@@ -2,6 +2,7 @@ import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-202
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261024-editor-v2-3';
 import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261024-editor-intuitivo-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
+import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261024-editor-atelier-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
   ['photos', 'Fotos y galería', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
@@ -111,7 +112,7 @@ export function enhanceProductEditor() {
       const group = document.createElement('section'); group.className = 'tt-editor-section'; group.dataset.productSection = section;
       const heading = document.createElement('h2');
       const toggle = document.createElement('button');toggle.type='button';toggle.className='tt-editor-section-toggle';toggle.textContent=title;
-      const open=!['specs','private'].includes(section);
+      const open=['photos','general'].includes(section);
       group.dataset.advanced=String(!open);
 
       toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-controls',`prod-section-${section}`);
@@ -120,15 +121,19 @@ export function enhanceProductEditor() {
       const fields = document.createElement('div'); fields.className = 'tt-editor-section-fields';
       fields.id=`prod-section-${section}`;fields.hidden=!open;description.hidden=!open;
       toggle.addEventListener('click',()=>{
-        const expanded=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(expanded));fields.hidden=!expanded;description.hidden=!expanded;
+        const expanded=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(expanded));fields.hidden=!expanded;
       });
-      group.append(heading,description,fields); (section==='visibility'?sidebar:grid).append(group);
+      // Las ayudas se consultan a demanda; no compiten con los campos editables.
+      const help=document.createElement('details');help.className='tt-editor-section-help';
+      const helpSummary=document.createElement('summary');helpSummary.textContent='Ayuda';help.append(helpSummary,description);
+      description.hidden=false;fields.append(help);
+      group.append(heading,fields); (section==='visibility'?sidebar:grid).append(group);
       for (const id of ids) {
         const field = originalFields.find(field=>field.id === id || field.querySelector(`#${id}`));
         if (field) fields.append(field);
       }
     }
-    const previewShell=document.createElement('details');previewShell.className='tt-editor-preview-shell';previewShell.open=false;
+    const previewShell=document.createElement('details');previewShell.className='tt-editor-preview-shell';previewShell.open=matchMedia('(min-width:1100px)').matches;
     const previewSummary=document.createElement('summary');previewSummary.textContent='Vista previa';previewShell.append(previewSummary);sidebar.append(previewShell);
     mountProductPreview(card,previewShell);
     const previewButton = document.createElement('button'); previewButton.type='button';previewButton.className='adm-btn adm-btn-outline tt-editor-preview-jump';
@@ -189,6 +194,7 @@ export function enhanceProductEditor() {
   refreshProductPreview(card);
   installEditorControls(card);refreshEditorControls(card);
   mountLocalVision(card);
+  mountProductSuggestions(card);
 }
 
 function refreshEditorHeading(card) {

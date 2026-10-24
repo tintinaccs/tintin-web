@@ -101,22 +101,28 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   await page.evaluate(()=>{
    const select=document.getElementById('prod-category');for(const [value,title]of [['relojes','Relojes'],['anillos','Anillos'],['collares','Collares']]){const option=document.createElement('option');option.value=value;option.textContent=title;select.append(option);}
   });
+  await page.locator('#prod-editor-section').selectOption('visibility');
   await page.locator('#prod-category').selectOption('relojes');await expect(page.locator('#prod-category')).toHaveValue('relojes');
   await expect(card.locator('[data-product-section]')).toHaveCount(7);
+  await page.locator('#prod-editor-section').selectOption('general');
   if(width<1200)await expect(page.locator('#prod-name')).toHaveCSS('font-size','16px');
   await openActions(page);await expect(page.locator('#prod-save-btn')).toBeInViewport();
+  await page.locator('#prod-editor-section').selectOption('inventory');
   await page.getByRole('button',{name:'Stock: 10 unidades',exact:true}).click();
   await expect(page.locator('#prod-stock')).toHaveValue('10');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByLabel('Elegir cantidad: Stock',{exact:true}).selectOption('500');await expect(page.locator('#prod-stock')).toHaveValue('500');
   await page.getByRole('button',{name:'Stock: 0 unidades',exact:true}).click();
   await expect(page.locator('#prod-stock')).toHaveValue('0');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByRole('button',{name:'Sumar una unidad: Stock',exact:true}).click();await expect(page.locator('#prod-stock')).toHaveValue('1');await expect(page.locator('#prod-active')).toBeChecked();
+  await page.locator('#prod-editor-section').selectOption('prices');
   await page.locator('#prod-price').fill('70000');
   await card.locator('[data-product-section=prices]').getByRole('button',{name:'Ajustar Precio (Gs.) * en 5000 guaraníes',exact:true}).click();await expect(page.locator('#prod-price')).toHaveValue('75000');
+  await page.locator('#prod-editor-section').selectOption('general');
   const general=page.getByRole('button',{name:'Producto',exact:true});
   await page.locator('#prod-name').fill('Reloj Alissia');await general.click();await expect(page.locator('#prod-name')).toBeHidden();
   await general.click();await expect(page.locator('#prod-name')).toHaveValue('Reloj Alissia');
-  await page.getByRole('button',{name:'Detalles del producto',exact:true}).click();
+  await page.locator('#prod-editor-section').selectOption('specs');
+  await expect(page.getByRole('button',{name:'Detalles del producto',exact:true})).toHaveAttribute('aria-expanded','true');
   await page.getByRole('group',{name:'Sugerencias: Material',exact:true}).getByRole('button',{name:'Acero inoxidable',exact:true}).click();await expect(page.locator('#prod-material')).toHaveValue('Acero inoxidable');
   const geometry=await card.locator('input:not([type=hidden]),select,button,textarea').evaluateAll(nodes=>nodes.filter(el=>el.getClientRects().length).map(el=>({id:el.id,left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right})));
   for(const box of geometry){expect(box.left,box.id).toBeGreaterThanOrEqual(-1);expect(box.right,box.id).toBeLessThanOrEqual(width+1);}
@@ -147,9 +153,9 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  test(`editor real por secciones conserva campos y acciones ${width}x${height}`,async({page})=>{
   await openEditor(page,width,height);
   const card=page.locator('#prod-form-card'),section=page.locator('#prod-editor-section');
-  await expect(page.locator('#prod-name')).toBeVisible();await expect(page.locator('#prod-price')).toBeVisible();
+  await expect(page.locator('#prod-name')).toBeVisible();await expect(page.locator('#prod-price')).toBeHidden();
   await page.locator('#prod-name').fill('Anillo de prueba');
-  await section.selectOption('prices');await page.locator('#prod-price').fill('45000');
+  await section.selectOption('prices');await expect(page.locator('#prod-price')).toBeVisible();await page.locator('#prod-price').fill('45000');
   await section.selectOption('private');await expect(page.locator('#prod-cost-unit')).toBeVisible();
   // El selector de secciones no puede descubrir campos que el controlador oculte por rol.
   await page.locator('#prod-inventory-fields').evaluate(el=>el.style.display='none');
@@ -379,7 +385,9 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
   await expect(page.locator('#prod-stock')).toHaveValue('1');
   await expect(page.locator('.tt-editor-stock-row').last()).toContainText('Agotado');
   await expect(page.locator('.tt-editor-stock-row').last().locator('img')).toHaveAttribute('src',/banda.webp/);
-  await page.locator('.tt-editor-preview-shell > summary').click();
+  const previewShell=page.locator('.tt-editor-preview-shell');
+  await expect(previewShell).toHaveJSProperty('open',width>=1100);
+  if(width<1100)await previewShell.locator('summary').click();
   const preview=page.locator('#prod-live-preview');
   await expect(preview.locator('h2')).toHaveText('Anillo Amore');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('75.000');
@@ -451,6 +459,7 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
 
 for (const width of [1200,1440,1920]) test(`controles seleccionados conservan texto legible con el tema real ${width}`,async({page})=>{
  await openEditor(page,width,900);
+ await page.locator('#prod-editor-section').selectOption('inventory');
  await page.addStyleTag({path:path.join(root,'css/core/tema-unificado-tintin.css')});
  for(const colors of [['#F8AACA','#222222'],['#222222','#FFFFFF']]) {
   await page.evaluate(([background,text])=>{document.documentElement.style.setProperty('--admin-color-button-primary-background',background);document.documentElement.style.setProperty('--admin-color-button-primary-text',text);},colors);
@@ -490,6 +499,7 @@ for (const width of [320,390,768,1440]) test(`cambiar apartado reinicia el edito
 
 test('abrir conserva producto oculto y visibilidad manual independiente de la cantidad',async({page})=>{
  await openEditor(page,390,844);
+ await page.locator('#prod-editor-section').selectOption('inventory');
  await page.evaluate(()=>{
   document.getElementById('prod-stock').value='7';
   document.getElementById('prod-active').checked=false;
@@ -673,7 +683,9 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await openEditor(page,width,height);
  const card=page.locator('#prod-form-card');
  await page.locator('#prod-name').fill('Reloj Alissia');
+ await page.locator('#prod-editor-section').selectOption('prices');
  await page.locator('#prod-price').fill('70000');
+ await page.locator('#prod-editor-section').selectOption('all');
  await page.locator('#prod-description').fill('Acero inoxidable, para todos los días.');
  await page.locator('#prod-publicationStatus').selectOption('draft');
  await expect(card.locator('#prod-form-title')).toHaveText('Reloj Alissia');

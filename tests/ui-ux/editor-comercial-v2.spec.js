@@ -8,6 +8,38 @@ const form=shell.slice(start,shell.indexOf('\n    </div>\n\n    <!-- ===========
 const source=fs.readFileSync('js/admin/admin-app.js','utf8');
 const renderer=source.slice(source.indexOf('let productVariantStockBaseline = null;'),source.indexOf('function serializeProductForm()'));
 const product={name:'Anillo',category:'anillos',price:30000,priceBefore:40000,active:true,variantCommerceVersion:2,variants:{Color:['Oro','Plata'],Talle:['M']},variantInventory:[{variant:'gold',attributes:{Color:'Oro',Talle:'M'},stock:3,price:45000},{variant:'silver',attributes:{Color:'Plata',Talle:'M'},stock:0}],stock:3};
+for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768],[1366,768],[1920,1080],[3840,2160]])test(`editor Tintin app: foco, sugerencias y campos preservados ${width}x${height}`,async({page})=>{
+ const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
+ const errors=[];page.on('pageerror',error=>errors.push(error.message));
+ await openProductSaveFixture(page,width,height);
+ await expect(page.locator('[data-product-section="general"] .tt-editor-section-toggle')).toHaveAttribute('aria-expanded','true');
+ for(const section of ['prices','inventory','specs','private'])await expect(page.locator(`[data-product-section="${section}"] .tt-editor-section-toggle`)).toHaveAttribute('aria-expanded','false');
+ await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Pulsera ficticia');
+ await page.getByRole('button',{name:'Producto',exact:true}).click();
+ await page.locator('#prod-editor-section').selectOption('general');
+ await page.locator('[data-product-section="general"] .tt-editor-section-help summary').click();
+ await expect(page.getByText('Nombre y descripción que verán tus clientes.',{exact:true})).toBeVisible();
+ await page.locator('#prod-editor-section').selectOption('specs');await page.locator('#prod-material').fill('Plata 925');
+ await page.locator('#prod-care').fill('Cuidados confirmados por el proveedor.');await page.locator('#prod-warranty').fill('Cobertura confirmada en el certificado.');
+ const suggestions=page.locator('.tt-editor-suggestions');await suggestions.locator('summary').click();
+ await expect(suggestions.locator('summary')).toHaveText('Sugerencias · pulsera');
+ const care=suggestions.getByRole('button',{name:'Guardar por separado y evitar tirones en cierres y extensores.',exact:true});
+ await care.click();await care.click();
+ await expect(page.locator('#prod-care')).toHaveValue('Cuidados confirmados por el proveedor. Guardar por separado y evitar tirones en cierres y extensores.');
+ await expect(page.locator('#prod-warranty')).toHaveValue('Cobertura confirmada en el certificado.');
+ await expect(suggestions).toContainText('Usar un paño específico para plata');
+ await page.evaluate(()=>{const category=document.getElementById('prod-category');category.add(new Option('Carteras','carteras'));});
+ await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('carteras');
+ await page.locator('#prod-editor-section').selectOption('specs');
+ await expect(suggestions.locator('summary')).toHaveText('Sugerencias · cartera');
+ await expect(page.locator('#prod-warranty')).toHaveValue('Cobertura confirmada en el certificado.');
+ await suggestions.getByRole('button',{name:'Revisar garantía',exact:true}).click();await expect(page.locator('#prod-warranty')).toBeFocused();
+ await page.locator('#prod-editor-section').selectOption('general');await expect(page.locator('#prod-name')).toHaveValue('Pulsera ficticia');
+ await expect(page.locator('#prod-save-btn')).toBeInViewport();
+ const geometry=await page.locator('#prod-form-card').evaluate(card=>({fits:card.scrollWidth<=card.clientWidth+1,fields:[...card.querySelectorAll('input:not([type=hidden]),select,textarea,button')].filter(el=>el.getClientRects().length).every(el=>{const r=el.getBoundingClientRect(),c=card.getBoundingClientRect();return r.left>=c.left-1 && r.right<=c.right+1;})}));
+ expect(geometry).toEqual({fits:true,fields:true});expect(errors).toEqual([]);
+ fs.mkdirSync('artifacts/editor-atelier',{recursive:true});await page.screenshot({path:`artifacts/editor-atelier/editor-${width}x${height}.png`});
+});
 for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768],[1440,900]])test(`editor comercial real: matriz, lote, orden y vista previa ${width}x${height}`,async({page})=>{
  await page.setViewportSize({width,height});const errors=[];page.on('pageerror',error=>errors.push(error.stack));
  await page.route('**/editor-v2-fixture',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${headStyles}<link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/shopify-commerce-admin.css"></head><body>${form}</body></html>`}));
