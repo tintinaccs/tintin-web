@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import {inspectStaticCsp} from './lib/csp-vision-local.mjs';
 
 const repository = String(process.env.GITHUB_REPOSITORY || '').trim();
 // GITHUB_SHA es una variable reservada de GitHub Actions: cualquier intento de
@@ -167,7 +168,7 @@ execFileSync(process.execPath, ['scripts/generar-csp-cloudflare.js'], { stdio: '
 
 const staticHeaders = fs.readFileSync('_headers', 'utf8').replace(/\r\n?/g, '\n');
 const cspLines = staticHeaders.split('\n').filter(line => line.includes('Content-Security-Policy:'));
-if (cspLines.length !== 1) throw new Error(`_headers debe contener exactamente una CSP fallback corta; encontradas: ${cspLines.length}.`);
+inspectStaticCsp(staticHeaders);
 const fallbackPolicy = staticFallbackPolicy(staticHeaders);
 if (cspLines[0].length > 2000) throw new Error(`La CSP fallback de _headers supera 2000 caracteres (${cspLines[0].length}).`);
 const hasCloudinaryOrigin = policy => String(policy || '').split(/\s+/).some(token => token.replace(/[;,]+$/g, '') === 'https://api.cloudinary.com');

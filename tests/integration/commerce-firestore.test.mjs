@@ -1,5 +1,8 @@
 import {saveProductEditor,saveProductBulk} from '../../cloudflare/product-editor-domain.mjs';
 import {productFingerprint} from '../../js/admin/products/maestro-productos-core.mjs';
+import {commercialDraft} from '../../js/admin/products/editor-comercial-core.mjs';
+import {composeCheckoutDraft} from '../../js/orders/politica-checkout.js';
+import {preparePublicCheckoutOrder} from '../../cloudflare/politica-checkout-publico.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createOrderAdmin, applyOrderAdminMutation } from '../../cloudflare/order-admin-domain.js';
@@ -50,6 +53,34 @@ const product = async id => decodeFirestoreFields((await deps.get({}, 'products/
 const actor = { uid: 'commerce_fixture', email: 'fixture@example.test', role: 'client', origin: 'public-checkout' };
 const admin = { uid: 'admin_fixture', email: 'admin@example.test', role: 'superadmin', origin: 'superadmin' };
 const input = (orderId, id, variant = '') => ({ orderId, userName: 'Clienta Fixture', userId: actor.uid, shippingMethod: 'retiro', paymentMethod: 'transferencia', paymentStatus: 'pendiente', items: [{ id, qty: 1, variant }] });
+
+test('Editor → checkout público → pedido: precio, fotos, clave estable y cancelación',async()=>{
+ const id='editor_checkout',requestId='editor_checkout_20261024';
+ await seed('settings/orderSequence',{lastNumber:0,highWaterMark:0,historyReconciledAt:new Date()});
+ await seed('settings/general',{storeOpen:true,paymentMethods:{transferencia:true}});
+ await seed(`checkoutGuards/${actor.uid}`,{lastCheckoutOrderId:`${actor.uid}_${requestId}`,lastCheckoutAt:new Date()});
+ await seed('collections/editor_checkout',{name:'Fixture'});
+ const original=commercialDraft({name:'Pulsera de prueba',category:'editor_checkout',price:30000,active:true,oferta:false,destacado:false,variants:{Color:['Dorado','Plateado'],Talle:['M']}});
+ original.variantInventory.forEach((row,index)=>{row.stock=2;row.price=index===0?45000:35000;});original.stock=4;
+ original.variantMedia=[{Color:'Dorado',imageUrl:'https://example.invalid/gold.png'},{Color:'Plateado',imageUrl:'https://example.invalid/silver.png'}];
+ await saveProductEditor({},{productId:id,expected:null,changeId:'editor_checkout_create',product:original},admin,deps);
+ const before=await product(id),selectedKey=before.variantInventory[0].variant;
+ const reordered=commercialDraft(before,{Talle:['M'],Color:['Plateado','Dorado']});
+ await saveProductEditor({},{productId:id,expected:productFingerprint(before),changeId:'editor_checkout_reorder',product:{variants:reordered.variants,variantInventory:reordered.variantInventory}},admin,deps);
+ const draft=composeCheckoutDraft({requestId,items:[{id,qty:1,variant:'M / Dorado',variantKey:selectedKey}],name:'Clienta Fixture',phone:'595981123456',contactEmail:actor.email,notes:'',selectedCity:'__retiro__',departamento:'',address:'',referencia:'',shipping:{method:'retiro',cost:0,pending:false},paymentMethod:'transferencia',subtotal:45000});
+ assert.deepEqual(draft.cartLines,[{id,qty:1,variant:'M / Dorado',variantKey:selectedKey}]);
+ const prepared=await preparePublicCheckoutOrder({},draft,actor,deps);
+ const order=await createOrderAdmin({},prepared.input,actor,{...deps,inspect:prepared.inspect});
+ assert.equal(order.order.total,45000);assert.equal(order.order.items[0].price,45000);
+ assert.equal(order.order.items[0].variantKey,selectedKey);assert.equal(order.order.items[0].variant,'M / Dorado');
+ assert.equal(order.order.items[0].imageUrl,'https://example.invalid/gold.png');
+ assert.equal((await product(id)).variantInventory.find(row=>row.variant===selectedKey).stock,1);
+ const duplicate=await createOrderAdmin({},prepared.input,actor,{...deps,inspect:prepared.inspect});assert.equal(duplicate.duplicate,true);
+ await applyOrderAdminMutation({},{orderId:order.orderId,status:'cancelado',changeId:'editor_checkout_cancel'},admin,deps);
+ await applyOrderAdminMutation({},{orderId:order.orderId,status:'cancelado',changeId:'editor_checkout_cancel'},admin,deps);
+ const after=await product(id);assert.equal(after.stock,4);assert.equal(after.variantInventory.find(row=>row.variant===selectedKey).stock,2);
+ assert.deepEqual(after.variantMedia,before.variantMedia);
+});
 
 test('Firestore aislado: pedido, precio canónico, reserva, concurrencia e idempotencia reales', async t => {
   await seed('settings/orderSequence', { lastNumber: 0, highWaterMark: 0, historyReconciledAt: new Date() });
