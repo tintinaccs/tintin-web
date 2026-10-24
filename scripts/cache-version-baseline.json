@@ -48,8 +48,8 @@
     "sha256": "1250e8f1efcc9860a190cc34c829b8b968fbe968b4c24130820921e8d868d9c3"
   },
   "css/admin/shopify-commerce-admin.css": {
-    "version": "tintin-20261024-editor-shopify-1",
-    "sha256": "f77f03cca22fe673c181470f2db21bfe2bd87b93cb16182f7ba2fc7a8bf6b2a3"
+    "version": "tintin-20261024-editor-intuitivo-1",
+    "sha256": "083e661954135b2236ab5d7d4bfc2e73c5da5b5f5d0a38d2bc85659e2db9d311"
   },
   "css/admin/sidebar-interaccion.css": {
     "version": "tintin-20261019-superadmin-live-1",
@@ -528,8 +528,8 @@
     "sha256": "7001d5221b6bf851de4e789ebc0fcb9c72ce99b204906602f89202884e5f7a65"
   },
   "js/admin/products/controles-editor-producto.js": {
-    "version": "tintin-20261024-editor-v2-3",
-    "sha256": "9a664e75a14119ec6128c38224e25cc51e10aac17d6e9d140fcc3e61fff0725c"
+    "version": "tintin-20261024-editor-intuitivo-1",
+    "sha256": "f75d8e3c018f6590e40fb5bccc217a0b708fb82bf26e8410b14a76a6e8d10598"
   },
   "js/admin/products/editor-comercial-core.mjs": {
     "version": "tintin-20261024-editor-v2-3",
@@ -560,8 +560,8 @@
     "sha256": "1c49c41a2c8a71e9d8251b0d9fe7ff0b425ac06fc35d82b9aa03b42e7c16872a"
   },
   "js/admin/products/interfaz-productos-adaptable.js": {
-    "version": "tintin-20261024-editor-shopify-1",
-    "sha256": "7fa9575c8293fa8a01461300f2be8183986ffefeded6e0d44c0c3fa077f85b10"
+    "version": "tintin-20261024-editor-intuitivo-1",
+    "sha256": "d268af3e39589a575cd4a1000beefec571ec1757fd7fbb73900693231bf52278"
   },
   "js/admin/products/maestro-productos-core.mjs": {
     "version": "tintin-20261024-editor-v2-4",
@@ -570,6 +570,18 @@
   "js/admin/products/maestro-productos-interfaz.js": {
     "version": "tintin-20261024-editor-v2-4",
     "sha256": "b40ad8061684c8a9cd9e30484c6f9250354391b01325125c21928994fce75af2"
+  },
+  "js/admin/products/vision-productos-core.mjs": {
+    "version": "tintin-20261024-editor-intuitivo-1",
+    "sha256": "ab8a69ca1fcc07b90ea6d8e420da628586dc9f60d101bb575e2a2e49daeae4a7"
+  },
+  "js/admin/products/vision-productos-interfaz.js": {
+    "version": "tintin-20261024-editor-intuitivo-1",
+    "sha256": "434e6d7365d460620a082ed49a639786283b4000ce2fa48c97ec8cc6bf764ecc"
+  },
+  "js/admin/products/vision-productos-worker.js": {
+    "version": "tintin-20261024-editor-intuitivo-1",
+    "sha256": "7ad558cfeb06a3b415f095f58549ed9e873a4f21c57b88506be46b140e2632f4"
   },
   "js/admin/products/vista-previa-producto.js": {
     "version": "tintin-20261024-editor-v2-3",
@@ -608,8 +620,8 @@
     "sha256": "fdf849e528365ade7bd0ee85a707661c0c92b8ffd39bf8392b76db7999e48be8"
   },
   "js/admin/shopify-commerce-admin.js": {
-    "version": "tintin-20261024-editor-shopify-1",
-    "sha256": "53fa30dea398cd0314435ca36fe915fa02f5e6948318ce66efb4fd171f35eb7c"
+    "version": "tintin-20261024-editor-intuitivo-1",
+    "sha256": "4a2c26d6837e9c9a66919f8c344067d3da96aa7be1e749b3e628cbc039a54a85"
   },
   "js/admin/sidebar-expandible-admin.js": {
     "version": "tintin-20261004-admin-connections-3",
@@ -1494,5 +1506,9 @@
   "tienda.js": {
     "version": "tintin-20261024-editor-v2-6",
     "sha256": "4162c94ba02609425cd898acef305b2c61f3e543d9776944b3cd62963746e1f3"
+  },
+  "vendor/onnxruntime-web-1.22.0/ort.wasm.bundle.min.mjs": {
+    "version": "tintin-20261024-editor-intuitivo-1",
+    "sha256": "e53392ea5f0e654acf1866c16564b340661ed5d238f692c3c2bd40b940f924a2"
   }
 }

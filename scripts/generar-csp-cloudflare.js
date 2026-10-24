@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+const {VISION_WORKER_PATH,VISION_WORKER_POLICY} = require('./lib/csp-vision-local.mjs');
 
 const root = path.resolve(__dirname, '..');
 const checkMode = process.argv.includes('--check');
@@ -25,6 +26,8 @@ const startMarker = '# CSP_ROUTE_POLICIES_START';
 const endMarker = '# CSP_ROUTE_POLICIES_END';
 const cacheStartMarker = '# CLEAN_ROUTE_CACHE_CONTROL_START';
 const cacheEndMarker = '# CLEAN_ROUTE_CACHE_CONTROL_END';
+const visionStartMarker = '# LOCAL_VISION_WORKER_CSP_START';
+const visionEndMarker = '# LOCAL_VISION_WORKER_CSP_END';
 const baseScriptOrigins = ['https://*.gstatic.com', 'https://*.google.com', 'https://www.googletagmanager.com'];
 const baseConnectOrigins = [
   'https://*.googleapis.com',
@@ -241,6 +244,7 @@ function runtimePolicies() {
 
 function expectedHeaders() {
   let headers = fs.readFileSync(headersPath, 'utf8').replace(/\r\n?/g, '\n');
+  headers = headers.replace(new RegExp(`${visionStartMarker}[\\s\\S]*?${visionEndMarker}\\n*`, 'g'), '');
   headers = headers.replace(new RegExp(`${startMarker}[\\s\\S]*?${endMarker}\\n*`, 'g'), '');
   headers = headers.replace(/^\s+Content-Security-Policy:.*(?:\n|$)/gm, '');
   headers = headers.replace(
@@ -253,6 +257,10 @@ function expectedHeaders() {
     `${cacheStartMarker}\n${cleanRouteCacheControlBlock()}\n${cacheEndMarker}`
   );
   headers = headers.replace(/\n{3,}/g, '\n\n');
+  // Sólo el worker local puede compilar WebAssembly. No habilita eval de JS,
+  // conexiones externas ni WebAssembly en documentos de tienda/checkout/admin.
+  // La eliminación explícita evita acumular la CSP fallback sobre la del worker.
+  headers += `\n${visionStartMarker}\n${VISION_WORKER_PATH}\n  ! Content-Security-Policy\n  Content-Security-Policy: ${VISION_WORKER_POLICY}\n\n/assets-tintin/vision/*\n  Cache-Control: public, max-age=31536000, immutable\n\n/vendor/onnxruntime-web-1.22.0/*\n  Cache-Control: public, max-age=31536000, immutable\n${visionEndMarker}\n`;
   const oversized = headers.split('\n').filter(line => line.length > 2000);
   if (oversized.length) {
     throw new Error(`_headers excede el límite de 2000 caracteres por línea (${oversized.map(line => line.length).join(', ')}).`);

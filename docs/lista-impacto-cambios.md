@@ -1,3 +1,7 @@
+## 2026-10-24 — Editor intuitivo y verificación de checkout
+
+Fotos/guía/contraste y controles canónicos de Productos; visión local opcional con TinyCLIP MIT, worker y assets propios sin API facturada. Sólo propone categoría existente mediante confirmación y conserva color/material manual, variantes/precio/stock y writers. CSP WASM exclusiva del worker validada por autoridad común; constructor de diagnóstico distingue builtins Node de referencias locales. Prueba REST/CAS une editor, carrito, política pública, pedido, reserva y cancelación sin cambios en sus fuentes comerciales ni datos reales. Versionado, protección y derivados desde generadores. Evidencia/límites en17-EDITOR-INTUITIVO-Y-CHECKOUT y CURRENT_STATE.
+
 ## 2026-10-24 — Distribución visual del editor tipo Shopify
 
 Interfaz canónica de Productos: tarjetas y columnas del formulario, lateral editorial y vista previa, cabecera con Guardar/Cancelar originales. Se reubican nodos sin duplicar IDs ni cambiar escrituras; privado respeta la visibilidad del controlador, SEO/estadísticas son plegables y móvil conserva un único desplazamiento principal. Tema Tintin intacto, sin nuevas rutas/reglas/API. Consumidores y CSS renuevan URLs inmutables; plan y manifiestos se regeneran. Evidencia: docs/editor-productos-v2/16-REDISENO-VISUAL.md y CURRENT_STATE.

@@ -3,6 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import {inspectStaticCsp,VISION_WORKER_PATH} from '../../scripts/lib/csp-vision-local.mjs';
 
 const read = file => fs.readFileSync(new URL(`../../${file}`, import.meta.url), 'utf8');
 const runtime = JSON.parse(read('config/csp-runtime.json'));
@@ -54,7 +55,7 @@ test('_headers conserva solo una CSP fallback corta y middleware aplica la compl
   const headers = read('_headers');
   const middleware = read('functions/_middleware.js');
   const cspLines = headers.split(/\r?\n/).filter(line => line.includes('Content-Security-Policy:'));
-  assert.equal(cspLines.length, 1, '_headers debe tener una sola CSP fallback estática');
+  assert.equal(cspLines.length, 2, '_headers contiene una CSP fallback y una excepción exclusiva del worker de visión');
   assert.ok(cspLines[0].length <= 2000, 'la CSP fallback debe respetar el límite por línea de Pages');
   assert.ok(cspLines[0].includes("script-src-attr 'none'"));
   assert.ok(!/(?:^|[\s;])https:\/\/api\.cloudinary\.com(?:[\s;]|$)/.test(cspLines[0]));
@@ -62,6 +63,22 @@ test('_headers conserva solo una CSP fallback corta y middleware aplica la compl
   assert.ok(headers.split(/\r?\n/).every(line => line.length <= 2000), '_headers debe respetar el límite por línea de Pages');
   assert.ok(middleware.includes("headers.set('Content-Security-Policy', policy)"));
   assert.ok(middleware.includes("'X-Tintin-CSP', 'edge-runtime'"));
+});
+
+test('WebAssembly queda limitado al worker local; páginas y checkout no reciben eval ni orígenes nuevos',()=>{
+ const headers=read('_headers');
+ assert.ok(inspectStaticCsp(headers).worker);
+ for(const invalid of [headers.replace(VISION_WORKER_PATH,'/js/*'),headers.replace("script-src 'self' 'wasm-unsafe-eval'","script-src 'self' 'unsafe-eval'"),headers.replace("connect-src 'self'; object-src 'none';","connect-src *; object-src 'none';"),headers.replace('  ! Content-Security-Policy','')])assert.throws(()=>inspectStaticCsp(invalid));
+ const block=headers.split('# LOCAL_VISION_WORKER_CSP_START')[1]?.split('# LOCAL_VISION_WORKER_CSP_END')[0];
+ assert.ok(block?.includes('/js/admin/products/vision-productos-worker.js\n  ! Content-Security-Policy'));
+ assert.ok(block.includes("script-src 'self' 'wasm-unsafe-eval'"));
+ assert.ok(block.includes("connect-src 'self';"));
+ assert.ok(!block.includes("'unsafe-eval'"));
+ assert.equal((headers.match(/wasm-unsafe-eval/g)||[]).length,1);
+ const runtime=JSON.parse(read('config/csp-runtime.json'));
+ for(const policy of [runtime.public,...Object.values(runtime.routes)]) {
+   assert.ok(!policy.includes('wasm-unsafe-eval'));assert.ok(!policy.includes("'unsafe-eval'"));
+ }
 });
 
 test('Pages Functions consume el módulo JS generado y no imports JSON con attributes', () => {

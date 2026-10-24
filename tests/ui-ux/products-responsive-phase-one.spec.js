@@ -683,3 +683,55 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  const ids=await card.locator('input[id],select[id],textarea[id]').evaluateAll(nodes=>nodes.map(node=>node.id));expect(new Set(ids).size).toBe(ids.length);
  if(width===390||width===1440){await card.locator('.adm-card-body').evaluate(el=>el.scrollTop=0);await page.screenshot({path:test.info().outputPath(`shopify-editor-${width}.png`)});}
 });
+
+for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768],[1440,900]])test(`editor guiado: fotos primero, contraste y borrador ${width}x${height}`,async({page})=>{
+ await openEditor(page,width,height);
+ const card=page.locator('#prod-form-card');
+ expect(await card.locator('.tt-product-fields > [data-product-section]').first().getAttribute('data-product-section')).toBe('photos');
+ await page.locator('#prod-name').fill('Pulsera conservada');
+ const surfaces=await page.evaluate(()=>{const sample=selector=>getComputedStyle(document.querySelector(selector)).backgroundColor;return [sample('#prod-form-card .adm-card-body'),sample('[data-product-section=general]'),sample('#prod-name')];});
+ expect(new Set(surfaces).size).toBe(3);
+ await card.locator('.tt-editor-guide summary').click();
+ await page.getByRole('button',{name:'2. Información',exact:true}).click();
+ await expect(page.locator('#prod-name')).toHaveValue('Pulsera conservada');
+ await expect(page.locator('#prod-name')).toBeFocused();
+ await expect(card.locator('[data-product-section=photos]')).toBeHidden();
+ await page.getByRole('button',{name:'5. Revisar todo',exact:true}).click();
+ await expect(card.locator('[data-product-section=photos]')).toBeVisible();
+ expect(await card.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
+ if(width===390||width===1440){await card.locator('.adm-card-body').evaluate(el=>el.scrollTop=0);await page.screenshot({animations:'disabled',path:test.info().outputPath(`editor-intuitivo-${width}.png`)});}
+});
+
+test('visión es opcional, aplica sólo la categoría elegida y descarta resultados de otra foto',async({page})=>{
+ await openEditor(page,390,844);
+ await page.evaluate(()=>{
+  window.__visionWorkers=[];
+  window.Worker=class {constructor(){window.__visionWorkers.push(this);}postMessage(){window.__visionLatest=this;}terminate(){this.terminated=true;}};
+  const select=document.getElementById('prod-category');select.add(new Option('Carteras','carteras'));
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=40;canvas.getContext('2d').fillRect(0,0,40,40);document.getElementById('prod-imageUrl').value=canvas.toDataURL();
+ });
+ await page.locator('.tt-editor-vision summary').click();
+ expect(await page.evaluate(()=>window.__visionWorkers.length)).toBe(0);
+ const before=await page.evaluate(()=>({material:document.getElementById('prod-material').value,stock:document.getElementById('prod-stock').value,variants:document.getElementById('prod-variants-text').value}));
+ await page.getByRole('button',{name:'Analizar imagen principal',exact:true}).click();
+ await page.waitForFunction(()=>window.__visionLatest);
+ await page.evaluate(()=>window.__visionLatest.onmessage({data:{ok:true,suggestion:{key:'bag',label:'Cartera'}}}));
+ await expect(page.getByRole('button',{name:'Usar categoría Carteras',exact:true})).toBeVisible();
+ await expect(page.locator('#prod-category')).not.toHaveValue('carteras');
+ await page.locator('#prod-category').evaluate(select=>select.disabled=true);
+ await page.getByRole('button',{name:'Usar categoría Carteras',exact:true}).click();
+ await expect(page.locator('#prod-category')).not.toHaveValue('carteras');
+ await page.locator('#prod-category').evaluate(select=>select.disabled=false);
+ await page.getByRole('button',{name:'Usar categoría Carteras',exact:true}).click();
+ await expect(page.locator('#prod-category')).toHaveValue('carteras');
+ const after=await page.evaluate(()=>({material:document.getElementById('prod-material').value,stock:document.getElementById('prod-stock').value,variants:document.getElementById('prod-variants-text').value}));expect(after).toEqual(before);
+ await page.locator('#prod-editor-section').selectOption('specs');
+ await expect(page.getByRole('group',{name:'Sugerencias: Material',exact:true}).getByRole('button',{name:'Cuero sintético',exact:true})).toBeVisible();
+ await page.locator('#prod-editor-section').selectOption('photos');
+ await page.getByRole('button',{name:'Analizar imagen principal',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Cancelar análisis',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Cancelar análisis',exact:true}).click();
+ await expect(page.locator('.tt-editor-vision [role=status]')).toHaveText('Análisis cancelado. Podés seguir editando.');
+ await page.evaluate(()=>window.__visionLatest.onmessage({data:{ok:true,suggestion:{key:'watch',label:'Reloj'}}}));
+ await expect(page.locator('.tt-editor-vision .tt-editor-choices button')).toHaveCount(0);
+});
