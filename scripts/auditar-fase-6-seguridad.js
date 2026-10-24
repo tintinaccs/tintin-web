@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const {inspectStaticCsp} = require('./lib/csp-vision-local.mjs');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
 const exists = file => fs.existsSync(path.join(root, file));
@@ -90,11 +91,11 @@ check(
   'Cross-Origin-Opener-Policy: same-origin-allow-popups'
 ].forEach(header => check('Encabezado estático presente: ' + header, headers.includes(header)));
 
-const staticCspLines = headers.split('\n').filter(line => line.includes('Content-Security-Policy:'));
-const staticCsp = staticCspLines[0] || '';
+const staticPolicies=(()=>{try{return inspectStaticCsp(headers);}catch{return null;}})();
+const staticCsp = staticPolicies?.fallback || '';
 check(
-  '_headers conserva una única CSP fallback corta para respuestas estáticas/404',
-  staticCspLines.length === 1 &&
+  '_headers conserva fallback restringido y una excepción WASM sólo para el worker local',
+  Boolean(staticPolicies) &&
     staticCsp.length <= 2000 &&
     staticCsp.includes("default-src 'self'") &&
     staticCsp.includes("script-src-attr 'none'") &&

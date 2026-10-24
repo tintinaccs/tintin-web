@@ -1,6 +1,13 @@
+## 2026-10-24 — Conciliar foco de paneles con editor intuitivo
+
+Se incorpora315883bd (#1223), conservando la liberación de foco antes de ocultar paneles y sus URLs de navegación. No cambian los bytes ni las URLs del editor/visión respecto de116e2218. Conflictos de documentación preservan ambas entradas; protección, plan y manifiestos se regeneran desde main vigente.495 pruebas de dominio y batería combinada de209 Chromium para editor/checkout; evidencia actual en CURRENT_STATE y PR1222. Sin cambios de datos reales.
+
 ## 2026-10-24 — Cierre accesible de paneles de navegación
 
 SurfaceController retira el foco antes de aria-hidden y restituye la campana con inert liberado. Accesibilidad global delega el foco de los paneles registrados a esa autoridad; mantiene los diálogos genéricos. Regresión de Alertas comprueba el orden de ocultamiento y cierre por Escape/botón en cinco resoluciones. Versiones transitivas y derivados canónicos renovados; sin reglas ni datos reales modificados. Evidencia en CURRENT_STATE.
+## 2026-10-24 — Editor intuitivo y verificación de checkout
+
+Fotos/guía/contraste y controles canónicos de Productos; visión local opcional con TinyCLIP MIT, worker y assets propios sin API facturada. Sólo propone categoría existente mediante confirmación y conserva color/material manual, variantes/precio/stock y writers. CSP WASM exclusiva del worker validada por autoridad común; constructor de diagnóstico distingue builtins Node de referencias locales. Prueba REST/CAS une editor, carrito, política pública, pedido, reserva y cancelación sin cambios en sus fuentes comerciales ni datos reales. Versionado, protección y derivados desde generadores. Evidencia/límites en17-EDITOR-INTUITIVO-Y-CHECKOUT y CURRENT_STATE.
 
 ## 2026-10-24 — Distribución visual del editor tipo Shopify
 

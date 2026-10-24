@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { functionRoutes } = require('./lib/rutas-pages.js');
+const {inspectStaticCsp} = require('./lib/csp-vision-local.mjs');
 const root = path.resolve(__dirname, '..');
 const cache = new Map();
 
@@ -130,14 +131,14 @@ check(
 );
 
 const cspRuntime = (() => { try { return JSON.parse(read('config/csp-runtime.json')); } catch { return null; } })();
-const headerCspLines = read('_headers').split(/\r?\n/).filter(line => line.includes('Content-Security-Policy:'));
-const staticFallbackCsp = headerCspLines[0] || '';
+const staticCsp = (()=>{try{return inspectStaticCsp(read('_headers'));}catch{return null;}})();
+const staticFallbackCsp = staticCsp?.fallback || '';
 check(
-  'CSP completa de HTML se entrega por Pages Functions y _headers conserva solo un fallback corto',
+  'CSP completa de HTML usa middleware; fallback restringido y WebAssembly exclusivo del worker local',
   exists('functions/_middleware.js') &&
     exists('config/csp-runtime.js') &&
     read('functions/_middleware.js').includes("headers.set('Content-Security-Policy', policy)") &&
-    headerCspLines.length === 1 &&
+    Boolean(staticCsp) &&
     staticFallbackCsp.length <= 2000 &&
     staticFallbackCsp.includes("script-src-attr 'none'") &&
     !staticFallbackCsp.includes('https://api.cloudinary.com') &&

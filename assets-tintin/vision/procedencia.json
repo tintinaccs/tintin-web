@@ -1,0 +1,48 @@
+{
+  "model": "onnx-community/TinyCLIP-ViT-40M-32-Text-19M-LAION400M-ONNX",
+  "revision": "737108a175dc6c043d9e64cf738baa91a272f7cb",
+  "license": "MIT",
+  "sourceModelSha256": "5e9390262b0eb80caec3eb878acc8b77e116570a2d3b8ea4a59d13029d6f3329",
+  "tokenizerSha256": "6d9109cc838977f3ca94a379eec36aecc7c807e1785cd729660ca2fc0171fb35",
+  "preparation": "scripts/vision/preparar-modelo-local.py",
+  "inputs": {
+    "pixel_values": [
+      1,
+      3,
+      224,
+      224
+    ]
+  },
+  "outputs": [
+    "image_embeds"
+  ],
+  "imageMean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "imageStd": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "modelSha256": "833f86038f84b2c093a366ef1dc56213c4204d09e3c826437885ac9f578d4549",
+  "parts": [
+    "tinyclip-vision-int8-v1.part1.bin",
+    "tinyclip-vision-int8-v1.part2.bin"
+  ],
+  "assets": {
+    "tinyclip-vision-int8-v1.part1.bin": {
+      "bytes": 23068672,
+      "sha256": "4d96d01ca2aeee70b0989a20d51feb21382556f25dc0a0af94f4986198fe35d1"
+    },
+    "tinyclip-vision-int8-v1.part2.bin": {
+      "bytes": 17592145,
+      "sha256": "449d7d6ed474a015594e47267cce4c5006b3a4d54fcdd13942469d87a981b628"
+    },
+    "etiquetas-v1.json": {
+      "bytes": 105870,
+      "sha256": "d1de2a3241c393e71c40770d83f7d040fdc9289578e531ce10cd23d3968608e2"
+    }
+  }
+}

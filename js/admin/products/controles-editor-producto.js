@@ -154,7 +154,7 @@ function variantBuilder(input) {
       const index=line.indexOf(':'); if(index<1) continue;
       const key=line.slice(0,index).trim();
       for (const option of line.slice(index+1).split(',').map(item=>item.trim()).filter(Boolean)) {
-        const chip = button(`${key}: ${option} ×`, `Quitar ${key}: ${option}`, () => {
+        const chip = button(`${key}: ${option} · Quitar`, `Quitar ${key}: ${option}`, () => {
           if(input.readOnly)return;
           input.value=input.value.split(/\r?\n/).flatMap(row=>{
             const separator=row.indexOf(':'); if(separator<1 || row.slice(0,separator).trim()!==key)return [row];
@@ -162,7 +162,9 @@ function variantBuilder(input) {
             return rest.length ? [`${key}: ${rest.join(', ')}`] : [];
           }).join('\n'); emit(input);
         });
-        chip.disabled=input.readOnly;chips.append(chip);
+        chip.disabled=input.readOnly;
+        if(input.readOnly)chip.title='Esta opción tiene inventario o historial. Editá su disponibilidad en la matriz.';
+        chips.append(chip);
       }
     }
   };
@@ -184,7 +186,16 @@ export function refreshEditorControls(card) {
   }
   for(const input of card.querySelectorAll('input[list]')) {
     const list=card.querySelector(`#${input.getAttribute('list')}`);
-    if(list) selection(input,[...list.options].slice(0,4).map(option=>[option.value,option.value]),`Sugerencias: ${input.labels?.[0]?.textContent || input.id}`);
+    if(list) {
+      let options=[...list.options].map(option=>option.value);
+      if(input.id==='prod-material') {
+        const category=card.querySelector('#prod-category');
+        const text=`${category?.value || ''} ${category?.selectedOptions?.[0]?.textContent || ''}`.toLocaleLowerCase('es');
+        const preferred=/cartera|bolso|billetera/.test(text)?['Cuero sintético','Cuero genuino','Tela / textil','Resina']:/reloj/.test(text)?['Acero inoxidable','Aleación metálica','Cuero sintético','Resina']:[];
+        options=[...preferred.filter(value=>options.includes(value)),...options.filter(value=>!preferred.includes(value))];
+      }
+      selection(input,options.slice(0,4).map(value=>[value,value]),`Sugerencias: ${input.labels?.[0]?.textContent || input.id}`);
+    }
   }
   const variants=card.querySelector('#prod-variants-text');if(variants)variantBuilder(variants);
   for(const panel of card.querySelectorAll('.tt-editor-variant-builder')) choices.get(panel)?.refresh();

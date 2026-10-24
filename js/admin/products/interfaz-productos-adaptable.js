@@ -1,10 +1,11 @@
 import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261024-editor-v2-3';
-import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261024-editor-v2-3';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261024-editor-intuitivo-1';
+import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
-  ['general', 'Producto', ['prod-name','prod-description']],
   ['photos', 'Fotos y galería', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
+  ['general', 'Producto', ['prod-name','prod-description']],
   ['prices', 'Precio', ['prod-price','prod-price-before','prod-badge','prod-oferta']],
   ['inventory', 'Variantes e inventario', ['prod-variants-text','prod-stock']],
   ['specs', 'Detalles del producto', ['prod-material','prod-measurements','prod-color-finish','prod-care','prod-water-resistance','prod-warranty','prod-size-fit','prod-package-contents']],
@@ -81,6 +82,15 @@ export function enhanceProductEditor() {
     select.value = 'all';
     select.addEventListener('change',()=>showSection(card,select.value,true));
     navigation.append(text,select);body.prepend(navigation);
+    const guide=document.createElement('details');guide.className='tt-editor-guide';
+    const summary=document.createElement('summary');summary.textContent='Guía rápida';guide.append(summary);
+    const steps=document.createElement('nav');steps.setAttribute('aria-label','Pasos para preparar el producto');
+    for(const [section,title] of [['photos','1. Fotos'],['general','2. Información'],['prices','3. Precio'],['inventory','4. Opciones y stock'],['all','5. Revisar todo']]) {
+      const step=document.createElement('button');step.type='button';step.textContent=title;step.dataset.editorStep=section;
+      step.addEventListener('click',()=>{showSection(card,section,true);const target=section==='all'?card.querySelector('#prod-publicationStatus'):(card.querySelector(`[data-product-section="${section}"] input:not([type=hidden])`) || card.querySelector(`[data-product-section="${section}"] button`));target?.focus({preventScroll:true});});steps.append(step);
+    }
+    const hint=document.createElement('p');hint.textContent='Podés seguir este orden o editar cualquier bloque. Los cambios se aplican al guardar.';
+    guide.append(hint,steps);navigation.prepend(guide);
   }
   let layout = body.querySelector('.tt-editor-layout');
   if (!layout) {
@@ -89,7 +99,7 @@ export function enhanceProductEditor() {
     const sidebar=document.createElement('aside');sidebar.className='tt-editor-sidebar';sidebar.setAttribute('aria-label','Publicación y organización del producto');layout.append(sidebar);
     const descriptions = {
       general:'Nombre y descripción que verán tus clientes.',
-      photos:'Subí varias fotos, ordenalas y elegí la portada de cada color.',
+      photos:'La imagen principal es la portada. Agregá otras vistas y ordená las fotos de cada color.',
       prices:'Definí el precio general y las promociones.',
       inventory:'Opciones, precios y cantidades de cada combinación.',
       specs:'Detalles opcionales que ayudan a elegir.',
@@ -178,6 +188,7 @@ export function enhanceProductEditor() {
   lastError=message;
   refreshProductPreview(card);
   installEditorControls(card);refreshEditorControls(card);
+  mountLocalVision(card);
 }
 
 function refreshEditorHeading(card) {
@@ -199,6 +210,9 @@ function refreshEditorHeading(card) {
 
 function showSection(card,value,expand=false) {
   card.querySelector('#prod-editor-section').value=value;
+  for(const step of card.querySelectorAll('[data-editor-step]')) {
+    if(step.dataset.editorStep===value)step.setAttribute('aria-current','step');else step.removeAttribute('aria-current');
+  }
   card.querySelector('.tt-editor-layout').dataset.editorSection=value;
   for (const field of card.querySelectorAll('[data-product-section]')) {
     const hidden=field.dataset.permissionHidden==='true' || value !== 'all' && field.dataset.productSection !== value;
