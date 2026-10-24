@@ -61,7 +61,7 @@ function bootGlobalUiUx() {
     document.head.appendChild(link);
   }
   if (!window.TintinUX?.booted) {
-    import('../../quality/experiencia-interfaz.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1')
+    import('../../quality/experiencia-interfaz.js?v=tintin-20261024-foco-paneles-1')
       .catch(error => console.warn('[PublicShell] No se pudo iniciar la capa UI global.', error));
   }
 }

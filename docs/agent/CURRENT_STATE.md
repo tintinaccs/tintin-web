@@ -1,3 +1,11 @@
+## 2026-10-24 — Foco de cierre de notificaciones (Codex /root)
+
+El aviso de Chrome se reproduce al cerrar Alertas: aria-hidden=true se aplicaba mientras su botón conservaba foco. SurfaceController libera inert y devuelve el foco al disparador antes de ocultar; al cambiar de panel sin restauración, retira cualquier foco restante del panel saliente. Se identifica además el control de foco global compitiendo con SurfaceController en tablet/escritorio: accesibilidad-global delega únicamente los diálogos registrados por identidad en esa autoridad y conserva su control de los demás diálogos.
+
+Regresión instrumenta el momento exacto de setAttribute para detectar descendientes enfocados, verifica Escape y botón de cierre y retorno a la campana en cinco resoluciones. Primer recorrido falla en las cinco; tras los cambios pasan las cinco. Contratos de bootstrap/cuenta: 2 PASS_LOCAL. PASS_LOCAL: 88 pruebas Chromium de navegación y accesibilidad, build Pages y 39 comandos de preflight (todos status=0). CI del SHA final: PENDING al preparar esta entrada. Se regeneran URLs inmutables, shell, caché y manifiestos desde sus autoridades. Sin cambios de reglas, sesión ni datos comerciales reales.
+
+El archivo de consola aportado por la titular contiene además rechazos permission-denied para perfil, recomendaciones, notificaciones, storeGate, tarifas/configuración y listener de carrito. Se informa alcance y uso de valores por defecto; el registro mezcla momentos y no demuestra causa ni persistencia actual. No se amplía esta reparación de foco a reglas de Firestore ni se silencian esos errores. HEARTBEAT_WRITE_SUCCESS/SUPPRESSED son diagnósticos normales.
+
 ## 2026-10-24 — Completar el diseño visual tipo Shopify (Codex /root)
 
 La titular señaló que la publicación funcional de PR1219 no completaba la distribución visual propuesta. Se recupera ese alcance autorizado sobre main1cdad406: Producto/Fotos/Precio/Variantes/Detalles a la izquierda y Publicación/Vista previa/Organización/SEO/Estadísticas a la derecha cuando caben; una columna en móvil/tablet vertical. Se preservan tema, nodos, IDs, valores y handlers; Guardar/Cancelar originales pasan a cabecera visible, con nombre/estado y títulos largos acotados. Inventario interno conserva permiso/ocultamiento y sección propia. Native details hace plegables vista previa, Google y estadísticas.

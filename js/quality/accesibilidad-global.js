@@ -169,6 +169,11 @@ function labelDialog(dialog) {
   }
 }
 
+// Navigation surfaces own their focus trap and restoration lifecycle.
+function isManagedSurface(dialog) {
+  return window.TintinSurfaceController?.registry?.get(dialog?.dataset.ttSurface)?.element === dialog;
+}
+
 function activateDialog(dialog) {
   if (!(dialog instanceof HTMLElement) || activeDialog === dialog || !isVisible(dialog)) return;
   if (activeDialog?.isConnected && isVisible(activeDialog)) return;
@@ -188,6 +193,11 @@ function activateDialog(dialog) {
 
 function releaseDialogIfNeeded() {
   if (!activeDialog) return false;
+  if (isManagedSurface(activeDialog)) {
+    activeDialog = null;
+    returnFocus = null;
+    return true;
+  }
   if (activeDialog.isConnected && isVisible(activeDialog)) return false;
   activeDialog = null;
   const target = returnFocus;
@@ -204,7 +214,7 @@ function releaseDialogIfNeeded() {
 function scanDialogs() {
   const released = releaseDialogIfNeeded();
   if (released || activeDialog) return;
-  const dialogs = Array.from(document.querySelectorAll(DIALOG_SELECTOR)).filter(isVisible);
+  const dialogs = Array.from(document.querySelectorAll(DIALOG_SELECTOR)).filter(dialog => !isManagedSurface(dialog) && isVisible(dialog));
   if (dialogs.length) activateDialog(dialogs.at(-1));
 }
 

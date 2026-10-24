@@ -326,12 +326,20 @@
         if (token !== this.operation) return false;
       }
 
+      // Release the opener before returning focus, and evacuate any remaining
+      // focus before hiding the dialog from assistive technology. Switches do
+      // not restore the opener; the next surface will establish its own focus.
+      if (config) this.setBackgroundInert(config.element, false);
+      if (restoreFocus && returnTarget?.isConnected && !config?.element.contains(returnTarget)) {
+        returnTarget.focus({ preventScroll: true });
+      }
+      if (config?.element.contains(document.activeElement)) document.activeElement.blur();
+
       if (config) {
         config.element.classList.remove('open', 'tt-surface-preparing');
         config.element.closest('.tt-nav-dropdown')?.classList.remove('open');
         config.element.setAttribute('aria-hidden', 'true');
         this.setExpanded(config, false);
-        this.setBackgroundInert(config.element, false);
       }
 
       if (!preserveEnvironment) {
@@ -343,7 +351,6 @@
       this.state = 'idle';
       this.trigger = null;
       config?.afterClose?.({ reason, controller: this });
-      if (restoreFocus && returnTarget?.isConnected) returnTarget.focus({ preventScroll: true });
       this.emit();
       return true;
     }
