@@ -8,7 +8,7 @@ import { resolveCICommands } from '../../scripts/ci-commands.js';
 
 function candidate() {
   return {
-    workflow: fs.readFileSync('.github/workflows/auditar-tintin.yml', 'utf8'),
+    workflow: fs.readFileSync('.github/workflows/auditar-tintin.yml', 'utf8').replace(/\r\n/g, '\n'),
     scripts: JSON.parse(fs.readFileSync('package.json', 'utf8')).scripts,
     stages: JSON.parse(fs.readFileSync('config/ci-stages.json', 'utf8')),
   };

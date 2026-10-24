@@ -417,23 +417,21 @@
       if (navigation) roots.push(navigation);
       const privacy = this.getPrivacySurface();
       if (privacy) roots.push(privacy);
-      const nodes = roots.flatMap(root => [...root.querySelectorAll(FOCUSABLE)]).filter(node => node.getClientRects().length && !node.closest('[inert],[hidden]') && getComputedStyle(node).visibility !== 'hidden');
+      const nodes = roots.flatMap(root => [...root.querySelectorAll(FOCUSABLE)]).filter(node => node.tabIndex >= 0 && node.getClientRects().length && !node.closest('[inert],[hidden]') && getComputedStyle(node).visibility !== 'hidden');
       if (!nodes.length) {
         event.preventDefault();
         config.element.focus();
         return;
       }
 
-      const first = nodes[0];
-      const last = nodes[nodes.length - 1];
-      const outside = !roots.some(root => root.contains(document.activeElement));
-      if (event.shiftKey && (document.activeElement === first || outside)) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && (document.activeElement === last || outside)) {
-        event.preventDefault();
-        first.focus();
-      }
+      // Los paneles y la barra móvil son raíces separadas. WebKit puede saltar
+      // enlaces al tabular; no delegar el siguiente foco al fondo o al navegador.
+      const current = nodes.indexOf(document.activeElement);
+      const next = event.shiftKey
+        ? (current <= 0 ? nodes.length - 1 : current - 1)
+        : (current < 0 || current === nodes.length - 1 ? 0 : current + 1);
+      event.preventDefault();
+      nodes[next].focus({ preventScroll: true });
     }
   }
 
