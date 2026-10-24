@@ -721,3 +721,7 @@ Autoridad checkout-maintenance.css: desktop reserva header fijo más difuminado;
 ## 2026-10-24 — Guardar y compartir ticket visual PNG
 
 Autoridad:pedido-checkout-seguro.js, filas existentes de ck-confirm-summary. Sustituye TXT/texto/portapapeles por imagen PNG local con presentación Tintin; comparte archivo cuando Web Share lo admite o descarga imagen. Imprimir/PDF permanece. Consumidores de carrito/checkout y sus referencias transitivas renuevan URL inmutable; shell/caché/CSP/rutas/diagnóstico y protección se generan desde sus autoridades. No modifica cálculo comercial, pedidos, stock, correo ni datos reales. Pruebas canónicas checkout-receipt cubren PNG real, identidad del archivo compartido, errores/cancelación, tickets largos y siete tamaños en Chromium/WebKit. Estado y límites en CURRENT_STATE.
+
+## 2026-10-24 — Mensaje junto al PNG y destino WhatsApp
+
+La titular elige selector nativo con imagen y texto juntos. Se reutiliza buildWhatsAppMessage para el ticket y se informa el contacto Tintin0981299331. Fallback explícito a enlace WhatsApp y PNG adjunto manualmente cuando la plataforma no admite compartir ambos; nunca se promete un envío automático a destinatario fijo. La fuente del PNG respeta Montserrat y se corrige el fallo real de typography sin tocar gates. Consumidores y generadores renuevan URLs a ticket-image-2; pruebas cubren mensaje, archivo exacto, destino fallback, cancelación y permisos. Sin mensajes reales, compras, cambios de datos ni publicación.

@@ -20,6 +20,7 @@ const submit = secure.slice(secure.indexOf('  async function submit('), secure.i
 const forceCart = hardening.slice(hardening.indexOf('function forceCart('), hardening.indexOf('\nfunction ', hardening.indexOf('function forceCart(') + 1));
 const cartListeners = hardening.slice(hardening.indexOf("  window.addEventListener('tt_cart_updated'"), hardening.indexOf('\n}', hardening.indexOf("  window.addEventListener('tt_cart_updated'")));
 const quote = secure.slice(secure.indexOf('  function renderQuote('), secure.indexOf('  async function reserveCheckoutGuard'));
+const whatsapp = secure.slice(secure.indexOf('  function shippingSummary('), secure.indexOf('  function renderConfirmedOrder('));
 const css = ['css/pages/checkout/checkout.css', 'css/pages/checkout/checkout-maintenance.css', 'css/components/payments/payment-methods.css'].map(read).join('\n');
 
 // Execute the original success/submit/cart guards; only external services are
@@ -42,10 +43,11 @@ async function fixture(page) {
     const text = value => String(value ?? '');
     const escapeHtml = value => { const el = document.createElement('div'); el.textContent = text(value); return el.innerHTML; };
     const formatPrice = value => 'Gs. ' + Number(value).toLocaleString('es-PY');
-    const DEFAULT_STORE_WHATSAPP = '595981000000';
+    const DEFAULT_STORE_WHATSAPP = '595981299331';
     const SHIPPING_LABELS = {encomienda:'Encomienda',delivery:'Delivery',retiro:'Retiro'};
     const PAYMENT_LABELS = {transferencia:'Transferencia bancaria'};
-    const buildWhatsAppMessage = result => 'Pedido ' + result.shortId;
+    const ENCOMIENDA_LABELS = {agencia:'retiro en agencia',puerta:'entrega en puerta'};
+    ${whatsapp}
     const scheduleAnnotations = () => {};
     const syncConfirmCartGuard = () => {};
     const showError = (value, step = 4) => { const el = document.getElementById('error-' + step); el.textContent = value; el.classList.add('show'); };
@@ -182,12 +184,19 @@ test('confirmed ticket downloads, shares and prints without another order reques
     window.print = () => { window.fixturePrinted = true; };
   });
   await page.locator('#ck-share-receipt').click();
-  await expect(page.locator('#ck-receipt-status')).toHaveText('Ticket compartido.');
+  await expect(page.locator('#ck-receipt-status')).toContainText('Elegí WhatsApp y Tintin (0981 299331)');
   const shared = await page.evaluate(async () => ({
     text: fixtureShared.text, name: fixtureShared.files[0].name, type: fixtureShared.files[0].type,
     bytes: [...new Uint8Array(await fixtureShared.files[0].arrayBuffer())],
   }));
-  expect(shared.text).toBeUndefined();
+  expect(shared.text).toContain('¡Hola, Tintin! 🌸 Hice mi pedido en la web');
+  expect(shared.text).toContain('QA-LOCAL-001');
+  expect(shared.text).toContain('Producto de prueba');
+  expect(shared.text).toContain('Dorado / M');
+  expect(shared.text).toContain('35.000');
+  expect(shared.text).toContain('¡Muchas gracias! 💗');
+  expect(shared.text).toContain('no acredita el pago');
+  await expect(page.locator('#ck-share-whatsapp-fallback')).toBeHidden();
   expect(shared.name).toBe(download.suggestedFilename());
   expect(shared.type).toBe('image/png');
   expect(Buffer.from(shared.bytes).equals(receipt)).toBe(true);
@@ -196,6 +205,7 @@ test('confirmed ticket downloads, shares and prints without another order reques
   await page.evaluate(() => Object.defineProperty(navigator, 'share', { configurable: true, value: async () => { throw new DOMException('Cancelled','AbortError'); } }));
   await page.locator('#ck-share-receipt').click();
   await expect(page.locator('#panel-4')).toHaveClass(/active/);
+  await expect(page.locator('#ck-share-whatsapp-fallback')).toBeHidden();
   expect(await page.evaluate(() => fixtureRequests)).toBe(1);
   await page.locator('#panel-4').screenshot({ path: 'artifacts/receipt-' + testInfo.project.name + '.png' });
   await page.emulateMedia({ media: 'print' });
@@ -215,7 +225,14 @@ test('without file sharing the fallback downloads a PNG, never copies personal t
   const download = await pending;
   expect(download.suggestedFilename()).toMatch(/\.png$/);
   expect(fs.readFileSync(await download.path()).subarray(1,4).toString()).toBe('PNG');
-  await expect(page.locator('#ck-receipt-status')).toContainText('Descargamos la imagen');
+  await expect(page.locator('#ck-receipt-status')).toContainText('Descargamos tu ticket PNG');
+  const link = page.locator('#ck-share-whatsapp-fallback');
+  await expect(link).toBeVisible();
+  const url = new URL(await link.getAttribute('href'));
+  expect(url.origin + url.pathname).toBe('https://wa.me/595981299331');
+  expect(url.searchParams.get('text')).toContain('Hice mi pedido en la web');
+  expect(url.searchParams.get('text')).toContain('QA-LOCAL-001');
+  await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   expect(await page.evaluate(() => fixtureRequests)).toBe(1);
 });
 
@@ -235,6 +252,19 @@ test('a failed PNG encoder can retry without submitting another order', async ({
   const pending = page.waitForEvent('download');
   await page.locator('#ck-save-receipt').click();
   expect((await pending).suggestedFilename()).toMatch(/\.png$/);
+  expect(await page.evaluate(() => fixtureRequests)).toBe(1);
+});
+
+test('share permission failure offers the explicit WhatsApp fallback without claiming delivery', async ({ page }) => {
+  await fixture(page);
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'canShare', { configurable:true, value:() => true });
+    Object.defineProperty(navigator, 'share', { configurable:true, value:async () => { throw new DOMException('Denied','NotAllowedError'); } });
+    fixtureReview(); void fixtureSubmit();
+  });
+  await page.locator('#ck-share-receipt').click();
+  await expect(page.locator('#ck-receipt-status')).toContainText('No pudimos abrir');
+  await expect(page.locator('#ck-share-whatsapp-fallback')).toBeVisible();
   expect(await page.evaluate(() => fixtureRequests)).toBe(1);
 });
 

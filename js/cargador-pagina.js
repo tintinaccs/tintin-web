@@ -953,7 +953,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261024-ticket-image-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261024-ticket-image-2');
   }
 
   function bootThemeColorSanitizerPublic() {

@@ -291,7 +291,7 @@ function getStockLimit(productId, variant) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261024-ticket-image-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261024-ticket-image-2');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -617,7 +617,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261024-ticket-image-1')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261024-ticket-image-2')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -935,7 +935,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261024-ticket-image-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261024-ticket-image-2');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1892,7 +1892,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261024-ticket-image-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261024-ticket-image-2');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

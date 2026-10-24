@@ -862,7 +862,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return mode ? `${base} — ${mode}` : base;
   }
 
-  function buildWhatsAppMessage(result, draft) {
+  function buildWhatsAppMessage(result, draft, sharingTicket = false) {
     const itemLines = (result.items || [])
       .map(item => `• ${item.qty}x ${item.name}${item.variant ? ` — ${item.variant}` : ''} — ${formatPrice(item.price * item.qty)}`)
       .join('\n');
@@ -873,7 +873,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       : formatPrice(result.shippingCost || 0);
 
     const lines = [
-      `Hola, consulto por mi pedido *#${result.shortId}* (ya confirmado en la web).`,
+      sharingTicket
+        ? `¡Hola, Tintin! 🌸 Hice mi pedido en la web y les comparto mi ticket.\n🛍️ Pedido *#${result.shortId}*`
+        : `Hola, consulto por mi pedido *#${result.shortId}* (ya confirmado en la web).`,
       '',
       itemLines,
       '',
@@ -909,6 +911,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (name) lines.push('', `👤 ${name}`);
     const phone = text(draft?.phone);
     if (phone) lines.push(`📱 ${phone}`);
+    if (sharingTicket) lines.push('', 'Quedo pendiente de coordinar el pago y la entrega. ¡Muchas gracias! 💗', 'El ticket confirma el registro del pedido; no acredita el pago.');
 
     return lines.join('\n');
   }
@@ -974,7 +977,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const context = canvas.getContext('2d');
     if (!context) throw new Error('Imagen no disponible');
     const width = 720, padding = 36, contentWidth = width - padding * 2;
-    const fontFamily = 'Montserrat, Arial, sans-serif';
+    const fontFamily = 'Montserrat, sans-serif';
     const commands = [];
     let y = 0;
     const font = (size, bold) => `${bold ? '600' : '400'} ${size}px ${fontFamily}`;
@@ -1047,11 +1050,18 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return new File([blob], `Tintin-pedido-${id}.png`, { type: 'image/png' });
   }
 
-  function bindReceiptActions(result) {
+  function bindReceiptActions(result, draft) {
     const status = document.getElementById('ck-receipt-status');
     const notify = value => { if (status) status.textContent = value; };
     const save = document.getElementById('ck-save-receipt');
     const share = document.getElementById('ck-share-receipt');
+    const whatsappFallback = document.getElementById('ck-share-whatsapp-fallback');
+    const shareMessage = buildWhatsAppMessage(result, draft, true);
+    // Click-to-chat can select a recipient and text, but cannot attach a local file.
+    if (whatsappFallback) {
+      whatsappFallback.href = `https://wa.me/${DEFAULT_STORE_WHATSAPP}?text=${encodeURIComponent(shareMessage)}`;
+      whatsappFallback.hidden = true;
+    }
     let image;
     const download = file => {
       const url = URL.createObjectURL(file);
@@ -1080,16 +1090,20 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (share) share.onclick = async () => {
       if (!image) { prepare(); return; }
       try {
-        const files = [image];
-        if (typeof navigator.share === 'function' && navigator.canShare?.({ files })) {
-          await navigator.share({ title: `Mi pedido Tintin ${text(result.shortId)}`, files });
-          notify('Ticket compartido.');
+        const shareData = { title: `Mi pedido Tintin ${text(result.shortId)}`, text: shareMessage, files: [image] };
+        if (typeof navigator.share === 'function' && navigator.canShare?.(shareData)) {
+          await navigator.share(shareData);
+          notify('Opciones para compartir abiertas. Elegí WhatsApp y Tintin (0981 299331); confirmá el envío allí.');
         } else {
           download(image);
-          notify('Descargamos la imagen del ticket. Podés compartirla desde tu dispositivo.');
+          if (whatsappFallback) whatsappFallback.hidden = false;
+          notify('Este navegador no admite compartir la imagen con el mensaje. Descargamos tu ticket PNG; abrí WhatsApp de Tintin desde el enlace y adjuntá la imagen.');
         }
       } catch (error) {
-        if (error?.name !== 'AbortError') notify('No pudimos compartirlo. Podés guardar el ticket y compartir el archivo.');
+        if (error?.name !== 'AbortError') {
+          if (whatsappFallback) whatsappFallback.hidden = false;
+          notify('No pudimos abrir las opciones para compartir. Guardá el ticket PNG y adjuntalo al abrir WhatsApp de Tintin desde el enlace.');
+        }
       }
     };
     const print = document.getElementById('ck-print-receipt');
@@ -1115,7 +1129,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     window._lastOrderId = result.shortId;
     window.TintinCheckoutOrderCompleted = true;
     document.getElementById('panel-4')?.classList.add('ck-receipt');
-    bindReceiptActions(result);
+    bindReceiptActions(result, draft);
     document.querySelectorAll('.ck-panel').forEach((panel, index) => panel.classList.toggle('active', index === 4));
     document.querySelectorAll('.ck-step').forEach((step, index) => {
       step.classList.toggle('active', index === 4);
