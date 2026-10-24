@@ -1,3 +1,7 @@
+## 2026-10-24 — Conservar ocultamiento legacy al guardar otros campos (Codex /root)
+
+Revisión posterior reproduce un caso de compatibilidad real en las funciones del formulario: publicationStatus active con active false se mostraba como Activo y productEditorialData volvía a guardar active true al editar otro campo. productIsPublished ya consideraba ese producto oculto. Se alinea la fuente de estado del editor: active false conserva borrador; archived sigue archivado y sólo la selección explícita de Activo publica. Regresión ejecuta productEditorialForm/productEditorialData reales con sus controles DOM mínimos; FAIL con active en vez de draft antes y45 pruebas específicas PASS_LOCAL después. Se conservan legacy undefined e invalid-state fail-closed. Se renuevan las URLs afectadas y derivados desde autoridades, sin cambiar CSS, reglas ni datos reales. CI de este ajuste PENDING; el editor sigue en borrador y continúa pendiente el dispatch del propietario para publicar las reglas ya integradas.
+
 ## 2026-10-23 — Reglas integradas; cierre de publicación del editor (Codex /root)
 
 PR1220 eee6b371 aprobó CI40054073304, CodeQL, Pages y ambos controles de integridad; se integró automáticamente como d8bfcbee sin omitir ni cambiar protecciones. PR1219 en19ec6d8f también aprobó CI40054231840 completa, CodeQL y Pages. Se incorpora ahora main d8bfcbee para renovar la base y el plan del editor; no hay cambios de fuentes del editor/interfaz por esta conciliación. Los PASS_CI anteriores se atribuyen sólo a esos SHA, no automáticamente a la combinación nueva.
