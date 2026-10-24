@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "315883bd849c69f5f7c957b5283e35439b36c41b",
-  "reason": "Esperar App Check al verificar el perfil y descartar eventos de mantenimiento sin candidato publicable",
+  "baseCommit": "e4ca19f4eb84f4a79ec7982adc1d5040e15e9a1e",
+  "reason": "Esperar App Check en perfil y omitir eventos no publicables conservando el editor de main",
   "files": [
     {
       "path": "_headers",
-      "oldHash": "8f48748fb4b82910ceb58411c461afc15edaff3487dfac4f0073b1a4f5d19107",
-      "newHash": "1a283ec32a06f6a0ff8964c771c9f692c1a90e556f5b029edc45edc180ae50da"
+      "oldHash": "423184cea2f45f8599d7eccbcd45dbfe30d046f88d41ae2b513b85416d5e090a",
+      "newHash": "63f58ce74e69c89f447ab65b6eb2d4925afb84a39727965c53862de80af5c856"
     },
     {
       "path": "404.html",
@@ -25,8 +25,8 @@
     },
     {
       "path": "admin.html",
-      "oldHash": "52a3b5f39be1040942a5ff2e9af6feabe29b7460a7b15c4bc8ff21e59769e957",
-      "newHash": "4e405c662ea17e0fa5e7bf206985bae07f59798d46e27329f76e35c6d5415c39"
+      "oldHash": "3544a1e785cd8046d45c17fbc1a74214a838a61e9d599b7e9917182433806fab",
+      "newHash": "fc906c4964689f1da5cb4867434bd9ee116d08458571120a61b21d787da31795"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -115,8 +115,8 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "d492cbefe5038f40b6571eed7763bb72ae6d3533f13c654ab60c7bc9bcb80f8a",
-      "newHash": "498fba44b9eb11c02167e19b66b2a5197c83244d05130d08d41ded58a475ca96"
+      "oldHash": "5f8322b2f0a97d96c1012c31a16ebd24f0feb86104a7d850215a767018c0b521",
+      "newHash": "2091fa1ce8f790644892f5e6f7c306ffaadd4d0c50e2fa2880fa2432eacca149"
     },
     {
       "path": "scripts/generar-flujo-decisiones-acceso.mjs",

@@ -1395,7 +1395,12 @@ html.tt-product-editor-open #prod-form-card .tt-editor-cover img { max-height:30
 
 /* Productos y catálogo administrativo: editor esencial + opciones avanzadas.
    Mantiene el mismo árbol de campos y las autoridades CRUD existentes. */
-#prod-form-card { --editor-line:#e9e7e9; --editor-soft:#f7f7f8; }
+#prod-form-card {
+  --editor-line:color-mix(in srgb,var(--tt-commerce-text) 24%,var(--tt-commerce-surface));
+  --editor-soft:color-mix(in srgb,var(--tt-commerce-text) 9%,var(--tt-commerce-surface));
+  --editor-field:color-mix(in srgb,var(--tt-commerce-brand) 16%,var(--tt-commerce-surface));
+  --editor-field-line:color-mix(in srgb,var(--tt-commerce-text) 58%,var(--tt-commerce-surface));
+}
 #prod-form-card .adm-card-head { gap:16px; }
 #prod-form-card .tt-product-section-nav { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:0 0 16px; }
 #prod-form-card .tt-product-section-nav > label { font-size:12px; color:var(--tt-commerce-muted); }
@@ -1560,3 +1565,24 @@ html.tt-product-editor-open #section-productos.tt-commerce-mounted #prod-form-ca
 #prod-form-card .tt-product-editorial { display:grid; gap:10px; margin-top:16px; padding:16px; }
 #prod-form-card #prod-statistics { overflow-wrap:anywhere; }
 @media(max-width:767px) { #prod-form-card .tt-commercial-row { grid-template-columns:1fr; } #prod-form-card .tt-commercial-toolbar > * { flex-basis:100%; } }
+
+/* Tres superficies distinguibles: lienzo, tarjetas y campos editables. */
+#section-productos.tt-commerce-mounted #prod-form-card .adm-input {
+  background:var(--editor-field);
+  border-color:var(--editor-field-line) !important;
+}
+#prod-form-card .adm-input::placeholder { color:var(--tt-commerce-text); opacity:.65; }
+#prod-form-card .tt-editor-section-fields label { color:var(--tt-commerce-text); }
+#prod-form-card .adm-input[readonly], #prod-form-card .adm-input:disabled { background:var(--editor-soft); }
+#prod-form-card .tt-product-section-nav { flex-wrap:wrap; }
+#prod-form-card .tt-editor-guide { margin-right:auto; min-width:0; max-width:100%; font-size:13px; font-weight:500; }
+#prod-form-card .tt-editor-guide summary { min-height:44px; display:list-item; align-content:center; cursor:pointer; font-weight:600; }
+#prod-form-card .tt-editor-guide[open] { flex-basis:100%; }
+#prod-form-card .tt-editor-guide p { margin:4px 0 10px; line-height:1.5; }
+#prod-form-card .tt-editor-guide nav { display:flex; flex-wrap:wrap; gap:8px; }
+#prod-form-card .tt-editor-guide button { min-height:44px; padding:8px 12px; border:1px solid var(--editor-field-line); border-radius:10px; background:var(--tt-commerce-surface); color:var(--tt-commerce-text); font:inherit; cursor:pointer; }
+#prod-form-card .tt-editor-guide button[aria-current=step] { background:var(--editor-field); font-weight:700; }
+#prod-form-card .tt-editor-vision { grid-column:1/-1; min-width:0; padding-top:12px; border-top:1px solid var(--editor-line); }
+#prod-form-card .tt-editor-vision summary { min-height:44px; cursor:pointer; font-weight:600; align-content:center; }
+#prod-form-card .tt-editor-vision p { font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
+#prod-form-card .tt-editor-vision button { margin:4px 4px 4px 0; max-width:100%; white-space:normal; }

@@ -1,3 +1,7 @@
+## 2026-10-24 — Conciliar perfil/mantenimiento con editor publicado (Codex /root)
+
+Se integra main e4ca19f4 de PR1222 mediante merge normal, conservando sus fuentes de editor/visión y las correcciones de perfil/mantenimiento de PR1225. Los conflictos están limitados a evidencia y derivados; se conservan ambas entradas de documentación y se regeneran plan/protección/manifiestos desde sus autoridades sobre la base nueva. PASS_LOCAL de la combinación:198 pruebas de cuenta/perfil/mantenimiento, build Pages y39 preflight aprobados. Ningún PASS_CI del candidato anterior se atribuye a esta combinación; CI del SHA nuevo PENDING. El ticket PNG sigue en su PR separado y no se modifica.
+
 ## 2026-10-24 — Perfil espera App Check y mantenimiento descarta eventos no publicables (Codex /root)
 
 Al revisar Actions por indicación de la titular, se dejan al trabajo concurrente los PR1222 (editor/visión) y1224 (ticket PNG). Sus listas de archivos no modifican perfil ni Firebase. Main315883bd tiene CI completa aprobada, Pages y salud de producción aprobados; las X de mantenimiento proceden de CI no aprobada, borrador o cambio de base, y no prueban un fallo del sitio. Las ejecuciones históricas no se reescriben ni se reintentan para ocultar resultados.
@@ -8,6 +12,12 @@ Mantenimiento disparaba publicación al finalizar CI fallida/cancelada y contra 
 
 Grafo de URLs de perfil/protección de sesión, contrato generado de acceso y derivados renovados desde sus autoridades. Build Pages y39 comandos de preflight PASS_LOCAL (todos status=0) sobre estas fuentes; CI del SHA final PENDING al preparar esta entrada. NOT_VERIFIED: causa y persistencia de los restantes permission-denied del archivo de consola; no hay navegador del usuario conectado y el acceso directo a Firestore desde este entorno falló. No se declaran resueltos por esta corrección ni se ensanchan reglas. Sin datos, cuentas, pedidos, correos o pagos reales modificados.
 
+## 2026-10-24 — Conciliar editor con corrección concurrente de foco (Codex /root)
+
+La CI40091157112 del candidato116e2218 aprobó completa, pero main incorporó315883bd (#1223) mientras corría. El controlador bloqueó correctamente su integración por cambio de base. Se incorpora main mediante merge normal, preservando ambas entradas de documentación, las nuevas URLs de navegación/foco y los bytes/URLs del editor y visión (sin cambios respecto de116e2218). Plan, política y manifiestos se regeneran desde la nueva base; no se evita ninguna protección ni se reescribe historia.
+
+PASS_LOCAL de la combinación:495 pruebas de checkout/carrito/pedidos/pagos/admin/CSP y build Pages/rutas/CSP/diagnóstico/caché aprobados. 209 Chromium combinados de editor/checkout sin reintentos y39 comandos de preflight aprobados. CI del nuevo SHA PENDING; la aprobación del candidato anterior se atribuye exclusivamente a116e2218. Integración automática autorizada por la titular tras los controles completos del nuevo candidato. No hay compras, cobros, correos ni modificaciones comerciales reales.
+
 ## 2026-10-24 — Foco de cierre de notificaciones (Codex /root)
 
 El aviso de Chrome se reproduce al cerrar Alertas: aria-hidden=true se aplicaba mientras su botón conservaba foco. SurfaceController libera inert y devuelve el foco al disparador antes de ocultar; al cambiar de panel sin restauración, retira cualquier foco restante del panel saliente. Se identifica además el control de foco global compitiendo con SurfaceController en tablet/escritorio: accesibilidad-global delega únicamente los diálogos registrados por identidad en esa autoridad y conserva su control de los demás diálogos.
@@ -15,6 +25,11 @@ El aviso de Chrome se reproduce al cerrar Alertas: aria-hidden=true se aplicaba 
 Regresión instrumenta el momento exacto de setAttribute para detectar descendientes enfocados, verifica Escape y botón de cierre y retorno a la campana en cinco resoluciones. Primer recorrido falla en las cinco; tras los cambios pasan las cinco. Contratos de bootstrap/cuenta: 2 PASS_LOCAL. PASS_LOCAL: 88 pruebas Chromium de navegación y accesibilidad, build Pages y 39 comandos de preflight (todos status=0). CI del SHA final: PENDING al preparar esta entrada. Se regeneran URLs inmutables, shell, caché y manifiestos desde sus autoridades. Sin cambios de reglas, sesión ni datos comerciales reales.
 
 El archivo de consola aportado por la titular contiene además rechazos permission-denied para perfil, recomendaciones, notificaciones, storeGate, tarifas/configuración y listener de carrito. Se informa alcance y uso de valores por defecto; el registro mezcla momentos y no demuestra causa ni persistencia actual. No se amplía esta reparación de foco a reglas de Firestore ni se silencian esos errores. HEARTBEAT_WRITE_SUCCESS/SUPPRESSED son diagnósticos normales.
+## 2026-10-24 — Editor intuitivo, visión local y checkout (Codex /root)
+
+Base main18bd9f5d. Fotos primero; guía de cinco accesos opcional; campos/tarjetas/lienzo distinguibles; Quitar explícito y materiales sugeridos por categoría. Conserva nodos, handlers, permisos, variantes y guardado. Reconocimiento TinyCLIP40M/ONNX local, sólo al solicitarlo, sin API facturada, cuenta o expiración de prueba;50MB iniciales aproximados y sugerencias revisables. No confirma materiales ni altera precio/stock/variantes. CSP de compilación WASM limitada al worker exacto, validada con negativas y Pages local; ninguna ampliación de documentos/checkout u orígenes externos. Modelos/runtime con licencias, procedencia y hashes, cada asset menor de25MiB.
+
+PASS_LOCAL:223 checkout/carrito/variantes y163 pedidos/pagos/presentación (con solapamiento),9 integraciones REST/CAS emuladas incluyendo editor→checkout→pedido→cancelación,140 Chromium sin reintentos y134 administrativas/CSP;5 visión/diagnóstico tras refuerzo de integridad. Capturas390/1440 inspeccionadas; build y estilos aprobados. PASS_LOCAL adicional:39 comandos de preflight completos,15 pruebas de seguridad/visión/diagnóstico y69 Chromium de disponibilidad, navegación y recibo de checkout. CI final PENDING. No se heredan resultados de otro SHA; no hay compras, pagos, correos o escrituras comerciales reales. Alcance, evidencia y límites en docs/editor-productos-v2/17-EDITOR-INTUITIVO-Y-CHECKOUT.md. No publicado.
 
 ## 2026-10-24 — Completar el diseño visual tipo Shopify (Codex /root)
 

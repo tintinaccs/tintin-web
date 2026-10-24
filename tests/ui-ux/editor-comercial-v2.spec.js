@@ -40,3 +40,26 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  expect(errors).toEqual([]);
  if(width===390 || width===1440){fs.mkdirSync('artifacts/editor-v2',{recursive:true});await page.locator('#prod-form-card').screenshot({path:`artifacts/editor-v2/editor-${width}.png`});}
 });
+
+test('reconocimiento real local: carteras, relojes y abstención sin API externa',async({page})=>{
+ test.setTimeout(120000);
+ const base=new URL(test.info().project.use.baseURL || 'http://127.0.0.1:4173').origin;
+ const external=[],models=[];
+ await page.route('**/*',route=>{const url=new URL(route.request().url());if(url.origin!==base){external.push(url.origin);return route.abort();}if(url.pathname.startsWith('/assets-tintin/vision/'))models.push(url.pathname);return route.continue();});
+ const policy=fs.readFileSync('_headers','utf8').split('# LOCAL_VISION_WORKER_CSP_START')[1].match(/Content-Security-Policy: ([^\n]+)/)[1];
+ await page.route('**/vision-productos-worker.js*',async route=>{const response=await route.fetch();await route.fulfill({response,headers:{...response.headers(),'content-security-policy':policy}});});
+ await page.route('**/vision-local-fixture',route=>route.fulfill({contentType:'text/html',headers:{'content-security-policy':"default-src 'self'; script-src 'self'; img-src 'self' data:; worker-src 'self'; connect-src 'self'"},body:'<!doctype html><div id="prod-form-card"><input id="prod-id"><input id="prod-imageUrl" type="hidden"><input id="prod-material" value="Dato confirmado"><input id="prod-stock" value="4"><textarea id="prod-variants-text">Color: Dorado</textarea><select id="prod-category"><option value="">Elegir</option><option value="carteras">Carteras</option><option value="relojes">Relojes</option></select><section data-product-section="photos"><div class="tt-editor-section-fields"></div></section></div>'}));
+ await page.goto('/vision-local-fixture');
+ await page.evaluate(async()=>{const url=new URL('/js/admin/products/vision-productos-interfaz.js',location.origin);const {mountLocalVision}=await import(url.href);mountLocalVision(document.getElementById('prod-form-card'));});
+ await page.locator('.tt-editor-vision summary').click();expect(models).toHaveLength(0);
+ for(const [image,label] of [['/assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp','Cartera'],['/assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp','Reloj']]) {
+  await page.locator('#prod-imageUrl').evaluate((input,url)=>{input.value=url;input.dispatchEvent(new Event('input',{bubbles:true}));},image);
+  await page.getByRole('button',{name:'Analizar imagen principal',exact:true}).click();
+  await expect(page.locator('.tt-editor-vision [role=status]')).toContainText(`Podría ser: ${label}`,{timeout:60000});
+ }
+ await expect(page.locator('#prod-category')).toHaveValue('');await expect(page.locator('#prod-material')).toHaveValue('Dato confirmado');await expect(page.locator('#prod-stock')).toHaveValue('4');await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado');
+ await page.locator('#prod-imageUrl').evaluate(input=>{const canvas=document.createElement('canvas');canvas.width=canvas.height=224;const context=canvas.getContext('2d');context.fillStyle='white';context.fillRect(0,0,224,224);input.value=canvas.toDataURL();input.dispatchEvent(new Event('input',{bubbles:true}));});
+ await page.getByRole('button',{name:'Analizar imagen principal',exact:true}).click();
+ await expect(page.locator('.tt-editor-vision [role=status]')).toContainText('No pude reconocer',{timeout:60000});
+ expect(models.length).toBeGreaterThan(0);expect(external).toEqual([]);
+});

@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const childProcess = require('child_process');
+const {isBuiltin} = require('node:module');
 const { visualSource } = require('../js/quality/revision-visual.mjs');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -401,7 +402,7 @@ function extractImports(file, source) {
     while ((match = pattern.exec(analyzableSource))) {
       imports.push({
         raw: match[1],
-        target: normalizeLocalReference(file, match[1]),
+        target: isBuiltin(match[1]) ? null : normalizeLocalReference(file, match[1]),
         dynamic: pattern.source.includes('\\('),
         line: lineAt(analyzableSource, match.index)
       });
