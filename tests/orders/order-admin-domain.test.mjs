@@ -1,3 +1,4 @@
+import {verifyRetiredOptionCheckout} from '../helpers/retired-option-checkout.mjs';
 import {mergeSelectedOrderProducts} from '../../js/admin/orders/seleccion-productos-pedido.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -981,4 +982,14 @@ test('multiple combinations may exceed 99 units in aggregate and still cancel wi
  const cancel={orderId:created.orderId,status:'cancelado',changeId:'v2_multi_cancel'};
  await applyOrderAdminMutation({},cancel,ACTOR,store);await applyOrderAdminMutation({},cancel,ACTOR,store);
  const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.stock,120);assert.equal(after.variantInventory[0].stock,60);assert.equal(after.variantInventory[1].stock,60);
+});
+
+
+test('editor y checkout conectados: retiro/restauración con reserva, cancelación y otro color',async()=>{
+ const deps=fakeStore({}, {transactional:true});
+ const seed=(path,data)=>deps.commit({},[{path,fields:encodeFirestoreFields(data)}]);
+ const product=async id=>decodeFirestoreFields((await deps.get({},`products/${id}`)).fields);
+ const actor={uid:'retire_fixture',email:'fixture@example.test',role:'client',origin:'public-checkout'};
+ const admin={uid:'retire_admin',email:'admin@example.test',role:'superadmin',origin:'superadmin'};
+ await verifyRetiredOptionCheckout({deps,seed,product,actor,admin});
 });

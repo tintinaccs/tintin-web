@@ -1,12 +1,38 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {commercialDraft,commercialPatch} from '../../js/admin/products/editor-comercial-core.mjs';
+import {commercialDraft,commercialPatch,setCommercialOptionAvailability} from '../../js/admin/products/editor-comercial-core.mjs';
 import {saveProductEditor,validateProductEditorPatch} from '../../cloudflare/product-editor-domain.mjs';
 import {encodeFirestoreFields,decodeFirestoreFields} from '../../cloudflare/firebase-admin-ligero.js';
 import {productFingerprint,productDuplicateData} from '../../js/admin/products/maestro-productos-core.mjs';
 const source={name:'Anillo',category:'anillos',price:30000,priceBefore:null,active:true,oferta:false,destacado:false,variants:{Color:['Oro','Plata']},variantInventory:[{variant:'Oro',stock:3},{variant:'Plata',stock:0}],stock:3,privateLegacy:'preservado'};
 const product=()=>commercialDraft(source);
 const inventory={costUnit:100,purchased:2,stockMinimum:1,internalNotes:'Privado'};
+
+test('retirar y restaurar una opción preserva cantidades, precios, fotos e identidades',()=>{
+ const p=product();p.variantInventory[0].price=45000;p.variantMedia=[{Color:'Oro',imageUrl:'https://example.invalid/gold.png'}];
+ const retired=setCommercialOptionAvailability(p,'Color','Oro',false);
+ assert.equal(p.variantInventory[0].active,undefined);
+ assert.deepEqual(retired.variantInventory[0],{...p.variantInventory[0],active:false});
+ assert.deepEqual(retired.variantInventory[1],p.variantInventory[1]);assert.deepEqual(retired.variantMedia,p.variantMedia);
+ assert.deepEqual(retired.variants,p.variants);assert.equal(retired.stock,p.stock);
+ assert.deepEqual(setCommercialOptionAvailability(retired,'Color','Oro',true).variantInventory[0],{...p.variantInventory[0],active:true});
+ assert.throws(()=>setCommercialOptionAvailability(p,'Color','Inexistente',false),/no existe/);
+ assert.throws(()=>setCommercialOptionAvailability(p,'Color','Oro','false'),/inválida/);
+});
+
+test('opciones no guardadas se pueden quitar; las guardadas siguen protegidas contra borrado físico',()=>{
+ const p=product();const extended=commercialDraft(p,{Color:['Oro','Plata','Negro']});
+ const removed=commercialDraft(extended,p.variants,p);
+ assert.deepEqual(removed.variantInventory,p.variantInventory);
+ assert.throws(()=>commercialPatch(p,{variantInventory:p.variantInventory.slice(1)}),/Conservá/);
+});
+
+test('servidor acepta retirar venta por la ruta canónica sin permitir destruir historial',()=>{
+ const p=product();const retired=setCommercialOptionAvailability(p,'Color','Oro',false);
+ const patch=validateProductEditorPatch(p,{variantInventory:retired.variantInventory});
+ assert.deepEqual(patch.variantInventory,retired.variantInventory);assert.equal(patch.stock,3);
+ assert.throws(()=>validateProductEditorPatch(p,{variants:{Color:['Plata']},variantInventory:[p.variantInventory[1]]}));
+});
 function store(){const docs=new Map([['products/p1',{fields:encodeFirestoreFields(product()),updateTime:'v1'}],['collections/anillos',{fields:{},updateTime:'c1'}],['productInventory/p1',{fields:encodeFirestoreFields(inventory),updateTime:'i1'}]]);const writes=[];return {docs,writes,io:{get:async(_env,path)=>docs.get(path),commit:async(_env,list)=>writes.push(...list)}};}
 const actor={uid:'super',role:'superadmin'};
 function body(){const p=product();return {productId:'p1',changeId:'test_change_id_123',expected:productFingerprint(p),product:p,inventory:{...inventory},expectedInventory:{...inventory}};}
