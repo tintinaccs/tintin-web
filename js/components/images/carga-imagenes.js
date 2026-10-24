@@ -431,7 +431,7 @@ export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary
       remove.addEventListener('click',()=>{queue=queue.filter(other=>other!==item);URL.revokeObjectURL(item.preview);render();});
       tile.append(image,remove);grid.append(tile);
     }
-    confirm.disabled=!queue.length || busy();drop.disabled=library.disabled=busy();input.disabled=busy();
+    confirm.hidden=!queue.length && !busy();confirm.disabled=!queue.length || busy();drop.disabled=library.disabled=busy();input.disabled=busy();
     root.setAttribute('aria-busy',String(busy()));
   }
   function addFiles(files) {

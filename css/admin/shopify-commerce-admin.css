@@ -1586,3 +1586,27 @@ html.tt-product-editor-open #section-productos.tt-commerce-mounted #prod-form-ca
 #prod-form-card .tt-editor-vision summary { min-height:44px; cursor:pointer; font-weight:600; align-content:center; }
 #prod-form-card .tt-editor-vision p { font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
 #prod-form-card .tt-editor-vision button { margin:4px 4px 4px 0; max-width:100%; white-space:normal; }
+
+/* Galería: el contenido es protagonista; ordenar y eliminar no ocupan una fila cada uno. */
+#prod-form-card .tt-editor-gallery-additional { grid-column:1/-1; min-width:0; border:1px solid var(--editor-line); border-radius:12px; background:var(--tt-commerce-surface); }
+#prod-form-card .tt-editor-gallery-additional > summary { min-height:44px; padding:12px 14px; cursor:pointer; font-size:13px; font-weight:650; color:var(--tt-commerce-text); }
+#prod-form-card .tt-editor-gallery-additional[open] > summary { border-bottom:1px solid var(--editor-line); }
+#prod-form-card .tt-editor-gallery-additional-content { padding:12px; }
+#prod-form-card .tt-editor-photo-filters { grid-column:1/-1; width:100%; padding:0; border-bottom:1px solid var(--editor-line); }
+#prod-form-card .tt-color-photo-tile { position:relative; gap:6px; padding:6px; border-radius:10px; }
+#prod-form-card .tt-color-photo-tile img { height:104px; }
+#prod-form-card .tt-color-photo-tile > label > input[type=checkbox] { position:absolute; z-index:1; top:6px; left:6px; margin:0; }
+#prod-form-card .tt-photo-order-badge { padding:3px 6px; border-radius:999px; font-size:10px; }
+#prod-form-card .tt-photo-order-badge.is-primary { background:color-mix(in srgb,var(--tt-commerce-brand) 22%,var(--tt-commerce-surface)); font-weight:700; }
+#prod-form-card .tt-photo-order-actions { grid-template-columns:repeat(3,36px); justify-content:end; gap:4px; }
+#prod-form-card .tt-photo-order-actions .adm-btn { display:grid; place-items:center; min-width:36px; min-height:36px; padding:4px; border-radius:8px; font-size:15px; line-height:1; }
+#prod-form-card .tt-photo-cover,#prod-form-card .tt-photo-remove { min-height:36px; padding:5px 8px; border-radius:8px; font-size:11px; }
+#prod-form-card .tt-photo-cover.is-cover { border-color:var(--tt-commerce-brand); background:var(--tt-commerce-soft); font-weight:700; }
+#tt-commerce-products .tt-card-visibility { justify-content:start; gap:3px; }
+#tt-commerce-products .tt-card-visibility > span { min-height:0; font-size:10px; line-height:1.3; }
+#tt-commerce-products .tt-card-visibility select { width:auto; min-height:34px; padding:5px 28px 5px 10px; border-radius:999px; font-size:11px; line-height:1.2; }
+@media(max-width:600px) {
+  #prod-form-card .tt-editor-gallery-additional-content { padding:10px; }
+  #prod-form-card .tt-color-photo-grid { grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:8px; }
+  #prod-form-card .tt-photo-order-actions { grid-template-columns:repeat(3,36px); }
+}

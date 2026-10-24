@@ -14,7 +14,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261024-editor-v2-3';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261024-editor-gallery-compact-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -46,7 +46,7 @@ import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tint
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261022-products-master-1";
+import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261024-gallery-compact-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261022-avatar-inicial-1";
@@ -5800,12 +5800,15 @@ function mountProductColorPhotos(product) {
   coverInput.addEventListener('change',()=>_formImageWidgets.get('prod-image-widget')?.setValue(coverInput.value,{discardPending:true}),{signal:gallerySignal});
   let gallery = document.getElementById('prod-gallery-widget');
   if (!gallery) {
-    gallery = document.createElement('div'); gallery.id = 'prod-gallery-widget';
+    gallery = document.createElement('details'); gallery.id = 'prod-gallery-widget';gallery.className='tt-editor-gallery-additional';
+    const summary=document.createElement('summary');summary.textContent='Agregar otras fotos';gallery.append(summary);
     galleryInput.before(gallery);
   }
+  let galleryContent=gallery.querySelector('.tt-editor-gallery-additional-content');
+  if (!galleryContent) { galleryContent=document.createElement('div');galleryContent.className='tt-editor-gallery-additional-content';gallery.append(galleryContent); }
   _formImageWidgets.get('prod-gallery-widget')?.destroy();
   let galleryPendingUrl = '';
-  _formImageWidgets.set('prod-gallery-widget', attachMultiImageUploadWidget(gallery, {
+  _formImageWidgets.set('prod-gallery-widget', attachMultiImageUploadWidget(galleryContent, {
     remaining: () => 12 - galleryInput.value.split(/\r?\n/).filter(value=>value.trim()).length + (coverInput.value ? 0 : 1),
     label: 'Agregar fotos a la galería', hint: 'Subí una foto o elegila de la biblioteca. Se agrega sin reemplazar la portada.',
     onOpenLibrary: openMediaLibraryPicker,
@@ -5841,13 +5844,13 @@ function mountProductColorPhotos(product) {
     urls.forEach((url,index)=>{
       const item = document.createElement('div');item.className='tt-color-photo-tile';
       const image = document.createElement('img');image.src=url;image.alt=`Foto del producto ${index+1}`;image.loading='lazy';
-      const badge=document.createElement('small');badge.className='tt-photo-order-badge';badge.textContent=index===0?'Portada del producto':`Foto ${index+1}`;
+      const badge=document.createElement('small');badge.className=`tt-photo-order-badge${index===0?' is-primary':''}`;badge.textContent=index===0?'Portada':`Foto ${index+1}`;
       const controls=document.createElement('div');controls.className='tt-photo-order-actions';
-      for(const [text,label,to] of [['Portada',`Usar foto ${index+1} como portada`,0],['←',`Mover foto ${index+1} antes`,index-1],['→',`Mover foto ${index+1} después`,index+1]]) {
+      for(const [text,label,to] of [['★',`Usar foto ${index+1} como portada`,0],['←',`Mover foto ${index+1} antes`,index-1],['→',`Mover foto ${index+1} después`,index+1]]) {
         const button=document.createElement('button');button.type='button';button.className='adm-btn adm-btn-outline';button.textContent=text;button.setAttribute('aria-label',label);button.disabled=to<0 || to>=urls.length || to===index;
         button.addEventListener('click',()=>{const next=[...urls];next.splice(index,1);next.splice(to,0,url);publish(next);});controls.append(button);
       }
-      const remove=document.createElement('button');remove.type='button';remove.className='adm-btn adm-btn-outline';remove.textContent='Quitar';remove.setAttribute('aria-label',`Quitar foto ${index+1} del producto`);
+      const remove=document.createElement('button');remove.type='button';remove.className='adm-btn adm-btn-outline tt-photo-remove';remove.textContent='Quitar';remove.setAttribute('aria-label',`Quitar foto ${index+1} del producto`);
       remove.addEventListener('click',()=>{publish(urls.filter(value=>value!==url));productColorPhotos?.removePhoto(url);});
       item.draggable=true;item.addEventListener('dragstart',event=>{event.dataTransfer.setData('application/x-tintin-gallery',url);event.dataTransfer.effectAllowed='move';});
       item.addEventListener('dragover',event=>{if(event.dataTransfer.types.includes('application/x-tintin-gallery'))event.preventDefault();});

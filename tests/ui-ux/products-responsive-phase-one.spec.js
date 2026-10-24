@@ -406,6 +406,9 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  },mount);
  await page.locator('#prod-editor-section').selectOption('photos');
  const gallery=page.locator('#prod-gallery-widget');
+ await expect(gallery).not.toHaveAttribute('open','');
+ await expect(gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true})).toBeHidden();
+ await gallery.locator('summary').click();
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
  await expect(page.locator('#prod-images-extra')).toHaveValue('https://img.test/extra-1.webp\nhttps://img.test/extra-2.webp');
