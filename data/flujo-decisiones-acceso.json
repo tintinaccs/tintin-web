@@ -41,7 +41,8 @@
       "file": "js/pages/profile/control-acceso-perfil.js",
       "tokens": [
         "leaveBlockedAccount",
-        "onSnapshot"
+        "onAppCheckSnapshot",
+        "../../core/firebase/suscripcion-app-check.js"
       ]
     },
     {

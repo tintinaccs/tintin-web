@@ -1,3 +1,7 @@
+## 2026-10-24 — Arranque seguro del perfil y eventos de mantenimiento
+
+La verificación global del perfil usa la suscripción canónica que espera App Check y admite token tardío; logout/cambio de cuenta cancelan el listener pendiente y los rechazos reales siguen visibles. Mantenimiento descarta eventos de CI no aprobada y PR borrador sin crear estados de aprobación ni intentar publicar; conserva validaciones de dispatch, base, autor, SHA y CI. Pruebas ejecutan módulos/runner reales; grafo de URLs, contrato de acceso y derivados regenerados. No se modifican editor, ticket, reglas ni datos reales. Evidencia y límites en CURRENT_STATE.
+
 ## 2026-10-24 — Conciliar foco de paneles con editor intuitivo
 
 Se incorpora315883bd (#1223), conservando la liberación de foco antes de ocultar paneles y sus URLs de navegación. No cambian los bytes ni las URLs del editor/visión respecto de116e2218. Conflictos de documentación preservan ambas entradas; protección, plan y manifiestos se regeneran desde main vigente.495 pruebas de dominio y batería combinada de209 Chromium para editor/checkout; evidencia actual en CURRENT_STATE y PR1222. Sin cambios de datos reales.

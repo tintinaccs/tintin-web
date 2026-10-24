@@ -81,6 +81,7 @@ globalThis.fetch=async (url,options)=>{
  if(endpoint==='pulls/1083'){
    if(scenario==='fork')data.head.repo.full_name='other/repo';
    if(scenario==='author')data.user.id=999;
+   if(scenario==='draft')data.draft=true;
    if(scenario==='head-changed')data.head.sha='d'.repeat(40);
    if(scenario==='head-changed-after-wait'&&state.calls.filter(c=>c.endpoint==='pulls/1083').length>3)data.head.sha='d'.repeat(40);
  }
@@ -107,7 +108,7 @@ globalThis.fetch=async (url,options)=>{
   assert.deepEqual(dispatches.find(call => call.endpoint.includes('monitor-produccion.yml')).body, { ref: 'main', inputs: { verification_only: true } });
   assert.deepEqual(dispatches.find(call => call.endpoint.includes('auditar-tintin.yml')).body, { ref: 'main' });
   assert.equal(fixedRequests.calls.filter(call => call.method === 'PATCH' && call.body.conclusion === 'success').length, 2);
-  for (const scenario of ['failed', 'pending', 'fork', 'author', 'head-changed', 'head-changed-after-wait', 'api-denied', 'pending-then-pass']) {
+  for (const scenario of ['failed', 'pending', 'fork', 'author', 'draft', 'head-changed', 'head-changed-after-wait', 'api-denied', 'pending-then-pass']) {
     write('responses.json', JSON.stringify({ responses, remoteBlobs, scenario }));
     fs.writeFileSync(statePath, JSON.stringify({ total: 0, blobs: 0, calls: [] }));
     const [result] = run(), state = JSON.parse(fs.readFileSync(statePath));
@@ -120,10 +121,11 @@ globalThis.fetch=async (url,options)=>{
       assert.equal(state.calls.filter(call => call.method === 'PATCH' && call.body.conclusion === 'success').length, 0, scenario + ': no fabrica success');
     }
   }
-  write('event.json', JSON.stringify({ workflow_run: { path: '.github/workflows/auditar-tintin.yml', event: 'pull_request', head_sha: headSha, head_repository: { full_name: config.repository } } }));
+  write('event.json', JSON.stringify({ workflow_run: { conclusion: 'success', path: '.github/workflows/auditar-tintin.yml', event: 'pull_request', head_sha: headSha, head_repository: { full_name: config.repository } } }));
   const lookup = `commits/${headSha}/pulls?per_page=100&page=1`;
-  for (const stale of [false, true]) {
-    responses[lookup] = stale ? [] : [responses['pulls/1083']];
+  for (const selection of ['current', 'closed', 'draft']) {
+    const stale = selection !== 'current';
+    responses[lookup] = selection === 'closed' ? [] : [{ ...responses['pulls/1083'], draft: selection === 'draft' }];
     write('responses.json', JSON.stringify({ responses, remoteBlobs }));
     fs.writeFileSync(statePath, JSON.stringify({ total: 0, blobs: 0, calls: [] }));
     const [result] = run({ GITHUB_EVENT_NAME: 'workflow_run', GITHUB_EVENT_PATH: path.join(dir, 'event.json'), PR_NUMBER: '', CANDIDATE_SHA: '' });
@@ -131,6 +133,14 @@ globalThis.fetch=async (url,options)=>{
     assert.equal(result.status, 0, result.stderr + result.stdout);
     assert.equal(state.calls.filter(call => call.method === 'PUT').length, stale ? 0 : 1);
     if (stale) assert.equal(state.calls.filter(call => call.method === 'PATCH').length, 0);
+  }
+  for (const conclusion of ['failure', 'cancelled', 'timed_out', 'neutral', 'skipped', undefined]) {
+    write('event.json', JSON.stringify({ workflow_run: { conclusion, path: '.github/workflows/auditar-tintin.yml', event: 'pull_request', head_sha: headSha, head_repository: { full_name: config.repository } } }));
+    fs.writeFileSync(statePath, JSON.stringify({ total: 0, blobs: 0, calls: [] }));
+    const [result] = run({ GITHUB_EVENT_NAME: 'workflow_run', GITHUB_EVENT_PATH: path.join(dir, 'event.json'), PR_NUMBER: '', CANDIDATE_SHA: '' });
+    const state = JSON.parse(fs.readFileSync(statePath));
+    assert.equal(result.status, 0, conclusion + ': evento sin candidato publicable');
+    assert.deepEqual(state.calls, [], 'no consulta candidatos ni crea checks, integra o despacha workflows');
   }
 } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 
