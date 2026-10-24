@@ -451,8 +451,27 @@ for (const [width,height] of [[390,844],[667,375],[768,1024],[1024,768],[1440,90
   await expect(drawer).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   await expect(drawer).toHaveCSS('background-image', 'none');
 
-  await page.keyboard.press('Escape');
-  await expect(drawer).toHaveAttribute('aria-hidden', 'true');
+  await page.evaluate(() => {
+    window.hiddenWithFocus = [];
+    const setAttribute = Element.prototype.setAttribute;
+    Element.prototype.setAttribute = function(name, value) {
+      if (name === 'aria-hidden' && value === 'true' && this.contains(document.activeElement)) {
+        window.hiddenWithFocus.push(this.id);
+      }
+      return setAttribute.call(this, name, value);
+    };
+  });
+  for (const close of ['escape', 'button']) {
+    if (close === 'escape') await page.keyboard.press('Escape');
+    else await drawer.locator('#btn-notifications-close').click();
+    await expect(drawer).toHaveAttribute('aria-hidden', 'true');
+    await expect(trigger).toBeFocused();
+    expect(await page.evaluate(() => window.hiddenWithFocus)).toEqual([]);
+    if (close === 'escape') {
+      await trigger.click();
+      await expect(drawer.locator('#btn-notifications-close')).toBeFocused();
+    }
+  }
 });
 
 test('cuenta mantiene cabecera rosa con logo y título blancos centrados y CTA legible', async ({ page }) => {
