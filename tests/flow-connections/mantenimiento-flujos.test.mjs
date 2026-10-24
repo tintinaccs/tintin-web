@@ -93,3 +93,15 @@ test('un campo candidato no habilita la autorización de controles', () => {
   data.candidate.automaticControlMaintenance = true;
   assert.throws(() => inspectMaintenance(data), /configuración confiable/);
 });
+
+test('la configuración real reconoce Pages del proyecto Tintin y rechaza otro proyecto o aplicación',async()=>{
+  const {readFileSync}=await import('node:fs');
+  const actual=JSON.parse(readFileSync(new URL('../../config/mantenimiento-flujos.json',import.meta.url),'utf8'));
+  const pages=actual.requiredChecks.find(check=>check.appId===85455);
+  const onlyPages={requiredChecks:[pages]};
+  const successful={id:100,name:'Cloudflare Pages: tintinaccesorios',app:{id:85455},head_sha:headSha,status:'completed',conclusion:'success'};
+  validateChecks([successful],onlyPages,headSha);
+  for(const spoof of [{...successful,name:'Cloudflare Pages: otro-proyecto'},{...successful,app:{id:15368}},{...successful,head_sha:baseSha},{...successful,status:'in_progress'}]) {
+    assert.throws(()=>validateChecks([spoof],onlyPages,headSha),/CI obligatorio/);
+  }
+});

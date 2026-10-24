@@ -1,8 +1,13 @@
 {
   "schemaVersion": 1,
   "baseCommit": "6ac1fdf2546fa859412399f88eccf207991880de",
-  "reason": "Preparar únicamente las reglas compatibles del carrito y protección SDK para el editor v2 antes de publicar la interfaz.",
+  "reason": "Corregir reconocimiento del despliegue Pages exacto para completar la preparación de reglas del editor v2 sin omitir validaciones.",
   "files": [
+    {
+      "path": "config/mantenimiento-flujos.json",
+      "oldHash": "67b9d30c59418b2829e2d53fc006788b3535e55035aa771ddc4cebe801df2605",
+      "newHash": "cefd7344792deca6699f6d885a15f191f0039698b8e3fa97f61b5d55381f083c"
+    },
     {
       "path": "firestore.rules",
       "oldHash": "4736675d3f7794fad4ea79ac29b8b60cba956bc1d08716edb8f1b3fc70e0f5fc",
@@ -12,6 +17,11 @@
       "path": "scripts/probar-firestore-critico.mjs",
       "oldHash": "14147c22dd78318d81133aa295ec8f13a0d1e9faac3c56024eef27ee9cf10fa1",
       "newHash": "2de51a726d12a437805ac6f20ab7a68bbbaa19feed7ce5e6f248a3dcc2b6364a"
+    },
+    {
+      "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
+      "oldHash": "c12daa454723fce9938b01642e5a0c8df54aee754fc835a8836f1f036777dc84",
+      "newHash": "41781e60d192e925f04593f4152296621556371e7e8671a09e37b8809615b83f"
     }
   ],
   "affectedRecords": [

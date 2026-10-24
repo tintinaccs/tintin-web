@@ -1,3 +1,9 @@
+## 2026-10-23 — Continuación de reglas y bloqueo de Pages (Codex /root)
+
+PR1220, cabeza anterior8f087952: CI40048914158, Repository audit, CodeQL y Pages PASS_CI del SHA anterior. Los controles de mantenimiento quedan esperando un nombre inexistente: la configuración confiable pide Cloudflare Pages y la aplicación85455 publica Cloudflare Pages: tintinaccesorios. Se corrige al nombre exacto del proyecto, conservando appId, SHA, éxito, workflow y todos los demás controles. Regresión reproducida FAIL antes de corregir;39 contratos PASS_LOCAL después, incluidos rechazo de otro proyecto, aplicación, SHA y estado pendiente. No se omiten controles ni se altera el entorno production-rules.
+
+CI del SHA nuevo PENDING. El workflow oficial de reglas necesita dispatch desde main y revisión del propietario en production-rules. El conector disponible permite PR y lecturas de Actions pero no dispatch; no hay herramienta de navegador conectada y la red del entorno rechaza api.github.com. #1219 conserva borrador hasta despliegue verificado. No se modifican datos de producción.
+
 ## 2026-10-23 — Preparación de reglas para editor v2
 
 El PR1219 reúne el candidato del editor, pero el carrito v2 requiere aceptar variantKey y los escritores SDK antiguos deben rechazar matrices v2. Se separa primero la actualización de firestore.rules y sus213 controles de emulador para desplegarla antes de exponer el editor. La autorización actual de la titular permite continuar; GitHub exige una revisión del propietario para el entorno production-rules. No se cambia ningún dato real ni se publica el editor desde esta rama. Pruebas locales del mismo archivo de reglas aprobadas en el candidato; CI del SHA de esta preparación se comprobará aparte.
