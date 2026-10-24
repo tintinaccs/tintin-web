@@ -740,3 +740,7 @@ La titular elige selector nativo con imagen y texto juntos. Se reutiliza buildWh
 ## 2026-10-24 — Respetar hidden del fallback WhatsApp del ticket
 
 La regla global de enlaces wa.me imponía display:inline-flex al enlace fallback del checkout y anulaba hidden. Corrección acotada en checkout.css, nueva URL ticket-hidden-1 y fixture que carga tema real; se conservan aserciones de ocultamiento y fallback visible. Main e4ca19f4e se integra sin tocar la implementación de #1222; derivados de plan/CSP/baseline/diagnóstico regenerados desde sus autoridades. No afecta precios, stock, compartir archivo/texto, permisos ni producción. Evidencia RED/verde y estado CI en CURRENT_STATE.
+
+## 2026-10-24 — Conciliar ticket con App Check de main
+
+CI de cb8f802bc aprobada; main aa75f4d91 vuelve obsoleta la base y produce conflicto documental/derivado. Merge normal preserva espera App Check y mantenimiento no elegible de #1225. Ticket, CSS y prueba conservan sus bytes; referencias/plan/CSP/caché/diagnóstico se regeneran por autoridades.42 pruebas de ticket y17 contratos del merge ejecutados; la nueva cabeza exige CI propia, sin publicación autorizada.
