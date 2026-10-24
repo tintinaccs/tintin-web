@@ -1,4 +1,4 @@
-import {productVariantPrice,variantStockLimit} from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import {productVariantPrice,variantStockLimit,hasProductStock} from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 
@@ -70,6 +70,10 @@ export function refreshProductPreview(card) {
   }
   for (const key of Object.keys(state.selected)) if (!groups[key]?.includes(state.selected[key])) delete state.selected[key];
   const product = { ...state.commercial, price:Number(value('price')),priceBefore:value('price-before')===''?null:Number(value('price-before')), imageUrl: value('imageUrl'), imagesExtra: value('images-extra').split(/\r?\n/), variants: groups, variantMedia: state.rows };
+  if(state.commercial?.variantCommerceVersion===2) {
+    for(const [key,values] of Object.entries(groups))groups[key]=values.filter(value=>product.variantInventory.some(row=>row.attributes?.[key]===value && row.active!==false));
+    for(const key of Object.keys(state.selected))if(!groups[key]?.includes(state.selected[key]))delete state.selected[key];
+  }
   const photos = media.uniqueImages(media.galleryImages(product, state.selected).map(url => sanitizeImageUrl(url)).filter(Boolean));
   if (state.pendingPhoto) photos.unshift(state.pendingPhoto);
   if (!photos.includes(state.photo)) state.photo = photos[0] || '';
@@ -111,8 +115,8 @@ export function refreshProductPreview(card) {
   const category = card.querySelector('#prod-category');
   write('.tt-editor-preview-category', category?.value ? category.selectedOptions[0]?.textContent || category.value : 'Sin colección');
   let price = Number(value('price')), before = Number(value('price-before'));
-  let commercialStock;
-  if(state.commercial && Object.keys(groups).every(key=>state.selected[key])){try{const effective=productVariantPrice(product,state.selected);price=effective.price;before=effective.priceBefore;commercialStock=variantStockLimit(product,state.selected);}catch{price=0;}}
+  let commercialStock=state.commercial && !hasProductStock(state.commercial)?0:undefined;
+  if(state.commercial && Object.keys(groups).every(key=>state.selected[key])){try{const selection=Object.keys(groups).map(key=>state.selected[key]).join(' / ');const effective=productVariantPrice(state.commercial,selection);price=effective.price;before=effective.priceBefore;commercialStock=variantStockLimit(state.commercial,selection);}catch{price=0;}}
   write('.tt-editor-preview-money strong', price > 0 ? money(price) : 'Ingresá un precio');
   const old = aside.querySelector('.tt-editor-preview-money s'), discount = aside.querySelector('.tt-editor-preview-money span');
   const sale = price > 0 && before > price;

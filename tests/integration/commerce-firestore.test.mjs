@@ -1,3 +1,4 @@
+import {verifyRetiredOptionCheckout} from '../helpers/retired-option-checkout.mjs';
 import {saveProductEditor,saveProductBulk} from '../../cloudflare/product-editor-domain.mjs';
 import {productFingerprint} from '../../js/admin/products/maestro-productos-core.mjs';
 import {commercialDraft} from '../../js/admin/products/editor-comercial-core.mjs';
@@ -53,6 +54,10 @@ const product = async id => decodeFirestoreFields((await deps.get({}, 'products/
 const actor = { uid: 'commerce_fixture', email: 'fixture@example.test', role: 'client', origin: 'public-checkout' };
 const admin = { uid: 'admin_fixture', email: 'admin@example.test', role: 'superadmin', origin: 'superadmin' };
 const input = (orderId, id, variant = '') => ({ orderId, userName: 'Clienta Fixture', userId: actor.uid, shippingMethod: 'retiro', paymentMethod: 'transferencia', paymentStatus: 'pendiente', items: [{ id, qty: 1, variant }] });
+
+test('retirar color con reserva conserva el pedido y permite comprar otros colores; restaurar recupera precio y foto',async()=>{
+ await verifyRetiredOptionCheckout({deps,seed,product,actor,admin});
+});
 
 test('Editor → checkout público → pedido: precio, fotos, clave estable y cancelación',async()=>{
  const id='editor_checkout',requestId='editor_checkout_20261024';

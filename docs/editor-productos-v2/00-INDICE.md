@@ -1,3 +1,7 @@
+# Estado vigente — 24/10/2026
+
+Ver [cierre por fases y publicación](19-CIERRE-Y-PUBLICACION-20261024.md): #1219/#1221/#1222/#1226 integrados; producción verificada en main0f253a41. #1228 sigue en borrador y necesita conciliar #1227, validar el nuevo SHA y obtener autorización de publicación. El 502 de correo sigue separado y sin causa exacta acreditada. Los estados de auditoría de 23/10 que siguen son históricos.
+
 [Rediseño visual del editor](16-REDISENO-VISUAL.md).
 
 [Matriz actual del candidato](15-MATRIZ-CANDIDATO.md) · [Recibo local](evidencias-continuidad.json).
@@ -8,7 +12,7 @@ La instrucción actual de la titular autoriza recuperar, corregir y continuar la
 
 # Editor de productos v2 — entrada para agentes
 
-Fecha:2026-10-23. Fase activa: **5, auditoría y correcciones acotadas autorizadas**. Resultado NO APTO; no equivale a fases2–4 aprobadas/integradas. No publicar ni migrar datos reales. La numeración de los pedidos expresos de la titular prevalece sobre propuestas históricas del plan.
+Fotografía histórica del23/10/2026: fase5 de auditoría. Resultado entonces NO APTO; no equivale a fases2–4 aprobadas/integradas. No publicar ni migrar datos reales. La numeración de los pedidos expresos de la titular prevalece sobre propuestas históricas del plan.
 
 Esta carpeta conserva las decisiones de la titular del «PROMPT 0». No reemplaza las autoridades técnicas existentes ni certifica funcionalidades por estar aprobadas.
 

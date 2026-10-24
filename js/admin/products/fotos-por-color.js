@@ -1,7 +1,7 @@
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261024-gallery-compact-1';
-import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261024-editor-v2-3';
+import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261024-retirar-opciones-1';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {
   const media = window.TintinProductMedia;

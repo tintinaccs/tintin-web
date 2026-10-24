@@ -369,7 +369,7 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
    const {variantInventoryEntries}=await loadModule('/js/core/store/inventario-variantes.mjs');
    const product={variants:{'Diseño de anillo':['coctel','banda']},variantInventory:[{variant:'coctel',stock:1},{variant:'banda',stock:2}],stock:3};
    new Function('variantInventoryEntries','product',renderer+';renderProductVariantStock(product);')(variantInventoryEntries,product);
-   const {setProductPreviewMedia}=await loadModule('/js/admin/products/vista-previa-producto.js?v=tintin-20261024-editor-v2-3');
+   const {setProductPreviewMedia}=await loadModule('/js/admin/products/vista-previa-producto.js?v=tintin-20261024-retirar-opciones-1');
    setProductPreviewMedia(card,[{'Diseño de anillo':'coctel',imageUrls:['https://img.test/coctel.webp']},{'Diseño de anillo':'banda',imageUrls:['https://img.test/banda.webp']}]);
    card.dispatchEvent(new Event('input',{bubbles:true}));
   },stockRenderer);
@@ -563,23 +563,27 @@ for(const [width,height] of [[320,700],[768,1024],[1440,900]])test(`fotos por co
  expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
 });
 
-test('stock maestro conserva cantidades y protege referencias existentes incluso con stock cero',async({page})=>{
+test('stock maestro retira opciones guardadas sin destruir cantidades ni referencias',async({page})=>{
  await openEditor(page,390,844);await page.locator('#prod-editor-section').selectOption('inventory');
- await page.evaluate(({renderer,inventory})=>{
+ await page.evaluate(async({renderer,inventory})=>{
+  const {commercialDraft}=await import(new URL('/js/admin/products/editor-comercial-core.mjs',location.origin));
+  const {mountCommercialEditor}=await import(new URL('/js/admin/products/editor-comercial-interfaz.js',location.origin));
   document.getElementById('prod-variants-text').value='Color: Dorado, Plateado';
-  window.__masterStock=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock,baseline:()=>productVariantStockBaseline};')();
-  window.__masterStock.renderProductVariantStock({stock:2,variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'Dorado',stock:1},{variant:'Plateado',stock:1}]});
+  document.getElementById('prod-price').value='45000';
+  window.__masterStock=new Function('commercialDraft','mountCommercialEditor',inventory+'\n'+renderer+'\nreturn {renderProductVariantStock,get:()=>productCommercialEditor.get()};')(commercialDraft,mountCommercialEditor);
+  window.__masterStock.renderProductVariantStock({price:45000,stock:2,variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'Dorado',stock:1},{variant:'Plateado',stock:1}]});
  },{renderer:stockRenderer,inventory:inventorySource});
- await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('1');await expect(page.getByLabel('Stock de Plateado',{exact:true})).toHaveValue('1');
- await expect(page.locator('#prod-stock')).toHaveValue('2');
+ await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('1');await expect(page.locator('#prod-stock')).toHaveValue('2');
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Oro rosa');await page.getByRole('button',{name:'Agregar opción',exact:true}).click();
  await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('1');await expect(page.getByLabel('Stock de Oro rosa',{exact:true})).toHaveValue('');
  await page.getByLabel('Stock de Oro rosa',{exact:true}).fill('0');await expect(page.locator('#prod-stock')).toHaveValue('2');
+ await page.getByRole('button',{name:'Quitar Color: Oro rosa',exact:true}).click();
+ await expect(page.locator('#prod-variants-text')).not.toHaveValue(/Oro rosa/);
  await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();
-  await expect(page.locator('#prod-form-error')).toContainText('historial potencial');await expect(page.locator('#prod-variants-text')).toHaveValue(/Dorado/);
- await page.getByLabel('Stock de Dorado',{exact:true}).fill('0');await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();
-  await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('0');await expect(page.locator('#prod-variants-text')).toHaveValue(/Dorado/);await expect(page.locator('#prod-stock')).toHaveValue('1');
- expect(await page.evaluate(()=>window.__masterStock.baseline().expectedEntries)).toEqual([{variant:'Dorado',stock:1},{variant:'Plateado',stock:1}]);
+ await expect(page.getByRole('button',{name:'Restaurar Color: Dorado',exact:true})).toBeVisible();
+ await expect(page.locator('#prod-form-error')).toBeHidden();
+ expect(await page.evaluate(()=>window.__masterStock.get().variantInventory.find(row=>row.variant==='Dorado'))).toMatchObject({variant:'Dorado',stock:1,active:false});
+ await expect(page.locator('#prod-stock')).toHaveValue('2');
  expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
 });
 

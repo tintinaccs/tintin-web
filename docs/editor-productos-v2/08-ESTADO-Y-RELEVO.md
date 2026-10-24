@@ -1,3 +1,7 @@
+# Estado vigente — 24/10/2026
+
+Consultar [19-CIERRE-Y-PUBLICACION-20261024](19-CIERRE-Y-PUBLICACION-20261024.md) y CURRENT_STATE para evidencia de main0f253a41 y su conciliación con #1228. Las secciones inferiores conservan resultados de candidatos anteriores; sus bloqueos y PASS no describen automáticamente el editor publicado actual.
+
 ## Cierre local del candidato — 23/10/2026
 
 PASS_LOCAL con dependencias instaladas por npm ci (lock intacto): 39 comandos preflight; 457 comercio; 221 sincronización; 117 administrativos antes del último ajuste de permisos, seguido de 11 pruebas específicas del escritor; 36 arquitectura; 213 controles de reglas y 8 REST/CAS en emulador demo; 143 Chromium sin reintentos. Build Pages/CSP/rutas/diagnóstico (19 páginas) y caché (369 recursos, 67 cargas dinámicas) aprobados. Revisión de diff y capturas móvil/escritorio completadas. CI del SHA final y publicación todavía PENDING. Matriz actual en15; detalle de compatibilidad/reversión en14. Ningún producto/pedido/correo real modificado.
