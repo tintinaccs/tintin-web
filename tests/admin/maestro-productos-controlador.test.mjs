@@ -1,3 +1,8 @@
+import {commercialPatch} from '../../js/admin/products/editor-comercial-core.mjs';
+import {saveProductEditor} from '../../cloudflare/product-editor-domain.mjs';
+import {encodeFirestoreFields,decodeFirestoreFields} from '../../cloudflare/firebase-admin-ligero.js';
+import {ensureEditorialFields} from '../../js/admin/products/editor-editorial-interfaz.js';
+import {editorialFields,productEditorialStatus,productTemplate} from '../../js/core/store/estado-editorial-producto.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -16,7 +21,7 @@ function runtime(product={}){
  let count=0;
  const ctx={window:{},document:{getElementById:control,querySelectorAll:selector=>selector==='#prod-variant-stock input'?variantInputs:[]},auth:{currentUser:{uid:'super'}},currentUser:{uid:'super'},navigator:{onLine:true},productMasterBusy:false,currentRole:'superadmin',can:()=>true,roleCanDo:()=>true,
   _allProducts:[original],_productSourceById:new Map([['source',structuredClone(original)]]),_allCollections:[{slug:'anillos'}],_productInventoryById:new Map([['source',{costUnit:100,purchased:5,stockMinimum:2,internalNotes:'Privado'}]]),productEditBaseline:null,productCommercialBaseline:null,productVariantStockBaseline:null,
-  productCardPatch,productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,_formImageWidgets:new Map(),productColorPhotos:{serialize:()=>[],flush:async()=>{}},
+  ensureEditorialFields,editorialFields,productEditorialStatus,productTemplate,productCardPatch,productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,_formImageWidgets:new Map(),productColorPhotos:{serialize:()=>[],flush:async()=>{}},
   wristCategory:x=>x,sanitizeImageUrl:x=>typeof x==='string'&&x.startsWith('https://')?x:'',mountFormImageWidget:()=>{},mountProductColorPhotos:()=>{},
   renderProductVariantStock:product=>{variantInputs.length=0;ctx.productVariantStockBaseline=product?.variantInventory?{stock:product.stock,expectedEntries:variantInventoryEntries(product),entries:variantInventoryEntries(product),variants:product.variants}:null;for(const entry of product?.variantInventory || [])variantInputs.push({value:String(entry.stock)});},
   UnsavedGuard:{confirmLeave:fn=>fn(),track:()=>{},clear:()=>{}},toast:()=>{},db:{},collection:(_db,name)=>name,
@@ -251,4 +256,24 @@ test('audit: old editor cannot save a v2 product and does not claim success',asy
  assert.equal(await r.ctx.window.saveTest(),false);
  assert.deepEqual(r.writes,[]);
  assert.match(r.control('prod-form-error').textContent,/editor compatible/);
+});
+
+
+test('editor compatible conecta prodGuardar real con el escritor comercial y conserva inventario privado',async()=>{
+ const product={variantCommerceVersion:2,variants:{Color:['Oro']},variantInventory:[{variant:'gold',attributes:{Color:'Oro'},stock:4,price:40000}],priceBefore:null,oferta:false,destacado:false};
+ const r=runtime(product);r.ctx._prodEditarNow('source');
+ r.ctx.v2Controller={get:()=>structuredClone(r.rows.get('products/source')),patch:base=>commercialPatch(r.original,{...r.original,...base,variantInventory:product.variantInventory})};
+ vm.runInContext('productCommercialEditor=v2Controller;productVariantStockBaseline=null;',r.ctx);
+ r.ctx.crypto=crypto;
+ r.rows.set('productInventory/source',{costUnit:100,purchased:5,stockMinimum:2,internalNotes:'Privado'});
+ r.ctx.authenticatedFetch=async(url,options)=>{
+  assert.equal(url,'/api/admin-order-mutation');const body=JSON.parse(options.body);assert.equal(body.action,'saveProduct');
+  const result=await saveProductEditor({},body,{uid:'super',role:'superadmin'},{get:async(_env,path)=>path==='collections/anillos'?{fields:encodeFirestoreFields({name:'Anillos'}),updateTime:'c1'}:r.rows.has(path)?{fields:encodeFirestoreFields(r.rows.get(path)),updateTime:'v1'}:null,commit:async(_env,writes)=>{for(const write of writes){r.rows.set(write.path,{...r.rows.get(write.path),...decodeFirestoreFields(write.fields)});r.writes.push(write.path);}}});
+  return {ok:true,json:async()=>({ok:true,result})};
+ };
+ r.control('prod-name').value='Anillo editado';
+ assert.equal(await r.ctx.window.saveTest(),true);
+ assert.equal(r.rows.get('products/source').name,'Anillo editado');assert.equal(r.rows.get('products/source').variantInventory[0].price,40000);
+ assert.equal(r.rows.get('products/source').internalNotes,undefined);assert.equal(r.rows.get('productInventory/source').internalNotes,'Privado');
+ assert.equal(r.writes.filter(path=>path.startsWith('auditLog/')).length,1);
 });

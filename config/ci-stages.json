@@ -53,7 +53,9 @@
       "node scripts/auditar-superadmin-cierre-total.mjs",
       "node scripts/auditar-superadmin-modulos-completos.mjs",
       "node scripts/auditar-superadmin-maestro-responsive.mjs",
-      "node scripts/auditar-borrado-global-catalogo.mjs"
+      "node scripts/auditar-borrado-global-catalogo.mjs",
+      "node --test tests/admin/editor-comercial.test.mjs tests/admin/editor-editorial.test.mjs",
+      "npx playwright test tests/ui-ux/editor-comercial-v2.spec.js --project=chromium --retries=0"
     ]
   },
   "quality": {

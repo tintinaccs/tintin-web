@@ -27,3 +27,7 @@ body[data-tt-product-server-preview="1"] #product-loading{display:none!important
 @media (min-width:600px){.tt-related-grid .tt-product-card .tt-product-badge{display:block!important}}
 
 @media (max-width:599px){.tt-related-grid .tt-product-card .tt-product-badge{display:block!important;top:60px;bottom:auto;left:6px;max-width:calc(100% - 12px);font-size:10px;line-height:1.2;padding:4px 6px}}
+
+/* Sólo cambia la presentación: galería, selección y compra siguen compartidas. */
+@media(min-width:1025px){#product-grid[data-product-template="gallery"]{grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr)}#product-grid[data-product-template="gallery"] .tt-gallery-main{max-height:none;aspect-ratio:4/5}}
+@media(max-width:767px){#product-grid[data-product-template="gallery"] .tt-gallery-main{aspect-ratio:4/5}}

@@ -1,3 +1,4 @@
+import {productIsPublished} from '../../js/core/store/estado-editorial-producto.mjs';
 import { wristCategory, unifyWristCollections } from '../../js/core/store/categorias-pulseras.mjs';
 import {
   decodeFirestoreFields,
@@ -11,7 +12,7 @@ const PRODUCT_FIELDS = new Set([
   'price', 'priceBefore', 'badge', 'description', 'desc', 'material', 'measurements',
   'colorFinish', 'care', 'waterResistance', 'warranty', 'sizeFit', 'packageContents',
   'imageUrl', 'image', 'img', 'photo', 'imageSrc', 'image_src', 'imagesExtra', 'images',
-  'variantCommerceVersion', 'stock', 'active', 'oferta', 'destacado', 'tags', 'variants', 'variantMedia', 'variantInventory', 'collectionOrder',
+  'publicationStatus','productTemplate','seoTitle','seoDescription', 'variantCommerceVersion', 'stock', 'active', 'oferta', 'destacado', 'tags', 'variants', 'variantMedia', 'variantInventory', 'collectionOrder',
   'createdAt', 'created_at', 'importedAt', 'updatedAt', 'updated_at', 'modifiedAt',
   'restockedAt', 'catalogActivityAt', 'merchandisingUpdatedAt', 'Image Src', 'Variant Image', 'Variant Price',
   'Variant Inventory Qty', 'Product Category', 'Category', 'Title', 'Handle', 'Body (HTML)'
@@ -72,7 +73,7 @@ async function buildPayload(env, resource, productId = '') {
     const document = await firestoreAdminGet(env, `products/${productId}`);
     if (!document) return { ok: true, resource, item: null };
     const data = pickKnownFields(decodeFirestoreFields(document?.fields || {}), PRODUCT_FIELDS);
-    if (data.active === false) return { ok: true, resource, item: null };
+    if (!productIsPublished(data)) return { ok: true, resource, item: null };
     return {
       ok: true,
       resource,
@@ -100,7 +101,7 @@ async function buildPayload(env, resource, productId = '') {
     });
   }
   items = items.filter(item => {
-    if (resource === 'products') return item.data.active !== false;
+    if (resource === 'products') return productIsPublished(item.data);
     return item.data.visible !== false;
   });
   return { ok: true, resource, items, count: items.length };

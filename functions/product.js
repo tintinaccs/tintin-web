@@ -140,7 +140,7 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   }
 
   const name = stripHtml(firstValue(data, ['name', 'title', 'Title'])) || 'Producto Tintin';
-  const rawDescription = firstValue(data, ['description', 'desc', 'Body (HTML)']);
+  const rawDescription = firstValue(data, ['seoDescription','description', 'desc', 'Body (HTML)']);
   const description = (stripHtml(rawDescription) || `${name} disponible en Tintin Accesorios & Relojes.`).slice(0, 220);
   const image = absoluteUrl(productVariantImage(data, firstAvailableVariant(data), firstImage(data)));
   const mainImage = productImageUrl(image, 900);
@@ -148,7 +148,7 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   const imageSizes = '(max-width:767px) calc(100vw - 32px), (max-width:1024px) 45vw, 560px';
   const canonical = `${PUBLIC_ORIGIN}/product?id=${encodeURIComponent(safeId)}`;
   const price = data.variantCommerceVersion === 2 ? productDefaultPrice(data).price : firstValue(data, ['price', 'Variant Price']);
-  const title = `${name} | Tintin Accesorios & Relojes`;
+  const title = stripHtml(data.seoTitle).slice(0,70) || `${name} | Tintin Accesorios & Relojes`;
 
   let html = String(sourceHtml || '');
   html = replaceTitle(html, title);

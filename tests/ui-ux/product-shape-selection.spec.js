@@ -186,3 +186,12 @@ for (const viewport of [{width:390,height:844},{width:1366,height:768}]) {
   expect(errors).toEqual([]);
  });
 }
+
+for(const productTemplate of ['default','gallery','unknown'])test(`plantilla ${productTemplate} conserva selección y compra canónicas`,async({page})=>{
+ const errors=await openFixture(page,{...product,productTemplate});
+ await expect(page.locator('#product-grid')).toHaveAttribute('data-product-template',productTemplate==='gallery'?'gallery':'default');
+ await expect(page.locator('#btn-product-add-cart')).toBeEnabled();
+ await page.locator('[data-variant-value="redondo"]').click();await expect(page.locator('#btn-product-add-cart')).toBeDisabled();
+ await page.locator('[data-variant-value="ovalado"]').click();await expect(page.locator('#btn-product-add-cart')).toBeEnabled();
+ expect(errors).toEqual([]);
+});

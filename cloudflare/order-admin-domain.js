@@ -1,3 +1,4 @@
+import {productIsPublished} from '../js/core/store/estado-editorial-producto.mjs';
 import {
   decodeFirestoreFields,
   encodeFirestoreFields,
@@ -298,7 +299,7 @@ async function resolveCanonicalCreationItems(env, rawItems, batchGet) {
 
   const items = lines.map(line => {
     const product = decodeFirestoreFields(documents.get(line.id)?.fields || {});
-    if (product.active === false) throw creationError(`El producto ${line.id} no está activo.`, 'product_inactive', { productId: line.id });
+    if (!productIsPublished(product)) throw creationError(`El producto ${line.id} no está activo.`, 'product_inactive', { productId: line.id });
     if (product.variantCommerceVersion != null && ![1,2].includes(product.variantCommerceVersion)) throw creationError('Versión comercial no compatible.', 'invalid_variant');
     let price = Number(product.price), variantKey;
     let variant = line.variant;

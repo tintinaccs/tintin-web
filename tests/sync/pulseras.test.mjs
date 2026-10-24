@@ -1,3 +1,4 @@
+import {productIsPublished} from '../../js/core/store/estado-editorial-producto.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { wristCategory, unifyWristCollections } from '../../js/core/store/categorias-pulseras.mjs';
@@ -20,7 +21,7 @@ test('ocultar la colección canónica también oculta el alias anterior', () => 
 import fs from 'node:fs';
 import vm from 'node:vm';
 test('el API público agrupa antes de filtrar visibilidad y normaliza productos históricos', async () => {
-  const context = vm.createContext({ wristCategory, unifyWristCollections, decodeFirestoreFields: value => value, firestoreAdminListAll: async () => context.docs });
+  const context = vm.createContext({ productIsPublished,wristCategory, unifyWristCollections, decodeFirestoreFields: value => value, firestoreAdminListAll: async () => context.docs });
   const source = fs.readFileSync('functions/api/public-catalog.js', 'utf8').replace(/^import[\s\S]*?;\s*$/gm, '').replace(/\bexport\s+/g, '');
   vm.runInContext(source, context);
   context.docs = [{ name: 'collections/brazaletes', fields: { name: 'Brazaletes', visible: true, image: '/legacy.webp' } }, { name: 'collections/pulseras', fields: { name: 'Pulseras', visible: false, imageUrl: '/preferred.webp' } }, { name: 'collections/aros', fields: { name: 'Aros', visible: true } }];

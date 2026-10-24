@@ -54,7 +54,7 @@ test('import opt-in preserves combination prices/photos/mixed stock without enab
  const old=buildCatalogProductFromImport(input);assert.equal(old.variantCommerceVersion,undefined);
  const next=buildCatalogProductFromImport(input,{variantCommerce:true});assert.equal(next.variantCommerceVersion,2);assert.equal(next.stock,null);
  assert.equal(productVariantPrice(next,'Plateado').price,150);assert.match(productVariantImage(next,'Dorado'),/gold/);
- assert.throws(()=>productBulkPatch(next,'stock',10));assert.throws(()=>productDuplicateData(next));
+ assert.throws(()=>productBulkPatch(next,'stock',10));const copy=productDuplicateData(next);assert.equal(copy.active,false);assert.equal(copy.stock,0);assert.equal(copy.variantInventory[0].price,next.variantInventory[0].price);assert.deepEqual(copy.variantInventory[0].attributes,next.variantInventory[0].attributes);
 });
 
 import {reorderVariantInventory} from '../../js/core/store/inventario-variantes.mjs';

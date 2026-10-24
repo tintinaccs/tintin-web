@@ -1,3 +1,4 @@
+import {productVariantPrice,variantStockLimit} from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 
@@ -47,6 +48,7 @@ export function mountProductPreview(card, layout) {
     stateFor(card).photo = stateFor(card).pendingPhoto || '';
     refresh();
   });
+  card.addEventListener('tintin:commercial-draft',event=>{stateFor(card).commercial=event.detail;refresh();});
   card.addEventListener('input', refresh);
   card.addEventListener('change', refresh);
   refresh();
@@ -67,7 +69,7 @@ export function refreshProductPreview(card) {
     groups[key] = [...new Set([...(groups[key] || []), ...line.slice(index + 1).split(',').map(s => s.trim()).filter(Boolean)])];
   }
   for (const key of Object.keys(state.selected)) if (!groups[key]?.includes(state.selected[key])) delete state.selected[key];
-  const product = { imageUrl: value('imageUrl'), imagesExtra: value('images-extra').split(/\r?\n/), variants: groups, variantMedia: state.rows };
+  const product = { ...state.commercial, price:Number(value('price')),priceBefore:value('price-before')===''?null:Number(value('price-before')), imageUrl: value('imageUrl'), imagesExtra: value('images-extra').split(/\r?\n/), variants: groups, variantMedia: state.rows };
   const photos = media.uniqueImages(media.galleryImages(product, state.selected).map(url => sanitizeImageUrl(url)).filter(Boolean));
   if (state.pendingPhoto) photos.unshift(state.pendingPhoto);
   if (!photos.includes(state.photo)) state.photo = photos[0] || '';
@@ -108,16 +110,18 @@ export function refreshProductPreview(card) {
   write('.tt-editor-preview-badges', [...new Set(badges)].join(' · '));
   const category = card.querySelector('#prod-category');
   write('.tt-editor-preview-category', category?.value ? category.selectedOptions[0]?.textContent || category.value : 'Sin colección');
-  const price = Number(value('price')), before = Number(value('price-before'));
+  let price = Number(value('price')), before = Number(value('price-before'));
+  let commercialStock;
+  if(state.commercial && Object.keys(groups).every(key=>state.selected[key])){try{const effective=productVariantPrice(product,state.selected);price=effective.price;before=effective.priceBefore;commercialStock=variantStockLimit(product,state.selected);}catch{price=0;}}
   write('.tt-editor-preview-money strong', price > 0 ? money(price) : 'Ingresá un precio');
   const old = aside.querySelector('.tt-editor-preview-money s'), discount = aside.querySelector('.tt-editor-preview-money span');
   const sale = price > 0 && before > price;
   hide(old, !sale); hide(discount, !sale);
   if (sale) { if (old.textContent !== money(before)) old.textContent = money(before); const text = `−${Math.round((1 - price / before) * 100)}%`; if (discount.textContent !== text) discount.textContent = text; }
   const selectedVariant = Object.keys(groups).map(key => state.selected[key]).filter(Boolean).join(' / ');
-  const inputs = [...card.querySelectorAll('#prod-variant-stock input')];
+  const inputs = [...card.querySelectorAll('#prod-variant-stock:not(.tt-commercial-editor) input')];
   const match = inputs.find(input => input.closest('label')?.dataset.variant === selectedVariant);
-  const stock = match ? match.value : value('stock');
+  const stock = commercialStock!==undefined ? commercialStock??'' : match ? match.value : value('stock');
   write('.tt-editor-preview-stock', stock === '' ? 'Sin control de stock' : Number(stock) > 0 ? `${Number(stock).toLocaleString('es-PY')} unidades disponibles${match ? ' · opción elegida' : ''}` : 'Agotado');
   write('.tt-editor-preview-description', value('description').trim() || 'La descripción de tu producto aparecerá acá.');
   const specs = ['material','measurements','color-finish','care','water-resistance','warranty','size-fit','package-contents'].map(id => [id, value(id)]).filter(([,text]) => text);

@@ -1,7 +1,7 @@
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261015-product-fast-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261023-editor-audit-1';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261023-variant-engine-v2-2';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261024-editor-v2-3';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261024-editor-v2-3';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261023-variant-engine-v2-2';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
@@ -85,6 +85,7 @@ export function mapProduct(id, d) {
     imagesExtra: uniqueSafeImageUrls(rawExtraImages).slice(0, 12),
     stock: d.stock ?? d['Variant Inventory Qty'] ?? null,
     active: d.active !== false,
+    publicationStatus:d.publicationStatus,productTemplate:d.productTemplate,seoTitle:d.seoTitle,seoDescription:d.seoDescription,
     oferta: !!d.oferta,
     destacado: !!d.destacado,
     tags: Array.isArray(d.tags)
@@ -135,6 +136,7 @@ function compactProduct(product) {
     variantInventory: product.variantInventory,
     stock: product.stock,
     active: product.active,
+    publicationStatus:product.publicationStatus,productTemplate:product.productTemplate,seoTitle:product.seoTitle,seoDescription:product.seoDescription,
     oferta: product.oferta,
     destacado: product.destacado,
     collectionOrder: product.collectionOrder,

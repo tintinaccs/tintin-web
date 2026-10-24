@@ -57,7 +57,7 @@ function quantity(input, label, main = false) {
       const unlimited=button('Sin control', 'No controlar stock', () => set(''));presets.append(unlimited);quick.push(unlimited);
       wrap.append(presets);
       const status = node('p', 'tt-editor-stock-status'); status.setAttribute('role','status'); wrap.append(status);
-      const hint = node('small', 'tt-editor-caption', 'Al cambiar la cantidad: 0 sin stock; desde 1 se activa. Podés ajustar la visibilidad por separado.'); wrap.append(hint);
+      const hint = node('small', 'tt-editor-caption', '0 significa agotado; vacío significa sin control. El estado de publicación se cambia por separado.'); wrap.append(hint);
       state = {minus,plus,select,quick,status};
     } else state = {minus,plus,select,quick};
     quantityControls.set(input, state);
@@ -174,7 +174,7 @@ function variantBuilder(input) {
 export function refreshEditorControls(card) {
   const stock=card.querySelector('#prod-stock');
   if(stock)quantity(stock,'Stock',true);
-  for(const input of card.querySelectorAll('#prod-variant-stock input')) quantity(input,input.getAttribute('aria-label') || 'Variante');
+  if(!card.querySelector('.tt-commercial-editor'))for(const input of card.querySelectorAll('#prod-variant-stock input')) quantity(input,input.getAttribute('aria-label') || 'Variante');
   for(const id of ['prod-purchased','prod-stock-minimum']) {
     const input=card.querySelector(`#${id}`);if(input)quantity(input,input.labels?.[0]?.textContent || id);
   }
@@ -195,8 +195,13 @@ export function installEditorControls(card) {
   mounted.add(card);
   const pendingPhoto=event=>{if(event.detail?.pending)window.AdminUnsaved?.markDirty('primary-editor');};
   card.addEventListener('tintin:image-pending',pendingPhoto);card.addEventListener('tintin:image-preview',pendingPhoto);
+  card.addEventListener('change',event=>{
+    const status=card.querySelector('#prod-publicationStatus'),active=card.querySelector('#prod-active');
+    if(event.target===status && active)active.checked=status.value==='active';
+    if(event.target===active && status)status.value=active.checked?'active':'draft';
+  });
   card.addEventListener('input',event=>{
-    if(event.target.id==='prod-stock' || event.target.closest('#prod-variant-stock')) {
+    if(!card.querySelector('#prod-publicationStatus') && !card.querySelector('.tt-commercial-editor') && (event.target.id==='prod-stock' || event.target.closest('#prod-variant-stock'))) {
       const stock=card.querySelector('#prod-stock'),active=card.querySelector('#prod-active');
       // Sólo una modificación de cantidad cambia el estado; abrir nunca activa productos ocultos.
       if(stock.value!=='' && Number.isInteger(Number(stock.value)) && Number(stock.value)>=0) {

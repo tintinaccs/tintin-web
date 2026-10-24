@@ -1,15 +1,20 @@
+import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-v2-3';
+import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-3';
+import {productStatistics} from './statistics/estadisticas-producto.mjs?v=tintin-20261024-editor-v2-3';
+import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261024-editor-v2-3';
+import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261024-editor-v2-3';
 import { reorderVariantInventory } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
-import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261024-editor-v2-3';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261022-avatar-inicial-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261022-color-editor-repair-1';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261024-editor-v2-3';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -1711,6 +1716,8 @@ function refreshRealtimeConsumers() {
 const adminOrderConsumers = new Set();
 let adminOrdersOwnerUid = '';
 function publishAdminOrders() {
+  const productId=document.getElementById('prod-id')?.value;
+  if(productId && document.getElementById('prod-form-card')?.style.display!=='none')renderProductStatistics(productId);
   const snapshot = { uid: currentUser?.uid || '', ready: adminRealtimeReady.orders, error: adminRealtimeErrors.orders, includeTestOrders: includesTestOrders(), orders: currentUser && adminOrdersOwnerUid===currentUser.uid ? allOrders : [] };
   for (const consume of adminOrderConsumers) { try { consume(snapshot); } catch(error) { console.error('No se pudo actualizar la vista de pedidos.',error?.message); } }
 }
@@ -5889,7 +5896,35 @@ function productVariantStockConfiguration(text, previous = [], previousVariants 
   return {variants: Object.fromEntries(attributes), entries: combinations.map(variant => ({variant, stock: quantities.get(variant) ?? ''}))};
 }
 
+function productEditorialForm(product={}) {
+  ensureEditorialFields(document.getElementById('prod-form-card'));
+  const values={publicationStatus:productEditorialStatus(product),productTemplate:productTemplate(product),seoTitle:product.seoTitle || '',seoDescription:product.seoDescription || ''};
+  for(const [key,value] of Object.entries(values)){const field=document.getElementById(`prod-${key}`);if(field)field.value=value;}
+}
+function productEditorialData() {
+  const status=document.getElementById('prod-publicationStatus');
+  if(!status?.options)return {};
+  return editorialFields(Object.fromEntries(['publicationStatus','productTemplate','seoTitle','seoDescription'].map(key=>[key,document.getElementById(`prod-${key}`).value])));
+}
+function renderProductStatistics(productId) {
+  const panel=document.getElementById('prod-statistics');if(!panel?.replaceChildren)return;
+  panel.replaceChildren();
+  if(!productId || !can(currentRole,'viewOrders') || !roleCanDo('pedidos','ver')){panel.textContent='Las estadísticas requieren un producto guardado y permiso para ver pedidos.';return;}
+  if(!adminRealtimeReady.orders || adminOrdersOwnerUid!==currentUser?.uid){panel.textContent='Esperando la sincronización de pedidos para calcular las estadísticas.';return;}
+  const metric=productStatistics(productId,filterStatisticsRows('products',allOrders,row=>activityTimestampMillis(row.createdAt)),activityTimestampMillis);
+  const heading=document.createElement('h3');heading.textContent='Estadísticas del producto';panel.append(heading);
+  const summary=document.createElement('p');summary.textContent=`${metric.units} unidades · ${formatPrice(metric.revenue)} brutos en líneas pagadas · ${metric.orders} pedidos`;panel.append(summary);
+  const note=document.createElement('p');note.textContent='Datos de los pedidos disponibles en esta sesión, desde el último reinicio de Productos vendidos. Excluye pruebas, cancelados, rechazados y reembolsos completos. No representa ingresos netos: no descuenta devoluciones parciales ni distribuye descuentos generales.';panel.append(note);
+  for(const row of metric.variants){const line=document.createElement('p');line.textContent=`${row.label}: ${row.units} unidades · ${formatPrice(row.revenue)}`;panel.append(line);}
+  for(const [month,revenue] of metric.months){const line=document.createElement('p');line.textContent=`${month}: ${formatPrice(revenue)}`;panel.append(line);}
+  if(metric.incomplete){const warning=document.createElement('p');warning.textContent=`${metric.incomplete} líneas sin datos completos excluidas.`;panel.append(warning);}
+}
+let productCommercialEditor = null;
+let productPrivateBaseline = null;
+let pendingProductEditorSave = null;
 function renderProductVariantStock(product, configuration = null) {
+  productCommercialEditor = null;
+  document.getElementById('prod-form-card')?.dispatchEvent?.(new CustomEvent('tintin:commercial-draft',{detail:null}));
   productVariantStockEvents?.abort();
   productVariantStockEvents = new AbortController();
   productVariantStockBaseline = null;
@@ -5900,10 +5935,27 @@ function renderProductVariantStock(product, configuration = null) {
     document.getElementById('prod-variants-text').parentElement.append(panel);
   }
   panel.replaceChildren();
+  panel.classList.remove('tt-commercial-editor');
   const stockInput = document.getElementById('prod-stock');
   const optionsInput = document.getElementById('prod-variants-text');
   stockInput.readOnly = false;
   optionsInput.readOnly = false;
+  if (product?.variantCommerceVersion === 2) {
+    productCommercialEditor = mountCommercialEditor(panel, product, productVariantStockConfiguration, productVariantStockEvents.signal, configuration?.commercialBaseline ?? product);
+    return;
+  }
+  const enable = document.createElement('button');
+  enable.type='button';enable.className='adm-btn adm-btn-outline';enable.textContent='Usar precios y disponibilidad por combinación';
+  enable.addEventListener('click',()=>{
+    try {
+      if(!confirm('¿Preparar combinaciones con identidad estable? Se conservarán las referencias existentes. El cambio se aplica al guardar.'))return;
+      const variants=productVariantStockConfiguration(optionsInput.value).variants;
+      const base={...product,price:Number(document.getElementById('prod-price').value),priceBefore:document.getElementById('prod-price-before').value===''?null:Number(document.getElementById('prod-price-before').value)};
+      renderProductVariantStock(commercialDraft(base,variants),{commercialBaseline:product || {}});
+      panel.dispatchEvent(new Event('change',{bubbles:true}));
+    } catch(error){const target=document.getElementById('prod-form-error');target.textContent=error.message;target.style.display='';}
+  });
+  panel.append(enable);
   const expectedEntries = variantInventoryEntries(product);
   let acceptedOptions = optionsInput.value;
   optionsInput.addEventListener('input', () => {
@@ -5989,6 +6041,8 @@ function serializeProductForm() {
     variantMedia: productColorPhotos?.serialize() || [],
     pendingPhotos:[..._formImageWidgets].filter(([id])=>id.startsWith('prod-')).map(([id,widget])=>[id,widget.pendingSignature?.() || []]),
     pendingColorPhotos:productColorPhotos?.pendingSignature?.() || [],
+    editorial: productEditorialData(),
+    commercialDraft: productCommercialEditor?.get() || null,
     variantStock: [...document.querySelectorAll('#prod-variant-stock input')].map(input => input.value),
     badge: document.getElementById('prod-badge').value,
     collection: document.getElementById('prod-collection').value,
@@ -6003,6 +6057,10 @@ window.prodNuevo = function() {
 };
 
 function _prodNuevoNow() {
+  productPrivateBaseline = null;
+  pendingProductEditorSave = null;
+  productEditorialForm({active:false});
+  renderProductStatistics('');
   productCommercialBaseline=null;
   productEditBaseline=null;
   renderProductVariantStock(null);
@@ -6062,6 +6120,10 @@ function _prodEditarNow(docId, duplicate=false) {
   const stored = _productSourceById.get(docId) || source;
   productEditBaseline=duplicate ? null : productFingerprint(stored);
   const inventory = duplicate ? {} : _productInventoryById.get(docId) || {};
+  pendingProductEditorSave = null;
+  productEditorialForm(p);
+  renderProductStatistics(duplicate?'':docId);
+  productPrivateBaseline = Object.fromEntries(['costUnit','purchased','stockMinimum','internalNotes'].map(key=>[key,inventory[key] ?? (key==='internalNotes'?'':null)]));
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
   document.getElementById('prod-id').value = duplicate ? '' : docId;
   document.getElementById('prod-form-title').textContent = duplicate ? 'Duplicar producto · copia inactiva y sin stock' : 'Editar producto';
@@ -6117,7 +6179,7 @@ function _prodEditarNow(docId, duplicate=false) {
     }
   }
   document.getElementById('prod-variants-text').value = variantsText;
-  renderProductVariantStock(p);
+  renderProductVariantStock(p,duplicate?{commercialBaseline:{}}:null);
   // El inventario por opción bloquea editar las opciones: conservar su representación original.
   if (!duplicate && productVariantStockBaseline) productVariantStockBaseline.variants = stored.variants;
   mountProductColorPhotos(p);
@@ -6141,12 +6203,7 @@ window.prodCancelForm = function() {
 
 async function prodGuardar() {
   const existingProduct = _allProducts.find(product => product._docId === document.getElementById('prod-id').value);
-  if (existingProduct?.variantCommerceVersion === 2) {
-    const error = document.getElementById('prod-form-error');
-    error.textContent = 'Este producto usa el motor comercial v2. Su edición está protegida hasta habilitar el editor compatible.';
-    error.style.display = ''; return false;
-  }
-
+  if(existingProduct?.variantCommerceVersion===2 && !productCommercialEditor){const error=document.getElementById('prod-form-error');error.textContent='Este producto requiere el editor compatible.';error.style.display='';return false;}
   if (document.getElementById('prod-save-btn')?.disabled) return false;
   const errEl = document.getElementById('prod-form-error');
   const _isEdit = !!document.getElementById('prod-id').value;
@@ -6300,10 +6357,10 @@ async function prodGuardar() {
     const current = serializeProductForm(), before = productCommercialBaseline;
     const comparable = ['name','sku','category','collection','price','priceBefore','imageUrl','description',
       'material','measurements','colorFinish','care','waterResistance','warranty','sizeFit',
-      'packageContents','imagesExtra','variantMedia','tags','badge','active','oferta','destacado','variants'];
+      'packageContents','imagesExtra','variantMedia','tags','badge','active','oferta','destacado','variants','editorial'];
     const equal = (a,b) => JSON.stringify(a) === JSON.stringify(b);
     const stockChanged = before && (!equal(current.stock,before.stock) || !equal(current.variantStock,before.variantStock));
-    const stockOnly = before && comparable.every(key =>
+    const stockOnly = before && stockChanged && comparable.every(key =>
       (key === 'active' && stockChanged && current.stock !== '' && current.active === (Number(current.stock) > 0))
       || equal(current[key],before[key]));
     if (stockOnly) data.restockedAt = serverTimestamp();
@@ -6313,6 +6370,8 @@ async function prodGuardar() {
   }
 
   try {
+  Object.assign(data, productEditorialData());
+  if (productCommercialEditor) Object.assign(data, productCommercialEditor.patch(data));
   if (productVariantStockBaseline) {
         const original = productVariantStockBaseline;
         const inputs = [...document.querySelectorAll('#prod-variant-stock input')];
@@ -6330,7 +6389,21 @@ async function prodGuardar() {
       action: async ctx => {
         ctx.start('save');
     const docId = document.getElementById('prod-id').value;
-    if (docId) {
+    if (productCommercialEditor) {
+      const targetId=docId || doc(collection(db,'products')).id;
+      const privateData=Object.fromEntries(['costUnit','purchased','stockMinimum','internalNotes'].map(key=>[key,inventoryData[key]]));
+      const request={action:'saveProduct',productId:targetId,expected:productEditBaseline,product:Object.fromEntries(Object.entries(data).filter(([key])=>!['updatedAt','merchandisingUpdatedAt','restockedAt'].includes(key))),...(currentRole==='superadmin'?{inventory:privateData,expectedInventory:productPrivateBaseline}: {})};
+      const signature=JSON.stringify(request);
+      if(pendingProductEditorSave?.signature!==signature)pendingProductEditorSave={signature,changeId:crypto.randomUUID()};
+      document.getElementById('prod-id').value=targetId;
+      const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...request,changeId:pendingProductEditorSave.changeId})});
+      const payload=await response.json();
+      if(!response.ok || !payload.ok)throw new Error(payload.error || 'No se pudo guardar el producto.');
+      document.getElementById('prod-id').value=targetId;
+      productEditBaseline=productFingerprint(payload.result.product);
+      productPrivateBaseline=privateData;
+      await pushProductsToSheets([targetId]);
+    } else if (docId) {
       const oldProd = _allProducts.find(p => p._docId === docId);
       let savedProduct;
       if (productVariantStockBaseline) {
@@ -6565,7 +6638,11 @@ window.TintinProductAdmin = Object.freeze({
     const ids=productBulkIds(request.ids);
     productMasterBusy=true;
     try {
-      const changes=await withAdminSiteChange(()=>runTransaction(db,async transaction=>{
+      const hasCommercial=ids.some(id=>_allProducts.find(product=>product._docId===id)?.variantCommerceVersion===2);
+      const changes=hasCommercial ? await (async()=>{
+        const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...request,action:'bulkProducts'})});
+        const payload=await response.json();if(!response.ok || !payload.ok)throw new Error(payload.error || 'No se pudo guardar la edición masiva.');return payload.result.changes;
+      })() : await withAdminSiteChange(()=>runTransaction(db,async transaction=>{
         let collections=_allCollections;
         if(request.field==='category'){
           const categorySnapshot=await transaction.get(doc(db,'collections',String(request.value)));
@@ -6576,7 +6653,7 @@ window.TintinProductAdmin = Object.freeze({
       }));
       for(const change of changes){const product=_allProducts.find(p=>p._docId===change.id);if(product)Object.assign(product,change.patch);}
       let auditPending=false;
-      try {await logAudit('editar_producto','producto','','',`Edición masiva: ${request.field}`,{bulk:true,count:ids.length,productHistory:changes.map(({id,before,patch})=>({productId:id,priceBefore:before.price ?? null,priceAfter:patch.price ?? before.price ?? null,stockBefore:before.stock ?? null,stockAfter:Object.hasOwn(patch,'stock')?patch.stock:before.stock ?? null}))});}catch(error){auditPending=true;console.warn('[products] Auditoría pendiente:',error?.message);}
+      try {if(!hasCommercial)await logAudit('editar_producto','producto','','',`Edición masiva: ${request.field}`,{bulk:true,count:ids.length,productHistory:changes.map(({id,before,patch})=>({productId:id,priceBefore:before.price ?? null,priceAfter:patch.price ?? before.price ?? null,stockBefore:before.stock ?? null,stockAfter:Object.hasOwn(patch,'stock')?patch.stock:before.stock ?? null}))});}catch(error){auditPending=true;console.warn('[products] Auditoría pendiente:',error?.message);}
       // La confirmación de Firestore no se revierte si Sheets está temporalmente fuera de servicio.
       let syncPending=false;
       try {await pushProductsToSheets(ids);}catch(error){syncPending=true;console.warn('[products] Sincronización externa pendiente:',error?.message);}

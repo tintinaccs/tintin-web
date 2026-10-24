@@ -109,7 +109,7 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   await expect(page.locator('#prod-stock')).toHaveValue('10');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByLabel('Elegir cantidad: Stock',{exact:true}).selectOption('500');await expect(page.locator('#prod-stock')).toHaveValue('500');
   await page.getByRole('button',{name:'Stock: 0 unidades',exact:true}).click();
-  await expect(page.locator('#prod-stock')).toHaveValue('0');await expect(page.locator('#prod-active')).not.toBeChecked();
+  await expect(page.locator('#prod-stock')).toHaveValue('0');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByRole('button',{name:'Sumar una unidad: Stock',exact:true}).click();await expect(page.locator('#prod-stock')).toHaveValue('1');await expect(page.locator('#prod-active')).toBeChecked();
   await page.locator('#prod-price').fill('70000');
   await card.locator('[data-product-section=general]').getByRole('button',{name:'Ajustar Precio (Gs.) * en 5000 guaraníes',exact:true}).click();await expect(page.locator('#prod-price')).toHaveValue('75000');
@@ -354,7 +354,7 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
    const {variantInventoryEntries}=await loadModule('/js/core/store/inventario-variantes.mjs');
    const product={variants:{'Diseño de anillo':['coctel','banda']},variantInventory:[{variant:'coctel',stock:1},{variant:'banda',stock:2}],stock:3};
    new Function('variantInventoryEntries','product',renderer+';renderProductVariantStock(product);')(variantInventoryEntries,product);
-   const {setProductPreviewMedia}=await loadModule('/js/admin/products/vista-previa-producto.js?v=tintin-20261021-visual-scope-2');
+   const {setProductPreviewMedia}=await loadModule('/js/admin/products/vista-previa-producto.js?v=tintin-20261024-editor-v2-3');
    setProductPreviewMedia(card,[{'Diseño de anillo':'coctel',imageUrls:['https://img.test/coctel.webp']},{'Diseño de anillo':'banda',imageUrls:['https://img.test/banda.webp']}]);
    card.dispatchEvent(new Event('input',{bubbles:true}));
   },stockRenderer);
@@ -474,12 +474,13 @@ test('abrir conserva producto oculto y visibilidad manual independiente de la ca
  await page.evaluate(()=>{
   document.getElementById('prod-stock').value='7';
   document.getElementById('prod-active').checked=false;
+  document.getElementById('prod-publicationStatus').value='draft';
   document.getElementById('prod-form-title').textContent='Editar producto';
  });
  await expect(page.locator('.tt-editor-stock-status')).toHaveText('7 unidades disponibles');
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await page.getByRole('button',{name:'Stock: 1 unidades',exact:true}).click();
- await expect(page.locator('#prod-active')).toBeChecked();
+ await expect(page.locator('#prod-active')).not.toBeChecked();
  await page.locator('#prod-editor-section').selectOption('visibility');
  await page.locator('#prod-active').uncheck();
  await page.locator('#prod-editor-section').selectOption('general');
@@ -616,7 +617,7 @@ test('salir con fotos masivas pendientes activa el guard real sin subir ni borra
   const moduleUrl=new URL('/js/components/images/carga-imagenes.js',location.origin);const {attachMultiImageUploadWidget}=await import(moduleUrl.href);
   const container=document.createElement('div');container.id='master-guard-queue';document.querySelector('[data-product-section=photos] .tt-editor-section-fields').append(container);
   window.__guardQueue=attachMultiImageUploadWidget(container,{onChange:()=>{throw Error('No debe subir para salir');}});
-  const serialize=new Function('_formImageWidgets','productColorPhotos',source+';return serializeProductForm;')(new Map([['prod-gallery-widget',window.__guardQueue]]),null);
+  const serialize=new Function('_formImageWidgets','productColorPhotos','productEditorialData','productCommercialEditor',source+';return serializeProductForm;')(new Map([['prod-gallery-widget',window.__guardQueue]]),null,()=>({}),null);
   window.AdminUnsaved.register('primary-editor',{root:'#prod-form-card',serialize:()=>JSON.stringify(serialize()),save:()=>false});
   window.prodCancelForm=()=>window.AdminUnsaved.requestNavigation(()=>{window.__guardQueue.destroy();document.getElementById('prod-form-card').style.display='none';});
  },serializer);

@@ -617,7 +617,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261023-editor-audit-1')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261024-editor-v2-3')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -1560,6 +1560,7 @@ function _renderProductDetail(product) {
   const notFound = document.getElementById('product-not-found');
   const loadError = document.getElementById('product-load-error');
   const grid = document.getElementById('product-grid');
+  if(grid)grid.dataset.productTemplate=_pdProduct?.productTemplate==='gallery'?'gallery':'default';
   if (loading) loading.style.display = 'none';
   window.ttPageReady && window.ttPageReady();
   if (notFound) notFound.style.display = 'none';
