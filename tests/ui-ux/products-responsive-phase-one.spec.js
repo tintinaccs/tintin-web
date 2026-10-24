@@ -212,6 +212,21 @@ test('configurar stock por color exige cantidades explícitas y recalcula total 
  await expect(page.locator('#prod-live-preview')).toContainText('2 unidades disponibles');
 });
 
+for(const [width,height] of [[768,1024],[1024,768]])test(`producto nuevo en tablet agrega opciones sin evaluar variantes nulas ${width}x${height}`,async({page})=>{
+ await openEditor(page,width,height);await page.locator('#prod-editor-section').selectOption('inventory');
+ await page.evaluate(({renderer,inventory})=>{
+  window.__stockEditor=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock};')();
+  window.__stockEditor.renderProductVariantStock(null);
+ },{renderer:stockRenderer,inventory:inventorySource});
+ await page.evaluate(()=>{const field=document.getElementById('prod-variants-text');field.value='Color: dorado, plateado';field.dispatchEvent(new Event('input',{bubbles:true}));});
+ expect(await page.evaluate(()=>({error:document.getElementById('prod-form-error').textContent,display:document.getElementById('prod-form-error').style.display,quantities:document.querySelectorAll('#prod-variant-stock input').length}))).toEqual({error:'',display:'none',quantities:2});
+ const quantities=page.locator('#prod-variant-stock input');
+ await quantities.nth(0).fill('1');await quantities.nth(1).fill('2');await expect(page.locator('#prod-stock')).toHaveValue('3');
+ await page.locator('#prod-editor-section').selectOption('photos');
+ await expect(page.locator('[data-product-section=photos]')).toBeVisible();
+ const geometry=await page.locator('#prod-form-card').evaluate(card=>({scroll:card.scrollWidth,client:card.clientWidth}));expect(geometry.scroll).toBeLessThanOrEqual(geometry.client+1);
+});
+
 for(const [width,height] of [[390,844],[775,582],[1024,768]]){
  test(`editor modal no queda debajo de la navegación y la restaura al cerrar ${width}`,async({page})=>{
   let originalVisibility;

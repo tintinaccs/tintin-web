@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f5328fe9fbccdb243abe67212d493bdcf15614f7f778c0f1a10933a49e611e5d",
+  "sourceFingerprint": "f330c42ec7c83e0232218c19ac4ef8d6e294a74ad4fca171b6278a58c5525648",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1470,
     "textFiles": 1379,
-    "totalBytes": 30352459,
+    "totalBytes": 30356394,
     "pages": 19,
     "modules": 1023
   },
@@ -2892,8 +2892,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204216,
-      "sha256": "b6cf126d3a2706c8fab5379bd1282e57b2ab509d7465493653e37e4e56fb1612",
+      "bytes": 204209,
+      "sha256": "d5447b39f51f1e2263828c7160cb3b90ae6f7878068df6b9bea64eb7175408f6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2947,7 +2947,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261024-editor-gallery-compact-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261024-tablet-variants-1",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -3302,7 +3302,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261024-editor-gallery-compact-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261024-tablet-variants-1",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -28179,8 +28179,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 515485,
-      "sha256": "82bbf54aba292406c7916c0655520792a3dce6892f1663ac25e30bf38723e9dc",
+      "bytes": 515487,
+      "sha256": "3b02dcada4516ad306491a2f355ac68c46d376fbdaaaa7c8047d1cad5b9f1d1f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55401,8 +55401,8 @@
     },
     {
       "path": "tests/ui-ux/products-responsive-phase-one.spec.js",
-      "bytes": 69637,
-      "sha256": "59cc2ddaff990cd5fc24c237c86253eefcf50af97b526b6fc5562594774c3d67",
+      "bytes": 71163,
+      "sha256": "7d19732a03d1a1bf82b93b87d470ccbe33e785545f6fcd23511cec22cc538f15",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55423,87 +55423,87 @@
         },
         {
           "url": "https://img.test/**",
-          "line": 262
+          "line": 277
         },
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 262
+          "line": 277
         },
         {
           "url": "https://img.test/rota.webp",
-          "line": 264
+          "line": 279
         },
         {
           "url": "https://img.test/principal.webp",
-          "line": 327
+          "line": 342
         },
         {
           "url": "https://img.test/coctel.webp",
-          "line": 352
+          "line": 367
         },
         {
           "url": "https://img.test/banda.webp",
-          "line": 352
+          "line": 367
         },
         {
           "url": "https://img.test/portada.webp",
-          "line": 402
+          "line": 417
         },
         {
           "url": "https://img.test/extra-$%7B++number%7D.webp",
-          "line": 404
-        },
-        {
-          "url": "https://img.test/extra-1.webp/nhttps://img.test/extra-2.webp",
-          "line": 414
-        },
-        {
-          "url": "https://img.test/extra-1.webp",
           "line": 419
         },
         {
+          "url": "https://img.test/extra-1.webp/nhttps://img.test/extra-2.webp",
+          "line": 429
+        },
+        {
+          "url": "https://img.test/extra-1.webp",
+          "line": 434
+        },
+        {
           "url": "https://img.test/tardia.webp",
-          "line": 432
+          "line": 447
         },
         {
           "url": "https://img.test/rosa.webp",
-          "line": 534
+          "line": 549
         },
         {
           "url": "https://img.test/rojo.webp",
-          "line": 534
+          "line": 549
         },
         {
           "url": "https://img.test/biblioteca.webp",
-          "line": 535
+          "line": 550
         },
         {
           "url": "https://img.test/a.webp",
-          "line": 576
+          "line": 591
         },
         {
           "url": "https://img.test/b.webp/nhttps://img.test/c.webp",
-          "line": 576
+          "line": 591
         },
         {
           "url": "https://img.test/b.webp",
-          "line": 577
+          "line": 592
         },
         {
           "url": "https://img.test/c.webp",
-          "line": 577
+          "line": 592
         },
         {
           "url": "https://img.test/",
-          "line": 596
+          "line": 611
         },
         {
           "url": "https://img.test/uno.png",
-          "line": 604
+          "line": 619
         },
         {
           "url": "https://img.test/dos.png",
-          "line": 606
+          "line": 621
         }
       ]
     },
@@ -56533,8 +56533,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204216,
-      "sha256": "b6cf126d3a2706c8fab5379bd1282e57b2ab509d7465493653e37e4e56fb1612"
+      "bytes": 204209,
+      "sha256": "d5447b39f51f1e2263828c7160cb3b90ae6f7878068df6b9bea64eb7175408f6"
     },
     {
       "path": "apple-touch-icon.png",
@@ -58201,8 +58201,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 889606,
-      "sha256": "35b59cac135c62b1123c2a27a6b9070ce6c83723a94e29d933bbf99924c5bd8d"
+      "bytes": 891998,
+      "sha256": "5f58ed299f25d8eb8071b1412c8728890f80e9c7dcd75a6c765af3b03b6eb4fb"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -59461,8 +59461,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 515485,
-      "sha256": "82bbf54aba292406c7916c0655520792a3dce6892f1663ac25e30bf38723e9dc"
+      "bytes": 515487,
+      "sha256": "3b02dcada4516ad306491a2f355ac68c46d376fbdaaaa7c8047d1cad5b9f1d1f"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -62413,8 +62413,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 74914,
-      "sha256": "2091fa1ce8f790644892f5e6f7c306ffaadd4d0c50e2fa2880fa2432eacca149"
+      "bytes": 74936,
+      "sha256": "61d788bc5678f670f455fa2493a89cc466053362144cd8de5046101dcae0635e"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -65047,8 +65047,8 @@
     {
       "path": "tests/ui-ux/products-responsive-phase-one.spec.js",
       "extension": ".js",
-      "bytes": 69637,
-      "sha256": "59cc2ddaff990cd5fc24c237c86253eefcf50af97b526b6fc5562594774c3d67"
+      "bytes": 71163,
+      "sha256": "7d19732a03d1a1bf82b93b87d470ccbe33e785545f6fcd23511cec22cc538f15"
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",

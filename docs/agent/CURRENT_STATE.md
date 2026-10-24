@@ -1,3 +1,9 @@
+## 2026-10-24 — Corrección de variantes nulas en tablet (Codex /root)
+
+La captura de la titular reproduce un error real al crear producto: el listener de opciones recibía product=null y accedía a product.variants al agregar Color, por lo que detenía el montaje de variantes, fotos por color y controles posteriores. El lector ahora es null-safe y conserva la misma matriz al editar. Regresión nueva en tablet vertical768×1024 y horizontal1024×768: crea Color dorado/plateado, renderiza dos cantidades, suma stock y cambia a Fotos sin excepción ni desborde. La matriz completa de Productos Chromium aprueba102 escenarios de320×568 a1920×1080, incluidos móvil, tablet vertical/horizontal, laptop, escritorio, fotos por color, orden/portada, carga múltiple y guardado protegido. No cambia checkout, precios, stock guardado, writers, permisos, reglas ni datos reales.
+
+El PR1226 también tenía una X de preflight por manifest/site-version generados antes del último registro de evidencia; no era una falla de producto. Se regeneran desde sus autoridades antes de reenviar CI. CI, merge y producción permanecen PENDING.
+
 ## 2026-10-24 — Compactación pendiente del editor de Productos (Codex /root)
 
 La continuación recupera un cierre que no llegó a commit tras #1222: la carga de fotos adicionales queda plegada hasta abrir «Agregar otras fotos»; antes de elegir archivos no muestra la confirmación deshabilitada. Las miniaturas conservan arrastre, portada, orden y eliminación, pero muestran la portada como cápsula inequívoca y usan controles compactos con nombres accesibles. Los filtros de color ocupan su propia fila. Las tarjetas de catálogo mantienen el selector canónico de visibilidad y el guardado inmediato, con una cápsula proporcional de 34px para Activo/Inactivo. No cambian esquema, writers, precios, stock, checkout, pedidos, permisos, reglas ni datos reales.

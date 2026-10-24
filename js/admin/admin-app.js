@@ -5965,7 +5965,7 @@ function renderProductVariantStock(product, configuration = null) {
     try {
       if (!optionsInput.value.trim() && !productVariantStockBaseline) return;
       const previous = productVariantStockBaseline?.entries.map((entry, index) => ({...entry, stock:panel.querySelectorAll('input')[index]?.value ?? entry.stock})) || [];
-      const draft = productVariantStockConfiguration(optionsInput.value, previous, productVariantStockBaseline?.variants || product.variants);
+      const draft = productVariantStockConfiguration(optionsInput.value, previous, productVariantStockBaseline?.variants || product?.variants);
       acceptedOptions = optionsInput.value;
       renderProductVariantStock(product, draft);
       const error = document.getElementById('prod-form-error'); error.textContent='';error.style.display='none';
@@ -5992,7 +5992,7 @@ function renderProductVariantStock(product, configuration = null) {
     panel.append(configure);
     return;
   }
-  productVariantStockBaseline = { stock: product?.stock, expectedEntries, entries: configuration?.entries || expectedEntries, variants: configuration?.variants || product.variants };
+  productVariantStockBaseline = { stock: product?.stock, expectedEntries, entries: configuration?.entries || expectedEntries, variants: configuration?.variants || product?.variants };
   stockInput.readOnly = true;
   optionsInput.readOnly = false;
   const hint = document.createElement('p');
