@@ -1,3 +1,5 @@
+[Rediseño visual del editor](16-REDISENO-VISUAL.md).
+
 [Matriz actual del candidato](15-MATRIZ-CANDIDATO.md) · [Recibo local](evidencias-continuidad.json).
 
 ## Continuación autorizada — candidato integrado (23/10/2026)

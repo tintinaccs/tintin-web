@@ -84,9 +84,9 @@ async function openEditor(page,width,height,withImages=false,beforeOpen=null){
 }
 
 async function openActions(page) {
- const toggle=page.getByRole('button',{name:'Acciones del producto',exact:true});
- if(await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();
- return page.locator('#prod-editor-actions');
+ const actions=page.locator('#prod-editor-actions');
+ await expect(actions).toBeVisible();
+ return actions;
 }
 
 for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180],[1024,768],[1180,820],[1280,720],[1366,768],[1440,900],[1920,1080]]) {
@@ -96,13 +96,13 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   const bounds=await card.boundingBox();
   expect(bounds.x).toBe(0);expect(bounds.y).toBe(0);expect(bounds.width).toBe(width);expect(bounds.height).toBe(height);
   await expect(page.locator('.tt-product-editor-actions')).toHaveCount(0);
-  await expect(page.locator('#prod-editor-actions')).toBeHidden();
-  await expect(page.getByRole('button',{name:'Acciones del producto',exact:true})).toBeInViewport();
+  await expect(page.locator('#prod-editor-actions')).toBeVisible();
+  await expect(page.locator('#prod-save-btn')).toBeInViewport();await expect(page.getByRole('button',{name:'Cancelar',exact:true})).toBeInViewport();
   await page.evaluate(()=>{
    const select=document.getElementById('prod-category');for(const [value,title]of [['relojes','Relojes'],['anillos','Anillos'],['collares','Collares']]){const option=document.createElement('option');option.value=value;option.textContent=title;select.append(option);}
   });
   await page.locator('#prod-category').selectOption('relojes');await expect(page.locator('#prod-category')).toHaveValue('relojes');
-  await expect(card.locator('[data-product-section]')).toHaveCount(6);
+  await expect(card.locator('[data-product-section]')).toHaveCount(7);
   if(width<1200)await expect(page.locator('#prod-name')).toHaveCSS('font-size','16px');
   await openActions(page);await expect(page.locator('#prod-save-btn')).toBeInViewport();
   await page.getByRole('button',{name:'Stock: 10 unidades',exact:true}).click();
@@ -112,11 +112,11 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   await expect(page.locator('#prod-stock')).toHaveValue('0');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByRole('button',{name:'Sumar una unidad: Stock',exact:true}).click();await expect(page.locator('#prod-stock')).toHaveValue('1');await expect(page.locator('#prod-active')).toBeChecked();
   await page.locator('#prod-price').fill('70000');
-  await card.locator('[data-product-section=general]').getByRole('button',{name:'Ajustar Precio (Gs.) * en 5000 guaraníes',exact:true}).click();await expect(page.locator('#prod-price')).toHaveValue('75000');
-  const general=page.getByRole('button',{name:'Datos principales',exact:true});
+  await card.locator('[data-product-section=prices]').getByRole('button',{name:'Ajustar Precio (Gs.) * en 5000 guaraníes',exact:true}).click();await expect(page.locator('#prod-price')).toHaveValue('75000');
+  const general=page.getByRole('button',{name:'Producto',exact:true});
   await page.locator('#prod-name').fill('Reloj Alissia');await general.click();await expect(page.locator('#prod-name')).toBeHidden();
   await general.click();await expect(page.locator('#prod-name')).toHaveValue('Reloj Alissia');
-  await page.getByRole('button',{name:'Descripción y ficha técnica',exact:true}).click();
+  await page.getByRole('button',{name:'Detalles del producto',exact:true}).click();
   await page.getByRole('group',{name:'Sugerencias: Material',exact:true}).getByRole('button',{name:'Acero inoxidable',exact:true}).click();await expect(page.locator('#prod-material')).toHaveValue('Acero inoxidable');
   const geometry=await card.locator('input:not([type=hidden]),select,button,textarea').evaluateAll(nodes=>nodes.filter(el=>el.getClientRects().length).map(el=>({id:el.id,left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right})));
   for(const box of geometry){expect(box.left,box.id).toBeGreaterThanOrEqual(-1);expect(box.right,box.id).toBeLessThanOrEqual(width+1);}
@@ -149,8 +149,8 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
   const card=page.locator('#prod-form-card'),section=page.locator('#prod-editor-section');
   await expect(page.locator('#prod-name')).toBeVisible();await expect(page.locator('#prod-price')).toBeVisible();
   await page.locator('#prod-name').fill('Anillo de prueba');
-  await section.selectOption('general');await page.locator('#prod-price').fill('45000');
-  await section.selectOption('visibility');await expect(page.locator('#prod-cost-unit')).toBeVisible();
+  await section.selectOption('prices');await page.locator('#prod-price').fill('45000');
+  await section.selectOption('private');await expect(page.locator('#prod-cost-unit')).toBeVisible();
   // El selector de secciones no puede descubrir campos que el controlador oculte por rol.
   await page.locator('#prod-inventory-fields').evaluate(el=>el.style.display='none');
   await section.selectOption('all');await expect(page.locator('#prod-cost-unit')).toBeHidden();
@@ -164,7 +164,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
    await expect(card).toHaveAttribute('role','dialog');
    const rect=await card.boundingBox();expect(rect.x).toBe(0);expect(rect.y).toBe(0);expect(rect.width).toBe(width);expect(rect.height).toBe(height);
    const footer=await save.boundingBox();expect(footer.y).toBeGreaterThan(0);expect(footer.y+footer.height).toBeLessThanOrEqual(height);
-   await page.keyboard.press('Escape');await expect(card.locator('.tt-product-editor-menu-toggle')).toBeFocused();await openActions(page);
+   await save.focus();await expect(save).toBeFocused();
   }
   await save.click();expect(await page.evaluate(()=>window.__calls.at(-1))).toEqual(['prodGuardar','Anillo de prueba','45000']);
   await page.screenshot({path:`test-results/products-editor-phase1-${width}x${height}.png`});
@@ -208,7 +208,7 @@ test('configurar stock por color exige cantidades explícitas y recalcula total 
  expect(await page.evaluate(()=>window.__stockEditor.baseline().expectedEntries)).toBe(null);
  expect(await page.evaluate(()=>window.__stockEditor.baseline().variants)).toEqual({Color:['dorado','plateado']});
  await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Azzura');
- await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-price').fill('50000');
+ await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('50000');
  await expect(page.locator('#prod-live-preview')).toContainText('2 unidades disponibles');
 });
 
@@ -291,7 +291,7 @@ test('cancelar respeta el guard nativo: seguir editando conserva datos y descart
   window.AdminUnsaved.register('primary-editor',{root:'#prod-form-card',serialize:()=>JSON.stringify({name:document.getElementById('prod-name').value,price:document.getElementById('prod-price').value}),save:window.prodGuardar});
   window.prodCancelForm=()=>window.AdminUnsaved.requestNavigation(()=>{window.AdminUnsaved.unregister('primary-editor');document.getElementById('prod-form-card').style.display='none';});
  });
- await page.locator('#prod-editor-section').selectOption('general');
+ await page.locator('#prod-editor-section').selectOption('prices');
  expect(await page.evaluate(()=>window.AdminUnsaved.isDirty('primary-editor'))).toBe(false);
  await page.locator('#prod-price').fill('15000');
  await openActions(page);await page.locator('#prod-form-card').getByRole('button',{name:'Cancelar',exact:true}).click();
@@ -364,6 +364,7 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
   await expect(page.locator('#prod-stock')).toHaveValue('1');
   await expect(page.locator('.tt-editor-stock-row').last()).toContainText('Agotado');
   await expect(page.locator('.tt-editor-stock-row').last().locator('img')).toHaveAttribute('src',/banda.webp/);
+  await page.locator('.tt-editor-preview-shell > summary').click();
   const preview=page.locator('#prod-live-preview');
   await expect(preview.locator('h2')).toHaveText('Anillo Amore');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('75.000');
@@ -376,7 +377,7 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
   await expect(page.locator('#prod-stock')).toHaveValue('1');
   await expect(page.locator('#prod-variants-text')).toHaveValue('Diseño de anillo: coctel, banda');
   await preview.getByLabel('Vista previa: Diseño de anillo',{exact:true}).selectOption('');
-  await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-price').fill('80000');
+  await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('80000');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('80.000');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('−20%');
   await page.locator('#prod-editor-section').selectOption('all');
@@ -482,8 +483,8 @@ test('abrir conserva producto oculto y visibilidad manual independiente de la ca
  await page.getByRole('button',{name:'Stock: 1 unidades',exact:true}).click();
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await page.locator('#prod-editor-section').selectOption('visibility');
- await page.locator('#prod-active').uncheck();
- await page.locator('#prod-editor-section').selectOption('general');
+ await page.locator('#prod-publicationStatus').selectOption('draft');
+ await page.locator('#prod-editor-section').selectOption('prices');
  await page.locator('#prod-price').fill('50000');
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await expect(page.locator('#prod-stock')).toHaveValue('1');
@@ -503,22 +504,17 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(editor).toHaveCSS('border-radius','0px');
  await expect(editor).toHaveAttribute('role','dialog');
  await expect(editor).toHaveAttribute('aria-modal','true');
- const toggle=editor.getByRole('button',{name:'Acciones del producto',exact:true});
- await expect(editor.locator('.tt-product-editor-actions')).toHaveCount(0);
- await expect(editor.locator('#prod-editor-actions')).toBeHidden();
+ const actions=editor.locator('#prod-editor-actions');
+ await expect(actions).toBeVisible();
  const body=editor.locator('.adm-card-body');await body.evaluate(el=>el.scrollTop=el.scrollHeight);
  const contentBox=await body.boundingBox();expect(contentBox.y+contentBox.height).toBeGreaterThanOrEqual(height-1);
- await toggle.focus();await page.keyboard.press('Enter');
- const menu=editor.locator('#prod-editor-actions'),buttons=menu.locator('button');
- await expect(buttons).toHaveCount(2);await expect(editor.locator('#prod-save-btn')).toBeFocused();
+ const buttons=actions.locator('button');await expect(buttons).toHaveCount(2);
  for(const button of await buttons.all()){
   await expect(button).toBeInViewport();
   expect(await button.evaluate(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===el;})).toBe(true);
  }
- await buttons.last().focus();await page.keyboard.press('Tab');await expect(menu).toBeHidden();
- await openActions(page);await page.keyboard.press('Escape');await expect(menu).toBeHidden();await expect(toggle).toBeFocused();await expect(editor).toBeVisible();
- await openActions(page);await editor.locator('#prod-form-title').click();await expect(menu).toBeHidden();
- await openActions(page);
+ await buttons.first().focus();await page.keyboard.press('Tab');await expect(editor.locator('#prod-save-btn')).toBeFocused();
+ await editor.locator('#prod-form-title').click();await expect(actions).toBeVisible();
  if(width===390||width===1440)await page.screenshot({path:test.info().outputPath(`editor-full-${width}.png`)});
  await editor.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(editor).toBeHidden();
  await expect(page.locator('[data-action="product-new"]')).toBeFocused();
@@ -630,7 +626,7 @@ test('salir con fotos masivas pendientes activa el guard real sin subir ni borra
  expect(await page.evaluate(()=>window.__imageCleanup || 0)).toBe(0);
 });
 
-for(const [width,height] of [[320,700],[390,844],[768,1024],[1024,768],[1280,720],[1440,900]])test(`panel completo mantiene título, menú y cantidades sin solaparse ${width}x${height}`,async({page})=>{
+for(const [width,height] of [[320,700],[390,844],[768,1024],[1024,768],[1280,720],[1440,900]])test(`panel completo mantiene título, acciones y cantidades sin solaparse ${width}x${height}`,async({page})=>{
  await openEditor(page,width,height);
  for(const file of ['css/admin/admin.css','css/admin/espacio-modulos-admin.css','css/admin/dashboard-control.css','css/theme/sistema-superficies-tintin.css'])await page.addStyleTag({content:fs.readFileSync(path.join(root,file),'utf8')});
  await page.evaluate(({renderer,inventory})=>{
@@ -639,9 +635,9 @@ for(const [width,height] of [[320,700],[390,844],[768,1024],[1024,768],[1280,720
   window.__stockRegression=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock};')();
   window.__stockRegression.renderProductVariantStock({stock:1,variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'Dorado',stock:1},{variant:'Plateado',stock:0}]});
  },{renderer:stockRenderer,inventory:inventorySource});
- const title=await page.locator('#prod-form-title').boundingBox(),menu=await page.locator('.tt-product-editor-menu-toggle').boundingBox();
- expect(Math.abs(title.y+title.height/2-menu.y-menu.height/2)).toBeLessThanOrEqual(1);
- expect(menu.x).toBeGreaterThanOrEqual(title.x+title.width);
+ const title=await page.locator('#prod-form-title').boundingBox(),actions=await page.locator('#prod-editor-actions').boundingBox();
+ expect(actions.y>=title.y+title.height-1 || actions.x>=title.x+title.width-1).toBe(true);
+ await expect(page.locator('#prod-save-btn')).toBeInViewport();
  await page.locator('#prod-editor-section').selectOption('inventory');
  for(const row of await page.locator('#prod-variant-stock .tt-editor-stock-row').all()){
   const controls=row.locator('.tt-editor-stepper > *, .tt-editor-quantity-select');const boxes=await controls.evaluateAll(nodes=>nodes.map(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width};}));
@@ -650,6 +646,40 @@ for(const [width,height] of [[320,700],[390,844],[768,1024],[1024,768],[1280,720
   for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];expect(a.right<=b.x+1 || b.right<=a.x+1 || a.bottom<=b.y+1 || b.bottom<=a.y+1).toBe(true);}
  }
  await page.getByRole('button',{name:'Sumar una unidad: Stock de Dorado',exact:true}).click();await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('2');
- await openActions(page);await expect(page.locator('#prod-save-btn')).toBeVisible();await page.keyboard.press('Escape');await expect(page.locator('#prod-form-card')).toBeVisible();
+ await openActions(page);await expect(page.locator('#prod-save-btn')).toBeVisible();
  if(width===390||width===1440)await page.screenshot({path:test.info().outputPath('controles-'+width+'.png')});
+ await page.keyboard.press('Escape');await expect(page.locator('#prod-form-card')).toBeHidden();await expect(page.locator('[data-action="product-new"]')).toBeFocused();
+});
+
+for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768],[1280,800],[1440,900],[1920,1080]])test(`editor estilo Shopify: columnas, estado, SEO y acciones ${width}x${height}`,async({page})=>{
+ await openEditor(page,width,height);
+ const card=page.locator('#prod-form-card');
+ await page.locator('#prod-name').fill('Reloj Alissia');
+ await page.locator('#prod-price').fill('70000');
+ await page.locator('#prod-description').fill('Acero inoxidable, para todos los días.');
+ await page.locator('#prod-publicationStatus').selectOption('draft');
+ await expect(card.locator('#prod-form-title')).toHaveText('Reloj Alissia');
+ await expect(card.locator('.tt-product-editor-state')).toHaveText('Borrador');
+ await page.locator('#prod-inventory-fields').evaluate(el=>el.style.display='none');
+ await expect(card.locator('[data-product-section="private"]')).toBeHidden();
+ const layout=card.locator('.tt-editor-layout'),main=card.locator('.tt-product-fields'),sidebar=card.locator('.tt-editor-sidebar');
+ const boxes=await Promise.all([main.boundingBox(),sidebar.boundingBox()]);
+ if(width>=1000){expect(boxes[1].x).toBeGreaterThanOrEqual(boxes[0].x+boxes[0].width);expect(boxes[0].width).toBeGreaterThan(boxes[1].width);}
+ else{expect(Math.abs(boxes[1].x-boxes[0].x)).toBeLessThanOrEqual(1);expect(boxes[1].y).toBeGreaterThanOrEqual(boxes[0].y+boxes[0].height);}
+ await expect(main.locator('#prod-description')).toHaveCount(1);
+ await expect(sidebar.locator('#prod-category')).toHaveCount(1);
+ await expect(sidebar.locator('#prod-publicationStatus')).toHaveCount(1);
+ await sidebar.locator('.tt-product-editorial-seo > summary').click();
+ await page.locator('#prod-seoTitle').fill('Reloj Alissia · Tintin');
+ await expect(page.locator('#prod-seoTitle')).toHaveValue('Reloj Alissia · Tintin');
+ await page.locator('#prod-name').fill('Reloj '+ 'A'.repeat(174));
+ expect((await card.locator('#prod-form-title').boundingBox()).height).toBeLessThanOrEqual(54);
+ await page.locator('#prod-name').fill('Reloj Alissia');
+ await card.locator('.adm-card-body').evaluate(el=>el.scrollTop=el.scrollHeight);
+ for(const button of await card.locator('#prod-editor-actions button').all())await expect(button).toBeInViewport();
+ const dimensions=await card.evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.client+1);
+ await page.locator('#prod-save-btn').click();
+ expect(await page.evaluate(()=>window.__calls.filter(row=>row[0]==='prodGuardar'))).toEqual([['prodGuardar','Reloj Alissia','70000']]);
+ const ids=await card.locator('input[id],select[id],textarea[id]').evaluateAll(nodes=>nodes.map(node=>node.id));expect(new Set(ids).size).toBe(ids.length);
+ if(width===390||width===1440){await card.locator('.adm-card-body').evaluate(el=>el.scrollTop=0);await page.screenshot({path:test.info().outputPath(`shopify-editor-${width}.png`)});}
 });

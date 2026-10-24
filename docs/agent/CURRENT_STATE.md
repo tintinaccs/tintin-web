@@ -1,3 +1,11 @@
+## 2026-10-24 — Completar el diseño visual tipo Shopify (Codex /root)
+
+La titular señaló que la publicación funcional de PR1219 no completaba la distribución visual propuesta. Se recupera ese alcance autorizado sobre main1cdad406: Producto/Fotos/Precio/Variantes/Detalles a la izquierda y Publicación/Vista previa/Organización/SEO/Estadísticas a la derecha cuando caben; una columna en móvil/tablet vertical. Se preservan tema, nodos, IDs, valores y handlers; Guardar/Cancelar originales pasan a cabecera visible, con nombre/estado y títulos largos acotados. Inventario interno conserva permiso/ocultamiento y sección propia. Native details hace plegables vista previa, Google y estadísticas.
+
+PASS_LOCAL:121 pruebas administrativas y99 Chromium sin reintentos (matriz comercial, formulario, fotos, permisos, borradores y ocho escenarios de diseño320–1920), con capturas390/1440 inspeccionadas. Se reproduce y corrige un desborde320; también un ciclo de MutationObserver al reasignar hidden sin cambiar valor: se actualiza sólo ante un cambio efectivo. Los controles anteriores de menú se adaptan al guardado visible, preservando cierre/foco/UnsavedGuard. La edición de precio se prueba en su sección propia y la vista previa se abre antes de interactuar.
+
+No cambian fuentes del dominio, reglas, API, permisos ni datos reales. Las reglas de producción ya fueron publicadas por40056875443. No se heredan PASS_CI del editor funcional al rediseño. PASS_LOCAL también:39 comandos de preflight, build Pages con verificadores de rutas/CSP/diagnóstico/caché y auditoría de estilos. CI y producción del candidato final PENDING; detalle en16-REDISENO-VISUAL.
+
 ## 2026-10-24 — Reglas publicadas por el workflow oficial (Codex /root)
 
 PASS_PRODUCTION del despliegue de reglas: ejecución40056875443, workflow .github/workflows/desplegar-reglas-firestore.yml, evento workflow_dispatch desde main d8bfcbee389fcc2fb560abb2aeca3b0c243d6977. validate y deploy concluyeron success; se completó la revisión de production-rules. El paso Publish only Firestore rules aprobó y Firebase confirmó compilación y released rules firestore.rules to cloud.firestore en el proyecto tintin-accesorios. Los bytes del archivo de reglas en el editor son idénticos a ese commit desplegado. Esto acredita el despliegue oficial, sin afirmar CRUD autenticado o compras reales de producción.
