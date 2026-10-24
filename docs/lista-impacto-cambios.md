@@ -752,3 +752,7 @@ La regla global de enlaces wa.me imponía display:inline-flex al enlace fallback
 ## 2026-10-24 — Conciliar ticket con App Check de main
 
 CI de cb8f802bc aprobada; main aa75f4d91 vuelve obsoleta la base y produce conflicto documental/derivado. Merge normal preserva espera App Check y mantenimiento no elegible de #1225. Ticket, CSS y prueba conservan sus bytes; referencias/plan/CSP/caché/diagnóstico se regeneran por autoridades.42 pruebas de ticket y17 contratos del merge ejecutados; la nueva cabeza exige CI propia, sin publicación autorizada.
+
+## 2026-10-24 — Diseño Apple-inspired del editor de productos
+
+Alcance sólo #prod-form-card del Superpanel: lienzo neutro, superficies agrupadas, jerarquía tipográfica, acciones persistentes, resúmenes de precio/stock/material al plegar y movimiento reducido. Autoridades: shopify-commerce-admin.css e interfaz-productos-adaptable.js; consumidores shopify-commerce-admin.js/admin.html actualizan URLs y baseline canónico. Montserrat/paleta Tintin conservadas, sin fuentes ni dependencias nuevas. No modifica listados, otras pantallas, CRUD, autorización, motores de variantes, catálogo real ni pagos. Pruebas: campos guardados, errores, fotos, combinaciones, tamaños320–3840, teclado, zoom y contraste; CI y publicación sólo del SHA final.

@@ -58,3 +58,7 @@ La instrucción actual de la titular autoriza recuperar, corregir y continuar la
 ## 2026-10-24 — Pulido visual solicitado y autorizado (Codex /root)
 
 Base main0f253a411. La titular aprobó implementar y fusionar la propuesta visual adaptable del editor. Rama independiente codex/editor-atelier-responsive-20261024; no se incorpora ni modifica el borrador1228 ajeno. Se conservan campos/handlers/motor y permisos. Se reducen ayudas permanentes y bloques abiertos inicialmente; se suavizan superficies y se añade ayuda editorial local por categoría/material confirmado, sin servicios pagos ni cambios automáticos de garantía. Pruebas nuevas de interfaz se ejecutan mediante el spec existente editor-comercial-v2, sin tocar comandos de CI. Validación local/CI/publicación se documentan por separado en CURRENT_STATE; este apunte no acredita un despliegue ni cierra fases históricas por inferencia.
+
+## 2026-10-24 — Aplicación de habilidad Apple-inspired existente
+
+Codex /root aplica la habilidad instalada apple-inspired-design al editor canónico, sin sistema paralelo. Base304e2db, rama codex/editor-apple-responsive-20261024. Reutiliza componentes y Montserrat/paleta de Tintin; sólo presentación y resúmenes de campos. No modifica la habilidad ni agrega servicios. Borrador1228 ajeno intacto. Evidencia local, CI y publicación se distinguen en CURRENT_STATE; no cerrar fases históricas por inferencia.

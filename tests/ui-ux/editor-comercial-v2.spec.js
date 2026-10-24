@@ -38,7 +38,7 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(page.locator('#prod-save-btn')).toBeInViewport();
  const geometry=await page.locator('#prod-form-card').evaluate(card=>({fits:card.scrollWidth<=card.clientWidth+1,fields:[...card.querySelectorAll('input:not([type=hidden]),select,textarea,button')].filter(el=>el.getClientRects().length).every(el=>{const r=el.getBoundingClientRect(),c=card.getBoundingClientRect();return r.left>=c.left-1 && r.right<=c.right+1;})}));
  expect(geometry).toEqual({fits:true,fields:true});expect(errors).toEqual([]);
- fs.mkdirSync('artifacts/editor-atelier',{recursive:true});await page.screenshot({path:`artifacts/editor-atelier/editor-${width}x${height}.png`});
+ fs.mkdirSync('artifacts/editor-atelier',{recursive:true});await page.screenshot({animations:"disabled",path:`artifacts/editor-atelier/editor-${width}x${height}.png`});
 });
 for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768],[1440,900]])test(`editor comercial real: matriz, lote, orden y vista previa ${width}x${height}`,async({page})=>{
  await page.setViewportSize({width,height});const errors=[];page.on('pageerror',error=>errors.push(error.stack));
@@ -94,4 +94,40 @@ test('reconocimiento real local: carteras, relojes y abstención sin API externa
  await page.getByRole('button',{name:'Analizar imagen principal',exact:true}).click();
  await expect(page.locator('.tt-editor-vision [role=status]')).toContainText('No pude reconocer',{timeout:60000});
  expect(models.length).toBeGreaterThan(0);expect(external).toEqual([]);
+});
+
+for(const [width,height] of [[320,700],[768,1024],[1024,768],[1440,900]])test(`editor Apple-inspired: resúmenes, teclado y movimiento reducido ${width}x${height}`,async({page})=>{
+ const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
+ await openProductSaveFixture(page,width,height);
+ const card=page.locator('#prod-form-card');
+ await page.locator('#prod-editor-section').selectOption('prices');
+ await page.locator('#prod-price').fill('45000');
+ const priceToggle=page.locator('[data-product-section="prices"] .tt-editor-section-toggle');
+ await priceToggle.focus();await page.keyboard.press('Enter');
+ await expect(priceToggle).toHaveAttribute('aria-expanded','false');
+ await expect(priceToggle.locator('.tt-editor-section-value')).toHaveText('Gs. 45.000');
+ await page.keyboard.press('Enter');await page.keyboard.press('Enter');await page.keyboard.press('Enter');
+ await expect(priceToggle).toHaveAttribute('aria-expanded','true');
+ await expect(page.locator('#prod-price')).toHaveValue('45000');
+ await page.locator('#prod-editor-section').selectOption('inventory');
+ await page.locator('#prod-stock').fill('0');await page.locator('#prod-stock').dispatchEvent('input');
+ const inventory=page.locator('[data-product-section="inventory"] .tt-editor-section-toggle');
+ await inventory.click();await expect(inventory.locator('.tt-editor-section-value')).toHaveText('0 unidades');
+ await inventory.click();await page.locator('#prod-stock').fill('');await page.locator('#prod-stock').dispatchEvent('input');
+ await inventory.click();await expect(inventory.locator('.tt-editor-section-value')).toHaveText('Stock sin control');
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await inventory.click();await expect(page.locator('#prod-stock')).toBeVisible();
+ expect(await inventory.locator('.tt-editor-chevron').evaluate(el=>getComputedStyle(el).transitionDuration)).toBe('0s');
+ expect(await page.locator('#prod-section-inventory').evaluate(el=>getComputedStyle(el).animationName)).toBe('none');
+ await page.locator('#prod-editor-section').selectOption('general');
+ await page.locator('#prod-name').fill('Pulsera de prueba con un nombre largo para comprobar la lectura en pantallas pequeñas');
+ const before=await page.locator('#prod-name').inputValue();
+ if(width===1440)await page.evaluate(()=>document.documentElement.style.zoom='2');
+ await expect(page.locator('#prod-name')).toHaveValue(before);
+ const bounds=await card.evaluate(el=>({fits:el.scrollWidth<=el.clientWidth+1,saveVisible:document.getElementById('prod-save-btn').getBoundingClientRect().bottom<=innerHeight}));
+ expect(bounds).toEqual({fits:true,saveVisible:true});
+ await expect(page.locator('#prod-save-btn')).toBeEnabled();
+ await page.evaluate(()=>document.documentElement.style.zoom='');
+ const contrast=await page.locator('#prod-save-btn').evaluate(el=>{const s=getComputedStyle(el),canvas=document.createElement('canvas');canvas.width=canvas.height=1;const ctx=canvas.getContext('2d');const luminance=color=>{ctx.clearRect(0,0,1,1);ctx.fillStyle=color;ctx.fillRect(0,0,1,1);const c=[...ctx.getImageData(0,0,1,1).data].slice(0,3).map(x=>{x/=255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4;});return .2126*c[0]+.7152*c[1]+.0722*c[2];};const a=luminance(s.color),b=luminance(s.backgroundColor);return(Math.max(a,b)+.05)/(Math.min(a,b)+.05);});
+ expect(contrast).toBeGreaterThanOrEqual(4.5);
 });

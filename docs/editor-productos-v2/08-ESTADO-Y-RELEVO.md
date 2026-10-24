@@ -100,3 +100,7 @@ Seguimiento de CI:40039955108/a3243 y40040078842/fa485 fallaron por control lite
 ## Pulido visual autorizado — 24/10/2026
 
 Trabajo propio en codex/editor-atelier-responsive-20261024 sobre main0f253a411: presentación del editor y sugerencias locales, preservando motor comercial y campos existentes. Titular autorizó implementar y fusionar, sujeto a controles protegidos y verificación posterior. PR1228 es un borrador ajeno de lógica comercial: no se integra ni modifica aquí. No tomar un PASS histórico ni esta autorización como evidencia de CI o publicación; consultar CURRENT_STATE y SHA del candidato actual. No compras, mensajes ni cambios de catálogo reales para probar.
+
+## Editor Apple-inspired — 24/10/2026
+
+Pedido de la titular: aplicar la habilidad existente al editor del Superpanel en escritorio/laptop/tablet vertical-horizontal/móvil, manteniendo un único editor. Rama codex/editor-apple-responsive-20261024 sobre304e2db. Contratos comerciales y guardado intactos; siguen vigentes todos los permisos y campos. Ver CURRENT_STATE para resultados por SHA; no heredar CI/publicación de1229. El borrador1228 permanece excluido.

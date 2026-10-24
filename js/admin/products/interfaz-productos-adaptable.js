@@ -111,7 +111,9 @@ export function enhanceProductEditor() {
     for (const [section,title,ids] of sections) {
       const group = document.createElement('section'); group.className = 'tt-editor-section'; group.dataset.productSection = section;
       const heading = document.createElement('h2');
-      const toggle = document.createElement('button');toggle.type='button';toggle.className='tt-editor-section-toggle';toggle.textContent=title;
+      const toggle = document.createElement('button');toggle.type='button';toggle.className='tt-editor-section-toggle';toggle.setAttribute('aria-label',title);
+      const titleText=document.createElement('span');titleText.className='tt-editor-section-title';titleText.textContent=title;toggle.append(titleText);
+      const valueText=document.createElement('span');valueText.className='tt-editor-section-value';valueText.id=`prod-section-${section}-value`;toggle.setAttribute('aria-describedby',valueText.id);toggle.append(valueText);
       const open=['photos','general'].includes(section);
       group.dataset.advanced=String(!open);
 
@@ -212,6 +214,23 @@ function refreshEditorHeading(card) {
   const label={active:'Activo',draft:'Borrador',archived:'Archivado'}[value] || 'Borrador';
   if(state.textContent!==label)state.textContent=label;
   if(state.dataset.state!==value)state.dataset.state=value;
+  refreshSectionValues(card);
+}
+
+// Resumen de los campos actuales; no calcula precios ni inventario.
+function refreshSectionValues(card) {
+  const read=id=>card.querySelector(`#${id}`)?.value.trim() || '';
+  const price=read('prod-price'),stock=read('prod-stock');
+  const values={
+    prices:price ? `Gs. ${Number(price).toLocaleString('es-PY')}` : 'Sin precio',
+    inventory:stock==='' ? 'Stock sin control' : `${stock} unidades`,
+    specs:read('prod-material') || 'Opcionales',
+    private:'Sólo administración',
+  };
+  for(const [section,text] of Object.entries(values)) {
+    const target=card.querySelector(`[data-product-section="${section}"] .tt-editor-section-value`);
+    if(target && target.textContent!==text)target.textContent=text;
+  }
 }
 
 function showSection(card,value,expand=false) {
