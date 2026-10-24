@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c69ae17e95992a09b9122ea97c50f588e87c699dad173d96f7ede6cce81f69fa",
+  "sourceFingerprint": "93e8bdaa196e53654b777d30b7cc55f5d40bb504393c51dd215d4687b7ad647c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1476,
     "textFiles": 1385,
-    "totalBytes": 30457397,
+    "totalBytes": 30458952,
     "pages": 19,
     "modules": 1028
   },
@@ -2893,7 +2893,7 @@
         "viewer"
       ],
       "bytes": 204205,
-      "sha256": "7950391b87d16f0f6361ac534b97e7f2a2ade25f686aa260703354b7683538dd",
+      "sha256": "c4f2b4f03ec659547c8ac0a067258d868ff588147f55f361a9d85b7f1c00fd84",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2972,7 +2972,7 @@
           "line": 2083
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261024-editor-apple-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261024-editor-apple-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084
         },
@@ -3332,7 +3332,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261024-editor-apple-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261024-editor-apple-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084,
           "exists": true
@@ -30764,7 +30764,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "bytes": 132507,
-      "sha256": "2e0e795a9e2c1c1f68c6531c1080a26dd87aa13236809292a4f8a6b9dbda82d2",
+      "sha256": "0c1fae950e6c13b766564041d614377b6c01bdd5e03efa690d58e0dfd78aba1e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -56675,7 +56675,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204205,
-      "sha256": "7950391b87d16f0f6361ac534b97e7f2a2ade25f686aa260703354b7683538dd"
+      "sha256": "c4f2b4f03ec659547c8ac0a067258d868ff588147f55f361a9d85b7f1c00fd84"
     },
     {
       "path": "apple-touch-icon.png",
@@ -57671,7 +57671,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 1177,
-      "sha256": "ab7b3e659ed712f55490067047bb38fb31394afc779a605be26040454a379336"
+      "sha256": "fb2e0fd94f92b11ff727f18551e68098641738a692ad328fb68c35d615ac2351"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -57683,7 +57683,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "88de9c929c3f1bb712a22e2a1780c0c8a7559cb19868789a3acd6c55e4759985"
+      "sha256": "d457f35e52ae1d5308f6e562c7f6cb9a2414895a959118097a392b0d46df3b17"
     },
     {
       "path": "config/public-site.json",
@@ -57790,8 +57790,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 114039,
-      "sha256": "4a3e024320061630a0e970b7a784294adb8e148c831354957d87f0f643a26be7"
+      "bytes": 114166,
+      "sha256": "ad395c4a69dd3a8d2029a1521c0ef33d9218e095ead69c7e3a2d748d06e6a14f"
     },
     {
       "path": "css/admin/sidebar-interaccion.css",
@@ -58342,8 +58342,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 915380,
-      "sha256": "4e445789690085f12d9abd48680e88dc5a0eeaebaee95e7d8f2d55a6c3934ff3"
+      "bytes": 916808,
+      "sha256": "a7f2c48591dbec02fd30be4389e55760ccdd507734ade9f0e3d9d215219d4e01"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -60047,7 +60047,7 @@
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
       "bytes": 132507,
-      "sha256": "2e0e795a9e2c1c1f68c6531c1080a26dd87aa13236809292a4f8a6b9dbda82d2"
+      "sha256": "0c1fae950e6c13b766564041d614377b6c01bdd5e03efa690d58e0dfd78aba1e"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -62573,7 +62573,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 75320,
-      "sha256": "62919a0fa772693da8e649bee51f29f2d55751ca25093d7371d13dbfb90d38bc"
+      "sha256": "1f10c26352e79e086c968b5621bebb152bfa4554256058d4c6c10d69a524318d"
     },
     {
       "path": "scripts/ci-commands.js",
