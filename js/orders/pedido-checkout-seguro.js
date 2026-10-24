@@ -862,7 +862,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return mode ? `${base} — ${mode}` : base;
   }
 
-  function buildWhatsAppMessage(result, draft) {
+  function buildWhatsAppMessage(result, draft, sharingTicket = false) {
     const itemLines = (result.items || [])
       .map(item => `• ${item.qty}x ${item.name}${item.variant ? ` — ${item.variant}` : ''} — ${formatPrice(item.price * item.qty)}`)
       .join('\n');
@@ -873,7 +873,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       : formatPrice(result.shippingCost || 0);
 
     const lines = [
-      `Hola, consulto por mi pedido *#${result.shortId}* (ya confirmado en la web).`,
+      sharingTicket
+        ? `¡Hola, Tintin! 🌸 Hice mi pedido en la web y les comparto mi ticket.\n🛍️ Pedido *#${result.shortId}*`
+        : `Hola, consulto por mi pedido *#${result.shortId}* (ya confirmado en la web).`,
       '',
       itemLines,
       '',
@@ -909,6 +911,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (name) lines.push('', `👤 ${name}`);
     const phone = text(draft?.phone);
     if (phone) lines.push(`📱 ${phone}`);
+    if (sharingTicket) lines.push('', 'Quedo pendiente de coordinar el pago y la entrega. ¡Muchas gracias! 💗', 'El ticket confirma el registro del pedido; no acredita el pago.');
 
     return lines.join('\n');
   }
@@ -958,48 +961,149 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       : 'Pedido registrado. El ticket por correo se está procesando; podés guardarlo aquí.';
   }
 
-  function receiptText(result) {
-    const lines = ['TINTIN ACCESORIOS', `Pedido: ${text(result.shortId)}`, 'Pedido registrado', ''];
-    document.querySelectorAll('#ck-confirm-summary .ck-summary-item, #ck-confirm-summary .ck-summary-total, #ck-confirm-summary .ck-summary-row').forEach(row => {
-      lines.push([...row.children].map(node => node.textContent.trim()).join(': '));
-    });
-    const note = document.querySelector('#ck-confirm-summary .ck-summary-shipping-note')?.textContent;
-    if (note) lines.push('', note.trim());
-    lines.push('', 'Este ticket confirma el registro del pedido. No acredita el pago ni reemplaza la factura.');
-    return lines.join('\n');
+  async function receiptImage(result) {
+    // Read the confirmed ticket, never recalculate amounts or fetch private data.
+    // Canvas keeps export local and works without SVG foreignObject or a service.
+    const rows = [...document.querySelectorAll('#ck-confirm-summary .ck-summary-item, #ck-confirm-summary .ck-summary-total, #ck-confirm-summary .ck-summary-row')].map(row => ({
+      values: [...row.children].map(node => node.textContent.trim()),
+      total: row.classList.contains('ck-summary-total'),
+      item: row.classList.contains('ck-summary-item'),
+    }));
+    const note = document.querySelector('#ck-confirm-summary .ck-summary-shipping-note')?.textContent?.trim();
+    const disclaimer = document.querySelector('.ck-receipt-disclaimer')?.textContent?.trim();
+    if (!rows.length || !disclaimer) throw new Error('Ticket no disponible');
+    await document.fonts?.ready;
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Imagen no disponible');
+    const width = 720, padding = 36, contentWidth = width - padding * 2;
+    const fontFamily = 'Montserrat, sans-serif';
+    const commands = [];
+    let y = 0;
+    const font = (size, bold) => `${bold ? '600' : '400'} ${size}px ${fontFamily}`;
+    // Wrap even unbroken references, URLs and long names without clipping.
+    const wrap = (value, maxWidth, size, bold) => {
+      context.font = font(size, bold);
+      const lines = [];
+      for (const paragraph of String(value).split(/\r?\n/)) {
+        let line = '';
+        for (const word of paragraph.split(/\s+/)) {
+          if (!word) continue;
+          if (line && context.measureText(`${line} ${word}`).width <= maxWidth) { line += ` ${word}`; continue; }
+          if (line) { lines.push(line); line = ''; }
+          for (const character of word) {
+            if (line && context.measureText(line + character).width > maxWidth) { lines.push(line); line = ''; }
+            line += character;
+          }
+        }
+        lines.push(line);
+      }
+      return lines;
+    };
+    const paragraph = (value, size, bold, color = '#713C53') => {
+      const lines = wrap(value, contentWidth, size, bold);
+      commands.push({ lines, x: padding, y, size, bold, color });
+      y += lines.length * (size + 9);
+    };
+    y = 32;
+    paragraph('TINTIN ACCESORIOS', 24, true);
+    paragraph(`Pedido ${text(result.shortId)}`, 20, true);
+    paragraph('Pedido registrado', 16, false);
+    y += 26;
+    const headerHeight = y - 12;
+    for (const row of rows) {
+      const [label, value = ''] = row.values;
+      const size = 18, bold = row.total;
+      const leftWidth = row.item ? 410 : 180;
+      const rightX = padding + leftWidth + 20;
+      const left = wrap(label, leftWidth, size, bold);
+      const right = wrap(value, width - padding - rightX, size, bold);
+      commands.push({ lines: left, x: padding, y, size, bold, color: '#713C53' });
+      commands.push({ lines: right, x: rightX, y, size, bold, color: '#713C53' });
+      y += Math.max(left.length, right.length) * 27 + 20;
+    }
+    y += 8;
+    if (note) { paragraph(note, 16, false); y += 16; }
+    paragraph(disclaimer, 16, false);
+    const height = Math.ceil(y + 32);
+    // Refuse oversize exports rather than silently returning a clipped ticket.
+    if (height > 16000) throw new Error('Ticket demasiado extenso para una imagen');
+    const scale = height <= 8000 ? 2 : 1;
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    context.scale(scale, scale);
+    context.fillStyle = '#FFFFFF';
+    context.fillRect(0, 0, width, height);
+    context.fillStyle = '#FCEEF4';
+    context.fillRect(0, 0, width, headerHeight);
+    context.fillStyle = '#F8AACA';
+    context.fillRect(0, 0, width, 6);
+    context.textBaseline = 'top';
+    for (const command of commands) {
+      context.font = font(command.size, command.bold);
+      context.fillStyle = command.color;
+      command.lines.forEach((line, index) => context.fillText(line, command.x, command.y + index * (command.size + 9)));
+    }
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    if (!blob) throw new Error('No se pudo generar la imagen');
+    const id = text(result.shortId).replace(/[^a-zA-Z0-9_-]/g, '') || 'confirmado';
+    return new File([blob], `Tintin-pedido-${id}.png`, { type: 'image/png' });
   }
 
-  function bindReceiptActions(result) {
+  function bindReceiptActions(result, draft) {
     const status = document.getElementById('ck-receipt-status');
     const notify = value => { if (status) status.textContent = value; };
     const save = document.getElementById('ck-save-receipt');
-    if (save) save.onclick = () => {
-      const file = new Blob([receiptText(result)], { type: 'text/plain;charset=utf-8' });
+    const share = document.getElementById('ck-share-receipt');
+    const whatsappFallback = document.getElementById('ck-share-whatsapp-fallback');
+    const shareMessage = buildWhatsAppMessage(result, draft, true);
+    // Click-to-chat can select a recipient and text, but cannot attach a local file.
+    if (whatsappFallback) {
+      whatsappFallback.href = `https://wa.me/${DEFAULT_STORE_WHATSAPP}?text=${encodeURIComponent(shareMessage)}`;
+      whatsappFallback.hidden = true;
+    }
+    let image;
+    const download = file => {
       const url = URL.createObjectURL(file);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Tintin-pedido-${text(result.shortId).replace(/[^a-zA-Z0-9_-]/g, '') || 'confirmado'}.txt`;
+      link.download = file.name;
       document.body.append(link);
       link.click();
       link.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 60000);
-      notify('Tu ticket está listo para guardar.');
     };
-    const share = document.getElementById('ck-share-receipt');
+    // Prepare before a click: file sharing must retain native user activation.
+    const prepare = () => {
+      [save, share].forEach(button => { if (button) button.disabled = true; });
+      notify('Preparando la imagen de tu ticket…');
+      receiptImage(result).then(file => { image = file; notify('Tu ticket está listo como imagen.'); })
+        .catch(() => notify('No pudimos generar la imagen. Reintentá con Guardar ticket o usá Imprimir / PDF.'))
+        .finally(() => [save, share].forEach(button => { if (button) button.disabled = false; }));
+    };
+    prepare();
+    if (save) save.onclick = () => {
+      if (!image) { prepare(); return; }
+      download(image);
+      notify('Tu ticket está listo para guardar como imagen PNG.');
+    };
     if (share) share.onclick = async () => {
-      const content = receiptText(result);
+      if (!image) { prepare(); return; }
       try {
-        if (typeof navigator.share === 'function') {
-          await navigator.share({ title: `Mi pedido Tintin ${text(result.shortId)}`, text: content });
-          notify('Ticket compartido.');
-        } else if (navigator.clipboard?.writeText) {
-          await navigator.clipboard.writeText(content);
-          notify('Ticket copiado. Pegalo donde quieras compartirlo.');
+        const shareData = { title: `Mi pedido Tintin ${text(result.shortId)}`, text: shareMessage, files: [image] };
+        if (typeof navigator.share === 'function' && navigator.canShare?.(shareData)) {
+          await navigator.share(shareData);
+          notify('Opciones para compartir abiertas. Elegí WhatsApp y Tintin (0981 299331); confirmá el envío allí.');
         } else {
-          notify('Guardá el ticket para compartir el archivo desde tu dispositivo.');
+          download(image);
+          if (whatsappFallback) whatsappFallback.hidden = false;
+          notify('Este navegador no admite compartir la imagen con el mensaje. Descargamos tu ticket PNG; abrí WhatsApp de Tintin desde el enlace y adjuntá la imagen.');
         }
       } catch (error) {
-        if (error?.name !== 'AbortError') notify('No pudimos compartirlo. Podés guardar el ticket y compartir el archivo.');
+        if (error?.name !== 'AbortError') {
+          if (whatsappFallback) whatsappFallback.hidden = false;
+          notify('No pudimos abrir las opciones para compartir. Guardá el ticket PNG y adjuntalo al abrir WhatsApp de Tintin desde el enlace.');
+        }
       }
     };
     const print = document.getElementById('ck-print-receipt');
@@ -1025,7 +1129,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     window._lastOrderId = result.shortId;
     window.TintinCheckoutOrderCompleted = true;
     document.getElementById('panel-4')?.classList.add('ck-receipt');
-    bindReceiptActions(result);
+    bindReceiptActions(result, draft);
     document.querySelectorAll('.ck-panel').forEach((panel, index) => panel.classList.toggle('active', index === 4));
     document.querySelectorAll('.ck-step').forEach((step, index) => {
       step.classList.toggle('active', index === 4);
