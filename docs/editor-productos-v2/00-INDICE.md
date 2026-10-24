@@ -1,6 +1,6 @@
 # Editor de productos v2 — entrada para agentes
 
-Fecha: 2026-10-23. Fase autorizada actual: **2, motor comercial y compatibilidad**, por instrucción expresa posterior al cierre de fase1. No publicar, migrar datos reales ni iniciar fase3. La fase2 comercial de la titular reemplaza la fase2 visual del plan inicial.
+Fecha:2026-10-23. Fase activa: **5, auditoría y correcciones acotadas autorizadas**. Resultado NO APTO; no equivale a fases2–4 aprobadas/integradas. No publicar ni migrar datos reales. La numeración de los pedidos expresos de la titular prevalece sobre propuestas históricas del plan.
 
 Esta carpeta conserva las decisiones de la titular del «PROMPT 0». No reemplaza las autoridades técnicas existentes ni certifica funcionalidades por estar aprobadas.
 
@@ -14,6 +14,10 @@ Esta carpeta conserva las decisiones de la titular del «PROMPT 0». No reemplaz
 8. [Estado y relevo](08-ESTADO-Y-RELEVO.md).
 9. [Hallazgos, reproducción e historial 422](09-AUDITORIA-FASE-1.md).
 10. [Motor comercial implementado y activación protegida](10-MOTOR-COMERCIAL-FASE-2.md).
+11. [Auditoría fase5 y evaluación NO APTO](11-AUDITORIA-FASE-5.md).
+12. [Matriz43 actual](12-MATRIZ-43-FASE-5.md).
+13. [Preservación44–58](13-PRESERVACION-FASE-5.md).
+14. [Recibo estructurado de evidencia](evidencias-fase5.json).
 
 ## Antes de cada tarea
 

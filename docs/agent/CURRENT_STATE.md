@@ -1,3 +1,9 @@
+## 2026-10-23 — Auditoría editor fase5: NO APTO (Codex /root)
+
+Rama codex/auditoria-editor-v2-fase5, worktree editor-v2-audit-f5, base85d5061d6/PR1217; no modificación de ramas ajenas/main/checkout principal. Nuevas pruebas y revisión independiente de afirmaciones anteriores: fases3/4 sin implementación en el candidato; editor SDK bloquea v2, estados/SEO editable/plantillas/ficha estadística incompletos. CI40040433474 de85 falló nivel2; no heredar verdes parciales.
+
+Corregidos en commits pequeños: contrato visible de identidad legacy sin tocar gate, JSON-LD con disponibilidad derivada v2, ranking por ID y exclusión cancelado/rechazado usando política existente. No se decide semántica neta de reembolsos/devoluciones/test. Pruebas457commerce/408compatibilidad/144Chromium editor existente/213reglas+6integración demo,39comandos preflight y36arquitectura; conteos solapados, RED/verde y límites en [informe](../editor-productos-v2/11-AUDITORIA-FASE-5.md). Matriz43 y preservación44–58 actualizadas; recibo estructurado y capturas locales. Sin datos reales, compras, pagos, cambios de reglas desplegadas ni despliegue. NO APTO; fase5 no aprobada. Relevo08 prevalece para el estado actual; cerrar dependencias previas y volver a probar antes de publicación.
+
 Seguimiento CI1217: cabezas a3243/fa485 fallaron en audit:integral por llamada literal de identidad legacy.965cd1f07 preserva la ruta original real sin tocar el gate; tag2 nuevo por preview previo.39comandos de ci:preflight,454commerce y5Chromium dirigidos finales PASS_LOCAL; CI remota del HEAD corregido pendiente. Logs inspeccionados40039955108/40040078842; no heredar sus checks.
 
 ## 2026-10-23 — Editor v2 fase2: motor comercial en revisión (Codex /root)

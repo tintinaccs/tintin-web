@@ -1,3 +1,17 @@
+# Estado actual — fase5, NO APTO para publicación
+
+2026-10-23, Codex /root. Informe/matrices/pruebas entregados para revisión; **fase5 NO aprobada**. No publicar. Base auditada85d5061d69ab503b4ae536425f5cac568ca8eab7 de1217; worktree C:/Users/Windows/.codex/worktrees/editor-v2-audit-f5/tintinaccs, rama codex/auditoria-editor-v2-fase5. El PR de auditoría apunta a codex/motor-comercial-variantes-v2; no duplica ni integra1217 a main.
+
+Bloqueos: prodGuardar/reglas protegen v2 porque falta escritor/editor de fase3; funciones31/32/41/42 no completas; diseños/«No listado»/métricas netas pendientes de definición; CI40040433474 del candidato85 falló level2 y omitió dependientes. No inventar implementaciones de fases3/4 ni heredar su aprobación. El pedido fase5 sí autoriza auditoría/correcciones acotadas.
+
+Correcciones locales: identidad/gate intacto, metadata usa stock derivado, ranking por ID y exclusión cancelado/rechazado según política existente. Pruebas RED y verdes preservadas.457commerce/408compatibilidad/144Chromium/213reglas+6integración,39preflight,36arquitectura; solapadas y con límites en11. Capturas de editor existente, no nuevo. No ampliar definición de ventas netas o plantillas sin aprobación. Próximo paso: revisar delta, cerrar dependencias previas en base autorizada sin despliegue y repetir aceptación del conjunto funcional completo. No merge a main, pagos, datos reales ni quitar guardas.
+
+Informe11, matriz12 y preservación13 prevalecen sobre el relevo histórico de abajo para este estado. CI nueva de la rama de auditoría no se supone; verificar el SHA y target del PR antes de atribuir checks.
+
+---
+
+## Relevo histórico fase2 (conservado)
+
 # Estado y relevo — fase2 comercial
 
 2026-10-23, Codex /root. **Motor implementado y validado localmente; entrega para revisión, no publicación. Fase3 NO iniciada.** La instrucción expresa de FASE2 aprueba la continuación del plan de fase1 (D014) y reemplaza su propuesta visual de fase2.

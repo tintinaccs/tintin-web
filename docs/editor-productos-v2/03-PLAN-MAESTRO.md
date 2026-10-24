@@ -68,3 +68,7 @@ Antes de activar v2: fixtures y copia/export autorizado con prueba de recuperaci
 El pedido posterior «FASE2: MOTOR COMERCIAL Y COMPATIBILIDAD» aprueba la continuación y reemplaza el alcance de fase2 visual propuesto anteriormente. Se implementa el motor de precios/stock/referencias y sus consumidores con activación protegida, no un rediseño completo. El resto del plan se conserva como propuesta histórica; su numeración no autoriza ejecutar fase3.
 
 Cierre de esta entrega: código y pruebas en rama separada, commits revisables y PR en borrador, contrato actualizado y evidencia local; no hay merge/deploy, activación de datos reales ni inicio de fase3. Antes de activar v2 faltan aprobación/publicación separadas y editor/escritor compatible. Los controles completos de CI del nuevo SHA deben revisarse cuando existan; la CI de6ac1 no se hereda.
+
+## Pedidos posteriores y estado real al auditar fase5
+
+La titular pidió fase3 NUEVO EDITOR VISUAL y fase4 FUNCIONES ADICIONALES. Se verificaron sus condiciones:1217 seguía draft/no integrado, editor compatible ausente y plantillas sin diseños aprobados. No se iniciaron esas implementaciones. Su solicitud no es evidencia de aprobación técnica/CI ni de código inexistente. El pedido fase5 autoriza ahora auditoría, matrices y correcciones pequeñas dentro del contrato, no inventar el resultado de fases3/4 ni completarlas silenciosamente. Evaluación actual NO APTO en11; código/matrices/pruebas nuevas en11–13. No despliegue ni incorporación de funciones NO.
