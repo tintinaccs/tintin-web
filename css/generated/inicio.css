@@ -1372,16 +1372,9 @@ html.tt-navigation-styles-loading .tt-surface-layer { display: none !important; 
   --login-card:var(--tt-surface);
 }
 
-/* Aliases del Super Admin — a propósito YA NO apuntan a --tt-* (el
-   esquema global): el panel tiene su propio esquema independiente en
-   css/admin/admin-color-tokens.css (Super Admin → Apariencia → Esquema de
-   Super Admin), cargado solo en admin.html/admin-images.html. Antes esta
-   sección forzaba --adm-* = --tt-* con !important en TODAS las páginas,
-   lo que hacía que el panel "heredara" el esquema público sin poder
-   independizarse nunca (admin.css ya definía sus propios --adm-* pero
-   quedaban pisados). Ahora, si --admin-color-* no está definido (páginas
-   públicas, que nunca cargan admin-color-tokens.css), estos alias no
-   tienen efecto porque las clases .adm-* tampoco existen ahí. */
+/* Compatibilidad del panel con el único esquema de Tintín. Sus nombres
+   --admin-color-* derivan de --color-* en admin-color-tokens.css; no existe
+   una segunda paleta activa ni otra publicación de colores para el panel. */
 body:has(.adm-main){
   --adm-bg:var(--admin-color-background-page);
   --adm-card:var(--admin-color-background-surface);
@@ -1418,9 +1411,9 @@ input::placeholder,textarea::placeholder{color:var(--tt-muted)!important;opacity
 input:focus,textarea:focus,select:focus,.perfil-input:focus,.ck-input:focus,.ck-select:focus,.login-email-input:focus{border-color:var(--tt-accent);box-shadow:0 0 0 3px var(--tt-focus);outline:none!important}
 body:has(.adm-main) .adm-input:focus,body:has(.adm-main) .adm-select:focus{border-color:var(--admin-color-field-border-focus);box-shadow:0 0 0 3px var(--admin-color-brand);outline:none!important}
 
-.tt-btn,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn{background:var(--tt-accent)!important;background-color:var(--tt-accent)!important;border-color:var(--tt-accent);color:#222222!important}
+.tt-btn,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn{background:var(--color-button-primary-background)!important;background-color:var(--color-button-primary-background)!important;border-color:var(--color-button-primary-background);color:var(--color-button-primary-text)!important}
 .tt-btn *,.tt-btn-primary-full *,.tt-cart-checkout-btn *,.tt-wa-float *,.tt-footer-wa *,.tt-contact-wa-link *,.ck-btn *,.login-google *,.login-email-btn *,.tt-welcome-primary *,.tt-welcome-test-btn *{color:#222222!important}
-.tt-btn:hover,.tt-cart-checkout-btn:hover,.tt-wa-float:hover,.tt-footer-wa:hover,.tt-contact-wa-link:hover,.ck-btn:hover,.login-google:hover,.login-email-btn:hover{background:var(--tt-accent-hover)!important;background-color:var(--tt-accent-hover)!important;color:#222222!important}
+.tt-btn:hover,.tt-cart-checkout-btn:hover,.ck-btn:hover,.login-google:hover,.login-email-btn:hover{background:var(--color-button-primary-hover)!important;background-color:var(--color-button-primary-hover)!important;color:var(--color-button-primary-text)!important}
 body:has(.adm-main) .adm-btn-primary,body:has(.adm-main) .adm-btn-save{background:var(--admin-color-button-primary-background)!important;background-color:var(--admin-color-button-primary-background)!important;border-color:var(--admin-color-button-primary-background);color:var(--admin-color-button-primary-text)!important}
 body:has(.adm-main) .adm-btn-primary *,body:has(.adm-main) .adm-btn-save *{color:var(--admin-color-button-primary-text)!important}
 body:has(.adm-main) .adm-btn-primary:hover,body:has(.adm-main) .adm-btn-save:hover{background:var(--admin-color-button-primary-hover)!important;background-color:var(--admin-color-button-primary-hover)!important;color:var(--admin-color-button-primary-text)!important}
@@ -4798,16 +4791,17 @@ html body.tt-catalog-maintenance .cat-hero,
   --tt-ui-heading-weight: 600;
   --tt-ui-label-weight: 600;
   --tt-ui-heading-tracking: -.02em;
-  --tt-ui-canvas: #FDECF2;
-  --tt-ui-surface: #ffffff;
+  --tt-ui-canvas: var(--color-brand-accent, #FDECF2);
+  --tt-ui-surface: var(--color-background-surface, #FFFFFF);
   --tt-ui-surface-soft: var(--color-brand-accent, #FDECF2);
   --tt-ui-ink: var(--color-text-primary, #222222);
-  --tt-ui-muted: var(--color-text-primary, #222222);
+  --tt-ui-muted: var(--color-text-secondary, #222222);
   --tt-ui-pink: var(--color-brand-primary, #F8AACA);
   --tt-ui-pink-deep: var(--color-brand-primary, #F8AACA);
   --tt-ui-pink-soft: var(--color-brand-accent, #FDECF2);
-  --tt-ui-line: #FDECF2;
-  --tt-ui-shadow: 0 18px 48px rgba(125, 38, 77, .11);
+  --tt-ui-line: var(--color-border-primary, #FDECF2);
+  --tt-ui-shadow: 0 8px 24px color-mix(in srgb, var(--tt-ui-ink) 8%, transparent);
+  --tt-ui-shadow-rest: 0 3px 14px color-mix(in srgb, var(--tt-ui-ink) 4%, transparent);
   --tt-ui-radius-xl: 28px;
   --tt-ui-radius-lg: 20px;
   --tt-ui-radius-md: 14px;
@@ -4839,6 +4833,17 @@ html:root body :is(.tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
   letter-spacing: .01em;
 }
 
+/* Acciones discretas y consistentes. Los círculos de iconos y los estados
+   de peligro/foco conservan su geometría y significado. */
+html:root body :is(.tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
+  .login-email-btn, .login-google, .ck-btn, .perfil-btn, .perfil-btn-outline,
+  .adm-btn, .tt-commerce-btn) {
+  box-sizing: border-box;
+  max-width: 100%;
+  box-shadow: none !important;
+  font-weight: var(--tt-ui-label-weight);
+}
+
 /* Public surfaces ------------------------------------------------------- */
 html body:not(:has(.adm-main)) {
   background: var(--tt-ui-canvas) !important;
@@ -4866,11 +4871,14 @@ html body:not(:has(.adm-main)) :is(
   .tt-trust-item, .tt-look-card, .tt-editorial, .tt-watch-feature,
   .tt-product-card, .tt-coll-card, .tt-coll-page-card, .tt-review-card,
   .tt-product-info-panel, .tt-product-actions-panel, .tt-specs-block,
-  .tt-reviews-summary, .tt-review-form, .tt-review-thread-message
+  .tt-reviews-summary, .tt-review-form, .tt-review-thread-message,
+  .cat-product-card, :where(.tt-card:has(.tt-card-img-wrap)), .cat-top, .cat-sidebar,
+  .perfil-card, .tt-profile-summary-card, .login-box, .ck-panel,
+  .tt-info-block, .tt-contact-info-item, .tt-contact-alt, :where(#contact-form)
 ) {
   border: 1px solid var(--tt-ui-line) !important;
   border-radius: var(--tt-ui-radius-lg) !important;
-  box-shadow: 0 10px 30px rgba(125, 38, 77, .07) !important;
+  box-shadow: var(--tt-ui-shadow-rest) !important;
 }
 
 html body:not(:has(.adm-main)) :is(
@@ -4884,7 +4892,7 @@ html body:not(:has(.adm-main)) :is(
 html body:not(:has(.adm-main)) :is(
   .tt-product-card, .tt-coll-card, .tt-coll-page-card
 ):hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--tt-ui-pink) 45%, white) !important;
   box-shadow: var(--tt-ui-shadow) !important;
 }
@@ -4951,47 +4959,47 @@ html body:not(:has(.adm-main)) :is(
 html body:not(:has(.adm-main)) :is(
   .tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
   .login-email-btn, .ck-btn
-):not(.tt-btn-outline):not(.tt-btn-outline-full) {
-  background: var(--tt-ui-pink) !important;
-  border-color: var(--tt-ui-pink) !important;
-  color:#222222 !important;
+):not(.tt-btn-outline):not(.tt-btn-outline-full):not(:disabled):not([aria-disabled="true"]):not(:is(.tt-btn-danger,.tt-btn-success,.tt-btn-warning,.tt-btn-info,.tt-btn-neutral,.tt-btn-transparent,[data-button-variant])) {
+  background: var(--tt-ui-action-bg, var(--color-button-primary-background)) !important;
+  border-color: var(--color-button-primary-background) !important;
+  color:var(--color-button-primary-text) !important;
 }
 
 /* Super Admin: panel hierarchy, menu and engagement modules ------------- */
 html body:has(.adm-main) {
-  background: #FDECF2 !important;
-  color:#222222 !important;
+  background: var(--tt-ui-canvas) !important;
+  color:var(--tt-ui-ink) !important;
 }
 
 html body:has(.adm-main) .adm-sidebar {
-  background: #fff !important;
-  border-right: 1px solid #FDECF2 !important;
-  box-shadow: 10px 0 28px rgba(125, 38, 77, .06) !important;
+  background: var(--tt-ui-surface) !important;
+  border-right: 1px solid var(--tt-ui-line) !important;
+  box-shadow: none !important;
   z-index: 300 !important;
 }
 
 html body:has(.adm-main) .adm-sidebar-logo {
   min-height: 104px;
   padding: 24px 24px 18px !important;
-  border-bottom: 1px solid #f2dfe7 !important;
-  background: linear-gradient(180deg, #fff 0%, #FDECF2 100%) !important;
+  border-bottom: 1px solid var(--tt-ui-line) !important;
+  background: var(--tt-ui-surface) !important;
 }
 
 html body:has(.adm-main) .adm-sidebar-toggle {
   z-index: 3;
-  box-shadow: 0 6px 16px rgba(125, 38, 77, .12);
+  box-shadow: var(--tt-ui-shadow-rest);
 }
 
 html body:has(.adm-main) .adm-main {
   min-width: 0;
-  background: #FDECF2 !important;
+  background: var(--tt-ui-canvas) !important;
 }
 
 html body:has(.adm-main) .adm-topbar {
   min-height: 76px;
-  background: #fff !important;
-  border-bottom: 1px solid #FDECF2 !important;
-  box-shadow: 0 5px 20px rgba(125, 38, 77, .05);
+  background: var(--tt-ui-surface) !important;
+  border-bottom: 1px solid var(--tt-ui-line) !important;
+  box-shadow: var(--tt-ui-shadow-rest);
   z-index: 200;
 }
 
@@ -5002,16 +5010,16 @@ html body:has(.adm-main) .adm-content {
 }
 
 html body:has(.adm-main) :is(.adm-card, .adm-table-wrap, .adm-modal, .adm-img-card) {
-  border: 1px solid #FDECF2 !important;
+  border: 1px solid var(--tt-ui-line) !important;
   border-radius: var(--tt-ui-radius-lg) !important;
-  box-shadow: 0 12px 36px rgba(125, 38, 77, .07) !important;
+  box-shadow: var(--tt-ui-shadow-rest) !important;
 }
 
 html body:has(.adm-main) .adm-card-head {
   min-height: 64px;
   padding: 14px 18px !important;
-  background: linear-gradient(180deg, #fff 0%, #fffafc 100%) !important;
-  border-bottom: 1px solid #f2dfe7 !important;
+  background: var(--tt-ui-surface) !important;
+  border-bottom: 1px solid var(--tt-ui-line) !important;
 }
 
 html body:has(.adm-main) .adm-card-body {
@@ -5024,22 +5032,22 @@ html body:has(.adm-main) :is(.adm-engagement-toolbar, .adm-engagement-list,
 }
 
 html body:has(.adm-main) :is(.adm-engagement-toolbar, .adm-bulk-toolbar) {
-  background: #fff1f6 !important;
-  border: 1px solid #FDECF2 !important;
+  background: var(--tt-ui-pink-soft) !important;
+  border: 1px solid var(--tt-ui-line) !important;
   padding: 12px !important;
 }
 
 html body:has(.adm-main) .adm-table-wrap {
   overflow-x: auto;
-  background: #fff !important;
+  background: var(--tt-ui-surface) !important;
 }
 
 html body:has(.adm-main) :is(.adm-table, .adm-table th, .adm-table td) {
-  border-color: #f2dfe7 !important;
+  border-color: var(--tt-ui-line) !important;
 }
 
 html body:has(.adm-main) .adm-table thead th {
-  background: #fbe0ea !important;
+  background: var(--admin-color-table-header-background) !important;
   color:var(--color-text-primary,#222222) !important;
   font-size: 11px;
   letter-spacing: .055em;
@@ -5053,7 +5061,7 @@ html body:has(.adm-main) .adm-nav-item {
 }
 
 html body:has(.adm-main) .adm-nav-item.active {
-  background: #fbe0ea !important;
+  background: var(--admin-color-background-sidebar-active) !important;
   color:var(--color-text-primary,#222222) !important;
   box-shadow: inset 3px 0 0 var(--color-brand-primary, #F8AACA);
 }
@@ -5061,9 +5069,9 @@ html body:has(.adm-main) .adm-nav-item.active {
 html body:has(.adm-main) :is(.adm-btn-primary, .adm-btn-save) {
   min-height: 42px;
   border-radius: 999px !important;
-  background: var(--color-brand-primary, #F8AACA) !important;
-  border-color: var(--color-brand-primary, #F8AACA) !important;
-  color:#222222 !important;
+  background: var(--tt-ui-action-bg, var(--admin-color-button-primary-background)) !important;
+  border-color: var(--admin-color-button-primary-background) !important;
+  color:var(--admin-color-button-primary-text) !important;
   font-weight: 800;
 }
 
@@ -5072,15 +5080,26 @@ html body:has(.adm-main) :is(.adm-btn, .adm-btn-outline) {
   border-radius: 999px !important;
 }
 
+/* Las acciones comparten también sus estados publicados, no sólo el rosa
+   inicial. Los controles secundarios/peligrosos no consumen esta variable. */
+html:root body :is(.tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
+  .login-email-btn, .ck-btn, .adm-btn-primary, .adm-btn-save):hover {
+  --tt-ui-action-bg: var(--color-button-primary-hover);
+}
+html:root body :is(.tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
+  .login-email-btn, .ck-btn, .adm-btn-primary, .adm-btn-save):active {
+  --tt-ui-action-bg: var(--color-button-primary-active);
+}
+
 html body:has(.adm-main) :is(.adm-input, .adm-select, .adm-textarea) {
   min-height: 42px;
   border-radius: 12px !important;
-  border-color: #e9cbd8 !important;
+  border-color: var(--admin-color-field-border) !important;
 }
 
 html body:has(.adm-main) :is(.adm-input, .adm-select, .adm-textarea):focus {
-  border-color: var(--color-brand-primary, #F8AACA) !important;
-  box-shadow: 0 0 0 3px rgba(196, 63, 112, .17) !important;
+  border-color: var(--admin-color-field-border-focus) !important;
+  box-shadow: 0 0 0 3px var(--color-button-primary-focus-ring, rgba(248,170,202,.24)) !important;
 }
 
 /* Responsive contract: menu never occupies the logo zone and toolbars can
@@ -5108,7 +5127,7 @@ html body:has(.adm-main) :is(.adm-input, .adm-select, .adm-textarea):focus {
 }
 
 :is(button, a, input, select, textarea, [tabindex]):focus-visible {
-  outline: 3px solid rgba(196, 63, 112, .45) !important;
+  outline: 2px solid var(--tt-ui-ink) !important;
   outline-offset: 2px;
 }
 
@@ -5142,7 +5161,7 @@ html body:not(:has(.adm-main)) :is(.tt-editorial-content, .tt-watch-feature-cont
    aplica a fotografías, indicadores, mapas ni controles compuestos: sus
    recortes y estados siguen perteneciendo a cada componente. */
 html:root body :is(.tt-info-block, .tt-contact-info-item, #contact-form,
-  .tt-contact-alt, .cat-top, .perfil-card, .tt-profile-summary-card, .ck-panel) {
+  .tt-contact-alt, .cat-top, .cat-sidebar, .perfil-card, .tt-profile-summary-card, .login-box, .ck-panel) {
   border-radius: var(--tt-ui-radius-card) !important;
   min-width: 0;
 }
@@ -5377,7 +5396,7 @@ html:root body :is(.perfil-wrap,.login-page,.ck-body,[data-tt-visual-zone]):has(
 }
 
 /* La foto y el cuerpo forman una tarjeta blanca continua, con aire interior. */
-html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card:has(.tt-card-img-wrap)) { border-radius:24px !important; overflow:hidden; background:#FFFFFF !important; }
+html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card:has(.tt-card-img-wrap)) { border-radius:var(--tt-ui-radius-card) !important; overflow:hidden; background:var(--tt-ui-surface) !important; }
 html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card:has(.tt-card-img-wrap)) :is(.tt-product-img,.tt-card-img-wrap) { background:#FFFFFF !important; padding:clamp(10px,1.4vw,18px); }
 html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card:has(.tt-card-img-wrap)) :is(.tt-product-img-real,.tt-card-img) { object-fit:contain; mix-blend-mode:normal; background:#FFFFFF !important; }
 
@@ -5398,8 +5417,8 @@ html:root body .tt-footer[data-tt-flow-block="pink"] { --tt-footer-logo-filter:u
 html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card) :is(.tt-product-img,.tt-card-img-wrap,.tt-product-img-real,.tt-card-img)[class],
 html:root body:not(:has(.adm-main)) .tt-card .tt-card-img-wrap > img,
 html:root body:not(:has(.adm-main)) .tt-visual-product-card > img { background:transparent !important; }
-html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card) > :is(.tt-product-info,.tt-card-info) { border-top:1px solid #D1D5DB !important; }
-html:root body:not(:has(.adm-main)) .tt-visual-product-card > strong { display:block; border-top:1px solid #D1D5DB; margin-top:12px; padding-top:12px; }
+html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card) > :is(.tt-product-info,.tt-card-info) { border-top:1px solid var(--tt-ui-line) !important; }
+html:root body:not(:has(.adm-main)) .tt-visual-product-card > strong { display:block; border-top:1px solid var(--tt-ui-line); margin-top:12px; padding-top:12px; }
 /* El estado se distingue también en una captura, sin depender del botón. */
 html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card).tt-stock-unavailable,
 html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label) { background:#F3F4F6 !important; }

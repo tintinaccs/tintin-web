@@ -1,48 +1,43 @@
-/**
- * TINTIN — Tokens de color del SUPER ADMIN (Super Admin → Apariencia →
- * Esquema de Super Admin). Generado a partir de js/components/color/esquema-color-catalogo.js
- * (ADMIN_TOKENS). Se carga SOLO en admin.html y admin-images.html — el
- * panel administrativo nunca depende de esto para heredar del esquema
- * público; si algún valor no está definido acá, no existe en absoluto en
- * las demás páginas, así que no hay forma de "filtrarse" por accidente.
- */
+/* Alias de compatibilidad del panel: una sola paleta --color-* publicada.
+ * No crea un segundo esquema ni conserva valores administrativos en línea.
+ * Los respaldos permiten cargar el panel sin red y conservan estados semánticos. */
 :root {
-  --admin-color-brand: #F8AACA;
-  --admin-color-brand-hover: #F8AACA;
-  --admin-color-background-page: #FFFFFF;
-  --admin-color-background-sidebar: #FFFFFF;
-  --admin-color-text-sidebar: #222222;
-  --admin-color-background-sidebar-active: #FDECF2;
-  --admin-color-text-sidebar-active: #222222;
-  --admin-color-background-header: #FFFFFF;
-  --admin-color-background-surface: #FFFFFF;
-  --admin-color-border: #FDECF2;
-  --admin-color-text-primary: #222222;
-  --admin-color-text-secondary: #222222;
-  --admin-color-text-tertiary: #222222;
-  --admin-color-text-title: #222222;
-  --admin-color-button-primary-background: #F8AACA;
-  --admin-color-button-primary-text: #222222;
-  --admin-color-button-primary-hover: #F8AACA;
-  --admin-color-button-outline-text: #222222;
-  --admin-color-button-danger-background: #dc2626;
-  --admin-color-button-danger-text: #FFFFFF;
-  --admin-color-button-danger-hover: #b91c1c;
-  --admin-color-table-header-background: #FDECF2;
-  --admin-color-table-row-hover: #FDECF2;
-  --admin-color-badge-background: #FDECF2;
-  --admin-color-badge-text: #222222;
-  --admin-color-field-background: #FFFFFF;
-  --admin-color-field-border: #FDECF2;
-  --admin-color-field-border-focus: #F8AACA;
-  --admin-color-success-background: #e0f5e6;
-  --admin-color-success-text: #166534;
-  --admin-color-warning-background: #fff3e0;
-  --admin-color-warning-text: #bf360c;
-  --admin-color-error-background: #fde3e1;
-  --admin-color-error-text: #b8341f;
-  --admin-color-modal-background: #FFFFFF;
-  --admin-color-modal-overlay: rgba(34,34,34,0.55);
+  --admin-color-brand: var(--color-brand-primary, #F8AACA);
+  --admin-color-brand-hover: var(--color-brand-primary-hover, #F8AACA);
+  --admin-color-background-page: var(--color-background-page, #FFFFFF);
+  --admin-color-background-sidebar: var(--color-background-menu, #FFFFFF);
+  --admin-color-text-sidebar: var(--color-text-primary, #222222);
+  --admin-color-background-sidebar-active: var(--color-nav-active-background, #FDECF2);
+  --admin-color-text-sidebar-active: var(--color-nav-active-text, #222222);
+  --admin-color-background-header: var(--color-background-header, #FFFFFF);
+  --admin-color-background-surface: var(--color-background-surface, #FFFFFF);
+  --admin-color-border: var(--color-border-primary, #FDECF2);
+  --admin-color-text-primary: var(--color-text-primary, #222222);
+  --admin-color-text-secondary: var(--color-text-secondary, #222222);
+  --admin-color-text-tertiary: var(--color-text-tertiary, #222222);
+  --admin-color-text-title: var(--color-text-title, #222222);
+  --admin-color-button-primary-background: var(--color-button-primary-background, #F8AACA);
+  --admin-color-button-primary-text: var(--color-button-primary-text, #222222);
+  --admin-color-button-primary-hover: var(--color-button-primary-hover, #F8AACA);
+  --admin-color-button-outline-text: var(--color-button-outline-text, #222222);
+  --admin-color-button-danger-background: var(--color-button-danger-background, #dc2626);
+  --admin-color-button-danger-text: var(--color-button-danger-text, #FFFFFF);
+  --admin-color-button-danger-hover: var(--color-button-danger-hover, #b91c1c);
+  --admin-color-table-header-background: var(--color-table-header-background, #FDECF2);
+  --admin-color-table-row-hover: var(--color-background-table-row-hover, #FDECF2);
+  --admin-color-badge-background: var(--color-badge-background, #FDECF2);
+  --admin-color-badge-text: var(--color-badge-text, #222222);
+  --admin-color-field-background: var(--color-field-background, #FFFFFF);
+  --admin-color-field-border: var(--color-field-border, #FDECF2);
+  --admin-color-field-border-focus: var(--color-field-border-focus, #F8AACA);
+  --admin-color-success-background: var(--color-success-background, #e0f5e6);
+  --admin-color-success-text: var(--color-success-text, #166534);
+  --admin-color-warning-background: var(--color-warning-background, #fff3e0);
+  --admin-color-warning-text: var(--color-warning-text, #bf360c);
+  --admin-color-error-background: var(--color-error-background, #fde3e1);
+  --admin-color-error-text: var(--color-error-text, #b8341f);
+  --admin-color-modal-background: var(--color-modal-background, #FFFFFF);
+  --admin-color-modal-overlay: var(--color-modal-overlay, rgba(34,34,34,0.55));
 }
 
 /*

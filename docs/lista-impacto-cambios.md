@@ -682,6 +682,11 @@ Autoridades: alternancia-secciones para impedir que fondos cubran navegación in
 
 catalog-maintenance.css reduce rellenos/márgenes y retira la doble reserva de cabecera en tablet; conserva navegación, dibujo completo y áreas táctiles. Se versionan sus consumidores transitivos y el generador de shell. El auditor Fase8 reconoce el comando actual de pruebas con global-form-fit sin retirar verificaciones. Geometría en11 tamaños Chromium/WebKit y35 regresiones compartidas; fuentes de protección, caché y diagnóstico regeneradas. No modifica datos, Auth ni Rules; evidencia en CURRENT_STATE y UI_RESPONSIVE_GLOBAL_20261023.md.
 
+
+### 2026-10-23 — Un único tema Tintín
+
+Autoridades: GLOBAL_TOKENS/runtime global, alias administrativos y sistema-superficies. Por petición explícita del propietario, el panel adopta el mismo esquema publicado tras Auth/App Check y Apariencia deja de activar un esquema exclusivo de Super Admin. Los documentos históricos permanecen intactos; no se realiza migración ni escritura de datos reales. Se unifican bordes/radios/elevación de tienda, cuenta, compra, formularios y panel preservando semántica de errores/peligro, logo, imágenes, fondos difuminados y geometrías del editor. Verificar esquema en vivo/gate denegado/resize, formularios, superficies, módulos administrativos, ficha y Nosotros; regenerar versiones transitivas, shell, CSP, plan protegido y diagnóstico. Detalle: docs/agent/TEMA_TINTIN_UNICO_20261023.md.
+
 ## 2026-10-23 — Dropup y headers adaptables
 
 Fuentes: control-paneles.js y coherencia-visual.css. Tienda, búsqueda, carrito, cuenta y alertas comparten presentación ascendente en móvil; altura del viewport visual y espacio real para la barra/teclado, contenido desplazable y acciones persistentes. Tablet conserva su menú y escritorio limita el mega menú a la altura disponible; controles activos, foco y cierres con mínimo44px. Se protege el cierre asíncrono ante cambios rápidos de superficie y se excluyen controles ocultos/inert del ciclo de foco. El aviso tardío de conexión queda sobre la barra y se oculta durante modales. No cambia datos comerciales, sesiones, roles ni rutas. Versiones transitivas, bundles, CSP, diagnóstico y mantenimiento se renuevan desde sus generadores. Evidencia en CURRENT_STATE.
@@ -690,3 +695,5 @@ Fuentes: control-paneles.js y coherencia-visual.css. Tienda, búsqueda, carrito,
 ## 2026-10-23 — Reserva superior de Checkout
 
 Autoridad checkout-maintenance.css: desktop reserva header fijo más difuminado; tablet usa los84px que ya reserva paneles.css y agrega sólo el difuminado; móvil conserva16px sin header superior. Consumidores HTML y fallback checkout-mantenimiento usan el mismo tag nuevo; cascada de referencias JS y generador del shell actualizados, sin cambios funcionales fuera del CSS. Pruebas en navigation-responsive.spec.js ya conectado a CI, con cinco paneles,15 tamaños y rotación. Caché, CSP, plan y diagnóstico se generan por sus autoridades. Evidencia/limitaciones en CURRENT_STATE; no se modifican sesiones, stock, pedidos, pagos ni datos reales.
+
+- Tema Tintín #1213: incorporar main b3997c7cc sin perder #1211/#1215; conservar todos los controles CI con presupuesto 120min y precisión geométrica de 48px. Corregir foco Tab/Shift+Tab de paneles compartidos en WebKit, con URLs nuevas del controlador y su compatibilidad. Evidencia en TEMA_TINTIN_UNICO_20261023.md; publicación pendiente del SHA final.

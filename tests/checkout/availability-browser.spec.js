@@ -37,7 +37,11 @@ for(const [width,height] of sizes)test(`agotado bloquea el avance con diálogo a
  await expect(dialog.getByRole('link',{name:'Ver catálogo'})).toBeFocused();
  const box=await dialog.boundingBox();expect(box.x).toBeGreaterThanOrEqual(0);expect(box.y).toBeGreaterThanOrEqual(0);expect(box.x+box.width).toBeLessThanOrEqual(width);expect(box.y+box.height).toBeLessThanOrEqual(height);
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
- for(const link of await dialog.getByRole('link').all()) expect((await link.boundingBox()).height).toBeGreaterThanOrEqual(48);
+ // El rectángulo transformado puede redondear 48px a 47.999969 en Chromium.
+ for(const link of await dialog.getByRole('link').all()){
+  expect(await link.evaluate(el=>parseFloat(getComputedStyle(el).minHeight))).toBeGreaterThanOrEqual(48);
+  expect((await link.boundingBox()).height + 0.001).toBeGreaterThanOrEqual(48);
+ }
  await dialog.getByRole('link',{name:'Cerrar y volver al inicio'}).focus();await page.keyboard.press('Tab');await expect(dialog.getByRole('link',{name:'Ver catálogo'})).toBeFocused();
  await page.screenshot({path:`artifacts/commerce/stock-${width}x${height}.png`});
 });

@@ -65,7 +65,10 @@ check('No hay claves administrativas duplicadas', new Set(adminTokens.map(token 
 check('No hay variables administrativas duplicadas', new Set(adminTokens.map(token => token.cssVar)).size === adminTokens.length);
 
 const missingGlobalDefaults = globalTokens.filter(token => !globalCss.includes(`${token.cssVar}: ${token.default}`));
-const missingAdminDefaults = adminTokens.filter(token => !adminCss.includes(`${token.cssVar}: ${token.default}`));
+const missingAdminDefaults = adminTokens.filter(token => {
+  const alias = adminCss.match(new RegExp(`${token.cssVar}: var\\((--color-[\\w-]+), ([^;]+)\\);`));
+  return !alias || alias[2] !== token.default || !globalCss.includes(`${alias[1]}:`);
+});
 check('Todos los tokens globales tienen respaldo CSS', missingGlobalDefaults.length === 0, missingGlobalDefaults.map(token => token.cssVar).join(', '));
 check('Todos los tokens administrativos tienen respaldo CSS', missingAdminDefaults.length === 0, missingAdminDefaults.map(token => token.cssVar).join(', '));
 
@@ -114,9 +117,13 @@ check('La publicación muestra impacto antes de guardar', adminApp.includes('fun
 check('El contraste se verifica antes de publicar, incluso por dispositivo', adminApp.includes('contrastContexts') && adminApp.includes('DEVICE_BREAKPOINTS.forEach'));
 check('La vista previa usa sobrescrituras por dispositivo', adminApp.includes('function aparResolvePreview') && adminApp.includes('aparPreviewDevice'));
 check('El runtime público escucha Firestore en tiempo real', globalRuntime.includes('onSnapshot') && globalRuntime.includes("doc(db, 'colorSchemes'"));
-check('El runtime administrativo escucha Firestore en tiempo real', adminRuntime.includes('onSnapshot') && adminRuntime.includes("doc(db, 'colorSchemes'"));
-check('Los cambios publicados se aplican como variables CSS reales', globalRuntime.includes('root.style.setProperty') && adminRuntime.includes('root.style.setProperty'));
-check('El runtime conserva caché para evitar parpadeos', globalRuntime.includes('localStorage.setItem') && adminRuntime.includes('localStorage.setItem'));
+check('El panel utiliza el runtime global tras el gate administrativo', adminRuntime.includes("await waitForAdminAppCheck(12000)") && adminRuntime.includes("components/color/esquema-color.js?v=") && !adminRuntime.includes('activeAdminSchemeId'));
+check('Apariencia edita un único esquema para toda Tintín',
+  adminApp.includes("const aparScope = 'global'") &&
+  !adminApp.includes('activeAdminSchemeId') && !adminApp.includes('default-admin') &&
+  !adminHtml.includes('data-apar-scope="admin"'));
+check('Los cambios publicados se aplican como variables CSS reales', globalRuntime.includes('root.style.setProperty') && adminRuntime.includes('components/color/esquema-color.js?v='));
+check('El runtime conserva caché para evitar parpadeos', globalRuntime.includes('localStorage.setItem') && !adminRuntime.includes('tt_color_scheme_admin'));
 
 const instantReleaseMs = Number(instantRuntime.match(/RELEASE_TIMEOUT_MS\s*=\s*(\d+)/)?.[1] || Infinity);
 const instantRevealMs = Number(instantRuntime.match(/FAST_REVEAL_TIMEOUT_MS\s*=\s*(\d+)/)?.[1] || Infinity);
@@ -163,9 +170,14 @@ const badFirstPaintOrder = publicPages.filter(file => {
 });
 check('Todas las páginas públicas estabilizan el fondo antes del loader y del CSS', badFirstPaintOrder.length === 0, badFirstPaintOrder.join(', '));
 
-check('Las páginas administrativas cargan su esquema independiente', ['admin.html', 'admin-images.html'].every(file => {
+check('Las páginas administrativas cargan alias del esquema único', ['admin.html', 'admin-images.html'].every(file => {
   const html = read(file);
   return html.includes('css/admin/admin-color-tokens.css') && html.includes('js/admin/settings/esquema-color-admin.js');
+}));
+check('El panel estabiliza la misma caché global antes del loader', ['admin.html', 'admin-images.html'].every(file => {
+  const html = read(file);
+  const at = html.indexOf('js/components/color/esquema-color-instantaneo.js');
+  return at >= 0 && at < html.indexOf('js/cargador-pagina.js');
 }));
 
 if (failures) {

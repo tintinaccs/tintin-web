@@ -66,16 +66,9 @@
   --login-card:var(--tt-surface);
 }
 
-/* Aliases del Super Admin — a propósito YA NO apuntan a --tt-* (el
-   esquema global): el panel tiene su propio esquema independiente en
-   css/admin/admin-color-tokens.css (Super Admin → Apariencia → Esquema de
-   Super Admin), cargado solo en admin.html/admin-images.html. Antes esta
-   sección forzaba --adm-* = --tt-* con !important en TODAS las páginas,
-   lo que hacía que el panel "heredara" el esquema público sin poder
-   independizarse nunca (admin.css ya definía sus propios --adm-* pero
-   quedaban pisados). Ahora, si --admin-color-* no está definido (páginas
-   públicas, que nunca cargan admin-color-tokens.css), estos alias no
-   tienen efecto porque las clases .adm-* tampoco existen ahí. */
+/* Compatibilidad del panel con el único esquema de Tintín. Sus nombres
+   --admin-color-* derivan de --color-* en admin-color-tokens.css; no existe
+   una segunda paleta activa ni otra publicación de colores para el panel. */
 body:has(.adm-main){
   --adm-bg:var(--admin-color-background-page);
   --adm-card:var(--admin-color-background-surface);
@@ -112,9 +105,9 @@ input::placeholder,textarea::placeholder{color:var(--tt-muted)!important;opacity
 input:focus,textarea:focus,select:focus,.perfil-input:focus,.ck-input:focus,.ck-select:focus,.login-email-input:focus{border-color:var(--tt-accent);box-shadow:0 0 0 3px var(--tt-focus);outline:none!important}
 body:has(.adm-main) .adm-input:focus,body:has(.adm-main) .adm-select:focus{border-color:var(--admin-color-field-border-focus);box-shadow:0 0 0 3px var(--admin-color-brand);outline:none!important}
 
-.tt-btn,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn{background:var(--tt-accent)!important;background-color:var(--tt-accent)!important;border-color:var(--tt-accent);color:#222222!important}
+.tt-btn,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn{background:var(--color-button-primary-background)!important;background-color:var(--color-button-primary-background)!important;border-color:var(--color-button-primary-background);color:var(--color-button-primary-text)!important}
 .tt-btn *,.tt-btn-primary-full *,.tt-cart-checkout-btn *,.tt-wa-float *,.tt-footer-wa *,.tt-contact-wa-link *,.ck-btn *,.login-google *,.login-email-btn *,.tt-welcome-primary *,.tt-welcome-test-btn *{color:#222222!important}
-.tt-btn:hover,.tt-cart-checkout-btn:hover,.tt-wa-float:hover,.tt-footer-wa:hover,.tt-contact-wa-link:hover,.ck-btn:hover,.login-google:hover,.login-email-btn:hover{background:var(--tt-accent-hover)!important;background-color:var(--tt-accent-hover)!important;color:#222222!important}
+.tt-btn:hover,.tt-cart-checkout-btn:hover,.ck-btn:hover,.login-google:hover,.login-email-btn:hover{background:var(--color-button-primary-hover)!important;background-color:var(--color-button-primary-hover)!important;color:var(--color-button-primary-text)!important}
 body:has(.adm-main) .adm-btn-primary,body:has(.adm-main) .adm-btn-save{background:var(--admin-color-button-primary-background)!important;background-color:var(--admin-color-button-primary-background)!important;border-color:var(--admin-color-button-primary-background);color:var(--admin-color-button-primary-text)!important}
 body:has(.adm-main) .adm-btn-primary *,body:has(.adm-main) .adm-btn-save *{color:var(--admin-color-button-primary-text)!important}
 body:has(.adm-main) .adm-btn-primary:hover,body:has(.adm-main) .adm-btn-save:hover{background:var(--admin-color-button-primary-hover)!important;background-color:var(--admin-color-button-primary-hover)!important;color:var(--admin-color-button-primary-text)!important}

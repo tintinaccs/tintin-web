@@ -1,81 +1,13 @@
-import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261022-avatar-inicial-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
-/**
- * TINTIN — Motor de esquema de colores del SUPER ADMIN (Super Admin →
- * Apariencia → Esquema de Super Admin), en vivo.
- *
- * Misma mecánica que js/components/color/esquema-color.js pero para las variables
- * --admin-color-* y el esquema con scope:'admin' — se carga SOLO en
- * admin.html y admin-images.html. Un esquema del panel nunca toca
- * --color-* (el esquema público), así que jamás se "filtra" hacia afuera.
+/** El panel utiliza el mismo esquema publicado que toda la plataforma.
+ * Conserva el gate administrativo antes de iniciar lecturas; los documentos
+ * de esquemas anteriores permanecen en Firestore como historial, sin activarse.
  */
-import { db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import { doc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { ADMIN_TOKENS, buildDefaultTokenMap, normalizeLegacyBrandColor } from '../../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
 
-const CACHE_KEY = 'tt_color_scheme_admin';
-const APPEARANCE_DOC = { col: 'settings', id: 'appearance' };
-const DEFAULT_SCHEME_ID = 'default-admin';
-
-let unsubScheme = null;
-let lastCssVarMap = null;
-
-function keyMapToCssVarMap(tokensByKey) {
-  const out = {};
-  if (!tokensByKey) return out;
-  ADMIN_TOKENS.forEach(t => {
-    if (tokensByKey[t.key] != null && tokensByKey[t.key] !== '') out[t.cssVar] = normalizeLegacyBrandColor(t, tokensByKey[t.key]);
-  });
-  return out;
+if (await waitForAdminAppCheck(12000)) {
+  await import('../../components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1');
 }
 
-function applyCssVarMap(map) {
-  const root = document.documentElement;
-  Object.entries(map).forEach(([k, v]) => root.style.setProperty(k, v));
-}
-
-function cacheToLocalStorage() {
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ tokens: lastCssVarMap || {} }));
-  } catch (e) { /* no crítico */ }
-}
-
-function applyScheme(schemeData) {
-  const defaults = buildDefaultTokenMap(ADMIN_TOKENS);
-  const merged = Object.assign({}, defaults, schemeData.tokens || {});
-  lastCssVarMap = keyMapToCssVarMap(merged);
-  applyCssVarMap(lastCssVarMap);
-  cacheToLocalStorage();
-}
-
-async function subscribeToScheme(schemeId) {
-  if (unsubScheme) { unsubScheme(); unsubScheme = null; }
-  if (!await waitForAdminAppCheck(12000)) return;
-  unsubScheme = onSnapshot(
-    doc(db, 'colorSchemes', schemeId || DEFAULT_SCHEME_ID),
-    snap => { if (snap.exists()) applyScheme(snap.data()); },
-    err => console.warn('[admin-color-scheme] No se pudo cargar el esquema del panel, se mantiene el último aplicado/cacheado:', err)
-  );
-}
-
-(async () => {
-  if (!await waitForAdminAppCheck(12000)) return;
-  onSnapshot(
-    doc(db, APPEARANCE_DOC.col, APPEARANCE_DOC.id),
-    snap => {
-      const cfg = snap.exists() ? snap.data() : {};
-      subscribeToScheme(cfg.activeAdminSchemeId || DEFAULT_SCHEME_ID);
-    },
-    err => {
-      console.warn('[admin-color-scheme] settings/appearance no disponible, se usa el esquema del panel por defecto:', err);
-      subscribeToScheme(DEFAULT_SCHEME_ID);
-    }
-  );
-})();
-
-// El Centro de campañas pertenece al constructor Apariencia de admin.html.
-// admin-images.html comparte este motor de colores, pero no debe cargar ese
-// editor ni dejar observadores esperando una interfaz que allí no existe.
 if (document.getElementById('visual-editor')) {
   import('../appearance/visual-studio-global-admin.js?v=tintin-20261022-avatar-inicial-1');
 }

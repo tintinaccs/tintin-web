@@ -1,13 +1,8 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "6ac1fdf2546fa859412399f88eccf207991880de",
-  "reason": "Corregir reconocimiento del despliegue Pages exacto para completar la preparación de reglas del editor v2 sin omitir validaciones.",
+  "baseCommit": "14c2b1d2ad463f05716ad35089d2da136028b843",
+  "reason": "Preparar reglas v2 compatibles para el editor preservando el tema integrado de main y la comprobación exacta del proyecto Pages.",
   "files": [
-    {
-      "path": "config/mantenimiento-flujos.json",
-      "oldHash": "67b9d30c59418b2829e2d53fc006788b3535e55035aa771ddc4cebe801df2605",
-      "newHash": "cefd7344792deca6699f6d885a15f191f0039698b8e3fa97f61b5d55381f083c"
-    },
     {
       "path": "firestore.rules",
       "oldHash": "4736675d3f7794fad4ea79ac29b8b60cba956bc1d08716edb8f1b3fc70e0f5fc",
