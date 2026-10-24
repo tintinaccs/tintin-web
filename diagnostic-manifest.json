@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9a0f3daa03fbe5f3d2b8dccc91cd0768acb19efdc18ec8dad9215a621844d2f2",
+  "sourceFingerprint": "458707d1b3b32e7f1fca92ea33130f207a9fc3422242225d93f71f22735f4105",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1456,
     "textFiles": 1365,
-    "totalBytes": 30101853,
+    "totalBytes": 30105986,
     "pages": 19,
     "modules": 1015
   },
@@ -47089,8 +47089,8 @@
     },
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
-      "bytes": 7344,
-      "sha256": "c12daa454723fce9938b01642e5a0c8df54aee754fc835a8836f1f036777dc84",
+      "bytes": 8202,
+      "sha256": "41781e60d192e925f04593f4152296621556371e7e8671a09e37b8809615b83f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47119,6 +47119,12 @@
           "target": "scripts/mantenimiento-flujos-core.mjs",
           "dynamic": false,
           "line": 4
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": true,
+          "line": 98
         }
       ],
       "endpoints": []
@@ -57248,8 +57254,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 18612,
-      "sha256": "18a222660c4283c6cb8b2361fa94365dbc24378d2c0daff6e8227bcef82eba67"
+      "bytes": 17984,
+      "sha256": "4808e80e50bfd3a81f89e71907d04cb99da215c20a4a99c20e4cff6675f7d6e9"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -57261,7 +57267,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "95e978900379b401648e6356ddf3849f5eb0944e83cbef5016874a16789ecc46"
+      "sha256": "0c34f0093bb2f147f32bde92944246ca66313013e8b87ad302f88716cbf6bfe9"
     },
     {
       "path": "config/public-site.json",
@@ -57920,8 +57926,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 874204,
-      "sha256": "4cadf82172649ebbd0d6d89cf52b425e6d226c17baff4f8bdeeb3735e26a50e3"
+      "bytes": 878107,
+      "sha256": "80ab3303f9272987130baf1a67cabae4c38b540e88fbc800f4bb69acedd6c257"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -63368,8 +63374,8 @@
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
       "extension": ".mjs",
-      "bytes": 7344,
-      "sha256": "c12daa454723fce9938b01642e5a0c8df54aee754fc835a8836f1f036777dc84"
+      "bytes": 8202,
+      "sha256": "41781e60d192e925f04593f4152296621556371e7e8671a09e37b8809615b83f"
     },
     {
       "path": "tests/flow-connections/pedidos-authority.test.mjs",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "14c2b1d2ad463f05716ad35089d2da136028b843",
-  "reason": "Conciliar el editor comercial v2 y sus correcciones con el tema único integrado de main, preservando fuentes de tema, permisos y todas las protecciones.",
+  "baseCommit": "d8bfcbee389fcc2fb560abb2aeca3b0c243d6977",
+  "reason": "Renovar la base del editor v2 después de integrar las reglas compatibles, preservando fuentes ya verificadas, el tema único y todas las protecciones.",
   "files": [
     {
       "path": "_headers",
@@ -97,11 +97,6 @@
       "path": "envios.html",
       "oldHash": "719b1176485ae71a156f8ee2ef394aca29c7cdd8df3ff15225cf21e2ebc0fdaa",
       "newHash": "d00392d9fcd87997a73054d5e43f0b98c90c1d037d83bb9777b01a998199fc7f"
-    },
-    {
-      "path": "firestore.rules",
-      "oldHash": "4736675d3f7794fad4ea79ac29b8b60cba956bc1d08716edb8f1b3fc70e0f5fc",
-      "newHash": "9df1911acb8711b00ed964848c0698410a3ad12e143a03aad8e574cf4d05bc2c"
     },
     {
       "path": "functions/api/admin-order-mutation.js",
@@ -334,11 +329,6 @@
       "newHash": "796d95f00ab092e16f2887f2ac3a69bdde547444d023f9a554441a000841b71c"
     },
     {
-      "path": "scripts/probar-firestore-critico.mjs",
-      "oldHash": "14147c22dd78318d81133aa295ec8f13a0d1e9faac3c56024eef27ee9cf10fa1",
-      "newHash": "2de51a726d12a437805ac6f20ab7a68bbbaa19feed7ce5e6f248a3dcc2b6364a"
-    },
-    {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "oldHash": "945e39c01c5e23508067f3090900d08492190368909ec8d82af432403f75260e",
       "newHash": "6dc9a7ac43afb9d164679f2b96abf380a30f039deeeb75820e0fb0489c4f70d5"
@@ -374,25 +364,19 @@
     "apps-script",
     "apps-script__google-sheets__24",
     "apps-script__sheets-products-webhook__26",
-    "carrito",
     "cf-functions",
     "cf-functions__apis-internas__20",
     "cf-functions__csp__29",
     "cf-functions__reglas-firestore__28",
     "cf-pages__cf-functions__19",
-    "comentarios",
     "correos",
     "csp",
     "cuenta-bloqueada",
     "entrada-login",
     "entrada-login__google-btn__1",
     "entrada-login__login-codigo__2",
-    "favoritos",
     "firebase-auth__redirect-result__5",
-    "firestore",
-    "firestore-fuente-verdad",
     "firestore__apps-script__23",
-    "firestore__carrito__36",
     "firestore__users-uid__8",
     "google-btn",
     "google-btn__firebase-auth__3",
@@ -400,7 +384,6 @@
     "inventario",
     "login-codigo",
     "login-codigo__firebase-auth__4",
-    "notificaciones",
     "pagina-perfil",
     "pagina-principal",
     "pedidos",
@@ -410,7 +393,6 @@
     "productos",
     "redirect-result",
     "redirect-result__sesion-estado__6",
-    "reglas-firestore",
     "roles__pagina-perfil__18",
     "roles__pagina-principal__17",
     "roles__perfil__10",

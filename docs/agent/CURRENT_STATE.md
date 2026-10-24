@@ -1,3 +1,11 @@
+## 2026-10-23 — Reglas integradas; cierre de publicación del editor (Codex /root)
+
+PR1220 eee6b371 aprobó CI40054073304, CodeQL, Pages y ambos controles de integridad; se integró automáticamente como d8bfcbee sin omitir ni cambiar protecciones. PR1219 en19ec6d8f también aprobó CI40054231840 completa, CodeQL y Pages. Se incorpora ahora main d8bfcbee para renovar la base y el plan del editor; no hay cambios de fuentes del editor/interfaz por esta conciliación. Los PASS_CI anteriores se atribuyen sólo a esos SHA, no automáticamente a la combinación nueva.
+
+PASS_LOCAL previo de las mismas fuentes comerciales/interfaz:131 pruebas de administración y mapeo,42 Chromium del editor/maestro/búsqueda,457 comerciales y39 comandos de preflight; build y URLs inmutables aprobados. El normalizador real conserva productos legacy con publicationStatus undefined y oculta valores definidos inválidos; desactivar archivados conserva archived. No hay conversaciones de revisión pendientes en ninguno de los dos PR.
+
+BLOCKED de publicación: falta ejecutar el workflow oficial Publicar reglas Firestore desde main con confirmation PUBLICAR_REGLAS y completar su revisión de production-rules. Se proporcionaron al propietario el enlace y los pasos concretos después de verificar el merge. El conector no ofrece dispatch, no hay navegador conectado y el entorno rechaza api.github.com. #1219 conserva borrador hasta verificar el despliegue. La CI del SHA de esta conciliación se comprobará por separado; no se modificó stock, productos, pedidos, pagos, cuentas ni datos reales.
+
 ## 2026-10-23 — Conciliar editor con main14c2b1d2 (Codex /root)
 
 PR1213 se integró durante la continuación con el tema único y la corrección del check Pages. Se conserva su CSS, controles de tema/paneles y pruebas de main; admin-app combina el editor y la administración global de colores, y se renuevan las URLs de los módulos combinados. Se incorporan ambas entradas de CURRENT_STATE sin descartar trabajo concurrente. Plan, shell, CSP, caché y manifiestos se regeneran sobre la base nueva. Las reglas siguen separadas en PR1220 y el editor permanece en borrador hasta el despliegue oficial verificado. CI de esta combinación PENDING; no se heredan resultados de la base anterior.
@@ -41,6 +49,20 @@ Autorización explícita posterior a PROMPT0: sólo auditoría/plan y documentos
 ## 2026-10-23 — PROMPT0: documentación del editor v2 (Codex /root)
 
 Alcance exclusivo: documentación y PR documental en rama codex/documentacion-editor-v2-20261023, base6ac1fdf2546fa859412399f88eccf207991880de. Se crea [índice de continuidad](../editor-productos-v2/00-INDICE.md) y ocho documentos relacionados, reutilizando autoridades canónicas. Se registran43 decisiones (33SÍ/10NO),15 preservaciones44–58 y correspondencias observadas. Seis fases propuestas porque el prompt no fija sus contenidos; sólo fase0 autorizada. No se modifica funcionalidad, datos ni ramas ajenas; no se inicia fase1 ni se autoriza merge/deploy. Pruebas funcionales NOT_VERIFIED; PASS_LOCAL documental: nueve documentos, conteo43+15/33SÍ/10NO, enlaces relativos y diffcheck. Resultados registrados en matriz/relevo. Se conserva debajo toda la evidencia previa, sin heredar sus PASS.
+
+## 2026-10-23 — Conciliar reglas con el tema ya integrado (Codex /root)
+
+Main avanzó a14c2b1d2 por PR1213 durante la continuación. Ese commit ya incluye la corrección exacta del check Pages; se conserva como autoridad confiable y esta rama mantiene su regresión de proyecto/aplicación/SHA. Se incorporan íntegros el tema y sus controles sin reemplazarlos. Plan y manifiestos regenerados sobre la base nueva; CI anterior no acredita esta conciliación. El despliegue de reglas sigue pendiente del workflow oficial y su revisión de production-rules.
+
+## 2026-10-23 — Continuación de reglas y bloqueo de Pages (Codex /root)
+
+PR1220, cabeza anterior8f087952: CI40048914158, Repository audit, CodeQL y Pages PASS_CI del SHA anterior. Los controles de mantenimiento quedan esperando un nombre inexistente: la configuración confiable pide Cloudflare Pages y la aplicación85455 publica Cloudflare Pages: tintinaccesorios. Se corrige al nombre exacto del proyecto, conservando appId, SHA, éxito, workflow y todos los demás controles. Regresión reproducida FAIL antes de corregir;39 contratos PASS_LOCAL después, incluidos rechazo de otro proyecto, aplicación, SHA y estado pendiente. No se omiten controles ni se altera el entorno production-rules.
+
+CI del SHA nuevo PENDING. El workflow oficial de reglas necesita dispatch desde main y revisión del propietario en production-rules. El conector disponible permite PR y lecturas de Actions pero no dispatch; no hay herramienta de navegador conectada y la red del entorno rechaza api.github.com. #1219 conserva borrador hasta despliegue verificado. No se modifican datos de producción.
+
+## 2026-10-23 — Preparación de reglas para editor v2
+
+El PR1219 reúne el candidato del editor, pero el carrito v2 requiere aceptar variantKey y los escritores SDK antiguos deben rechazar matrices v2. Se separa primero la actualización de firestore.rules y sus213 controles de emulador para desplegarla antes de exponer el editor. La autorización actual de la titular permite continuar; GitHub exige una revisión del propietario para el entorno production-rules. No se cambia ningún dato real ni se publica el editor desde esta rama. Pruebas locales del mismo archivo de reglas aprobadas en el candidato; CI del SHA de esta preparación se comprobará aparte.
 
 ## 2026-10-24 — Candidato conciliado y revisión de Actions (Codex /root)
 
