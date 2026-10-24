@@ -75,6 +75,7 @@ async function fixture(page) {
     ${confirmation}
     ${quote}
     ${success}
+    window.fixtureReceiptImage = receiptImage;
     ${submit}
     ${paymentHandlers}
     const paymentMethodLabel = method => method.title;
@@ -151,27 +152,45 @@ test('failed order keeps review and cart; an ordinary empty cart still resets ch
 
 test('confirmed ticket downloads, shares and prints without another order request', async ({ page }, testInfo) => {
   await fixture(page);
+  await page.evaluate(() => {
+    const draw = CanvasRenderingContext2D.prototype.fillText;
+    window.fixtureDrawn = [];
+    CanvasRenderingContext2D.prototype.fillText = function(value, ...args) { fixtureDrawn.push(value); return draw.call(this, value, ...args); };
+  });
   await page.evaluate(() => { fixtureReview(); fixtureQuote(); void fixtureSubmit(); });
   await expect(page.locator('#ck-success-head')).toBeVisible();
   const downloadPromise = page.waitForEvent('download');
   await page.locator('#ck-save-receipt').click();
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toBe('Tintin-pedido-QA-LOCAL-001.txt');
-  const receipt = fs.readFileSync(await download.path(), 'utf8');
-  expect(receipt).toContain('QA-LOCAL-001');
-  expect(receipt).toContain('Producto de prueba');
-  expect(receipt).toContain('Dorado / M');
+  expect(download.suggestedFilename()).toBe('Tintin-pedido-QA-LOCAL-001.png');
+  const receipt = fs.readFileSync(await download.path());
+  expect([...receipt.subarray(0, 8)]).toEqual([137,80,78,71,13,10,26,10]);
+  expect(receipt.readUInt32BE(16)).toBe(1440);
+  expect(receipt.readUInt32BE(20)).toBeGreaterThan(800);
+  const rendered = await page.evaluate(() => fixtureDrawn.join(' '));
+  expect(rendered).toContain('QA-LOCAL-001');
+  expect(rendered).toContain('Producto de prueba');
+  expect(rendered).toContain('Dorado / M');
   await expect(page.locator('#ck-email-status')).toContainText('se está procesando');
-  expect(receipt).toContain('Persona de Prueba');
-  expect(receipt).not.toContain('<svg');
-  expect(receipt).toContain('No acredita el pago');
+  expect(rendered).toContain('Persona de Prueba');
+  expect(rendered).toContain('35.000');
+  expect(rendered).toContain('No acredita el pago');
+  await download.saveAs('artifacts/ticket-imagen-' + testInfo.project.name + '.png');
   await page.evaluate(() => {
+    Object.defineProperty(navigator, 'canShare', { configurable: true, value: data => data.files?.[0]?.type === 'image/png' });
     Object.defineProperty(navigator, 'share', { configurable: true, value: async data => { window.fixtureShared = data; } });
     window.print = () => { window.fixturePrinted = true; };
   });
   await page.locator('#ck-share-receipt').click();
   await expect(page.locator('#ck-receipt-status')).toHaveText('Ticket compartido.');
-  expect((await page.evaluate(() => fixtureShared)).text).toBe(receipt);
+  const shared = await page.evaluate(async () => ({
+    text: fixtureShared.text, name: fixtureShared.files[0].name, type: fixtureShared.files[0].type,
+    bytes: [...new Uint8Array(await fixtureShared.files[0].arrayBuffer())],
+  }));
+  expect(shared.text).toBeUndefined();
+  expect(shared.name).toBe(download.suggestedFilename());
+  expect(shared.type).toBe('image/png');
+  expect(Buffer.from(shared.bytes).equals(receipt)).toBe(true);
   await page.locator('#ck-print-receipt').click();
   expect(await page.evaluate(() => fixturePrinted)).toBe(true);
   await page.evaluate(() => Object.defineProperty(navigator, 'share', { configurable: true, value: async () => { throw new DOMException('Cancelled','AbortError'); } }));
@@ -182,6 +201,61 @@ test('confirmed ticket downloads, shares and prints without another order reques
   await page.emulateMedia({ media: 'print' });
   await expect(page.locator('#ck-post-confirm')).toBeHidden();
   await expect(page.locator('#ck-order-num')).toBeVisible();
+});
+
+test('without file sharing the fallback downloads a PNG, never copies personal text', async ({ page }) => {
+  await fixture(page);
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'canShare', { configurable: true, value: () => false });
+    Object.defineProperty(navigator, 'share', { configurable: true, value: () => { throw new Error('Must not share text'); } });
+    fixtureReview(); void fixtureSubmit();
+  });
+  const pending = page.waitForEvent('download');
+  await page.locator('#ck-share-receipt').click();
+  const download = await pending;
+  expect(download.suggestedFilename()).toMatch(/\.png$/);
+  expect(fs.readFileSync(await download.path()).subarray(1,4).toString()).toBe('PNG');
+  await expect(page.locator('#ck-receipt-status')).toContainText('Descargamos la imagen');
+  expect(await page.evaluate(() => fixtureRequests)).toBe(1);
+});
+
+test('a failed PNG encoder can retry without submitting another order', async ({ page }) => {
+  await fixture(page);
+  await page.evaluate(() => {
+    const encode = HTMLCanvasElement.prototype.toBlob;
+    HTMLCanvasElement.prototype.toBlob = function(callback, ...args) {
+      HTMLCanvasElement.prototype.toBlob = encode;
+      callback(null);
+    };
+    fixtureReview(); void fixtureSubmit();
+  });
+  await expect(page.locator('#ck-receipt-status')).toContainText('No pudimos generar');
+  await page.locator('#ck-save-receipt').click();
+  await expect(page.locator('#ck-receipt-status')).toContainText('listo como imagen');
+  const pending = page.waitForEvent('download');
+  await page.locator('#ck-save-receipt').click();
+  expect((await pending).suggestedFilename()).toMatch(/\.png$/);
+  expect(await page.evaluate(() => fixtureRequests)).toBe(1);
+});
+
+test('long tickets include the final item and disclaimer inside the PNG', async ({ page }) => {
+  await fixture(page);
+  const result = await page.evaluate(async () => {
+    const draw = CanvasRenderingContext2D.prototype.fillText;
+    const drawn = [];
+    CanvasRenderingContext2D.prototype.fillText = function(value, x, y) {
+      drawn.push({value, y, height: this.canvas.height / this.getTransform().d});
+      return draw.call(this, value, x, y);
+    };
+    fixtureReview();
+    document.querySelector('#ck-confirm-summary').innerHTML = Array.from({length:24}, (_, i) => `<div class="ck-summary-item"><span>${i + 1}x Producto con descripción larga y variante Plateado / Material de prueba / Talle M</span><span>Gs. 35.000</span></div>`).join('') + '<div class="ck-summary-row"><span>Referencia</span><span>' + 'X'.repeat(180) + '</span></div>';
+    const image = await window.fixtureReceiptImage({shortId:'QA-LARGO'});
+    return { size:image.size, drawn };
+  });
+  expect(result.size).toBeGreaterThan(10000);
+  expect(result.drawn.map(row => row.value).join(' ')).toContain('24x Producto');
+  expect(result.drawn.map(row => row.value).join(' ')).toContain('No acredita el pago');
+  expect(result.drawn.every(row => row.y + 20 < row.height)).toBe(true);
 });
 
 
