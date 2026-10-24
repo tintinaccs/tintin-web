@@ -590,8 +590,12 @@ test('el dropup anima, permite cambiar durante el cierre y libera el fondo', asy
   await page.locator('#tabbar-cuenta').click();
   await expect.poll(() => page.evaluate(() => [window.TintinSurfaceController.surface,window.TintinSurfaceController.state])).toEqual(['account','open']);
   await expect(page.locator('[data-tt-surface].open')).toHaveCount(1);
-  await page.keyboard.press('Tab');
-  expect(await page.evaluate(() => !!document.activeElement.closest('#account-drawer,#tt-tabbar,#tt-privacy-consent'))).toBe(true);
+  for (const key of ['Tab', 'Shift+Tab']) {
+    for (let step = 0; step < 12; step++) {
+      await page.keyboard.press(key);
+      expect(await page.evaluate(() => !!document.activeElement.closest('#account-drawer,#tt-tabbar,#tt-privacy-consent'))).toBe(true);
+    }
+  }
   await page.keyboard.press('Escape');
   await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('idle');
   expect(await page.locator('.tt-footer').evaluate(el => !!el.closest('[inert]'))).toBe(false);
