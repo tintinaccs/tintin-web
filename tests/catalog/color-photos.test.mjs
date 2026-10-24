@@ -51,3 +51,15 @@ test('mapProduct y las normalizaciones posteriores conservan fotos largas por co
   const p=vm.runInContext("normalizeProduct(normalizeProduct(mapProduct('fixture',input)))",c);
   assert.equal(p.variantMedia[0].imageUrls.length,3);assert.equal(p.variantMedia[0].imageUrls[0],long);
 });
+
+test('el mapeo real conserva visibilidad legacy y oculta estados editoriales inválidos',async()=>{
+ const {productIsPublished}=await import('../../js/core/store/estado-editorial-producto.mjs');
+ const source=fs.readFileSync(new URL('../../js/core/store/estado-productos.js',import.meta.url),'utf8');
+ const c=vm.createContext({wristCategory,cleanText:String,cleanMultilineText:String,sanitizeVariantData:v=>v,normalizeImageUrl:d=>d.imageUrl||'',sanitizeProductImage:String,uniqueSafeImageUrls:list=>list,timestampToMillis:()=>0});
+ vm.runInContext(source.slice(source.indexOf('export function mapProduct'),source.indexOf('function compactProduct')).replace('export ',''),c);
+ for(const [extra,visible] of [[{},true],[{active:false},false],[{publicationStatus:'active'},true],[{publicationStatus:'draft'},false],[{publicationStatus:'archived'},false],[{publicationStatus:'unknown'},false],[{publicationStatus:null},false]]){
+  c.input={name:'Anillo',category:'anillos',price:30000,active:true,...extra};
+  const mapped=vm.runInContext("mapProduct('fixture',input)",c);
+  assert.equal(productIsPublished(mapped),visible,JSON.stringify(extra));
+ }
+});

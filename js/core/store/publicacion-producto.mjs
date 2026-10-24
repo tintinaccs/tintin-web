@@ -1,4 +1,4 @@
-import {productIsPublished} from './estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-4';
+import {productIsPublished} from './estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-5';
 // Contrato estructural compartido entre catálogo y metadata/sitemap del servidor.
 // La visibilidad de la colección sigue siendo responsabilidad del catálogo.
 export function hasPublicProductFields(product) {

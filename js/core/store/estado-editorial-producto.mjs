@@ -1,7 +1,7 @@
 export const PRODUCT_STATUSES = Object.freeze(['active','draft','archived']);
 export const PRODUCT_TEMPLATES = Object.freeze(['default','gallery']);
 export function productEditorialStatus(product) {
-  if (product && Object.hasOwn(product,'publicationStatus')) return PRODUCT_STATUSES.includes(product.publicationStatus) ? product.publicationStatus : 'draft';
+  if (product?.publicationStatus!==undefined) return PRODUCT_STATUSES.includes(product.publicationStatus) ? product.publicationStatus : 'draft';
   return product?.active===false?'draft':'active';
 }
 export function productIsPublished(product) {
