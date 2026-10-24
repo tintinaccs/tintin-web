@@ -1,3 +1,7 @@
+## 2026-10-24 — Cierre accesible de paneles de navegación
+
+SurfaceController retira el foco antes de aria-hidden y restituye la campana con inert liberado. Accesibilidad global delega el foco de los paneles registrados a esa autoridad; mantiene los diálogos genéricos. Regresión de Alertas comprueba el orden de ocultamiento y cierre por Escape/botón en cinco resoluciones. Versiones transitivas y derivados canónicos renovados; sin reglas ni datos reales modificados. Evidencia en CURRENT_STATE.
+
 ## 2026-10-24 — Distribución visual del editor tipo Shopify
 
 Interfaz canónica de Productos: tarjetas y columnas del formulario, lateral editorial y vista previa, cabecera con Guardar/Cancelar originales. Se reubican nodos sin duplicar IDs ni cambiar escrituras; privado respeta la visibilidad del controlador, SEO/estadísticas son plegables y móvil conserva un único desplazamiento principal. Tema Tintin intacto, sin nuevas rutas/reglas/API. Consumidores y CSS renuevan URLs inmutables; plan y manifiestos se regeneran. Evidencia: docs/editor-productos-v2/16-REDISENO-VISUAL.md y CURRENT_STATE.
