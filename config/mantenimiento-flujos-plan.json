@@ -1,70 +1,28 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "9312c832a6635bc01c623dd8c96bad789f1af23b",
-  "reason": "Corregir alta y conversión de stock, recuperación del pago y captura de pedidos cancelados con QA ficticia responsive",
+  "baseCommit": "0f253a4113fb9c6bcc04423f79ad1cc4f3e11d8d",
+  "reason": "Editor Tintin adaptable, ayudas editoriales locales y preservación del motor comercial; publicación autorizada por titular",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "8909552612f9c5e47e96d61fe5969380e72c1a5f49541107ad77f81bfecbe19f",
-      "newHash": "1738afb31e66d4b35e1917c2809aedb2a993c4449b1cf9ddef68dd7cca01b873"
+      "oldHash": "1738afb31e66d4b35e1917c2809aedb2a993c4449b1cf9ddef68dd7cca01b873",
+      "newHash": "f465579379ba6ed61511f07d51f3a0fa1f8f82bc32ef9272ea343fed39f912f2"
     },
     {
-      "path": "checkout.html",
-      "oldHash": "35b413c684c820af4e87cc2ebf6803189c5ea9155623fc9a2e341e97219deddf",
-      "newHash": "d5624ace3a2c71c376abaed55a6615a09067e50f5003cb3c29eedac1167fee8d"
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "fc306552ce5075bec341ddd89381d220f0528f7fae5ca00a751a3f4ad5cc90d7",
+      "newHash": "f5405c002912eacf1f211aba7f21cc32705290b4b0571571bf2e852c6b6f7cd7"
     },
     {
-      "path": "cloudflare/paypal-seguro.js",
-      "oldHash": "719e2f57d9f554561e951dacd10d9a8d202e1f22a187a13cf20fcad0b3e5280d",
-      "newHash": "c4a06a108916da03399d1ca67217b9f37f8ba73d9535169dd9ed3bff5a0cc22e"
-    },
-    {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "3b02dcada4516ad306491a2f355ac68c46d376fbdaaaa7c8047d1cad5b9f1d1f",
-      "newHash": "ba3a2ccb1f79c4444d7073f7fb78f3875cd52547a5904ccea618469eb3cb6312"
-    },
-    {
-      "path": "js/pages/checkout/paypal-checkout.js",
-      "oldHash": "d459610333feb579613e4f1756becb9600d425b0051a1587e3abe6b3ff92a578",
-      "newHash": "6b73c1867997b851a8bb241e524cee39a735ede1cf991fe9174a9a233627dd97"
-    },
-    {
-      "path": "package.json",
-      "oldHash": "c6446d7ea1b7640733a618d549ea6d09a658be25d15125fb42fdb96c2cb8ce00",
-      "newHash": "422ea45eaba694a3710c9634125188ec480a68a09d83bcd8502b216e1dd2b354"
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "eaac47a2fc9847ad030ae93808fcb58e686f3e2abd401971a5e71c1335f03ee5",
+      "newHash": "150a396fbaed5fa993643577ab7edc1edad8131c17fd3e374c10d5db5e4e01cf"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "e974bae5a387092373a65f238508a01eb89dabd443775ea004eb067046a25d0a",
-      "newHash": "e76aa6af4c75e0c8ac8e029f8c8aa8eae24d464495b43f578517d15b0d6cb41f"
+      "oldHash": "e76aa6af4c75e0c8ac8e029f8c8aa8eae24d464495b43f578517d15b0d6cb41f",
+      "newHash": "a3c5df68ca35d9316857f99334de8ecb7ecde1a6f326bcc360825c20a1248e30"
     }
   ],
-  "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
-    "apis-internas__apps-script__22",
-    "apis-internas__correos__41",
-    "apis-internas__pedidos__32",
-    "apps-script",
-    "apps-script__google-sheets__24",
-    "apps-script__sheets-products-webhook__26",
-    "correos",
-    "firestore__apps-script__23",
-    "google-sheets__apps-script__25",
-    "pagina-perfil",
-    "pedidos",
-    "pedidos__inventario__33",
-    "productos",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-perfil__18",
-    "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
-    "sheets-products-webhook",
-    "sheets-products-webhook__firestore__27",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
-    "super-panel__productos__34"
-  ]
+  "affectedRecords": []
 }

@@ -1396,18 +1396,18 @@ html.tt-product-editor-open #prod-form-card .tt-editor-cover img { max-height:30
 /* Productos y catálogo administrativo: editor esencial + opciones avanzadas.
    Mantiene el mismo árbol de campos y las autoridades CRUD existentes. */
 #prod-form-card {
-  --editor-line:color-mix(in srgb,var(--tt-commerce-text) 24%,var(--tt-commerce-surface));
-  --editor-soft:color-mix(in srgb,var(--tt-commerce-text) 9%,var(--tt-commerce-surface));
-  --editor-field:color-mix(in srgb,var(--tt-commerce-brand) 16%,var(--tt-commerce-surface));
-  --editor-field-line:color-mix(in srgb,var(--tt-commerce-text) 58%,var(--tt-commerce-surface));
+  --editor-line:color-mix(in srgb,var(--tt-commerce-text) 12%,var(--tt-commerce-surface));
+  --editor-soft:color-mix(in srgb,var(--tt-commerce-brand) 10%,var(--tt-commerce-surface));
+  --editor-field:color-mix(in srgb,var(--tt-commerce-brand) 5%,var(--tt-commerce-surface));
+  --editor-field-line:color-mix(in srgb,var(--tt-commerce-text) 28%,var(--tt-commerce-surface));
 }
 #prod-form-card .adm-card-head { gap:16px; }
 #prod-form-card .tt-product-section-nav { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:0 0 16px; }
 #prod-form-card .tt-product-section-nav > label { font-size:12px; color:var(--tt-commerce-muted); }
 #prod-form-card .tt-product-section-nav > select { flex:1 1 180px; max-width:320px; }
-#prod-form-card .tt-editor-section { border-radius:16px; background:var(--tt-commerce-surface,#fff); }
+#prod-form-card .tt-editor-section { border-radius:20px; background:var(--tt-commerce-surface,#fff); }
 #prod-form-card .tt-editor-section-toggle { min-height:44px; font-weight:650; text-transform:none; }
-#prod-form-card .tt-editor-section[data-advanced=true] { padding:12px 18px; border-radius:12px; }
+#prod-form-card .tt-editor-section[data-advanced=true] { padding:10px 18px; border-radius:18px; }
 #prod-form-card .tt-editor-section[data-advanced=true] h2 { margin:0; font-size:14px; }
 #prod-form-card .tt-editor-section[data-advanced=true]:has([aria-expanded=true]) { padding-bottom:20px; }
 #prod-form-card .tt-editor-section[data-advanced=true] .tt-editor-section-fields { padding-top:16px; }
@@ -1470,7 +1470,7 @@ html.tt-product-editor-open #prod-form-card .tt-editor-cover img { max-height:30
 html.tt-product-editor-open #section-productos.tt-commerce-mounted #prod-form-card .adm-card-body { padding-bottom:24px !important; }
 
 /* La cabecera esencial no repite opciones ni consume la pantalla del teléfono. */
-#prod-form-card [data-product-section=general] .tt-editor-caption { display:none; }
+#prod-form-card .tt-editor-section-help .tt-editor-caption { display:block; }
 #prod-form-card [data-product-section=general] .tt-editor-section-fields { grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
 #prod-form-card [data-product-section=general] :has(> #prod-name) { grid-column:1/-1; }
 #prod-form-card .tt-product-section-nav { justify-content:flex-end; padding-bottom:0; }
@@ -1517,10 +1517,10 @@ html.tt-product-editor-open #section-productos.tt-commerce-mounted #prod-form-ca
 #prod-form-card .tt-product-editor-heading #prod-form-title { display:-webkit-box; flex:0 1 auto; min-width:0; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; line-height:1.3; }
 #prod-form-card .tt-product-editor-state { flex:none; padding:5px 9px; border:1px solid var(--editor-line); border-radius:999px; font-size:11px; font-weight:600; background:var(--editor-soft); color:var(--tt-commerce-text); }
 #prod-form-card .tt-product-primary-actions { display:flex; flex:none; align-items:center; gap:8px; margin-left:auto; }
-#prod-form-card .tt-product-primary-actions button { position:static; min-height:44px; padding:10px 18px; border-radius:10px; font-size:14px; white-space:normal; line-height:1.25; }
-#prod-form-card .tt-editor-layout { grid-template-columns:minmax(0,1fr); width:100%; max-width:1320px; margin-inline:auto; gap:24px; }
+#prod-form-card .tt-product-primary-actions button { position:static; min-height:44px; padding:10px 18px; border-radius:14px; font-size:14px; white-space:normal; line-height:1.25; }
+#prod-form-card .tt-editor-layout { grid-template-columns:minmax(0,1fr); width:100%; max-width:1320px; margin-inline:auto; gap:18px; }
 #prod-form-card .tt-editor-sidebar { display:grid; align-content:start; min-width:0; gap:16px; }
-#prod-form-card .tt-editor-sidebar .tt-editor-section { margin:0; padding:20px; border-radius:14px; }
+#prod-form-card .tt-editor-sidebar .tt-editor-section { margin:0; padding:18px; border-radius:20px; }
 #prod-form-card .tt-editor-sidebar .tt-editor-section-fields { grid-template-columns:minmax(0,1fr); gap:16px; }
 #prod-form-card .tt-editor-sidebar .tt-editor-section-fields > div { grid-column:auto !important; }
 #prod-form-card .tt-editor-sidebar label:has(#prod-active) { display:none !important; }
@@ -1586,6 +1586,30 @@ html.tt-product-editor-open #section-productos.tt-commerce-mounted #prod-form-ca
 #prod-form-card .tt-editor-vision summary { min-height:44px; cursor:pointer; font-weight:600; align-content:center; }
 #prod-form-card .tt-editor-vision p { font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
 #prod-form-card .tt-editor-vision button { margin:4px 4px 4px 0; max-width:100%; white-space:normal; }
+
+/* Editor Tintin: ayudas consultables y superficies compactas sobre el mismo formulario. */
+#prod-form-card .tt-editor-section-help { grid-column:1/-1; order:10; color:var(--tt-commerce-muted); }
+#prod-form-card .tt-editor-section-help > summary { width:fit-content; min-height:44px; align-content:center; cursor:pointer; font-size:12px; }
+#prod-form-card .tt-editor-section-help .tt-editor-caption { margin:6px 0 0; }
+#prod-form-card .tt-editor-suggestions { grid-column:1/-1; padding:12px 14px; border-radius:14px; background:var(--editor-soft); min-width:0; }
+#prod-form-card .tt-editor-suggestions > summary { min-height:44px; align-content:center; cursor:pointer; font-weight:600; font-size:13px; }
+#prod-form-card .tt-editor-suggestions .tt-editor-choices { margin-block:8px 12px; }
+#prod-form-card .tt-editor-suggestions .tt-editor-choice { text-align:left; }
+#prod-form-card .tt-editor-suggestion-status { font-size:12px; margin:8px 0 0; }
+#prod-form-card .tt-editor-suggestion-status:empty { display:none; }
+#prod-form-card .tt-editor-section-fields { gap:14px; }
+#prod-form-card .tt-editor-preview-shell { border-radius:20px; }
+#prod-form-card .tt-editor-preview-shell .tt-editor-preview { border:0; padding:12px 0 0; max-height:none; overflow:visible; }
+#prod-form-card .tt-editor-preview-shell .tt-editor-cover, #prod-form-card .tt-editor-preview-shell .tt-editor-cover img { max-height:240px; }
+#prod-form-card .tt-editor-section h2 { margin-bottom:0; }
+#prod-form-card .tt-editor-section:has(.tt-editor-section-toggle[aria-expanded=true]) > h2 { margin-bottom:12px; }
+#prod-form-card #prod-image-widget .tt-iuw-preview { max-height:240px; }
+#prod-form-card #prod-image-widget .tt-iuw-preview img { object-fit:contain; }
+@container product-editor (max-width:600px) {
+  #prod-form-card .tt-editor-section-fields { grid-template-columns:minmax(0,1fr); }
+  #prod-form-card .tt-editor-section { padding:14px; border-radius:18px; }
+  #prod-form-card .tt-editor-suggestions { padding:10px; }
+}
 
 /* Galería: el contenido es protagonista; ordenar y eliminar no ocupan una fila cada uno. */
 #prod-form-card .tt-editor-gallery-additional { grid-column:1/-1; min-width:0; border:1px solid var(--editor-line); border-radius:12px; background:var(--tt-commerce-surface); }
