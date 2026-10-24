@@ -49,7 +49,7 @@ export function productBulkPatch(product,field,value,collections=[]) {
     if(tags.length>30 || tags.some(tag=>tag.length>60)) throw Error('Usá hasta 30 etiquetas de hasta 60 caracteres.');
     patch.tags=tags;
   }
-  if(field==='active' && product.publicationStatus)patch.publicationStatus=value?'active':'draft';
+  if(field==='active' && product.publicationStatus)patch.publicationStatus=value?'active':product.publicationStatus==='archived'?'archived':'draft';
   if(product.variantCommerceVersion===2){variantInventoryEntries({...product,...patch});assertVariantCompatibility(product,{...product,...patch});}
   return patch;
 }

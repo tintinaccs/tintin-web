@@ -1,3 +1,11 @@
+## 2026-10-23 — Retomar el cierre del editor v2 (Codex /root)
+
+Se recuperan PR1219 a4a569ca y PR1220 8f087952 desde GitHub, con CI principal completada en ambos SHA. El texto de relevo menciona dos arreglos finales que no están en la rama remota: estado desconocido oculto y archivo conservado al desactivar. Se reproducen ambas fallas con tests y se corrigen en las autoridades existentes. Los estados legacy sin publicationStatus conservan compatibilidad; un campo presente inválido queda oculto. Desactivar archivado conserva archived; publicar exige activación explícita. Grafo de URLs inmutables y derivados regenerados desde herramientas canónicas.
+
+PASS_LOCAL de esta continuación:41 pruebas específicas,120 administrativas,457 comerciales; build Pages con rutas/CSP/diagnóstico/caché aprobado. Preflight39 comandos PASS_LOCAL; CI del SHA nuevo PENDING. No se hereda PASS_CI de a4a569ca a esta modificación.
+
+Bloqueo identificado del mantenimiento: nombre Cloudflare Pages distinto de Cloudflare Pages: tintinaccesorios, con la misma aplicación85455. La corrección exacta y su prueba negativa se preparan en PR1220. La publicación del editor conserva la dependencia de reglas desplegadas y verificadas. No hay capacidad de dispatch de Actions en el conector actual, navegador conectado ni acceso de red permitido a api.github.com; no se alteran protecciones ni credenciales. No se crean pedidos ni se modifica inventario/datos reales.
+
 ## Cierre local del candidato — 23/10/2026
 
 PASS_LOCAL con dependencias instaladas por npm ci (lock intacto): 39 comandos preflight; 457 comercio; 221 sincronización; 117 administrativos antes del último ajuste de permisos, seguido de 11 pruebas específicas del escritor; 36 arquitectura; 213 controles de reglas y 8 REST/CAS en emulador demo; 143 Chromium sin reintentos. Build Pages/CSP/rutas/diagnóstico (19 páginas) y caché (369 recursos, 67 cargas dinámicas) aprobados. Revisión de diff y capturas móvil/escritorio completadas. CI del SHA final y publicación todavía PENDING. Matriz actual en docs/editor-productos-v2/15-MATRIZ-CANDIDATO.md; detalle de compatibilidad/reversión en docs/editor-productos-v2/14-CONTINUIDAD-Y-CANDIDATO.md. Ningún producto/pedido/correo real modificado.

@@ -28,3 +28,18 @@ test('SEO editable llega a title, descripción y Open Graph sin cambiar canonica
  const {html}=renderProductMetadataHtml(fs.readFileSync('product.html','utf8'),'fixture',{name:'Anillo',category:'anillos',price:30000,active:true,seoTitle:'Regalo Tintin',seoDescription:'Acero para todos los días.'});
  assert.match(html,/<title>Regalo Tintin<\/title>/);assert.match(html,/<meta property="og:title" content="Regalo Tintin"/);assert.match(html,/Acero para todos los días/);assert.match(html,/https:\/\/tintinaccs.com\/product\?id=fixture/);
 });
+
+test('los estados desconocidos permanecen ocultos aunque active sea true',()=>{
+ for(const publicationStatus of ['unknown','',null,0]) {
+  assert.equal(productIsPublished({...p,publicationStatus}),false);
+  assert.equal(hasPublicProductFields({...p,publicationStatus}),false);
+ }
+ assert.equal(productIsPublished(p),true);
+});
+
+test('desactivar un producto archivado conserva el archivo; activarlo es explícito',async()=>{
+ const {productBulkPatch}=await import('../../js/admin/products/maestro-productos-core.mjs');
+ const archived={...p,publicationStatus:'archived',active:false};
+ assert.equal(productBulkPatch(archived,'active',false).publicationStatus,'archived');
+ assert.equal(productBulkPatch(archived,'active',true).publicationStatus,'active');
+});

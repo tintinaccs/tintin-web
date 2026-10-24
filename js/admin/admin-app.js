@@ -1,5 +1,5 @@
 import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-v2-3';
-import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-3';
+import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-4';
 import {productStatistics} from './statistics/estadisticas-producto.mjs?v=tintin-20261024-editor-v2-3';
 import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261024-editor-v2-3';
 import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261024-editor-v2-3';
@@ -8,7 +8,7 @@ import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
-import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261024-editor-v2-3';
+import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261024-editor-v2-4';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261022-avatar-inicial-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
