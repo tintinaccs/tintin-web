@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "18bd9f5dd747ca976765002dbc4cade5454ab952",
-  "reason": "Editor intuitivo con visión local sin API facturada y validación de compatibilidad checkout",
+  "baseCommit": "315883bd849c69f5f7c957b5283e35439b36c41b",
+  "reason": "Conciliar editor intuitivo y visión local con corrección de foco de paneles de main",
   "files": [
     {
       "path": "_headers",
@@ -10,8 +10,8 @@
     },
     {
       "path": "admin.html",
-      "oldHash": "3cdf86e46ca41dd1f938432bad5951719da3f96bae1344af63ca8b2668ff9f19",
-      "newHash": "ad545edb3b930c9ca85a99b5c8365dc3c21d4e0f564a8a460fb41d89ff75bb8c"
+      "oldHash": "52a3b5f39be1040942a5ff2e9af6feabe29b7460a7b15c4bc8ff21e59769e957",
+      "newHash": "3544a1e785cd8046d45c17fbc1a74214a838a61e9d599b7e9917182433806fab"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -25,8 +25,8 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "a4f1986192440d275b3763a5a7e80ccc35bc47029dfa0fd2ae16e1339db8ba24",
-      "newHash": "78c27c5bb9a6e868cb2374e06725d59bea6483c11e3bdefa5b5b622dccb3a981"
+      "oldHash": "d492cbefe5038f40b6571eed7763bb72ae6d3533f13c654ab60c7bc9bcb80f8a",
+      "newHash": "5f8322b2f0a97d96c1012c31a16ebd24f0feb86104a7d850215a767018c0b521"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
