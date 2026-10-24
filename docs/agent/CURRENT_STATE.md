@@ -1,3 +1,17 @@
+## 2026-10-23 — Conciliar reglas con el tema ya integrado (Codex /root)
+
+Main avanzó a14c2b1d2 por PR1213 durante la continuación. Ese commit ya incluye la corrección exacta del check Pages; se conserva como autoridad confiable y esta rama mantiene su regresión de proyecto/aplicación/SHA. Se incorporan íntegros el tema y sus controles sin reemplazarlos. Plan y manifiestos regenerados sobre la base nueva; CI anterior no acredita esta conciliación. El despliegue de reglas sigue pendiente del workflow oficial y su revisión de production-rules.
+
+## 2026-10-23 — Continuación de reglas y bloqueo de Pages (Codex /root)
+
+PR1220, cabeza anterior8f087952: CI40048914158, Repository audit, CodeQL y Pages PASS_CI del SHA anterior. Los controles de mantenimiento quedan esperando un nombre inexistente: la configuración confiable pide Cloudflare Pages y la aplicación85455 publica Cloudflare Pages: tintinaccesorios. Se corrige al nombre exacto del proyecto, conservando appId, SHA, éxito, workflow y todos los demás controles. Regresión reproducida FAIL antes de corregir;39 contratos PASS_LOCAL después, incluidos rechazo de otro proyecto, aplicación, SHA y estado pendiente. No se omiten controles ni se altera el entorno production-rules.
+
+CI del SHA nuevo PENDING. El workflow oficial de reglas necesita dispatch desde main y revisión del propietario en production-rules. El conector disponible permite PR y lecturas de Actions pero no dispatch; no hay herramienta de navegador conectada y la red del entorno rechaza api.github.com. #1219 conserva borrador hasta despliegue verificado. No se modifican datos de producción.
+
+## 2026-10-23 — Preparación de reglas para editor v2
+
+El PR1219 reúne el candidato del editor, pero el carrito v2 requiere aceptar variantKey y los escritores SDK antiguos deben rechazar matrices v2. Se separa primero la actualización de firestore.rules y sus213 controles de emulador para desplegarla antes de exponer el editor. La autorización actual de la titular permite continuar; GitHub exige una revisión del propietario para el entorno production-rules. No se cambia ningún dato real ni se publica el editor desde esta rama. Pruebas locales del mismo archivo de reglas aprobadas en el candidato; CI del SHA de esta preparación se comprobará aparte.
+
 ## 2026-10-24 — Candidato conciliado y revisión de Actions (Codex /root)
 
 Se preservan remoto872095114 y main6ac1fdf25 sin reescritura. El workflow de main por fases reemplaza íntegro la ampliación local del workflow monolítico: no se mantiene CI120min ni se omiten gates. Tres runtimes combinados reciben tema-conciliado-1; foco/compatibilidad conservan tema-unico-3 y superficies tema-unico-2. PASS_LOCAL actual:119/119 Chromium y18/18 WebKit sin reintentos;41 contratos de mantenimiento/cuenta y11 de CI/aislamiento; colores153/36, Apariencia15, arquitectura, niveles1/2, Parte2H19, CSS, rutas/CSP38, caché364/67 y protección78/544. La prueba negativa de fases de CI se normaliza a LF al leer el YAML para ejecutar las mismas mutaciones en Windows; se reprodujo fallo antes y11/11 después. No se cambia el resolvedor ni el workflow. Fixtures privados y motores emulados, sin certificación de hardware físico ni escrituras comerciales. CI/merge/producción del candidato: PENDING.

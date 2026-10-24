@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6bcdfc694a90039c92ecc052646bd6d009d8cf876555f76adce1e4ad0b8475e3",
+  "sourceFingerprint": "b31928790b699ebd316415bb1354baab806bf516779a4815cfbea1f9830e300f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1427,
     "textFiles": 1336,
-    "totalBytes": 29795077,
+    "totalBytes": 29793742,
     "pages": 19,
     "modules": 1004
   },
@@ -40291,8 +40291,8 @@
     },
     {
       "path": "scripts/probar-firestore-critico.mjs",
-      "bytes": 25907,
-      "sha256": "14147c22dd78318d81133aa295ec8f13a0d1e9faac3c56024eef27ee9cf10fa1",
+      "bytes": 27403,
+      "sha256": "2de51a726d12a437805ac6f20ab7a68bbbaa19feed7ce5e6f248a3dcc2b6364a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -46637,8 +46637,8 @@
     },
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
-      "bytes": 7344,
-      "sha256": "c12daa454723fce9938b01642e5a0c8df54aee754fc835a8836f1f036777dc84",
+      "bytes": 8202,
+      "sha256": "41781e60d192e925f04593f4152296621556371e7e8671a09e37b8809615b83f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -46667,6 +46667,12 @@
           "target": "scripts/mantenimiento-flujos-core.mjs",
           "dynamic": false,
           "line": 4
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": true,
+          "line": 98
         }
       ],
       "endpoints": []
@@ -56684,8 +56690,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 8112,
-      "sha256": "1d26aeb77169cef344936b43b4713ea35f5579ff1ce8f0fb7609b3b43cd67ea0"
+      "bytes": 1605,
+      "sha256": "4ed55073f473751a2ba3df87212da02a5ce4453a8ac6264020faed4e7f9b5992"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56697,7 +56703,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "00ba01f8f83bd674577775b4c2ee3544278756f03bb20397b0ce1164febc847c"
+      "sha256": "983aead29c612cbaab80cc6ca9769d59937eb3a208a2b4bc05eb118b50473b8b"
     },
     {
       "path": "config/public-site.json",
@@ -57356,8 +57362,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 864616,
-      "sha256": "77ffd0abb9b7d5a69ea9cff2b58e36e2efccf0fcf2075fd251c27bfd460fbe62"
+      "bytes": 866931,
+      "sha256": "aa7a4d059993a25b43ef9bcc9c592d578b482c245ab143b410bfcad0190425ba"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -58010,8 +58016,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 67947,
-      "sha256": "4736675d3f7794fad4ea79ac29b8b60cba956bc1d08716edb8f1b3fc70e0f5fc"
+      "bytes": 68450,
+      "sha256": "9df1911acb8711b00ed964848c0698410a3ad12e143a03aad8e574cf4d05bc2c"
     },
     {
       "path": "functions/[page].js",
@@ -61622,8 +61628,8 @@
     {
       "path": "scripts/probar-firestore-critico.mjs",
       "extension": ".mjs",
-      "bytes": 25907,
-      "sha256": "14147c22dd78318d81133aa295ec8f13a0d1e9faac3c56024eef27ee9cf10fa1"
+      "bytes": 27403,
+      "sha256": "2de51a726d12a437805ac6f20ab7a68bbbaa19feed7ce5e6f248a3dcc2b6364a"
     },
     {
       "path": "scripts/probar-firestore-notificaciones.mjs",
@@ -62654,8 +62660,8 @@
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
       "extension": ".mjs",
-      "bytes": 7344,
-      "sha256": "c12daa454723fce9938b01642e5a0c8df54aee754fc835a8836f1f036777dc84"
+      "bytes": 8202,
+      "sha256": "41781e60d192e925f04593f4152296621556371e7e8671a09e37b8809615b83f"
     },
     {
       "path": "tests/flow-connections/pedidos-authority.test.mjs",
