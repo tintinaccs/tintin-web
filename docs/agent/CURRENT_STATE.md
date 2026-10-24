@@ -1,3 +1,7 @@
+## 2026-10-23 — Preparación de reglas para editor v2
+
+El PR1219 reúne el candidato del editor, pero el carrito v2 requiere aceptar variantKey y los escritores SDK antiguos deben rechazar matrices v2. Se separa primero la actualización de firestore.rules y sus213 controles de emulador para desplegarla antes de exponer el editor. La autorización actual de la titular permite continuar; GitHub exige una revisión del propietario para el entorno production-rules. No se cambia ningún dato real ni se publica el editor desde esta rama. Pruebas locales del mismo archivo de reglas aprobadas en el candidato; CI del SHA de esta preparación se comprobará aparte.
+
 ## 2026-10-23 — Conciliar Checkout1215 antes de la publicación autorizada (Codex /root)
 
 Mientras se validaba0cd73cb1, main avanzó a b3997c7c por PR1215 (separación de los pasos de Checkout respecto del encabezado). El CI del HEAD actual seguía sin fallos; la X histórica40009290746 pertenecía al publicador automático cuando el PR estaba en borrador. Se incorpora el nuevo main sin eliminar trabajo concurrente, conservando idénticos CSS/controlador y43 pruebas de navegación de Checkout de PR1215. Las referencias comerciales/transitivas de ambos candidatos reciben un tag combinado único; el CSS y controlador de Checkout conservan su URL canónica de main porque sus bytes no cambiaron. Shell, caché/CSP, diagnóstico y plan se regeneran desde sus autoridades.

@@ -22,10 +22,13 @@ import {
 } from 'firebase/firestore';
 
 const projectId = 'demo-tintin-critical';
+const emulatorHost = process.env.FIRESTORE_EMULATOR_HOST || '127.0.0.1:8080';
+if (!/^(127\.0\.0\.1|localhost):\d+$/.test(emulatorHost)) throw new Error('Sólo emulador loopback.');
+const [emulatorAddress, emulatorPort] = emulatorHost.split(':');
 const rules = fs.readFileSync(new URL('../firestore.rules', import.meta.url), 'utf8');
 const testEnv = await initializeTestEnvironment({
   projectId,
-  firestore: { rules, host: '127.0.0.1', port: 8080 }
+  firestore: { rules, host: emulatorAddress, port: Number(emulatorPort) }
 });
 
 const claims = {
@@ -501,6 +504,18 @@ try {
     }
   }
 
+  await testEnv.withSecurityRulesDisabled(async context => {
+    await setDoc(doc(context.firestore(),'products','v2_protected'),{name:'Fixture v2',price:100,stock:null,active:true,variantCommerceVersion:2,variants:{Color:['Plateado']},variantInventory:[{variant:'Plateado',attributes:{Color:'Plateado'},stock:null,price:150}]});
+  });
+  for (const sdk of [client1, admin, superDb]) {
+    await fails(updateDoc(doc(sdk,'products','v2_protected'),{price:1}));
+    await fails(updateDoc(doc(sdk,'products','v2_protected'),{variantCommerceVersion:1}));
+    await fails(deleteDoc(doc(sdk,'products','v2_protected')));
+  }
+  await fails(setDoc(doc(superDb,'products','v2_new'),{variantCommerceVersion:2,price:1}));
+  await fails(setDoc(doc(superDb,'products','v3_new'),{variantCommerceVersion:3,price:1}));
+  await succeeds(setDoc(doc(client1,'users','client1','cart','v2_line_fixture'),{schemaVersion:2,lineId:'v2_line_fixture',id:'v2_protected',variant:'Plateado',variantKey:'Plateado',qty:1,name:'Fixture',cat:'aros',price:150,imageUrl:'',updatedAt:serverTimestamp(),updatedByDevice:'fixture_device'}));
+  await fails(updateDoc(doc(client1,'users','client1','cart','v2_line_fixture'),{variantKey:123,updatedAt:serverTimestamp()}));
   console.log('Reglas Fase 6: ' + checks + ' ataques/controles verificados.');
 } finally {
   await testEnv.cleanup();
