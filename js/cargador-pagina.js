@@ -953,7 +953,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261023-variant-engine-v2-2');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261023-editor-audit-1');
   }
 
   function bootThemeColorSanitizerPublic() {
