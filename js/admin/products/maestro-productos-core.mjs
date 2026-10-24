@@ -1,6 +1,6 @@
-import { variantInventoryEntries } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { variantInventoryEntries,assertVariantCompatibility } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 // Contrato de las operaciones del maestro; Firestore y permisos se inyectan desde Admin.
-const FIELDS = ['name','sku','category','collection','price','priceBefore','stock','active','oferta','destacado','badge','description','desc','image','imageUrl','imagesExtra','variantMedia','variants','variantInventory','variantCommerceVersion','tags','material','measurements','colorFinish','care','waterResistance','warranty','sizeFit','packageContents'];
+const FIELDS = ['name','sku','category','collection','price','priceBefore','stock','active','oferta','destacado','badge','description','desc','image','imageUrl','imagesExtra','variantMedia','variants','variantInventory','variantCommerceVersion','tags','material','measurements','colorFinish','care','waterResistance','warranty','sizeFit','packageContents','publicationStatus','productTemplate','seoTitle','seoDescription'];
 export const PRODUCT_BULK_FIELDS = ['price','pricePercent','priceBefore','stock','stockDelta','category','active','oferta','destacado','badge','tags'];
 function stable(value) {
   if(Array.isArray(value)) return value.map(stable);
@@ -15,7 +15,6 @@ function integer(value,min,max,label) {
   return Number(value);
 }
 export function productBulkPatch(product,field,value,collections=[]) {
-  if(product.variantCommerceVersion === 2) throw Error('La edición comercial v2 requiere el editor compatible.');
   if(!PRODUCT_BULK_FIELDS.includes(field)) throw Error('Acción de producto no válida.');
   const patch={};
   if(field==='price' || field==='pricePercent') {
@@ -50,6 +49,8 @@ export function productBulkPatch(product,field,value,collections=[]) {
     if(tags.length>30 || tags.some(tag=>tag.length>60)) throw Error('Usá hasta 30 etiquetas de hasta 60 caracteres.');
     patch.tags=tags;
   }
+  if(field==='active' && product.publicationStatus)patch.publicationStatus=value?'active':'draft';
+  if(product.variantCommerceVersion===2){variantInventoryEntries({...product,...patch});assertVariantCompatibility(product,{...product,...patch});}
   return patch;
 }
 export function productBulkIds(ids) {
@@ -74,12 +75,12 @@ export async function applyProductBulkTransaction(transaction,request,collection
   return changes;
 }
 export function productDuplicateData(product) {
-  if (product.variantCommerceVersion === 2) throw Error('La duplicación comercial v2 requiere el editor compatible.');
   const copy=Object.fromEntries(FIELDS.filter(field=>Object.hasOwn(product,field)).map(field=>[field,structuredClone(product[field])]));
   copy.name=`${String(product.name || 'Producto').slice(0,170)} (copia)`;
   if(Array.isArray(copy.variants))copy.variants=copy.variants.map(row=>row && typeof row==='object'?Object.fromEntries(Object.entries(row).filter(([key])=>key!=='sku')):row);
+  if(copy.publicationStatus)copy.publicationStatus='draft';
   copy.sku='';copy.active=false;copy.oferta=false;copy.destacado=false;copy.badge=null;copy.priceBefore=null;copy.stock=0;
-  if(Array.isArray(product.variantInventory)) copy.variantInventory=product.variantInventory.map(entry=>({variant:entry.variant,stock:0}));
+  if(Array.isArray(product.variantInventory)) copy.variantInventory=product.variantInventory.map(entry=>product.variantCommerceVersion===2?{...structuredClone(entry),stock:0}:{variant:entry.variant,stock:0});
   return copy;
 }
 

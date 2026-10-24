@@ -1,3 +1,5 @@
+import {saveProductEditor,saveProductBulk} from '../../cloudflare/product-editor-domain.mjs';
+import {productFingerprint} from '../../js/admin/products/maestro-productos-core.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createOrderAdmin, applyOrderAdminMutation } from '../../cloudflare/order-admin-domain.js';
@@ -113,4 +115,35 @@ test('Firestore real aislado: dos combinaciones de 60 unidades se reservan y dev
  const restored=await product('v2_bulk');
  assert.equal(restored.stock,120);
  assert.deepEqual(restored.variantInventory.map(row=>row.stock),[60,60]);
+});
+
+
+test('Editor v2: commit real público/privado, reintento e interferencia de una venta',async()=>{
+  const data={name:'Anillo editor',category:'editor_fixture',price:30000,priceBefore:null,active:true,oferta:false,destacado:false,variantCommerceVersion:2,variants:{Color:['Oro']},variantInventory:[{variant:'oro',attributes:{Color:'Oro'},stock:2,price:40000}],stock:2};
+  await seed('collections/editor_fixture',{name:'Fixture'});
+  const inventory={costUnit:100,purchased:2,stockMinimum:1,internalNotes:'Dato privado demo'};
+  const create={productId:'editor_fixture',expected:null,changeId:'editor_create_123',product:data,inventory,expectedInventory:null};
+  const saved=await saveProductEditor({},create,admin,deps);
+  assert.equal((await product('editor_fixture')).price,30000);
+  assert.equal(decodeFirestoreFields((await deps.get({},'productInventory/editor_fixture')).fields).internalNotes,inventory.internalNotes);
+  assert.equal((await saveProductEditor({},create,admin,deps)).duplicate,true);
+  const expected=productFingerprint(saved.product);
+  const order=await createOrderAdmin({},input('commerce_editor_sale','editor_fixture','Oro'),actor,deps);
+  assert.equal(order.order.items[0].price,40000);
+  await assert.rejects(saveProductEditor({},{...create,expected,changeId:'editor_edit_456',product:{...data,name:'Cambio concurrente'}},admin,deps),error=>error.status===409);
+  assert.equal((await product('editor_fixture')).stock,1);
+  assert.equal((await product('editor_fixture')).name,'Anillo editor');
+});
+
+
+test('Editor v2: lote mixto comercial atómico y conflicto antes de escribir',async()=>{
+ const commercial=await product('editor_fixture');
+ await seed('products/editor_simple',{name:'Simple',price:20000,stock:2,active:true});
+ const simple=await product('editor_simple');
+ const request={ids:['editor_fixture','editor_simple'],expected:{editor_fixture:productFingerprint(commercial),editor_simple:productFingerprint(simple)},field:'price',value:35000};
+ await assert.rejects(saveProductBulk({},{...request,expected:{...request.expected,editor_simple:'obsoleto'}},admin,deps));
+ assert.equal((await product('editor_fixture')).price,commercial.price);
+ await saveProductBulk({},request,admin,deps);
+ assert.equal((await product('editor_fixture')).price,35000);assert.equal((await product('editor_fixture')).variantInventory[0].price,40000);
+ assert.equal((await product('editor_simple')).price,35000);
 });

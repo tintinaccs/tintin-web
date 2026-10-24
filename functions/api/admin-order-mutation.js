@@ -1,3 +1,4 @@
+import {handleProductEditor} from '../../cloudflare/product-editor-handler.mjs';
 import { rateLimitErrorResponse,
   assertOrderStaffPermission,
   jsonResponse,
@@ -49,8 +50,10 @@ export async function onRequest(context) {
 
   try {
     const raw = await request.text();
-    if (!raw || new TextEncoder().encode(raw).byteLength > 64 * 1024) throw new Error('Solicitud inválida.');
+    if (!raw || new TextEncoder().encode(raw).byteLength > 750000) throw new Error('Solicitud inválida.');
     const body = JSON.parse(raw);
+    if(['saveProduct','bulkProducts'].includes(body.action))return handleProductEditor(context,body,origin);
+    if(new TextEncoder().encode(raw).byteLength > 64 * 1024)throw new Error('Solicitud inválida.');
     const actor = body.action === 'updatePayment' || body.action === 'recordEmailResend'
       ? await requireOrderStaff(request, env)
       : await requireSuperAdmin(request, env);

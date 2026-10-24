@@ -1,0 +1,23 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {editorialFields,productIsPublished,productTemplate} from '../../js/core/store/estado-editorial-producto.mjs';
+import {hasPublicProductFields} from '../../js/core/store/publicacion-producto.mjs';
+import {productStatistics} from '../../js/admin/statistics/estadisticas-producto.mjs';
+const p={id:'x',name:'Anillo',category:'anillos',price:30000,active:true,stock:0};
+test('estado y stock son independientes; borradores y archivados no son públicos aunque active esté desactualizado',()=>{
+ assert.equal(hasPublicProductFields(p),true);
+ for(const publicationStatus of ['draft','archived']){assert.equal(productIsPublished({...p,publicationStatus}),false);assert.equal(hasPublicProductFields({...p,publicationStatus}),false);}
+ assert.equal(productIsPublished({...p,publicationStatus:'active',active:false}),false);
+});
+test('SEO vacío hereda y sólo se admiten plantillas/estados definidos',()=>{
+ assert.deepEqual(editorialFields({publicationStatus:'draft',productTemplate:'gallery',seoTitle:'',seoDescription:''}),{publicationStatus:'draft',active:false,productTemplate:'gallery',seoTitle:'',seoDescription:''});
+ assert.equal(productTemplate({productTemplate:'script'}),'default');
+ assert.throws(()=>editorialFields({publicationStatus:'unlisted'}));
+ assert.throws(()=>editorialFields({publicationStatus:'active',productTemplate:'default',seoTitle:'<script>',seoDescription:''}));
+});
+test('estadísticas separan homónimos, variantes, pruebas, reembolsos y cancelaciones; no inventan importes',()=>{
+ const order={id:'order1',status:'entregado',paymentStatus:'pagado',createdAt:'2026-10-20',items:[{id:'x',variantKey:'oro-id',variant:'Oro',qty:2,price:30000},{id:'y',name:'Anillo',qty:10,price:10}]};
+ const orders=[order,{...order,id:'order2',status:'cancelado'},{...order,id:'order3',paymentStatus:'reembolsado'},{...order,id:'order4',paymentStatus:'pendiente'},{...order,id:'TINPEDPRUEBA01'},{...order,id:'order5',items:[{id:'x',qty:1,price:undefined}]}];
+ const result=productStatistics('x',orders,value=>new Date(value).getTime());
+ assert.equal(result.units,2);assert.equal(result.revenue,60000);assert.equal(result.orders,1);assert.equal(result.incomplete,1);assert.equal(result.variants[0].key,'oro-id');assert.equal(result.months.length,1);
+});
