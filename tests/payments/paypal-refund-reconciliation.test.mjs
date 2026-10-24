@@ -66,3 +66,11 @@ test('cobro tardío conserva el reembolso parcial; no revive un reembolso total'
   await markPaid({}, { ...mapping, status: 'REVERSED' }, capture, deps);
   assert.equal(writes.length, 1);
 });
+
+test('el aviso parcial comunica el estado sin mostrar dólares como importe de la tienda', async () => {
+  let notice;
+  await markReversed({}, mapping, refund('QA_REF_PARTIAL'), { commit: async () => {}, notify: async (_env, value) => { notice = value; } });
+  assert.match(notice.body, /parcial/);
+  assert.match(notice.body, /pagado/);
+  assert.doesNotMatch(notice.body, /USD|\$/);
+});

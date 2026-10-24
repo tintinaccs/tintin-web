@@ -309,7 +309,9 @@ async function notifyOrderConfirmed(env, mapping, cents, currency) {
     const order = orderDoc ? decodeFirestoreFields(orderDoc.fields || {}) : {};
     const orderNumber = clean(order.orderNumber || order.shortId || mapping.orderId, 80);
     const customerName = clean(order.userName || 'Una clienta', 160);
-    const totalText = `Gs. ${(cents / 100).toLocaleString('es-PY')}`;
+    const totalPyg = Number(order.total);
+    if (!Number.isSafeInteger(totalPyg) || totalPyg <= 0) throw new Error('No se pudo verificar el total del pedido en guaraníes.');
+    const totalText = `Gs. ${totalPyg.toLocaleString('es-PY')}`;
 
     await notifyAdminIfAbsent(env, {
       kind: 'order_confirmed', actorType: 'system', actorName: 'PayPal',
@@ -334,6 +336,7 @@ export async function capturePaypalOrder(env, { providerOrderId, uid }) {
     return { paid: true, orderId: mapping.orderId, captureId: mapping.captureId, idempotent: true };
   }
   await assertAccountNotBlocked(env, uid);
+  validatePayableOrder(await loadOrder(env, mapping.orderId), uid);
   const provider = await paypalRequest(config, `/v2/checkout/orders/${encodeURIComponent(mapping.id)}/capture`, {
     // Por orden de PayPal (no por pedido): si el pedido tuvo que generar una
     // orden nueva, repetir el id del pedido devolvería la captura de la vieja.
@@ -463,7 +466,7 @@ export async function markReversed(env, mapping, reversal, deps = {}) {
       title,
       body: full
         ? 'El pago quedó marcado como reembolsado. Revisá el pedido y el stock antes de entregar.'
-        : `Se devolvieron USD ${(reversal.cents / 100).toFixed(2)}; el pago sigue figurando como pagado.`,
+        : 'Se registró una devolución parcial; el pago sigue figurando como pagado.',
       iconKey: 'order', targetUrl: 'admin.html#section-pedidos',
       orderId: mapping.orderId, status: full ? 'reembolsado' : 'pagado',
       sourceType: 'order', sourceId: mapping.orderId, createdAt: now,

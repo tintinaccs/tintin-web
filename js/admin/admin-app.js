@@ -5953,8 +5953,14 @@ function renderProductVariantStock(product, configuration = null) {
     try {
       if(!confirm('¿Preparar combinaciones con identidad estable? Se conservarán las referencias existentes. El cambio se aplica al guardar.'))return;
       const variants=productVariantStockConfiguration(optionsInput.value).variants;
-      const base={...product,price:Number(document.getElementById('prod-price').value),priceBefore:document.getElementById('prod-price-before').value===''?null:Number(document.getElementById('prod-price-before').value)};
-      renderProductVariantStock(commercialDraft(base,variants),{commercialBaseline:product || {}});
+      const entries=productVariantStockBaseline?.entries.map((entry,index)=>{
+        const raw=panel.querySelectorAll('input')[index]?.value ?? entry.stock;
+        if(raw==='' && product)throw new Error('Completá el stock de cada opción antes de activar precios por combinación.');
+        return {...entry,stock:raw===''?0:Number(raw)};
+      });
+      if(!entries && Number(stockInput.value)>0)throw new Error('Primero asigná el stock a cada opción antes de activar precios por combinación.');
+      const base={...product,...(entries?{variants:productVariantStockBaseline.variants,variantInventory:entries}:{}),price:Number(document.getElementById('prod-price').value),priceBefore:document.getElementById('prod-price-before').value===''?null:Number(document.getElementById('prod-price-before').value)};
+      renderProductVariantStock(commercialDraft(base,variants,product || {}),{commercialBaseline:product || {}});
       panel.dispatchEvent(new Event('change',{bubbles:true}));
     } catch(error){const target=document.getElementById('prod-form-error');target.textContent=error.message;target.style.display='';}
   });
@@ -5965,7 +5971,17 @@ function renderProductVariantStock(product, configuration = null) {
     try {
       if (!optionsInput.value.trim() && !productVariantStockBaseline) return;
       const previous = productVariantStockBaseline?.entries.map((entry, index) => ({...entry, stock:panel.querySelectorAll('input')[index]?.value ?? entry.stock})) || [];
+      if (!optionsInput.value.trim() && !product && !document.getElementById('prod-id').value) {
+        if (previous.some(entry => Number(entry.stock) > 0)) throw new Error('Primero dejá en 0 el stock de la opción que querés quitar.');
+        const unconfiguredStock = productVariantStockBaseline?.unconfiguredStock ?? '0';
+        renderProductVariantStock(null);
+        stockInput.value = unconfiguredStock;
+        stockInput.dispatchEvent(new Event('input', {bubbles:true}));
+        const error = document.getElementById('prod-form-error'); error.textContent='';error.style.display='none';
+        return;
+      }
       const draft = productVariantStockConfiguration(optionsInput.value, previous, productVariantStockBaseline?.variants || product?.variants);
+      if (!product) draft.unconfiguredStock = productVariantStockBaseline?.unconfiguredStock ?? stockInput.value;
       acceptedOptions = optionsInput.value;
       renderProductVariantStock(product, draft);
       const error = document.getElementById('prod-form-error'); error.textContent='';error.style.display='none';
@@ -5992,7 +6008,7 @@ function renderProductVariantStock(product, configuration = null) {
     panel.append(configure);
     return;
   }
-  productVariantStockBaseline = { stock: product?.stock, expectedEntries, entries: configuration?.entries || expectedEntries, variants: configuration?.variants || product?.variants };
+  productVariantStockBaseline = { stock: product?.stock, expectedEntries, entries: configuration?.entries || expectedEntries, variants: configuration?.variants || product?.variants, ...(!product ? {unconfiguredStock:configuration?.unconfiguredStock ?? stockInput.value} : {}) };
   stockInput.readOnly = true;
   optionsInput.readOnly = false;
   const hint = document.createElement('p');

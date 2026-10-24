@@ -1,66 +1,56 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "aaf2703d8fb23e252453820f4246d9ce8f3e09e1",
-  "reason": "Corregir editor de productos en tablet, galería y variantes con evidencia responsive",
+  "baseCommit": "9312c832a6635bc01c623dd8c96bad789f1af23b",
+  "reason": "Corregir alta y conversión de stock, recuperación del pago y captura de pedidos cancelados con QA ficticia responsive",
   "files": [
     {
-      "path": "admin-images.html",
-      "oldHash": "5b9a6b592a22730a579e1ec00ef5ce203baceb02a1f91bc6dd7b6b7c6f74e5af",
-      "newHash": "62228db4b11e9fe34d6de759756b695d1a4b29dd484d12c68b03352a4c11b3c4"
-    },
-    {
       "path": "admin.html",
-      "oldHash": "a01b04b77041d0d11fef9e37453e565e52952cdb08bcf0b47c8b1e9768d0b4cc",
-      "newHash": "8909552612f9c5e47e96d61fe5969380e72c1a5f49541107ad77f81bfecbe19f"
+      "oldHash": "8909552612f9c5e47e96d61fe5969380e72c1a5f49541107ad77f81bfecbe19f",
+      "newHash": "1738afb31e66d4b35e1917c2809aedb2a993c4449b1cf9ddef68dd7cca01b873"
     },
     {
-      "path": "config/csp-runtime.js",
-      "oldHash": "954bc585d5a9f821f193d4cc0f748810082c27146afc3b0282355e122ad9263e",
-      "newHash": "e010048882e7bfedb62654068e1ca2e672f76761c69ade8a00811f09c8b2cf9a"
+      "path": "checkout.html",
+      "oldHash": "35b413c684c820af4e87cc2ebf6803189c5ea9155623fc9a2e341e97219deddf",
+      "newHash": "d5624ace3a2c71c376abaed55a6615a09067e50f5003cb3c29eedac1167fee8d"
     },
     {
-      "path": "config/csp-runtime.json",
-      "oldHash": "8224b44c259429075288611bfd89630f4b8482010275e5f67acdb8ae65476c91",
-      "newHash": "3f2058a2ff925ca2607d3a4849c38c912d6e50b75781a85aba3aadba48bb879e"
-    },
-    {
-      "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "083e661954135b2236ab5d7d4bfc2e73c5da5b5f5d0a38d2bc85659e2db9d311",
-      "newHash": "fc306552ce5075bec341ddd89381d220f0528f7fae5ca00a751a3f4ad5cc90d7"
+      "path": "cloudflare/paypal-seguro.js",
+      "oldHash": "719e2f57d9f554561e951dacd10d9a8d202e1f22a187a13cf20fcad0b3e5280d",
+      "newHash": "c4a06a108916da03399d1ca67217b9f37f8ba73d9535169dd9ed3bff5a0cc22e"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "fcdd3dd28aa060e07fc7617f11bd02523e30a5f18130c42be9f6cc421b9e0181",
-      "newHash": "3b02dcada4516ad306491a2f355ac68c46d376fbdaaaa7c8047d1cad5b9f1d1f"
+      "oldHash": "3b02dcada4516ad306491a2f355ac68c46d376fbdaaaa7c8047d1cad5b9f1d1f",
+      "newHash": "ba3a2ccb1f79c4444d7073f7fb78f3875cd52547a5904ccea618469eb3cb6312"
     },
     {
-      "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "4a2c26d6837e9c9a66919f8c344067d3da96aa7be1e749b3e628cbc039a54a85",
-      "newHash": "eaac47a2fc9847ad030ae93808fcb58e686f3e2abd401971a5e71c1335f03ee5"
+      "path": "js/pages/checkout/paypal-checkout.js",
+      "oldHash": "d459610333feb579613e4f1756becb9600d425b0051a1587e3abe6b3ff92a578",
+      "newHash": "6b73c1867997b851a8bb241e524cee39a735ede1cf991fe9174a9a233627dd97"
     },
     {
-      "path": "js/components/images/carga-imagenes.js",
-      "oldHash": "767e7088edccdb2f48eef99d00045bb94c84ef76a9a48ce5880b08a73b2fa797",
-      "newHash": "277b171995c45979e1711bcbfc1fd3ba3e8e468010581c7369e90e4211063759"
+      "path": "package.json",
+      "oldHash": "c6446d7ea1b7640733a618d549ea6d09a658be25d15125fb42fdb96c2cb8ce00",
+      "newHash": "422ea45eaba694a3710c9634125188ec480a68a09d83bcd8502b216e1dd2b354"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "3c2c303662cc191a3a62ac4f2646961e08ca1ed5f3ea3ef85f29b760f5769305",
-      "newHash": "e974bae5a387092373a65f238508a01eb89dabd443775ea004eb067046a25d0a"
+      "oldHash": "e974bae5a387092373a65f238508a01eb89dabd443775ea004eb067046a25d0a",
+      "newHash": "e76aa6af4c75e0c8ac8e029f8c8aa8eae24d464495b43f578517d15b0d6cb41f"
     }
   ],
   "affectedRecords": [
     "admin-guard",
     "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__apps-script__22",
     "apis-internas__correos__41",
     "apis-internas__pedidos__32",
-    "cf-functions",
-    "cf-functions__apis-internas__20",
-    "cf-functions__csp__29",
-    "cf-functions__reglas-firestore__28",
-    "cf-pages__cf-functions__19",
+    "apps-script",
+    "apps-script__google-sheets__24",
+    "apps-script__sheets-products-webhook__26",
     "correos",
-    "csp",
+    "firestore__apps-script__23",
+    "google-sheets__apps-script__25",
     "pagina-perfil",
     "pedidos",
     "pedidos__inventario__33",
@@ -70,6 +60,8 @@
     "roles__super-panel__14",
     "sesion-estado",
     "sesion-estado__firestore__7",
+    "sheets-products-webhook",
+    "sheets-products-webhook__firestore__27",
     "super-panel",
     "super-panel__admin-guard__15",
     "super-panel__pedidos__35",
