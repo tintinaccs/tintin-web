@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import { variantStockLimit } from '../../js/core/store/inventario-variantes.mjs';
+import { variantStockLimit, productVariantPrice, stableVariantSelection, variantSelectionLabel } from '../../js/core/store/inventario-variantes.mjs';
 const source=fs.readFileSync(new URL('../../js/components/cart/sincronizacion-carrito.js',import.meta.url),'utf8');
 const slice=(a,b)=>source.slice(source.indexOf(a),source.indexOf(b,source.indexOf(a)));
 function fixture(readProduct) {
@@ -39,4 +39,31 @@ test('recorte de stock en tiempo real informa una sola vez y descarta otra ident
   assert.equal(events.length,changeUser?0:1);
   if(!changeUser){assert.equal(events[0].type,'tintin:cart-stock-adjusted');assert.equal(events[0].detail.issues[0].available,0);}
  }
+});
+
+test('legacy carts with reordered selections merge one v2 identity and refresh canonical unit price',()=>{
+ const product={id:'ring',price:100,variantCommerceVersion:2,variants:{Talle:['M'],Color:['Plateado','Dorado']},variantInventory:[{variant:'Plateado / M',attributes:{Color:'Plateado',Talle:'M'},stock:4,price:150},{variant:'Dorado / M',attributes:{Color:'Dorado',Talle:'M'},stock:null}]};
+ const c=vm.createContext({window:{PRODUCTS:[product]},MAX_QTY:99,MAX_CART_LINES:100,productVariantPrice,stableVariantSelection,variantSelectionLabel,sanitizeImageUrl:v=>v});
+ vm.runInContext(slice('  function cleanText(', '  function enforceStockLimits('),c);
+ const old=[{id:'ring',variant:'Plateado / M',qty:1,price:100},{id:'ring',variant:'M / Plateado',qty:2,price:999}];
+ const rows=c.normalizeCart(old);assert.equal(rows.length,1);assert.equal(rows[0].qty,3);assert.equal(rows[0].price,150);
+ const again=c.normalizeCart(JSON.parse(JSON.stringify(rows)));assert.equal(again.length,1);assert.equal(again[0].qty,3);assert.equal(again[0].lineId,rows[0].lineId);
+});
+
+test('persisted legacy label keeps its original combination when overlapping attributes are reordered',()=>{
+ const product={id:'ring',price:100,variantCommerceVersion:2,variants:{Talle:['S','L'],Color:['S','L']},variantInventory:[{variant:'S / L',attributes:{Color:'S',Talle:'L'},stock:1,price:150},{variant:'L / S',attributes:{Color:'L',Talle:'S'},stock:1,price:200}]};
+ const c=vm.createContext({window:{PRODUCTS:[product]},MAX_QTY:99,MAX_CART_LINES:100,productVariantPrice,stableVariantSelection,variantSelectionLabel,sanitizeImageUrl:v=>v});
+ vm.runInContext(slice('  function cleanText(', '  function enforceStockLimits('),c);
+ const [row]=c.normalizeCart([{id:'ring',variant:'S / L',qty:1,price:100}]);
+ assert.equal(row.variantKey,'S / L');assert.equal(row.variant,'L / S');assert.equal(row.price,150);
+ assert.equal(c.normalizeCart([row])[0].lineId,row.lineId);
+});
+
+test('legacy identities remain distinct by product and option with the original line ID contract',()=>{
+ const c=vm.createContext({window:{PRODUCTS:[]},MAX_QTY:99,MAX_CART_LINES:100,sanitizeImageUrl:v=>v});
+ vm.runInContext(slice('  function cleanText(', '  function enforceStockLimits('),c);
+ const rows=c.normalizeCart([{id:'a',variant:'Plateado',qty:1},{id:'a',variant:'Dorado',qty:1},{id:'b',variant:'Plateado',qty:1}]);
+ assert.equal(rows.length,3);
+ assert.equal(new Set(rows.map(row=>row.lineId)).size,3);
+ for(const row of rows) assert.equal(row.lineId,c.lineIdFor({id:row.id,variant:row.variant}));
 });

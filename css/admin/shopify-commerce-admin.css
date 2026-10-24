@@ -1513,3 +1513,17 @@ html.tt-product-editor-open #section-productos.tt-commerce-mounted #prod-form-ca
 #prod-form-card .tt-product-editor-action-list { position:absolute; inset:calc(100% + 8px) 0 auto auto; display:grid; gap:6px; width:220px; max-width:calc(100vw - 32px); max-height:calc(var(--tt-product-viewport-height,100dvh) - 140px); overflow:auto; box-sizing:border-box; padding:8px; border:1px solid var(--editor-line); border-radius:14px; background:var(--tt-commerce-surface); box-shadow:0 8px 24px rgb(24 30 42 / 12%); }
 #prod-form-card .tt-product-editor-action-list[hidden] { display:none; }
 #prod-form-card .tt-product-editor-action-list button { width:100%; min-height:44px; margin:0; padding:10px 14px; border-radius:9px; font-size:13px; }
+
+/* Matriz comercial: cada combinación conserva controles accesibles en móvil. */
+#prod-form-card .tt-commercial-editor { grid-column:1/-1; min-width:0; }
+#prod-form-card .tt-commercial-toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-block:12px; }
+#prod-form-card .tt-commercial-toolbar > * { flex:1 1 150px; min-width:0; max-width:100%; }
+#prod-form-card .tt-commercial-rows { display:grid; gap:12px; min-width:0; }
+#prod-form-card .tt-commercial-row { display:grid; grid-template-columns:44px repeat(3,minmax(100px,1fr)); gap:12px; margin:0; padding:12px; min-width:0; border:1px solid var(--editor-line); border-radius:12px; }
+#prod-form-card .tt-commercial-row legend { max-width:100%; overflow-wrap:anywhere; font-weight:700; }
+#prod-form-card .tt-commercial-row label { display:grid; gap:6px; min-width:0; }
+#prod-form-card .tt-commercial-row input[type=checkbox] { width:24px; height:24px; min-height:24px; align-self:center; }
+#prod-form-card .tt-commercial-row small { grid-column:1/-1; }
+#prod-form-card .tt-product-editorial { display:grid; gap:10px; margin-top:16px; padding:16px; }
+#prod-form-card #prod-statistics { overflow-wrap:anywhere; }
+@media(max-width:767px) { #prod-form-card .tt-commercial-row { grid-template-columns:1fr; } #prod-form-card .tt-commercial-toolbar > * { flex-basis:100%; } }

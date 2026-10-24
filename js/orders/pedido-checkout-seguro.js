@@ -1,4 +1,4 @@
-import { inspectCheckoutAvailability, showCheckoutAvailabilityDialog } from '../pages/checkout/disponibilidad-checkout.js?v=tintin-20261023-checkout-variants-header-2';
+import { inspectCheckoutAvailability, showCheckoutAvailabilityDialog } from '../pages/checkout/disponibilidad-checkout.js?v=tintin-20261023-variant-engine-v2-2';
 import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../components/location/tarifas-delivery.mjs?v=tintin-20261007-master-audit-1';
@@ -43,7 +43,7 @@ import {
   isValidTaxpayerType
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1';
 import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20261022-avatar-inicial-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2-cupones-1-master-20261007-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20261023-variant-engine-v2-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -749,7 +749,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   function cartLineKey(item) {
-    return `${String(item?.id ?? '')}\u241f${text(item?.variant)}`;
+    return `${String(item?.id ?? '')}\u241f${text(item?.variantKey || item?.variant)}`;
   }
 
   function authoritativeCartFromQuote(quote) {
@@ -762,6 +762,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       price: Number(item.price || 0),
       qty: Number(item.qty || 1),
       variant: item.variant || '',
+      ...(item.variantKey ? {variantKey:item.variantKey} : {}),
       imageUrl: item.imageUrl || '',
       imgUrl: item.imageUrl || ''
     }));

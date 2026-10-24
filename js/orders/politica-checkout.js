@@ -19,10 +19,10 @@ export function aggregateCheckoutCart(items) {
     if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99) {
       throw Object.assign(new Error('Encontramos una cantidad no válida en el carrito.'), { code: 'invalid_cart' });
     }
-    const key = `${id}\u241f${variant}`;
+    const key = `${id}\u241f${item.variantKey || variant}`;
     const existing = byLine.get(key);
     if (existing) existing.qty += qty;
-    else byLine.set(key, { id, qty, variant });
+    else byLine.set(key, { id, qty, variant, ...(item.variantKey ? {variantKey:item.variantKey} : {}) });
   }
   const result = [...byLine.values()];
   if (result.some(item => item.qty > 99)) {

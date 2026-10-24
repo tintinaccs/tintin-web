@@ -1,5 +1,6 @@
-import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261021-visual-scope-2';
-import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261022-products-master-1';
+import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-v2-3';
+import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261024-editor-v2-3';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261024-editor-v2-3';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
   ['general', 'Datos principales', ['prod-name','prod-category','prod-price']],
@@ -64,6 +65,7 @@ export function syncProductSurfaces() {
 export function enhanceProductEditor() {
   const card = document.getElementById('prod-form-card');
   const body = card?.querySelector('.adm-card-body');
+  ensureEditorialFields(card);
   const grid = body?.querySelector('.tt-product-fields, :scope > div[style*="grid-template-columns"]');
   if (!grid) return;
   grid.classList.add('tt-product-fields');

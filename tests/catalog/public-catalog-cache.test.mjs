@@ -46,7 +46,7 @@ test('la proyección pública conserva SKU para buscar y excluye campos internos
 test('tripwire acepta caché positiva de hasta60s y sigue rechazando valores superiores o cero',()=>{
  const script=fs.readFileSync('scripts/auditar-rendimiento-regresiones.js','utf8');
  for(const seconds of [0,10,60,61,600]){
-  let exit=0;const context={__dirname:path.resolve('scripts'),console:{log(){},error(){}},process:{exit:code=>{exit=code;}},require(name){if(name==='path')return path;if(name==='fs')return {...fs,readFileSync(file,...args){const text=fs.readFileSync(file,...args);return String(file).endsWith('/js/core/store/estado-productos.js')?text.replace(/const ALL_CACHE_TTL = \d+ \* 1000;/,`const ALL_CACHE_TTL = ${seconds} * 1000;`):text;}};throw Error(name);}};
+  let exit=0;const context={__dirname:path.resolve('scripts'),console:{log(){},error(){}},process:{exit:code=>{exit=code;}},require(name){if(name==='path')return path;if(name==='fs')return {...fs,readFileSync(file,...args){const text=fs.readFileSync(file,...args);return String(file).split(path.sep).join('/').endsWith('/js/core/store/estado-productos.js')?text.replace(/const ALL_CACHE_TTL = \d+ \* 1000;/,`const ALL_CACHE_TTL = ${seconds} * 1000;`):text;}};throw Error(name);}};
   vm.runInNewContext(script,context);assert.equal(exit,seconds>0&&seconds<=60?0:1,`TTL ${seconds}`);
  }
 });
@@ -54,7 +54,7 @@ test('tripwire acepta caché positiva de hasta60s y sigue rechazando valores sup
 test('presupuesto conserva caché edge de10 a60s y rechaza TTL insuficiente o excesivo',()=>{
  const script=fs.readFileSync('scripts/auditar-firestore-lecturas-presupuesto.js','utf8');
  for(const seconds of [0,9,10,60,61,600]){
-  let exit=0;const context={__dirname:path.resolve('scripts'),console:{log(){},error(){}},process:{exit:code=>{exit=code;}},require(name){if(name==='path')return path;if(name==='fs')return {...fs,readFileSync(file,...args){const text=fs.readFileSync(file,...args);return String(file).endsWith('/functions/api/public-catalog.js')?text.replace(/s-maxage=\d+/,`s-maxage=${seconds}`):text;}};throw Error(name);}};
+  let exit=0;const context={__dirname:path.resolve('scripts'),console:{log(){},error(){}},process:{exit:code=>{exit=code;}},require(name){if(name==='path')return path;if(name==='fs')return {...fs,readFileSync(file,...args){const text=fs.readFileSync(file,...args);return String(file).split(path.sep).join('/').endsWith('/functions/api/public-catalog.js')?text.replace(/s-maxage=\d+/,`s-maxage=${seconds}`):text;}};throw Error(name);}};
   vm.runInNewContext(script,context);assert.equal(exit,seconds>=10&&seconds<=60?0:1,`TTL edge ${seconds}`);
  }
 });

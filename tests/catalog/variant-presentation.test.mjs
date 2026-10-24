@@ -1,3 +1,4 @@
+import {productStockTotal} from '../../js/core/store/inventario-variantes.mjs';
 import { wristCategory } from '../../js/core/store/categorias-pulseras.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -21,4 +22,13 @@ test('una opción agotada no hace desaparecer las demás ni confunde stock agreg
 test('normalizar el catálogo conserva fotos por opción después de una segunda publicación',()=>{
  const policy=fs.readFileSync(new URL('../../js/pages/catalog/politica-visibilidad-catalogo.js',import.meta.url),'utf8');const c=vm.createContext({wristCategory,timestampToMillis:()=>0});vm.runInContext(policy.slice(policy.indexOf('function clean('),policy.indexOf('function categoryIsVisible')).replace(/export /g,''),c);
  c.input={id:'p',price:100,variants:[{Color:'Negro',imageUrl:'https://example.com/black.webp'}]};const result=vm.runInContext('normalizeProduct(normalizeProduct(input))',c);assert.equal(result.variantMedia[0].imageUrl,'https://example.com/black.webp');assert.deepEqual(Array.from(result.variants.Color),['Negro']);
+});
+
+test('invalid opt-in commerce cannot crash the whole catalog or remain purchasable',()=>{
+ const policy=fs.readFileSync(new URL('../../js/pages/catalog/politica-visibilidad-catalogo.js',import.meta.url),'utf8');
+ const c=vm.createContext({wristCategory,timestampToMillis:()=>0,productStockTotal});
+ vm.runInContext(policy.slice(policy.indexOf('function clean('),policy.indexOf('function categoryIsVisible')).replace(/export /g,''),c);
+ c.input={id:'bad',price:100,stock:4,active:true,variantCommerceVersion:2,variants:{Color:['Dorado']},variantInventory:[]};
+ assert.equal(vm.runInContext('normalizeProduct(input).active',c),false);
+ c.input.variantCommerceVersion=3;assert.equal(vm.runInContext('normalizeProduct(input).active',c),false);
 });

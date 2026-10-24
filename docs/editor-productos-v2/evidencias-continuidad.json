@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_LOCAL_CI_PENDING",
+  "sourceCommit": "813c39db",
+  "base": "6ac1fdf2546fa859412399f88eccf207991880de",
+  "environment": {
+    "node": "24.19.0",
+    "dependencies": "npm ci; package-lock sin cambios",
+    "browser": "Chromium del sistema; Playwright del lock"
+  },
+  "checks": [
+    {
+      "command": "npm run ci:preflight",
+      "commands": 39,
+      "failed": 0
+    },
+    {
+      "command": "npm run test:commerce",
+      "passed": 457
+    },
+    {
+      "command": "npm run test:products-sync",
+      "passed": 221
+    },
+    {
+      "command": "node --test tests/admin/*.test.mjs",
+      "passedBeforePermissionFix": 117,
+      "followup": "11 escritor/permisos aprobadas después del ajuste"
+    },
+    {
+      "command": "npm run test:architecture-gates",
+      "passed": 36
+    },
+    {
+      "command": "firebase emulators:exec (demo, loopback)",
+      "rulesControls": 213,
+      "restCasTests": 8
+    },
+    {
+      "command": "playwright editor-comercial-v2 + products-responsive-phase-one + product-shape-selection",
+      "passed": 143,
+      "retries": 0
+    },
+    {
+      "command": "npm run build:pages",
+      "pages": 19,
+      "versionedResources": 369,
+      "dynamicLoads": 67
+    }
+  ],
+  "production": "NOT_VERIFIED",
+  "realCommercialWrites": false,
+  "humanIndependentReview": "NOT_VERIFIED",
+  "limitations": [
+    "Conversión de productos existentes con stock agregado protegida hasta revisar reservas",
+    "Estadísticas brutas de líneas pagadas; no ingresos netos ni reconstrucción histórica",
+    "Auth/proveedores/dispositivos físicos productivos no probados"
+  ]
+}

@@ -33,6 +33,16 @@ function discountInfo(p) {
   return { before, percent: Math.max(1, Math.round((1 - now / before) * 100)) };
 }
 
+function selectedProductMoney(product, selection = '') {
+  return product?.variantCommerceVersion === 2 && window.TintinCatalogPolicy?.priceFor
+    ? window.TintinCatalogPolicy.priceFor(product, selection || productInitialSelectionString(product))
+    : product;
+}
+function productInitialSelectionString(product) {
+  const groups = productVariantGroups(product);
+  const available = product.variantInventory?.find(entry => entry.active !== false && (entry.stock === null || entry.stock > 0)) || product.variantInventory?.[0];
+  return available?.attributes ? groups.map(([key]) => available.attributes[key]).join(' / ') : groups.map(([,values]) => values[0]).join(' / ');
+}
 function priceMarkup(p) {
   const info = discountInfo(p);
   const current = formatPrice(p.price);
@@ -281,7 +291,7 @@ function getStockLimit(productId, variant) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261023-checkout-variants-header-2');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261023-editor-audit-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -434,7 +444,7 @@ function renderCart() {
       <div class="tt-cart-item-info">
         <div class="tt-cart-item-name">${safeName}</div>
         ${item.variant ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">${safeVariant}</div>` : ''}
-        <div class="tt-cart-item-price">${priceMarkup({ price: item.price, priceBefore: (Array.isArray(window.PRODUCTS) ? window.PRODUCTS.find(p => String(p.id) === String(item.id)) : null)?.priceBefore })}</div>
+        <div class="tt-cart-item-price">${priceMarkup({ price: item.price, priceBefore: (() => { const p = (window.PRODUCTS || []).find(p => String(p.id) === String(item.id)); return p?.variantCommerceVersion === 2 ? selectedProductMoney(p,item.variant).priceBefore : p?.priceBefore; })() })}</div>
         <div class="tt-cart-qty">
           <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="-1" aria-label="Restar">−</button>
           <span class="tt-cart-qty-val">${item.qty}</span>
@@ -571,7 +581,7 @@ function directWAProduct(product, variant = '') {
   productUrl.search = '';
   productUrl.searchParams.set('id', String(product.id));
   const variantLine = variant ? `\n  Variante: ${variant}` : '';
-  const msg = `¡Hola Tintin! 💕 Me interesa este producto:\n\n• ${product.name}\n  Precio: ${formatPrice(product.price)}${variantLine}\n  Enlace: ${productUrl.href}\n\n¿Está disponible? ¡Gracias!`;
+  const msg = `¡Hola Tintin! 💕 Me interesa este producto:\n\n• ${product.name}\n  Precio: ${formatPrice(selectedProductMoney(product,variant).price)}${variantLine}\n  Enlace: ${productUrl.href}\n\n¿Está disponible? ¡Gracias!`;
   const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank', 'noopener');
 }
@@ -607,7 +617,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261023-checkout-variants-header-2')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261024-editor-v2-6')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -784,7 +794,7 @@ function renderProductCardMarkup(p, options = {}) {
       <div class="tt-product-info">
         <div class="tt-product-cat">${escapeHtml(p.category || p.cat || '')}</div>
         <h3 class="tt-product-name"><a href="${productHref}">${safeName}</a></h3>
-        <div class="tt-product-price">${priceMarkup(p)}</div>
+        <div class="tt-product-price">${priceMarkup(p.variantCommerceVersion === 2 ? selectedProductMoney(p) : p)}</div>
         ${colorsHTML}
         <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
         <div class="tt-product-actions">
@@ -925,7 +935,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261023-checkout-variants-header-2');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261023-editor-audit-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1029,6 +1039,14 @@ let _pdLoadTimer = 0;
 const PRODUCT_PAGE_LOAD_DEADLINE_MS = 12000;
 
 function _pdUpdateQtyUI() {
+  if (_pdProduct?.variantCommerceVersion === 2 && window.TintinCatalogPolicy?.priceFor) {
+    const moneyNode = document.getElementById('product-price');
+    try {
+      const resolved = window.TintinCatalogPolicy.priceFor(_pdProduct,_pdGetSelectedVariant());
+      if (moneyNode) moneyNode.innerHTML = priceMarkup(resolved);
+    } catch { if (moneyNode) moneyNode.textContent = 'Elegí una combinación disponible'; }
+  }
+
   const hasStock = window.TintinCatalogMerchandising?.isProductInStock?.(_pdProduct) ?? !(_pdProduct?.stock != null && Number(_pdProduct.stock) <= 0);
   const total = hasStock ? (_pdProduct?.stock == null || _pdProduct.stock === '' ? 99 : Math.max(0, Number(_pdProduct.stock) || 0)) : 0;
   const selected = _pdGetSelectedVariant();
@@ -1096,6 +1114,10 @@ function productColorSwatch(value, product) {
 }
 
 function productOptionUnavailable(product, groupIndex, option) {
+  if (product?.variantCommerceVersion === 2) {
+    const key = productVariantGroups(product)[groupIndex]?.[0];
+    return !product.variantInventory?.some(row => row.attributes?.[key] === option && row.active !== false && (row.stock === null || row.stock > 0));
+  }
   if (product?.stock != null && product.stock !== '' && Number(product.stock) <= 0) return true;
   if (!Array.isArray(product?.variantInventory)) return false;
   const entries = product.variantInventory.filter(row => String(row.variant || '').split('/').map(v => v.trim())[groupIndex] === option);
@@ -1109,6 +1131,13 @@ function productVariantMediaRows(product) {
 function productPreferredSelection(product, preferred = {}, keepUnavailable = false) {
   const groups = productVariantGroups(product);
   if (!groups.length) return {};
+  if (product?.variantCommerceVersion === 2) {
+    const rows = product.variantInventory || [];
+    const matches = row => groups.every(([key, options]) => options.includes(preferred[key]) && row.attributes?.[key] === preferred[key]);
+    const available = row => row.active !== false && (row.stock === null || row.stock > 0);
+    const row = rows.find(row => matches(row) && (keepUnavailable || available(row))) || rows.find(available) || rows[0];
+    return row ? {...row.attributes} : {};
+  }
   const valid = values => groups.every(([key, options]) => options.includes(String(values[key] || '')));
   const variant = values => groups.map(([key]) => values[key]).join(' / ');
   const entries = Array.isArray(product.variantInventory) ? product.variantInventory : null;
@@ -1143,6 +1172,10 @@ function productSelectionMediaRows(product, selected) {
 }
 
 function productMediaUnavailable(product, row) {
+  if (product?.variantCommerceVersion === 2) {
+    const keys = productVariantGroups(product).map(([key]) => key).filter(key => row?.[key]);
+    return !product.variantInventory?.some(entry => entry.active !== false && (entry.stock === null || entry.stock > 0) && keys.every(key => entry.attributes?.[key] === row[key]));
+  }
   if (!isInStock(product)) return true;
   if (!Array.isArray(product?.variantInventory)) return false;
   const groups = productVariantGroups(product);
@@ -1312,7 +1345,7 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
       '@type': 'Offer',
       url: canonicalProductUrl.href,
       priceCurrency: 'PYG',
-      price: product.price != null ? Number(product.price) : undefined,
+      price: product.variantCommerceVersion === 2 ? selectedProductMoney(product,_pdGetSelectedVariant()).price : product.price != null ? Number(product.price) : undefined,
       availability: available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
       itemCondition: 'https://schema.org/NewCondition',
     },
@@ -1527,6 +1560,7 @@ function _renderProductDetail(product) {
   const notFound = document.getElementById('product-not-found');
   const loadError = document.getElementById('product-load-error');
   const grid = document.getElementById('product-grid');
+  if(grid)grid.dataset.productTemplate=_pdProduct?.productTemplate==='gallery'?'gallery':'default';
   if (loading) loading.style.display = 'none';
   window.ttPageReady && window.ttPageReady();
   if (notFound) notFound.style.display = 'none';
@@ -1547,7 +1581,7 @@ function _renderProductDetail(product) {
   const statusEl = document.getElementById('product-status');
 
   if (nameEl) nameEl.textContent = product.name;
-  if (priceEl) priceEl.innerHTML = priceMarkup(product);
+  if (priceEl) priceEl.innerHTML = priceMarkup(product.variantCommerceVersion === 2 ? selectedProductMoney(product) : product);
   if (catEl) catEl.textContent = (product.category || product.cat || '').toUpperCase();
   // Conditional rendering: an empty/missing description has no place in the DOM at all
   if (descEl) {
@@ -1696,7 +1730,7 @@ function _renderProductDetail(product) {
   const shareEl = document.getElementById('product-share');
   if (shareEl) {
     const shareUrl = window.location.href;
-    const shareText = `¡Mirá este accesorio de TINTIN! ${product.name} — ${formatPrice(product.price)}`;
+    const shareText = `¡Mirá este accesorio de TINTIN! ${product.name} — ${formatPrice(selectedProductMoney(product).price)}`;
     const waHref = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
     let html = `<span class="tt-share-label">Compartir</span>`;
     if (navigator.share) {
@@ -1720,7 +1754,7 @@ function _renderProductDetail(product) {
         const button = event.target.closest('[data-share-action]');
         if (!button || !_pdProduct) return;
         const currentUrl = window.location.href;
-        const currentText = `¡Mirá este accesorio de TINTIN! ${_pdProduct.name} — ${formatPrice(_pdProduct.price)}`;
+        const currentText = `¡Mirá este accesorio de TINTIN! ${_pdProduct.name} — ${formatPrice(selectedProductMoney(_pdProduct,_pdGetSelectedVariant()).price)}`;
         if (button.dataset.shareAction === 'native' && navigator.share) {
           await navigator.share({ title: _pdProduct.name, text: currentText, url: currentUrl }).catch(() => {});
           return;
@@ -1858,11 +1892,11 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261023-checkout-variants-header-2');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261023-editor-audit-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
-    price: product.price,
+    price: product.variantCommerceVersion === 2 ? window.TintinCatalogPolicy.priceFor(product, variantStr).price : product.price,
     qty,
     stock: product.stock,
     cat: product.category || product.cat || '',

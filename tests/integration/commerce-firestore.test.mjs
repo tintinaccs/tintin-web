@@ -1,3 +1,5 @@
+import {saveProductEditor,saveProductBulk} from '../../cloudflare/product-editor-domain.mjs';
+import {productFingerprint} from '../../js/admin/products/maestro-productos-core.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createOrderAdmin, applyOrderAdminMutation } from '../../cloudflare/order-admin-domain.js';
@@ -81,4 +83,67 @@ test('Firestore aislado: pedido, precio canónico, reserva, concurrencia e idemp
     await assert.rejects(createOrderAdmin({}, input('commerce_deleted', 'ring', 'Dorado / 7'), actor, deps));
     assert.equal(await deps.get({}, 'orders/commerce_deleted'), null);
   });
+});
+
+test('Firestore real aislado: v2 prices, mixed stock, concurrent reserve, cancellation and replay',async()=>{
+ await seed('products/v2',{name:'Fixture v2',price:100,stock:null,active:true,variantCommerceVersion:2,variants:{Talle:['M'],Color:['Plateado','Dorado']},
+ variantInventory:[{variant:'Plateado / M',attributes:{Color:'Plateado',Talle:'M'},stock:1,price:250},{variant:'Dorado / M',attributes:{Color:'Dorado',Talle:'M'},stock:null}],
+ variantMedia:[{Color:'Plateado',imageUrl:'https://example.invalid/silver.png'}]});
+ const results=await Promise.allSettled(['v2_real_a','v2_real_b'].map(orderId=>createOrderAdmin({},input(orderId,'v2','M / Plateado'),actor,deps)));
+ assert.equal(results.filter(r=>r.status==='fulfilled').length,1);assert.equal(results.filter(r=>r.status==='rejected').length,1);
+ const winner=results.find(r=>r.status==='fulfilled').value;
+ assert.equal(winner.order.items[0].price,250);assert.match(winner.order.items[0].imageUrl,/silver/);
+ let p=await product('v2');assert.equal(p.variantInventory[0].stock,0);assert.equal(p.stock,null);
+ const cancel={orderId:winner.orderId,status:'cancelado',changeId:'v2_real_cancel'};
+ await applyOrderAdminMutation({},cancel,admin,deps);await applyOrderAdminMutation({},cancel,admin,deps);
+ p=await product('v2');assert.equal(p.variantInventory[0].stock,1);assert.equal(p.variantInventory[0].price,250);assert.equal(p.variantInventory[1].stock,null);
+});
+
+test('Firestore real aislado: dos combinaciones de 60 unidades se reservan y devuelven una sola vez', async () => {
+ await seed('products/v2_bulk', {name:'Fixture cantidad',price:100,stock:120,active:true,variantCommerceVersion:2,
+  variants:{Color:['Plateado','Dorado']},variantInventory:[
+   {variant:'Plateado',attributes:{Color:'Plateado'},stock:60,price:200},
+   {variant:'Dorado',attributes:{Color:'Dorado'},stock:60}]});
+ const draft={...input('v2_bulk_real','v2_bulk'),items:[
+  {id:'v2_bulk',variant:'Plateado',qty:60},{id:'v2_bulk',variant:'Dorado',qty:60}]};
+ const created=await createOrderAdmin({},draft,actor,deps);
+ assert.equal(created.order.total,18000);
+ assert.equal((await product('v2_bulk')).stock,0);
+ const cancel={orderId:created.orderId,status:'cancelado',changeId:'v2_bulk_cancel'};
+ await applyOrderAdminMutation({},cancel,admin,deps);
+ await applyOrderAdminMutation({},cancel,admin,deps);
+ const restored=await product('v2_bulk');
+ assert.equal(restored.stock,120);
+ assert.deepEqual(restored.variantInventory.map(row=>row.stock),[60,60]);
+});
+
+
+test('Editor v2: commit real público/privado, reintento e interferencia de una venta',async()=>{
+  const data={name:'Anillo editor',category:'editor_fixture',price:30000,priceBefore:null,active:true,oferta:false,destacado:false,variantCommerceVersion:2,variants:{Color:['Oro']},variantInventory:[{variant:'oro',attributes:{Color:'Oro'},stock:2,price:40000}],stock:2};
+  await seed('collections/editor_fixture',{name:'Fixture'});
+  const inventory={costUnit:100,purchased:2,stockMinimum:1,internalNotes:'Dato privado demo'};
+  const create={productId:'editor_fixture',expected:null,changeId:'editor_create_123',product:data,inventory,expectedInventory:null};
+  const saved=await saveProductEditor({},create,admin,deps);
+  assert.equal((await product('editor_fixture')).price,30000);
+  assert.equal(decodeFirestoreFields((await deps.get({},'productInventory/editor_fixture')).fields).internalNotes,inventory.internalNotes);
+  assert.equal((await saveProductEditor({},create,admin,deps)).duplicate,true);
+  const expected=productFingerprint(saved.product);
+  const order=await createOrderAdmin({},input('commerce_editor_sale','editor_fixture','Oro'),actor,deps);
+  assert.equal(order.order.items[0].price,40000);
+  await assert.rejects(saveProductEditor({},{...create,expected,changeId:'editor_edit_456',product:{...data,name:'Cambio concurrente'}},admin,deps),error=>error.status===409);
+  assert.equal((await product('editor_fixture')).stock,1);
+  assert.equal((await product('editor_fixture')).name,'Anillo editor');
+});
+
+
+test('Editor v2: lote mixto comercial atómico y conflicto antes de escribir',async()=>{
+ const commercial=await product('editor_fixture');
+ await seed('products/editor_simple',{name:'Simple',price:20000,stock:2,active:true});
+ const simple=await product('editor_simple');
+ const request={ids:['editor_fixture','editor_simple'],expected:{editor_fixture:productFingerprint(commercial),editor_simple:productFingerprint(simple)},field:'price',value:35000};
+ await assert.rejects(saveProductBulk({},{...request,expected:{...request.expected,editor_simple:'obsoleto'}},admin,deps));
+ assert.equal((await product('editor_fixture')).price,commercial.price);
+ await saveProductBulk({},request,admin,deps);
+ assert.equal((await product('editor_fixture')).price,35000);assert.equal((await product('editor_fixture')).variantInventory[0].price,40000);
+ assert.equal((await product('editor_simple')).price,35000);
 });

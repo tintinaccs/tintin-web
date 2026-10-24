@@ -852,7 +852,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261024-tema-conciliado-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261024-editor-tema-1');
     }
   }
 
@@ -953,7 +953,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261023-checkout-variants-header-2');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261023-editor-audit-1');
   }
 
   function bootThemeColorSanitizerPublic() {

@@ -62,6 +62,6 @@ if (loaded.status !== 0) {
   console.error(loaded.stderr || loaded.error || 'El smoke de servidor no terminó correctamente');
   process.exit(1);
 }
-const dependencies = spawnSync('npm', ['ls', '--depth=0'], { stdio: 'inherit' });
+const dependencies = spawnSync('npm', ['ls', '--depth=0'], { stdio: 'inherit', shell: process.platform === 'win32' });
 if (dependencies.status !== 0) process.exit(1);
 console.log(`Preflight: ${sources.length} archivos parseados, ${entries.length} funciones importadas; ${((performance.now() - start) / 1000).toFixed(2)}s. Sin peticiones ni escrituras de datos.`);

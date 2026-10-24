@@ -917,3 +917,68 @@ for(const status of ['cancelado','rechazado']) test(`pedido público sin pago li
  assert.equal(stock().stock,5);assert.equal(stock().variantInventory[0].stock,2);
  const order=decodeFirestoreFields(store.map.get('orders/'+created.orderId).fields);assert.equal(order.inventoryState,'released');assert.equal(order.paymentStatus,'pendiente');
 });
+
+function commercialStore() {
+ return fakeStore({'products/ring':document('products/ring',{name:'Fixture',price:100,stock:999,active:true,variantCommerceVersion:2,
+ variants:{Color:['Plateado','Dorado']},variantInventory:[{variant:'Plateado',attributes:{Color:'Plateado'},stock:1,price:250},
+ {variant:'Dorado',attributes:{Color:'Dorado'},stock:null}]})}, {transactional:true});
+}
+test('v2 simultaneous orders reserve last counted combination only once with CAS',async()=>{
+ const store=commercialStore();
+ const create=uid=>createOrderAdmin({}, {orderId:'v2_'+uid,userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',qty:1,variant:'Plateado'}]},checkoutActor(uid),store);
+ const result=await Promise.allSettled([create('first'),create('second')]);
+ assert.equal(result.filter(r=>r.status==='fulfilled').length,1);
+ assert.equal(result.filter(r=>r.status==='rejected').length,1);
+ const p=decodeFirestoreFields(store.map.get('products/ring').fields);
+ assert.equal(p.stock,null);assert.equal(p.variantInventory[0].stock,0);assert.equal(p.variantInventory[0].price,250);
+});
+test('v2 cancel, replay, reopen and quantity edits retain historical unit price and metadata',async()=>{
+ const store=commercialStore();
+ const created=await createOrderAdmin({}, {orderId:'v2_history',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',qty:1,variant:'Plateado'},{id:'ring',qty:2,variant:'Dorado'}]},checkoutActor('history'),store);
+ assert.equal(created.order.total,450);
+ const p=decodeFirestoreFields(store.map.get('products/ring').fields);p.variantInventory[0].price=900;
+ store.map.set('products/ring',document('products/ring',p,'2099-01-01T00:00:00Z'));
+ const edited=await applyOrderAdminMutation({}, {orderId:created.orderId,changeId:'v2_edit_123',items:[{id:'ring',qty:1,variant:'Plateado',price:1},{id:'ring',qty:3,variant:'Dorado',price:999}]},ACTOR,store);
+ assert.equal(edited.order.items[0].price,250);assert.equal(edited.order.items[1].price,100);assert.equal(edited.order.total,550);
+ const cancel={orderId:created.orderId,status:'cancelado',changeId:'v2_cancel_123'};
+ await applyOrderAdminMutation({},cancel,ACTOR,store);await applyOrderAdminMutation({},cancel,ACTOR,store);
+ let now=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(now.variantInventory[0].stock,1);assert.equal(now.variantInventory[1].stock,null);
+ await applyOrderAdminMutation({}, {orderId:created.orderId,status:'pendiente',paymentStatus:'pendiente',changeId:'v2_reopen_123'},ACTOR,store);
+ now=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(now.variantInventory[0].stock,0);assert.equal(now.variantInventory[0].price,900);
+ const order=decodeFirestoreFields(store.map.get('orders/'+created.orderId).fields);assert.equal(order.items[0].price,250);
+});
+
+test('v2 cancellation after overlapping attribute reorder releases the saved reference, not the new positional label',async()=>{
+ const data={name:'Overlap',price:100,stock:2,active:true,variantCommerceVersion:2,variants:{Color:['S','L'],Talle:['S','L']},variantInventory:[{variant:'S / L',attributes:{Color:'S',Talle:'L'},price:250,stock:1},{variant:'L / S',attributes:{Color:'L',Talle:'S'},price:300,stock:1}]};
+ const store=fakeStore({'products/ring':document('products/ring',data)}, {transactional:true});
+ const created=await createOrderAdmin({}, {orderId:'v2_overlap',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',variant:'S / L',qty:1}]},checkoutActor('overlap'),store);
+ assert.equal(created.order.items[0].price,250);assert.equal(created.order.variantInventoryItems[0].variantKey,'S / L');
+ const p=decodeFirestoreFields(store.map.get('products/ring').fields);p.variants={Talle:['S','L'],Color:['S','L']};store.map.set('products/ring',document('products/ring',p,'2099-01-01T00:00:00Z'));
+ await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',changeId:'overlap_cancel'},ACTOR,store);
+ const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.variantInventory[0].stock,1);assert.equal(after.variantInventory[1].stock,1);
+});
+
+test('edit and cancel legacy reservation after explicit v2 fixture upgrade retain historical price and immutable reference',async()=>{
+ const old={name:'Legacy overlap',price:100,stock:2,active:true,variants:{Color:['S','L'],Talle:['S','L']},variantInventory:[{variant:'S / L',stock:1},{variant:'L / S',stock:1}]};
+ const store=fakeStore({'products/ring':document('products/ring',old)}, {transactional:true});
+ const created=await createOrderAdmin({}, {orderId:'v1_to_v2_fixture',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',variant:'S / L',qty:1}]},checkoutActor('legacy'),store);
+ const p=decodeFirestoreFields(store.map.get('products/ring').fields);p.variantCommerceVersion=2;p.variants={Talle:['S','L'],Color:['S','L']};p.variantInventory[0].attributes={Color:'S',Talle:'L'};p.variantInventory[1].attributes={Color:'L',Talle:'S'};
+ store.map.set('products/ring',document('products/ring',p,'2099-01-01T00:00:00Z'));
+ const edited=await applyOrderAdminMutation({}, {orderId:created.orderId,changeId:'legacy_v2_edit',items:[{id:'ring',variant:'S / L',qty:1,price:999}]},ACTOR,store);
+ assert.equal(edited.order.items[0].price,100);
+ assert.equal(edited.order.items[0].variantKey,'S / L');
+ assert.equal(edited.order.items[0].variant,'L / S');
+ assert.equal(edited.order.variantInventoryItems[0].variantKey,'S / L');
+ await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',changeId:'legacy_v2_cancel'},ACTOR,store);
+ const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.variantInventory[0].stock,1);assert.equal(after.variantInventory[1].stock,1);
+});
+
+test('multiple combinations may exceed 99 units in aggregate and still cancel without double release',async()=>{
+ const p={name:'Bulk combinations',price:100,stock:120,active:true,variantCommerceVersion:2,variants:{Color:['Plateado','Dorado']},variantInventory:[{variant:'Plateado',attributes:{Color:'Plateado'},stock:60,price:200},{variant:'Dorado',attributes:{Color:'Dorado'},stock:60}]};
+ const store=fakeStore({'products/ring':document('products/ring',p)}, {transactional:true});
+ const created=await createOrderAdmin({}, {orderId:'v2_multi_quantity',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',variant:'Plateado',qty:60},{id:'ring',variant:'Dorado',qty:60}]},checkoutActor('multi_quantity'),store);
+ assert.equal(created.order.total,18000);assert.equal(decodeFirestoreFields(store.map.get('products/ring').fields).stock,0);
+ const cancel={orderId:created.orderId,status:'cancelado',changeId:'v2_multi_cancel'};
+ await applyOrderAdminMutation({},cancel,ACTOR,store);await applyOrderAdminMutation({},cancel,ACTOR,store);
+ const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.stock,120);assert.equal(after.variantInventory[0].stock,60);assert.equal(after.variantInventory[1].stock,60);
+});

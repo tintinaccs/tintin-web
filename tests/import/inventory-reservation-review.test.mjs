@@ -39,3 +39,10 @@ test('estado reservado terminal y cantidad acumulada excesiva no se ocultan', ()
   assert.ok(report.issues.some(issue => issue.code === 'INVALID_AGGREGATE_QUANTITY'));
   assert.equal(report.products[0].reservedQty, 120);
 });
+
+test('varias combinaciones válidas no se señalan como exceso por sumar más de 99', () => {
+  const items = [{id:'p',variant:'Plateado',variantKey:'Plateado',qty:60},{id:'p',variant:'Dorado',variantKey:'Dorado',qty:60}];
+  const report=buildInventoryReservationReview([{id:'bulk',inventoryState:'reserved',status:'confirmado',items,variantInventoryItems:items}]);
+  assert.equal(report.summary.reservedQty,120);
+  assert.deepEqual(report.issues,[]);
+});

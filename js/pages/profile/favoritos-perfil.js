@@ -3,8 +3,8 @@ import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tinti
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { collection} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1-bags-20261014-1';
-import { hasProductStock, firstAvailableVariant } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
-import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { hasProductStock, firstAvailableVariant, productDefaultPrice } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-2';
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const money = value => `Gs. ${Math.round(Number(value) || 0).toLocaleString('es-PY')}`;
@@ -13,7 +13,7 @@ export function resolveFavoriteProducts(items, products) {
   const current = new Map(products.map(product => [String(product.id), product.data]));
   return items.map(item => {
     const product = current.get(String(item.productId));
-    const price = product?.price;
+    const price = product?.variantCommerceVersion === 2 ? productDefaultPrice(product).price : product?.price;
     return { ...item, name: product?.name || item.name, imageUrl: product ? productVariantImage(product, firstAvailableVariant(product), product.imageUrl || item.imageUrl) : item.imageUrl,
       available: product ? hasProductStock(product) : null,
       price: price != null && price !== '' && Number.isFinite(Number(price)) && Number(price) > 0 ? Number(price) : null };

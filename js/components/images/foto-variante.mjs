@@ -1,4 +1,4 @@
-import { resolveProductVariant } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { resolveProductVariant, variantAttributes } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 /* Misma foto por color en producto, carrito, checkout y pedido canónico. */
 const metadata = new Set(['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active', 'colorHex', 'swatch']);
 function safeImage(value) {
@@ -15,6 +15,7 @@ function imageKey(value) {
   return url.href;
 }
 export function productVariantImage(product, selection, fallback = '') {
+  const selectedAttributes = product?.variantCommerceVersion === 2 ? variantAttributes(product,selection) : null;
   selection = resolveProductVariant(product, selection) ?? selection;
   const variants = product?.variants || {};
   const keys = Array.isArray(variants)
@@ -33,7 +34,7 @@ export function productVariantImage(product, selection, fallback = '') {
   const images = row => [row?.imageUrl, ...(Array.isArray(row?.imageUrls) ? row.imageUrls : [])].map(safeImage).filter(Boolean);
   // Formas, talles y combinaciones usan su asociación explícita. La fila
   // más específica prevalece sobre una foto genérica del mismo color.
-  const selected = Object.fromEntries(keys.map((key, index) => [key, String(selection || '').split('/')[index]?.trim() || '']));
+  const selected = selectedAttributes || Object.fromEntries(keys.map((key, index) => [key, String(selection || '').split('/')[index]?.trim() || '']));
   const normalize = value => String(value ?? '').trim().toLocaleLowerCase('es');
   const assigned = rows.filter(row => {
     const attributes = keys.filter(key => row?.[key] != null && String(row[key]).trim());

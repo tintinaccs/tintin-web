@@ -1,0 +1,556 @@
+{
+  "schemaVersion": 1,
+  "baseAuditada": "85d5061d69ab503b4ae536425f5cac568ca8eab7",
+  "evaluacion": "NO_APTO",
+  "funciones": [
+    {
+      "numero": 1,
+      "funcion": "Nombre del producto",
+      "decision": "SÍ",
+      "estado": "Existente legado; v2 bloqueado",
+      "evidencia": "admin-app:prodGuardar/serializeProductForm",
+      "pruebas": "E1/E3",
+      "problema_o_limite": "No hay escritor compatible v2 (B01)."
+    },
+    {
+      "numero": 2,
+      "funcion": "Descripción",
+      "decision": "SÍ",
+      "estado": "Existente legado",
+      "evidencia": "admin-app:description",
+      "pruebas": "E1/E3",
+      "problema_o_limite": "No acredita editor nuevo ni validación visual de texto enriquecido."
+    },
+    {
+      "numero": 3,
+      "funcion": "Fotografías y galería",
+      "decision": "SÍ",
+      "estado": "Existente legado",
+      "evidencia": "fotos-por-color/fotos-por-variante/carga-imagenes",
+      "pruebas": "E3",
+      "problema_o_limite": "Uploads ficticios; Cloudinary real no probado."
+    },
+    {
+      "numero": 4,
+      "funcion": "Ordenar fotografías",
+      "decision": "SÍ",
+      "estado": "Parcial",
+      "evidencia": "fotos-por-variante; portada por color",
+      "pruebas": "E3",
+      "problema_o_limite": "Orden de fotos probado; no toda organización nueva de F3."
+    },
+    {
+      "numero": 5,
+      "funcion": "Precio de venta",
+      "decision": "SÍ",
+      "estado": "Existente general; motor v2 probado",
+      "evidencia": "inventario-variantes:productVariantPrice; dominio pedidos",
+      "pruebas": "E1/E4/E5",
+      "problema_o_limite": "Edición del override no está disponible en editor (B01)."
+    },
+    {
+      "numero": 6,
+      "funcion": "Precio anterior y descuentos",
+      "decision": "SÍ",
+      "estado": "Existente con contrato v2",
+      "evidencia": "productVariantPrice/priceBefore",
+      "pruebas": "E4",
+      "problema_o_limite": "No confundir descuento de precio anterior con cupón arbitrario."
+    },
+    {
+      "numero": 7,
+      "funcion": "Costo de compra",
+      "decision": "SÍ",
+      "estado": "Existente privado",
+      "evidencia": "productInventory.costUnit; reglas",
+      "pruebas": "E1/E5",
+      "problema_o_limite": "No se expone al cliente; persistencia editor probada con almacén ficticio."
+    },
+    {
+      "numero": 8,
+      "funcion": "Categoría",
+      "decision": "SÍ",
+      "estado": "Existente legado",
+      "evidencia": "prod-category; maestro-productos-core",
+      "pruebas": "E1/E2/E3",
+      "problema_o_limite": "No rediseño F3."
+    },
+    {
+      "numero": 9,
+      "funcion": "Colecciones",
+      "decision": "SÍ",
+      "estado": "Parcial",
+      "evidencia": "prod-collection; productBulkPatch",
+      "pruebas": "E1/E2/E3",
+      "problema_o_limite": "Campo/edición masiva existentes; pertenencia múltiple no acreditada."
+    },
+    {
+      "numero": 10,
+      "funcion": "Etiquetas de búsqueda",
+      "decision": "SÍ",
+      "estado": "Existente legado",
+      "evidencia": "prod-tags; filtros maestro/búsqueda",
+      "pruebas": "E1/E2/E3",
+      "problema_o_limite": "Sin novedad funcional de F3."
+    },
+    {
+      "numero": 11,
+      "funcion": "SKU general del producto",
+      "decision": "SÍ",
+      "estado": "Existente general",
+      "evidencia": "prod-sku; controlador duplicado",
+      "pruebas": "E1/E2/E3",
+      "problema_o_limite": "SKU por variante sigue excluido como novedad."
+    },
+    {
+      "numero": 12,
+      "funcion": "Vista previa",
+      "decision": "SÍ",
+      "estado": "Existente legado",
+      "evidencia": "vista-previa-producto; cambios de sección",
+      "pruebas": "E3",
+      "problema_o_limite": "Preview nuevo de todas las combinaciones v2 no disponible."
+    },
+    {
+      "numero": 13,
+      "funcion": "Crear, editar y guardar",
+      "decision": "SÍ",
+      "estado": "Parcial",
+      "evidencia": "prodGuardar/transaction; huella original",
+      "pruebas": "E1/E5",
+      "problema_o_limite": "v2 bloqueado; guardado público/privado por etapas (B01/M01)."
+    },
+    {
+      "numero": 14,
+      "funcion": "Duplicar productos",
+      "decision": "SÍ",
+      "estado": "Existente v1; v2 protegido",
+      "evidencia": "productDuplicateData; prodDuplicar",
+      "pruebas": "E1/E2/E3",
+      "problema_o_limite": "Duplicar v2 se bloquea hasta escritor compatible."
+    },
+    {
+      "numero": 15,
+      "funcion": "Edición masiva",
+      "decision": "SÍ",
+      "estado": "Existente v1; v2 protegido",
+      "evidencia": "applyProductBulkTransaction",
+      "pruebas": "E1/E2/E3",
+      "problema_o_limite": "Lote no edita precios por combinación v2."
+    },
+    {
+      "numero": 16,
+      "funcion": "Variantes por color",
+      "decision": "SÍ",
+      "estado": "Existente color; motor v2",
+      "evidencia": "namedVariantGroups/fotos-por-color",
+      "pruebas": "E3/E4",
+      "problema_o_limite": "Edición comercial v2 aún bloqueada."
+    },
+    {
+      "numero": 17,
+      "funcion": "Variantes por talle",
+      "decision": "SÍ",
+      "estado": "Existente genérico",
+      "evidencia": "resolveProductVariant/namedVariantGroups",
+      "pruebas": "E4/E5",
+      "problema_o_limite": "Falta UX v2; no se afirma prueba física de talles."
+    },
+    {
+      "numero": 18,
+      "funcion": "Variantes por material",
+      "decision": "SÍ",
+      "estado": "Existente genérico",
+      "evidencia": "namedVariantGroups; campo descriptivo material separado",
+      "pruebas": "E1/E4",
+      "problema_o_limite": "Material como opción genérica; UX v2 específica no probada."
+    },
+    {
+      "numero": 19,
+      "funcion": "Variantes personalizadas",
+      "decision": "SÍ",
+      "estado": "Existente genérico",
+      "evidencia": "namedVariantGroups/variants",
+      "pruebas": "E4",
+      "problema_o_limite": "No equivale a campos descriptivos arbitrarios (40 NO)."
+    },
+    {
+      "numero": 20,
+      "funcion": "Agregar, editar y quitar opciones",
+      "decision": "SÍ",
+      "estado": "Parcial/protegido",
+      "evidencia": "reorderVariantInventory",
+      "pruebas": "E3/E4",
+      "problema_o_limite": "No elimina referencia guardada ni con stock0; nueva UX pendiente."
+    },
+    {
+      "numero": 21,
+      "funcion": "Combinaciones de variantes",
+      "decision": "SÍ",
+      "estado": "Motor probado; UI parcial",
+      "evidencia": "variantInventory/attributes/variantKey",
+      "pruebas": "E4/E5",
+      "problema_o_limite": "Tabla/guardado v2 completo no existe (B01)."
+    },
+    {
+      "numero": 22,
+      "funcion": "Stock por variante",
+      "decision": "SÍ",
+      "estado": "Motor probado; UI v1",
+      "evidencia": "applyVariantInventoryDeltas",
+      "pruebas": "E1/E3/E4/E5",
+      "problema_o_limite": "No activar editor v2 antes de escritor compatible."
+    },
+    {
+      "numero": 23,
+      "funcion": "Stock total automático",
+      "decision": "SÍ",
+      "estado": "Motor probado",
+      "evidencia": "productStockTotal/variantInventoryTotal",
+      "pruebas": "E4/E5/E6",
+      "problema_o_limite": "Suma finita o null; SEO corregido para agregado desactualizado (F02)."
+    },
+    {
+      "numero": 24,
+      "funcion": "Precio por variante",
+      "decision": "SÍ",
+      "estado": "Parcial",
+      "evidencia": "productVariantPrice y cotización persistida",
+      "pruebas": "E4/E5/E6",
+      "problema_o_limite": "Motor sí; precio editable por fila en editor no (B01)."
+    },
+    {
+      "numero": 25,
+      "funcion": "SKU por variante",
+      "decision": "NO",
+      "estado": "No incorporada como novedad",
+      "evidencia": "diff 85d5061d6..rama de auditoría y fuentes originales",
+      "pruebas": "E8",
+      "problema_o_limite": "SKU legado en importación/medios conservado; no se exige ni añade editor SKU por combinación."
+    },
+    {
+      "numero": 26,
+      "funcion": "Fotografías por variante",
+      "decision": "SÍ",
+      "estado": "Existente; identidad v2 probada",
+      "evidencia": "productVariantImage/variantMedia",
+      "pruebas": "E2/E3/E4/E5",
+      "problema_o_limite": "Medios reales no alterados ni probados en Cloudinary."
+    },
+    {
+      "numero": 27,
+      "funcion": "Círculos de colores",
+      "decision": "SÍ",
+      "estado": "Existente legado",
+      "evidencia": "swatch/colorHex; fotos-por-color",
+      "pruebas": "E3",
+      "problema_o_limite": "Teclado/aria de fixtures; lector físico no probado."
+    },
+    {
+      "numero": 28,
+      "funcion": "Editar varias variantes",
+      "decision": "SÍ",
+      "estado": "Parcial",
+      "evidencia": "maestro y stock por fila",
+      "pruebas": "E1/E3",
+      "problema_o_limite": "Lote integral de combinaciones/precios v2 no implementado."
+    },
+    {
+      "numero": 29,
+      "funcion": "Reordenar variantes",
+      "decision": "SÍ",
+      "estado": "Parcial",
+      "evidencia": "reorderVariantInventory/attributesKey",
+      "pruebas": "E3/E4/E5",
+      "problema_o_limite": "Identidad motor estable; UI completa F3 ausente."
+    },
+    {
+      "numero": 30,
+      "funcion": "Disponibilidad de variantes",
+      "decision": "SÍ",
+      "estado": "Parcial",
+      "evidencia": "active de fila; hasProductStock",
+      "pruebas": "E4/E5/E6",
+      "problema_o_limite": "Disponibilidad resuelta; controles editor v2 pendientes."
+    },
+    {
+      "numero": 31,
+      "funcion": "Estados del producto",
+      "decision": "SÍ",
+      "estado": "No completada",
+      "evidencia": "active; hasPublicProductFields",
+      "pruebas": "E3/E4/E8",
+      "problema_o_limite": "No hay ciclo draft/archive/unlisted aprobado e integrado (B02)."
+    },
+    {
+      "numero": 32,
+      "funcion": "SEO para Google",
+      "decision": "SÍ",
+      "estado": "Parcial",
+      "evidencia": "functions/product.js; sitemap-products.xml.js",
+      "pruebas": "E6/E8",
+      "problema_o_limite": "SEO automático existe; título/descripción SEO editables no (B02)."
+    },
+    {
+      "numero": 33,
+      "funcion": "URL personalizada",
+      "decision": "NO",
+      "estado": "No incorporada como novedad",
+      "evidencia": "diff 85d5061d6..rama de auditoría y fuentes originales",
+      "pruebas": "E8",
+      "problema_o_limite": "Aliases históricos/canonical conservados; no hay editor de URL personalizada nuevo."
+    },
+    {
+      "numero": 34,
+      "funcion": "Código de barras",
+      "decision": "NO",
+      "estado": "No incorporada como novedad",
+      "evidencia": "diff 85d5061d6..rama de auditoría y fuentes originales",
+      "pruebas": "E8",
+      "problema_o_limite": "No campo/flujo nuevo de código de barras en diff."
+    },
+    {
+      "numero": 35,
+      "funcion": "Peso y datos de envío",
+      "decision": "NO",
+      "estado": "No incorporada como novedad",
+      "evidencia": "diff 85d5061d6..rama de auditoría y fuentes originales",
+      "pruebas": "E8",
+      "problema_o_limite": "No nuevos campos de peso/envío; checkout existente conservado."
+    },
+    {
+      "numero": 36,
+      "funcion": "Proveedor/fabricante",
+      "decision": "NO",
+      "estado": "No incorporada como novedad",
+      "evidencia": "diff 85d5061d6..rama de auditoría y fuentes originales",
+      "pruebas": "E8",
+      "problema_o_limite": "Sin editor nuevo de proveedor/fabricante."
+    },
+    {
+      "numero": 37,
+      "funcion": "Canales de venta",
+      "decision": "NO",
+      "estado": "No incorporada como novedad",
+      "evidencia": "diff 85d5061d6..rama de auditoría y fuentes originales",
+      "pruebas": "E8",
+      "problema_o_limite": "Sin gestión nueva de canales de venta."
+    },
+    {
+      "numero": 38,
+      "funcion": "Inventario por sucursal",
+      "decision": "NO",
+      "estado": "No incorporada como novedad",
+      "evidencia": "diff 85d5061d6..rama de auditoría y fuentes originales",
+      "pruebas": "E8",
+      "problema_o_limite": "Sin motor nuevo por sucursal."
+    },
+    {
+      "numero": 39,
+      "funcion": "Videos y modelos 3D",
+      "decision": "NO",
+      "estado": "No incorporada como novedad",
+      "evidencia": "diff 85d5061d6..rama de auditoría y fuentes originales",
+      "pruebas": "E8",
+      "problema_o_limite": "Sin editor nuevo de video/3D; no se borran medios reales."
+    },
+    {
+      "numero": 40,
+      "funcion": "Campos personalizados",
+      "decision": "NO",
+      "estado": "No incorporada como novedad",
+      "evidencia": "diff 85d5061d6..rama de auditoría y fuentes originales",
+      "pruebas": "E8",
+      "problema_o_limite": "Sin constructor arbitrario de campos; atributos de variantes no son esta función."
+    },
+    {
+      "numero": 41,
+      "funcion": "Plantillas por producto",
+      "decision": "SÍ",
+      "estado": "No implementada",
+      "evidencia": "product.html fijo; sin selector de plantilla",
+      "pruebas": "E8",
+      "problema_o_limite": "Diseños propuestos aún sin aprobación; no construirlos por inferencia (B02)."
+    },
+    {
+      "numero": 42,
+      "funcion": "Estadísticas por producto",
+      "decision": "SÍ",
+      "estado": "Parcial",
+      "evidencia": "renderGeneralStatistics/modelo-reinicios",
+      "pruebas": "E7/E8",
+      "problema_o_limite": "Ranking ID/cancelaciones corregido; falta ficha, variantes, evolución y contrato de netos (B02/M02)."
+    },
+    {
+      "numero": 43,
+      "funcion": "Suscripciones y preventas",
+      "decision": "NO",
+      "estado": "No incorporada como novedad",
+      "evidencia": "diff 85d5061d6..rama de auditoría y fuentes originales",
+      "pruebas": "E8",
+      "problema_o_limite": "Sin suscripciones/preventas nuevas."
+    }
+  ],
+  "resultados": [
+    {
+      "ref": "E1",
+      "comando": "node --test tests/admin/maestro-productos-controlador.test.mjs",
+      "casos": 26,
+      "exit": 0,
+      "estado": "PASS_LOCAL",
+      "log": "artifacts/phase5/preservation.log",
+      "sha256": "650d03ecbf6d3955d569d764d3bc140796e86abfe547b38531b2bbbc4faf9214"
+    },
+    {
+      "ref": "E2",
+      "comando": "node --test tests/import/*.test.mjs tests/sync/*.test.mjs tests/admin/maestro-productos*.test.mjs tests/catalog/*.test.mjs tests/profile/favorite-current-product.test.mjs",
+      "casos": 408,
+      "exit": 0,
+      "estado": "PASS_LOCAL",
+      "log": "artifacts/phase5/compatibility-final.log",
+      "sha256": "ea2ac2c77b1d6285988cf6e503f8df49bf35567d3484388a70e791434aa3f291"
+    },
+    {
+      "ref": "E3",
+      "comando": "npx playwright test tests/ui-ux/products-responsive-phase-one.spec.js tests/ui-ux/products-master.spec.js tests/ui-ux/product-color-gallery.spec.js tests/cart/color-choice-browser.spec.js --project=chromium --workers=2 --retries=0",
+      "casos": 144,
+      "exit": 0,
+      "estado": "PASS_LOCAL",
+      "log": "artifacts/phase5/editor-browser-final.log",
+      "sha256": "58367d624c737e9c979e377dc5665b8287a54f246bfb33408cbab04ad8f437bd"
+    },
+    {
+      "ref": "E4",
+      "comando": "npm run test:commerce",
+      "casos": 457,
+      "exit": 0,
+      "estado": "PASS_LOCAL",
+      "log": "artifacts/phase5/commerce-final.log",
+      "sha256": "68019b75e84ffbbd8bcd262608bd1b1a372e353719c01b88fc9dc88976102aca"
+    },
+    {
+      "ref": "E5",
+      "comando": "firebase emulators:exec: 213 controles y 6 integration tests",
+      "casos": 6,
+      "exit": 0,
+      "estado": "PASS_LOCAL",
+      "log": "artifacts/phase5/firestore.log",
+      "sha256": "8ba8173278d54392f56da97d1c7a6b53ce57ab43c71562700116b9b0111bd010"
+    },
+    {
+      "ref": "E6",
+      "comando": "npx playwright test tests/ci/server-import.spec.js --project=chromium --workers=1 --retries=0",
+      "casos": 5,
+      "exit": 0,
+      "estado": "PASS_LOCAL",
+      "log": "artifacts/phase5/seo-after.log",
+      "sha256": "63545fb1b89a04ed6f5ee9faec6d2cb88b2224f09f5c3d76e8f10f70438e29f4"
+    },
+    {
+      "ref": "E7",
+      "comando": "node --test tests/orders/statistics-reset-render.test.mjs",
+      "casos": 5,
+      "exit": 0,
+      "estado": "PASS_LOCAL",
+      "log": "artifacts/phase5/statistics-after.log",
+      "sha256": "cd62e773acb94703fffc5861417681345a777ccc7cdab8c578ccd76d8ae73122"
+    },
+    {
+      "ref": "E8",
+      "comando": "npm run ci:preflight: 39 comandos",
+      "casos": 39,
+      "exit": 0,
+      "estado": "PASS_LOCAL",
+      "log": "artifacts/phase5/preflight-final.log",
+      "sha256": "9a367b33d218e66c30afdf9e01a0468f314d4d68189123a0b9096d18f9237045"
+    }
+  ],
+  "conteosSolapados": true,
+  "noVerificado": [
+    "Editor/escritor v2 completo",
+    "Fases3/4",
+    "Producción",
+    "Cloudinary/Sheets/Apps Script desplegados",
+    "Auth/carrito multidispositivo reales",
+    "Dispositivos/lector de pantalla físicos",
+    "CI del nuevo HEAD",
+    "Política neta de reembolsos/devoluciones/test"
+  ],
+  "sources": {
+    "js/admin/admin-app.js": "969b0b0a969fbb0bfaeb883b80311bda15d469670a7a2390c2e0db9969add2e6",
+    "js/components/cart/sincronizacion-carrito.js": "edf893139e5661901ee6c1f826f490199de6c2fcf9347d788d3c21a69074d78f",
+    "functions/product.js": "891064e73b9d825b7312808e098aaea3f3f3332e06cbe31fd3f4d3f8a127e163",
+    "firestore.rules": "9df1911acb8711b00ed964848c0698410a3ad12e143a03aad8e574cf4d05bc2c",
+    "tests/ci/server-import.spec.js": "c8135cc46a2e204b4ceb5ee37e475275ed8b6973d386df2397778b00a63bc784",
+    "tests/orders/statistics-reset-render.test.mjs": "4e4652cb2434853d4d29f515ee17a324b8def145cf5638f95fec360c63aadc86",
+    "tests/admin/maestro-productos-controlador.test.mjs": "f600417c5db0d8b2e6f03af3b46057f3b8203f2b26aead7442ef2b5c7c70a520",
+    "tests/ui-ux/products-responsive-phase-one.spec.js": "d717ddb69b2f58f116854c85f2c4791e23c2f443ca2ba802d58a7e1509b1ed8d"
+  },
+  "fallosAntesDeCorregir": [
+    {
+      "id": "F01",
+      "log": "artifacts/phase5/level2-before.log",
+      "sha256": "e69a3cf1649406c97a2b34fb5d28484f628c761def0fa30b76e72b8ee786b5f7",
+      "estado": "FAIL_REPRODUCIDO_ANTES_DEL_ARREGLO"
+    },
+    {
+      "id": "F02",
+      "log": "artifacts/phase5/seo-before.log",
+      "sha256": "a05b24523054a8a2b2452f515ab4b13c34a866629855ca90ed82d891b92d151e",
+      "estado": "FAIL_REPRODUCIDO_ANTES_DEL_ARREGLO"
+    },
+    {
+      "id": "F03",
+      "log": "artifacts/phase5/statistics-before.log",
+      "sha256": "ab042f9f520de65e0c8ae9c8b14edf1d7e58f4f797637c783bdefca6d4e53a02",
+      "estado": "FAIL_REPRODUCIDO_ANTES_DEL_ARREGLO"
+    },
+    {
+      "id": "F04",
+      "log": "artifacts/phase5/statistics-cancel-before.log",
+      "sha256": "c207a1a7e329215ca6ef885f42d276e6ba2671fa651111eb6a1f1244bd6107c4",
+      "estado": "FAIL_REPRODUCIDO_ANTES_DEL_ARREGLO"
+    },
+    {
+      "id": "F05",
+      "log": "artifacts/phase5/editor-browser.log",
+      "sha256": "c1f63c71e9caa05aa4069427724614f5c2cff7dd2b69dde0b87ca908a5f653e5",
+      "estado": "FAIL_REPRODUCIDO_ANTES_DEL_ARREGLO"
+    },
+    {
+      "id": "CSP_intermedio",
+      "log": "artifacts/phase5/security.log",
+      "sha256": "59a6b90cd126bb522820dd3badd36b1d7030fcf28302fe3e2c06ace28b475812",
+      "estado": "FAIL_REPRODUCIDO_ANTES_DEL_ARREGLO"
+    }
+  ],
+  "capturas": [
+    {
+      "archivo": "artifacts/phase5/editor-mobile.png",
+      "sha256": "86f48edf2113480a70e385febba68c9ca56cc1beb9873f25cb478dd9603e2d0f",
+      "alcance": "editor existente, datos ficticios"
+    },
+    {
+      "archivo": "artifacts/phase5/editor-desktop.png",
+      "sha256": "1866576c77eb2734abc9560c21ba2d070c53efb99efb84afaac5a461a92f3171",
+      "alcance": "editor existente, datos ficticios"
+    }
+  ],
+  "preservacion": [
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58
+  ]
+}

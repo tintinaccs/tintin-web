@@ -23,8 +23,8 @@ const product = {id:'shapes', name:'Anillo de acero con piedra', category:'anill
 async function openFixture(page, item=product) {
   const errors=[]; page.on('pageerror', error=>errors.push(error.message));
   await page.route('**/shape-fixture', route=>route.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${styles}</head><body class="tt-product-maintenance tt-product-runtime-ready">${section}<script src="/js/components/images/galeria-producto.js"></script><script type="module" src="/shape-fixture.js"></script></body></html>`}));
-  await page.route('**/shape-fixture.js', route=>route.fulfill({contentType:'text/javascript', body:`import {variantStockLimit,hasProductStock} from '${inventoryRuntime}';
-    window.TintinCatalogPolicy={variantStockLimit};window.TintinCatalogMerchandising={isProductInStock:hasProductStock};
+  await page.route('**/shape-fixture.js', route=>route.fulfill({contentType:'text/javascript', body:`import {variantStockLimit,hasProductStock,productVariantPrice} from '${inventoryRuntime}';
+    window.TintinCatalogPolicy={variantStockLimit,priceFor:productVariantPrice};window.TintinCatalogMerchandising={isProductInStock:hasProductStock};
     let _pdProduct=null,_pdRenderedSignature='',_pdGalleryImages=[],_pdGalleryIndex=0,_pdQty=1,_pdMaxQty=99,_pdLoadTimer=null;
     function getProductImage(){return ''}function _injectProductJsonLd(){}function _updateProductMeta(){}function _openLightbox(){}
     ${functions}
@@ -171,3 +171,27 @@ for (const [width,height] of [[320,568],[667,375],[768,1024],[1024,768],[1366,76
     expect(errors).toEqual([]);
   });
 }
+
+for (const viewport of [{width:390,height:844},{width:1366,height:768}]) {
+ test(`motor v2 cambia precio/foto por selección sin marcar sin control como agotado ${viewport.width}`,async({page})=>{
+  await page.setViewportSize(viewport);
+  const item={...product,variantCommerceVersion:2,stock:null,variantInventory:shapes.map((variant,i)=>({variant,attributes:{'Forma de la piedra':variant},stock:i===2?0:null,price:50000+i*10000}))};
+  const errors=await openFixture(page,item);
+  await page.locator(`[data-variant-value="${shapes[0]}"]`).click();
+  await expect(page.locator('#product-price')).toContainText('50.000');
+  await expect(page.locator('#btn-product-add-cart')).toBeEnabled();
+  await page.locator(`[data-variant-value="${shapes[1]}"]`).click();
+  await expect(page.locator('#product-price')).toContainText('60.000');
+  await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/shape-1.svg$/);
+  expect(errors).toEqual([]);
+ });
+}
+
+for(const productTemplate of ['default','gallery','unknown'])test(`plantilla ${productTemplate} conserva selección y compra canónicas`,async({page})=>{
+ const errors=await openFixture(page,{...product,productTemplate});
+ await expect(page.locator('#product-grid')).toHaveAttribute('data-product-template',productTemplate==='gallery'?'gallery':'default');
+ await expect(page.locator('#btn-product-add-cart')).toBeEnabled();
+ await page.locator('[data-variant-value="redondo"]').click();await expect(page.locator('#btn-product-add-cart')).toBeDisabled();
+ await page.locator('[data-variant-value="ovalado"]').click();await expect(page.locator('#btn-product-add-cart')).toBeEnabled();
+ expect(errors).toEqual([]);
+});

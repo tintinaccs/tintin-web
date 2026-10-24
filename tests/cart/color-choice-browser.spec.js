@@ -5,10 +5,11 @@ const render = checkout.slice(checkout.indexOf('let lastCartRenderKey'), checkou
 const hardening = fs.readFileSync('js/pages/checkout/checkout-hardening.js', 'utf8');
 const annotate = hardening.slice(hardening.indexOf('function annotateCartRows()'), hardening.indexOf('\nfunction ', hardening.indexOf('function annotateCartRows()') + 1));
 
-test('elegir no agrega; agregar cada color conserva líneas, fotos y cantidades hasta checkout', async ({ page }) => {
+for (const variantV2 of [false,true]) test(`elegir no agrega; colores conservan líneas, precios y fotos hasta checkout v2=${variantV2}`, async ({ page }) => {
   const gold = 'https://cdn.example.test/gold.jpg', silver = 'https://cdn.example.test/silver.jpg';
   const fixture = { id: 'qa-color-flow', name: 'Aro QA', category: 'aros', active: true, price: 50000, stock: 6, imageUrl: gold,
     variants: { Color: ['Dorado', 'Plateado'] }, variantMedia: [{ Color: 'Dorado', imageUrls: [gold] }, { Color: 'Plateado', imageUrls: [silver] }] };
+  if (variantV2) Object.assign(fixture,{variantCommerceVersion:2,variantInventory:[{variant:'Dorado',attributes:{Color:'Dorado'},stock:3,price:50000},{variant:'Plateado',attributes:{Color:'Plateado'},stock:3,price:70000}]});
   await page.route('**/api/public-catalog?**', route => {
     const url = new URL(route.request().url()), resource = url.searchParams.get('resource');
     if (resource === 'collections') return route.fulfill({ json: { ok: true, resource, items: [{ id: 'aros', data: { name: 'Aros', slug: 'aros', active: true } }] } });
@@ -37,6 +38,7 @@ test('elegir no agrega; agregar cada color conserva líneas, fotos y cantidades 
     { variant: 'Dorado', qty: 1, imageUrl: gold }, { variant: 'Plateado', qty: 1, imageUrl: silver }
   ]);
   expect(lines[0].lineId).not.toBe(lines[1].lineId);
+  expect(lines.map(line=>line.price)).toEqual(variantV2?[50000,70000]:[50000,50000]);
   await page.evaluate(async ({ render, annotate }) => {
     const runtime = window.TintinCartRuntime;
     await runtime.updateQty(runtime.getCartLocal()[1].lineId, 1);
@@ -45,14 +47,14 @@ test('elegir no agrega; agregar cada color conserva líneas, fotos y cantidades 
     document.body.innerHTML = '<div id="ck-items"></div><div id="ck-subtotal-val"></div><button id="btn-step1-next"></button>';
     window.qaRender = new Function('getCartLocal', 'setCartLocal', 'productVariantImage', `let cartItems=[];const sessionCanMakeCheckoutDecision=()=>true;const escapeSearchHtml=s=>String(s);const sanitizeImageUrl=s=>s;const formatPrice=n=>String(n);const cartTotal=items=>items.reduce((sum,i)=>sum+i.qty*i.price,0);${render};${annotate};return async()=>{await renderCart();annotateCartRows();}`)(runtime.getCartLocal, () => {}, productVariantImage);
     await window.qaRender();
-    window.qaDraft = composeCheckoutDraft({ items: runtime.getCartLocal(), subtotal: 150000, shipping: { method: 'retiro', cost: 0, pending: false } });
+    window.qaDraft = composeCheckoutDraft({ items: runtime.getCartLocal(), subtotal: runtime.getCartLocal().reduce((sum,item)=>sum+item.price*item.qty,0), shipping: { method: 'retiro', cost: 0, pending: false } });
   }, { render, annotate });
   await expect(page.locator('.ck-item')).toHaveCount(2);
   await expect(page.locator('.ck-item').nth(0).locator('[data-cart-variant]')).toHaveText('Dorado');
   await expect(page.locator('.ck-item').nth(1).locator('[data-cart-variant]')).toHaveText('Plateado');
   await expect(page.locator('.ck-item-img').nth(1)).toHaveAttribute('src', silver);
   await expect(page.locator('.ck-qty-num').nth(1)).toHaveText('2');
-  expect(await page.evaluate(() => window.qaDraft.cartLines)).toEqual([{ id: fixture.id, variant: 'Dorado', qty: 1 }, { id: fixture.id, variant: 'Plateado', qty: 2 }]);
+  expect(await page.evaluate(() => window.qaDraft.cartLines)).toEqual([{ id: fixture.id, variant: 'Dorado', qty: 1, ...(variantV2?{variantKey:'Dorado'}:{}) }, { id: fixture.id, variant: 'Plateado', qty: 2, ...(variantV2?{variantKey:'Plateado'}:{}) }]);
   await page.evaluate(async () => { const r=window.TintinCartRuntime;await r.removeFromCart(r.getCartLocal()[0].lineId);await window.qaRender(); });
   await expect(page.locator('.ck-item')).toHaveCount(1);
   await expect(page.locator('[data-cart-variant]')).toHaveText('Plateado');

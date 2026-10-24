@@ -1,4 +1,4 @@
-import {productBulkPatch,productFingerprint} from './maestro-productos-core.mjs?v=tintin-20261023-checkout-variants-header-2';
+import {productBulkPatch,productFingerprint} from './maestro-productos-core.mjs?v=tintin-20261024-editor-v2-4';
 let modalSequence=0;
 const labels={price:'Precio fijo',pricePercent:'Ajustar precio por porcentaje',priceBefore:'Precio anterior',stock:'Establecer stock',stockDelta:'Sumar o restar stock',category:'Colección',active:'Activo',oferta:'En oferta',destacado:'Destacado en Inicio',badge:'Etiqueta visible',tags:'Etiquetas de búsqueda'};
 const element=(tag,text,className)=>{const node=document.createElement(tag);if(text!=null)node.textContent=text;if(className)node.className=className;return node;};

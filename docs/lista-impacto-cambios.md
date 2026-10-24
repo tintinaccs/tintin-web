@@ -1,3 +1,15 @@
+## 2026-10-23 — Continuación editor comercial v2
+
+Formulario/guardado canónicos con matriz compatible y escritor administrativo CAS; inventario privado y auditoría en el mismo commit. Lote mixto usa applyProductBulkTransaction; estado editorial comparte política pública/servidor. SEO editable, dos plantillas acotadas y métricas históricas brutas por ID. Galería y precio/inventario siguen las autoridades de fase2. Conserva SDK/Sheets antiguos protegidos y bloquea convertir stock agregado sin revisar reservas. Sin datos comerciales reales modificados. Referencias transitivas, rutas/CSP/caché/diagnóstico y protección se regeneran desde sus autoridades. Evidencia actual en docs/editor-productos-v2/14-CONTINUIDAD-Y-CANDIDATO.md y CURRENT_STATE.
+
+## 2026-10-23 — Auditoría del editor v2 y correcciones acotadas
+
+Base85d5061d6: identidad legacy del carrito conserva contrato de gates sin cambiarlos; metadata v2 reutiliza productStockTotal; ranking existente separa IDs/renombres y reutiliza exclusión cancelado/rechazado. No se inventan métricas netas, plantillas o editor compatible faltante. Regresiones antes/después, conservación de campos privados, matrices43+15 y evaluación NO APTO; no publicación. Referencias transitivas/CSP/diagnóstico/caché/protección se generan desde autoridades, sin tocar CSS/workflows/paquetes ni datos reales. Informe docs/editor-productos-v2/11-AUDITORIA-FASE-5.md.
+
+## 2026-10-23 — Motor comercial de variantes v2, sin activación
+
+Autoridad reutilizada inventario-variantes y modelo-inventario: precio individual/fallback/descuento, atributos por nombre, referencia estable opcional y stocknullable derivado. Dominio servidor recalcula desde productos persistidos y conserva precios históricos/CAS/idempotencia. Consumidores públicos, carrito/checkout/pedidos/fotos, catálogo inline/búsqueda/favoritos/SEO y orden por precio comparten el contrato; Sheets conserva merges y rechaza escrituras incompatibles, GS legacy falla cerrado y Shopify nuevo formato sólo por opción interna no expuesta. Guardas en editor/SDK/borrado previenen degradación. Máximo99 por combinación permite cancelar/reservar agregados mayores sin doble liberación. Reglas, fixtures, negativas y emulador demo prueban integridad; sin migración/publicación/ventas reales ni fase3. Referencias transitivas/cache/CSP/diagnóstico y plan protegido se regeneran desde autoridades. Contrato y evidencia en docs/editor-productos-v2/05 y10, con límites de activación/reversión.
+
 ## 2026-10-23 — Conciliar variantes con encabezado publicado
 
 Se conservan las autoridades de PR1211 para encabezado/búsqueda/dropup y de PR1214 para selección, fotos, carrito, checkout e inventario. El conflicto se resuelve en referencias transitivas y shell, con una URL nueva para los dos módulos de navegación conciliados. Derivados de caché/CSP/diagnóstico y plan se regeneran. La regresión de tres atributos fijos verifica los seis órdenes del producto comunicado, sin datos ni operaciones comerciales reales. Evidencia y límites de red en CURRENT_STATE.
