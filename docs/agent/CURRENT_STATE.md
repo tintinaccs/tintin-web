@@ -1,3 +1,11 @@
+## Cierre local del candidato — 23/10/2026
+
+PASS_LOCAL con dependencias instaladas por npm ci (lock intacto): 39 comandos preflight; 457 comercio; 221 sincronización; 117 administrativos antes del último ajuste de permisos, seguido de 11 pruebas específicas del escritor; 36 arquitectura; 213 controles de reglas y 8 REST/CAS en emulador demo; 143 Chromium sin reintentos. Build Pages/CSP/rutas/diagnóstico (19 páginas) y caché (369 recursos, 67 cargas dinámicas) aprobados. Revisión de diff y capturas móvil/escritorio completadas. CI del SHA final y publicación todavía PENDING. Matriz actual en docs/editor-productos-v2/15-MATRIZ-CANDIDATO.md; detalle de compatibilidad/reversión en docs/editor-productos-v2/14-CONTINUIDAD-Y-CANDIDATO.md. Ningún producto/pedido/correo real modificado.
+
+## 2026-10-23 — Continuación editor v2 (Codex /root)
+
+Rama codex/completar-editor-v2-20261024, sobre b06e95f2 de #1218 que incluye #1217/#1216. La titular autoriza continuar, corregir y terminar. Se implementan el editor/escritor v2 y funciones editoriales; el NO APTO histórico no se hereda al nuevo candidato. Comercial457 y sync221 PASS_LOCAL; reglas213 y REST/CAS demo/loopback con nuevo guardado y lote mixto, más tests dirigidos. Build/preflight/CI final pendientes de registrar. Sin merge/deploy ni datos reales al escribir esta entrada. Compatibilidad, límites, pruebas y reversión en docs/editor-productos-v2/14-CONTINUIDAD-Y-CANDIDATO.md. Conservar lectores/reservas v2; conversión de stock agregado protegida.
+
 ## 2026-10-23 — Auditoría editor fase5: NO APTO (Codex /root)
 
 Rama codex/auditoria-editor-v2-fase5, worktree editor-v2-audit-f5, base85d5061d6/PR1217; no modificación de ramas ajenas/main/checkout principal. Nuevas pruebas y revisión independiente de afirmaciones anteriores: fases3/4 sin implementación en el candidato; editor SDK bloquea v2, estados/SEO editable/plantillas/ficha estadística incompletos. CI40040433474 de85 falló nivel2; no heredar verdes parciales.

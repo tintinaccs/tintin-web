@@ -1,3 +1,11 @@
+## Cierre local del candidato — 23/10/2026
+
+PASS_LOCAL con dependencias instaladas por npm ci (lock intacto): 39 comandos preflight; 457 comercio; 221 sincronización; 117 administrativos antes del último ajuste de permisos, seguido de 11 pruebas específicas del escritor; 36 arquitectura; 213 controles de reglas y 8 REST/CAS en emulador demo; 143 Chromium sin reintentos. Build Pages/CSP/rutas/diagnóstico (19 páginas) y caché (369 recursos, 67 cargas dinámicas) aprobados. Revisión de diff y capturas móvil/escritorio completadas. CI del SHA final y publicación todavía PENDING. Matriz actual en15; detalle de compatibilidad/reversión en14. Ningún producto/pedido/correo real modificado.
+
+## Continuación autorizada — candidato integrado (23/10/2026)
+
+La instrucción actual de la titular autoriza recuperar, corregir y continuar las fases pendientes. Se recuperó #1218 sobre #1217 en codex/completar-editor-v2-20261024. Ahora existe editor/escritor compatible, estados/SEO, plantillas acotadas y estadísticas con límites explícitos. El resultado NO APTO de fase5 describe el candidato anterior; no certifica ni rechaza automáticamente el nuevo. Ver [14-CONTINUIDAD-Y-CANDIDATO](14-CONTINUIDAD-Y-CANDIDATO.md). Estado de pruebas/CI/publicación: consultar el relevo actual, sin heredar PASS. No se migran productos reales.
+
 # Estado actual — fase5, NO APTO para publicación
 
 2026-10-23, Codex /root. Informe/matrices/pruebas entregados para revisión; **fase5 NO aprobada**. No publicar. Base auditada85d5061d69ab503b4ae536425f5cac568ca8eab7 de1217; worktree C:/Users/Windows/.codex/worktrees/editor-v2-audit-f5/tintinaccs, rama codex/auditoria-editor-v2-fase5. El PR de auditoría apunta a codex/motor-comercial-variantes-v2; no duplica ni integra1217 a main.

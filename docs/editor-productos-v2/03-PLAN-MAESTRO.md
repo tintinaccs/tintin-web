@@ -1,3 +1,7 @@
+## Continuación autorizada — candidato integrado (23/10/2026)
+
+La instrucción actual de la titular autoriza recuperar, corregir y continuar las fases pendientes. Se recuperó #1218 sobre #1217 en codex/completar-editor-v2-20261024. Ahora existe editor/escritor compatible, estados/SEO, plantillas acotadas y estadísticas con límites explícitos. El resultado NO APTO de fase5 describe el candidato anterior; no certifica ni rechaza automáticamente el nuevo. Ver [14-CONTINUIDAD-Y-CANDIDATO](14-CONTINUIDAD-Y-CANDIDATO.md). Estado de pruebas/CI/publicación: consultar el relevo actual, sin heredar PASS. No se migran productos reales.
+
 # Plan maestro — fase1 auditada; fases2–6 propuestas
 
 Fase0 documental preparada en ed438c660/f5a905dc1. La titular autorizó posteriormente la **fase1 de auditoría y plan**, ahora realizada con límites registrados. No se inicia fase2 por esta entrega. Las decisiones43 se mantienen33SÍ/10NO; se amplía la propuesta inicial de fases sin borrar su justificación histórica en el registro D003.

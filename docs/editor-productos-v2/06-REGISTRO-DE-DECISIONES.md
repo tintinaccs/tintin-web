@@ -1,3 +1,7 @@
+## D016 — Continuidad autorizada y candidato de editor
+
+23/10/2026. El pedido actual autoriza continuar y corregir lo pendiente. Se reutilizan Actual y Galería ampliada; se mantienen active/draft/archived, sin No listado indefinido. Métricas brutas de líneas pagadas con límites visibles; no inventar ingresos netos. La conversión real de inventario agregado queda protegida hasta revisar reservas. No altera las diez decisiones NO. Detalle y evidencia actual en14.
+
 # Registro de decisiones
 
 | ID / fecha | Decisión | Motivo | Consecuencia |

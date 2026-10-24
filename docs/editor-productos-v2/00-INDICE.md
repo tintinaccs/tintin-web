@@ -1,3 +1,9 @@
+[Matriz actual del candidato](15-MATRIZ-CANDIDATO.md) · [Recibo local](evidencias-continuidad.json).
+
+## Continuación autorizada — candidato integrado (23/10/2026)
+
+La instrucción actual de la titular autoriza recuperar, corregir y continuar las fases pendientes. Se recuperó #1218 sobre #1217 en codex/completar-editor-v2-20261024. Ahora existe editor/escritor compatible, estados/SEO, plantillas acotadas y estadísticas con límites explícitos. El resultado NO APTO de fase5 describe el candidato anterior; no certifica ni rechaza automáticamente el nuevo. Ver [14-CONTINUIDAD-Y-CANDIDATO](14-CONTINUIDAD-Y-CANDIDATO.md). Estado de pruebas/CI/publicación: consultar el relevo actual, sin heredar PASS. No se migran productos reales.
+
 # Editor de productos v2 — entrada para agentes
 
 Fecha:2026-10-23. Fase activa: **5, auditoría y correcciones acotadas autorizadas**. Resultado NO APTO; no equivale a fases2–4 aprobadas/integradas. No publicar ni migrar datos reales. La numeración de los pedidos expresos de la titular prevalece sobre propuestas históricas del plan.

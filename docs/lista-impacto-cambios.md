@@ -1,3 +1,7 @@
+## 2026-10-23 — Continuación editor comercial v2
+
+Formulario/guardado canónicos con matriz compatible y escritor administrativo CAS; inventario privado y auditoría en el mismo commit. Lote mixto usa applyProductBulkTransaction; estado editorial comparte política pública/servidor. SEO editable, dos plantillas acotadas y métricas históricas brutas por ID. Galería y precio/inventario siguen las autoridades de fase2. Conserva SDK/Sheets antiguos protegidos y bloquea convertir stock agregado sin revisar reservas. Sin datos comerciales reales modificados. Referencias transitivas, rutas/CSP/caché/diagnóstico y protección se regeneran desde sus autoridades. Evidencia actual en docs/editor-productos-v2/14-CONTINUIDAD-Y-CANDIDATO.md y CURRENT_STATE.
+
 ## 2026-10-23 — Auditoría del editor v2 y correcciones acotadas
 
 Base85d5061d6: identidad legacy del carrito conserva contrato de gates sin cambiarlos; metadata v2 reutiliza productStockTotal; ranking existente separa IDs/renombres y reutiliza exclusión cancelado/rechazado. No se inventan métricas netas, plantillas o editor compatible faltante. Regresiones antes/después, conservación de campos privados, matrices43+15 y evaluación NO APTO; no publicación. Referencias transitivas/CSP/diagnóstico/caché/protección se generan desde autoridades, sin tocar CSS/workflows/paquetes ni datos reales. Informe docs/editor-productos-v2/11-AUDITORIA-FASE-5.md.
