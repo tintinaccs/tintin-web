@@ -1104,6 +1104,10 @@ function productVariantGroups(product) {
   } else {
     for (const [key, values] of Object.entries(product?.variants || {})) add(key, values);
   }
+  if(product?.variantCommerceVersion===2) {
+    const entries=Array.isArray(product.variantInventory)?product.variantInventory:[];
+    return [...groups].map(([key,values])=>[key,values.filter(value=>entries.some(row=>row?.attributes?.[key]===value && row.active!==false))]);
+  }
   return [...groups];
 }
 
@@ -1116,7 +1120,7 @@ function productColorSwatch(value, product) {
 function productOptionUnavailable(product, groupIndex, option) {
   if (product?.variantCommerceVersion === 2) {
     const key = productVariantGroups(product)[groupIndex]?.[0];
-    return !product.variantInventory?.some(row => row.attributes?.[key] === option && row.active !== false && (row.stock === null || row.stock > 0));
+    return !(Array.isArray(product.variantInventory) && product.variantInventory.some(row => row?.attributes?.[key] === option && row.active !== false && (row.stock === null || row.stock > 0)));
   }
   if (product?.stock != null && product.stock !== '' && Number(product.stock) <= 0) return true;
   if (!Array.isArray(product?.variantInventory)) return false;
@@ -1132,8 +1136,8 @@ function productPreferredSelection(product, preferred = {}, keepUnavailable = fa
   const groups = productVariantGroups(product);
   if (!groups.length) return {};
   if (product?.variantCommerceVersion === 2) {
-    const rows = product.variantInventory || [];
-    const matches = row => groups.every(([key, options]) => options.includes(preferred[key]) && row.attributes?.[key] === preferred[key]);
+    const rows = Array.isArray(product.variantInventory)?product.variantInventory.filter(row=>row && typeof row==='object'):[];
+    const matches = row => groups.every(([key, options]) => options.includes(row.attributes?.[key]) && (preferred[key] == null || row.attributes?.[key] === preferred[key]));
     const available = row => row.active !== false && (row.stock === null || row.stock > 0);
     const row = rows.find(row => matches(row) && (keepUnavailable || available(row))) || rows.find(available) || rows[0];
     return row ? {...row.attributes} : {};

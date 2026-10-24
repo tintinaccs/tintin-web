@@ -1,3 +1,7 @@
+## 2026-10-24 — Retirada comercial de opciones y controles conectados
+
+Quitar/Restaurar del editor usa la disponibilidad v2 existente, preservando las referencias de matrices legacy y las reservas históricas. Los nuevos borradores no quedan protegidos como si fueran historial. Autoridades: editor-comercial-core para el borrador/patch; inventario-variantes y product-editor-domain conservan sus validaciones y CAS. Consumidores: controles/editor/matriz/fotos/vista previa y tarjeta/ficha de tienda. Se corrigen precio previo, preferencia de color parcial y layout del grid comercial, con pruebas de botones, geometría y flujo de pedido/cancelación aislado. URLs transitivas, CSS, CSP, diagnóstico y protección se generan desde fuentes canónicas; no hay migraciones ni cambios de reglas/datos reales. Estado y límites actuales en CURRENT_STATE y editor-productos-v2/18-RETIRO-OPCIONES-Y-CHECKOUT.md.
+
 ## 2026-10-24 — Arranque seguro del perfil y eventos de mantenimiento
 
 La verificación global del perfil usa la suscripción canónica que espera App Check y admite token tardío; logout/cambio de cuenta cancelan el listener pendiente y los rechazos reales siguen visibles. Mantenimiento descarta eventos de CI no aprobada y PR borrador sin crear estados de aprobación ni intentar publicar; conserva validaciones de dispatch, base, autor, SHA y CI. Pruebas ejecutan módulos/runner reales; grafo de URLs, contrato de acceso y derivados regenerados. No se modifican editor, ticket, reglas ni datos reales. Evidencia y límites en CURRENT_STATE.

@@ -34,3 +34,18 @@ export function commercialPatch(before, draft) {
   }
   return {variantCommerceVersion:2, variants:next.variants, variantInventory:next.variantInventory, stock:next.stock};
 }
+
+// Retiring an option is reversible availability, never deletion of a reserved
+// identity or transfer of its stock/price to another combination.
+export function setCommercialOptionAvailability(product, attribute, value, active, persisted = product) {
+  if (typeof active !== 'boolean') throw new Error('Disponibilidad inválida.');
+  let matched = false;
+  const rows = variantInventoryEntries(product).map(row => {
+    if (row.attributes?.[attribute] !== value) return row;
+    matched = true;
+    return {...row, active};
+  });
+  if (!matched) throw new Error('La opción seleccionada ya no existe.');
+  const next = {...product, variantInventory:rows};
+  return {...next, ...commercialPatch(persisted, next)};
+}

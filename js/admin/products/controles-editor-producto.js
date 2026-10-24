@@ -2,6 +2,7 @@
 const mounted = new WeakSet();
 const quantityControls = new WeakMap();
 const choices = new WeakMap();
+const commercialDrafts = new WeakMap();
 const node = (tag, className, text) => {
   const el = document.createElement(tag);
   if (className) el.className = className;
@@ -128,8 +129,10 @@ function variantBuilder(input) {
     const text = value.value.trim();
     if (!text || /[,:\n\r\/<>]/.test(text)) {error.textContent='Escribí una opción sin comas, barras ni dos puntos.'; return;}
     const lines = input.value.split(/\r?\n/).filter(Boolean);
-    const exists = lines.some(line => line.split(':')[0].trim().toLocaleLowerCase('es') === attribute.value.toLocaleLowerCase('es') && line.slice(line.indexOf(':')+1).split(',').some(item=>item.trim().toLocaleLowerCase('es')===text.toLocaleLowerCase('es')));
+    const existing = lines.find(line => line.split(':')[0].trim().toLocaleLowerCase('es') === attribute.value.toLocaleLowerCase('es') && line.slice(line.indexOf(':')+1).split(',').some(item=>item.trim().toLocaleLowerCase('es')===text.toLocaleLowerCase('es')));
+    const exists=Boolean(existing);
     if (!exists) {input.value=[...lines,`${attribute.value}: ${text}`].join('\n'); emit(input);}
+    else input.dispatchEvent(new CustomEvent('tintin:variant-option-availability',{cancelable:true,detail:{attribute:existing.split(':')[0].trim(),value:existing.slice(existing.indexOf(':')+1).split(',').map(item=>item.trim()).find(item=>item.toLocaleLowerCase('es')===text.toLocaleLowerCase('es')),active:true}}));
     value.value=''; error.textContent=''; if(focus)value.focus();
   };
   const addButton = button('Agregar opción', null, add);
@@ -144,24 +147,36 @@ function variantBuilder(input) {
   input.hidden=true;
   advanced.addEventListener('toggle',()=>{input.hidden=!advanced.open;});
   let signature = '';
+  const retired = (key,option) => {
+    const rows=commercialDrafts.get(input.closest('#prod-form-card'))?.variantInventory?.filter(row=>row.attributes?.[key]===option) || [];
+    return rows.length>0 && rows.every(row=>row.active===false);
+  };
   const refresh = () => {
     attribute.disabled=value.disabled=addButton.disabled=input.readOnly;
     const colors=input.value.split(/\r?\n/).filter(line=>/^\s*colou?r\s*:/i.test(line)).flatMap(line=>line.slice(line.indexOf(':')+1).split(',')).map(value=>value.trim().toLocaleLowerCase('es'));
     for(const choice of palette.children){choice.disabled=input.readOnly;choice.setAttribute('aria-pressed',String(colors.includes(choice.dataset.color.toLocaleLowerCase('es'))));}
-    const current = JSON.stringify([input.value,input.readOnly]); if (current===signature) return;
+    const current = JSON.stringify([input.value,input.readOnly,commercialDrafts.get(input.closest('#prod-form-card'))?.variantInventory?.map(row=>[row.variant,row.active])]); if (current===signature) return;
     signature=current;chips.replaceChildren();
     for (const line of input.value.split(/\r?\n/)) {
       const index=line.indexOf(':'); if(index<1) continue;
       const key=line.slice(0,index).trim();
       for (const option of line.slice(index+1).split(',').map(item=>item.trim()).filter(Boolean)) {
-        const chip = button(`${key}: ${option} · Quitar`, `Quitar ${key}: ${option}`, () => {
+        const isRetired=retired(key,option);
+        const chip = button(`${key}: ${option} · ${isRetired?'Restaurar':'Quitar'}`, `${isRetired?'Restaurar':'Quitar'} ${key}: ${option}`, () => {
           if(input.readOnly)return;
+          const handled=!input.dispatchEvent(new CustomEvent('tintin:variant-option-availability',{cancelable:true,detail:{attribute:key,value:option,active:isRetired}}));
+          if(handled) {
+            [...chips.children].find(item=>item.dataset.variantAttribute===key && item.dataset.variantOption===option)?.focus({preventScroll:true});
+            return;
+          }
+          if(isRetired)return;
           input.value=input.value.split(/\r?\n/).flatMap(row=>{
             const separator=row.indexOf(':'); if(separator<1 || row.slice(0,separator).trim()!==key)return [row];
             const rest=row.slice(separator+1).split(',').map(item=>item.trim()).filter(item=>item && item!==option);
             return rest.length ? [`${key}: ${rest.join(', ')}`] : [];
           }).join('\n'); emit(input);
         });
+        chip.dataset.variantAttribute=key;chip.dataset.variantOption=option;
         chip.disabled=input.readOnly;
         if(input.readOnly)chip.title='Esta opción tiene inventario o historial. Editá su disponibilidad en la matriz.';
         chips.append(chip);
@@ -210,6 +225,10 @@ export function installEditorControls(card) {
     const status=card.querySelector('#prod-publicationStatus'),active=card.querySelector('#prod-active');
     if(event.target===status && active)active.checked=status.value==='active';
     if(event.target===active && status)status.value=active.checked?'active':'draft';
+  });
+  card.addEventListener('tintin:commercial-draft',event=>{
+    commercialDrafts.set(card,event.detail);
+    refreshEditorControls(card);
   });
   card.addEventListener('input',event=>{
     if(!card.querySelector('#prod-publicationStatus') && !card.querySelector('.tt-commercial-editor') && (event.target.id==='prod-stock' || event.target.closest('#prod-variant-stock'))) {
