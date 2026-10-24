@@ -21,3 +21,10 @@ test('estadísticas separan homónimos, variantes, pruebas, reembolsos y cancela
  const result=productStatistics('x',orders,value=>new Date(value).getTime());
  assert.equal(result.units,2);assert.equal(result.revenue,60000);assert.equal(result.orders,1);assert.equal(result.incomplete,1);assert.equal(result.variants[0].key,'oro-id');assert.equal(result.months.length,1);
 });
+
+test('SEO editable llega a title, descripción y Open Graph sin cambiar canonical ni precio',async()=>{
+ const {renderProductMetadataHtml}=await import('../../functions/product.js');
+ const fs=await import('node:fs');
+ const {html}=renderProductMetadataHtml(fs.readFileSync('product.html','utf8'),'fixture',{name:'Anillo',category:'anillos',price:30000,active:true,seoTitle:'Regalo Tintin',seoDescription:'Acero para todos los días.'});
+ assert.match(html,/<title>Regalo Tintin<\/title>/);assert.match(html,/<meta property="og:title" content="Regalo Tintin"/);assert.match(html,/Acero para todos los días/);assert.match(html,/https:\/\/tintinaccs.com\/product\?id=fixture/);
+});
