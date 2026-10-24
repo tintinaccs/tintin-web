@@ -21,7 +21,7 @@ const forceCart = hardening.slice(hardening.indexOf('function forceCart('), hard
 const cartListeners = hardening.slice(hardening.indexOf("  window.addEventListener('tt_cart_updated'"), hardening.indexOf('\n}', hardening.indexOf("  window.addEventListener('tt_cart_updated'")));
 const quote = secure.slice(secure.indexOf('  function renderQuote('), secure.indexOf('  async function reserveCheckoutGuard'));
 const whatsapp = secure.slice(secure.indexOf('  function shippingSummary('), secure.indexOf('  function renderConfirmedOrder('));
-const css = ['css/pages/checkout/checkout.css', 'css/pages/checkout/checkout-maintenance.css', 'css/components/payments/payment-methods.css'].map(read).join('\n');
+const css = ['css/core/tema-unificado-tintin.css', 'css/pages/checkout/checkout.css', 'css/pages/checkout/checkout-maintenance.css', 'css/components/payments/payment-methods.css'].map(read).join('\n');
 
 // Execute the original success/submit/cart guards; only external services are
 // controlled. No production order, profile write, notification or email occurs.
