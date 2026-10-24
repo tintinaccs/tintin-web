@@ -63,3 +63,14 @@ test('un producto nuevo admite stock no controlado; una referencia histórica fi
  assert.equal(commercialPatch({}, {...draft,variantInventory:draft.variantInventory.map(row=>({...row,stock:null}))}).stock,null);
  assert.throws(()=>commercialPatch(source,{...product(),variantInventory:product().variantInventory.map(row=>({...row,stock:null}))}),/control de stock/);
 });
+
+test('crear borradores y cambiar publicación respetan permisos separados de edición',async()=>{
+ const {saveProductBulk}=await import('../../cloudflare/product-editor-domain.mjs');
+ const s=store(),p=product();
+ s.docs.set('rolePermissions/main',{fields:encodeFirestoreFields({admin:{productos:{crear:true,editar:false,activarDesactivar:true,accionesMasivas:true}}})});
+ await saveProductBulk({},{ids:['p1'],expected:{p1:productFingerprint(p)},field:'active',value:false},{uid:'admin',role:'admin'},s.io);
+ assert.equal(s.writes.length,2);
+ const create=store();create.docs.set('rolePermissions/main',{fields:encodeFirestoreFields({admin:{productos:{crear:true,activarDesactivar:false}}})});
+ await saveProductEditor({},{productId:'new1',expected:null,changeId:'create_draft_123',product:{...editable(p),active:false}},{uid:'admin',role:'admin'},create.io);
+ assert.equal(create.writes.length,2);
+});

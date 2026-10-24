@@ -1,4 +1,4 @@
-import {editorialFields} from '../js/core/store/estado-editorial-producto.mjs';
+import {editorialFields,productIsPublished} from '../js/core/store/estado-editorial-producto.mjs';
 import {decodeFirestoreFields, encodeFirestoreFields, firestoreAdminGet} from './firebase-admin-ligero.js';
 import {firestoreAdminBatchCommit} from './firestore-admin-batch.js';
 import {productFingerprint,applyProductBulkTransaction} from '../js/admin/products/maestro-productos-core.mjs';
@@ -43,7 +43,7 @@ export async function saveProductEditor(env, body, actor, io={get:firestoreAdmin
     const permissions=decodeFirestoreFields((await io.get(env,'rolePermissions/main'))?.fields || {});
     const action=document?'editar':'crear';
     if(permissions?.admin?.productos?.[action]!==undefined && permissions.admin.productos[action]!==true) fail('Tu rol no tiene permiso para esta acción.',403);
-    if(before.active!==(body.product?.publicationStatus!=null?body.product.publicationStatus==='active':body.product?.active) && permissions?.admin?.productos?.activarDesactivar!==undefined && permissions.admin.productos.activarDesactivar!==true) fail('Tu rol no tiene permiso para publicar productos.',403);
+    if(document && productIsPublished(before)!==(body.product?.publicationStatus!=null?body.product.publicationStatus==='active':body.product?.active!==false) && permissions?.admin?.productos?.activarDesactivar!==undefined && permissions.admin.productos.activarDesactivar!==true) fail('Tu rol no tiene permiso para publicar productos.',403);
     if(body.inventory!=null) fail('El inventario privado requiere Super Admin.',403);
   }
   if(typeof body.changeId!=='string' || !/^[A-Za-z0-9_-]{10,80}$/.test(body.changeId))fail('Identificador de guardado inválido.');
@@ -77,7 +77,7 @@ export async function saveProductBulk(env,body,actor,io={get:firestoreAdminGet,c
   if(!['admin','superadmin'].includes(actor?.role))fail('No tenés permiso para esta edición masiva.',403);
   if(actor.role!=='superadmin'){
     const permissions=decodeFirestoreFields((await io.get(env,'rolePermissions/main'))?.fields || {}).admin?.productos || {};
-    for(const action of ['accionesMasivas','editar',...(body.field==='active'?['activarDesactivar']:[])])if(permissions[action]!==undefined && permissions[action]!==true)fail('Tu rol no tiene permiso para esta edición masiva.',403);
+    for(const action of ['accionesMasivas',body.field==='active'?'activarDesactivar':'editar'])if(permissions[action]!==undefined && permissions[action]!==true)fail('Tu rol no tiene permiso para esta edición masiva.',403);
   }
   let collections=[];
   if(body.field==='category'){
