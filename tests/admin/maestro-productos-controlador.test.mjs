@@ -230,7 +230,7 @@ test('edición de precio o visibilidad conserva prioridad comercial aun en produ
 });
 
 
-test('audit: technical and private fields survive opening and serializing the existing editor',()=>{
+test('audit: technical and private fields survive opening, serializing and saving the existing editor',async()=>{
  const fields={material:'Acero',measurements:'20 mm',colorFinish:'Plateado',care:'Paño seco',waterResistance:'Salpicaduras',warranty:'6 meses',sizeFit:'Ajustable',packageContents:'Caja',stock:null,destacado:true,badge:'Nuevo'};
  const r=runtime(fields);r.ctx._prodEditarNow('source');
  const draft=r.ctx.serializeProductForm();
@@ -238,6 +238,11 @@ test('audit: technical and private fields survive opening and serializing the ex
  assert.equal(draft.stock,'');
  assert.equal(draft.costUnit,'100');assert.equal(draft.purchased,'5');assert.equal(draft.stockMinimum,'2');assert.equal(draft.internalNotes,'Privado');
  assert.deepEqual(r.writes,[]);
+ assert.equal(await r.ctx.window.saveTest(),true);
+ const saved=r.rows.get('products/source'),priv=r.rows.get('productInventory/source');
+ for(const key of ['material','measurements','colorFinish','care','waterResistance','warranty','sizeFit','packageContents','destacado','badge']) assert.equal(saved[key],fields[key],key);
+ assert.equal(saved.stock,null);assert.equal(priv.costUnit,100);assert.equal(priv.purchased,5);assert.equal(priv.stockMinimum,2);assert.equal(priv.internalNotes,'Privado');
+ for(const key of ['costUnit','purchased','stockMinimum','internalNotes']) assert.equal(Object.hasOwn(saved,key),false,key+' no pertenece al producto público');
 });
 
 test('audit: old editor cannot save a v2 product and does not claim success',async()=>{
