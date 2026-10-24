@@ -913,6 +913,7 @@
 .ck-receipt-action { min-height: 48px; border: 1px solid var(--border, #ecd0dc); border-radius: 14px; padding: 12px; background: #fff; color: var(--text, #222222); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
 .ck-receipt-action:hover { background: var(--acc-pale, #fff0f5); border-color: var(--acc, #efabc7); }
 .ck-receipt-action:focus-visible { outline: 3px solid var(--acc, #efabc7); outline-offset: 3px; }
+#ck-share-whatsapp-fallback[hidden] { display: none !important; }
 .ck-receipt-status, .ck-receipt-disclaimer { font-size: 12px; line-height: 1.5; color: var(--text-muted, #856673); text-align: center; margin-top: 12px; }
 .ck-receipt-status:empty { display: none; }
 @media (max-width: 480px) {

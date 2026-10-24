@@ -728,3 +728,19 @@ Fuentes: control-paneles.js y coherencia-visual.css. Tienda, búsqueda, carrito,
 Autoridad checkout-maintenance.css: desktop reserva header fijo más difuminado; tablet usa los84px que ya reserva paneles.css y agrega sólo el difuminado; móvil conserva16px sin header superior. Consumidores HTML y fallback checkout-mantenimiento usan el mismo tag nuevo; cascada de referencias JS y generador del shell actualizados, sin cambios funcionales fuera del CSS. Pruebas en navigation-responsive.spec.js ya conectado a CI, con cinco paneles,15 tamaños y rotación. Caché, CSP, plan y diagnóstico se generan por sus autoridades. Evidencia/limitaciones en CURRENT_STATE; no se modifican sesiones, stock, pedidos, pagos ni datos reales.
 
 - Tema Tintín #1213: incorporar main b3997c7cc sin perder #1211/#1215; conservar todos los controles CI con presupuesto 120min y precisión geométrica de 48px. Corregir foco Tab/Shift+Tab de paneles compartidos en WebKit, con URLs nuevas del controlador y su compatibilidad. Evidencia en TEMA_TINTIN_UNICO_20261023.md; publicación pendiente del SHA final.
+
+## 2026-10-24 — Guardar y compartir ticket visual PNG
+
+Autoridad:pedido-checkout-seguro.js, filas existentes de ck-confirm-summary. Sustituye TXT/texto/portapapeles por imagen PNG local con presentación Tintin; comparte archivo cuando Web Share lo admite o descarga imagen. Imprimir/PDF permanece. Consumidores de carrito/checkout y sus referencias transitivas renuevan URL inmutable; shell/caché/CSP/rutas/diagnóstico y protección se generan desde sus autoridades. No modifica cálculo comercial, pedidos, stock, correo ni datos reales. Pruebas canónicas checkout-receipt cubren PNG real, identidad del archivo compartido, errores/cancelación, tickets largos y siete tamaños en Chromium/WebKit. Estado y límites en CURRENT_STATE.
+
+## 2026-10-24 — Mensaje junto al PNG y destino WhatsApp
+
+La titular elige selector nativo con imagen y texto juntos. Se reutiliza buildWhatsAppMessage para el ticket y se informa el contacto Tintin0981299331. Fallback explícito a enlace WhatsApp y PNG adjunto manualmente cuando la plataforma no admite compartir ambos; nunca se promete un envío automático a destinatario fijo. La fuente del PNG respeta Montserrat y se corrige el fallo real de typography sin tocar gates. Consumidores y generadores renuevan URLs a ticket-image-2; pruebas cubren mensaje, archivo exacto, destino fallback, cancelación y permisos. Sin mensajes reales, compras, cambios de datos ni publicación.
+
+## 2026-10-24 — Respetar hidden del fallback WhatsApp del ticket
+
+La regla global de enlaces wa.me imponía display:inline-flex al enlace fallback del checkout y anulaba hidden. Corrección acotada en checkout.css, nueva URL ticket-hidden-1 y fixture que carga tema real; se conservan aserciones de ocultamiento y fallback visible. Main e4ca19f4e se integra sin tocar la implementación de #1222; derivados de plan/CSP/baseline/diagnóstico regenerados desde sus autoridades. No afecta precios, stock, compartir archivo/texto, permisos ni producción. Evidencia RED/verde y estado CI en CURRENT_STATE.
+
+## 2026-10-24 — Conciliar ticket con App Check de main
+
+CI de cb8f802bc aprobada; main aa75f4d91 vuelve obsoleta la base y produce conflicto documental/derivado. Merge normal preserva espera App Check y mantenimiento no elegible de #1225. Ticket, CSS y prueba conservan sus bytes; referencias/plan/CSP/caché/diagnóstico se regeneran por autoridades.42 pruebas de ticket y17 contratos del merge ejecutados; la nueva cabeza exige CI propia, sin publicación autorizada.
