@@ -1,6 +1,6 @@
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261022-color-editor-repair-1';
+import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261024-gallery-compact-1';
 import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261024-editor-v2-3';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {
@@ -143,7 +143,8 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
         if (suggestion) { const text = document.createElement('small'); text.textContent = `Sugerido: ${suggestion}`; label.append(text); }
         tile.append(label);
         appendPhotoOrderControls(tile,{url,photos:assignments.get(color) || [],label:color,update:urls=>{assignments.set(color,urls);render();}});
-        const cover=document.createElement('button');cover.type='button';cover.className='adm-btn adm-btn-outline';cover.textContent=media.imageKey(mainInput.value)===media.imageKey(url)?'Portada del producto':'Usar de portada';cover.setAttribute('aria-label',`Portada del producto: foto ${pool.indexOf(url)+1} de ${color}`);cover.setAttribute('aria-pressed',String(media.imageKey(mainInput.value)===media.imageKey(url)));
+        const isCover=media.imageKey(mainInput.value)===media.imageKey(url);
+        const cover=document.createElement('button');cover.type='button';cover.className=`adm-btn adm-btn-outline tt-photo-cover${isCover?' is-cover':''}`;cover.textContent=isCover?'Portada':'Elegir portada';cover.setAttribute('aria-label',`Portada del producto: foto ${pool.indexOf(url)+1} de ${color}`);cover.setAttribute('aria-pressed',String(isCover));
         cover.addEventListener('click',()=>{mainInput.value=url;mainInput.dispatchEvent(new Event('input',{bubbles:true}));mainInput.dispatchEvent(new Event('change',{bubbles:true}));});tile.append(cover);grid.append(tile);
       }
       field.append(grid);

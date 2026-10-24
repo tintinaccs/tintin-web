@@ -5,10 +5,10 @@ export function appendPhotoOrderControls(tile, {url, photos, label, update}) {
   if(index<0)return;
   tile.dataset.photoGroup=label;tile.dataset.photoKey=media.imageKey(url);
   const publish=next=>{const root=tile.closest('#prod-color-photos') || tile.parentElement?.parentElement;update(next);if(root?.isConnected){const target=[...root.querySelectorAll('.tt-color-photo-tile')].find(item=>item.dataset.photoGroup===label && item.dataset.photoKey===media.imageKey(url));target?.querySelector('button:not(:disabled)')?.focus({preventScroll:true});}};
-  const badge=document.createElement('small');badge.className='tt-photo-order-badge';badge.textContent=index===0?'Primera foto':`Foto ${index+1}`;tile.append(badge);
+  const badge=document.createElement('small');badge.className=`tt-photo-order-badge${index===0?' is-primary':''}`;badge.textContent=index===0?'Portada':`Foto ${index+1}`;tile.append(badge);
   const controls=document.createElement('div');controls.className='tt-photo-order-actions';
   const move=to=>{const next=[...photos];next.splice(index,1);next.splice(to,0,url);publish(next);};
-  for(const [text,name,to] of [['Primera',`Usar como primera foto de ${label}`,0],['←',`Mover foto anterior en ${label}`,index-1],['→',`Mover foto siguiente en ${label}`,index+1]]) {
+  for(const [text,name,to] of [['★',`Usar como primera foto de ${label}`,0],['←',`Mover foto anterior en ${label}`,index-1],['→',`Mover foto siguiente en ${label}`,index+1]]) {
     const button=document.createElement('button');button.type='button';button.className='adm-btn adm-btn-outline';button.textContent=text;button.setAttribute('aria-label',name);button.disabled=to<0 || to>=photos.length || to===index;button.addEventListener('click',()=>move(to));controls.append(button);
   }
   tile.append(controls);tile.draggable=true;
