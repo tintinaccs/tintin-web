@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { expect } = require('@playwright/test');
 const { mockRuntime, fixtureHtml } = require('./admin-commerce-fixture.cjs');
+const { removeFixtureScripts } = require('../../../scripts/lib/html-layout-fixture.js');
 const root = path.resolve(__dirname, '../../..');
 const shell = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
 const headStyles = (shell.match(/<link[^>]+rel="stylesheet"[^>]*>/g) || []).join('');
@@ -34,7 +35,7 @@ async function openProductSaveFixture(page, width, height, {fullShell=false} = {
     const loader=fs.readFileSync(path.join(root,'js/cargador-pagina.js'),'utf8');
     const scroll=loader.slice(loader.indexOf("  try { history.scrollRestoration"),loader.indexOf('  // El sitio oficial'));
     const modules=['/js/admin/shopify-commerce-admin.js','/js/admin/maestro/espacio-modulos-admin.js','/js/admin/maestro/navegacion-movil-admin.js','/js/admin/sidebar-expandible-admin.js'];
-    html=shell.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'')
+    html=removeFixtureScripts(shell)
       .replace('class="adm-section active" id="section-dashboard"','class="adm-section" id="section-dashboard"')
       .replace('class="adm-section" id="section-productos"','class="adm-section active" id="section-productos"')
       .replace('</head>',`<script>document.documentElement.classList.add('adm-auth-ready');${scroll}</script></head>`)
