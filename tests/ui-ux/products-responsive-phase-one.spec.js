@@ -431,28 +431,26 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  await page.evaluate(async source=>{
   const loadModule=url=>import(new URL(url,location.origin).href);
   const {attachImageUploadWidget,attachMultiImageUploadWidget}=await loadModule('/js/components/images/carga-imagenes.js?fixture');
-  const {attachColorPhotos}=await loadModule('/js/admin/products/fotos-por-color.js');
+  const {attachProductGallery}=await loadModule('/js/admin/products/galeria-unificada.js');
   const {sanitizeImageUrl}=await loadModule('/js/components/images/utilidades-imagenes.js');
   document.getElementById('prod-imageUrl').value='https://img.test/portada.webp';
   document.getElementById('prod-variants-text').value='Diseño: Coctel, Banda';
   let number=0;const library=async()=>window.__delayGalleryChoice ? new Promise(resolve=>{window.__resolveGalleryChoice=resolve;}) : `https://img.test/extra-${++number}.webp`;
-  window.__remountGallery=new Function('attachImageUploadWidget','attachMultiImageUploadWidget','attachColorPhotos','openMediaLibraryPicker','sanitizeImageUrl','_formImageWidgets',source+';mountProductColorPhotos({variants:{Diseño:["Coctel","Banda"]}});return mountProductColorPhotos;')(attachImageUploadWidget,attachMultiImageUploadWidget,attachColorPhotos,library,sanitizeImageUrl,new Map());
+  window.__remountGallery=new Function('attachImageUploadWidget','attachMultiImageUploadWidget','attachProductGallery','openMediaLibraryPicker','sanitizeImageUrl','_formImageWidgets',source+';mountProductColorPhotos({variants:{Diseño:["Coctel","Banda"]}});return mountProductColorPhotos;')(attachImageUploadWidget,attachMultiImageUploadWidget,attachProductGallery,library,sanitizeImageUrl,new Map());
  },mount);
  await page.locator('#prod-editor-section').selectOption('photos');
- const gallery=page.locator('#prod-gallery-widget');
- await expect(gallery).not.toHaveAttribute('open','');
+ const gallery=page.locator('.tt-unified-photos .tt-iuw-multiple');
  await expect(gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true})).toBeHidden();
- await gallery.locator('summary').click();
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
  await expect(page.locator('#prod-images-extra')).toHaveValue('https://img.test/extra-1.webp\nhttps://img.test/extra-2.webp');
  await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/portada.webp');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(3);
- await expect(page.locator('#prod-gallery-thumbs img')).toHaveCount(3);
- await page.getByRole('button',{name:'Quitar foto 3 del producto',exact:true}).click();
+ await expect(page.locator('.tt-unified-photo img')).toHaveCount(3);
+ await page.getByRole('button',{name:'Quitar foto 3',exact:true}).click();
  await expect(page.locator('#prod-images-extra')).toHaveValue('https://img.test/extra-1.webp');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(2);
- await page.getByRole('button',{name:'Quitar foto 2 del producto',exact:true}).click();
+ await page.getByRole('button',{name:'Quitar foto 2',exact:true}).click();
  await expect(page.locator('#prod-images-extra')).toHaveValue('');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(1);
  expect(await page.evaluate(()=>window.__imageCleanup||0)).toBe(0);
@@ -461,7 +459,7 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  await page.locator('#prod-live-preview').getByRole('button',{name:'Volver a editar'}).click();
  await expect(page.locator('#prod-editor-section')).toBeFocused();
  // Una selección pendiente del producto anterior nunca debe tocar el nuevo formulario.
- await page.evaluate(()=>{window.__delayGalleryChoice=true;window.__oldGalleryRoot=document.querySelector('#prod-gallery-widget .tt-iuw');});
+ await page.evaluate(()=>{window.__delayGalleryChoice=true;window.__oldGalleryRoot=document.querySelector('.tt-unified-photos .tt-iuw-multiple');});
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
  await page.evaluate(()=>{window.__remountGallery({variants:{Diseño:['Coctel','Banda']}});window.__resolveGalleryChoice('https://img.test/tardia.webp');});
  await page.waitForFunction(()=>window.__oldGalleryRoot.textContent.includes('El producto cambió'));

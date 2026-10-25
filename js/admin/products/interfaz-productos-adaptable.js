@@ -5,7 +5,7 @@ import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024
 import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261024-editor-atelier-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
-  ['photos', 'Fotos y galería', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
+  ['photos', 'Fotografías del producto', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
   ['general', 'Producto', ['prod-name','prod-description']],
   ['prices', 'Precio', ['prod-price','prod-price-before','prod-badge','prod-oferta']],
   ['inventory', 'Variantes e inventario', ['prod-variants-text','prod-stock']],
@@ -272,6 +272,7 @@ export function installProductInterface() {
   installed=true;
   let queued=false;
   const card=document.getElementById('prod-form-card');
+  card?.addEventListener('click',event=>{if(event.target.closest('#prod-save-btn'))lastError='';},{capture:true});
   card?.addEventListener('input',()=>refreshEditorHeading(card));
   card?.addEventListener('change',()=>refreshEditorHeading(card));
   if (card) new MutationObserver(()=>{

@@ -1,3 +1,15 @@
+## 2026-10-25 — Fase 2 galería unificada (Codex /root)
+
+Base0f57f327ad43671d22d0bd4d373d2f5b7bee8e40 de PR1237 OPEN/no integrado; main f9399a90c. Rama codex/galeria-unificada-fase2-20261025. Autorización actual exige PR listo para revisión, prohíbe merge/deploy. Se prepara PR apilado sobre rama1237; mantenimiento automático sólo considera base main y no debe habilitarse al retargetear sin autorización. Informe: docs/editor-productos-v2/19-GALERIA-UNIFICADA-FASE-2.md.
+
+Un centro de carga/biblioteca y miniaturas; portada/orden/reemplazo/quitar/asociar. Campos originales y escritor permanecen, asociaciones canónicas se reutilizan sin vista duplicada. Límite13 únicas, backend12 adicionales conservado,15MiB/archivo, cola secuencial y estado por archivo. No borrado físico al quitar; no producción/Rules/checkout/pagos ni migraciones. Histórico>13 se muestra pero requiere revisión antes de guardar. No se acredita cuota Cloudinary real.
+
+Evidencia inicial:6 recorridos de montaje/guardado real con proveedor/SDK sintéticos en6 tamaños PASS;56 galería ampliada/público PASS antes del ajuste visual/círculos,41 Node dirigidos PASS. Repetición final y gates pendientes. Regresión previa de Fase1 sobre error repetido al Guardar corregida sin reset durante input. Resultados de otros SHA no se heredan. Capturas artifacts/unified-gallery; mobile/laptop revisados. CI/producción y hardware físico NOT_VERIFIED.
+
+Evidencia final adicional:27/27 integración/carga/error repetido,6/6 tras ajuste visual,45/45 Node,42 auditoría de imágenes, estilos y39 preflight PASS. Tanda amplia294 PASS/1 FAIL por fixture del montaje retirado; adaptado al módulo unificado preservando portada/miniaturas/cero borrado/biblioteca tardía, repetición7/7 PASS. No heredar295PASS inexistentes. Tags/protección regenerados contra0f57; sin autorizar publicación. Revisión final sincroniza alias image histórico con imageUrl en escritores existentes, con prueba Node de cambio/vaciado/sin alias nuevo. Suite Node ampliada en unified-node-complete.log.
+
+Cierre local:57/57 Node y39 comandos preflight finales exit0; build Pages/caché final PASS. Plan9 fuentes/24 registros; evidencia completa en informe19. PR apilado listo para revisión, pendiente de crear y registrar URL/SHA en el recibo del chat. Sin merge, producción, datos reales ni nuevas credenciales.
+
 ## 2026-10-25 — Fase 1 de estabilización solicitada por adjunto (Codex /root)
 
 Base f9399a90c, rama codex/editor-estabilizacion-fase1-20261025. Autorización actual: auditoría/correcciones/PR; explícitamente sin merge ni deploy, prevalece sobre instrucción permanente de AGENTS. Mantenimiento automático puede fusionar candidatos elegibles: presentar PR en borrador para respetar esta restricción, sin alterar workflows. Informe autosuficiente: docs/editor-productos-v2/18-ESTABILIZACION-FASE-1-20261025.md.

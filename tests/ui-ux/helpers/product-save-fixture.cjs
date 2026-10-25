@@ -11,9 +11,10 @@ const start = shell.indexOf('<div class="adm-card" id="prod-form-card"');
 const form = shell.slice(start, shell.indexOf('\n    </div>\n\n    <!-- ===================== COLECCIONES', start));
 const code = source.slice(source.indexOf('let productVariantStockBaseline = null;'), source.indexOf('window.prodToggleActive ='));
 
-async function openProductSaveFixture(page, width, height, {fullShell=false} = {}) {
+async function openProductSaveFixture(page, width, height, {fullShell=false,photos=false} = {}) {
   await page.setViewportSize({ width, height });
   await mockRuntime(page);
+  await page.route('**/components/images/biblioteca-multimedia.js*',route=>route.fulfill({contentType:'text/javascript',body:`export const deleteMediaByUrlIfUnused=async()=>{throw Error('No se permite borrar archivos en QA');};export const deleteMediaItem=deleteMediaByUrlIfUnused;export const uploadImageToLibrary=async(file,options)=>{options?.onProgress?.('uploading');if(window.qaUploadFailure)throw Error('Carga fallida de prueba');return {url:'https://img.test/'+file.name,mediaId:'synthetic'};};`}));
   await page.exposeFunction('qaCommercialWrite', async ({ request, records }) => {
     const { pathToFileURL } = require('node:url');
     const [{ saveProductEditor }, { encodeFirestoreFields, decodeFirestoreFields }] = await Promise.all([
@@ -56,7 +57,10 @@ async function openProductSaveFixture(page, width, height, {fullShell=false} = {
     const rows = new Map(); let counter = 0;
     window.qaProductStore = rows; window.qaProductWrites = []; window.qaProductOperations = [];
     const apply = (ref, data) => { rows.set(ref.path, { ...rows.get(ref.path), ...structuredClone(data) }); window.qaProductWrites.push(ref.path); };
+    const galleryModule=await load('/js/admin/products/galeria-unificada.js');
+    const uploadModule=await load('/js/components/images/carga-imagenes.js?v=tintin-20261025-gallery-unified-1');
     const deps = {
+      ...galleryModule,...uploadModule,openMediaLibraryPicker:async()=>window.qaLibraryPhoto || null,
       ...inventory, ...commercial, ...commercialUi, ...editorialUi, ...editorial, ...master,
       _allProducts: [], _productSourceById: new Map(), _productInventoryById: new Map(), adminRealtimeReady: { orders: false }, _allCollections: [{ slug: 'qa-tablet', name: 'Colección ficticia' }],
       productEditBaseline: null, productCommercialBaseline: null, _formImageWidgets: new Map(),
@@ -97,7 +101,7 @@ async function openProductSaveFixture(page, width, height, {fullShell=false} = {
     // Original controller and DOM; only identity, storage and external services are fictitious.
     new Function('__deps', `with (__deps) { ${code}\nwindow.prodGuardar = prodGuardar; window.qaProductController = { serializeProductForm }; }`)(deps);
     const category = document.getElementById('prod-category'); category.replaceChildren(new Option('Elegí colección', ''), new Option('Colección ficticia', 'qa-tablet'));
-  }, code);
+  }, photos ? source.slice(source.indexOf('const _formImageWidgets = new Map();'),source.indexOf('let productVariantStockBaseline = null;'))+code : code);
   await page.locator('[data-action="product-new"]').click();
   await expect(page.locator('#prod-editor-section')).toBeVisible();
 }

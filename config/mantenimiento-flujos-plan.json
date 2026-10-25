@@ -1,32 +1,52 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "f9399a90c73398a18c877bcaf1985491d4085913",
-  "reason": "Estabilizar scroll, foco y reseñas para revisión; sin merge ni despliegue",
+  "baseCommit": "0f57f327ad43671d22d0bd4d373d2f5b7bee8e40",
+  "reason": "Galería unificada sobre Fase 1 para revisión, sin merge ni despliegue",
   "files": [
     {
-      "path": "admin.html",
-      "oldHash": "d4cee3bbac1b086225909ea88da297e4ddac95d47ea3da005105f3d1c7097405",
-      "newHash": "099ed87c47a48a324e63a568ad811533d9d9cd733098692beb62df2711955da8"
+      "path": "admin-images.html",
+      "oldHash": "c28b663f23083a211b9ede1d8d09e5bf371bcd8148a9c0268225f686362f071c",
+      "newHash": "34424b6b5408ebac7a04a478b0b23892fe361543b9d4e5c1b5fcd53773e76006"
     },
     {
-      "path": "index.html",
-      "oldHash": "0b48f316bf8c2802bbd64f7cc34f5b523f836cc361df576ccf0dd790e51b9fb3",
-      "newHash": "819ce68a3f6557cdf3af488b1898361cef9d84158a4d3c6d4b42f670ec01207b"
+      "path": "admin.html",
+      "oldHash": "099ed87c47a48a324e63a568ad811533d9d9cd733098692beb62df2711955da8",
+      "newHash": "7f78fb039cb26d298ea701ae88a61386cd79f2482a0698d3a5ab632852adb97d"
+    },
+    {
+      "path": "config/csp-runtime.js",
+      "oldHash": "e010048882e7bfedb62654068e1ca2e672f76761c69ade8a00811f09c8b2cf9a",
+      "newHash": "9514d0769ffb1900f072ba477d3a997c526f97b48c213f49cf70df196ce94528"
+    },
+    {
+      "path": "config/csp-runtime.json",
+      "oldHash": "3f2058a2ff925ca2607d3a4849c38c912d6e50b75781a85aba3aadba48bb879e",
+      "newHash": "da0012427f24a32e51fc40d3c7260fa172bfa9c630ad40c8afdbdfa1f9a71ceb"
+    },
+    {
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "2d3358195366fd2f58301b456a34fb3b4db99798b910173744f6568bb9727722",
+      "newHash": "467b2f0610bd5f5543132d942bfdce8ee4e44d80d052ce57059f3abff10ea7fd"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "cce2ac5610a78b535ce597e816db6386009ba1045a2241c59eb8f9876002d633",
-      "newHash": "5d07340989e7e3cb641b4caebb9d4b85f4ef4800532cbca7e147c726775de37b"
+      "oldHash": "5d07340989e7e3cb641b4caebb9d4b85f4ef4800532cbca7e147c726775de37b",
+      "newHash": "ffc5530ce8aad9ceb9b8a7e8d39074bf98416b1f5bea496a383b32a9d6fcb20f"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "7c521fb10153b116782b4681ffa8aff6de90e6acce027f5d3a7fcb95e10863fe",
-      "newHash": "104eb2b5f77057e6f4ed4bdfb8e3b8b8b9ebc68d4751e38363552073599e662c"
+      "oldHash": "104eb2b5f77057e6f4ed4bdfb8e3b8b8b9ebc68d4751e38363552073599e662c",
+      "newHash": "edb67f72ecc22b7a531fe306d65ac14a094637fda8fd8c35e51927ad40387a24"
+    },
+    {
+      "path": "js/components/images/carga-imagenes.js",
+      "oldHash": "277b171995c45979e1711bcbfc1fd3ba3e8e468010581c7369e90e4211063759",
+      "newHash": "45a7695ddcc9b8132055971e6a795397754b90f2807ebeb90218d9cbd1b5cd03"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "95c0db9dd1cee0dec8b7f380ff934f941f65bad60e4b876f15479c0f6c345754",
-      "newHash": "62dde7a20d340f7430ec582a1a01fb9487400b87bd70c2648509c0f0280d27d7"
+      "oldHash": "62dde7a20d340f7430ec582a1a01fb9487400b87bd70c2648509c0f0280d27d7",
+      "newHash": "1c32bb66fad5e427fb88ca9f68894ede7bb4f7154016e09fa7e996f0f283d0be"
     }
   ],
   "affectedRecords": [
@@ -34,7 +54,13 @@
     "admin-guard__firestore-fuente-verdad__16",
     "apis-internas__correos__41",
     "apis-internas__pedidos__32",
+    "cf-functions",
+    "cf-functions__apis-internas__20",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
     "correos",
+    "csp",
     "pagina-perfil",
     "pedidos",
     "pedidos__inventario__33",

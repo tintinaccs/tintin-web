@@ -1,9 +1,9 @@
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261024-gallery-compact-1';
+import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261025-gallery-unified-1';
 import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261024-editor-v2-3';
 
-export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {
+export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload, headless=false }) {
   const media = window.TintinProductMedia;
   const initialRows = media.mediaRows(product);
   const variantPhotos = createVariantPhotoEditor({ variantsInput, media, initialRows, sanitizeImageUrl, openLibrary, attachUpload });
@@ -83,6 +83,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
   }
   function render() {
     if (destroyed || flushing || uploads.some(widget => widget.hasPending?.()) || variantPhotos.hasPending()) return;
+    if(headless){notifyPreview();return;}
     // La asignación reconstruye los controles. Transferir el foco al mismo
     // control lógico evita enviarlo a body al retirar su nodo anterior.
     const focused=container.contains(document.activeElement) ? document.activeElement : null;
@@ -216,5 +217,13 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     render();
   }
   render();
+  if(headless) return {
+    serialize, flush, pendingSignature:()=>[], refresh:render,
+    setAppearance(color,appearance){appearances.set(color,appearance);notifyPreview();},
+    setPhotos(selected,urls){const keys=Object.keys(selected);if(keys.length===1 && media.isColorKey(keys[0])){activeKey=keys[0];assignments.set(selected[keys[0]],media.uniqueImages(urls));}else variantPhotos.setPhotos(selected,urls);notifyPreview();},
+    replacePhoto(from,to){const key=media.imageKey(from);for(const [color,photos] of assignments)assignments.set(color,media.uniqueImages(photos.map(url=>media.imageKey(url)===key?to:url)));variantPhotos.replacePhoto(from,to);notifyPreview();},
+    removePhoto(url){const key=media.imageKey(url);for(const [color,photos] of assignments)assignments.set(color,photos.filter(photo=>media.imageKey(photo)!==key));variantPhotos.removePhoto(url);notifyPreview();},
+    destroy(){destroyed=true;controller.abort();variantPhotos.destroy();container.removeEventListener('input',onMediaInput);container.removeEventListener('change',onMediaInput);variantsInput.removeEventListener('input',render);imagesInput.removeEventListener('input',render);mainInput.removeEventListener('change',render);}
+  };
   return { serialize, flush, pendingSignature:()=>[variantPhotos.pendingSignature(),...uploads.map(widget=>widget.pendingSignature?.() || [])], refresh: render, removePhoto(url){const key=media.imageKey(url);pool=pool.filter(photo=>media.imageKey(photo)!==key);for(const [color,photos] of assignments)assignments.set(color,photos.filter(photo=>media.imageKey(photo)!==key));variantPhotos.removePhoto(url);render();}, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantPhotos.destroy(); container.removeEventListener('input', onMediaInput); container.removeEventListener('change', onMediaInput); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
 }

@@ -27,6 +27,9 @@ export function validateProductEditorPatch(before, input) {
   let matrix;
   try {matrix=commercialPatch(before,next);} catch(error) {fail(error.message);}
   const patch={...input,...matrix};
+  // Un alias histórico no puede volver a mostrar una portada quitada ni
+  // competir con la portada canónica en consumidores antiguos.
+  if(Object.hasOwn(before,'image') && Object.hasOwn(input,'imageUrl'))patch.image=input.imageUrl;
   if(input.publicationStatus!=null){try{Object.assign(patch,editorialFields(input));}catch(error){fail(error.message);}}
   if(JSON.stringify({...before,...patch}).length>700000) fail('El producto supera el tamaño permitido.');
   return patch;

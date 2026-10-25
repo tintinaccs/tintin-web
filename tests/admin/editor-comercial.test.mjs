@@ -6,6 +6,13 @@ import {encodeFirestoreFields,decodeFirestoreFields} from '../../cloudflare/fire
 import {productFingerprint,productDuplicateData} from '../../js/admin/products/maestro-productos-core.mjs';
 const source={name:'Anillo',category:'anillos',price:30000,priceBefore:null,active:true,oferta:false,destacado:false,variants:{Color:['Oro','Plata']},variantInventory:[{variant:'Oro',stock:3},{variant:'Plata',stock:0}],stock:3,privateLegacy:'preservado'};
 const product=()=>commercialDraft(source);
+test('portada canónica actualiza o vacía el alias histórico sin revivir fotografías',()=>{
+ const before={...product(),image:'https://img.test/old.webp'};
+ const next=validateProductEditorPatch(before,{imageUrl:'https://img.test/fourth.webp'});
+ assert.equal(next.image,'https://img.test/fourth.webp');
+ const removed=validateProductEditorPatch(before,{imageUrl:null});assert.equal(removed.image,null);
+ const noAlias=validateProductEditorPatch(product(),{imageUrl:'https://img.test/fourth.webp'});assert.equal(Object.hasOwn(noAlias,'image'),false);
+});
 const inventory={costUnit:100,purchased:2,stockMinimum:1,internalNotes:'Privado'};
 function store(){const docs=new Map([['products/p1',{fields:encodeFirestoreFields(product()),updateTime:'v1'}],['collections/anillos',{fields:{},updateTime:'c1'}],['productInventory/p1',{fields:encodeFirestoreFields(inventory),updateTime:'i1'}]]);const writes=[];return {docs,writes,io:{get:async(_env,path)=>docs.get(path),commit:async(_env,list)=>writes.push(...list)}};}
 const actor={uid:'super',role:'superadmin'};

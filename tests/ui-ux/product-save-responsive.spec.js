@@ -186,3 +186,78 @@ test('viewport reducido y restauración no dejan el editor vacío ni pierden el 
   await page.evaluate(()=>{delete visualViewport.height;dispatchEvent(new Event('pageshow'));});
   await expect.poll(()=>page.locator('#prod-form-card').evaluate(n=>n.getBoundingClientRect().height)).toBeGreaterThan(500);await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');
 });
+
+// Galería unificada: integración con controlador y escritor originales.
+{
+const {test,expect}=require('@playwright/test');
+const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
+
+test('carga unificada conserva pendientes ante fallo, reintenta y permite cancelar',async({page})=>{
+ await openProductSaveFixture(page,390,844,{photos:true});await page.locator('#prod-editor-section').selectOption('photos');
+ const gallery=page.locator('.tt-unified-photos');
+ const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=40;canvas.height=40;return canvas.toDataURL('image/png').split(',')[1];});
+ const file=n=>({name:`device${n}.png`,mimeType:'image/png',buffer:Buffer.from(png,'base64')});
+ await gallery.locator('input[multiple]').setInputFiles([1,2,3,4,5].map(file));
+ await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(5);
+ await page.evaluate(()=>window.qaUploadFailure=true);await gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true}).click();
+ await expect(gallery.locator('.tt-iuw-multiple .tt-iuw-status')).toContainText('Carga fallida');await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(5);
+ await page.evaluate(()=>window.qaUploadFailure=false);await gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true}).click();
+ await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(0);
+ await gallery.locator('input[multiple]').setInputFiles(file(6));await gallery.getByRole('button',{name:'Quitar pendiente device6.png',exact:true}).click();await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(0);
+ await gallery.getByRole('button',{name:'Reemplazar foto 1',exact:true}).click();await gallery.getByRole('button',{name:'Cancelar reemplazo',exact:true}).click();await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);
+});
+
+for(const count of [1,2,3,4,5,10,13])test(`galería única con ${count} imágenes conserva orden y portada`,async({page})=>{
+ await openProductSaveFixture(page,1366,768,{photos:true});await page.locator('#prod-editor-section').selectOption('photos');const gallery=page.locator('.tt-unified-photos');
+ for(let i=1;i<=count;i++){await page.evaluate(i=>window.qaLibraryPhoto=`https://img.test/count${i}.webp`,i);await gallery.locator('.tt-iuw-multiple').getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();}
+ await expect(gallery.locator('.tt-unified-photo')).toHaveCount(count);const index=Math.min(4,count);await gallery.getByRole('button',{name:`Portada: foto ${index}`,exact:true}).click();await expect(page.locator('#prod-imageUrl')).toHaveValue(`https://img.test/count${index}.webp`);
+});
+
+for(const [width,height] of [[390,844],[844,390],[768,1024],[1024,768],[1366,768],[1920,1080]])test(`galería única guarda, reabre y conserva asociaciones ${width}x${height}`,async({page})=>{
+ await openProductSaveFixture(page,width,height,{photos:true});
+ await page.locator('#prod-editor-section').selectOption('photos');
+ const gallery=page.locator('.tt-unified-photos');await expect(gallery).toBeVisible();
+ await expect(gallery.locator('input[multiple]')).toHaveCount(1);
+ await page.locator('#prod-variants-text').evaluate(input=>{input.value='Color: Dorado, Plateado\nForma: Redondo, Ovalado';input.dispatchEvent(new Event('input',{bubbles:true}));});
+ for(let i=1;i<=5;i++){
+  await page.evaluate(i=>{window.qaLibraryPhoto=`https://img.test/photo${i}.webp`;},i);
+  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
+ }
+ await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);
+ await gallery.getByRole('button',{name:'Portada: foto 4',exact:true}).click();
+ await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/photo4.webp');
+ await gallery.getByRole('button',{name:'Asociar foto 1',exact:true}).click();
+ await gallery.getByLabel('Asociación: Color',{exact:true}).selectOption('Dorado');await gallery.getByLabel('Asociación: Forma',{exact:true}).selectOption('Redondo');await gallery.getByRole('button',{name:'Asociar fotografía',exact:true}).click();
+ await gallery.getByRole('button',{name:'Asociar foto 3',exact:true}).click();await gallery.getByLabel('Asociación: Color',{exact:true}).selectOption('Plateado');await gallery.getByRole('button',{name:'Asociar fotografía',exact:true}).click();
+ await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Galería sintética');await page.locator('#prod-description').fill('Descripción sintética');
+ await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('45000');
+ await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('qa-tablet');
+ await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ const saved=await page.evaluate(()=>window.qaProductStore.get('products/qa-product-1'));
+ expect(saved.imageUrl).toBe('https://img.test/photo4.webp');expect(saved.imagesExtra).toHaveLength(4);
+ expect(saved.variantMedia.find(row=>row.Forma==='Redondo').imageUrls).toEqual(['https://img.test/photo4.webp']);
+ const publicImages=await page.evaluate(async data=>{const path='/js/components/images/foto-variante.mjs';const {productVariantImage}=await import(path);return [productVariantImage(data,''),productVariantImage(data,'Dorado / Redondo'),productVariantImage(data,'Plateado / Redondo')];},saved);
+ expect(publicImages).toEqual(['https://img.test/photo4.webp','https://img.test/photo4.webp','https://img.test/photo2.webp']);
+ await page.evaluate(()=>window.prodEditar('qa-product-1'));
+ await page.locator('#prod-editor-section').selectOption('photos');await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);
+ await expect(page.locator('#prod-imageUrl')).toHaveValue(saved.imageUrl);
+ await page.evaluate(()=>window.qaLibraryPhoto='https://img.test/photo6.webp');await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
+ await expect(gallery.locator('.tt-unified-photo')).toHaveCount(6);
+ await gallery.getByRole('button',{name:'Siguiente: foto 2',exact:true}).focus();await page.keyboard.press('Enter');
+ await gallery.getByRole('button',{name:'Reemplazar foto 2',exact:true}).click();
+ await page.evaluate(()=>window.qaLibraryPhoto='https://img.test/replacement.webp');await gallery.locator('.tt-iuw:not(.tt-iuw-multiple)').getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
+ await expect(gallery.locator('.tt-unified-photo img[src$="replacement.webp"]')).toHaveCount(1);
+ await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ const replaced=await page.evaluate(()=>window.qaProductStore.get('products/qa-product-1'));
+ expect(replaced.variantMedia.find(row=>row.Color==='Plateado').imageUrls).toEqual(['https://img.test/replacement.webp']);
+ expect(replaced.variantMedia.find(row=>row.Forma==='Redondo').imageUrls).toEqual(['https://img.test/photo4.webp']);
+ await page.evaluate(()=>window.prodEditar('qa-product-1'));await page.locator('#prod-editor-section').selectOption('photos');
+ await gallery.getByRole('button',{name:'Quitar foto 3',exact:true}).click();await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);
+ await gallery.getByRole('button',{name:'Quitar foto 1',exact:true}).click();await expect(gallery.locator('.tt-unified-photo')).toHaveCount(4);
+ await expect(page.locator('#prod-imageUrl')).not.toHaveValue('');
+ expect(await gallery.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
+ await page.locator('#prod-form-card .adm-card-body').evaluate(node=>node.scrollTop=0);
+ await page.screenshot({path:`artifacts/unified-gallery/${width}x${height}.png`});
+});
+
+}
