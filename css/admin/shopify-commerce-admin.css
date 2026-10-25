@@ -1401,6 +1401,7 @@ html.tt-product-editor-open #prod-form-card .tt-editor-cover img { max-height:30
   --editor-field:var(--tt-commerce-surface);
   --editor-field-line:color-mix(in srgb,var(--tt-commerce-text) 52%,var(--tt-commerce-surface));
   --editor-placeholder:color-mix(in srgb,var(--tt-commerce-text) 65%,var(--tt-commerce-surface));
+  --editor-panel:color-mix(in srgb,var(--tt-commerce-brand) 5%,var(--tt-commerce-surface));
 }
 #prod-form-card .adm-card-head { gap:16px; }
 #prod-form-card .tt-product-section-nav { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:0 0 16px; }
@@ -1664,7 +1665,7 @@ html.tt-product-editor-open #prod-form-card .tt-editor-section,
 #prod-form-card .tt-editor-sidebar .tt-editor-section,
 #prod-form-card .tt-editor-preview-shell {
   border:1px solid var(--editor-line); border-radius:var(--editor-radius); padding:20px; box-shadow:none;
-  background:var(--tt-commerce-surface);
+  background:var(--editor-panel);
 }
 #prod-form-card .tt-editor-section[data-advanced=true] { padding:10px 20px; }
 #prod-form-card .tt-editor-section[data-advanced=true]:has([aria-expanded=true]) { padding-bottom:20px; }
