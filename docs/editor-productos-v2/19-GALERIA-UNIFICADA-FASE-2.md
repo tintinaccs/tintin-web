@@ -56,6 +56,8 @@ Repetición del fixture corregido y seis integraciones:7/7 PASS. Compatibilidad 
 
 Cierre local:57/57 Node en `unified-node-complete.log`; build Pages/caché y39 comandos preflight finales exit0 (`unified-build-receipt.log`, `unified-preflight-receipt.log`). El plan final abarca9 fuentes protegidas y24 registros. El código no se fusiona ni publica; consultar SHA del PR para la cabeza exacta. Esta nota final sólo cambia evidencia y manifiesto regenerado.
 
+Entrega: [PR1238](https://github.com/tintinaccs/tintin-web/pull/1238), listo para revisión, base rama de PR1237. Commit funcional `c2afdac8a`; el commit posterior registra esta URL y derivados. Sin auto-merge ni autorización para retargetear y fusionar a main. Las ejecuciones completas de CI filtradas a main no se infieren de los controles locales.
+
 ## Reversión y Fase 3
 
 Revertir el delta de Fase2 con commit normal conserva el esquema de datos; restaurar montaje/imports y regenerar versiones/caché/protección/diagnóstico desde generadores. No revertir Fase1 ni restaurar datos sobre producción. No se requieren migraciones de Firestore ni cambios de reglas.

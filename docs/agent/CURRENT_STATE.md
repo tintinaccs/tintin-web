@@ -8,7 +8,7 @@ Evidencia inicial:6 recorridos de montaje/guardado real con proveedor/SDK sinté
 
 Evidencia final adicional:27/27 integración/carga/error repetido,6/6 tras ajuste visual,45/45 Node,42 auditoría de imágenes, estilos y39 preflight PASS. Tanda amplia294 PASS/1 FAIL por fixture del montaje retirado; adaptado al módulo unificado preservando portada/miniaturas/cero borrado/biblioteca tardía, repetición7/7 PASS. No heredar295PASS inexistentes. Tags/protección regenerados contra0f57; sin autorizar publicación. Revisión final sincroniza alias image histórico con imageUrl en escritores existentes, con prueba Node de cambio/vaciado/sin alias nuevo. Suite Node ampliada en unified-node-complete.log.
 
-Cierre local:57/57 Node y39 comandos preflight finales exit0; build Pages/caché final PASS. Plan9 fuentes/24 registros; evidencia completa en informe19. PR apilado listo para revisión, pendiente de crear y registrar URL/SHA en el recibo del chat. Sin merge, producción, datos reales ni nuevas credenciales.
+Cierre local:57/57 Node y39 comandos preflight finales exit0; build Pages/caché final PASS. Plan9 fuentes/24 registros; evidencia completa en informe19. PR1238 listo para revisión, apilado sobre1237; commit funcional c2afdac8a y recibo posterior. Sin auto-merge, merge, producción, datos reales ni nuevas credenciales. No retargetear/habilitar mantenimiento automático sin autorización.
 
 ## 2026-10-25 — Fase 1 de estabilización solicitada por adjunto (Codex /root)
 
