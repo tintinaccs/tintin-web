@@ -1087,7 +1087,7 @@ html.tt-product-panel-open { overflow:hidden; }
 .tt-editor-money > span { font-size:13px; }
 #prod-form-card .tt-editor-money > input { flex:1; width:0; }
 #prod-form-card .tt-editor-stock-row .tt-editor-quantity { grid-column:1/-1; grid-template-columns:minmax(0,1fr); align-items:center; }
-.tt-editor-variant-builder { display:grid; gap:10px; min-width:0; }
+.tt-editor-variant-builder { display:grid; gap:10px; min-width:0; container:variant-controls / inline-size; }
 .tt-editor-variant-add { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px; }
 .tt-editor-variant-add > button { grid-column:1/-1; }
 .tt-editor-variant-groups { display:flex; gap:6px; flex-wrap:wrap; min-width:0; }
@@ -1746,4 +1746,17 @@ html.tt-product-editor-open #prod-form-card .tt-editor-section,
 
 @media(max-width:1199px) {
   #prod-form-card #prod-name { font-size:16px !important; }
+}
+
+@container variant-controls (max-width:399px) {
+  #prod-form-card .tt-editor-variant-add { grid-template-columns:minmax(0,1fr); }
+  #prod-form-card .tt-editor-variant-add > button { grid-column:auto; }
+}
+@container variant-controls (min-width:400px) and (max-width:639px) {
+  #prod-form-card .tt-editor-variant-add { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+  #prod-form-card .tt-editor-variant-add > button { grid-column:1/-1; }
+}
+@container variant-controls (min-width:640px) {
+  #prod-form-card .tt-editor-variant-add { grid-template-columns:minmax(180px,.7fr) minmax(180px,1fr) auto; }
+  #prod-form-card .tt-editor-variant-add > button { grid-column:auto; }
 }

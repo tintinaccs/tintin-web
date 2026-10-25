@@ -1,52 +1,33 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "9346d3bd3d4fbcab75e06962a43edae63fcb35ec",
-  "reason": "Publicar correcciones de opciones voluntarias y distribución adaptable del editor autorizadas por la titular",
+  "baseCommit": "d325b90518dbcba102235b3bf6ae3d7263d9319d",
+  "reason": "Conservar listados durante fallos de montaje y reservar espacio para navegación móvil sin alterar contratos comerciales",
   "files": [
     {
+      "path": "admin-images.html",
+      "oldHash": "62228db4b11e9fe34d6de759756b695d1a4b29dd484d12c68b03352a4c11b3c4",
+      "newHash": "f44650730dc8fbc9001ae0c089c6183e2428d4e51a02a3528b6f6c05422842d2"
+    },
+    {
       "path": "admin.html",
-      "oldHash": "9b7c23bae8cc7deb547b19339d61ee67d9c564cdbe2dee9473e7bc3a8d644410",
-      "newHash": "b3a999e49087da40c30fb7724b1091b3d1ac4e43ec3ca38f8df3a7f0e5ebff39"
+      "oldHash": "b3a999e49087da40c30fb7724b1091b3d1ac4e43ec3ca38f8df3a7f0e5ebff39",
+      "newHash": "7545baaf78fe5f152594f4adbb5c5af29c5fdd0854b654948b6430d7c31a77a7"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "1f4393db141790a2020585680876500fd318f4e7bfeb2379b4e85578fde3ee75",
-      "newHash": "7f9ae5a78d74eb334c287c05537f8666478e52afdb78d79a01332dd9a7484546"
-    },
-    {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "ba3a2ccb1f79c4444d7073f7fb78f3875cd52547a5904ccea618469eb3cb6312",
-      "newHash": "2c0ef3c4654e44bb5620f066ffab841e723f49b8981c0130b0b248f25454965a"
+      "oldHash": "7f9ae5a78d74eb334c287c05537f8666478e52afdb78d79a01332dd9a7484546",
+      "newHash": "c634faa5712804794b75063067397364e9c78c25cf34478b1b9a9bb9955015f5"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "8a49b7db09da1dd145bd857f8b6aa4a4526846f048f9fb444214de76d27f4ecf",
-      "newHash": "ad5c13c76011f1bd3a040b9cd302ca38121c814776d93fb72767be71bdc753d0"
+      "oldHash": "ad5c13c76011f1bd3a040b9cd302ca38121c814776d93fb72767be71bdc753d0",
+      "newHash": "b7a0b51ec738d3585637dd3295c6694c4841420204f78620a060d0ceb0184df4"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "afa010cce3cc7939aedcf0a5087426d53f2b0419c005a8f97b9f91faa2f2aea6",
-      "newHash": "4b83e63d4014a2eb574d02159dca1504654ba1c7d756dc46b6a2a72277d2417c"
+      "oldHash": "4b83e63d4014a2eb574d02159dca1504654ba1c7d756dc46b6a2a72277d2417c",
+      "newHash": "3d319906f484af28182885ac9e797703afe3f66d5d800d297c76818127fcfb1d"
     }
   ],
-  "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
-    "apis-internas__correos__41",
-    "apis-internas__pedidos__32",
-    "correos",
-    "pagina-perfil",
-    "pedidos",
-    "pedidos__inventario__33",
-    "productos",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-perfil__18",
-    "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
-    "super-panel__productos__34"
-  ]
+  "affectedRecords": []
 }

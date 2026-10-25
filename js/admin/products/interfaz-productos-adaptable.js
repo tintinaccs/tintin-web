@@ -59,7 +59,13 @@ export function syncProductSurfaces() {
   document.documentElement.style.setProperty('--tt-product-viewport-top', `${viewport?.offsetTop || 0}px`);
   const header = document.querySelector('.adm-topbar');
   const headerBottom = header?.getClientRects().length ? header.getBoundingClientRect().bottom : 0;
-  const editorTop = Math.max(viewport?.offsetTop || 0, headerBottom);
+  const viewportTop = viewport?.offsetTop || 0;
+  const viewportHeight = viewport?.height || innerHeight;
+  const preferredTop = Math.max(viewportTop, headerBottom);
+  // Teclado, zoom o una cabecera alta no pueden dejar el editor con altura cero.
+  // Si no caben ambas barras, la del editor conserva sus propias acciones.
+  const editorTop = preferredTop + Math.min(240, viewportHeight) > viewportTop + viewportHeight
+    ? viewportTop : preferredTop;
   document.documentElement.style.setProperty('--tt-product-editor-top', `${editorTop}px`);
   document.documentElement.style.setProperty('--tt-product-editor-height', `${Math.max(0, (viewport?.height || innerHeight) + (viewport?.offsetTop || 0) - editorTop)}px`);
 }
@@ -282,6 +288,10 @@ export function installProductInterface() {
     previousPicker=picker;
   }).observe(document.body,{childList:true});
   window.addEventListener('resize',syncProductSurfaces,{passive:true});
+  window.addEventListener('pageshow',syncProductSurfaces,{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncProductSurfaces();});
+  const header=document.querySelector('.adm-topbar');
+  if(header && typeof ResizeObserver==='function')new ResizeObserver(syncProductSurfaces).observe(header);
   window.visualViewport?.addEventListener('resize',syncProductSurfaces,{passive:true});
   window.visualViewport?.addEventListener('scroll',syncProductSurfaces,{passive:true});
   document.addEventListener('error',event=>{

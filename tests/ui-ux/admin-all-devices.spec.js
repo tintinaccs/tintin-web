@@ -78,3 +78,21 @@ for(const [width,height] of [[390,844],[768,1024],[1024,768],[1920,1080]]) {
     await page.screenshot({path:info.outputPath(`imagenes-${width}.png`)});
   });
 }
+
+
+for(const width of [320,390,540])test('último control accesible sobre navegación móvil '+width,async({page})=>{
+  await load(page,width,'admin.html',{mobile:true,sidebar:true});await page.setViewportSize({width,height:844});
+  await page.evaluate(()=>{
+    const area=document.getElementById('section-dashboard');
+    const spacer=document.createElement('div');spacer.style.height='1600px';area.append(spacer);
+    const button=document.createElement('button');button.id='qa-last-control';button.textContent='Última acción de prueba';button.style.minHeight='44px';area.append(button);
+  });
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  await page.locator('#qa-last-control').evaluate(n=>n.scrollIntoView({block:'end',behavior:'instant'}));
+  await expect.poll(()=>page.evaluate(()=>{
+    const control=document.getElementById('qa-last-control').getBoundingClientRect();
+    const nav=document.getElementById('adm-mobile-tabs').getBoundingClientRect();
+    return control.bottom<=nav.top && nav.bottom<=innerHeight;
+  })).toBe(true);
+  await expect(page.locator('#qa-last-control')).toBeInViewport();
+});
