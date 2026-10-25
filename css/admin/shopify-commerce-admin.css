@@ -1396,10 +1396,12 @@ html.tt-product-editor-open #prod-form-card .tt-editor-cover img { max-height:30
 /* Productos y catálogo administrativo: editor esencial + opciones avanzadas.
    Mantiene el mismo árbol de campos y las autoridades CRUD existentes. */
 #prod-form-card {
-  --editor-line:color-mix(in srgb,var(--tt-commerce-text) 12%,var(--tt-commerce-surface));
-  --editor-soft:color-mix(in srgb,var(--tt-commerce-text) 4%,var(--tt-commerce-surface));
-  --editor-field:color-mix(in srgb,var(--tt-commerce-text) 2%,var(--tt-commerce-surface));
-  --editor-field-line:color-mix(in srgb,var(--tt-commerce-text) 24%,var(--tt-commerce-surface));
+  --editor-line:color-mix(in srgb,var(--tt-commerce-text) 22%,var(--tt-commerce-surface));
+  --editor-soft:color-mix(in srgb,var(--tt-commerce-brand) 18%,var(--tt-commerce-surface));
+  --editor-field:var(--tt-commerce-surface);
+  --editor-field-line:color-mix(in srgb,var(--tt-commerce-text) 52%,var(--tt-commerce-surface));
+  --editor-placeholder:color-mix(in srgb,var(--tt-commerce-text) 65%,var(--tt-commerce-surface));
+  --editor-panel:color-mix(in srgb,var(--tt-commerce-brand) 5%,var(--tt-commerce-surface));
 }
 #prod-form-card .adm-card-head { gap:16px; }
 #prod-form-card .tt-product-section-nav { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:0 0 16px; }
@@ -1571,7 +1573,7 @@ html.tt-product-editor-open #section-productos.tt-commerce-mounted #prod-form-ca
   background:var(--editor-field);
   border-color:var(--editor-field-line) !important;
 }
-#prod-form-card .adm-input::placeholder { color:var(--tt-commerce-text); opacity:.65; }
+#prod-form-card .adm-input::placeholder { color:var(--editor-placeholder) !important; opacity:1; font-weight:400; }
 #prod-form-card .tt-editor-section-fields label { color:var(--tt-commerce-text); }
 #prod-form-card .adm-input[readonly], #prod-form-card .adm-input:disabled { background:var(--editor-soft); }
 #prod-form-card .tt-product-section-nav { flex-wrap:wrap; }
@@ -1663,23 +1665,27 @@ html.tt-product-editor-open #prod-form-card .tt-editor-section,
 #prod-form-card .tt-editor-sidebar .tt-editor-section,
 #prod-form-card .tt-editor-preview-shell {
   border:1px solid var(--editor-line); border-radius:var(--editor-radius); padding:20px; box-shadow:none;
-  background:var(--tt-commerce-surface);
+  background:var(--editor-panel);
 }
 #prod-form-card .tt-editor-section[data-advanced=true] { padding:10px 20px; }
 #prod-form-card .tt-editor-section[data-advanced=true]:has([aria-expanded=true]) { padding-bottom:20px; }
 #prod-form-card .tt-editor-section-toggle { gap:10px; min-height:44px; }
 #prod-form-card .tt-editor-section-title { min-width:0; overflow-wrap:anywhere; }
+#prod-form-card .tt-editor-section-toggle { color:var(--tt-commerce-text); }
+#prod-form-card .tt-editor-section-toggle[aria-expanded=true] { border-bottom:2px solid var(--tt-commerce-brand); padding-bottom:10px; }
+#prod-form-card .tt-editor-section-fields { padding-top:12px; }
 #prod-form-card .tt-editor-section-value { margin-left:auto; min-width:0; max-width:45%; font-size:12px; font-weight:400; color:var(--tt-commerce-muted); text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 #prod-form-card .tt-editor-section-value:empty,
 #prod-form-card .tt-editor-section-toggle[aria-expanded=true] .tt-editor-section-value { display:none; }
 #prod-form-card .tt-editor-chevron { flex:none; width:8px; height:8px; border-top:1.5px solid currentColor; border-right:1.5px solid currentColor; font-size:0; transform:rotate(-45deg); opacity:.65; }
 #prod-form-card .tt-editor-section-toggle[aria-expanded=false] .tt-editor-chevron { transform:rotate(135deg); }
 #section-productos.tt-commerce-mounted #prod-form-card .adm-input { border-radius:10px !important; padding:12px; background:var(--editor-field); min-height:46px; }
-#prod-form-card .adm-input:focus-visible { background:var(--tt-commerce-surface); outline:2px solid var(--editor-focus); outline-offset:2px; }
+#section-productos.tt-commerce-mounted #prod-form-card .adm-input:focus-visible { background:var(--tt-commerce-surface); outline:2px solid var(--editor-focus) !important; outline-offset:2px; }
 #prod-form-card #prod-name { font-size:18px !important; font-weight:600; letter-spacing:-.02em; }
 #prod-form-card #prod-description { min-height:128px; }
 #prod-form-card .tt-editor-section-fields { gap:16px; }
 #prod-form-card .tt-editor-section-fields > div > label { display:block; margin-bottom:6px; }
+#prod-form-card .tt-editor-section-fields label { text-transform:none !important; letter-spacing:0 !important; font-weight:600 !important; }
 #prod-form-card .tt-editor-section-help { border-top:1px solid var(--editor-line); padding-top:4px; margin-top:2px; }
 #prod-form-card .tt-editor-section-help > summary { font-size:12px; font-weight:500; }
 #prod-form-card .tt-editor-sidebar { gap:12px; }

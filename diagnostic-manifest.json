@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "93e8bdaa196e53654b777d30b7cc55f5d40bb504393c51dd215d4687b7ad647c",
+  "sourceFingerprint": "cd9f6c6234935e3f5bbb80f8644e393944c565312cba4f4f09a8ab94bd516bcc",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1476,
     "textFiles": 1385,
-    "totalBytes": 30458952,
+    "totalBytes": 30468102,
     "pages": 19,
     "modules": 1028
   },
@@ -2892,8 +2892,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204205,
-      "sha256": "c4f2b4f03ec659547c8ac0a067258d868ff588147f55f361a9d85b7f1c00fd84",
+      "bytes": 204435,
+      "sha256": "9b7c23bae8cc7deb547b19339d61ee67d9c564cdbe2dee9473e7bc3a8d644410",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2972,7 +2972,7 @@
           "line": 2083
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261024-editor-apple-2",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261025-editor-contrast-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084
         },
@@ -3332,7 +3332,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261024-editor-apple-2",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261025-editor-contrast-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084,
           "exists": true
@@ -30763,8 +30763,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 132507,
-      "sha256": "0c1fae950e6c13b766564041d614377b6c01bdd5e03efa690d58e0dfd78aba1e",
+      "bytes": 132510,
+      "sha256": "8a49b7db09da1dd145bd857f8b6aa4a4526846f048f9fb444214de76d27f4ecf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -54848,8 +54848,8 @@
     },
     {
       "path": "tests/ui-ux/editor-comercial-v2.spec.js",
-      "bytes": 14951,
-      "sha256": "1670861971883baa14f27d1347ff4eda7af1bc20693c22dd3c902b92638a83c3",
+      "bytes": 17382,
+      "sha256": "6be6e285f7ab7e073c153fb92cb29826e088bd23fdc2643ba14ca06566fb1c91",
       "syntax": {
         "ok": true,
         "error": ""
@@ -56674,8 +56674,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204205,
-      "sha256": "c4f2b4f03ec659547c8ac0a067258d868ff588147f55f361a9d85b7f1c00fd84"
+      "bytes": 204435,
+      "sha256": "9b7c23bae8cc7deb547b19339d61ee67d9c564cdbe2dee9473e7bc3a8d644410"
     },
     {
       "path": "apple-touch-icon.png",
@@ -57670,8 +57670,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1177,
-      "sha256": "fb2e0fd94f92b11ff727f18551e68098641738a692ad328fb68c35d615ac2351"
+      "bytes": 1167,
+      "sha256": "22e3f5a8ce423dd955da951c2124ecabfa3aa2ce5d3cb8d795da1f2a5b551639"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -57683,7 +57683,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "d457f35e52ae1d5308f6e562c7f6cb9a2414895a959118097a392b0d46df3b17"
+      "sha256": "95e40c5db3866066e08ab7b6a59c04228ef9e6ba5dc0e09baea4639e539b30ef"
     },
     {
       "path": "config/public-site.json",
@@ -57790,8 +57790,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 114166,
-      "sha256": "ad395c4a69dd3a8d2029a1521c0ef33d9218e095ead69c7e3a2d748d06e6a14f"
+      "bytes": 114802,
+      "sha256": "1f4393db141790a2020585680876500fd318f4e7bfeb2379b4e85578fde3ee75"
     },
     {
       "path": "css/admin/sidebar-interaccion.css",
@@ -58342,8 +58342,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 916808,
-      "sha256": "a7f2c48591dbec02fd30be4389e55760ccdd507734ade9f0e3d9d215219d4e01"
+      "bytes": 921433,
+      "sha256": "7029b0297416a53da45fc0d31ca533b911f8614298ea8c5df18c9e9d285c1545"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -58750,14 +58750,14 @@
     {
       "path": "docs/editor-productos-v2/07-BITACORA-DE-AGENTES.md",
       "extension": ".md",
-      "bytes": 11117,
-      "sha256": "723a15fc2d7b558691ab6be50be703d0a38c8efe100f12677f5cf40f89f2740a"
+      "bytes": 11491,
+      "sha256": "dedbb4445045108af58bb9faf89b544abdb7838743504fc27b50c80d018dcc55"
     },
     {
       "path": "docs/editor-productos-v2/08-ESTADO-Y-RELEVO.md",
       "extension": ".md",
-      "bytes": 12468,
-      "sha256": "366563670d68146c851090c70b5ed132f41a8a38b5622e88b035e4e879b93412"
+      "bytes": 12832,
+      "sha256": "0b21960ce32491748646313de1aab1d50027f0d73108a29d16cf8e68621a0ede"
     },
     {
       "path": "docs/editor-productos-v2/09-AUDITORIA-FASE-1.md",
@@ -58900,8 +58900,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 122733,
-      "sha256": "036aede206e659a7035ec445e099b8d2f3a7c5f8fe975dc8b328442e84ee89f3"
+      "bytes": 123224,
+      "sha256": "0cd287104cfbe73d1b674bf80758a633fa17478618a82060e6eb7ca691982446"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -60046,8 +60046,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 132507,
-      "sha256": "0c1fae950e6c13b766564041d614377b6c01bdd5e03efa690d58e0dfd78aba1e"
+      "bytes": 132510,
+      "sha256": "8a49b7db09da1dd145bd857f8b6aa4a4526846f048f9fb444214de76d27f4ecf"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -62572,8 +62572,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 75320,
-      "sha256": "1f10c26352e79e086c968b5621bebb152bfa4554256058d4c6c10d69a524318d"
+      "bytes": 75326,
+      "sha256": "afa010cce3cc7939aedcf0a5087426d53f2b0419c005a8f97b9f91faa2f2aea6"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -65056,8 +65056,8 @@
     {
       "path": "tests/ui-ux/editor-comercial-v2.spec.js",
       "extension": ".js",
-      "bytes": 14951,
-      "sha256": "1670861971883baa14f27d1347ff4eda7af1bc20693c22dd3c902b92638a83c3"
+      "bytes": 17382,
+      "sha256": "6be6e285f7ab7e073c153fb92cb29826e088bd23fdc2643ba14ca06566fb1c91"
     },
     {
       "path": "tests/ui-ux/global-form-fit.spec.js",

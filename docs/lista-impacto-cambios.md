@@ -756,3 +756,7 @@ CI de cb8f802bc aprobada; main aa75f4d91 vuelve obsoleta la base y produce confl
 ## 2026-10-24 — Diseño Apple-inspired del editor de productos
 
 Alcance sólo #prod-form-card del Superpanel: lienzo neutro, superficies agrupadas, jerarquía tipográfica, acciones persistentes, resúmenes de precio/stock/material al plegar y movimiento reducido. Autoridades: shopify-commerce-admin.css e interfaz-productos-adaptable.js; consumidores shopify-commerce-admin.js/admin.html actualizan URLs y baseline canónico. Montserrat/paleta Tintin conservadas, sin fuentes ni dependencias nuevas. No modifica listados, otras pantallas, CRUD, autorización, motores de variantes, catálogo real ni pagos. Pruebas: campos guardados, errores, fotos, combinaciones, tamaños320–3840, teclado, zoom y contraste; CI y publicación sólo del SHA final.
+
+## 2026-10-24 — Contraste y ejemplos del editor Tintin
+
+Agregar y editar comparten CSS canónico: lienzo rosa suave, campos blancos con borde definido, títulos sin mayúsculas forzadas y separadores rosas. Ejemplos de entrada no son valores persistidos; garantía sólo solicita cobertura confirmada. Se refuerza foco visible frente al reset anterior. No cambian cálculos, guardado, datos ni permisos. Se renueva CSS/loader y sus consumidores; derivados desde constructores canónicos.

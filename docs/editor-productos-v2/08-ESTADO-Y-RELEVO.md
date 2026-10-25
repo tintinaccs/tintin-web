@@ -104,3 +104,7 @@ Trabajo propio en codex/editor-atelier-responsive-20261024 sobre main0f253a411: 
 ## Editor Apple-inspired — 24/10/2026
 
 Pedido de la titular: aplicar la habilidad existente al editor del Superpanel en escritorio/laptop/tablet vertical-horizontal/móvil, manteniendo un único editor. Rama codex/editor-apple-responsive-20261024 sobre304e2db. Contratos comerciales y guardado intactos; siguen vigentes todos los permisos y campos. Ver CURRENT_STATE para resultados por SHA; no heredar CI/publicación de1229. El borrador1228 permanece excluido.
+
+## 2026-10-24 — Refinamiento visual posterior a PR1230
+
+Rama codex/editor-contraste-ejemplos-20261024, base920cfd8. Contraste y placeholders en el mismo formulario de agregar/editar; no nueva versión funcional ni cambios de negocio. Publicación de este nuevo delta todavía no realizada. Evidencia actual en CURRENT_STATE; no heredar CI1230 para este cambio.
