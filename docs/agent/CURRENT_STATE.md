@@ -1,3 +1,13 @@
+## 2026-10-25 — Fase 1 de estabilización solicitada por adjunto (Codex /root)
+
+Base f9399a90c, rama codex/editor-estabilizacion-fase1-20261025. Autorización actual: auditoría/correcciones/PR; explícitamente sin merge ni deploy, prevalece sobre instrucción permanente de AGENTS. Mantenimiento automático puede fusionar candidatos elegibles: presentar PR en borrador para respetar esta restricción, sin alterar workflows. Informe autosuficiente: docs/editor-productos-v2/18-ESTABILIZACION-FASE-1-20261025.md.
+
+PASS_LOCAL: regresión reproduce1 reset con error persistente en base y0 en candidato, con foco/scroll conservados. Se navega por error sólo cuando cambia el mensaje. Imágenes de reseñas abren el diálogo existente mediante botones nativos y restauran foco.149 Chromium existentes/extendidos PASS sin reintentos;7 nuevos de orden/portada1–20 PASS;45 Node de controlador/medios/entrada PASS. Perfil real de galería:5 casos base y5 candidato; tabla cuantificada en informe, sin atribuir aceleración causal a corrección de scroll. Build Pages/caché PASS. Captura after revisada; baseline FAIL esperado conservado. No checkout, Rules, datos reales ni PR ajenos modificados.
+
+Delta final: pérdida de foco al desmarcar foto reproducida RED en390; render transfiere foco al reemplazo lógico por aria-label, preventScroll. Galería completa42/42 PASS después, con7 anchos y7 cantidades. Admin-app sólo renueva import, sin cambios de guardado. Preflight inicial FAIL en reproducibilidad del manifiesto mientras había trabajo local concurrente; repetición con árbol estable:39 comandos PASS/exit0, sin relajar gate. Captura desktop1366 inspeccionada además de móvil390.
+
+NOT_VERIFIED: sesión autenticada, ida/vuelta cuarta portada guardada→tarjeta pública, memoria precisa/listeners acumulados, Safari/teclado físico y cobertura exhaustiva de colecciones. No certificar la fase completa. CI del candidato pendiente. No heredar evidencia histórica. Primer arranque de pruebas bloqueado por Chromium ausente; navegador instalado y suites realmente ejecutadas después.
+
 ## 2026-10-25 — Preparación de merge de navegación móvil (Codex /root, GPT-6)
 
 La titular autoriza explícitamente integrar estas correcciones mediante «mergealo». Se prepara el PR desde9839f4597, conservando el informe y su límite Safari/iPhone NOT_VERIFIED. Evidencia local previa:70 pruebas panel/inicio,126 combinaciones canónicas y6 regresiones dirigidas del editor aprobadas; build/caché/protección/sintaxis aprobados. No se hereda CI/producción de1234/1235. El candidato nuevo debe aprobar controles protegidos propios antes de merge/publicación; sin cambios en permisos ni datos reales.

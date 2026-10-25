@@ -52,6 +52,7 @@ for(const width of [320,390,709,768,1024,1440,1920]) test(`galería y editor de 
   const rows=await page.evaluate(()=>window.editor.serialize());expect(rows.map(r=>r.imageUrls.length)).toEqual([3,3]);
   expect(await page.evaluate(()=>window.editor.serialize().some(row=>Object.values(row).some(value=>value===undefined)))).toBe(false);
   await page.getByRole('checkbox',{name:'Asignar foto 3 a Dorado',exact:true}).uncheck();
+  await expect(page.getByRole('checkbox',{name:'Asignar foto 3 a Dorado',exact:true})).toBeFocused();
   expect((await page.evaluate(()=>window.editor.serialize()))[0].imageUrls).toHaveLength(2);
   await page.getByRole('button',{name:'Elegir foto de biblioteca para Dorado',exact:true}).click();
   expect((await page.evaluate(()=>window.editor.serialize()))[0].imageUrls).toHaveLength(3);
@@ -74,6 +75,22 @@ test('el inventario conserva sus colores y destruir el editor cancela la detecci
   await page.evaluate(()=>window.editor.destroy());finishPhoto?.();
   await expect(page.locator('#editor')).toBeEmpty();
   expect((await page.evaluate(()=>window.editor.serialize())).map(row=>row.Color)).toEqual(['Dorado','Plateado']);
+});
+
+for(const count of [1,2,3,4,5,10,20]) test(`orden y portada general con ${count} fotografías`,async({page})=>{
+ const urls=Array.from({length:count},(_,i)=>`/gold${i+1}.svg`);
+ const product={id:'synthetic',imageUrl:urls[0],imagesExtra:urls.slice(1),variants:{Color:['Dorado']},variantMedia:[{Color:'Dorado',imageUrls:urls}]};
+ await page.route('**/color-gallery-fixture',r=>r.fulfill({contentType:'text/html',body:fixture}));
+ await page.route('**/gallery-fixture.js',r=>r.fulfill({contentType:'text/javascript',body:`window._pdProduct=${JSON.stringify(product)};`}));
+ await page.route(/\/(gold|silver)\d+\.svg$/,r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"/>'}));
+ await page.goto('/color-gallery-fixture');await page.waitForFunction(()=>window.editorReady);
+ const chosen=urls[Math.min(3,count-1)];
+ const tile=page.locator('.tt-color-photo-tile').filter({has:page.locator(`img[src$="${chosen}"]`)}).first();
+ if(count>1) await tile.getByRole('button',{name:'Usar como primera foto de Dorado',exact:true}).click();
+ expect((await page.evaluate(()=>window.editor.serialize()))[0].imageUrls.map(url=>new URL(url).pathname)).toEqual([chosen,...urls.filter(url=>url!==chosen)]);
+ const current=page.locator('.tt-color-photo-tile').filter({has:page.locator(`img[src$="${chosen}"]`)}).first();
+ await current.locator('.tt-photo-cover').click();
+ expect(new URL(await page.locator('#main').inputValue()).pathname).toBe(chosen);
 });
 
 const productHtml = fs.readFileSync('product.html', 'utf8');

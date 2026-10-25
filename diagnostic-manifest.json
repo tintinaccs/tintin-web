@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f979bee4764b79d6376c7ec031193cfea5c7b9acd59f251b3e639532f45d9855",
+  "sourceFingerprint": "a8b0f74e02fada2fad179a773ab6d035c0e9467125b2108cd626e1144476b063",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1477,
-    "textFiles": 1386,
-    "totalBytes": 30508655,
+    "files": 1478,
+    "textFiles": 1387,
+    "totalBytes": 30532051,
     "pages": 19,
     "modules": 1028
   },
@@ -2892,8 +2892,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204421,
-      "sha256": "d4cee3bbac1b086225909ea88da297e4ddac95d47ea3da005105f3d1c7097405",
+      "bytes": 204415,
+      "sha256": "099ed87c47a48a324e63a568ad811533d9d9cd733098692beb62df2711955da8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2947,7 +2947,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261025-mobile-shell-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261025-stability-1",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -2972,7 +2972,7 @@
           "line": 2083
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261025-mobile-shell-2",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261025-stability-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084
         },
@@ -3302,7 +3302,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261025-mobile-shell-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261025-stability-1",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -3332,7 +3332,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261025-mobile-shell-2",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261025-stability-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084,
           "exists": true
@@ -15768,8 +15768,8 @@
         "guest",
         "client"
       ],
-      "bytes": 46614,
-      "sha256": "0b48f316bf8c2802bbd64f7cc34f5b523f836cc361df576ccf0dd790e51b9fb3",
+      "bytes": 46626,
+      "sha256": "819ce68a3f6557cdf3af488b1898361cef9d84158a4d3c6d4b42f670ec01207b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15895,7 +15895,7 @@
           "line": 490
         },
         {
-          "raw": "js/pages/home/resenas-clientas.js?v=tintin-20261016-reviews-1",
+          "raw": "js/pages/home/resenas-clientas.js?v=tintin-20261025-reviews-interaction-1",
           "target": "js/pages/home/resenas-clientas.js",
           "line": 520
         },
@@ -16839,7 +16839,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/home/resenas-clientas.js?v=tintin-20261016-reviews-1",
+          "raw": "js/pages/home/resenas-clientas.js?v=tintin-20261025-reviews-interaction-1",
           "target": "js/pages/home/resenas-clientas.js",
           "line": 520,
           "exists": true
@@ -28179,8 +28179,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 517530,
-      "sha256": "cce2ac5610a78b535ce597e816db6386009ba1045a2241c59eb8f9876002d633",
+      "bytes": 517524,
+      "sha256": "5d07340989e7e3cb641b4caebb9d4b85f4ef4800532cbca7e147c726775de37b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28283,7 +28283,7 @@
           "line": 16
         },
         {
-          "raw": "./products/fotos-por-color.js?v=tintin-20261025-editor-opciones-2",
+          "raw": "./products/fotos-por-color.js?v=tintin-20261025-stability-1",
           "target": "js/admin/products/fotos-por-color.js",
           "dynamic": false,
           "line": 17
@@ -30150,8 +30150,8 @@
     },
     {
       "path": "js/admin/products/fotos-por-color.js",
-      "bytes": 16273,
-      "sha256": "115649a2848a9bbbfc0a18762cc85329d6ca853792681ab52f35eee363478cb4",
+      "bytes": 16781,
+      "sha256": "059a32e274cbbe71c83891a5c7bf9b4c965d815193323eadda4bb7ee93bb6d71",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30268,8 +30268,8 @@
     },
     {
       "path": "js/admin/products/interfaz-productos-adaptable.js",
-      "bytes": 21204,
-      "sha256": "8273e97be2b364bc76e8ac63b8af05e9bd5a0d280ea038774df3a24cb8c15537",
+      "bytes": 21445,
+      "sha256": "cb8eb1ae9d1685424aeaf1390a7e112edaa7de1862f00af8882fcf2ea5e69212",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30763,8 +30763,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 132836,
-      "sha256": "7c521fb10153b116782b4681ffa8aff6de90e6acce027f5d3a7fcb95e10863fe",
+      "bytes": 132833,
+      "sha256": "104eb2b5f77057e6f4ed4bdfb8e3b8b8b9ebc68d4751e38363552073599e662c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30807,7 +30807,7 @@
           "line": 6
         },
         {
-          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261025-mobile-shell-2",
+          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261025-stability-1",
           "target": "js/admin/products/interfaz-productos-adaptable.js",
           "dynamic": false,
           "line": 7
@@ -35407,8 +35407,8 @@
     },
     {
       "path": "js/pages/home/resenas-clientas.js",
-      "bytes": 1691,
-      "sha256": "1a7e599fae69a2615c3dbe978c95352078fc044a4a48f566d3939d837dc95995",
+      "bytes": 2372,
+      "sha256": "88ecff093cd88886ee45f62393b1e8debe6b000042ac35b1a79cbc7d242ac6d9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -51616,8 +51616,8 @@
     },
     {
       "path": "tests/performance/home-review-gallery.spec.js",
-      "bytes": 2939,
-      "sha256": "3b9d3c76c03fc9cd1ca15f630b491a9db34fbb13333455d51da9eebb323112fe",
+      "bytes": 3382,
+      "sha256": "4157075c19d236c8485b4fee30adab9363c61265c693f890668573a7f37d52f3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55358,8 +55358,8 @@
     },
     {
       "path": "tests/ui-ux/product-color-gallery.spec.js",
-      "bytes": 24496,
-      "sha256": "fd9e1028d51cf17e6ba508013216494d8459a2121a4a07437d319fe14ee01047",
+      "bytes": 26097,
+      "sha256": "515cf780a662d64f70edf005e8be1eecdb7896f4667d7a4e32373e7273fe04b7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55547,8 +55547,8 @@
     },
     {
       "path": "tests/ui-ux/products-responsive-phase-one.spec.js",
-      "bytes": 72870,
-      "sha256": "a36c422f19afb45fdbecf62374c0fe847c9bd236b558e5d96f03c954c6fdeb0a",
+      "bytes": 77397,
+      "sha256": "a2ee5fca301493fbeef9b01895319cb43f80b705dc5b6245c4d77b995aa7fb19",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55561,95 +55561,99 @@
         },
         {
           "url": "https://tintin.test/js/components/images/biblioteca-multimedia.js*",
-          "line": 68
+          "line": 72
         },
         {
           "url": "https://tintin.test/admin-commerce-fixture",
-          "line": 71
+          "line": 75
         },
         {
           "url": "https://img.test/**",
-          "line": 290
+          "line": 294
         },
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 290
+          "line": 294
         },
         {
           "url": "https://img.test/rota.webp",
-          "line": 292
+          "line": 296
         },
         {
           "url": "https://img.test/principal.webp",
-          "line": 355
+          "line": 359
         },
         {
           "url": "https://img.test/coctel.webp",
-          "line": 380
+          "line": 384
         },
         {
           "url": "https://img.test/banda.webp",
-          "line": 380
+          "line": 384
         },
         {
           "url": "https://img.test/portada.webp",
-          "line": 432
+          "line": 436
         },
         {
           "url": "https://img.test/extra-$%7B++number%7D.webp",
-          "line": 434
+          "line": 438
         },
         {
           "url": "https://img.test/extra-1.webp/nhttps://img.test/extra-2.webp",
-          "line": 444
+          "line": 448
         },
         {
           "url": "https://img.test/extra-1.webp",
-          "line": 449
+          "line": 453
         },
         {
           "url": "https://img.test/tardia.webp",
-          "line": 462
+          "line": 466
+        },
+        {
+          "url": "https://img.test/$%7Bi%7D.webp",
+          "line": 518
         },
         {
           "url": "https://img.test/rosa.webp",
-          "line": 566
+          "line": 614
         },
         {
           "url": "https://img.test/rojo.webp",
-          "line": 566
+          "line": 614
         },
         {
           "url": "https://img.test/biblioteca.webp",
-          "line": 567
+          "line": 615
         },
         {
           "url": "https://img.test/a.webp",
-          "line": 608
+          "line": 656
         },
         {
           "url": "https://img.test/b.webp/nhttps://img.test/c.webp",
-          "line": 608
+          "line": 656
         },
         {
           "url": "https://img.test/b.webp",
-          "line": 609
+          "line": 657
         },
         {
           "url": "https://img.test/c.webp",
-          "line": 609
+          "line": 657
         },
         {
           "url": "https://img.test/",
-          "line": 628
+          "line": 676
         },
         {
           "url": "https://img.test/uno.png",
-          "line": 636
+          "line": 684
         },
         {
           "url": "https://img.test/dos.png",
-          "line": 638
+          "line": 686
         }
       ]
     },
@@ -56679,8 +56683,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204421,
-      "sha256": "d4cee3bbac1b086225909ea88da297e4ddac95d47ea3da005105f3d1c7097405"
+      "bytes": 204415,
+      "sha256": "099ed87c47a48a324e63a568ad811533d9d9cd733098692beb62df2711955da8"
     },
     {
       "path": "apple-touch-icon.png",
@@ -57675,8 +57679,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 2764,
-      "sha256": "cf4165670772222f02771aa8ea9178f77b9a2ddace4cefcf3aae73bfa68d28d0"
+      "bytes": 1844,
+      "sha256": "538346dfd4418e18752ff0640b73ab1e5d297428582f3bb19fb94cc2d06b193c"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -57688,7 +57692,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "acff70387ccb0a203fefd940bdd7387f65369efeeee17e73bef7a42989bfc308"
+      "sha256": "b9307161920b931ac53d570c5b6c329d2edbe5bfcd3cd0bf5bf91b7c66ed8403"
     },
     {
       "path": "config/public-site.json",
@@ -58347,8 +58351,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 933176,
-      "sha256": "f4e4be1cab46f733af7bdbaabb069a8763295ba3a57bb123da63dc52ff935b33"
+      "bytes": 935275,
+      "sha256": "d75b4c5a7b53e92b9e3daf1f6ffd0f31162678557259a4ed30098c260226581c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -58719,8 +58723,8 @@
     {
       "path": "docs/editor-productos-v2/00-INDICE.md",
       "extension": ".md",
-      "bytes": 3495,
-      "sha256": "2f663af94a142d089bd0c16e3f040cf0681841fc405aebb3c133780238e07c7b"
+      "bytes": 3654,
+      "sha256": "f6534b67ec75b4072258904fac052c97246e083644867c0d8f1abd036741309c"
     },
     {
       "path": "docs/editor-productos-v2/01-DECISIONES-Y-ALCANCE.md",
@@ -58823,6 +58827,12 @@
       "extension": ".md",
       "bytes": 6554,
       "sha256": "ed01dae8761200f09a48a0b9fbe862d07231fb770afd0557f88d80d5d894e535"
+    },
+    {
+      "path": "docs/editor-productos-v2/18-ESTABILIZACION-FASE-1-20261025.md",
+      "extension": ".md",
+      "bytes": 14063,
+      "sha256": "181fbf67b38845b2d70dfed77d7eb083fbe4e14809d528fa633167d10a561d14"
     },
     {
       "path": "docs/editor-productos-v2/evidencias-continuidad.json",
@@ -59613,14 +59623,14 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 46614,
-      "sha256": "0b48f316bf8c2802bbd64f7cc34f5b523f836cc361df576ccf0dd790e51b9fb3"
+      "bytes": 46626,
+      "sha256": "819ce68a3f6557cdf3af488b1898361cef9d84158a4d3c6d4b42f670ec01207b"
     },
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 517530,
-      "sha256": "cce2ac5610a78b535ce597e816db6386009ba1045a2241c59eb8f9876002d633"
+      "bytes": 517524,
+      "sha256": "5d07340989e7e3cb641b4caebb9d4b85f4ef4800532cbca7e147c726775de37b"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -59931,8 +59941,8 @@
     {
       "path": "js/admin/products/fotos-por-color.js",
       "extension": ".js",
-      "bytes": 16273,
-      "sha256": "115649a2848a9bbbfc0a18762cc85329d6ca853792681ab52f35eee363478cb4"
+      "bytes": 16781,
+      "sha256": "059a32e274cbbe71c83891a5c7bf9b4c965d815193323eadda4bb7ee93bb6d71"
     },
     {
       "path": "js/admin/products/fotos-por-variante.js",
@@ -59955,8 +59965,8 @@
     {
       "path": "js/admin/products/interfaz-productos-adaptable.js",
       "extension": ".js",
-      "bytes": 21204,
-      "sha256": "8273e97be2b364bc76e8ac63b8af05e9bd5a0d280ea038774df3a24cb8c15537"
+      "bytes": 21445,
+      "sha256": "cb8eb1ae9d1685424aeaf1390a7e112edaa7de1862f00af8882fcf2ea5e69212"
     },
     {
       "path": "js/admin/products/maestro-productos-core.mjs",
@@ -60057,8 +60067,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 132836,
-      "sha256": "7c521fb10153b116782b4681ffa8aff6de90e6acce027f5d3a7fcb95e10863fe"
+      "bytes": 132833,
+      "sha256": "104eb2b5f77057e6f4ed4bdfb8e3b8b8b9ebc68d4751e38363552073599e662c"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -61221,8 +61231,8 @@
     {
       "path": "js/pages/home/resenas-clientas.js",
       "extension": ".js",
-      "bytes": 1691,
-      "sha256": "1a7e599fae69a2615c3dbe978c95352078fc044a4a48f566d3939d837dc95995"
+      "bytes": 2372,
+      "sha256": "88ecff093cd88886ee45f62393b1e8debe6b000042ac35b1a79cbc7d242ac6d9"
     },
     {
       "path": "js/pages/institutional/about-canonical-clean-v1.js",
@@ -62583,8 +62593,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 75298,
-      "sha256": "95c0db9dd1cee0dec8b7f380ff934f941f65bad60e4b876f15479c0f6c345754"
+      "bytes": 75295,
+      "sha256": "62dde7a20d340f7430ec582a1a01fb9487400b87bd70c2648509c0f0280d27d7"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -64533,8 +64543,8 @@
     {
       "path": "tests/performance/home-review-gallery.spec.js",
       "extension": ".js",
-      "bytes": 2939,
-      "sha256": "3b9d3c76c03fc9cd1ca15f630b491a9db34fbb13333455d51da9eebb323112fe"
+      "bytes": 3382,
+      "sha256": "4157075c19d236c8485b4fee30adab9363c61265c693f890668573a7f37d52f3"
     },
     {
       "path": "tests/performance/image-fidelity.spec.js",
@@ -65181,8 +65191,8 @@
     {
       "path": "tests/ui-ux/product-color-gallery.spec.js",
       "extension": ".js",
-      "bytes": 24496,
-      "sha256": "fd9e1028d51cf17e6ba508013216494d8459a2121a4a07437d319fe14ee01047"
+      "bytes": 26097,
+      "sha256": "515cf780a662d64f70edf005e8be1eecdb7896f4667d7a4e32373e7273fe04b7"
     },
     {
       "path": "tests/ui-ux/product-first-paint.spec.js",
@@ -65235,8 +65245,8 @@
     {
       "path": "tests/ui-ux/products-responsive-phase-one.spec.js",
       "extension": ".js",
-      "bytes": 72870,
-      "sha256": "a36c422f19afb45fdbecf62374c0fe847c9bd236b558e5d96f03c954c6fdeb0a"
+      "bytes": 77397,
+      "sha256": "a2ee5fca301493fbeef9b01895319cb43f80b705dc5b6245c4d77b995aa7fb19"
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",

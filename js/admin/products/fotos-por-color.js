@@ -83,6 +83,10 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
   }
   function render() {
     if (destroyed || flushing || uploads.some(widget => widget.hasPending?.()) || variantPhotos.hasPending()) return;
+    // La asignación reconstruye los controles. Transferir el foco al mismo
+    // control lógico evita enviarlo a body al retirar su nodo anterior.
+    const focused=container.contains(document.activeElement) ? document.activeElement : null;
+    const focusLabel=focused?.getAttribute('aria-label');
     destroyUploads(); container.replaceChildren();
     const options = colors();
     if(visibleColor===null || (visibleColor && !options.includes(visibleColor)))visibleColor=options[0] || '';
@@ -181,6 +185,10 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     }
     applyFilter();
     variantPhotos.render(container, pool, render);
+    if(focusLabel) {
+      const replacement=[...container.querySelectorAll('[aria-label]')].find(node=>node.getAttribute('aria-label')===focusLabel);
+      replacement?.focus({preventScroll:true});
+    }
     notifyPreview();
     void analyzePhotos();
   }

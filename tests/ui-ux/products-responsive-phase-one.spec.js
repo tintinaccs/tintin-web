@@ -65,6 +65,10 @@ const prompt=shell.slice(promptStart,shell.indexOf('\n<!-- ═',promptStart));
 
 async function openEditor(page,width,height,withImages=false,beforeOpen=null){
  await page.setViewportSize({width,height});await mockRuntime(page);
+ if(process.env.EDITOR_PROFILE_BASELINE==='1') {
+  const baseline=require('node:child_process').execFileSync('git',['show','f9399a90c:js/admin/products/interfaz-productos-adaptable.js'],{encoding:'utf8'});
+  await page.route('**/products/interfaz-productos-adaptable.js*',route=>route.fulfill({contentType:'text/javascript',body:baseline}));
+ }
  if(withImages) await page.route('https://tintin.test/js/components/images/biblioteca-multimedia.js*',route=>route.fulfill({contentType:'text/javascript',body:typeof withImages==='string'?withImages:'export const deleteMediaByUrlIfUnused=()=>{window.__imageCleanup=(window.__imageCleanup||0)+1;throw Error("Sin escrituras");};export const deleteMediaItem=deleteMediaByUrlIfUnused;export const uploadImageToLibrary=deleteMediaByUrlIfUnused;'}));
  const html=fixtureHtml();const start=html.indexOf('<div class="adm-card" id="prod-form-card"');
  const full=html.slice(0,start)+form+html.slice(html.indexOf('</section>',start));
@@ -502,6 +506,50 @@ for (const width of [320,390,768,1440]) test(`cambiar apartado reinicia el edito
  await page.evaluate(()=>{const input=document.getElementById('prod-price');input.value='65000';input.dispatchEvent(new Event('input',{bubbles:true}));});
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  expect(await page.evaluate(()=>({window:scrollY,body:document.querySelector('#prod-form-card .adm-card-body').scrollTop}))).toEqual(before);
+});
+
+for(const photos of [1,2,5,10,20]) test(`perfil sintético del editor con ${photos} fotografías`,async({page})=>{
+ const start=performance.now();await openEditor(page,1366,768);
+ const openMs=performance.now()-start;
+ const metrics=await page.evaluate(async count=>{
+  const card=document.querySelector('#prod-form-card');let records=0,added=0;
+  const photoContainer=document.createElement('div');photoContainer.id='prod-color-photos';card.querySelector('[data-product-section="photos"] .tt-editor-section-fields').append(photoContainer);
+  const photoModule='/js/admin/products/fotos-por-color.js';const {attachColorPhotos}=await import(photoModule);
+  const urls=Array.from({length:count},(_,i)=>`https://img.test/${i}.webp`);
+  const variantsInput=document.getElementById('prod-variants-text'),imagesInput=document.getElementById('prod-images-extra'),mainInput=document.getElementById('prod-imageUrl');
+  variantsInput.value='Color: Dorado';mainInput.value=urls[0];imagesInput.value=urls.slice(1).join('\n');
+  const gallery=attachColorPhotos({container:photoContainer,product:{id:'synthetic-profile',imageUrl:urls[0],imagesExtra:urls.slice(1),variants:{Color:['Dorado']}},variantsInput,imagesInput,mainInput,openLibrary:async()=>null});
+  const longTasks=[];const tasks=typeof PerformanceObserver==='function' && PerformanceObserver.supportedEntryTypes.includes('longtask')?new PerformanceObserver(list=>longTasks.push(...list.getEntries().map(item=>item.duration))):null;tasks?.observe({type:'longtask'});
+  const observer=new MutationObserver(batch=>{records+=batch.length;for(const item of batch)added+=item.addedNodes.length;});
+  observer.observe(card,{childList:true,subtree:true});
+  const settle=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  const measure=async(id,value)=>{records=0;added=0;const t=performance.now();const field=document.getElementById(id);field.value=value;field.dispatchEvent(new Event('input',{bubbles:true}));field.dispatchEvent(new Event('change',{bubbles:true}));await settle();return {ms:performance.now()-t,mutationRecords:records,addedNodes:added};};
+  const photos=await measure('prod-images-extra',Array.from({length:count},(_,i)=>`https://img.test/${i}.webp`).join('\n'));
+  const color=await measure('prod-variants-text','Color: Dorado, Plateado');
+  const stock=await measure('prod-stock','25');observer.disconnect();tasks?.disconnect();gallery.destroy();
+  return {photos,color,stock,longTasks,heapBytes:performance.memory?.usedJSHeapSize ?? null};
+ },photos);
+ console.log('EDITOR_PROFILE',JSON.stringify({photoCount:photos,openMs,...metrics}));
+ await test.info().attach(`profile-${photos}.json`,{body:JSON.stringify({photoCount:photos,openMs,...metrics}),contentType:'application/json'});
+});
+
+test('un error persistente no reinicia scroll ni foco al editar precio',async({page})=>{
+ await openEditor(page,390,844);
+ await page.evaluate(()=>{const error=document.querySelector('#prod-form-error');error.textContent='Completá el nombre';error.style.display='block';});
+ await expect(page.locator('#prod-form-error')).toBeFocused();
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ const before=await page.evaluate(()=>{
+  const input=document.querySelector('#prod-price');input.focus({preventScroll:true});
+  const body=document.querySelector('#prod-form-card .adm-card-body');body.scrollTop=300;
+  window.__scrollResets=0;const reset=window.TintinPageScroll.reset;window.TintinPageScroll.reset=(...args)=>{window.__scrollResets++;return reset(...args);};
+  input.value='65000';input.dispatchEvent(new Event('input',{bubbles:true}));
+  return body.scrollTop;
+ });
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ await page.screenshot({path:`artifacts/editor-phase1/error-${process.env.EDITOR_PROFILE_BASELINE==='1'?'before':'after'}.png`});
+ expect(await page.evaluate(()=>window.__scrollResets)).toBe(0);
+ expect(await page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop)).toBe(before);
+ await expect(page.locator('#prod-price')).toBeFocused();
 });
 
 test('abrir conserva producto oculto y visibilidad manual independiente de la cantidad',async({page})=>{

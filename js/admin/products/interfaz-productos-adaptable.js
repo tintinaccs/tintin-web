@@ -198,8 +198,12 @@ export function enhanceProductEditor() {
   }
   const selected=privateHidden && card.querySelector('#prod-editor-section').value==='private'?'all':card.querySelector('#prod-editor-section').value;
   const message=error?.style.display !== 'none' ? error?.textContent.trim() || '' : '';
-  showSection(card,message ? 'all' : selected,Boolean(message));
-  if(message && message!==lastError && visibleProductEditor()) {error.focus({preventScroll:true});error.scrollIntoView({block:'nearest'});}
+  // Sólo un error nuevo inicia navegación. El observer también corre al editar
+  // controles: un mensaje persistente no debe reiniciar scroll ni desplegar
+  // otra vez todos los bloques en cada pulsación.
+  const newError=Boolean(message && message!==lastError);
+  showSection(card,newError ? 'all' : selected,newError);
+  if(newError && visibleProductEditor()) {error.focus({preventScroll:true});error.scrollIntoView({block:'nearest'});}
   lastError=message;
   refreshProductPreview(card);
   installEditorControls(card);refreshEditorControls(card);

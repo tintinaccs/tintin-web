@@ -46,5 +46,10 @@ for (const width of [320, 390, 768, 1024, 1366, 1920]) {
     await expect(more).toBeFocused();
     await expect(dialog.locator('img')).toHaveCount(23);
     expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('');
+    const imageButton=page.getByRole('button',{name:'Reseña de una clienta de Tintin, captura 1. Abrir galería de reseñas',exact:true});
+    await imageButton.click();await expect(dialog).toBeVisible();
+    await page.keyboard.press('Escape');await expect(imageButton).toBeFocused();
+    await page.keyboard.press('Enter');await expect(dialog).toBeVisible();
+    await page.keyboard.press('Escape');await expect(imageButton).toBeFocused();
   });
 }

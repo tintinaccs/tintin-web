@@ -1,52 +1,32 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "9839f4597699a5153472f8235e98afde5ee23f61",
-  "reason": "Integrar correcciones de navegación móvil y centrado con instrucción permanente de merge protegido",
+  "baseCommit": "f9399a90c73398a18c877bcaf1985491d4085913",
+  "reason": "Estabilizar scroll, foco y reseñas para revisión; sin merge ni despliegue",
   "files": [
     {
-      "path": "admin-images.html",
-      "oldHash": "f44650730dc8fbc9001ae0c089c6183e2428d4e51a02a3528b6f6c05422842d2",
-      "newHash": "c28b663f23083a211b9ede1d8d09e5bf371bcd8148a9c0268225f686362f071c"
-    },
-    {
       "path": "admin.html",
-      "oldHash": "7545baaf78fe5f152594f4adbb5c5af29c5fdd0854b654948b6430d7c31a77a7",
-      "newHash": "d4cee3bbac1b086225909ea88da297e4ddac95d47ea3da005105f3d1c7097405"
-    },
-    {
-      "path": "AGENTS.md",
-      "oldHash": "fed2f2588cc7e3d3f6ae8c120a2c0564cc2173b6351c822a3bc4d1dc7dc5556a",
-      "newHash": "d75b5063915f451493681421aa42d41c2aae289d5dcdbd8a22ea33dcc1f82c31"
-    },
-    {
-      "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "c634faa5712804794b75063067397364e9c78c25cf34478b1b9a9bb9955015f5",
-      "newHash": "2d3358195366fd2f58301b456a34fb3b4db99798b910173744f6568bb9727722"
-    },
-    {
-      "path": "css/pages/home/ajuste-inicio.css",
-      "oldHash": "b24ff61ce8968be143857707c2f78108f221d2dd89e0f80628a6aad5f73f2855",
-      "newHash": "1ded5adc6dbb79fe1bdf1d72593b8d2f4cdfbb8cb4c20a3453b2f10cea67bb7b"
+      "oldHash": "d4cee3bbac1b086225909ea88da297e4ddac95d47ea3da005105f3d1c7097405",
+      "newHash": "099ed87c47a48a324e63a568ad811533d9d9cd733098692beb62df2711955da8"
     },
     {
       "path": "index.html",
-      "oldHash": "c750f0b23c1bcae0e32e3ab445f0a362f42aa78951db6146501be7642e594bf7",
-      "newHash": "0b48f316bf8c2802bbd64f7cc34f5b523f836cc361df576ccf0dd790e51b9fb3"
+      "oldHash": "0b48f316bf8c2802bbd64f7cc34f5b523f836cc361df576ccf0dd790e51b9fb3",
+      "newHash": "819ce68a3f6557cdf3af488b1898361cef9d84158a4d3c6d4b42f670ec01207b"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "2c0ef3c4654e44bb5620f066ffab841e723f49b8981c0130b0b248f25454965a",
-      "newHash": "cce2ac5610a78b535ce597e816db6386009ba1045a2241c59eb8f9876002d633"
+      "oldHash": "cce2ac5610a78b535ce597e816db6386009ba1045a2241c59eb8f9876002d633",
+      "newHash": "5d07340989e7e3cb641b4caebb9d4b85f4ef4800532cbca7e147c726775de37b"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "b7a0b51ec738d3585637dd3295c6694c4841420204f78620a060d0ceb0184df4",
-      "newHash": "7c521fb10153b116782b4681ffa8aff6de90e6acce027f5d3a7fcb95e10863fe"
+      "oldHash": "7c521fb10153b116782b4681ffa8aff6de90e6acce027f5d3a7fcb95e10863fe",
+      "newHash": "104eb2b5f77057e6f4ed4bdfb8e3b8b8b9ebc68d4751e38363552073599e662c"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "3d319906f484af28182885ac9e797703afe3f66d5d800d297c76818127fcfb1d",
-      "newHash": "95c0db9dd1cee0dec8b7f380ff934f941f65bad60e4b876f15479c0f6c345754"
+      "oldHash": "95c0db9dd1cee0dec8b7f380ff934f941f65bad60e4b876f15479c0f6c345754",
+      "newHash": "62dde7a20d340f7430ec582a1a01fb9487400b87bd70c2648509c0f0280d27d7"
     }
   ],
   "affectedRecords": [
