@@ -13,6 +13,8 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
     expect(await page.locator('#prod-form-card').evaluate(card => card.scrollWidth <= card.clientWidth + 1)).toBe(true);
     await page.locator('#prod-editor-section').selectOption('general');
     await page.locator('#prod-name').fill('Producto ficticio QA tablet');
+    await page.locator('#prod-description').fill('Descripción del producto de prueba.');
+    await page.locator('#prod-imageUrl').evaluate(input => { input.value='/assets-tintin/logo.png'; });
     await page.locator('#prod-editor-section').selectOption('prices');
     await page.locator('#prod-price').fill('45000');
     await page.locator('#prod-editor-section').selectOption('visibility');
@@ -22,6 +24,7 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
     await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado');
     await expect(page.locator('#prod-form-error')).toBeHidden();
     const quantity = page.locator('#prod-variant-stock input[type="number"]');
+    await press(page.getByRole('button', { name: 'Asignar stock por color u opción', exact: true }));
     await quantity.fill('2');
     await expect(page.locator('#prod-stock')).toHaveValue('2');
     if ([390,768,1024,1366,1920].includes(width)) {
@@ -38,6 +41,8 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
   async function fillValid(page) {
     await page.locator('#prod-editor-section').selectOption('general');
     await page.locator('#prod-name').fill('Producto ficticio QA');
+    await page.locator('#prod-description').fill('Descripción del producto de prueba.');
+    await page.locator('#prod-imageUrl').evaluate(input => { input.value='/assets-tintin/logo.png'; });
     await page.locator('#prod-editor-section').selectOption('prices');
     await page.locator('#prod-price').fill('45000');
     await page.locator('#prod-editor-section').selectOption('visibility');
@@ -47,6 +52,7 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
     await openProductSaveFixture(page, width, height); await fillValid(page);
     await page.locator('#prod-editor-section').selectOption('inventory');
     await press(page.getByRole('button', { name: 'Agregar color Dorado', exact: true }));
+    await press(page.getByRole('button', { name: 'Asignar stock por color u opción', exact: true }));
     await page.locator('#prod-variant-stock input[type="number"]').fill('2');
     page.once('dialog', dialog => dialog.accept());
     await press(page.getByRole('button', { name: 'Usar precios y disponibilidad por combinación', exact: true }));
@@ -58,6 +64,27 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
     await press(page.locator('#prod-save-btn')); await expect(page.locator('#prod-form-card')).toBeHidden();
     const saved = await page.evaluate(() => window.qaProductStore.get('products/qa-product-1'));
     expect(saved.variantCommerceVersion).toBe(2); expect(saved.stock).toBe(2); expect(saved.variantInventory[0].stock).toBe(2); expect(saved.variantInventory[0].price).toBe(55000);
+  });
+  test('color opcional sin reparto de stock y básicos de publicación', async ({page}) => {
+    await openProductSaveFixture(page, width, height); await fillValid(page);
+    await page.locator('#prod-publicationStatus').selectOption('active');
+    await page.locator('#prod-description').evaluate(input => { input.value=''; });
+    await press(page.locator('#prod-save-btn'));
+    await expect(page.locator('#prod-form-error')).toContainText('descripción');
+    await page.locator('#prod-description').evaluate(input => { input.value='Descripción válida'; });
+    await page.locator('#prod-imageUrl').evaluate(input => { input.value=''; });
+    await press(page.locator('#prod-save-btn'));
+    await expect(page.locator('#prod-form-error')).toContainText('foto principal');
+    await page.locator('#prod-imageUrl').evaluate(input => { input.value='/assets-tintin/logo.png'; });
+    await page.locator('#prod-editor-section').selectOption('inventory');
+    await press(page.getByRole('button', {name:'Agregar color Dorado',exact:true}));
+    await expect(page.locator('#prod-stock')).toBeEditable();
+    await expect(page.locator('#prod-variant-stock input[type="number"]')).toHaveCount(0);
+    await press(page.locator('#prod-save-btn'));
+    await expect(page.locator('#prod-form-card')).toBeHidden();
+    const saved=await page.evaluate(()=>window.qaProductStore.get('products/qa-product-1'));
+    expect(saved.variants).toEqual({Color:['Dorado']});
+    expect(saved.variantInventory).toBeUndefined();
   });
   test('doble toque o doble clic mientras guarda crea un solo producto', async ({ page }) => {
     await openProductSaveFixture(page, width, height); await fillValid(page);
@@ -113,6 +140,7 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
     await openProductSaveFixture(page, width, height);
     await page.locator('#prod-editor-section').selectOption('inventory');
     await press(page.getByRole('button', { name: 'Agregar color Dorado', exact: true }));
+    await press(page.getByRole('button', { name: 'Asignar stock por color u opción', exact: true }));
     await page.locator('#prod-variant-stock input[type="number"]').fill('2');
     await press(page.getByRole('button', { name: 'Quitar Color: Dorado', exact: true }));
     await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado');

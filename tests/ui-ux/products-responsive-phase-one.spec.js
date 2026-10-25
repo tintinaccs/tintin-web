@@ -205,6 +205,9 @@ test('configurar stock por color exige cantidades explícitas y recalcula total 
   window.__stockEditor.renderProductVariantStock({stock:1});
  },{renderer:stockRenderer,inventory:inventorySource});
  await page.getByText('Editar opciones en texto',{exact:true}).click();await page.locator('#prod-variants-text').fill('Color: dorado, plateado');
+ await expect(page.locator('#prod-stock')).toBeEditable();
+ await expect(page.locator('#prod-variant-stock input')).toHaveCount(0);
+ await page.getByRole('button',{name:'Asignar stock por color u opción',exact:true}).click();
  await expect(page.getByRole('button',{name:'Asignar stock por color u opción',exact:true})).toHaveCount(0);
  const quantities=page.locator('#prod-variant-stock input');await expect(quantities).toHaveCount(2);
  await expect(quantities.nth(0)).toHaveValue('');await expect(quantities.nth(1)).toHaveValue('');
@@ -225,6 +228,9 @@ for(const [width,height] of [[768,1024],[1024,768]])test(`producto nuevo en tabl
   window.__stockEditor.renderProductVariantStock(null);
  },{renderer:stockRenderer,inventory:inventorySource});
  await page.evaluate(()=>{const field=document.getElementById('prod-variants-text');field.value='Color: dorado, plateado';field.dispatchEvent(new Event('input',{bubbles:true}));});
+ await expect(page.locator('#prod-stock')).toBeEditable();
+ await expect(page.locator('#prod-variant-stock input')).toHaveCount(0);
+ await page.getByRole('button',{name:'Asignar stock por color u opción',exact:true}).click();
  expect(await page.evaluate(()=>({error:document.getElementById('prod-form-error').textContent,display:document.getElementById('prod-form-error').style.display,quantities:document.querySelectorAll('#prod-variant-stock input').length}))).toEqual({error:'',display:'none',quantities:2});
  const quantities=page.locator('#prod-variant-stock input');
  await quantities.nth(0).fill('1');await quantities.nth(1).fill('2');await expect(page.locator('#prod-stock')).toHaveValue('3');
@@ -694,7 +700,7 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(card.locator('[data-product-section="private"]')).toBeHidden();
  const layout=card.locator('.tt-editor-layout'),main=card.locator('.tt-product-fields'),sidebar=card.locator('.tt-editor-sidebar');
  const boxes=await Promise.all([main.boundingBox(),sidebar.boundingBox()]);
- if(width>=1000){expect(boxes[1].x).toBeGreaterThanOrEqual(boxes[0].x+boxes[0].width);expect(boxes[0].width).toBeGreaterThan(boxes[1].width);}
+ if(await card.evaluate(node=>{const style=getComputedStyle(node);return node.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)>=1200;})){expect(boxes[1].x).toBeGreaterThanOrEqual(boxes[0].x+boxes[0].width);expect(boxes[0].width).toBeGreaterThan(boxes[1].width);}
  else{expect(Math.abs(boxes[1].x-boxes[0].x)).toBeLessThanOrEqual(1);expect(boxes[1].y).toBeGreaterThanOrEqual(boxes[0].y+boxes[0].height);}
  await expect(main.locator('#prod-description')).toHaveCount(1);
  await expect(sidebar.locator('#prod-category')).toHaveCount(1);

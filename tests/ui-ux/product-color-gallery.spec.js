@@ -17,6 +17,22 @@ const fixture = `<!doctype html><html lang="es"><head><link rel="stylesheet" hre
 <button id="gallery-main" aria-label="Ampliar"></button><div id="product-variants"><div class="tt-product-variants" data-variant-key="Color"><div class="tt-variant-options"><button class="tt-variant-option">Dorado</button><button class="tt-variant-option">Plateado</button></div></div></div><div id="gallery-thumbs"></div>
 <h2>Super Admin: asignación de fotos</h2><textarea id="options">Color: Dorado\nColor: Plateado</textarea><textarea id="extras">/gold1.svg\n/gold2.svg\n/gold3.svg\n/silver1.svg\n/silver2.svg\n/silver3.svg</textarea><input id="main" value="/gold1.svg"><div id="editor"></div>
 <script src="/js/components/images/galeria-producto.js"></script><script src="/gallery-fixture.js"></script><script type="module">import {attachColorPhotos} from '/js/admin/products/fotos-por-color.js';window.editor=attachColorPhotos({container:document.getElementById('editor'),product:_pdProduct,variantsInput:document.getElementById('options'),imagesInput:document.getElementById('extras'),mainInput:document.getElementById('main'),openLibrary:async()=>'/gold4.svg'});window.editorReady=true;</script></body></html>`;
+for (const accept of [true, false]) test(`sugerencia de color requiere decisión explícita: ${accept ? 'aceptar' : 'descartar'}`, async ({page}) => {
+  await page.route('**/color-suggestion-fixture', r => r.fulfill({contentType:'text/html',body:`<textarea id="options"></textarea><textarea id="extras"></textarea><input id="main" value="/gold1.svg"><div id="editor"></div><script src="/js/components/images/galeria-producto.js"></script><script type="module">
+    const editorPath='/js/admin/products/fotos-por-color.js'; const {attachColorPhotos}=await import(editorPath);
+    window.TintinProductColors={...window.TintinProductColors,suggestImageColor:async()=>({name:'Dorado'})};
+    window.editor=attachColorPhotos({container:document.querySelector('#editor'),variantsInput:document.querySelector('#options'),imagesInput:document.querySelector('#extras'),mainInput:document.querySelector('#main'),openLibrary:async()=>null});
+  </script>`}));
+  await page.goto('/color-suggestion-fixture');
+  await expect(page.getByRole('button',{name:'Aceptar Dorado',exact:true})).toBeVisible();
+  await expect(page.locator('#options')).toHaveValue('');
+  expect(await page.evaluate(()=>window.editor.serialize())).toEqual([]);
+  await page.getByRole('button',{name:`${accept?'Aceptar':'Descartar'} Dorado`,exact:true}).click();
+  await expect(page.locator('#options')).toHaveValue(accept?'Color: Dorado':'');
+  await page.evaluate(()=>{document.querySelector('#options').value='';document.querySelector('#options').dispatchEvent(new Event('input'));window.editor.refresh();});
+  await expect(page.getByRole('button',{name:'Aceptar Dorado',exact:true})).toHaveCount(0);
+  expect(await page.evaluate(()=>window.editor.serialize())).toEqual([]);
+});
 for(const width of [320,390,709,768,1024,1440,1920]) test(`galería y editor de tres fotos por color en ${width}px`,async({page})=>{
   await page.setViewportSize({width,height:900});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -157,11 +173,13 @@ for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real mini
 });
 
 test('las sugerencias agrupan varias fotos y respetan el cambio manual',async({page})=>{
-  const autoFixture=fixture.replace('product:_pdProduct,','product:{..._pdProduct,variantMedia:[]},');
+  const autoFixture=fixture.replace('product:_pdProduct,','product:{..._pdProduct,id:undefined,variantMedia:[]},');
   await page.route('**/color-gallery-fixture',r=>r.fulfill({contentType:'text/html',body:autoFixture}));
   await page.route('**/gallery-fixture.js',r=>r.fulfill({contentType:'text/javascript',body:harness}));
   await page.route(/\/(gold|silver)\d\.svg$/,r=>r.fulfill({contentType:'image/svg+xml',body:`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><circle cx="60" cy="60" r="40" fill="${r.request().url().includes('gold')?'gold':'silver'}"/></svg>`}));
-  await page.goto('/color-gallery-fixture');await page.waitForFunction(()=>window.editorReady&&window.editor.serialize().every(row=>row.imageUrls.length===3));
+  await page.goto('/color-gallery-fixture');await page.waitForFunction(()=>window.editorReady);
+  for (let index=0;index<6;index++) await page.getByRole('button',{name:/^Aceptar (dorado|plateado)$/i}).first().click();
+  await page.waitForFunction(()=>window.editor.serialize().every(row=>row.imageUrls.length===3));
   const rows=await page.evaluate(()=>window.editor.serialize());
   expect(rows[0].imageUrls.every(url=>url.includes('gold'))).toBe(true);expect(rows[1].imageUrls.every(url=>url.includes('silver'))).toBe(true);
   await page.getByRole('checkbox',{name:'Asignar foto 1 a Dorado',exact:true}).uncheck();

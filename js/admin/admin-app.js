@@ -14,7 +14,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261024-editor-gallery-compact-1';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261025-editor-opciones-2';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -5970,6 +5970,8 @@ function renderProductVariantStock(product, configuration = null) {
   optionsInput.addEventListener('input', () => {
     try {
       if (!optionsInput.value.trim() && !productVariantStockBaseline) return;
+      // Agregar opciones no activa el control de unidades por combinación.
+      if (!productVariantStockBaseline) { acceptedOptions = optionsInput.value; return; }
       const previous = productVariantStockBaseline?.entries.map((entry, index) => ({...entry, stock:panel.querySelectorAll('input')[index]?.value ?? entry.stock})) || [];
       if (!optionsInput.value.trim() && !product && !document.getElementById('prod-id').value) {
         if (previous.some(entry => Number(entry.stock) > 0)) throw new Error('Primero dejá en 0 el stock de la opción que querés quitar.');
@@ -6273,6 +6275,10 @@ async function prodGuardar() {
     // cargas antes de construir el payload evita guardar sin la foto elegida.
     await productColorPhotos?.flush();
     await Promise.all(['prod-image-widget', 'prod-gallery-widget'].map(id => _formImageWidgets.get(id)?.flush()));
+    if (document.getElementById('prod-publicationStatus')?.value !== 'draft' && document.getElementById('prod-publicationStatus')?.value !== 'archived') {
+      if (!document.getElementById('prod-description').value.trim()) throw new Error('Completá la descripción para publicar el producto.');
+      if (!document.getElementById('prod-imageUrl').value.trim()) throw new Error('Elegí una foto principal para publicar el producto.');
+    }
   } catch (error) {
     errEl.textContent = 'No se guardó el producto: ' + (error?.message || 'No se pudo subir la imagen.');
     errEl.style.display = '';
