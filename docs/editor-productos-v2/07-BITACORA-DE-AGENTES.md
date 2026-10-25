@@ -62,3 +62,7 @@ Base main0f253a411. La titular aprobó implementar y fusionar la propuesta visua
 ## 2026-10-24 — Aplicación de habilidad Apple-inspired existente
 
 Codex /root aplica la habilidad instalada apple-inspired-design al editor canónico, sin sistema paralelo. Base304e2db, rama codex/editor-apple-responsive-20261024. Reutiliza componentes y Montserrat/paleta de Tintin; sólo presentación y resúmenes de campos. No modifica la habilidad ni agrega servicios. Borrador1228 ajeno intacto. Evidencia local, CI y publicación se distinguen en CURRENT_STATE; no cerrar fases históricas por inferencia.
+
+## 2026-10-24 — Codex /root: contraste y ejemplos de entrada
+
+Refinamiento Apple-inspired de agregar/editar, sin cambiar estructura ni motor comercial. Casillas blancas, borde contrastado, rosa discreto en lienzo/separadores, títulos legibles y ejemplos suplementarios conservando etiquetas. Foco reparado contra reset heredado. Validación y límites en CURRENT_STATE.

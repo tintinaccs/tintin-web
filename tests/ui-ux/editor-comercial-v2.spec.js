@@ -131,3 +131,22 @@ for(const [width,height] of [[320,700],[768,1024],[1024,768],[1440,900]])test(`e
  const contrast=await page.locator('#prod-save-btn').evaluate(el=>{const s=getComputedStyle(el),canvas=document.createElement('canvas');canvas.width=canvas.height=1;const ctx=canvas.getContext('2d');const luminance=color=>{ctx.clearRect(0,0,1,1);ctx.fillStyle=color;ctx.fillRect(0,0,1,1);const c=[...ctx.getImageData(0,0,1,1).data].slice(0,3).map(x=>{x/=255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4;});return .2126*c[0]+.7152*c[1]+.0722*c[2];};const a=luminance(s.color),b=luminance(s.backgroundColor);return(Math.max(a,b)+.05)/(Math.min(a,b)+.05);});
  expect(contrast).toBeGreaterThanOrEqual(4.5);
 });
+for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768],[1440,900],[1920,1080]])test(`editor contraste Tintin: ejemplos, superficies y foco ${width}x${height}`,async({page})=>{
+ const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
+ await openProductSaveFixture(page,width,height);
+ await page.locator('#prod-editor-section').selectOption('general');
+ const name=page.locator('#prod-name');
+ await expect(name).toHaveAttribute('placeholder','Ej.: Pulsera Fiorella');
+ await name.fill('');await expect(name).toHaveValue('');
+ const colors=await name.evaluate(el=>{
+  const s=getComputedStyle(el),p=getComputedStyle(el,'::placeholder'),canvas=document.createElement('canvas');canvas.width=canvas.height=1;const ctx=canvas.getContext('2d');
+  const lum=color=>{ctx.clearRect(0,0,1,1);ctx.fillStyle=color;ctx.fillRect(0,0,1,1);const c=[...ctx.getImageData(0,0,1,1).data].slice(0,3).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;});return .2126*c[0]+.7152*c[1]+.0722*c[2];};
+  const ratio=(a,b)=>(Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05);
+  return{placeholder:ratio(p.color,s.backgroundColor),border:ratio(s.borderTopColor,s.backgroundColor),text:ratio(s.color,s.backgroundColor),distinct:p.color!==s.color,opacity:p.opacity,field:s.backgroundColor,canvas:getComputedStyle(el.closest('.adm-card-body')).backgroundColor};
+ });
+ expect(colors.placeholder).toBeGreaterThanOrEqual(4.5);expect(colors.distinct).toBe(true);expect(colors.border).toBeGreaterThanOrEqual(3);expect(colors.text).toBeGreaterThanOrEqual(4.5);expect(colors.opacity).toBe('1');expect(colors.field).not.toBe(colors.canvas);
+ await name.focus();expect(await name.evaluate(el=>getComputedStyle(el).outlineStyle)).not.toBe('none');
+ await name.fill('Pulsera de prueba');await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('45000');await page.locator('#prod-editor-section').selectOption('general');await expect(name).toHaveValue('Pulsera de prueba');
+ expect(await page.locator('#prod-form-card').evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
+ fs.mkdirSync('artifacts/editor-contrast',{recursive:true});await name.fill('');await name.blur();await page.evaluate(()=>document.fonts.ready);await page.screenshot({animations:'disabled',path:`artifacts/editor-contrast/agregar-${test.info().project.name}-${width}.png`});
+});
