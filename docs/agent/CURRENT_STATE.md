@@ -8,6 +8,8 @@ Delta final: pérdida de foco al desmarcar foto reproducida RED en390; render tr
 
 NOT_VERIFIED: sesión autenticada, ida/vuelta cuarta portada guardada→tarjeta pública, memoria precisa/listeners acumulados, Safari/teclado físico y cobertura exhaustiva de colecciones. No certificar la fase completa. CI del candidato pendiente. No heredar evidencia histórica. Primer arranque de pruebas bloqueado por Chromium ausente; navegador instalado y suites realmente ejecutadas después.
 
+Cierre local funcional aa4856c5bd4a2a44e3a6e62f80cf3b35dbd321f3:156/156 Chromium finales sin reintentos PASS. PR1237 DRAFT sin auto-merge, CI remota pendiente; Cloudflare crea preview automáticamente (no producción). Commit posterior sólo evidencia/diagnóstico. No fusionar ni publicar.
+
 ## 2026-10-25 — Preparación de merge de navegación móvil (Codex /root, GPT-6)
 
 La titular autoriza explícitamente integrar estas correcciones mediante «mergealo». Se prepara el PR desde9839f4597, conservando el informe y su límite Safari/iPhone NOT_VERIFIED. Evidencia local previa:70 pruebas panel/inicio,126 combinaciones canónicas y6 regresiones dirigidas del editor aprobadas; build/caché/protección/sintaxis aprobados. No se hereda CI/producción de1234/1235. El candidato nuevo debe aprobar controles protegidos propios antes de merge/publicación; sin cambios en permisos ni datos reales.
