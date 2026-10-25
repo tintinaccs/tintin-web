@@ -159,3 +159,30 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
   });
  });
 }
+
+
+for(const [width,height] of [[320,568],[390,844],[430,932],[540,900],[600,960],[768,1024],[820,1180],[844,390],[1024,768],[1180,820],[1366,768],[1920,1080],[3840,2160]])test('Nuevo y Editar conservan formulario visible con cabecera real '+width+'x'+height,async({page})=>{
+  await openProductSaveFixture(page,width,height,{fullShell:true});
+  await page.locator('#prod-editor-section').selectOption('general');
+  await page.locator('#prod-name').fill('Producto ficticio con cabecera');
+  await page.locator('#prod-description').fill('Descripción de prueba, sin productos reales.');
+  await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('45000');
+  await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('qa-tablet');
+  await page.locator('#prod-imageUrl').evaluate(n=>{n.value='https://img.test/principal.png';});
+  await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+  await page.evaluate(()=>window.prodEditar('qa-product-1'));
+  await expect(page.locator('#prod-name')).toHaveValue('Producto ficticio con cabecera');
+  const frame=await page.locator('#prod-form-card').boundingBox();expect(frame.height).toBeGreaterThan(200);expect(frame.y).toBeGreaterThanOrEqual(0);expect(frame.y+frame.height).toBeLessThanOrEqual(height+1);
+  await expect(page.locator('#prod-save-btn')).toBeInViewport();
+  await page.locator('#prod-editor-section').selectOption('inventory');
+  const controls=await page.locator('.tt-editor-variant-add').evaluate(row=>({row:row.getBoundingClientRect().toJSON(),children:[...row.children].map(n=>({tag:n.tagName,rect:n.getBoundingClientRect().toJSON()}))}));
+  for(const control of controls.children){expect(control.rect.left).toBeGreaterThanOrEqual(controls.row.left-1);expect(control.rect.right).toBeLessThanOrEqual(controls.row.right+1);if(['INPUT','SELECT'].includes(control.tag))expect(control.rect.width).toBeGreaterThanOrEqual(Math.min(180,controls.row.width)-1);}
+});
+
+test('viewport reducido y restauración no dejan el editor vacío ni pierden el borrador',async({page})=>{
+  await openProductSaveFixture(page,390,844,{fullShell:true});await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Borrador conservado');
+  await page.evaluate(()=>{window.qaVisualHeight=document.querySelector('.adm-topbar').getBoundingClientRect().bottom;Object.defineProperty(visualViewport,'height',{configurable:true,get:()=>window.qaVisualHeight});dispatchEvent(new Event('resize'));});
+  expect((await page.locator('#prod-form-card').boundingBox()).height).toBeGreaterThan(0);
+  await page.evaluate(()=>{delete visualViewport.height;dispatchEvent(new Event('pageshow'));});
+  await expect.poll(()=>page.locator('#prod-form-card').evaluate(n=>n.getBoundingClientRect().height)).toBeGreaterThan(500);await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');
+});

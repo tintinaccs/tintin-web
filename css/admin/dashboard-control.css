@@ -145,9 +145,12 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
 
 /* Cápsula móvil sólida, con la misma separación que la navegación pública. */
 @media (max-width:540px) {
-  html:root body.tt-admin-control {
+  html:root:has(body.tt-admin-control) {
     --tt-admin-nav-bottom: max(12px,env(safe-area-inset-bottom,0px));
     --tt-admin-nav-clearance: calc(76px + var(--tt-admin-nav-bottom));
+  }
+  html:root:has(body.tt-admin-control #adm-mobile-tabs) {
+    scroll-padding-bottom: calc(var(--tt-admin-nav-clearance) + 24px);
   }
   html:root body.tt-admin-control #adm-mobile-tabs {
     left: 50vw; right: auto; bottom: var(--tt-admin-nav-bottom);

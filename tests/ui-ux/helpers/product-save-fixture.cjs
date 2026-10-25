@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { expect } = require('@playwright/test');
 const { mockRuntime, fixtureHtml } = require('./admin-commerce-fixture.cjs');
+const { removeFixtureScripts } = require('../../../scripts/lib/html-layout-fixture.js');
 const root = path.resolve(__dirname, '../../..');
 const shell = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
 const headStyles = (shell.match(/<link[^>]+rel="stylesheet"[^>]*>/g) || []).join('');
@@ -10,7 +11,7 @@ const start = shell.indexOf('<div class="adm-card" id="prod-form-card"');
 const form = shell.slice(start, shell.indexOf('\n    </div>\n\n    <!-- ===================== COLECCIONES', start));
 const code = source.slice(source.indexOf('let productVariantStockBaseline = null;'), source.indexOf('window.prodToggleActive ='));
 
-async function openProductSaveFixture(page, width, height) {
+async function openProductSaveFixture(page, width, height, {fullShell=false} = {}) {
   await page.setViewportSize({ width, height });
   await mockRuntime(page);
   await page.exposeFunction('qaCommercialWrite', async ({ request, records }) => {
@@ -28,9 +29,20 @@ async function openProductSaveFixture(page, width, height) {
       return { ok: true, result, records: [...data], writes };
     } catch (error) { return { ok: false, error: error.message }; }
   });
-  const html = fixtureHtml().replace('<section class="adm-section" id="section-productos">', '<section class="adm-section active" id="section-productos">').replace(/<link[^>]+rel="stylesheet"[^>]*>/g, '').replace('</head>', headStyles + '</head>');
+  let html = fixtureHtml().replace('<section class="adm-section" id="section-productos">', '<section class="adm-section active" id="section-productos">').replace(/<link[^>]+rel="stylesheet"[^>]*>/g, '').replace('</head>', headStyles + '</head>');
+  if(fullShell){
+    const seed=[...fixtureHtml().matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)].map(match=>match[1]).join('\n');
+    const loader=fs.readFileSync(path.join(root,'js/cargador-pagina.js'),'utf8');
+    const scroll=loader.slice(loader.indexOf("  try { history.scrollRestoration"),loader.indexOf('  // El sitio oficial'));
+    const modules=['/js/admin/shopify-commerce-admin.js','/js/admin/maestro/espacio-modulos-admin.js','/js/admin/maestro/navegacion-movil-admin.js','/js/admin/sidebar-expandible-admin.js'];
+    html=removeFixtureScripts(shell)
+      .replace('class="adm-section active" id="section-dashboard"','class="adm-section" id="section-dashboard"')
+      .replace('class="adm-section" id="section-productos"','class="adm-section active" id="section-productos"')
+      .replace('</head>',`<script>document.documentElement.classList.add('adm-auth-ready');${scroll}</script></head>`)
+      .replace('</body>',`<script>${seed}</script>${modules.map(src=>`<script type="module" src="${src}"></script>`).join('')}</body>`);
+  }
   const before = html.indexOf('<div class="adm-card" id="prod-form-card"');
-  await page.route('https://tintin.test/admin-commerce-fixture', route => route.fulfill({ contentType: 'text/html', body: html.slice(0, before) + form + html.slice(html.indexOf('</section>', before)) }));
+  await page.route('https://tintin.test/admin-commerce-fixture', route => route.fulfill({ contentType: 'text/html', body: fullShell ? html : html.slice(0, before) + form + html.slice(html.indexOf('</section>', before)) }));
   await page.goto('https://tintin.test/admin-commerce-fixture');
   await page.evaluate(() => document.fonts.ready.then(() => true));
   await expect(page.locator('[data-action="product-new"]')).toBeVisible();

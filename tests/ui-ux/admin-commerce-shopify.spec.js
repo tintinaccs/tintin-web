@@ -77,3 +77,22 @@ test('la interfaz sigue utilizable en móvil sin desbordar el documento', async 
   const box = await page.locator('#tt-commerce-drawer').boundingBox();
   expect(box?.width || 9999).toBeLessThanOrEqual(390.5);
 });
+
+
+test('un fallo de montaje conserva el listado de Productos en todos los tamaños',async({page})=>{
+  await page.addInitScript(()=>{
+    const native=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');
+    Object.defineProperty(Element.prototype,'innerHTML',{...native,set(value){
+      if(this.id==='tt-commerce-products'&&!window.qaMountFailed){window.qaMountFailed=true;throw Error('Fallo de montaje controlado');}
+      return native.set.call(this,value);
+    }});
+  });
+  await page.goto('https://tintin.test/admin-commerce-fixture');
+  await expect.poll(()=>page.evaluate(()=>window.qaMountFailed)).toBe(true);
+  for(const [width,height] of [[320,568],[390,844],[540,900],[600,960],[768,1024],[820,1180],[844,390],[1024,768],[1180,820],[1366,768],[1920,1080],[2560,1440],[3840,2160]]){
+    await page.setViewportSize({width,height});
+    await expect(page.locator('#prod-list-card')).toBeVisible();
+    await expect(page.locator('#tt-commerce-products')).toBeEmpty();
+    await expect(page.locator('#section-productos')).not.toHaveClass(/tt-commerce-mounted/);
+  }
+});

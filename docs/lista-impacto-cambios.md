@@ -760,3 +760,9 @@ Alcance sólo #prod-form-card del Superpanel: lienzo neutro, superficies agrupad
 ## 2026-10-24 — Contraste y ejemplos del editor Tintin
 
 Agregar y editar comparten CSS canónico: lienzo rosa suave, campos blancos con borde definido, títulos sin mayúsculas forzadas y separadores rosas. Ejemplos de entrada no son valores persistidos; garantía sólo solicita cobertura confirmada. Se refuerza foco visible frente al reset anterior. No cambian cálculos, guardado, datos ni permisos. Se renueva CSS/loader y sus consumidores; derivados desde constructores canónicos.
+
+## 25/10 — Resiliencia del montaje y foco ante barra móvil
+
+shopify-commerce-admin confirma reemplazo del listado sólo después de render correcto; un fallo mantiene el listado canónico. dashboard-control reserva en scroll-padding la cápsula móvil existente, con una sola autoridad de altura/safearea. Pruebas en specs existentes de comercio y todas las pantallas, sin cambios comerciales, auth ni Rules. Referencias admin/admin-images y CSS dinámico del loader se versionan; CSP, caché, protección y diagnóstico desde generadores. No se afirma reproducida la causa exacta del dispositivo físico.
+
+Apertura de Nuevo/Editar: geometría del editor nunca colapsa al quedar la cabecera fuera del viewport visible; resync en reanudación/ResizeObserver sin recargar ni alterar borradores. Constructor de opciones se distribuye según espacio útil. Regresión con shell administrativo completo y controlador real en product-save-responsive (no otra implementación ni nuevos comandos CI).
