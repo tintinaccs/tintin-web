@@ -16,6 +16,8 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
   let destroyed = false, analyzing = false, flushing = false;
   const uploads = [];
   let pool = media.uniqueImages(media.galleryImages(product).map(url => sanitizeImageUrl(url)).filter(Boolean));
+  // Al reabrir, las fotos guardadas ya fueron revisadas por la administradora.
+  if (product.id) for (const url of pool) analyzed.add(media.imageKey(url));
   let activeKey = media.colorKey(product);
   let visibleColor = null;
   for (const row of initialRows) {
@@ -74,11 +76,6 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
         if (destroyed) break;
         if (suggestion) {
           suggestions.set(identity, suggestion.name);
-          if (!manuallyAssigned.has(identity)) {
-            let target = colors().find(name => window.TintinProductColors.preset(name)?.name === suggestion.name);
-            if (!target && !variantsInput.readOnly) { addColor(suggestion.name); target = suggestion.name; }
-            if (target) assignments.set(target, media.uniqueImages([...(assignments.get(target) || []), url]));
-          }
         }
         render();
       }
@@ -92,8 +89,26 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     pool = media.uniqueImages([...pool, mainInput.value, ...imagesInput.value.split(/\r?\n/)].map(url => sanitizeImageUrl(url)).filter(Boolean));
     const heading = document.createElement('h3'); heading.textContent = 'Fotos por color'; container.append(heading);
     const hint = document.createElement('p');
-    hint.textContent = 'Sugerimos un color para las fotos sin asignar cuando la imagen permite estimarlo. Revisá la propuesta y cambiá lo que necesites. Las fotos y los círculos se aplican al guardar el producto.';
+    hint.textContent = 'Los colores son opcionales. Una sugerencia sólo agrega un color si la aceptás. Las fotos y los círculos se aplican al guardar el producto.';
     container.append(hint);
+    for (const [identity, name] of suggestions) {
+      const url = pool.find(photo => media.imageKey(photo) === identity);
+      if (!url || manuallyAssigned.has(identity) || [...assignments.values()].some(photos => photos.some(photo => media.imageKey(photo) === identity))) continue;
+      const row = document.createElement('div'); row.className = 'adm-color-palette';
+      const label = document.createElement('span'); label.textContent = `Color sugerido: ${name}`;
+      const accept = document.createElement('button'); accept.type = 'button'; accept.className = 'adm-btn adm-btn-outline'; accept.textContent = `Aceptar ${name}`; accept.disabled = variantsInput.readOnly;
+      accept.addEventListener('click', () => {
+        manuallyAssigned.add(identity); suggestions.delete(identity);
+        const target = colors().find(color => color.toLocaleLowerCase() === name.toLocaleLowerCase()) || name;
+        addColor(target);
+        // El controlador puede rechazar opciones incompatibles con inventario persistido.
+        if (colors().includes(target)) assignments.set(target, media.uniqueImages([...(assignments.get(target) || []), url]));
+        render();
+      });
+      const dismiss = document.createElement('button'); dismiss.type = 'button'; dismiss.className = 'adm-btn adm-btn-outline'; dismiss.textContent = `Descartar ${name}`;
+      dismiss.addEventListener('click', () => { suggestions.delete(identity); manuallyAssigned.add(identity); render(); });
+      row.append(label, accept, dismiss); container.append(row);
+    }
     const filters=document.createElement('div');filters.className='tt-editor-choices tt-editor-photo-filters';filters.setAttribute('role','group');filters.setAttribute('aria-label','Ver fotos por color');
     const applyFilter=()=>{for(const field of container.querySelectorAll(':scope > fieldset[data-media-color]'))field.hidden=Boolean(visibleColor && field.dataset.mediaColor!==visibleColor);for(const button of filters.children)button.setAttribute('aria-pressed',String(button.dataset.photoColor===visibleColor));};
     for(const color of ['',...options]){const button=document.createElement('button');button.type='button';button.className='tt-editor-choice';button.textContent=color || 'Todas';button.dataset.photoColor=color;button.addEventListener('click',()=>{visibleColor=color;applyFilter();});filters.append(button);}
