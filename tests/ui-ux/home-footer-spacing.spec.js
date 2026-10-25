@@ -28,6 +28,16 @@ async function mountLayout(page, markup = html) {
   await page.addScriptTag({ content: fs.readFileSync(path.join(root, 'js/components/color/logotipo-marca.js'), 'utf8') });
   await page.addScriptTag({ content: fs.readFileSync(path.join(root, 'js/components/navigation/compartido/acordeon-pie-pagina.js'), 'utf8').replace('export function', 'function') + '\nenhanceMobileFooter();' });
 }
+for(const width of [320,390,430,540,767])test(`botones de bienvenida centrados en móvil ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});await mountLayout(page);
+ const centers=await page.locator('#hero .tt-hero-actions a').evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return b.x+b.width/2;}));
+ expect(centers).toHaveLength(2);
+ // A partir de 480px pueden compartir fila: el conjunto debe seguir centrado.
+ const group=await page.locator('#hero .tt-hero-actions').boundingBox();
+ const hero=await page.locator('#hero').boundingBox(),axis=hero.x+hero.width/2;
+ expect(Math.abs(group.x+group.width/2-axis)).toBeLessThanOrEqual(1);
+ if(width<480)for(const center of centers)expect(Math.abs(center-axis)).toBeLessThanOrEqual(1);
+});
 
 for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320],[844,390],
   [600,960],[767,1024],[768,1024],[820,1180],[1024,768],[1025,768],[1180,820],[1280,800],[1366,768],[1440,900],[1920,1080],[2560,1440]]) {

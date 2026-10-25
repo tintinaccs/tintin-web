@@ -153,7 +153,8 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
     scroll-padding-bottom: calc(var(--tt-admin-nav-clearance) + 24px);
   }
   html:root body.tt-admin-control #adm-mobile-tabs {
-    left: 50vw; right: auto; bottom: var(--tt-admin-nav-bottom);
+    position:fixed; top:calc(var(--tt-admin-viewport-bottom,100dvh) - 76px - var(--tt-admin-nav-bottom));
+    left: 50vw; right: auto; bottom: auto;
     width: min(420px,calc(100vw - 24px)); margin-inline: 0; transform: translateX(-50%); height: 76px; padding: 6px; gap: 2px;
     border: 1px solid var(--tt-control-line); border-radius: 28px;
     box-shadow: none; backdrop-filter: none; overflow: hidden;

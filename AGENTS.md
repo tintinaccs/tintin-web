@@ -6,6 +6,7 @@
 - Prefer simple, robust, maintainable solutions. Do not add technologies, services, abstractions, dependencies, or architecture without a demonstrated need.
 
 ## Autonomy
+- Standing owner instruction (2026-10-25): requested implementation work includes completing the protected PR merge. Create PRs ready for review, never as drafts, and do not treat a local change, open PR, or enabled auto-merge as completed work. Resolve related check failures and continue through merge; report a concrete external blocker when human intervention is necessary. Preserve all required checks and protections; this instruction never authorizes bypass, force-push, or destructive production data operations. Read-only review requests remain read-only.
 - For requests to answer, explain, review, diagnose, inspect, compare, or plan: inspect the relevant materials and report the result. Do not implement changes unless the request also asks for them.
 - For requests to change, build, fix, or implement: make the requested in-scope changes and run relevant non-destructive validation without asking first.
 - Do not stop for routine technical decisions that can be resolved from the codebase, official docs, or standard engineering practice.

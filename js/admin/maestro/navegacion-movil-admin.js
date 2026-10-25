@@ -1,4 +1,19 @@
 const mobileTabs = document.getElementById('adm-mobile-tabs');
+// Safari cambia el viewport visible al desplazar sus barras o abrir el teclado.
+// Mantener la navegación en su borde inferior, sin depender de un alto anterior.
+let viewportFrame;
+function syncMobileViewport() {
+  cancelAnimationFrame(viewportFrame);
+  viewportFrame = requestAnimationFrame(() => {
+    const viewport = window.visualViewport;
+    document.documentElement.style.setProperty('--tt-admin-viewport-bottom', `${viewport ? viewport.offsetTop + viewport.height : innerHeight}px`);
+  });
+}
+window.visualViewport?.addEventListener('resize', syncMobileViewport, {passive:true});
+window.visualViewport?.addEventListener('scroll', syncMobileViewport, {passive:true});
+window.addEventListener('resize', syncMobileViewport, {passive:true});
+window.addEventListener('pageshow', syncMobileViewport);
+syncMobileViewport();
 const mobileMoreToggle = document.getElementById('adm-mobile-more-toggle');
 const mobileMoreSheet = document.getElementById('adm-mobile-more-sheet');
 const mobileMoreBackdrop = document.getElementById('adm-mobile-more-backdrop');

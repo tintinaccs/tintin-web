@@ -1,3 +1,17 @@
+## 2026-10-25 — Preparación de merge de navegación móvil (Codex /root, GPT-6)
+
+La titular autoriza explícitamente integrar estas correcciones mediante «mergealo». Se prepara el PR desde9839f4597, conservando el informe y su límite Safari/iPhone NOT_VERIFIED. Evidencia local previa:70 pruebas panel/inicio,126 combinaciones canónicas y6 regresiones dirigidas del editor aprobadas; build/caché/protección/sintaxis aprobados. No se hereda CI/producción de1234/1235. El candidato nuevo debe aprobar controles protegidos propios antes de merge/publicación; sin cambios en permisos ni datos reales.
+
+## 2026-10-25 — Recorrido global responsive y navegación accesible del editor (Codex /root, GPT-6)
+
+Base9839f4597, rama codex/admin-mobile-navigation-20261025, inicialmente limpia. La titular aporta tres capturas y amplía el pedido a revisar/listar problemas de todas las pantallas para aplicar después. Se conservan PR1234/1235; no se vuelve a publicar por sus resultados anteriores. Informe con hallazgos concretos, alcance, lista de pendientes y evidencia: REVISION-RESPONSIVE-GLOBAL-2026-10-25.md.
+
+Fuentes locales: hero móvil con relleno simétrico; menú lateral accesible durante la edición con capas coherentes y espacio reservado/observado en tablet/escritorio; editor no modal para permitir navegación; barra inferior responde a visualViewport resize/scroll/pageshow. No se modifica autorización, Rules, datos ni integraciones. Tests añaden eje del hero, acceso real al menú por hit-test, scroll/cambio de altura y conservan guardado/foco/validación. URLs inmutables y bundle de Inicio regenerados por autoridades.
+
+PASS_LOCAL:126/126 combinaciones de18 documentos/siete resoluciones;26 primeros recorridos de módulos y70/70 posteriores de panel/inicio (23 secciones en12 tamaños para la matriz de módulos). Editor100/102 en primera tanda; dos expectativas antiguas de lateral oculto se actualizan al requerimiento y6/6 dirigidas aprueban después. No se atribuye PASS a esa primera ejecución fallida. Build Pages/caché y preflight aprobados. Capturas Inicio390, dashboard390 y menú/editor390/768 revisadas. No se declara inspección estética individual de126 capturas.
+
+NOT_VERIFIED: reproducción/cierre de la posición de barra en Safari/iPhone físico. WebKit se descargó pero faltan bibliotecas de sistema y sudo no está disponible. Las pruebas Chromium de viewport visible no sustituyen Safari. Tampoco se acredita sesión productiva, operaciones reales ni integraciones de los23 módulos. CI/producción de estos cambios pendientes; solicitud vigente prioriza informe previo a aplicación global. Sin commit/PR/publicación nuevos en este recorrido.
+
 ## 2026-10-25 — Corrección del recorrido administrativo de CI1234 (Codex /root, GPT-6)
 
 CI40198141630/2e23b03fb: preflight, comercio, calidad, reglas, interfaz/SEO/rendimiento y CodeQL aprobaron; administración terminó con361 PASS/4 FAIL. Tres recorridos antiguos esperaban reparto automático de stock al agregar opciones; ahora comprueban primero stock editable/cero casillas y pulsan el botón explícito antes de conservar todas las aserciones de cantidades/preview. El cuarto esperaba columna lateral en1024; se verifica contra el ancho real del contenedor y el umbral1200 vigente, conservando aserciones de apilado/columnas y controles. No cambios funcionales ni relajación de gates. Se repite el grupo afectado antes de actualizar el mismo PR; CI nueva del SHA final requerida. Merge y publicación siguen autorizados, no realizados todavía.

@@ -1,5 +1,37 @@
 const { test, expect } = require('@playwright/test');
 const { load } = require('./helpers/admin-panel-fixture.cjs');
+for (const width of [320,390,540]) test(`barra móvil permanece al pie tras scroll y cambio de altura ${width}`,async({page})=>{
+ await load(page,width,'admin.html',{mobile:true,sidebar:true});
+ for (const height of [844,620,900]) {
+  await page.setViewportSize({width,height});
+  for (const y of [0,400,900]) {
+   await page.evaluate(y=>scrollTo(0,y),y);
+   await expect.poll(()=>page.locator('#adm-mobile-tabs').evaluate(node=>{
+    const box=node.getBoundingClientRect(),v=visualViewport;
+    return Math.abs((v.offsetTop+v.height)-box.bottom-12);
+   })).toBeLessThanOrEqual(1);
+  }
+ }
+});
+for (const width of [390,768,1366]) test(`menú de módulos accesible con editor abierto ${width}`,async({page})=>{
+ await load(page,width,'admin.html',{mobile:true,sidebar:true,guard:true});
+ await page.addStyleTag({path:require('node:path').resolve('css/admin/shopify-commerce-admin.css')});
+ await page.evaluate(()=>{
+  document.documentElement.classList.add('tt-product-editor-open');
+  document.documentElement.style.setProperty('--tt-product-editor-top', `${document.querySelector('.adm-topbar').getBoundingClientRect().bottom}px`);
+  document.querySelectorAll('.adm-section').forEach(n=>n.classList.toggle('active',n.id==='section-productos'));
+  document.getElementById('section-productos').classList.add('tt-commerce-mounted');
+  const card=document.getElementById('prod-form-card');card.style.display='flex';
+  document.getElementById('prod-name').value='Borrador conservado';
+ });
+ if(width<=540) await page.locator('#adm-hamburger').click();
+ else await page.locator('#adm-sidebar').hover();
+ await expect(page.locator('#adm-sidebar')).toBeVisible();
+ const button=page.locator('#adm-sidebar .adm-nav-item').first();
+ await button.scrollIntoViewIfNeeded();
+ expect(await button.evaluate(n=>{const b=n.getBoundingClientRect();return n.contains(document.elementFromPoint(b.x+b.width/2,b.y+b.height/2));})).toBe(true);
+ await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');
+});
 const devices = [
   ['móvil pequeño',320,568], ['móvil vertical',390,844], ['móvil horizontal',844,390],
   ['tablet compacta vertical',600,960], ['tablet compacta horizontal',960,600],
