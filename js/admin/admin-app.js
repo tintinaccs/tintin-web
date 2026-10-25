@@ -7,7 +7,7 @@ import { reorderVariantInventory } from '../core/store/inventario-variantes.mjs?
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
-import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
+import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261025-mobile-shell-1';
 import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261024-editor-v2-4';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261022-avatar-inicial-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';

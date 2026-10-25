@@ -240,19 +240,20 @@ for(const [width,height] of [[768,1024],[1024,768]])test(`producto nuevo en tabl
 });
 
 for(const [width,height] of [[390,844],[775,582],[1024,768]]){
- test(`editor modal no queda debajo de la navegación y la restaura al cerrar ${width}`,async({page})=>{
+ test(`editor conserva navegación y acciones accesibles al abrir y cerrar ${width}`,async({page})=>{
   let originalVisibility;
   await openEditor(page,width,height,false,async()=>{
    originalVisibility=await page.evaluate(()=>{
-    const sidebar=document.createElement('aside');sidebar.className='adm-sidebar';sidebar.textContent='Navegación del panel';
+    const sidebar=document.createElement('aside');sidebar.id='adm-sidebar';sidebar.className='adm-sidebar';sidebar.textContent='Navegación del panel';
     sidebar.style.cssText='position:fixed;inset:0 auto 0 0;width:84px;background:pink;z-index:300';document.body.append(sidebar);
     // El shell administrativo puede crear un contexto inferior al de su barra lateral.
     const main=document.querySelector('.adm-main');main.style.position='relative';main.style.zIndex='1';
     return getComputedStyle(sidebar).visibility;
    });
   });
-  await expect(page.locator('.adm-sidebar')).toBeHidden();
-  expect(await page.evaluate(()=>Boolean(document.elementFromPoint(20,20)?.closest('#prod-form-card')))).toBe(true);
+  if(width<=540)await expect(page.locator('.adm-sidebar')).toBeHidden();
+  else await expect(page.locator('.adm-sidebar')).toBeVisible();
+  expect(await page.locator('#prod-form-card').evaluate(card=>{const box=card.getBoundingClientRect();return Boolean(document.elementFromPoint(box.x+20,box.y+20)?.closest('#prod-form-card'));})).toBe(true);
   await openActions(page);await page.locator('#prod-form-card').getByRole('button',{name:'Cancelar',exact:true}).click();
   // En móvil vuelve a su estado normal plegado, sin quedar oculta por el editor.
   await expect(page.locator('html')).not.toHaveClass(/tt-product-editor-open/);
@@ -537,7 +538,7 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  expect(bounds.x).toBe(0);expect(bounds.y).toBe(header.y+header.height);expect(bounds.width).toBe(width);expect(bounds.height).toBe(height-bounds.y);
  await expect(editor).toHaveCSS('border-radius','0px');
  await expect(editor).toHaveAttribute('role','dialog');
- await expect(editor).toHaveAttribute('aria-modal','true');
+ await expect(editor).toHaveAttribute('aria-modal','false');
  const actions=editor.locator('#prod-editor-actions');
  await expect(actions).toBeVisible();
  const body=editor.locator('.adm-card-body');await body.evaluate(el=>el.scrollTop=el.scrollHeight);

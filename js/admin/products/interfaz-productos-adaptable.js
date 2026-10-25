@@ -35,7 +35,7 @@ export function syncProductSurfaces() {
       (editor.querySelector('#prod-editor-section') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
     }
     editor.setAttribute('role','dialog');
-    editor.setAttribute('aria-modal','true');
+    editor.setAttribute('aria-modal','false');
     editor.setAttribute('aria-labelledby','prod-form-title');
   } else if (editorWasOpen) {
     requestAnimationFrame(()=>{
@@ -55,6 +55,8 @@ export function syncProductSurfaces() {
   const navigation=document.getElementById('adm-mobile-tabs');
   document.documentElement.style.setProperty('--tt-product-navigation-height', `${navigation?.getClientRects().length ? Math.max(0, innerHeight-navigation.getBoundingClientRect().top) : 0}px`);
   const viewport = window.visualViewport;
+  const sidebar = document.getElementById('adm-sidebar');
+  document.documentElement.style.setProperty('--tt-product-editor-left', `${innerWidth > 540 && sidebar?.getClientRects().length ? Math.max(0,sidebar.getBoundingClientRect().right) : 0}px`);
   document.documentElement.style.setProperty('--tt-product-viewport-height', `${viewport?.height || innerHeight}px`);
   document.documentElement.style.setProperty('--tt-product-viewport-top', `${viewport?.offsetTop || 0}px`);
   const header = document.querySelector('.adm-topbar');
@@ -292,6 +294,8 @@ export function installProductInterface() {
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncProductSurfaces();});
   const header=document.querySelector('.adm-topbar');
   if(header && typeof ResizeObserver==='function')new ResizeObserver(syncProductSurfaces).observe(header);
+  const sidebar=document.getElementById('adm-sidebar');
+  if(sidebar && typeof ResizeObserver==='function')new ResizeObserver(syncProductSurfaces).observe(sidebar);
   window.visualViewport?.addEventListener('resize',syncProductSurfaces,{passive:true});
   window.visualViewport?.addEventListener('scroll',syncProductSurfaces,{passive:true});
   document.addEventListener('error',event=>{
