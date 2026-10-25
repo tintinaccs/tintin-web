@@ -1774,3 +1774,13 @@ html.tt-product-editor-open #prod-form-card .tt-editor-section,
 #prod-form-card .tt-unified-photo-actions .adm-btn {min-height:44px;flex:1 1 110px;min-width:min(110px,100%);white-space:normal;word-break:normal;overflow-wrap:normal;}
 .tt-unified-photo button[aria-pressed=true] {background:#F8AACA;}
 .tt-unified-photos select {display:block;max-width:100%;min-height:44px;}
+.tt-option-group {min-width:0;border:1px solid #e3c3cf;border-radius:12px;padding:12px;margin:12px 0;}
+.tt-option-row {display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid #f1dce5;padding:12px 0;}
+.tt-option-row>strong {flex:1 1 140px;overflow-wrap:anywhere;}
+.tt-option-row button,.tt-option-row summary {min-height:44px;display:inline-flex;align-items:center;}
+.tt-option-row label {font-size:12px;display:flex;align-items:center;gap:8px;}
+.tt-option-rename {max-width:100%;}
+.tt-option-rename input {max-width:100%;}
+.tt-editor-option-assistance {margin-top:12px;}
+#prod-form-card [data-product-section=availability] .tt-editor-section-fields {grid-template-columns:minmax(0,1fr);}
+#prod-form-card #prod-variant-stock {grid-column:1/-1;min-width:0;}

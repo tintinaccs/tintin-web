@@ -107,7 +107,7 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   });
   await page.locator('#prod-editor-section').selectOption('visibility');
   await page.locator('#prod-category').selectOption('relojes');await expect(page.locator('#prod-category')).toHaveValue('relojes');
-  await expect(card.locator('[data-product-section]')).toHaveCount(7);
+  await expect(card.locator('[data-product-section]')).toHaveCount(8);
   await page.locator('#prod-editor-section').selectOption('general');
   if(width<1200)await expect(page.locator('#prod-name')).toHaveCSS('font-size','16px');
   await openActions(page);await expect(page.locator('#prod-save-btn')).toBeInViewport();
@@ -142,7 +142,7 @@ test('variantes visuales conservan formatos previos y bloquean controles del tot
  await page.getByLabel('Característica de variante',{exact:true}).selectOption('Color');
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Dorado');await page.getByRole('button',{name:'Agregar opción',exact:true}).click();
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Plateado');await page.keyboard.press('Enter');
- await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado\nColor: Plateado');
+ await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado, Plateado');
  await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Plateado');
  await page.evaluate(({renderer,inventory})=>{window.__stockEditor=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock};')();document.getElementById('prod-stock').value='700';window.__stockEditor.renderProductVariantStock({variants:{Color:['Plateado']},variantInventory:[{variant:'Plateado',stock:700}],stock:700});},{renderer:stockRenderer,inventory:inventorySource});
  await expect(page.locator('#prod-stock')).toHaveValue('700');
@@ -472,6 +472,7 @@ for (const width of [1200,1440,1920]) test(`controles seleccionados conservan te
  await page.addStyleTag({path:path.join(root,'css/core/tema-unificado-tintin.css')});
  for(const colors of [['#F8AACA','#222222'],['#222222','#FFFFFF']]) {
   await page.evaluate(([background,text])=>{document.documentElement.style.setProperty('--admin-color-button-primary-background',background);document.documentElement.style.setProperty('--admin-color-button-primary-text',text);},colors);
+  await page.locator('.tt-editor-option-assistance').evaluate(node=>node.open=true);
   const controls=page.locator('#prod-form-card [data-product-section=inventory] .tt-editor-choice[aria-pressed]');
   expect(await controls.count()).toBeGreaterThan(0);
   for (const button of await controls.all()) {

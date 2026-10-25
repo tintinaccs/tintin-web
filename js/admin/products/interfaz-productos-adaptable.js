@@ -1,6 +1,6 @@
 import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261024-editor-v2-3';
-import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261024-editor-intuitivo-1';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261025-options-phase3-3';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
 import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261024-editor-atelier-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
@@ -8,7 +8,8 @@ const sections = [
   ['photos', 'Fotografías del producto', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
   ['general', 'Producto', ['prod-name','prod-description']],
   ['prices', 'Precio', ['prod-price','prod-price-before','prod-badge','prod-oferta']],
-  ['inventory', 'Variantes e inventario', ['prod-variants-text','prod-stock']],
+  ['inventory', 'Opciones y variantes', ['prod-variants-text']],
+  ['availability', 'Inventario y disponibilidad', ['prod-stock']],
   ['specs', 'Detalles del producto', ['prod-material','prod-measurements','prod-color-finish','prod-care','prod-water-resistance','prod-warranty','prod-size-fit','prod-package-contents']],
   ['visibility', 'Organización', ['prod-category','prod-collection','prod-tags','prod-sku','prod-destacado','prod-active']],
   ['private', 'Inventario interno', ['prod-inventory-fields']],
@@ -111,6 +112,7 @@ export function enhanceProductEditor() {
       photos:'La imagen principal es la portada. Agregá otras vistas y ordená las fotos de cada color.',
       prices:'Definí el precio general y las promociones.',
       inventory:'Opciones, precios y cantidades de cada combinación.',
+      availability:'Cantidades y disponibilidad. La publicación se configura por separado.',
       specs:'Detalles opcionales que ayudan a elegir.',
       visibility:'Colección, búsqueda y referencias del producto.',
       private:'Costo y notas internas, disponibles sólo con permiso.',
@@ -190,6 +192,9 @@ export function enhanceProductEditor() {
   if(privateSection)privateSection.dataset.permissionHidden=String(privateHidden);
   const privateOption=card.querySelector('#prod-editor-section option[value="private"]');
   if(privateOption){if(privateOption.hidden!==privateHidden)privateOption.hidden=privateHidden;if(privateOption.disabled!==privateHidden)privateOption.disabled=privateHidden;}
+  const inventoryPanel=card.querySelector('#prod-variant-stock');
+  const inventoryTarget=card.querySelector('[data-product-section="availability"] .tt-editor-section-fields');
+  if(inventoryPanel && inventoryTarget && inventoryPanel.parentElement!==inventoryTarget)inventoryTarget.append(inventoryPanel);
   refreshEditorHeading(card);
   const error=card.querySelector('#prod-form-error');
   if (error) {
@@ -252,7 +257,7 @@ function showSection(card,value,expand=false) {
   }
   card.querySelector('.tt-editor-layout').dataset.editorSection=value;
   for (const field of card.querySelectorAll('[data-product-section]')) {
-    const hidden=field.dataset.permissionHidden==='true' || value !== 'all' && field.dataset.productSection !== value;
+    const hidden=field.dataset.permissionHidden==='true' || value !== 'all' && field.dataset.productSection !== value && !(value==='inventory' && field.dataset.productSection==='availability');
     if (field.hidden !== hidden) field.hidden=hidden;
     if (!hidden && expand) {
       field.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');

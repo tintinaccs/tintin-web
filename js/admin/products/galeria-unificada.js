@@ -15,6 +15,9 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
   const associationHost=document.createElement('div');associationHost.hidden=true;
   container.append(heading,hint,uploadHost,status,grid,context,associationHost);
   const associations=attachColorPhotos({container:associationHost,product,mainInput,imagesInput,variantsInput,openLibrary,headless:true});
+  const card=container.closest('#prod-form-card');
+  card?.addEventListener('tintin:option-media-read',event=>{event.detail.rows=associations.serialize();},{signal:abort.signal});
+  card?.addEventListener('tintin:color-appearance',event=>{const {color,colorHex}=event.detail;if(!/^#[\da-f]{6}$/i.test(colorHex))return;associations.setAppearance(color,{colorHex});render();},{signal:abort.signal});
   const urls=()=>media.uniqueImages([mainInput.value,...imagesInput.value.split(/\r?\n/),...associations.serialize().flatMap(media.rowImages)].map(sanitizeImageUrl).filter(Boolean));
   // Los campos existentes siguen siendo la autoridad de orden/portada.
   function publish(next,cover=next[0]){
@@ -36,8 +39,6 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     for(const [key,values] of groups()){const label=document.createElement('label');label.textContent=key;const select=document.createElement('select');select.setAttribute('aria-label',`Asociación: ${key}`);for(const value of ['',...values]){const option=document.createElement('option');option.value=value;option.textContent=value||'Cualquiera';select.append(option);}select.addEventListener('change',()=>{if(select.value)selected[key]=select.value;else delete selected[key];});label.append(select);context.append(label);}
     const apply=remove=>{if(!Object.keys(selected).length){status.textContent='Elegí al menos un atributo.';return;}const rows=associations.serialize();const metadata=new Set(['imageUrl','imageUrls','stock','price','sku','active','colorHex','swatch']);const row=rows.find(row=>{const keys=Object.keys(row).filter(k=>!metadata.has(k));return keys.length===Object.keys(selected).length && keys.every(k=>row[k]===selected[k]);});const photos=media.rowImages(row);associations.setPhotos({...selected},remove?photos.filter(photo=>media.imageKey(photo)!==media.imageKey(url)):media.uniqueImages([...photos,url]));status.textContent=remove?'Asociación quitada.':'Asociación guardada en el borrador.';render();};
     button('Asociar fotografía',()=>apply(false),context);button('Quitar asociación',()=>apply(true),context);button('Cerrar asociaciones',()=>context.replaceChildren(),context);
-    const circle=document.createElement('input');circle.type='color';circle.setAttribute('aria-label','Color del círculo');context.append(circle);
-    button('Aplicar círculo al color elegido',()=>{const keys=Object.keys(selected);if(keys.length!==1 || !media.isColorKey(keys[0])){status.textContent='Elegí sólo un color para personalizar su círculo.';return;}associations.setAppearance(selected[keys[0]],{colorHex:circle.value});status.textContent='Círculo actualizado en el borrador.';render();},context);
     context.querySelector('select')?.focus({preventScroll:true});
   }
   function replace(url){

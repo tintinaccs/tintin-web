@@ -2,7 +2,7 @@ import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=t
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
 import {productStatistics} from './statistics/estadisticas-producto.mjs?v=tintin-20261024-editor-v2-3';
 import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261024-editor-v2-3';
-import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261024-editor-v2-3';
+import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261025-options-phase3-1';
 import { reorderVariantInventory } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
@@ -14,7 +14,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261025-gallery-unified-1';
+import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261025-options-phase3-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -5861,6 +5861,7 @@ function renderProductVariantStock(product, configuration = null) {
   document.getElementById('prod-form-card')?.dispatchEvent?.(new CustomEvent('tintin:commercial-draft',{detail:null}));
   productVariantStockEvents?.abort();
   productVariantStockEvents = new AbortController();
+  document.getElementById('prod-form-card')?.addEventListener('tintin:product-options-read',event=>{event.detail.product=configuration?.commercialBaseline ?? product;},{signal:productVariantStockEvents.signal});
   productVariantStockBaseline = null;
   let panel = document.getElementById('prod-variant-stock');
   if (!panel) {
@@ -5900,6 +5901,13 @@ function renderProductVariantStock(product, configuration = null) {
   let acceptedOptions = optionsInput.value;
   optionsInput.addEventListener('input', () => {
     try {
+      if(document.getElementById('prod-id').value && product?.variants && !Array.isArray(product.variants)){
+        const requested=productVariantStockConfiguration(optionsInput.value).variants || {};
+        for(const [key,values] of Object.entries(product.variants))if(Array.isArray(values)){
+          if(values.some(value=>!requested[key]?.includes(value)))throw new Error('Esta opción tiene inventario o referencias históricas. Conservá su nombre y editá su disponibilidad; no se puede eliminar directamente.');
+          if(/^colou?r$/i.test(key) && !product.variantMedia?.length && values.some((value,index)=>requested[key]?.[index]!==value))throw new Error('Estas fotos históricas pueden estar asociadas por posición. Revisá sus asociaciones antes de cambiar el orden.');
+        }
+      }
       if (!optionsInput.value.trim() && !productVariantStockBaseline) return;
       // Agregar opciones no activa el control de unidades por combinación.
       if (!productVariantStockBaseline) { acceptedOptions = optionsInput.value; return; }

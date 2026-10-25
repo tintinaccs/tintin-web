@@ -1,3 +1,11 @@
+## 2026-10-25 — Fase 3 opciones e inventario (Codex /root)
+
+Rama codex/opciones-inventario-fase3-20261025, base746e944d0d05abf45d9f00d55d3448913352fa6f de PR1238 OPEN; PR1237 también OPEN/no integrado. Main f9399a90c. Se conserva ascendencia, no se fusionan ramas. Instrucción actual exige PR listo para revisión sin merge/deploy: apilar sobre rama1238 evita elegibilidad del mantenimiento automático de main. Informe: docs/editor-productos-v2/20-OPCIONES-INVENTARIO-FASE-3.md.
+
+Grupos visuales con alta/renombrado seguro/quitar/reordenar, círculo independiente de nombre y acceso a galería única; asistencia plegada y explícita, textarea técnico sincronizado. Inventario separado, total readonly sin controles redundantes, filas V1/V2 originales. Se elimina listener legacy de stock→publicación. No cambios del motor, CAS, reservas, Rules, Sheets, pedidos ni datos reales. Guardas protegen valores persistidos y fotos V1 posicionales; no hay migración. Cambiar finito→null histórico sigue rechazado, con explicación accionable.
+
+Evidencia inicial actual:68 Node dominio,221 sync,54 repetición dirigida;13 Chromium y10 aceptación nuevos,27 regresiones antiguas adaptadas PASS. Conteos solapados. Tanda amplia inicial interrumpida por fixtures que no abrían la asistencia plegada y representación agrupada; no declarar PASS global. Capturas sintéticas6 viewports, móvil/laptop inspeccionados. Tanda final/build/preflight/CI pendientes de registrar. Producción/hardware físico NOT_VERIFIED.
+
 ## 2026-10-25 — Fase 2 galería unificada (Codex /root)
 
 Base0f57f327ad43671d22d0bd4d373d2f5b7bee8e40 de PR1237 OPEN/no integrado; main f9399a90c. Rama codex/galeria-unificada-fase2-20261025. Autorización actual exige PR listo para revisión, prohíbe merge/deploy. Se prepara PR apilado sobre rama1237; mantenimiento automático sólo considera base main y no debe habilitarse al retargetear sin autorización. Informe: docs/editor-productos-v2/19-GALERIA-UNIFICADA-FASE-2.md.

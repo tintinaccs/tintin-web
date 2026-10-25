@@ -2,6 +2,8 @@
 
 [Fase 2: galería unificada](19-GALERIA-UNIFICADA-FASE-2.md): centro visual de fotografías, compatibilidad y evidencia.
 
+[Fase 3: opciones e inventario](20-OPCIONES-INVENTARIO-FASE-3.md): grupos, disponibilidad, identidades y pruebas.
+
 [Rediseño visual del editor](16-REDISENO-VISUAL.md).
 
 [Matriz actual del candidato](15-MATRIZ-CANDIDATO.md) · [Recibo local](evidencias-continuidad.json).

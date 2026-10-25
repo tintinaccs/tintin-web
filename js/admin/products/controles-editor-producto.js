@@ -116,66 +116,133 @@ function money(input) {
 function variantBuilder(input) {
   if (mounted.has(input)) return;
   mounted.add(input);
+  const card=input.closest('#prod-form-card');
   const panel = node('div', 'tt-editor-variant-builder');
   const form = node('div', 'tt-editor-variant-add');
   const attribute = node('select', 'adm-input'); attribute.setAttribute('aria-label', 'Característica de variante');
   for (const title of ['Color','Talle','Material','Forma','Diseño','Modelo']) attribute.append(node('option','',title));
-  const value = node('input', 'adm-input'); value.placeholder='Ej.: Dorado'; value.maxLength=120; value.setAttribute('aria-label','Nueva opción de variante');
+  const other=node('option','','Otro grupo');other.value='__custom';attribute.append(other);
+  const custom=node('input','adm-input');custom.placeholder='Nombre del grupo';custom.maxLength=60;custom.setAttribute('aria-label','Nombre del nuevo grupo');custom.hidden=true;
+  attribute.addEventListener('change',()=>{custom.hidden=attribute.value!=='__custom';});
+  const value = node('input', 'adm-input'); value.placeholder='Ej.: Verde Oliva'; value.maxLength=120; value.setAttribute('aria-label','Nueva opción de variante');
   const error = node('p','tt-editor-control-error'); error.setAttribute('role','alert');
   const chips = node('div','tt-editor-variant-groups');
+  const groups=()=>{const map=new Map();for(const line of input.value.split(/\r?\n/)){const i=line.indexOf(':');if(i<1)continue;const key=line.slice(0,i).trim();map.set(key,[...new Set([...(map.get(key)||[]),...line.slice(i+1).split(',').map(s=>s.trim()).filter(Boolean)])]);}return map;};
+  const valid=text=>text && !/[,:\n\r\/<>]/.test(text) && text.length<=120;
+  const mediaRows=()=>{const detail={rows:[]};card?.dispatchEvent(new CustomEvent('tintin:option-media-read',{detail}));return detail.rows;};
+  const baseline=()=>{const detail={product:null};card?.dispatchEvent(new CustomEvent('tintin:product-options-read',{detail}));return detail.product;};
+  const hasDraftData=(key,option)=>{const detail={product:null};card?.dispatchEvent(new CustomEvent('tintin:commercial-options-read',{detail}));return detail.product?.variantInventory?.some(row=>row.attributes?.[key]===option && (Number(row.stock)>0 || row.price!=null || row.priceBefore!=null));};
+  const write=map=>{
+    const focused=panel.contains(document.activeElement)?document.activeElement.getAttribute('aria-label'):null;
+    error.textContent='';input.value=[...map].filter(([,values])=>values.length).map(([key,values])=>key+': '+values.join(', ')).join('\n');emit(input);refresh();
+    if(focused){const target=[...panel.querySelectorAll('[aria-label]')].find(node=>node.getAttribute('aria-label')===focused);const next=target?.disabled?target.closest('.tt-option-row')?.querySelector('button:not(:disabled)'):target;(next || value).focus({preventScroll:true});}
+  };
   const add = (focus = true) => {
     if (input.readOnly) return;
-    const text = value.value.trim();
-    if (!text || /[,:\n\r\/<>]/.test(text)) {error.textContent='Escribí una opción sin comas, barras ni dos puntos.'; return;}
-    const lines = input.value.split(/\r?\n/).filter(Boolean);
-    const exists = lines.some(line => line.split(':')[0].trim().toLocaleLowerCase('es') === attribute.value.toLocaleLowerCase('es') && line.slice(line.indexOf(':')+1).split(',').some(item=>item.trim().toLocaleLowerCase('es')===text.toLocaleLowerCase('es')));
-    if (!exists) {input.value=[...lines,`${attribute.value}: ${text}`].join('\n'); emit(input);}
-    value.value=''; error.textContent=''; if(focus)value.focus();
+    const text=value.value.trim();
+    if(!valid(text)){error.textContent='Escribí una opción de hasta 120 caracteres, sin comas, barras ni dos puntos.';return;}
+    const groupName=attribute.value==='__custom'?custom.value.trim():attribute.value;
+    if(!valid(groupName) || groupName.length>60){error.textContent='Escribí un nombre de grupo de hasta 60 caracteres.';return;}
+    const map=groups(),key=[...map.keys()].find(key=>key.toLocaleLowerCase('es')===groupName.toLocaleLowerCase('es')) || groupName;
+    if((map.get(key)||[]).some(option=>option.toLocaleLowerCase('es')===text.toLocaleLowerCase('es'))){error.textContent='Esta opción ya está en '+key+'. Editá su nombre o elegí otro.';return;}
+    map.set(key,[...(map.get(key)||[]),text]);write(map);
+    value.value='';error.textContent='';if(focus)value.focus({preventScroll:true});
   };
-  const addButton = button('Agregar opción', null, add);
+  const addButton=button('Agregar opción',null,()=>add());
   value.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();add();}});
+  const assistance=node('details','tt-editor-option-assistance'),assistanceTitle=node('summary','','Sugerencias de colores (opcionales)');
   const palette=node('div','tt-editor-choices tt-editor-color-presets');palette.setAttribute('role','group');palette.setAttribute('aria-label','Colores rápidos');
-  for(const title of ['Dorado','Plateado','Oro rosa','Negro','Blanco']) {
-    const choice=button(title,`Agregar color ${title}`,()=>{attribute.value='Color';value.value=title;add(false);});const dot=node('span','adm-color-circle');dot.style.background=window.TintinProductColors?.preset(title)?.hex || 'transparent';dot.setAttribute('aria-hidden','true');choice.dataset.color=title;choice.prepend(dot);palette.append(choice);
+  for(const title of ['Dorado','Plateado','Oro rosa','Negro','Blanco']){
+    const choice=button(title,'Agregar color '+title,()=>{attribute.value='Color';value.value=title;add(false);});
+    const dot=node('span','adm-color-circle');dot.style.background=window.TintinProductColors?.preset(title)?.hex || 'transparent';dot.setAttribute('aria-hidden','true');choice.dataset.color=title;choice.prepend(dot);palette.append(choice);
   }
-  form.append(attribute,value,addButton); panel.append(palette,form,error,chips); input.before(panel);
-  const advanced = node('details','tt-editor-advanced'); const summary = node('summary','','Editar opciones en texto');
-  input.before(advanced); advanced.append(summary);
-  input.hidden=true;
+  const suggestion=node('div'),suggestStatus=node('p');suggestStatus.setAttribute('role','status');
+  const suggest=button('Sugerir desde la portada',null,async()=>{
+    const photo=card.querySelector('#prod-imageUrl')?.value,id=card.querySelector('#prod-id')?.value,manual=input.value;
+    if(!photo){suggestStatus.textContent='Elegí primero una portada en Fotografías del producto.';return;}
+    suggest.disabled=true;suggestStatus.textContent='Analizando una aproximación del color…';
+    try {
+      const result=await window.TintinProductColors?.suggestImageColor(photo);
+      if(photo!==card.querySelector('#prod-imageUrl')?.value || id!==card.querySelector('#prod-id')?.value || manual!==input.value)return;
+      suggestion.replaceChildren();suggestStatus.textContent=result?'Sugerencia aproximada: '+result.name+'. Podés corregir el nombre antes de agregarlo.':'No hay una sugerencia confiable. Escribí el nombre comercial manualmente.';
+      if(result){suggestion.append(button('Usar sugerencia '+result.name,null,()=>{attribute.value='Color';value.value=result.name;suggestion.replaceChildren();value.focus({preventScroll:true});}),button('Descartar sugerencia',null,()=>{suggestion.replaceChildren();suggestStatus.textContent='Sugerencia descartada.';}));}
+    } catch {suggestStatus.textContent='No se pudo analizar la foto. Podés escribir el color manualmente.';}
+    finally {suggest.disabled=false;}
+  });
+  assistance.append(assistanceTitle,palette,suggest,suggestStatus,suggestion);
+  form.append(attribute,custom,value,addButton);panel.append(form,error,chips,assistance);input.before(panel);
+  const advanced=node('details','tt-editor-advanced');const summary=node('summary','','Editar opciones en texto');
+  input.before(advanced);advanced.append(summary);input.hidden=true;
   advanced.addEventListener('toggle',()=>{input.hidden=!advanced.open;});
-  let signature = '';
-  const refresh = () => {
+  let signature='';
+  function refresh(){
     attribute.disabled=value.disabled=addButton.disabled=input.readOnly;
-    const colors=input.value.split(/\r?\n/).filter(line=>/^\s*colou?r\s*:/i.test(line)).flatMap(line=>line.slice(line.indexOf(':')+1).split(',')).map(value=>value.trim().toLocaleLowerCase('es'));
-    for(const choice of palette.children){choice.disabled=input.readOnly;choice.setAttribute('aria-pressed',String(colors.includes(choice.dataset.color.toLocaleLowerCase('es'))));}
-    const current = JSON.stringify([input.value,input.readOnly]); if (current===signature) return;
-    signature=current;chips.replaceChildren();
-    for (const line of input.value.split(/\r?\n/)) {
-      const index=line.indexOf(':'); if(index<1) continue;
-      const key=line.slice(0,index).trim();
-      for (const option of line.slice(index+1).split(',').map(item=>item.trim()).filter(Boolean)) {
-        const chip = button(`${key}: ${option} · Quitar`, `Quitar ${key}: ${option}`, () => {
-          if(input.readOnly)return;
-          input.value=input.value.split(/\r?\n/).flatMap(row=>{
-            const separator=row.indexOf(':'); if(separator<1 || row.slice(0,separator).trim()!==key)return [row];
-            const rest=row.slice(separator+1).split(',').map(item=>item.trim()).filter(item=>item && item!==option);
-            return rest.length ? [`${key}: ${rest.join(', ')}`] : [];
-          }).join('\n'); emit(input);
-        });
-        chip.disabled=input.readOnly;
-        if(input.readOnly)chip.title='Esta opción tiene inventario o historial. Editá su disponibilidad en la matriz.';
-        chips.append(chip);
+    for(const key of groups().keys())if(![...attribute.options].some(option=>option.value===key))attribute.append(node('option','',key));
+    const source=baseline();
+    const current=JSON.stringify([input.value,input.readOnly,card?.querySelector('#prod-id')?.value,source?.variants,source?.variantCommerceVersion]);if(current===signature)return;signature=current;
+    chips.replaceChildren();
+    for(const [key,values] of groups()){
+      const group=node('fieldset','tt-option-group'),legend=node('legend','',key);group.append(legend);
+      const original=baseline(),persisted=Boolean(card?.querySelector('#prod-id')?.value);
+      const protectedValues=persisted && Array.isArray(original?.variants?.[key])?original.variants[key]:[];
+      if(protectedValues.length)group.append(node('p','tt-editor-caption','Las opciones guardadas conservan sus referencias. Podés cambiar cantidades o dejar combinaciones sin disponibilidad; no eliminar su identidad histórica.'));
+      for(const [index,option] of values.entries()){
+        const protectedOption=protectedValues.includes(option);
+        const row=node('div','tt-option-row'),title=node('strong','',option);row.append(title);
+        const rename=node('details','tt-option-rename'),renameTitle=node('summary','','Editar nombre');
+        const name=node('input','adm-input');name.value=option;name.maxLength=120;name.setAttribute('aria-label','Nombre comercial de '+key+': '+option);
+        const apply=button('Aplicar nombre','Aplicar nombre de '+key+': '+option,()=>{
+          if(protectedOption){error.textContent='Esta opción tiene inventario o referencias históricas. Conservá el nombre y editá su disponibilidad.';return;}
+          if(hasDraftData(key,option)){error.textContent='Esta opción tiene cantidades o precios configurados. Revisalos antes de cambiar el nombre; podés editar su disponibilidad sin perder esos datos.';return;}
+          const text=name.value.trim();if(!valid(text)){error.textContent='Revisá el nombre de la opción.';return;}
+          if(values.some(other=>other!==option && other.toLocaleLowerCase('es')===text.toLocaleLowerCase('es'))){error.textContent='Ya existe una opción con ese nombre en '+key+'.';return;}
+          if(mediaRows().some(media=>media[key]===option && window.TintinProductMedia?.rowImages(media).length)){error.textContent='Esta opción tiene fotografías asociadas. Conservá su nombre o revisá primero las asociaciones en la galería.';return;}
+          const appearance=mediaRows().find(media=>media[key]===option);
+          const map=groups();map.set(key,values.map(other=>other===option?text:other));write(map);
+          if(appearance?.colorHex && window.TintinProductMedia?.isColorKey(key))card.dispatchEvent(new CustomEvent('tintin:color-appearance',{detail:{color:text,colorHex:appearance.colorHex}}));
+        });apply.disabled=input.readOnly || protectedOption;name.disabled=input.readOnly || protectedOption;rename.append(renameTitle,name,apply);row.append(rename);
+        const remove=button('Quitar','Quitar '+key+': '+option,()=>{if(input.readOnly)return;if(hasDraftData(key,option)){error.textContent='Esta opción tiene cantidades o precios configurados. Revisalos antes de quitarla o dejala sin disponibilidad.';return;}const map=groups();map.set(key,values.filter(other=>other!==option));write(map);});
+        remove.disabled=input.readOnly || protectedOption;if(remove.disabled)remove.title='Esta opción tiene inventario o referencias históricas. Conservá su identidad y revisá su disponibilidad.';
+        row.append(remove);
+        for(const [label,to] of [['Anterior',index-1],['Siguiente',index+1]]){
+          const move=button(label,label+' opción '+key+': '+option,()=>{const next=[...values];next.splice(index,1);next.splice(to,0,option);const map=groups();map.set(key,next);write(map);});
+          const positional=protectedOption && original?.variantCommerceVersion!==2 && !original?.variantMedia?.length && window.TintinProductMedia?.isColorKey(key);
+          move.disabled=input.readOnly || positional || to<0 || to>=values.length;if(positional)move.title='Revisá las asociaciones de fotos históricas antes de cambiar este orden.';row.append(move);
+        }
+        if(window.TintinProductMedia?.isColorKey(key)){
+          const detail={rows:[]};card?.dispatchEvent(new CustomEvent('tintin:option-media-read',{detail}));
+          const media=detail.rows.find(media=>media[key]===option && Object.keys(media).filter(k=>!['imageUrl','imageUrls','stock','price','sku','active','colorHex','swatch'].includes(k)).length===1) || {};
+          const label=node('label','','Círculo visual (no cambia el nombre)');
+          const color=node('input');color.type='color';color.value=media.colorHex || window.TintinProductColors?.preset(media.swatch || option)?.hex || '#CFD4DA';color.setAttribute('aria-label','Círculo de '+option);
+          color.addEventListener('input',()=>{card.dispatchEvent(new CustomEvent('tintin:color-appearance',{detail:{color:option,colorHex:color.value}}));card.dispatchEvent(new Event('change',{bubbles:true}));});
+          label.append(color);row.append(label);
+        }
+        row.append(button('Fotos','Fotos de '+key+': '+option,()=>{const select=card.querySelector('#prod-editor-section');select.value='photos';select.dispatchEvent(new Event('change',{bubbles:true}));card.querySelector('.tt-unified-photos button')?.focus({preventScroll:true});}));
+        row.append(button('Disponibilidad','Disponibilidad de '+key+': '+option,()=>{const select=card.querySelector('#prod-editor-section');select.value='availability';select.dispatchEvent(new Event('change',{bubbles:true}));card.querySelector('#prod-variant-stock input, #prod-stock')?.focus({preventScroll:true});}));
+        group.append(row);
       }
+      chips.append(group);
     }
-  };
+    for(const choice of palette.children){choice.disabled=input.readOnly;choice.setAttribute('aria-pressed',String([...groups()].some(([key,values])=>/^colou?r$/i.test(key)&&values.some(option=>option.toLocaleLowerCase('es')===choice.dataset.color.toLocaleLowerCase('es')))));}
+  }
   input.addEventListener('input',refresh);
   choices.set(panel,{refresh});
-  // El textarea mantiene su padre: inventario y fotos se montan en ese contenedor.
 }
 
 export function refreshEditorControls(card) {
   const stock=card.querySelector('#prod-stock');
-  if(stock)quantity(stock,'Stock',true);
+  if(stock){
+    quantity(stock,'Stock',true);
+    const field=stock.closest('.tt-editor-quantity')?.parentElement;
+    if(field && field.hidden!==stock.readOnly)field.hidden=stock.readOnly;
+  }
+  const inventory=card.querySelector('#prod-variant-stock');
+  if(inventory){
+    const hidden=!card.querySelector('#prod-variants-text')?.value.trim() && !inventory.classList.contains('tt-commercial-editor');if(inventory.hidden!==hidden)inventory.hidden=hidden;
+    let total=inventory.querySelector('.tt-inventory-total');
+    if(stock?.readOnly){if(!total){total=node('p','tt-inventory-total');total.setAttribute('role','status');inventory.prepend(total);}const text=stock.value===''?(inventory.classList.contains('tt-commercial-editor')?'Total: inventario sin control':'Completá las cantidades de cada opción'):'Total: '+stock.value+' unidades';if(total.textContent!==text)total.textContent=text;}
+    else total?.remove();
+  }
   if(!card.querySelector('.tt-commercial-editor'))for(const input of card.querySelectorAll('#prod-variant-stock input')) quantity(input,input.getAttribute('aria-label') || 'Variante');
   for(const id of ['prod-purchased','prod-stock-minimum']) {
     const input=card.querySelector(`#${id}`);if(input)quantity(input,input.labels?.[0]?.textContent || id);
@@ -212,13 +279,6 @@ export function installEditorControls(card) {
     if(event.target===active && status)status.value=active.checked?'active':'draft';
   });
   card.addEventListener('input',event=>{
-    if(!card.querySelector('#prod-publicationStatus') && !card.querySelector('.tt-commercial-editor') && (event.target.id==='prod-stock' || event.target.closest('#prod-variant-stock'))) {
-      const stock=card.querySelector('#prod-stock'),active=card.querySelector('#prod-active');
-      // Sólo una modificación de cantidad cambia el estado; abrir nunca activa productos ocultos.
-      if(stock.value!=='' && Number.isInteger(Number(stock.value)) && Number(stock.value)>=0) {
-        active.checked=Number(stock.value)>0;active.dispatchEvent(new Event('change',{bubbles:true}));
-      }
-    }
     refreshEditorControls(card);
   });
   card.addEventListener('change',()=>refreshEditorControls(card));
