@@ -760,3 +760,8 @@ Alcance sólo #prod-form-card del Superpanel: lienzo neutro, superficies agrupad
 ## 2026-10-24 — Contraste y ejemplos del editor Tintin
 
 Agregar y editar comparten CSS canónico: lienzo rosa suave, campos blancos con borde definido, títulos sin mayúsculas forzadas y separadores rosas. Ejemplos de entrada no son valores persistidos; garantía sólo solicita cobertura confirmada. Se refuerza foco visible frente al reset anterior. No cambian cálculos, guardado, datos ni permisos. Se renueva CSS/loader y sus consumidores; derivados desde constructores canónicos.
+
+
+## 2026-10-25 — Reglas previas de privacidad para borradores
+
+Fuentes exclusivas firestore.rules y script canónico probar-firestore-critico.mjs. Lectura pública sólo de productos publicados, consulta acotada, lectura de admin compatible con defaults/ver revocado y agente con ver explícito; sin cambios de escritura ni cliente.233 controles reales en emulador aislado PASS_LOCAL. Preparar Rules antes del editor mediante su workflow oficial, previa autorización; PR borrador, sin deploy ni datos reales. Plan/protección y diagnóstico derivados de main9346d3bd3 se regeneran; CI productiva pendiente.

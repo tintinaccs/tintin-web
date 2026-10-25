@@ -1,28 +1,39 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "920cfd8cb865d00db26b55b27f04370e73eb0052",
-  "reason": "Contraste y ejemplos de entrada en agregar/editar producto; misma presentación canónica sin cambiar negocio",
+  "baseCommit": "9346d3bd3d4fbcab75e06962a43edae63fcb35ec",
+  "reason": "Privacidad de lectura de borradores antes de habilitar el editor; escrituras y roles conservados",
   "files": [
     {
-      "path": "admin.html",
-      "oldHash": "c4f2b4f03ec659547c8ac0a067258d868ff588147f55f361a9d85b7f1c00fd84",
-      "newHash": "9b7c23bae8cc7deb547b19339d61ee67d9c564cdbe2dee9473e7bc3a8d644410"
+      "path": "firestore.rules",
+      "oldHash": "9df1911acb8711b00ed964848c0698410a3ad12e143a03aad8e574cf4d05bc2c",
+      "newHash": "51a925583f30449be8c80b1266f09b863c22c5327b5875a000b189345d73a0b8"
     },
     {
-      "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "ad395c4a69dd3a8d2029a1521c0ef33d9218e095ead69c7e3a2d748d06e6a14f",
-      "newHash": "1f4393db141790a2020585680876500fd318f4e7bfeb2379b4e85578fde3ee75"
-    },
-    {
-      "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "0c1fae950e6c13b766564041d614377b6c01bdd5e03efa690d58e0dfd78aba1e",
-      "newHash": "8a49b7db09da1dd145bd857f8b6aa4a4526846f048f9fb444214de76d27f4ecf"
-    },
-    {
-      "path": "scripts/cache-version-baseline.json",
-      "oldHash": "1f10c26352e79e086c968b5621bebb152bfa4554256058d4c6c10d69a524318d",
-      "newHash": "afa010cce3cc7939aedcf0a5087426d53f2b0419c005a8f97b9f91faa2f2aea6"
+      "path": "scripts/probar-firestore-critico.mjs",
+      "oldHash": "2de51a726d12a437805ac6f20ab7a68bbbaa19feed7ce5e6f248a3dcc2b6364a",
+      "newHash": "ceb598f586d6e40bf31befc31241b6bf086dc4124f474db1632647933ab481fc"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__comentarios__39",
+    "apis-internas__favoritos__37",
+    "apis-internas__firestore__21",
+    "apis-internas__notificaciones__40",
+    "carrito",
+    "cf-functions__reglas-firestore__28",
+    "comentarios",
+    "favoritos",
+    "firestore",
+    "firestore-fuente-verdad",
+    "firestore__apps-script__23",
+    "firestore__carrito__36",
+    "firestore__users-uid__8",
+    "notificaciones",
+    "reglas-firestore",
+    "sesion-estado__firestore__7",
+    "sheets-products-webhook__firestore__27",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

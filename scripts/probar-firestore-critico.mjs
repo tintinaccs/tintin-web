@@ -191,6 +191,47 @@ try {
   const anon = testEnv.unauthenticatedContext().firestore();
   await succeeds(getDoc(doc(anon, 'settings', 'general')));
   await succeeds(getDoc(doc(anon, 'products', 'p1')));
+  await testEnv.withSecurityRulesDisabled(async context=>{
+    await setDoc(doc(context.firestore(),'products','private_draft'),{name:'Borrador privado fixture',category:'',price:null,active:false,publicationStatus:'draft'});
+    await setDoc(doc(context.firestore(),'products','public_explicit'),{name:'Publicado fixture',category:'aros',price:100,active:true,publicationStatus:'active'});
+  });
+  await fails(getDoc(doc(anon,'products','private_draft')));
+  const draftClient=testEnv.authenticatedContext('client1',claims.client1).firestore();
+  const draftAdmin=testEnv.authenticatedContext('admin1',claims.admin1).firestore();
+  const draftViewer=testEnv.authenticatedContext('viewer1',claims.viewer1).firestore();
+  await fails(getDoc(doc(draftClient,'products','private_draft')));
+  await fails(getDoc(doc(draftViewer,'products','private_draft')));
+  await succeeds(getDoc(doc(draftAdmin,'products','private_draft')));
+  await succeeds(getDoc(doc(anon,'products','public_explicit')));
+  await fails(getDocs(query(collection(anon,'products'),limit(1000))));
+  await fails(getDocs(query(collection(anon,'products'),where('active','==',true),limit(1000))));
+  await succeeds(getDocs(query(collection(anon,'products'),where('active','==',true),where('publicationStatus','==','active'),limit(1000))));
+  await succeeds(getDocs(query(collection(draftAdmin,'products'),limit(1000))));
+  await testEnv.withSecurityRulesDisabled(context=>updateDoc(doc(context.firestore(),'rolePermissions','main'),{'admin.productos.ver':false}));
+  await fails(getDoc(doc(draftAdmin,'products','private_draft')));
+  await fails(getDocs(query(collection(draftAdmin,'products'),limit(1000))));
+  await testEnv.withSecurityRulesDisabled(context=>updateDoc(doc(context.firestore(),'rolePermissions','main'),{'admin.productos.ver':true}));
+  await fails(getDocs(query(collection(draftAdmin,'products'),limit(1001))));
+
+  let draftRolePermissions;
+  await testEnv.withSecurityRulesDisabled(async context=>{
+    const ref=doc(context.firestore(),'rolePermissions','main');
+    draftRolePermissions=(await getDoc(ref)).data();
+    await updateDoc(ref,{'admin.productos':{crear:false,editar:false}});
+  });
+  await succeeds(getDoc(doc(draftAdmin,'products','private_draft')));
+  await succeeds(getDocs(query(collection(draftAdmin,'products'),limit(1000))));
+  const draftAgent=testEnv.authenticatedContext('agent1',claims.agent1).firestore();
+  await fails(getDoc(doc(draftAgent,'products','private_draft')));
+  await testEnv.withSecurityRulesDisabled(context=>updateDoc(doc(context.firestore(),'rolePermissions','main'),{'agent.productos.ver':true}));
+  await succeeds(getDoc(doc(draftAgent,'products','private_draft')));
+  await testEnv.withSecurityRulesDisabled(context=>deleteDoc(doc(context.firestore(),'rolePermissions','main')));
+  await succeeds(getDoc(doc(draftAdmin,'products','private_draft')));
+  await succeeds(getDocs(query(collection(draftAdmin,'products'),limit(1000))));
+  await fails(getDoc(doc(draftAgent,'products','private_draft')));
+  await fails(getDoc(doc(anon,'products','private_draft')));
+  await testEnv.withSecurityRulesDisabled(context=>setDoc(doc(context.firestore(),'rolePermissions','main'),draftRolePermissions));
+
   await fails(getDoc(doc(anon, 'settings', 'privateSecrets')));
   await fails(getDoc(doc(anon, 'users', 'client1')));
   await fails(getDoc(doc(anon, 'orders', 'client1_order1')));
