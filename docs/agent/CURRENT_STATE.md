@@ -10,6 +10,8 @@ Evidencia local actual:235/235 Node admin/catálogo/variantes PASS,21/21 privaci
 
 Límites/Fase5:450KB snapshot, lista100 activos/escaneo1000 documentos, sin retención automática; archivos pendientes requieren reelección o confirmación explícita, sin prometer persistir bytes no subidos; conciliación de campos manual; revisar permisos y Rules en staging autorizado. Instrucciones de reversión en informe21, conservar protección de privacidad y datos privados aunque se revierta UI.
 
+Entrega Fase4: commit funcional6f330b5d99c39d9c727ca495d321ac54e383608c; [PR1240](https://github.com/tintinaccs/tintin-web/pull/1240) OPEN/listo (no draft), base codex/opciones-inventario-fase3-20261025, sin auto-merge. Pruebas finales del contenido:235/235 Node,13/13 Chromium sin reintentos,21 privacidad Rules,39 comandos preflight, build Pages, protección78/544 y plan7fuentes/38registros PASS_LOCAL. Capturas conservadas artifacts/editor-fase4 (seis resoluciones). CI aún sin resultados al crear PR; no se certifica PASS remoto ni producción. Este recibo documental posterior no altera código comercial. No merge, despliegue, migración ni compras reales.
+
 ## 2026-10-25 — Fase 3 opciones e inventario (Codex /root)
 
 Rama codex/opciones-inventario-fase3-20261025, base746e944d0d05abf45d9f00d55d3448913352fa6f de PR1238 OPEN; PR1237 también OPEN/no integrado. Main f9399a90c. Se conserva ascendencia, no se fusionan ramas. Instrucción actual exige PR listo para revisión sin merge/deploy: apilar sobre rama1238 evita elegibilidad del mantenimiento automático de main. Informe: docs/editor-productos-v2/20-OPCIONES-INVENTARIO-FASE-3.md.
