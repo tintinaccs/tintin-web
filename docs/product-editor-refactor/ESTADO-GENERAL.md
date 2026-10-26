@@ -1,3 +1,22 @@
+# Estado vigente — rediseño visual y continuidad
+
+Actualización26/10/2026. Fase6 funcional ya está fusionada mediante#1244
+(8e9225038), con CI y monitor productivo aprobados. La base incluye#1245
+(ed574b1c5). El pedido posterior exige una reorganización visual importante y
+se implementa en `codex/editor-rediseno-visible-20261026`.
+
+Estado del nuevo diseño: implementación terminada, aceptación local e integración
+en curso; no se atribuye al rediseño la CI anterior. Evidencia nueva y límites en
+[08-REDISENO-VISUAL.md](08-REDISENO-VISUAL.md). Conciliación del último adjunto y
+los pendientes generales en [09-CONCILIACION-AVANCES-GENERALES.md](09-CONCILIACION-AVANCES-GENERALES.md).
+
+Las cuentas reales, proveedores y dispositivos físicos conservan aceptación
+pendiente. No se afirma cierre del proyecto completo por una UI nueva o CI verde.
+Los apartados siguientes conservan la fotografía de la entrega local anterior,
+que fue sustituida por la autorización e integración posterior de#1244.
+
+---
+
 # Estado general del rediseño controlado
 
 26/10/2026 · Codex /root · base5dc6f781 · rama local editor-fase6-integracion.

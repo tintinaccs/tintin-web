@@ -1,3 +1,8 @@
+> Actualización26/10/2026: la entrega funcional de este informe se integró en#1244.
+> El rediseño visual solicitado después y la comparación con avances generales
+> se documentan en08-REDISENO-VISUAL.md y09-CONCILIACION-AVANCES-GENERALES.md.
+> Las cifras siguientes pertenecen a su ejecución fechada, no se heredan al nuevo candidato.
+
 # Informe final — Editor Tintin, Fase 6
 
 **Aceptación local con pendientes externos. Integración protegida autorizada por la titular.**

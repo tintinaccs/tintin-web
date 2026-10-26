@@ -1,4 +1,5 @@
 'use strict';
+const {selectProductEditorSection}=require('./helpers/product-save-fixture.cjs');
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const shell=fs.readFileSync('admin.html','utf8');
@@ -14,12 +15,12 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await openProductSaveFixture(page,width,height);
  await expect(page.locator('[data-product-section="general"] .tt-editor-section-toggle')).toHaveAttribute('aria-expanded','true');
  for(const section of ['prices','inventory','specs','private'])await expect(page.locator(`[data-product-section="${section}"] .tt-editor-section-toggle`)).toHaveAttribute('aria-expanded','false');
- await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Pulsera ficticia');
- await page.getByRole('button',{name:'Producto',exact:true}).click();
- await page.locator('#prod-editor-section').selectOption('general');
+ await selectProductEditorSection(page,'general');await page.locator('#prod-name').fill('Pulsera ficticia');
+ await page.locator('[data-product-section=general] .tt-editor-section-toggle').click();
+ await selectProductEditorSection(page,'general');
  await page.locator('[data-product-section="general"] .tt-editor-section-help summary').click();
  await expect(page.getByText('Nombre y descripción que verán tus clientes.',{exact:true})).toBeVisible();
- await page.locator('#prod-editor-section').selectOption('specs');await page.locator('#prod-material').fill('Plata 925');
+ await selectProductEditorSection(page,'specs');await page.locator('#prod-material').fill('Plata 925');
  await page.locator('#prod-care').fill('Cuidados confirmados por el proveedor.');await page.locator('#prod-warranty').fill('Cobertura confirmada en el certificado.');
  const suggestions=page.locator('.tt-editor-suggestions');await suggestions.locator('summary').click();
  await expect(suggestions.locator('summary')).toHaveText('Sugerencias · pulsera');
@@ -29,12 +30,12 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(page.locator('#prod-warranty')).toHaveValue('Cobertura confirmada en el certificado.');
  await expect(suggestions).toContainText('Usar un paño específico para plata');
  await page.evaluate(()=>{const category=document.getElementById('prod-category');category.add(new Option('Carteras','carteras'));});
- await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('carteras');
- await page.locator('#prod-editor-section').selectOption('specs');
+ await selectProductEditorSection(page,'visibility');await page.locator('#prod-category').selectOption('carteras');
+ await selectProductEditorSection(page,'specs');
  await expect(suggestions.locator('summary')).toHaveText('Sugerencias · cartera');
  await expect(page.locator('#prod-warranty')).toHaveValue('Cobertura confirmada en el certificado.');
  await suggestions.getByRole('button',{name:'Revisar garantía',exact:true}).click();await expect(page.locator('#prod-warranty')).toBeFocused();
- await page.locator('#prod-editor-section').selectOption('general');await expect(page.locator('#prod-name')).toHaveValue('Pulsera ficticia');
+ await selectProductEditorSection(page,'general');await expect(page.locator('#prod-name')).toHaveValue('Pulsera ficticia');
  await expect(page.locator('#prod-save-btn')).toBeInViewport();
  const geometry=await page.locator('#prod-form-card').evaluate(card=>({fits:card.scrollWidth<=card.clientWidth+1,fields:[...card.querySelectorAll('input:not([type=hidden]),select,textarea,button')].filter(el=>el.getClientRects().length).every(el=>{const r=el.getBoundingClientRect(),c=card.getBoundingClientRect();return r.left>=c.left-1 && r.right<=c.right+1;})}));
  expect(geometry).toEqual({fits:true,fields:true});expect(errors).toEqual([]);
@@ -56,7 +57,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
   const factory=new Function('variantInventoryEntries','reorderVariantInventory','commercialDraft','mountCommercialEditor',renderer+';return {render:renderProductVariantStock,get:()=>productCommercialEditor.get(),patch:()=>productCommercialEditor.patch({price:30000,priceBefore:40000})};');
   window.editor=factory(inventory.variantInventoryEntries,inventory.reorderVariantInventory,commercialDraft,mountCommercialEditor);window.editor.render(product);
  },{renderer,product});
- await page.locator('#prod-editor-section').selectOption('inventory');
+ await selectProductEditorSection(page,'inventory');
  await page.getByRole('spinbutton',{name:'Precio: Oro / M',exact:true}).fill('55000');
  await page.getByRole('checkbox',{name:'Seleccionar Plata / M',exact:true}).check();
  await page.locator('.tt-commercial-advanced').evaluate(node=>node.open=true);
@@ -101,7 +102,7 @@ for(const [width,height] of [[320,700],[768,1024],[1024,768],[1440,900]])test(`e
  const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
  await openProductSaveFixture(page,width,height);
  const card=page.locator('#prod-form-card');
- await page.locator('#prod-editor-section').selectOption('prices');
+ await selectProductEditorSection(page,'prices');
  await page.locator('#prod-price').fill('45000');
  const priceToggle=page.locator('[data-product-section="prices"] .tt-editor-section-toggle');
  await priceToggle.focus();await page.keyboard.press('Enter');
@@ -110,7 +111,7 @@ for(const [width,height] of [[320,700],[768,1024],[1024,768],[1440,900]])test(`e
  await page.keyboard.press('Enter');await page.keyboard.press('Enter');await page.keyboard.press('Enter');
  await expect(priceToggle).toHaveAttribute('aria-expanded','true');
  await expect(page.locator('#prod-price')).toHaveValue('45000');
- await page.locator('#prod-editor-section').selectOption('inventory');
+ await selectProductEditorSection(page,'inventory');
  await page.locator('#prod-stock').fill('0');await page.locator('#prod-stock').dispatchEvent('input');
  const inventory=page.locator('[data-product-section="inventory"] .tt-editor-section-toggle');
  await inventory.click();await expect(inventory.locator('.tt-editor-section-value')).toHaveText('0 unidades');
@@ -120,7 +121,7 @@ for(const [width,height] of [[320,700],[768,1024],[1024,768],[1440,900]])test(`e
  await inventory.click();await expect(page.locator('#prod-stock')).toBeVisible();
  expect(await inventory.locator('.tt-editor-chevron').evaluate(el=>getComputedStyle(el).transitionDuration)).toBe('0s');
  expect(await page.locator('#prod-section-inventory').evaluate(el=>getComputedStyle(el).animationName)).toBe('none');
- await page.locator('#prod-editor-section').selectOption('general');
+ await selectProductEditorSection(page,'general');
  await page.locator('#prod-name').fill('Pulsera de prueba con un nombre largo para comprobar la lectura en pantallas pequeñas');
  const before=await page.locator('#prod-name').inputValue();
  if(width===1440)await page.evaluate(()=>document.documentElement.style.zoom='2');
@@ -135,7 +136,7 @@ for(const [width,height] of [[320,700],[768,1024],[1024,768],[1440,900]])test(`e
 for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768],[1440,900],[1920,1080]])test(`editor contraste Tintin: ejemplos, superficies y foco ${width}x${height}`,async({page})=>{
  const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
  await openProductSaveFixture(page,width,height);
- await page.locator('#prod-editor-section').selectOption('general');
+ await selectProductEditorSection(page,'general');
  const name=page.locator('#prod-name');
  await expect(name).toHaveAttribute('placeholder','Ej.: Pulsera Fiorella');
  await name.fill('');await expect(name).toHaveValue('');
@@ -147,7 +148,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  });
  expect(colors.placeholder).toBeGreaterThanOrEqual(4.5);expect(colors.distinct).toBe(true);expect(colors.border).toBeGreaterThanOrEqual(3);expect(colors.text).toBeGreaterThanOrEqual(4.5);expect(colors.opacity).toBe('1');expect(colors.field).not.toBe(colors.canvas);
  await name.focus();expect(await name.evaluate(el=>getComputedStyle(el).outlineStyle)).not.toBe('none');
- await name.fill('Pulsera de prueba');await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('45000');await page.locator('#prod-editor-section').selectOption('general');await expect(name).toHaveValue('Pulsera de prueba');
+ await name.fill('Pulsera de prueba');await selectProductEditorSection(page,'prices');await page.locator('#prod-price').fill('45000');await selectProductEditorSection(page,'general');await expect(name).toHaveValue('Pulsera de prueba');
  expect(await page.locator('#prod-form-card').evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
  fs.mkdirSync('artifacts/editor-contrast',{recursive:true});await name.fill('');await name.blur();await page.evaluate(()=>document.fonts.ready);await page.screenshot({animations:'disabled',path:`artifacts/editor-contrast/agregar-${test.info().project.name}-${width}.png`});
 });

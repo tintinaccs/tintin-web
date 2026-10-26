@@ -94,7 +94,7 @@ const imagesStub = `export function sanitizeImageUrl(value) { return /^https?:\\
 function fixtureHtml() {
   return `<!doctype html>
   <html lang="es" class="adm-auth-ready"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/tablero-pedidos.css"><link rel="stylesheet" href="/css/admin/dashboard-control.css"><style>
+  <link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/editor-producto-studio.css"><link rel="stylesheet" href="/css/admin/tablero-pedidos.css"><link rel="stylesheet" href="/css/admin/dashboard-control.css"><style>
     :root {
       --admin-color-brand:#AD3F67; --admin-color-brand-hover:#8B2642; --admin-color-background-page:#FFF6FA;
       --admin-color-background-surface:#fff; --admin-color-background-sidebar-active:#FDECF2; --admin-color-border:#F1E4E7;

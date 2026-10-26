@@ -1,3 +1,7 @@
+## 2026-10-26 — Reorganización visual del editor de productos
+
+Autoridad: interfaz-productos-adaptable y controles originales de admin-app. Nueva hoja editor-producto-studio, navegación lateral/compacta y vista previa separada; publicación/SEO/organización se reubican conservando nodos y serializer. La sección inicial cambia a Producto. No se alteran contratos comerciales ni checkout, pagos, backend, reglas o reservas. Versionado transitivo, diagnóstico y plan se generan por las autoridades existentes. Evidencia y conciliación con#1244/#1245/#1246 en docs/product-editor-refactor/08 y09; no se hereda PASS de fases anteriores.
+
 ## 2026-10-26 — Lectura de Checkout y reserva de logo
 
 Autoridades: checkout-maintenance.css y sharedFooter del constructor público. Texto de cinco pasos mantiene legibilidad y contenido al ampliar; atributos HTML reservan104×56 del logo antes del CSS en los footers generados. Consumidores de estilos renuevan URLs transitivas y los derivados desde generadores. No lógica de pedidos/pagos, Auth ni datos. Se verifican otros cinco puntos del informe sin introducir sus overrides innecesarios; evidencia en docs/agent/VALIDACION-AUDITORIA-VISUAL-20261026.md y CURRENT_STATE.

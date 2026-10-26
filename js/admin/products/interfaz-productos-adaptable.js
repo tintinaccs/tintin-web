@@ -1,5 +1,5 @@
 import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
-import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261026-editor-phase6-1';
+import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261026-editor-studio-1';
 import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261026-editor-phase6-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
 import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261024-editor-atelier-1';
@@ -32,8 +32,10 @@ export function syncProductSurfaces() {
   if (editor) {
     if (!editorWasOpen) {
       editorOpener = document.activeElement;
+      showSection(editor,editor.querySelector('#prod-editor-section')?.value || 'general',true);
       window.TintinPageScroll?.reset(editor);
-      (editor.querySelector('#prod-editor-section') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
+      const activeLink=editor.querySelector('[data-editor-section-link][aria-current=page]');
+      (activeLink?.getClientRects().length ? activeLink : editor.querySelector('#prod-editor-section'))?.focus({preventScroll:true});
     }
     editor.setAttribute('role','dialog');
     editor.setAttribute('aria-modal',String(editor.classList.contains('tt-editor-workspace')));
@@ -80,6 +82,7 @@ export function enhanceProductEditor() {
   const grid = body?.querySelector('.tt-product-fields, :scope > div[style*="grid-template-columns"]');
   if (!grid) return;
   grid.classList.add('tt-product-fields');
+  card.classList.add('tt-editor-studio');
   let navigation = body.querySelector('.tt-product-section-nav');
   if (!navigation) {
     navigation = document.createElement('div');
@@ -89,16 +92,25 @@ export function enhanceProductEditor() {
     for (const [value,label] of [['all','Todos los campos'],...sections.map(([id,title])=>[id,title])]) {
       const option = document.createElement('option');option.value=value;option.textContent=label;select.append(option);
     }
-    select.value = 'all';
+    select.value = 'general';
     select.addEventListener('change',()=>showSection(card,select.value,true));
-    navigation.append(text,select);body.prepend(navigation);
+    const eyebrow=document.createElement('span');eyebrow.className='tt-editor-nav-heading';eyebrow.textContent='Editor de producto';
+    const links=document.createElement('nav');links.className='tt-editor-section-links';links.setAttribute('aria-label','Secciones del producto');
+    const ordered=[sections[1],sections[0],...sections.slice(2),['all','Revisar todo']];
+    ordered.forEach(([value,label],index)=>{
+      const button=document.createElement('button');button.type='button';button.dataset.editorSectionLink=value;
+      const number=document.createElement('span');number.className='tt-editor-nav-number';number.setAttribute('aria-hidden','true');number.textContent=value==='all'?'↗':String(index+1).padStart(2,'0');
+      const title=document.createElement('span');title.textContent=label;button.append(number,title);
+      button.addEventListener('click',()=>{select.value=value;select.dispatchEvent(new Event('change',{bubbles:true}));});links.append(button);
+    });
+    navigation.append(eyebrow,text,select,links);body.prepend(navigation);
 
   }
   let layout = body.querySelector('.tt-editor-layout');
   if (!layout) {
     layout = document.createElement('div'); layout.className = 'tt-editor-layout';
     grid.before(layout); layout.append(grid);
-    const sidebar=document.createElement('aside');sidebar.className='tt-editor-sidebar';sidebar.setAttribute('aria-label','Publicación y organización del producto');layout.append(sidebar);
+    const sidebar=document.createElement('aside');sidebar.className='tt-editor-sidebar';sidebar.setAttribute('aria-label','Vista previa del producto');layout.append(sidebar);layout.prepend(navigation);
     const descriptions = {
       general:'Nombre y descripción que verán tus clientes.',
       photos:'La imagen principal es la portada. Agregá otras vistas y ordená las fotos de cada color.',
@@ -131,13 +143,14 @@ export function enhanceProductEditor() {
       const help=document.createElement('details');help.className='tt-editor-section-help';
       const helpSummary=document.createElement('summary');helpSummary.textContent='Ayuda';help.append(helpSummary,description);
       description.hidden=false;fields.append(help);
-      group.append(heading,fields); (section==='visibility'?sidebar:grid).append(group);
+      group.append(heading,fields);grid.append(group);
       for (const id of ids) {
         const field = originalFields.find(field=>field.id === id || field.querySelector(`#${id}`));
         if (field) fields.append(field);
       }
     }
-    const previewShell=document.createElement('details');previewShell.className='tt-editor-preview-shell';previewShell.open=matchMedia('(min-width:1100px)').matches;
+    const previewShell=document.createElement('details');previewShell.className='tt-editor-preview-shell';previewShell.open=matchMedia('(min-width:1280px)').matches;
+    matchMedia('(min-width:1280px)').addEventListener('change',event=>{if(event.matches)previewShell.open=true;});
     const previewSummary=document.createElement('summary');previewSummary.textContent='Vista previa';previewShell.append(previewSummary);sidebar.append(previewShell);
     mountProductPreview(card,previewShell);
     const previewButton = document.createElement('button'); previewButton.type='button';previewButton.className='adm-btn adm-btn-outline tt-editor-preview-jump';
@@ -166,27 +179,25 @@ export function enhanceProductEditor() {
     header?.querySelector('button[onclick="prodCancelForm()"]')?.remove();
     header?.append(actions);
   }
-  const sidebar=layout.querySelector('.tt-editor-sidebar');
-  if(sidebar) {
-    const publication=card.querySelector('.tt-product-editorial-publication');
-    const organization=sidebar.querySelector('[data-product-section="visibility"]');
-    if(publication && sidebar.firstElementChild!==publication)sidebar.prepend(publication);
-    for(const panel of card.querySelectorAll('.tt-product-editorial-seo,.tt-product-editorial-statistics')) {
-      if(panel.parentElement!==sidebar) sidebar.append(panel);
-    }
-    const preview=sidebar.querySelector('.tt-editor-preview-shell');
-    if(preview && publication?.nextElementSibling!==preview)publication?.after(preview);
-    if(organization && preview?.nextElementSibling!==organization)preview?.after(organization);
+  const organization=grid.querySelector('[data-product-section="visibility"] .tt-editor-section-fields');
+  const publication=card.querySelector('.tt-product-editorial-publication');
+  if(publication && organization && organization.firstElementChild!==publication)organization.prepend(publication);
+  for(const panel of card.querySelectorAll('.tt-product-editorial-seo,.tt-product-editorial-statistics')) {
+    if(organization && panel.parentElement!==organization)organization.append(panel);
   }
   const privateSection=grid.querySelector('[data-product-section="private"]');
   const privateField=card.querySelector('#prod-inventory-fields');
   const privateHidden=!privateField || privateField.hidden || privateField.style.display==='none';
   if(privateSection)privateSection.dataset.permissionHidden=String(privateHidden);
+  const privateLink=card.querySelector('[data-editor-section-link=private]');
+  if(privateLink && privateLink.hidden!==privateHidden)privateLink.hidden=privateHidden;
   const privateOption=card.querySelector('#prod-editor-section option[value="private"]');
   if(privateOption){if(privateOption.hidden!==privateHidden)privateOption.hidden=privateHidden;if(privateOption.disabled!==privateHidden)privateOption.disabled=privateHidden;}
   const inventoryPanel=card.querySelector('#prod-variant-stock');
   const inventoryTarget=card.querySelector('[data-product-section="availability"] .tt-editor-section-fields');
   if(inventoryPanel && inventoryTarget && inventoryPanel.parentElement!==inventoryTarget)inventoryTarget.append(inventoryPanel);
+  const secondary=card.querySelector('.tt-work-secondary');
+  if(secondary && body.lastElementChild!==secondary)body.append(secondary);
   refreshEditorHeading(card);
   const error=card.querySelector('#prod-form-error');
   if (error) {
@@ -244,8 +255,8 @@ function refreshSectionValues(card) {
 
 function showSection(card,value,expand=false) {
   card.querySelector('#prod-editor-section').value=value;
-  for(const step of card.querySelectorAll('[data-editor-step]')) {
-    if(step.dataset.editorStep===value)step.setAttribute('aria-current','step');else step.removeAttribute('aria-current');
+  for(const link of card.querySelectorAll('[data-editor-section-link]')) {
+    if(link.dataset.editorSectionLink===value)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
   }
   card.querySelector('.tt-editor-layout').dataset.editorSection=value;
   for (const field of card.querySelectorAll('[data-product-section]')) {

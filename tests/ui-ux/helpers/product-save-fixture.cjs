@@ -11,9 +11,10 @@ const start = shell.indexOf('<div class="adm-card" id="prod-form-card"');
 const form = shell.slice(start, shell.indexOf('\n    </div>\n\n    <!-- ===================== COLECCIONES', start));
 const code = source.slice(source.indexOf('let productVariantStockBaseline = null;'), source.indexOf('window.prodToggleActive ='));
 
-async function openProductSaveFixture(page, width, height, {fullShell=false,photos=false,workflow=false,initialRecords=[],gallerySource=null} = {}) {
+async function openProductSaveFixture(page, width, height, {fullShell=false,photos=false,workflow=false,initialRecords=[],gallerySource=null,presentationSource=null} = {}) {
   await page.setViewportSize({ width, height });
   await mockRuntime(page);
+  if(presentationSource)await page.route('**/products/interfaz-productos-adaptable.js*',route=>route.fulfill({contentType:'text/javascript',body:presentationSource}));
   if(gallerySource)await page.route('**/products/galeria-unificada.js*',route=>route.fulfill({contentType:'text/javascript',body:gallerySource}));
   await page.route('**/components/images/biblioteca-multimedia.js*',route=>route.fulfill({contentType:'text/javascript',body:`export const deleteMediaByUrlIfUnused=async()=>{throw Error('No se permite borrar archivos en QA');};export const deleteMediaItem=deleteMediaByUrlIfUnused;export const uploadImageToLibrary=async(file,options)=>{options?.onProgress?.('uploading');if(window.qaUploadFailure)throw Error('Carga fallida de prueba');return {url:'https://img.test/'+file.name,mediaId:'synthetic'};};`}));
   if(!await page.evaluate(()=>typeof window.qaCommercialWrite==='function'))await page.exposeFunction('qaCommercialWrite', async ({ request, records }) => {
@@ -110,6 +111,10 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
     const category = document.getElementById('prod-category'); category.replaceChildren(new Option('Elegí colección', ''), new Option('Colección ficticia', 'qa-tablet'));
   }, {workflow,initialRecords,code:photos ? source.slice(source.indexOf('const _formImageWidgets = new Map();'),source.indexOf('let productVariantStockBaseline = null;'))+code : code});
   await page.locator('[data-action="product-new"]').click();
-  await expect(page.locator('#prod-editor-section')).toBeVisible();
+  await expect(page.locator('.tt-product-section-nav')).toBeVisible();
 }
-module.exports = { openProductSaveFixture };
+async function selectProductEditorSection(page,value) {
+  const link=page.locator(`[data-editor-section-link="${value}"]`);
+  if(await link.isVisible())await link.click();else await page.locator('#prod-editor-section').selectOption(value);
+}
+module.exports = { openProductSaveFixture,selectProductEditorSection };

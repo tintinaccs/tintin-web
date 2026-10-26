@@ -4065,3 +4065,19 @@ obsoleta para recuperar funcionalidad ya conciliada. Las pruebas locales y sus
 límites están en el informe final. CI se comprueba sobre la nueva cabeza; no se
 atribuye anticipadamente PASS_CI ni producción. Estado definitivo: PR y entrega
 del chat. Después del merge se verifican main y los PR de Dependabot indicados.
+
+
+## 2026-10-26 — Reorganización visual importante, continuidad de la titular
+
+Codex /root. Rama codex/editor-rediseno-visible-20261026; base ed574b1c5 (#1245),
+conservando integración funcional#1244. La titular reiteró que quiere una diferencia
+visual importante y pidió continuar hasta terminar/fusionar; autorización vigente.
+Navegación lateral desde1024, vista previa independiente desde1280, selector móvil,
+Producto como entrada y publicación/SEO en Organización. Campos/serializer/CAS/
+workspace/permisos originales. Sin motor checkout/pagos ni datos productivos.
+44Node PASS_LOCAL; build/caché aprobados. Navegador final/preflight/CI en curso;
+no se atribuye anticipadamente PASS_CI ni producción. Primeros fallos de fixtures
+antiguos se corrigen conservando aserciones comerciales; también se registra una
+caída del servidor local de pruebas. Capturas y resultados en08; comparación del
+adjunto/ochos runs antiguos confirmados CANCELLED y pendientes externos en09.
+PR#1246 de Perfil sigue independiente y abierta al comprobar; no se pisa su código.
