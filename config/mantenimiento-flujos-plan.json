@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "e78a9de2fef629bb353cac27b394d288867f9d53",
-  "reason": "Mantener exclusivamente el editor de seis fases y retirar especificaciones visuales y controles sin consumidores.",
+  "reason": "Mantener el editor único de seis fases y registrar su regresión contra montajes o diseños alternativos en CI.",
   "files": [
     {
       "path": "admin.html",

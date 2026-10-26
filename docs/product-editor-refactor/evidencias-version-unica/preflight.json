@@ -41,5 +41,6 @@
     "npm run audit:cache-versioning",
     "npm run test:fast",
     "node scripts/auditar-legal-paginas.js"
-  ]
+  ],
+  "includesSingleVersionCiRegistration": true
 }

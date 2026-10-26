@@ -28,7 +28,7 @@ backend, checkout, pagos, pedidos o reservas. Perfil conserva sus bytes de main.
 |Sesión productiva autenticada/proveedores/dispositivos físicos |NO EJECUTADA |Sin datos productivos ni pagos reales |
 |CI y monitor de la unificación |PENDIENTES al publicar |Recibo remoto se añade al PR |
 
-Los casos nuevos abren tres veces el mismo producto y exigen un solo formulario,
+Los casos nuevos quedan registrados en la etapa C de CI y abren tres veces el mismo producto y exigen un solo formulario,
 layout y galería. Editan, guardan una vez, recuperan el mismo producto y conservan
 sus cantidades y variantes. También se repiten cancelación, draft, fallos, fotos,
 archivo/restauración, orientación, zoom y teclado con los fixtures existentes.
