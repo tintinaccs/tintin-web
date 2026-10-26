@@ -1,28 +1,52 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "e78a9de2fef629bb353cac27b394d288867f9d53",
-  "reason": "Mantener el editor único de seis fases y registrar su regresión contra montajes o diseños alternativos en CI.",
+  "baseCommit": "899a6851100b9560e6e3520e71ea3100babaa9fb",
+  "reason": "Reunir producto completo junto a fotografías conservando campos y contratos canónicos",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "fd5daad453c547666a232fd288cf8fe252f69b2baaf65e1111badbcdd2a1644f",
-      "newHash": "92d0dbc2d4d6a3fca82edf77be929ed07a83327e85dfd3d838a6291523bfb3a7"
+      "oldHash": "92d0dbc2d4d6a3fca82edf77be929ed07a83327e85dfd3d838a6291523bfb3a7",
+      "newHash": "4342bd86bb5171f5312d2267c54adfc8b4aa218abbdc25208a54b6fc2f051b48"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "8b9a165f59780776e7e3dec98361f7262d8214fdd33285b0f4fbe9d0e9c9d32d",
-      "newHash": "c2baa72f83b8ae847e9dd367f2d76779daca5d8f0af224d4b1eed7533f8263f4"
+      "oldHash": "c2baa72f83b8ae847e9dd367f2d76779daca5d8f0af224d4b1eed7533f8263f4",
+      "newHash": "95e7842844cf9a39c1a800d643527735a9bd0ebbc891cd202657df6c06d49420"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "9404c5f1925adc53892eba0b1b1f28166afb29cdfb1e7455d808d30a180fa822",
+      "newHash": "84f717e17c34b4853758140626f07daca8a7dd380c4be1c09df14c9affa951f6"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "9851e7dae9e49f1c32ee8289f55b23b28ae1ae53c3a9e5f0b2ba8aef7710602f",
-      "newHash": "266829585494aca53c2225556c4b8595e948814feb0310a513b9d547f7028632"
+      "oldHash": "266829585494aca53c2225556c4b8595e948814feb0310a513b9d547f7028632",
+      "newHash": "616b18ee36bc4e4ab59a8fa9e0b3ecd686a438459609f3bd0788182e17dd10f9"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "67351ceb9e43e404937368c918199311797a2cf4c7845a7a597070cf001e21f5",
-      "newHash": "740a7cbb5e535d1166857a1312a4bac974b525bac92cc0ca172dc4ccb830fbe7"
+      "oldHash": "740a7cbb5e535d1166857a1312a4bac974b525bac92cc0ca172dc4ccb830fbe7",
+      "newHash": "afc92ac43e1023f44d43f5328c300c2ba616a1cd6c2d5082b93e708d4a07ff6e"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "correos",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

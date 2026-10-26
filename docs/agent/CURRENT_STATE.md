@@ -1,3 +1,17 @@
+## 2026-10-26 — Edición contextual completa del producto
+
+Codex /root, rama codex/editor-bloque-contextual-completo-20261026, base899a685.
+Autorización expresa para implementar y terminar el merge protegido. Se reúnen
+fotos, asociaciones múltiples, nombre/descripción, categoría, opciones, precios,
+stock, material/especificaciones y publicación en el mismo bloque canónico.
+Se conservan los campos originales, modelos y permisos. Trece familias proponen
+detalles sólo por clic; sin inferencias ni escrituras de datos reales. Node58/58
+PASS_LOCAL; Chromium30/30, repetición responsive8/8 y autoguardado1/1 PASS_LOCAL.
+Build/caché/diagnóstico/protección y39/39 preflight PASS_LOCAL; CI/merge/monitor
+IN_PROGRESS hasta la confirmación externa del candidato exacto. La matriz inicial
+329PASS/11FAIL no se declara aprobada: cambios de navegación y selector recortado
+requieren repetición. Recibo EDICION-CONTEXTUAL-PRODUCTO.md. No hay otro diseño.
+
 ## Estado actual — versión única del editor,26/10/2026
 
 Codex /root. La titular ordena conservar exclusivamente el editor de seis fases.

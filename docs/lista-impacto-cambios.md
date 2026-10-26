@@ -1,3 +1,7 @@
+## 2026-10-26 — Producto completo junto a su galería
+
+Autoridades: interfaz-productos-adaptable, galeria-unificada, sugerencias-producto y CSS administrativo. Un solo bloque reúne los campos originales; selección múltiple aplica asociaciones por colores/atributos y notifica al workspace. Trece familias de categorías ofrecen propuestas explícitas sin inferir datos. Panel de datos estable fuera de la raíz destruible de galería. Mismos contratos V1/V2, IDs, stock/precios, privacidad y guardado; sin checkout/pagos/backend/Rules. Nuevos tests Node/Chromium en etapas existentes. Versionado y derivados por generadores. Evidencia: docs/product-editor-refactor/EDICION-CONTEXTUAL-PRODUCTO.md.
+
 ## 2026-10-26 — Una única versión del editor de seis fases
 
 Autoridad vigente: docs/product-editor-refactor/00-VERSION-UNICA.md. Se conserva main con#1241/#1244/#1245/#1246, sin la propuesta retirada#1247. Se eliminan especificaciones visuales previas y guía sin consumidores; se unifican índices y estado. No se tocan contratos comerciales ni fuentes de Perfil. El CSS y sus consumidores renuevan caché; diagnóstico y plan se regeneran por autoridades existentes. Ver UNIFICACION-SEIS-FASES y CURRENT_STATE para evidencia propia, sin heredar PASS de la propuesta descartada.

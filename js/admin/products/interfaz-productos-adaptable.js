@@ -2,7 +2,7 @@ import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-202
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261026-editor-phase6-1';
 import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261026-editor-phase6-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
-import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261024-editor-atelier-1';
+import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261026-editor-contextual-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
   ['photos', 'Fotografías del producto', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
@@ -32,6 +32,7 @@ export function syncProductSurfaces() {
   if (editor) {
     if (!editorWasOpen) {
       editorOpener = document.activeElement;
+      const photoControls=editor.querySelector('.tt-photo-product-controls');if(photoControls)photoControls.open=true;
       window.TintinPageScroll?.reset(editor);
       (editor.querySelector('#prod-editor-section') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
     }
@@ -80,6 +81,7 @@ export function enhanceProductEditor() {
   const grid = body?.querySelector('.tt-product-fields, :scope > div[style*="grid-template-columns"]');
   if (!grid) return;
   grid.classList.add('tt-product-fields');
+  card.classList.add('tt-editor-composer');
   let navigation = body.querySelector('.tt-product-section-nav');
   if (!navigation) {
     navigation = document.createElement('div');
@@ -91,7 +93,12 @@ export function enhanceProductEditor() {
     }
     select.value = 'all';
     select.addEventListener('change',()=>showSection(card,select.value,true));
-    navigation.append(text,select);body.prepend(navigation);
+    const shortcuts=document.createElement('nav');shortcuts.className='tt-product-quick-actions';shortcuts.setAttribute('aria-label','Editar datos del producto');
+    for(const [value,title] of [['photos','Fotos y colores'],['general','Nombre y descripción'],['inventory','Opciones'],['prices','Precios'],['availability','Stock'],['specs','Material y detalles'],['visibility','Publicación']]){
+      const button=document.createElement('button');button.type='button';button.className='adm-btn adm-btn-outline';button.textContent=title;
+      button.addEventListener('click',()=>{select.value=value;select.dispatchEvent(new Event('change',{bubbles:true}));});shortcuts.append(button);
+    }
+    navigation.append(text,select,shortcuts);body.prepend(navigation);
 
   }
   let layout = body.querySelector('.tt-editor-layout');
@@ -131,7 +138,7 @@ export function enhanceProductEditor() {
       const help=document.createElement('details');help.className='tt-editor-section-help';
       const helpSummary=document.createElement('summary');helpSummary.textContent='Ayuda';help.append(helpSummary,description);
       description.hidden=false;fields.append(help);
-      group.append(heading,fields); (section==='visibility'?sidebar:grid).append(group);
+      group.append(heading,fields); grid.append(group);
       for (const id of ids) {
         const field = originalFields.find(field=>field.id === id || field.querySelector(`#${id}`));
         if (field) fields.append(field);
@@ -143,7 +150,7 @@ export function enhanceProductEditor() {
     const previewButton = document.createElement('button'); previewButton.type='button';previewButton.className='adm-btn adm-btn-outline tt-editor-preview-jump';
     previewButton.textContent='Ver vista previa';previewButton.setAttribute('aria-controls','prod-live-preview');
     previewButton.addEventListener('click',()=>{const preview=card.querySelector('#prod-live-preview');const shell=preview.closest('details');if(shell)shell.open=true;preview.focus({preventScroll:true});preview.scrollIntoView({block:'start'});});
-    navigation.append(previewButton);
+    navigation.insertBefore(previewButton,navigation.querySelector('.tt-product-quick-actions'));
   }
   for (const [section,,ids] of sections) for (const id of ids) {
     // La galería se monta al abrir cada producto; se reubica sin recrear sus controles.
@@ -167,17 +174,23 @@ export function enhanceProductEditor() {
     header?.append(actions);
   }
   const sidebar=layout.querySelector('.tt-editor-sidebar');
-  if(sidebar) {
-    const publication=card.querySelector('.tt-product-editorial-publication');
-    const organization=sidebar.querySelector('[data-product-section="visibility"]');
-    if(publication && sidebar.firstElementChild!==publication)sidebar.prepend(publication);
-    for(const panel of card.querySelectorAll('.tt-product-editorial-seo,.tt-product-editorial-statistics')) {
-      if(panel.parentElement!==sidebar) sidebar.append(panel);
-    }
-    const preview=sidebar.querySelector('.tt-editor-preview-shell');
-    if(preview && publication?.nextElementSibling!==preview)publication?.after(preview);
-    if(organization && preview?.nextElementSibling!==organization)preview?.after(organization);
+  const organization=grid.querySelector('[data-product-section="visibility"] .tt-editor-section-fields');
+  const publication=card.querySelector('.tt-product-editorial-publication');
+  if(publication && organization && organization.firstElementChild!==publication)organization.prepend(publication);
+  for(const panel of card.querySelectorAll('.tt-product-editorial-seo,.tt-product-editorial-statistics'))if(organization && panel.parentElement!==organization)organization.append(panel);
+  const category=card.querySelector('#prod-category')?.parentElement;
+  const identity=grid.querySelector('[data-product-section="general"] .tt-editor-section-fields');
+  if(category && identity && category.parentElement!==identity)identity.prepend(category);
+  const photoFields=grid.querySelector('[data-product-section="photos"] .tt-editor-section-fields');
+  let photoControls=photoFields?.querySelector(':scope > .tt-photo-product-controls');
+  if(photoFields && !photoControls){photoControls=document.createElement('details');photoControls.className='tt-photo-product-controls';photoControls.open=true;const title=document.createElement('summary');title.textContent='Datos, opciones, precios y stock del producto';photoControls.append(title);photoFields.prepend(photoControls);}
+  for(const section of ['general','inventory','prices','availability','specs','visibility','private']){
+    const group=card.querySelector(`[data-product-section="${section}"]`);if(group && photoControls && group.parentElement!==photoControls)photoControls.append(group);
   }
+  const priceFields=card.querySelector('[data-product-section=prices] .tt-editor-section-fields');
+  if(priceFields && !priceFields.querySelector('.tt-photo-price-scope')){const note=document.createElement('p');note.className='tt-editor-caption tt-photo-price-scope';note.textContent='Precio general del producto. Los precios propios de cada color o combinación se editan en Inventario y disponibilidad.';priceFields.prepend(note);}
+  // El panel pertenece al formulario, fuera de la galería que se destruye al reabrir.
+  // Nunca se recrean campos ni se trasladan filas fuera de su serializer.
   const privateSection=grid.querySelector('[data-product-section="private"]');
   const privateField=card.querySelector('#prod-inventory-fields');
   const privateHidden=!privateField || privateField.hidden || privateField.style.display==='none';
@@ -187,6 +200,7 @@ export function enhanceProductEditor() {
   const inventoryPanel=card.querySelector('#prod-variant-stock');
   const inventoryTarget=card.querySelector('[data-product-section="availability"] .tt-editor-section-fields');
   if(inventoryPanel && inventoryTarget && inventoryPanel.parentElement!==inventoryTarget)inventoryTarget.append(inventoryPanel);
+  const secondary=card.querySelector('.tt-work-secondary');if(secondary && body.lastElementChild!==secondary)body.append(secondary);
   refreshEditorHeading(card);
   const error=card.querySelector('#prod-form-error');
   if (error) {
@@ -246,17 +260,23 @@ function showSection(card,value,expand=false) {
   card.querySelector('#prod-editor-section').value=value;
   card.querySelector('.tt-editor-layout').dataset.editorSection=value;
   for (const field of card.querySelectorAll('[data-product-section]')) {
-    const hidden=field.dataset.permissionHidden==='true' || value !== 'all' && field.dataset.productSection !== value && !(value==='inventory' && field.dataset.productSection==='availability');
-    if (field.hidden !== hidden) field.hidden=hidden;
-    if (!hidden && expand) {
+    const hidden=field.dataset.permissionHidden==='true';
+    if(field.hidden!==hidden)field.hidden=hidden;
+    const selected=value==='all' || field.dataset.productSection===value || value==='inventory' && field.dataset.productSection==='availability';
+    if(!hidden && expand && selected){
       field.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
-      for(const content of field.querySelectorAll(':scope > .tt-editor-section-fields,:scope > .tt-editor-caption')) if(content.hidden)content.hidden=false;
+      const fields=field.querySelector(':scope > .tt-editor-section-fields');if(fields)fields.hidden=false;
+      for(let parent=field.parentElement;parent && parent!==card;parent=parent.parentElement){
+        if(parent.tagName==='DETAILS')parent.open=true;
+        if(parent.classList.contains('tt-editor-section-fields'))parent.hidden=false;
+        if(parent.matches('[data-product-section]'))parent.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
+      }
     }
   }
-  if (expand) {
-    card.scrollTop = 0;
-    card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});
+  if(expand){
     window.TintinPageScroll?.reset(card);
+    if(value==='all'){card.scrollTop=0;card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});}
+    else card.querySelector(`[data-product-section="${value}"]`)?.scrollIntoView({block:'start',behavior:'instant'});
   }
 }
 

@@ -232,8 +232,8 @@ for(const [width,height] of [[390,844],[844,390],[768,1024],[1024,768],[1366,768
  await gallery.getByRole('button',{name:'Portada: foto 4',exact:true}).click();
  await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/photo4.webp');
  await gallery.getByRole('button',{name:'Asociar foto 1',exact:true}).click();
- await gallery.getByLabel('Asociación: Color',{exact:true}).selectOption('Dorado');await gallery.getByLabel('Asociación: Forma',{exact:true}).selectOption('Redondo');await gallery.getByRole('button',{name:'Asociar fotografía',exact:true}).click();
- await gallery.getByRole('button',{name:'Asociar foto 3',exact:true}).click();await gallery.getByLabel('Asociación: Color',{exact:true}).selectOption('Plateado');await gallery.getByRole('button',{name:'Asociar fotografía',exact:true}).click();
+ await gallery.getByRole('checkbox',{name:'Asociar color Dorado',exact:true}).check();await gallery.getByLabel('Asociación: Forma',{exact:true}).selectOption('Redondo');await gallery.getByRole('button',{name:'Asociar fotografías',exact:true}).click();
+ await gallery.getByRole('button',{name:'Asociar foto 3',exact:true}).click();await gallery.getByRole('checkbox',{name:'Asociar color Plateado',exact:true}).check();await gallery.getByRole('button',{name:'Asociar fotografías',exact:true}).click();
  await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Galería sintética');await page.locator('#prod-description').fill('Descripción sintética');
  await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('45000');
  await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('qa-tablet');
