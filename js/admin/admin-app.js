@@ -1,10 +1,10 @@
-import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261026-editor-workspace-2';
+import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261026-editor-phase6-1';
 import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
 import {productStatistics} from './statistics/estadisticas-producto.mjs?v=tintin-20261024-editor-v2-3';
-import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261024-editor-v2-3';
-import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261025-options-phase3-1';
-import { reorderVariantInventory } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261026-editor-phase6-1';
+import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261026-editor-phase6-1';
+import { reorderVariantInventory, variantAttributes } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
@@ -15,7 +15,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261025-options-phase3-1';
+import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261026-editor-phase6-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -934,7 +934,7 @@ window.addEventListener('hashchange', () => {
 
   document.addEventListener('keydown', event => {
     // Si está el modal de cambios sin guardar, lo maneja su propio guard.
-    if (unsavedOpen()) return;
+    if (unsavedOpen() || document.querySelector('dialog[open]')) return;
     const top = topOverlay();
     if (!top) return;
     if (event.key === 'Escape') {
@@ -5808,7 +5808,7 @@ function mountProductColorPhotos(product) {
 }
 let productVariantStockBaseline = null;
 let productVariantStockEvents = null;
-function productVariantStockConfiguration(text, previous = [], previousVariants = null) {
+function productVariantStockConfiguration(text, previous = [], previousVariants = null, protectedEntries = previous) {
   const attributes = new Map();
   for (const line of String(text || '').split(/\r?\n/).filter(line => line.trim())) {
     const separator = line.indexOf(':');
@@ -5827,7 +5827,17 @@ function productVariantStockConfiguration(text, previous = [], previousVariants 
     combinations = combinations.flatMap(prefix => values.map(value => prefix ? `${prefix} / ${value}` : value));
   }
   if (combinations.some(value => value.length > 120)) throw new Error('Los nombres combinados deben tener hasta 120 caracteres.');
-  if (previousVariants && previous.length) return {variants:Object.fromEntries(attributes),entries:reorderVariantInventory({variants:previousVariants},Object.fromEntries(attributes),previous)};
+  if (previousVariants && previous.length) {
+    const protectedKeys=new Set(protectedEntries.map(row=>row.variant));
+    const retained=previous.filter(row=>{
+      if(protectedKeys.has(row.variant))return true;
+      const selected=variantAttributes({variants:previousVariants},row.variant);
+      const keep=selected && Object.keys(selected).length===attributes.size && [...attributes].every(([key,values])=>values.includes(selected[key]));
+      if(!keep && Number(row.stock)>0)throw new Error('Primero dejá en 0 el stock de la opción que querés quitar.');
+      return keep;
+    });
+    return {variants:Object.fromEntries(attributes),entries:reorderVariantInventory({variants:previousVariants},Object.fromEntries(attributes),retained)};
+  }
   const retained = new Set(combinations);
   if (previous.some(entry => Number(entry.stock) > 0 && !retained.has(entry.variant))) throw new Error('Primero dejá en 0 el stock de la opción que querés quitar.');
   const quantities = new Map(previous.map(entry => [entry.variant, entry.stock]));
@@ -5910,6 +5920,24 @@ function renderProductVariantStock(product, configuration = null) {
   });
   panel.append(enable);
   const expectedEntries = variantInventoryEntries(product);
+  if(expectedEntries)optionsInput.addEventListener('tintin:variant-option-availability',event=>{
+    if(event.detail.active!==false || !productVariantStockBaseline)return;
+    try {
+      const entries=productVariantStockBaseline.entries.map((row,index)=>({...row,stock:panel.querySelectorAll('input')[index]?.value===''?NaN:Number(panel.querySelectorAll('input')[index]?.value ?? row.stock)}));
+      const variants=productVariantStockConfiguration(optionsInput.value).variants;
+      const base={...product,variants:productVariantStockBaseline.variants,variantInventory:entries,price:Number(document.getElementById('prod-price').value),priceBefore:document.getElementById('prod-price-before').value===''?null:Number(document.getElementById('prod-price-before').value)};
+      const draft=commercialDraft(base,variants,product);
+      const keys=new Set(expectedEntries.map(row=>row.variant));
+      if(!draft.variantInventory.some(row=>keys.has(row.variant) && row.attributes?.[event.detail.attribute]===event.detail.value))return;
+      event.preventDefault();
+      renderProductVariantStock(draft,{commercialBaseline:product});
+      productCommercialEditor.setOptionAvailability(event.detail.attribute,event.detail.value,false);
+      const error=document.getElementById('prod-form-error');error.textContent='';error.style.display='none';
+    } catch(failure) {
+      event.preventDefault();
+      const error=document.getElementById('prod-form-error');error.textContent=failure.message;error.style.display='';
+    }
+  },{signal:productVariantStockEvents.signal});
   let acceptedOptions = optionsInput.value;
   optionsInput.addEventListener('input', () => {
     try {
@@ -5933,7 +5961,7 @@ function renderProductVariantStock(product, configuration = null) {
         const error = document.getElementById('prod-form-error'); error.textContent='';error.style.display='none';
         return;
       }
-      const draft = productVariantStockConfiguration(optionsInput.value, previous, productVariantStockBaseline?.variants || product?.variants);
+      const draft = productVariantStockConfiguration(optionsInput.value, previous, productVariantStockBaseline?.variants || product?.variants, expectedEntries || []);
       if (!product) draft.unconfiguredStock = productVariantStockBaseline?.unconfiguredStock ?? stockInput.value;
       acceptedOptions = optionsInput.value;
       renderProductVariantStock(product, draft);

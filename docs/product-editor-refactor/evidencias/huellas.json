@@ -1,0 +1,82 @@
+{
+  "base": "5dc6f781a81e0ae0dd07d84b0c742ec3d567e133",
+  "branch": "codex/editor-fase6-integracion-20261026",
+  "environment": {
+    "node": "v24.19.0",
+    "dependencies": {
+      "@firebase/rules-unit-testing": "6.0.0",
+      "@playwright/test": "1.64.1",
+      "firebase-tools": "15.34.1",
+      "firebase": "13.1.0",
+      "monaco-editor": "0.57.0",
+      "parse5": "8.0.1",
+      "playwright": "1.64.1"
+    },
+    "chromiumEngine": "151.0.7922.173",
+    "userAgentIsEmulated": true
+  },
+  "sources": {
+    "css/admin/shopify-commerce-admin.css": "8b9a165f59780776e7e3dec98361f7262d8214fdd33285b0f4fbe9d0e9c9d32d",
+    "js/admin/admin-app.js": "9404c5f1925adc53892eba0b1b1f28166afb29cdfb1e7455d808d30a180fa822",
+    "js/admin/products/controles-editor-producto.js": "e570de5628ea3c2d43814ea432db652be78ff3538c86875357613aa1a99d24cf",
+    "js/admin/products/editor-comercial-core.mjs": "c8e53974fc8ef501edc6d4286ae47619ccbe1b740555151c6a4fbe9555ce03c8",
+    "js/admin/products/editor-comercial-interfaz.js": "832f1dd5f9ceb5110b15a13fa24f5fc0ea2ec2b5a6376ca74d4740c3937da58b",
+    "js/admin/products/espacio-trabajo-producto.js": "a3f084e62c11ba9513036625e64ed4b2606df7c7de83e7c16546af133ae1c6d7",
+    "js/admin/products/fotos-por-color.js": "d50bcd0e395339158935630c23db09ab90bd7957734ddcebfa33195869591940",
+    "js/admin/products/galeria-unificada.js": "d6b125df0ea830a86eaea79687b0c8a2dbec7c7fd119442ed05b91739075a692",
+    "js/admin/products/interfaz-productos-adaptable.js": "c717225626a78a911bf4ea1d71c17ffb673ba4e58426353bdccbe00566fec450",
+    "js/admin/products/vista-previa-producto.js": "423738855838767b523b5ab3363c7a2abad2e388e066535a0e640152a6930a53",
+    "js/admin/shopify-commerce-admin.js": "9851e7dae9e49f1c32ee8289f55b23b28ae1ae53c3a9e5f0b2ba8aef7710602f",
+    "tests/admin/editor-comercial.test.mjs": "2986c58c8e222bef07dd525256e781be7594552530e0ecf99ca1f50025155d0b",
+    "tests/catalog/variant-presentation.test.mjs": "48565b46b73c7dbe271408412bd26ad79e6e50c7e62b5d4ff41099c27ec88ddc",
+    "tests/helpers/retired-option-checkout.mjs": "973028d76ce3ee03348a583e78da1f79a93ac96a259787e58c342ead92b83577",
+    "tests/integration/commerce-firestore.test.mjs": "e7c87836c7a85fe9007250c996befe074229bb2d2f8fd5b5de1e283256f2d707",
+    "tests/ui-ux/product-editor-final.spec.js": "d59b34a3932b6978d0e0657700707a5519e8c22b22d49c6655bfffe1fbea62fa",
+    "tests/ui-ux/product-save-responsive.spec.js": "a756b4ba6abf31e09a03e3ce9f59cd809513242dd31891e3aea52f6144754fbf",
+    "tests/ui-ux/product-workspaces.spec.js": "87239210dba552be2c3647b1e833ddfc41d0a43ae7982930a95affb1c552392b",
+    "tests/ui-ux/products-responsive-phase-one.spec.js": "4cff9a7b9e8bfb5cdc2235dd17a3ef92fff8de9d5aadac49349113ccb3581aff",
+    "tienda.js": "6b52a3263ed6f743978d91f9ff6326ef844f7e93301b20701d352967807741da"
+  },
+  "unchangedBackendAndContracts": {
+    "cloudflare/product-editor-domain.mjs": {
+      "sha256": "40778e7d80b43706f4ee7f6a9a05f49991047ffc0b75e2aa1d94303da116b34b",
+      "sameAsBase": true
+    },
+    "cloudflare/product-editor-workspaces.mjs": {
+      "sha256": "c6ea47ff894d7dfb5f7a8553c2fa6e4f7c5bfe68c7ac2140d139e77b3bce370e",
+      "sameAsBase": true
+    },
+    "cloudflare/order-admin-domain.js": {
+      "sha256": "fcc8a99b37ac3dda6d5393686b78ee276f894eb061e30c432d45bc8527ba6ac3",
+      "sameAsBase": true
+    },
+    "cloudflare/politica-checkout-publico.js": {
+      "sha256": "b18849844206dc6af753dcc9d6b3d0d099452642c8d163052d26b01e4ce8c496",
+      "sameAsBase": true
+    },
+    "cloudflare/paypal-seguro.js": {
+      "sha256": "65f2e80c06379ae583b3429879e42f38249e57a66d158ccbd3666fb7a47535c4",
+      "sameAsBase": true
+    },
+    "js/orders/politica-checkout.js": {
+      "sha256": "9d82b6120b673fd15a46fcdadb7e059323ffab208e9e64e58796cb30660a0ade",
+      "sameAsBase": true
+    },
+    "js/pages/checkout/paypal-checkout.js": {
+      "sha256": "6b73c1867997b851a8bb241e524cee39a735ede1cf991fe9174a9a233627dd97",
+      "sameAsBase": true
+    },
+    "firestore.rules": {
+      "sha256": "6000a1c182df3b25be7c22d755c36e93bf83bde00c1d7950d2d84b52aac894a0",
+      "sameAsBase": true
+    },
+    "package.json": {
+      "sha256": "26de21ae29214d5efba7cbd8a9452b09a21ab9656de7308034a07b41e6bfad34",
+      "sameAsBase": true
+    },
+    "package-lock.json": {
+      "sha256": "38f32c4c15c32ae2818df24c95e65c567e61896f054b5a2e0ce23ec26babcc11",
+      "sameAsBase": true
+    }
+  }
+}

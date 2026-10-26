@@ -1,4 +1,4 @@
-import {attachColorPhotos} from './fotos-por-color.js?v=tintin-20261025-gallery-unified-1';
+import {attachColorPhotos} from './fotos-por-color.js?v=tintin-20261026-editor-phase6-1';
 import {sanitizeImageUrl} from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import {attachMultiImageUploadWidget,attachImageUploadWidget} from '../../components/images/carga-imagenes.js?v=tintin-20261025-gallery-unified-1';
 
@@ -6,7 +6,7 @@ import {attachMultiImageUploadWidget,attachImageUploadWidget} from '../../compon
 export const PRODUCT_PHOTO_LIMIT=13;
 export function attachProductGallery({container,product={},mainInput,imagesInput,variantsInput,openLibrary}) {
   const media=window.TintinProductMedia;
-  const abort=new AbortController();let destroyed=false,replacement=null;
+  const abort=new AbortController();let destroyed=false,replacement=null,lastGalleryState='';
   container.replaceChildren();container.classList.add('tt-unified-photos');
   const heading=document.createElement('h3');heading.textContent='FOTOGRAFÍAS DEL PRODUCTO';
   const hint=document.createElement('p');hint.textContent='Elegí una portada para todo el producto. Las asociaciones conservan la imagen propia de cada color o combinación.';
@@ -52,13 +52,16 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     button('Cancelar reemplazo',()=>{replacement?.destroy();replacement=null;context.replaceChildren();refocus(url);},context);
   }
   function render(){
-    if(destroyed)return;const focus=grid.contains(document.activeElement)?document.activeElement?.getAttribute('aria-label'):null;
-    grid.replaceChildren();const photos=urls();
+    if(destroyed)return;const photos=urls(),rows=associations.serialize();
+    const state=JSON.stringify([photos,mainInput.value,groups(),rows]);
+    if(state===lastGalleryState)return;lastGalleryState=state;
+    const focus=grid.contains(document.activeElement)?document.activeElement?.getAttribute('aria-label'):null;
+    grid.replaceChildren();
     photos.forEach((url,index)=>{
       const tile=document.createElement('article');tile.className='tt-unified-photo';tile.dataset.photoKey=media.imageKey(url);
       const image=document.createElement('img');image.src=url;image.alt=`Fotografía ${index+1}`;image.loading='lazy';tile.append(image);
       const cover=media.imageKey(mainInput.value)===media.imageKey(url),badge=document.createElement('strong');badge.textContent=cover?'PORTADA':`Foto ${index+1}`;tile.append(badge);
-      const assigned=document.createElement('small');assigned.textContent=associations.serialize().filter(row=>media.rowImages(row).some(photo=>media.imageKey(photo)===media.imageKey(url))).map(row=>Object.entries(row).filter(([key])=>!['imageUrl','imageUrls','stock','price','sku','active','colorHex','swatch'].includes(key)).map(([key,value])=>`${key}: ${value}`).join(' / ')).join(' · ');tile.append(assigned);
+      const assigned=document.createElement('small');assigned.textContent=rows.filter(row=>media.rowImages(row).some(photo=>media.imageKey(photo)===media.imageKey(url))).map(row=>Object.entries(row).filter(([key])=>!['imageUrl','imageUrls','stock','price','sku','active','colorHex','swatch'].includes(key)).map(([key,value])=>`${key}: ${value}`).join(' / ')).join(' · ');tile.append(assigned);
       const actions=document.createElement('div');actions.className='tt-unified-photo-actions';tile.append(actions);
       button('Ver imagen',()=>{const dialog=document.createElement('dialog');const img=document.createElement('img');img.src=url;img.alt=`Fotografía ${index+1}`;img.style.cssText='max-width:85vw;max-height:75vh';dialog.append(img);button('Cerrar imagen',()=>dialog.close(),dialog);dialog.addEventListener('close',()=>{dialog.remove();refocus(url);},{once:true});container.append(dialog);dialog.showModal();},actions,`Ver foto ${index+1}`);
       const choose=button(cover?'Portada':'Elegir portada',()=>{publish([url,...photos.filter(photo=>photo!==url)],url);refocus(url);},actions,`Portada: foto ${index+1}`);choose.setAttribute('aria-pressed',String(cover));

@@ -1817,3 +1817,10 @@ html.tt-product-workspace-active #prod-form-card.tt-editor-workspace {inset:0 !i
   }
   html.tt-product-workspace-active #prod-form-card .tt-editor-guide[open] {grid-column:1/-1;}
 }
+
+/* Confirmación editorial: una decisión explícita antes de salir con cambios. */
+.tt-work-exit-dialog{margin:auto;inset:0;background:var(--tt-commerce-surface);color:var(--tt-commerce-text);width:min(32rem,calc(100vw - 2rem));max-width:100%;max-height:calc(100dvh - 2rem);overflow:auto;box-sizing:border-box;padding:clamp(16px,4vw,24px);border:1px solid var(--tt-commerce-border);border-radius:16px;}
+.tt-work-exit-dialog::backdrop{background:rgb(0 0 0 / .45);}
+.tt-work-exit-actions{display:flex;flex-wrap:wrap;gap:8px;}
+.tt-work-exit-actions button{min-height:44px;white-space:normal;flex:1 1 180px;}
+.tt-work-exit-actions .tt-work-discard{text-decoration:underline;}
