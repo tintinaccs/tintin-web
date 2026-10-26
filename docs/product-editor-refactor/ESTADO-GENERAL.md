@@ -8,7 +8,7 @@
 |4, nueva simplificación del adjunto |Reconstruida localmente; originales no recuperados |04-SIMPLIFICACION-UX.md; rendimiento |
 |5, nuevo ciclo Cancelar/Guardar cambios |Implementado y verificado localmente, sin publicación |05-BORRADORES-GUARDADO.md; workspace/errores/concurrencia |
 |6, integración y auditoría |PASS_LOCAL de los recorridos ejecutados; aceptación externa pendiente |06-AUDITORIA-FINAL.md; matriz/evidencias |
-|CI y publicación del candidato |NO EJECUTADA; no autorizada |INCIDENCIAS-PENDIENTES.md |
+|CI e integración del candidato |AUTORIZADA por la nueva instrucción; verificación remota en curso |07-INTEGRACION-AUTORIZADA.md; estado vivo del PR |
 |Producción, proveedores y dispositivos físicos |NOT_VERIFIED en esta entrega |EXT-01/DEV-01 |
 
 No se afirma cierre completo del proyecto. La lista de pruebas aprobadas,

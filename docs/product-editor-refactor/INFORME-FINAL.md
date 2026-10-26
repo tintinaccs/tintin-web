@@ -1,6 +1,10 @@
 # Informe final — Editor Tintin, Fase 6
 
-**Aceptación local con pendientes externos. No aprobado para publicación todavía.**
+**Aceptación local con pendientes externos. Integración protegida autorizada por la titular.**
+
+Actualización posterior a la entrega local: la titular solicitó terminar y hacer
+merge. Ver07-INTEGRACION-AUTORIZADA.md. Las frases de sólo entrega local siguientes
+describen la situación anterior; el estado final de CI/merge se consulta en el PR.
 Base `5dc6f781a81e0ae0dd07d84b0c742ec3d567e133`, rama local `codex/editor-fase6-integracion-20261026`.
 
 Se reconstruyó la continuidad del adjunto sobre main y se concilió la funcionalidad

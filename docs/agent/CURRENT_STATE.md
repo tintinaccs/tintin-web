@@ -4041,3 +4041,19 @@ documental y diagnóstico se regenera. Plan preparado contra main por su autorid
 sin rebajar gates. Checkout/pagos/backend/Rules intactos. CI del candidato,
 staging autenticado/proveedores y dispositivos físicos siguen NOT_VERIFIED.
 No se declara proyecto terminado ni producción aprobada.
+
+## 2026-10-26 — Integración de Fase 6 autorizada por la titular
+
+La instrucción nueva solicita terminar y hacer merge del proyecto en curso y,
+después, revisar#1231/#1242. Sustituye la prohibición anterior de merge para el
+candidato Fase6. Se autoriza publicar el PR listo para revisión, resolver los
+gates del SHA exacto y completar el merge protegido. No autoriza bypass,
+force-push, pagos/pedidos reales ni despliegue manual de Rules.
+
+Base remota comprobada5dc6f781; candidato funcional d590eecec, fuentes/huellas
+conservadas. No se modifica el motor de checkout/pagos. El PR#1228 mantiene su
+delta independiente de pagos fuera de este candidato; no se integra su rama
+obsoleta para recuperar funcionalidad ya conciliada. Las pruebas locales y sus
+límites están en el informe final. CI se comprueba sobre la nueva cabeza; no se
+atribuye anticipadamente PASS_CI ni producción. Estado definitivo: PR y entrega
+del chat. Después del merge se verifican main y los PR de Dependabot indicados.
