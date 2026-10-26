@@ -56,6 +56,16 @@ Opciones guardadas muestran explicación y acciones destructivas deshabilitadas.
 
 Los recorridos ejecutan el controlador y escritor reales con SDK, identidad, proveedor y almacenamiento sintéticos. Público: el motor de selección/precio/stock se ejecuta sobre lo guardado; se repite galería/ficha pública con fixtures. No se hacen pedidos, compras, mensajes ni cambios reales. CI del SHA exacto, CRUD autenticado, Safari/lector y teclado físico siguen separados de PASS_LOCAL. El recibo final de pruebas/build/PR se registra al completarlos.
 
+## Recibo de entrega y corrección final
+
+[PR1239](https://github.com/tintinaccs/tintin-web/pull/1239), OPEN/listo para revisión, base rama de1238, sin auto-merge. Primer commit funcional `4e49d96835ed3327ba4eca6a169cab843095a47d`; corrección posterior de visibilidad, recibo y derivados se consultan en la cabeza del mismo PR. No merge ni deploy autorizados.
+
+Tanda amplia:309 PASS/22 FAIL en331 casos, sin reintentos. Los13 de cabecera medían también el nuevo input oculto de Otro grupo; los3 de contraste pulsaban asistencia plegada. Se conservan las comprobaciones y se mide sólo lo visible/abre explícitamente asistencia: repetición16/16 PASS (`phase3-layout-regression.log`). Los otros6 encontraron un defecto real de transición: la interfaz ocultaba inventario configurado si el texto de opciones estaba vacío. Se corrige para conservar visible toda fila existente; repetición6/6 PASS (`phase3-stock-visibility-final.log`) mantiene íntegros los requisitos44px, geometría, no solapamiento y edición del stock. No se filtran las filas para ocultar el problema.
+
+Aceptación final de grupos/stock/sugerencias/simple/null/Color+Talle:10/10 PASS (`phase3-final-targeted.log`), con foco conservado al reconstruir acciones y0 resets al agregar. Las22 fallas de la tanda anterior no se cuentan como331PASS de una ejecución que no ocurrió. Dominio68, sync221 y subconjunto54 aprobados; conteos solapados. Build/caché y39 comandos preflight aprobaron antes de la última condición de visibilidad y se regeneran/reverifican sobre esa corrección antes del push final. Capturas adicionales del inventario en `artifacts/options-phase3/inventory-{ancho}x{alto}.png`, móvil inspeccionado. La CI completa de main no se hereda a un PR apilado.
+
+Cierre del candidato corregido:12/12 Chromium adicionales PASS (`phase3-ready-acceptance.log`): seis controles de inventario/44px y seis recorridos completos de grupos/guardar/reabrir. «Disponibilidad» enfoca una fila visible correspondiente a la opción, no el total oculto ni otra variante al cambiar el orden. Se conserva foco al reconstruir/reordenar acciones. Build Pages/caché y39 comandos preflight finales exit0 (`phase3-final-build.log`, `phase3-final-preflight.log`). Plan canónico:5 fuentes protegidas/18 registros. Sin merge ni publicación, estado del PR y SHA definitivo se registran en el recibo posterior.
+
 ## Riesgos, reversión y Fase 4
 
 No se ofrece renombrado general de identidades históricas: el modelo usa nombres como atributos además de claves opacas. Para habilitarlo haría falta diseñar aliases/IDs de presentación y adaptar medios/consumidores/Sheets con una estrategia aprobada; no adivinar correspondencias ni migrar datos reales.

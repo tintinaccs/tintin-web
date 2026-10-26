@@ -329,6 +329,8 @@ for(const [width,height] of [[390,844],[844,390],[768,1024],[1024,768],[1366,768
   expect(changed.stock).toBe(5);const newOlive=changed.variantInventory.find(row=>row.attributes.Color==='Verde Oliva');
   expect(newOlive.variant).toBe(olive.variant);expect(newOlive.stock).toBe(1);expect(newOlive.price).toBe(55000);
   await page.evaluate(()=>window.prodEditar('qa-product-1'));await page.locator('#prod-editor-section').selectOption('inventory');
+  await page.getByRole('button',{name:'Disponibilidad de Color: Verde Oliva',exact:true}).click();await expect(page.getByLabel('Seleccionar Verde Oliva',{exact:true})).toBeFocused();
+  await page.locator('#prod-editor-section').selectOption('inventory');
   expect(await page.locator('#prod-form-card').evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);
   await page.locator('#prod-form-card .adm-card-body').evaluate(node=>node.scrollTop=0);
   await page.screenshot({path:'artifacts/options-phase3/'+width+'x'+height+'.png',animations:'disabled'});

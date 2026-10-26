@@ -135,7 +135,7 @@ function variantBuilder(input) {
   const write=map=>{
     const focused=panel.contains(document.activeElement)?document.activeElement.getAttribute('aria-label'):null;
     error.textContent='';input.value=[...map].filter(([,values])=>values.length).map(([key,values])=>key+': '+values.join(', ')).join('\n');emit(input);refresh();
-    if(focused){const target=[...panel.querySelectorAll('[aria-label]')].find(node=>node.getAttribute('aria-label')===focused);const next=target?.disabled?target.closest('.tt-option-row')?.querySelector('button:not(:disabled)'):target;(next || value).focus({preventScroll:true});}
+    if(focused){const target=[...panel.querySelectorAll('[aria-label]')].find(node=>node.getAttribute('aria-label')===focused);const next=target?.disabled?[...target.closest('.tt-option-row').querySelectorAll('button:not(:disabled)')].find(node=>node.getClientRects().length):target;(next || value).focus({preventScroll:true});}
   };
   const add = (focus = true) => {
     if (input.readOnly) return;
@@ -218,7 +218,12 @@ function variantBuilder(input) {
           label.append(color);row.append(label);
         }
         row.append(button('Fotos','Fotos de '+key+': '+option,()=>{const select=card.querySelector('#prod-editor-section');select.value='photos';select.dispatchEvent(new Event('change',{bubbles:true}));card.querySelector('.tt-unified-photos button')?.focus({preventScroll:true});}));
-        row.append(button('Disponibilidad','Disponibilidad de '+key+': '+option,()=>{const select=card.querySelector('#prod-editor-section');select.value='availability';select.dispatchEvent(new Event('change',{bubbles:true}));card.querySelector('#prod-variant-stock input, #prod-stock')?.focus({preventScroll:true});}));
+        row.append(button('Disponibilidad','Disponibilidad de '+key+': '+option,()=>{
+          const select=card.querySelector('#prod-editor-section');select.value='availability';select.dispatchEvent(new Event('change',{bubbles:true}));
+          const visible=[...card.querySelectorAll('#prod-variant-stock input, #prod-stock')].filter(node=>node.getClientRects().length && !node.disabled);
+          const matching=visible.find(node=>{const row=node.closest('.tt-commercial-row,.tt-editor-stock-row');const title=row?.querySelector('legend')?.textContent || row?.dataset.variant || '';return title.split('/').map(value=>value.trim()).includes(option);});
+          (matching || visible[0])?.focus({preventScroll:true});
+        }));
         group.append(row);
       }
       chips.append(group);
@@ -238,7 +243,7 @@ export function refreshEditorControls(card) {
   }
   const inventory=card.querySelector('#prod-variant-stock');
   if(inventory){
-    const hidden=!card.querySelector('#prod-variants-text')?.value.trim() && !inventory.classList.contains('tt-commercial-editor');if(inventory.hidden!==hidden)inventory.hidden=hidden;
+    const hidden=!card.querySelector('#prod-variants-text')?.value.trim() && !inventory.classList.contains('tt-commercial-editor') && !inventory.querySelector('input');if(inventory.hidden!==hidden)inventory.hidden=hidden;
     let total=inventory.querySelector('.tt-inventory-total');
     if(stock?.readOnly){if(!total){total=node('p','tt-inventory-total');total.setAttribute('role','status');inventory.prepend(total);}const text=stock.value===''?(inventory.classList.contains('tt-commercial-editor')?'Total: inventario sin control':'Completá las cantidades de cada opción'):'Total: '+stock.value+' unidades';if(total.textContent!==text)total.textContent=text;}
     else total?.remove();

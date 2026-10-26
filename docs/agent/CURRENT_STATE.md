@@ -6,6 +6,10 @@ Grupos visuales con alta/renombrado seguro/quitar/reordenar, círculo independie
 
 Evidencia inicial actual:68 Node dominio,221 sync,54 repetición dirigida;13 Chromium y10 aceptación nuevos,27 regresiones antiguas adaptadas PASS. Conteos solapados. Tanda amplia inicial interrumpida por fixtures que no abrían la asistencia plegada y representación agrupada; no declarar PASS global. Capturas sintéticas6 viewports, móvil/laptop inspeccionados. Tanda final/build/preflight/CI pendientes de registrar. Producción/hardware físico NOT_VERIFIED.
 
+PR1239 OPEN/listo, apilado sobre1238, autoMergeRequest=null. Commit funcional4e49d96835ed3327ba4eca6a169cab843095a47d y recibo/corrección posteriores en el mismo PR. Tanda amplia309PASS/22FAIL:13 geometría contaban input condicional oculto,3 asistencia plegada y6 defecto real de visibilidad de inventario configurado con texto vacío. Fixtures16/16 PASS al abrir asistencia/medir controles visibles; defecto corregido sin filtrar filas,6/6 PASS con44px/no superposiciones/edición. Aceptación última10/10 PASS. No declarar331PASS inexistentes. Build/caché/39 preflight previos PASS, se repiten sobre corrección final. Capturas options-phase3 e inventory-*.png inspeccionadas. Sin merge ni despliegue.
+
+Cierre corregido:12/12 Chromium PASS (6 inventario táctil +6 grupos/stock/guardar/reabrir/foco), build Pages/caché y39 preflight finales exit0. Consulta Disponibilidad dirige foco a fila visible de la opción conservando identidad/orden comercial. Plan5 fuentes/18 registros. Source/recibo del candidato final se consultan en PR1239, sin auto-merge. CI main/producción/hardware físico NOT_VERIFIED.
+
 ## 2026-10-25 — Fase 2 galería unificada (Codex /root)
 
 Base0f57f327ad43671d22d0bd4d373d2f5b7bee8e40 de PR1237 OPEN/no integrado; main f9399a90c. Rama codex/galeria-unificada-fase2-20261025. Autorización actual exige PR listo para revisión, prohíbe merge/deploy. Se prepara PR apilado sobre rama1237; mantenimiento automático sólo considera base main y no debe habilitarse al retargetear sin autorización. Informe: docs/editor-productos-v2/19-GALERIA-UNIFICADA-FASE-2.md.
