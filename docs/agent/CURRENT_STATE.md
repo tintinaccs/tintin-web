@@ -1,3 +1,25 @@
+## Continuación contextual del editor, 26/10/2026 — Codex /root, GPT-6
+
+Pedido vigente: continuar el trabajo del texto pegado posterior a #1248, con fotos
+seleccionables, asociaciones superiores y controles/datos reunidos con acceso rápido.
+Se creó worktree `/workspace/tintin-editor-contexto`, rama
+`codex/editor-contexto-continuacion-20261026`, base `899a6851`. Los cambios antiguos
+de `/workspace/tintin-web` se conservaron aparte. No se recuperó ningún avance
+posterior publicado: main y todas las ramas remotas consultadas sólo contienen
+la versión anterior de la galería. Se continúa sobre su implementación canónica.
+
+PASS_LOCAL inicial: 6 Chromium asociación múltiple/guardado/contención en
+320/390/600/768/1024/1440; 6 regresiones workspace y 44 Node de dominio/editorial.
+Build Pages/caché aprobados. Adicionalmente 26 Chromium de editor final/versión
+única/contexto y 8 contextuales finales aprobados (corridas solapadas). Incluyen
+opciones Bags por confirmación y reemplazo pendiente conservado. npm ci instaló
+671 paquetes del lockfile tras detectar dependencias heredadas incompatibles.
+Cierre posterior con dependencias exactas:14/14 Chromium finales y stage oficial
+preflight completo PASS_LOCAL; build Pages/CSP/rutas/diagnóstico/caché aprobados.
+CI del candidato PENDING; proveedores,
+hardware y publicación de este candidato NOT_VERIFIED. Informe:
+`docs/product-editor-refactor/08-EDICION-CONTEXTUAL.md`.
+
 ## Estado actual — versión única del editor,26/10/2026
 
 Codex /root. La titular ordena conservar exclusivamente el editor de seis fases.

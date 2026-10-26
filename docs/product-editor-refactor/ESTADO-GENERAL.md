@@ -1,5 +1,15 @@
 # Estado general del editor de productos
 
+## Continuación — edición contextual
+
+Trabajo sobre `899a6851` en `codex/editor-contexto-continuacion-20261026`.
+Fotos con selección múltiple y asociaciones superiores; campos originales en un
+recorrido continuo junto a la galería, accesos rápidos y sugerencias de atributos
+por familia. Evidencia y límites en `08-EDICION-CONTEXTUAL.md`. Verificación local
+dirigida aprobada: 14/14 Chromium finales con dependencias exactas y stage oficial
+preflight completo; build Pages/CSP/rutas/diagnóstico/caché aprobados. CI del
+candidato pendiente de publicación.
+
 ## Única versión vigente
 
 El editor de seis fases y sus correcciones es la única versión mantenida.

@@ -22,5 +22,6 @@ export function productSuggestionProfile({category='',name='',material=''}={}) {
   else if(/bano|chapad|enchapad/.test(confirmed))care.push('Evitar fricción, perfumes y productos abrasivos para cuidar el baño.');
   else if(/acero/.test(confirmed))care.push('Limpiar con un paño suave y secar antes de guardar.');
   else if(/cuero|cuerina|sintetico/.test(confirmed))care.push('Probar la limpieza en una zona poco visible y evitar fuentes de calor.');
-  return {type,care,warrantyReview:match?.[3] || 'Confirmar plazo, cobertura y exclusiones con la política de Tintin o el proveedor.'};
+  const optionHints={cartera:{Modelo:['Bandolera','Tote','Mochila','Clutch'],Cierre:['Cremallera','Broche','Imán'],Correa:['Ajustable','Desmontable']},reloj:{Correa:['Metálica','Cuero','Silicona'],Movimiento:['Cuarzo','Automático']},collar:{Largo:['Corto','Medio','Largo']},anillo:{Talle:['Ajustable'],Forma:['Liso','Con piedra']},pulsera:{Cierre:['Ajustable','Broche']},aros:{Cierre:['Mariposa','Gancho','Presión']},accesorio:{Modelo:[]}};
+  return {type,care,optionHints:optionHints[type] || {},warrantyReview:match?.[3] || 'Confirmar plazo, cobertura y exclusiones con la política de Tintin o el proveedor.'};
 }

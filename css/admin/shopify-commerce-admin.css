@@ -1794,6 +1794,15 @@ html.tt-product-workspace-active #prod-form-card.tt-editor-workspace {inset:0 !i
 #prod-form-card.tt-editor-workspace .tt-work-secondary summary {min-height:44px;display:flex;align-items:center;cursor:pointer;}
 #prod-form-card.tt-editor-workspace button[onclick="prodCancelForm()"] {display:none;}
 .tt-private-work-list {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:12px;margin:12px 0;}
+#prod-form-card .tt-editor-layout.tt-editor-contextual {display:grid;grid-template-columns:minmax(0,1fr);max-width:none;}
+#prod-form-card .tt-editor-context-media,#prod-form-card .tt-editor-contextual .tt-product-fields {min-width:0;}
+#prod-form-card .tt-editor-contextual .tt-editor-sidebar {grid-column:1/-1;}
+#prod-form-card .tt-photo-selection {display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+#prod-form-card .tt-photo-selection p {flex-basis:100%;}
+#prod-form-card .tt-unified-photo>label {display:flex;align-items:center;min-height:44px;gap:8px;}
+@media(min-width:1024px){
+  #prod-form-card .tt-editor-layout.tt-editor-contextual {grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start;}
+}
 .tt-private-work-list button {min-height:64px;white-space:normal;text-align:left;border-radius:12px;}
 
 /* El selector conserva el rótulo completo junto a guía y vista previa. */

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e0895e00d2b5f42a880324415f3ca1cd3dd70011631735b2274d99d93e484c00",
+  "sourceFingerprint": "ef70fa33d042b54256b2d5ef2be66b7ca57932fee0792cd141feb2e3b21c6f8e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1554,
-    "textFiles": 1435,
-    "totalBytes": 33820913,
+    "files": 1556,
+    "textFiles": 1437,
+    "totalBytes": 33835808,
     "pages": 19,
-    "modules": 1045
+    "modules": 1046
   },
   "viewports": [
     {
@@ -2892,8 +2892,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204431,
-      "sha256": "92d0dbc2d4d6a3fca82edf77be929ed07a83327e85dfd3d838a6291523bfb3a7",
+      "bytes": 204415,
+      "sha256": "b348ffe2a8647af146b7051a65071386309d1becde384ff24d29c2f77bb6ac64",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2947,7 +2947,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261026-editor-phase6-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261026-contexto-3",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -2972,7 +2972,7 @@
           "line": 2083
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-editor-unico-6fases-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-contexto-3",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084
         },
@@ -3302,7 +3302,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261026-editor-phase6-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261026-contexto-3",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -3332,7 +3332,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-editor-unico-6fases-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-contexto-3",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084,
           "exists": true
@@ -28233,8 +28233,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 521436,
-      "sha256": "9404c5f1925adc53892eba0b1b1f28166afb29cdfb1e7455d808d30a180fa822",
+      "bytes": 521431,
+      "sha256": "248b4c7b3468f5df876d54da4998edaf58324214eb1577b6859d6f61b569a2f2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28343,7 +28343,7 @@
           "line": 17
         },
         {
-          "raw": "./products/galeria-unificada.js?v=tintin-20261026-editor-phase6-1",
+          "raw": "./products/galeria-unificada.js?v=tintin-20261026-contexto-3",
           "target": "js/admin/products/galeria-unificada.js",
           "dynamic": false,
           "line": 18
@@ -30286,8 +30286,8 @@
     },
     {
       "path": "js/admin/products/galeria-unificada.js",
-      "bytes": 11245,
-      "sha256": "d6b125df0ea830a86eaea79687b0c8a2dbec7c7fd119442ed05b91739075a692",
+      "bytes": 12973,
+      "sha256": "4c3c0831bc734ca03dc790cb7f85d75d60c3d79b317a9dc5a298c9fc3614bf8e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30387,8 +30387,8 @@
     },
     {
       "path": "js/admin/products/interfaz-productos-adaptable.js",
-      "bytes": 20843,
-      "sha256": "136b37973ecd26767d188303a016cee347e0ec798e08a6c26a1d79473d875f07",
+      "bytes": 21287,
+      "sha256": "b9e7bc1d4b84a50e1ca9e55d83e4c3bebd09c36378868b6e31ca85b2fd13f6be",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30419,7 +30419,7 @@
           "line": 4
         },
         {
-          "raw": "./sugerencias-producto-interfaz.js?v=tintin-20261024-editor-atelier-1",
+          "raw": "./sugerencias-producto-interfaz.js?v=tintin-20261026-contexto-1",
           "target": "js/admin/products/sugerencias-producto-interfaz.js",
           "dynamic": false,
           "line": 5
@@ -30465,8 +30465,8 @@
     },
     {
       "path": "js/admin/products/sugerencias-producto-core.mjs",
-      "bytes": 2914,
-      "sha256": "50c8105fb366af57b5c5399fcbe14d7c4c5f237e52d5568d0bcb6fc61f02052e",
+      "bytes": 3395,
+      "sha256": "fd94691a82a8790a55563e99079f658afadd38a69659ae90c33e4c34a72528ff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30476,15 +30476,15 @@
     },
     {
       "path": "js/admin/products/sugerencias-producto-interfaz.js",
-      "bytes": 3058,
-      "sha256": "11c2bc30a7a0825880503a69799455ce76617584b220f8d0bfb2877af71f1320",
+      "bytes": 4093,
+      "sha256": "d27ca868977627e43a9c29227382ce567f20d61d457c4ddc8404cbef8b8feed6",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./sugerencias-producto-core.mjs?v=tintin-20261024-editor-atelier-1",
+          "raw": "./sugerencias-producto-core.mjs?v=tintin-20261026-contexto-1",
           "target": "js/admin/products/sugerencias-producto-core.mjs",
           "dynamic": false,
           "line": 1
@@ -30882,8 +30882,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 137957,
-      "sha256": "266829585494aca53c2225556c4b8595e948814feb0310a513b9d547f7028632",
+      "bytes": 137935,
+      "sha256": "9001070c0615f62a9aeb997f1537ad9d167a9782ac10f6d351be35fbb6df4436",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30926,7 +30926,7 @@
           "line": 6
         },
         {
-          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261026-editor-unico-6fases-1",
+          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261026-contexto-2",
           "target": "js/admin/products/interfaz-productos-adaptable.js",
           "dynamic": false,
           "line": 7
@@ -56032,6 +56032,34 @@
       ]
     },
     {
+      "path": "tests/ui-ux/product-context-editor.spec.js",
+      "bytes": 4501,
+      "sha256": "d5c9e8570bd51c234345dd38c83097680ac44835bf2a0ec2f672c940e8cd1471",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://img.test/*.webp",
+          "line": 5
+        },
+        {
+          "url": "https://img.test/a.webp",
+          "line": 8
+        },
+        {
+          "url": "https://img.test/b.webp",
+          "line": 8
+        },
+        {
+          "url": "https://img.test/replacement.png",
+          "line": 33
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/product-editor-final.spec.js",
       "bytes": 12986,
       "sha256": "d59b34a3932b6978d0e0657700707a5519e8c22b22d49c6655bfffe1fbea62fa",
@@ -57439,8 +57467,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204431,
-      "sha256": "92d0dbc2d4d6a3fca82edf77be929ed07a83327e85dfd3d838a6291523bfb3a7"
+      "bytes": 204415,
+      "sha256": "b348ffe2a8647af146b7051a65071386309d1becde384ff24d29c2f77bb6ac64"
     },
     {
       "path": "apple-touch-icon.png",
@@ -58423,8 +58451,8 @@
     {
       "path": "config/ci-stages.json",
       "extension": ".json",
-      "bytes": 6542,
-      "sha256": "b8d2d444bb647fe56d98caecb991d4f00c8af886b5ec27b1d18212b4db5a5b3a"
+      "bytes": 6585,
+      "sha256": "ea52f27ab77cfce2f77215a7af9baa6a7e24ffd35ed82b1c69a995a7aa7973e2"
     },
     {
       "path": "config/csp-runtime.js",
@@ -58441,8 +58469,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1170,
-      "sha256": "166ad6d75b33be748a61325cdbea440b1b74a454b831e9dc939fa6eaa685bc65"
+      "bytes": 1881,
+      "sha256": "f41c9b93596dac4d4af1d1f7330e55c8b1d66ee33ef1801c625cf8b734eee0bf"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -58454,7 +58482,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "2c79c2865fe6beec312b704dd06f272a8b3a9b788e7902726c79e32bd26f0d27"
+      "sha256": "251a9dd62b1dac1244f13bb51ad8f1cdfd5c9426e0b3e968fdb6c3f70cf0ea05"
     },
     {
       "path": "config/public-site.json",
@@ -58561,8 +58589,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 120232,
-      "sha256": "c2baa72f83b8ae847e9dd367f2d76779daca5d8f0af224d4b1eed7533f8263f4"
+      "bytes": 120953,
+      "sha256": "68d00ea4869cb004363c3612642b0543beb2776b32ca023ff487c052ab96ffef"
     },
     {
       "path": "css/admin/sidebar-interaccion.css",
@@ -59113,8 +59141,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 963069,
-      "sha256": "80227470f694874a49d4ff366dbffa11fc68086c2b5e1801c0e575bf22d363f0"
+      "bytes": 964518,
+      "sha256": "439a87a33f31caf57f1dfc09e96140c4af1e62b36a8f8fc1e2eccefd823dd34f"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -59891,6 +59919,12 @@
       "sha256": "a1d151de1bb71c95c4cba3e64e930b4f14cadf0bbc3b476bf653159a795a4b47"
     },
     {
+      "path": "docs/product-editor-refactor/08-EDICION-CONTEXTUAL.md",
+      "extension": ".md",
+      "bytes": 3311,
+      "sha256": "73b7722bbc11d1a0d3820dd9a433816734de63ee1a3eb43713a23ab713168a8c"
+    },
+    {
       "path": "docs/product-editor-refactor/CAMBIOS-Y-COMPATIBILIDAD.md",
       "extension": ".md",
       "bytes": 3868,
@@ -59905,8 +59939,8 @@
     {
       "path": "docs/product-editor-refactor/ESTADO-GENERAL.md",
       "extension": ".md",
-      "bytes": 1218,
-      "sha256": "e8023e1e33c0aa109468e31eabddd8162998dbee609efb67935d02ecfaf9a2b8"
+      "bytes": 1787,
+      "sha256": "3efd8c6a9b396f85b95dd0f58c7742abb6d27b2b2a388c5e9684c8b737f8c326"
     },
     {
       "path": "docs/product-editor-refactor/INCIDENCIAS-PENDIENTES.md",
@@ -60745,8 +60779,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 521436,
-      "sha256": "9404c5f1925adc53892eba0b1b1f28166afb29cdfb1e7455d808d30a180fa822"
+      "bytes": 521431,
+      "sha256": "248b4c7b3468f5df876d54da4998edaf58324214eb1577b6859d6f61b569a2f2"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -61081,8 +61115,8 @@
     {
       "path": "js/admin/products/galeria-unificada.js",
       "extension": ".js",
-      "bytes": 11245,
-      "sha256": "d6b125df0ea830a86eaea79687b0c8a2dbec7c7fd119442ed05b91739075a692"
+      "bytes": 12973,
+      "sha256": "4c3c0831bc734ca03dc790cb7f85d75d60c3d79b317a9dc5a298c9fc3614bf8e"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -61099,8 +61133,8 @@
     {
       "path": "js/admin/products/interfaz-productos-adaptable.js",
       "extension": ".js",
-      "bytes": 20843,
-      "sha256": "136b37973ecd26767d188303a016cee347e0ec798e08a6c26a1d79473d875f07"
+      "bytes": 21287,
+      "sha256": "b9e7bc1d4b84a50e1ca9e55d83e4c3bebd09c36378868b6e31ca85b2fd13f6be"
     },
     {
       "path": "js/admin/products/maestro-productos-core.mjs",
@@ -61117,14 +61151,14 @@
     {
       "path": "js/admin/products/sugerencias-producto-core.mjs",
       "extension": ".mjs",
-      "bytes": 2914,
-      "sha256": "50c8105fb366af57b5c5399fcbe14d7c4c5f237e52d5568d0bcb6fc61f02052e"
+      "bytes": 3395,
+      "sha256": "fd94691a82a8790a55563e99079f658afadd38a69659ae90c33e4c34a72528ff"
     },
     {
       "path": "js/admin/products/sugerencias-producto-interfaz.js",
       "extension": ".js",
-      "bytes": 3058,
-      "sha256": "11c2bc30a7a0825880503a69799455ce76617584b220f8d0bfb2877af71f1320"
+      "bytes": 4093,
+      "sha256": "d27ca868977627e43a9c29227382ce567f20d61d457c4ddc8404cbef8b8feed6"
     },
     {
       "path": "js/admin/products/vision-productos-core.mjs",
@@ -61201,8 +61235,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 137957,
-      "sha256": "266829585494aca53c2225556c4b8595e948814feb0310a513b9d547f7028632"
+      "bytes": 137935,
+      "sha256": "9001070c0615f62a9aeb997f1537ad9d167a9782ac10f6d351be35fbb6df4436"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -63727,8 +63761,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 75851,
-      "sha256": "740a7cbb5e535d1166857a1312a4bac974b525bac92cc0ca172dc4ccb830fbe7"
+      "bytes": 75796,
+      "sha256": "0e5a3a1315bb38a57727d537e0fca9424db1a0dfb098d6d9c9b89a91933e7571"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -66387,6 +66421,12 @@
       "extension": ".js",
       "bytes": 26097,
       "sha256": "515cf780a662d64f70edf005e8be1eecdb7896f4667d7a4e32373e7273fe04b7"
+    },
+    {
+      "path": "tests/ui-ux/product-context-editor.spec.js",
+      "extension": ".js",
+      "bytes": 4501,
+      "sha256": "d5c9e8570bd51c234345dd38c83097680ac44835bf2a0ec2f672c940e8cd1471"
     },
     {
       "path": "tests/ui-ux/product-editor-final.spec.js",

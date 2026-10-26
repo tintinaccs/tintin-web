@@ -1,4 +1,4 @@
-import {productSuggestionProfile} from './sugerencias-producto-core.mjs?v=tintin-20261024-editor-atelier-1';
+import {productSuggestionProfile} from './sugerencias-producto-core.mjs?v=tintin-20261026-contexto-1';
 const mounted=new WeakSet();
 export function mountProductSuggestions(card) {
   const fields=card?.querySelector('[data-product-section="specs"] .tt-editor-section-fields');
@@ -20,6 +20,15 @@ export function mountProductSuggestions(card) {
     const profile=productSuggestionProfile(input);
     summary.textContent=`Sugerencias · ${profile.type}`;
     choices.replaceChildren();
+    for(const [attribute,values] of Object.entries(profile.optionHints))for(const value of values){
+      const button=document.createElement('button');button.type='button';button.className='tt-editor-choice';button.textContent=`${attribute}: ${value}`;
+      button.addEventListener('click',()=>{
+        const select=card.querySelector('[aria-label="Característica de variante"]'),custom=card.querySelector('[aria-label="Nombre del nuevo grupo"]'),input=card.querySelector('[aria-label="Nueva opción de variante"]');
+        if(!select || !input || select.disabled || input.disabled)return;
+        const native=[...select.options].some(option=>option.value===attribute);select.value=native?attribute:'__custom';select.dispatchEvent(new Event('change',{bubbles:true}));if(!native && custom)custom.value=attribute;
+        input.value=value;input.focus({preventScroll:true});input.scrollIntoView({block:'nearest'});status.textContent='Revisá la opción y pulsá Agregar opción para confirmarla.';
+      });choices.append(button);
+    }
     for(const suggestion of profile.care){
       const button=document.createElement('button');button.type='button';button.className='tt-editor-choice';button.textContent=suggestion;
       button.addEventListener('click',()=>{
