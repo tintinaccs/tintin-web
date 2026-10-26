@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "f9399a90c73398a18c877bcaf1985491d4085913",
-  "reason": "Integración autorizada de Fases1–6, correcciones de privacidad y UI con paginación y regresiones completas",
+  "reason": "Integración autorizada de Fases1–6 con regresiones de permisos, progreso, montaje y listado paginado",
   "files": [
     {
       "path": "_headers",
@@ -26,7 +26,7 @@
     {
       "path": "admin.html",
       "oldHash": "d4cee3bbac1b086225909ea88da297e4ddac95d47ea3da005105f3d1c7097405",
-      "newHash": "24bb8be57119d4bb78f3b91f6d55a21f196d7df848bd6aff9fe89133c70fdaa0"
+      "newHash": "b591c0e29d37b66a09d9e2f0d9aeac85e392cd739c2d29250bd3811f0d0d3e62"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -106,7 +106,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "7c521fb10153b116782b4681ffa8aff6de90e6acce027f5d3a7fcb95e10863fe",
-      "newHash": "d58ec3fd4388716d865abc00a6bc37161ca05ab22affccf887ff757d4fbbd35a"
+      "newHash": "8196c4a957b4e23b025ccc5170a1aafc9f6a0c4ecdeafa3215e8438a7202e92c"
     },
     {
       "path": "js/cargador-mantenimiento-pagina.js",
@@ -221,7 +221,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "95c0db9dd1cee0dec8b7f380ff934f941f65bad60e4b876f15479c0f6c345754",
-      "newHash": "8a5c9fc316c7ca9002a068fa3b63c31ea072dce445fa74027d4930fbc403d945"
+      "newHash": "37fa7b668d3fe23b91093c462cd9909b0a5c1fe5ab6d078961a9c6ece4089a5a"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0772bcfe20b8de8e8388d38def3e1738928d686ae1ce926b4b4fde32e8242325",
+  "sourceFingerprint": "8218ca942b87c3dc756667a6474b1c92976ddcaf001e22fe0ffbe145d21d66d8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1522,
-    "textFiles": 1406,
-    "totalBytes": 32942497,
+    "files": 1523,
+    "textFiles": 1407,
+    "totalBytes": 32955032,
     "pages": 19,
-    "modules": 1038
+    "modules": 1039
   },
   "viewports": [
     {
@@ -2893,7 +2893,7 @@
         "viewer"
       ],
       "bytes": 204415,
-      "sha256": "24bb8be57119d4bb78f3b91f6d55a21f196d7df848bd6aff9fe89133c70fdaa0",
+      "sha256": "b591c0e29d37b66a09d9e2f0d9aeac85e392cd739c2d29250bd3811f0d0d3e62",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2972,7 +2972,7 @@
           "line": 2083
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-editor-f56-3",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-editor-f56-4",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084
         },
@@ -3332,7 +3332,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-editor-f56-3",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-editor-f56-4",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084,
           "exists": true
@@ -30876,8 +30876,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 137698,
-      "sha256": "d58ec3fd4388716d865abc00a6bc37161ca05ab22affccf887ff757d4fbbd35a",
+      "bytes": 137789,
+      "sha256": "8196c4a957b4e23b025ccc5170a1aafc9f6a0c4ecdeafa3215e8438a7202e92c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36664,8 +36664,8 @@
     },
     {
       "path": "scripts/auditar-admin-productos-multimedia.js",
-      "bytes": 21101,
-      "sha256": "a4a06c10ee9f6a6f495638cf0627b1eeac85b1522f34eb37ce354eb7e6aac977",
+      "bytes": 21106,
+      "sha256": "1e3ad3a03409f1a072d54b21eeff37f22f34eaf92ac0eca461dfeeb5cf66b57d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42827,8 +42827,8 @@
     },
     {
       "path": "tests/admin/private-work-pagination-session.test.mjs",
-      "bytes": 1516,
-      "sha256": "9c561ee9363f9cf4731d47ac946df3331c26ff7c625818e2e59ef9a69de48cbe",
+      "bytes": 1580,
+      "sha256": "317187888c397ddfd2870bbd4bf1ec7115f2ea3fbe0bc18dae85dd7ad78e4e75",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42893,6 +42893,48 @@
           "target": null,
           "dynamic": false,
           "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/admin/product-progress-audit.test.mjs",
+      "bytes": 1287,
+      "sha256": "cc6142709d7194320872043f68e79cb3d788a4b33fe612dd9664523b71dd3ae6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 5
         }
       ],
       "endpoints": []
@@ -57088,7 +57130,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204415,
-      "sha256": "24bb8be57119d4bb78f3b91f6d55a21f196d7df848bd6aff9fe89133c70fdaa0"
+      "sha256": "b591c0e29d37b66a09d9e2f0d9aeac85e392cd739c2d29250bd3811f0d0d3e62"
     },
     {
       "path": "apple-touch-icon.png",
@@ -58071,8 +58113,8 @@
     {
       "path": "config/ci-stages.json",
       "extension": ".json",
-      "bytes": 6407,
-      "sha256": "eaab4b9cce0fba65b4ebb62921bdeeec7d63db344611a76dcf3df5bf14f7ac86"
+      "bytes": 6451,
+      "sha256": "88afca0eeb746b3614149fe73f28056e048102d2c75915fb47f2b7cff70f9930"
     },
     {
       "path": "config/csp-runtime.js",
@@ -58089,8 +58131,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 12908,
-      "sha256": "78b6ed5e865b5c2a6ca183397abbb62f4046914c6f9f29a5a54f9a0ae46df715"
+      "bytes": 12901,
+      "sha256": "c06bd9a13b9ed1f9ce909144400f64d51a354f396825274c6e7853ec72865c5e"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -58102,7 +58144,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "11e19d35e996155fd047bc56f88bb26bffd09b7e962355ac08d167bd5fb60400"
+      "sha256": "9a8a366a9b2a2436b3a0e3dd4e493a2225568f2125bd180a03b9ee85d22e1027"
     },
     {
       "path": "config/public-site.json",
@@ -58761,8 +58803,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 950528,
-      "sha256": "1aa7065f09d8ab1b213f3aad7073d2b7595fe18a8e9ba7ee6a28b5baa0ef1409"
+      "bytes": 951422,
+      "sha256": "8027981f1c80a33cc1ca3ed803ead30772a88afe0da4c2c4cce90004de183e7f"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -59277,8 +59319,8 @@
     {
       "path": "docs/editor-productos-v2/24-INTEGRACION-Y-CIERRE.md",
       "extension": ".md",
-      "bytes": 4822,
-      "sha256": "a1d36453b8eba94114e7462106bda2ce03a3a2c3dfd5eda5566cdef642efb2eb"
+      "bytes": 6019,
+      "sha256": "55e431be57249ea1f11e502b3b09d4fd2537ebfa222389b22be63eff5e462ed3"
     },
     {
       "path": "docs/editor-productos-v2/evidencias-continuidad.json",
@@ -59451,8 +59493,8 @@
     {
       "path": "docs/editor-productos-v2/evidencias-integracion-cierre.json",
       "extension": ".json",
-      "bytes": 14380,
-      "sha256": "909556ba09bd086f0b1e914e2d494a8f71cf707fac6d1ca2f32d5f772cd96daf"
+      "bytes": 23340,
+      "sha256": "f92ea24305dcae281ca112ed09b0bb13ab97be3f3bba83e07b1963ed0e43ec68"
     },
     {
       "path": "docs/editor-visual-seguro.md",
@@ -60699,8 +60741,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 137698,
-      "sha256": "d58ec3fd4388716d865abc00a6bc37161ca05ab22affccf887ff757d4fbbd35a"
+      "bytes": 137789,
+      "sha256": "8196c4a957b4e23b025ccc5170a1aafc9f6a0c4ecdeafa3215e8438a7202e92c"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -62463,8 +62505,8 @@
     {
       "path": "scripts/auditar-admin-productos-multimedia.js",
       "extension": ".js",
-      "bytes": 21101,
-      "sha256": "a4a06c10ee9f6a6f495638cf0627b1eeac85b1522f34eb37ce354eb7e6aac977"
+      "bytes": 21106,
+      "sha256": "1e3ad3a03409f1a072d54b21eeff37f22f34eaf92ac0eca461dfeeb5cf66b57d"
     },
     {
       "path": "scripts/auditar-admin-publico-sincronizar.js",
@@ -63226,7 +63268,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 75827,
-      "sha256": "8a5c9fc316c7ca9002a068fa3b63c31ea072dce445fa74027d4930fbc403d945"
+      "sha256": "37fa7b668d3fe23b91093c462cd9909b0a5c1fe5ab6d078961a9c6ece4089a5a"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -63801,14 +63843,20 @@
     {
       "path": "tests/admin/private-work-pagination-session.test.mjs",
       "extension": ".mjs",
-      "bytes": 1516,
-      "sha256": "9c561ee9363f9cf4731d47ac946df3331c26ff7c625818e2e59ef9a69de48cbe"
+      "bytes": 1580,
+      "sha256": "317187888c397ddfd2870bbd4bf1ec7115f2ea3fbe0bc18dae85dd7ad78e4e75"
     },
     {
       "path": "tests/admin/product-history-audit.test.mjs",
       "extension": ".mjs",
       "bytes": 975,
       "sha256": "a571577321049ce1d1434a7ac2a12e6dcc1fcf92ab962b4420059b2b36999896"
+    },
+    {
+      "path": "tests/admin/product-progress-audit.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1287,
+      "sha256": "cc6142709d7194320872043f68e79cb3d788a4b33fe612dd9664523b71dd3ae6"
     },
     {
       "path": "tests/admin/product-toggle-result.test.mjs",

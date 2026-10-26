@@ -1,3 +1,7 @@
+## 2026-10-26 — Segunda pasada CI de integración (Codex /root, GPT-6)
+
+PR1241 contra main: CI40307127833 sobre bd083237 aprobó preflight, comercio, Rules y CodeQL. Administración detectó auditor de firma antigua de prodGuardar (INT03); se conserva la operación/progreso/resultado y se agregan mutaciones negativas. La ejecución local posterior descubrió INT04: respuesta de borradores re-renderizaba shell tras fallo de montaje. Se exige marca canónica tt-commerce-mounted antes de renderizar respuesta; regresión existente13 tamaños320–3840 RED/GREEN. Módulo administrativo publica URL editor-f56-4. Se repite administración y CI para la nueva cabeza; ningún PASS remoto de bd083237 se hereda. Recibos y estado exacto en informe24, evidencias-integracion-cierre.json y checks/merge del PR. Autorización de merge sigue vigente; sin bypass, force-push o despliegues manuales.
+
 ## 2026-10-26 — Integración completa autorizada (Codex /root, GPT-6)
 
 La titular pide arreglar/comprobar todo y completar merge. Esta instrucción nueva sustituye la prohibición anterior de merge para Fases1–6; no se ejecutan despliegues manuales ni operaciones comerciales reales. PR1241 ahora contra main f9399a90c73398a18c877bcaf1985491d4085913, candidato único que incluye por ascendencia #1237–#1240. Los PR anteriores sólo se cerrarán como reemplazados cuando el conjunto esté fusionado. Sin bypass ni force-push.

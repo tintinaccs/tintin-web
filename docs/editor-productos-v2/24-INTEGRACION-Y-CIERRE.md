@@ -77,3 +77,22 @@ paginación móvil final, build y39 controles preflight aprobados. La corrida
 amplia de24 recorridos del workspace precede al refuerzo adicional de sesión;
 CI repite el workspace completo sobre la cabeza final. Los checks y registro de
 merge del PR conservan el estado remoto sin atribuirlo anticipadamente.
+
+## Segunda pasada de integración
+
+- **INT03, MEDIUM:** CI40307127833 aprobó comercio y Rules, pero administración
+  detectó que el auditor de multimedia esperaba `prodGuardar()` sin argumentos.
+  Fase4 usa `prodGuardar({commit=false}={})`; se acepta la firma parametrizada
+  conservando la exigencia de operación central, inicio y resultado de guardado.
+  Nueva prueba negativa elimina cada uno dentro del bloque y exige rechazo.
+- **INT04, MEDIUM:** la regresión existente de fallo de montaje encontró que la
+  respuesta de la lista privada llamaba `renderProducts` aunque el montaje
+  hubiera fallado. Eso poblaba un shell no confirmado y alteraba el respaldo.
+  La respuesta sólo vuelve a renderizar si la sección tiene la marca canónica
+  de montaje confirmado. La prueba existente conserva listado original, shell
+  vacío y ausencia de marca en13 tamaños,320–3840px. RED antes, GREEN después.
+  Se publica una URL nueva del módulo administrativo (`editor-f56-4`), sin
+  reutilizar la URL ya publicada con bytes nuevos.
+
+Los resultados del SHA bd083237 no se heredan a la nueva cabeza: CI vuelve a
+validar el conjunto. No se elimina ninguna prueba ni se oculta la regresión.

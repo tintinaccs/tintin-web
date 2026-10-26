@@ -429,5 +429,292 @@
   "limitations": [
     "No prueba de hardware/Safari nativo/lector físico.",
     "No transacciones reales, cobros, correos, migración o deploy manual de Rules."
-  ]
+  ],
+  "followupInt03Int04": {
+    "parentSha": "bd083237d4a6f8ef3d3921ab9812684baebd0ffd",
+    "findings": {
+      "INT03": "Firma parametrizada prodGuardar aceptada sin retirar operación, progreso ni resultado. Mutaciones negativas.",
+      "INT04": "Respuesta privada no renderiza tras montaje fallido; exige marca canónica confirmada. RED anterior: shell no vacío; GREEN13 viewports."
+    },
+    "sourceSha256": {
+      "js/admin/shopify-commerce-admin.js": "8196c4a957b4e23b025ccc5170a1aafc9f6a0c4ecdeafa3215e8438a7202e92c",
+      "scripts/auditar-admin-productos-multimedia.js": "1e3ad3a03409f1a072d54b21eeff37f22f34eaf92ac0eca461dfeeb5cf66b57d",
+      "tests/admin/product-progress-audit.test.mjs": "cc6142709d7194320872043f68e79cb3d788a4b33fe612dd9664523b71dd3ae6",
+      "tests/admin/private-work-pagination-session.test.mjs": "317187888c397ddfd2870bbd4bf1ec7115f2ea3fbe0bc18dae85dd7ad78e4e75",
+      "config/ci-stages.json": "88afca0eeb746b3614149fe73f28056e048102d2c75915fb47f2b7cff70f9930"
+    },
+    "suites": [
+      {
+        "command": "node --test tests/admin/*.test.mjs tests/auth/store-gate-product-publication-audit.test.mjs",
+        "status": "PASS_LOCAL",
+        "tests": 151,
+        "passed": 151,
+        "logSha256": "225b5a51bc592e533e77f5567d20f4ab1e68155d5531580e5cb3cf57d8705d46"
+      },
+      {
+        "command": "npx playwright test tests/ui-ux/admin-commerce-shopify.spec.js --grep 'fallo de montaje' --project=chromium --retries=0",
+        "status": "PASS_LOCAL",
+        "tests": 1,
+        "passed": 1,
+        "viewports": 13,
+        "logSha256": "ffb26616e7921feae45b869cdb4e71229de82e2e6eb11b506527d9f784e86e39"
+      },
+      {
+        "command": "npm run audit:products-media",
+        "status": "PASS_LOCAL",
+        "checks": 42,
+        "logSha256": "5d82f2c9399c26c3e9a5817d64cac17472d118e38aca71e03dd90ed963863c40"
+      },
+      {
+        "command": "npm run build:pages",
+        "status": "PASS_LOCAL",
+        "logSha256": "480149618b7cfba180aeb71acae5f70fc8fb3e6558770457052c55f79f6b3c68"
+      },
+      {
+        "command": "npm run ci:preflight",
+        "status": "PASS_LOCAL",
+        "commands": [
+          {
+            "command": "npm run audit:level1",
+            "seconds": 0.887,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:part2h",
+            "seconds": 0.654,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:site-structure",
+            "seconds": 1.364,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:architecture-contracts",
+            "seconds": 0.594,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:level3",
+            "seconds": 1.006,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:typography",
+            "seconds": 3.225,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:colors",
+            "seconds": 0.992,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:styles",
+            "seconds": 0.506,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:modular-architecture",
+            "seconds": 0.512,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:tintin",
+            "seconds": 1.228,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:emails",
+            "seconds": 0.413,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:collections",
+            "seconds": 0.452,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:images",
+            "seconds": 0.61,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:content",
+            "seconds": 0.246,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:security",
+            "seconds": 0.202,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:release",
+            "seconds": 0.273,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:integral",
+            "seconds": 0.268,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:diagnostics",
+            "seconds": 16.959,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:diagnostic-findings",
+            "seconds": 0.408,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:postphase",
+            "seconds": 0.181,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:help-pages",
+            "seconds": 0.168,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:aux-pages",
+            "seconds": 0.292,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:final-integration",
+            "seconds": 0.414,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:performance",
+            "seconds": 0.449,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:performance-regressions",
+            "seconds": 0.284,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:page-loading",
+            "seconds": 0.527,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:hero-background-controls",
+            "seconds": 0.239,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:storegate-deadlock",
+            "seconds": 0.241,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:app-check-bootstrap",
+            "seconds": 0.195,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase5",
+            "seconds": 0.405,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase6",
+            "seconds": 0.459,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase7-catalog",
+            "seconds": 0.186,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase8-ui",
+            "seconds": 0.189,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase10",
+            "seconds": 0.198,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase11",
+            "seconds": 0.369,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:public-operational-contract",
+            "seconds": 0.171,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:cache-versioning",
+            "seconds": 1.217,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run test:fast",
+            "seconds": 10.481,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "node scripts/auditar-legal-paginas.js",
+            "seconds": 0.104,
+            "status": 0,
+            "signal": null
+          }
+        ],
+        "logSha256": "c4851d7215d8e3542a83bbc1be965885234836122c5ed8ff39a2d815a75978f2"
+      }
+    ],
+    "previousRedLogSha256": "a615baa4436bfb30ac3d9e232e34d9307a1f32c98c2e77f9a275a7759c225f66",
+    "previousCI": "40307127833 sobre bd083237: preflight/comercio/Rules/CodeQL aprobados; administración falló en firma del auditor. Resto de jobs no se atribuye a la nueva cabeza.",
+    "runtimeURLVersion": "tintin-20261026-editor-f56-4",
+    "remoteResult": "Consultar checks del SHA final y registro de merge de PR1241; no heredar resultados anteriores."
+  }
 }

@@ -536,7 +536,7 @@ async function loadPrivateProductWorks(force=false,append=false) {
       privateWorkNext=payload.result.nextPageToken || '';privateWorkLimited=payload.result.limited===true;
     }
   }catch(error){if(state.user?.uid===uid && state.role===role && generation===privateWorkGeneration)privateWorkError=error.message;}
-  finally{if(generation===privateWorkGeneration){privateWorkLoading=false;renderProducts();}}
+  finally{if(generation===privateWorkGeneration){privateWorkLoading=false;if(document.getElementById('section-productos')?.classList.contains('tt-commerce-mounted'))renderProducts();}}
 }
 window.addEventListener('tintin:product-work-saved',()=>void loadPrivateProductWorks(true));
 function renderProducts() {
