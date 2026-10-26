@@ -1,3 +1,7 @@
+## 2026-10-25 — Fases 5–6 (Codex /root, GPT-6)
+
+Recuperada cadena abierta1237–1240; base a6e197e5, sin merge/deploy. Presentación, correcciones demostradas, matriz, capturas y auditoría en informes22–23 y recibo evidencias-f56.json. Fase5 conserva editor/motor de fases anteriores; Fase6 distingue PASS local de instalación/CI/producción pendientes. Se conserva toda la historia inferior sin heredar aprobaciones. El PR de entrega apunta a la rama de Fase4, fuera de mantenimiento automático de main.
+
 ## Cierre local del candidato — 23/10/2026
 
 PASS_LOCAL con dependencias instaladas por npm ci (lock intacto): 39 comandos preflight; 457 comercio; 221 sincronización; 117 administrativos antes del último ajuste de permisos, seguido de 11 pruebas específicas del escritor; 36 arquitectura; 213 controles de reglas y 8 REST/CAS en emulador demo; 143 Chromium sin reintentos. Build Pages/CSP/rutas/diagnóstico (19 páginas) y caché (369 recursos, 67 cargas dinámicas) aprobados. Revisión de diff y capturas móvil/escritorio completadas. CI del SHA final y publicación todavía PENDING. Matriz actual en15; detalle de compatibilidad/reversión en14. Ningún producto/pedido/correo real modificado.

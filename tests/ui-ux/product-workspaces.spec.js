@@ -40,7 +40,7 @@ test('Borradores lista progreso privado y permite continuar sin inventario públ
  await open(page);
  await page.route('https://tintin.test/api/admin-order-mutation*',async route=>{
   const items=await page.evaluate(()=>[...window.qaProductStore].filter(([path,row])=>path.startsWith('productEditorWorkspaces/') && !row.closed).map(([,row])=>({key:row.key,productId:row.productId,name:row.snapshot.name,revision:row.revision})));
-  await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,result:{items}})});
+  await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,result:{items,limited:true}})});
  });
  await page.locator('#prod-name').fill('Desde listado');await saveProgress(page);await page.locator('.tt-work-back').click();
  // Volver queda sobre la barra autoexpandible al cerrarse el espacio. Retirar
@@ -48,6 +48,7 @@ test('Borradores lista progreso privado y permite continuar sin inventario públ
  await page.mouse.move(1300,700);await expect(page.locator('html')).not.toHaveClass(/adm-sidebar-peek/);
  await page.getByRole('button',{name:/Borradores privados \(1\)/}).click();
  await expect(page.getByRole('heading',{name:'Borradores privados de esta cuenta'})).toBeVisible();
+ await expect(page.getByText('La lista de borradores está limitada.',{exact:false})).toBeVisible();
  await page.locator('[data-action="work-continue"]').click();await page.evaluate(()=>window.qaProductController.workspace.ready);await expect(page.locator('#prod-name')).toHaveValue('Desde listado');
  expect(await page.evaluate(()=>[...window.qaProductStore.keys()].filter(key=>key.startsWith('products/')).length)).toBe(0);
 });
@@ -86,4 +87,43 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1366,768]
  expect(await page.locator('.adm-sidebar').evaluate(node=>getComputedStyle(node).visibility)).toBe('hidden');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  await page.screenshot({path:info.outputPath(`phase4-${width}x${height}.png`)});
+});
+
+for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768],[1920,1080]])test(`progreso y acciones con altura reducida ${width}x${height}`,async({page},info)=>{
+ await open(page,width,height);await page.locator('#prod-name').fill('Trabajo con teclado');
+ await page.setViewportSize({width,height:Math.max(300,Math.round(height*.6))});
+ const save=page.locator('#prod-save-btn');await expect(save).toBeInViewport();
+ expect(await save.evaluate(node=>{const box=node.getBoundingClientRect();return node.contains(document.elementFromPoint(box.x+box.width/2,box.y+box.height/2));})).toBe(true);
+ await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('45000');
+ await page.locator('#prod-editor-section').selectOption('general');await expect(page.locator('#prod-name')).toHaveValue('Trabajo con teclado');
+ await save.focus();await page.keyboard.press('Tab');
+ expect(await page.locator('#prod-form-card').evaluate(card=>card.contains(document.activeElement))).toBe(true);
+ await page.keyboard.press('Shift+Tab');await expect(save).toBeFocused();
+ await saveProgress(page);await expect(page.locator('#prod-price')).toHaveValue('45000');
+ await page.screenshot({path:info.outputPath(`keyboard-${width}.png`)});
+ await page.setViewportSize({width,height});await expect(save).toBeInViewport();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+});
+
+for(const width of [320,390])test(`sección elegida legible sin recorte ${width}`,async({page},info)=>{
+ await open(page,width,844);
+ const select=page.locator('#prod-editor-section');
+ for(const section of ['all','visibility']){
+  await select.selectOption(section);
+  const size=await select.evaluate(node=>{const style=getComputedStyle(node),context=document.createElement('canvas').getContext('2d');context.font=style.font;return {text:context.measureText(node.selectedOptions[0].textContent).width,available:node.getBoundingClientRect().width-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)-24};});
+  expect(size.available).toBeGreaterThanOrEqual(size.text);
+ }
+ const guide=page.locator('.tt-editor-guide');await guide.locator('summary').click();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ await guide.getByRole('button',{name:'3. Precio',exact:true}).click();await expect(page.locator('#prod-price')).toBeFocused();
+ await guide.locator('summary').click();await select.selectOption('visibility');
+ await page.screenshot({path:info.outputPath(`navigation-${width}.png`)});
+});
+
+for(const width of [1366,1920])test(`acciones compactas junto al título en escritorio ${width}`,async({page})=>{
+ await open(page,width,1080);
+ const back=await page.locator('.tt-work-back').boundingBox(),actions=await page.locator('#prod-editor-actions').boundingBox();
+ expect(actions.width).toBeLessThanOrEqual(440);
+ expect(Math.abs(actions.y-back.y)).toBeLessThan(8);
+ await expect(page.locator('#prod-save-btn')).toBeInViewport();
 });

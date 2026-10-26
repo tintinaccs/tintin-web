@@ -71,7 +71,7 @@ check(
 
 check(
   'Las colecciones ocultas también ocultan sus productos',
-  /loadCollections\(\)/.test(policy) &&
+  (/loadCollections\(\)/.test(policy) || /loadCollections\(\{\s*onData\(collections\)/.test(policy)) &&
     /visibleCollectionSlugs = new Set/.test(policy) &&
     /phase7-collections/.test(policy),
   'La visibilidad de la colección debe formar parte de la política pública.'

@@ -1,4 +1,5 @@
 import {saveProductEditor,saveProductBulk} from '../../cloudflare/product-editor-domain.mjs';
+import {productEditorWorkspace} from '../../cloudflare/product-editor-workspaces.mjs';
 import {productFingerprint} from '../../js/admin/products/maestro-productos-core.mjs';
 import {commercialDraft} from '../../js/admin/products/editor-comercial-core.mjs';
 import {composeCheckoutDraft} from '../../js/orders/politica-checkout.js';
@@ -60,7 +61,7 @@ test('Editor → checkout público → pedido: precio, fotos, clave estable y ca
  await seed('settings/general',{storeOpen:true,paymentMethods:{transferencia:true}});
  await seed(`checkoutGuards/${actor.uid}`,{lastCheckoutOrderId:`${actor.uid}_${requestId}`,lastCheckoutAt:new Date()});
  await seed('collections/editor_checkout',{name:'Fixture'});
- const original=commercialDraft({name:'Pulsera de prueba',category:'editor_checkout',price:30000,active:true,oferta:false,destacado:false,variants:{Color:['Dorado','Plateado'],Talle:['M']}});
+ const original=commercialDraft({name:'Pulsera de prueba',description:'Descripción sintética completa',imageUrl:'https://example.invalid/gold.png',category:'editor_checkout',price:30000,active:true,oferta:false,destacado:false,variants:{Color:['Dorado','Plateado'],Talle:['M']}});
  original.variantInventory.forEach((row,index)=>{row.stock=2;row.price=index===0?45000:35000;});original.stock=4;
  original.variantMedia=[{Color:'Dorado',imageUrl:'https://example.invalid/gold.png'},{Color:'Plateado',imageUrl:'https://example.invalid/silver.png'}];
  await saveProductEditor({},{productId:id,expected:null,changeId:'editor_checkout_create',product:original},admin,deps);
@@ -150,10 +151,12 @@ test('Firestore real aislado: dos combinaciones de 60 unidades se reservan y dev
 
 
 test('Editor v2: commit real público/privado, reintento e interferencia de una venta',async()=>{
-  const data={name:'Anillo editor',category:'editor_fixture',price:30000,priceBefore:null,active:true,oferta:false,destacado:false,variantCommerceVersion:2,variants:{Color:['Oro']},variantInventory:[{variant:'oro',attributes:{Color:'Oro'},stock:2,price:40000}],stock:2};
+  const data={name:'Anillo editor',description:'Descripción sintética completa',imageUrl:'https://example.invalid/gold.png',category:'editor_fixture',price:30000,priceBefore:null,active:true,oferta:false,destacado:false,variantCommerceVersion:2,variants:{Color:['Oro']},variantInventory:[{variant:'oro',attributes:{Color:'Oro'},stock:2,price:40000}],stock:2};
   await seed('collections/editor_fixture',{name:'Fixture'});
   const inventory={costUnit:100,purchased:2,stockMinimum:1,internalNotes:'Dato privado demo'};
   const create={productId:'editor_fixture',expected:null,changeId:'editor_create_123',product:data,inventory,expectedInventory:null};
+  await assert.rejects(saveProductEditor({},{...create,product:{...data,description:''}},admin,deps),error=>error.status===422);
+  assert.equal(await deps.get({},'products/editor_fixture'),null);
   const saved=await saveProductEditor({},create,admin,deps);
   assert.equal((await product('editor_fixture')).price,30000);
   assert.equal(decodeFirestoreFields((await deps.get({},'productInventory/editor_fixture')).fields).internalNotes,inventory.internalNotes);
@@ -166,6 +169,24 @@ test('Editor v2: commit real público/privado, reintento e interferencia de una 
   assert.equal((await product('editor_fixture')).name,'Anillo editor');
 });
 
+
+test('progreso privado en Firestore: CAS, recuperación y cierre atómico al publicar',async()=>{
+ const key='phase6_private_workspace';
+ await seed('collections/phase6_fixture',{name:'Colección sintética'});
+ const initial=await productEditorWorkspace({},{action:'readProductWork',key},admin,deps);
+ const body={action:'saveProductWork',key,baseExpected:initial.sourceExpected,expectedRevision:0,changeId:'phase6_workspace_0001',snapshot:{name:'Incompleto'}};
+ const saved=await productEditorWorkspace({},body,admin,deps);
+ assert.equal(await deps.get({},'products/'+key),null);
+ assert.equal((await productEditorWorkspace({},body,admin,deps)).duplicate,true);
+ await assert.rejects(productEditorWorkspace({},{...body,changeId:'phase6_workspace_stale'},admin,deps),error=>error.status===409);
+ const reopened=await productEditorWorkspace({},{action:'readProductWork',key},admin,deps);
+ assert.equal(reopened.work.snapshot.name,'Incompleto');assert.equal(reopened.revision,saved.revision);
+ const data={name:'Publicado sintético',description:'Completo',imageUrl:'https://example.invalid/cover.png',category:'phase6_fixture',price:30000,stock:2,active:true,oferta:false,destacado:false,publicationStatus:'active',productTemplate:'default',seoTitle:'',seoDescription:''};
+ await saveProductEditor({},{productId:key,expected:null,changeId:'phase6_apply_work_0001',workspace:{key,revision:saved.revision},product:data},admin,deps);
+ assert.equal((await product(key)).stock,2);
+ const closed=await productEditorWorkspace({},{action:'readProductWork',key},admin,deps);
+ assert.equal(closed.work,null);assert.equal(closed.revision,saved.revision+1);
+});
 
 test('Editor v2: lote mixto comercial atómico y conflicto antes de escribir',async()=>{
  const commercial=await product('editor_fixture');
@@ -189,7 +210,7 @@ test('compra enteramente ficticia: producto → pedido → captura simulada → 
   await seed('settings/general', { storeOpen: true, paypal: { enabled: true }, paymentMethods: { paypal: true } });
   await seed('collections/qa_fake_collection', { name: 'Colección ficticia' });
   await seed(`checkoutGuards/${actor.uid}`, { lastCheckoutOrderId: `${actor.uid}_${requestId}`, lastCheckoutAt: new Date() });
-  const draftProduct = commercialDraft({ name: 'Producto ficticio QA', category: 'qa_fake_collection', price: 30000, active: true, publicationStatus: 'active', productTemplate: 'default', seoTitle: '', seoDescription: '', oferta: false, destacado: false, variants: { Color: ['Dorado'] } });
+  const draftProduct = commercialDraft({ name: 'Producto ficticio QA', description:'Descripción sintética completa', imageUrl:'https://example.invalid/gold.png', category: 'qa_fake_collection', price: 30000, active: true, publicationStatus: 'active', productTemplate: 'default', seoTitle: '', seoDescription: '', oferta: false, destacado: false, variants: { Color: ['Dorado'] } });
   draftProduct.variantInventory[0].stock = 2; draftProduct.variantInventory[0].price = 45000; draftProduct.stock = 2;
   await saveProductEditor({}, { productId: id, expected: null, changeId: 'qa_fake_product_create', product: draftProduct }, admin, deps);
   const stored = await product(id), key = stored.variantInventory[0].variant;

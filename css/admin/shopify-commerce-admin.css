@@ -1802,3 +1802,18 @@ html.tt-product-workspace-active #prod-form-card.tt-editor-workspace {inset:0 !i
 #prod-form-card.tt-editor-workspace button[onclick="prodCancelForm()"] {display:none;}
 .tt-private-work-list {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:12px;margin:12px 0;}
 .tt-private-work-list button {min-height:64px;white-space:normal;text-align:left;border-radius:12px;}
+
+/* El selector conserva el rótulo completo junto a guía y vista previa. */
+@media (min-width:1024px) {
+  #prod-form-card.tt-editor-workspace #prod-editor-actions {width:auto;margin-left:auto;flex:0 0 auto;}
+  #prod-form-card.tt-editor-workspace #prod-editor-actions button {flex:0 0 auto;}
+}
+@media (max-width:767px) {
+  html.tt-product-workspace-active #prod-form-card .tt-product-section-nav {
+    display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;
+  }
+  html.tt-product-workspace-active #prod-form-card .tt-product-section-nav > select {
+    grid-column:1/-1;order:-1;width:100% !important;max-width:none;
+  }
+  html.tt-product-workspace-active #prod-form-card .tt-editor-guide[open] {grid-column:1/-1;}
+}

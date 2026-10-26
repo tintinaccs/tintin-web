@@ -1,3 +1,5 @@
+[Fase 5 responsive y superficies públicas](22-UI-RESPONSIVE-FASE-5.md) · [Fase 6 auditoría actual](23-AUDITORIA-FINAL-FASE-6.md). Sin aprobación productiva; ver pruebas, base y bloqueos de esta ejecución.
+
 [Fase 4: progreso privado y publicación](21-FLUJO-EDITORIAL-FASE-4.md): espacio dedicado, borradores, CAS, privacidad y pruebas.
 
 [Nueva Fase 1 de estabilización, 25/10/2026](18-ESTABILIZACION-FASE-1-20261025.md): resultados actuales y pendientes; sin autorización de merge/despliegue.

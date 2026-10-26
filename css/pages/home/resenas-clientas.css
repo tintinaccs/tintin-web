@@ -7,6 +7,12 @@ body.tt-home-premium .tt-review-screens {
 }
 .tt-review-screen { margin: 0; min-width: 0; padding: 12px; border-radius: 16px; background: #fff; box-shadow: 0 8px 24px rgb(113 60 83 / 8%); }
 .tt-review-screen img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.tt-review-trigger { display: block; width: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; border-radius: 8px; }
+.tt-review-trigger:focus-visible, .tt-review-viewer button:focus-visible { outline: 3px solid #713c53; outline-offset: 2px; }
+.tt-review-viewer { padding: 0 12px 16px; }
+.tt-review-viewer__nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; }
+.tt-review-viewer button { min-width: 44px; min-height: 44px; border: 1px solid #713c53; border-radius: 12px; color: #713c53; background: #fff; cursor: pointer; }
+.tt-review-viewer img { display: block; width: 100%; height: auto; max-height: max(100px, calc(100dvh - 190px)); object-fit: contain; }
 .tt-reviews-action { display: flex; justify-content: center; margin-top: 28px; }
 .tt-reviews-dialog {
   width: min(1120px, calc(100vw - 28px)); max-width: none;

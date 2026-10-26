@@ -51,12 +51,11 @@ export async function loadCollections(options = {}) {
     options.onData?.(visible, source);
     return visible;
   };
-  if (!options.force) {
-    const cached = readCached(CACHE_KEY, CACHE_TTL);
-    if (Array.isArray(cached)) return emit(cached, 'cache');
-  }
-  const stale = readStaleCached(CACHE_KEY);
-  if (!options.force && Array.isArray(stale) && stale.length) emit(stale, 'stale-cache');
+  // Render immediately, then revalidate presentation on every entry. A fresh
+  // local cache must not suppress a newly saved collection cover for 30 min.
+  const cached = options.force ? null : readCached(CACHE_KEY, CACHE_TTL);
+  const stale = Array.isArray(cached) ? cached : readStaleCached(CACHE_KEY);
+  if (!options.force && Array.isArray(stale)) emit(stale, Array.isArray(cached) ? 'cache' : 'stale-cache');
   try {
     const list = await runSingleFlight('collections:public', async () => {
       const documents = await fetchPublicCatalogResource('collections');

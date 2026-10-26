@@ -5,7 +5,7 @@ import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin
    Mantiene una sola definición de producto comprable para portada,
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
-import { loadCollections, normalizeCollectionSlug } from '../collections/datos-publicos-colecciones.js?v=tintin-20261015-public-collection-data-1';
+import { loadCollections, normalizeCollectionSlug } from '../collections/datos-publicos-colecciones.js?v=tintin-20261026-editor-f56-1';
 import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20261023-variant-engine-v2-2';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 import { variantStockLimit, hasProductStock, resolveProductVariant, productVariantPrice, productStockTotal, stableVariantSelection, variantSelectionLabel } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
@@ -264,11 +264,17 @@ function keepDetailGuardInstalled() {
   }, 50);
 }
 
-export const catalogVisibilityReady = loadCollections().then(collections => {
-  visibleCollectionSlugs = new Set(collections.map(collection => collection.slug));
-  if (Array.isArray(window.PRODUCTS)) publishFiltered(window.PRODUCTS, 'phase7-collections');
-}).catch(error => {
-  console.warn('[phase7-catalog-policy] No se pudo confirmar la visibilidad de colecciones; se conserva el catálogo validado sin ese filtro.', error);
+export const catalogVisibilityReady = new Promise(resolve => {
+  // A cached snapshot can release the first render while metadata revalidates.
+  // The later snapshot updates the same policy instead of delaying products.
+  loadCollections({ onData(collections) {
+    visibleCollectionSlugs = new Set(collections.map(collection => collection.slug));
+    if (Array.isArray(window.PRODUCTS)) publishFiltered(window.PRODUCTS, 'phase7-collections');
+    resolve();
+  } }).catch(error => {
+    console.warn('[phase7-catalog-policy] No se pudo confirmar la visibilidad de colecciones; se conserva el catálogo validado sin ese filtro.', error);
+    resolve();
+  });
 });
 
 keepDetailGuardInstalled();

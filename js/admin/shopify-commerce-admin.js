@@ -38,10 +38,10 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261022-avatar-inicial-1';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261026-editor-f56-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
-const VERSION = 'tintin-20261026-editor-workspace-1';
+const VERSION = 'tintin-20261026-editor-f56-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -516,16 +516,16 @@ function selectPageOnly(set, ids, checked) {
   if (missing.length > available) toast(`La selección está limitada a ${MAX_BULK_SELECTION} elementos.`);
 }
 
-let privateWorkOwner='',privateWorks=[],privateWorkError='',privateWorkLoading=false,privateWorkGeneration=0;
+let privateWorkOwner='',privateWorks=[],privateWorkError='',privateWorkLoading=false,privateWorkLimited=false,privateWorkGeneration=0;
 async function loadPrivateProductWorks(force=false) {
   const uid=state.user?.uid || '';
   if(!uid || !['admin','superadmin'].includes(state.role))return;
   if(!force && privateWorkOwner===uid)return;
-  const generation=++privateWorkGeneration;privateWorkOwner=uid;privateWorkLoading=true;privateWorks=[];privateWorkError='';
+  const generation=++privateWorkGeneration;privateWorkOwner=uid;privateWorkLoading=true;privateWorks=[];privateWorkError='';privateWorkLimited=false;
   try{
     const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'listProductWork'})});
     const payload=await response.json();if(!response.ok || !payload.ok)throw Error(payload.error || 'No se pudo recuperar la lista de borradores.');
-    if(state.user?.uid===uid && generation===privateWorkGeneration)privateWorks=payload.result.items || [];
+    if(state.user?.uid===uid && generation===privateWorkGeneration){privateWorks=payload.result.items || [];privateWorkLimited=payload.result.limited===true;}
   }catch(error){if(state.user?.uid===uid && generation===privateWorkGeneration)privateWorkError=error.message;}
   finally{if(generation===privateWorkGeneration){privateWorkLoading=false;renderProducts();}}
 }
@@ -541,7 +541,7 @@ function renderProducts() {
   void loadPrivateProductWorks();
   const counts = productTabCounts();
   const ownerWorks=privateWorkOwner===state.user?.uid?privateWorks:[];
-  const privatePanel=state.productTab==='draft'?`<section aria-label="Progreso privado"><h3>Borradores privados de esta cuenta</h3><p>No modifican la tienda. Los cambios de productos publicados se aplican únicamente al guardar cambios.</p>${privateWorkLoading?'<p role="status">Buscando progreso guardado…</p>':''}${privateWorkError?`<p role="alert">${esc(privateWorkError)}</p><button class="tt-commerce-btn" data-action="work-retry">Reintentar</button>`:''}<div class="tt-private-work-list">${ownerWorks.map(work=>`<button class="tt-commerce-btn" data-action="work-continue" data-key="${esc(work.key)}" data-product-id="${esc(work.productId || '')}"><strong>${esc(work.name)}</strong><br>Continuar borrador · ${work.productId?'cambios privados':'producto nuevo'}</button>`).join('')}</div>${!privateWorkLoading && !privateWorkError && !ownerWorks.length?'<p>No hay progreso privado pendiente.</p>':''}</section>`:`${ownerWorks.length?`<p><button class="tt-commerce-btn" data-action="work-show">Borradores privados (${ownerWorks.length})</button></p>`:''}`;
+  const privatePanel=state.productTab==='draft'?`<section aria-label="Progreso privado"><h3>Borradores privados de esta cuenta</h3><p>No modifican la tienda. Los cambios de productos publicados se aplican únicamente al guardar cambios.</p>${privateWorkOwner===state.user?.uid && privateWorkLimited?'<p role="status">La lista de borradores está limitada. Puede haber más progreso guardado que no aparece aquí. No se eliminó; revisá el producto existente antes de crear otra copia.</p>':''}${privateWorkLoading?'<p role="status">Buscando progreso guardado…</p>':''}${privateWorkError?`<p role="alert">${esc(privateWorkError)}</p><button class="tt-commerce-btn" data-action="work-retry">Reintentar</button>`:''}<div class="tt-private-work-list">${ownerWorks.map(work=>`<button class="tt-commerce-btn" data-action="work-continue" data-key="${esc(work.key)}" data-product-id="${esc(work.productId || '')}"><strong>${esc(work.name)}</strong><br>Continuar borrador · ${work.productId?'cambios privados':'producto nuevo'}</button>`).join('')}</div>${!privateWorkLoading && !privateWorkError && !ownerWorks.length?'<p>No hay progreso privado pendiente.</p>':''}</section>`:`${ownerWorks.length?`<p><button class="tt-commerce-btn" data-action="work-show">Borradores privados (${ownerWorks.length})</button></p>`:''}`;
   const list = filteredProducts();
   const page = pageSlice(list, state.productPage);
   state.productPage = page.page;

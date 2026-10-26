@@ -56,7 +56,8 @@
       "node scripts/auditar-borrado-global-catalogo.mjs",
       "node --test tests/admin/editor-comercial.test.mjs tests/admin/editor-editorial.test.mjs tests/admin/vision-productos.test.mjs",
       "node --test tests/security/csp-cloudinary-upload.test.mjs tests/diagnostics/manifest-exclusions.test.mjs",
-      "npx playwright test tests/ui-ux/editor-comercial-v2.spec.js --project=chromium --retries=0"
+      "npx playwright test tests/ui-ux/editor-comercial-v2.spec.js --project=chromium --retries=0",
+      "npx playwright test tests/ui-ux/product-workspaces.spec.js tests/ui-ux/product-color-gallery.spec.js --project=chromium --retries=0"
     ]
   },
   "quality": {
@@ -102,7 +103,8 @@
     "commands": [
       "npm run test:rules-critical",
       "npm run test:rules-phone",
-      "npm run test:rules-username"
+      "npm run test:rules-username",
+      "npm run test:rules-editor"
     ]
   },
   "preflight": {

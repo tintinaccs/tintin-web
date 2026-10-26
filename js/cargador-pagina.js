@@ -852,7 +852,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261024-editor-tema-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261026-editor-f56-1');
     }
   }
 
@@ -948,7 +948,7 @@
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261022-avatar-inicial-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261026-editor-f56-1');
     }
   }
 
