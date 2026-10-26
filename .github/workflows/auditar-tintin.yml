@@ -89,7 +89,9 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-${{ runner.arch }}-chromium-${{ hashFiles('package-lock.json') }}
       - name: Install Chromium once
-        run: npx playwright install --with-deps chromium
+        run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
       - name: Serve exact commit for browser gates
         run: |
           node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
@@ -146,7 +148,9 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-${{ runner.arch }}-chromium-${{ hashFiles('package-lock.json') }}
       - name: Install Chromium once
-        run: npx playwright install --with-deps chromium
+        run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
       - name: Serve exact commit for browser gates
         run: |
           node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
@@ -205,7 +209,9 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-${{ runner.arch }}-chromium-${{ hashFiles('package-lock.json') }}
       - name: Install Chromium once
-        run: npx playwright install --with-deps chromium
+        run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
       - name: Serve exact commit for browser gates
         run: |
           node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
@@ -259,7 +265,9 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-${{ runner.arch }}-chromium-${{ hashFiles('package-lock.json') }}
       - name: Install Chromium once
-        run: npx playwright install --with-deps chromium
+        run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
       - name: Serve exact commit for browser gates
         run: |
           node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
