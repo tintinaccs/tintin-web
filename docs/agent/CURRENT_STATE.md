@@ -1,3 +1,9 @@
+## 2026-10-26 — Integración completa autorizada (Codex /root, GPT-6)
+
+La titular pide arreglar/comprobar todo y completar merge. Esta instrucción nueva sustituye la prohibición anterior de merge para Fases1–6; no se ejecutan despliegues manuales ni operaciones comerciales reales. PR1241 ahora contra main f9399a90c73398a18c877bcaf1985491d4085913, candidato único que incluye por ascendencia #1237–#1240. Los PR anteriores sólo se cerrarán como reemplazados cuando el conjunto esté fusionado. Sin bypass ni force-push.
+
+CI40303230270 (a2a0b7d8) falló en auditor de tienda: patrón de regla get anterior a privacidad Fase4. INT01 actualiza el auditor sin cambiar Rules y añade mutaciones negativas para guardas de tienda/publicación/actividad/listado. INT02 elimina truncado100/1000 de Borradores con paginación REST por UID, cursor, Cargar más, deduplicación y reintento que conserva páginas. Progreso sin caducidad automática y cierre explícito preservan datos/auditoría; no hay limpieza destructiva pendiente como requisito de funcionamiento. Conflictos CAS requieren conciliación explícita por diseño. Informe24 y recibo de cierre contienen alcance/evidencia. Resultado local:150 Node administrativos/auditor,13 integraciones REST/CAS reales aisladas, prueba móvil final de paginación, build y39 comandos preflight aprobados. Recibo:docs/editor-productos-v2/evidencias-integracion-cierre.json. Los checks del SHA final y el registro de merge del PR son la autoridad para el estado remoto actual; no se copian PASS remotos antes de ejecutarse ni se heredan de otra cabeza.
+
 Validación de esta continuación:497/497 Node,96/96 Chromium, build Pages y39/39 comandos preflight PASS_LOCAL. Huellas, comandos y recibos en evidencias-f56.json; ver collectionMembershipFollowup. No se atribuyen al candidato nuevas pruebas de Rules o editor no modificados. CI remoto se registra por SHA aparte.
 
 ## 2026-10-26 — Continuación Fases 5–6: revalidación canónica (Codex /root, GPT-6)

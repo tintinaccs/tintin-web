@@ -1,0 +1,433 @@
+{
+  "agent": "Codex /root (GPT-6)",
+  "dateUTC": "2026-10-26",
+  "baseSha": "f9399a90c73398a18c877bcaf1985491d4085913",
+  "parentSha": "a2a0b7d887a22df9fedf61df6b9fb3f622e26aa8",
+  "pullRequest": 1241,
+  "scope": "Integración de Fases1–6, merge autorizado por nueva instrucción de la titular; sin despliegues manuales ni operaciones comerciales reales.",
+  "findings": {
+    "INT01": "Auditor de tienda actualizado a guardas de publicación/actividad/staff vigentes. Mutaciones negativas preservadas. Sin cambios de Rules.",
+    "INT02": "Paginación privada REST por UID,100 por página, cursor opaco validado, sin techo total100/1000. Cargar más, deduplicación, reintento y descarte de respuestas de otro rol/sesión."
+  },
+  "sourceSha256": {
+    "cloudflare/firebase-admin-ligero.js": "8c2ddda530608bc9b8a4491b38b9553457974f837e244bc036039bf4c08f682e",
+    "cloudflare/product-editor-workspaces.mjs": "07841ca24020fdd74843603c931cd98d4a564f9731b760e7c7f22e8e54b82082",
+    "js/admin/shopify-commerce-admin.js": "d58ec3fd4388716d865abc00a6bc37161ca05ab22affccf887ff757d4fbbd35a",
+    "scripts/auditar-control-tienda.js": "d3a772121e4ec4fed66966cf98f01501fe81fb0467ac96221d3af611bf3a8575",
+    "config/ci-stages.json": "eaab4b9cce0fba65b4ebb62921bdeeec7d63db344611a76dcf3df5bf14f7ac86",
+    "tests/admin/product-workspaces.test.mjs": "9cbc6bc0499839682db1ba38171db0f2472be34b5e09dc1eec41cac23909b780",
+    "tests/admin/firestore-list-page.test.mjs": "f08c1cbee8877e9d6db75b0b2fc3398a69624bb1b981a06d7cc193a998e4b5e5",
+    "tests/admin/private-work-pagination-session.test.mjs": "9c561ee9363f9cf4731d47ac946df3331c26ff7c625818e2e59ef9a69de48cbe",
+    "tests/auth/store-gate-product-publication-audit.test.mjs": "3dc7a89c905bfd42aa0efdf99209ee081c1e8eba30bda83820d6701b3a1cdac7",
+    "tests/integration/commerce-firestore.test.mjs": "3bfec0066c1d368bdf15bf22e9e861ba0b291530f4e132f85d637b2ffdc5e4b0",
+    "tests/ui-ux/product-workspaces.spec.js": "83ad300faf003916244e2ce952aa48e0ba0b5739d459b5711bfbe8208410b5db"
+  },
+  "suites": [
+    {
+      "name": "Node administrativo y auditor",
+      "status": "PASS_LOCAL",
+      "command": "node --test tests/admin/*.test.mjs tests/auth/store-gate-product-publication-audit.test.mjs",
+      "tests": 150,
+      "passed": 150,
+      "logSha256": "1db62db67cf29524b29025a2cedc4ef0690b1711d62c088253b7a9f9d9735dc3"
+    },
+    {
+      "name": "REST/CAS real aislado",
+      "status": "PASS_LOCAL",
+      "command": "npm run test:commerce-integration",
+      "tests": 13,
+      "passed": 13,
+      "fixture": "205 borradores abiertos, uno cerrado y otro de dueño diferente; tres páginas y orden estable por documento; sin producto público creado",
+      "logSha256": "fd10fc0dc377da6c64b9c0b5fb917c84c3019b479c6059d9aba65e749db3d211"
+    },
+    {
+      "name": "Paginación móvil sobre fuente final",
+      "status": "PASS_LOCAL",
+      "command": "npx playwright test tests/ui-ux/product-workspaces.spec.js --grep 'carga páginas' --project=chromium --retries=0",
+      "tests": 1,
+      "passed": 1,
+      "logSha256": "afacc35e4067b7cfeed8bda0adf08803f92e521ac7c7a2a1306ce3542eec9cde"
+    },
+    {
+      "name": "Workspace completo antes del refuerzo adicional de cambio de rol",
+      "status": "PASS_LOCAL",
+      "command": "npx playwright test tests/ui-ux/product-workspaces.spec.js --project=chromium --retries=0",
+      "tests": 24,
+      "passed": 24,
+      "scope": "No se atribuye a los bytes posteriores del refuerzo de sesión; éste tiene dos pruebas Node específicas y la nueva corrida móvil. CI ejecuta todo el workspace sobre la cabeza final.",
+      "logSha256": "976e2247edc80c71d87d7da8d7c1f6b951eb5c33b193d2013689207a10b8c23f"
+    },
+    {
+      "name": "Build Pages",
+      "command": "npm run build:pages",
+      "status": "PASS_LOCAL",
+      "logSha256": "ad50b86a22fc5bb8beab60938ed8958c23c7fdf8bbdc0f0d6f96f13ddd0dd637"
+    },
+    {
+      "name": "Preflight completo",
+      "command": "npm run ci:preflight",
+      "status": "PASS_LOCAL",
+      "commands": [
+        {
+          "command": "npm run audit:level1",
+          "seconds": 1.479,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:part2h",
+          "seconds": 0.634,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:site-structure",
+          "seconds": 2.258,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:architecture-contracts",
+          "seconds": 0.637,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:level3",
+          "seconds": 0.885,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:typography",
+          "seconds": 3.119,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:colors",
+          "seconds": 1.487,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:styles",
+          "seconds": 0.43,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:modular-architecture",
+          "seconds": 0.493,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:tintin",
+          "seconds": 1.865,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:emails",
+          "seconds": 0.325,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:collections",
+          "seconds": 0.584,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:images",
+          "seconds": 0.344,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:content",
+          "seconds": 0.493,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:security",
+          "seconds": 0.33,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:release",
+          "seconds": 0.419,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:integral",
+          "seconds": 0.428,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:diagnostics",
+          "seconds": 18.911,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:diagnostic-findings",
+          "seconds": 0.644,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:postphase",
+          "seconds": 0.402,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:help-pages",
+          "seconds": 0.427,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:aux-pages",
+          "seconds": 0.361,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:final-integration",
+          "seconds": 1.048,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:performance",
+          "seconds": 0.885,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:performance-regressions",
+          "seconds": 0.664,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:page-loading",
+          "seconds": 1.23,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:hero-background-controls",
+          "seconds": 0.422,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:storegate-deadlock",
+          "seconds": 0.772,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:app-check-bootstrap",
+          "seconds": 0.504,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase5",
+          "seconds": 0.979,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase6",
+          "seconds": 1.151,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase7-catalog",
+          "seconds": 0.544,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase8-ui",
+          "seconds": 0.63,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase10",
+          "seconds": 0.526,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase11",
+          "seconds": 0.787,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:public-operational-contract",
+          "seconds": 0.471,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:cache-versioning",
+          "seconds": 1.933,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run test:fast",
+          "seconds": 11.386,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node scripts/auditar-legal-paginas.js",
+          "seconds": 0.053,
+          "status": 0,
+          "signal": null
+        }
+      ],
+      "logSha256": "6a3205ad039cf4574c0952ab7bfad7b9dee348858256deeb8a3f41cd23855334"
+    },
+    {
+      "name": "Commerce completo",
+      "status": "PASS_LOCAL",
+      "command": "node scripts/ci-stage.mjs commerce",
+      "commands": [
+        {
+          "command": "npm run audit:level2",
+          "seconds": 0.226,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:store-gate",
+          "seconds": 0.24,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:secure-orders",
+          "seconds": 4.399,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:checkout-delivery",
+          "seconds": 0.15,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:cart",
+          "seconds": 0.174,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:admin-orders",
+          "seconds": 1.873,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node --test tests/auth/*.test.mjs",
+          "seconds": 1.73,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run test:accounts",
+          "seconds": 2.476,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node --test tests/wholesale/*.test.mjs",
+          "seconds": 0.341,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run test:cart-persistence",
+          "seconds": 0.493,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node --test tests/catalog/color-photos.test.mjs tests/catalog/variant-presentation.test.mjs tests/catalog/product-colors.test.mjs",
+          "seconds": 0.282,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run test:products-sync",
+          "seconds": 5.04,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run test:cart-quantity-browser",
+          "seconds": 10.997,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npx playwright test tests/ui-ux/product-shape-selection.spec.js --project=chromium --retries=0",
+          "seconds": 72.432,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npx playwright test tests/checkout/coupon-recovery.spec.js tests/ui-ux/product-small-controls.spec.js tests/login/profile-availability-recovery.spec.js --project=chromium",
+          "seconds": 159.273,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npx playwright test tests/checkout/paypal-fictitious-browser.spec.js tests/checkout/login-required-browser.spec.js tests/checkout/availability-browser.spec.js tests/catalog/search-responsive.spec.js tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium",
+          "seconds": 300.692,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npx playwright test tests/profile/wholesale-session-recovery.spec.js --project=chromium",
+          "seconds": 5.973,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npx playwright test tests/cart/color-choice-browser.spec.js --project=chromium --retries=0",
+          "seconds": 11.712,
+          "status": 0,
+          "signal": null
+        }
+      ],
+      "logSha256": "42050db76d74e9da394988b938d9316226e690e039e2f5d07ad010d1c20434b4",
+      "scope": "Datos sintéticos; comandos de checkout/pagos son regresiones del contrato existente, sin cambios a esos flujos ni proveedores reales."
+    }
+  ],
+  "retention": "Sin caducidad automática; cierre/descarte explícito y auditoría. No borrado de datos/fotos. Paginación elimina techo de acceso.",
+  "ordering": "ListDocuments con cursor en orden de documento predeterminado. Evita dependencia de índices y limitación del emulador con orderBy+pageToken.",
+  "remoteCI": "Resultado y SHA en los checks de PR1241 contra main; esos registros y el merge son la autoridad remota. No heredar el run40303230270 fallido.",
+  "limitations": [
+    "No prueba de hardware/Safari nativo/lector físico.",
+    "No transacciones reales, cobros, correos, migración o deploy manual de Rules."
+  ]
+}

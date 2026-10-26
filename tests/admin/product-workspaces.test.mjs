@@ -8,7 +8,7 @@ const actor={uid:'qa-admin',role:'superadmin'},key='qa-product',path=productWork
 const product={name:'Anillo',category:'anillos',price:30000,priceBefore:null,stock:4,active:true,oferta:false,destacado:false,description:'Descripción completa',imageUrl:'https://img.test/cover.webp',publicationStatus:'active',productTemplate:'default',seoTitle:'',seoDescription:''};
 function store(initial={}){
  const docs=new Map(Object.entries(initial).map(([path,data])=>[path,{fields:encode(data),updateTime:'initial'}]));let sequence=0;const writes=[];
- const io={get:async(_,path)=>docs.get(path),list:async(_,path)=>[...docs].filter(([key])=>key.startsWith(path+'/')).map(([,doc])=>doc),commit:async(_,batch)=>{
+ const io={get:async(_,path)=>docs.get(path),listPage:async(_,path)=>({documents:[...docs].filter(([key])=>key.startsWith(path+'/')).map(([,doc])=>doc),nextPageToken:''}),commit:async(_,batch)=>{
   for(const write of batch){const doc=docs.get(write.path);if(write.currentDocument?.exists===false && doc || write.currentDocument?.updateTime && write.currentDocument.updateTime!==doc?.updateTime)throw Object.assign(Error('Conflicto CAS'),{status:409});}
   for(const write of batch){docs.set(write.path,{fields:encode({...decode(docs.get(write.path)?.fields || {}),...decode(write.fields)}),updateTime:String(++sequence)});writes.push(write);}
  }};return {docs,writes,io,data:path=>decode(docs.get(path)?.fields || {})};
@@ -64,4 +64,20 @@ test('descartar conserva tombstone e historial y no toca versión publicada ni a
 test('límites, campos desconocidos, URLs temporales e identidades inválidas',async()=>{
  for(const snapshot of [{secret:'bad'},{imageUrl:'blob:temporary'},{name:'x'.repeat(20001)},JSON.parse('{"name":{"__proto__":{}}}')])await assert.rejects(draft(store(),snapshot),e=>e.status===422);
  assert.throws(()=>productWorkPath('qa','../other'));assert.throws(()=>productWorkPath('','key'));
+});
+
+test('listado pagina sin truncar a100/1000, mantiene permisos y restringe siempre al dueño autenticado',async()=>{
+ const s=store(),calls=[];
+ const row=(key,extra={})=>({fields:encode({key,ownerUid:actor.uid,private:false,closed:false,snapshot:{name:key},updatedAt:'2026-10-26T10:00:00Z',...extra})});
+ s.io.listPage=async(_,root,options)=>{
+  calls.push({root,...options});
+  return options.pageToken?{documents:[row('final'),row('ajeno',{ownerUid:'other'}),row('cerrado',{closed:true})],nextPageToken:''}:{documents:Array.from({length:100},(_,i)=>row('work_'+i)),nextPageToken:'opaque/next+=123'};
+ };
+ const first=await productEditorWorkspace({},{action:'listProductWork',ownerUid:'other'},actor,s.io);
+ assert.equal(first.items.length,100);assert.equal(first.nextPageToken,'opaque/next+=123');assert.equal(first.limited,true);
+ const last=await productEditorWorkspace({},{action:'listProductWork',pageToken:first.nextPageToken},actor,s.io);
+ assert.deepEqual(last.items.map(x=>x.key),['final']);assert.equal(last.limited,false);
+ assert(calls.every(x=>x.root===`productEditorWorkspaces/${actor.uid}/items` && x.pageSize===100));
+ assert.equal(calls[1].pageToken,first.nextPageToken);assert.equal(s.writes.length,0);
+ for(const pageToken of [42,{},'x'.repeat(4097),'bad\npage'])await assert.rejects(productEditorWorkspace({},{action:'listProductWork',pageToken},actor,s.io),e=>e.status===422);
 });

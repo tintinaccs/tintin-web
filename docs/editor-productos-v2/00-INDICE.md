@@ -53,3 +53,5 @@ Registrar agente, fecha, archivos/funciones afectados, comandos realmente ejecut
 - [Versiones canónicas](../arquitectura-versiones-canonicas.md), [CI](../contratos-arquitectura-ci.md), [calidad](../contratos-calidad.md).
 
 Una discrepancia entre esta fotografía documental y el código futuro exige investigar y registrar la resolución; no implementar una segunda autoridad.
+
+- [24 — Integración y cierre autorizado de las seis fases](24-INTEGRACION-Y-CIERRE.md).

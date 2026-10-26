@@ -74,3 +74,7 @@ Refinamiento Apple-inspired de agregar/editar, sin cambiar estructura ni motor c
 ## 2026-10-26 — Continuación UI07 (Codex /root, GPT-6)
 
 La prueba con el publicador real reproduce recuperación incompleta tras revalidar membresía de colecciones. Se reutiliza carga canónica, conserva ficha visible y cubre búsqueda informativa. Regresión RED/GREEN y recibo adicional en evidencias-f56.json. PR1241 sobre Fase4, sin merge/deploy; ver los resultados de esta continuación en el recibo, sin heredar PASS históricos.
+
+## 2026-10-26 — Integración/merge autorizados (Codex /root, GPT-6)
+
+PR1241 pasa a main con Fases1–6. Se corrige auditor de tienda obsoleto y truncado del listado privado mediante paginación. Ver informe24 y recibo de cierre; autorización nueva prevalece sobre restricciones anteriores de merge. Sin despliegues manuales ni operaciones comerciales reales.

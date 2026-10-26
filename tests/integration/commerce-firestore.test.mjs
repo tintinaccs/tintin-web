@@ -25,6 +25,11 @@ async function request(suffix, body) {
   return data;
 }
 const deps = {
+  async listPage(_env,path,{pageSize,pageToken}) {
+    const params=new URLSearchParams({pageSize:String(pageSize)});
+    if(pageToken)params.set('pageToken',pageToken);
+    return await request('/'+path+'?'+params.toString().replace(/\+/g,'%20')) || {documents:[],nextPageToken:''};
+  },
   get: (_env, path) => request('/' + path),
   async batchGet(_env, paths) {
     const rows = await request(':batchGet', { documents: paths.map(path => prefix + path) });
@@ -186,6 +191,22 @@ test('progreso privado en Firestore: CAS, recuperación y cierre atómico al pub
  assert.equal((await product(key)).stock,2);
  const closed=await productEditorWorkspace({},{action:'readProductWork',key},admin,deps);
  assert.equal(closed.work,null);assert.equal(closed.revision,saved.revision+1);
+});
+
+test('Progreso privado: paginación REST real recupera más de100 sin perder filtros ni orden',async()=>{
+ const actor={uid:'phase6-pagination',role:'superadmin'},rootPath=`productEditorWorkspaces/${actor.uid}/items`;
+ const works=Array.from({length:205},(_,i)=>({key:`page_${String(i).padStart(3,'0')}`,ownerUid:actor.uid,private:true,closed:false,updatedAt:new Date(Date.UTC(2026,9,26,0,0,i)),snapshot:{name:`Borrador ${i}`}}));
+ works.push({...works[0],key:'closed',closed:true},{...works[0],key:'foreign',ownerUid:'other'});
+ await deps.commit({},works.map(work=>({path:`${rootPath}/${work.key}`,fields:encodeFirestoreFields(work)})));
+ let pageToken='',all=[],pages=0;
+ do {
+  const page=await productEditorWorkspace({},{action:'listProductWork',pageToken},actor,deps);
+  assert(page.items.length<=100);all.push(...page.items);pageToken=page.nextPageToken;
+  assert.equal(page.limited,Boolean(pageToken));assert(++pages<=4);
+ }while(pageToken);
+ assert.equal(all.length,205);assert.equal(new Set(all.map(row=>row.key)).size,205);
+ assert.equal(all[0].key,'page_000');assert.equal(all.at(-1).key,'page_204');
+ assert.equal(await deps.get({},'products/page_204'),null);
 });
 
 test('Editor v2: lote mixto comercial atómico y conflicto antes de escribir',async()=>{

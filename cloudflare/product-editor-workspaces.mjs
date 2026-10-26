@@ -1,4 +1,4 @@
-import {decodeFirestoreFields,encodeFirestoreFields,firestoreAdminGet,firestoreAdminListAll} from './firebase-admin-ligero.js';
+import {decodeFirestoreFields,encodeFirestoreFields,firestoreAdminGet,firestoreAdminListPage} from './firebase-admin-ligero.js';
 import {firestoreAdminBatchCommit} from './firestore-admin-batch.js';
 import {productFingerprint} from '../js/admin/products/maestro-productos-core.mjs';
 
@@ -40,14 +40,15 @@ function validateSnapshot(snapshot,actor){
   if(new TextEncoder().encode(JSON.stringify(snapshot)).length>450000)fail('El progreso supera el tamaño admitido.');
   return structuredClone(snapshot);
 }
-export async function productEditorWorkspace(env,body,actor,io={get:firestoreAdminGet,commit:firestoreAdminBatchCommit,list:firestoreAdminListAll}){
+export async function productEditorWorkspace(env,body,actor,io={get:firestoreAdminGet,commit:firestoreAdminBatchCommit,listPage:firestoreAdminListPage}){
   if(!['admin','superadmin'].includes(actor?.role))fail('No tenés permiso para trabajar con borradores.',403);
   if(body.action==='listProductWork'){
     const permissions=await access(env,actor,null,io);
     const root=productWorkPath(actor.uid,'index').replace(/\/index$/,'');
-    const documents=await io.list(env,root,1000);
-    const works=documents.map(document=>decodeFirestoreFields(document.fields || {})).filter(work=>work.ownerUid===actor.uid && !work.closed && (!work.private || actor.role==='superadmin') && permissions?.[work.productId?'editar':'crear']!==false).sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt))).slice(0,100);
-    return {items:works.map(work=>({key:work.key,productId:work.productId,name:work.snapshot?.name || 'Producto sin nombre',imageUrl:work.snapshot?.imageUrl || '',revision:work.revision,updatedAt:work.updatedAt,publicationStatus:'draft'})),limited:works.length===100 || documents.length>=1000};
+    if(body.pageToken!=null && (typeof body.pageToken!=='string' || body.pageToken.length>4096 || /[\u0000-\u001f\u007f]/.test(body.pageToken)))fail('Página de borradores inválida.');
+    const page=await io.listPage(env,root,{pageSize:100,pageToken:body.pageToken || ''});
+    const works=page.documents.map(document=>decodeFirestoreFields(document.fields || {})).filter(work=>work.ownerUid===actor.uid && !work.closed && (!work.private || actor.role==='superadmin') && permissions?.[work.productId?'editar':'crear']!==false);
+    return {items:works.map(work=>({key:work.key,productId:work.productId,name:work.snapshot?.name || 'Producto sin nombre',imageUrl:work.snapshot?.imageUrl || '',revision:work.revision,updatedAt:work.updatedAt,publicationStatus:'draft'})),nextPageToken:page.nextPageToken || '',limited:Boolean(page.nextPageToken)};
   }
   const path=productWorkPath(actor.uid,body.key),document=await io.get(env,path),work=decodeFirestoreFields(document?.fields || {});
   if(document && (work.ownerUid!==actor.uid || work.private && actor.role!=='superadmin'))fail('No tenés permiso para este progreso privado.',403);

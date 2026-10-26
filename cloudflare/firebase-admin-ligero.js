@@ -621,15 +621,22 @@ export async function firestoreAdminDelete(env, path) {
   if (response.status !== 404 && !response.ok) throw new Error(`Firestore DELETE falló (${response.status})`);
 }
 
-export async function firestoreAdminList(env, path, pageSize = 300) {
+/** Una página del listado canónico; el cursor queda ligado a la ruta pedida. */
+export async function firestoreAdminListPage(env, path, {pageSize=100,pageToken=''}={}) {
   const sa = parseServiceAccount(env);
   const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
-  const url = `${firestoreDocUrl(sa, path)}?pageSize=${Math.max(1, Math.min(300, Number(pageSize) || 300))}`;
-  const response = await fetch(url, { headers: { authorization: `Bearer ${accessToken}` } });
-  if (response.status === 404) return [];
-  if (!response.ok) throw new Error(`Firestore LIST falló (${response.status})`);
-  const data = await response.json().catch(() => ({}));
-  return Array.isArray(data.documents) ? data.documents : [];
+  const params = new URLSearchParams({pageSize:String(Math.max(1,Math.min(300,Number(pageSize)||100)))});
+  if(pageToken)params.set('pageToken',pageToken);
+  const response = await fetch(`${firestoreDocUrl(sa,path)}?${params.toString().replace(/\+/g,'%20')}`,{headers:{authorization:`Bearer ${accessToken}`}});
+  if(response.status===404)return {documents:[],nextPageToken:''};
+  if(!response.ok)throw new Error(`Firestore LIST falló (${response.status})`);
+  const data=await response.json();
+  if(data.documents!==undefined && !Array.isArray(data.documents))throw new Error('Firestore LIST devolvió una página inválida.');
+  return {documents:data.documents || [],nextPageToken:typeof data.nextPageToken==='string'?data.nextPageToken:''};
+}
+
+export async function firestoreAdminList(env,path,pageSize=300) {
+  return (await firestoreAdminListPage(env,path,{pageSize})).documents;
 }
 
 /** Lista una colección completa de forma paginada, con un techo explícito. */

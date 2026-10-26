@@ -127,3 +127,27 @@ for(const width of [1366,1920])test(`acciones compactas junto al título en escr
  expect(Math.abs(actions.y-back.y)).toBeLessThan(8);
  await expect(page.locator('#prod-save-btn')).toBeInViewport();
 });
+
+test('Borradores carga páginas, conserva la lista tras fallo y reintenta el mismo cursor sin duplicar',async({page})=>{
+ await open(page,390,844);
+ const requests=[];let failPage=true;
+ await page.route('https://tintin.test/api/admin-order-mutation*',async route=>{
+  const body=route.request().postDataJSON();requests.push(body.pageToken || '');
+  if(body.pageToken && failPage){failPage=false;return route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({ok:false,error:'Red interrumpida'})});}
+  const items=body.pageToken?[{key:'qa-first',name:'Primer borrador actualizado'},{key:'qa-second',name:'Segundo borrador'}]:[{key:'qa-first',name:'Primer borrador'}];
+  await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,result:{items,nextPageToken:body.pageToken?'':'page2',limited:!body.pageToken}})});
+ });
+ await page.locator('#prod-name').fill('Disparar actualización');await saveProgress(page);await page.locator('.tt-work-back').click();await page.mouse.move(380,700);
+ await page.getByRole('button',{name:/Borradores privados \(1\)/}).click();
+ const panel=page.getByRole('region',{name:'Progreso privado'});
+ await expect(panel.locator('[data-action="work-continue"]')).toHaveCount(1);
+ await panel.getByRole('button',{name:'Cargar más borradores',exact:true}).click();
+ await expect(panel.getByRole('alert')).toContainText('Red interrumpida');
+ await expect(panel.locator('[data-action="work-continue"]')).toHaveCount(1);
+ await panel.getByRole('button',{name:'Reintentar',exact:true}).click();
+ await expect(panel.locator('[data-action="work-continue"]')).toHaveCount(2);
+ await expect(panel.getByText('Primer borrador actualizado',{exact:true})).toBeVisible();
+ await expect(panel.getByRole('button',{name:'Cargar más borradores',exact:true})).toHaveCount(0);
+ expect(requests.slice(-2)).toEqual(['page2','page2']);
+ expect(await page.evaluate(()=>[...window.qaProductStore.keys()].filter(key=>key.startsWith('products/')).length)).toBe(0);
+});
