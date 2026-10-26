@@ -1,3 +1,7 @@
+## 2026-10-26 — Lectura de Checkout y reserva de logo
+
+Autoridades: checkout-maintenance.css y sharedFooter del constructor público. Texto de cinco pasos mantiene legibilidad y contenido al ampliar; atributos HTML reservan104×56 del logo antes del CSS en los footers generados. Consumidores de estilos renuevan URLs transitivas y los derivados desde generadores. No lógica de pedidos/pagos, Auth ni datos. Se verifican otros cinco puntos del informe sin introducir sus overrides innecesarios; evidencia en docs/agent/VALIDACION-AUDITORIA-VISUAL-20261026.md y CURRENT_STATE.
+
 ## 2026-10-26 — Consolidación de dependencias de desarrollo
 
 Autoridades: package.json y package-lock.json. Reúne propuestas1231/1242 de fast-uri/Firebase CLI/SDK npm y corrige hallazgos transitivos HIGH mediante rangos compatibles. Afecta instalación, emuladores y herramientas; el SDK CDN y las fuentes de aplicación no cambian. Se conservan integridad, plan protegido, gates y autor confiable; derivados desde constructores canónicos. Evidencia en docs/agent/DEPENDENCIAS-1231-1242-20261026.md y CURRENT_STATE.

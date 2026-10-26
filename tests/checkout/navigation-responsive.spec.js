@@ -50,6 +50,8 @@ async function expectCheckoutClearOfHeader(page) {
   expect(geometry.overflow).toBe(false);
   for(const label of geometry.labels){expect(label.left).toBeGreaterThanOrEqual(0);expect(label.right).toBeLessThanOrEqual(geometry.width);}
   await expect(page.locator('.ck-step-label')).toHaveCount(5);
+  const labels=await page.locator('.ck-step-label').evaluateAll(nodes=>nodes.map(node=>({textSize:parseFloat(getComputedStyle(node).fontSize),clipped:node.scrollWidth>node.clientWidth+1})));
+  for(const label of labels){expect(label.textSize).toBeGreaterThanOrEqual(12);expect(label.clipped).toBe(false);}
 }
 for(const [width,height] of checkoutViewports)test(`checkout sin contenido bajo el encabezado (${width}x${height})`,async({page})=>{
   await openCheckoutLayout(page,{width,height});
@@ -182,4 +184,14 @@ for(const width of [320,390,767])for(const route of ['index.html','catalogo.html
   expect(await nav.evaluate(el=>{const box=el.getBoundingClientRect();return !!document.elementFromPoint(box.left+box.width/2,box.top+box.height/2)?.closest('#tt-tabbar');})).toBe(true);
  }
  if(width===390&&route==='checkout.html')await page.screenshot({path:'../checkout-halo-corregido.png',clip:{x:0,y:660,width:390,height:140}});
+});
+
+test('pasos del checkout conservan sus textos completos con letra ampliada al200%',async({page})=>{
+ await openCheckoutLayout(page,{width:320,height:568});
+ await page.addStyleTag({content:'html{font-size:32px!important}'});
+ await expectCheckoutClearOfHeader(page);
+ for(const label of await page.locator('.ck-step-label').all()){
+  expect(await label.evaluate(node=>getComputedStyle(node).overflowX)).not.toBe('hidden');
+  expect(await label.evaluate(node=>parseFloat(getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(24);
+ }
 });
