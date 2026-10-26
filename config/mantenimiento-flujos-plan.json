@@ -1,28 +1,18 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "e78a9de2fef629bb353cac27b394d288867f9d53",
-  "reason": "Mantener el editor único de seis fases y registrar su regresión contra montajes o diseños alternativos en CI.",
+  "baseCommit": "899a6851100b9560e6e3520e71ea3100babaa9fb",
+  "reason": "Evitar bloqueos de red APT en CI usando mirrors oficiales HTTPS y tiempos acotados, conservando firmas, dependencias y todas las pruebas.",
   "files": [
     {
-      "path": "admin.html",
-      "oldHash": "fd5daad453c547666a232fd288cf8fe252f69b2baaf65e1111badbcdd2a1644f",
-      "newHash": "92d0dbc2d4d6a3fca82edf77be929ed07a83327e85dfd3d838a6291523bfb3a7"
-    },
-    {
-      "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "8b9a165f59780776e7e3dec98361f7262d8214fdd33285b0f4fbe9d0e9c9d32d",
-      "newHash": "c2baa72f83b8ae847e9dd367f2d76779daca5d8f0af224d4b1eed7533f8263f4"
-    },
-    {
-      "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "9851e7dae9e49f1c32ee8289f55b23b28ae1ae53c3a9e5f0b2ba8aef7710602f",
-      "newHash": "266829585494aca53c2225556c4b8595e948814feb0310a513b9d547f7028632"
-    },
-    {
-      "path": "scripts/cache-version-baseline.json",
-      "oldHash": "67351ceb9e43e404937368c918199311797a2cf4c7845a7a597070cf001e21f5",
-      "newHash": "740a7cbb5e535d1166857a1312a4bac974b525bac92cc0ca172dc4ccb830fbe7"
+      "path": ".github/workflows/auditar-tintin.yml",
+      "oldHash": "7cd3d0e42d4ae1fe7a6fdc2101401de579ef88fa0a131d31132b6907ecdf2eb4",
+      "newHash": "1619395707f1cd8fdd872687939e1b7c63862cc58e2741d1823a1eca29df166e"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "github-actions",
+    "github-actions__deployments__30",
+    "github-actions__pruebas-automatizadas__31",
+    "pruebas-automatizadas"
+  ]
 }

@@ -800,3 +800,8 @@ compartido, la disponibilidad de filas históricas ni checkout.
 ### 26/10/2026 — Seguimiento histórico y guardado seguro de Perfil
 
 Nueva rama desde main1245, sin portar código antiguo. Perfil valida antes de reservar identidades y conserva las reservas anteriores ante fallo; libera sólo tras setDoc confirmado. El handler administra la operación pendiente en lugar del timeout1800ms de mantenimiento y descarta UI/continuaciones de otra generación/UID. Consume las funciones reserve/release existentes; Rules/validación/roles sin cambios. Seis regresiones nuevas en test:login-profile, render inicial/direcciones y contratos de dominio. Versiones transitivas, shell, CSP, caché, plan y manifiestos desde autoridades; plan calculado después del build final. Actions antiguas canceladas e issues conciliados con evidencia externa; activaciones/manuales no certificadas por pruebas aisladas.
+
+
+### 26/10/2026 — Red de APT en runners de navegador
+
+Los cuatro jobs de CI preparan mirrors oficiales HTTPS y timeout30s/reintentos2 antes del mismo playwright install --with-deps chromium. El ajuste de APT permanece para las instalaciones WebKit posteriores del job. No cambia aplicación, dependencias bloqueadas, permisos, validaciones, matrices ni límites de ejecución. Se parte de899a6851, preservando1246 y1248. Plan protegido y manifiestos mediante generadores existentes; no reactivar código de ejecuciones antiguas.

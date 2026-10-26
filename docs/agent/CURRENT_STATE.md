@@ -1,3 +1,7 @@
+## 2026-10-26 — Evitar bloqueo del mirror Ubuntu en CI actual
+
+Codex /root. Base899a6851 (#1248), que preserva íntegra la reparación Perfil de1246/e78a9de2. CI main40389682500 cancelada: Install Chromium quedó en apt-get update desde19:47 hasta20:42UTC contra HTTP azure.archive. La CI anterior40380530922 también agotó55min, con pruebas runtime iniciadas al final después de instalaciones lentas. Se reintentó sólo comercio y dependientes de la versión ACTUAL, sin reactivar e78 anterior. El mirror volvió a demorar varios minutos. Se corrige la preparación del runner, no la aplicación: script compartido usado por los cuatro jobs de navegador cambia el mirror regional por Ubuntu oficial HTTPS y fija timeout30s/reintentos2 de APT. Conserva suites, claves, firmas, instalación --with-deps, tests y límites del job. No ejecutable fuera de GitHub Actions/Linux. Verificación bash/YAML y preflight; CI/merge del nuevo SHA pendientes. Ocho runs antiguos permanecen cancelados y cinco issues operativos abiertos con alcance actualizado. Perfil1246 sí obtuvo CI completa40376208312 y merge protegido, producción40380534105SUCCESS; no afirmar su CI posterior completa porque fue cancelada.
+
 ## Estado actual — versión única del editor,26/10/2026
 
 Codex /root. La titular ordena conservar exclusivamente el editor de seis fases.
