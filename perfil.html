@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="3f71b47008607fdd55cbade3f4b3048006141bc4033773f11a4e2e4b51625ad5">
+  <meta name="tintin-page-revision" content="b8605c4a90dcf996a3e263c53536d7f28c92ca46f8efa4aaa43b620664ecea5f">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -9,7 +9,7 @@
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20261026-editor-closure-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261024-foco-paneles-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261026-visual-audit-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261026-profile-save-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261021-iconos-rosa-1">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261021-iconos-rosa-1">
@@ -22,7 +22,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261026-visual-audit-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261026-profile-save-1">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <meta name="description" content="Mi perfil en Tintin Accesorios. Gestioná tu cuenta, pedidos y datos." />
   <link rel="canonical" href="https://tintinaccs.com/perfil.html" />
@@ -264,7 +264,7 @@
 
 <!-- Scripts -->
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261026-visual-audit-1"></script>
+<script src="tienda.js?v=tintin-20261026-profile-save-1"></script>
 
 <script type="module">
 import { auth, db, appCheckReady } from "./js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -282,9 +282,9 @@ import { MAX_SAVED_LOCATIONS, readAddressBook, addressBookPatch, addAddress, rem
 import { readAccountIdentity } from "./js/pages/profile/estado-canonico-perfil.mjs?v=tintin-20261022-avatar-inicial-1";
 import { accountAccessSummary } from "./js/core/auth/presentacion-acceso.mjs?v=tintin-20261004-location-consistency-1";
 import { DEFAULT_COUNTRY, phoneKey, normalizePhone, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
-import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
+import { reservePhone, releasePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
-import { changeReservedUsername } from "./js/components/forms/reserva-username.js?v=tintin-20261010-whatsapp-release-5";
+import { reserveUsername, releaseUsername } from "./js/components/forms/reserva-username.js?v=tintin-20261010-whatsapp-release-5";
 import { isValidUsernameFormat, isReservedUsername, usernameKey } from "./js/components/forms/utilidades-username.js?v=tintin-20261010-whatsapp-release-5";
 
 const ROLE_COLORS = {
@@ -679,46 +679,55 @@ async function loadProfile(user, attempt = 0) {
   };
 
   // Save
+  let profileSaveInFlight = false;
   document.getElementById('btn-guardar-perfil').onclick = async () => {
-    if (!profileConfirmed || generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
-    const release = () => window.TintinReleaseProfileButton?.('btn-guardar-perfil');
-    const telefonoIngresado = document.getElementById('perfil-tel').value.trim();
-    const country = DEFAULT_COUNTRY;
-    const nuevoTelefono = normalizePhone(telefonoIngresado, country).value;
-    if (!isNationalMobileInput(telefonoIngresado)) {
-      toast('❌ Escribí un celular válido: 0912 345 678 o 912 345 678');
-      document.getElementById('perfil-tel').focus();
-      release();
-      return;
-    }
-    const usernameInput = document.getElementById('perfil-username');
-    const nuevoUsername = usernameInput.value.trim().toLowerCase();
-    const usernameYaCambiado = !!userData?.usernameChangedAt;
-    const usernameActual = (userData?.username || '').toLowerCase();
-    const cambioUsername = usernameEditable && !usernameYaCambiado && nuevoUsername !== usernameActual;
-
-    if (cambioUsername && nuevoUsername) {
-      if (!isValidUsernameFormat(nuevoUsername) || isReservedUsername(nuevoUsername)) {
-        toast('❌ Usuario inválido: 3 a 20 caracteres, minúsculas, números y guion bajo');
+    const isCurrent = () => profileConfirmed && generation === profileGeneration && auth.currentUser?.uid === user.uid;
+    if (!isCurrent() || profileSaveInFlight) return;
+    profileSaveInFlight = true;
+    const saveButton = document.getElementById('btn-guardar-perfil');
+    saveButton.disabled = true;
+    saveButton.dataset.ttBusy = '1';
+    saveButton.setAttribute('aria-busy', 'true');
+    const release = () => {
+      profileSaveInFlight = false;
+      if (!isCurrent()) return;
+      saveButton.disabled = false;
+      saveButton.dataset.ttBusy = '0';
+      saveButton.removeAttribute('aria-busy');
+      window.TintinReleaseProfileButton?.('btn-guardar-perfil');
+    };
+    let cambioUsername = false;
+    try {
+      const telefonoIngresado = document.getElementById('perfil-tel').value.trim();
+      const country = DEFAULT_COUNTRY;
+      const nuevoTelefono = normalizePhone(telefonoIngresado, country).value;
+      if (!isNationalMobileInput(telefonoIngresado)) {
+        toast('❌ Escribí un celular válido: 0912 345 678 o 912 345 678');
+        document.getElementById('perfil-tel').focus();
         release();
         return;
       }
-    }
+      const usernameInput = document.getElementById('perfil-username');
+      const nuevoUsername = usernameInput.value.trim().toLowerCase();
+      const usernameYaCambiado = !!userData?.usernameChangedAt;
+      const usernameActual = (userData?.username || '').toLowerCase();
+      cambioUsername = usernameEditable && !usernameYaCambiado && nuevoUsername !== usernameActual;
 
-    try {
-      // El teléfono pasa por la misma reserva que el alta: si no, editarlo
-      // desde acá sería la forma de saltear la unicidad. Sólo se toca la
-      // reserva cuando el número realmente cambió.
-      const claveAnterior = phoneKey(userData?.phone || '', country);
-      const claveNueva = phoneKey(nuevoTelefono, country);
-
-      if (nuevoTelefono && claveNueva !== claveAnterior) {
-        if (!isRealisticPhone(nuevoTelefono, country)) {
-          toast('❌ Ese número no parece un celular válido');
+      if (cambioUsername && nuevoUsername) {
+        if (!isValidUsernameFormat(nuevoUsername) || isReservedUsername(nuevoUsername)) {
+          toast('❌ Usuario inválido: 3 a 20 caracteres, minúsculas, números y guion bajo');
           release();
           return;
         }
-        await changeReservedPhone(db, user.uid, claveAnterior, nuevoTelefono, country);
+      }
+
+      const claveAnterior = phoneKey(userData?.phone || '', country);
+      const claveNueva = phoneKey(nuevoTelefono, country);
+      const usernameAnterior = usernameKey(usernameActual);
+      const cambioTelefono = nuevoTelefono && claveNueva !== claveAnterior;
+      if (cambioTelefono && !isRealisticPhone(nuevoTelefono, country)) {
+        toast('❌ Ese número no parece un celular válido');
+        return;
       }
 
       const submittedName = document.getElementById('perfil-nombre').value.trim();
@@ -740,15 +749,25 @@ async function loadProfile(user, attempt = 0) {
       };
 
       if (cambioUsername && nuevoUsername) {
-        // Mismo patrón que el teléfono: reserva la clave nueva y recién
-        // después libera la vieja. `usernameChangedAt` consume el único
-        // cambio permitido (ver usernameChangeValid() en firestore.rules).
-        await changeReservedUsername(db, user.uid, usernameKey(usernameActual), nuevoUsername);
+        // La reserva anterior se conserva hasta confirmar el perfil.
+        await reserveUsername(db, user.uid, nuevoUsername);
+        if (!isCurrent()) return;
         updates.username = nuevoUsername;
         updates.usernameChangedAt = serverTimestamp();
       }
 
+      if (cambioTelefono) {
+        await reservePhone(db, user.uid, nuevoTelefono, country);
+        if (!isCurrent()) return;
+      }
       await setDoc(ref, updates, { merge: true });
+      if (!isCurrent()) return;
+      // Las Rules ya confirmaron que las reservas nuevas pertenecen al UID.
+      // Un error de validación o persistencia nunca libera la identidad válida.
+      if (cambioTelefono && claveAnterior) await releasePhone(db, claveAnterior);
+      if (!isCurrent()) return;
+      if (cambioUsername && nuevoUsername && usernameAnterior) await releaseUsername(db, usernameAnterior);
+      if (!isCurrent()) return;
       userData = { ...(userData || {}), ...updates };
       const savedIdentity = readAccountIdentity(userData, user);
       document.getElementById('perfil-nombre-display').textContent = savedIdentity.name || savedIdentity.email || 'Cuenta Tintin';
@@ -762,6 +781,7 @@ async function loadProfile(user, attempt = 0) {
       }
       toast('✅ Perfil actualizado');
     } catch (e) {
+      if (!isCurrent()) return;
       if (e?.code === 'phone_already_registered') {
         toast('❌ Ese número ya está en otra cuenta');
       } else if (cambioUsername && (e?.code === 'username_already_taken' || e?.code === 'permission-denied')) {
