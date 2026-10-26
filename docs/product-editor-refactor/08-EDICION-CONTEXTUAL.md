@@ -57,3 +57,15 @@ aprobaron. Build Pages final, CSP, rutas, diagnóstico y caché aprobaron.
 
 Las pruebas usan identidad y proveedores ficticios. CI, dispositivos físicos y
 proveedores reales requieren evidencia propia del candidato final.
+
+## Corrección de regresiones de presentación
+
+CI 40399508881 sobre d2aaaa17 aprobó preflight, comercio, reglas, CodeQL y calidad;
+Administración detectó 35 expectativas anteriores al recorrido continuo, con
+383 recorridos aprobados. Se actualizaron los selectores de estructura/foco:
+no se exige ocultar precio/fotos al navegar, Categoría pertenece al cuerpo de
+campos y el acceso rápido enfoca el destino en lugar de volver al principio.
+El botón Producto se consulta dentro de su sección para distinguirlo de la
+sugerencia del contenido del paquete. Se preservan las pruebas de permisos,
+contención, datos, acciones y foco. Repetición dirigida: 35/35 Chromium aprobados.
+La siguiente CI debe validar el nuevo commit; no se hereda su resultado global.

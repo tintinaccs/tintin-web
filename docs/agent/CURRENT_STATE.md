@@ -20,6 +20,12 @@ CI del candidato PENDING; proveedores,
 hardware y publicación de este candidato NOT_VERIFIED. Informe:
 `docs/product-editor-refactor/08-EDICION-CONTEXTUAL.md`.
 
+CI 40399508881/d2aaaa17: preflight/comercio/Rules/CodeQL/calidad aprobados;
+Administración:383 aprobados,35 fallos de expectativas de presentación anterior.
+Se adaptan ubicación de fotos/categoría, foco del acceso rápido y visibilidad
+continua sin retirar aserciones comerciales/privacidad/geometría. Repetición
+dirigida35/35 PASS_LOCAL. Nueva CI pendiente; matriz completa local en curso.
+
 ## Estado actual — versión única del editor,26/10/2026
 
 Codex /root. La titular ordena conservar exclusivamente el editor de seis fases.

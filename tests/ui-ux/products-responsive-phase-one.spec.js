@@ -122,7 +122,7 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   await page.locator('#prod-price').fill('70000');
   await card.locator('[data-product-section=prices]').getByRole('button',{name:'Ajustar Precio (Gs.) * en 5000 guaraníes',exact:true}).click();await expect(page.locator('#prod-price')).toHaveValue('75000');
   await page.locator('#prod-editor-section').selectOption('general');
-  const general=page.getByRole('button',{name:'Producto',exact:true});
+  const general=card.locator('[data-product-section=general] .tt-editor-section-toggle');
   await page.locator('#prod-name').fill('Reloj Alissia');await general.click();await expect(page.locator('#prod-name')).toBeHidden();
   await general.click();await expect(page.locator('#prod-name')).toHaveValue('Reloj Alissia');
   await page.locator('#prod-editor-section').selectOption('specs');
@@ -157,7 +157,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  test(`editor real por secciones conserva campos y acciones ${width}x${height}`,async({page})=>{
   await openEditor(page,width,height);
   const card=page.locator('#prod-form-card'),section=page.locator('#prod-editor-section');
-  await expect(page.locator('#prod-name')).toBeVisible();await expect(page.locator('#prod-price')).toBeHidden();
+  await expect(page.locator('#prod-name')).toBeVisible();await expect(page.locator('#prod-price')).toBeVisible();
   await page.locator('#prod-name').fill('Anillo de prueba');
   await section.selectOption('prices');await expect(page.locator('#prod-price')).toBeVisible();await page.locator('#prod-price').fill('45000');
   await section.selectOption('private');await expect(page.locator('#prod-cost-unit')).toBeVisible();
@@ -496,8 +496,8 @@ for (const width of [320,390,768,1440]) test(`cambiar apartado reinicia el edito
  await page.locator('#prod-name').fill('Borrador conservado');
  await page.evaluate(()=>{document.querySelector('#prod-form-card .adm-card-body').scrollTop=700;scrollTo(0,500);});
  await select.selectOption('prices');
- await expect.poll(()=>page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop)).toBe(0);
- await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
+ await expect(page.locator('#prod-price')).toBeFocused();
+ await expect(page.locator('#prod-price')).toBeInViewport();
  await select.selectOption('all');
  await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
@@ -751,11 +751,13 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await page.locator('#prod-inventory-fields').evaluate(el=>el.style.display='none');
  await expect(card.locator('[data-product-section="private"]')).toBeHidden();
  const layout=card.locator('.tt-editor-layout'),main=card.locator('.tt-product-fields'),sidebar=card.locator('.tt-editor-sidebar');
- const boxes=await Promise.all([main.boundingBox(),sidebar.boundingBox()]);
- if(await card.evaluate(node=>{const style=getComputedStyle(node);return node.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)>=1200;})){expect(boxes[1].x).toBeGreaterThanOrEqual(boxes[0].x+boxes[0].width);expect(boxes[0].width).toBeGreaterThan(boxes[1].width);}
- else{expect(Math.abs(boxes[1].x-boxes[0].x)).toBeLessThanOrEqual(1);expect(boxes[1].y).toBeGreaterThanOrEqual(boxes[0].y+boxes[0].height);}
+ const media=card.locator('.tt-editor-context-media');
+ const boxes=await Promise.all([main.boundingBox(),sidebar.boundingBox(),media.boundingBox()]);
+ if(width>=1024)expect(boxes[0].x).toBeGreaterThanOrEqual(boxes[2].x+boxes[2].width);
+ else{expect(Math.abs(boxes[2].x-boxes[0].x)).toBeLessThanOrEqual(1);expect(boxes[0].y).toBeGreaterThanOrEqual(boxes[2].y+boxes[2].height);}
+ expect(boxes[1].y).toBeGreaterThanOrEqual(boxes[0].y+boxes[0].height-1);
  await expect(main.locator('#prod-description')).toHaveCount(1);
- await expect(sidebar.locator('#prod-category')).toHaveCount(1);
+ await expect(main.locator('#prod-category')).toHaveCount(1);
  await expect(sidebar.locator('#prod-publicationStatus')).toHaveCount(1);
  await sidebar.locator('.tt-product-editorial-seo > summary').click();
  await page.locator('#prod-seoTitle').fill('Reloj Alissia · Tintin');
@@ -775,7 +777,8 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
 for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768],[1440,900]])test(`editor guiado: fotos primero, contraste y borrador ${width}x${height}`,async({page})=>{
  await openEditor(page,width,height);
  const card=page.locator('#prod-form-card');
- expect(await card.locator('.tt-product-fields > [data-product-section]').first().getAttribute('data-product-section')).toBe('photos');
+ await expect(card.locator('.tt-editor-context-media > [data-product-section=photos]')).toHaveCount(1);
+ expect(await card.locator('.tt-product-fields > [data-product-section]').first().getAttribute('data-product-section')).toBe('inventory');
  await page.locator('#prod-name').fill('Pulsera conservada');
  const surfaces=await page.evaluate(()=>{const sample=selector=>getComputedStyle(document.querySelector(selector)).backgroundColor;return [sample('#prod-form-card .adm-card-body'),sample('[data-product-section=general]'),sample('#prod-name')];});
  expect(new Set(surfaces).size).toBe(3);
@@ -783,7 +786,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').click();
  await expect(page.locator('#prod-name')).toHaveValue('Pulsera conservada');
  await expect(page.locator('#prod-name')).toBeFocused();
- await expect(card.locator('[data-product-section=photos]')).toBeHidden();
+ await expect(card.locator('[data-product-section=photos]')).toBeVisible();
  await page.locator('#prod-editor-section').selectOption('all');
  await expect(card.locator('[data-product-section=photos]')).toBeVisible();
  expect(await card.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
