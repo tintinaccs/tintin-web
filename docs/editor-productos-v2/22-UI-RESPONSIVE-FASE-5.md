@@ -29,6 +29,19 @@ La matriz final, comandos, resultados y límites están en [Fase 6](23-AUDITORIA
 | UI05 | MEDIUM: en320/390 el selector comparte fila con guía/vista previa y recorta el rótulo (80,53px disponibles frente a111,38px medidos para «Todos los campos» en390). | Grid de dos filas sólo en workspace móvil: selector ocupa ancho completo; guía y vista previa conservan acceso, y guía abierta ocupa su fila. Dos regresiones RED; comprueban texto medido, selección larga, guía, foco y ancho antes de captura. |
 | UI06 | MEDIUM: acciones desktop ocupan1864px en viewport1920 y fuerzan otra fila, desproporcionadas respecto del formulario. | Desde1024px el grupo usa ancho natural y botones sin expansión, alineados con Volver/título. Dos RED; suite completa del workspace repetida23/23 después. |
 
+UI07 (MEDIUM, corrección adicional 26/10): al revalidar membresía de colecciones,
+el catálogo recibía una lista ya filtrada por el store. Una colección recuperada
+no recuperaba sus productos. Se reprodujo con el store real, caché Aros, metadata
+retenida y actualización canónica que elimina un aro y cambia stock de un reloj:
+RED esperaba reloj/stock3 y recibía[]; la corrección recarga mediante
+`ensureCurrentPage` al cambiar membresía, sin guardar un segundo catálogo.
+Una portada nueva con idéntica membresía no provoca esa recarga. La ficha visible
+conserva su suscripción y selección; búsqueda en páginas informativas se actualiza
+incluso si la proyección anterior estaba vacía. Ubicaciones: política de catálogo
+(`catalogVisibilityReady`) y store (`ensureProductsForCurrentPage`). Regresiones:
+`home-review-gallery.spec.js` y `product-fast-path.test.mjs`. Versionado transitivo
+`editor-f56-2`; no hay cambios de precios, stock persistido, Rules o checkout.
+
 UI01: `js/pages/home/resenas-clientas.js`, `css/pages/home/resenas-clientas.css`.
 UI02: `js/pages/collections/datos-publicos-colecciones.js`; consumidores originales
 `estado-colecciones.js`, `carga-colecciones.js` y presentación de colecciones.

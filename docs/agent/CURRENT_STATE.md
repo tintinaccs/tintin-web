@@ -1,3 +1,9 @@
+Validación de esta continuación:497/497 Node,96/96 Chromium, build Pages y39/39 comandos preflight PASS_LOCAL. Huellas, comandos y recibos en evidencias-f56.json; ver collectionMembershipFollowup. No se atribuyen al candidato nuevas pruebas de Rules o editor no modificados. CI remoto se registra por SHA aparte.
+
+## 2026-10-26 — Continuación Fases 5–6: revalidación canónica (Codex /root, GPT-6)
+
+Sobre12bdfe9a8ce82371c30e617ac7f189a38150d7bb, PR1241 sobre Fase4. UI07: prueba con publicador real demuestra que un catálogo ya filtrado no recupera productos de una colección nuevamente visible. Se reutiliza ensureCurrentPage(force,collectionsChanged), sin duplicar fuente de productos. La ficha aún visible conserva stock en vivo y selecciones; búsqueda informativa se vuelve a cargar. RED reproducido (esperado reloj stock3, recibido[]), GREEN dirigido y10 pruebas del fast-path aprobados. Versión pública transitiva editor-f56-2. Ver recibo adicional en evidencias-f56.json para regresiones y gates de esta continuación; los resultados anteriores conservan su alcance histórico. No merge/deploy. Persiste dictamen sin aprobación de producción y limitaciones del informe23.
+
 ## 2026-10-25 — Fases 5–6: UI pública y auditoría del editor (Codex /root, GPT-6)
 
 Base recuperada a6e197e5382cf694caf6d07272e6450a2dfe5b5b de #1240. La cadena #1237/#1238/#1239/#1240 sigue abierta; se conserva ascendencia y no se fusiona ni despliega. Main comprobado inicialmente f9399a90c73398a18c877bcaf1985491d4085913. Rama codex/editor-responsive-auditoria-fases5-6, entrega apilada sobre Fase4. La prohibición expresa del pedido prevalece sobre la instrucción permanente de merge; no retargetear a main ni habilitar auto-merge. Los informes antiguos 09–17 son de otra iteración; la secuencia vigente es18–23.

@@ -1,7 +1,7 @@
 import { normalizeProductSearch as normalize, productSearchText, productSearchScore } from '../../../core/store/busqueda-productos.mjs?v=tintin-20261021-commerce-review-1';
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261026-editor-f56-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261026-editor-f56-2';
 
 const MAX_RESULTS = 10;
 import { hasProductStock, firstAvailableVariant, productDefaultPrice } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';

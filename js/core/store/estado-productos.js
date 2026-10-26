@@ -1,7 +1,7 @@
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261015-product-fast-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261026-editor-f56-1';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261026-editor-f56-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261026-editor-f56-2';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261026-editor-f56-2';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261023-variant-engine-v2-2';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
@@ -544,11 +544,25 @@ export async function ensureProductsForSearch() {
 
 export async function ensureProductsForCurrentPage(options = {}) {
   const path = location.pathname.toLowerCase();
-  if (/(^|\/)product(?:\.html)?$/.test(path)) return loadProductPage(options);
+  if (options.collectionsChanged === true && document.getElementById('search-input')?.value?.trim()) {
+    return loadAllProducts(options);
+  }
+  if (/(^|\/)product(?:\.html)?$/.test(path)) {
+    const id = options.id || new URLSearchParams(location.search).get('id');
+    // Preserve the live stock subscription and selections of a still-visible
+    // detail when another collection changes membership.
+    if (options.collectionsChanged === true && publicProductCurrent &&
+        String(publicProductCurrent.id) === String(id) &&
+        window.TintinCatalogPolicy?.isCatalogVisible(publicProductCurrent)) {
+      return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
+    }
+    return loadProductPage(options);
+  }
   if (path.endsWith('/') || /(^|\/)index(?:\.html)?$/.test(path)) return loadHomeProducts(options);
   if (/(^|\/)(?:catalogo|collections)(?:\.html)?$/.test(path)) {
     return loadAllProducts(options);
   }
+  if (options.collectionsChanged === true && window.PRODUCTS?.length) return loadAllProducts(options);
   // Inventario histórico de rutas para auditorías: index|catalogo|collections.
   return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 }

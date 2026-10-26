@@ -268,9 +268,20 @@ export const catalogVisibilityReady = new Promise(resolve => {
   // A cached snapshot can release the first render while metadata revalidates.
   // The later snapshot updates the same policy instead of delaying products.
   loadCollections({ onData(collections) {
+    const previous = visibleCollectionSlugs;
     visibleCollectionSlugs = new Set(collections.map(collection => collection.slug));
+    const membershipChanged = previous !== null &&
+      (previous.size !== visibleCollectionSlugs.size || [...visibleCollectionSlugs].some(slug => !previous.has(slug)));
     if (Array.isArray(window.PRODUCTS)) publishFiltered(window.PRODUCTS, 'phase7-collections');
     resolve();
+    // The store filters before publishing/caching. Reuse its authoritative load
+    // when membership changes; a filtered snapshot cannot restore hidden items.
+    // Yield so a completed single-flight request can release its old result.
+    if (membershipChanged) window.setTimeout(() => {
+      window.TintinProductsStore?.ensureCurrentPage({ force: true, collectionsChanged: true })?.catch(error => {
+        window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
+      });
+    }, 0);
   } }).catch(error => {
     console.warn('[phase7-catalog-policy] No se pudo confirmar la visibilidad de colecciones; se conserva el catálogo validado sin ese filtro.', error);
     resolve();

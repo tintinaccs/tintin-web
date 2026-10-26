@@ -2060,5 +2060,408 @@
     "functionalCommit": "7fd6b7eab6ee6a467a3388133f56e166a36d7157",
     "functionalTree": "083454aec3aeac9989a51318518aafb9291ddc8e",
     "method": "Conector GitHub; blobs/árbol verificados; Git fetch posterior confirma commit local. Cierre documental posterior no cambia código."
+  },
+  "collectionMembershipFollowup": {
+    "agent": "Codex /root (GPT-6)",
+    "dateUTC": "2026-10-26",
+    "parentSha": "12bdfe9a8ce82371c30e617ac7f189a38150d7bb",
+    "finding": "UI07 MEDIUM: colección recuperada no restaura productos ya filtrados por el publicador canónico.",
+    "reproduction": {
+      "status": "RED",
+      "expected": [
+        {
+          "id": "qa-watch",
+          "stock": 3
+        }
+      ],
+      "actual": [],
+      "logSha256": "db465943d1e3c6a54b57e0ecec05ef21bc2ae29cfa0d4cb8462bc4ac2e1dc205",
+      "scope": "store real, caché Aros, metadata retenida, update canónico que elimina Aro/cambia stock Reloj"
+    },
+    "fix": "Recarga por ensureCurrentPage(force,collectionsChanged) al cambiar membresía. Conserva ficha visible y actualiza búsqueda informativa; sin segunda fuente de productos.",
+    "runtimeVersion": "tintin-20261026-editor-f56-2",
+    "sourceSha256": {
+      "js/pages/catalog/politica-visibilidad-catalogo.js": "93e39559b0b8bee749c7a7ef00b7b33626f3b811e3adefbfe8a429689fb1e498",
+      "js/core/store/estado-productos.js": "8681478424cf93d86910abee3e382f9e635ab493c8797c755f22ff6bc38784d0",
+      "tests/performance/home-review-gallery.spec.js": "cfffd5c85cfa63f720e50d29d58fff29693d50b5bc1da9f7e4f6bd77b1afcad5",
+      "tests/architecture/product-fast-path.test.mjs": "91ed096a66a2a26ebf5a3d4d963bae8d8c9d689287b3e383fed1930d3cdf59d4"
+    },
+    "verification": {
+      "node": {
+        "status": "PASS_LOCAL",
+        "command": "node --test tests/admin/*.test.mjs tests/sync/*.test.mjs tests/catalog/*.test.mjs tests/orders/*variant*.test.mjs tests/cart/*variant*.test.mjs tests/architecture/*.test.mjs",
+        "tests": 497,
+        "passed": 497,
+        "failed": 0,
+        "logSha256": "9af04583d6195425ed8b04f4b6bb33bf1514046a241e1dec723d496fe8d5b01b"
+      },
+      "specific": {
+        "status": "PASS_LOCAL",
+        "command": "node --test tests/catalog/search-authority.test.mjs tests/architecture/product-fast-path.test.mjs",
+        "tests": 12,
+        "passed": 12,
+        "logSha256": "54a603ab00b64e1a76d5c9e08bf5c9edf0ed0611e57dcd23933d2a3613315ca9"
+      },
+      "build": {
+        "status": "PASS_LOCAL",
+        "command": "npm run build:pages",
+        "logSha256": "511971a49e6e07fd4c0d6b3179e321cce84f5114daec06ff8e666fca8bcdb785"
+      },
+      "preflight": {
+        "status": "PASS_LOCAL",
+        "command": "npm run ci:preflight",
+        "commands": [
+          {
+            "command": "npm run audit:level1",
+            "seconds": 0.812,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:part2h",
+            "seconds": 0.578,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:site-structure",
+            "seconds": 1.199,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:architecture-contracts",
+            "seconds": 0.283,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:level3",
+            "seconds": 0.399,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:typography",
+            "seconds": 1.592,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:colors",
+            "seconds": 0.75,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:styles",
+            "seconds": 0.559,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:modular-architecture",
+            "seconds": 0.32,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:tintin",
+            "seconds": 1.288,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:emails",
+            "seconds": 0.624,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:collections",
+            "seconds": 0.397,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:images",
+            "seconds": 0.528,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:content",
+            "seconds": 0.298,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:security",
+            "seconds": 0.28,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:release",
+            "seconds": 0.37,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:integral",
+            "seconds": 0.56,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:diagnostics",
+            "seconds": 15.893,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:diagnostic-findings",
+            "seconds": 0.261,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:postphase",
+            "seconds": 0.269,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:help-pages",
+            "seconds": 0.4,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:aux-pages",
+            "seconds": 0.489,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:final-integration",
+            "seconds": 0.64,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:performance",
+            "seconds": 0.705,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:performance-regressions",
+            "seconds": 0.35,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:page-loading",
+            "seconds": 0.938,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:hero-background-controls",
+            "seconds": 0.199,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:storegate-deadlock",
+            "seconds": 0.292,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:app-check-bootstrap",
+            "seconds": 0.37,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase5",
+            "seconds": 1.01,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase6",
+            "seconds": 0.996,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase7-catalog",
+            "seconds": 0.339,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase8-ui",
+            "seconds": 0.545,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase10",
+            "seconds": 0.456,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:phase11",
+            "seconds": 0.608,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:public-operational-contract",
+            "seconds": 0.313,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run audit:cache-versioning",
+            "seconds": 1.994,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "npm run test:fast",
+            "seconds": 8.404,
+            "status": 0,
+            "signal": null
+          },
+          {
+            "command": "node scripts/auditar-legal-paginas.js",
+            "seconds": 0.092,
+            "status": 0,
+            "signal": null
+          }
+        ],
+        "logSha256": "b7a85fd3e2a8dd1af7e8c8b5c647865019d7ef6e1697601b891b7eba26ae8453"
+      },
+      "public": {
+        "status": "PASS_LOCAL",
+        "command": "npx playwright test tests/performance/home-review-gallery.spec.js tests/ui-ux/public-spacing-product.spec.js tests/ui-ux/wrist-collections.spec.js tests/ui-ux/product-stock-first.spec.js tests/catalog/search-responsive.spec.js tests/navigation/collection-menu-parity.spec.js --project=chromium --retries=0",
+        "tests": 96,
+        "passed": 96,
+        "failed": 0,
+        "logSha256": "65619cb2d56005c641729662c180410640a660f2c7dbe817919d7ef5f1565d52",
+        "summary": [
+          "  ✓   1 [chromium] › tests/catalog/search-responsive.spec.js:7:117 › búsqueda tolerante y recuperación de filtros 320×568 (5.1s)",
+          "  ✓   2 [chromium] › tests/catalog/search-responsive.spec.js:7:117 › búsqueda tolerante y recuperación de filtros 390×844 (4.8s)",
+          "  ✓   3 [chromium] › tests/catalog/search-responsive.spec.js:7:117 › búsqueda tolerante y recuperación de filtros 844×390 (5.5s)",
+          "  ✓   4 [chromium] › tests/catalog/search-responsive.spec.js:7:117 › búsqueda tolerante y recuperación de filtros 768×1024 (4.4s)",
+          "  ✓   5 [chromium] › tests/catalog/search-responsive.spec.js:7:117 › búsqueda tolerante y recuperación de filtros 1024×768 (3.9s)",
+          "  ✓   6 [chromium] › tests/catalog/search-responsive.spec.js:7:117 › búsqueda tolerante y recuperación de filtros 1180×820 (4.3s)",
+          "  ✓   7 [chromium] › tests/catalog/search-responsive.spec.js:7:117 › búsqueda tolerante y recuperación de filtros 1366×768 (4.3s)",
+          "  ✓   8 [chromium] › tests/catalog/search-responsive.spec.js:7:117 › búsqueda tolerante y recuperación de filtros 1920×1080 (4.7s)",
+          "  ✓   9 [chromium] › tests/catalog/search-responsive.spec.js:37:108 › página informativa carga búsqueda al usarla y conserva texto temprano 390×844 (4.4s)",
+          "  ✓  10 [chromium] › tests/catalog/search-responsive.spec.js:37:108 › página informativa carga búsqueda al usarla y conserva texto temprano 844×390 (5.2s)",
+          "  ✓  11 [chromium] › tests/catalog/search-responsive.spec.js:37:108 › página informativa carga búsqueda al usarla y conserva texto temprano 1366×768 (5.1s)",
+          "  ✓  12 [chromium] › tests/catalog/search-responsive.spec.js:59:1 › motor comercial v2 comparte precio y descuento entre tarjeta y búsqueda (4.3s)",
+          "  ✓  13 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas / en 390px (4.1s)",
+          "  ✓  14 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas /about en 390px (3.1s)",
+          "  ✓  15 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas /catalogo en 390px (3.8s)",
+          "  ✓  16 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas /collections en 390px (3.7s)",
+          "  ✓  17 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas / en 768px (5.2s)",
+          "  ✓  18 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas /about en 768px (4.5s)",
+          "  ✓  19 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas /catalogo en 768px (7.8s)",
+          "  ✓  20 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas /collections en 768px (6.2s)",
+          "  ✓  21 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas / en 1440px (5.1s)",
+          "  ✓  22 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas /about en 1440px (4.3s)",
+          "  ✓  23 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas /catalogo en 1440px (5.6s)",
+          "  ✓  24 [chromium] › tests/navigation/collection-menu-parity.spec.js:7:5 › colecciones e imágenes compartidas /collections en 1440px (5.1s)",
+          "  ✓  25 [chromium] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 320 (2.3s)",
+          "  ✓  26 [chromium] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 390 (2.2s)",
+          "  ✓  27 [chromium] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 768 (2.2s)",
+          "  ✓  28 [chromium] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 1024 (2.3s)",
+          "  ✓  29 [chromium] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 1366 (2.6s)",
+          "  ✓  30 [chromium] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 1920 (2.8s)",
+          "  ✓  31 [chromium] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 320 (1.7s)",
+          "  ✓  32 [chromium] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 390 (1.8s)",
+          "  ✓  33 [chromium] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 844 (1.8s)",
+          "  ✓  34 [chromium] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 768 (2.0s)",
+          "  ✓  35 [chromium] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 1024 (1.9s)",
+          "  ✓  36 [chromium] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 1440 (2.4s)",
+          "  ✓  37 [chromium] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 1920 (2.6s)",
+          "  ✓  38 [chromium] › tests/performance/home-review-gallery.spec.js:82:1 › portada de colección se revalida aun con caché reciente y conserva respaldo sin red (606ms)",
+          "  ✓  39 [chromium] › tests/performance/home-review-gallery.spec.js:102:1 › catálogo usa caché sin esperar red y encabezado recibe la portada revalidada (938ms)",
+          "  ✓  40 [chromium] › tests/ui-ux/product-stock-first.spec.js:16:3 › abre la variante disponible, sincroniza la foto y conserva el dorado agotado en 390px (4.3s)",
+          "  ✓  41 [chromium] › tests/ui-ux/product-stock-first.spec.js:43:66 › /catalogo envía abajo los agotados incluso con stock agregado desactualizado en 390px (4.0s)",
+          "  ✓  42 [chromium] › tests/ui-ux/product-stock-first.spec.js:43:66 › /catalogo?cat=aros envía abajo los agotados incluso con stock agregado desactualizado en 390px (3.8s)",
+          "  ✓  43 [chromium] › tests/ui-ux/product-stock-first.spec.js:16:3 › abre la variante disponible, sincroniza la foto y conserva el dorado agotado en 1440px (3.9s)",
+          "  ✓  44 [chromium] › tests/ui-ux/product-stock-first.spec.js:43:66 › /catalogo envía abajo los agotados incluso con stock agregado desactualizado en 1440px (3.4s)",
+          "  ✓  45 [chromium] › tests/ui-ux/product-stock-first.spec.js:43:66 › /catalogo?cat=aros envía abajo los agotados incluso con stock agregado desactualizado en 1440px (3.4s)",
+          "  ✓  46 [chromium] › tests/ui-ux/product-stock-first.spec.js:55:34 › tarjeta conserva una foto disponible al tocar un agotado y actualizar stock en 390px (3.9s)",
+          "  ✓  47 [chromium] › tests/ui-ux/product-stock-first.spec.js:55:34 › tarjeta conserva una foto disponible al tocar un agotado y actualizar stock en 1440px (3.9s)",
+          "  ✓  48 [chromium] › tests/ui-ux/product-stock-first.spec.js:83:34 › catálogo actualiza stock y foto sin pedir recarga ni esperar el TTL en 390px (3.1s)",
+          "  ✓  49 [chromium] › tests/ui-ux/product-stock-first.spec.js:83:34 › catálogo actualiza stock y foto sin pedir recarga ni esperar el TTL en 1440px (3.6s)",
+          "  ✓  50 [chromium] › tests/ui-ux/product-stock-first.spec.js:102:31 › ficha y SEO conservan descripción y disponibilidad por variante 390px (2.7s)",
+          "  ✓  51 [chromium] › tests/ui-ux/product-stock-first.spec.js:102:31 › ficha y SEO conservan descripción y disponibilidad por variante 1440px (3.0s)",
+          "  ✓  52 [chromium] › tests/ui-ux/public-spacing-product.spec.js:83:3 › producto y selección conservan sus marcos en 320px (4.4s)",
+          "  ✓  53 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /index.html muestra tarjetas pobladas sin recortes en 320px (2.6s)",
+          "  ✓  54 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /catalogo.html muestra tarjetas pobladas sin recortes en 320px (1.9s)",
+          "  ✓  55 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /collections.html muestra tarjetas pobladas sin recortes en 320px (1.8s)",
+          "  ✓  56 [chromium] › tests/ui-ux/public-spacing-product.spec.js:83:3 › producto y selección conservan sus marcos en 390px (3.5s)",
+          "  ✓  57 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /index.html muestra tarjetas pobladas sin recortes en 390px (2.7s)",
+          "  ✓  58 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /catalogo.html muestra tarjetas pobladas sin recortes en 390px (1.9s)",
+          "  ✓  59 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /collections.html muestra tarjetas pobladas sin recortes en 390px (2.1s)",
+          "  ✓  60 [chromium] › tests/ui-ux/public-spacing-product.spec.js:83:3 › producto y selección conservan sus marcos en 768px (3.3s)",
+          "  ✓  61 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /index.html muestra tarjetas pobladas sin recortes en 768px (2.7s)",
+          "  ✓  62 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /catalogo.html muestra tarjetas pobladas sin recortes en 768px (2.2s)",
+          "  ✓  63 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /collections.html muestra tarjetas pobladas sin recortes en 768px (1.9s)",
+          "  ✓  64 [chromium] › tests/ui-ux/public-spacing-product.spec.js:83:3 › producto y selección conservan sus marcos en 1024px (3.4s)",
+          "  ✓  65 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /index.html muestra tarjetas pobladas sin recortes en 1024px (2.6s)",
+          "  ✓  66 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /catalogo.html muestra tarjetas pobladas sin recortes en 1024px (2.1s)",
+          "  ✓  67 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /collections.html muestra tarjetas pobladas sin recortes en 1024px (1.6s)",
+          "  ✓  68 [chromium] › tests/ui-ux/public-spacing-product.spec.js:83:3 › producto y selección conservan sus marcos en 1280px (3.2s)",
+          "  ✓  69 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /index.html muestra tarjetas pobladas sin recortes en 1280px (2.7s)",
+          "  ✓  70 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /catalogo.html muestra tarjetas pobladas sin recortes en 1280px (1.9s)",
+          "  ✓  71 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /collections.html muestra tarjetas pobladas sin recortes en 1280px (1.8s)",
+          "  ✓  72 [chromium] › tests/ui-ux/public-spacing-product.spec.js:83:3 › producto y selección conservan sus marcos en 1440px (3.5s)",
+          "  ✓  73 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /index.html muestra tarjetas pobladas sin recortes en 1440px (3.0s)",
+          "  ✓  74 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /catalogo.html muestra tarjetas pobladas sin recortes en 1440px (2.1s)",
+          "  ✓  75 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /collections.html muestra tarjetas pobladas sin recortes en 1440px (2.1s)",
+          "  ✓  76 [chromium] › tests/ui-ux/public-spacing-product.spec.js:83:3 › producto y selección conservan sus marcos en 1920px (4.1s)",
+          "  ✓  77 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /index.html muestra tarjetas pobladas sin recortes en 1920px (3.0s)",
+          "  ✓  78 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /catalogo.html muestra tarjetas pobladas sin recortes en 1920px (2.1s)",
+          "  ✓  79 [chromium] › tests/ui-ux/public-spacing-product.spec.js:146:5 › /collections.html muestra tarjetas pobladas sin recortes en 1920px (2.2s)",
+          "  ✓  80 [chromium] › tests/ui-ux/public-spacing-product.spec.js:206:2 › cinco productos en Tu selección no superponen foto ni controles en 320 (3.8s)",
+          "  ✓  81 [chromium] › tests/ui-ux/public-spacing-product.spec.js:206:2 › cinco productos en Tu selección no superponen foto ni controles en 390 (3.1s)",
+          "  ✓  82 [chromium] › tests/ui-ux/public-spacing-product.spec.js:206:2 › cinco productos en Tu selección no superponen foto ni controles en 600 (4.6s)",
+          "  ✓  83 [chromium] › tests/ui-ux/public-spacing-product.spec.js:206:2 › cinco productos en Tu selección no superponen foto ni controles en 640 (5.0s)",
+          "  ✓  84 [chromium] › tests/ui-ux/public-spacing-product.spec.js:206:2 › cinco productos en Tu selección no superponen foto ni controles en 768 (3.3s)",
+          "  ✓  85 [chromium] › tests/ui-ux/public-spacing-product.spec.js:206:2 › cinco productos en Tu selección no superponen foto ni controles en 1024 (4.3s)",
+          "  ✓  86 [chromium] › tests/ui-ux/public-spacing-product.spec.js:206:2 › cinco productos en Tu selección no superponen foto ni controles en 1440 (3.7s)",
+          "  ✓  87 [chromium] › tests/ui-ux/wrist-collections.spec.js:3:139 › Pulseras reúne 13 pulseras y 9 brazaletes sin duplicar colecciones 320×568 (1.7s)",
+          "  ✓  88 [chromium] › tests/ui-ux/wrist-collections.spec.js:3:139 › Pulseras reúne 13 pulseras y 9 brazaletes sin duplicar colecciones 390×844 (2.2s)",
+          "  ✓  89 [chromium] › tests/ui-ux/wrist-collections.spec.js:3:139 › Pulseras reúne 13 pulseras y 9 brazaletes sin duplicar colecciones 844×390 (1.9s)",
+          "  ✓  90 [chromium] › tests/ui-ux/wrist-collections.spec.js:3:139 › Pulseras reúne 13 pulseras y 9 brazaletes sin duplicar colecciones 768×1024 (2.0s)",
+          "  ✓  91 [chromium] › tests/ui-ux/wrist-collections.spec.js:3:139 › Pulseras reúne 13 pulseras y 9 brazaletes sin duplicar colecciones 1024×768 (1.7s)",
+          "  ✓  92 [chromium] › tests/ui-ux/wrist-collections.spec.js:3:139 › Pulseras reúne 13 pulseras y 9 brazaletes sin duplicar colecciones 820×1180 (1.7s)",
+          "  ✓  93 [chromium] › tests/ui-ux/wrist-collections.spec.js:3:139 › Pulseras reúne 13 pulseras y 9 brazaletes sin duplicar colecciones 1180×820 (1.7s)",
+          "  ✓  94 [chromium] › tests/ui-ux/wrist-collections.spec.js:3:139 › Pulseras reúne 13 pulseras y 9 brazaletes sin duplicar colecciones 1366×768 (1.7s)",
+          "  ✓  95 [chromium] › tests/ui-ux/wrist-collections.spec.js:3:139 › Pulseras reúne 13 pulseras y 9 brazaletes sin duplicar colecciones 1440×900 (1.7s)",
+          "  ✓  96 [chromium] › tests/ui-ux/wrist-collections.spec.js:3:139 › Pulseras reúne 13 pulseras y 9 brazaletes sin duplicar colecciones 1920×1080 (1.8s)",
+          "  96 passed (5.2m)"
+        ]
+      }
+    },
+    "historicalResults": "Las suites y hashes previos son recibos de sus fuentes anteriores. Los logs temporales de la sesión anterior se perdieron al reiniciar el entorno; no se reatribuyen a esta continuación.",
+    "production": "NOT_VERIFIED; sin merge/deploy; mantiene limitaciones del informe23.",
+    "integrationRechecked": {
+      "dateUTC": "2026-10-26",
+      "phases1to4": "OPEN; mismas cabezas documentadas; PR1241 OPEN listo sobre Fase4",
+      "autoMerge": false
+    }
   }
 }

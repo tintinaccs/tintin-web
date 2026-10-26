@@ -70,3 +70,7 @@ Codex /root aplica la habilidad instalada apple-inspired-design al editor canón
 ## 2026-10-24 — Codex /root: contraste y ejemplos de entrada
 
 Refinamiento Apple-inspired de agregar/editar, sin cambiar estructura ni motor comercial. Casillas blancas, borde contrastado, rosa discreto en lienzo/separadores, títulos legibles y ejemplos suplementarios conservando etiquetas. Foco reparado contra reset heredado. Validación y límites en CURRENT_STATE.
+
+## 2026-10-26 — Continuación UI07 (Codex /root, GPT-6)
+
+La prueba con el publicador real reproduce recuperación incompleta tras revalidar membresía de colecciones. Se reutiliza carga canónica, conserva ficha visible y cubre búsqueda informativa. Regresión RED/GREEN y recibo adicional en evidencias-f56.json. PR1241 sobre Fase4, sin merge/deploy; ver los resultados de esta continuación en el recibo, sin heredar PASS históricos.

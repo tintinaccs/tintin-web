@@ -101,22 +101,35 @@ test('portada de colección se revalida aun con caché reciente y conserva respa
 
 test('catálogo usa caché sin esperar red y encabezado recibe la portada revalidada',async({page})=>{
   await page.route('https://img.test/**',route=>route.fulfill({contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=','base64')}));
-  await page.route('**/__collection-header',route=>route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="es"><nav data-collections-nav="desktop"></nav></html>'}));
-  await page.goto('/__collection-header');
-  await page.evaluate(async()=>{
+  await page.route('**/catalogo?__collection-header',route=>route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="es"><nav data-collections-nav="desktop"></nav></html>'}));
+  await page.goto('/catalogo?__collection-header');
+  await page.route('**/js/cargador-mantenimiento-pagina.js*',route=>route.fulfill({contentType:'application/javascript',body:''}));
+  const policySpecifier=fs.readFileSync('js/core/store/estado-productos.js','utf8').split('\n').find(line=>line.includes('{ catalogVisibilityReady }')).split("'")[1];
+  await page.evaluate(async(policySpecifier)=>{
     const cacheUrl='/js/core/firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
     const {writeCached}=await import(cacheUrl);
     writeCached('collections:public:unified-v2',[{slug:'aros',name:'Aros',image:'https://img.test/old.webp',order:1}]);
-    window.fetch=()=>new Promise(resolve=>{window.releaseMetadata=()=>resolve(new Response(JSON.stringify({ok:true,resource:'collections',items:[{id:'aros',data:{name:'Aros',image:'https://img.test/new.webp'}}]}),{status:200}));});
+    window.phase6Items=[{id:'qa-ear',name:'Aro',category:'aros',price:30000,stock:2,active:true},{id:'qa-watch',name:'Reloj',category:'relojes',price:40000,stock:2,active:true}];
+    window.productReads=0;
+    window.fetch=(resource)=>String(resource).includes('resource=collections') ? new Promise(resolve=>{window.releaseMetadata=()=>resolve(Response.json({ok:true,resource:'collections',items:[{id:'aros',data:{name:'Aros',image:'https://img.test/new.webp'}},{id:'relojes',data:{name:'Relojes'}}]}));}) : Promise.resolve(Response.json({ok:true,resource:'products',items:(window.productReads++,window.phase6Items.map(({id,...data})=>({id,data})))}));
     const navUrl='/js/components/navigation/compartido/carga-colecciones.js';
     const {initNavCollections}=await import(navUrl);window.headerReady=initNavCollections();
-    const policyUrl='/js/pages/catalog/politica-visibilidad-catalogo.js';
-    const {catalogVisibilityReady}=await import(policyUrl);
+    const storeUrl=new URL('/js/core/store/estado-productos.js',location.origin);
+    await import(storeUrl.href);
+    await window.TintinProductsStore.loadAll();
+    const {catalogVisibilityReady}=await import(new URL(policySpecifier,storeUrl).href);
     window.policyReady=false;catalogVisibilityReady.then(()=>{window.policyReady=true;});
-  });
+  },policySpecifier);
   await expect.poll(()=>page.evaluate(()=>window.policyReady)).toBe(true);
+  expect(await page.evaluate(()=>window.PRODUCTS.map(item=>item.id))).toEqual(['qa-ear']);
+  // La fuente canónica cambia mientras sigue pendiente la metadata. El aro
+  // eliminado no debe reaparecer y el reloj debe recuperarse al hacerse visible.
+  await page.evaluate(async()=>{window.phase6Items=[{id:'qa-watch',name:'Reloj',category:'relojes',price:40000,stock:3,active:true}];await window.TintinProductsStore.loadAll({force:true});});
+  expect(await page.evaluate(()=>window.PRODUCTS)).toEqual([]);
   const image=page.locator('[data-collections-nav="desktop"] img').first();
   await expect(image).toHaveAttribute('src','https://img.test/old.webp');
   await page.evaluate(async()=>{window.releaseMetadata();await window.headerReady;});
   await expect(image).toHaveAttribute('src','https://img.test/new.webp');
+  await expect.poll(()=>page.evaluate(()=>window.PRODUCTS.map(item=>({id:item.id,stock:item.stock})))).toEqual([{id:'qa-watch',stock:3}]);
+  expect(await page.evaluate(()=>window.productReads)).toBeGreaterThanOrEqual(3);
 });

@@ -113,3 +113,26 @@ test('una ficha iniciada a tiempo conserva la precarga aunque venza antes de pin
   assert.equal(takes,1);
   assert.equal(h.reads(),0);
 });
+
+test('revalidar membresía conserva la ficha visible y su suscripción sin renderizar otra vez',async()=>{
+  const h=harness({response:Promise.resolve(Response.json({ok:true,resource:'products',item:item('main')})),catalog:Promise.resolve([item('main')])});
+  vm.runInContext("startProductRealtime('main')",h.context);
+  for(let i=0;i<8;i++)await tick();
+  const renders=h.renders.length;
+  h.window.TintinCatalogPolicy={isCatalogVisible:()=>true};
+  await vm.runInContext('ensureProductsForCurrentPage({force:true,collectionsChanged:true})',h.context);
+  assert.equal(h.renders.length,renders);
+  assert.equal(h.reads(),0);
+  assert.equal(h.window.PRODUCTS[0].id,'main');
+});
+
+test('revalidar membresía actualiza búsqueda vacía en una página informativa sin agregar carga al arranque',async()=>{
+  const h=harness(null);
+  h.context.location.pathname='/about';
+  h.context.document.getElementById=id=>id==='search-input'?{value:'aro'}:null;
+  await vm.runInContext('ensureProductsForCurrentPage()',h.context);
+  assert.equal(h.reads(),0);
+  await vm.runInContext('ensureProductsForCurrentPage({force:true,collectionsChanged:true})',h.context);
+  assert.equal(h.reads(),1);
+  assert.equal(h.window.PRODUCTS[0].id,'fallback');
+});

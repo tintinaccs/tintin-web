@@ -167,3 +167,15 @@ no autoriza volver a lecturas públicas inseguras, borrar matrices ni migrar dat
 Para mantenimiento: una única autoridad por dominio, errores de red visibles,
 pruebas negativas de permisos y CAS, fotos fallidas recuperables y CI con estas
 suites. Toda nueva versión requiere evidencia de su propio SHA.
+
+## Continuación 26/10: UI07
+
+La prueba de metadata se amplió para ejecutar el store público real, su caché y
+su carga forzada. Detectó un defecto de integración que una emisión sintética
+no cubría: la lista llegaba ya filtrada. Se corrigió recargando por la autoridad
+existente ante cambios de membresía, conservando la ficha visible y actualizando
+búsquedas en páginas informativas. Detalle y reproducción en informe22; pruebas
+y huellas de esta continuación en `evidencias-f56.json`, campo
+`collectionMembershipFollowup`. No se hereda el PASS previo al código modificado.
+
+Validación de esta continuación:497/497 Node,96/96 Chromium, build Pages y39/39 comandos preflight PASS_LOCAL. Huellas, comandos y recibos en evidencias-f56.json; ver collectionMembershipFollowup. No se atribuyen al candidato nuevas pruebas de Rules o editor no modificados. CI remoto se registra por SHA aparte.
