@@ -1,3 +1,19 @@
+## Estado actual — versión única del editor,26/10/2026
+
+Codex /root. La titular ordena conservar exclusivamente el editor de seis fases.
+Nueva rama desde main e78a9de2f: codex/editor-version-unica-seis-fases-20261026.
+Se conserva#1241 con correcciones#1244 y avances#1245/#1246. La propuesta#1247
+se cerró sin merge y se canceló su CI; su distribución y archivos no se incorporan.
+Entrada única: docs/product-editor-refactor/00-VERSION-UNICA.md. Se retiran dos
+especificaciones visuales previas y ocho reglas/recorrido de guía sin consumidores.
+Serializer, modelos, permisos, workspace, backend y contratos comerciales intactos.
+PASS_LOCAL propio:44/44 Chromium sin reintentos,44/44 Node,39/39 preflight,
+build/caché.12capturas actuales;16 ilustraciones previas del editor retiradas.
+La rama remota de#1247 también se retiró. Backend/Rules/Perfil idénticos a main.
+CI y publicación de esta unificación: PENDING al publicar. No heredar PASS.
+Los registros siguientes son evidencia fechada de sus entregas, no alternativas
+activables del editor. Autorización vigente para terminar por el merge protegido.
+
 ## 2026-10-26 — Conciliación de Actions/issues históricos y reparación puntual de Perfil
 
 Codex /root (GPT-6), base ed574b1c de1245. Autorización explícita de la titular para depurar lo obsoleto sin reintroducir ramas antiguas. Ocho runs queued/waiting de julio/agosto/16oct verificados y cancelados; todos completed/cancelled. #803 y #374 cerrados not_planned como migración/propuesta antigua sin reactivar. #372/#373/#312/#340 actualizados con alcance vigente y descripción histórica preservada. PayPal público actual: sandbox/USD, enabledfalse por feature_disabled; tasa BCP23oct. Backup Firestore40312057311 SUCCESS; restauración previa960/960 es histórica y no certifica repetición hoy. Perfil735 conserva un defecto real: reservas liberadas antes de setDoc, doble guardado y UI tardía de otra sesión. Se corrige en nueva rama desde main: validar antes de reservar, liberar lo anterior sólo tras confirmación, bloqueo de promesa real y guardas UID/generación después de awaits. Rules/helpers de reserva sin cambios. RED5 casos, GREEN13 dirigidos,332 casos de dominios iniciales más2/2 runtime dirigidos tras usar Chromium instalado;34/34 Chromium sin reintentos. Gates arquitectura4,38 tests y modular31 PASS; preflight/build/caché PASS_LOCAL. Manual autenticado/activación de proveedores NOT_VERIFIED. CI exacta/merge/main/producción PENDING al redactar; no heredar aprobación de1245. Detalle SEGUIMIENTO_PENDIENTES_20261026.md. El cierre de1245 sí fue verificado externamente: CI40365418855, mantenimiento40370304512, main40370397017, CodeQL40370397709 y producción40370400656 SUCCESS, árbol997e9755 idéntico al candidato.
@@ -171,7 +187,7 @@ El archivo de consola aportado por la titular contiene además rechazos permissi
 
 Base main18bd9f5d. Fotos primero; guía de cinco accesos opcional; campos/tarjetas/lienzo distinguibles; Quitar explícito y materiales sugeridos por categoría. Conserva nodos, handlers, permisos, variantes y guardado. Reconocimiento TinyCLIP40M/ONNX local, sólo al solicitarlo, sin API facturada, cuenta o expiración de prueba;50MB iniciales aproximados y sugerencias revisables. No confirma materiales ni altera precio/stock/variantes. CSP de compilación WASM limitada al worker exacto, validada con negativas y Pages local; ninguna ampliación de documentos/checkout u orígenes externos. Modelos/runtime con licencias, procedencia y hashes, cada asset menor de25MiB.
 
-PASS_LOCAL:223 checkout/carrito/variantes y163 pedidos/pagos/presentación (con solapamiento),9 integraciones REST/CAS emuladas incluyendo editor→checkout→pedido→cancelación,140 Chromium sin reintentos y134 administrativas/CSP;5 visión/diagnóstico tras refuerzo de integridad. Capturas390/1440 inspeccionadas; build y estilos aprobados. PASS_LOCAL adicional:39 comandos de preflight completos,15 pruebas de seguridad/visión/diagnóstico y69 Chromium de disponibilidad, navegación y recibo de checkout. CI final PENDING. No se heredan resultados de otro SHA; no hay compras, pagos, correos o escrituras comerciales reales. Alcance, evidencia y límites en docs/editor-productos-v2/17-EDITOR-INTUITIVO-Y-CHECKOUT.md. No publicado.
+PASS_LOCAL:223 checkout/carrito/variantes y163 pedidos/pagos/presentación (con solapamiento),9 integraciones REST/CAS emuladas incluyendo editor→checkout→pedido→cancelación,140 Chromium sin reintentos y134 administrativas/CSP;5 visión/diagnóstico tras refuerzo de integridad. Capturas390/1440 inspeccionadas; build y estilos aprobados. PASS_LOCAL adicional:39 comandos de preflight completos,15 pruebas de seguridad/visión/diagnóstico y69 Chromium de disponibilidad, navegación y recibo de checkout. CI final PENDING. No se heredan resultados de otro SHA; no hay compras, pagos, correos o escrituras comerciales reales. Alcance, evidencia y límites en docs/product-editor-refactor/00-VERSION-UNICA.md. No publicado.
 
 ## 2026-10-24 — Completar el diseño visual tipo Shopify (Codex /root)
 
@@ -179,7 +195,7 @@ La titular señaló que la publicación funcional de PR1219 no completaba la dis
 
 PASS_LOCAL:121 pruebas administrativas y99 Chromium sin reintentos (matriz comercial, formulario, fotos, permisos, borradores y ocho escenarios de diseño320–1920), con capturas390/1440 inspeccionadas. Se reproduce y corrige un desborde320; también un ciclo de MutationObserver al reasignar hidden sin cambiar valor: se actualiza sólo ante un cambio efectivo. Los controles anteriores de menú se adaptan al guardado visible, preservando cierre/foco/UnsavedGuard. La edición de precio se prueba en su sección propia y la vista previa se abre antes de interactuar.
 
-No cambian fuentes del dominio, reglas, API, permisos ni datos reales. Las reglas de producción ya fueron publicadas por40056875443. No se heredan PASS_CI del editor funcional al rediseño. PASS_LOCAL también:39 comandos de preflight, build Pages con verificadores de rutas/CSP/diagnóstico/caché y auditoría de estilos. CI y producción del candidato final PENDING; detalle en16-REDISENO-VISUAL.
+No cambian fuentes del dominio, reglas, API, permisos ni datos reales. Las reglas de producción ya fueron publicadas por40056875443. No se heredan PASS_CI del editor funcional al rediseño. PASS_LOCAL también:39 comandos de preflight, build Pages con verificadores de rutas/CSP/diagnóstico/caché y auditoría de estilos. CI y producción del candidato final PENDING; detalle endocs/product-editor-refactor/00-VERSION-UNICA.md.
 
 ## 2026-10-24 — Reglas publicadas por el workflow oficial (Codex /root)
 

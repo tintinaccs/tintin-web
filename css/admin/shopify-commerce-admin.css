@@ -1580,13 +1580,6 @@ html.tt-product-editor-open #section-productos.tt-commerce-mounted #prod-form-ca
 #prod-form-card .tt-editor-section-fields label { color:var(--tt-commerce-text); }
 #prod-form-card .adm-input[readonly], #prod-form-card .adm-input:disabled { background:var(--editor-soft); }
 #prod-form-card .tt-product-section-nav { flex-wrap:wrap; }
-#prod-form-card .tt-editor-guide { margin-right:auto; min-width:0; max-width:100%; font-size:13px; font-weight:500; }
-#prod-form-card .tt-editor-guide summary { min-height:44px; display:list-item; align-content:center; cursor:pointer; font-weight:600; }
-#prod-form-card .tt-editor-guide[open] { flex-basis:100%; }
-#prod-form-card .tt-editor-guide p { margin:4px 0 10px; line-height:1.5; }
-#prod-form-card .tt-editor-guide nav { display:flex; flex-wrap:wrap; gap:8px; }
-#prod-form-card .tt-editor-guide button { min-height:44px; padding:8px 12px; border:1px solid var(--editor-field-line); border-radius:10px; background:var(--tt-commerce-surface); color:var(--tt-commerce-text); font:inherit; cursor:pointer; }
-#prod-form-card .tt-editor-guide button[aria-current=step] { background:var(--editor-field); font-weight:700; }
 #prod-form-card .tt-editor-vision { grid-column:1/-1; min-width:0; padding-top:12px; border-top:1px solid var(--editor-line); }
 #prod-form-card .tt-editor-vision summary { min-height:44px; cursor:pointer; font-weight:600; align-content:center; }
 #prod-form-card .tt-editor-vision p { font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
@@ -1815,7 +1808,6 @@ html.tt-product-workspace-active #prod-form-card.tt-editor-workspace {inset:0 !i
   html.tt-product-workspace-active #prod-form-card .tt-product-section-nav > select {
     grid-column:1/-1;order:-1;width:100% !important;max-width:none;
   }
-  html.tt-product-workspace-active #prod-form-card .tt-editor-guide[open] {grid-column:1/-1;}
 }
 
 /* Confirmación editorial: una decisión explícita antes de salir con cambios. */

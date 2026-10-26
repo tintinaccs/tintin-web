@@ -88,18 +88,10 @@ Después: [320](evidencias-f56/review-enlarged-320.png),
 [1920](evidencias-f56/review-enlarged-1920.png).
 Comparaciones del mismo viewport: [después390](evidencias-f56/review-enlarged-390.png)
 y [después1440](evidencias-f56/review-enlarged-1440.png).
-Editor previo al ajuste de navegación: [390](evidencias-f56/editor-antes-390.png).
-Antes del ajuste desktop: [1920](evidencias-f56/editor-antes-1920.png).
-Editor final: [320](evidencias-f56/editor-320x568.png),
-[390](evidencias-f56/editor-390x844.png),
-[horizontal844](evidencias-f56/editor-844x390.png),
-[tablet768](evidencias-f56/editor-768x1024.png),
-[laptop1366](evidencias-f56/editor-1366x768.png),
-[1920](evidencias-f56/editor-1920x1080.png).
-Selector corregido: [320](evidencias-f56/navigation-320.png) y
-[390](evidencias-f56/navigation-390.png).
-Altura reducida: [390](evidencias-f56/keyboard-390.png) y
-[1024](evidencias-f56/keyboard-1024.png).
+Las ilustraciones anteriores del editor se retiraron para mantener una sola
+referencia visual. Capturas actuales y su ejecución propia:
+[Versión única](../product-editor-refactor/UNIFICACION-SEIS-FASES.md).
+Las medidas y resultados fechados de esta fase conservan su alcance histórico.
 Las capturas muestran la cuarta reseña después de probar anterior/siguiente;
 las aserciones anteriores verifican que se abrió originalmente la tercera elegida.
 No se afirma comparación pixel a pixel con una referencia aprobada inexistente.
