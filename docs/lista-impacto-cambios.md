@@ -805,3 +805,8 @@ Nueva rama desde main1245, sin portar código antiguo. Perfil valida antes de re
 ### 26/10/2026 — Red de APT en runners de navegador
 
 Los cuatro jobs de CI preparan mirrors oficiales HTTPS y timeout30s/reintentos2 antes del mismo playwright install --with-deps chromium. El ajuste de APT permanece para las instalaciones WebKit posteriores del job. No cambia aplicación, dependencias bloqueadas, permisos, validaciones, matrices ni límites de ejecución. Se parte de899a6851, preservando1246 y1248. Plan protegido y manifiestos mediante generadores existentes; no reactivar código de ejecuciones antiguas.
+
+
+### 26/10/2026 — Completar preparación APT de consumidores operativos
+
+Monitor producción, auditoría visual programada y cinco jobs de Diagnóstico Maestro reutilizan preparar-red-apt-ci.sh antes del mismo install --with-deps; junto a los cuatro de CI suman11 instalaciones. No hay cambios en el helper, permisos, triggers, datos ni pruebas. Base1250 preservada; manifiestos/plan canónicos y validación YAML para detectar un consumidor que quede sin preparación.

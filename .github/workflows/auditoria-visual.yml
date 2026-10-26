@@ -27,7 +27,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build:pages
-      - run: npx playwright install --with-deps chromium
+      - run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
       - name: Viewports y geometría global
         run: |
           npm run audit:canonical-viewports

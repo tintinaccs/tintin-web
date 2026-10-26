@@ -1,18 +1,23 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "899a6851100b9560e6e3520e71ea3100babaa9fb",
-  "reason": "Evitar bloqueos de red APT en CI usando mirrors oficiales HTTPS y tiempos acotados, conservando firmas, dependencias y todas las pruebas.",
+  "baseCommit": "c176e10e4b89df24d64148b737274f166ab52f56",
+  "reason": "Completar el preparador APT ya aprobado en todos los consumidores de navegador operativos, conservando instalacion, firmas, permisos y escenarios.",
   "files": [
     {
-      "path": ".github/workflows/auditar-tintin.yml",
-      "oldHash": "7cd3d0e42d4ae1fe7a6fdc2101401de579ef88fa0a131d31132b6907ecdf2eb4",
-      "newHash": "1619395707f1cd8fdd872687939e1b7c63862cc58e2741d1823a1eca29df166e"
+      "path": ".github/workflows/auditoria-visual.yml",
+      "oldHash": "e5a45955a8913e74f9aec6ef8091735eebc7d686afe5f24a6565fd8bcd4f8cf7",
+      "newHash": "35f6097b104a83b47b2d4cb5b0b1328a7b5592d564c06ab65a57022b597f4e85"
+    },
+    {
+      "path": ".github/workflows/diagnostico-maestro.yml",
+      "oldHash": "f30bf30e05e5ba1bd4fcd54791e0a3663f55375996522c652615959ba7567958",
+      "newHash": "b2b5f09066c579152daf4f057fdb873a1be2f5eabeb8da2e2ce880a13310014a"
+    },
+    {
+      "path": ".github/workflows/monitor-produccion.yml",
+      "oldHash": "7a8b43f11656229161488d36a685cdad8ebb26d7165863a9b52dd84a39a531ab",
+      "newHash": "765435aadf86d71c4daeb3f32eeb29a3f7d87e7bfc5cf4703fd69b36c20ebe58"
     }
   ],
-  "affectedRecords": [
-    "github-actions",
-    "github-actions__deployments__30",
-    "github-actions__pruebas-automatizadas__31",
-    "pruebas-automatizadas"
-  ]
+  "affectedRecords": []
 }
