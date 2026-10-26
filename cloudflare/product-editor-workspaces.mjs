@@ -1,4 +1,4 @@
-import {decodeFirestoreFields,encodeFirestoreFields,firestoreAdminGet,firestoreAdminListPage} from './firebase-admin-ligero.js';
+import {decodeFirestoreFields,encodeFirestoreFields,firestoreAdminGet,firestoreAdminListPage,firestoreAdminCollectionGroupPage} from './firebase-admin-ligero.js';
 import {firestoreAdminBatchCommit} from './firestore-admin-batch.js';
 import {productFingerprint} from '../js/admin/products/maestro-productos-core.mjs';
 
@@ -65,4 +65,30 @@ export async function productEditorWorkspace(env,body,actor,io={get:firestoreAdm
   const next={schemaVersion:1,key:body.key,ownerUid:actor.uid,private:actor.role==='superadmin',productId:work.closed || !document?(source.document?body.key:null):work.productId,baseExpected:body.baseExpected,snapshot:closed?work.snapshot || {}:validateSnapshot(body.snapshot,actor),revision:(work.revision || 0)+1,lastChangeId:body.changeId,closed,createdAt:work.createdAt || now,updatedAt:now};
   await io.commit(env,[{path,fields:encodeFirestoreFields(next),mergeFields:Object.keys(next),currentDocument:condition(document)},{path:`auditLog/work_${crypto.randomUUID().replaceAll('-','')}`,fields:encodeFirestoreFields({action:'editar_producto',targetType:'producto',targetId:body.key,targetLabel:next.snapshot.name || '',details:closed?'Descartar progreso privado':'Guardar progreso privado',actorId:actor.uid,actorRole:actor.role,createdAt:now})}]);
   return {work:next,revision:next.revision,conflict:next.baseExpected!==source.revision};
+}
+
+// No se devuelven cuentas ni contenido privado al solicitante del borrado.
+export async function findProductWorkMediaUsage(env,publicIds,cloudName,io={listPage:firestoreAdminCollectionGroupPage}) {
+  const wanted=new Set(publicIds),used=new Set();let after='';if(!wanted.size)return [];
+  const inspect=value=>{
+    if(typeof value==='string'){
+      for(const candidate of value.split(/\s+/)){
+        let url;try{url=new URL(candidate);}catch{continue;}
+        if(url.protocol!=='https:' || url.hostname!=='res.cloudinary.com')continue;
+        const parts=url.pathname.split('/');
+        if(parts[1]!==cloudName || parts[2]!=='image' || parts[3]!=='upload')continue;
+        const id=parts.at(-1).replace(/\.[a-z0-9]+$/i,'');if(wanted.has(id))used.add(id);
+      }
+    }else if(value && typeof value==='object')for(const item of Object.values(value))inspect(item);
+  };
+  while(true){
+    const page=await io.listPage(env,'items',{pageSize:100,after,fieldPaths:['closed','snapshot.imageUrl','snapshot.imagesExtra','snapshot.variantMedia','snapshot.pendingPhotos','snapshot.pendingColorPhotos','snapshot.variants','snapshot.pendingUploads','snapshot.commercialDraft.imageUrl','snapshot.commercialDraft.imagesExtra','snapshot.commercialDraft.variantMedia','snapshot.commercialDraft.variantInventory']});
+    for(const document of page){
+      if(!/\/documents\/productEditorWorkspaces\/[^/]+\/items\/[^/]+$/.test(document.name))continue;
+      const work=decodeFirestoreFields(document.fields || {});if(!work.closed)inspect(work.snapshot);
+    }
+    if(used.size || page.length<100)break;
+    const next=page.at(-1)?.name;if(!next || next===after)throw new Error('La inspección de fotos privadas no avanzó.');after=next;
+  }
+  return [...used];
 }

@@ -76,6 +76,7 @@
   }
   function closeGallery() {
     dialog.close();
+    restorePage();
   }
   dialog.querySelector('[data-reviews-close]').addEventListener('click', closeGallery);
   dialog.addEventListener('cancel', event => { event.preventDefault(); closeGallery(); });

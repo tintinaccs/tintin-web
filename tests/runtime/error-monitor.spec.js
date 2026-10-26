@@ -52,7 +52,14 @@ test('native reads cancelled on navigation are diagnostic only for known callers
       { name:'unrelated catalog caller', leaving:true, delta:5, stack:'    at otherReader (http://127.0.0.1:4174/js/other-reader.js:1:1)' },
       { name:'native fetch without canonical catalog caller', leaving:true, delta:5, stack:'    at fetch ([native code]:0:0)' },
       { name:'production catalog endpoint', leaving:true, delta:5, message:'/tintinaccs.com/api/public-catalog?resource=products due to access control checks.' },
-      { name:'another catalog resource', leaving:true, delta:5, message:'/127.0.0.1:4174/api/public-catalog?resource=collections due to access control checks.' },
+      { name:'collections cancelled on reload', leaving:true, delta:5, diagnostic:true, message:'/127.0.0.1:4174/api/public-catalog?resource=collections due to access control checks.' },
+      ...[
+        {name:'active collections failure',leaving:false,delta:5},
+        {name:'late collections failure',leaving:true,delta:1000},
+        {name:'collections JavaScript exception',leaving:true,delta:5,errorName:'Error'},
+        {name:'collections unknown caller',leaving:true,delta:5,stack:'    at otherReader (http://127.0.0.1:4174/js/other-reader.js:1:1)'},
+      ].map(fixture=>({...fixture,message:'/127.0.0.1:4174/api/public-catalog?resource=collections due to access control checks.'})),
+      { name:'another catalog resource', leaving:true, delta:5, message:'/127.0.0.1:4174/api/public-catalog?resource=settings due to access control checks.' },
       { name:'real catalog JavaScript error', leaving:true, delta:5, errorName:'Error' },
     ].map(fixture => ({ ...fixture, change: {
       name:fixture.errorName || nativeError.name,

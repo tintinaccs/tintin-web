@@ -1,3 +1,4 @@
+import {findProductWorkMediaUsage} from '../../cloudflare/product-editor-workspaces.mjs';
 import { rateLimitErrorResponse,
   cleanPublicId,
   cloudinarySignature,
@@ -69,6 +70,9 @@ export async function onRequest(context) {
     }
 
     const config = getCloudinaryConfig(env);
+    if((await findProductWorkMediaUsage(env,publicIds,config.cloudName)).length) {
+      return jsonResponse({error:'Una imagen está en progreso privado y no se puede borrar.'},409,origin,requestUrl);
+    }
     const results = [];
     // Cada borrado se reporta por separado: si el 2do de 4 falla, el
     // llamador necesita saber que el 1ro sí se borró para no reintentar

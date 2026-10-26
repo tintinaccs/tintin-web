@@ -38,7 +38,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261026-editor-f56-1';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261026-editor-closure-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
 const VERSION = 'tintin-20261026-editor-f56-1';

@@ -133,3 +133,17 @@ test('catálogo usa caché sin esperar red y encabezado recibe la portada revali
   await expect.poll(()=>page.evaluate(()=>window.PRODUCTS.map(item=>({id:item.id,stock:item.stock})))).toEqual([{id:'qa-watch',stock:3}]);
   expect(await page.evaluate(()=>window.productReads)).toBeGreaterThanOrEqual(3);
 });
+
+test('cerrar y reabrir reseñas en el mismo turno conserva y restaura el scroll original',async({page})=>{
+ await page.route('**/__home-reviews',route=>route.fulfill({contentType:'text/html',body:html}));
+ await page.goto('/__home-reviews');await page.addScriptTag({content:runtime});
+ await page.evaluate(()=>{
+  document.documentElement.style.overflow='clip';
+  const open=document.getElementById('tt-reviews-more');
+  open.click();document.querySelector('[data-reviews-close]').click();open.click();
+ });
+ await expect(page.locator('#tt-reviews-dialog')).toBeVisible();
+ expect(await page.evaluate(()=>document.documentElement.style.overflow)).toBe('hidden');
+ await page.locator('[data-reviews-close]').click();
+ expect(await page.evaluate(()=>document.documentElement.style.overflow)).toBe('clip');
+});

@@ -268,7 +268,7 @@ export function initNavCollections(force = false) {
   renderLoading();
 
   // Metadata pública canónica: el menú no espera Firebase/Auth para responder.
-  return import('../../../pages/collections/datos-publicos-colecciones.js?v=tintin-20261026-editor-f56-1')
+  return import('../../../pages/collections/datos-publicos-colecciones.js?v=tintin-20261026-editor-closure-1')
     .then(({ loadCollections }) => loadCollections({
       force,
       onData(collections) {

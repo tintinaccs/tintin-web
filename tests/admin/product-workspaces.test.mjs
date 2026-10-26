@@ -81,3 +81,15 @@ test('listado pagina sin truncar a100/1000, mantiene permisos y restringe siempr
  assert.equal(calls[1].pageToken,first.nextPageToken);assert.equal(s.writes.length,0);
  for(const pageToken of [42,{},'x'.repeat(4097),'bad\npage'])await assert.rejects(productEditorWorkspace({},{action:'listProductWork',pageToken},actor,s.io),e=>e.status===422);
 });
+
+test('fotos de progreso privado bloquean borrado entre cuentas y páginas; error impide continuar',async()=>{
+ const {findProductWorkMediaUsage}=await import('../../cloudflare/product-editor-workspaces.mjs');
+ const id='tintin_media_fixture000_full',url=`https://res.cloudinary.com/qa-cloud/image/upload/f_auto/v123/${id}.webp`;
+ const work=(key,snapshot,closed=false)=>({name:`projects/demo/databases/(default)/documents/productEditorWorkspaces/another-owner/items/${key}`,fields:encode({snapshot,closed})});
+ for(const snapshot of [{imageUrl:url},{imagesExtra:'https://other.test/a.png\n'+url},{variantMedia:[{imageUrls:[url]}]},{commercialDraft:{variantInventory:[{imageUrl:url}]}}])assert.deepEqual(await findProductWorkMediaUsage({},[id],'qa-cloud',{listPage:async()=>[work('w',snapshot)]}),[id]);
+ assert.deepEqual(await findProductWorkMediaUsage({},[id],'qa-cloud',{listPage:async()=>[work('closed',{imageUrl:url},true),work('other',{imageUrl:url.replace('qa-cloud','other-cloud')})]}),[]);
+ const first=Array.from({length:100},(_,i)=>work('empty'+i,{},true));let calls=0;
+ assert.deepEqual(await findProductWorkMediaUsage({},[id],'qa-cloud',{listPage:async(_,group,options)=>{assert.equal(group,'items');if(++calls===1)return first;assert.equal(options.after,first.at(-1).name);return [work('last',{imageUrl:url})];}}),[id]);assert.equal(calls,2);
+ await assert.rejects(findProductWorkMediaUsage({},[id],'qa-cloud',{listPage:async()=>{throw Error('offline');}}),/offline/);
+ await assert.rejects(findProductWorkMediaUsage({},[id],'qa-cloud',{listPage:async()=>first}),/no avanzó/);
+});

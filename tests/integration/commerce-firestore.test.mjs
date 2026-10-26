@@ -304,3 +304,18 @@ test('pago ficticio: un pedido cancelado después de abrir PayPal no se puede ca
     assert.notEqual(order.paymentStatus, 'pagado'); assert.equal((await product(id)).stock, 1);
   });
 });
+
+test('fotos privadas: query real paginada entre cuentas bloquea referencias comerciales',async()=>{
+ const {findProductWorkMediaUsage}=await import('../../cloudflare/product-editor-workspaces.mjs');
+ const fs=await import('node:fs'),vm=await import('node:vm');
+ const source=fs.readFileSync('cloudflare/firebase-admin-ligero.js','utf8');
+ const queryCode=source.slice(source.indexOf('export async function firestoreAdminCollectionGroupPage'),source.indexOf('/** Una página del listado canónico')).replace('export ','');
+ let calls=0;
+ const context=vm.createContext({parseServiceAccount:()=>({}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch:async(url,options)=>{calls++;assert.equal(url,root+':runQuery');return Response.json(await request(':runQuery',JSON.parse(options.body)));}});
+ vm.runInContext(queryCode,context);
+ const id='tintin_media_privateemulator_full',url=`https://res.cloudinary.com/qa-cloud/image/upload/v1/${id}.webp`;
+ await deps.commit({},Array.from({length:105},(_,i)=>({path:`productEditorWorkspaces/aaa-media/items/${String(i).padStart(3,'0')}`,fields:encodeFirestoreFields({closed:true,snapshot:{imageUrl:url}})})));
+ await deps.commit({},[{path:'productEditorWorkspaces/zzz-media/items/reference',fields:encodeFirestoreFields({closed:false,snapshot:{commercialDraft:{variantInventory:[{imageUrl:url}]}}})}]);
+ const used=await findProductWorkMediaUsage({},[id],'qa-cloud',{listPage:context.firestoreAdminCollectionGroupPage});
+ assert.deepEqual(used,[id]);assert(calls>=2);assert(!JSON.stringify(used).includes('zzz-media'));
+});
