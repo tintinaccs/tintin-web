@@ -137,3 +137,13 @@ for (const file of ['about.html', 'perfil.html']) {
     });
   }
 }
+
+for(const width of [390,1440])test(`logo del footer reserva sus dimensiones incluso sin CSS · ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});await mountLayout(page);
+ const logo=page.locator('.tt-footer-brand img');
+ const styled=await logo.boundingBox();
+ await page.evaluate(()=>{for(const sheet of document.styleSheets)sheet.disabled=true;});
+ const intrinsic=await logo.boundingBox();
+ expect(intrinsic.width).toBe(styled.width);expect(intrinsic.height).toBe(styled.height);
+ expect(intrinsic.width).toBe(104);expect(intrinsic.height).toBe(56);
+});

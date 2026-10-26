@@ -116,6 +116,12 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
       return issues;
     });
     expect(geometry).toEqual([]);
+    const gallery=await page.locator('.tt-product-gallery').evaluate(node=>{
+      const r=node.getBoundingClientRect(),ends=[...node.children].map(child=>child.getBoundingClientRect()).filter(box=>box.height>0).map(box=>box.bottom);
+      return {top:r.top,slack:r.bottom-Math.max(...ends)};
+    });
+    expect(gallery.slack).toBeLessThanOrEqual(32);
+    if(width>=768)expect(Math.abs(gallery.top-(await page.locator('.tt-product-info-panel').boundingBox()).y)).toBeLessThanOrEqual(1);
     await page.getByRole('button', { name: 'Dorado', exact: true }).click();
     await page.locator('#btn-qty-plus').click();
     await expect(page.locator('#qty-val')).toHaveText('2');
@@ -178,6 +184,18 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
         await expect(first.locator('.tt-card-name,.tt-coll-page-name')).toHaveText(
           route === '/collections.html' ? 'Relojes y accesorios con un nombre de colección largo'.toUpperCase() : product.name);
       }
+      if(route==='/catalogo.html'){
+        const frame=first.locator('.tt-card-img-wrap');let before;
+        await expect(async()=>{before=await frame.boundingBox();expect(before).not.toBeNull();expect(Math.abs(before.width-before.height)).toBeLessThanOrEqual(1);}).toPass({timeout:5000});
+        for(const [w,h] of [[240,60],[60,240]]){
+          const url=`/__ratio-${w}-${h}.svg`;
+          await page.route('**'+url,r=>r.fulfill({contentType:'image/svg+xml',body:`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect width="100%" height="100%" fill="pink"/></svg>`}));
+          const image=frame.locator('img');await image.evaluate((node,url)=>{node.removeAttribute('srcset');node.src=url;},url);
+          await expect(image).toHaveJSProperty('naturalWidth',w);
+          const after=await frame.boundingBox();expect(Math.abs(after.width-after.height)).toBeLessThanOrEqual(1);
+          expect(after.height).toBeCloseTo(before.height,0);await expect(image).toHaveCSS('object-fit','contain');
+        }
+      }
       // Resolver el nodo y medirlo en la misma tarea del navegador: el catálogo
       // puede reemplazar tarjetas entre una consulta de locator y su evaluate.
       await expect(async () => {
@@ -228,3 +246,26 @@ for(const [width,height] of [[320,700],[390,844],[600,900],[640,900],[768,1024],
   await page.locator('#tinsel-items .tinsel-item').nth(4).locator('[data-tinsel-remove]').click();await expect(page.locator('#tinsel-items .tinsel-item')).toHaveCount(4);
  });
 }
+
+for(const width of [320,390,768,1280,1920])for(const route of ['terminos','privacidad','contact'])test(`auditoría visual: lectura y márgenes /${route} ${width}`,async({page},info)=>{
+ const {removeFixtureScripts}=require('../../scripts/lib/html-layout-fixture.js');
+ const markup=removeFixtureScripts(fs.readFileSync(route+'.html','utf8'),{removeModulePreloads:true});
+ await page.setViewportSize({width,height:900});await page.route('https://**',r=>r.abort());
+ await page.route('**/__audit-layout',r=>r.fulfill({contentType:'text/html',body:markup}));
+ await page.goto('/__audit-layout');await page.evaluate(()=>document.fonts.ready);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ if(route==='contact'){
+  const form=await page.locator('#contact-form').boundingBox();expect(form.x).toBeGreaterThanOrEqual(15);expect(form.x+form.width).toBeLessThanOrEqual(width-15);
+  for(const field of await page.locator('#contact-form input:not([type=hidden]),#contact-form textarea').all()){
+   const b=await field.boundingBox();if(b){expect(b.x).toBeGreaterThan(form.x);expect(b.x+b.width).toBeLessThan(form.x+form.width);}
+  }
+ }else{
+  expect(await page.locator('.tt-info-block p,.tt-info-block li').count()).toBeGreaterThan(0);
+  const bad=await page.locator('.tt-info-block p,.tt-info-block li').evaluateAll(nodes=>nodes.filter(node=>{
+   const style=getComputedStyle(node),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');ctx.font=style.font;
+   return node.getBoundingClientRect().width>ctx.measureText('0').width*72+1;
+  }).map(node=>node.textContent.slice(0,30)));
+  expect(bad).toEqual([]);
+ }
+ if([390,1280].includes(width))await page.screenshot({path:info.outputPath(`${route}-${width}.png`),fullPage:true});
+});

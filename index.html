@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="8ad8304380e6003f6a38e90489f1ca55101ce490a6de01586b6ad28d7070977d">
+  <meta name="tintin-page-revision" content="632c6e895e9a9a117c73cad5d09a8f113a940410541cc06ae56fc0f9e945b7c6">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preload" as="image" type="image/png" fetchpriority="high" media="(max-width: 767px)" href="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png?v=tintin-20261019-hero-centered-1">
@@ -13,7 +13,7 @@
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20261026-editor-closure-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261024-foco-paneles-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261026-editor-closure-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261026-visual-audit-1" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
        acá. cargador-pagina.js caía al fallback window.load si no se le avisaba
        — que espera a TODAS las imágenes de la página completa, no solo al
@@ -53,7 +53,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261026-editor-closure-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261026-visual-audit-1">
   <!-- Cada variante del header solo se descarga en el viewport que la utiliza. -->
   <link rel="stylesheet" id="tt-home-css-bundle" href="css/generated/inicio.css?v=tintin-home-a289a33c1ce72f94" onerror="var bundle=this;function restore(){document.querySelectorAll('link[data-tt-style-bundle]').forEach(function(link){if(link.dataset.ttStyleBundle===bundle.id){link.disabled=false;link.rel='stylesheet';delete link.dataset.ttStyleBundle;}});}bundle.dataset.ttBundleError='1';restore();if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore,{once:true});">
   <link rel="tt-bundled-stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2" disabled data-tt-style-bundle="tt-home-css-bundle">
@@ -330,7 +330,7 @@
     <div class="tt-footer-grid">
       <div class="tt-footer-brand" aria-label="TINTIN Accesorios">
         <a href="/" class="tt-logo-link" aria-label="Ir al inicio de TINTIN">
-          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2" alt="TINTIN" width="104" height="56" class="tt-logo-img tt-logo-img--menu">
         </a>
         <p class="tt-footer-tagline">Tu tienda de accesorios y relojes en Paraguay. Comprá online con atención cercana.</p>
         <p class="tt-footer-hours">Horario de atención: 09:00 a 22:00 hs.</p>
@@ -438,7 +438,7 @@
 })();
 </script>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261026-editor-closure-1" defer></script>
+<script src="tienda.js?v=tintin-20261026-visual-audit-1" defer></script>
 <script src="js/pages/home/mas-vendidos.js?v=tintin-20261016-bestsellers-1" defer></script>
 <script type="module" src="js/pages/home/carrusel-colecciones.js?v=tintin-20261026-editor-closure-1"></script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1"></script>
