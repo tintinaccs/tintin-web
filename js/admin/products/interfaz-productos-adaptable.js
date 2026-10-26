@@ -1,14 +1,15 @@
 import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261024-editor-v2-3';
-import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261024-editor-intuitivo-1';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261025-options-phase3-6';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
 import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261024-editor-atelier-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
-  ['photos', 'Fotos y galería', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
+  ['photos', 'Fotografías del producto', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
   ['general', 'Producto', ['prod-name','prod-description']],
   ['prices', 'Precio', ['prod-price','prod-price-before','prod-badge','prod-oferta']],
-  ['inventory', 'Variantes e inventario', ['prod-variants-text','prod-stock']],
+  ['inventory', 'Opciones y variantes', ['prod-variants-text']],
+  ['availability', 'Inventario y disponibilidad', ['prod-stock']],
   ['specs', 'Detalles del producto', ['prod-material','prod-measurements','prod-color-finish','prod-care','prod-water-resistance','prod-warranty','prod-size-fit','prod-package-contents']],
   ['visibility', 'Organización', ['prod-category','prod-collection','prod-tags','prod-sku','prod-destacado','prod-active']],
   ['private', 'Inventario interno', ['prod-inventory-fields']],
@@ -35,7 +36,7 @@ export function syncProductSurfaces() {
       (editor.querySelector('#prod-editor-section') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
     }
     editor.setAttribute('role','dialog');
-    editor.setAttribute('aria-modal','false');
+    editor.setAttribute('aria-modal',String(editor.classList.contains('tt-editor-workspace')));
     editor.setAttribute('aria-labelledby','prod-form-title');
   } else if (editorWasOpen) {
     requestAnimationFrame(()=>{
@@ -111,6 +112,7 @@ export function enhanceProductEditor() {
       photos:'La imagen principal es la portada. Agregá otras vistas y ordená las fotos de cada color.',
       prices:'Definí el precio general y las promociones.',
       inventory:'Opciones, precios y cantidades de cada combinación.',
+      availability:'Cantidades y disponibilidad. La publicación se configura por separado.',
       specs:'Detalles opcionales que ayudan a elegir.',
       visibility:'Colección, búsqueda y referencias del producto.',
       private:'Costo y notas internas, disponibles sólo con permiso.',
@@ -190,6 +192,9 @@ export function enhanceProductEditor() {
   if(privateSection)privateSection.dataset.permissionHidden=String(privateHidden);
   const privateOption=card.querySelector('#prod-editor-section option[value="private"]');
   if(privateOption){if(privateOption.hidden!==privateHidden)privateOption.hidden=privateHidden;if(privateOption.disabled!==privateHidden)privateOption.disabled=privateHidden;}
+  const inventoryPanel=card.querySelector('#prod-variant-stock');
+  const inventoryTarget=card.querySelector('[data-product-section="availability"] .tt-editor-section-fields');
+  if(inventoryPanel && inventoryTarget && inventoryPanel.parentElement!==inventoryTarget)inventoryTarget.append(inventoryPanel);
   refreshEditorHeading(card);
   const error=card.querySelector('#prod-form-error');
   if (error) {
@@ -198,8 +203,12 @@ export function enhanceProductEditor() {
   }
   const selected=privateHidden && card.querySelector('#prod-editor-section').value==='private'?'all':card.querySelector('#prod-editor-section').value;
   const message=error?.style.display !== 'none' ? error?.textContent.trim() || '' : '';
-  showSection(card,message ? 'all' : selected,Boolean(message));
-  if(message && message!==lastError && visibleProductEditor()) {error.focus({preventScroll:true});error.scrollIntoView({block:'nearest'});}
+  // Sólo un error nuevo inicia navegación. El observer también corre al editar
+  // controles: un mensaje persistente no debe reiniciar scroll ni desplegar
+  // otra vez todos los bloques en cada pulsación.
+  const newError=Boolean(message && message!==lastError);
+  showSection(card,newError ? 'all' : selected,newError);
+  if(newError && visibleProductEditor()) {error.focus({preventScroll:true});error.scrollIntoView({block:'nearest'});}
   lastError=message;
   refreshProductPreview(card);
   installEditorControls(card);refreshEditorControls(card);
@@ -218,8 +227,8 @@ function refreshEditorHeading(card) {
   if(title.title!==text)title.title=text;
   let state=heading.querySelector('.tt-product-editor-state');
   if(!state){state=document.createElement('span');state.className='tt-product-editor-state';heading.append(state);}
-  const value=card.querySelector('#prod-publicationStatus')?.value || 'draft';
-  const label={active:'Activo',draft:'Borrador',archived:'Archivado'}[value] || 'Borrador';
+  const value=card.dataset.productPublicState || card.querySelector('#prod-publicationStatus')?.value || 'draft';
+  const label={active:'Publicado',draft:'Borrador',archived:'Archivado',inactive:'Inactivo (histórico)'}[value] || 'Borrador';
   if(state.textContent!==label)state.textContent=label;
   if(state.dataset.state!==value)state.dataset.state=value;
   refreshSectionValues(card);
@@ -248,7 +257,7 @@ function showSection(card,value,expand=false) {
   }
   card.querySelector('.tt-editor-layout').dataset.editorSection=value;
   for (const field of card.querySelectorAll('[data-product-section]')) {
-    const hidden=field.dataset.permissionHidden==='true' || value !== 'all' && field.dataset.productSection !== value;
+    const hidden=field.dataset.permissionHidden==='true' || value !== 'all' && field.dataset.productSection !== value && !(value==='inventory' && field.dataset.productSection==='availability');
     if (field.hidden !== hidden) field.hidden=hidden;
     if (!hidden && expand) {
       field.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
@@ -268,6 +277,7 @@ export function installProductInterface() {
   installed=true;
   let queued=false;
   const card=document.getElementById('prod-form-card');
+  card?.addEventListener('click',event=>{if(event.target.closest('#prod-save-btn'))lastError='';},{capture:true});
   card?.addEventListener('input',()=>refreshEditorHeading(card));
   card?.addEventListener('change',()=>refreshEditorHeading(card));
   if (card) new MutationObserver(()=>{

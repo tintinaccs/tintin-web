@@ -6,6 +6,7 @@ import { readCached, readStaleCached, runSingleFlight, writeCached } from '../..
 import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1-bags-20261014-1';
 export const CACHE_KEY = 'collections:public:unified-v2';
 const CACHE_TTL = 30 * 60 * 1000;
+let pageRead = null;
 export function normalizeCollectionDoc(id, data) {
   const d = data || {};
   const orderNum = Number(d.order);
@@ -51,19 +52,20 @@ export async function loadCollections(options = {}) {
     options.onData?.(visible, source);
     return visible;
   };
-  if (!options.force) {
-    const cached = readCached(CACHE_KEY, CACHE_TTL);
-    if (Array.isArray(cached)) return emit(cached, 'cache');
-  }
-  const stale = readStaleCached(CACHE_KEY);
-  if (!options.force && Array.isArray(stale) && stale.length) emit(stale, 'stale-cache');
+  // Render immediately, then revalidate presentation on every entry. A fresh
+  // local cache must not suppress a newly saved collection cover for 30 min.
+  const cached = options.force ? null : readCached(CACHE_KEY, CACHE_TTL);
+  const stale = Array.isArray(cached) ? cached : readStaleCached(CACHE_KEY);
+  if (!options.force && Array.isArray(stale)) emit(stale, Array.isArray(cached) ? 'cache' : 'stale-cache');
   try {
-    const list = await runSingleFlight('collections:public', async () => {
+    if (options.force) pageRead = null;
+    if (!pageRead) pageRead = runSingleFlight('collections:public', async () => {
       const documents = await fetchPublicCatalogResource('collections');
       const rows = documents.map(item => normalizeCollectionDoc(item.id, item.data));
       writeCached(CACHE_KEY, rows);
       return rows;
-    });
+    }).catch(error => { pageRead = null; throw error; });
+    const list = await pageRead;
     return emit(list, 'edge-cache');
   } catch (error) {
     if (Array.isArray(stale) && stale.length) return emit(stale, 'stale-cache');

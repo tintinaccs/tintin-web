@@ -52,7 +52,7 @@ export async function onRequest(context) {
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > 750000) throw new Error('Solicitud inválida.');
     const body = JSON.parse(raw);
-    if(['saveProduct','bulkProducts'].includes(body.action))return handleProductEditor(context,body,origin);
+    if(['saveProduct','bulkProducts','readProductWork','saveProductWork','listProductWork','discardProductWork'].includes(body.action))return handleProductEditor(context,body,origin);
     if(new TextEncoder().encode(raw).byteLength > 64 * 1024)throw new Error('Solicitud inválida.');
     const actor = body.action === 'updatePayment' || body.action === 'recordEmailResend'
       ? await requireOrderStaff(request, env)

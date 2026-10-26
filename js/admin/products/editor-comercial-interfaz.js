@@ -7,6 +7,7 @@ export function mountCommercialEditor(panel, product, parseOptions, signal, pers
   let draft=structuredClone(product),page=0;
   const selected=new Set();
   const options=document.getElementById('prod-variants-text'),total=document.getElementById('prod-stock');
+  panel.closest('#prod-form-card')?.addEventListener('tintin:commercial-options-read',event=>{event.detail.product=draft;},{signal});
   panel.replaceChildren();panel.classList.add('tt-commercial-editor');
   const error=element('p');error.setAttribute('role','alert');
   const announce=()=>{panel.dispatchEvent(new CustomEvent('tintin:commercial-draft',{bubbles:true,detail:draft}));panel.dispatchEvent(new Event('change',{bubbles:true}));};
@@ -26,13 +27,14 @@ export function mountCommercialEditor(panel, product, parseOptions, signal, pers
     options.dispatchEvent(new Event('input',{bubbles:true}));
   });
   toolbar.append(field,bulk,apply,reorder);
+  const advanced=element('details');advanced.className='tt-commercial-advanced';advanced.append(element('summary','Edición múltiple y orden de atributos'),toolbar);
   const rows=element('div');rows.className='tt-commercial-rows';
   const pagination=element('div');pagination.className='tt-commercial-toolbar';
   const status=element('span');status.setAttribute('role','status');
   const previous=button('Anteriores',()=>{page--;render();});
   const next=button('Siguientes',()=>{page++;render();});
   pagination.append(previous,status,next);
-  panel.append(heading,element('p','Precio vacío hereda el general. Stock vacío significa sin control. Desactivar conserva el historial.'),toolbar,error,rows,pagination);
+  panel.append(heading,element('p','Precio vacío hereda el general. Stock vacío significa sin control. Desactivar conserva el historial; no cambia la publicación del producto.'),advanced,error,rows,pagination);
   function render(){
     rows.replaceChildren();
     page=Math.max(0,Math.min(page,Math.ceil(draft.variantInventory.length/25)-1));
@@ -55,12 +57,12 @@ export function mountCommercialEditor(panel, product, parseOptions, signal, pers
     status.textContent=`${draft.variantInventory.length} combinaciones · página ${page+1}`;
     updateTotal();
   }
-  function updateTotal(){try{const patch=commercialPatch(persisted,draft);total.value=patch.stock??'';error.textContent='';}catch(failure){error.textContent=failure.message;}}
+  function updateTotal(){try{const patch=commercialPatch(persisted,draft);total.value=patch.stock??'';error.textContent='';}catch(failure){error.textContent=/Conservá la combinación comercial/.test(failure.message)?'Esta combinación tiene referencias históricas. Conservá su control de stock: usá 0 si está agotada o desactivá su disponibilidad. No se puede eliminar su identidad ni cambiar entre cantidad y sin control.':failure.message;}}
   options.addEventListener('input',()=>{
     try {
       const variants=parseOptions(options.value).variants;
       draft=commercialDraft(draft,variants,persisted);error.textContent='';render();announce();
-    }catch(failure){options.value=Object.entries(draft.variants).map(([key,values])=>`${key}: ${values.join(', ')}`).join('\n');error.textContent=failure.message;}
+    }catch(failure){options.value=Object.entries(draft.variants).map(([key,values])=>`${key}: ${values.join(', ')}`).join('\n');error.textContent='No se aplicó el cambio. Esta opción puede tener inventario o referencias de pedidos anteriores. Podés dejar su combinación sin disponibilidad, pero no eliminar su identidad. '+failure.message;}
   },{signal});
   for(const id of ['prod-price','prod-price-before'])document.getElementById(id).addEventListener('input',()=>{
     draft.price=Number(document.getElementById('prod-price').value);draft.priceBefore=document.getElementById('prod-price-before').value===''?null:Number(document.getElementById('prod-price-before').value);updateTotal();announce();

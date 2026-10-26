@@ -10,7 +10,7 @@ import { wristCategory, unifyWristCollections } from '../../core/store/categoria
 
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
-import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20261022-avatar-inicial-1';
+import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20261026-editor-closure-1';
 
 if (!window.TintinAdminCollectionsPhase4Booted) {
   window.TintinAdminCollectionsPhase4Booted = true;

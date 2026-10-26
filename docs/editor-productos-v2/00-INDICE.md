@@ -1,3 +1,13 @@
+[Fase 5 responsive y superficies públicas](22-UI-RESPONSIVE-FASE-5.md) · [Fase 6 auditoría actual](23-AUDITORIA-FINAL-FASE-6.md). Sin aprobación productiva; ver pruebas, base y bloqueos de esta ejecución.
+
+[Fase 4: progreso privado y publicación](21-FLUJO-EDITORIAL-FASE-4.md): espacio dedicado, borradores, CAS, privacidad y pruebas.
+
+[Nueva Fase 1 de estabilización, 25/10/2026](18-ESTABILIZACION-FASE-1-20261025.md): resultados actuales y pendientes; sin autorización de merge/despliegue.
+
+[Fase 2: galería unificada](19-GALERIA-UNIFICADA-FASE-2.md): centro visual de fotografías, compatibilidad y evidencia.
+
+[Fase 3: opciones e inventario](20-OPCIONES-INVENTARIO-FASE-3.md): grupos, disponibilidad, identidades y pruebas.
+
 [Rediseño visual del editor](16-REDISENO-VISUAL.md).
 
 [Matriz actual del candidato](15-MATRIZ-CANDIDATO.md) · [Recibo local](evidencias-continuidad.json).
@@ -43,3 +53,5 @@ Registrar agente, fecha, archivos/funciones afectados, comandos realmente ejecut
 - [Versiones canónicas](../arquitectura-versiones-canonicas.md), [CI](../contratos-arquitectura-ci.md), [calidad](../contratos-calidad.md).
 
 Una discrepancia entre esta fotografía documental y el código futuro exige investigar y registrar la resolución; no implementar una segunda autoridad.
+
+- [24 — Integración y cierre autorizado de las seis fases](24-INTEGRACION-Y-CIERRE.md).

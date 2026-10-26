@@ -5,6 +5,13 @@ import vm from 'node:vm';
 const context = vm.createContext({ URL, window: { location: { href: 'https://example.test/product' } } });
 vm.runInContext(fs.readFileSync(new URL('../../js/components/images/galeria-producto.js', import.meta.url), 'utf8'), context);
 const colors = context.window.TintinProductColors;
+test('la heurística no distingue nombres comerciales: bordó, oliva, blanco y gris',()=>{
+ const pixels=rgb=>Uint8ClampedArray.from(Array.from({length:100},()=>[...rgb,255]).flat());
+ assert.equal(colors.guessColor(pixels([128,0,32])).name,'rojo');
+ assert.equal(colors.guessColor(pixels([128,128,0])).name,'dorado');
+ assert.equal(colors.guessColor(pixels([255,255,255])),null);
+ assert.equal(colors.guessColor(pixels([170,170,170])).name,'plateado');
+});
 test('paleta editable, alias y metalizados distintos del marrón', () => {
   assert.ok(colors.palette.length >= 25);
   assert.equal(colors.preset('GOLD').name, 'dorado');

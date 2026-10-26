@@ -408,7 +408,7 @@ export function attachImageUploadWidget(container, options = {}) {
 
 // Cola visual del mismo transporte y validación que la carga individual.
 // Un fallo conserva las fotos pendientes; guardar espera toda la cola.
-export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary, remaining = () => 12} = {}) {
+export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary, remaining = () => 12, maxImages=12} = {}) {
   ensureStyles();
   const root = document.createElement('div');root.className='tt-iuw tt-iuw-multiple';
   const input=document.createElement('input');input.type='file';input.multiple=true;input.accept='image/jpeg,image/png,image/webp,image/avif';input.className='tt-iuw-input';input.setAttribute('aria-label','Subir varias fotos');
@@ -427,9 +427,10 @@ export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary
     for(const item of queue) {
       const tile=document.createElement('div');tile.className='tt-editor-upload-item';
       const image=document.createElement('img');image.src=item.preview;image.alt=item.file.name;
+      const progress=document.createElement('span');progress.setAttribute('role','status');progress.textContent=item.stage || 'Pendiente';
       const remove=document.createElement('button');remove.type='button';remove.className='tt-iuw-btn';remove.textContent='Quitar';remove.setAttribute('aria-label',`Quitar pendiente ${item.file.name}`);remove.disabled=busy();
       remove.addEventListener('click',()=>{queue=queue.filter(other=>other!==item);URL.revokeObjectURL(item.preview);render();});
-      tile.append(image,remove);grid.append(tile);
+      tile.append(image,progress,remove);grid.append(tile);
     }
     confirm.hidden=!queue.length && !busy();confirm.disabled=!queue.length || busy();drop.disabled=library.disabled=busy();input.disabled=busy();
     root.setAttribute('aria-busy',String(busy()));
@@ -450,7 +451,7 @@ export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary
         if(!verdict.ok){rejected++;continue;}
         queue.push({file,preview:URL.createObjectURL(file)});
       }
-      status.textContent=`${queue.length} foto${queue.length===1?'':'s'} pendiente${queue.length===1?'':'s'}.${rejected ? ` ${rejected} no se agregaron: revisá el formato, tamaño o límite de 12 fotos de galería.` : ''}`;
+      status.textContent=`${queue.length} foto${queue.length===1?'':'s'} pendiente${queue.length===1?'':'s'}.${rejected ? ` ${rejected} no se agregaron: revisá el formato, tamaño o límite de ${maxImages} fotos de galería.` : ''}`;
       render();
     }).catch(error=>{status.textContent=error.message;}).finally(()=>{validating--;});
     return validation;
@@ -463,10 +464,13 @@ export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary
     operation=(async()=>{
       while(queue.length) {
         if(destroyed) throw new Error('El producto cambió durante la carga.');
-        if(remaining()<1) throw new Error('La galería admite hasta 12 fotos. Quitá una antes de continuar.');
+        if(remaining()<1) throw new Error(`La galería admite hasta ${maxImages} fotos. Quitá una antes de continuar.`);
         const item=queue[0];
         status.textContent=`Subiendo ${item.file.name} · ${queue.length} pendiente${queue.length===1?'':'s'}…`;
-        const result=await uploadImageToLibrary(item.file,{section:'productos'});
+        item.stage='Subiendo…';render();
+        let result;
+        try {result=await uploadImageToLibrary(item.file,{section:'productos',onProgress:stage=>{item.stage=STAGE_LABELS[stage] || 'Procesando…';if(!destroyed)render();}});}
+        catch(error){item.stage='Error. Reintentá la carga.';throw error;}
         try {
           if(destroyed) throw new Error('El producto cambió durante la carga.');
           await onChange?.(result.url,result);
@@ -488,7 +492,7 @@ export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary
   confirm.addEventListener('click',()=>void upload().catch(()=>{}));
   library.addEventListener('click',async()=>{
     if(busy())return;
-    try {const url=await onOpenLibrary();if(!url)return;if(destroyed)throw new Error('El producto cambió. Volvé a elegir la foto.');if(remaining()<1)throw new Error('La galería admite hasta 12 fotos.');await onChange?.(url,{fromLibrary:true});}
+    try {const url=await onOpenLibrary();if(!url)return;if(destroyed)throw new Error('El producto cambió. Volvé a elegir la foto.');if(remaining()<1)throw new Error(`La galería admite hasta ${maxImages} fotos.`);await onChange?.(url,{fromLibrary:true});}
     catch(error){status.textContent=error.message || 'No pudimos abrir la biblioteca.';}
   });
   render();

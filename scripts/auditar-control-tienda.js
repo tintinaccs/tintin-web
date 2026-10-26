@@ -247,10 +247,12 @@ check(
   /match\s+\/settings\/general\s*\{[\s\S]*?allow read:\s*if isStoreOpenOrAllowed\(\);/.test(rules),
   'settings/general no debe seguir público cuando la tienda cierra'
 );
+const productReads = rules.match(/match\s+\/products\/\{productId\}\s*\{([\s\S]*?)allow create:/)?.[1] || '';
 check(
   'Productos cerrados',
-  /match\s+\/products\/\{productId\}\s*\{[\s\S]*?allow get:\s*if isStoreOpenOrAllowed\(\);[\s\S]*?request\.query\.limit <= 1000/.test(rules),
-  'productos deben exigir tienda abierta y limitar los listados públicos'
+  /allow get:\s*if \(isStoreOpenOrAllowed\(\) &&\s*resource\.data\.get\('active', true\) != false &&\s*resource\.data\.get\('publicationStatus', 'active'\) == 'active'\) \|\| canReadProductDrafts\(\);/.test(productReads) &&
+    /allow list:\s*if isSuperAdmin\(\) \|\|\s*\(\s*request\.query\.limit != null &&\s*request\.query\.limit <= 1000 &&\s*\(\(isStoreOpenOrAllowed\(\) && resource\.data\.active == true &&\s*resource\.data\.publicationStatus == 'active'\) \|\| canReadProductDrafts\(\)\)\s*\);/.test(productReads),
+  'lecturas públicas deben exigir tienda abierta, producto publicado/activo y listado acotado; borradores sólo mediante el permiso staff'
 );
 check(
   'Colecciones cerradas',

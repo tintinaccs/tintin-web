@@ -1,4 +1,4 @@
-import { CACHE_KEY, loadCollections as loadCollectionMetadata, normalizeCollectionDoc, normalizeCollectionSlug, canonicalPublicCollections, sortCols } from './datos-publicos-colecciones.js?v=tintin-20261015-public-collection-data-1';
+import { CACHE_KEY, loadCollections as loadCollectionMetadata, normalizeCollectionDoc, normalizeCollectionSlug, canonicalPublicCollections, sortCols } from './datos-publicos-colecciones.js?v=tintin-20261026-editor-closure-1';
 export { normalizeCollectionDoc, normalizeCollectionSlug, canonicalPublicCollections };
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import {

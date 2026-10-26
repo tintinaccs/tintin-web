@@ -143,7 +143,8 @@
     "ci:browser": "node scripts/ci-stage.mjs browser",
     "ci:rules": "node scripts/ci-stage.mjs rules",
     "ci:preflight": "node scripts/ci-stage.mjs preflight",
-    "test:commerce-integration": "firebase emulators:exec --only firestore --project demo-tintin-commerce-integration \"node --test tests/integration/commerce-firestore.test.mjs\""
+    "test:commerce-integration": "firebase emulators:exec --only firestore --project demo-tintin-commerce-integration \"node --test tests/integration/commerce-firestore.test.mjs\"",
+    "test:rules-editor": "firebase emulators:exec --only firestore --project demo-tintin-phase4 --config firebase.editor-workspaces.test.json \"FIRESTORE_EMULATOR_HOST=127.0.0.1:8089 node scripts/probar-privacidad-borradores.mjs\""
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "6.0.0",

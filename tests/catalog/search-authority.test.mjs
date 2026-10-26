@@ -20,6 +20,8 @@ test('el auditor exige campos, delegación clásica y política de visibilidad e
   (file,s)=>file==='tienda.js'?s.replace('module => module.initSearchController()','module => undefined'):s,
   (file,s)=>file==='tienda.js'?s+'\nfunction runSearch() {}':s,
   (file,s)=>file.endsWith('control-busqueda.js')?s.replace('window.TintinCatalogPolicy.isCatalogVisible(product)','true'):s,
+  (file,s)=>file.endsWith('politica-visibilidad-catalogo.js')?s.replace('loadCollections({ onData(collections)', 'skipCollections({ onData(collections)'):s,
+  (file,s)=>file.endsWith('politica-visibilidad-catalogo.js')?s.replace('visibleCollectionSlugs = new Set', 'unusedCollectionSlugs = new Set'):s,
  ])assert.equal(audit(mutate),1);
 });
 test('controlador real excluye ocultos/inactivos y prioriza opciones disponibles antes de agotados',()=>{

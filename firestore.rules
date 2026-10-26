@@ -1293,13 +1293,25 @@ service cloud.firestore {
        PRODUCTS / COLLECTIONS / CONTENT
        ============================================================ */
 
+    function canReadProductDrafts() {
+      let role = currentRole();
+      let permissionsExist = exists(/databases/$(database)/documents/rolePermissions/main);
+      let permitted = permissionsExist ? get(/databases/$(database)/documents/rolePermissions/main).data
+        .get(role, {}).get('productos', {}).get('ver', role == 'admin') == true : role == 'admin';
+      return isSuperAdmin() || (isSignedIn() && role in ['admin', 'agent'] &&
+        permitted && isStoreOpenOrAllowed());
+    }
+
     match /products/{productId} {
-      allow get: if isStoreOpenOrAllowed();
+      allow get: if (isStoreOpenOrAllowed() &&
+        resource.data.get('active', true) != false &&
+        resource.data.get('publicationStatus', 'active') == 'active') || canReadProductDrafts();
       allow list: if isSuperAdmin() ||
         (
-          isStoreOpenOrAllowed() &&
           request.query.limit != null &&
-          request.query.limit <= 1000
+          request.query.limit <= 1000 &&
+          ((isStoreOpenOrAllowed() && resource.data.active == true &&
+            resource.data.publicationStatus == 'active') || canReadProductDrafts())
         );
 
       allow create: if request.resource.data.get('variantCommerceVersion', 1) == 1 && (isSuperAdmin() ||

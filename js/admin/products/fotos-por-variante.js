@@ -41,6 +41,17 @@ export function createVariantPhotoEditor({ variantsInput, media, initialRows, sa
     const replaced = new Set(changed.keys());
     return [...rows.filter(row => !replaced.has(identity(row))), ...changed.values()];
   }
+  function setPhotos(selected, urls) {
+    const key=identity(selected), row=changed.get(key) || initialRows.find(row=>identity(row)===key);
+    const next={...row,...selected,imageUrls:media.uniqueImages(urls)};delete next.imageUrl;changed.set(key,next);
+  }
+  function replacePhoto(from,to) {
+    for(const row of serialize(initialRows)) {
+      if(attributes(row).length===1 && media.isColorKey(attributes(row)[0]))continue;
+      const photos=media.rowImages(row);if(!photos.some(url=>media.imageKey(url)===media.imageKey(from)))continue;
+      setPhotos(Object.fromEntries(attributes(row).map(key=>[key,row[key]])),photos.map(url=>media.imageKey(url)===media.imageKey(from)?to:url));
+    }
+  }
   function render(container, pool, refresh) {
     destroyUploads();
     const options = groups();
@@ -80,7 +91,7 @@ export function createVariantPhotoEditor({ variantsInput, media, initialRows, sa
     library.addEventListener('click', async () => { try { const url = await openLibrary(); if (url) add(url); } catch { hint.textContent = 'No pudimos abrir la biblioteca. Reintentá.'; } }); container.append(library);
     if (attachUpload) { const upload = document.createElement('div'); container.append(upload); uploads.push(attachUpload(upload, { label: 'Agregar foto a esta variante', hint: 'Subí una foto o pegá su enlace.', onOpenLibrary: openLibrary, onChange: add, cleanupPrevious: false })); }
   }
-  return { render, serialize, removePhoto(url) {for(const row of serialize(initialRows)){if(attributes(row).length===1 && media.isColorKey(attributes(row)[0]))continue;const photos=media.rowImages(row).filter(photo=>media.imageKey(photo)!==media.imageKey(url));if(photos.length===media.rowImages(row).length)continue;const next={...row,imageUrls:photos};delete next.imageUrl;changed.set(identity(row),next);}}, hasPending: () => uploads.some(widget => widget.hasPending?.()),
+  return { render, serialize, setPhotos, replacePhoto, removePhoto(url) {for(const row of serialize(initialRows)){if(attributes(row).length===1 && media.isColorKey(attributes(row)[0]))continue;const photos=media.rowImages(row).filter(photo=>media.imageKey(photo)!==media.imageKey(url));if(photos.length===media.rowImages(row).length)continue;const next={...row,imageUrls:photos};delete next.imageUrl;changed.set(identity(row),next);}}, hasPending: () => uploads.some(widget => widget.hasPending?.()),
     pendingSignature:()=>uploads.map(widget=>widget.pendingSignature?.() || []),
     flush: () => Promise.all(uploads.map(widget => widget.flush?.())), destroy: destroyUploads };
 }

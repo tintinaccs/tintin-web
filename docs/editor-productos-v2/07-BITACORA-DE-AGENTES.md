@@ -1,3 +1,7 @@
+## 2026-10-25 — Fases 5–6 (Codex /root, GPT-6)
+
+Recuperada cadena abierta1237–1240; base a6e197e5, sin merge/deploy. Presentación, correcciones demostradas, matriz, capturas y auditoría en informes22–23 y recibo evidencias-f56.json. Fase5 conserva editor/motor de fases anteriores; Fase6 distingue PASS local de instalación/CI/producción pendientes. Se conserva toda la historia inferior sin heredar aprobaciones. El PR de entrega apunta a la rama de Fase4, fuera de mantenimiento automático de main.
+
 ## Cierre local del candidato — 23/10/2026
 
 PASS_LOCAL con dependencias instaladas por npm ci (lock intacto): 39 comandos preflight; 457 comercio; 221 sincronización; 117 administrativos antes del último ajuste de permisos, seguido de 11 pruebas específicas del escritor; 36 arquitectura; 213 controles de reglas y 8 REST/CAS en emulador demo; 143 Chromium sin reintentos. Build Pages/CSP/rutas/diagnóstico (19 páginas) y caché (369 recursos, 67 cargas dinámicas) aprobados. Revisión de diff y capturas móvil/escritorio completadas. CI del SHA final y publicación todavía PENDING. Matriz actual en15; detalle de compatibilidad/reversión en14. Ningún producto/pedido/correo real modificado.
@@ -66,3 +70,11 @@ Codex /root aplica la habilidad instalada apple-inspired-design al editor canón
 ## 2026-10-24 — Codex /root: contraste y ejemplos de entrada
 
 Refinamiento Apple-inspired de agregar/editar, sin cambiar estructura ni motor comercial. Casillas blancas, borde contrastado, rosa discreto en lienzo/separadores, títulos legibles y ejemplos suplementarios conservando etiquetas. Foco reparado contra reset heredado. Validación y límites en CURRENT_STATE.
+
+## 2026-10-26 — Continuación UI07 (Codex /root, GPT-6)
+
+La prueba con el publicador real reproduce recuperación incompleta tras revalidar membresía de colecciones. Se reutiliza carga canónica, conserva ficha visible y cubre búsqueda informativa. Regresión RED/GREEN y recibo adicional en evidencias-f56.json. PR1241 sobre Fase4, sin merge/deploy; ver los resultados de esta continuación en el recibo, sin heredar PASS históricos.
+
+## 2026-10-26 — Integración/merge autorizados (Codex /root, GPT-6)
+
+PR1241 pasa a main con Fases1–6. Se corrige auditor de tienda obsoleto y truncado del listado privado mediante paginación. Ver informe24 y recibo de cierre; autorización nueva prevalece sobre restricciones anteriores de merge. Sin despliegues manuales ni operaciones comerciales reales.

@@ -11,23 +11,27 @@ const start = shell.indexOf('<div class="adm-card" id="prod-form-card"');
 const form = shell.slice(start, shell.indexOf('\n    </div>\n\n    <!-- ===================== COLECCIONES', start));
 const code = source.slice(source.indexOf('let productVariantStockBaseline = null;'), source.indexOf('window.prodToggleActive ='));
 
-async function openProductSaveFixture(page, width, height, {fullShell=false} = {}) {
+async function openProductSaveFixture(page, width, height, {fullShell=false,photos=false,workflow=false} = {}) {
   await page.setViewportSize({ width, height });
   await mockRuntime(page);
+  await page.route('**/components/images/biblioteca-multimedia.js*',route=>route.fulfill({contentType:'text/javascript',body:`export const deleteMediaByUrlIfUnused=async()=>{throw Error('No se permite borrar archivos en QA');};export const deleteMediaItem=deleteMediaByUrlIfUnused;export const uploadImageToLibrary=async(file,options)=>{options?.onProgress?.('uploading');if(window.qaUploadFailure)throw Error('Carga fallida de prueba');return {url:'https://img.test/'+file.name,mediaId:'synthetic'};};`}));
   await page.exposeFunction('qaCommercialWrite', async ({ request, records }) => {
     const { pathToFileURL } = require('node:url');
-    const [{ saveProductEditor }, { encodeFirestoreFields, decodeFirestoreFields }] = await Promise.all([
+    const [{ saveProductEditor }, { encodeFirestoreFields, decodeFirestoreFields },{productEditorWorkspace}] = await Promise.all([
       import(pathToFileURL(path.join(root, 'cloudflare/product-editor-domain.mjs')).href),
       import(pathToFileURL(path.join(root, 'cloudflare/firebase-admin-ligero.js')).href),
+      import(pathToFileURL(path.join(root, 'cloudflare/product-editor-workspaces.mjs')).href),
     ]);
     const data = new Map(records), writes = [];
     try {
-      const result = await saveProductEditor({}, request, { uid: 'qa-admin', role: 'superadmin', email: 'qa-admin@example.invalid' }, {
+      const writer=request.action==='saveProduct'?saveProductEditor:productEditorWorkspace;
+      const result = await writer({}, request, { uid: 'qa-admin', role: 'superadmin', email: 'qa-admin@example.invalid' }, {
         get: async (_env, key) => key === 'collections/qa-tablet' ? { fields: encodeFirestoreFields({ name: 'Colección ficticia' }), updateTime: 'qa-collection' } : data.has(key) ? { fields: encodeFirestoreFields(data.get(key)), updateTime: 'qa-record' } : null,
+        list:async (_env,path)=>[...data].filter(([key])=>key.startsWith(path+'/')).map(([,value])=>({fields:encodeFirestoreFields(value)})),
         commit: async (_env, changes) => { for (const change of changes) { data.set(change.path, { ...data.get(change.path), ...decodeFirestoreFields(change.fields) }); writes.push(change.path); } },
       });
       return { ok: true, result, records: [...data], writes };
-    } catch (error) { return { ok: false, error: error.message }; }
+    } catch (error) { return { ok: false, error: error.message,status:error.status }; }
   });
   let html = fixtureHtml().replace('<section class="adm-section" id="section-productos">', '<section class="adm-section active" id="section-productos">').replace(/<link[^>]+rel="stylesheet"[^>]*>/g, '').replace('</head>', headStyles + '</head>');
   if(fullShell){
@@ -46,7 +50,7 @@ async function openProductSaveFixture(page, width, height, {fullShell=false} = {
   await page.goto('https://tintin.test/admin-commerce-fixture');
   await page.evaluate(() => document.fonts.ready.then(() => true));
   await expect(page.locator('[data-action="product-new"]')).toBeVisible();
-  await page.evaluate(async code => {
+  await page.evaluate(async ({code,workflow}) => {
     const load = file => import(new URL(file, location.origin).href);
     const [inventory, commercial, commercialUi, editorialUi, editorial, master] = await Promise.all([
       load('/js/core/store/inventario-variantes.mjs'), load('/js/admin/products/editor-comercial-core.mjs'),
@@ -56,7 +60,11 @@ async function openProductSaveFixture(page, width, height, {fullShell=false} = {
     const rows = new Map(); let counter = 0;
     window.qaProductStore = rows; window.qaProductWrites = []; window.qaProductOperations = [];
     const apply = (ref, data) => { rows.set(ref.path, { ...rows.get(ref.path), ...structuredClone(data) }); window.qaProductWrites.push(ref.path); };
+    const galleryModule=await load('/js/admin/products/galeria-unificada.js');
+    const workspaceModule=workflow?await load('/js/admin/products/espacio-trabajo-producto.js'):{};
+    const uploadModule=await load('/js/components/images/carga-imagenes.js?v=tintin-20261025-gallery-unified-1');
     const deps = {
+      ...workspaceModule,...galleryModule,...uploadModule,openMediaLibraryPicker:async()=>window.qaLibraryPhoto || null,
       ...inventory, ...commercial, ...commercialUi, ...editorialUi, ...editorial, ...master,
       _allProducts: [], _productSourceById: new Map(), _productInventoryById: new Map(), adminRealtimeReady: { orders: false }, _allCollections: [{ slug: 'qa-tablet', name: 'Colección ficticia' }],
       productEditBaseline: null, productCommercialBaseline: null, _formImageWidgets: new Map(),
@@ -82,9 +90,10 @@ async function openProductSaveFixture(page, width, height, {fullShell=false} = {
       },
       authenticatedFetch: async (_url, options) => {
         if (window.qaRejectSave) return { ok: false, json: async () => ({ ok: false, error: 'Almacenamiento ficticio sin conexión' }) };
+        if(window.qaHoldCommit && JSON.parse(options.body).action==='saveProduct')await new Promise(resolve=>window.qaReleaseCommit=resolve);
         const response = await window.qaCommercialWrite({ request: JSON.parse(options.body), records: [...rows] });
         if (response.ok) { for (const [key, value] of response.records) rows.set(key, value); window.qaProductWrites.push(...response.writes); }
-        return { ok: response.ok, json: async () => response };
+        return { ok: response.ok,status:response.status || (response.ok?200:500), json: async () => response };
       },
       pushProductsToSheets: async () => { return !window.qaFailSync; }, logAudit: async () => {},
       loadProductos() {
@@ -95,9 +104,9 @@ async function openProductSaveFixture(page, width, height, {fullShell=false} = {
       runAdminCrudOperation: async config => { try { await config.action({ start() {}, ok() {} }); window.qaProductOperations.push('green'); return { status: 'green' }; } catch (error) { window.qaProductOperations.push(error.message); return { status: 'red' }; } },
     };
     // Original controller and DOM; only identity, storage and external services are fictitious.
-    new Function('__deps', `with (__deps) { ${code}\nwindow.prodGuardar = prodGuardar; window.qaProductController = { serializeProductForm }; }`)(deps);
+    new Function('__deps', `with (__deps) { ${code}\nwindow.prodGuardar = prodGuardar; window.qaProductController = { serializeProductForm,refresh:()=>loadProductos(),get workspace(){return productWorkspace;} }; }`)(deps);
     const category = document.getElementById('prod-category'); category.replaceChildren(new Option('Elegí colección', ''), new Option('Colección ficticia', 'qa-tablet'));
-  }, code);
+  }, {workflow,code:photos ? source.slice(source.indexOf('const _formImageWidgets = new Map();'),source.indexOf('let productVariantStockBaseline = null;'))+code : code});
   await page.locator('[data-action="product-new"]').click();
   await expect(page.locator('#prod-editor-section')).toBeVisible();
 }

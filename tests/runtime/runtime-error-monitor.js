@@ -44,7 +44,9 @@ async function installRuntimeErrorMonitor(page,context){
     // CI39238913443 trace: products read cancelled 5.153ms after
     // beforeunload when returning from login. Restrict to the local fixture,
     // native access diagnostic and the canonical fetchResource caller.
-    const publicCatalogProducts=error.message==='/127.0.0.1:4174/api/public-catalog?resource=products due to access control checks.' &&
+    // CI40311904791 also reports the collections revalidation on reload.
+    // Keep exact local resource allowlist, caller, native kind and leaving window.
+    const publicCatalogProducts=['products','collections'].some(resource=>error.message===`/127.0.0.1:4174/api/public-catalog?resource=${resource} due to access control checks.`) &&
       error.stack?.includes('    at fetchResource (http://127.0.0.1:4174/js/core/firebase/catalogo-publico-api.js?');
     const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup || authTokenRefresh || visualStudioPublic || siteVersionPublic || publicCatalogProducts);
     if(navigationCancellation)browserDiagnostics.push({kind:'native-emulator-channel-cancelled-on-navigation',message:error.message});

@@ -20,6 +20,7 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
     await page.locator('#prod-editor-section').selectOption('visibility');
     await page.locator('#prod-category').selectOption('qa-tablet');
     await page.locator('#prod-editor-section').selectOption('inventory');
+    await page.locator(".tt-editor-option-assistance").evaluate(node=>node.open=true);
     await press(page.getByRole('button', { name: 'Agregar color Dorado', exact: true }));
     await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado');
     await expect(page.locator('#prod-form-error')).toBeHidden();
@@ -51,6 +52,7 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
   test('activar precios por combinación conserva las cantidades recién editadas', async ({ page }) => {
     await openProductSaveFixture(page, width, height); await fillValid(page);
     await page.locator('#prod-editor-section').selectOption('inventory');
+    await page.locator(".tt-editor-option-assistance").evaluate(node=>node.open=true);
     await press(page.getByRole('button', { name: 'Agregar color Dorado', exact: true }));
     await press(page.getByRole('button', { name: 'Asignar stock por color u opción', exact: true }));
     await page.locator('#prod-variant-stock input[type="number"]').fill('2');
@@ -77,6 +79,7 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
     await expect(page.locator('#prod-form-error')).toContainText('foto principal');
     await page.locator('#prod-imageUrl').evaluate(input => { input.value='/assets-tintin/logo.png'; });
     await page.locator('#prod-editor-section').selectOption('inventory');
+    await page.locator(".tt-editor-option-assistance").evaluate(node=>node.open=true);
     await press(page.getByRole('button', {name:'Agregar color Dorado',exact:true}));
     await expect(page.locator('#prod-stock')).toBeEditable();
     await expect(page.locator('#prod-variant-stock input[type="number"]')).toHaveCount(0);
@@ -128,6 +131,7 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
     await openProductSaveFixture(page, width, height);
     await page.locator('#prod-editor-section').selectOption('inventory');
     await page.locator('#prod-stock').fill('7');
+    await page.locator(".tt-editor-option-assistance").evaluate(node=>node.open=true);
     await press(page.getByRole('button', { name: 'Agregar color Dorado', exact: true }));
     await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado');
     await press(page.getByRole('button', { name: 'Quitar Color: Dorado', exact: true }));
@@ -139,6 +143,7 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024
   test('quitar una opción con stock conserva datos y explica cómo corregirla', async ({ page }) => {
     await openProductSaveFixture(page, width, height);
     await page.locator('#prod-editor-section').selectOption('inventory');
+    await page.locator(".tt-editor-option-assistance").evaluate(node=>node.open=true);
     await press(page.getByRole('button', { name: 'Agregar color Dorado', exact: true }));
     await press(page.getByRole('button', { name: 'Asignar stock por color u opción', exact: true }));
     await page.locator('#prod-variant-stock input[type="number"]').fill('2');
@@ -175,7 +180,7 @@ for(const [width,height] of [[320,568],[390,844],[430,932],[540,900],[600,960],[
   const frame=await page.locator('#prod-form-card').boundingBox();expect(frame.height).toBeGreaterThan(200);expect(frame.y).toBeGreaterThanOrEqual(0);expect(frame.y+frame.height).toBeLessThanOrEqual(height+1);
   await expect(page.locator('#prod-save-btn')).toBeInViewport();
   await page.locator('#prod-editor-section').selectOption('inventory');
-  const controls=await page.locator('.tt-editor-variant-add').evaluate(row=>({row:row.getBoundingClientRect().toJSON(),children:[...row.children].map(n=>({tag:n.tagName,rect:n.getBoundingClientRect().toJSON()}))}));
+  const controls=await page.locator('.tt-editor-variant-add').evaluate(row=>({row:row.getBoundingClientRect().toJSON(),children:[...row.children].filter(node=>node.getClientRects().length).map(n=>({tag:n.tagName,rect:n.getBoundingClientRect().toJSON()}))}));
   for(const control of controls.children){expect(control.rect.left).toBeGreaterThanOrEqual(controls.row.left-1);expect(control.rect.right).toBeLessThanOrEqual(controls.row.right+1);if(['INPUT','SELECT'].includes(control.tag))expect(control.rect.width).toBeGreaterThanOrEqual(Math.min(180,controls.row.width)-1);}
 });
 
@@ -185,4 +190,195 @@ test('viewport reducido y restauración no dejan el editor vacío ni pierden el 
   expect((await page.locator('#prod-form-card').boundingBox()).height).toBeGreaterThan(0);
   await page.evaluate(()=>{delete visualViewport.height;dispatchEvent(new Event('pageshow'));});
   await expect.poll(()=>page.locator('#prod-form-card').evaluate(n=>n.getBoundingClientRect().height)).toBeGreaterThan(500);await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');
+});
+
+// Galería unificada: integración con controlador y escritor originales.
+{
+const {test,expect}=require('@playwright/test');
+const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
+
+test('carga unificada conserva pendientes ante fallo, reintenta y permite cancelar',async({page})=>{
+ await openProductSaveFixture(page,390,844,{photos:true});await page.locator('#prod-editor-section').selectOption('photos');
+ const gallery=page.locator('.tt-unified-photos');
+ const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=40;canvas.height=40;return canvas.toDataURL('image/png').split(',')[1];});
+ const file=n=>({name:`device${n}.png`,mimeType:'image/png',buffer:Buffer.from(png,'base64')});
+ await gallery.locator('input[multiple]').setInputFiles([1,2,3,4,5].map(file));
+ await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(5);
+ await page.evaluate(()=>window.qaUploadFailure=true);await gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true}).click();
+ await expect(gallery.locator('.tt-iuw-multiple .tt-iuw-status')).toContainText('Carga fallida');await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(5);
+ await page.evaluate(()=>window.qaUploadFailure=false);await gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true}).click();
+ await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(0);
+ await gallery.locator('input[multiple]').setInputFiles(file(6));await gallery.getByRole('button',{name:'Quitar pendiente device6.png',exact:true}).click();await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(0);
+ await gallery.getByRole('button',{name:'Reemplazar foto 1',exact:true}).click();await gallery.getByRole('button',{name:'Cancelar reemplazo',exact:true}).click();await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);
+});
+
+for(const count of [1,2,3,4,5,10,13])test(`galería única con ${count} imágenes conserva orden y portada`,async({page})=>{
+ await openProductSaveFixture(page,1366,768,{photos:true});await page.locator('#prod-editor-section').selectOption('photos');const gallery=page.locator('.tt-unified-photos');
+ for(let i=1;i<=count;i++){await page.evaluate(i=>window.qaLibraryPhoto=`https://img.test/count${i}.webp`,i);await gallery.locator('.tt-iuw-multiple').getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();}
+ await expect(gallery.locator('.tt-unified-photo')).toHaveCount(count);const index=Math.min(4,count);await gallery.getByRole('button',{name:`Portada: foto ${index}`,exact:true}).click();await expect(page.locator('#prod-imageUrl')).toHaveValue(`https://img.test/count${index}.webp`);
+});
+
+for(const [width,height] of [[390,844],[844,390],[768,1024],[1024,768],[1366,768],[1920,1080]])test(`galería única guarda, reabre y conserva asociaciones ${width}x${height}`,async({page})=>{
+ await openProductSaveFixture(page,width,height,{photos:true});
+ await page.locator('#prod-editor-section').selectOption('photos');
+ const gallery=page.locator('.tt-unified-photos');await expect(gallery).toBeVisible();
+ await expect(gallery.locator('input[multiple]')).toHaveCount(1);
+ await page.locator('#prod-variants-text').evaluate(input=>{input.value='Color: Dorado, Plateado\nForma: Redondo, Ovalado';input.dispatchEvent(new Event('input',{bubbles:true}));});
+ for(let i=1;i<=5;i++){
+  await page.evaluate(i=>{window.qaLibraryPhoto=`https://img.test/photo${i}.webp`;},i);
+  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
+ }
+ await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);
+ await gallery.getByRole('button',{name:'Portada: foto 4',exact:true}).click();
+ await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/photo4.webp');
+ await gallery.getByRole('button',{name:'Asociar foto 1',exact:true}).click();
+ await gallery.getByLabel('Asociación: Color',{exact:true}).selectOption('Dorado');await gallery.getByLabel('Asociación: Forma',{exact:true}).selectOption('Redondo');await gallery.getByRole('button',{name:'Asociar fotografía',exact:true}).click();
+ await gallery.getByRole('button',{name:'Asociar foto 3',exact:true}).click();await gallery.getByLabel('Asociación: Color',{exact:true}).selectOption('Plateado');await gallery.getByRole('button',{name:'Asociar fotografía',exact:true}).click();
+ await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Galería sintética');await page.locator('#prod-description').fill('Descripción sintética');
+ await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('45000');
+ await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('qa-tablet');
+ await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ const saved=await page.evaluate(()=>window.qaProductStore.get('products/qa-product-1'));
+ expect(saved.imageUrl).toBe('https://img.test/photo4.webp');expect(saved.imagesExtra).toHaveLength(4);
+ expect(saved.variantMedia.find(row=>row.Forma==='Redondo').imageUrls).toEqual(['https://img.test/photo4.webp']);
+ const publicImages=await page.evaluate(async data=>{const path='/js/components/images/foto-variante.mjs';const {productVariantImage}=await import(path);return [productVariantImage(data,''),productVariantImage(data,'Dorado / Redondo'),productVariantImage(data,'Plateado / Redondo')];},saved);
+ expect(publicImages).toEqual(['https://img.test/photo4.webp','https://img.test/photo4.webp','https://img.test/photo2.webp']);
+ await page.evaluate(()=>window.prodEditar('qa-product-1'));
+ await page.locator('#prod-editor-section').selectOption('photos');await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);
+ await expect(page.locator('#prod-imageUrl')).toHaveValue(saved.imageUrl);
+ await page.evaluate(()=>window.qaLibraryPhoto='https://img.test/photo6.webp');await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
+ await expect(gallery.locator('.tt-unified-photo')).toHaveCount(6);
+ await gallery.getByRole('button',{name:'Siguiente: foto 2',exact:true}).focus();await page.keyboard.press('Enter');
+ await gallery.getByRole('button',{name:'Reemplazar foto 2',exact:true}).click();
+ await page.evaluate(()=>window.qaLibraryPhoto='https://img.test/replacement.webp');await gallery.locator('.tt-iuw:not(.tt-iuw-multiple)').getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
+ await expect(gallery.locator('.tt-unified-photo img[src$="replacement.webp"]')).toHaveCount(1);
+ await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ const replaced=await page.evaluate(()=>window.qaProductStore.get('products/qa-product-1'));
+ expect(replaced.variantMedia.find(row=>row.Color==='Plateado').imageUrls).toEqual(['https://img.test/replacement.webp']);
+ expect(replaced.variantMedia.find(row=>row.Forma==='Redondo').imageUrls).toEqual(['https://img.test/photo4.webp']);
+ await page.evaluate(()=>window.prodEditar('qa-product-1'));await page.locator('#prod-editor-section').selectOption('photos');
+ await gallery.getByRole('button',{name:'Quitar foto 3',exact:true}).click();await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);
+ await gallery.getByRole('button',{name:'Quitar foto 1',exact:true}).click();await expect(gallery.locator('.tt-unified-photo')).toHaveCount(4);
+ await expect(page.locator('#prod-imageUrl')).not.toHaveValue('');
+ expect(await gallery.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
+ await page.locator('#prod-form-card .adm-card-body').evaluate(node=>node.scrollTop=0);
+ await page.screenshot({path:`artifacts/unified-gallery/${width}x${height}.png`});
+});
+
+}
+
+// Fase 3: grupos e inventario usan el mismo controlador y escritor.
+for(const [width,height] of [[390,844],[844,390],[768,1024],[1024,768],[1366,768],[1920,1080]]) {
+ test('opciones agrupadas, inventario y referencias seguras '+width+'x'+height,async({page})=>{
+  await openProductSaveFixture(page,width,height,{photos:true});
+  await page.locator('#prod-editor-section').selectOption('general');
+  await page.locator('#prod-name').fill('Opciones sintéticas');
+  await page.locator('#prod-description').fill('Descripción de prueba');
+  await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('45000');
+  await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('qa-tablet');await page.locator('#prod-publicationStatus').selectOption('draft');
+  await page.locator('#prod-editor-section').selectOption('inventory');
+  const add=async(group,name)=>{await page.getByLabel('Característica de variante',{exact:true}).selectOption(group);await page.getByLabel('Nueva opción de variante',{exact:true}).fill(name);await page.getByRole('button',{name:'Agregar opción',exact:true}).click();};
+  for(const color of ['Verde','Verde Oliva','Bordó','Plateado','Blanco'])await add('Color',color);
+  await expect(page.locator('.tt-option-group')).toHaveCount(1);
+  await expect(page.locator('.tt-option-row')).toHaveCount(5);
+  await page.evaluate(()=>{window.qaOptionScrollResets=0;window.TintinPageScroll={reset:()=>window.qaOptionScrollResets++};const body=document.querySelector('#prod-form-card .adm-card-body');body.scrollTop=250;const value=document.querySelector('[aria-label="Nueva opción de variante"]');value.value='Temporal';value.focus({preventScroll:true});document.querySelector('.tt-editor-variant-add button').click();});
+  expect(await page.evaluate(()=>window.qaOptionScrollResets)).toBe(0);
+  await expect(page.getByLabel('Nueva opción de variante',{exact:true})).toBeFocused();
+  await page.getByRole('button',{name:'Quitar Color: Temporal',exact:true}).click();
+  await add('Color','Verde');await expect(page.locator('.tt-editor-control-error')).toContainText('ya está');
+  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('');
+  const first=page.locator('.tt-option-row').filter({has:page.locator('strong',{hasText:/^Verde$/})});
+  await first.locator('summary').click();await page.getByLabel('Nombre comercial de Color: Verde',{exact:true}).fill('Verde Claro');
+  await page.getByRole('button',{name:'Aplicar nombre de Color: Verde',exact:true}).click();
+  await expect(page.locator('#prod-variants-text')).toHaveValue(/Verde Claro/);
+  await page.getByRole('button',{name:'Siguiente opción Color: Bordó',exact:true}).click();
+  await expect(page.locator('#prod-variants-text')).toHaveValue(/Plateado, Bordó/);
+  await page.getByLabel('Círculo de Verde Oliva',{exact:true}).fill('#667744');
+  await page.getByRole('button',{name:'Disponibilidad de Color: Bordó',exact:true}).click();
+  await expect(page.locator('[data-product-section=availability]')).toBeVisible();
+  await expect(page.locator('#prod-stock')).toBeVisible();
+  await page.locator('#prod-stock').fill('0');
+  await page.evaluate(()=>window.confirm=()=>true);
+  await page.getByRole('button',{name:'Usar precios y disponibilidad por combinación',exact:true}).click();
+  await expect(page.locator('#prod-stock')).toBeHidden();
+  await page.getByLabel('Stock: Verde Claro',{exact:true}).fill('4');
+  await page.getByLabel('Stock: Verde Oliva',{exact:true}).fill('2');
+  await page.getByLabel('Precio: Verde Oliva',{exact:true}).fill('55000');
+  await page.locator('#prod-editor-section').selectOption('inventory');
+  const oliveRow=page.locator('.tt-option-row').filter({has:page.locator('strong',{hasText:/^Verde Oliva$/})});await oliveRow.locator('summary').click();
+  await page.getByLabel('Nombre comercial de Color: Verde Oliva',{exact:true}).fill('Oliva nueva');await page.getByRole('button',{name:'Aplicar nombre de Color: Verde Oliva',exact:true}).click();
+  await expect(page.locator('.tt-editor-control-error')).toContainText('cantidades o precios');await expect(page.locator('#prod-variants-text')).toHaveValue(/Verde Oliva/);
+  await page.getByLabel('Disponible: Bordó',{exact:true}).uncheck();
+  await expect(page.locator('#prod-publicationStatus')).toHaveValue('draft');
+  await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+  const saved=await page.evaluate(()=>window.qaProductStore.get('products/qa-product-1'));
+  expect(saved.stock).toBe(6);expect(saved.publicationStatus).toBe('draft');
+  expect(saved.variantMedia.find(row=>row.Color==='Verde Oliva').colorHex).toBe('#667744');
+  const olive=saved.variantInventory.find(row=>row.attributes.Color==='Verde Oliva');expect(olive.stock).toBe(2);expect(olive.price).toBe(55000);
+  const burgundy=saved.variantInventory.find(row=>row.attributes.Color==='Bordó');expect(burgundy.stock).toBe(0);expect(burgundy.active).toBe(false);
+  await page.evaluate(()=>window.prodEditar('qa-product-1'));await page.locator('#prod-editor-section').selectOption('inventory');
+  await expect(page.getByRole('button',{name:'Quitar Color: Verde Oliva',exact:true})).toBeDisabled();
+  await expect(page.getByLabel('Círculo de Verde Oliva',{exact:true})).toHaveValue('#667744');
+  await page.getByRole('button',{name:'Anterior opción Color: Verde Oliva',exact:true}).click();
+  await page.getByLabel('Stock: Verde Oliva',{exact:true}).fill('');
+  await expect(page.locator('#prod-variant-stock > [role=alert]')).toContainText('control de stock');
+  await page.getByLabel('Stock: Verde Oliva',{exact:true}).fill('1');
+  await expect(page.locator('#prod-publicationStatus')).toHaveValue('draft');
+  await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+  const changed=await page.evaluate(()=>window.qaProductStore.get('products/qa-product-1'));
+  expect(changed.stock).toBe(5);const newOlive=changed.variantInventory.find(row=>row.attributes.Color==='Verde Oliva');
+  expect(newOlive.variant).toBe(olive.variant);expect(newOlive.stock).toBe(1);expect(newOlive.price).toBe(55000);
+  await page.evaluate(()=>window.prodEditar('qa-product-1'));await page.locator('#prod-editor-section').selectOption('inventory');
+  await page.getByRole('button',{name:'Disponibilidad de Color: Verde Oliva',exact:true}).click();await expect(page.getByLabel('Seleccionar Verde Oliva',{exact:true})).toBeFocused();
+  await page.locator('#prod-editor-section').selectOption('inventory');
+  expect(await page.locator('#prod-form-card').evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);
+  await page.locator('#prod-form-card .adm-card-body').evaluate(node=>node.scrollTop=0);
+  await page.screenshot({path:'artifacts/options-phase3/'+width+'x'+height+'.png',animations:'disabled'});
+  await page.locator('#prod-editor-section').selectOption('availability');await page.locator('#prod-form-card .adm-card-body').evaluate(node=>node.scrollTop=0);
+  await page.screenshot({path:'artifacts/options-phase3/inventory-'+width+'x'+height+'.png',animations:'disabled'});
+ });
+}
+test('la sugerencia es contextual y jamás crea una opción sin confirmación',async({page})=>{
+ await openProductSaveFixture(page,390,844,{photos:true});await page.locator('#prod-editor-section').selectOption('inventory');
+ await page.evaluate(()=>{document.querySelector('#prod-imageUrl').value='https://img.test/green.webp';window.TintinProductColors={...window.TintinProductColors,suggestImageColor:async()=>({name:'Dorado'})};});
+ const assistance=page.locator('.tt-editor-option-assistance');await assistance.locator('summary').click();
+ await assistance.getByRole('button',{name:'Sugerir desde la portada',exact:true}).click();
+ await expect(page.locator('#prod-variants-text')).toHaveValue('');
+ await assistance.getByRole('button',{name:'Usar sugerencia Dorado',exact:true}).click();
+ await expect(page.locator('#prod-variants-text')).toHaveValue('');
+ await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Bordó');
+ await page.getByRole('button',{name:'Agregar opción',exact:true}).click();await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Bordó');
+});
+
+for(const kind of ['simple','sin-control','color-talle'])test('inventario pertinente y persistente: '+kind,async({page})=>{
+ await openProductSaveFixture(page,768,1024,{photos:true});
+ await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Producto '+kind);await page.locator('#prod-description').fill('Descripción ficticia');
+ await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('45000');
+ await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('qa-tablet');await page.locator('#prod-publicationStatus').selectOption('draft');
+ await page.locator('#prod-editor-section').selectOption('inventory');
+ if(kind==='simple'){
+  await expect(page.locator('#prod-variant-stock')).toBeHidden();await expect(page.locator('#prod-stock')).toBeVisible();await page.locator('#prod-stock').fill('0');
+ }else{
+  const add=async(key,name)=>{await page.getByLabel('Característica de variante',{exact:true}).selectOption(key);await page.getByLabel('Nueva opción de variante',{exact:true}).fill(name);await page.getByRole('button',{name:'Agregar opción',exact:true}).click();};
+  await add('Color','Verde');
+  if(kind==='color-talle'){await add('Color','Plateado');await add('Talle','M');await add('Talle','L');}
+  await page.locator('#prod-stock').fill('0');await page.evaluate(()=>window.confirm=()=>true);await page.getByRole('button',{name:'Usar precios y disponibilidad por combinación',exact:true}).click();
+  if(kind==='sin-control')await page.getByLabel('Stock: Verde',{exact:true}).fill('');
+  else {await page.getByLabel('Stock: Verde / M',{exact:true}).fill('2');await page.getByLabel('Precio: Verde / L',{exact:true}).fill('65000');}
+ }
+ await expect(page.locator('#prod-publicationStatus')).toHaveValue('draft');
+ await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ const saved=await page.evaluate(()=>window.qaProductStore.get('products/qa-product-1'));
+ expect(saved.publicationStatus).toBe('draft');
+ if(kind==='simple')expect(saved.stock).toBe(0);
+ else if(kind==='sin-control'){expect(saved.stock).toBeNull();expect(saved.variantInventory[0].stock).toBeNull();}
+ else {
+  expect(saved.variantInventory).toHaveLength(4);
+  const quoted=await page.evaluate(async saved=>{const path='/js/core/store/inventario-variantes.mjs';const core=await import(path);return [core.productVariantPrice(saved,'Verde / L').price,core.productVariantPrice(saved,'Verde / M').price,core.variantStockLimit(saved,'Verde / M')];},saved);
+  expect(quoted).toEqual([65000,45000,2]);
+ }
+ await page.evaluate(()=>window.prodEditar('qa-product-1'));await page.locator('#prod-editor-section').selectOption('inventory');
+ if(kind==='simple')await expect(page.locator('#prod-stock')).toHaveValue('0');
+ else if(kind==='sin-control')await expect(page.getByLabel('Stock: Verde',{exact:true})).toHaveValue('');
+ else await expect(page.getByLabel('Precio: Verde / L',{exact:true})).toHaveValue('65000');
 });

@@ -100,7 +100,7 @@ check(
 );
 check(
   'CRUD individual de productos y colecciones usa progreso y resultado central',
-  /async function prodGuardar\(\)[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('save'\)[\s\S]*?ctx\.ok\('save'\)[\s\S]*?window\.prodToggleActive/.test(adminApp) &&
+  /async function prodGuardar\([^)]*\)[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('save'\)[\s\S]*?ctx\.ok\('save'\)[\s\S]*?window\.prodToggleActive/.test(adminApp) &&
     /async function prodEliminar\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('delete'\)[\s\S]*?ctx\.start\('sync'\)[\s\S]*?ctx\.start\('refresh'\)/.test(adminApp) &&
     /window\.collGuardar = async function\(\)[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('save'\)[\s\S]*?window\.collEliminar/.test(adminApp) &&
     /window\.collEliminar = async function\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('move'\)[\s\S]*?ctx\.start\('delete'\)/.test(adminApp) &&

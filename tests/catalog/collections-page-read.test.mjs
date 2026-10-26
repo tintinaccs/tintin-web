@@ -1,0 +1,8 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+const source=fs.readFileSync('js/pages/collections/datos-publicos-colecciones.js','utf8').replace(/^import .*;$/gm,'').replaceAll('export ','');
+function page(){let reads=0,offline=false,cache=null;const flights=new Map();const context=vm.createContext({wristCategory:x=>x,unifyWristCollections:x=>x,cleanText:x=>x,cleanMultilineText:x=>x,sanitizeImageUrl:x=>x,readCached:()=>cache,readStaleCached:()=>cache,writeCached:(_,rows)=>cache=rows,fetchPublicCatalogResource:async()=>{reads++;if(offline)throw Error('offline');return [{id:'aros',data:{name:'Aros',image:'https://img.test/'+reads}}];},runSingleFlight:(key,fn)=>{if(!flights.has(key))flights.set(key,Promise.resolve().then(fn).finally(()=>flights.delete(key)));return flights.get(key);}});vm.runInContext(source,context);return {load:options=>context.loadCollections(options),reads:()=>reads,offline:value=>offline=value};}
+test('consumidores tardíos comparten lectura; refresco explícito y documento nuevo revalidan',async()=>{const p=page();for(let i=0;i<3;i++)await p.load();assert.equal(p.reads(),1);const next=await p.load({force:true});assert.equal(p.reads(),2);assert.equal(next[0].image,'https://img.test/2');const other=page();await other.load();assert.equal(other.reads(),1);});
+test('fallo de red conserva respaldo y permite reintentar',async()=>{const p=page();await p.load();p.offline(true);assert.equal((await p.load({force:true}))[0].name,'Aros');p.offline(false);await p.load();assert.equal(p.reads(),3);});

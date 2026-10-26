@@ -59,6 +59,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  await page.locator('#prod-editor-section').selectOption('inventory');
  await page.getByRole('spinbutton',{name:'Precio: Oro / M',exact:true}).fill('55000');
  await page.getByRole('checkbox',{name:'Seleccionar Plata / M',exact:true}).check();
+ await page.locator('.tt-commercial-advanced').evaluate(node=>node.open=true);
  await page.getByRole('combobox',{name:'Campo para editar combinaciones seleccionadas'}).selectOption('stock');
  await page.getByRole('textbox',{name:'Valor para combinaciones seleccionadas'}).fill('2');
  await page.getByRole('button',{name:'Aplicar a seleccionadas'}).click();

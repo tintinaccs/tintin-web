@@ -65,6 +65,10 @@ const prompt=shell.slice(promptStart,shell.indexOf('\n<!-- ═',promptStart));
 
 async function openEditor(page,width,height,withImages=false,beforeOpen=null){
  await page.setViewportSize({width,height});await mockRuntime(page);
+ if(process.env.EDITOR_PROFILE_BASELINE==='1') {
+  const baseline=require('node:child_process').execFileSync('git',['show','f9399a90c:js/admin/products/interfaz-productos-adaptable.js'],{encoding:'utf8'});
+  await page.route('**/products/interfaz-productos-adaptable.js*',route=>route.fulfill({contentType:'text/javascript',body:baseline}));
+ }
  if(withImages) await page.route('https://tintin.test/js/components/images/biblioteca-multimedia.js*',route=>route.fulfill({contentType:'text/javascript',body:typeof withImages==='string'?withImages:'export const deleteMediaByUrlIfUnused=()=>{window.__imageCleanup=(window.__imageCleanup||0)+1;throw Error("Sin escrituras");};export const deleteMediaItem=deleteMediaByUrlIfUnused;export const uploadImageToLibrary=deleteMediaByUrlIfUnused;'}));
  const html=fixtureHtml();const start=html.indexOf('<div class="adm-card" id="prod-form-card"');
  const full=html.slice(0,start)+form+html.slice(html.indexOf('</section>',start));
@@ -103,7 +107,7 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   });
   await page.locator('#prod-editor-section').selectOption('visibility');
   await page.locator('#prod-category').selectOption('relojes');await expect(page.locator('#prod-category')).toHaveValue('relojes');
-  await expect(card.locator('[data-product-section]')).toHaveCount(7);
+  await expect(card.locator('[data-product-section]')).toHaveCount(8);
   await page.locator('#prod-editor-section').selectOption('general');
   if(width<1200)await expect(page.locator('#prod-name')).toHaveCSS('font-size','16px');
   await openActions(page);await expect(page.locator('#prod-save-btn')).toBeInViewport();
@@ -138,7 +142,7 @@ test('variantes visuales conservan formatos previos y bloquean controles del tot
  await page.getByLabel('Característica de variante',{exact:true}).selectOption('Color');
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Dorado');await page.getByRole('button',{name:'Agregar opción',exact:true}).click();
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Plateado');await page.keyboard.press('Enter');
- await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado\nColor: Plateado');
+ await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado, Plateado');
  await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Plateado');
  await page.evaluate(({renderer,inventory})=>{window.__stockEditor=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock};')();document.getElementById('prod-stock').value='700';window.__stockEditor.renderProductVariantStock({variants:{Color:['Plateado']},variantInventory:[{variant:'Plateado',stock:700}],stock:700});},{renderer:stockRenderer,inventory:inventorySource});
  await expect(page.locator('#prod-stock')).toHaveValue('700');
@@ -427,28 +431,26 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  await page.evaluate(async source=>{
   const loadModule=url=>import(new URL(url,location.origin).href);
   const {attachImageUploadWidget,attachMultiImageUploadWidget}=await loadModule('/js/components/images/carga-imagenes.js?fixture');
-  const {attachColorPhotos}=await loadModule('/js/admin/products/fotos-por-color.js');
+  const {attachProductGallery}=await loadModule('/js/admin/products/galeria-unificada.js');
   const {sanitizeImageUrl}=await loadModule('/js/components/images/utilidades-imagenes.js');
   document.getElementById('prod-imageUrl').value='https://img.test/portada.webp';
   document.getElementById('prod-variants-text').value='Diseño: Coctel, Banda';
   let number=0;const library=async()=>window.__delayGalleryChoice ? new Promise(resolve=>{window.__resolveGalleryChoice=resolve;}) : `https://img.test/extra-${++number}.webp`;
-  window.__remountGallery=new Function('attachImageUploadWidget','attachMultiImageUploadWidget','attachColorPhotos','openMediaLibraryPicker','sanitizeImageUrl','_formImageWidgets',source+';mountProductColorPhotos({variants:{Diseño:["Coctel","Banda"]}});return mountProductColorPhotos;')(attachImageUploadWidget,attachMultiImageUploadWidget,attachColorPhotos,library,sanitizeImageUrl,new Map());
+  window.__remountGallery=new Function('attachImageUploadWidget','attachMultiImageUploadWidget','attachProductGallery','openMediaLibraryPicker','sanitizeImageUrl','_formImageWidgets',source+';mountProductColorPhotos({variants:{Diseño:["Coctel","Banda"]}});return mountProductColorPhotos;')(attachImageUploadWidget,attachMultiImageUploadWidget,attachProductGallery,library,sanitizeImageUrl,new Map());
  },mount);
  await page.locator('#prod-editor-section').selectOption('photos');
- const gallery=page.locator('#prod-gallery-widget');
- await expect(gallery).not.toHaveAttribute('open','');
+ const gallery=page.locator('.tt-unified-photos .tt-iuw-multiple');
  await expect(gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true})).toBeHidden();
- await gallery.locator('summary').click();
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
  await expect(page.locator('#prod-images-extra')).toHaveValue('https://img.test/extra-1.webp\nhttps://img.test/extra-2.webp');
  await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/portada.webp');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(3);
- await expect(page.locator('#prod-gallery-thumbs img')).toHaveCount(3);
- await page.getByRole('button',{name:'Quitar foto 3 del producto',exact:true}).click();
+ await expect(page.locator('.tt-unified-photo img')).toHaveCount(3);
+ await page.getByRole('button',{name:'Quitar foto 3',exact:true}).click();
  await expect(page.locator('#prod-images-extra')).toHaveValue('https://img.test/extra-1.webp');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(2);
- await page.getByRole('button',{name:'Quitar foto 2 del producto',exact:true}).click();
+ await page.getByRole('button',{name:'Quitar foto 2',exact:true}).click();
  await expect(page.locator('#prod-images-extra')).toHaveValue('');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(1);
  expect(await page.evaluate(()=>window.__imageCleanup||0)).toBe(0);
@@ -457,7 +459,7 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  await page.locator('#prod-live-preview').getByRole('button',{name:'Volver a editar'}).click();
  await expect(page.locator('#prod-editor-section')).toBeFocused();
  // Una selección pendiente del producto anterior nunca debe tocar el nuevo formulario.
- await page.evaluate(()=>{window.__delayGalleryChoice=true;window.__oldGalleryRoot=document.querySelector('#prod-gallery-widget .tt-iuw');});
+ await page.evaluate(()=>{window.__delayGalleryChoice=true;window.__oldGalleryRoot=document.querySelector('.tt-unified-photos .tt-iuw-multiple');});
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
  await page.evaluate(()=>{window.__remountGallery({variants:{Diseño:['Coctel','Banda']}});window.__resolveGalleryChoice('https://img.test/tardia.webp');});
  await page.waitForFunction(()=>window.__oldGalleryRoot.textContent.includes('El producto cambió'));
@@ -470,6 +472,7 @@ for (const width of [1200,1440,1920]) test(`controles seleccionados conservan te
  await page.addStyleTag({path:path.join(root,'css/core/tema-unificado-tintin.css')});
  for(const colors of [['#F8AACA','#222222'],['#222222','#FFFFFF']]) {
   await page.evaluate(([background,text])=>{document.documentElement.style.setProperty('--admin-color-button-primary-background',background);document.documentElement.style.setProperty('--admin-color-button-primary-text',text);},colors);
+  await page.locator('.tt-editor-option-assistance').evaluate(node=>node.open=true);
   const controls=page.locator('#prod-form-card [data-product-section=inventory] .tt-editor-choice[aria-pressed]');
   expect(await controls.count()).toBeGreaterThan(0);
   for (const button of await controls.all()) {
@@ -502,6 +505,50 @@ for (const width of [320,390,768,1440]) test(`cambiar apartado reinicia el edito
  await page.evaluate(()=>{const input=document.getElementById('prod-price');input.value='65000';input.dispatchEvent(new Event('input',{bubbles:true}));});
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  expect(await page.evaluate(()=>({window:scrollY,body:document.querySelector('#prod-form-card .adm-card-body').scrollTop}))).toEqual(before);
+});
+
+for(const photos of [1,2,5,10,20]) test(`perfil sintético del editor con ${photos} fotografías`,async({page})=>{
+ const start=performance.now();await openEditor(page,1366,768);
+ const openMs=performance.now()-start;
+ const metrics=await page.evaluate(async count=>{
+  const card=document.querySelector('#prod-form-card');let records=0,added=0;
+  const photoContainer=document.createElement('div');photoContainer.id='prod-color-photos';card.querySelector('[data-product-section="photos"] .tt-editor-section-fields').append(photoContainer);
+  const photoModule='/js/admin/products/fotos-por-color.js';const {attachColorPhotos}=await import(photoModule);
+  const urls=Array.from({length:count},(_,i)=>`https://img.test/${i}.webp`);
+  const variantsInput=document.getElementById('prod-variants-text'),imagesInput=document.getElementById('prod-images-extra'),mainInput=document.getElementById('prod-imageUrl');
+  variantsInput.value='Color: Dorado';mainInput.value=urls[0];imagesInput.value=urls.slice(1).join('\n');
+  const gallery=attachColorPhotos({container:photoContainer,product:{id:'synthetic-profile',imageUrl:urls[0],imagesExtra:urls.slice(1),variants:{Color:['Dorado']}},variantsInput,imagesInput,mainInput,openLibrary:async()=>null});
+  const longTasks=[];const tasks=typeof PerformanceObserver==='function' && PerformanceObserver.supportedEntryTypes.includes('longtask')?new PerformanceObserver(list=>longTasks.push(...list.getEntries().map(item=>item.duration))):null;tasks?.observe({type:'longtask'});
+  const observer=new MutationObserver(batch=>{records+=batch.length;for(const item of batch)added+=item.addedNodes.length;});
+  observer.observe(card,{childList:true,subtree:true});
+  const settle=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  const measure=async(id,value)=>{records=0;added=0;const t=performance.now();const field=document.getElementById(id);field.value=value;field.dispatchEvent(new Event('input',{bubbles:true}));field.dispatchEvent(new Event('change',{bubbles:true}));await settle();return {ms:performance.now()-t,mutationRecords:records,addedNodes:added};};
+  const photos=await measure('prod-images-extra',Array.from({length:count},(_,i)=>`https://img.test/${i}.webp`).join('\n'));
+  const color=await measure('prod-variants-text','Color: Dorado, Plateado');
+  const stock=await measure('prod-stock','25');observer.disconnect();tasks?.disconnect();gallery.destroy();
+  return {photos,color,stock,longTasks,heapBytes:performance.memory?.usedJSHeapSize ?? null};
+ },photos);
+ console.log('EDITOR_PROFILE',JSON.stringify({photoCount:photos,openMs,...metrics}));
+ await test.info().attach(`profile-${photos}.json`,{body:JSON.stringify({photoCount:photos,openMs,...metrics}),contentType:'application/json'});
+});
+
+test('un error persistente no reinicia scroll ni foco al editar precio',async({page})=>{
+ await openEditor(page,390,844);
+ await page.evaluate(()=>{const error=document.querySelector('#prod-form-error');error.textContent='Completá el nombre';error.style.display='block';});
+ await expect(page.locator('#prod-form-error')).toBeFocused();
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ const before=await page.evaluate(()=>{
+  const input=document.querySelector('#prod-price');input.focus({preventScroll:true});
+  const body=document.querySelector('#prod-form-card .adm-card-body');body.scrollTop=300;
+  window.__scrollResets=0;const reset=window.TintinPageScroll.reset;window.TintinPageScroll.reset=(...args)=>{window.__scrollResets++;return reset(...args);};
+  input.value='65000';input.dispatchEvent(new Event('input',{bubbles:true}));
+  return body.scrollTop;
+ });
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ await page.screenshot({path:`artifacts/editor-phase1/error-${process.env.EDITOR_PROFILE_BASELINE==='1'?'before':'after'}.png`});
+ expect(await page.evaluate(()=>window.__scrollResets)).toBe(0);
+ expect(await page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop)).toBe(before);
+ await expect(page.locator('#prod-price')).toBeFocused();
 });
 
 test('abrir conserva producto oculto y visibilidad manual independiente de la cantidad',async({page})=>{
@@ -648,7 +695,7 @@ test('salir con fotos masivas pendientes activa el guard real sin subir ni borra
   const moduleUrl=new URL('/js/components/images/carga-imagenes.js',location.origin);const {attachMultiImageUploadWidget}=await import(moduleUrl.href);
   const container=document.createElement('div');container.id='master-guard-queue';document.querySelector('[data-product-section=photos] .tt-editor-section-fields').append(container);
   window.__guardQueue=attachMultiImageUploadWidget(container,{onChange:()=>{throw Error('No debe subir para salir');}});
-  const serialize=new Function('_formImageWidgets','productColorPhotos','productEditorialData','productCommercialEditor',source+';return serializeProductForm;')(new Map([['prod-gallery-widget',window.__guardQueue]]),null,()=>({}),null);
+  const serialize=new Function('_formImageWidgets','productColorPhotos','productEditorialData','productCommercialEditor','productVariantStockBaseline',source+';return serializeProductForm;')(new Map([['prod-gallery-widget',window.__guardQueue]]),null,()=>({}),null,null);
   window.AdminUnsaved.register('primary-editor',{root:'#prod-form-card',serialize:()=>JSON.stringify(serialize()),save:()=>false});
   window.prodCancelForm=()=>window.AdminUnsaved.requestNavigation(()=>{window.__guardQueue.destroy();document.getElementById('prod-form-card').style.display='none';});
  },serializer);

@@ -621,15 +621,36 @@ export async function firestoreAdminDelete(env, path) {
   if (response.status !== 404 && !response.ok) throw new Error(`Firestore DELETE falló (${response.status})`);
 }
 
-export async function firestoreAdminList(env, path, pageSize = 300) {
+/** Inspección paginada de subcolecciones privadas, sólo desde servidor. */
+export async function firestoreAdminCollectionGroupPage(env, collectionId, {pageSize=100,after='',fieldPaths=[]}={}) {
+  if(!/^[A-Za-z0-9_-]{1,120}$/.test(collectionId))throw new Error('Colección inválida.');
+  const sa=parseServiceAccount(env),token=await getGoogleAccessToken(env,[FIRESTORE_SCOPE]);
+  const query={from:[{collectionId,allDescendants:true}],orderBy:[{field:{fieldPath:'__name__'},direction:'ASCENDING'}],limit:Math.max(1,Math.min(100,Number(pageSize)||100))};
+  if(after)query.startAt={values:[{referenceValue:after}],before:false};
+  if(fieldPaths.length)query.select={fields:fieldPaths.map(fieldPath=>({fieldPath}))};
+  const response=await fetch(`${firestoreDatabaseUrl(sa)}/documents:runQuery`,{method:'POST',headers:{authorization:`Bearer ${token}`,'content-type':'application/json'},body:JSON.stringify({structuredQuery:query})});
+  if(!response.ok)throw new Error(`Firestore inspección falló (${response.status})`);
+  const rows=await response.json();
+  if(!Array.isArray(rows) || rows.some(row=>!row || typeof row!=='object' || row.error || row.document && typeof row.document.name!=='string'))throw new Error('Firestore devolvió una página inválida.');
+  return rows.map(row=>row.document).filter(Boolean);
+}
+
+/** Una página del listado canónico; el cursor queda ligado a la ruta pedida. */
+export async function firestoreAdminListPage(env, path, {pageSize=100,pageToken=''}={}) {
   const sa = parseServiceAccount(env);
   const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
-  const url = `${firestoreDocUrl(sa, path)}?pageSize=${Math.max(1, Math.min(300, Number(pageSize) || 300))}`;
-  const response = await fetch(url, { headers: { authorization: `Bearer ${accessToken}` } });
-  if (response.status === 404) return [];
-  if (!response.ok) throw new Error(`Firestore LIST falló (${response.status})`);
-  const data = await response.json().catch(() => ({}));
-  return Array.isArray(data.documents) ? data.documents : [];
+  const params = new URLSearchParams({pageSize:String(Math.max(1,Math.min(300,Number(pageSize)||100)))});
+  if(pageToken)params.set('pageToken',pageToken);
+  const response = await fetch(`${firestoreDocUrl(sa,path)}?${params.toString().replace(/\+/g,'%20')}`,{headers:{authorization:`Bearer ${accessToken}`}});
+  if(response.status===404)return {documents:[],nextPageToken:''};
+  if(!response.ok)throw new Error(`Firestore LIST falló (${response.status})`);
+  const data=await response.json();
+  if(data.documents!==undefined && !Array.isArray(data.documents))throw new Error('Firestore LIST devolvió una página inválida.');
+  return {documents:data.documents || [],nextPageToken:typeof data.nextPageToken==='string'?data.nextPageToken:''};
+}
+
+export async function firestoreAdminList(env,path,pageSize=300) {
+  return (await firestoreAdminListPage(env,path,{pageSize})).documents;
 }
 
 /** Lista una colección completa de forma paginada, con un techo explícito. */

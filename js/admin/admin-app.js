@@ -1,8 +1,9 @@
+import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261026-editor-workspace-2';
 import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
 import {productStatistics} from './statistics/estadisticas-producto.mjs?v=tintin-20261024-editor-v2-3';
 import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261024-editor-v2-3';
-import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261024-editor-v2-3';
+import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261025-options-phase3-1';
 import { reorderVariantInventory } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
@@ -14,7 +15,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261025-editor-opciones-2';
+import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261025-options-phase3-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -40,13 +41,13 @@ import {
 } from "../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261017-domain-cutover-1";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261022-avatar-inicial-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261026-editor-closure-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261024-gallery-compact-1";
+import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261025-gallery-unified-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261022-avatar-inicial-1";
@@ -5515,6 +5516,9 @@ const UnsavedGuard = {
   /** Call before navigating away from the form. Runs `proceed` immediately
    *  if nothing changed; otherwise blocks with a Guardar/Descartar modal. */
   confirmLeave(proceed) {
+    if (typeof productWorkspace!=='undefined' && productWorkspace) {
+      void productWorkspace.leave(proceed);return;
+    }
     if (!window.AdminUnsaved) {
       if (!this.isDirty() || window.confirm('Tenés cambios sin guardar. ¿Deseás salir sin guardarlos?')) {
         this.clear();
@@ -5793,84 +5797,15 @@ let productGalleryListener = null;
 function mountProductColorPhotos(product) {
   productColorPhotos?.destroy();
   productGalleryListener?.abort();
-  productGalleryListener = new AbortController();
-  const gallerySignal = productGalleryListener.signal;
-  const galleryInput = document.getElementById('prod-images-extra');
-  const coverInput = document.getElementById('prod-imageUrl');
-  coverInput.addEventListener('change',()=>_formImageWidgets.get('prod-image-widget')?.setValue(coverInput.value,{discardPending:true}),{signal:gallerySignal});
-  let gallery = document.getElementById('prod-gallery-widget');
-  if (!gallery) {
-    gallery = document.createElement('details'); gallery.id = 'prod-gallery-widget';gallery.className='tt-editor-gallery-additional';
-    const summary=document.createElement('summary');summary.textContent='Agregar otras fotos';gallery.append(summary);
-    galleryInput.before(gallery);
-  }
-  let galleryContent=gallery.querySelector('.tt-editor-gallery-additional-content');
-  if (!galleryContent) { galleryContent=document.createElement('div');galleryContent.className='tt-editor-gallery-additional-content';gallery.append(galleryContent); }
-  _formImageWidgets.get('prod-gallery-widget')?.destroy();
-  let galleryPendingUrl = '';
-  _formImageWidgets.set('prod-gallery-widget', attachMultiImageUploadWidget(galleryContent, {
-    remaining: () => 12 - galleryInput.value.split(/\r?\n/).filter(value=>value.trim()).length + (coverInput.value ? 0 : 1),
-    label: 'Agregar fotos a la galería', hint: 'Subí una foto o elegila de la biblioteca. Se agrega sin reemplazar la portada.',
-    onOpenLibrary: openMediaLibraryPicker,
-    cleanupPrevious: false,
-    onChange: value => {
-      if (gallerySignal.aborted) throw new Error('El producto cambió. Volvé a elegir la foto en su galería.');
-      const url = sanitizeImageUrl(value);
-      if(url && !coverInput.value) {coverInput.value=url;coverInput.dispatchEvent(new Event('input',{bubbles:true}));coverInput.dispatchEvent(new Event('change',{bubbles:true}));return;}
-      const current = galleryInput.value.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-      const urls = url ? [...new Set([...current, url])] : current.filter(item=>item !== galleryPendingUrl);
-      galleryPendingUrl = url;
-      galleryInput.value = urls.join('\n'); galleryInput.dispatchEvent(new Event('input', { bubbles: true }));
-    },
-  }));
-  let galleryGrid = document.getElementById('prod-gallery-thumbs');
-  if (!galleryGrid) {
-    galleryGrid = document.createElement('div'); galleryGrid.id = 'prod-gallery-thumbs'; galleryGrid.className = 'tt-editor-gallery-grid';
-    gallery.after(galleryGrid);
-  }
-  if (!document.getElementById('prod-gallery-links')) {
-    const links = document.createElement('details'); links.id = 'prod-gallery-links';
-    const summary = document.createElement('summary'); summary.textContent = 'Enlaces de imágenes (opcional)'; links.append(summary);
-    galleryInput.before(links); links.append(galleryInput);
-  }
-  const renderGallery = () => {
-    galleryGrid.replaceChildren();
-    const urls = window.TintinProductMedia.uniqueImages([coverInput.value,...galleryInput.value.split(/\r?\n/)].map(value=>sanitizeImageUrl(value)).filter(Boolean));
-    const publish = next => {
-      coverInput.value=next[0] || '';galleryInput.value=next.slice(1).join('\n');
-      coverInput.dispatchEvent(new Event('input',{bubbles:true}));coverInput.dispatchEvent(new Event('change',{bubbles:true}));
-      galleryInput.dispatchEvent(new Event('input',{bubbles:true}));
-    };
-    urls.forEach((url,index)=>{
-      const item = document.createElement('div');item.className='tt-color-photo-tile';
-      const image = document.createElement('img');image.src=url;image.alt=`Foto del producto ${index+1}`;image.loading='lazy';
-      const badge=document.createElement('small');badge.className=`tt-photo-order-badge${index===0?' is-primary':''}`;badge.textContent=index===0?'Portada':`Foto ${index+1}`;
-      const controls=document.createElement('div');controls.className='tt-photo-order-actions';
-      for(const [text,label,to] of [['★',`Usar foto ${index+1} como portada`,0],['←',`Mover foto ${index+1} antes`,index-1],['→',`Mover foto ${index+1} después`,index+1]]) {
-        const button=document.createElement('button');button.type='button';button.className='adm-btn adm-btn-outline';button.textContent=text;button.setAttribute('aria-label',label);button.disabled=to<0 || to>=urls.length || to===index;
-        button.addEventListener('click',()=>{const next=[...urls];next.splice(index,1);next.splice(to,0,url);publish(next);});controls.append(button);
-      }
-      const remove=document.createElement('button');remove.type='button';remove.className='adm-btn adm-btn-outline tt-photo-remove';remove.textContent='Quitar';remove.setAttribute('aria-label',`Quitar foto ${index+1} del producto`);
-      remove.addEventListener('click',()=>{publish(urls.filter(value=>value!==url));productColorPhotos?.removePhoto(url);});
-      item.draggable=true;item.addEventListener('dragstart',event=>{event.dataTransfer.setData('application/x-tintin-gallery',url);event.dataTransfer.effectAllowed='move';});
-      item.addEventListener('dragover',event=>{if(event.dataTransfer.types.includes('application/x-tintin-gallery'))event.preventDefault();});
-      item.addEventListener('drop',event=>{event.preventDefault();const from=urls.indexOf(event.dataTransfer.getData('application/x-tintin-gallery'));if(from<0 || from===index)return;const next=[...urls];const [photo]=next.splice(from,1);next.splice(index,0,photo);publish(next);});
-      item.append(image,badge,controls,remove);galleryGrid.append(item);
-    });
-  };
-  coverInput.addEventListener('change',renderGallery,{signal:gallerySignal});
-  galleryInput.addEventListener('input',renderGallery,{signal:productGalleryListener.signal});
-  renderGallery();
-  let container = document.getElementById('prod-color-photos');
-  if (!container) {
-    container = document.createElement('div'); container.id = 'prod-color-photos'; container.style.gridColumn = '1 / -1';
-    document.getElementById('prod-variants-text').parentElement.after(container);
-  }
-  productColorPhotos = attachColorPhotos({ container, product,
-    variantsInput: document.getElementById('prod-variants-text'), imagesInput: document.getElementById('prod-images-extra'), mainInput: document.getElementById('prod-imageUrl'),
-    openLibrary: openMediaLibraryPicker, attachUpload: attachImageUploadWidget });
+  for(const id of ['prod-image-widget','prod-gallery-widget']) {_formImageWidgets.get(id)?.destroy();_formImageWidgets.delete(id);}
+  for(const id of ['prod-gallery-widget','prod-gallery-thumbs','prod-gallery-links'])document.getElementById(id)?.remove();
+  const mainInput=document.getElementById('prod-imageUrl'),imagesInput=document.getElementById('prod-images-extra');
+  // Mantener los campos canónicos, sin controles de imagen duplicados.
+  for(const field of [document.getElementById('prod-image-widget')?.parentElement,imagesInput.parentElement])if(field)field.hidden=true;
+  let container=document.getElementById('prod-color-photos');
+  if(!container){container=document.createElement('div');container.id='prod-color-photos';document.getElementById('prod-image-widget').parentElement.after(container);}
+  productColorPhotos=attachProductGallery({container,product,mainInput,imagesInput,variantsInput:document.getElementById('prod-variants-text'),openLibrary:openMediaLibraryPicker});
 }
-
 let productVariantStockBaseline = null;
 let productVariantStockEvents = null;
 function productVariantStockConfiguration(text, previous = [], previousVariants = null) {
@@ -5901,13 +5836,20 @@ function productVariantStockConfiguration(text, previous = [], previousVariants 
 
 function productEditorialForm(product={}) {
   ensureEditorialFields(document.getElementById('prod-form-card'));
-  const values={publicationStatus:productEditorialStatus(product),productTemplate:productTemplate(product),seoTitle:product.seoTitle || '',seoDescription:product.seoDescription || ''};
+  const status=document.getElementById('prod-publicationStatus');
+  const inactive=product.active===false && (!product.publicationStatus || product.publicationStatus==='active');
+  if(inactive && !status.querySelector('option[value=inactive]'))status.add(new Option('Inactivo (histórico)','inactive'));
+  if(!inactive)status.querySelector('option[value=inactive]')?.remove();
+  const values={publicationStatus:inactive?'inactive':productEditorialStatus(product),productTemplate:productTemplate(product),seoTitle:product.seoTitle || '',seoDescription:product.seoDescription || ''};
   for(const [key,value] of Object.entries(values)){const field=document.getElementById(`prod-${key}`);if(field)field.value=value;}
 }
 function productEditorialData() {
   const status=document.getElementById('prod-publicationStatus');
   if(!status?.options)return {};
-  return editorialFields(Object.fromEntries(['publicationStatus','productTemplate','seoTitle','seoDescription'].map(key=>[key,document.getElementById(`prod-${key}`).value])));
+  const values=Object.fromEntries(['publicationStatus','productTemplate','seoTitle','seoDescription'].map(key=>[key,document.getElementById(`prod-${key}`).value]));
+  const result=editorialFields({...values,publicationStatus:values.publicationStatus==='inactive'?'draft':values.publicationStatus});
+  if(values.publicationStatus==='inactive')delete result.publicationStatus;
+  return result;
 }
 function renderProductStatistics(productId) {
   const panel=document.getElementById('prod-statistics');if(!panel?.replaceChildren)return;
@@ -5923,6 +5865,7 @@ function renderProductStatistics(productId) {
   if(metric.incomplete){const warning=document.createElement('p');warning.textContent=`${metric.incomplete} líneas sin datos completos excluidas.`;panel.append(warning);}
 }
 let productCommercialEditor = null;
+let productWorkspace = null;
 let productPrivateBaseline = null;
 let pendingProductEditorSave = null;
 function renderProductVariantStock(product, configuration = null) {
@@ -5930,6 +5873,7 @@ function renderProductVariantStock(product, configuration = null) {
   document.getElementById('prod-form-card')?.dispatchEvent?.(new CustomEvent('tintin:commercial-draft',{detail:null}));
   productVariantStockEvents?.abort();
   productVariantStockEvents = new AbortController();
+  document.getElementById('prod-form-card')?.addEventListener('tintin:product-options-read',event=>{event.detail.product=configuration?.commercialBaseline ?? product;},{signal:productVariantStockEvents.signal});
   productVariantStockBaseline = null;
   let panel = document.getElementById('prod-variant-stock');
   if (!panel) {
@@ -5969,6 +5913,13 @@ function renderProductVariantStock(product, configuration = null) {
   let acceptedOptions = optionsInput.value;
   optionsInput.addEventListener('input', () => {
     try {
+      if(document.getElementById('prod-id').value && product?.variants && !Array.isArray(product.variants)){
+        const requested=productVariantStockConfiguration(optionsInput.value).variants || {};
+        for(const [key,values] of Object.entries(product.variants))if(Array.isArray(values)){
+          if(values.some(value=>!requested[key]?.includes(value)))throw new Error('Esta opción tiene inventario o referencias históricas. Conservá su nombre y editá su disponibilidad; no se puede eliminar directamente.');
+          if(/^colou?r$/i.test(key) && !product.variantMedia?.length && values.some((value,index)=>requested[key]?.[index]!==value))throw new Error('Estas fotos históricas pueden estar asociadas por posición. Revisá sus asociaciones antes de cambiar el orden.');
+        }
+      }
       if (!optionsInput.value.trim() && !productVariantStockBaseline) return;
       // Agregar opciones no activa el control de unidades por combinación.
       if (!productVariantStockBaseline) { acceptedOptions = optionsInput.value; return; }
@@ -6065,6 +6016,7 @@ function serializeProductForm() {
     editorial: productEditorialData(),
     commercialDraft: productCommercialEditor?.get() || null,
     variantStock: [...document.querySelectorAll('#prod-variant-stock input')].map(input => input.value),
+    variantStockEntries: productVariantStockBaseline?.entries.map((entry,index)=>({variant:entry.variant,stock:document.querySelectorAll('#prod-variant-stock input')[index]?.value ?? ''})) || [],
     badge: document.getElementById('prod-badge').value,
     collection: document.getElementById('prod-collection').value,
     active: document.getElementById('prod-active').checked,
@@ -6073,14 +6025,57 @@ function serializeProductForm() {
   };
 }
 
+function beginProductWorkspace(key,source) {
+  productWorkspace?.destroy();productWorkspace=null;
+  if(typeof mountProductWorkspace!=='function'){UnsavedGuard.track(serializeProductForm,prodGuardar);return;}
+  const ownerUid=currentUser.uid;
+  const ids={priceBefore:'price-before',imageUrl:'imageUrl',colorFinish:'color-finish',waterResistance:'water-resistance',sizeFit:'size-fit',packageContents:'package-contents',imagesExtra:'images-extra',costUnit:'cost-unit',stockMinimum:'stock-minimum',internalNotes:'internal-notes',variants:'variants-text'};
+  const restore=async snapshot=>{
+    for(const [key,value] of Object.entries(snapshot)){
+      const input=document.getElementById('prod-'+(ids[key] || key));
+      if(!input || ['active','oferta','destacado'].includes(key))continue;
+      if(typeof value==='string' || typeof value==='number')input.value=value;
+    }
+    for(const key of ['active','oferta','destacado'])document.getElementById('prod-'+key).checked=Boolean(snapshot[key]);
+    if(snapshot.editorial){
+      const values={...snapshot.editorial,publicationStatus:snapshot.editorial.publicationStatus || 'inactive'};
+      const status=document.getElementById('prod-publicationStatus');
+      if(values.publicationStatus==='inactive' && !status.querySelector('option[value=inactive]'))status.add(new Option('Inactivo (histórico)','inactive'));
+      for(const [key,value] of Object.entries(values)){const input=document.getElementById('prod-'+key);if(input)input.value=value;}
+    }
+    let variants=source?.variants;
+    try{variants=productVariantStockConfiguration(snapshot.variants || '').variants;}catch{}
+    const virtual={...source,variants,imageUrl:snapshot.imageUrl || '',imagesExtra:String(snapshot.imagesExtra || '').split(/\n/).filter(Boolean),variantMedia:snapshot.variantMedia || []};
+    if(snapshot.commercialDraft)renderProductVariantStock({...virtual,...snapshot.commercialDraft},{commercialBaseline:source || {}});
+    else if(snapshot.variantStockEntries?.length){
+      renderProductVariantStock({...virtual,variantInventory:snapshot.variantStockEntries.map(row=>({...row,stock:row.stock===''?0:Number(row.stock)}))});
+      for(const [index,row] of snapshot.variantStockEntries.entries()){const input=document.querySelectorAll('#prod-variant-stock input')[index];if(input)input.value=row.stock;}
+      if(productVariantStockBaseline){productVariantStockBaseline.stock=source?.stock;productVariantStockBaseline.expectedEntries=variantInventoryEntries(source || {});}
+    }
+    mountProductColorPhotos(virtual);
+    document.getElementById('prod-form-card').dispatchEvent(new Event('change',{bubbles:true}));
+  };
+  productWorkspace=mountProductWorkspace({card:document.getElementById('prod-form-card'),uid:ownerUid,key,productId:source?key:null,source,privateAllowed:currentRole==='superadmin',serialize:serializeProductForm,restore,
+    async request(body){
+      const check=()=>{if(currentUser?.uid!==ownerUid)throw Object.assign(Error('La cuenta cambió. Reabrí el editor con la cuenta propietaria.'),{status:403});};
+      check();const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const payload=await response.json();check();return {...payload,status:response.status};
+    },
+    async flushMedia(){await productColorPhotos?.flush();await Promise.all(['prod-image-widget','prod-gallery-widget'].map(id=>_formImageWidgets.get(id)?.flush()));},
+    commit:()=>prodGuardar({commit:true}),close:_prodCloseForm});
+  UnsavedGuard.track(serializeProductForm,()=>productWorkspace.save());
+}
+window.prodContinuarBorrador=function(key,productId=null){
+  UnsavedGuard.confirmLeave(()=>{if(productId){if(!_allProducts.some(row=>row._docId===productId)){toast('Esperá a que se cargue el producto original y reintentá.');return;}_prodEditarNow(productId);}else _prodNuevoNow(key);});
+};
+
 window.prodNuevo = function() {
   UnsavedGuard.confirmLeave(_prodNuevoNow);
 };
 
-function _prodNuevoNow() {
+function _prodNuevoNow(workKey=null) {
   productPrivateBaseline = null;
   pendingProductEditorSave = null;
-  productEditorialForm({active:false});
+  productEditorialForm({publicationStatus:'draft',active:false});
   renderProductStatistics('');
   productCommercialBaseline=null;
   productEditBaseline=null;
@@ -6127,7 +6122,7 @@ function _prodNuevoNow() {
   document.getElementById('prod-form-error').style.display = 'none';
   document.getElementById('prod-list-card').style.display = 'none';
   document.getElementById('prod-form-card').style.display = '';
-  UnsavedGuard.track(serializeProductForm, prodGuardar);
+  beginProductWorkspace(typeof workKey==='string'?workKey:crypto.randomUUID(),null);
 }
 
 window.prodEditar = function(docId) {
@@ -6211,18 +6206,21 @@ function _prodEditarNow(docId, duplicate=false) {
   document.getElementById('prod-list-card').style.display = 'none';
   document.getElementById('prod-form-card').style.display = '';
   productCommercialBaseline = duplicate ? null : JSON.parse(JSON.stringify(serializeProductForm()));
-  UnsavedGuard.track(serializeProductForm, prodGuardar);
+  beginProductWorkspace(duplicate?crypto.randomUUID():docId,duplicate?null:stored);
 }
 
 function _prodCloseForm() {
+  productWorkspace?.destroy();productWorkspace=null;UnsavedGuard.clear();
   document.getElementById('prod-form-card').style.display = 'none';
   document.getElementById('prod-list-card').style.display = '';
 }
 window.prodCancelForm = function() {
+  if(productWorkspace){void productWorkspace.leave();return;}
   UnsavedGuard.confirmLeave(_prodCloseForm);
 };
 
-async function prodGuardar() {
+async function prodGuardar({commit=false}={}) {
+  if(productWorkspace && !commit){try{return await productWorkspace.publish();}catch(error){const box=document.getElementById('prod-form-error');box.textContent=error.message;box.style.display='';return false;}}
   const existingProduct = _allProducts.find(product => product._docId === document.getElementById('prod-id').value);
   if(existingProduct?.variantCommerceVersion===2 && !productCommercialEditor){const error=document.getElementById('prod-form-error');error.textContent='Este producto requiere el editor compatible.';error.style.display='';return false;}
   if (document.getElementById('prod-save-btn')?.disabled) return false;
@@ -6275,7 +6273,7 @@ async function prodGuardar() {
     // cargas antes de construir el payload evita guardar sin la foto elegida.
     await productColorPhotos?.flush();
     await Promise.all(['prod-image-widget', 'prod-gallery-widget'].map(id => _formImageWidgets.get(id)?.flush()));
-    if (document.getElementById('prod-publicationStatus')?.value !== 'draft' && document.getElementById('prod-publicationStatus')?.value !== 'archived') {
+    if (document.getElementById('prod-publicationStatus')?.value === 'active') {
       if (!document.getElementById('prod-description').value.trim()) throw new Error('Completá la descripción para publicar el producto.');
       if (!document.getElementById('prod-imageUrl').value.trim()) throw new Error('Elegí una foto principal para publicar el producto.');
     }
@@ -6396,6 +6394,7 @@ async function prodGuardar() {
 
   try {
   Object.assign(data, productEditorialData());
+  if(!productCommercialEditor && existingProduct && Object.hasOwn(existingProduct,'image'))data.image=data.imageUrl;
   if (productCommercialEditor) Object.assign(data, productCommercialEditor.patch(data));
   if (productVariantStockBaseline) {
         const original = productVariantStockBaseline;
@@ -6414,10 +6413,15 @@ async function prodGuardar() {
       action: async ctx => {
         ctx.start('save');
     const docId = document.getElementById('prod-id').value;
-    if (productCommercialEditor) {
-      const targetId=docId || doc(collection(db,'products')).id;
+    if (productCommercialEditor || productWorkspace) {
+      const targetId=docId || productWorkspace?.key || doc(collection(db,'products')).id;
+      if(productWorkspace && !productCommercialEditor){
+        if(productCommercialBaseline && serializeProductForm().variants===productCommercialBaseline.variants){
+          if(existingProduct?.variants!==undefined)data.variants=existingProduct.variants;else delete data.variants;
+        }else if(!variantsParsed)data.variants=null;
+      }
       const privateData=Object.fromEntries(['costUnit','purchased','stockMinimum','internalNotes'].map(key=>[key,inventoryData[key]]));
-      const request={action:'saveProduct',productId:targetId,expected:productEditBaseline,product:Object.fromEntries(Object.entries(data).filter(([key])=>!['updatedAt','merchandisingUpdatedAt','restockedAt'].includes(key))),...(currentRole==='superadmin'?{inventory:privateData,expectedInventory:productPrivateBaseline}: {})};
+      const request={action:'saveProduct',productId:targetId,expected:productEditBaseline,restockOnly:Boolean(data.restockedAt),product:Object.fromEntries(Object.entries(data).filter(([key])=>!['image','updatedAt','merchandisingUpdatedAt','restockedAt'].includes(key))),...(productWorkspace?{workspace:productWorkspace.reference}:{}),...(currentRole==='superadmin'?{inventory:privateData,expectedInventory:productPrivateBaseline}: {})};
       const signature=JSON.stringify(request);
       if(pendingProductEditorSave?.signature!==signature)pendingProductEditorSave={signature,changeId:crypto.randomUUID()};
       document.getElementById('prod-id').value=targetId;
