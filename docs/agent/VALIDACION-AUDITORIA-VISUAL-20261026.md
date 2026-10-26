@@ -56,3 +56,21 @@ su auditor estático de tipografía; se renombra a textSize conservando las dos
 aserciones. Los dos casos dirigidos320/200% se repiten y aprueban después; no se
 suman a127 como casos distintos. Preflight final39/39 comandos PASS, sin cambios
 al auditor. Build y caché PASS. CI/merge del nuevo SHA se verifican por separado.
+
+## Conciliación con main8e922503
+
+Durante CI se integró el PR1244 del editor. Se incorpora mediante merge normal,
+sin force-push ni descartar su trabajo. Los conflictos HTML son referencias de
+release; se parte de los documentos nuevos de main y se regeneran footer/URLs.
+El constructor conserva width/height y ambas fuentes de tienda.js (retirada de
+variantes de main y referencia visual nueva). Política y plan se reconstruyen
+contra8e922503 conservando registros y metadatos. Build/caché de la combinación
+PASS; se repiten127 recorridos Chromium,7 WebKit y preflight. Los resultados
+remotos de5f799437 no se atribuyen a la cabeza combinada. CI repetirá también la
+matriz canónica sobre ese nuevo SHA;126/126 local documenta la pasada anterior.
+
+Cierre local posterior a la conciliación:127/127 Chromium,7/7 WebKit y39/39
+comandos preflight PASS de nuevo sobre8e922503 combinado con la mejora visual.
+Se preservan todas las aserciones y las fuentes del editor; ninguna prueba o
+protección se reduce. Build/caché y diff propios contra main verificados. La
+cabeza combinada debe aprobar su propia CI antes del merge y monitor posterior.

@@ -1,6 +1,6 @@
 // Progreso editorial privado. La publicación continúa en prodGuardar/CAS.
 export function mountProductWorkspace({card,uid,key,productId,source,request,serialize,flushMedia,restore,commit,close,privateAllowed=false,debounceMs=1800}){
-  let destroyed=false,loading=true,revision=0,baseExpected='',conflict=false,lastSaved='',pending=null,operation=null,timer=null,retries=0,applying=false,missingUploads=false,mediaProblem=false,hasWork=false,publishing=false;
+  let destroyed=false,loading=true,revision=0,baseExpected='',conflict=false,lastSaved='',pending=null,operation=null,timer=null,retries=0,applying=false,missingUploads=false,mediaProblem=false,hasWork=false,publishing=false,openedSignature='',exitAction=null;
   const signal=new AbortController();const storageKey='tt-product-work:'+uid+':'+key;
   // Evita pisar lo tecleado mientras llega una recuperación remota.
   const locked=[...card.querySelectorAll('input,textarea,select,button')].filter(input=>!input.disabled);
@@ -11,9 +11,9 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   const signature=()=>JSON.stringify(clone());
   const node=(tag,text)=>{const element=document.createElement(tag);if(text)element.textContent=text;return element;};
   const head=card.querySelector('.adm-card-head'),actions=card.querySelector('#prod-editor-actions') || card.querySelector('#prod-save-btn')?.parentElement;
-  const back=node('button','← Volver');back.type='button';back.className='adm-btn adm-btn-outline tt-work-back';head.prepend(back);
+  const originalCancel=card.querySelector('button[onclick="prodCancelForm()"]'),cancelWasHidden=originalCancel?.hidden;if(originalCancel)originalCancel.hidden=true;
+  const back=node('button','Cancelar');back.type='button';back.className='adm-btn adm-btn-outline tt-work-back';head.prepend(back);
   const status=node('p');status.className='tt-work-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');head.append(status);
-  const progress=node('button','Guardar progreso');progress.type='button';progress.className='adm-btn adm-btn-outline';actions.prepend(progress);
   const retry=node('button','Reintentar');retry.type='button';retry.className='adm-btn adm-btn-outline';retry.hidden=true;actions.append(retry);
   const errors=node('div');errors.className='tt-work-exit-error';errors.hidden=true;
   const explanation=node('p','No se pudo guardar todo el progreso. Podés reintentar, permanecer o descartar sólo los cambios pendientes. El último progreso del servidor se conserva.');
@@ -28,7 +28,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   function label(){
     const selected=card.querySelector('#prod-publicationStatus')?.value;
     const save=card.querySelector('#prod-save-btn');if(!save)return;
-    const text=selected==='archived'?'Archivar':selected==='draft' && actual==='active'?'Retirar de publicación':selected==='inactive'?'Guardar cambios':actual==='active'?'Guardar cambios':'Publicar producto';
+    const text=selected==='archived'?'Archivar':'Guardar cambios';
     if(!applying && save.textContent!==text)save.textContent=text;
   }
   function backup(){try{sessionStorage.setItem(storageKey,JSON.stringify({snapshot:clone(),revision,baseExpected,time:Date.now()}));}catch{} }
@@ -44,7 +44,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
       lastSaved=signature();
       let local=null;try{local=JSON.parse(sessionStorage.getItem(storageKey));}catch{}
       if(local && local.revision===revision && local.baseExpected===baseExpected && local.time>Date.parse(result.work?.updatedAt || 0)){await restore(local.snapshot,{conflict,key});missingUploads=local.snapshot.pendingUploads===true;acknowledge.hidden=!missingUploads;}
-      loading=false;unlock();label();
+      openedSignature=signature();loading=false;unlock();label();
       if(missingUploads){message('Texto recuperado; faltan archivos que no terminaron de subir. Volvé a elegirlos o confirmá continuar sin esas fotos.',true);errors.hidden=false;}
       else if(dirty())schedule();else {window.AdminUnsaved?.markClean('primary-editor');message(conflict?'Progreso privado recuperado. La versión publicada cambió: conciliá antes de aplicar.':result.work?'Progreso privado recuperado del servidor.':actual==='active'?'Versión pública activa. El progreso se guarda por separado.':'Nuevo trabajo privado · todavía no publicado.');}
     }catch(error){loading=false;unlock();message('No se pudo recuperar el progreso: '+error.message,true);throw error;}
@@ -63,23 +63,49 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
         const snapshot=clone(),current=JSON.stringify(snapshot);backup();
         if(!pending && current===lastSaved && hasWork)break;
         if(!pending)pending={action:'saveProductWork',key,expectedRevision:revision,baseExpected,changeId:crypto.randomUUID(),snapshot,signature:current};
-        message('Guardando progreso privado…');
+        message('Guardando borrador…');
         const {signature:sent,...body}=pending;const result=await send(body);
         if(destroyed)return;revision=result.revision;conflict=result.conflict;lastSaved=sent;pending=null;retries=0;hasWork=true;
         if(signature()===sent)break;
       }
       if(mediaError)throw Object.assign(new Error('Texto guardado en servidor; quedan fotos pendientes: '+mediaError.message),{status:mediaError.status});
-      if(!dirty()){clearBackup();window.AdminUnsaved?.markClean('primary-editor');message(conflict?'Progreso guardado. La versión pública cambió; reabrí y conciliá antes de aplicar.':'Progreso guardado en servidor · '+new Date().toLocaleTimeString());window.dispatchEvent(new CustomEvent('tintin:product-work-saved'));}
+      if(!dirty()){clearBackup();window.AdminUnsaved?.markClean('primary-editor');message(conflict?'Progreso guardado. La versión pública cambió; reabrí y conciliá antes de aplicar.':'Borrador guardado en servidor · '+new Date().toLocaleTimeString());window.dispatchEvent(new CustomEvent('tintin:product-work-saved'));}
       else {message('Hay cambios nuevos pendientes.');schedule();}
       return !dirty();
     })().catch(error=>{message(error.message,true);backup();if(!destroyed && ![403,409,422].includes(error.status) && retries<3){timer=setTimeout(()=>void save().catch(()=>{}),[2000,5000,15000][retries++]);}throw error;}).finally(()=>{operation=null;});
     return operation;
   }
+  let exitBusy=false;
+  const exit=node('dialog');exit.className='tt-work-exit-dialog';
+  const exitTitle=node('h3','¿Salir del editor?');exitTitle.id='tt-work-exit-title';exit.setAttribute('aria-labelledby',exitTitle.id);
+  const exitHint=node('p','Hay cambios en esta edición. Podés conservarlos como borrador privado antes de salir.');
+  const exitError=node('p');exitError.setAttribute('role','alert');
+  const exitButtons=node('div');exitButtons.className='tt-work-exit-actions';
+  const saveExit=node('button','Guardar borrador y salir'),keepEditing=node('button','Seguir editando'),discardExit=node('button','Descartar cambios y salir');
+  for(const control of [saveExit,keepEditing,discardExit]){control.type='button';control.className='adm-btn adm-btn-outline';exitButtons.append(control);}
+  discardExit.classList.add('tt-work-discard');exit.append(exitTitle,exitHint,exitError,exitButtons);card.append(exit);
+  function finishExit(){const next=exitAction;exitAction=null;exit.close();close();if(typeof next==='function')next();}
   async function leave(next){
-    if(publishing){message('Terminando la acción de publicación. Esperá su confirmación.');return;}
-    try{await ready;if(dirty() || pending || operation || missingUploads){const saved=await save();if(!saved)throw Error('Quedan cambios pendientes.');}close();if(typeof next==='function')next();}
-    catch{errors.hidden=false;errors.scrollIntoView({block:'nearest'});stay.focus({preventScroll:true});}
+    if(publishing){message('Terminando el guardado. Esperá su confirmación.');return;}
+    try{await ready;}catch{errors.hidden=false;return;}
+    if(destroyed)return;
+    if(signature()===openedSignature && !dirty() && !pending && !operation && !missingUploads){close();if(typeof next==='function')next();return;}
+    exitAction=next;exitError.textContent='';if(!exit.open)exit.showModal();keepEditing.focus();
   }
+  keepEditing.addEventListener('click',()=>{if(exitBusy)return;exitAction=null;exit.close();back.focus();});
+  exit.addEventListener('cancel',event=>{if(exitBusy){event.preventDefault();return;}exitAction=null;});
+  saveExit.addEventListener('click',async()=>{
+    if(exitBusy)return;exitBusy=true;saveExit.disabled=keepEditing.disabled=discardExit.disabled=true;
+    try{if(!await save())throw Error('Quedan cambios pendientes.');finishExit();}
+    catch(error){exitError.textContent='No se confirmó el borrador completo: '+error.message;errors.hidden=false;}
+    finally{exitBusy=false;saveExit.disabled=keepEditing.disabled=discardExit.disabled=false;}
+  });
+  discardExit.addEventListener('click',async()=>{
+    if(exitBusy)return;exitBusy=true;saveExit.disabled=keepEditing.disabled=discardExit.disabled=true;clearTimeout(timer);
+    try{if(operation)await operation;if(hasWork)await send({action:'discardProductWork',key,expectedRevision:revision,baseExpected,changeId:crypto.randomUUID()});clearBackup();window.AdminUnsaved?.markClean('primary-editor');window.dispatchEvent(new CustomEvent('tintin:product-work-saved'));finishExit();}
+    catch(error){exitError.textContent='No se pudo descartar el borrador: '+error.message;}
+    finally{exitBusy=false;saveExit.disabled=keepEditing.disabled=discardExit.disabled=false;}
+  });
   async function publish(){
     if(publishing || destroyed)return false;
     publishing=true;back.disabled=true;discard.disabled=true;
@@ -88,7 +114,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
       await ready;await save();if(conflict) {message('La versión pública cambió. Reabrí y conciliá el progreso antes de aplicar.',true);return false;}
       if(dirty() || destroyed)return false;
       const select=card.querySelector('#prod-publicationStatus');
-      if(actual!=='active' && select?.value==='draft'){select.value='active';select.dispatchEvent(new Event('change',{bubbles:true}));await save();}
+      if(select?.value==='draft'){close();return true;}
       if(dirty() || destroyed)return false;
       applying=true;clearTimeout(timer);
       frozen=[...card.querySelectorAll('input,textarea,select,button')].filter(control=>!control.disabled && control.id!=='prod-save-btn');
@@ -99,7 +125,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
       publishing=false;applying=false;back.disabled=false;discard.disabled=false;if(!destroyed)label();
     }
   }
-  back.addEventListener('click',()=>void leave());progress.addEventListener('click',()=>void save().catch(()=>{}));retry.addEventListener('click',()=>void save().catch(()=>{}));
+  back.addEventListener('click',()=>void leave());retry.addEventListener('click',()=>void save().catch(()=>{}));
   stay.addEventListener('click',()=>{errors.hidden=true;});discardPending.addEventListener('click',()=>{clearBackup();window.AdminUnsaved?.markClean('primary-editor');close();});
   acknowledge.addEventListener('click',()=>{missingUploads=false;mediaProblem=false;acknowledge.hidden=true;errors.hidden=true;schedule();});
   card.addEventListener('tintin:image-pending',()=>{missingUploads=false;acknowledge.hidden=true;},{signal:signal.signal});
@@ -107,5 +133,5 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   for(const event of ['input','change','tintin:image-pending','tintin:image-preview','tintin:commercial-draft'])card.addEventListener(event,schedule,{signal:signal.signal});
   window.addEventListener('online',()=>{if(dirty())void save().catch(()=>{});},{signal:signal.signal});
   card.addEventListener('keydown',event=>{if(event.key!=='Tab' || event.target.closest('dialog') || document.querySelector('.tt-mlib-overlay'))return;const controls=[...card.querySelectorAll('button,input,textarea,select,a[href],summary,[tabindex]')].filter(node=>node.getClientRects().length && !node.disabled && node.tabIndex>=0);if(!controls.length)return;const target=event.shiftKey?controls.at(-1):controls[0];if(event.shiftKey && document.activeElement===controls[0] || !event.shiftKey && document.activeElement===controls.at(-1)){event.preventDefault();target.focus({preventScroll:true});}},{signal:signal.signal});
-  return {key,ready,save,leave,publish,get revision(){return revision;},get applying(){return applying;},get reference(){return {key,revision};},destroy(){destroyed=true;unlock();clearTimeout(timer);signal.abort();back.remove();progress.remove();retry.remove();secondary.remove();status.remove();errors.remove();card.classList.remove('tt-editor-workspace');delete card.dataset.productPublicState;document.documentElement.classList.remove('tt-product-workspace-active');}};
+  return {key,ready,save,leave,publish,get revision(){return revision;},get applying(){return applying;},get reference(){return {key,revision};},destroy(){destroyed=true;unlock();clearTimeout(timer);signal.abort();back.remove();if(originalCancel)originalCancel.hidden=cancelWasHidden;exit.remove();retry.remove();secondary.remove();status.remove();errors.remove();card.classList.remove('tt-editor-workspace');delete card.dataset.productPublicState;document.documentElement.classList.remove('tt-product-workspace-active');}};
 }

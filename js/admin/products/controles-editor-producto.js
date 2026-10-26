@@ -2,6 +2,7 @@
 const mounted = new WeakSet();
 const quantityControls = new WeakMap();
 const choices = new WeakMap();
+const commercialDrafts = new WeakMap();
 const node = (tag, className, text) => {
   const el = document.createElement(tag);
   if (className) el.className = className;
@@ -171,15 +172,16 @@ function variantBuilder(input) {
   });
   assistance.append(assistanceTitle,palette,suggest,suggestStatus,suggestion);
   form.append(attribute,custom,value,addButton);panel.append(form,error,chips,assistance);input.before(panel);
-  const advanced=node('details','tt-editor-advanced');const summary=node('summary','','Editar opciones en texto');
+  const advanced=node('details','tt-editor-advanced');const summary=node('summary','','Formato avanzado');
   input.before(advanced);advanced.append(summary);input.hidden=true;
   advanced.addEventListener('toggle',()=>{input.hidden=!advanced.open;});
+  const retired=(key,option)=>{const rows=commercialDrafts.get(card)?.variantInventory?.filter(row=>row.attributes?.[key]===option) || [];return rows.length>0 && rows.every(row=>row.active===false);};
   let signature='';
   function refresh(){
     attribute.disabled=value.disabled=addButton.disabled=input.readOnly;
     for(const key of groups().keys())if(![...attribute.options].some(option=>option.value===key))attribute.append(node('option','',key));
     const source=baseline();
-    const current=JSON.stringify([input.value,input.readOnly,card?.querySelector('#prod-id')?.value,source?.variants,source?.variantCommerceVersion]);if(current===signature)return;signature=current;
+    const current=JSON.stringify([input.value,input.readOnly,card?.querySelector('#prod-id')?.value,source?.variants,source?.variantCommerceVersion,commercialDrafts.get(card)?.variantInventory?.map(row=>[row.variant,row.active])]);if(current===signature)return;signature=current;
     chips.replaceChildren();
     for(const [key,values] of groups()){
       const group=node('fieldset','tt-option-group'),legend=node('legend','',key);group.append(legend);
@@ -201,8 +203,13 @@ function variantBuilder(input) {
           const map=groups();map.set(key,values.map(other=>other===option?text:other));write(map);
           if(appearance?.colorHex && window.TintinProductMedia?.isColorKey(key))card.dispatchEvent(new CustomEvent('tintin:color-appearance',{detail:{color:text,colorHex:appearance.colorHex}}));
         });apply.disabled=input.readOnly || protectedOption;name.disabled=input.readOnly || protectedOption;rename.append(renameTitle,name,apply);row.append(rename);
-        const remove=button('Quitar','Quitar '+key+': '+option,()=>{if(input.readOnly)return;if(hasDraftData(key,option)){error.textContent='Esta opción tiene cantidades o precios configurados. Revisalos antes de quitarla o dejala sin disponibilidad.';return;}const map=groups();map.set(key,values.filter(other=>other!==option));write(map);});
-        remove.disabled=input.readOnly || protectedOption;if(remove.disabled)remove.title='Esta opción tiene inventario o referencias históricas. Conservá su identidad y revisá su disponibilidad.';
+        const isRetired=retired(key,option);
+        const remove=button(isRetired?'Restaurar':'Quitar',(isRetired?'Restaurar ':'Quitar ')+key+': '+option,()=>{if(input.readOnly)return;
+          const handled=!input.dispatchEvent(new CustomEvent('tintin:variant-option-availability',{cancelable:true,detail:{attribute:key,value:option,active:isRetired}}));
+          if(handled){refresh();[...chips.querySelectorAll('button')].find(button=>button.getAttribute('aria-label')===(isRetired?'Quitar ':'Restaurar ')+key+': '+option)?.focus({preventScroll:true});return;}
+          if(protectedOption || isRetired){error.textContent='Conservá esta identidad histórica y revisá su disponibilidad en la matriz.';return;}
+          if(hasDraftData(key,option)){error.textContent='Esta opción tiene cantidades o precios configurados. Revisalos antes de quitarla o dejala sin disponibilidad.';return;}const map=groups();map.set(key,values.filter(other=>other!==option));write(map);});
+        remove.disabled=input.readOnly;if(remove.disabled)remove.title='Esta opción tiene inventario o referencias históricas. Conservá su identidad y revisá su disponibilidad.';
         row.append(remove);
         for(const [label,to] of [['Anterior',index-1],['Siguiente',index+1]]){
           const move=button(label,label+' opción '+key+': '+option,()=>{const next=[...values];next.splice(index,1);next.splice(to,0,option);const map=groups();map.set(key,next);write(map);});
@@ -282,6 +289,10 @@ export function installEditorControls(card) {
     const status=card.querySelector('#prod-publicationStatus'),active=card.querySelector('#prod-active');
     if(event.target===status && active)active.checked=status.value==='active';
     if(event.target===active && status)status.value=active.checked?'active':'draft';
+  });
+  card.addEventListener('tintin:commercial-draft',event=>{
+    commercialDrafts.set(card,event.detail);
+    refreshEditorControls(card);
   });
   card.addEventListener('input',event=>{
     refreshEditorControls(card);

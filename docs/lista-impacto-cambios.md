@@ -774,3 +774,20 @@ Agregar y editar comparten CSS canónico: lienzo rosa suave, campos blancos con 
 shopify-commerce-admin confirma reemplazo del listado sólo después de render correcto; un fallo mantiene el listado canónico. dashboard-control reserva en scroll-padding la cápsula móvil existente, con una sola autoridad de altura/safearea. Pruebas en specs existentes de comercio y todas las pantallas, sin cambios comerciales, auth ni Rules. Referencias admin/admin-images y CSS dinámico del loader se versionan; CSP, caché, protección y diagnóstico desde generadores. No se afirma reproducida la causa exacta del dispositivo físico.
 
 Apertura de Nuevo/Editar: geometría del editor nunca colapsa al quedar la cabecera fuera del viewport visible; resync en reanudación/ResizeObserver sin recargar ni alterar borradores. Constructor de opciones se distribuye según espacio útil. Regresión con shell administrativo completo y controlador real en product-save-responsive (no otra implementación ni nuevos comandos CI).
+
+## 2026-10-26 — Continuidad del editor, Fase 6 sin publicación
+
+Autoridades: workspace privado y writer CAS existentes; galería unificada,
+constructor/matriz comercial, vista previa y presentación pública de tienda.
+Cancelar confirma cambios incluso autoguardados; Guardar cambios en draft guarda
+privado y exige elegir Activo antes de publicar. Retiro/restauración preserva
+identidad, cantidades, precios y fotos; catálogo completa la selección parcial
+válida. Galería conserva nodos si su estado no cambia. Atajos globales respetan
+diálogos nativos. No cambian pagos, checkout, Rules, paquetes, esquemas ni datos
+reales. Versiones, plan protegido y diagnóstico se regeneran por sus autoridades.
+Matriz, límites y procedencia del adjunto: `docs/product-editor-refactor/`.
+
+La continuación también preserva cantidades pendientes V1 antes de filtrar una
+opción nueva:2 unidades no se descartan al quitar una entre varias opciones.
+Regresión negativa reproducida y repetida tras el guard; no cambia el motor
+compartido, la disponibilidad de filas históricas ni checkout.
