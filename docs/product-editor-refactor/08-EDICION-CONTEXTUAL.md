@@ -69,3 +69,13 @@ El botón Producto se consulta dentro de su sección para distinguirlo de la
 sugerencia del contenido del paquete. Se preservan las pruebas de permisos,
 contención, datos, acciones y foco. Repetición dirigida: 35/35 Chromium aprobados.
 La siguiente CI debe validar el nuevo commit; no se hereda su resultado global.
+
+La matriz administrativa completa posterior aprobó 418/418 Chromium sin
+reintentos (9,1 min). CI 40404109302/b372116f aprobó esa matriz, comercio,
+reglas, calidad, interfaz y CodeQL; Administración detectó después otras ocho
+expectativas de paneles inicialmente plegados en `editor-comercial-v2.spec.js`.
+Se adaptaron a los campos abiertos del espacio continuo y se acotó el selector
+del encabezado Producto. Repetición conjunta de las seis suites finales:
+120/120 Chromium sin reintentos (3,3 min), incluyendo esos ocho casos,
+reconocimiento local, asociaciones, borradores, guardado y reapertura.
+No sumar 418+120 como casos únicos: existen recorridos parcialmente solapados.

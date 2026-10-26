@@ -13,9 +13,9 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await openProductSaveFixture(page,width,height);
  await expect(page.locator('[data-product-section="general"] .tt-editor-section-toggle')).toHaveAttribute('aria-expanded','true');
- for(const section of ['prices','inventory','specs','private'])await expect(page.locator(`[data-product-section="${section}"] .tt-editor-section-toggle`)).toHaveAttribute('aria-expanded','false');
+ for(const section of ['prices','inventory','specs','private'])await expect(page.locator(`[data-product-section="${section}"] .tt-editor-section-toggle`)).toHaveAttribute('aria-expanded','true');
  await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Pulsera ficticia');
- await page.getByRole('button',{name:'Producto',exact:true}).click();
+ await page.locator('[data-product-section="general"] .tt-editor-section-toggle').click();
  await page.locator('#prod-editor-section').selectOption('general');
  await page.locator('[data-product-section="general"] .tt-editor-section-help summary').click();
  await expect(page.getByText('Nombre y descripción que verán tus clientes.',{exact:true})).toBeVisible();

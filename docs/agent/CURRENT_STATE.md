@@ -30,6 +30,13 @@ dirigida35/35 PASS_LOCAL. Nueva CI pendiente; matriz completa local en curso.
 
 Codex /root. Base899a6851 (#1248), que preserva íntegra la reparación Perfil de1246/e78a9de2. CI main40389682500 cancelada: Install Chromium quedó en apt-get update desde19:47 hasta20:42UTC contra HTTP azure.archive. La CI anterior40380530922 también agotó55min, con pruebas runtime iniciadas al final después de instalaciones lentas. Se reintentó sólo comercio y dependientes de la versión ACTUAL, sin reactivar e78 anterior. El mirror volvió a demorar varios minutos. Se corrige la preparación del runner, no la aplicación: script compartido usado por los cuatro jobs de navegador cambia el mirror regional por Ubuntu oficial HTTPS y fija timeout30s/reintentos2 de APT. Conserva suites, claves, firmas, instalación --with-deps, tests y límites del job. No ejecutable fuera de GitHub Actions/Linux. Verificación bash/YAML y preflight; CI/merge del nuevo SHA pendientes. Ocho runs antiguos permanecen cancelados y cinco issues operativos abiertos con alcance actualizado. Perfil1246 sí obtuvo CI completa40376208312 y merge protegido, producción40380534105SUCCESS; no afirmar su CI posterior completa porque fue cancelada.
 
+Continuación sobre main c176e10e (#1250), integrada con plan protegido regenerado.
+418/418 Chromium administrativos PASS_LOCAL. CI40404109302/b372116f aprobó
+preflight/comercio/Rules/calidad/interfaz/CodeQL y la matriz418; detectó después
+8 expectativas de panel plegado en editor-comercial-v2. Adaptadas sin cambios
+de aplicación, repetición conjunta120/120 Chromium PASS_LOCAL, sin reintentos.
+Nueva CI del commit de tests PENDING. Suites parcialmente solapadas.
+
 ## Estado actual — versión única del editor,26/10/2026
 
 Codex /root. La titular ordena conservar exclusivamente el editor de seis fases.
