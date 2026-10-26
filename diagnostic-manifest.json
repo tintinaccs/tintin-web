@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "227828effc1a95301a8b86a8806c77707000de6fcd30179c75ff05ffdd25ad3a",
+  "sourceFingerprint": "d752cd3c83c6ec3611eaf277e11c9ee83da49f5365366d4fb02b368aa55fdbe4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1526,
-    "textFiles": 1410,
-    "totalBytes": 33001074,
+    "files": 1527,
+    "textFiles": 1411,
+    "totalBytes": 32992550,
     "pages": 19,
     "modules": 1041
   },
@@ -58263,8 +58263,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 13402,
-      "sha256": "be3f7bb55ee738e078f62cb044c955a6c6fb6997f8e003b9de93d0cb02488fc2"
+      "bytes": 695,
+      "sha256": "32c615bcaddfd9033d6a4423251e8f6b3b9e5ae021db0874522523e5689f5db3"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -58276,7 +58276,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "df6017556b0bda0d27064adaab9193832ac5417dc6d03048b760b672ca8034c9"
+      "sha256": "a6bc5b8358422e1f30cfd4154ec2541a93a975211abdc7361e1c0dff7883bc65"
     },
     {
       "path": "config/public-site.json",
@@ -58935,14 +58935,20 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 953949,
-      "sha256": "4b1223a6c451207fb1e4031e031b6047f027e7b52b6a02692785ffd3877398ae"
+      "bytes": 954960,
+      "sha256": "085278c5e589d285bbd1174337b04d98e5381ad22a960fb9edcfedf77f6ec1fc"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
       "extension": ".md",
       "bytes": 4949,
       "sha256": "a1f79becd882edb479fe690db26901d1fb80027a697ee131689ecdb27ce3a873"
+    },
+    {
+      "path": "docs/agent/DEPENDENCIAS-1231-1242-20261026.md",
+      "extension": ".md",
+      "bytes": 2622,
+      "sha256": "c7ada848abb8267f745484e1acb7cea330e943b079e45bb39f41dc9cf275e643"
     },
     {
       "path": "docs/agent/ESPACIADO_GLOBAL_20261023.md",
@@ -59709,8 +59715,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 124221,
-      "sha256": "1ec9bfe3138e0c8da414532e268cd87c309741b6d2a7171428631d2868a1bd5b"
+      "bytes": 124743,
+      "sha256": "0f810ceba30d4a47336485972ed6c7a53fd8892b04f7074c1cb982f1c99b132a"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -62517,14 +62523,14 @@
     {
       "path": "package-lock.json",
       "extension": ".json",
-      "bytes": 313320,
-      "sha256": "67e53d15c132cf439a86a42041bdd74cecb90d3ad39cd2cbfc58a44b75ba04bd"
+      "bytes": 313348,
+      "sha256": "38f32c4c15c32ae2818df24c95e65c567e61896f054b5a2e0ce23ec26babcc11"
     },
     {
       "path": "package.json",
       "extension": ".json",
       "bytes": 18672,
-      "sha256": "5c963884e3d4f1b681c8307d9ce1f866bac4ab78aff6e511f214738c27686c91"
+      "sha256": "26de21ae29214d5efba7cbd8a9452b09a21ab9656de7308034a07b41e6bfad34"
     },
     {
       "path": "perfil.html",
