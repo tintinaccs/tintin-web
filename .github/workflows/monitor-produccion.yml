@@ -68,7 +68,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
       - name: Artefacto de producción corresponde al commit auditado
         run: npm run audit:production-artifact
       - name: Monitor operativo
