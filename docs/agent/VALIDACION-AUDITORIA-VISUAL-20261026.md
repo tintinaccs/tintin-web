@@ -74,3 +74,12 @@ comandos preflight PASS de nuevo sobre8e922503 combinado con la mejora visual.
 Se preservan todas las aserciones y las fuentes del editor; ninguna prueba o
 protección se reduce. Build/caché y diff propios contra main verificados. La
 cabeza combinada debe aprobar su propia CI antes del merge y monitor posterior.
+
+## Renovación final del plan protegido
+
+CI40359757141 aprobó todas las etapas del candidato combinado. El mantenimiento
+40364881108 bloqueó correctamente el merge: el build diagnóstico había renovado
+los marcadores HTML después del cálculo del plan, dejando14 huellas antiguas.
+Se vuelve a ejecutar el preparador canónico sobre los artefactos finales y se
+comprueban todas las entradas protegidas tras el último build. No cambia código
+de aplicación ni se reduce el control; el nuevo commit requiere su propia CI.

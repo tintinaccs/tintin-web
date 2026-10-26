@@ -1,42 +1,42 @@
 {
   "schemaVersion": 1,
   "baseCommit": "8e922503881d49e17e24fbe4c14a39f2c43bf9dc",
-  "reason": "Conciliar la mejora visual con Fase6 integrada sin perder cambios del editor y validar fuente combinada sobre main actual",
+  "reason": "Reservar dimensiones HTML del footer y mejorar lectura de pasos checkout, conservando lógica comercial y renovando huellas después del build final.",
   "files": [
     {
       "path": "404.html",
       "oldHash": "15a0f94b73cdf1f5b7ed4d27351bc150d73b05cf83ab0d0ac3fb5d89a38a369f",
-      "newHash": "65d832347c007a0c8b2e49a67e1e561374487764e8389e1f82b40acc3c4cc584"
+      "newHash": "325a4b71eb862f6e3d12fce8737330249c50aa36e40ddf7580d63bcb48d66a2b"
     },
     {
       "path": "about.html",
       "oldHash": "ee852330ed845acba417e1f62c89d9b4ffccd73de50672a2e5a06b780da2d900",
-      "newHash": "9f84a7a68d4fe619d71d10e6aab25983763a0d9c88c0e08159da30801f2ffc5e"
+      "newHash": "29b5e48d4d6dcffa0e5dd3758de78ab8caad605cd8e5313437c4a69f1dce6a5d"
     },
     {
       "path": "cambios-devoluciones.html",
       "oldHash": "bacb01a1b954be805a4c4f9d45e0ceda12cf3f361dbcd71ece4e15b4cb12010c",
-      "newHash": "10b6e7469d6d659c203127efb8f7af2d2f24d83a190213917959f62aa2ccce2b"
+      "newHash": "9a7a4a640169b887c0d21c10621e970def44ebd321cc1bc19f506813aa183428"
     },
     {
       "path": "catalogo.html",
       "oldHash": "c128f9242f3a23fd3217bc70723458749fa00cc2ec37c59a1b255264e93cf12c",
-      "newHash": "9b2a52c6fdac65bda741ed455aad77d6681d645b3410d5cc60d2ad922ec11c38"
+      "newHash": "2466784802ce538699f535292ccc315b62accaca042367d3f4f6a555ccb660c1"
     },
     {
       "path": "checkout.html",
       "oldHash": "83c1484612267e02c012cabec607db8887598d6cd14b4642b1ca399bc3b764bc",
-      "newHash": "6a7ef3dc3dc7f3f01e162c8225d8c3ad05d5d1e952790f8a16bc0ce4869ce279"
+      "newHash": "cf5b4ecf66ad016eaff2b82ccece18e5063b40f820fa10da1fab6bde5b75bf05"
     },
     {
       "path": "collections.html",
       "oldHash": "ca4b3179a91e95b04ceea6d1e846e4af0295e18dbe36e997e64f2ced22f46af7",
-      "newHash": "d47bfe0974b6ef47e22bcde049e131eb90cb287c1c5a1eeb0d2ec0fcbe68ed45"
+      "newHash": "68f90923614969988035b55603e9f155dfa6cde4fa4b7a001d9c6a302b5cc3b0"
     },
     {
       "path": "contact.html",
       "oldHash": "8d31c5e65a199955381f86c6faec9f198dec9931ec359762d3439fb824f86f68",
-      "newHash": "a3defc78a09db6534a3b91cd0408ee9c4cb1bb847fe5c8331da5a438410d9a33"
+      "newHash": "4a4fe16c2ee256066cb0d88eed74e7950a0ec4079f4e8ddad59b1bfc13c47ff6"
     },
     {
       "path": "css/pages/checkout/checkout-maintenance.css",
@@ -46,12 +46,12 @@
     {
       "path": "envios.html",
       "oldHash": "bd3c1c364154ae4869d6107da4273c1306a21c0b6d37de0ec2d5da806da92276",
-      "newHash": "f7f4274403090822be908c9bafa4c8407cdc0b730bf1e622d2cf73fa3e6c2e8b"
+      "newHash": "3a5925c3416675942893aa7579937df1e0893a7e691f7763f9d56fe5916d2c37"
     },
     {
       "path": "index.html",
       "oldHash": "7f947d77b92abac48d5616d3ef5cf572b3a3c4c591b835c81b1c5ca53ab63124",
-      "newHash": "4e1ab6ab1a9b7c915fdcfde31ca1d59f229c2f0936cc7aaf79a595414c4a2bba"
+      "newHash": "23b5f509a7ea5e90a8484a3b69f7a5e87aa110c7fde9a746bdcee0529d1fd79d"
     },
     {
       "path": "js/cargador-mantenimiento-pagina.js",
@@ -96,22 +96,22 @@
     {
       "path": "perfil.html",
       "oldHash": "0cb6b380d76054ca6011fb2d98c4fae9b11583315352a15ca5a1706cc1ead5bf",
-      "newHash": "0a9718813d2e35dc8a8ff4456299131e14d5f6d374a26402d39ef492d820f830"
+      "newHash": "7a0b39ba22edb294c8a663867f81f814c4cb180569f857c6203ff16758bc8f39"
     },
     {
       "path": "preguntas-frecuentes.html",
       "oldHash": "490a74d6abf78e92686ea951025b4bf3961c5047113b24f98e9361ec7ebd30db",
-      "newHash": "da7f584d7d198e4da27bbfcfeaa514618c64bef43d60435022889d7c25e82d11"
+      "newHash": "d411a9f967476473b3def957e53315c927a9ad5cdbb546ee9b1686d46d305c2a"
     },
     {
       "path": "privacidad.html",
       "oldHash": "edf927772679141465236ee1411715042328161946555ea04e2ac3e4fc8555f4",
-      "newHash": "ec7d3f7942a2190fe9f41ec87408920c39b3be21b3be131f4988cfce260cfba2"
+      "newHash": "b7bf7f613b6b2e292f280405f69fa88f0bc03e107111274cb022525ea21ccf66"
     },
     {
       "path": "product.html",
       "oldHash": "a5a9f2d7e040474e922df6155ed78eda7f4a439406ee6c7ee9ede9bba55eb15c",
-      "newHash": "0d9dd9d6447727d161a33b41f6138f39266ac3b4c7f70d2661105de89894296b"
+      "newHash": "7e70c01b00f8ac0b858ddf84eeddb1a46fd4074d06c94831f9d2a08dcac4248a"
     },
     {
       "path": "scripts/cache-version-baseline.json",
@@ -126,7 +126,7 @@
     {
       "path": "terminos.html",
       "oldHash": "cdece91977943fd36ddc21af8efd5960f89f958dbfa4ce4b114cbda62bb11859",
-      "newHash": "e04dcd085b5277955635d67559d50655e9ec16401d17a2bbe8950df63ea54e9c"
+      "newHash": "220f8bf4e431feaaab2b2586c23eedad013533c45f8cf728b36e88a9ab74149c"
     },
     {
       "path": "tienda.js",
