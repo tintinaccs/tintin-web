@@ -66,6 +66,8 @@ Aceptación final de grupos/stock/sugerencias/simple/null/Color+Talle:10/10 PASS
 
 Cierre del candidato corregido:12/12 Chromium adicionales PASS (`phase3-ready-acceptance.log`): seis controles de inventario/44px y seis recorridos completos de grupos/guardar/reabrir. «Disponibilidad» enfoca una fila visible correspondiente a la opción, no el total oculto ni otra variante al cambiar el orden. Se conserva foco al reconstruir/reordenar acciones. Build Pages/caché y39 comandos preflight finales exit0 (`phase3-final-build.log`, `phase3-final-preflight.log`). Plan canónico:5 fuentes protegidas/18 registros. Sin merge ni publicación, estado del PR y SHA definitivo se registran en el recibo posterior.
 
+SHA funcional corregido: `b09756acd343146a9b7490592ce892f88abc807f`. El commit posterior sólo incorpora este recibo y diagnóstico generado. PR1239 permanece listo para revisión, apilado sobre1238, sin auto-merge. Consultar su cabeza para el SHA de entrega con documentación; no atribuirle CI de main.
+
 ## Riesgos, reversión y Fase 4
 
 No se ofrece renombrado general de identidades históricas: el modelo usa nombres como atributos además de claves opacas. Para habilitarlo haría falta diseñar aliases/IDs de presentación y adaptar medios/consumidores/Sheets con una estrategia aprobada; no adivinar correspondencias ni migrar datos reales.

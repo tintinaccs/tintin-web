@@ -10,6 +10,8 @@ PR1239 OPEN/listo, apilado sobre1238, autoMergeRequest=null. Commit funcional4e4
 
 Cierre corregido:12/12 Chromium PASS (6 inventario táctil +6 grupos/stock/guardar/reabrir/foco), build Pages/caché y39 preflight finales exit0. Consulta Disponibilidad dirige foco a fila visible de la opción conservando identidad/orden comercial. Plan5 fuentes/18 registros. Source/recibo del candidato final se consultan en PR1239, sin auto-merge. CI main/producción/hardware físico NOT_VERIFIED.
 
+SHA funcional corregido b09756acd343146a9b7490592ce892f88abc807f; recibo posterior sólo documentación/diagnóstico. PR1239 listo para revisión, base rama1238, sin merge ni deploy.
+
 ## 2026-10-25 — Fase 2 galería unificada (Codex /root)
 
 Base0f57f327ad43671d22d0bd4d373d2f5b7bee8e40 de PR1237 OPEN/no integrado; main f9399a90c. Rama codex/galeria-unificada-fase2-20261025. Autorización actual exige PR listo para revisión, prohíbe merge/deploy. Se prepara PR apilado sobre rama1237; mantenimiento automático sólo considera base main y no debe habilitarse al retargetear sin autorización. Informe: docs/editor-productos-v2/19-GALERIA-UNIFICADA-FASE-2.md.
