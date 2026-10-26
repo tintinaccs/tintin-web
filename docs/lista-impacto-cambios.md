@@ -1,3 +1,7 @@
+## 2026-10-26 — Consolidación de dependencias de desarrollo
+
+Autoridades: package.json y package-lock.json. Reúne propuestas1231/1242 de fast-uri/Firebase CLI/SDK npm y corrige hallazgos transitivos HIGH mediante rangos compatibles. Afecta instalación, emuladores y herramientas; el SDK CDN y las fuentes de aplicación no cambian. Se conservan integridad, plan protegido, gates y autor confiable; derivados desde constructores canónicos. Evidencia en docs/agent/DEPENDENCIAS-1231-1242-20261026.md y CURRENT_STATE.
+
 ## 2026-10-24 — Editor Tintin adaptable y sugerencias locales
 
 Autoridades: interfaz-productos-adaptable.js y shopify-commerce-admin.css sobre los mismos campos/controladores existentes. Fotos y producto abiertos, demás bloques consultables, ayuda plegada, preview abierto inicialmente en escritorio, superficies suaves y columnas adaptables. Nuevo helper editorial local propone cuidados por categoría/nombre/material confirmado, sólo tras clic explícito; conserva texto anterior, limita longitud, evita duplicados y no inventa garantía/material/resistencia. No cambia reconocimiento visual, permisos, serializer, escritor, variantes, inventario, precios, checkout ni integraciones. No incluye el PR1228 ajeno. Nuevas pruebas se agregan al spec canónico ya ejecutado por CI, sin cambiar comandos/gates. URLs inmutables CSS/JS y autoridades derivadas regeneradas; publicación autorizada expresamente por la titular en este chat. Evidencias y límites en CURRENT_STATE.
