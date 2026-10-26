@@ -1,3 +1,5 @@
+[Fase 4: progreso privado y publicación](21-FLUJO-EDITORIAL-FASE-4.md): espacio dedicado, borradores, CAS, privacidad y pruebas.
+
 [Nueva Fase 1 de estabilización, 25/10/2026](18-ESTABILIZACION-FASE-1-20261025.md): resultados actuales y pendientes; sin autorización de merge/despliegue.
 
 [Fase 2: galería unificada](19-GALERIA-UNIFICADA-FASE-2.md): centro visual de fotografías, compatibilidad y evidencia.

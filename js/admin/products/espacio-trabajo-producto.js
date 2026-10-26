@@ -1,0 +1,111 @@
+// Progreso editorial privado. La publicación continúa en prodGuardar/CAS.
+export function mountProductWorkspace({card,uid,key,productId,source,request,serialize,flushMedia,restore,commit,close,privateAllowed=false,debounceMs=1800}){
+  let destroyed=false,loading=true,revision=0,baseExpected='',conflict=false,lastSaved='',pending=null,operation=null,timer=null,retries=0,applying=false,missingUploads=false,mediaProblem=false,hasWork=false,publishing=false;
+  const signal=new AbortController();const storageKey='tt-product-work:'+uid+':'+key;
+  // Evita pisar lo tecleado mientras llega una recuperación remota.
+  const locked=[...card.querySelectorAll('input,textarea,select,button')].filter(input=>!input.disabled);
+  for(const input of locked)input.disabled=true;
+  function unlock(){for(const input of locked)if(input.isConnected)input.disabled=false;}
+  const pendingFiles=value=>Array.isArray(value)?value.some(pendingFiles):typeof value==='string'?Boolean(value):typeof value==='number' && value>0;
+  const clone=()=>{const value=JSON.parse(JSON.stringify(serialize()));if(!privateAllowed)for(const key of ['costUnit','purchased','stockMinimum','internalNotes'])delete value[key];value.pendingUploads=missingUploads || mediaProblem || value.pendingPhotos?.some(([,signature])=>pendingFiles(signature)) || pendingFiles(value.pendingColorPhotos);if(value.commercialDraft)value.commercialDraft=Object.fromEntries(['variantCommerceVersion','variants','variantInventory','stock','price','priceBefore'].filter(key=>value.commercialDraft[key]!==undefined).map(key=>[key,value.commercialDraft[key]]));return value;};
+  const signature=()=>JSON.stringify(clone());
+  const node=(tag,text)=>{const element=document.createElement(tag);if(text)element.textContent=text;return element;};
+  const head=card.querySelector('.adm-card-head'),actions=card.querySelector('#prod-editor-actions') || card.querySelector('#prod-save-btn')?.parentElement;
+  const back=node('button','← Volver');back.type='button';back.className='adm-btn adm-btn-outline tt-work-back';head.prepend(back);
+  const status=node('p');status.className='tt-work-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');head.append(status);
+  const progress=node('button','Guardar progreso');progress.type='button';progress.className='adm-btn adm-btn-outline';actions.prepend(progress);
+  const retry=node('button','Reintentar');retry.type='button';retry.className='adm-btn adm-btn-outline';retry.hidden=true;actions.append(retry);
+  const errors=node('div');errors.className='tt-work-exit-error';errors.hidden=true;
+  const explanation=node('p','No se pudo guardar todo el progreso. Podés reintentar, permanecer o descartar sólo los cambios pendientes. El último progreso del servidor se conserva.');
+  const stay=node('button','Permanecer'),discardPending=node('button','Descartar cambios pendientes y volver');
+  for(const button of [stay,discardPending]){button.type='button';button.className='adm-btn adm-btn-outline';}errors.append(explanation,stay,discardPending);card.querySelector('.adm-card-body').prepend(errors);
+  const secondary=node('details');secondary.className='tt-work-secondary';secondary.append(node('summary','Más acciones del borrador'));
+  const discard=node('button','Descartar progreso guardado');discard.type='button';discard.className='adm-btn adm-btn-outline';secondary.append(discard);errors.after(secondary);
+  const acknowledge=node('button','Continuar sin las fotos pendientes');acknowledge.type='button';acknowledge.className='adm-btn adm-btn-outline';acknowledge.hidden=true;errors.append(acknowledge);
+  const actual=source?.active===false && (!source.publicationStatus || source.publicationStatus==='active')?'inactive':source?.publicationStatus || (source?'active':'draft');
+  card.dataset.productPublicState=actual;card.classList.add('tt-editor-workspace');document.documentElement.classList.add('tt-product-workspace-active');
+  const message=(text,error=false)=>{if(destroyed)return;status.textContent=text;status.dataset.error=String(error);retry.hidden=!error;};
+  function label(){
+    const selected=card.querySelector('#prod-publicationStatus')?.value;
+    const save=card.querySelector('#prod-save-btn');if(!save)return;
+    const text=selected==='archived'?'Archivar':selected==='draft' && actual==='active'?'Retirar de publicación':selected==='inactive'?'Guardar cambios':actual==='active'?'Guardar cambios':'Publicar producto';
+    if(!applying && save.textContent!==text)save.textContent=text;
+  }
+  function backup(){try{sessionStorage.setItem(storageKey,JSON.stringify({snapshot:clone(),revision,baseExpected,time:Date.now()}));}catch{} }
+  function clearBackup(){try{sessionStorage.removeItem(storageKey);}catch{}}
+  function dirty(){return signature()!==lastSaved;}
+  function schedule(){if(destroyed || loading || applying)return;backup();message('Cambios pendientes · la versión pública no se modifica.');clearTimeout(timer);timer=setTimeout(()=>void save().catch(()=>{}),debounceMs);label();}
+  async function send(body){const response=await request(body);if(!response.ok || !response.result){const error=Object.assign(new Error(response.error || 'No se pudo guardar el progreso.'),{status:response.status});throw error;}return response.result;}
+  let ready=(async()=>{
+    try{
+      const result=await send({action:'readProductWork',key});if(destroyed)return;
+      revision=result.revision;baseExpected=result.work?.baseExpected || result.sourceExpected;conflict=result.conflict;hasWork=Boolean(result.work);
+      if(result.work){await restore(result.work.snapshot,{conflict,key});missingUploads=result.work.snapshot.pendingUploads===true;acknowledge.hidden=!missingUploads;}
+      lastSaved=signature();
+      let local=null;try{local=JSON.parse(sessionStorage.getItem(storageKey));}catch{}
+      if(local && local.revision===revision && local.baseExpected===baseExpected && local.time>Date.parse(result.work?.updatedAt || 0)){await restore(local.snapshot,{conflict,key});missingUploads=local.snapshot.pendingUploads===true;acknowledge.hidden=!missingUploads;}
+      loading=false;unlock();label();
+      if(missingUploads){message('Texto recuperado; faltan archivos que no terminaron de subir. Volvé a elegirlos o confirmá continuar sin esas fotos.',true);errors.hidden=false;}
+      else if(dirty())schedule();else {window.AdminUnsaved?.markClean('primary-editor');message(conflict?'Progreso privado recuperado. La versión publicada cambió: conciliá antes de aplicar.':result.work?'Progreso privado recuperado del servidor.':actual==='active'?'Versión pública activa. El progreso se guarda por separado.':'Nuevo trabajo privado · todavía no publicado.');}
+    }catch(error){loading=false;unlock();message('No se pudo recuperar el progreso: '+error.message,true);throw error;}
+  })();
+  void ready.catch(()=>{});
+  async function save(){
+    clearTimeout(timer);
+    try{await ready;}catch(error){const result=await send({action:'readProductWork',key});if(result.work)throw Object.assign(new Error('Hay progreso guardado. Reabrí el editor para recuperarlo sin sobrescribirlo.'),{status:409});revision=result.revision;baseExpected=result.sourceExpected;ready=Promise.resolve();}
+    if(destroyed)throw Error('El editor cambió.');
+    if(operation)return operation;
+    operation=(async()=>{
+      let mediaError=null;try{await flushMedia();mediaProblem=false;}catch(error){mediaError=error;mediaProblem=true;}
+      if(missingUploads)mediaError=new Error('Volvé a elegir las fotos pendientes o confirmá continuar sin ellas.');
+      if(destroyed)throw Error('El editor cambió durante la carga.');
+      for(let attempt=0;attempt<3;attempt++){
+        const snapshot=clone(),current=JSON.stringify(snapshot);backup();
+        if(!pending && current===lastSaved && hasWork)break;
+        if(!pending)pending={action:'saveProductWork',key,expectedRevision:revision,baseExpected,changeId:crypto.randomUUID(),snapshot,signature:current};
+        message('Guardando progreso privado…');
+        const {signature:sent,...body}=pending;const result=await send(body);
+        if(destroyed)return;revision=result.revision;conflict=result.conflict;lastSaved=sent;pending=null;retries=0;hasWork=true;
+        if(signature()===sent)break;
+      }
+      if(mediaError)throw Object.assign(new Error('Texto guardado en servidor; quedan fotos pendientes: '+mediaError.message),{status:mediaError.status});
+      if(!dirty()){clearBackup();window.AdminUnsaved?.markClean('primary-editor');message(conflict?'Progreso guardado. La versión pública cambió; reabrí y conciliá antes de aplicar.':'Progreso guardado en servidor · '+new Date().toLocaleTimeString());window.dispatchEvent(new CustomEvent('tintin:product-work-saved'));}
+      else {message('Hay cambios nuevos pendientes.');schedule();}
+      return !dirty();
+    })().catch(error=>{message(error.message,true);backup();if(!destroyed && ![403,409,422].includes(error.status) && retries<3){timer=setTimeout(()=>void save().catch(()=>{}),[2000,5000,15000][retries++]);}throw error;}).finally(()=>{operation=null;});
+    return operation;
+  }
+  async function leave(next){
+    if(publishing){message('Terminando la acción de publicación. Esperá su confirmación.');return;}
+    try{await ready;if(dirty() || pending || operation || missingUploads){const saved=await save();if(!saved)throw Error('Quedan cambios pendientes.');}close();if(typeof next==='function')next();}
+    catch{errors.hidden=false;errors.scrollIntoView({block:'nearest'});stay.focus({preventScroll:true});}
+  }
+  async function publish(){
+    if(publishing || destroyed)return false;
+    publishing=true;back.disabled=true;discard.disabled=true;
+    let frozen=[];
+    try{
+      await ready;await save();if(conflict) {message('La versión pública cambió. Reabrí y conciliá el progreso antes de aplicar.',true);return false;}
+      if(dirty() || destroyed)return false;
+      const select=card.querySelector('#prod-publicationStatus');
+      if(actual!=='active' && select?.value==='draft'){select.value='active';select.dispatchEvent(new Event('change',{bubbles:true}));await save();}
+      if(dirty() || destroyed)return false;
+      applying=true;clearTimeout(timer);
+      frozen=[...card.querySelectorAll('input,textarea,select,button')].filter(control=>!control.disabled && control.id!=='prod-save-btn');
+      for(const control of frozen)control.disabled=true;
+      return await commit();
+    }finally{
+      for(const control of frozen)if(control.isConnected)control.disabled=false;
+      publishing=false;applying=false;back.disabled=false;discard.disabled=false;if(!destroyed)label();
+    }
+  }
+  back.addEventListener('click',()=>void leave());progress.addEventListener('click',()=>void save().catch(()=>{}));retry.addEventListener('click',()=>void save().catch(()=>{}));
+  stay.addEventListener('click',()=>{errors.hidden=true;});discardPending.addEventListener('click',()=>{clearBackup();window.AdminUnsaved?.markClean('primary-editor');close();});
+  acknowledge.addEventListener('click',()=>{missingUploads=false;mediaProblem=false;acknowledge.hidden=true;errors.hidden=true;schedule();});
+  card.addEventListener('tintin:image-pending',()=>{missingUploads=false;acknowledge.hidden=true;},{signal:signal.signal});
+  discard.addEventListener('click',async()=>{try{await ready;await send({action:'discardProductWork',key,expectedRevision:revision,baseExpected,changeId:crypto.randomUUID()});clearBackup();window.dispatchEvent(new CustomEvent('tintin:product-work-saved'));close();}catch(error){message(error.message,true);}});
+  for(const event of ['input','change','tintin:image-pending','tintin:image-preview','tintin:commercial-draft'])card.addEventListener(event,schedule,{signal:signal.signal});
+  window.addEventListener('online',()=>{if(dirty())void save().catch(()=>{});},{signal:signal.signal});
+  card.addEventListener('keydown',event=>{if(event.key!=='Tab' || event.target.closest('dialog') || document.querySelector('.tt-mlib-overlay'))return;const controls=[...card.querySelectorAll('button,input,textarea,select,a[href],summary,[tabindex]')].filter(node=>node.getClientRects().length && !node.disabled && node.tabIndex>=0);if(!controls.length)return;const target=event.shiftKey?controls.at(-1):controls[0];if(event.shiftKey && document.activeElement===controls[0] || !event.shiftKey && document.activeElement===controls.at(-1)){event.preventDefault();target.focus({preventScroll:true});}},{signal:signal.signal});
+  return {key,ready,save,leave,publish,get revision(){return revision;},get applying(){return applying;},get reference(){return {key,revision};},destroy(){destroyed=true;unlock();clearTimeout(timer);signal.abort();back.remove();progress.remove();retry.remove();secondary.remove();status.remove();errors.remove();card.classList.remove('tt-editor-workspace');delete card.dataset.productPublicState;document.documentElement.classList.remove('tt-product-workspace-active');}};
+}

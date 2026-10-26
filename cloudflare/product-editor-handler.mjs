@@ -1,6 +1,7 @@
 import {requireOrderStaff,jsonResponse,statusFromError,rateLimitErrorResponse} from './seguridad-cloudinary.js';
 import {saveProductEditor,saveProductBulk} from './product-editor-domain.mjs';
 import {queueCatalogSheetSync} from './resiliencia-sync-catalogo.js';
+import {productEditorWorkspace} from './product-editor-workspaces.mjs';
 
 // Acción de la API administrativa existente; conserva su guardia de origen y
 // permite el techo de roles de Productos antes de entrar al escritor confiable.
@@ -8,6 +9,7 @@ export async function handleProductEditor(context,body,origin) {
   const {request,env}=context;
   try {
     const actor=await requireOrderStaff(request,env);
+    if(['readProductWork','saveProductWork','listProductWork','discardProductWork'].includes(body.action))return jsonResponse({ok:true,result:await productEditorWorkspace(env,body,actor)},200,origin,request.url);
     const result=body.action==='bulkProducts'?await saveProductBulk(env,body,actor):await saveProductEditor(env,body,actor);
     const ids=result.productId?[result.productId]:result.changes.map(change=>change.id);
     let queued=false;

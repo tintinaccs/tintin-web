@@ -4,10 +4,11 @@ import { variantInventoryEntries, firstAvailableVariant } from '../core/store/in
 import { productVariantImage } from '../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { ordersForView, testOrderNumber, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261024-editor-v2-4';
-import { installProductInterface, syncProductSurfaces, visibleProductEditor } from './products/interfaz-productos-adaptable.js?v=tintin-20261025-options-phase3-6';
+import { installProductInterface, syncProductSurfaces, visibleProductEditor } from './products/interfaz-productos-adaptable.js?v=tintin-20261026-editor-workspace-1';
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261020-orders-clean-2';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
+import {productAdminState,productIsPublished} from './products/estado-administrativo-producto.mjs?v=tintin-20261026-editor-workspace-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 /* ========================================================================
    TINTIN — Productos, Colecciones y Pedidos
@@ -40,7 +41,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261022-avatar-inicial-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
-const VERSION = 'tintin-20261025-options-phase3-1';
+const VERSION = 'tintin-20261026-editor-workspace-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -295,7 +296,8 @@ async function saveCollectionVisibility(target) {
 }
 
 function productStatus(product) {
-  if (product?.active === false) return { key: 'inactive', label: 'Inactivo', cls: 'warning' };
+  const editorial=productAdminState(product);
+  if(editorial!=='active')return {key:editorial,label:{inactive:'Inactivo (histórico)',draft:'Borrador',archived:'Archivado'}[editorial],cls:'warning'};
   if (product?.stock !== null && product?.stock !== undefined && Number(product.stock) <= 0) {
     return { key: 'soldout', label: 'Agotado', cls: 'error' };
   }
@@ -351,12 +353,14 @@ function collectionProductCount(slug) {
 function productTabCounts() {
   return {
     all: state.products.length,
-    active: state.products.filter(p => p?.active !== false).length,
-    inactive: state.products.filter(p => p?.active === false).length,
-    soldout: state.products.filter(p => p?.active !== false && p?.stock != null && Number(p.stock) <= 0).length,
+    active: state.products.filter(productIsPublished).length,
+    draft: state.products.filter(p=>productAdminState(p)==='draft').length,
+    archived: state.products.filter(p=>productAdminState(p)==='archived').length,
+    inactive: state.products.filter(p=>productAdminState(p)==='inactive').length,
+    soldout: state.products.filter(p => productIsPublished(p) && p?.stock != null && Number(p.stock) <= 0).length,
     sale: state.products.filter(p => p?.oferta === true || (Number(p?.priceBefore) > Number(p?.price) && Number(p?.price) >= 0)).length,
     featured: state.products.filter(p => p?.destacado === true).length,
-    low:state.products.filter(p=>p.stock!=null && Number(p.stock)>0 && Number(p.stock)<=5).length,
+    low:state.products.filter(p=>productIsPublished(p) && p.stock!=null && Number(p.stock)>0 && Number(p.stock)<=5).length,
     missingphoto:state.products.filter(p=>!productImage(p)).length,
     unclassified:state.products.filter(p=>!state.collections.some(c=>wristCategory(c.slug)===wristCategory(p.category || p.cat))).length
   };
@@ -380,11 +384,10 @@ function filteredProducts() {
   if (q) {
     list = list.filter(p => [p?.name, p?.category, p?._docId, p?.sku,p?.collection,...(Array.isArray(p?.tags)?p.tags:[])].some(v => normalizeText(v).includes(q)));
   }
-  if (state.productTab === 'active') list = list.filter(p => p?.active !== false);
-  if (state.productTab === 'inactive') list = list.filter(p => p?.active === false);
-  if (state.productTab === 'soldout') list = list.filter(p => p?.active !== false && p?.stock != null && Number(p.stock) <= 0);
+  if (['active','inactive','draft','archived'].includes(state.productTab)) list = list.filter(p => productAdminState(p)===state.productTab);
+  if (state.productTab === 'soldout') list = list.filter(p => productIsPublished(p) && p?.stock != null && Number(p.stock) <= 0);
   if (state.productTab === 'sale') list = list.filter(p => p?.oferta === true || Number(p?.priceBefore) > Number(p?.price));
-  if(state.productTab==='low')list=list.filter(p=>p.stock!=null && Number(p.stock)>0 && Number(p.stock)<=5);
+  if(state.productTab==='low')list=list.filter(p=>productIsPublished(p) && p.stock!=null && Number(p.stock)>0 && Number(p.stock)<=5);
   if(state.productTab==='missingphoto')list=list.filter(p=>!productImage(p));
   if(state.productTab==='unclassified')list=list.filter(p=>!state.collections.some(c=>wristCategory(c.slug)===wristCategory(p.category || p.cat)));
   if (state.productTab === 'featured') list = list.filter(p => p?.destacado === true);
@@ -513,6 +516,20 @@ function selectPageOnly(set, ids, checked) {
   if (missing.length > available) toast(`La selección está limitada a ${MAX_BULK_SELECTION} elementos.`);
 }
 
+let privateWorkOwner='',privateWorks=[],privateWorkError='',privateWorkLoading=false,privateWorkGeneration=0;
+async function loadPrivateProductWorks(force=false) {
+  const uid=state.user?.uid || '';
+  if(!uid || !['admin','superadmin'].includes(state.role))return;
+  if(!force && privateWorkOwner===uid)return;
+  const generation=++privateWorkGeneration;privateWorkOwner=uid;privateWorkLoading=true;privateWorks=[];privateWorkError='';
+  try{
+    const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'listProductWork'})});
+    const payload=await response.json();if(!response.ok || !payload.ok)throw Error(payload.error || 'No se pudo recuperar la lista de borradores.');
+    if(state.user?.uid===uid && generation===privateWorkGeneration)privateWorks=payload.result.items || [];
+  }catch(error){if(state.user?.uid===uid && generation===privateWorkGeneration)privateWorkError=error.message;}
+  finally{if(generation===privateWorkGeneration){privateWorkLoading=false;renderProducts();}}
+}
+window.addEventListener('tintin:product-work-saved',()=>void loadPrivateProductWorks(true));
 function renderProducts() {
   const root = document.getElementById('tt-commerce-products');
   if (!root) return;
@@ -521,7 +538,10 @@ function renderProducts() {
   const focusSelector=focusAttribute ? `[${focusAttribute}="${CSS.escape(activeControl.getAttribute(focusAttribute))}"]` + ['data-id','data-variant'].filter(attribute=>activeControl.hasAttribute(attribute)).map(attribute=>`[${attribute}="${CSS.escape(activeControl.getAttribute(attribute))}"]`).join('') : null;
   const caret=focusAttribute && typeof activeControl.selectionStart==='number' ? [activeControl.selectionStart,activeControl.selectionEnd] : null;
   root.dataset.view=state.productView;root.dataset.filtersOpen=String(state.productFiltersOpen);root.dataset.bulkOpen=String(state.productBulkOpen);
+  void loadPrivateProductWorks();
   const counts = productTabCounts();
+  const ownerWorks=privateWorkOwner===state.user?.uid?privateWorks:[];
+  const privatePanel=state.productTab==='draft'?`<section aria-label="Progreso privado"><h3>Borradores privados de esta cuenta</h3><p>No modifican la tienda. Los cambios de productos publicados se aplican únicamente al guardar cambios.</p>${privateWorkLoading?'<p role="status">Buscando progreso guardado…</p>':''}${privateWorkError?`<p role="alert">${esc(privateWorkError)}</p><button class="tt-commerce-btn" data-action="work-retry">Reintentar</button>`:''}<div class="tt-private-work-list">${ownerWorks.map(work=>`<button class="tt-commerce-btn" data-action="work-continue" data-key="${esc(work.key)}" data-product-id="${esc(work.productId || '')}"><strong>${esc(work.name)}</strong><br>Continuar borrador · ${work.productId?'cambios privados':'producto nuevo'}</button>`).join('')}</div>${!privateWorkLoading && !privateWorkError && !ownerWorks.length?'<p>No hay progreso privado pendiente.</p>':''}</section>`:`${ownerWorks.length?`<p><button class="tt-commerce-btn" data-action="work-show">Borradores privados (${ownerWorks.length})</button></p>`:''}`;
   const list = filteredProducts();
   const page = pageSlice(list, state.productPage);
   state.productPage = page.page;
@@ -552,12 +572,14 @@ function renderProducts() {
         ${canCreate ? button('Agregar producto', 'product-new', { primary: true }) : ''}
       </div>
     </div>
-    <div class="tt-product-metrics" aria-label="Indicadores de catálogo">${[['all','Total'],['active','Activos'],['inactive','Inactivos'],['soldout','Agotados'],['low','Stock bajo (1–5)'],['missingphoto','Sin foto'],['unclassified','Sin colección válida']].map(([key,label])=>`<button type="button" data-action="products-metric" data-product-metric="${key}" aria-pressed="${state.productTab===key}"><strong>${state.productsReady && !state.productsError?counts[key]:'—'}</strong><span>${label}</span></button>`).join('')}</div>
+    <div class="tt-product-metrics" aria-label="Indicadores de catálogo">${[['all','Total'],['active','Activos'],['draft','Borradores'],['inactive','Inactivos históricos'],['archived','Archivados'],['soldout','Agotados'],['low','Stock bajo (1–5)'],['missingphoto','Sin foto'],['unclassified','Sin colección válida']].map(([key,label])=>`<button type="button" data-action="products-metric" data-product-metric="${key}" aria-pressed="${state.productTab===key}"><strong>${state.productsReady && !state.productsError?counts[key]:'—'}</strong><span>${label}</span></button>`).join('')}</div>
     <div class="tt-commerce-card">
       <div class="tt-commerce-tabs">
         ${tabButton('products', 'all', 'Todos', counts.all, state.productTab)}
         ${tabButton('products', 'active', 'Activos', counts.active, state.productTab)}
+        ${tabButton('products', 'draft', 'Borradores', counts.draft, state.productTab)}
         ${tabButton('products', 'inactive', 'Inactivos', counts.inactive, state.productTab)}
+        ${tabButton('products', 'archived', 'Archivados', counts.archived, state.productTab)}
         ${tabButton('products', 'soldout', 'Agotados', counts.soldout, state.productTab)}
         ${tabButton('products', 'sale', 'En oferta', counts.sale, state.productTab)}
         ${tabButton('products', 'featured', 'Destacados', counts.featured, state.productTab)}
@@ -568,7 +590,7 @@ function renderProducts() {
         <div class="tt-product-views" role="group" aria-label="Vista de productos">${['grid','list'].map(view=>`<button type="button" class="tt-commerce-btn" data-action="products-view-${view}" aria-pressed="${state.productView===view}">${view==='grid'?'Mosaico':'Lista'}</button>`).join('')}</div>
       </div>
       <div class="tt-commerce-toolbar tt-product-filter-panel" id="tt-product-filter-panel">
-        <label class="tt-product-status-filter">Estado<select class="tt-commerce-select" data-filter="product-status" aria-label="Filtrar por estado">${[['all','Todos'],['active','Activos'],['inactive','Inactivos'],['soldout','Agotados'],['sale','En oferta'],['featured','Destacados'],['low','Stock bajo (1–5)'],['missingphoto','Sin foto'],['unclassified','Sin colección válida']].map(([value,label])=>`<option value="${value}" ${state.productTab===value?'selected':''}>${label} (${counts[value]})</option>`).join('')}</select></label>
+        <label class="tt-product-status-filter">Estado<select class="tt-commerce-select" data-filter="product-status" aria-label="Filtrar por estado">${[['all','Todos'],['active','Activos'],['draft','Borradores'],['inactive','Inactivos históricos'],['archived','Archivados'],['soldout','Agotados'],['sale','En oferta'],['featured','Destacados'],['low','Stock bajo (1–5)'],['missingphoto','Sin foto'],['unclassified','Sin colección válida']].map(([value,label])=>`<option value="${value}" ${state.productTab===value?'selected':''}>${label} (${counts[value]})</option>`).join('')}</select></label>
         <label>Colección
         <select class="tt-commerce-select" data-filter="product-category" aria-label="Filtrar por colección">
           <option value="">Todas las colecciones</option>
@@ -591,6 +613,7 @@ function renderProducts() {
         <button type="button" class="tt-commerce-btn" data-action="products-reset-filters">Limpiar filtros</button>
       </div>
       <p class="tt-product-selection-hint">Marcá las casillas para seleccionar varios. Abrí la foto o el nombre para ver el producto.</p>
+      ${privatePanel}
       ${productsWarning}
       ${!state.productsReady ? '<div class="tt-commerce-loading">Cargando productos…</div>' : productsUnavailable ? '' : page.items.length ? `
       <div class="tt-commerce-tablewrap tt-commerce-product-grid-wrap">
@@ -1273,6 +1296,9 @@ async function handleAction(action, element) {
   if (action === 'order-history-retry') { state.orderHistory.delete(id);return refreshOrderHistory(id); }
 
   if(action==='product-photo'){if(state.drawer?.type==='product'){state.drawer.imageIndex=Number(element.dataset.photoIndex)||0;renderDrawer();}return;}
+  if(action==='work-retry')return void loadPrivateProductWorks(true);
+  if(action==='work-show'){state.productTab='draft';state.productPage=0;return renderProducts();}
+  if(action==='work-continue')return window.prodContinuarBorrador?.(element.dataset.key,element.dataset.productId || null);
   if(action==='products-metric'){state.productTab=element.dataset.productMetric;state.productPage=0;return renderProducts();}
   if(action==='product-duplicate'){
     if(!perm('productos','crear','addProducts'))return toast('No tenés permiso para duplicar productos.');

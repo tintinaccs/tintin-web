@@ -1784,3 +1784,21 @@ html.tt-product-editor-open #prod-form-card .tt-editor-section,
 .tt-editor-option-assistance {margin-top:12px;}
 #prod-form-card [data-product-section=availability] .tt-editor-section-fields {grid-template-columns:minmax(0,1fr);}
 #prod-form-card #prod-variant-stock {grid-column:1/-1;min-width:0;}
+
+/* Espacio dedicado: la navegación del Superpanel queda fuera del recorrido. */
+html.tt-product-workspace-active :is(.adm-sidebar,.adm-topbar,#adm-mobile-tabs,#adm-mobile-more-sheet,#adm-mobile-more-backdrop,.adm-overlay) {visibility:hidden !important;pointer-events:none !important;}
+html.tt-product-workspace-active body:has(.adm-main) :is(.adm-sidebar,.adm-topbar) {visibility:hidden !important;pointer-events:none !important;transition:none !important;}
+html.tt-product-workspace-active #prod-form-card.tt-editor-workspace {inset:0 !important;width:100% !important;max-width:none !important;height:100dvh !important;margin:0 !important;border-radius:0 !important;z-index:400;}
+#prod-form-card.tt-editor-workspace .adm-card-head {flex-wrap:wrap;gap:12px;}
+#prod-form-card.tt-editor-workspace .tt-work-back {order:-2;min-height:44px;flex:0 0 auto;}
+#prod-form-card.tt-editor-workspace .tt-work-status {flex:1 1 100%;margin:0;font-size:13px;color:var(--text-muted,#666);}
+#prod-form-card.tt-editor-workspace .tt-work-status[data-error=true] {color:#9c234c;}
+#prod-form-card.tt-editor-workspace .tt-work-exit-error {padding:16px;border:1px solid #e5b4c5;border-radius:12px;background:#fff5f8;grid-column:1/-1;}
+#prod-form-card.tt-editor-workspace .tt-work-exit-error button {min-height:44px;margin:4px;white-space:normal;}
+#prod-form-card.tt-editor-workspace #prod-editor-actions {flex-wrap:wrap;width:100%;}
+#prod-form-card.tt-editor-workspace #prod-editor-actions button {min-height:44px;white-space:normal;flex:1 1 120px;padding-inline:10px;}
+#prod-form-card.tt-editor-workspace .tt-work-secondary {margin-bottom:12px;}
+#prod-form-card.tt-editor-workspace .tt-work-secondary summary {min-height:44px;display:flex;align-items:center;cursor:pointer;}
+#prod-form-card.tt-editor-workspace button[onclick="prodCancelForm()"] {display:none;}
+.tt-private-work-list {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:12px;margin:12px 0;}
+.tt-private-work-list button {min-height:64px;white-space:normal;text-align:left;border-radius:12px;}

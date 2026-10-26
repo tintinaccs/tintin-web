@@ -1,49 +1,79 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "746e944d0d05abf45d9f00d55d3448913352fa6f",
-  "reason": "Reorganizar opciones e inventario sobre Fase 2 para revisión, sin merge ni despliegue",
+  "baseCommit": "38fa577b629c7106c7085360ae6d0070fc89c5c5",
+  "reason": "Fase 4: progreso editorial privado y publicación explícita; sin merge ni despliegue",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "7f78fb039cb26d298ea701ae88a61386cd79f2482a0698d3a5ab632852adb97d",
-      "newHash": "543a050988db8530c262f2d97da050403f7767b24263bd6c250c36d542413272"
+      "oldHash": "543a050988db8530c262f2d97da050403f7767b24263bd6c250c36d542413272",
+      "newHash": "9544b6462211e366fccee8c3e85298f2eaba486b5eba119f2e6832d894e56c14"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "467b2f0610bd5f5543132d942bfdce8ee4e44d80d052ce57059f3abff10ea7fd",
-      "newHash": "e83e85349a3ef20813ef2333226628d9b3b232070ac751ee0dfb547cf294544b"
+      "oldHash": "e83e85349a3ef20813ef2333226628d9b3b232070ac751ee0dfb547cf294544b",
+      "newHash": "af71ca15bfcc51fd99db825a5bb8bd288b21e00d0495b08aeb7b60f6ee1d20dc"
+    },
+    {
+      "path": "firestore.rules",
+      "oldHash": "9df1911acb8711b00ed964848c0698410a3ad12e143a03aad8e574cf4d05bc2c",
+      "newHash": "6000a1c182df3b25be7c22d755c36e93bf83bde00c1d7950d2d84b52aac894a0"
+    },
+    {
+      "path": "functions/api/admin-order-mutation.js",
+      "oldHash": "69c04a4c9837c0e9f69c21c38068e909f74033539ef28591ecf7608477fea96a",
+      "newHash": "de42345030f77f3494b902b7826b7ddeaaf0a0d850f8780c233aae4d88b23724"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "ffc5530ce8aad9ceb9b8a7e8d39074bf98416b1f5bea496a383b32a9d6fcb20f",
-      "newHash": "d395cf362ec36dfdb246cc38680c6aa1d4de25fc1573901356efbc5888e08abd"
+      "oldHash": "d395cf362ec36dfdb246cc38680c6aa1d4de25fc1573901356efbc5888e08abd",
+      "newHash": "32d6dbf5e89883b58dacec6d06fd87236cc857e0c500240bbbe8ed2e1d01dc9c"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "edb67f72ecc22b7a531fe306d65ac14a094637fda8fd8c35e51927ad40387a24",
-      "newHash": "23fefde6759ba486748af44d12f83c44533f63b61eb2441dd5163888da10f06b"
+      "oldHash": "23fefde6759ba486748af44d12f83c44533f63b61eb2441dd5163888da10f06b",
+      "newHash": "ca43bcfa5ce0387086fc84fc609af2354dc12c557fc345f12b3a168bf9029ced"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "1c32bb66fad5e427fb88ca9f68894ede7bb4f7154016e09fa7e996f0f283d0be",
-      "newHash": "007d06f7529d306787e4764f01c7033af87bff36e5ced31ae95163fc732620dd"
+      "oldHash": "007d06f7529d306787e4764f01c7033af87bff36e5ced31ae95163fc732620dd",
+      "newHash": "48883d04c2e61daff5d9f4ed796eb044dcd2f884fdf80234edcf3ef3bc1d5e8a"
     }
   ],
   "affectedRecords": [
     "admin-guard",
     "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas",
+    "apis-internas__apps-script__22",
+    "apis-internas__comentarios__39",
     "apis-internas__correos__41",
+    "apis-internas__favoritos__37",
+    "apis-internas__firestore__21",
+    "apis-internas__likes__38",
+    "apis-internas__notificaciones__40",
     "apis-internas__pedidos__32",
+    "carrito",
+    "cf-functions__apis-internas__20",
+    "cf-functions__reglas-firestore__28",
+    "comentarios",
     "correos",
+    "favoritos",
+    "firestore",
+    "firestore-fuente-verdad",
+    "firestore__apps-script__23",
+    "firestore__carrito__36",
+    "firestore__users-uid__8",
+    "notificaciones",
     "pagina-perfil",
     "pedidos",
     "pedidos__inventario__33",
     "productos",
     "redirect-result__sesion-estado__6",
+    "reglas-firestore",
     "roles__pagina-perfil__18",
     "roles__super-panel__14",
     "sesion-estado",
     "sesion-estado__firestore__7",
+    "sheets-products-webhook__firestore__27",
     "super-panel",
     "super-panel__admin-guard__15",
     "super-panel__pedidos__35",

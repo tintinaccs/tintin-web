@@ -48,10 +48,10 @@ test('abrir y guardar el formulario real no publica un producto oculto por el in
  const fs=await import('node:fs'),vm=await import('node:vm');
  const {productEditorialStatus}=await import('../../js/core/store/estado-editorial-producto.mjs');
  const source=fs.readFileSync('js/admin/admin-app.js','utf8');
- const fields=Object.fromEntries(['publicationStatus','productTemplate','seoTitle','seoDescription'].map(key=>[`prod-${key}`,{value:'',options:[]}]));
- const context=vm.createContext({document:{getElementById:id=>fields[id]},ensureEditorialFields(){},productEditorialStatus,productTemplate,editorialFields});
+ const fields=Object.fromEntries(['publicationStatus','productTemplate','seoTitle','seoDescription'].map(key=>[`prod-${key}`,{value:'',options:[],querySelector:()=>null,add:()=>{}}]));
+ const context=vm.createContext({Option:function(text,value){this.value=value;},document:{getElementById:id=>fields[id]},ensureEditorialFields(){},productEditorialStatus,productTemplate,editorialFields});
  vm.runInContext(source.slice(source.indexOf('function productEditorialForm('),source.indexOf('function renderProductStatistics(')),context);
- for(const [publicationStatus,active,expected] of [['active',false,'draft'],['archived',false,'archived'],['active',true,'active'],['draft',true,'draft']]){
+ for(const [publicationStatus,active,expected] of [['active',false,undefined],['archived',false,'archived'],['active',true,'active'],['draft',true,'draft']]){
   context.product={publicationStatus,active};
   const saved=vm.runInContext('productEditorialForm(product); productEditorialData()',context);
   assert.equal(saved.publicationStatus,expected);assert.equal(saved.active,expected==='active');

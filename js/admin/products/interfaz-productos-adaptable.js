@@ -36,7 +36,7 @@ export function syncProductSurfaces() {
       (editor.querySelector('#prod-editor-section') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
     }
     editor.setAttribute('role','dialog');
-    editor.setAttribute('aria-modal','false');
+    editor.setAttribute('aria-modal',String(editor.classList.contains('tt-editor-workspace')));
     editor.setAttribute('aria-labelledby','prod-form-title');
   } else if (editorWasOpen) {
     requestAnimationFrame(()=>{
@@ -227,8 +227,8 @@ function refreshEditorHeading(card) {
   if(title.title!==text)title.title=text;
   let state=heading.querySelector('.tt-product-editor-state');
   if(!state){state=document.createElement('span');state.className='tt-product-editor-state';heading.append(state);}
-  const value=card.querySelector('#prod-publicationStatus')?.value || 'draft';
-  const label={active:'Activo',draft:'Borrador',archived:'Archivado'}[value] || 'Borrador';
+  const value=card.dataset.productPublicState || card.querySelector('#prod-publicationStatus')?.value || 'draft';
+  const label={active:'Publicado',draft:'Borrador',archived:'Archivado',inactive:'Inactivo (histórico)'}[value] || 'Borrador';
   if(state.textContent!==label)state.textContent=label;
   if(state.dataset.state!==value)state.dataset.state=value;
   refreshSectionValues(card);
