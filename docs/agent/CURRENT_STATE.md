@@ -4003,3 +4003,57 @@ Cierre LOCAL posterior a la aclaración:14/14 pruebas WebKit con emulación tác
 
 
 25/10 — La titular autorizó expresamente merge/publicación de1235. Se inspeccionó cabeza cf7ee26: CodeQL agregó2alertasaltas por filtro HTML regex del fixture, aunque los3Analyze terminaronSUCCESS. Se reemplaza el filtro por removeFixtureScripts, helper canónico parse5 ya instalado, sin cambiar dependencias ni detectores.28/28 Chromium-WebKit del shell/controlador completo repetidos PASS; tests del parser canónico ejecutados. Los4recursos productivos mantienen sus bytes y URLs; sólo cambia fixture y evidencia/diagnóstico. CodeQL y CI del nuevo SHA:PENDING; no heredar los resultados de cf7 ni publicar con alertas activas. Autorización ya concedida, sin nuevas preguntas de merge.
+
+## 2026-10-26 — Continuación Fase 6 del editor, aceptación local
+
+Codex /root. Base5dc6f781, rama `codex/editor-fase6-integracion-20261026`.
+El pedido actual prohíbe merge/deploy y operaciones productivas; prevalece sobre
+permisos de otros chats. Entrega local, sin push/PR nuevo ni auto-merge.
+
+Búsqueda:701 cabezas remotas e historial accesible sin la carpeta del adjunto.
+Se documenta reconstrucción sobre antecedentes de `docs/editor-productos-v2/`.
+Se adapta el delta de editor/presentación de#1228; su rama no se actualiza y los
+cambios de PayPal/checkout quedan fuera. Main remoto sigue5dc6f781.
+
+Cambios: Cancelar explícito incluso tras autoguardado; draft privado sin activación
+implícita; listado con tipo/fecha; retiro/restauración conservando datos y reservas;
+galería sin reconstrucción por eventos idénticos; atajos nativos y bloqueo de
+acciones contradictorias durante escritura. Se reproduce y corrige pérdida de
+cantidades pendientes al quitar una opción nueva V1 con otra opción restante.
+
+npm ci instala671 paquetes exactos, sin cambios en package/lock. Node24.19.0,
+Playwright1.64.1 y Chromium real151.0.7922.173 (UA emulado, no motor156).
+PASS_LOCAL:610Node;21privacidad+233Rules+15integraciones Firestore;24Chromium de
+tarjetas; matriz423/428 con5 fallos de fixture de URL, corregidos y repetidos en10
+viewports;64regresiones finales aprobadas después del guard de cantidades. Unión
+454casos de navegador con última ejecución aprobada, no una corrida de454PASS.
+La regresión V1 tuvo1FAIL previo verificable. Corridas con dependencias iniciales
+y primer override de perfil inválido quedan separados de la evidencia final.
+
+Perfil aislado, lock exacto/un worker/sin otro navegador de QA:5muestras de20
+inputs/5fotos. Base500 tarjetas reemplazadas, final0; medianas descriptivas62/39ms.
+No se afirma aceleración productiva ni ausencia global de fugas. Reproducción,
+pruebas individuales, fuentes/huellas, capturas y límites en
+`docs/product-editor-refactor/INFORME-FINAL.md` y su matriz/evidencias.
+
+Build/caché y39preflight aprobados; el recibo por comando se renueva tras el cierre
+documental y diagnóstico se regenera. Plan preparado contra main por su autoridad,
+sin rebajar gates. Checkout/pagos/backend/Rules intactos. CI del candidato,
+staging autenticado/proveedores y dispositivos físicos siguen NOT_VERIFIED.
+No se declara proyecto terminado ni producción aprobada.
+
+## 2026-10-26 — Integración de Fase 6 autorizada por la titular
+
+La instrucción nueva solicita terminar y hacer merge del proyecto en curso y,
+después, revisar#1231/#1242. Sustituye la prohibición anterior de merge para el
+candidato Fase6. Se autoriza publicar el PR listo para revisión, resolver los
+gates del SHA exacto y completar el merge protegido. No autoriza bypass,
+force-push, pagos/pedidos reales ni despliegue manual de Rules.
+
+Base remota comprobada5dc6f781; candidato funcional d590eecec, fuentes/huellas
+conservadas. No se modifica el motor de checkout/pagos. El PR#1228 mantiene su
+delta independiente de pagos fuera de este candidato; no se integra su rama
+obsoleta para recuperar funcionalidad ya conciliada. Las pruebas locales y sus
+límites están en el informe final. CI se comprueba sobre la nueva cabeza; no se
+atribuye anticipadamente PASS_CI ni producción. Estado definitivo: PR y entrega
+del chat. Después del merge se verifican main y los PR de Dependabot indicados.

@@ -1,0 +1,67 @@
+[
+  {
+    "run": "baseline-browser",
+    "stats": {
+      "startTime": "2026-10-26T14:57:53.274Z",
+      "duration": 157365.022,
+      "expected": 65,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "status": "EXPLORATORIA; dependencias preinstaladas fuera del lock; no acredita validación final"
+  },
+  {
+    "run": "workspace-first",
+    "stats": {
+      "startTime": "2026-10-26T15:02:06.789Z",
+      "duration": 264863.922,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 3,
+      "flaky": 0
+    },
+    "status": "EXPLORATORIA; dependencias preinstaladas fuera del lock; no acredita validación final"
+  },
+  {
+    "run": "final-new-first",
+    "stats": {
+      "startTime": "2026-10-26T15:04:31.884Z",
+      "duration": 136620.75100000002,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 7,
+      "flaky": 0
+    },
+    "status": "EXPLORATORIA; dependencias preinstaladas fuera del lock; no acredita validación final"
+  },
+  {
+    "run": "final-new-second",
+    "stats": {
+      "startTime": "2026-10-26T15:08:14.339Z",
+      "duration": 98805.82800000001,
+      "expected": 32,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "status": "EXPLORATORIA; dependencias preinstaladas fuera del lock; no acredita validación final"
+  },
+  {
+    "run": "responsive-editor",
+    "stats": {
+      "startTime": "2026-10-26T15:11:45.395Z",
+      "duration": 458525.464,
+      "expected": 243,
+      "skipped": 115,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "status": "EXPLORATORIA; dependencias preinstaladas fuera del lock; no acredita validación final"
+  },
+  {
+    "run": "performance-before-locked",
+    "status": "MEDICIÓN INVALIDADA",
+    "reason": "La ruta genérica de la fixture ocultaba el override; devolvió0 reemplazos en la supuesta base. Se instala el override después del mock y se exige500 antes/0 después; sólo performance-before-final/after-final se usan como comparación."
+  }
+]

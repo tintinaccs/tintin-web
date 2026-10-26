@@ -1,3 +1,4 @@
+import {verifyRetiredOptionCheckout} from '../helpers/retired-option-checkout.mjs';
 import {saveProductEditor,saveProductBulk} from '../../cloudflare/product-editor-domain.mjs';
 import {productEditorWorkspace} from '../../cloudflare/product-editor-workspaces.mjs';
 import {productFingerprint} from '../../js/admin/products/maestro-productos-core.mjs';
@@ -319,3 +320,5 @@ test('fotos privadas: query real paginada entre cuentas bloquea referencias come
  const used=await findProductWorkMediaUsage({},[id],'qa-cloud',{listPage:context.firestoreAdminCollectionGroupPage});
  assert.deepEqual(used,[id]);assert(calls>=2);assert(!JSON.stringify(used).includes('zzz-media'));
 });
+
+test('retiro, reserva previa, cancelación idempotente y restauración conservan identidad, precio y foto',async()=>{await verifyRetiredOptionCheckout({deps,seed,product,actor,admin});});

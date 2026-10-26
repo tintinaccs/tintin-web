@@ -317,7 +317,9 @@ for(const [width,height] of [[390,844],[844,390],[768,1024],[1024,768],[1366,768
   const olive=saved.variantInventory.find(row=>row.attributes.Color==='Verde Oliva');expect(olive.stock).toBe(2);expect(olive.price).toBe(55000);
   const burgundy=saved.variantInventory.find(row=>row.attributes.Color==='Bordó');expect(burgundy.stock).toBe(0);expect(burgundy.active).toBe(false);
   await page.evaluate(()=>window.prodEditar('qa-product-1'));await page.locator('#prod-editor-section').selectOption('inventory');
-  await expect(page.getByRole('button',{name:'Quitar Color: Verde Oliva',exact:true})).toBeDisabled();
+  await page.getByRole('button',{name:'Quitar Color: Verde Oliva',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Restaurar Color: Verde Oliva',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Restaurar Color: Verde Oliva',exact:true}).click();
   await expect(page.getByLabel('Círculo de Verde Oliva',{exact:true})).toHaveValue('#667744');
   await page.getByRole('button',{name:'Anterior opción Color: Verde Oliva',exact:true}).click();
   await page.getByLabel('Stock: Verde Oliva',{exact:true}).fill('');

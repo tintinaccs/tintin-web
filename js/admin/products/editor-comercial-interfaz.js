@@ -1,4 +1,4 @@
-import {commercialDraft,commercialPatch} from './editor-comercial-core.mjs?v=tintin-20261024-editor-v2-3';
+import {commercialDraft,commercialPatch,setCommercialOptionAvailability} from './editor-comercial-core.mjs?v=tintin-20261026-editor-phase6-1';
 import {productVariantPrice,variantSelectionLabel} from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 const element=(tag,text)=>{const node=document.createElement(tag);if(text!=null)node.textContent=text;return node;};
 const button=(text,action)=>{const node=element('button',text);node.type='button';node.className='adm-btn adm-btn-outline';node.addEventListener('click',action);return node;};
@@ -6,10 +6,12 @@ const button=(text,action)=>{const node=element('button',text);node.type='button
 export function mountCommercialEditor(panel, product, parseOptions, signal, persisted=product) {
   let draft=structuredClone(product),page=0;
   const selected=new Set();
+  const effectivePrices=new Map();
   const options=document.getElementById('prod-variants-text'),total=document.getElementById('prod-stock');
   panel.closest('#prod-form-card')?.addEventListener('tintin:commercial-options-read',event=>{event.detail.product=draft;},{signal});
   panel.replaceChildren();panel.classList.add('tt-commercial-editor');
   const error=element('p');error.setAttribute('role','alert');
+  const notice=element('p');notice.setAttribute('role','status');
   const announce=()=>{panel.dispatchEvent(new CustomEvent('tintin:commercial-draft',{bubbles:true,detail:draft}));panel.dispatchEvent(new Event('change',{bubbles:true}));};
   const heading=element('h3','Combinaciones');
   const toolbar=element('div');toolbar.className='tt-commercial-toolbar';
@@ -34,9 +36,24 @@ export function mountCommercialEditor(panel, product, parseOptions, signal, pers
   const previous=button('Anteriores',()=>{page--;render();});
   const next=button('Siguientes',()=>{page++;render();});
   pagination.append(previous,status,next);
-  panel.append(heading,element('p','Precio vacío hereda el general. Stock vacío significa sin control. Desactivar conserva el historial; no cambia la publicación del producto.'),advanced,error,rows,pagination);
+  panel.append(heading,element('p','Precio vacío hereda el general. Stock vacío significa sin control. Retirar conserva existencias, fotos e historial.'),advanced,error,notice,rows,pagination);
+  function setOptionAvailability(attribute,value,active) {
+    try {
+      draft=setCommercialOptionAvailability(draft,attribute,value,active,persisted);
+      error.textContent='';render();announce();
+      notice.textContent=`${attribute}: ${value} ${active?'restaurado para la venta':'retirado de la venta; conserva sus existencias y referencias'}. Guardá para aplicar.`;
+    } catch(failure) {error.textContent=failure.message;}
+  }
+  options.addEventListener('tintin:variant-option-availability',event=>{
+    const {attribute,value,active}=event.detail;
+    const protectedKeys=new Set((persisted?.variantInventory || []).map(row=>row.variant));
+    if(!draft.variantInventory.some(row=>protectedKeys.has(row.variant) && row.attributes?.[attribute]===value) && active===false)return;
+    event.preventDefault();setOptionAvailability(attribute,value,active);
+  },{signal});
+  function effectivePrice(row){try{return `Precio efectivo: Gs. ${productVariantPrice(draft,{variantKey:row.variant}).price.toLocaleString('es-PY')}`;}catch{return 'Revisá el precio de la combinación.';}}
   function render(){
     rows.replaceChildren();
+    effectivePrices.clear();
     page=Math.max(0,Math.min(page,Math.ceil(draft.variantInventory.length/25)-1));
     for(const row of draft.variantInventory.slice(page*25,page*25+25)){
       const card=element('fieldset');card.className='tt-commercial-row';
@@ -48,9 +65,9 @@ export function mountCommercialEditor(panel, product, parseOptions, signal, pers
         const wrap=element('label',label),input=element('input');input.type='number';input.min=key==='stock'?'0':'1';input.max=key==='stock'?'1000000':'1000000000';input.step='1';input.className='adm-input';input.value=row[key]??'';input.placeholder=key==='stock'?'Sin control':'Heredar';input.setAttribute('aria-label',`${label}: ${title}`);
         input.addEventListener('input',()=>{row[key]=parse(key,input.value);updateTotal();announce();});wrap.append(input);card.append(wrap);
       }
-      const availability=element('label','Disponible'),active=element('input');active.type='checkbox';active.checked=row.active!==false;active.setAttribute('aria-label',`Disponible: ${title}`);active.addEventListener('change',()=>{row.active=active.checked;announce();});availability.append(active);card.append(availability);
-      const effective=element('small',`Precio efectivo: Gs. ${productVariantPrice(draft,{variantKey:row.variant}).price.toLocaleString('es-PY')}`);card.append(effective);
-      card.addEventListener('input',()=>{try{effective.textContent=`Precio efectivo: Gs. ${productVariantPrice(draft,{variantKey:row.variant}).price.toLocaleString('es-PY')}`;}catch{effective.textContent='Revisá el precio de la combinación.';}});
+      const availability=element('label','Disponible'),active=element('input');availability.className='tt-commercial-availability';active.type='checkbox';active.checked=row.active!==false;active.setAttribute('aria-label',`Disponible: ${title}`);active.addEventListener('change',()=>{row.active=active.checked;announce();});availability.append(active);card.append(availability);
+      const effective=element('small',effectivePrice(row));card.append(effective);effectivePrices.set(row.variant,{row,node:effective});
+      card.addEventListener('input',()=>{effective.textContent=effectivePrice(row);});
       rows.append(card);
     }
     previous.disabled=page===0;next.disabled=(page+1)*25>=draft.variantInventory.length;
@@ -65,8 +82,10 @@ export function mountCommercialEditor(panel, product, parseOptions, signal, pers
     }catch(failure){options.value=Object.entries(draft.variants).map(([key,values])=>`${key}: ${values.join(', ')}`).join('\n');error.textContent='No se aplicó el cambio. Esta opción puede tener inventario o referencias de pedidos anteriores. Podés dejar su combinación sin disponibilidad, pero no eliminar su identidad. '+failure.message;}
   },{signal});
   for(const id of ['prod-price','prod-price-before'])document.getElementById(id).addEventListener('input',()=>{
-    draft.price=Number(document.getElementById('prod-price').value);draft.priceBefore=document.getElementById('prod-price-before').value===''?null:Number(document.getElementById('prod-price-before').value);updateTotal();announce();
+    draft.price=Number(document.getElementById('prod-price').value);draft.priceBefore=document.getElementById('prod-price-before').value===''?null:Number(document.getElementById('prod-price-before').value);updateTotal();
+    for(const {row,node} of effectivePrices.values())node.textContent=effectivePrice(row);
+    announce();
   },{signal});
   total.readOnly=true;render();announce();
-  return {get:()=>structuredClone(draft),patch:base=>commercialPatch(persisted,{...draft,price:base.price,priceBefore:base.priceBefore})};
+  return {get:()=>structuredClone(draft),patch:base=>commercialPatch(persisted,{...draft,price:base.price,priceBefore:base.priceBefore}),setOptionAvailability};
 }

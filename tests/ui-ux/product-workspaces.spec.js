@@ -2,33 +2,34 @@
 const {test,expect}=require('@playwright/test');
 const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
 async function open(page,width=1366,height=768){await openProductSaveFixture(page,width,height,{fullShell:true,photos:true,workflow:true});await page.evaluate(()=>window.qaProductController.workspace.ready);}
+async function cancelSave(page){await page.locator('.tt-work-back').click();if(await page.locator('.tt-work-exit-dialog').isVisible())await page.getByRole('button',{name:'Guardar borrador y salir',exact:true}).click();}
 async function saveProgress(page){await page.evaluate(()=>window.qaProductController.workspace.save());await expect(page.locator('.tt-work-status')).toContainText('guardado en servidor');}
 async function reopen(page,key,productId=null){await page.evaluate(({key,productId})=>window.prodContinuarBorrador(key,productId),{key,productId});await page.evaluate(()=>window.qaProductController.workspace.ready);}
 test('crear incompleto, salir, recuperar, publicar, editar sin reemplazar público y recuperar cambios',async({page})=>{
  await open(page);await page.locator('#prod-name').fill('Borrador recuperable');
  await page.evaluate(()=>{document.getElementById('prod-imageUrl').value='https://img.test/cover.webp';document.getElementById('prod-imageUrl').dispatchEvent(new Event('change',{bubbles:true}));});
  const key=await page.evaluate(()=>window.qaProductController.workspace.key);
- await page.locator('.tt-work-back').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ await cancelSave(page);await expect(page.locator('#prod-form-card')).toBeHidden();
  expect(await page.evaluate(()=>[...window.qaProductStore.keys()].filter(key=>key.startsWith('products/')).length)).toBe(0);
  await reopen(page,key);await expect(page.locator('#prod-name')).toHaveValue('Borrador recuperable');await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/cover.webp');
  await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('qa-tablet');
  await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('30000');
  await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-description').fill('Descripción completa');
- await page.evaluate(()=>window.prodGuardar());await expect(page.locator('#prod-form-card')).toBeHidden();
+ await page.locator('#prod-publicationStatus').selectOption('active');await page.evaluate(()=>window.prodGuardar());await expect(page.locator('#prod-form-card')).toBeHidden();
  expect(await page.evaluate(key=>window.qaProductStore.get('products/'+key).publicationStatus,key)).toBe('active');
  await reopen(page,key,key);await page.locator('#prod-name').fill('Cambio privado');await saveProgress(page);
  expect(await page.evaluate(key=>window.qaProductStore.get('products/'+key).name,key)).toBe('Borrador recuperable');
- await page.locator('.tt-work-back').click();await expect(page.locator('#prod-form-card')).toBeHidden();await reopen(page,key,key);await expect(page.locator('#prod-name')).toHaveValue('Cambio privado');
+ await cancelSave(page);await expect(page.locator('#prod-form-card')).toBeHidden();await reopen(page,key,key);await expect(page.locator('#prod-name')).toHaveValue('Cambio privado');
  await page.evaluate(()=>window.prodGuardar());expect(await page.evaluate(key=>window.qaProductStore.get('products/'+key).name,key)).toBe('Cambio privado');
 });
 test('fallo de red conserva trabajo pendiente, bloquea salida silenciosa y reintenta',async({page})=>{
- await open(page);await page.locator('#prod-name').fill('Trabajo sin red');await page.evaluate(()=>window.qaRejectSave=true);await page.locator('.tt-work-back').click();
- await expect(page.locator('.tt-work-exit-error')).toBeVisible();await expect(page.locator('#prod-form-card')).toBeVisible();
- await page.evaluate(()=>window.qaRejectSave=false);await saveProgress(page);await page.locator('.tt-work-back').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ await open(page);await page.locator('#prod-name').fill('Trabajo sin red');await page.evaluate(()=>window.qaRejectSave=true);await cancelSave(page);
+ await expect(page.locator('.tt-work-exit-dialog [role=alert]')).toContainText('No se confirmó');await expect(page.locator('#prod-form-card')).toBeVisible();
+ await page.getByRole('button',{name:'Seguir editando',exact:true}).click();await page.evaluate(()=>window.qaRejectSave=false);await saveProgress(page);await cancelSave(page);await expect(page.locator('#prod-form-card')).toBeHidden();
 });
 test('publicación en vuelo bloquea doble acción y salida, sin duplicar producto',async({page})=>{
  await open(page);await page.evaluate(()=>{
-  for(const [id,value] of Object.entries({'prod-name':'Único','prod-description':'Completa','prod-price':'30000','prod-category':'qa-tablet','prod-imageUrl':'https://img.test/cover.webp'}))document.getElementById(id).value=value;
+  for(const [id,value] of Object.entries({'prod-publicationStatus':'active','prod-name':'Único','prod-description':'Completa','prod-price':'30000','prod-category':'qa-tablet','prod-imageUrl':'https://img.test/cover.webp'}))document.getElementById(id).value=value;
   document.getElementById('prod-name').dispatchEvent(new Event('input',{bubbles:true}));window.qaHoldCommit=true;window.qaPendingCommit=window.prodGuardar();
  });
  await expect.poll(()=>page.evaluate(()=>typeof window.qaReleaseCommit)).toBe('function');await expect(page.locator('.tt-work-back')).toBeDisabled();
@@ -42,12 +43,12 @@ test('Borradores lista progreso privado y permite continuar sin inventario públ
   const items=await page.evaluate(()=>[...window.qaProductStore].filter(([path,row])=>path.startsWith('productEditorWorkspaces/') && !row.closed).map(([,row])=>({key:row.key,productId:row.productId,name:row.snapshot.name,revision:row.revision})));
   await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,result:{items,limited:true}})});
  });
- await page.locator('#prod-name').fill('Desde listado');await saveProgress(page);await page.locator('.tt-work-back').click();
+ await page.locator('#prod-name').fill('Desde listado');await saveProgress(page);await cancelSave(page);
  // Volver queda sobre la barra autoexpandible al cerrarse el espacio. Retirar
  // el puntero como en una navegación normal, sin forzar clicks atravesando ella.
  await page.mouse.move(1300,700);await expect(page.locator('html')).not.toHaveClass(/adm-sidebar-peek/);
  await page.getByRole('button',{name:/Borradores privados \(1\)/}).click();
- await expect(page.getByRole('heading',{name:'Borradores privados de esta cuenta'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Borradores de esta cuenta'})).toBeVisible();
  await expect(page.getByText('La lista de borradores está limitada.',{exact:false})).toBeVisible();
  await page.locator('[data-action="work-continue"]').click();await page.evaluate(()=>window.qaProductController.workspace.ready);await expect(page.locator('#prod-name')).toHaveValue('Desde listado');
  expect(await page.evaluate(()=>[...window.qaProductStore.keys()].filter(key=>key.startsWith('products/')).length)).toBe(0);
@@ -55,7 +56,7 @@ test('Borradores lista progreso privado y permite continuar sin inventario públ
 test('conflicto de progreso no pisa otra pestaña y no publica',async({page})=>{
  await open(page);await page.locator('#prod-name').fill('Primera pestaña');await saveProgress(page);
  await page.evaluate(()=>{const key='productEditorWorkspaces/qa-admin/items/'+window.qaProductController.workspace.key;const work=window.qaProductStore.get(key);window.qaProductStore.set(key,{...work,revision:work.revision+1,snapshot:{...work.snapshot,name:'Otra pestaña'}});});
- await page.locator('#prod-name').fill('Cambio viejo');await page.locator('.tt-work-back').click();await expect(page.locator('.tt-work-status')).toContainText('otra pestaña');
+ await page.locator('#prod-name').fill('Cambio viejo');await cancelSave(page);await expect(page.locator('.tt-work-exit-dialog [role=alert]')).toContainText('otra pestaña');
  expect(await page.evaluate(()=>[...window.qaProductStore.keys()].filter(key=>key.startsWith('products/')).length)).toBe(0);
 });
 test('fotos pendientes: fallo guarda texto, recuperar advierte y reintento/cancelación no pierde fotos previas',async({page})=>{
@@ -63,7 +64,7 @@ test('fotos pendientes: fallo guarda texto, recuperar advierte y reintento/cance
  const gallery=page.locator('.tt-unified-photos');
  const buffer=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=','base64');
  await gallery.locator('input[multiple]').setInputFiles({name:'pending.png',mimeType:'image/png',buffer});await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(1);
- await page.evaluate(()=>window.qaUploadFailure=true);await page.locator('.tt-work-back').click();await expect(page.locator('.tt-work-status')).toContainText('Texto guardado');await expect(page.locator('#prod-form-card')).toBeVisible();
+ await page.evaluate(()=>window.qaUploadFailure=true);await cancelSave(page);await expect(page.locator('.tt-work-exit-dialog [role=alert]')).toContainText('Texto guardado');await page.getByRole('button',{name:'Seguir editando',exact:true}).click();await expect(page.locator('#prod-form-card')).toBeVisible();
  const key=await page.evaluate(()=>window.qaProductController.workspace.key);
  expect(await page.evaluate(key=>window.qaProductStore.get('productEditorWorkspaces/qa-admin/items/'+key).snapshot.pendingUploads,key)).toBe(true);
  await page.getByRole('button',{name:'Descartar cambios pendientes y volver',exact:true}).click();await reopen(page,key);await expect(page.locator('.tt-work-status')).toContainText('faltan archivos');
@@ -113,10 +114,10 @@ for(const width of [320,390])test(`sección elegida legible sin recorte ${width}
   const size=await select.evaluate(node=>{const style=getComputedStyle(node),context=document.createElement('canvas').getContext('2d');context.font=style.font;return {text:context.measureText(node.selectedOptions[0].textContent).width,available:node.getBoundingClientRect().width-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)-24};});
   expect(size.available).toBeGreaterThanOrEqual(size.text);
  }
- const guide=page.locator('.tt-editor-guide');await guide.locator('summary').click();
+ await expect(page.locator('.tt-editor-guide')).toHaveCount(0);
+ await select.selectOption('prices');await page.locator('#prod-price').focus();await expect(page.locator('#prod-price')).toBeFocused();
+ await select.selectOption('visibility');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
- await guide.getByRole('button',{name:'3. Precio',exact:true}).click();await expect(page.locator('#prod-price')).toBeFocused();
- await guide.locator('summary').click();await select.selectOption('visibility');
  await page.screenshot({path:info.outputPath(`navigation-${width}.png`)});
 });
 
@@ -137,7 +138,7 @@ test('Borradores carga páginas, conserva la lista tras fallo y reintenta el mis
   const items=body.pageToken?[{key:'qa-first',name:'Primer borrador actualizado'},{key:'qa-second',name:'Segundo borrador'}]:[{key:'qa-first',name:'Primer borrador'}];
   await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,result:{items,nextPageToken:body.pageToken?'':'page2',limited:!body.pageToken}})});
  });
- await page.locator('#prod-name').fill('Disparar actualización');await saveProgress(page);await page.locator('.tt-work-back').click();await page.mouse.move(380,700);
+ await page.locator('#prod-name').fill('Disparar actualización');await saveProgress(page);await cancelSave(page);await page.mouse.move(380,700);
  await page.getByRole('button',{name:/Borradores privados \(1\)/}).click();
  const panel=page.getByRole('region',{name:'Progreso privado'});
  await expect(panel.locator('[data-action="work-continue"]')).toHaveCount(1);
