@@ -57,7 +57,9 @@ jobs:
         run: npm ci
 
       - name: Instalar Chromium para auditorías que lo requieran
-        run: npx playwright install --with-deps chromium
+        run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
 
       - name: Servir el árbol exacto auditado (static)
         shell: bash
@@ -141,7 +143,9 @@ jobs:
         run: npm run build:pages
 
       - name: Instalar Chromium para las regresiones de acceso
-        run: npx playwright install --with-deps chromium
+        run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
 
       - name: Servir el árbol exacto auditado (commerce)
         shell: bash
@@ -200,7 +204,9 @@ jobs:
         run: npm run build:pages
 
       - name: Instalar Chromium
-        run: npx playwright install --with-deps chromium
+        run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
 
       - name: Servir el árbol exacto auditado
         shell: bash
@@ -264,7 +270,9 @@ jobs:
         run: npm run build:pages
 
       - name: Instalar Chromium
-        run: npx playwright install --with-deps chromium
+        run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
 
       - name: Servir el árbol exacto auditado
         shell: bash
@@ -328,7 +336,9 @@ jobs:
         run: npm run build:pages
 
       - name: Instalar Chromium
-        run: npx playwright install --with-deps chromium
+        run: |
+          bash scripts/preparar-red-apt-ci.sh
+          npx playwright install --with-deps chromium
 
       - name: Servir el árbol exacto auditado
         shell: bash

@@ -1,3 +1,9 @@
+
+Conciliación de entrega: main0c3e4b9 (#1250/#1251) incorporado sin alterar sus
+workflows ni preparación APT. Fuentes del editor idénticas a43cf6bf. Repetidos
+build,39/39 preflight y plan protegido contra la nueva base: PASS_LOCAL.
+CI/merge/monitor del candidato combinado pendientes de confirmación externa.
+
 ## 2026-10-26 — Edición contextual completa del producto
 
 Codex /root, rama codex/editor-bloque-contextual-completo-20261026, base899a685.
@@ -11,6 +17,14 @@ Build/caché/diagnóstico/protección y39/39 preflight PASS_LOCAL; CI/merge/moni
 IN_PROGRESS hasta la confirmación externa del candidato exacto. La matriz inicial
 329PASS/11FAIL no se declara aprobada: cambios de navegación y selector recortado
 requieren repetición. Recibo EDICION-CONTEXTUAL-PRODUCTO.md. No hay otro diseño.
+
+## 2026-10-26 — Completar consumidores de la preparación APT
+
+Codex /root, basec176e10e (#1250), conserva899a6851/editor y e78a9de2/Perfil. CI del candidato1250 aprobó40400258197; instalación Chromium en cuatro runners17–24s frente al timeout55min anterior. Su merge protegido40403203673SUCCESS conserva árbolffc56368. CI/producción de main se están verificando. El primer ajuste cubría cuatro jobs del gate central; se completa el mismo preparador existente en monitor producción, auditoría visual y cinco jobs de Diagnóstico Maestro, todos Linux Ubuntu. Once instalaciones de Chromium comparten ahora la preparación, sin cambiar helper, suites, dependencias, firmas, permisos ni escenarios. El runtime WebKit de CI hereda esa configuración. Validación YAML de todos los consumidores, build/cache/preflight y plan final; CI/merge del nuevo SHA pendientes. No afirmar como aprobada la CI posterior a1250 todavía en ejecución.
+
+## 2026-10-26 — Evitar bloqueo del mirror Ubuntu en CI actual
+
+Codex /root. Base899a6851 (#1248), que preserva íntegra la reparación Perfil de1246/e78a9de2. CI main40389682500 cancelada: Install Chromium quedó en apt-get update desde19:47 hasta20:42UTC contra HTTP azure.archive. La CI anterior40380530922 también agotó55min, con pruebas runtime iniciadas al final después de instalaciones lentas. Se reintentó sólo comercio y dependientes de la versión ACTUAL, sin reactivar e78 anterior. El mirror volvió a demorar varios minutos. Se corrige la preparación del runner, no la aplicación: script compartido usado por los cuatro jobs de navegador cambia el mirror regional por Ubuntu oficial HTTPS y fija timeout30s/reintentos2 de APT. Conserva suites, claves, firmas, instalación --with-deps, tests y límites del job. No ejecutable fuera de GitHub Actions/Linux. Verificación bash/YAML y preflight; CI/merge del nuevo SHA pendientes. Ocho runs antiguos permanecen cancelados y cinco issues operativos abiertos con alcance actualizado. Perfil1246 sí obtuvo CI completa40376208312 y merge protegido, producción40380534105SUCCESS; no afirmar su CI posterior completa porque fue cancelada.
 
 ## Estado actual — versión única del editor,26/10/2026
 

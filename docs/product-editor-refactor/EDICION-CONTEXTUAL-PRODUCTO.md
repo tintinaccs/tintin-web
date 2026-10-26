@@ -85,3 +85,8 @@ CI/merge/monitor: PENDING hasta obtener evidencia del candidato exacto. La entre
 se completa mediante el flujo protegido autorizado, sin bypass. El recibo externo
 de la PR registra estos resultados después del merge para no certificar un SHA
 futuro dentro del mismo commit.
+
+Conciliación de entrega: main0c3e4b9 (#1250/#1251) incorporado sin alterar sus
+workflows ni preparación APT. Fuentes del editor idénticas a43cf6bf. Repetidos
+build,39/39 preflight y plan protegido contra la nueva base: PASS_LOCAL.
+CI/merge/monitor del candidato combinado pendientes de confirmación externa.
