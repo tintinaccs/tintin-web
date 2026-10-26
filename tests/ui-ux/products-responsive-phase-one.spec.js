@@ -695,7 +695,7 @@ test('salir con fotos masivas pendientes activa el guard real sin subir ni borra
   const moduleUrl=new URL('/js/components/images/carga-imagenes.js',location.origin);const {attachMultiImageUploadWidget}=await import(moduleUrl.href);
   const container=document.createElement('div');container.id='master-guard-queue';document.querySelector('[data-product-section=photos] .tt-editor-section-fields').append(container);
   window.__guardQueue=attachMultiImageUploadWidget(container,{onChange:()=>{throw Error('No debe subir para salir');}});
-  const serialize=new Function('_formImageWidgets','productColorPhotos','productEditorialData','productCommercialEditor',source+';return serializeProductForm;')(new Map([['prod-gallery-widget',window.__guardQueue]]),null,()=>({}),null);
+  const serialize=new Function('_formImageWidgets','productColorPhotos','productEditorialData','productCommercialEditor','productVariantStockBaseline',source+';return serializeProductForm;')(new Map([['prod-gallery-widget',window.__guardQueue]]),null,()=>({}),null,null);
   window.AdminUnsaved.register('primary-editor',{root:'#prod-form-card',serialize:()=>JSON.stringify(serialize()),save:()=>false});
   window.prodCancelForm=()=>window.AdminUnsaved.requestNavigation(()=>{window.__guardQueue.destroy();document.getElementById('prod-form-card').style.display='none';});
  },serializer);

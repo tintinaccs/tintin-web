@@ -96,3 +96,30 @@ merge del PR conservan el estado remoto sin atribuirlo anticipadamente.
 
 Los resultados del SHA bd083237 no se heredan a la nueva cabeza: CI vuelve a
 validar el conjunto. No se elimina ninguna prueba ni se oculta la regresión.
+
+## Compatibilidad y última fixture de regresión
+
+WebKit27.2 (Playwright1.64.1, build2370):46/46 pruebas reales de navegador en
+reseñas, catálogo, administración y workspace. Sin cambios a la aplicación.
+El entorno no permite instalar paquetes como root: bibliotecas Debian se
+extrajeron en directorio de usuario y se validó su carga efectiva. El precheck
+que consulta exclusivamente el caché global de ldconfig se omitió sólo en esta
+corrida adicional; no reconoce bibliotecas de usuario. El motor ejecutó todas
+las aserciones, sin reintentos ni omisiones de pruebas. CI conserva su instalación
+y validación completas. Esto amplía la prueba de motor, sin certificar Safari
+físico ni lectores de pantalla reales.
+
+**INT05, LOW (fixture):** en418 recorridos responsive,417 aprobaron; el restante
+omitía `productVariantStockBaseline` al construir un serializador aislado con
+`new Function`. La variable existe en el controlador real desde Fase3. Se
+inyecta null, como en un producto nuevo, y se conserva la prueba completa:
+pendiente marca dirty, Cancelar abre confirmación, Permanecer conserva fotos,
+no hay subida ni limpieza. Regresión dirigida GREEN; no se eliminan aserciones.
+Los417 más el caso dirigido no se presentan como una ejecución única de418.
+CI repite el archivo completo sobre la cabeza final.
+
+Las27 comprobaciones administrativas posteriores a ese batch aprobaron,
+incluidos26 recorridos de editor comercial y66 de workspace/galería. Build y39
+comandos preflight sobre la fixture final aprobaron. Recibo completo y huellas
+en evidencias-integracion-cierre.json. El registro de CI y el merge del SHA final
+son la autoridad remota; no se atribuye PASS a un run cancelado ni a otra cabeza.

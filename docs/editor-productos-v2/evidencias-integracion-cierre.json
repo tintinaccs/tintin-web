@@ -716,5 +716,483 @@
     "previousCI": "40307127833 sobre bd083237: preflight/comercio/Rules/CodeQL aprobados; administración falló en firma del auditor. Resto de jobs no se atribuye a la nueva cabeza.",
     "runtimeURLVersion": "tintin-20261026-editor-f56-4",
     "remoteResult": "Consultar checks del SHA final y registro de merge de PR1241; no heredar resultados anteriores."
+  },
+  "finalFixtureAndWebkit": {
+    "testedRuntimeParent": "336c71d7a4d381da54a42790cf014323e2e86aba",
+    "sourceSha256": {
+      "js/admin/shopify-commerce-admin.js": "8196c4a957b4e23b025ccc5170a1aafc9f6a0c4ecdeafa3215e8438a7202e92c",
+      "js/admin/admin-app.js": "790d74397a220c5e47f281539462cc5d2fa5b36be05250199440060e4c1e2445",
+      "tests/ui-ux/products-responsive-phase-one.spec.js": "2f487bad3e0e9b161c7e457375e0a9f6c672d93877ec7acf04d67bdc6a6a29af",
+      "tests/ui-ux/product-workspaces.spec.js": "83ad300faf003916244e2ce952aa48e0ba0b5739d459b5711bfbe8208410b5db",
+      "tests/ui-ux/admin-commerce-shopify.spec.js": "40dc48b65666bd5b577dfe54faf982235afc3102bbd48a88bbef7e124d989e97",
+      "tests/performance/home-review-gallery.spec.js": "cfffd5c85cfa63f720e50d29d58fff29693d50b5bc1da9f7e4f6bd77b1afcad5"
+    },
+    "INT05": "Dependencia de fixture productVariantStockBaseline no inyectada; se agrega null como estado de nuevo producto. Sin cambios al código funcional ni retiro de aserciones.",
+    "responsiveRed": {
+      "tests": 418,
+      "passed": 417,
+      "failed": 1,
+      "previousAuditorBatchPassed": 73,
+      "logSha256": "66c814e608da7c23257fc1c3dcf01c2ae22647217f2ab71a46c48f01a7d6c3da",
+      "scope": "No se presenta como PASS de418; se corrige y CI repite completo."
+    },
+    "targeted": {
+      "status": "PASS_LOCAL",
+      "command": "npx playwright test tests/ui-ux/products-responsive-phase-one.spec.js --grep 'salir con fotos masivas' --project=chromium --retries=0",
+      "tests": 1,
+      "passed": 1,
+      "logSha256": "d54faa8401e83446a4a996f31fbcfcfdab7099b2ee3afedd58a02cb16f789e5d"
+    },
+    "webkit": {
+      "status": "PASS_LOCAL",
+      "engine": "WebKit27.2 build2370",
+      "playwright": "1.64.1",
+      "tests": 46,
+      "passed": 46,
+      "failed": 0,
+      "retries": 0,
+      "command": "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 LD_LIBRARY_PATH=/tmp/f56-webkit-libs/usr/lib/x86_64-linux-gnu npx playwright test --config=/tmp/f56-playwright-webkit.config.cjs tests/performance/home-review-gallery.spec.js tests/ui-ux/product-workspaces.spec.js tests/ui-ux/admin-commerce-shopify.spec.js",
+      "configOverride": "Misma configuración base, testDir absoluto del repo, workers1, retries0, use.launchOptions={}, proyecto webkit/browserName=webkit.",
+      "environment": "Bibliotecas Debian extraídas en directorio de usuario sin root; ctypes.CDLL carga GTK4/GLES/manette/cairo; enlaces en sys/lib del bundle. Se omite precheck ldconfig que sólo mira caché global; las bibliotecas reales cargan y todas las pruebas ejecutan el motor nativo. No se cambia CI ni se omite ninguna aserción.",
+      "logSha256": "e125c57a97536d94151964d04bb3d52226f975900b34821e6ba0a7164c1de2bf",
+      "cases": [
+        "  ✓   1 [webkit] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 320 (7.8s)",
+        "  ✓   2 [webkit] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 390 (3.4s)",
+        "  ✓   3 [webkit] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 768 (3.6s)",
+        "  ✓   4 [webkit] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 1024 (5.2s)",
+        "  ✓   5 [webkit] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 1366 (4.6s)",
+        "  ✓   6 [webkit] › tests/performance/home-review-gallery.spec.js:8:3 › reseñas reales: cuatro imágenes y galería accesible sin cargarla antes de abrir · 1920 (5.5s)",
+        "  ✓   7 [webkit] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 320 (3.1s)",
+        "  ✓   8 [webkit] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 390 (3.4s)",
+        "  ✓   9 [webkit] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 844 (3.7s)",
+        "  ✓  10 [webkit] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 768 (4.2s)",
+        "  ✓  11 [webkit] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 1024 (3.8s)",
+        "  ✓  12 [webkit] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 1440 (5.0s)",
+        "  ✓  13 [webkit] › tests/performance/home-review-gallery.spec.js:58:3 › ampliar la reseña tocada y navegar sin perder foco · 1920 (6.5s)",
+        "  ✓  14 [webkit] › tests/performance/home-review-gallery.spec.js:82:1 › portada de colección se revalida aun con caché reciente y conserva respaldo sin red (826ms)",
+        "  ✓  15 [webkit] › tests/performance/home-review-gallery.spec.js:102:1 › catálogo usa caché sin esperar red y encabezado recibe la portada revalidada (967ms)",
+        "  ✓  16 [webkit] › tests/ui-ux/admin-commerce-shopify.spec.js:13:1 › renderiza los tres módulos con datos, filtros y colores Tintin (1.8s)",
+        "  ✓  17 [webkit] › tests/ui-ux/admin-commerce-shopify.spec.js:29:1 › abre ficha rápida y reutiliza la edición real de producto (3.5s)",
+        "  ✓  18 [webkit] › tests/ui-ux/admin-commerce-shopify.spec.js:37:1 › oculta el listado avanzado mientras se abre el formulario existente (2.5s)",
+        "  ✓  19 [webkit] › tests/ui-ux/admin-commerce-shopify.spec.js:44:1 › colecciones navegan a sus productos sin inventar colecciones inteligentes (3.1s)",
+        "  ✓  20 [webkit] › tests/ui-ux/admin-commerce-shopify.spec.js:54:1 › pedido separa entrega/pago y ejecuta los contratos existentes (3.1s)",
+        "  ✓  21 [webkit] › tests/ui-ux/admin-commerce-shopify.spec.js:69:1 › la interfaz sigue utilizable en móvil sin desbordar el documento (2.9s)",
+        "  ✓  22 [webkit] › tests/ui-ux/admin-commerce-shopify.spec.js:82:1 › un fallo de montaje conserva el listado de Productos en todos los tamaños (2.7s)",
+        "  ✓  23 [webkit] › tests/ui-ux/product-workspaces.spec.js:7:1 › crear incompleto, salir, recuperar, publicar, editar sin reemplazar público y recuperar cambios (10.4s)",
+        "  ✓  24 [webkit] › tests/ui-ux/product-workspaces.spec.js:24:1 › fallo de red conserva trabajo pendiente, bloquea salida silenciosa y reintenta (4.8s)",
+        "  ✓  25 [webkit] › tests/ui-ux/product-workspaces.spec.js:29:1 › publicación en vuelo bloquea doble acción y salida, sin duplicar producto (4.1s)",
+        "  ✓  26 [webkit] › tests/ui-ux/product-workspaces.spec.js:39:1 › Borradores lista progreso privado y permite continuar sin inventario público ficticio (6.2s)",
+        "  ✓  27 [webkit] › tests/ui-ux/product-workspaces.spec.js:55:1 › conflicto de progreso no pisa otra pestaña y no publica (5.6s)",
+        "  ✓  28 [webkit] › tests/ui-ux/product-workspaces.spec.js:61:1 › fotos pendientes: fallo guarda texto, recuperar advierte y reintento/cancelación no pierde fotos previas (6.8s)",
+        "  ✓  29 [webkit] › tests/ui-ux/product-workspaces.spec.js:74:1 › archivar y restaurar exige acción explícita y no cambia stock (5.6s)",
+        "  ✓  30 [webkit] › tests/ui-ux/product-workspaces.spec.js:84:95 › espacio dedicado 320x568 (3.6s)",
+        "  ✓  31 [webkit] › tests/ui-ux/product-workspaces.spec.js:84:95 › espacio dedicado 390x844 (4.3s)",
+        "  ✓  32 [webkit] › tests/ui-ux/product-workspaces.spec.js:84:95 › espacio dedicado 844x390 (4.9s)",
+        "  ✓  33 [webkit] › tests/ui-ux/product-workspaces.spec.js:84:95 › espacio dedicado 768x1024 (4.6s)",
+        "  ✓  34 [webkit] › tests/ui-ux/product-workspaces.spec.js:84:95 › espacio dedicado 1366x768 (4.9s)",
+        "  ✓  35 [webkit] › tests/ui-ux/product-workspaces.spec.js:84:95 › espacio dedicado 1920x1080 (5.2s)",
+        "  ✓  36 [webkit] › tests/ui-ux/product-workspaces.spec.js:92:95 › progreso y acciones con altura reducida 320x568 (6.5s)",
+        "  ✓  37 [webkit] › tests/ui-ux/product-workspaces.spec.js:92:95 › progreso y acciones con altura reducida 390x844 (6.3s)",
+        "  ✓  38 [webkit] › tests/ui-ux/product-workspaces.spec.js:92:95 › progreso y acciones con altura reducida 844x390 (5.0s)",
+        "  ✓  39 [webkit] › tests/ui-ux/product-workspaces.spec.js:92:95 › progreso y acciones con altura reducida 768x1024 (7.0s)",
+        "  ✓  40 [webkit] › tests/ui-ux/product-workspaces.spec.js:92:95 › progreso y acciones con altura reducida 1024x768 (7.2s)",
+        "  ✓  41 [webkit] › tests/ui-ux/product-workspaces.spec.js:92:95 › progreso y acciones con altura reducida 1920x1080 (5.3s)",
+        "  ✓  42 [webkit] › tests/ui-ux/product-workspaces.spec.js:108:30 › sección elegida legible sin recorte 320 (4.3s)",
+        "  ✓  43 [webkit] › tests/ui-ux/product-workspaces.spec.js:108:30 › sección elegida legible sin recorte 390 (3.7s)",
+        "  ✓  44 [webkit] › tests/ui-ux/product-workspaces.spec.js:123:32 › acciones compactas junto al título en escritorio 1366 (4.2s)",
+        "  ✓  45 [webkit] › tests/ui-ux/product-workspaces.spec.js:123:32 › acciones compactas junto al título en escritorio 1920 (4.6s)",
+        "  ✓  46 [webkit] › tests/ui-ux/product-workspaces.spec.js:131:1 › Borradores carga páginas, conserva la lista tras fallo y reintenta el mismo cursor sin duplicar (5.6s)",
+        "  46 passed (3.6m)"
+      ]
+    },
+    "remoteCI": "Run40308793351 attempt1 cancelado al investigar provisioning lento; se recuperaron logs y se reintentaron jobs en mismoSHA. No se atribuye aprobación al run cancelado; consultar cabeza final/última ejecución del PR.",
+    "remainingAdministration": {
+      "status": "PASS_LOCAL",
+      "commands": [
+        {
+          "command": "npm run audit:users-roles",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:content-appearance",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:appearance-unified",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:email-messaging",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:analytics-audit",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node --test tests/operations/*.test.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node --test tests/admin/lecturas-admin.test.mjs tests/admin/webhook-diagnostico.test.mjs tests/admin/firebase-permission-recovery.test.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run test:phase2-import",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node --test tests/import/inventory-reservation-review.test.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase2-contract",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node --test tests/seo/shopify-independent-media.test.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node --test tests/seo/pages-dev-indexing-middleware.test.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node scripts/backup-firestore.mjs --dry-run",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node scripts/restore-firestore.mjs --dry-run",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run test:web-push",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run test:engagement",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run test:visual-builder",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node scripts/auditar-superadmin-maestro.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node scripts/auditar-superadmin-maestro-conexiones.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node scripts/auditar-superadmin-cierre-total.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node scripts/auditar-superadmin-modulos-completos.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node scripts/auditar-superadmin-maestro-responsive.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node scripts/auditar-borrado-global-catalogo.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node --test tests/admin/editor-comercial.test.mjs tests/admin/editor-editorial.test.mjs tests/admin/vision-productos.test.mjs tests/admin/product-workspaces.test.mjs tests/admin/firestore-list-page.test.mjs tests/admin/private-work-pagination-session.test.mjs tests/admin/product-progress-audit.test.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node --test tests/security/csp-cloudinary-upload.test.mjs tests/diagnostics/manifest-exclusions.test.mjs",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npx playwright test tests/ui-ux/editor-comercial-v2.spec.js --project=chromium --retries=0",
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npx playwright test tests/ui-ux/product-workspaces.spec.js tests/ui-ux/product-color-gallery.spec.js --project=chromium --retries=0",
+          "status": 0,
+          "signal": null
+        }
+      ],
+      "logSha256": "9dd37a8f33d3ae03521c52b38c8712d6e819c30738849148b8dd136b69f999fb",
+      "scope": "27 comprobaciones canónicas posteriores a audit:admin-responsive. No reemplaza ni marca aprobado el batch418 que tuvo una fixture fallida; caso corregido dirigido y CI completo en cabeza final."
+    },
+    "finalBuild": {
+      "status": "PASS_LOCAL",
+      "command": "npm run build:pages",
+      "logSha256": "480149618b7cfba180aeb71acae5f70fc8fb3e6558770457052c55f79f6b3c68"
+    },
+    "finalPreflight": {
+      "status": "PASS_LOCAL",
+      "command": "npm run ci:preflight",
+      "commands": [
+        {
+          "command": "npm run audit:level1",
+          "seconds": 1.033,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:part2h",
+          "seconds": 0.255,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:site-structure",
+          "seconds": 1.33,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:architecture-contracts",
+          "seconds": 0.507,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:level3",
+          "seconds": 0.264,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:typography",
+          "seconds": 2.102,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:colors",
+          "seconds": 1.166,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:styles",
+          "seconds": 0.482,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:modular-architecture",
+          "seconds": 0.307,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:tintin",
+          "seconds": 1.877,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:emails",
+          "seconds": 0.568,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:collections",
+          "seconds": 0.31,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:images",
+          "seconds": 0.43,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:content",
+          "seconds": 0.604,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:security",
+          "seconds": 0.465,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:release",
+          "seconds": 0.405,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:integral",
+          "seconds": 0.62,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:diagnostics",
+          "seconds": 17.022,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:diagnostic-findings",
+          "seconds": 0.892,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:postphase",
+          "seconds": 0.487,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:help-pages",
+          "seconds": 0.342,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:aux-pages",
+          "seconds": 0.621,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:final-integration",
+          "seconds": 1.159,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:performance",
+          "seconds": 0.652,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:performance-regressions",
+          "seconds": 0.442,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:page-loading",
+          "seconds": 1.08,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:hero-background-controls",
+          "seconds": 0.299,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:storegate-deadlock",
+          "seconds": 0.611,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:app-check-bootstrap",
+          "seconds": 0.398,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase5",
+          "seconds": 1.155,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase6",
+          "seconds": 0.937,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase7-catalog",
+          "seconds": 0.707,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase8-ui",
+          "seconds": 0.478,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase10",
+          "seconds": 0.342,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:phase11",
+          "seconds": 0.69,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:public-operational-contract",
+          "seconds": 0.647,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run audit:cache-versioning",
+          "seconds": 1.63,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "npm run test:fast",
+          "seconds": 10.105,
+          "status": 0,
+          "signal": null
+        },
+        {
+          "command": "node scripts/auditar-legal-paginas.js",
+          "seconds": 0.185,
+          "status": 0,
+          "signal": null
+        }
+      ],
+      "logSha256": "6945e748483261e9c157d3fb94d0ff957842d369f3394ede3dfb4829396191fa"
+    }
   }
 }
