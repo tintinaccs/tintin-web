@@ -1625,86 +1625,6 @@
   },
   "screenshots": [
     {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-1366x768.png",
-      "bytes": 71060,
-      "sha256": "f2a8f7121d61ae13f60926e32cfd8384bc97d830dd7bb2b0cfd4dbf09ca6d347"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-1920x1080.png",
-      "bytes": 102793,
-      "sha256": "3f826e230d3a73d6615405e95b370e795f393c04e8c97e060b17c6d306e169e2"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-320x568.png",
-      "bytes": 33653,
-      "sha256": "51393de0f6d1b654573f745218236c5541cd5a02a3c02b9f7dcdea0bdbd3a58c"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-390x844.png",
-      "bytes": 47253,
-      "sha256": "a2d37a2d997638e059793d87d40e1aef28add6e16fd195d6265c78531c27d544"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-768x1024.png",
-      "bytes": 56382,
-      "sha256": "4639a29d3f9f6c2be87e34976fe470b76a4b596b3840f88bc53aaa01131f57d0"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-844x390.png",
-      "bytes": 28647,
-      "sha256": "16be6a1046b6160a0d969b2878da61c9a7e6d63a71f4cfafe906e06f8782781c"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-antes-1920.png",
-      "bytes": 97912,
-      "sha256": "0ad2c0ded11d3c4fb3c7bc0592a5a02f54e3c85b354c7a5b9d0d5b1d5050d1ad"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-antes-390.png",
-      "bytes": 46884,
-      "sha256": "c162a77f5bd5b281e7799f59981cff50798c163ee122d97f7d933af4903c9d4e"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-1024.png",
-      "bytes": 32942,
-      "sha256": "b9aeb7f6183afaf81497880d23bcd7f8212604d0145f49519d4b58a050c04030"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-1920.png",
-      "bytes": 58745,
-      "sha256": "b7cc588132fbd84c97b9d03d08f565309563efb8a2ac44883fcb721885d0914f"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-320.png",
-      "bytes": 23234,
-      "sha256": "866c01fafe5490d0ee3b40791d09107225160d023d94c9b5465abbe3cbf74055"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-390.png",
-      "bytes": 30693,
-      "sha256": "1fde876792a380049ffaa1fc9daa7bc6a4bf4369c8d9897d89233c370e087fb6"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-768.png",
-      "bytes": 39698,
-      "sha256": "5f1fb2b6762fd510f5c332db8f40d0f9ff331ef38aec73319a3e2b2a92ed70c8"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-844.png",
-      "bytes": 27305,
-      "sha256": "5c35caa41f76e05ca04bdf73428de56a5c62416e0563842b8ad29f173a491bb6"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/navigation-320.png",
-      "bytes": 41519,
-      "sha256": "c3e5352795044ab95df201d2096c22f968e21d965603fb838399d590aafcc37d"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/navigation-390.png",
-      "bytes": 43501,
-      "sha256": "c49db74e61220bfe1fecabb935b99756e04751a30ce5ad98d9448c82fe544a25"
-    },
-    {
       "path": "docs/editor-productos-v2/evidencias-f56/resenas-antes-1440.png",
       "bytes": 65567,
       "sha256": "794d658672ff3b2376cb0301d65d123207c6922c3d16884943f59b5ed6497e67"
@@ -2463,5 +2383,6 @@
       "phases1to4": "OPEN; mismas cabezas documentadas; PR1241 OPEN listo sobre Fase4",
       "autoMerge": false
     }
-  }
+  },
+  "editorIllustrations": "Retiradas al unificar la versión de seis fases. Capturas vigentes en docs/product-editor-refactor/evidencias-version-unica; no se atribuyen a pruebas históricas."
 }

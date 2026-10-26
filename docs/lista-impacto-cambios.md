@@ -1,3 +1,7 @@
+## 2026-10-26 — Una única versión del editor de seis fases
+
+Autoridad vigente: docs/product-editor-refactor/00-VERSION-UNICA.md. Se conserva main con#1241/#1244/#1245/#1246, sin la propuesta retirada#1247. Se eliminan especificaciones visuales previas y guía sin consumidores; se unifican índices y estado. No se tocan contratos comerciales ni fuentes de Perfil. El CSS y sus consumidores renuevan caché; diagnóstico y plan se regeneran por autoridades existentes. Ver UNIFICACION-SEIS-FASES y CURRENT_STATE para evidencia propia, sin heredar PASS de la propuesta descartada.
+
 ## 2026-10-26 — Lectura de Checkout y reserva de logo
 
 Autoridades: checkout-maintenance.css y sharedFooter del constructor público. Texto de cinco pasos mantiene legibilidad y contenido al ampliar; atributos HTML reservan104×56 del logo antes del CSS en los footers generados. Consumidores de estilos renuevan URLs transitivas y los derivados desde generadores. No lógica de pedidos/pagos, Auth ni datos. Se verifican otros cinco puntos del informe sin introducir sus overrides innecesarios; evidencia en docs/agent/VALIDACION-AUDITORIA-VISUAL-20261026.md y CURRENT_STATE.
@@ -27,11 +31,11 @@ Se incorpora315883bd (#1223), conservando la liberación de foco antes de oculta
 SurfaceController retira el foco antes de aria-hidden y restituye la campana con inert liberado. Accesibilidad global delega el foco de los paneles registrados a esa autoridad; mantiene los diálogos genéricos. Regresión de Alertas comprueba el orden de ocultamiento y cierre por Escape/botón en cinco resoluciones. Versiones transitivas y derivados canónicos renovados; sin reglas ni datos reales modificados. Evidencia en CURRENT_STATE.
 ## 2026-10-24 — Editor intuitivo y verificación de checkout
 
-Fotos/guía/contraste y controles canónicos de Productos; visión local opcional con TinyCLIP MIT, worker y assets propios sin API facturada. Sólo propone categoría existente mediante confirmación y conserva color/material manual, variantes/precio/stock y writers. CSP WASM exclusiva del worker validada por autoridad común; constructor de diagnóstico distingue builtins Node de referencias locales. Prueba REST/CAS une editor, carrito, política pública, pedido, reserva y cancelación sin cambios en sus fuentes comerciales ni datos reales. Versionado, protección y derivados desde generadores. Evidencia/límites en17-EDITOR-INTUITIVO-Y-CHECKOUT y CURRENT_STATE.
+Fotos/guía/contraste y controles canónicos de Productos; visión local opcional con TinyCLIP MIT, worker y assets propios sin API facturada. Sólo propone categoría existente mediante confirmación y conserva color/material manual, variantes/precio/stock y writers. CSP WASM exclusiva del worker validada por autoridad común; constructor de diagnóstico distingue builtins Node de referencias locales. Prueba REST/CAS une editor, carrito, política pública, pedido, reserva y cancelación sin cambios en sus fuentes comerciales ni datos reales. Versionado, protección y derivados desde generadores. Evidencia/límites endocs/product-editor-refactor/00-VERSION-UNICA.md y CURRENT_STATE.
 
 ## 2026-10-24 — Distribución visual del editor tipo Shopify
 
-Interfaz canónica de Productos: tarjetas y columnas del formulario, lateral editorial y vista previa, cabecera con Guardar/Cancelar originales. Se reubican nodos sin duplicar IDs ni cambiar escrituras; privado respeta la visibilidad del controlador, SEO/estadísticas son plegables y móvil conserva un único desplazamiento principal. Tema Tintin intacto, sin nuevas rutas/reglas/API. Consumidores y CSS renuevan URLs inmutables; plan y manifiestos se regeneran. Evidencia: docs/editor-productos-v2/16-REDISENO-VISUAL.md y CURRENT_STATE.
+Interfaz canónica de Productos: tarjetas y columnas del formulario, lateral editorial y vista previa, cabecera con Guardar/Cancelar originales. Se reubican nodos sin duplicar IDs ni cambiar escrituras; privado respeta la visibilidad del controlador, SEO/estadísticas son plegables y móvil conserva un único desplazamiento principal. Tema Tintin intacto, sin nuevas rutas/reglas/API. Consumidores y CSS renuevan URLs inmutables; plan y manifiestos se regeneran. Evidencia: docs/product-editor-refactor/00-VERSION-UNICA.md y CURRENT_STATE.
 
 ## 2026-10-23 — Continuación editor comercial v2
 

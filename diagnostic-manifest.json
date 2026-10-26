@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "1ec24a3ca2667d95808658c09770bcc049811ecb9c057376f8308f954eef4413",
+  "sourceFingerprint": "e0895e00d2b5f42a880324415f3ca1cd3dd70011631735b2274d99d93e484c00",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1556,
-    "textFiles": 1433,
-    "totalBytes": 33969156,
+    "files": 1554,
+    "textFiles": 1435,
+    "totalBytes": 33820913,
     "pages": 19,
-    "modules": 1044
+    "modules": 1045
   },
   "viewports": [
     {
@@ -2892,8 +2892,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204425,
-      "sha256": "fd5daad453c547666a232fd288cf8fe252f69b2baaf65e1111badbcdd2a1644f",
+      "bytes": 204431,
+      "sha256": "92d0dbc2d4d6a3fca82edf77be929ed07a83327e85dfd3d838a6291523bfb3a7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2972,7 +2972,7 @@
           "line": 2083
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-editor-phase6-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-editor-unico-6fases-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084
         },
@@ -3332,7 +3332,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-editor-phase6-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261026-editor-unico-6fases-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084,
           "exists": true
@@ -30387,8 +30387,8 @@
     },
     {
       "path": "js/admin/products/interfaz-productos-adaptable.js",
-      "bytes": 21037,
-      "sha256": "c717225626a78a911bf4ea1d71c17ffb673ba4e58426353bdccbe00566fec450",
+      "bytes": 20843,
+      "sha256": "136b37973ecd26767d188303a016cee347e0ec798e08a6c26a1d79473d875f07",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30882,8 +30882,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 137945,
-      "sha256": "9851e7dae9e49f1c32ee8289f55b23b28ae1ae53c3a9e5f0b2ba8aef7710602f",
+      "bytes": 137957,
+      "sha256": "266829585494aca53c2225556c4b8595e948814feb0310a513b9d547f7028632",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30926,7 +30926,7 @@
           "line": 6
         },
         {
-          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261026-editor-phase6-1",
+          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261026-editor-unico-6fases-1",
           "target": "js/admin/products/interfaz-productos-adaptable.js",
           "dynamic": false,
           "line": 7
@@ -56052,6 +56052,22 @@
       ]
     },
     {
+      "path": "tests/ui-ux/product-editor-single-version.spec.js",
+      "bytes": 3714,
+      "sha256": "b39c48703d48e422cfb559354c510c4120533963e79e18680313c35b5d6de6be",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://img.test/reloj.webp",
+          "line": 5
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/product-first-paint.spec.js",
       "bytes": 2384,
       "sha256": "9e98bd73684190fe791afa4d1b19df39b525d02e3c791ba4a8dd40c7343c09ad",
@@ -57423,8 +57439,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204425,
-      "sha256": "fd5daad453c547666a232fd288cf8fe252f69b2baaf65e1111badbcdd2a1644f"
+      "bytes": 204431,
+      "sha256": "92d0dbc2d4d6a3fca82edf77be929ed07a83327e85dfd3d838a6291523bfb3a7"
     },
     {
       "path": "apple-touch-icon.png",
@@ -58407,8 +58423,8 @@
     {
       "path": "config/ci-stages.json",
       "extension": ".json",
-      "bytes": 6492,
-      "sha256": "770d8f7c79278ca440f3ed93ef2eee9999056ec0b420e9de2e1b9936e22e65c1"
+      "bytes": 6542,
+      "sha256": "b8d2d444bb647fe56d98caecb991d4f00c8af886b5ec27b1d18212b4db5a5b3a"
     },
     {
       "path": "config/csp-runtime.js",
@@ -58425,8 +58441,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 7522,
-      "sha256": "471d1c307f662903125374f701405cdb94841619a7833d408c51e55883d592cd"
+      "bytes": 1170,
+      "sha256": "166ad6d75b33be748a61325cdbea440b1b74a454b831e9dc939fa6eaa685bc65"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -58438,7 +58454,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "9dc62b3c4097d75e21b459c1f665a01eea09b36ce0765b680795169298ff6b7d"
+      "sha256": "2c79c2865fe6beec312b704dd06f272a8b3a9b788e7902726c79e32bd26f0d27"
     },
     {
       "path": "config/public-site.json",
@@ -58545,8 +58561,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 121149,
-      "sha256": "8b9a165f59780776e7e3dec98361f7262d8214fdd33285b0f4fbe9d0e9c9d32d"
+      "bytes": 120232,
+      "sha256": "c2baa72f83b8ae847e9dd367f2d76779daca5d8f0af224d4b1eed7533f8263f4"
     },
     {
       "path": "css/admin/sidebar-interaccion.css",
@@ -59097,8 +59113,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 961929,
-      "sha256": "c4749e9b2d713ebe2b30384b4b12beb61b81615076919d13adcca6004e2a6d84"
+      "bytes": 963069,
+      "sha256": "80227470f694874a49d4ff366dbffa11fc68086c2b5e1801c0e575bf22d363f0"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -59487,8 +59503,8 @@
     {
       "path": "docs/editor-productos-v2/00-INDICE.md",
       "extension": ".md",
-      "bytes": 4325,
-      "sha256": "8fcde64cb3f3373ba50471125e81f234162b090767bc3f5558a94a492f9f278a"
+      "bytes": 479,
+      "sha256": "efc71e1bcaf74161ddd91e2277c9d3ebaa09a5d0de4f8607710b3bcd0744f717"
     },
     {
       "path": "docs/editor-productos-v2/01-DECISIONES-Y-ALCANCE.md",
@@ -59505,8 +59521,8 @@
     {
       "path": "docs/editor-productos-v2/03-PLAN-MAESTRO.md",
       "extension": ".md",
-      "bytes": 10654,
-      "sha256": "4412d452d2f8072c373b12a4f2e29bbc21912d6090ffb5763f741eb6d97d0708"
+      "bytes": 1018,
+      "sha256": "6c0507907d7df5dcb1e08af1700e6564789db4eecb0ac5340c31536a12a9d81f"
     },
     {
       "path": "docs/editor-productos-v2/04-CONTRATOS-Y-COMPATIBILIDAD.md",
@@ -59535,8 +59551,8 @@
     {
       "path": "docs/editor-productos-v2/08-ESTADO-Y-RELEVO.md",
       "extension": ".md",
-      "bytes": 12832,
-      "sha256": "0b21960ce32491748646313de1aab1d50027f0d73108a29d16cf8e68621a0ede"
+      "bytes": 570,
+      "sha256": "f77024f04e3ecd471db0f58c1c9b7b1359f6700980738a104d8250b6a4d59d29"
     },
     {
       "path": "docs/editor-productos-v2/09-AUDITORIA-FASE-1.md",
@@ -59581,18 +59597,6 @@
       "sha256": "88fedc3a8f68a66bf5ad303b033b6501326e256b060001df1290eccfcc54337b"
     },
     {
-      "path": "docs/editor-productos-v2/16-REDISENO-VISUAL.md",
-      "extension": ".md",
-      "bytes": 3254,
-      "sha256": "e9fc4b740f167c965c2ba8e1e5660269f5cea57f21b8fa700fcbc389591a6529"
-    },
-    {
-      "path": "docs/editor-productos-v2/17-EDITOR-INTUITIVO-Y-CHECKOUT.md",
-      "extension": ".md",
-      "bytes": 6554,
-      "sha256": "ed01dae8761200f09a48a0b9fbe862d07231fb770afd0557f88d80d5d894e535"
-    },
-    {
       "path": "docs/editor-productos-v2/18-ESTABILIZACION-FASE-1-20261025.md",
       "extension": ".md",
       "bytes": 14618,
@@ -59619,8 +59623,8 @@
     {
       "path": "docs/editor-productos-v2/22-UI-RESPONSIVE-FASE-5.md",
       "extension": ".md",
-      "bytes": 9405,
-      "sha256": "7d8d1178c12b3c61d987ea73d58afa8d2ff151fe9890da46ec9dbf2073117c2a"
+      "bytes": 9040,
+      "sha256": "fe9c4c71c3f1be7a08147feaab08da631d48b587a43c155fa8a00ca08cb91ba7"
     },
     {
       "path": "docs/editor-productos-v2/23-AUDITORIA-FINAL-FASE-6.md",
@@ -59649,104 +59653,8 @@
     {
       "path": "docs/editor-productos-v2/evidencias-f56.json",
       "extension": ".json",
-      "bytes": 179005,
-      "sha256": "e7d0dd1a1339dd4f4bd243f8ebb73ce2aca97141edafb9c6230c7c1ffde3bdde"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-1366x768.png",
-      "extension": ".png",
-      "bytes": 71060,
-      "sha256": "f2a8f7121d61ae13f60926e32cfd8384bc97d830dd7bb2b0cfd4dbf09ca6d347"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-1920x1080.png",
-      "extension": ".png",
-      "bytes": 102793,
-      "sha256": "3f826e230d3a73d6615405e95b370e795f393c04e8c97e060b17c6d306e169e2"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-320x568.png",
-      "extension": ".png",
-      "bytes": 33653,
-      "sha256": "51393de0f6d1b654573f745218236c5541cd5a02a3c02b9f7dcdea0bdbd3a58c"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-390x844.png",
-      "extension": ".png",
-      "bytes": 47253,
-      "sha256": "a2d37a2d997638e059793d87d40e1aef28add6e16fd195d6265c78531c27d544"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-768x1024.png",
-      "extension": ".png",
-      "bytes": 56382,
-      "sha256": "4639a29d3f9f6c2be87e34976fe470b76a4b596b3840f88bc53aaa01131f57d0"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-844x390.png",
-      "extension": ".png",
-      "bytes": 28647,
-      "sha256": "16be6a1046b6160a0d969b2878da61c9a7e6d63a71f4cfafe906e06f8782781c"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-antes-1920.png",
-      "extension": ".png",
-      "bytes": 97912,
-      "sha256": "0ad2c0ded11d3c4fb3c7bc0592a5a02f54e3c85b354c7a5b9d0d5b1d5050d1ad"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/editor-antes-390.png",
-      "extension": ".png",
-      "bytes": 46884,
-      "sha256": "c162a77f5bd5b281e7799f59981cff50798c163ee122d97f7d933af4903c9d4e"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-1024.png",
-      "extension": ".png",
-      "bytes": 32942,
-      "sha256": "b9aeb7f6183afaf81497880d23bcd7f8212604d0145f49519d4b58a050c04030"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-1920.png",
-      "extension": ".png",
-      "bytes": 58745,
-      "sha256": "b7cc588132fbd84c97b9d03d08f565309563efb8a2ac44883fcb721885d0914f"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-320.png",
-      "extension": ".png",
-      "bytes": 23234,
-      "sha256": "866c01fafe5490d0ee3b40791d09107225160d023d94c9b5465abbe3cbf74055"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-390.png",
-      "extension": ".png",
-      "bytes": 30693,
-      "sha256": "1fde876792a380049ffaa1fc9daa7bc6a4bf4369c8d9897d89233c370e087fb6"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-768.png",
-      "extension": ".png",
-      "bytes": 39698,
-      "sha256": "5f1fb2b6762fd510f5c332db8f40d0f9ff331ef38aec73319a3e2b2a92ed70c8"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/keyboard-844.png",
-      "extension": ".png",
-      "bytes": 27305,
-      "sha256": "5c35caa41f76e05ca04bdf73428de56a5c62416e0563842b8ad29f173a491bb6"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/navigation-320.png",
-      "extension": ".png",
-      "bytes": 41519,
-      "sha256": "c3e5352795044ab95df201d2096c22f968e21d965603fb838399d590aafcc37d"
-    },
-    {
-      "path": "docs/editor-productos-v2/evidencias-f56/navigation-390.png",
-      "extension": ".png",
-      "bytes": 43501,
-      "sha256": "c49db74e61220bfe1fecabb935b99756e04751a30ce5ad98d9448c82fe544a25"
+      "bytes": 176093,
+      "sha256": "f583b71eba201950cc521198432650913210919f7b7c3f0206be121288f201ae"
     },
     {
       "path": "docs/editor-productos-v2/evidencias-f56/resenas-antes-1440.png",
@@ -59889,8 +59797,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 127251,
-      "sha256": "76535b2060c617c977122fd3b902346be45c9a6ada7980cc97dcc992e5480733"
+      "bytes": 127856,
+      "sha256": "f0d275b56b881e9b96f94c0495263e2fe5adf7034597a7d4d26df4f8ab74d533"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -59953,6 +59861,12 @@
       "sha256": "ebbedaae6945e55cdd74b9254076579f8b2e182a3d054cccadc65ae38ab2262f"
     },
     {
+      "path": "docs/product-editor-refactor/00-VERSION-UNICA.md",
+      "extension": ".md",
+      "bytes": 3510,
+      "sha256": "46ef31bfb43cd281da2b8e2c57057bb4a414f3e2a05287aac290a61b7c10045d"
+    },
+    {
       "path": "docs/product-editor-refactor/04-SIMPLIFICACION-UX.md",
       "extension": ".md",
       "bytes": 672,
@@ -59991,8 +59905,8 @@
     {
       "path": "docs/product-editor-refactor/ESTADO-GENERAL.md",
       "extension": ".md",
-      "bytes": 1388,
-      "sha256": "ab0459fefa9eff6a6a434fbcb867c30cac5e3e9ccc61de6d2c65ba7f7a0d9531"
+      "bytes": 1218,
+      "sha256": "e8023e1e33c0aa109468e31eabddd8162998dbee609efb67935d02ecfaf9a2b8"
     },
     {
       "path": "docs/product-editor-refactor/INCIDENCIAS-PENDIENTES.md",
@@ -60017,6 +59931,90 @@
       "extension": ".md",
       "bytes": 2219,
       "sha256": "7b15eb6aac06e2400ab52f60ba1a5ee2d33d01fd6b4be101b7aca702236a9bce"
+    },
+    {
+      "path": "docs/product-editor-refactor/UNIFICACION-SEIS-FASES.md",
+      "extension": ".md",
+      "bytes": 3262,
+      "sha256": "01f9db9fb681921cb9889df9aa58915d62df7406d275fb404af91f3eeaffd5c5"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/preflight.json",
+      "extension": ".json",
+      "bytes": 1424,
+      "sha256": "d17479efe94363e15016315b745fcd000b2f3a795cb52f28df1504359c996ba8"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-fotos-1024.png",
+      "extension": ".png",
+      "bytes": 58433,
+      "sha256": "b05f684816e5c6d2be69a7ca20b51f828c905b63fe07c3d3ab4cc149ab1c687a"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-fotos-1440.png",
+      "extension": ".png",
+      "bytes": 79487,
+      "sha256": "aef5b7f8861b864c2500eb629b13062368c754307fb761e4f1d1c1fcca08b286"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-fotos-320.png",
+      "extension": ".png",
+      "bytes": 43890,
+      "sha256": "25c56e4438f12517b14d509ea069c1765e16625dbcab2d13ea4fc7b40951fc6f"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-fotos-390.png",
+      "extension": ".png",
+      "bytes": 44452,
+      "sha256": "52e8acf7a74c36f1b75b40e3fd64e6fc4a9bd72218fdbe49b19051a88446fa2d"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-fotos-600.png",
+      "extension": ".png",
+      "bytes": 46497,
+      "sha256": "1705d0eaa97a82a957f9e44f4333b836a58fa344eea2b75b9198bf8c16fa0cc6"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-fotos-768.png",
+      "extension": ".png",
+      "bytes": 47833,
+      "sha256": "e43784ec5bc00a957ffb13f9444b8f85c1733e4c01bb025e74bb5feef29d302b"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-variantes-1024.png",
+      "extension": ".png",
+      "bytes": 63230,
+      "sha256": "52e649bba6c0fe27cdea504eeeca004995914fcbfcd8603ce0ba4b082a9ff34d"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-variantes-1440.png",
+      "extension": ".png",
+      "bytes": 83262,
+      "sha256": "38d3dbac292ed6ef1fe33d471956a3a86dcbd89dd8ddfb398cd404f51f636b46"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-variantes-320.png",
+      "extension": ".png",
+      "bytes": 40765,
+      "sha256": "3c7e4085b44383c35a1a25e2408efe79861bb8738b420b0fe4f500907cb752bb"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-variantes-390.png",
+      "extension": ".png",
+      "bytes": 42400,
+      "sha256": "fa43c482332c07c06341fbc32c0ecb014e1bb8a006d5f755677ccb5a31f08764"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-variantes-600.png",
+      "extension": ".png",
+      "bytes": 53459,
+      "sha256": "6133aab20a00bf9c2403044edecbf1f1dbd5b19b2c81333f4a37bab4bfbee48e"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-version-unica/version-unica-variantes-768.png",
+      "extension": ".png",
+      "bytes": 62991,
+      "sha256": "41fe882fe91a367046f88ba391e79f5b4cffd7371c33e55672193e939ec327ce"
     },
     {
       "path": "docs/product-editor-refactor/evidencias/cancelar-1024.png",
@@ -61101,8 +61099,8 @@
     {
       "path": "js/admin/products/interfaz-productos-adaptable.js",
       "extension": ".js",
-      "bytes": 21037,
-      "sha256": "c717225626a78a911bf4ea1d71c17ffb673ba4e58426353bdccbe00566fec450"
+      "bytes": 20843,
+      "sha256": "136b37973ecd26767d188303a016cee347e0ec798e08a6c26a1d79473d875f07"
     },
     {
       "path": "js/admin/products/maestro-productos-core.mjs",
@@ -61203,8 +61201,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 137945,
-      "sha256": "9851e7dae9e49f1c32ee8289f55b23b28ae1ae53c3a9e5f0b2ba8aef7710602f"
+      "bytes": 137957,
+      "sha256": "266829585494aca53c2225556c4b8595e948814feb0310a513b9d547f7028632"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -63729,8 +63727,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 75833,
-      "sha256": "67351ceb9e43e404937368c918199311797a2cf4c7845a7a597070cf001e21f5"
+      "bytes": 75851,
+      "sha256": "740a7cbb5e535d1166857a1312a4bac974b525bac92cc0ca172dc4ccb830fbe7"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -66395,6 +66393,12 @@
       "extension": ".js",
       "bytes": 12986,
       "sha256": "d59b34a3932b6978d0e0657700707a5519e8c22b22d49c6655bfffe1fbea62fa"
+    },
+    {
+      "path": "tests/ui-ux/product-editor-single-version.spec.js",
+      "extension": ".js",
+      "bytes": 3714,
+      "sha256": "b39c48703d48e422cfb559354c510c4120533963e79e18680313c35b5d6de6be"
     },
     {
       "path": "tests/ui-ux/product-first-paint.spec.js",

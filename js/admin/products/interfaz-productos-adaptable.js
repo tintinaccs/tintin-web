@@ -244,9 +244,6 @@ function refreshSectionValues(card) {
 
 function showSection(card,value,expand=false) {
   card.querySelector('#prod-editor-section').value=value;
-  for(const step of card.querySelectorAll('[data-editor-step]')) {
-    if(step.dataset.editorStep===value)step.setAttribute('aria-current','step');else step.removeAttribute('aria-current');
-  }
   card.querySelector('.tt-editor-layout').dataset.editorSection=value;
   for (const field of card.querySelectorAll('[data-product-section]')) {
     const hidden=field.dataset.permissionHidden==='true' || value !== 'all' && field.dataset.productSection !== value && !(value==='inventory' && field.dataset.productSection==='availability');
