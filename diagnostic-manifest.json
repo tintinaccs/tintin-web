@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9029190c82297303cdae61cef2102b15d52223a962f0cabf0da170db4de38c79",
+  "sourceFingerprint": "d202c4f33a7d84905c3f838524fd0ff34ee9b21f36f6e198e8a163f42a1413d0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1570,
     "textFiles": 1439,
-    "totalBytes": 34676090,
+    "totalBytes": 34679337,
     "pages": 19,
     "modules": 1047
   },
@@ -2893,7 +2893,7 @@
         "viewer"
       ],
       "bytes": 204433,
-      "sha256": "4342bd86bb5171f5312d2267c54adfc8b4aa218abbdc25208a54b6fc2f051b48",
+      "sha256": "591f3d301f4f6969156efe11ab66300204bfd05b7c393a018291870eb48cd00c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2947,7 +2947,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261026-editor-contextual-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261026-editor-contextual-3",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -3302,7 +3302,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261026-editor-contextual-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261026-editor-contextual-3",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -28234,7 +28234,7 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 521440,
-      "sha256": "84f717e17c34b4853758140626f07daca8a7dd380c4be1c09df14c9affa951f6",
+      "sha256": "d5aeeb556f9c193710e3603dc049b5be56f9e21949e1af9d80e80bde1c983c70",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28343,7 +28343,7 @@
           "line": 17
         },
         {
-          "raw": "./products/galeria-unificada.js?v=tintin-20261026-editor-contextual-1",
+          "raw": "./products/galeria-unificada.js?v=tintin-20261026-editor-contextual-3",
           "target": "js/admin/products/galeria-unificada.js",
           "dynamic": false,
           "line": 18
@@ -30286,8 +30286,8 @@
     },
     {
       "path": "js/admin/products/galeria-unificada.js",
-      "bytes": 17490,
-      "sha256": "601e5cd6f5e632045e75a74a8beea5024f922149ab8fb328b7b2fddaacd38edb",
+      "bytes": 17503,
+      "sha256": "ebacacc8d94c133b556eac51ef93700ca26419bd96ac1a9a68583e826587ddda",
       "syntax": {
         "ok": true,
         "error": ""
@@ -56110,8 +56110,8 @@
     },
     {
       "path": "tests/ui-ux/product-photo-context.spec.js",
-      "bytes": 10720,
-      "sha256": "7f43a9f90575b26acb7065e004441585bb2f5895ab279fdf0556ff23629be45a",
+      "bytes": 12078,
+      "sha256": "0baca26b21d4f1eb60cfb5cc4abcd3db6f1fc204dde12d36ba3a9e3e8e2d6504",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57490,7 +57490,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204433,
-      "sha256": "4342bd86bb5171f5312d2267c54adfc8b4aa218abbdc25208a54b6fc2f051b48"
+      "sha256": "591f3d301f4f6969156efe11ab66300204bfd05b7c393a018291870eb48cd00c"
     },
     {
       "path": "apple-touch-icon.png",
@@ -58491,8 +58491,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1888,
-      "sha256": "9f0f717dcf246bf5971b1033d0003f2c2a36810f1a83470d09d0458b21767a63"
+      "bytes": 1887,
+      "sha256": "01225a7360b8344c9c03753a6ab6f5e9dc19ed5a7afbbf8dc0cacec78b724fab"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -58504,7 +58504,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "e031180ac5d1c4207435c60d5bce53b9d170ca0d20e227090842a2034950883e"
+      "sha256": "a4478f625cac74e745cdac7c56580f30a0d78931617f92741e1f605ffaceeac5"
     },
     {
       "path": "config/public-site.json",
@@ -59163,8 +59163,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 966499,
-      "sha256": "e7b5e865ccca914b2ba00ea4052ce00c664e5f9ff5e5cfaf59838ddac8ff8f38"
+      "bytes": 966857,
+      "sha256": "a9ff2a6a14bd6550cb54956f3bb8c13ebebccacfd7ea80e57ea46118ac24b577"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -59955,8 +59955,8 @@
     {
       "path": "docs/product-editor-refactor/EDICION-CONTEXTUAL-PRODUCTO.md",
       "extension": ".md",
-      "bytes": 6352,
-      "sha256": "03d210082b15044aa35d797e8c0dc2a43705e736b62c26d4629702759aa5beb0"
+      "bytes": 6905,
+      "sha256": "8a6bc1b6023da1c9c945f65232ebc6e4b526358448b6afb43b46e448cc4d6359"
     },
     {
       "path": "docs/product-editor-refactor/ESTADO-GENERAL.md",
@@ -60021,8 +60021,8 @@
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/contexto-600.png",
       "extension": ".png",
-      "bytes": 62848,
-      "sha256": "debea225ef9858129f9a041b02f4000c1d9df7ffe9f85dc20904625695bdb1f2"
+      "bytes": 62832,
+      "sha256": "6ab5e531bc6d942627c29f62d2a25d2bc9942364832fb41c974ccbaced3b2d80"
     },
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/contexto-768.png",
@@ -60033,8 +60033,8 @@
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/resultados.json",
       "extension": ".json",
-      "bytes": 1749,
-      "sha256": "bfe9989a3aecc7b10a8cd653673fbe2a92f57b5ea52205d95709a1fb1f644504"
+      "bytes": 1946,
+      "sha256": "983a087b0dfb9ec9f77f7206ed55b2c3164d2477a347ce5c071b3a073998fb0a"
     },
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/seleccion-1024.png",
@@ -60051,8 +60051,8 @@
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/seleccion-320.png",
       "extension": ".png",
-      "bytes": 48093,
-      "sha256": "0bef3a00ce987ac2f55c870bfd859a42524bb1aefd5d54ea2973b2df8a6ffde1"
+      "bytes": 48638,
+      "sha256": "439fba8aad1f89e3d73f7c7b232c454b4ae2ede83624118484b8cb44f3d8ed2a"
     },
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/seleccion-390.png",
@@ -60063,14 +60063,14 @@
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/seleccion-600.png",
       "extension": ".png",
-      "bytes": 58965,
-      "sha256": "431d9a9b6adb73e9f20b451a68a878844c7cebed5de0fc1461cf6154b84828d6"
+      "bytes": 59207,
+      "sha256": "3caf4e7c6f9fd4d7610ff22e71e6df15d881a8c6f54b95ac5d07f934aadb7671"
     },
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/seleccion-768.png",
       "extension": ".png",
-      "bytes": 62777,
-      "sha256": "e90b23f515330d8d43ae19b2a3ed084b86e9cfe40606949a4ff1922b717f3f08"
+      "bytes": 62775,
+      "sha256": "c20684713ccf7de626a696c0f915cf9221cd8da227a4348b5a11b4c3e22d8956"
     },
     {
       "path": "docs/product-editor-refactor/evidencias-version-unica/preflight.json",
@@ -60880,7 +60880,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 521440,
-      "sha256": "84f717e17c34b4853758140626f07daca8a7dd380c4be1c09df14c9affa951f6"
+      "sha256": "d5aeeb556f9c193710e3603dc049b5be56f9e21949e1af9d80e80bde1c983c70"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -61215,8 +61215,8 @@
     {
       "path": "js/admin/products/galeria-unificada.js",
       "extension": ".js",
-      "bytes": 17490,
-      "sha256": "601e5cd6f5e632045e75a74a8beea5024f922149ab8fb328b7b2fddaacd38edb"
+      "bytes": 17503,
+      "sha256": "ebacacc8d94c133b556eac51ef93700ca26419bd96ac1a9a68583e826587ddda"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -63862,7 +63862,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 75859,
-      "sha256": "afc92ac43e1023f44d43f5328c300c2ba616a1cd6c2d5082b93e708d4a07ff6e"
+      "sha256": "f87449e647ca3d6a804f55c75be2c424fa20340a2e692d69d32bf0c4848343a9"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -66549,8 +66549,8 @@
     {
       "path": "tests/ui-ux/product-photo-context.spec.js",
       "extension": ".js",
-      "bytes": 10720,
-      "sha256": "7f43a9f90575b26acb7065e004441585bb2f5895ab279fdf0556ff23629be45a"
+      "bytes": 12078,
+      "sha256": "0baca26b21d4f1eb60cfb5cc4abcd3db6f1fc204dde12d36ba3a9e3e8e2d6504"
     },
     {
       "path": "tests/ui-ux/product-review-rating-required.spec.js",

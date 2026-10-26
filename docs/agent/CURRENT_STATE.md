@@ -1,3 +1,10 @@
+## Ajuste final contextual — 26/10/2026
+
+Regresión reproducida con Color y Color de correa. Se separan el color principal
+y los atributos adicionales sin mezclar valores. RED1, GREEN11/11 Chromium
+completo tras el ajuste,39/39 preflight repetidos PASS_LOCAL. Candidato previo
+CI40421168969 sustituido/cancelado; sólo la nueva CI puede aprobar el merge.
+
 
 Conciliación de entrega: main0c3e4b9 (#1250/#1251) incorporado sin alterar sus
 workflows ni preparación APT. Fuentes del editor idénticas a43cf6bf. Repetidos

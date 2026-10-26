@@ -46,6 +46,7 @@ sesión autenticada siguen NO EJECUTADOS. No se hacen pagos ni pedidos reales.
 | --- | --- | --- |
 | Core comercial, editorial, workspace y13 categorías | APROBADA local58/58 | Node, cuatro archivos dirigidos; sin omisiones |
 | Editor único, ciclo editorial y nuevo bloque contextual | APROBADA local30/30 | product-editor-final, product-editor-single-version, product-photo-context; Chromium sin reintentos |
+| Bloque contextual final,11 casos incluyendo segundo atributo de color | APROBADA local11/11 | Repetición completa sin reintentos después del último ajuste |
 | Último CSS:320/390/600/768/1024/1440; selector móvil | APROBADA local8/8 | Repetición responsive-final,12capturas actuales |
 | Quitar asociación actualiza borrador por autoguardado y conserva público | APROBADA local1/1 | autosave-final, sin llamar manualmente a save |
 | Precio/stock por combinación, IDs estables y producto simple | APROBADA local | Incluidos en30/30; importes propios y total6 comprobados |
@@ -90,3 +91,9 @@ Conciliación de entrega: main0c3e4b9 (#1250/#1251) incorporado sin alterar sus
 workflows ni preparación APT. Fuentes del editor idénticas a43cf6bf. Repetidos
 build,39/39 preflight y plan protegido contra la nueva base: PASS_LOCAL.
 CI/merge/monitor del candidato combinado pendientes de confirmación externa.
+
+Ajuste final comprobado RED/GREEN: Color y Color de correa coexistentes. Sólo
+el primer atributo de color usa selección múltiple; los demás conservan el
+selector de combinación para no mezclar valores entre nombres de atributos.
+11/11 Chromium finales y39/39 preflight repetidos después del ajuste. La CI
+40421168969 quedó sustituida/cancelada; su resultado no aprueba esta entrega.

@@ -73,3 +73,13 @@ test('un reemplazo pendiente no se pierde al intentar cambiar asociaciones y qui
  await page.getByRole('button',{name:'Asociar foto 2',exact:true}).click();await expect(page.locator('.tt-unified-photos > [role=status]')).toContainText('reemplazo pendiente');await expect(page.locator('.tt-photo-context input[type=file]')).toHaveCount(1);
  await page.getByRole('button',{name:'Quitar foto 1',exact:true}).click();await page.evaluate(()=>window.qaProductController.workspace.save());await expect(page.locator('.tt-unified-photo')).toHaveCount(1);await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/two.webp');
 });
+
+test('un segundo atributo de color no mezcla sus valores con el color principal',async({page})=>{
+ const multiple={...product,variants:{Color:['Dorado','Plateado'],'Color de correa':['Negro','Blanco']}};
+ await openProductSaveFixture(page,1440,900,{fullShell:true,photos:true,workflow:true,initialRecords:[['products/qa',multiple]]});await page.evaluate(()=>window.qaProductController.workspace.ready);await page.locator('.tt-work-back').click();await page.evaluate(()=>{window.qaProductController.refresh();window.prodEditar('qa');});await page.evaluate(()=>window.qaProductController.workspace.ready);
+ await page.getByRole('checkbox',{name:'Seleccionar foto 1',exact:true}).check();await page.getByRole('checkbox',{name:'Asociar color Plateado',exact:true}).check();await page.getByLabel('Asociación: Color de correa',{exact:true}).selectOption('Negro');await page.getByRole('button',{name:'Asociar fotografías',exact:true}).click();
+ await page.evaluate(()=>window.qaProductController.workspace.save());
+ const rows=await page.evaluate(()=>[...window.qaProductStore].find(([key])=>key.includes('productEditorWorkspaces/'))[1].snapshot.variantMedia);
+ expect(rows.find(row=>row.Color==='Plateado' && row['Color de correa']==='Negro').imageUrls).toContain(product.imageUrl);
+ expect(rows.some(row=>row['Color de correa']==='Plateado')).toBe(false);
+});

@@ -49,7 +49,7 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     const preview=document.createElement('div');preview.className='tt-photo-selection-preview';for(const [index,url] of chosen.entries()){const image=document.createElement('img');image.src=url;image.alt=`Fotografía seleccionada ${index+1}`;preview.append(image);}context.append(preview,explanation);
     const picked={},colors=new Set();let colorKey='';
     for(const [key,values] of groups()){
-      if(media.isColorKey(key)){
+      if(media.isColorKey(key) && !colorKey){
         colorKey=key;const field=document.createElement('fieldset');field.className='tt-photo-color-choices';const legend=document.createElement('legend');legend.textContent=key;field.append(legend);
         for(const value of values){const label=document.createElement('label'),check=document.createElement('input');check.type='checkbox';check.setAttribute('aria-label',`Asociar color ${value}`);
           const colorRow=mediaRows.find(row=>row[key]===value && Object.keys(row).filter(k=>!metadata.has(k)).length===1),photoKeys=new Set(media.rowImages(colorRow).map(media.imageKey));
