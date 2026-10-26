@@ -1,0 +1,64 @@
+(node:79620) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/cloudflare/firebase-admin-ligero.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ portada canónica actualiza o vacía el alias histórico sin revivir fotografías (10.054213ms)
+✔ retirar y restaurar una opción preserva cantidades, precios, fotos e identidades (2.210874ms)
+✔ opciones no guardadas se pueden quitar; las guardadas siguen protegidas contra borrado físico (4.606046ms)
+✔ servidor acepta retirar venta por la ruta canónica sin permitir destruir historial (1.148532ms)
+✔ legacy convierte sin cambiar referencias, fotografías ni cero; reordenar mantiene precio y stock (0.646025ms)
+✔ matriz valida precios y referencias sin permitir degradar o eliminar historial (0.677642ms)
+✔ duplicado v2 conserva identidad local y fotos con stock cero y copia inactiva (6.209905ms)
+✔ guardado público, privado y auditoría comparten commit CAS y preservan campos desconocidos (4.101335ms)
+✔ conflicto comercial o privado rechaza antes de escribir (1.57166ms)
+✔ permisos servidor rechazan agentes, inventario privado admin y acciones revocadas (1.73737ms)
+✔ campos privados y cantidades inválidas nunca alcanzan el commit (0.671263ms)
+✔ edición masiva v2 valida todas las filas antes del commit y mantiene overrides (8.138755ms)
+✔ opciones nuevas reciben identidades opacas que sobreviven al reordenamiento (0.565683ms)
+✔ un producto nuevo admite stock no controlado; una referencia histórica finita conserva su modo (34.217674ms)
+✔ crear borradores y cambiar publicación respetan permisos separados de edición (0.911575ms)
+(node:79633) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/functions/product.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ estado y stock son independientes; borradores y archivados no son públicos aunque active esté desactualizado (1.567955ms)
+✔ SEO vacío hereda y sólo se admiten plantillas/estados definidos (3.121056ms)
+✔ estadísticas separan homónimos, variantes, pruebas, reembolsos y cancelaciones; no inventan importes (97.915648ms)
+✔ SEO editable llega a title, descripción y Open Graph sin cambiar canonical ni precio (74.799405ms)
+✔ los estados desconocidos permanecen ocultos aunque active sea true (2.184054ms)
+✔ desactivar un producto archivado conserva el archivo; activarlo es explícito (0.995341ms)
+✔ abrir y guardar el formulario real no publica un producto oculto por el indicador legacy (12.872934ms)
+✔ categoría explícita prevalece sobre nombre ambiguo (2.787654ms)
+✔ sugerencias locales pertinentes: Pulseras (2.721354ms)
+✔ sugerencias locales pertinentes: Brazaletes (0.49085ms)
+✔ sugerencias locales pertinentes: Carteras (0.195215ms)
+✔ sugerencias locales pertinentes: Aros (0.164518ms)
+✔ sugerencias locales pertinentes: Relojes (1.451159ms)
+✔ sugerencias locales pertinentes: Collares (0.081103ms)
+✔ sugerencias locales pertinentes: Anillos (0.130767ms)
+✔ material sólo afecta sugerencias al estar informado (1.105196ms)
+✔ producto desconocido conserva alternativa manual sin inventar clasificación (0.128914ms)
+(node:79645) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/cloudflare/firebase-admin-ligero.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ nuevo incompleto es progreso privado, no producto ni inventario; reabrir y listar (63.9012ms)
+✔ reintento idempotente y dos pestañas: un único avance, revisión vieja rechazada (11.025208ms)
+✔ publicado conserva versión pública; publicar cierra progreso y audita atómicamente (16.881959ms)
+✔ cambio público o inventario privado impide aplicar; el progreso sigue recuperable (51.942655ms)
+✔ nuevo sólo se publica completo y no duplica al reintentar aplicación (6.752192ms)
+✔ writer V1 conserva la intención canónica de reposición sin alterar prioridad comercial (4.345313ms)
+✔ propietario y privilegios: sin acceso cruzado ni campos privados al bajar rol (6.476027ms)
+✔ permisos de crear/editar se revisan al leer y escribir; listar admite rol sólo editor (5.57651ms)
+✔ descartar conserva tombstone e historial y no toca versión publicada ni archivos (2.578628ms)
+✔ límites, campos desconocidos, URLs temporales e identidades inválidas (5.717703ms)
+✔ listado pagina sin truncar a100/1000, mantiene permisos y restringe siempre al dueño autenticado (4.45561ms)
+✔ fotos de progreso privado bloquean borrado entre cuentas y páginas; error impide continuar (3.539778ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1100.719865

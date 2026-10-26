@@ -40,7 +40,7 @@ export function loadPageMaintenance() {
   if (/\/login(?:\.html)?$/.test(path)) {
     return load('pages/login/mantenimiento-acceso.js', 'tintin-20261022-avatar-inicial-1');
   }
-  if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261008-producto-superficies-1-first-render-merge-20261010-1');
+  if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261026-profile-save-1');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-20261016-story-2bbd366911');
   if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', 'tintin-20261017-domain-cutover-1');
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {

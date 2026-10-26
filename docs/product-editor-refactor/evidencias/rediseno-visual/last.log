@@ -1,0 +1,23 @@
+
+Running 13 tests using 1 worker
+
+(node:93541) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 320x700 (4.7s)
+  ✓   2 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 390x844 (5.2s)
+  ✓   3 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 844x390 (3.7s)
+  ✓   4 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 768x1024 (4.1s)
+  ✓   5 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 1024x768 (4.3s)
+  ✓   6 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 1440x900 (4.1s)
+  ✓   7 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:78:1 › reconocimiento real local: carteras, relojes y abstención sin API externa (13.5s)
+(node:93541) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/cloudflare/firebase-admin-ligero.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+  ✓   8 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 320 (6.7s)
+  ✓   9 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 390 (6.8s)
+  ✓  10 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 600 (8.1s)
+  ✓  11 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 768 (7.0s)
+  ✓  12 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 1024 (7.8s)
+  ✓  13 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 1440 (9.4s)
+
+  13 passed (1.5m)

@@ -795,3 +795,8 @@ La continuación también preserva cantidades pendientes V1 antes de filtrar una
 opción nueva:2 unidades no se descartan al quitar una entre varias opciones.
 Regresión negativa reproducida y repetida tras el guard; no cambia el motor
 compartido, la disponibilidad de filas históricas ni checkout.
+
+
+### 26/10/2026 — Seguimiento histórico y guardado seguro de Perfil
+
+Nueva rama desde main1245, sin portar código antiguo. Perfil valida antes de reservar identidades y conserva las reservas anteriores ante fallo; libera sólo tras setDoc confirmado. El handler administra la operación pendiente en lugar del timeout1800ms de mantenimiento y descarta UI/continuaciones de otra generación/UID. Consume las funciones reserve/release existentes; Rules/validación/roles sin cambios. Seis regresiones nuevas en test:login-profile, render inicial/direcciones y contratos de dominio. Versiones transitivas, shell, CSP, caché, plan y manifiestos desde autoridades; plan calculado después del build final. Actions antiguas canceladas e issues conciliados con evidencia externa; activaciones/manuales no certificadas por pruebas aisladas.

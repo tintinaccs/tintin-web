@@ -35,7 +35,8 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
   }
 
   function guardAsyncActions() {
-    const ids = ['btn-guardar-perfil','btn-logout','btn-borrar-ubicacion'];
+    // Guardar perfil controla su operación real en perfil.html; no usa un timeout.
+    const ids = ['btn-logout','btn-borrar-ubicacion'];
     const timers = new Map();
     function release(button) {
       const timer = timers.get(button.id);

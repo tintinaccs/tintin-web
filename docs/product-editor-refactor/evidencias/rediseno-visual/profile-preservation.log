@@ -1,0 +1,18 @@
+(node:96434) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/js/components/forms/utilidades-telefono.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ nombre inválido no reserva ni libera identidades antes de validar el formulario completo (3.19654ms)
+✔ un fallo al persistir conserva ambas reservas anteriores (1.320291ms)
+✔ libera reservas anteriores sólo después de confirmar el perfil y sincroniza sus campos (1.039968ms)
+✔ dos activaciones durante una escritura lenta comparten un único guardado (4.070107ms)
+✔ una confirmación tardía de otra sesión no modifica ni habilita la interfaz actual (1.274061ms)
+✔ el mantenimiento no libera Guardar con el timeout de 1800ms mientras persiste (2.35412ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 74.994172

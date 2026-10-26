@@ -1,3 +1,11 @@
+## Continuidad visual26/10/2026
+
+Nueva distribución por secciones, vista previa separada y publicación/SEO dentro
+de Organización. Mismos IDs, controles, serializer, workspace y contratos. Sin
+checkout, pagos, backend, reglas ni cambios de datos. Base incluye#1244,#1245 y
+#1246; fuente de Perfil idéntica a main. Referencias transitivas de caché coherentes.
+Detalle en08 y conciliación general en09.
+
 # Cambios y compatibilidad
 
 Base `5dc6f781` · rama `codex/editor-fase6-integracion-20261026`.

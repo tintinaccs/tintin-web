@@ -1,12 +1,12 @@
 # Estado vigente — rediseño visual y continuidad
 
 Actualización26/10/2026. Fase6 funcional ya está fusionada mediante#1244
-(8e9225038), con CI y monitor productivo aprobados. La base incluye#1245
-(ed574b1c5). El pedido posterior exige una reorganización visual importante y
+(8e9225038), con CI y monitor productivo aprobados. La base incluye#1245 y#1246
+(e78a9de2f), preservando también la reparación de Perfil. El pedido posterior exige una reorganización visual importante y
 se implementa en `codex/editor-rediseno-visible-20261026`.
 
-Estado del nuevo diseño: implementación terminada, aceptación local e integración
-en curso; no se atribuye al rediseño la CI anterior. Evidencia nueva y límites en
+Estado del nuevo diseño: PASS_LOCAL (333 casos con última ejecución aprobada,
+44+6Node,39preflight); integración protegida en curso; no se atribuye al rediseño la CI anterior. Evidencia nueva y límites en
 [08-REDISENO-VISUAL.md](08-REDISENO-VISUAL.md). Conciliación del último adjunto y
 los pendientes generales en [09-CONCILIACION-AVANCES-GENERALES.md](09-CONCILIACION-AVANCES-GENERALES.md).
 

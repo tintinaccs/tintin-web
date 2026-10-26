@@ -1,3 +1,14 @@
+## Estado posterior al rediseño visual26/10/2026
+
+No quedan fallos reproducibles del rediseño en los333 casos con último resultado
+aprobado. Los7 fallos por servidor de QA detenido y las expectativas antiguas de
+fixtures quedan registrados con su repetición; no se declaran PASS históricos.
+Sigue sin ejecutarse aceptación con dispositivos físicos, sesión real y proveedores.
+Los seguimientos PayPal#372, Push#373, recuperación#312 y aceptación real de
+Perfil#735 permanecen abiertos;#803/#374 cerrados. No se activan ni reintroducen
+ramas antiguas. Integración/monitor del nuevo candidato: pendientes al publicar.
+Detalle y evidencia en08/09; incidencias históricas de la fase anterior abajo.
+
 # Incidencias pendientes y condiciones de publicación
 
 Los resultados locales concretos están en MATRIZ-PRUEBAS-FINAL.md. Esta lista no

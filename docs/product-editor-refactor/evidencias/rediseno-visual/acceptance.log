@@ -1,0 +1,484 @@
+
+Running 333 tests using 2 workers
+
+(node:79006) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:79007) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:79007) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/cloudflare/firebase-admin-ligero.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+  ✓    1 [chromium] › tests/ui-ux/product-editor-final.spec.js:7:1 › galería: eventos sin cambios conservan nodos y foco (3.8s)
+  ✓    2 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:12:118 › editor Tintin app: foco, sugerencias y campos preservados 320x568 (4.7s)
+  ✓    4 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:12:118 › editor Tintin app: foco, sugerencias y campos preservados 390x844 (3.3s)
+  ✓    3 [chromium] › tests/ui-ux/product-editor-final.spec.js:23:48 › ciclo editorial y diálogo sin pérdida 320 (5.5s)
+  ✓    5 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:12:118 › editor Tintin app: foco, sugerencias y campos preservados 844x390 (3.9s)
+  ✓    6 [chromium] › tests/ui-ux/product-editor-final.spec.js:23:48 › ciclo editorial y diálogo sin pérdida 390 (5.0s)
+  ✓    7 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:12:118 › editor Tintin app: foco, sugerencias y campos preservados 768x1024 (4.0s)
+  ✓    9 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:12:118 › editor Tintin app: foco, sugerencias y campos preservados 1024x768 (4.2s)
+  ✓    8 [chromium] › tests/ui-ux/product-editor-final.spec.js:23:48 › ciclo editorial y diálogo sin pérdida 600 (6.8s)
+  ✓   10 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:12:118 › editor Tintin app: foco, sugerencias y campos preservados 1366x768 (6.0s)
+  ✓   11 [chromium] › tests/ui-ux/product-editor-final.spec.js:23:48 › ciclo editorial y diálogo sin pérdida 768 (7.2s)
+  ✓   12 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:12:118 › editor Tintin app: foco, sugerencias y campos preservados 1920x1080 (5.8s)
+  ✓   13 [chromium] › tests/ui-ux/product-editor-final.spec.js:23:48 › ciclo editorial y diálogo sin pérdida 1024 (8.3s)
+  ✓   14 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:12:118 › editor Tintin app: foco, sugerencias y campos preservados 3840x2160 (6.1s)
+  ✘   16 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 320x700 (1.1s)
+(node:80296) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   17 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 390x844 (994ms)
+(node:80480) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   18 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 844x390 (811ms)
+(node:80628) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   15 [chromium] › tests/ui-ux/product-editor-final.spec.js:23:48 › ciclo editorial y diálogo sin pérdida 1440 (8.8s)
+  ✘   19 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 768x1024 (1.2s)
+(node:80853) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   21 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 1024x768 (722ms)
+(node:80981) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   20 [chromium] › tests/ui-ux/product-editor-final.spec.js:50:1 › descartar es explícito y un error de escritura conserva el borrador (5.3s)
+  ✘   22 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 1440x900 (675ms)
+(node:81138) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   24 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:78:1 › reconocimiento real local: carteras, relojes y abstención sin API externa (796ms)
+(node:81281) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   25 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:101:74 › editor Apple-inspired: resúmenes, teclado y movimiento reducido 320x700 (3.4s)
+  ✓   23 [chromium] › tests/ui-ux/product-editor-final.spec.js:60:1 › retiro y restauración de opción guardada preserva el producto público hasta guardar (8.3s)
+  ✓   26 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:101:74 › editor Apple-inspired: resúmenes, teclado y movimiento reducido 768x1024 (3.8s)
+  ✓   28 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:101:74 › editor Apple-inspired: resúmenes, teclado y movimiento reducido 1024x768 (3.2s)
+  ✓   27 [chromium] › tests/ui-ux/product-editor-final.spec.js:77:1 › reabrir administrador recupera servidor y respaldo de sesión sin publicar (5.8s)
+  ✓   29 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:101:74 › editor Apple-inspired: resúmenes, teclado y movimiento reducido 1440x900 (4.6s)
+  ✓   31 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:136:106 › editor contraste Tintin: ejemplos, superficies y foco 320x700 (2.3s)
+  ✓   30 [chromium] › tests/ui-ux/product-editor-final.spec.js:87:1 › reabrir cinco veces no multiplica escrituras del borrador (7.9s)
+  ✓   32 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:136:106 › editor contraste Tintin: ejemplos, superficies y foco 390x844 (3.1s)
+  ✓   34 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:136:106 › editor contraste Tintin: ejemplos, superficies y foco 844x390 (2.2s)
+  ✓   33 [chromium] › tests/ui-ux/product-editor-final.spec.js:99:1 › reflujo equivalente a zoom 200%, orientación y táctil conservan acciones (4.3s)
+  ✓   35 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:136:106 › editor contraste Tintin: ejemplos, superficies y foco 768x1024 (3.0s)
+  ✓   37 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:136:106 › editor contraste Tintin: ejemplos, superficies y foco 1024x768 (2.3s)
+  ✓   36 [chromium] › tests/ui-ux/product-editor-final.spec.js:114:1 › salida con escritura en vuelo bloquea decisiones contradictorias (5.3s)
+  ✓   38 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:136:106 › editor contraste Tintin: ejemplos, superficies y foco 1440x900 (3.1s)
+  ✓   39 [chromium] › tests/ui-ux/product-editor-final.spec.js:123:1 › quitar una opción nueva no pierde cantidades de una matriz histórica de stock (4.2s)
+  ✓   40 [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:136:106 › editor contraste Tintin: ejemplos, superficies y foco 1920x1080 (3.2s)
+  ✓   41 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 320 (3.9s)
+  ✓   42 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 320x568 › nuevo producto real: opciones y guardado 320x568 (3.4s)
+  ✓   43 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 390 (3.7s)
+(node:81281) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/cloudflare/firebase-admin-ligero.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+  ✓   44 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 320x568 › activar precios por combinación conserva las cantidades recién editadas (4.2s)
+  ✓   45 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 600 (3.8s)
+  ✓   46 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 320x568 › color opcional sin reparto de stock y básicos de publicación (4.1s)
+  ✓   47 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 768 (3.4s)
+  ✓   48 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 320x568 › doble toque o doble clic mientras guarda crea un solo producto (2.8s)
+  ✓   49 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 1024 (3.9s)
+  ✓   50 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 320x568 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (3.3s)
+  ✓   51 [chromium] › tests/ui-ux/product-editor-studio.spec.js:5:48 › espacio de edición visual 1440 (4.2s)
+  ✓   52 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 320x568 › reabrir lo guardado y editar usa el mismo producto (3.2s)
+  ✓   54 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 320x568 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (2.9s)
+  ✓   55 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 320x568 › quitar una opción con stock conserva datos y explica cómo corregirla (2.6s)
+  ✓   56 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 320x568 › cada intento inválido muestra el error aunque se haya desplazado el formulario (2.0s)
+  ✓   53 [chromium] › tests/ui-ux/product-workspaces.spec.js:9:1 › crear incompleto, salir, recuperar, publicar, editar sin reemplazar público y recuperar cambios (9.1s)
+  ✓   57 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 390x844 › nuevo producto real: opciones y guardado 390x844 (4.1s)
+  ✓   58 [chromium] › tests/ui-ux/product-workspaces.spec.js:26:1 › fallo de red conserva trabajo pendiente, bloquea salida silenciosa y reintenta (5.8s)
+  ✓   59 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 390x844 › activar precios por combinación conserva las cantidades recién editadas (3.2s)
+  ✓   60 [chromium] › tests/ui-ux/product-workspaces.spec.js:31:1 › publicación en vuelo bloquea doble acción y salida, sin duplicar producto (3.6s)
+  ✓   61 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 390x844 › color opcional sin reparto de stock y básicos de publicación (4.3s)
+  ✓   63 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 390x844 › doble toque o doble clic mientras guarda crea un solo producto (2.4s)
+  ✓   62 [chromium] › tests/ui-ux/product-workspaces.spec.js:41:1 › Borradores lista progreso privado y permite continuar sin inventario público ficticio (5.5s)
+  ✓   64 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 390x844 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (3.3s)
+  ✓   66 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 390x844 › reabrir lo guardado y editar usa el mismo producto (3.0s)
+  ✓   65 [chromium] › tests/ui-ux/product-workspaces.spec.js:57:1 › conflicto de progreso no pisa otra pestaña y no publica (5.0s)
+  ✓   67 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 390x844 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (3.2s)
+  ✓   69 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 390x844 › quitar una opción con stock conserva datos y explica cómo corregirla (2.4s)
+  ✓   70 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 390x844 › cada intento inválido muestra el error aunque se haya desplazado el formulario (1.9s)
+  ✓   68 [chromium] › tests/ui-ux/product-workspaces.spec.js:63:1 › fotos pendientes: fallo guarda texto, recuperar advierte y reintento/cancelación no pierde fotos previas (7.8s)
+  ✓   71 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 430x932 › nuevo producto real: opciones y guardado 430x932 (3.6s)
+  ✓   72 [chromium] › tests/ui-ux/product-workspaces.spec.js:76:1 › archivar y restaurar exige acción explícita y no cambia stock (4.8s)
+  ✓   73 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 430x932 › activar precios por combinación conserva las cantidades recién editadas (3.6s)
+  ✓   74 [chromium] › tests/ui-ux/product-workspaces.spec.js:86:95 › espacio dedicado 320x568 (2.7s)
+  ✓   76 [chromium] › tests/ui-ux/product-workspaces.spec.js:86:95 › espacio dedicado 390x844 (2.3s)
+  ✓   75 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 430x932 › color opcional sin reparto de stock y básicos de publicación (3.9s)
+  ✓   78 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 430x932 › doble toque o doble clic mientras guarda crea un solo producto (3.1s)
+  ✓   77 [chromium] › tests/ui-ux/product-workspaces.spec.js:86:95 › espacio dedicado 844x390 (3.4s)
+  ✓   79 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 430x932 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (3.0s)
+  ✓   80 [chromium] › tests/ui-ux/product-workspaces.spec.js:86:95 › espacio dedicado 768x1024 (3.0s)
+  ✓   81 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 430x932 › reabrir lo guardado y editar usa el mismo producto (3.1s)
+  ✓   82 [chromium] › tests/ui-ux/product-workspaces.spec.js:86:95 › espacio dedicado 1366x768 (3.0s)
+  ✓   83 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 430x932 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (3.2s)
+  ✓   84 [chromium] › tests/ui-ux/product-workspaces.spec.js:86:95 › espacio dedicado 1920x1080 (3.5s)
+  ✓   85 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 430x932 › quitar una opción con stock conserva datos y explica cómo corregirla (3.6s)
+  ✓   86 [chromium] › tests/ui-ux/product-workspaces.spec.js:94:95 › progreso y acciones con altura reducida 320x568 (5.2s)
+  ✓   87 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 430x932 › cada intento inválido muestra el error aunque se haya desplazado el formulario (3.7s)
+  ✓   88 [chromium] › tests/ui-ux/product-workspaces.spec.js:94:95 › progreso y acciones con altura reducida 390x844 (6.6s)
+  ✓   89 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 844x390 › nuevo producto real: opciones y guardado 844x390 (6.1s)
+  ✓   90 [chromium] › tests/ui-ux/product-workspaces.spec.js:94:95 › progreso y acciones con altura reducida 844x390 (5.8s)
+  ✓   91 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 844x390 › activar precios por combinación conserva las cantidades recién editadas (6.1s)
+  ✓   92 [chromium] › tests/ui-ux/product-workspaces.spec.js:94:95 › progreso y acciones con altura reducida 768x1024 (6.8s)
+  ✓   93 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 844x390 › color opcional sin reparto de stock y básicos de publicación (7.3s)
+  ✓   95 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 844x390 › doble toque o doble clic mientras guarda crea un solo producto (5.0s)
+  ✓   94 [chromium] › tests/ui-ux/product-workspaces.spec.js:94:95 › progreso y acciones con altura reducida 1024x768 (7.3s)
+  ✓   96 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 844x390 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (5.8s)
+  ✓   97 [chromium] › tests/ui-ux/product-workspaces.spec.js:94:95 › progreso y acciones con altura reducida 1920x1080 (8.6s)
+  ✓   98 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 844x390 › reabrir lo guardado y editar usa el mismo producto (5.5s)
+  ✓   99 [chromium] › tests/ui-ux/product-workspaces.spec.js:110:30 › sección elegida legible sin recorte 320 (5.3s)
+  ✓  100 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 844x390 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (4.0s)
+  ✓  101 [chromium] › tests/ui-ux/product-workspaces.spec.js:110:30 › sección elegida legible sin recorte 390 (3.7s)
+  ✓  102 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 844x390 › quitar una opción con stock conserva datos y explica cómo corregirla (3.4s)
+  ✓  103 [chromium] › tests/ui-ux/product-workspaces.spec.js:125:32 › acciones compactas junto al título en escritorio 1366 (3.3s)
+  ✓  104 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 844x390 › cada intento inválido muestra el error aunque se haya desplazado el formulario (3.0s)
+  ✓  105 [chromium] › tests/ui-ux/product-workspaces.spec.js:125:32 › acciones compactas junto al título en escritorio 1920 (3.3s)
+  ✓  106 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 768x1024 › nuevo producto real: opciones y guardado 768x1024 (4.4s)
+  ✓  108 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 768x1024 › activar precios por combinación conserva las cantidades recién editadas (3.4s)
+  ✓  107 [chromium] › tests/ui-ux/product-workspaces.spec.js:133:1 › Borradores carga páginas, conserva la lista tras fallo y reintenta el mismo cursor sin duplicar (5.5s)
+  ✓  110 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:12:106 › foto local visible y guardado espera subida en producto y colección 320x700 (2.6s)
+  ✓  109 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 768x1024 › color opcional sin reparto de stock y básicos de publicación (4.6s)
+  ✓  111 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:12:106 › foto local visible y guardado espera subida en producto y colección 390x844 (2.4s)
+  ✓  113 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:12:106 › foto local visible y guardado espera subida en producto y colección 844x390 (2.3s)
+  ✓  112 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 768x1024 › doble toque o doble clic mientras guarda crea un solo producto (3.5s)
+  ✓  114 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:12:106 › foto local visible y guardado espera subida en producto y colección 768x1024 (2.6s)
+  ✓  115 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 768x1024 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (3.6s)
+  ✓  116 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:12:106 › foto local visible y guardado espera subida en producto y colección 1024x768 (2.6s)
+  ✓  118 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:12:106 › foto local visible y guardado espera subida en producto y colección 1366x768 (2.4s)
+  ✓  117 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 768x1024 › reabrir lo guardado y editar usa el mismo producto (3.6s)
+  ✓  119 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:12:106 › foto local visible y guardado espera subida en producto y colección 1920x1080 (3.0s)
+  ✓  120 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 768x1024 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (3.7s)
+  ✓  122 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 768x1024 › quitar una opción con stock conserva datos y explica cómo corregirla (2.7s)
+  ✓  121 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 320x568 (4.5s)
+  ✓  123 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 768x1024 › cada intento inválido muestra el error aunque se haya desplazado el formulario (2.7s)
+  ✓  124 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 390x844 (4.0s)
+  ✓  125 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 820x1180 › nuevo producto real: opciones y guardado 820x1180 (3.4s)
+  ✓  126 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 667x375 (4.8s)
+  ✓  127 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 820x1180 › activar precios por combinación conserva las cantidades recién editadas (4.1s)
+  ✓  128 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 768x1024 (5.7s)
+  ✓  129 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 820x1180 › color opcional sin reparto de stock y básicos de publicación (6.3s)
+  ✓  131 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 820x1180 › doble toque o doble clic mientras guarda crea un solo producto (3.2s)
+  ✓  130 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 820x1180 (5.1s)
+  ✓  132 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 820x1180 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (3.4s)
+  ✓  133 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 1024x768 (4.8s)
+  ✓  134 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 820x1180 › reabrir lo guardado y editar usa el mismo producto (3.0s)
+  ✓  136 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 820x1180 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (2.9s)
+  ✓  135 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 1180x820 (5.1s)
+  ✓  137 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 820x1180 › quitar una opción con stock conserva datos y explica cómo corregirla (3.3s)
+  ✓  139 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 820x1180 › cada intento inválido muestra el error aunque se haya desplazado el formulario (3.0s)
+  ✓  138 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 1280x720 (6.5s)
+  ✓  140 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 1024x768 › nuevo producto real: opciones y guardado 1024x768 (5.8s)
+  ✓  141 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 1366x768 (5.6s)
+  ✓  142 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 1024x768 › activar precios por combinación conserva las cantidades recién editadas (6.9s)
+  ✓  143 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 1440x900 (7.1s)
+  ✓  144 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 1024x768 › color opcional sin reparto de stock y básicos de publicación (7.8s)
+  ✓  145 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:98:2 › editor minimal: botones, stock y tarjetas accesibles 1920x1080 (7.2s)
+  ✓  146 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 1024x768 › doble toque o doble clic mientras guarda crea un solo producto (4.2s)
+  ✓  147 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:141:1 › variantes visuales conservan formatos previos y bloquean controles del total distribuido (3.1s)
+  ✓  149 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:158:2 › editor real por secciones conserva campos y acciones 320x700 (3.4s)
+  ✓  148 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 1024x768 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (4.7s)
+  ✓  150 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:158:2 › editor real por secciones conserva campos y acciones 390x844 (3.4s)
+  ✓  151 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 1024x768 › reabrir lo guardado y editar usa el mismo producto (4.5s)
+  ✓  152 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:158:2 › editor real por secciones conserva campos y acciones 844x390 (2.8s)
+  ✓  153 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 1024x768 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (3.8s)
+  ✓  154 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:158:2 › editor real por secciones conserva campos y acciones 768x1024 (3.6s)
+  ✓  156 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:158:2 › editor real por secciones conserva campos y acciones 1024x768 (4.0s)
+  ✓  155 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 1024x768 › quitar una opción con stock conserva datos y explica cómo corregirla (4.3s)
+  ✓  158 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 1024x768 › cada intento inválido muestra el error aunque se haya desplazado el formulario (3.5s)
+  ✓  157 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:158:2 › editor real por secciones conserva campos y acciones 1440x900 (4.4s)
+  ✓  160 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:187:2 › la navegación autenticada no tapa las acciones del editor 320x568 (2.6s)
+  ✓  159 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 1180x820 › nuevo producto real: opciones y guardado 1180x820 (5.6s)
+  ✓  161 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:187:2 › la navegación autenticada no tapa las acciones del editor 390x844 (2.4s)
+  ✓  163 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:187:2 › la navegación autenticada no tapa las acciones del editor 768x1024 (2.8s)
+  ✓  164 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:187:2 › la navegación autenticada no tapa las acciones del editor 1024x768 (2.4s)
+  ✓  162 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 1180x820 › activar precios por combinación conserva las cantidades recién editadas (6.3s)
+  ✓  165 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:187:2 › la navegación autenticada no tapa las acciones del editor 1180x820 (3.1s)
+  ✓  167 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:187:2 › la navegación autenticada no tapa las acciones del editor 844x390 (1.8s)
+  ✓  166 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 1180x820 › color opcional sin reparto de stock y básicos de publicación (5.7s)
+  ✓  168 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:206:1 › configurar stock por color exige cantidades explícitas y recalcula total y vista previa (3.0s)
+  ✓  170 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:229:53 › producto nuevo en tablet agrega opciones sin evaluar variantes nulas 768x1024 (2.1s)
+  ✓  169 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 1180x820 › doble toque o doble clic mientras guarda crea un solo producto (3.5s)
+  ✓  171 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:229:53 › producto nuevo en tablet agrega opciones sin evaluar variantes nulas 1024x768 (2.7s)
+  ✓  172 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 1180x820 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (4.0s)
+  ✓  173 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:248:2 › editor conserva navegación y acciones accesibles al abrir y cerrar 390 (2.2s)
+  ✓  175 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:248:2 › editor conserva navegación y acciones accesibles al abrir y cerrar 775 (1.9s)
+  ✓  174 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 1180x820 › reabrir lo guardado y editar usa el mismo producto (4.4s)
+  ✓  176 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:248:2 › editor conserva navegación y acciones accesibles al abrir y cerrar 1024 (1.8s)
+  ✓  177 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 1180x820 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (3.0s)
+  ✓  178 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:269:1 › selección persiste al filtrar; barra móvil, lista y foco de búsqueda operan sin perder datos (3.9s)
+  ✓  180 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:283:1 › ficha móvil a pantalla completa atrapa Tab, cierra con Escape y devuelve el foco (1.9s)
+  ✓  179 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 1180x820 › quitar una opción con stock conserva datos y explica cómo corregirla (3.1s)
+  ✓  181 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:293:1 › foto vertical, horizontal y faltante no se recorta ni invade controles (2.3s)
+  ✓  182 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 1180x820 › cada intento inválido muestra el error aunque se haya desplazado el formulario (3.0s)
+  ✓  183 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:308:1 › la biblioteca queda sobre el editor y Escape cierra sólo la biblioteca (2.2s)
+  ✓  185 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:319:1 › cancelar respeta el guard nativo: seguir editando conserva datos y descartar vuelve al listado (2.1s)
+  ✓  184 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 1280x720 › nuevo producto real: opciones y guardado 1280x720 (4.6s)
+  ✓  186 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:337:1 › validación revela campos y pone el mensaje en foco sin perder valores (2.0s)
+  ✓  188 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:343:1 › selección entre páginas y barra sobre navegación sin tapar el último producto (2.3s)
+  ✓  187 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 1280x720 › activar precios por combinación conserva las cantidades recién editadas (4.7s)
+  ✓  189 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:358:1 › foto principal completa en editor real y rotación conserva borrador y acciones superiores (1.5s)
+  ✓  191 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:367:1 › salir de Productos libera el scroll y regresar conserva el editor visible (1.8s)
+  ✓  192 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:377:2 › vista previa conectada, cantidades y fotos sin desbordes 320x700 (2.3s)
+  ✓  190 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 1280x720 › color opcional sin reparto de stock y básicos de publicación (4.4s)
+  ✓  193 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:377:2 › vista previa conectada, cantidades y fotos sin desbordes 390x844 (3.2s)
+  ✓  194 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 1280x720 › doble toque o doble clic mientras guarda crea un solo producto (3.5s)
+  ✓  195 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:377:2 › vista previa conectada, cantidades y fotos sin desbordes 600x900 (2.9s)
+  ✓  196 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 1280x720 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (3.6s)
+  ✓  197 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:377:2 › vista previa conectada, cantidades y fotos sin desbordes 768x1024 (3.0s)
+  ✓  198 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 1280x720 › reabrir lo guardado y editar usa el mismo producto (4.1s)
+  ✓  199 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:377:2 › vista previa conectada, cantidades y fotos sin desbordes 820x1180 (3.3s)
+  ✓  200 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 1280x720 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (3.2s)
+  ✓  201 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:377:2 › vista previa conectada, cantidades y fotos sin desbordes 1024x768 (3.4s)
+  ✓  202 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 1280x720 › quitar una opción con stock conserva datos y explica cómo corregirla (3.5s)
+  ✓  203 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:377:2 › vista previa conectada, cantidades y fotos sin desbordes 1180x820 (3.4s)
+  ✓  204 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 1280x720 › cada intento inválido muestra el error aunque se haya desplazado el formulario (3.0s)
+  ✓  205 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:377:2 › vista previa conectada, cantidades y fotos sin desbordes 1366x768 (3.9s)
+  ✓  206 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 1366x768 › nuevo producto real: opciones y guardado 1366x768 (4.5s)
+  ✓  207 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:377:2 › vista previa conectada, cantidades y fotos sin desbordes 1440x900 (3.7s)
+  ✓  209 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:377:2 › vista previa conectada, cantidades y fotos sin desbordes 1920x1080 (3.5s)
+  ✓  208 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 1366x768 › activar precios por combinación conserva las cantidades recién editadas (4.8s)
+  ✓  210 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:429:1 › galería agrega varias fotos y quita la elegida sin borrar fotos pendientes ni cambiar la portada (3.1s)
+  ✓  211 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 1366x768 › color opcional sin reparto de stock y básicos de publicación (4.9s)
+  ✓  212 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:470:39 › controles seleccionados conservan texto legible con el tema real 1200 (3.5s)
+  ✓  213 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 1366x768 › doble toque o doble clic mientras guarda crea un solo producto (3.2s)
+  ✓  214 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:470:39 › controles seleccionados conservan texto legible con el tema real 1440 (4.0s)
+  ✓  215 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 1366x768 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (3.4s)
+  ✓  216 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:470:39 › controles seleccionados conservan texto legible con el tema real 1920 (4.3s)
+  ✓  217 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 1366x768 › reabrir lo guardado y editar usa el mismo producto (3.6s)
+  ✓  218 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:493:41 › cambiar apartado reinicia el editor sin perder el borrador 320 (2.4s)
+  ✓  219 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 1366x768 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (3.3s)
+  ✓  220 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:493:41 › cambiar apartado reinicia el editor sin perder el borrador 390 (2.0s)
+  ✓  222 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:493:41 › cambiar apartado reinicia el editor sin perder el borrador 768 (2.1s)
+  ✓  221 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 1366x768 › quitar una opción con stock conserva datos y explica cómo corregirla (3.7s)
+  ✓  223 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:493:41 › cambiar apartado reinicia el editor sin perder el borrador 1440 (2.6s)
+  ✓  224 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 1366x768 › cada intento inválido muestra el error aunque se haya desplazado el formulario (2.8s)
+EDITOR_PROFILE {"photoCount":1,"openMs":1523.5809930000105,"photos":{"ms":62.80000000074506,"mutationRecords":7,"addedNodes":6},"color":{"ms":66.19999999925494,"mutationRecords":13,"addedNodes":9},"stock":{"ms":70.5,"mutationRecords":3,"addedNodes":3},"longTasks":[],"heapBytes":4035894}
+  ✓  225 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:511:36 › perfil sintético del editor con 1 fotografías (2.1s)
+EDITOR_PROFILE {"photoCount":2,"openMs":1356.9856010000221,"photos":{"ms":27,"mutationRecords":7,"addedNodes":6},"color":{"ms":91.40000000037253,"mutationRecords":14,"addedNodes":10},"stock":{"ms":36.19999999925494,"mutationRecords":3,"addedNodes":3},"longTasks":[],"heapBytes":4054064}
+  ✓  227 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:511:36 › perfil sintético del editor con 2 fotografías (1.9s)
+EDITOR_PROFILE {"photoCount":5,"openMs":1145.495408000017,"photos":{"ms":30.90000000037253,"mutationRecords":7,"addedNodes":6},"color":{"ms":64.59999999962747,"mutationRecords":17,"addedNodes":13},"stock":{"ms":54.09999999962747,"mutationRecords":3,"addedNodes":3},"longTasks":[],"heapBytes":4097404}
+  ✓  228 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:511:36 › perfil sintético del editor con 5 fotografías (1.6s)
+  ✓  226 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 1440x900 › nuevo producto real: opciones y guardado 1440x900 (5.1s)
+EDITOR_PROFILE {"photoCount":10,"openMs":1749.2961430000141,"photos":{"ms":33.70000000111759,"mutationRecords":7,"addedNodes":6},"color":{"ms":189.69999999925494,"mutationRecords":22,"addedNodes":18},"stock":{"ms":90,"mutationRecords":3,"addedNodes":3},"longTasks":[70,101],"heapBytes":4066897}
+  ✓  229 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:511:36 › perfil sintético del editor con 10 fotografías (2.5s)
+EDITOR_PROFILE {"photoCount":20,"openMs":1254.045118000009,"photos":{"ms":50.80000000074506,"mutationRecords":7,"addedNodes":6},"color":{"ms":149,"mutationRecords":32,"addedNodes":28},"stock":{"ms":69.29999999888241,"mutationRecords":3,"addedNodes":3},"longTasks":[102,50],"heapBytes":4266479}
+  ✓  231 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:511:36 › perfil sintético del editor con 20 fotografías (1.9s)
+  ✓  230 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 1440x900 › activar precios por combinación conserva las cantidades recién editadas (5.2s)
+  ✓  232 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:536:1 › un error persistente no reinicia scroll ni foco al editar precio (2.2s)
+  ✓  234 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:555:1 › abrir conserva producto oculto y visibilidad manual independiente de la cantidad (2.5s)
+  ✓  233 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 1440x900 › color opcional sin reparto de stock y básicos de publicación (4.6s)
+  ✓  235 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:580:128 › editor ocupa el área bajo Productos sin barras anidadas 320x568 (2.3s)
+  ✓  236 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 1440x900 › doble toque o doble clic mientras guarda crea un solo producto (3.1s)
+  ✓  237 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:580:128 › editor ocupa el área bajo Productos sin barras anidadas 390x844 (2.1s)
+  ✓  239 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:580:128 › editor ocupa el área bajo Productos sin barras anidadas 844x390 (2.3s)
+  ✓  238 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 1440x900 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (3.9s)
+  ✓  240 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:580:128 › editor ocupa el área bajo Productos sin barras anidadas 768x1024 (2.6s)
+  ✓  242 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:580:128 › editor ocupa el área bajo Productos sin barras anidadas 1024x768 (2.9s)
+  ✓  241 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 1440x900 › reabrir lo guardado y editar usa el mismo producto (5.0s)
+  ✓  243 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:580:128 › editor ocupa el área bajo Productos sin barras anidadas 1180x820 (3.3s)
+  ✓  244 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 1440x900 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (4.2s)
+  ✓  245 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:580:128 › editor ocupa el área bajo Productos sin barras anidadas 1366x768 (2.6s)
+  ✓  247 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:580:128 › editor ocupa el área bajo Productos sin barras anidadas 1440x900 (3.1s)
+  ✓  246 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 1440x900 › quitar una opción con stock conserva datos y explica cómo corregirla (5.5s)
+  ✓  248 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:580:128 › editor ocupa el área bajo Productos sin barras anidadas 1920x1080 (3.3s)
+  ✓  249 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 1440x900 › cada intento inválido muestra el error aunque se haya desplazado el formulario (4.2s)
+  ✓  250 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:606:63 › fotos por color ordenadas y editables 320x700 (4.0s)
+  ✓  252 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:606:63 › fotos por color ordenadas y editables 768x1024 (3.5s)
+  ✓  251 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 1920x1080 › nuevo producto real: opciones y guardado 1920x1080 (7.2s)
+  ✓  253 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:606:63 › fotos por color ordenadas y editables 1440x900 (4.0s)
+  ✓  255 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:631:1 › stock maestro retira opciones guardadas sin destruir cantidades ni referencias (3.0s)
+  ✓  254 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 1920x1080 › activar precios por combinación conserva las cantidades recién editadas (6.0s)
+  ✓  256 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:655:1 › portada por color es explícita, reordenable y conserva metadatos de variante (2.6s)
+  ✓  258 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:677:1 › carga múltiple espera archivos, conserva fallidos y reintenta sin duplicar los subidos (2.1s)
+  ✓  259 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:694:1 › salir con fotos masivas pendientes activa el guard real sin subir ni borrar imágenes (1.6s)
+  ✓  257 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 1920x1080 › color opcional sin reparto de stock y básicos de publicación (5.4s)
+  ✓  260 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:716:95 › panel completo mantiene título, acciones y cantidades sin solaparse 320x700 (4.1s)
+  ✓  261 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 1920x1080 › doble toque o doble clic mientras guarda crea un solo producto (5.4s)
+  ✓  262 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:716:95 › panel completo mantiene título, acciones y cantidades sin solaparse 390x844 (4.2s)
+  ✓  263 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 1920x1080 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (6.2s)
+  ✓  264 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:716:95 › panel completo mantiene título, acciones y cantidades sin solaparse 768x1024 (3.8s)
+  ✓  266 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:716:95 › panel completo mantiene título, acciones y cantidades sin solaparse 1024x768 (4.3s)
+  ✓  265 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 1920x1080 › reabrir lo guardado y editar usa el mismo producto (6.7s)
+  ✓  267 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:716:95 › panel completo mantiene título, acciones y cantidades sin solaparse 1280x720 (4.0s)
+  ✓  268 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 1920x1080 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (5.9s)
+  ✓  269 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:716:95 › panel completo mantiene título, acciones y cantidades sin solaparse 1440x900 (4.1s)
+  ✓  271 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:741:117 › editor estilo Shopify: columnas, estado, SEO y acciones 320x568 (5.0s)
+  ✓  270 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 1920x1080 › quitar una opción con stock conserva datos y explica cómo corregirla (6.5s)
+  ✓  272 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:741:117 › editor estilo Shopify: columnas, estado, SEO y acciones 390x844 (4.7s)
+  ✓  273 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 1920x1080 › cada intento inválido muestra el error aunque se haya desplazado el formulario (4.6s)
+  ✓  274 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:741:117 › editor estilo Shopify: columnas, estado, SEO y acciones 844x390 (4.3s)
+  ✓  275 [chromium] › tests/ui-ux/product-save-responsive.spec.js:9:3 › 2560x1440 › nuevo producto real: opciones y guardado 2560x1440 (6.0s)
+  ✓  276 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:741:117 › editor estilo Shopify: columnas, estado, SEO y acciones 768x1024 (3.3s)
+  ✓  278 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:741:117 › editor estilo Shopify: columnas, estado, SEO y acciones 1024x768 (5.6s)
+  ✓  277 [chromium] › tests/ui-ux/product-save-responsive.spec.js:53:3 › 2560x1440 › activar precios por combinación conserva las cantidades recién editadas (8.4s)
+  ✓  279 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:741:117 › editor estilo Shopify: columnas, estado, SEO y acciones 1280x800 (4.7s)
+  ✓  281 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:741:117 › editor estilo Shopify: columnas, estado, SEO y acciones 1440x900 (4.8s)
+  ✓  280 [chromium] › tests/ui-ux/product-save-responsive.spec.js:71:3 › 2560x1440 › color opcional sin reparto de stock y básicos de publicación (8.0s)
+  ✓  282 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:741:117 › editor estilo Shopify: columnas, estado, SEO y acciones 1920x1080 (5.1s)
+  ✓  283 [chromium] › tests/ui-ux/product-save-responsive.spec.js:93:3 › 2560x1440 › doble toque o doble clic mientras guarda crea un solo producto (5.8s)
+  ✓  284 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:776:94 › editor guiado: fotos primero, contraste y borrador 320x700 (3.2s)
+  ✓  286 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:776:94 › editor guiado: fotos primero, contraste y borrador 390x844 (3.5s)
+  ✓  285 [chromium] › tests/ui-ux/product-save-responsive.spec.js:107:3 › 2560x1440 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados (6.5s)
+  ✓  287 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:776:94 › editor guiado: fotos primero, contraste y borrador 844x390 (2.8s)
+  ✓  289 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:776:94 › editor guiado: fotos primero, contraste y borrador 768x1024 (3.5s)
+  ✓  288 [chromium] › tests/ui-ux/product-save-responsive.spec.js:119:3 › 2560x1440 › reabrir lo guardado y editar usa el mismo producto (6.0s)
+  ✓  290 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:776:94 › editor guiado: fotos primero, contraste y borrador 1024x768 (3.7s)
+  ✓  291 [chromium] › tests/ui-ux/product-save-responsive.spec.js:131:3 › 2560x1440 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior (5.0s)
+  ✓  292 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:776:94 › editor guiado: fotos primero, contraste y borrador 1440x900 (4.9s)
+  ✓  293 [chromium] › tests/ui-ux/product-save-responsive.spec.js:144:3 › 2560x1440 › quitar una opción con stock conserva datos y explica cómo corregirla (7.3s)
+  ✓  294 [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js:794:1 › visión es opcional, aplica sólo la categoría elegida y descarta resultados de otra foto (5.0s)
+  ✓  295 [chromium] › tests/ui-ux/product-save-responsive.spec.js:156:3 › 2560x1440 › cada intento inválido muestra el error aunque se haya desplazado el formulario (3.3s)
+  ✓  296 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 320x568 (3.0s)
+  ✓  297 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 390x844 (3.5s)
+  ✓  298 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 430x932 (3.6s)
+  ✓  299 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 540x900 (3.2s)
+  ✓  300 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 600x960 (3.2s)
+  ✓  301 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 768x1024 (3.1s)
+  ✓  302 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 820x1180 (4.0s)
+  ✓  303 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 844x390 (3.7s)
+  ✓  304 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 1024x768 (3.7s)
+  ✓  305 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 1180x820 (3.5s)
+  ✓  306 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 1366x768 (3.8s)
+  ✓  307 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 1920x1080 (4.9s)
+  ✓  308 [chromium] › tests/ui-ux/product-save-responsive.spec.js:170:170 › Nuevo y Editar conservan formulario visible con cabecera real 3840x2160 (5.0s)
+  ✓  309 [chromium] › tests/ui-ux/product-save-responsive.spec.js:188:1 › viewport reducido y restauración no dejan el editor vacío ni pierden el borrador (1.9s)
+  ✓  310 [chromium] › tests/ui-ux/product-save-responsive.spec.js:201:1 › carga unificada conserva pendientes ante fallo, reintenta y permite cancelar (2.1s)
+  ✓  311 [chromium] › tests/ui-ux/product-save-responsive.spec.js:216:38 › galería única con 1 imágenes conserva orden y portada (1.6s)
+  ✓  312 [chromium] › tests/ui-ux/product-save-responsive.spec.js:216:38 › galería única con 2 imágenes conserva orden y portada (1.8s)
+  ✓  313 [chromium] › tests/ui-ux/product-save-responsive.spec.js:216:38 › galería única con 3 imágenes conserva orden y portada (1.8s)
+  ✓  314 [chromium] › tests/ui-ux/product-save-responsive.spec.js:216:38 › galería única con 4 imágenes conserva orden y portada (1.8s)
+  ✓  315 [chromium] › tests/ui-ux/product-save-responsive.spec.js:216:38 › galería única con 5 imágenes conserva orden y portada (2.0s)
+  ✓  316 [chromium] › tests/ui-ux/product-save-responsive.spec.js:216:38 › galería única con 10 imágenes conserva orden y portada (2.6s)
+  ✓  317 [chromium] › tests/ui-ux/product-save-responsive.spec.js:216:38 › galería única con 13 imágenes conserva orden y portada (2.6s)
+  ✓  318 [chromium] › tests/ui-ux/product-save-responsive.spec.js:222:96 › galería única guarda, reabre y conserva asociaciones 390x844 (3.9s)
+  ✓  319 [chromium] › tests/ui-ux/product-save-responsive.spec.js:222:96 › galería única guarda, reabre y conserva asociaciones 844x390 (4.0s)
+  ✓  320 [chromium] › tests/ui-ux/product-save-responsive.spec.js:222:96 › galería única guarda, reabre y conserva asociaciones 768x1024 (3.7s)
+  ✓  321 [chromium] › tests/ui-ux/product-save-responsive.spec.js:222:96 › galería única guarda, reabre y conserva asociaciones 1024x768 (4.2s)
+  ✓  322 [chromium] › tests/ui-ux/product-save-responsive.spec.js:222:96 › galería única guarda, reabre y conserva asociaciones 1366x768 (4.3s)
+  ✓  323 [chromium] › tests/ui-ux/product-save-responsive.spec.js:222:96 › galería única guarda, reabre y conserva asociaciones 1920x1080 (4.6s)
+  ✓  324 [chromium] › tests/ui-ux/product-save-responsive.spec.js:273:2 › opciones agrupadas, inventario y referencias seguras 390x844 (6.3s)
+  ✓  325 [chromium] › tests/ui-ux/product-save-responsive.spec.js:273:2 › opciones agrupadas, inventario y referencias seguras 844x390 (6.0s)
+  ✓  326 [chromium] › tests/ui-ux/product-save-responsive.spec.js:273:2 › opciones agrupadas, inventario y referencias seguras 768x1024 (6.3s)
+  ✓  327 [chromium] › tests/ui-ux/product-save-responsive.spec.js:273:2 › opciones agrupadas, inventario y referencias seguras 1024x768 (6.7s)
+  ✓  328 [chromium] › tests/ui-ux/product-save-responsive.spec.js:273:2 › opciones agrupadas, inventario y referencias seguras 1366x768 (6.9s)
+  ✓  329 [chromium] › tests/ui-ux/product-save-responsive.spec.js:273:2 › opciones agrupadas, inventario y referencias seguras 1920x1080 (7.3s)
+  ✓  330 [chromium] › tests/ui-ux/product-save-responsive.spec.js:344:1 › la sugerencia es contextual y jamás crea una opción sin confirmación (1.7s)
+  ✓  331 [chromium] › tests/ui-ux/product-save-responsive.spec.js:356:58 › inventario pertinente y persistente: simple (1.7s)
+  ✓  332 [chromium] › tests/ui-ux/product-save-responsive.spec.js:356:58 › inventario pertinente y persistente: sin-control (2.2s)
+  ✓  333 [chromium] › tests/ui-ux/product-save-responsive.spec.js:356:58 › inventario pertinente y persistente: color-talle (2.8s)
+
+
+  1) [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 320x700 
+
+    Error: page.evaluate: TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4173/js/core/store/inventario-variantes.mjs
+
+      46 |  await page.route('**/editor-v2-fixture',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${headStyles}<link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/shopify-commerce-admin.css"></head><body>${form}</body></html>`}));
+      47 |  await page.goto('/editor-v2-fixture');
+    > 48 |  await page.evaluate(async({renderer,product})=>{
+         |             ^
+      49 |   const loadModule=url=>import(new URL(url,location.origin).href);
+      50 |   const inventory=await loadModule('/js/core/store/inventario-variantes.mjs');
+      51 |   const {commercialDraft}=await loadModule('/js/admin/products/editor-comercial-core.mjs');
+        at /workspace/tintin-web/tests/ui-ux/editor-comercial-v2.spec.js:48:13
+
+    Error Context: ../../tmp/tintin-studio/acceptance-results/ui-ux-editor-comercial-v2--6ae0e-rden-y-vista-previa-320x700-chromium/error-context.md
+
+  2) [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 390x844 
+
+    Error: page.evaluate: TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4173/js/core/store/inventario-variantes.mjs
+
+      46 |  await page.route('**/editor-v2-fixture',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${headStyles}<link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/shopify-commerce-admin.css"></head><body>${form}</body></html>`}));
+      47 |  await page.goto('/editor-v2-fixture');
+    > 48 |  await page.evaluate(async({renderer,product})=>{
+         |             ^
+      49 |   const loadModule=url=>import(new URL(url,location.origin).href);
+      50 |   const inventory=await loadModule('/js/core/store/inventario-variantes.mjs');
+      51 |   const {commercialDraft}=await loadModule('/js/admin/products/editor-comercial-core.mjs');
+        at /workspace/tintin-web/tests/ui-ux/editor-comercial-v2.spec.js:48:13
+
+    Error Context: ../../tmp/tintin-studio/acceptance-results/ui-ux-editor-comercial-v2--4f96a-rden-y-vista-previa-390x844-chromium/error-context.md
+
+  3) [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 844x390 
+
+    Error: page.evaluate: TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4173/js/core/store/inventario-variantes.mjs
+
+      46 |  await page.route('**/editor-v2-fixture',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${headStyles}<link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/shopify-commerce-admin.css"></head><body>${form}</body></html>`}));
+      47 |  await page.goto('/editor-v2-fixture');
+    > 48 |  await page.evaluate(async({renderer,product})=>{
+         |             ^
+      49 |   const loadModule=url=>import(new URL(url,location.origin).href);
+      50 |   const inventory=await loadModule('/js/core/store/inventario-variantes.mjs');
+      51 |   const {commercialDraft}=await loadModule('/js/admin/products/editor-comercial-core.mjs');
+        at /workspace/tintin-web/tests/ui-ux/editor-comercial-v2.spec.js:48:13
+
+    Error Context: ../../tmp/tintin-studio/acceptance-results/ui-ux-editor-comercial-v2--cd835-rden-y-vista-previa-844x390-chromium/error-context.md
+
+  4) [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 768x1024 
+
+    Error: page.evaluate: TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4173/js/core/store/inventario-variantes.mjs
+
+      46 |  await page.route('**/editor-v2-fixture',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${headStyles}<link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/shopify-commerce-admin.css"></head><body>${form}</body></html>`}));
+      47 |  await page.goto('/editor-v2-fixture');
+    > 48 |  await page.evaluate(async({renderer,product})=>{
+         |             ^
+      49 |   const loadModule=url=>import(new URL(url,location.origin).href);
+      50 |   const inventory=await loadModule('/js/core/store/inventario-variantes.mjs');
+      51 |   const {commercialDraft}=await loadModule('/js/admin/products/editor-comercial-core.mjs');
+        at /workspace/tintin-web/tests/ui-ux/editor-comercial-v2.spec.js:48:13
+
+    Error Context: ../../tmp/tintin-studio/acceptance-results/ui-ux-editor-comercial-v2--6e7ca-den-y-vista-previa-768x1024-chromium/error-context.md
+
+  5) [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 1024x768 
+
+    Error: page.evaluate: TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4173/js/core/store/inventario-variantes.mjs
+
+      46 |  await page.route('**/editor-v2-fixture',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${headStyles}<link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/shopify-commerce-admin.css"></head><body>${form}</body></html>`}));
+      47 |  await page.goto('/editor-v2-fixture');
+    > 48 |  await page.evaluate(async({renderer,product})=>{
+         |             ^
+      49 |   const loadModule=url=>import(new URL(url,location.origin).href);
+      50 |   const inventory=await loadModule('/js/core/store/inventario-variantes.mjs');
+      51 |   const {commercialDraft}=await loadModule('/js/admin/products/editor-comercial-core.mjs');
+        at /workspace/tintin-web/tests/ui-ux/editor-comercial-v2.spec.js:48:13
+
+    Error Context: ../../tmp/tintin-studio/acceptance-results/ui-ux-editor-comercial-v2--f0214-den-y-vista-previa-1024x768-chromium/error-context.md
+
+  6) [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 1440x900 
+
+    Error: page.evaluate: TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4173/js/core/store/inventario-variantes.mjs
+
+      46 |  await page.route('**/editor-v2-fixture',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${headStyles}<link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/shopify-commerce-admin.css"></head><body>${form}</body></html>`}));
+      47 |  await page.goto('/editor-v2-fixture');
+    > 48 |  await page.evaluate(async({renderer,product})=>{
+         |             ^
+      49 |   const loadModule=url=>import(new URL(url,location.origin).href);
+      50 |   const inventory=await loadModule('/js/core/store/inventario-variantes.mjs');
+      51 |   const {commercialDraft}=await loadModule('/js/admin/products/editor-comercial-core.mjs');
+        at /workspace/tintin-web/tests/ui-ux/editor-comercial-v2.spec.js:48:13
+
+    Error Context: ../../tmp/tintin-studio/acceptance-results/ui-ux-editor-comercial-v2--032c7-den-y-vista-previa-1440x900-chromium/error-context.md
+
+  7) [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:78:1 › reconocimiento real local: carteras, relojes y abstención sin API externa 
+
+    Error: page.evaluate: TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4173/js/admin/products/vision-productos-interfaz.js
+
+      85 |  await page.route('**/vision-local-fixture',route=>route.fulfill({contentType:'text/html',headers:{'content-security-policy':"default-src 'self'; script-src 'self'; img-src 'self' data:; worker-src 'self'; connect-src 'self'"},body:'<!doctype html><div id="prod-form-card"><input id="prod-id"><input id="prod-imageUrl" type="hidden"><input id="prod-material" value="Dato confirmado"><input id="prod-stock" value="4"><textarea id="prod-variants-text">Color: Dorado</textarea><select id="prod-category"><option value="">Elegir</option><option value="carteras">Carteras</option><option value="relojes">Relojes</option></select><section data-product-section="photos"><div class="tt-editor-section-fields"></div></section></div>'}));
+      86 |  await page.goto('/vision-local-fixture');
+    > 87 |  await page.evaluate(async()=>{const url=new URL('/js/admin/products/vision-productos-interfaz.js',location.origin);const {mountLocalVision}=await import(url.href);mountLocalVision(document.getElementById('prod-form-card'));});
+         |             ^
+      88 |  await page.locator('.tt-editor-vision summary').click();expect(models).toHaveLength(0);
+      89 |  for(const [image,label] of [['/assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp','Cartera'],['/assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp','Reloj']]) {
+      90 |   await page.locator('#prod-imageUrl').evaluate((input,url)=>{input.value=url;input.dispatchEvent(new Event('input',{bubbles:true}));},image);
+        at /workspace/tintin-web/tests/ui-ux/editor-comercial-v2.spec.js:87:13
+
+    Error Context: ../../tmp/tintin-studio/acceptance-results/ui-ux-editor-comercial-v2--d3c34--abstención-sin-API-externa-chromium/error-context.md
+
+  Slow test file: [chromium] › tests/ui-ux/product-save-responsive.spec.js (10.7m)
+  Slow test file: [chromium] › tests/ui-ux/products-responsive-phase-one.spec.js (6.0m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  7 failed
+    [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 320x700 
+    [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 390x844 
+    [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 844x390 
+    [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 768x1024 
+    [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 1024x768 
+    [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:44:94 › editor comercial real: matriz, lote, orden y vista previa 1440x900 
+    [chromium] › tests/ui-ux/editor-comercial-v2.spec.js:78:1 › reconocimiento real local: carteras, relojes y abstención sin API externa 
+  326 passed (12.3m)

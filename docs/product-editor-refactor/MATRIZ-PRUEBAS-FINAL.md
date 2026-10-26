@@ -1,3 +1,20 @@
+## Actualización posterior — reorganización visual26/10/2026
+
+| Comprobación nueva | Resultado | Evidencia |
+| --- | --- | --- |
+|333 casos del editor, guardado y fotografías |APROBADA: última ejecución de cada caso;326 matriz+13 repetición con6 solapados |evidencias/rediseno-visual/matriz-casos.json; acceptance.log; last.log |
+|320,390,600,768,1024,1440px; navegación, datos, acciones y consola |APROBADA en Chromium |product-editor-studio.spec; capturas antes/después |
+|Estado de publicación único y datos privados |APROBADA |Casos nuevos y regresiones de permisos |
+|Workspace/editor comercial/editorial Node |APROBADA44/44 |domain-final.log |
+|Preservación de corrección de Perfil integrada |APROBADA6/6; fuente idéntica a main |profile-preservation.log |
+|Preflight integrado |APROBADA39/39 |preflight.json |
+|Benchmark nuevo de campo, dispositivos físicos, proveedor y sesión real |NO EJECUTADA |Límites de08-REDISENO-VISUAL.md |
+|CI y producción del rediseño |NO EJECUTADA al publicar; recibo final en PR |No se hereda CI anterior |
+
+La matriz siguiente conserva la ejecución histórica de Fase6.
+
+---
+
 # Matriz de pruebas final
 
 Todos los PASS siguientes son locales/sintéticos o emulados, según la columna de evidencia.

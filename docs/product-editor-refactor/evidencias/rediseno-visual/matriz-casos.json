@@ -1,0 +1,2352 @@
+{
+  "note": "Último resultado por caso; no una corrida única. Siete fallos por servidor local detenido se repiten tras reiniciarlo. Las seis pruebas de presentación también se repiten con la hoja final y base integrada.",
+  "runs": [
+    {
+      "evidence": "acceptance.log",
+      "executed": 333,
+      "passed": 326,
+      "failed": 7,
+      "retries": 0
+    },
+    {
+      "evidence": "last.log",
+      "executed": 13,
+      "passed": 13,
+      "failed": 0,
+      "retries": 0
+    }
+  ],
+  "cases": [
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "galería: eventos sin cambios conservan nodos y foco",
+      "status": "APROBADA",
+      "duration": "3.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Tintin app: foco, sugerencias y campos preservados 320x568",
+      "status": "APROBADA",
+      "duration": "4.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Tintin app: foco, sugerencias y campos preservados 390x844",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "ciclo editorial y diálogo sin pérdida 320",
+      "status": "APROBADA",
+      "duration": "5.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Tintin app: foco, sugerencias y campos preservados 844x390",
+      "status": "APROBADA",
+      "duration": "3.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "ciclo editorial y diálogo sin pérdida 390",
+      "status": "APROBADA",
+      "duration": "5.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Tintin app: foco, sugerencias y campos preservados 768x1024",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Tintin app: foco, sugerencias y campos preservados 1024x768",
+      "status": "APROBADA",
+      "duration": "4.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "ciclo editorial y diálogo sin pérdida 600",
+      "status": "APROBADA",
+      "duration": "6.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Tintin app: foco, sugerencias y campos preservados 1366x768",
+      "status": "APROBADA",
+      "duration": "6.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "ciclo editorial y diálogo sin pérdida 768",
+      "status": "APROBADA",
+      "duration": "7.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Tintin app: foco, sugerencias y campos preservados 1920x1080",
+      "status": "APROBADA",
+      "duration": "5.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "ciclo editorial y diálogo sin pérdida 1024",
+      "status": "APROBADA",
+      "duration": "8.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Tintin app: foco, sugerencias y campos preservados 3840x2160",
+      "status": "APROBADA",
+      "duration": "6.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor comercial real: matriz, lote, orden y vista previa 320x700",
+      "status": "APROBADA",
+      "duration": "4.7s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor comercial real: matriz, lote, orden y vista previa 390x844",
+      "status": "APROBADA",
+      "duration": "5.2s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor comercial real: matriz, lote, orden y vista previa 844x390",
+      "status": "APROBADA",
+      "duration": "3.7s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "ciclo editorial y diálogo sin pérdida 1440",
+      "status": "APROBADA",
+      "duration": "8.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor comercial real: matriz, lote, orden y vista previa 768x1024",
+      "status": "APROBADA",
+      "duration": "4.1s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor comercial real: matriz, lote, orden y vista previa 1024x768",
+      "status": "APROBADA",
+      "duration": "4.3s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "descartar es explícito y un error de escritura conserva el borrador",
+      "status": "APROBADA",
+      "duration": "5.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor comercial real: matriz, lote, orden y vista previa 1440x900",
+      "status": "APROBADA",
+      "duration": "4.1s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "reconocimiento real local: carteras, relojes y abstención sin API externa",
+      "status": "APROBADA",
+      "duration": "13.5s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Apple-inspired: resúmenes, teclado y movimiento reducido 320x700",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "retiro y restauración de opción guardada preserva el producto público hasta guardar",
+      "status": "APROBADA",
+      "duration": "8.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Apple-inspired: resúmenes, teclado y movimiento reducido 768x1024",
+      "status": "APROBADA",
+      "duration": "3.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Apple-inspired: resúmenes, teclado y movimiento reducido 1024x768",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "reabrir administrador recupera servidor y respaldo de sesión sin publicar",
+      "status": "APROBADA",
+      "duration": "5.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor Apple-inspired: resúmenes, teclado y movimiento reducido 1440x900",
+      "status": "APROBADA",
+      "duration": "4.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor contraste Tintin: ejemplos, superficies y foco 320x700",
+      "status": "APROBADA",
+      "duration": "2.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "reabrir cinco veces no multiplica escrituras del borrador",
+      "status": "APROBADA",
+      "duration": "7.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor contraste Tintin: ejemplos, superficies y foco 390x844",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor contraste Tintin: ejemplos, superficies y foco 844x390",
+      "status": "APROBADA",
+      "duration": "2.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "reflujo equivalente a zoom 200%, orientación y táctil conservan acciones",
+      "status": "APROBADA",
+      "duration": "4.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor contraste Tintin: ejemplos, superficies y foco 768x1024",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor contraste Tintin: ejemplos, superficies y foco 1024x768",
+      "status": "APROBADA",
+      "duration": "2.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "salida con escritura en vuelo bloquea decisiones contradictorias",
+      "status": "APROBADA",
+      "duration": "5.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor contraste Tintin: ejemplos, superficies y foco 1440x900",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-final.spec.js",
+      "name": "quitar una opción nueva no pierde cantidades de una matriz histórica de stock",
+      "status": "APROBADA",
+      "duration": "4.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/editor-comercial-v2.spec.js",
+      "name": "editor contraste Tintin: ejemplos, superficies y foco 1920x1080",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-studio.spec.js",
+      "name": "espacio de edición visual 320",
+      "status": "APROBADA",
+      "duration": "6.7s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "320x568 › nuevo producto real: opciones y guardado 320x568",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-studio.spec.js",
+      "name": "espacio de edición visual 390",
+      "status": "APROBADA",
+      "duration": "6.8s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "320x568 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "4.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-studio.spec.js",
+      "name": "espacio de edición visual 600",
+      "status": "APROBADA",
+      "duration": "8.1s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "320x568 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "4.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-studio.spec.js",
+      "name": "espacio de edición visual 768",
+      "status": "APROBADA",
+      "duration": "7.0s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "320x568 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "2.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-studio.spec.js",
+      "name": "espacio de edición visual 1024",
+      "status": "APROBADA",
+      "duration": "7.8s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "320x568 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-editor-studio.spec.js",
+      "name": "espacio de edición visual 1440",
+      "status": "APROBADA",
+      "duration": "9.4s",
+      "evidence": "last.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "320x568 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "320x568 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "2.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "320x568 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "320x568 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "2.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "crear incompleto, salir, recuperar, publicar, editar sin reemplazar público y recuperar cambios",
+      "status": "APROBADA",
+      "duration": "9.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "390x844 › nuevo producto real: opciones y guardado 390x844",
+      "status": "APROBADA",
+      "duration": "4.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "fallo de red conserva trabajo pendiente, bloquea salida silenciosa y reintenta",
+      "status": "APROBADA",
+      "duration": "5.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "390x844 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "publicación en vuelo bloquea doble acción y salida, sin duplicar producto",
+      "status": "APROBADA",
+      "duration": "3.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "390x844 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "4.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "390x844 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "2.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "Borradores lista progreso privado y permite continuar sin inventario público ficticio",
+      "status": "APROBADA",
+      "duration": "5.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "390x844 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "390x844 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "conflicto de progreso no pisa otra pestaña y no publica",
+      "status": "APROBADA",
+      "duration": "5.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "390x844 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "390x844 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "2.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "390x844 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "1.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "fotos pendientes: fallo guarda texto, recuperar advierte y reintento/cancelación no pierde fotos previas",
+      "status": "APROBADA",
+      "duration": "7.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "430x932 › nuevo producto real: opciones y guardado 430x932",
+      "status": "APROBADA",
+      "duration": "3.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "archivar y restaurar exige acción explícita y no cambia stock",
+      "status": "APROBADA",
+      "duration": "4.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "430x932 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "3.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "espacio dedicado 320x568",
+      "status": "APROBADA",
+      "duration": "2.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "espacio dedicado 390x844",
+      "status": "APROBADA",
+      "duration": "2.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "430x932 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "3.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "430x932 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "espacio dedicado 844x390",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "430x932 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "espacio dedicado 768x1024",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "430x932 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "espacio dedicado 1366x768",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "430x932 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "espacio dedicado 1920x1080",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "430x932 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "3.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "progreso y acciones con altura reducida 320x568",
+      "status": "APROBADA",
+      "duration": "5.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "430x932 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "3.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "progreso y acciones con altura reducida 390x844",
+      "status": "APROBADA",
+      "duration": "6.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "844x390 › nuevo producto real: opciones y guardado 844x390",
+      "status": "APROBADA",
+      "duration": "6.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "progreso y acciones con altura reducida 844x390",
+      "status": "APROBADA",
+      "duration": "5.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "844x390 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "6.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "progreso y acciones con altura reducida 768x1024",
+      "status": "APROBADA",
+      "duration": "6.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "844x390 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "7.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "844x390 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "5.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "progreso y acciones con altura reducida 1024x768",
+      "status": "APROBADA",
+      "duration": "7.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "844x390 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "5.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "progreso y acciones con altura reducida 1920x1080",
+      "status": "APROBADA",
+      "duration": "8.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "844x390 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "5.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "sección elegida legible sin recorte 320",
+      "status": "APROBADA",
+      "duration": "5.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "844x390 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "sección elegida legible sin recorte 390",
+      "status": "APROBADA",
+      "duration": "3.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "844x390 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "acciones compactas junto al título en escritorio 1366",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "844x390 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "acciones compactas junto al título en escritorio 1920",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "768x1024 › nuevo producto real: opciones y guardado 768x1024",
+      "status": "APROBADA",
+      "duration": "4.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "768x1024 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-workspaces.spec.js",
+      "name": "Borradores carga páginas, conserva la lista tras fallo y reintenta el mismo cursor sin duplicar",
+      "status": "APROBADA",
+      "duration": "5.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "foto local visible y guardado espera subida en producto y colección 320x700",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "768x1024 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "4.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "foto local visible y guardado espera subida en producto y colección 390x844",
+      "status": "APROBADA",
+      "duration": "2.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "foto local visible y guardado espera subida en producto y colección 844x390",
+      "status": "APROBADA",
+      "duration": "2.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "768x1024 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "foto local visible y guardado espera subida en producto y colección 768x1024",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "768x1024 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "3.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "foto local visible y guardado espera subida en producto y colección 1024x768",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "foto local visible y guardado espera subida en producto y colección 1366x768",
+      "status": "APROBADA",
+      "duration": "2.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "768x1024 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "3.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "foto local visible y guardado espera subida en producto y colección 1920x1080",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "768x1024 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "3.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "768x1024 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "2.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 320x568",
+      "status": "APROBADA",
+      "duration": "4.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "768x1024 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "2.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 390x844",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "820x1180 › nuevo producto real: opciones y guardado 820x1180",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 667x375",
+      "status": "APROBADA",
+      "duration": "4.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "820x1180 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "4.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 768x1024",
+      "status": "APROBADA",
+      "duration": "5.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "820x1180 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "6.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "820x1180 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 820x1180",
+      "status": "APROBADA",
+      "duration": "5.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "820x1180 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 1024x768",
+      "status": "APROBADA",
+      "duration": "4.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "820x1180 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "820x1180 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "2.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 1180x820",
+      "status": "APROBADA",
+      "duration": "5.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "820x1180 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "820x1180 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 1280x720",
+      "status": "APROBADA",
+      "duration": "6.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1024x768 › nuevo producto real: opciones y guardado 1024x768",
+      "status": "APROBADA",
+      "duration": "5.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 1366x768",
+      "status": "APROBADA",
+      "duration": "5.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1024x768 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "6.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 1440x900",
+      "status": "APROBADA",
+      "duration": "7.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1024x768 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "7.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor minimal: botones, stock y tarjetas accesibles 1920x1080",
+      "status": "APROBADA",
+      "duration": "7.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1024x768 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "4.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "variantes visuales conservan formatos previos y bloquean controles del total distribuido",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor real por secciones conserva campos y acciones 320x700",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1024x768 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "4.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor real por secciones conserva campos y acciones 390x844",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1024x768 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "4.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor real por secciones conserva campos y acciones 844x390",
+      "status": "APROBADA",
+      "duration": "2.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1024x768 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "3.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor real por secciones conserva campos y acciones 768x1024",
+      "status": "APROBADA",
+      "duration": "3.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor real por secciones conserva campos y acciones 1024x768",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1024x768 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "4.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1024x768 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor real por secciones conserva campos y acciones 1440x900",
+      "status": "APROBADA",
+      "duration": "4.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "la navegación autenticada no tapa las acciones del editor 320x568",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1180x820 › nuevo producto real: opciones y guardado 1180x820",
+      "status": "APROBADA",
+      "duration": "5.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "la navegación autenticada no tapa las acciones del editor 390x844",
+      "status": "APROBADA",
+      "duration": "2.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "la navegación autenticada no tapa las acciones del editor 768x1024",
+      "status": "APROBADA",
+      "duration": "2.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "la navegación autenticada no tapa las acciones del editor 1024x768",
+      "status": "APROBADA",
+      "duration": "2.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1180x820 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "6.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "la navegación autenticada no tapa las acciones del editor 1180x820",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "la navegación autenticada no tapa las acciones del editor 844x390",
+      "status": "APROBADA",
+      "duration": "1.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1180x820 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "5.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "configurar stock por color exige cantidades explícitas y recalcula total y vista previa",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "producto nuevo en tablet agrega opciones sin evaluar variantes nulas 768x1024",
+      "status": "APROBADA",
+      "duration": "2.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1180x820 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "producto nuevo en tablet agrega opciones sin evaluar variantes nulas 1024x768",
+      "status": "APROBADA",
+      "duration": "2.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1180x820 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor conserva navegación y acciones accesibles al abrir y cerrar 390",
+      "status": "APROBADA",
+      "duration": "2.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor conserva navegación y acciones accesibles al abrir y cerrar 775",
+      "status": "APROBADA",
+      "duration": "1.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1180x820 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "4.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor conserva navegación y acciones accesibles al abrir y cerrar 1024",
+      "status": "APROBADA",
+      "duration": "1.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1180x820 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "selección persiste al filtrar; barra móvil, lista y foco de búsqueda operan sin perder datos",
+      "status": "APROBADA",
+      "duration": "3.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "ficha móvil a pantalla completa atrapa Tab, cierra con Escape y devuelve el foco",
+      "status": "APROBADA",
+      "duration": "1.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1180x820 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "foto vertical, horizontal y faltante no se recorta ni invade controles",
+      "status": "APROBADA",
+      "duration": "2.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1180x820 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "la biblioteca queda sobre el editor y Escape cierra sólo la biblioteca",
+      "status": "APROBADA",
+      "duration": "2.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "cancelar respeta el guard nativo: seguir editando conserva datos y descartar vuelve al listado",
+      "status": "APROBADA",
+      "duration": "2.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1280x720 › nuevo producto real: opciones y guardado 1280x720",
+      "status": "APROBADA",
+      "duration": "4.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "validación revela campos y pone el mensaje en foco sin perder valores",
+      "status": "APROBADA",
+      "duration": "2.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "selección entre páginas y barra sobre navegación sin tapar el último producto",
+      "status": "APROBADA",
+      "duration": "2.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1280x720 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "4.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "foto principal completa en editor real y rotación conserva borrador y acciones superiores",
+      "status": "APROBADA",
+      "duration": "1.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "salir de Productos libera el scroll y regresar conserva el editor visible",
+      "status": "APROBADA",
+      "duration": "1.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "vista previa conectada, cantidades y fotos sin desbordes 320x700",
+      "status": "APROBADA",
+      "duration": "2.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1280x720 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "4.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "vista previa conectada, cantidades y fotos sin desbordes 390x844",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1280x720 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "vista previa conectada, cantidades y fotos sin desbordes 600x900",
+      "status": "APROBADA",
+      "duration": "2.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1280x720 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "3.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "vista previa conectada, cantidades y fotos sin desbordes 768x1024",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1280x720 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "4.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "vista previa conectada, cantidades y fotos sin desbordes 820x1180",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1280x720 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "vista previa conectada, cantidades y fotos sin desbordes 1024x768",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1280x720 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "vista previa conectada, cantidades y fotos sin desbordes 1180x820",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1280x720 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "vista previa conectada, cantidades y fotos sin desbordes 1366x768",
+      "status": "APROBADA",
+      "duration": "3.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1366x768 › nuevo producto real: opciones y guardado 1366x768",
+      "status": "APROBADA",
+      "duration": "4.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "vista previa conectada, cantidades y fotos sin desbordes 1440x900",
+      "status": "APROBADA",
+      "duration": "3.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "vista previa conectada, cantidades y fotos sin desbordes 1920x1080",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1366x768 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "4.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "galería agrega varias fotos y quita la elegida sin borrar fotos pendientes ni cambiar la portada",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1366x768 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "4.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "controles seleccionados conservan texto legible con el tema real 1200",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1366x768 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "controles seleccionados conservan texto legible con el tema real 1440",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1366x768 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "3.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "controles seleccionados conservan texto legible con el tema real 1920",
+      "status": "APROBADA",
+      "duration": "4.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1366x768 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "3.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "cambiar apartado reinicia el editor sin perder el borrador 320",
+      "status": "APROBADA",
+      "duration": "2.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1366x768 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "cambiar apartado reinicia el editor sin perder el borrador 390",
+      "status": "APROBADA",
+      "duration": "2.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "cambiar apartado reinicia el editor sin perder el borrador 768",
+      "status": "APROBADA",
+      "duration": "2.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1366x768 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "3.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "cambiar apartado reinicia el editor sin perder el borrador 1440",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1366x768 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "2.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "perfil sintético del editor con 1 fotografías",
+      "status": "APROBADA",
+      "duration": "2.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "perfil sintético del editor con 2 fotografías",
+      "status": "APROBADA",
+      "duration": "1.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "perfil sintético del editor con 5 fotografías",
+      "status": "APROBADA",
+      "duration": "1.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1440x900 › nuevo producto real: opciones y guardado 1440x900",
+      "status": "APROBADA",
+      "duration": "5.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "perfil sintético del editor con 10 fotografías",
+      "status": "APROBADA",
+      "duration": "2.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "perfil sintético del editor con 20 fotografías",
+      "status": "APROBADA",
+      "duration": "1.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1440x900 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "5.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "un error persistente no reinicia scroll ni foco al editar precio",
+      "status": "APROBADA",
+      "duration": "2.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "abrir conserva producto oculto y visibilidad manual independiente de la cantidad",
+      "status": "APROBADA",
+      "duration": "2.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1440x900 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "4.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor ocupa el área bajo Productos sin barras anidadas 320x568",
+      "status": "APROBADA",
+      "duration": "2.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1440x900 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor ocupa el área bajo Productos sin barras anidadas 390x844",
+      "status": "APROBADA",
+      "duration": "2.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor ocupa el área bajo Productos sin barras anidadas 844x390",
+      "status": "APROBADA",
+      "duration": "2.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1440x900 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "3.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor ocupa el área bajo Productos sin barras anidadas 768x1024",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor ocupa el área bajo Productos sin barras anidadas 1024x768",
+      "status": "APROBADA",
+      "duration": "2.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1440x900 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "5.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor ocupa el área bajo Productos sin barras anidadas 1180x820",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1440x900 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "4.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor ocupa el área bajo Productos sin barras anidadas 1366x768",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor ocupa el área bajo Productos sin barras anidadas 1440x900",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1440x900 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "5.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor ocupa el área bajo Productos sin barras anidadas 1920x1080",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1440x900 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "4.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "fotos por color ordenadas y editables 320x700",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "fotos por color ordenadas y editables 768x1024",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1920x1080 › nuevo producto real: opciones y guardado 1920x1080",
+      "status": "APROBADA",
+      "duration": "7.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "fotos por color ordenadas y editables 1440x900",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "stock maestro retira opciones guardadas sin destruir cantidades ni referencias",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1920x1080 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "6.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "portada por color es explícita, reordenable y conserva metadatos de variante",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "carga múltiple espera archivos, conserva fallidos y reintenta sin duplicar los subidos",
+      "status": "APROBADA",
+      "duration": "2.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "salir con fotos masivas pendientes activa el guard real sin subir ni borrar imágenes",
+      "status": "APROBADA",
+      "duration": "1.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1920x1080 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "5.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "panel completo mantiene título, acciones y cantidades sin solaparse 320x700",
+      "status": "APROBADA",
+      "duration": "4.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1920x1080 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "5.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "panel completo mantiene título, acciones y cantidades sin solaparse 390x844",
+      "status": "APROBADA",
+      "duration": "4.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1920x1080 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "6.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "panel completo mantiene título, acciones y cantidades sin solaparse 768x1024",
+      "status": "APROBADA",
+      "duration": "3.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "panel completo mantiene título, acciones y cantidades sin solaparse 1024x768",
+      "status": "APROBADA",
+      "duration": "4.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1920x1080 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "6.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "panel completo mantiene título, acciones y cantidades sin solaparse 1280x720",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1920x1080 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "5.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "panel completo mantiene título, acciones y cantidades sin solaparse 1440x900",
+      "status": "APROBADA",
+      "duration": "4.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor estilo Shopify: columnas, estado, SEO y acciones 320x568",
+      "status": "APROBADA",
+      "duration": "5.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1920x1080 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "6.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor estilo Shopify: columnas, estado, SEO y acciones 390x844",
+      "status": "APROBADA",
+      "duration": "4.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "1920x1080 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "4.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor estilo Shopify: columnas, estado, SEO y acciones 844x390",
+      "status": "APROBADA",
+      "duration": "4.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "2560x1440 › nuevo producto real: opciones y guardado 2560x1440",
+      "status": "APROBADA",
+      "duration": "6.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor estilo Shopify: columnas, estado, SEO y acciones 768x1024",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor estilo Shopify: columnas, estado, SEO y acciones 1024x768",
+      "status": "APROBADA",
+      "duration": "5.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "2560x1440 › activar precios por combinación conserva las cantidades recién editadas",
+      "status": "APROBADA",
+      "duration": "8.4s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor estilo Shopify: columnas, estado, SEO y acciones 1280x800",
+      "status": "APROBADA",
+      "duration": "4.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor estilo Shopify: columnas, estado, SEO y acciones 1440x900",
+      "status": "APROBADA",
+      "duration": "4.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "2560x1440 › color opcional sin reparto de stock y básicos de publicación",
+      "status": "APROBADA",
+      "duration": "8.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor estilo Shopify: columnas, estado, SEO y acciones 1920x1080",
+      "status": "APROBADA",
+      "duration": "5.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "2560x1440 › doble toque o doble clic mientras guarda crea un solo producto",
+      "status": "APROBADA",
+      "duration": "5.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor guiado: fotos primero, contraste y borrador 320x700",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor guiado: fotos primero, contraste y borrador 390x844",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "2560x1440 › un fallo al guardar conserva el formulario y permite reintentar sin duplicados",
+      "status": "APROBADA",
+      "duration": "6.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor guiado: fotos primero, contraste y borrador 844x390",
+      "status": "APROBADA",
+      "duration": "2.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor guiado: fotos primero, contraste y borrador 768x1024",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "2560x1440 › reabrir lo guardado y editar usa el mismo producto",
+      "status": "APROBADA",
+      "duration": "6.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor guiado: fotos primero, contraste y borrador 1024x768",
+      "status": "APROBADA",
+      "duration": "3.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "2560x1440 › una opción nueva sin stock se puede quitar y conserva el stock simple anterior",
+      "status": "APROBADA",
+      "duration": "5.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "editor guiado: fotos primero, contraste y borrador 1440x900",
+      "status": "APROBADA",
+      "duration": "4.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "2560x1440 › quitar una opción con stock conserva datos y explica cómo corregirla",
+      "status": "APROBADA",
+      "duration": "7.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/products-responsive-phase-one.spec.js",
+      "name": "visión es opcional, aplica sólo la categoría elegida y descarta resultados de otra foto",
+      "status": "APROBADA",
+      "duration": "5.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "2560x1440 › cada intento inválido muestra el error aunque se haya desplazado el formulario",
+      "status": "APROBADA",
+      "duration": "3.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 320x568",
+      "status": "APROBADA",
+      "duration": "3.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 390x844",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 430x932",
+      "status": "APROBADA",
+      "duration": "3.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 540x900",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 600x960",
+      "status": "APROBADA",
+      "duration": "3.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 768x1024",
+      "status": "APROBADA",
+      "duration": "3.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 820x1180",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 844x390",
+      "status": "APROBADA",
+      "duration": "3.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 1024x768",
+      "status": "APROBADA",
+      "duration": "3.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 1180x820",
+      "status": "APROBADA",
+      "duration": "3.5s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 1366x768",
+      "status": "APROBADA",
+      "duration": "3.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 1920x1080",
+      "status": "APROBADA",
+      "duration": "4.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "Nuevo y Editar conservan formulario visible con cabecera real 3840x2160",
+      "status": "APROBADA",
+      "duration": "5.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "viewport reducido y restauración no dejan el editor vacío ni pierden el borrador",
+      "status": "APROBADA",
+      "duration": "1.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "carga unificada conserva pendientes ante fallo, reintenta y permite cancelar",
+      "status": "APROBADA",
+      "duration": "2.1s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única con 1 imágenes conserva orden y portada",
+      "status": "APROBADA",
+      "duration": "1.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única con 2 imágenes conserva orden y portada",
+      "status": "APROBADA",
+      "duration": "1.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única con 3 imágenes conserva orden y portada",
+      "status": "APROBADA",
+      "duration": "1.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única con 4 imágenes conserva orden y portada",
+      "status": "APROBADA",
+      "duration": "1.8s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única con 5 imágenes conserva orden y portada",
+      "status": "APROBADA",
+      "duration": "2.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única con 10 imágenes conserva orden y portada",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única con 13 imágenes conserva orden y portada",
+      "status": "APROBADA",
+      "duration": "2.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única guarda, reabre y conserva asociaciones 390x844",
+      "status": "APROBADA",
+      "duration": "3.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única guarda, reabre y conserva asociaciones 844x390",
+      "status": "APROBADA",
+      "duration": "4.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única guarda, reabre y conserva asociaciones 768x1024",
+      "status": "APROBADA",
+      "duration": "3.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única guarda, reabre y conserva asociaciones 1024x768",
+      "status": "APROBADA",
+      "duration": "4.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única guarda, reabre y conserva asociaciones 1366x768",
+      "status": "APROBADA",
+      "duration": "4.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "galería única guarda, reabre y conserva asociaciones 1920x1080",
+      "status": "APROBADA",
+      "duration": "4.6s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "opciones agrupadas, inventario y referencias seguras 390x844",
+      "status": "APROBADA",
+      "duration": "6.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "opciones agrupadas, inventario y referencias seguras 844x390",
+      "status": "APROBADA",
+      "duration": "6.0s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "opciones agrupadas, inventario y referencias seguras 768x1024",
+      "status": "APROBADA",
+      "duration": "6.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "opciones agrupadas, inventario y referencias seguras 1024x768",
+      "status": "APROBADA",
+      "duration": "6.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "opciones agrupadas, inventario y referencias seguras 1366x768",
+      "status": "APROBADA",
+      "duration": "6.9s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "opciones agrupadas, inventario y referencias seguras 1920x1080",
+      "status": "APROBADA",
+      "duration": "7.3s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "la sugerencia es contextual y jamás crea una opción sin confirmación",
+      "status": "APROBADA",
+      "duration": "1.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "inventario pertinente y persistente: simple",
+      "status": "APROBADA",
+      "duration": "1.7s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "inventario pertinente y persistente: sin-control",
+      "status": "APROBADA",
+      "duration": "2.2s",
+      "evidence": "acceptance.log"
+    },
+    {
+      "file": "tests/ui-ux/product-save-responsive.spec.js",
+      "name": "inventario pertinente y persistente: color-talle",
+      "status": "APROBADA",
+      "duration": "2.8s",
+      "evidence": "acceptance.log"
+    }
+  ]
+}

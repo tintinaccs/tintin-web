@@ -25,7 +25,9 @@ La autoridad continúa en admin-app y su serializer, workspace privado y contrat
 comerciales existentes. No se cambian precios, inventario, IDs, reglas de acceso,
 checkout, pagos, pedidos, reservas ni backend. En fotos-por-color y galeria-unificada
 sólo cambia la referencia transitiva de caché a la vista previa; no su comportamiento.
-El cambio del controlador es la sección inicial en Nuevo/Editar.
+El cambio del controlador es la sección inicial en Nuevo/Editar. El checkbox
+legado Activo sigue disponible al serializer, oculto como antes: Estado del
+producto es el único control visible de publicación.
 
 Los botones laterales envían el mismo evento change al selector canónico. La
 sección privada y su entrada lateral se ocultan con el permiso existente. No hay
@@ -44,15 +46,20 @@ accesible, ausencia de desbordamiento, recuperación de vista previa al redimens
 y errores de página. Las regresiones comprueban guardado/recuperación, fotos,
 variantes históricas, stock, costos privados, cancelación y fallos de conexión.
 
-Resultado final de la corrida: **PENDIENTE DE CIERRE**. Las44 pruebas Node de
-workspace, editor comercial y editorial aprobaron. Build y versionado de caché
-aprobaron. El preflight y CI se registran antes del cierre del PR.
+Resultado local: **333 casos de navegador con última ejecución APROBADA**.
+No es una corrida única:326/333 aprobaron en la matriz completa,7 fallaron con
+el servidor detenido y aprobaron en la repetición dirigida de13/13 (incluye6
+casos de presentación repetidos con la hoja final). Sin reintentos automáticos.
+La matriz individual y los dos logs están en `evidencias/rediseno-visual/`.
+Las44 pruebas Node de workspace/editor comercial/editorial y6 de preservación
+de Perfil aprobaron. Build, caché, protección y39/39 comandos del preflight
+aprobaron después de incorporar#1246. CI propia del PR: pendiente al publicar.
 
 Primer recorrido:312/333 aprobadas;21 fallos de fixtures por selectores ambiguos,
 posiciones antiguas o navegación implícita. Se adaptan las interacciones a la nueva
 UI conservando las comprobaciones comerciales. La repetición dirigida detectó
 otras dos expectativas antiguas y aprobó las19 pruebas de su corrección.
-Una corrida posterior perdió el servidor local4173 (imports reales fallaron);
+La matriz final perdió el servidor local4173 al comienzo (7 imports reales fallaron);
 se conserva como intento fallido de entorno y se reinicia el servidor, sin cambiar
 la aplicación para ocultar ese fallo. No se suman intentos como una sola corrida.
 
@@ -63,7 +70,7 @@ y proveedores siguen NO EJECUTADOS. No se hicieron pagos ni pedidos reales.
 
 ## Integración y publicación
 
-Rama nueva desde main vigente; se conserva #1245. Referencias de caché, diagnóstico,
+Rama nueva desde main vigente; se conservan #1245 y#1246 (base e78a9de2f). Referencias de caché, diagnóstico,
 CSP y plan protegido se regeneran por sus autoridades. La titular autorizó terminar
 y fusionar; se exigen CI, CodeQL, preview y mantenimiento protegido de este candidato.
 El recibo definitivo del SHA/merge/monitor se incorpora al PR al terminar; este
