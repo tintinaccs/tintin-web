@@ -2,7 +2,21 @@ name: Operación — resultados GitHub
 
 on:
   workflow_run:
-    workflows: ['*']
+    # Lista auditada contra todos los workflows operativos; evita que el
+    # receptor genere nuevos runs al observar su propia finalización.
+    workflows:
+      - Mantenimiento — ramas
+      - CI Tintin — contrato único
+      - Mantenimiento — dependencias y flujos protegidos
+      - Operación — auditoría visual consolidada
+      - Backup Firestore
+      - Fallback manual — GitHub Pages
+      - Publicar reglas Firestore
+      - Diagnóstico Maestro Tintin
+      - Operación — reintento de correos de pedido
+      - Operación — sincronización catálogo a Sheets
+      - Operación — salud de producción
+      - Backup — repositorio
     types: [completed]
   pull_request_target:
     types: [closed]

@@ -116,6 +116,11 @@ if (workflows.includes(resultNotifier)) {
   assert(/workflow_run:/.test(notifier) && /types: \[completed\]/.test(notifier), 'GitHub: el receptor debe observar resultados terminales.');
   assert(/ref: \$\{\{ github.event.repository.default_branch \}\}/.test(notifier) && /persist-credentials: false/.test(notifier), 'GitHub: el receptor debe ejecutar sólo la rama confiable sin persistir credenciales.');
   assert(!/contents:\s*write|actions:\s*write|id-token:\s*write/.test(notifier), 'GitHub: el receptor de avisos no puede escribir código, administrar Actions ni solicitar OIDC.');
+  for (const file of operationalWorkflows) {
+    const name = read(`.github/workflows/${file}`).match(/^name:\s*(.+)$/m)?.[1]?.trim();
+    assert(Boolean(name) && notifier.includes(`      - ${name}\n`), `GitHub: el receptor no observa el workflow ${file}.`);
+  }
+  assert(!notifier.includes('      - Operación — resultados GitHub\n'), 'GitHub: el receptor no debe observar su propia finalización.');
 }
 assert(prWorkflows.length === 1 && prWorkflows[0] === 'auditar-tintin.yml', `GitHub Actions: solo auditar-tintin.yml debe dispararse en PR; encontrados: ${prWorkflows.join(', ') || 'ninguno'}.`);
 
