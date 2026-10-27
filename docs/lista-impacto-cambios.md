@@ -1,3 +1,7 @@
+## 2026-10-27 — Tablet y un único aviso de guardado
+
+Autoridades: CSS administrativo, workspace privado y controlador canónico de Productos. Dos columnas desde720px, estados/reintento en una sola región accesible y limpieza del error anterior del cuerpo al pulsar Guardar. Se mantienen validaciones, confirmación estricta del servidor, borrador/recuperación, fotos, modelos, permisos y publicación existentes. Pruebas en las suites CI vigentes amplían orientación y tamaños; URLs inmutables y derivados por constructores. Sin datos reales ni workflows modificados. Evidencia y límites: docs/product-editor-refactor/TABLET-Y-AVISO-GUARDADO.md y CURRENT_STATE.
+
 ## 2026-10-26 — Portada de WhatsApp con identidad Tintin
 
 Autoridades: assets/og-cover.jpg y metadatos estáticos de index.html/catalogo.html. Logo blanco plano sobre rosa claro de la referencia de la titular, nombre y descripción blancos, composición centrada. Se documenta la preferencia en docs/identidad-visual-tintin.md; no cambia la paleta global ni los logos de navegación. Inicio/Catálogo renuevan URL OG/Twitter y declaran formato, medidas y texto alternativo. Consumidores existentes de la portada reciben el mismo diseño; fichas con foto propia mantienen su metadata dinámica. CSP/diagnóstico/plan se regeneran por constructores. Sin datos comerciales ni reglas modificadas.

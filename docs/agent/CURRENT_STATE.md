@@ -1,3 +1,15 @@
+## 2026-10-27 — Tablet y error duplicado, Codex /root
+
+Rama codex/editor-tablet-guardado-20261027, base51e5e737 (#1256). Se reproduce
+el fallo del botón Guardar con respuesta503/HTML: aviso duplicado y campos
+apilados bajo toda la galería en768/820. Se centraliza el error en workspace,
+Reintentar accesible junto al aviso, dos columnas desde720px y una columna
+por debajo. Conserva respuesta estricta, respaldo privado y escritores.
+PASS_LOCAL inicial6/6 Chromium tras RED3; Node29/29 y audit:admin-sync78/78,
+preflight nativo sin peticiones/escrituras aprobado. Matrices ampliadas,
+build/plan, CI/merge/producción IN_PROGRESS. Sesión/POST real de la foto y
+hardware físico NOT_VERIFIED. Informe TABLET-Y-AVISO-GUARDADO.md.
+
 ## 2026-10-26 — Editor amplio y vista previa inferior, Codex /root GPT-6
 
 Base main95091da9, worktree /workspace/tintin-editor-responsive, rama

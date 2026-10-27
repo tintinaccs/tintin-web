@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "fb0bede6461cc736ddfe34be1a286993d23f31b9",
-  "reason": "Mejorar UX del editor: asociacion explicita agil, render estable y errores recuperables sin modificar contratos comerciales",
+  "baseCommit": "51e5e7376a355902a1eafdba78a3ffbb74ef58c6",
+  "reason": "Unificar aviso de guardado y adaptar galería y campos de producto a tablet conservando escritores y permisos",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "2c6347ba15db84c0b47eef863f4f1c656e7187f5957a8790b5487ff85ae3b8bf",
-      "newHash": "34e53a17261bec16597f08b9005c43490ad55535b8dbb4c73fd68422ff2414dc"
+      "oldHash": "34e53a17261bec16597f08b9005c43490ad55535b8dbb4c73fd68422ff2414dc",
+      "newHash": "96c511771aa2981c6734254513b7c6428de91ee21fdebf2dce8e2b7c2ab1ea4d"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "ed8b39ae8bdbbcfa264d9988b3e2db40dbe04a2e2abaf57c496936bee13e9b85",
-      "newHash": "e7d3e95c0034aef173f9648c521876e95cc1c7402f53e278e9aa34b8d653c9a9"
+      "oldHash": "e7d3e95c0034aef173f9648c521876e95cc1c7402f53e278e9aa34b8d653c9a9",
+      "newHash": "612b4e71f2426bb00917d74738c1ef4f8f6863918662af0ff00dca720bd23ea4"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "d5aeeb556f9c193710e3603dc049b5be56f9e21949e1af9d80e80bde1c983c70",
-      "newHash": "25d5c792b3bab394cb18c1b0f2357d2957570a82bf07f656e9eaf864f17eacd0"
+      "oldHash": "25d5c792b3bab394cb18c1b0f2357d2957570a82bf07f656e9eaf864f17eacd0",
+      "newHash": "223b168abca36e7b00699d4cd47cf6ec7c16d1926679e985a34f07df3c6d3e27"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "ea91a0ae1a9ee53fdcce98819f7d55c32fd826c62329cb747fa23c1f41bd7c69",
-      "newHash": "b6f0560e923846762908da207f67ee98cef534523be50fba6a79a8f4eacbac04"
+      "oldHash": "b6f0560e923846762908da207f67ee98cef534523be50fba6a79a8f4eacbac04",
+      "newHash": "277fd7f25ad02632ca78e7dda21d61da0018588f2898084f43095da9dc840129"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "5241f00ff12c2d5f10e9a8010654266ab67b76e80282ba95ccd7e84350dd7726",
-      "newHash": "2af7687584d84ab9b435425d77a7c03c67334caeec58bc31b7a9f15a4acf278b"
+      "oldHash": "2af7687584d84ab9b435425d77a7c03c67334caeec58bc31b7a9f15a4acf278b",
+      "newHash": "c42960ba8627b90d8c8651cb5b1a084a0cef4de548af1a78084250ed8da89638"
     }
   ],
   "affectedRecords": [

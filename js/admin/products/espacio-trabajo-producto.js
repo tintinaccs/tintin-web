@@ -1,6 +1,6 @@
 // Progreso editorial privado. La publicación continúa en prodGuardar/CAS.
 export function mountProductWorkspace({card,uid,key,productId,source,request,serialize,flushMedia,restore,commit,close,privateAllowed=false,debounceMs=1800}){
-  let destroyed=false,loading=true,revision=0,baseExpected='',conflict=false,lastSaved='',pending=null,operation=null,timer=null,retries=0,applying=false,missingUploads=false,mediaProblem=false,hasWork=false,publishing=false,openedSignature='',exitAction=null;
+  let destroyed=false,loading=true,revision=0,baseExpected='',conflict=false,lastSaved='',pending=null,operation=null,timer=null,retries=0,applying=false,missingUploads=false,mediaProblem=false,hasWork=false,publishing=false,openedSignature='',exitAction=null,failedSignature=null;
   const signal=new AbortController();const storageKey='tt-product-work:'+uid+':'+key;
   // Evita pisar lo tecleado mientras llega una recuperación remota.
   const locked=[...card.querySelectorAll('input,textarea,select,button')].filter(input=>!input.disabled);
@@ -10,11 +10,12 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   const clone=()=>{const value=JSON.parse(JSON.stringify(serialize()));if(!privateAllowed)for(const key of ['costUnit','purchased','stockMinimum','internalNotes'])delete value[key];value.pendingUploads=missingUploads || mediaProblem || value.pendingPhotos?.some(([,signature])=>pendingFiles(signature)) || pendingFiles(value.pendingColorPhotos);if(value.commercialDraft)value.commercialDraft=Object.fromEntries(['variantCommerceVersion','variants','variantInventory','stock','price','priceBefore'].filter(key=>value.commercialDraft[key]!==undefined).map(key=>[key,value.commercialDraft[key]]));return value;};
   const signature=()=>JSON.stringify(clone());
   const node=(tag,text)=>{const element=document.createElement(tag);if(text)element.textContent=text;return element;};
-  const head=card.querySelector('.adm-card-head'),actions=card.querySelector('#prod-editor-actions') || card.querySelector('#prod-save-btn')?.parentElement;
+  const head=card.querySelector('.adm-card-head');
   const originalCancel=card.querySelector('button[onclick="prodCancelForm()"]'),cancelWasHidden=originalCancel?.hidden;if(originalCancel)originalCancel.hidden=true;
   const back=node('button','Cancelar');back.type='button';back.className='adm-btn adm-btn-outline tt-work-back';head.prepend(back);
-  const status=node('p');status.className='tt-work-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');head.append(status);
-  const retry=node('button','Reintentar');retry.type='button';retry.className='adm-btn adm-btn-outline';retry.hidden=true;actions.append(retry);
+  const feedback=node('div');feedback.className='tt-work-feedback';head.append(feedback);
+  const status=node('p');status.id='tt-product-work-status';status.className='tt-work-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');feedback.append(status);
+  const retry=node('button','Reintentar');retry.type='button';retry.className='adm-btn adm-btn-outline';retry.hidden=true;retry.setAttribute('aria-describedby',status.id);feedback.append(retry);
   const errors=node('div');errors.className='tt-work-exit-error';errors.hidden=true;
   const explanation=node('p','No se pudo guardar todo el progreso. Podés reintentar, permanecer o descartar sólo los cambios pendientes. El último progreso del servidor se conserva.');
   const stay=node('button','Permanecer'),discardPending=node('button','Descartar cambios pendientes y volver');
@@ -24,7 +25,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   const acknowledge=node('button','Continuar sin las fotos pendientes');acknowledge.type='button';acknowledge.className='adm-btn adm-btn-outline';acknowledge.hidden=true;errors.append(acknowledge);
   const actual=source?.active===false && (!source.publicationStatus || source.publicationStatus==='active')?'inactive':source?.publicationStatus || (source?'active':'draft');
   card.dataset.productPublicState=actual;card.classList.add('tt-editor-workspace');document.documentElement.classList.add('tt-product-workspace-active');
-  const message=(text,error=false,state='idle')=>{if(destroyed)return;status.textContent=text;status.dataset.error=String(error);status.dataset.state=error?'error':state;retry.hidden=!error;};
+  const message=(text,error=false,state='idle')=>{if(destroyed)return;if(status.textContent!==text)status.textContent=text;feedback.dataset.state=error?'error':state;status.dataset.error=String(error);status.dataset.state=error?'error':state;retry.hidden=!error;};
   function label(){
     const selected=card.querySelector('#prod-publicationStatus')?.value;
     const save=card.querySelector('#prod-save-btn');if(!save)return;
@@ -33,8 +34,9 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   }
   function backup(){try{sessionStorage.setItem(storageKey,JSON.stringify({snapshot:clone(),revision,baseExpected,time:Date.now()}));}catch{} }
   function clearBackup(){try{sessionStorage.removeItem(storageKey);}catch{}}
+  function reportError(error){if(destroyed)return;failedSignature=signature();message(error.name==='TimeoutError' || error.name==='AbortError'?'El servidor tardó demasiado. No se confirmó el guardado; reintentá sin cerrar el editor.':error.message,true);backup();}
   function dirty(){return signature()!==lastSaved;}
-  function schedule(){if(destroyed || loading || applying)return;label();if(!dirty() && !operation && !pending)return;backup();message('Cambios pendientes · la versión pública no se modifica.',false,'pending');clearTimeout(timer);timer=setTimeout(()=>void save().catch(()=>{}),debounceMs);}
+  function schedule(){if(destroyed || loading || applying)return;if(status.dataset.state==='error' && signature()===failedSignature)return;label();if(!dirty() && !operation && !pending)return;backup();message('Cambios pendientes · la versión pública no se modifica.',false,'pending');clearTimeout(timer);timer=setTimeout(()=>void save().catch(()=>{}),debounceMs);}
   async function send(body){const response=await request(body);if(!response.ok || !response.result){const error=Object.assign(new Error(response.error || 'No se pudo guardar el progreso.'),{status:response.status});throw error;}return response.result;}
   let ready=(async()=>{
     try{
@@ -72,7 +74,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
       if(!dirty()){clearBackup();window.AdminUnsaved?.markClean('primary-editor');message(conflict?'Progreso guardado. La versión pública cambió; reabrí y conciliá antes de aplicar.':'Borrador guardado en servidor · '+new Date().toLocaleTimeString(),false,'saved');window.dispatchEvent(new CustomEvent('tintin:product-work-saved'));}
       else {message('Hay cambios nuevos pendientes.');schedule();}
       return !dirty();
-    })().catch(error=>{message(error.name==='TimeoutError' || error.name==='AbortError'?'El servidor tardó demasiado. No se confirmó el guardado; reintentá sin cerrar el editor.':error.message,true);backup();if(!destroyed && ![403,409,422].includes(error.status) && retries<3){timer=setTimeout(()=>void save().catch(()=>{}),[2000,5000,15000][retries++]);}throw error;}).finally(()=>{operation=null;});
+    })().catch(error=>{reportError(error);if(!destroyed && ![403,409,422].includes(error.status) && retries<3){timer=setTimeout(()=>void save().catch(()=>{}),[2000,5000,15000][retries++]);}throw error;}).finally(()=>{operation=null;});
     return operation;
   }
   let exitBusy=false;
@@ -125,7 +127,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
       publishing=false;applying=false;back.disabled=false;discard.disabled=false;if(!destroyed)label();
     }
   }
-  back.addEventListener('click',()=>void leave());retry.addEventListener('click',()=>void save().catch(()=>{}));
+  back.addEventListener('click',()=>void leave());retry.addEventListener('click',()=>void save().catch(reportError));
   stay.addEventListener('click',()=>{errors.hidden=true;});discardPending.addEventListener('click',()=>{clearBackup();window.AdminUnsaved?.markClean('primary-editor');close();});
   acknowledge.addEventListener('click',()=>{missingUploads=false;mediaProblem=false;acknowledge.hidden=true;errors.hidden=true;schedule();});
   card.addEventListener('tintin:image-pending',()=>{missingUploads=false;acknowledge.hidden=true;},{signal:signal.signal});
@@ -133,5 +135,5 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   for(const event of ['input','change','tintin:image-pending','tintin:image-preview','tintin:commercial-draft'])card.addEventListener(event,schedule,{signal:signal.signal});
   window.addEventListener('online',()=>{if(dirty())void save().catch(()=>{});},{signal:signal.signal});
   card.addEventListener('keydown',event=>{if(event.key!=='Tab' || event.target.closest('dialog') || document.querySelector('.tt-mlib-overlay'))return;const controls=[...card.querySelectorAll('button,input,textarea,select,a[href],summary,[tabindex]')].filter(node=>node.getClientRects().length && !node.disabled && node.tabIndex>=0);if(!controls.length)return;const target=event.shiftKey?controls.at(-1):controls[0];if(event.shiftKey && document.activeElement===controls[0] || !event.shiftKey && document.activeElement===controls.at(-1)){event.preventDefault();target.focus({preventScroll:true});}},{signal:signal.signal});
-  return {key,ready,save,leave,publish,get revision(){return revision;},get applying(){return applying;},get reference(){return {key,revision};},destroy(){destroyed=true;unlock();clearTimeout(timer);signal.abort();back.remove();if(originalCancel)originalCancel.hidden=cancelWasHidden;exit.remove();retry.remove();secondary.remove();status.remove();errors.remove();card.classList.remove('tt-editor-workspace');delete card.dataset.productPublicState;document.documentElement.classList.remove('tt-product-workspace-active');}};
+  return {key,ready,save,leave,publish,reportError,get revision(){return revision;},get applying(){return applying;},get reference(){return {key,revision};},destroy(){destroyed=true;unlock();clearTimeout(timer);signal.abort();back.remove();if(originalCancel)originalCancel.hidden=cancelWasHidden;exit.remove();secondary.remove();feedback.remove();errors.remove();card.classList.remove('tt-editor-workspace');delete card.dataset.productPublicState;document.documentElement.classList.remove('tt-product-workspace-active');}};
 }

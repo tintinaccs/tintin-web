@@ -1802,7 +1802,7 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-workspace .tt-work-st
 .tt-private-work-list button {min-height:64px;white-space:normal;text-align:left;border-radius:12px;}
 
 /* El selector conserva el rótulo completo junto a guía y vista previa. */
-@media (min-width:1024px) {
+@media (min-width:720px) {
   #prod-form-card.tt-editor-workspace #prod-editor-actions {width:auto;margin-left:auto;flex:0 0 auto;}
   #prod-form-card.tt-editor-workspace #prod-editor-actions button {flex:0 0 auto;}
 }
@@ -1884,20 +1884,20 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-
 /* La foto permanece junto a todos los campos, en el mismo bloque del formulario. */
 #prod-form-card.tt-editor-composer .tt-photo-product-controls {background:var(--tt-commerce-surface);}
 #prod-form-card.tt-editor-composer .tt-photo-price-scope {grid-column:1/-1;}
-@media(min-width:1100px) {
+@media(min-width:720px) {
  #prod-form-card.tt-editor-composer .tt-product-fields {grid-template-columns:minmax(0,1fr) !important;}
  #prod-form-card.tt-editor-composer .tt-product-fields > [data-product-section=photos] {grid-column:1;grid-row:1;}
- #prod-form-card.tt-editor-composer [data-product-section=photos] > .tt-editor-section-fields {grid-template-columns:minmax(280px,.7fr) minmax(0,1.3fr);align-items:start;gap:24px;}
+ #prod-form-card.tt-editor-composer [data-product-section=photos] > .tt-editor-section-fields {display:grid;grid-template-columns:minmax(220px,.7fr) minmax(0,1.3fr);align-items:start;gap:16px;}
  #prod-form-card.tt-editor-composer #prod-color-photos.tt-unified-photos {grid-column:1 !important;grid-row:1;position:static;max-height:none;overflow:visible;padding:0;}
  #prod-form-card.tt-editor-composer [data-product-section=photos] > .tt-editor-section-fields > .tt-photo-product-controls {grid-column:2;grid-row:1;}
 }
-@media(max-width:1099px) {
+@media(max-width:719px) {
  #prod-form-card.tt-editor-composer [data-product-section=photos] > .tt-editor-section-fields {display:flex;flex-direction:column;}
  #prod-form-card.tt-editor-composer #prod-color-photos.tt-unified-photos {order:-1;width:100%;}
  #prod-form-card.tt-editor-composer .tt-photo-product-controls {width:100%;box-sizing:border-box;}
 }
 #prod-form-card.tt-editor-composer .tt-unified-photos > h3 {display:none;}
-@media(min-width:1100px) {
+@media(min-width:720px) {
  #prod-form-card.tt-editor-composer [data-product-section=photos] > .tt-editor-section-fields > .tt-photo-product-controls {grid-column:2 !important;}
  #prod-form-card.tt-editor-composer .tt-photo-selection-bar {position:static;background:var(--tt-commerce-surface);}
 }
@@ -1924,4 +1924,13 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-
  #prod-form-card.tt-editor-composer .tt-product-quick-actions {grid-column:1;grid-row:1;gap:4px;padding:0;}
  #prod-form-card.tt-editor-composer .tt-product-quick-actions button {flex:1 1 90px;padding:6px;font-size:12px;white-space:normal;}
  #prod-form-card.tt-editor-composer #prod-editor-section {grid-column:2;grid-row:1;margin:0;width:100%;max-width:100%;}
+}
+
+/* Un único estado del guardado, con su reintento, fuera de los campos. */
+#prod-form-card.tt-editor-workspace .tt-work-feedback {display:flex;flex-wrap:wrap;align-items:center;gap:8px;flex:1 1 100%;min-width:0;}
+#prod-form-card.tt-editor-workspace .tt-work-feedback .tt-work-status {flex:1 1 220px;margin:0;padding:0;line-height:1.5;}
+#prod-form-card.tt-editor-workspace .tt-work-feedback > button {flex:0 0 auto;min-height:44px;max-width:100%;padding:8px 14px;font-size:14px;white-space:normal;}
+#prod-form-card.tt-editor-workspace .tt-work-feedback[data-state=error] {padding-top:8px;border-top:1px solid var(--editor-line);}
+@media(max-height:500px) {
+ #prod-form-card.tt-editor-workspace .adm-card-head {gap:8px;}
 }

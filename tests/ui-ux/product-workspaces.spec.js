@@ -5,16 +5,44 @@ async function open(page,width=1366,height=768){await openProductSaveFixture(pag
 async function cancelSave(page){await page.locator('.tt-work-back').click();if(await page.locator('.tt-work-exit-dialog').isVisible())await page.getByRole('button',{name:'Guardar borrador y salir',exact:true}).click();}
 async function saveProgress(page){await page.evaluate(()=>window.qaProductController.workspace.save());await expect(page.locator('.tt-work-status')).toContainText('guardado en servidor');}
 async function reopen(page,key,productId=null){await page.evaluate(({key,productId})=>window.prodContinuarBorrador(key,productId),{key,productId});await page.evaluate(()=>window.qaProductController.workspace.ready);}
+for(const [width,height] of [[320,568],[390,844],[568,320],[736,414],[720,960],[768,1024],[820,1180],[1024,768],[1194,834],[1920,1080]])test(`Guardar con respuesta inválida muestra un único error y reintento accesible ${width}x${height}`,async({page},info)=>{
+ await open(page,width,height);
+ await page.locator('#prod-name').fill('Borrador conservado en tablet');
+ await page.evaluate(()=>window.qaHtmlResponse=true);
+ await page.locator('#prod-save-btn').click();
+ const message='El servidor no confirmó el guardado. Conservá el editor abierto y reintentá.';
+ await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','error');
+ await expect(page.getByText(message,{exact:true})).toHaveCount(1);
+ await expect(page.locator('#prod-form-error')).toBeHidden();
+ const retry=page.getByRole('button',{name:'Reintentar',exact:true});
+ await expect(retry).toBeInViewport();
+ await expect(page.locator('#prod-save-btn')).toBeInViewport();
+ const bounds=await retry.boundingBox();expect(bounds.height).toBeGreaterThanOrEqual(44);
+ expect((await page.locator('#prod-form-card > .adm-card-body').boundingBox()).height).toBeGreaterThanOrEqual(64);
+ await expect(retry).toHaveAttribute('aria-describedby','tt-product-work-status');
+ await page.screenshot({path:info.outputPath(`error-guardado-${width}.png`)});
+ expect(await page.locator('#prod-form-card').evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);
+ await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado en tablet');
+ expect(await page.evaluate(()=>Object.keys(sessionStorage).some(key=>key.startsWith('tt-product-work:')))).toBe(true);
+ // La red se recupera al clic: el backoff automático no puede ocultar Reintentar antes de probarlo.
+ await retry.evaluate(button=>button.addEventListener('click',()=>{window.qaHtmlResponse=false;},{capture:true,once:true}));await retry.click();
+ await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','saved');
+ await expect(page.getByText(message,{exact:true})).toHaveCount(0);
+ await expect(page.locator('#prod-form-error')).toBeHidden();
+ expect(await page.evaluate(()=>[...window.qaProductStore.keys()].some(key=>key.startsWith('products/')))).toBe(false);
+ await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+});
 test('respuesta HTML durante autoguardado conserva texto, muestra error recuperable y permite reintentar',async({page})=>{
  await open(page,390,844);await page.evaluate(()=>window.qaHtmlResponse=true);
  await page.locator('#prod-name').fill('Mi borrador recuperable');
  await page.evaluate(()=>window.qaProductController.workspace.save().catch(()=>{}));
+ await expect(page.locator('#prod-name')).toBeFocused();
  await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','error');
  await expect(page.locator('.tt-work-status')).toContainText('El servidor no confirmó');
  await expect(page.locator('.tt-work-status')).not.toContainText('DOCTYPE');
  await expect(page.locator('#prod-name')).toHaveValue('Mi borrador recuperable');
  expect(await page.evaluate(()=>Object.keys(sessionStorage).some(key=>key.startsWith('tt-product-work:')))).toBe(true);
- await page.evaluate(()=>window.qaHtmlResponse=false);await page.getByRole('button',{name:'Reintentar',exact:true}).click();
+ const retry=page.getByRole('button',{name:'Reintentar',exact:true});await retry.evaluate(button=>button.addEventListener('click',()=>{window.qaHtmlResponse=false;},{capture:true,once:true}));await retry.click();
  await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','saved');
  await expect(page.locator('.tt-work-status')).toContainText('guardado en servidor');
  expect(await page.evaluate(()=>[...window.qaProductStore.keys()].some(key=>key.startsWith('products/')))).toBe(false);
