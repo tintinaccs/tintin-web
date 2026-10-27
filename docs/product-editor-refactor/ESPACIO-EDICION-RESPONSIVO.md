@@ -38,6 +38,9 @@ asociaciones, precios, foco y regreso a edición.
 Regresión ampliada final:197/197 Chromium aprobadas sin reintentos (4,8min),
 incluyendo editor comercial, espacios privados, contexto por fotografía y
 formulario responsive completo. Stage oficial preflight y build Pages, rutas,
-CSP, diagnóstico, caché y diff-check: aprobados. CI del SHA final pendiente.
+CSP, diagnóstico, caché y diff-check: aprobados. CI del SHA final APROBADA:#1254, run40430346855 SUCCESS.
 Proveedores reales, sesión administrativa productiva y hardware físico no se
 certifican con estas fixtures de navegador.
+
+Cierre remoto consultado el27/10/2026: [CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md).
+Las pruebas autenticadas se registran separadas de estos recorridos locales.

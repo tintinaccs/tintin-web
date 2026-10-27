@@ -26,7 +26,7 @@ backend, checkout, pagos, pedidos o reservas. Perfil conserva sus bytes de main.
 |Build, caché y diagnóstico |APROBADA |Generadores canónicos;378 recursos y67 cargas dinámicas |
 |320,390,600,768,1024,1440px |APROBADA en los6 recorridos nuevos |12 capturas de fotos/variantes en evidencias-version-unica |
 |Sesión productiva autenticada/proveedores/dispositivos físicos |NO EJECUTADA |Sin datos productivos ni pagos reales |
-|CI y monitor de la unificación |PENDIENTES al publicar |Recibo remoto se añade al PR |
+|CI y monitor de la unificación |APROBADOS remotos |#1248 MERGED, CI40385863831 y producción40389685713 SUCCESS; ver CIERRE-VERIFICADO-20261027.md |
 
 Los casos nuevos quedan registrados en la etapa C de CI y abren tres veces el mismo producto y exigen un solo formulario,
 layout y galería. Editan, guardan una vez, recuperan el mismo producto y conservan

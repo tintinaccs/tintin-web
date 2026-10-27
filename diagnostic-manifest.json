@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "cf99cc2c522e01df87cd41b936a8a86ed2dd46437056a0d6ad04cfbed0ee78b1",
+  "sourceFingerprint": "220c121fd1500ef72bfdb5bc9a9e99575eaab11b3621326c57d846b7e1539dc0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1586,
-    "textFiles": 1455,
-    "totalBytes": 34573611,
+    "files": 1588,
+    "textFiles": 1457,
+    "totalBytes": 34616162,
     "pages": 19,
     "modules": 1058
   },
@@ -59587,8 +59587,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 983958,
-      "sha256": "64f0ed9fdee9fa241fad33e1e629348c1a47f420eac60ff12a60a618aa07629a"
+      "bytes": 985210,
+      "sha256": "752ea4bc4f60510756795fe2a6a3611fe67191084a502081c239c4d55d3746eb"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -60283,8 +60283,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 132830,
-      "sha256": "5b8945ae061d1a9b192675ca0b65096355449c91250fffeea904360ca4dca624"
+      "bytes": 133508,
+      "sha256": "0c65b75896424d92d00040d576cc8c9aa426914e24c75caf85f21d20c7a15d0a"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -60349,8 +60349,8 @@
     {
       "path": "docs/product-editor-refactor/00-VERSION-UNICA.md",
       "extension": ".md",
-      "bytes": 4325,
-      "sha256": "b6f669e969840bafc6f3a6ff7a30e0a0139e01c49cfedf03773c66d5b1f2b928"
+      "bytes": 4551,
+      "sha256": "140a673049abfbb51bbbb8b4712ff35282059b8ba7e36704fd0ed0b1025d2956"
     },
     {
       "path": "docs/product-editor-refactor/04-SIMPLIFICACION-UX.md",
@@ -60367,8 +60367,8 @@
     {
       "path": "docs/product-editor-refactor/06-AUDITORIA-FINAL.md",
       "extension": ".md",
-      "bytes": 7353,
-      "sha256": "6377661db1185116226138b6a236ca65c3c206d50e9de26a917ebd57010b993f"
+      "bytes": 7474,
+      "sha256": "87e8cab6f7779e174221f0f4628de53a8b364e3105567fd6d4c498be9178b87b"
     },
     {
       "path": "docs/product-editor-refactor/07-INTEGRACION-AUTORIZADA.md",
@@ -60379,8 +60379,14 @@
     {
       "path": "docs/product-editor-refactor/CAMBIOS-Y-COMPATIBILIDAD.md",
       "extension": ".md",
-      "bytes": 4342,
-      "sha256": "1162950a67220a4c6014c43c407ca0ea5713868b3feac37a6791aaba71f25fb8"
+      "bytes": 4389,
+      "sha256": "ab4ec24a9fc140f4367b15778cf19f79a5b457aa1f0ab7a5f95486b86cbd662e"
+    },
+    {
+      "path": "docs/product-editor-refactor/CIERRE-VERIFICADO-20261027.md",
+      "extension": ".md",
+      "bytes": 6023,
+      "sha256": "e30d517e6ed10d8c9cc73e3ff50fe4dae07bf17115653de812b450effbd5c677"
     },
     {
       "path": "docs/product-editor-refactor/CONTINUIDAD-FASES-0-5.md",
@@ -60391,38 +60397,38 @@
     {
       "path": "docs/product-editor-refactor/EDICION-CONTEXTUAL-PRODUCTO.md",
       "extension": ".md",
-      "bytes": 6905,
-      "sha256": "8a6bc1b6023da1c9c945f65232ebc6e4b526358448b6afb43b46e448cc4d6359"
+      "bytes": 6950,
+      "sha256": "95e1d7d6a67c1437799b35c6e15dca0246388fda3a45b763f22ba1b1672f419a"
     },
     {
       "path": "docs/product-editor-refactor/ESPACIO-EDICION-RESPONSIVO.md",
       "extension": ".md",
-      "bytes": 2434,
-      "sha256": "9cd11f2ee6896e0f94f7235814c9d6fbd5eb1eb73b5f9783a4466e6cb1543c2f"
+      "bytes": 2644,
+      "sha256": "70830cc455220bc7a9e90f85d8544767ccc71f0378dff024294aef398d23cc7c"
     },
     {
       "path": "docs/product-editor-refactor/ESTADO-GENERAL.md",
       "extension": ".md",
-      "bytes": 2734,
-      "sha256": "40e5ea9aa0c1f0e73ff5c41612a14ead9da596dcba4dc022f1b431e92b88cf9e"
+      "bytes": 2153,
+      "sha256": "d096bd91920584706ce1e381e2c499de8f74010b21744d8af6299a921226ee5d"
     },
     {
       "path": "docs/product-editor-refactor/INCIDENCIAS-PENDIENTES.md",
       "extension": ".md",
-      "bytes": 3221,
-      "sha256": "815fd65df7728518815c533c87a7fc34b6982231d923601016ecb28885526e47"
+      "bytes": 2758,
+      "sha256": "51e473381a6d1cf1bce5cdfcc768dd9cc734cca8593dbad9b6813119ca9d1049"
     },
     {
       "path": "docs/product-editor-refactor/INFORME-FINAL.md",
       "extension": ".md",
-      "bytes": 3637,
-      "sha256": "3be0125fb615e6ac5761aec17d58fd18e21f426b3bb964c2a62a11d85700911a"
+      "bytes": 3915,
+      "sha256": "b0e6837b2ed6569079e21d7e0487f371c47865bb81b080359464ebf9575a0f35"
     },
     {
       "path": "docs/product-editor-refactor/MATRIZ-PRUEBAS-FINAL.md",
       "extension": ".md",
-      "bytes": 73770,
-      "sha256": "42d9a6c94acf51146efd78d8f55ddd449d094405754218e414169c46c14803c8"
+      "bytes": 73939,
+      "sha256": "1640b230ca223a3f59c0695afbbaf3c22b4307fbcd30824c7299459f73866d60"
     },
     {
       "path": "docs/product-editor-refactor/RENDIMIENTO.md",
@@ -60439,14 +60445,20 @@
     {
       "path": "docs/product-editor-refactor/UNIFICACION-SEIS-FASES.md",
       "extension": ".md",
-      "bytes": 3262,
-      "sha256": "01f9db9fb681921cb9889df9aa58915d62df7406d275fb404af91f3eeaffd5c5"
+      "bytes": 3323,
+      "sha256": "0fa74d2ea3682d27f8d6c5eb41f26fab5eb34daa742e9069abf560993b226bd1"
     },
     {
       "path": "docs/product-editor-refactor/UX-AGIL-AUTOGUARDADO.md",
       "extension": ".md",
-      "bytes": 5997,
-      "sha256": "66f70a6c45c857d40dae4450b62f1c6989593cd8cf614e8198c23847baaac2d2"
+      "bytes": 6203,
+      "sha256": "6fb06ff9b1288daf5bca6142ecaf8349fdc67d693a752ea24f637f66b45de154"
+    },
+    {
+      "path": "docs/product-editor-refactor/evidencias-cierre-20261027.json",
+      "extension": ".json",
+      "bytes": 34279,
+      "sha256": "11357fc549ae3bd5afb5294f0063ade06868d5e81e4f0e2a7c98b9bdd045b1df"
     },
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/contexto-1024.png",

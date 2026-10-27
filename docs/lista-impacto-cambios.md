@@ -1,3 +1,7 @@
+## 2026-10-27 — Cierre documental del editor y aceptación real separada
+
+Autoridad: docs/product-editor-refactor/CIERRE-VERIFICADO-20261027.md y recibos JSON obtenidos por API GitHub para #1248/#1252 y continuaciones hasta #1262. Se corrigen estados de CI/merge/publicación que habían quedado pendientes pese a sus resultados SUCCESS. Se mantienen como no ejecutadas la carga real de QA, guardado/reapertura y verificación de fila en Sheets mientras falta sesión confirmada. Sin cambios de aplicación, contratos ni datos de proveedores. El job global de Sheets no certifica un producto. Los checks de esta revisión documental tendrán su propio SHA y recibo en la PR.
+
 ## 2026-10-27 — Tablet y un único aviso de guardado
 
 Autoridades: CSS administrativo, workspace privado y controlador canónico de Productos. Dos columnas desde720px, estados/reintento en una sola región accesible y limpieza del error anterior del cuerpo al pulsar Guardar. Se mantienen validaciones, confirmación estricta del servidor, borrador/recuperación, fotos, modelos, permisos y publicación existentes. Pruebas en las suites CI vigentes amplían orientación y tamaños; URLs inmutables y derivados por constructores. Sin datos reales ni workflows modificados. Evidencia y límites: docs/product-editor-refactor/TABLET-Y-AVISO-GUARDADO.md y CURRENT_STATE.

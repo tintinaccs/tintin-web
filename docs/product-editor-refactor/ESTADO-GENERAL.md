@@ -1,52 +1,38 @@
 # Estado general del editor de productos
 
-## UX ágil sobre la versión publicada #1254
+## Única versión vigente y publicada
 
-Base fb0bede6. Asociación por color con un clic cuando no hay combinaciones,
-galería sin reconstrucción de medios por asociación, controles táctiles y estado
-de guardado real. Respuestas HTML/JSON inválidas son errores recuperables, no
-confirmaciones. Vista previa permanece al final. Ver `UX-AGIL-AUTOGUARDADO.md`
-para evidencia propia, alcance y límites; no heredar PASS de entregas anteriores.
-PASS_LOCAL:64 Node,354 Chromium ampliados y13 específicos tras conservar el
-panel de colores (corridas solapadas); preflight oficial. CI del candidato
-pendiente. La causa externa del HTML productivo sigue sin reproducirse.
-
-## Ajuste actual de espacio en todas las pantallas
-
-Sobre main95091da9/#1252: vista previa únicamente al final, navegación sin
-superposición, galería con scroll del formulario, más ancho de edición y letra
-mínima16px. Ver `ESPACIO-EDICION-RESPONSIVO.md`. PASS_LOCAL:197/197 Chromium
-ampliados sin reintentos, preflight oficial y build/CSP/rutas/caché/diagnóstico.
-CI del candidato pendiente; no heredar CI anterior.
-
-## Única versión vigente
-
-El editor de seis fases y sus correcciones es la única versión mantenida.
+Comprobado el27/10/2026. Aplicación de main comprobada: `65ee34250b20738591ec65cc097ee4e8bd452486`
+(PR #1262), que conserva el editor de seis fases y sus correcciones posteriores.
+No existe un selector de diseños ni una segunda implementación del formulario.
 Autoridad: [00-VERSION-UNICA.md](00-VERSION-UNICA.md).
 
-Incluye#1241 (integración de las seis fases),#1244 (continuidad de guardado,
-borradores y variantes),#1245 y Perfil#1246. La propuesta visual#1247 se cerró
-sin merge, con CI cancelada. No está publicada ni se incorpora a esta versión.
+La unificación #1248 y el bloque contextual #1252 están integrados y publicados.
+Se conservan las mejoras de espacio #1254, colores/autoguardado #1256, tablet #1258,
+fluidez #1257, publicación #1260 y guardado/CSP #1262. La vista previa actual queda
+al final y se mantienen los controles/contratos originales; las capturas de cada
+entrega son evidencia fechada, no diseños alternativos vigentes.
 
-No existe un selector de diseños. Se conservan el formulario, galería, controles,
-serializer, progreso privado, permisos y contratos comerciales canónicos. Las
-especificaciones visuales previas y los controles muertos se retiran de la rama
-vigente para impedir que se reutilicen como versiones actuales.
+## Verificación remota comprobada
 
-## Verificación actual
+- CI de #1252:40421504536 SUCCESS; CI posterior de main40424020632 SUCCESS.
+- Producción de #1252:40424022740 SUCCESS, con artefacto del merge33af11a5.
+- CI actual de main40560324289 y producción40560326995:SUCCESS, ambos para65ee3425.
+- Operación global a Sheets40568998469:SUCCESS; no certifica una fila de QA.
+- Recibos con SHA completos, intentos y enlaces: [CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md).
 
-La unificación se valida en `codex/editor-version-unica-seis-fases-20261026`.
-PASS_LOCAL:44/44 Chromium,44/44 Node y39/39 preflight, sin reintentos.
-CI y monitor propios pendientes al publicar; no se reutiliza PASS de#1247.
+CI, merge y publicación de las entregas citadas ya no están pendientes.
+No se reutilizan resultados de una propuesta descartada ni se aprueba un SHA
+futuro de esta revisión documental mediante recibos anteriores.
 
-Recibo: [UNIFICACION-SEIS-FASES.md](UNIFICACION-SEIS-FASES.md).
-La evidencia fechada de Fase6 funcional se conserva en sus informes. Las pruebas
-autenticadas con proveedores y dispositivos físicos siguen pendientes.
+## Aceptación externa aún abierta
 
-## Continuidad contextual actual
+EXT-01 está bloqueada por falta de sesión administrativa confirmada. Existe un
+perfil «Tintin Super Admin» sin inicio registrado; se solicitó confirmar/iniciar
+sesión. Todavía no se creó producto de QA, subió imagen real ni verificó su fila
+en `Productos`. La sincronización programada no sustituye ese recorrido.
+DEV-01 y PERF-01 conservan sus límites: hardware físico y medición con red real
+no ejecutados. El límite de13 fotos permanece vigente, sin truncar datos.
 
-Se implementa el bloque único de fotografías y datos completos del producto, con
-asociaciones múltiples y propuestas específicas por categoría. Misma autoridad
-de seis fases, mismos campos y contratos. Ver
-[EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md) para la evidencia
-propia y limitaciones. No heredar los resultados anteriores como aprobación actual.
+La matriz real y sus pasos se registran en el recibo de cierre. No declarar el
+proyecto completamente aceptado mientras falten esas comprobaciones.
