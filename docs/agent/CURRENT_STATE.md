@@ -33,6 +33,13 @@ inactivo/archivado, fallo HTML y recuperación del guardado oficial, diez tamañ
 y rotación. Preflight final39/39 tras el ajuste de Reintentar, build Pages, CSP,
 caché y plan protegido aprobados. CI, merge y producción PENDING al redactar.
 
+CI inicial40554031431, attempt1, head62e2a7b1: calidad falla al recolectar
+email-history-safety porque el fixture buscaba inlineArgumentAdmin eliminado.
+Se migran los dos consumidores de prueba al emisor/listener canónico. Regresiones
+locales14/14 Node y4/4 Chromium escritorio/móvil con IDs/etiquetas hostiles PASS.
+La corrida runtime amplia local se interrumpe deliberadamente para entregar el
+ajuste; no se declara PASS global. CI completa se repite en el nuevo SHA.
+
 NOT_VERIFIED: guardar productos reales con la sesión de la propietaria; el control
 de su navegador no está expuesto. No se publican datos QA, pedidos ni correos,
 ni se afirma que cada502 de infraestructura tenga la misma causa. Las capturas

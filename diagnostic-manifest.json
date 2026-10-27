@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a15023707a4563485f3bcd35036b01af35fb68c7041410f249866320a0a04392",
+  "sourceFingerprint": "cf99cc2c522e01df87cd41b936a8a86ed2dd46437056a0d6ad04cfbed0ee78b1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1586,
     "textFiles": 1455,
-    "totalBytes": 34572684,
+    "totalBytes": 34573611,
     "pages": 19,
     "modules": 1058
   },
@@ -50785,8 +50785,8 @@
     },
     {
       "path": "tests/operations/content-security-boundaries.test.mjs",
-      "bytes": 6051,
-      "sha256": "29c5205207e80f93612ceb6a51ec39ac3444ccb1b900508db533e8ebc7388a9f",
+      "bytes": 6355,
+      "sha256": "b51553d6bd28ecd06f26ae0c288a7ab7ef914ff0eb70f60676dbb4c9a1ed5084",
       "syntax": {
         "ok": true,
         "error": ""
@@ -50799,42 +50799,48 @@
           "line": 1
         },
         {
-          "raw": "node:assert/strict",
-          "target": null,
+          "raw": "../../js/admin/eventos-dinamicos-admin.mjs",
+          "target": "js/admin/eventos-dinamicos-admin.mjs",
           "dynamic": false,
           "line": 2
         },
         {
-          "raw": "node:fs",
+          "raw": "node:assert/strict",
           "target": null,
           "dynamic": false,
           "line": 3
         },
         {
-          "raw": "node:module",
+          "raw": "node:fs",
           "target": null,
           "dynamic": false,
           "line": 4
         },
         {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
           "raw": "../../cloudflare/contenido-pagina-seguro.js",
           "target": "cloudflare/contenido-pagina-seguro.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/pages/fixture",
-          "line": 8
+          "line": 9
         },
         {
           "url": "https://example.test/",
-          "line": 20
+          "line": 21
         },
         {
           "url": "https://res.cloudinary.com/demo/image/upload/a.png",
-          "line": 33
+          "line": 34
         }
       ]
     },
@@ -53788,8 +53794,8 @@
     },
     {
       "path": "tests/runtime/email-history-safety.spec.js",
-      "bytes": 2885,
-      "sha256": "4bf8bf4d31b14cb08125b4932387dba7ca545402d1447bd1f2bafcb4eaba4ad6",
+      "bytes": 3035,
+      "sha256": "bef0bae9a39adc6bb1b17cd255e6ff8643a668ec6394f2083c40ae803d6b87cd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53798,7 +53804,7 @@
       "endpoints": [
         {
           "url": "https://untrusted.invalid/tracker",
-          "line": 11
+          "line": 12
         }
       ]
     },
@@ -59581,8 +59587,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 983485,
-      "sha256": "ab6b5ca63c4ba5dbe723b47c1a75375a3b8aee4cb02f43022f1a1a7961344f8f"
+      "bytes": 983958,
+      "sha256": "64f0ed9fdee9fa241fad33e1e629348c1a47f420eac60ff12a60a618aa07629a"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -66109,8 +66115,8 @@
     {
       "path": "tests/operations/content-security-boundaries.test.mjs",
       "extension": ".mjs",
-      "bytes": 6051,
-      "sha256": "29c5205207e80f93612ceb6a51ec39ac3444ccb1b900508db533e8ebc7388a9f"
+      "bytes": 6355,
+      "sha256": "b51553d6bd28ecd06f26ae0c288a7ab7ef914ff0eb70f60676dbb4c9a1ed5084"
     },
     {
       "path": "tests/operations/custom-page-revision.test.mjs",
@@ -66589,8 +66595,8 @@
     {
       "path": "tests/runtime/email-history-safety.spec.js",
       "extension": ".js",
-      "bytes": 2885,
-      "sha256": "4bf8bf4d31b14cb08125b4932387dba7ca545402d1447bd1f2bafcb4eaba4ad6"
+      "bytes": 3035,
+      "sha256": "bef0bae9a39adc6bb1b17cd255e6ff8643a668ec6394f2083c40ae803d6b87cd"
     },
     {
       "path": "tests/runtime/error-monitor.spec.js",
