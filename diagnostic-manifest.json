@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "3a3f95253f01c7c141f535a0b6fbcbfa60c13a5c6c9c16c79943892cf8855947",
+  "sourceFingerprint": "1ddccc2f9c5f5c5edfad9ccd1e35d975a618fc448bbaa817ca73f06c06ae3755",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1579,
     "textFiles": 1448,
-    "totalBytes": 34714912,
+    "totalBytes": 34709924,
     "pages": 19,
     "modules": 1052
   },
@@ -2893,7 +2893,7 @@
         "viewer"
       ],
       "bytes": 204428,
-      "sha256": "75e3246faf7572013485f2fa2108e643cbfbf8cb7ca98903b3502aead5ca3761",
+      "sha256": "767520042ff6383e49efc0b03cd900186827d335e075a1efe3c487b3ab5262e5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2947,7 +2947,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -2972,7 +2972,7 @@
           "line": 2083
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084
         },
@@ -3302,7 +3302,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -3332,7 +3332,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084,
           "exists": true
@@ -28245,7 +28245,7 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 521728,
-      "sha256": "d47663a6a18da2fa25aafe762869f3eff1aa86b0acfc8b2de084d3c7c1224204",
+      "sha256": "71c67fb45e34d6803c2078ac8bdfea0a1a0d7c56564024d53c2b6aa2e180a76f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28360,7 +28360,7 @@
           "line": 18
         },
         {
-          "raw": "./products/galeria-unificada.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "./products/galeria-unificada.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/products/galeria-unificada.js",
           "dynamic": false,
           "line": 19
@@ -30911,7 +30911,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "bytes": 137975,
-      "sha256": "5963a8ed261b41fa15e00b7478e74d846c10ea0ec6567d5eaa6204cabdc5db82",
+      "sha256": "37aa2a0d331c1e179d5796499f7498a504d498ac988ae2c2ac85d810c587bc80",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30954,7 +30954,7 @@
           "line": 6
         },
         {
-          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/products/interfaz-productos-adaptable.js",
           "dynamic": false,
           "line": 7
@@ -57667,7 +57667,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204428,
-      "sha256": "75e3246faf7572013485f2fa2108e643cbfbf8cb7ca98903b3502aead5ca3761"
+      "sha256": "767520042ff6383e49efc0b03cd900186827d335e075a1efe3c487b3ab5262e5"
     },
     {
       "path": "apple-touch-icon.png",
@@ -58668,8 +58668,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 8439,
-      "sha256": "f380575336d9df950ca3e1ee08750d73eb8c33becefe835825557d2f53519ee0"
+      "bytes": 1622,
+      "sha256": "1fb91b58ff04b86b90572eaccd368f2da493c924364013315d23c7a9cdfebf24"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -58681,7 +58681,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "c79ccbc176406922a842ca6eda469ff0b5dbd615bd467b21f7090932b9d6c37b"
+      "sha256": "c729eb9c7cd517b85bc6755082265c2979f10ac36f3b83a2a1aee4622180375e"
     },
     {
       "path": "config/public-site.json",
@@ -59340,8 +59340,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 976737,
-      "sha256": "9da5e7673df271e4ee682ebe789be20bbff827df365a984b289b0831f3cb8c01"
+      "bytes": 978566,
+      "sha256": "b554af6d39594528d63a4bbf1c3288bbfd0131cd86d7982a3508c3b73d34250e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -61081,7 +61081,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 521728,
-      "sha256": "d47663a6a18da2fa25aafe762869f3eff1aa86b0acfc8b2de084d3c7c1224204"
+      "sha256": "71c67fb45e34d6803c2078ac8bdfea0a1a0d7c56564024d53c2b6aa2e180a76f"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -61543,7 +61543,7 @@
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
       "bytes": 137975,
-      "sha256": "5963a8ed261b41fa15e00b7478e74d846c10ea0ec6567d5eaa6204cabdc5db82"
+      "sha256": "37aa2a0d331c1e179d5796499f7498a504d498ac988ae2c2ac85d810c587bc80"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -64069,7 +64069,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 75978,
-      "sha256": "bc72ed0f7af73082d1ff2b98f4d02dc597420a5577266219087dcbcf219d3a8b"
+      "sha256": "ad20ddf67e012c84a7ee976d35213302a064ff01a7912cd23634ed7420a13868"
     },
     {
       "path": "scripts/ci-commands.js",
