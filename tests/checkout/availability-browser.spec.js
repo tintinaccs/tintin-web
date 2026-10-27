@@ -11,6 +11,7 @@ async function mount(page,{stock=0,offline=false,delay=0,deferReads=false}={}){
  import '../../js/quality/accesibilidad-global.js';
  import {inspectCheckoutAvailability,showCheckoutAvailabilityDialog} from '../../js/pages/checkout/disponibilidad-checkout.js';
  import {hasForwardValidation,replayValidatedForward} from '../../js/pages/checkout/validacion-avance.js';
+ import {sanitizeImageUrl} from '../../js/components/images/utilidades-imagenes.js';
  const AUTH_STATES={UNKNOWN:'unknown'}; const user={uid:'fixture',emailVerified:true};
  let activeUser=user; const getSessionUser=()=>activeUser; window.changeSession=()=>{activeUser={uid:'other'}};
  const waitForSession=async()=>({status:'authenticated',user:activeUser});const subscribeAuthState=()=>{};

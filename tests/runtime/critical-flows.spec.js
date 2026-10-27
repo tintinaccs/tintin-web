@@ -55,6 +55,13 @@ async function otp(page,request,email,{invalid=false}={}){
 }
 async function fillProfile(page){await page.locator('#login-profile-first-name').fill('María González');await page.locator('#login-profile-phone').fill('0981123456');}
 async function continueProfile(page){const b=page.locator('#btn-save-profile');if(test.info().project.use.hasTouch)await b.tap();else await b.click();}
+async function closeFirstWelcome(page,request,email){
+  const welcome=page.locator('#tt-welcome-tutorial');
+  await expect(welcome).toBeVisible();
+  expect((await state(request,email)).profile.welcomeTutorialSeen).toBe(true);
+  await page.locator('#tt-welcome-close').click();
+  await expect(welcome).toHaveCount(0);
+}
 
 test('correo → OTP real → Continuar → perfil persistido → sesión conservada',async({page,request},testInfo)=>{
   if(testInfo.project.name.includes('mobile'))await page.setViewportSize({width:320,height:568});
@@ -118,6 +125,7 @@ test('Firestore deniega permisos y la interfaz permite recuperar el guardado',as
 
 test('producto carga desde HTTP, carrito cambia y checkout avanza tras validar sesión',async({page,request})=>{
   const email='checkout@example.test';await otp(page,request,email);await fillProfile(page);await continueProfile(page);await expect(page).toHaveURL(/index\.html/);
+  await closeFirstWelcome(page,request,email);
   await page.goto('/product?id=runtime-watch',{waitUntil:'domcontentloaded'});
   await expect(page.locator('#product-name')).toHaveText('Reloj Runtime');
   // El aviso aparece con retraso y puede interponerse durante el clic móvil.
@@ -166,6 +174,7 @@ test('cliente no puede elevar su rol ni abrir el panel administrativo',async({pa
 
 test('cuenta muestra el perfil persistido, guarda cambios y los conserva al recargar',async({page,request},testInfo)=>{
   const email='account@example.test';await otp(page,request,email);await fillProfile(page);await continueProfile(page);await expect(page).toHaveURL(/index\.html/);
+  await closeFirstWelcome(page,request,email);
   await page.goto('/perfil',{waitUntil:'domcontentloaded'});
   await expect(page.locator('#perfil-email-display')).toHaveText(email);
   await expect(page.locator('#perfil-nombre')).toHaveValue('María González');

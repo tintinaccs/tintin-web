@@ -46,6 +46,15 @@ test('respuesta HTML durante autoguardado conserva texto, muestra error recupera
  await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','saved');
  await expect(page.locator('.tt-work-status')).toContainText('guardado en servidor');
  expect(await page.evaluate(()=>[...window.qaProductStore.keys()].some(key=>key.startsWith('products/')))).toBe(false);
+ await page.evaluate(()=>window.qaHtmlResponse=true);
+ await page.locator('#prod-name').fill('Otra edición sin conexión');
+ await page.evaluate(()=>window.qaProductController.workspace.save().catch(()=>{}));
+ await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','error');
+ await page.locator('#prod-name').fill('Edición nueva conservada');
+ await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','pending');
+ await page.evaluate(()=>window.qaHtmlResponse=false);
+ await saveProgress(page);
+ await expect(page.locator('#prod-name')).toHaveValue('Edición nueva conservada');
 });
 test('crear incompleto, salir, recuperar, publicar, editar sin reemplazar público y recuperar cambios',async({page})=>{
  await open(page);await page.locator('#prod-name').fill('Borrador recuperable');

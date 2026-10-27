@@ -5,7 +5,7 @@ import vm from 'node:vm';
 const source=fs.readFileSync('js/orders/pedido-checkout-seguro.js','utf8');
 test('el ticket comunica la reserva real sin atribuirla a pedidos antiguos o liberados',()=>{
  for(const state of ['reserved','released','legacy']){
-  const target={innerHTML:''};const c=vm.createContext({document:{getElementById:()=>target},formatPrice:String,escapeHtml:v=>String(v??''),SHIPPING_LABELS:{},PAYMENT_LABELS:{}});
+  const target={innerHTML:''};const c=vm.createContext({document:{getElementById:()=>target},formatPrice:String,escapeHtml:v=>String(v??''),SHIPPING_LABELS:{},PAYMENT_LABELS:{},ENCOMIENDA_LABELS:{}});
   vm.runInContext(source.slice(source.indexOf('  function renderConfirmedOrder('),source.indexOf('  function updateReceiptEmailStatus(')),c);
   c.renderConfirmedOrder({items:[],total:100,subtotal:100,inventoryState:state,...(state==='legacy'?{}:{inventoryPolicy:'reserve-on-checkout'})});
   assert.equal(target.innerHTML.includes('Productos apartados para este pedido'),state==='reserved');

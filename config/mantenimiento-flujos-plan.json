@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "51e5e7376a355902a1eafdba78a3ffbb74ef58c6",
-  "reason": "Unificar aviso de guardado y adaptar galería y campos de producto a tablet conservando escritores y permisos",
+  "baseCommit": "1467835415f7cf4ecc432b809bc118acb0b6197e",
+  "reason": "Unificar aviso de guardado, conservar Reintentar al perder foco y adaptar fotos y campos a tablet",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "34e53a17261bec16597f08b9005c43490ad55535b8dbb4c73fd68422ff2414dc",
-      "newHash": "96c511771aa2981c6734254513b7c6428de91ee21fdebf2dce8e2b7c2ab1ea4d"
+      "oldHash": "f731228bf3dc6a4a85fc6aadae45108fcb5819af3b2ec98267faec6d5f6d74c6",
+      "newHash": "96f1caf2c6babfe44dec56593ce0328264ad2de0372a66e9a983adeeec59b615"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -25,8 +25,8 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "2af7687584d84ab9b435425d77a7c03c67334caeec58bc31b7a9f15a4acf278b",
-      "newHash": "c42960ba8627b90d8c8651cb5b1a084a0cef4de548af1a78084250ed8da89638"
+      "oldHash": "a893c23970980b02cc9ea5db3ff24098ff72785e0012348ab0078f380dbad1cd",
+      "newHash": "0d418d72e386b995963f26e636862cdcb5e84f389d588621eb8dd14fa3988e8a"
     }
   ],
   "affectedRecords": [

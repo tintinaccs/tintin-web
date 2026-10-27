@@ -10,6 +10,20 @@ preflight nativo sin peticiones/escrituras aprobado. Matrices ampliadas,
 build/plan, CI/merge/producción IN_PROGRESS. Sesión/POST real de la foto y
 hardware físico NOT_VERIFIED. Informe TABLET-Y-AVISO-GUARDADO.md.
 
+Conciliado main1467835415f7cf4ecc432b809bc118acb0b6197e (#1255), sin retirar
+sus cambios de Checkout/bienvenida ni los imports compartidos. Reproducción
+adicional: blur del nombre ocultaba Reintentar antes del clic; se conserva el
+error mientras la instantánea no cambie. Node29/29 y admin-sync78/78 repetidos
+sobre la base conciliada PASS_LOCAL. WebKit12/12 de errores/reintento/rotación
+PASS_LOCAL; matriz33 WebKit aprobada en la corrida anterior, cuyo fallo restante
+de interacción se reprodujo y corrigió. Chromium144 en ejecución.
+
+## 2026-10-27 — Bienvenida al salir del checkout y confirmación organizada
+
+Codex /root. Alcance vigente confirmado por la titular: ninguna bienvenida en /checkout ni /checkout.html, tampoco en Pedido confirmado, ticket restaurado o pago pendiente. No se descarga desde el guardia ni consume sus flags; aparece al salir hacia otra página pública/Perfil. Se elimina el disparo de success y se conserva transacción por cuenta/configuración. En otras páginas, el controlador de superficies libera carrito/cuenta antes de la guía, sin vaciar productos. Confirmación organizada en secciones con fotos seguras/fallback, totales, entrega, cliente, pago y ticket; enlaces a Pedidos, PNG/compartir/PDF conservados. Se integra main51e5e737/#1256 preservando editor y tests.
+
+Evidencia previa del mismo trabajo:205 Node,37 Chromium y39 preflight;16 pruebas de disponibilidad tras cargar la utilidad de fotos en su fixture; CI40435606414 aprobó comercio, interfaz, Rules y administración. Calidad detectó seis recorridos que intentaban usar cookies mientras la bienvenida estaba abierta (ocultamiento deliberado ya existente). Los dos recorridos de compra/perfil ahora comprueban la primera guía, su marca persistida y cierre antes de seguir;4/4 Chromium escritorio/móvil con Auth/Firestore reales aislados aprobaron. WebKit local no dispone de bibliotecas del host y queda a cargo de CI. PASS_LOCAL vigente tras la aclaración y conciliación con1256:206/206 Node,37/37 Chromium,39/39 preflight y4/4 recorridos reales aislados de compra/perfil en Chromium escritorio/móvil, sin reintentos. Build/caché aprobados. CI final/merge/producción PENDING. No se crean pedidos ni correos reales. PR1255.
+
 ## 2026-10-26 — Editor amplio y vista previa inferior, Codex /root GPT-6
 
 Base main95091da9, worktree /workspace/tintin-editor-responsive, rama

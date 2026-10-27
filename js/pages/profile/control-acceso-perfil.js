@@ -160,6 +160,7 @@ function enforceProfileComplete(user, data) {
 
 let watchedUid = '';
 let stopWatching = null;
+let welcomeRuntimeLoading = null;
 
 function watchProfile(user) {
   if (!user || user.isAnonymous || isSuperAdminUser(user)) {
@@ -177,6 +178,16 @@ function watchProfile(user) {
       return;
     }
     enforceProfileComplete(user, data);
+    if (!redirecting && currentPageName() !== 'checkout' && data.role === 'client' && data.profileStatus === 'active' &&
+        data.welcomeTutorialPending === true && !data.welcomeTutorialSeen &&
+        !data.welcomeTutorialFirstShownAt && !data.welcomeTutorialCompletedAt &&
+        data.onboardingCompleted !== true && !welcomeRuntimeLoading) {
+      welcomeRuntimeLoading = import('../../components/welcome/tutorial-bienvenida.js?v=tintin-20261027-welcome-receipt-1')
+        .catch(error => {
+          welcomeRuntimeLoading = null;
+          console.warn('[profile-gate] Bienvenida pendiente:', error);
+        });
+    }
   }, error => {
     // Sin poder leer el perfil no se bloquea la navegación: un problema de
     // red no tiene por qué dejar a alguien afuera de la tienda. El bloqueo
