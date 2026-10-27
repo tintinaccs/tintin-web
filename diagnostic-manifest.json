@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "3a3f95253f01c7c141f535a0b6fbcbfa60c13a5c6c9c16c79943892cf8855947",
+  "sourceFingerprint": "0c7bca80fabe8bf0a31c635aff8dc7773b84910c4802262161c1fc6209f10e01",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1579,
-    "textFiles": 1448,
-    "totalBytes": 34714912,
+    "files": 1583,
+    "textFiles": 1452,
+    "totalBytes": 34724561,
     "pages": 19,
-    "modules": 1052
+    "modules": 1055
   },
   "viewports": [
     {
@@ -2893,7 +2893,7 @@
         "viewer"
       ],
       "bytes": 204428,
-      "sha256": "75e3246faf7572013485f2fa2108e643cbfbf8cb7ca98903b3502aead5ca3761",
+      "sha256": "767520042ff6383e49efc0b03cd900186827d335e075a1efe3c487b3ab5262e5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2947,7 +2947,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -2972,7 +2972,7 @@
           "line": 2083
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084
         },
@@ -3302,7 +3302,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -3332,7 +3332,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084,
           "exists": true
@@ -28245,7 +28245,7 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 521728,
-      "sha256": "d47663a6a18da2fa25aafe762869f3eff1aa86b0acfc8b2de084d3c7c1224204",
+      "sha256": "71c67fb45e34d6803c2078ac8bdfea0a1a0d7c56564024d53c2b6aa2e180a76f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28360,7 +28360,7 @@
           "line": 18
         },
         {
-          "raw": "./products/galeria-unificada.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "./products/galeria-unificada.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/products/galeria-unificada.js",
           "dynamic": false,
           "line": 19
@@ -30911,7 +30911,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "bytes": 137975,
-      "sha256": "5963a8ed261b41fa15e00b7478e74d846c10ea0ec6567d5eaa6204cabdc5db82",
+      "sha256": "37aa2a0d331c1e179d5796499f7498a504d498ac988ae2c2ac85d810c587bc80",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30954,7 +30954,7 @@
           "line": 6
         },
         {
-          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261027-global-fluidez-3",
+          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261027-global-fluidez-4",
           "target": "js/admin/products/interfaz-productos-adaptable.js",
           "dynamic": false,
           "line": 7
@@ -40751,6 +40751,29 @@
       },
       "imports": [],
       "endpoints": []
+    },
+    {
+      "path": "scripts/notificar-resultados-github.mjs",
+      "bytes": 3184,
+      "sha256": "bec25cd858cbc05f691f1592a588190a1e5c156e8ac32e7e6d4744408149fb57",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.github.com/",
+          "line": 6
+        }
+      ]
     },
     {
       "path": "scripts/preparar-hosting.js",
@@ -51009,6 +51032,87 @@
       ]
     },
     {
+      "path": "tests/operations/github-result-notifications.test.mjs",
+      "bytes": 1913,
+      "sha256": "53acf59d141102d8d9525142cfe89c08540b250d47cbab24fdbca55e64afd097",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.github.com/repos/owner/repo/issues/7/comments",
+          "line": 18
+        },
+        {
+          "url": "https://github.com/owner/repo/actions/runs/12",
+          "line": 29
+        }
+      ]
+    },
+    {
+      "path": "tests/operations/github-results-routing.test.mjs",
+      "bytes": 2593,
+      "sha256": "0089f2bff839da748bf084e89336f774ae933db9a0b4b6bf6c6141d34f00135c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/operations/html-layout-fixture.test.mjs",
       "bytes": 1512,
       "sha256": "eab2d25ee1672cf736fb34f6acf64563eed10ed5a42d2f0141346f429529054d",
@@ -57552,8 +57656,8 @@
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
       "extension": ".yml",
-      "bytes": 3357,
-      "sha256": "d3e925b0fdec9d4987fe5d5f47040bc3de2339d6b8922c37d4d349072fd90eac"
+      "bytes": 4708,
+      "sha256": "e25b08a695c924cc59c3331cdb74a0134f27ae0be4a8de53fc67f1aa2d0e04d1"
     },
     {
       "path": ".github/workflows/auditoria-visual.yml",
@@ -57618,8 +57722,8 @@
     {
       "path": "AGENTS.md",
       "extension": ".md",
-      "bytes": 6970,
-      "sha256": "d75b5063915f451493681421aa42d41c2aae289d5dcdbd8a22ea33dcc1f82c31"
+      "bytes": 7894,
+      "sha256": "af843165479a2bed288004dc4d8ed7619bcd284e315e002be9fb56df509b75e8"
     },
     {
       "path": "README.md",
@@ -57667,7 +57771,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204428,
-      "sha256": "75e3246faf7572013485f2fa2108e643cbfbf8cb7ca98903b3502aead5ca3761"
+      "sha256": "767520042ff6383e49efc0b03cd900186827d335e075a1efe3c487b3ab5262e5"
     },
     {
       "path": "apple-touch-icon.png",
@@ -58668,8 +58772,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 8439,
-      "sha256": "f380575336d9df950ca3e1ee08750d73eb8c33becefe835825557d2f53519ee0"
+      "bytes": 2089,
+      "sha256": "006c0a661d164b65c5baed4686028012dbee9eda6347cfa0a9469a013f76857b"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -58681,7 +58785,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "c79ccbc176406922a842ca6eda469ff0b5dbd615bd467b21f7090932b9d6c37b"
+      "sha256": "fef5d6af0db5fd8b2bf2baf2db9c5504119b5d576499d50b23bd292d2673c9e9"
     },
     {
       "path": "config/public-site.json",
@@ -59340,8 +59444,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 976737,
-      "sha256": "9da5e7673df271e4ee682ebe789be20bbff827df365a984b289b0831f3cb8c01"
+      "bytes": 980816,
+      "sha256": "af7d7cdd078a1ca1d50cfbef7efa1e549729b1c1fc7fcadf16fddbe05d6591ec"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -59360,6 +59464,12 @@
       "extension": ".md",
       "bytes": 3721,
       "sha256": "bd23f83e484528b378a990bbc24ac3625bad1055d5c01c4b01c57550fe717b45"
+    },
+    {
+      "path": "docs/agent/GITHUB_RESULTS.md",
+      "extension": ".md",
+      "bytes": 1955,
+      "sha256": "a5e84177219e6c6b4a2dbba7eb7852e8c242e331ebb99f75f5eff1b27c729495"
     },
     {
       "path": "docs/agent/IDENTIDAD_TINTIN_20261021.md",
@@ -61081,7 +61191,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 521728,
-      "sha256": "d47663a6a18da2fa25aafe762869f3eff1aa86b0acfc8b2de084d3c7c1224204"
+      "sha256": "71c67fb45e34d6803c2078ac8bdfea0a1a0d7c56564024d53c2b6aa2e180a76f"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -61543,7 +61653,7 @@
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
       "bytes": 137975,
-      "sha256": "5963a8ed261b41fa15e00b7478e74d846c10ea0ec6567d5eaa6204cabdc5db82"
+      "sha256": "37aa2a0d331c1e179d5796499f7498a504d498ac988ae2c2ac85d810c587bc80"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -64069,7 +64179,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 75978,
-      "sha256": "bc72ed0f7af73082d1ff2b98f4d02dc597420a5577266219087dcbcf219d3a8b"
+      "sha256": "ad20ddf67e012c84a7ee976d35213302a064ff01a7912cd23634ed7420a13868"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -64274,6 +64384,12 @@
       "extension": ".js",
       "bytes": 5077,
       "sha256": "68fd109a0b137a679d75e543629e8b803b8efd6fd89c64e2e74930d64dbcdb8c"
+    },
+    {
+      "path": "scripts/notificar-resultados-github.mjs",
+      "extension": ".mjs",
+      "bytes": 3184,
+      "sha256": "bec25cd858cbc05f691f1592a588190a1e5c156e8ac32e7e6d4744408149fb57"
     },
     {
       "path": "scripts/preparar-hosting.js",
@@ -65882,6 +65998,18 @@
       "extension": ".mjs",
       "bytes": 5936,
       "sha256": "dc490ebee69d6b195a0806789eb14d1a498e0382a194e5f7041e7f50f5bbc709"
+    },
+    {
+      "path": "tests/operations/github-result-notifications.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1913,
+      "sha256": "53acf59d141102d8d9525142cfe89c08540b250d47cbab24fdbca55e64afd097"
+    },
+    {
+      "path": "tests/operations/github-results-routing.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2593,
+      "sha256": "0089f2bff839da748bf084e89336f774ae933db9a0b4b6bf6c6141d34f00135c"
     },
     {
       "path": "tests/operations/html-layout-fixture.test.mjs",
