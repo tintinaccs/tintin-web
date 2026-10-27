@@ -4221,3 +4221,21 @@ Tras integrar #1257 (34edd77b), la comprobación pública solicitó tres URLs de
 La corrección queda acotada a admin.html y los imports de admin-app/shopify-commerce-admin. Galería e interfaz conservan exactamente los bytes aprobados; el cambio de URL necesario por caché se registra mediante la entrada aprobada por huella del mecanismo canónico cache-versioning:write (consumida por el generador), sin modificar el auditor. CSS usa el tag dinámico del mismo VERSION. PASS_LOCAL27/27 Node y6/6 Chromium sin reintentos. La primera preflight coincidió con el reinicio de test-results de Playwright y terminó ENOENT al recorrer .last-run.json; se repite secuencialmente sin cambiar código ni gates.
 
 Preflight secuencial39/39 aprobada después de finalizar Chromium. Build, baseline y protección se regeneran para esta entrega antes del commit. Las URLs productivas del tag4 NO se consultan hasta confirmar que producción entrega el manifiesto de esta corrección.
+## 2026-10-27 — Recibos y seguimiento obligatorio de GitHub
+
+Codex /root GPT-6. Pedido explícito: recibir el estado terminal de cada PR/run
+y obligar a cualquier agente a comprobarlo. Se añade workflow de eventos
+workflow_run/completed y cierre de PR, con recibos deduplicados por run/intento,
+SHA y conclusión; sin PR asociado se usa issue central. AGENTS y Claude exigen
+espera activa, logs ante fallo y comprobación de merge/post-merge. La integración
+actual no expone receptor webhook para despertar Codex: ese extremo sigue
+BLOCKED; los recibos GitHub no se presentan como una notificación entregada a
+un agente dormido. PR1257 comprobado MERGED, todos sus checks SUCCESS.
+
+## Conciliación del cierre global — caché y recibos GitHub
+
+La PR1259 falló en40504800268: contrato de integración detectó13 workflows frente al presupuesto12. Se conservan sus commits mediante merge en el candidato de1260; el notificador se integra como job con permisos propios en el workflow canónico de mantenimiento. El merge automático conserva su disparador limitado al CI de PRs propias y el checkout de main; el notificador ejecuta sólo código de la rama por defecto y excluye su propio workflow. Los recibos de cierre de PR siguen cubriendo merged/closed_without_merge. No se aumenta el presupuesto ni se debilitan gates. La CI previa de1260 queda sustituida por un candidato combinado;1259 se cerrará sólo tras integrar este candidato, conservando su historial.
+
+PASS_LOCAL de recibos/merge:3/3 pruebas del notificador y del enrutado de eventos,48/48 regresiones de mantenimiento/protección, sintaxis JS/YAML e integración canónica aprobadas (12 workflows). La comprobación de rutas evalúa las condiciones reales: un workflow ajeno, un fork, un PR cerrado o un schedule no habilitan el merge; el notificador tiene permisos propios, checkout confiable y exclusión del workflow de mantenimiento. No se atribuye entrega a Codex dormido: sigue bloqueada por ausencia de receptor soportado.
+
+El candidato combinado conserva12 workflows y aprueba la preflight secuencial39/39 después del build. El notificador se prueba sin llamadas reales a GitHub; los recibos reales y el seguimiento post-merge se verifican por separado tras integrar.

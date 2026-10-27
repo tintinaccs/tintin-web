@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "1ddccc2f9c5f5c5edfad9ccd1e35d975a618fc448bbaa817ca73f06c06ae3755",
+  "sourceFingerprint": "0c7bca80fabe8bf0a31c635aff8dc7773b84910c4802262161c1fc6209f10e01",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1579,
-    "textFiles": 1448,
-    "totalBytes": 34709924,
+    "files": 1583,
+    "textFiles": 1452,
+    "totalBytes": 34724561,
     "pages": 19,
-    "modules": 1052
+    "modules": 1055
   },
   "viewports": [
     {
@@ -40753,6 +40753,29 @@
       "endpoints": []
     },
     {
+      "path": "scripts/notificar-resultados-github.mjs",
+      "bytes": 3184,
+      "sha256": "bec25cd858cbc05f691f1592a588190a1e5c156e8ac32e7e6d4744408149fb57",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.github.com/",
+          "line": 6
+        }
+      ]
+    },
+    {
       "path": "scripts/preparar-hosting.js",
       "bytes": 2294,
       "sha256": "e7a77d052d8c77ea40aa782fdf1bedfd097829444fc732c0fb9ee41d8d3e65e9",
@@ -51009,6 +51032,87 @@
       ]
     },
     {
+      "path": "tests/operations/github-result-notifications.test.mjs",
+      "bytes": 1913,
+      "sha256": "53acf59d141102d8d9525142cfe89c08540b250d47cbab24fdbca55e64afd097",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.github.com/repos/owner/repo/issues/7/comments",
+          "line": 18
+        },
+        {
+          "url": "https://github.com/owner/repo/actions/runs/12",
+          "line": 29
+        }
+      ]
+    },
+    {
+      "path": "tests/operations/github-results-routing.test.mjs",
+      "bytes": 2593,
+      "sha256": "0089f2bff839da748bf084e89336f774ae933db9a0b4b6bf6c6141d34f00135c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/operations/html-layout-fixture.test.mjs",
       "bytes": 1512,
       "sha256": "eab2d25ee1672cf736fb34f6acf64563eed10ed5a42d2f0141346f429529054d",
@@ -57552,8 +57656,8 @@
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
       "extension": ".yml",
-      "bytes": 3357,
-      "sha256": "d3e925b0fdec9d4987fe5d5f47040bc3de2339d6b8922c37d4d349072fd90eac"
+      "bytes": 4708,
+      "sha256": "e25b08a695c924cc59c3331cdb74a0134f27ae0be4a8de53fc67f1aa2d0e04d1"
     },
     {
       "path": ".github/workflows/auditoria-visual.yml",
@@ -57618,8 +57722,8 @@
     {
       "path": "AGENTS.md",
       "extension": ".md",
-      "bytes": 6970,
-      "sha256": "d75b5063915f451493681421aa42d41c2aae289d5dcdbd8a22ea33dcc1f82c31"
+      "bytes": 7894,
+      "sha256": "af843165479a2bed288004dc4d8ed7619bcd284e315e002be9fb56df509b75e8"
     },
     {
       "path": "README.md",
@@ -58668,8 +58772,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1622,
-      "sha256": "1fb91b58ff04b86b90572eaccd368f2da493c924364013315d23c7a9cdfebf24"
+      "bytes": 2089,
+      "sha256": "006c0a661d164b65c5baed4686028012dbee9eda6347cfa0a9469a013f76857b"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -58681,7 +58785,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "c729eb9c7cd517b85bc6755082265c2979f10ac36f3b83a2a1aee4622180375e"
+      "sha256": "fef5d6af0db5fd8b2bf2baf2db9c5504119b5d576499d50b23bd292d2673c9e9"
     },
     {
       "path": "config/public-site.json",
@@ -59340,8 +59444,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 978566,
-      "sha256": "b554af6d39594528d63a4bbf1c3288bbfd0131cd86d7982a3508c3b73d34250e"
+      "bytes": 980816,
+      "sha256": "af7d7cdd078a1ca1d50cfbef7efa1e549729b1c1fc7fcadf16fddbe05d6591ec"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -59360,6 +59464,12 @@
       "extension": ".md",
       "bytes": 3721,
       "sha256": "bd23f83e484528b378a990bbc24ac3625bad1055d5c01c4b01c57550fe717b45"
+    },
+    {
+      "path": "docs/agent/GITHUB_RESULTS.md",
+      "extension": ".md",
+      "bytes": 1955,
+      "sha256": "a5e84177219e6c6b4a2dbba7eb7852e8c242e331ebb99f75f5eff1b27c729495"
     },
     {
       "path": "docs/agent/IDENTIDAD_TINTIN_20261021.md",
@@ -64276,6 +64386,12 @@
       "sha256": "68fd109a0b137a679d75e543629e8b803b8efd6fd89c64e2e74930d64dbcdb8c"
     },
     {
+      "path": "scripts/notificar-resultados-github.mjs",
+      "extension": ".mjs",
+      "bytes": 3184,
+      "sha256": "bec25cd858cbc05f691f1592a588190a1e5c156e8ac32e7e6d4744408149fb57"
+    },
+    {
       "path": "scripts/preparar-hosting.js",
       "extension": ".js",
       "bytes": 2294,
@@ -65882,6 +65998,18 @@
       "extension": ".mjs",
       "bytes": 5936,
       "sha256": "dc490ebee69d6b195a0806789eb14d1a498e0382a194e5f7041e7f50f5bbc709"
+    },
+    {
+      "path": "tests/operations/github-result-notifications.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1913,
+      "sha256": "53acf59d141102d8d9525142cfe89c08540b250d47cbab24fdbca55e64afd097"
+    },
+    {
+      "path": "tests/operations/github-results-routing.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2593,
+      "sha256": "0089f2bff839da748bf084e89336f774ae933db9a0b4b6bf6c6141d34f00135c"
     },
     {
       "path": "tests/operations/html-layout-fixture.test.mjs",

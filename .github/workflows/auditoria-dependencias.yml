@@ -2,8 +2,10 @@ name: Mantenimiento — dependencias y flujos protegidos
 
 on:
   workflow_run:
-    workflows: ["CI Tintin — contrato único"]
+    workflows: ['*']
     types: [completed]
+  pull_request_target:
+    types: [closed]
   workflow_dispatch:
     inputs:
       maintenance:
@@ -29,7 +31,7 @@ permissions:
   checks: read
 
 concurrency:
-  group: ${{ ((github.event_name == 'workflow_run' && github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.head_repository.full_name == github.repository) || inputs.maintenance) && format('protected-maintenance-{0}', github.event.workflow_run.head_branch || inputs.pr) || 'dependency-maintenance' }}
+  group: ${{ (github.event_name == 'pull_request_target' && format('github-results-pr-{0}', github.event.pull_request.number)) || (github.event_name == 'workflow_run' && github.event.workflow_run.name != 'CI Tintin — contrato único' && format('github-results-{0}-{1}', github.event.workflow_run.id, github.event.workflow_run.run_attempt)) || ((github.event_name == 'workflow_run' && github.event.workflow_run.name == 'CI Tintin — contrato único' && github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.head_repository.full_name == github.repository) || inputs.maintenance) && format('protected-maintenance-{0}', github.event.workflow_run.head_branch || inputs.pr) || 'dependency-maintenance' }}
   cancel-in-progress: false
 
 env:
@@ -73,7 +75,7 @@ jobs:
           if-no-files-found: error
 
   automatic:
-    if: github.ref == 'refs/heads/main' && ((github.event_name == 'workflow_run' && github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.head_repository.full_name == github.repository) || inputs.maintenance)
+    if: github.ref == 'refs/heads/main' && ((github.event_name == 'workflow_run' && github.event.workflow_run.name == 'CI Tintin — contrato único' && github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.head_repository.full_name == github.repository) || inputs.maintenance)
     name: Validar y publicar automáticamente
     runs-on: ubuntu-24.04
     timeout-minutes: 90
@@ -95,3 +97,27 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: node scripts/mantenimiento-flujos-github.mjs automatic
+
+  notify:
+    name: Registrar resultado terminal
+    if: github.event_name == 'pull_request_target' || (github.event_name == 'workflow_run' && github.event.workflow_run.name != 'Mantenimiento — dependencias y flujos protegidos')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+      issues: write
+      pull-requests: write
+    steps:
+      # Sólo código de la rama por defecto; nunca código de la PR que originó el evento.
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Publicar resultado terminal
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/notificar-resultados-github.mjs

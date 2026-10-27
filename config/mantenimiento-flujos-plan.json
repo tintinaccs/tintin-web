@@ -1,12 +1,22 @@
 {
   "schemaVersion": 1,
   "baseCommit": "34edd77b7b779b45e1dc627e3b73d0a2f4c94001",
-  "reason": "Corregir URLs de tres recursos CDN sin cambiar su funcionalidad",
+  "reason": "Corregir caché del editor y consolidar recibos en el mantenimiento canónico",
   "files": [
+    {
+      "path": ".github/workflows/auditoria-dependencias.yml",
+      "oldHash": "d3e925b0fdec9d4987fe5d5f47040bc3de2339d6b8922c37d4d349072fd90eac",
+      "newHash": "e25b08a695c924cc59c3331cdb74a0134f27ae0be4a8de53fc67f1aa2d0e04d1"
+    },
     {
       "path": "admin.html",
       "oldHash": "75e3246faf7572013485f2fa2108e643cbfbf8cb7ca98903b3502aead5ca3761",
       "newHash": "767520042ff6383e49efc0b03cd900186827d335e075a1efe3c487b3ab5262e5"
+    },
+    {
+      "path": "AGENTS.md",
+      "oldHash": "d75b5063915f451493681421aa42d41c2aae289d5dcdbd8a22ea33dcc1f82c31",
+      "newHash": "af843165479a2bed288004dc4d8ed7619bcd284e315e002be9fb56df509b75e8"
     },
     {
       "path": "js/admin/admin-app.js",
