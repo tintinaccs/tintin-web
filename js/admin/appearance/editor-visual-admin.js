@@ -7,7 +7,7 @@ import {
   mergeContent, sanitizeContentHref, setNested,
 } from '../../core/store/esquema-contenido.js?v=tintin-20261021-identidad-1';
 import { chooseRandomPreviewProduct, productPreviewTarget } from './preview-dynamic-targets.js?v=tintin-20260812-preview-dinamico-1';
-import { installWorkspaceSplitters } from './workspace-splitters.js?v=tintin-20260813-apariencia-splitters-1';
+import { installWorkspaceSplitters } from './workspace-splitters.js?v=tintin-20261027-performance-1';
 
 const $ = id => document.getElementById(id);
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -58,6 +58,7 @@ let draggedEntry = null;
 let sectionListNode = null;
 let previewProductsPromise = null;
 let previewProductSample = null;
+let previewFrame = 0;
 
 const responsiveDefaults = () => ({ visibility:'inherit', spacing:'inherit', width:'inherit', align:'inherit', columns:'inherit', imageFit:'inherit' });
 const defaultStyle = () => ({
@@ -224,7 +225,16 @@ function renderAdvancedProperties(root){if(selected.kind==='section'){reorderBut
 function renderProperties(){const root=$('visual-properties');if(!root)return;root.replaceChildren();ensureValidSelection();const heading=$('visual-inspector-heading');if(heading)heading.textContent=selectedLabel();document.querySelectorAll('[data-inspector-tab]').forEach(button=>button.classList.toggle('active',button.dataset.inspectorTab===inspectorTab));if(!selected){root.appendChild(make('div','visual-empty','Elegí una sección o tocá un elemento en la vista previa.'));return;}if(inspectorTab==='content')renderContentProperties(root);else if(inspectorTab==='design')renderDesignProperties(root);else if(inspectorTab==='responsive')renderResponsiveProperties(root);else renderAdvancedProperties(root);}
 
 function renderHistory(){const root=$('visual-history-list');if(!root)return;root.replaceChildren();if(!history.length){root.appendChild(make('div','visual-empty','Todavía no hay versiones publicadas.'));return;}history.forEach(item=>{const row=make('div','visual-history-item');const info=make('div');info.append(make('strong','',`Versión ${item.version} · ${item.action==='restore'?'restauración':'publicación'}`),make('small','',`${item.actorEmail||''} · ${new Date(item.createdAt).toLocaleString('es-PY')}`));row.appendChild(info);if(['publish','restore'].includes(item.action)&&item.version>0){const button=make('button','adm-btn adm-btn-outline adm-btn-sm','Restaurar');button.type='button';button.dataset.restore=item.id;row.appendChild(button);}root.appendChild(row);});}
-function postPreview(){const frame=$('visual-preview-frame');if(!frame?.contentWindow||!config||!content)return;frame.contentWindow.postMessage({type:'tintin:visual-preview',pageId,config,content,selected},location.origin);}
+function postPreview(){
+  if (previewFrame) return;
+  const schedule = window.requestAnimationFrame || (callback => window.setTimeout(callback, 16));
+  previewFrame = schedule(()=>{
+    previewFrame=0;
+    const frame=$('visual-preview-frame');
+    if(!frame?.contentWindow||!config||!content)return;
+    frame.contentWindow.postMessage({type:'tintin:visual-preview',pageId,config,content,selected},location.origin);
+  });
+}
 function renderPreviewVersion(){const node=$('visual-version');if(!node)return;const sample=pageId==='product'&&previewProductSample?` · Muestra: ${String(previewProductSample.name||previewProductSample.title||'Producto')}`:'';node.textContent=`Versión publicada: ${version}${sample}`;}
 async function loadPreviewProducts(){
   if (!previewProductsPromise) {

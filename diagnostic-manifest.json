@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "31eccb9824d73d7f93ec638b513283a809d9a8b38535ca1816f1a3be9a8034a2",
+  "sourceFingerprint": "2aee99aa77ad36ccb0ad8c4cdd1d922040293191639433ddddc007dba8faf21f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1576,
-    "textFiles": 1445,
-    "totalBytes": 34667343,
+    "files": 1577,
+    "textFiles": 1446,
+    "totalBytes": 34670705,
     "pages": 19,
-    "modules": 1050
+    "modules": 1051
   },
   "viewports": [
     {
@@ -2892,8 +2892,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204417,
-      "sha256": "34e53a17261bec16597f08b9005c43490ad55535b8dbb4c73fd68422ff2414dc",
+      "bytes": 204418,
+      "sha256": "67448f3e7591c5de016cd5c969669c6e1d3e9089fbe6aee56cc2261755f5f7e5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2947,7 +2947,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261027-editor-ux-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20261027-performance-1",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -2972,12 +2972,12 @@
           "line": 2083
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-editor-ux-3",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-performance-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20261022-avatar-inicial-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20261027-performance-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 2085
         },
@@ -3302,7 +3302,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261027-editor-ux-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20261027-performance-1",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -3332,13 +3332,13 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-editor-ux-3",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261027-performance-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2084,
           "exists": true
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20261022-avatar-inicial-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20261027-performance-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 2085,
           "exists": true
@@ -28233,8 +28233,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 521616,
-      "sha256": "25d5c792b3bab394cb18c1b0f2357d2957570a82bf07f656e9eaf864f17eacd0",
+      "bytes": 521618,
+      "sha256": "a203b508611471c7b2cc35b7c6c4f6bbfc2cb9fc6e23309e1ad573d96aafd11c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28349,7 +28349,7 @@
           "line": 18
         },
         {
-          "raw": "./products/galeria-unificada.js?v=tintin-20261027-editor-ux-3",
+          "raw": "./products/galeria-unificada.js?v=tintin-20261027-performance-1",
           "target": "js/admin/products/galeria-unificada.js",
           "dynamic": false,
           "line": 19
@@ -28668,8 +28668,8 @@
     },
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
-      "bytes": 53311,
-      "sha256": "e91cae9b8041bc72f2ec000eab051eabd285c79b323df11cc1f63846e89ab99f",
+      "bytes": 53524,
+      "sha256": "bd8921084afcac31b69b456424f389771b8cc34686f1c5196ca96ca043101114",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28712,7 +28712,7 @@
           "line": 9
         },
         {
-          "raw": "./workspace-splitters.js?v=tintin-20260813-apariencia-splitters-1",
+          "raw": "./workspace-splitters.js?v=tintin-20261027-performance-1",
           "target": "js/admin/appearance/workspace-splitters.js",
           "dynamic": false,
           "line": 10
@@ -28798,8 +28798,8 @@
     },
     {
       "path": "js/admin/appearance/workspace-splitters.js",
-      "bytes": 5881,
-      "sha256": "482f5dbc943a2aba11a1926e54670a155c3a7db732b5f2f385def7829e18ebfd",
+      "bytes": 6248,
+      "sha256": "646321bd73d0317f1fe02d3f4d494b3cdaee0e7db645d9b5f5d7378924da00b2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30292,8 +30292,8 @@
     },
     {
       "path": "js/admin/products/galeria-unificada.js",
-      "bytes": 19025,
-      "sha256": "53b0c1fb0bffbc0838e87f4ec5ea11b861480c5a096bc9f6e0dcbeda272a9b97",
+      "bytes": 19374,
+      "sha256": "ce84a3827904068d50156d4a2bc5919c62725fcea63661aeccd276b5e7577930",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30393,8 +30393,8 @@
     },
     {
       "path": "js/admin/products/interfaz-productos-adaptable.js",
-      "bytes": 23265,
-      "sha256": "2036d399aa9915b556e1770caab30889518da108d4917910140f76158d70c939",
+      "bytes": 23876,
+      "sha256": "446f5825481aa858918287148d13f8a34cf08a54f783679a74e068df4b25dcc3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30899,8 +30899,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 137966,
-      "sha256": "b6f0560e923846762908da207f67ee98cef534523be50fba6a79a8f4eacbac04",
+      "bytes": 137967,
+      "sha256": "10b82ec8580bc43a967ab1a7e30b82cfc97f5d558db9a4f660866955284d64bd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30943,7 +30943,7 @@
           "line": 6
         },
         {
-          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261027-editor-space-2",
+          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261027-performance-1",
           "target": "js/admin/products/interfaz-productos-adaptable.js",
           "dynamic": false,
           "line": 7
@@ -52220,6 +52220,42 @@
       "endpoints": []
     },
     {
+      "path": "tests/performance/admin-scroll-scheduling.test.mjs",
+      "bytes": 1705,
+      "sha256": "5a64f27dce456a9e4268bb6f08471d42f028684d588f5aab72f6e851fadaef81",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/performance/admin.performance.spec.js",
       "bytes": 1874,
       "sha256": "9fce8f980069379398f6513a97302d7112b5aa7bfdbb1b60fa204e870e4af796",
@@ -57565,8 +57601,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204417,
-      "sha256": "34e53a17261bec16597f08b9005c43490ad55535b8dbb4c73fd68422ff2414dc"
+      "bytes": 204418,
+      "sha256": "67448f3e7591c5de016cd5c969669c6e1d3e9089fbe6aee56cc2261755f5f7e5"
     },
     {
       "path": "apple-touch-icon.png",
@@ -58687,8 +58723,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 132112,
-      "sha256": "e7d3e95c0034aef173f9648c521876e95cc1c7402f53e278e9aa34b8d653c9a9"
+      "bytes": 132230,
+      "sha256": "2aefd1d309d4d56cc4cc9729e852c8d2896a1347689810a5637b45313f1d2510"
     },
     {
       "path": "css/admin/sidebar-interaccion.css",
@@ -60973,8 +61009,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 521616,
-      "sha256": "25d5c792b3bab394cb18c1b0f2357d2957570a82bf07f656e9eaf864f17eacd0"
+      "bytes": 521618,
+      "sha256": "a203b508611471c7b2cc35b7c6c4f6bbfc2cb9fc6e23309e1ad573d96aafd11c"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -60991,8 +61027,8 @@
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
       "extension": ".js",
-      "bytes": 53311,
-      "sha256": "e91cae9b8041bc72f2ec000eab051eabd285c79b323df11cc1f63846e89ab99f"
+      "bytes": 53524,
+      "sha256": "bd8921084afcac31b69b456424f389771b8cc34686f1c5196ca96ca043101114"
     },
     {
       "path": "js/admin/appearance/preview-dynamic-targets.js",
@@ -61015,8 +61051,8 @@
     {
       "path": "js/admin/appearance/workspace-splitters.js",
       "extension": ".js",
-      "bytes": 5881,
-      "sha256": "482f5dbc943a2aba11a1926e54670a155c3a7db732b5f2f385def7829e18ebfd"
+      "bytes": 6248,
+      "sha256": "646321bd73d0317f1fe02d3f4d494b3cdaee0e7db645d9b5f5d7378924da00b2"
     },
     {
       "path": "js/admin/auth/app-check-admin.js",
@@ -61309,8 +61345,8 @@
     {
       "path": "js/admin/products/galeria-unificada.js",
       "extension": ".js",
-      "bytes": 19025,
-      "sha256": "53b0c1fb0bffbc0838e87f4ec5ea11b861480c5a096bc9f6e0dcbeda272a9b97"
+      "bytes": 19374,
+      "sha256": "ce84a3827904068d50156d4a2bc5919c62725fcea63661aeccd276b5e7577930"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -61327,8 +61363,8 @@
     {
       "path": "js/admin/products/interfaz-productos-adaptable.js",
       "extension": ".js",
-      "bytes": 23265,
-      "sha256": "2036d399aa9915b556e1770caab30889518da108d4917910140f76158d70c939"
+      "bytes": 23876,
+      "sha256": "446f5825481aa858918287148d13f8a34cf08a54f783679a74e068df4b25dcc3"
     },
     {
       "path": "js/admin/products/maestro-productos-core.mjs",
@@ -61435,8 +61471,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 137966,
-      "sha256": "b6f0560e923846762908da207f67ee98cef534523be50fba6a79a8f4eacbac04"
+      "bytes": 137967,
+      "sha256": "10b82ec8580bc43a967ab1a7e30b82cfc97f5d558db9a4f660866955284d64bd"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -63961,8 +63997,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 76005,
-      "sha256": "2af7687584d84ab9b435425d77a7c03c67334caeec58bc31b7a9f15a4acf278b"
+      "bytes": 76000,
+      "sha256": "4abbdbe0d961e85ba9968de0cd60769e94c500b524b349183badef71e5d315c9"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -65951,6 +65987,12 @@
       "sha256": "d13f9aad115a31c66a574dc5f821c9f5196ca66c66fc4fd2dd874179692cc577"
     },
     {
+      "path": "tests/performance/admin-scroll-scheduling.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1705,
+      "sha256": "5a64f27dce456a9e4268bb6f08471d42f028684d588f5aab72f6e851fadaef81"
+    },
+    {
       "path": "tests/performance/admin.performance.spec.js",
       "extension": ".js",
       "bytes": 1874,
@@ -66928,7 +66970,7 @@
     },
     {
       "file": "js/admin/appearance/editor-visual-admin.js",
-      "line": 238,
+      "line": 248,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -69488,7 +69530,7 @@
           },
           {
             "file": "js/admin/appearance/editor-visual-admin.js",
-            "line": 231,
+            "line": 241,
             "operation": "collection"
           },
           {

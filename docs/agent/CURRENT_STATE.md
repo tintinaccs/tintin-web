@@ -4157,3 +4157,24 @@ completo repetido PASS_LOCAL78/78 y sus auditorías; nuevo SHA necesita CI propi
 HTTP401 JSON no autenticado en producción: no se reprodujo la causa externa del
 HTML de la titular; no se afirma arreglada esa infraestructura ni sesión real.
 Evidencia y reversión: docs/product-editor-refactor/UX-AGIL-AUTOGUARDADO.md.
+## 2026-10-27 — Fluidez de Super Admin, editor y galerías
+
+Codex /root. Pedido: eliminar trabas de carga y desplazamiento, manteniendo los
+loaders de entrada. Se confirmó trabajo redundante durante eventos de viewport:
+el editor de Productos medía/escribía la geometría completa por cada señal de
+`visualViewport`, incluso al desplazarse. Esas actualizaciones, la galería y el
+iframe del constructor ahora se agrupan como máximo una vez por frame; los
+separadores del constructor también aplican una sola geometría por frame. Las
+filas de combinaciones y fotos fuera de pantalla usan `content-visibility` con
+tamaño intrínseco para reducir pintura durante recorridos largos. No cambian
+CRUD, datos, permisos, loaders, inventario ni checkout.
+
+PASS_LOCAL: 47/47 Node dirigidos (incluye contratos comerciales, constructor y
+la nueva regresión de scheduling), auditorías de rendimiento/regresiones y
+cache-versioning, más build Pages completo. Chromium local del sistema:
+46/46 en el editor/comercial/preview, de móvil 320×568 a escritorio 3840×2160;
+la matriz incluye vertical y horizontal. Se regeneran CSP, rutas, diagnóstico,
+site-version y URLs inmutables desde sus autoridades. `audit:performance`
+mantiene sus dos advertencias informativas existentes sobre presupuesto sin
+comprimir de Inicio (471 KB CSS y 272 KB JS); no hay fallos críticos. CI y
+producción NOT_VERIFIED.

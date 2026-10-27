@@ -77,7 +77,13 @@ export function installWorkspaceSplitters(editor) {
     if (event.button !== 0) return;
     event.preventDefault();
     document.body.classList.add('visual-workspace-resizing', `is-resizing-${axis}`);
-    const move = moveEvent => {
+    let pendingMove = null;
+    let frame = 0;
+    const applyMove = () => {
+      frame = 0;
+      const moveEvent = pendingMove;
+      pendingMove = null;
+      if (!moveEvent) return;
       if (axis === 'horizontal') {
         const rect = layout.getBoundingClientRect();
         state.previewRatio = clamp((moveEvent.clientY - rect.top) / Math.max(rect.height, 1), 0.3, 0.72);
@@ -87,7 +93,14 @@ export function installWorkspaceSplitters(editor) {
       }
       apply();
     };
+    const move = moveEvent => {
+      pendingMove = moveEvent;
+      if (!frame) frame = requestAnimationFrame(applyMove);
+    };
     const finish = () => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      applyMove();
       document.body.classList.remove('visual-workspace-resizing', `is-resizing-${axis}`);
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', finish);
