@@ -826,3 +826,20 @@ Los cuatro jobs de CI preparan mirrors oficiales HTTPS y timeout30s/reintentos2 
 ### 26/10/2026 — Completar preparación APT de consumidores operativos
 
 Monitor producción, auditoría visual programada y cinco jobs de Diagnóstico Maestro reutilizan preparar-red-apt-ci.sh antes del mismo install --with-deps; junto a los cuatro de CI suman11 instalaciones. No hay cambios en el helper, permisos, triggers, datos ni pruebas. Base1250 preservada; manifiestos/plan canónicos y validación YAML para detectar un consumidor que quede sin preparación.
+
+
+### 27/10/2026 — Guardados Firestore y eventos CSP del panel
+
+Autoridades: validateSnapshot del workspace privado, writer oficial CAS y
+controladores existentes en admin-app. Se descartan sólo firmas transitorias de
+archivos (listas anidadas no persistibles), conservando pendingUploads y el
+formulario recuperable. Los callbacks dinámicos usan datos escapados/listeners
+permitidos y conservan permisos y propagación; CSP se regenera sin unsafe-inline
+para scripts. Consumidores: usuarios, pedidos, plantillas, productos, colecciones
+y CSV del mismo panel. Guardados privado/inactivo/activo/archivado, transiciones,
+fallo/reintento y cierre atómico se verifican con Firestore real aislado; CSP y
+modos de UI en Chromium. Runner runtime y etapa admin existentes incorporan
+regresiones; sin workflows nuevos. Rules, datos reales, checkout y pagos intactos.
+Reintentar conserva la intención de guardado oficial y no sólo del borrador;
+el aviso se centraliza sin duplicarlo. Versiones, CSP, diagnóstico y protección
+mediante herramientas canónicas.

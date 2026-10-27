@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {adminEventAttributes} from '../../js/admin/eventos-dinamicos-admin.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
@@ -55,8 +56,8 @@ test('historial y dashboard representan etiquetas y IDs hostiles como datos', ()
     if (!elements.has(name)) elements.set(name, { value:'', innerHTML:'' });
     return elements.get(name);
   }};
-  const deps = { document, allEmailLogs:[{id,type:key,status:'failed',category:'pedido'}], allEmailTemplates:[], allEmailCampaigns:[], emailSettingsCache:{senderEmail:key}, EMAIL_WEBHOOK_URL:'',EMAIL_SENDER_ADDRESS:'sender@example.test', ORDER_TYPE_NAMES:{},_selectedLogs:new Set(),formatDate:()=> 'fecha',updateLogsBulkToolbar:()=>{} };
-  const run = new Function('deps', 'const {'+Object.keys(deps).join(',')+'}=deps;'+['escapeHtmlAdmin','inlineArgumentAdmin','templateLabel_','logStatusBadge_','categoryBadge_','renderCorreosHistorialTab','renderCorreosDashboard'].map(body).join('\n')+'; renderCorreosHistorialTab(); renderCorreosDashboard();');
+  const deps = { document, adminEventAttributes, allEmailLogs:[{id,type:key,status:'failed',category:'pedido'}], allEmailTemplates:[], allEmailCampaigns:[], emailSettingsCache:{senderEmail:key}, EMAIL_WEBHOOK_URL:'',EMAIL_SENDER_ADDRESS:'sender@example.test', ORDER_TYPE_NAMES:{},_selectedLogs:new Set(),formatDate:()=> 'fecha',updateLogsBulkToolbar:()=>{} };
+  const run = new Function('deps', 'const {'+Object.keys(deps).join(',')+'}=deps;'+['escapeHtmlAdmin','templateLabel_','logStatusBadge_','categoryBadge_','renderCorreosHistorialTab','renderCorreosDashboard'].map(body).join('\n')+'; renderCorreosHistorialTab(); renderCorreosDashboard();');
   run(deps);
   for (const name of ['hist-tbody','hist-filter-type','correos-dash-recent','correos-system-status']) {
     for (const node of walk(parse5.parseFragment(elements.get(name).innerHTML))) assert.ok(!['img','svg','script'].includes(node.tagName));
@@ -67,7 +68,12 @@ test('historial y dashboard representan etiquetas y IDs hostiles como datos', ()
   assert.equal(attrs(nodes.find(node => node.tagName === 'input'))['data-id'], id);
   const captured=[];
   const window={viewLogDetail:value=>captured.push(value),retryFailedLog:value=>captured.push(value)};
-  for (const node of nodes.filter(node => node.tagName === 'button')) new Function('window', attrs(node).onclick)(window);
+  for (const node of nodes.filter(node => node.tagName === 'button')) {
+    const attributes=attrs(node);
+    assert.equal(attributes.onclick,undefined);
+    assert.ok(['viewLogDetail','retryFailedLog'].includes(attributes['data-admin-click']));
+    window[attributes['data-admin-click']](...JSON.parse(attributes['data-admin-click-args']));
+  }
   assert.deepEqual(captured, [id,id]);assert.equal(window.pwned, undefined);
 });
 test('el ID real de Firestore conserva autoridad frente a un campo id del documento', () => {

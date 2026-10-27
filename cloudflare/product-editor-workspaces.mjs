@@ -38,7 +38,15 @@ function validateSnapshot(snapshot,actor){
   };
   walk(snapshot);
   if(new TextEncoder().encode(JSON.stringify(snapshot)).length>450000)fail('El progreso supera el tamaño admitido.');
-  return structuredClone(snapshot);
+  const next=structuredClone(snapshot);
+  // Las firmas describen archivos del navegador, no contenido recuperable.
+  // Incluyen tuplas y listas anidadas que Firestore rechaza. Sólo se conserva
+  // el indicador necesario para pedir esos archivos al recuperar el borrador.
+  const pending=value=>Array.isArray(value)?value.some(pending):typeof value==='string'?Boolean(value):typeof value==='number'?value>0:false;
+  next.pendingUploads=Boolean(next.pendingUploads || (Array.isArray(next.pendingPhotos) && next.pendingPhotos.some(row=>Array.isArray(row) && pending(row[1]))) || pending(next.pendingColorPhotos));
+  delete next.pendingPhotos;
+  delete next.pendingColorPhotos;
+  return next;
 }
 export async function productEditorWorkspace(env,body,actor,io={get:firestoreAdminGet,commit:firestoreAdminBatchCommit,listPage:firestoreAdminListPage}){
   if(!['admin','superadmin'].includes(actor?.role))fail('No tenés permiso para trabajar con borradores.',403);

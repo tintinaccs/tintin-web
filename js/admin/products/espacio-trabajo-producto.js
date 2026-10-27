@@ -1,6 +1,6 @@
 // Progreso editorial privado. La publicación continúa en prodGuardar/CAS.
 export function mountProductWorkspace({card,uid,key,productId,source,request,serialize,flushMedia,restore,commit,close,privateAllowed=false,debounceMs=1800}){
-  let destroyed=false,loading=true,revision=0,baseExpected='',conflict=false,lastSaved='',pending=null,operation=null,timer=null,retries=0,applying=false,missingUploads=false,mediaProblem=false,hasWork=false,publishing=false,openedSignature='',exitAction=null,failedSignature=null;
+  let destroyed=false,loading=true,revision=0,baseExpected='',conflict=false,lastSaved='',pending=null,operation=null,timer=null,retries=0,applying=false,missingUploads=false,mediaProblem=false,hasWork=false,publishing=false,openedSignature='',exitAction=null,failedSignature=null,retryPublish=false;
   const signal=new AbortController();const storageKey='tt-product-work:'+uid+':'+key;
   // Evita pisar lo tecleado mientras llega una recuperación remota.
   const locked=[...card.querySelectorAll('input,textarea,select,button')].filter(input=>!input.disabled);
@@ -110,7 +110,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   });
   async function publish(){
     if(publishing || destroyed)return false;
-    publishing=true;back.disabled=true;discard.disabled=true;
+    publishing=true;retryPublish=false;back.disabled=true;discard.disabled=true;
     let frozen=[];
     try{
       await ready;await save();if(conflict) {message('La versión pública cambió. Reabrí y conciliá el progreso antes de aplicar.',true);return false;}
@@ -121,13 +121,20 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
       applying=true;clearTimeout(timer);
       frozen=[...card.querySelectorAll('input,textarea,select,button')].filter(control=>!control.disabled && control.id!=='prod-save-btn');
       for(const control of frozen)control.disabled=true;
-      return await commit();
+      retryPublish=true;
+      const result=await commit();
+      if(result===false){
+        const error=card.querySelector('#prod-form-error');
+        reportError(new Error(error?.textContent || 'No se confirmó el guardado oficial. Reintentá sin cerrar el editor.'));
+        if(error){error.textContent='';error.style.display='none';}
+      }else retryPublish=false;
+      return result;
     }finally{
       for(const control of frozen)if(control.isConnected)control.disabled=false;
       publishing=false;applying=false;back.disabled=false;discard.disabled=false;if(!destroyed)label();
     }
   }
-  back.addEventListener('click',()=>void leave());retry.addEventListener('click',()=>void save().catch(reportError));
+  back.addEventListener('click',()=>void leave());retry.addEventListener('click',()=>void (retryPublish?publish():save()).catch(reportError));
   stay.addEventListener('click',()=>{errors.hidden=true;});discardPending.addEventListener('click',()=>{clearBackup();window.AdminUnsaved?.markClean('primary-editor');close();});
   acknowledge.addEventListener('click',()=>{missingUploads=false;mediaProblem=false;acknowledge.hidden=true;errors.hidden=true;schedule();});
   card.addEventListener('tintin:image-pending',()=>{missingUploads=false;acknowledge.hidden=true;},{signal:signal.signal});
