@@ -1,5 +1,5 @@
 // Orden explícito compartido por color y por combinación; teclado y táctil.
-export function appendPhotoOrderControls(tile, {url, photos, label, update}) {
+export function appendPhotoOrderControls(tile, {url, photos, label, update, draggable=true}) {
   const media=window.TintinProductMedia;
   const index=photos.findIndex(photo=>media.imageKey(photo)===media.imageKey(url));
   if(index<0)return;
@@ -11,7 +11,7 @@ export function appendPhotoOrderControls(tile, {url, photos, label, update}) {
   for(const [text,name,to] of [['★',`Usar como primera foto de ${label}`,0],['←',`Mover foto anterior en ${label}`,index-1],['→',`Mover foto siguiente en ${label}`,index+1]]) {
     const button=document.createElement('button');button.type='button';button.className='adm-btn adm-btn-outline';button.textContent=text;button.setAttribute('aria-label',name);button.disabled=to<0 || to>=photos.length || to===index;button.addEventListener('click',()=>move(to));controls.append(button);
   }
-  tile.append(controls);tile.draggable=true;
+  tile.append(controls);if(!draggable)return;tile.draggable=true;
   tile.addEventListener('dragstart',event=>{event.dataTransfer.setData('application/x-tintin-photo',JSON.stringify({label,url}));event.dataTransfer.effectAllowed='move';});
   tile.addEventListener('dragover',event=>{if(event.dataTransfer.types.includes('application/x-tintin-photo'))event.preventDefault();});
   tile.addEventListener('drop',event=>{event.preventDefault();try {const item=JSON.parse(event.dataTransfer.getData('application/x-tintin-photo'));if(item.label!==label)return;const from=photos.findIndex(photo=>media.imageKey(photo)===media.imageKey(item.url));if(from<0 || from===index)return;const next=[...photos];const [photo]=next.splice(from,1);next.splice(index,0,photo);publish(next);}catch{}});

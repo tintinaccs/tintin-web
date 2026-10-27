@@ -114,4 +114,11 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
   await page.locator('[data-action="product-new"]').click();
   await expect(page.locator('#prod-editor-section')).toBeVisible();
 }
-module.exports = { openProductSaveFixture };
+async function openOptionAvailability(page,value,attribute='Color',combination=null){
+ const toggle=page.getByRole('button',{name:'Opciones y variantes',exact:true});
+ if(await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();
+ const trigger=page.getByRole('button',{name:`Disponibilidad de ${attribute}: ${value}`,exact:true});
+ if(await trigger.getAttribute('aria-expanded')!=='true')await trigger.click();
+ if(combination)await page.getByLabel('Combinación disponible',{exact:true}).selectOption({label:combination});
+}
+module.exports = { openProductSaveFixture,openOptionAvailability };

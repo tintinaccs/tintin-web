@@ -1,6 +1,6 @@
 import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261026-editor-phase6-1';
-import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261026-editor-phase6-1';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261027-opciones-inline-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
 import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261026-editor-contextual-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
@@ -165,7 +165,7 @@ export function enhanceProductEditor() {
     // La galería se monta al abrir cada producto; se reubica sin recrear sus controles.
     if (id !== 'prod-color-photos') continue;
     const field = card.querySelector(`#${id}`), target = card.querySelector(`[data-product-section="${section}"] .tt-editor-section-fields`);
-    if (field && target && field.parentElement !== target) target.append(field);
+    if (field && !field.dataset.optionInline && target && field.parentElement !== target) target.append(field);
   }
   for (const control of layout.querySelectorAll('input[id],select[id],textarea[id]')) {
     if (control.type === 'hidden' || control.closest('label')) continue;
@@ -208,7 +208,7 @@ export function enhanceProductEditor() {
   if(privateOption){if(privateOption.hidden!==privateHidden)privateOption.hidden=privateHidden;if(privateOption.disabled!==privateHidden)privateOption.disabled=privateHidden;}
   const inventoryPanel=card.querySelector('#prod-variant-stock');
   const inventoryTarget=card.querySelector('[data-product-section="availability"] .tt-editor-section-fields');
-  if(inventoryPanel && inventoryTarget && inventoryPanel.parentElement!==inventoryTarget)inventoryTarget.append(inventoryPanel);
+  if(inventoryPanel && !inventoryPanel.dataset.optionInline && inventoryTarget && inventoryPanel.parentElement!==inventoryTarget)inventoryTarget.append(inventoryPanel);
   const preview=card.querySelector('.tt-editor-preview-shell');if(preview && body.lastElementChild!==preview)body.append(preview);
   const secondary=card.querySelector('.tt-work-secondary');if(secondary && preview && secondary.nextElementSibling!==preview)body.insertBefore(secondary,preview);
   refreshEditorHeading(card);
@@ -267,10 +267,12 @@ function refreshSectionValues(card) {
 }
 
 function showSection(card,value,expand=false) {
+  const optionStock=value==='availability' && Boolean(card.querySelector('#prod-variants-text')?.value.trim());
+  if(optionStock)value='inventory';
   card.querySelector('#prod-editor-section').value=value;
   card.querySelector('.tt-editor-layout').dataset.editorSection=value;
   for (const field of card.querySelectorAll('[data-product-section]')) {
-    const hidden=field.dataset.permissionHidden==='true';
+    const hidden=field.dataset.permissionHidden==='true' || field.dataset.productSection==='availability' && Boolean(card.querySelector('#prod-variants-text')?.value.trim());
     if(field.hidden!==hidden)field.hidden=hidden;
     const selected=value==='all' || field.dataset.productSection===value || value==='inventory' && field.dataset.productSection==='availability';
     if(!hidden && expand && selected){
@@ -283,6 +285,7 @@ function showSection(card,value,expand=false) {
       }
     }
   }
+  if(optionStock && expand)queueMicrotask(()=>card.querySelector('[data-option-panel=availability]')?.click());
   if(expand){
     window.TintinPageScroll?.reset(card);
     if(value==='all'){card.scrollTop=0;card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});}

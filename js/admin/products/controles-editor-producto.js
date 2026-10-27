@@ -3,6 +3,7 @@ const mounted = new WeakSet();
 const quantityControls = new WeakMap();
 const choices = new WeakMap();
 const commercialDrafts = new WeakMap();
+const optionPanels = new WeakMap();
 const node = (tag, className, text) => {
   const el = document.createElement(tag);
   if (className) el.className = className;
@@ -17,6 +18,56 @@ function button(text, label, action) {
   const el = node('button', 'tt-editor-choice', text); el.type = 'button';
   if (label) el.setAttribute('aria-label', label);
   el.addEventListener('click', action); return el;
+}
+
+// Traslada el nodo canónico: nunca clona campos ni crea otro escritor.
+function optionPanel(card) {
+  if(optionPanels.has(card))return optionPanels.get(card);
+  let current=null;
+  function close(focus=false){
+    if(!current)return;
+    const {content,anchor,host,trigger,kind,extras}=current;current=null;card.classList.remove('tt-option-photos-open');
+    content.dispatchEvent(new CustomEvent('tintin:option-context',{detail:null}));
+    if(kind==='availability')filterLegacyInventory(card,content,null);
+    delete content.dataset.optionInline;delete content.dataset.optionAttribute;delete content.dataset.optionValue;
+    for(const {field,marker} of extras)if(marker.isConnected)marker.replaceWith(field);
+    if(anchor.isConnected)anchor.replaceWith(content);
+    host.remove();trigger.setAttribute('aria-expanded','false');trigger.removeAttribute('aria-controls');
+    if(focus && trigger.isConnected)trigger.focus({preventScroll:true});
+  }
+  function open(trigger,kind,attribute,value){
+    if(current?.trigger===trigger){close(true);return;}
+    const content=card.querySelector(kind==='photos'?'.tt-unified-photos':'#prod-variant-stock');
+    if(!content)return;
+    const detail={attribute,value,accepted:true};
+    content.dispatchEvent(new CustomEvent('tintin:option-context-check',{detail}));
+    if(!detail.accepted)return;
+    close();
+    const host=node('section','tt-option-inline'),title=node('strong','',`${kind==='photos'?'Fotos':'Disponibilidad'} · ${value}`);
+    host.id='prod-option-inline';host.setAttribute('role','region');host.setAttribute('aria-label',title.textContent);
+    const dismiss=button('Cerrar','Cerrar '+title.textContent,()=>close(true));
+    const heading=node('div','tt-option-inline-heading');heading.append(title,dismiss);host.append(heading);
+    const anchor=document.createComment('Ubicación del editor canónico');content.before(anchor);
+    trigger.closest('.tt-option-row').append(host);
+    const extras=[];
+    const stock=card.querySelector('#prod-stock'),field=stock?.closest('.tt-editor-quantity')?.parentElement;
+    if(kind==='availability' && field && !stock.readOnly){const marker=document.createComment('Stock general canónico');field.before(marker);host.append(field);extras.push({field,marker});}
+    host.append(content);
+    content.dataset.optionInline=kind;content.dataset.optionAttribute=attribute;content.dataset.optionValue=value;card.classList.toggle('tt-option-photos-open',kind==='photos');
+    trigger.setAttribute('aria-expanded','true');trigger.setAttribute('aria-controls',host.id);
+    current={content,anchor,host,trigger,kind,attribute,value,extras,product:card.querySelector('#prod-id')?.value};
+    content.dispatchEvent(new CustomEvent('tintin:option-context',{detail:{attribute,value}}));
+    if(kind==='availability')filterLegacyInventory(card,content,{attribute,value});
+    content.querySelector('[aria-label="Combinación disponible"],.tt-photo-context select')?.focus({preventScroll:true});
+  }
+  const api={open,close,suspend(){const saved=current?{...current}:null;close();return saved;},resume(saved){
+    if(!saved || saved.product!==card.querySelector('#prod-id')?.value)return;
+    const trigger=[...card.querySelectorAll('[data-option-panel]')].find(el=>el.dataset.optionPanel===saved.kind && el.dataset.optionAttribute===saved.attribute && el.dataset.optionValue===saved.value);
+    if(trigger)open(trigger,saved.kind,saved.attribute,saved.value);
+  }};
+  card.addEventListener('keydown',event=>{if(event.key==='Escape' && current?.host.contains(event.target)){event.preventDefault();event.stopPropagation();close(true);}});
+  card.querySelector('#prod-editor-section')?.addEventListener('change',()=>close());
+  optionPanels.set(card,api);return api;
 }
 
 function quantity(input, label, main = false) {
@@ -172,16 +223,15 @@ function variantBuilder(input) {
   });
   assistance.append(assistanceTitle,palette,suggest,suggestStatus,suggestion);
   form.append(attribute,custom,value,addButton);panel.append(form,error,chips,assistance);input.before(panel);
-  const advanced=node('details','tt-editor-advanced');const summary=node('summary','','Formato avanzado');
-  input.before(advanced);advanced.append(summary);input.hidden=true;
-  advanced.addEventListener('toggle',()=>{input.hidden=!advanced.open;});
+  input.hidden=true; // Campo canónico del serializer; se edita sólo con los controles de opciones.
   const retired=(key,option)=>{const rows=commercialDrafts.get(card)?.variantInventory?.filter(row=>row.attributes?.[key]===option) || [];return rows.length>0 && rows.every(row=>row.active===false);};
   let signature='';
   function refresh(){
     attribute.disabled=value.disabled=addButton.disabled=input.readOnly;
     for(const key of groups().keys())if(![...attribute.options].some(option=>option.value===key))attribute.append(node('option','',key));
     const source=baseline();
-    const current=JSON.stringify([input.value,input.readOnly,card?.querySelector('#prod-id')?.value,source?.variants,source?.variantCommerceVersion,commercialDrafts.get(card)?.variantInventory?.map(row=>[row.variant,row.active])]);if(current===signature)return;signature=current;
+    const current=JSON.stringify([input.value,input.readOnly,card?.querySelector('#prod-id')?.value,source?.variants,source?.variantCommerceVersion,[...groups()].map(([key,values])=>[key,values.map(option=>[option,retired(key,option)])])]);if(current===signature)return;signature=current;
+    const openPanel=optionPanel(card).suspend();
     chips.replaceChildren();
     for(const [key,values] of groups()){
       const group=node('fieldset','tt-option-group'),legend=node('legend','',key);group.append(legend);
@@ -224,21 +274,34 @@ function variantBuilder(input) {
           color.addEventListener('input',()=>{card.dispatchEvent(new CustomEvent('tintin:color-appearance',{detail:{color:option,colorHex:color.value}}));card.dispatchEvent(new Event('change',{bubbles:true}));});
           label.append(color);row.append(label);
         }
-        row.append(button('Fotos','Fotos de '+key+': '+option,()=>{const select=card.querySelector('#prod-editor-section');select.value='photos';select.dispatchEvent(new Event('change',{bubbles:true}));card.querySelector('.tt-unified-photos button')?.focus({preventScroll:true});}));
-        row.append(button('Disponibilidad','Disponibilidad de '+key+': '+option,()=>{
-          const select=card.querySelector('#prod-editor-section');select.value='availability';select.dispatchEvent(new Event('change',{bubbles:true}));
-          const visible=[...card.querySelectorAll('#prod-variant-stock input, #prod-stock')].filter(node=>node.getClientRects().length && !node.disabled);
-          const matching=visible.find(node=>{const row=node.closest('.tt-commercial-row,.tt-editor-stock-row');const title=row?.querySelector('legend')?.textContent || row?.dataset.variant || '';return title.split('/').map(value=>value.trim()).includes(option);});
-          (matching || visible[0])?.focus({preventScroll:true});
-        }));
+        for(const [kind,text] of [['photos','Fotos'],['availability','Disponibilidad']]){
+          const trigger=button(text,text+' de '+key+': '+option,()=>optionPanel(card).open(trigger,kind,key,option));
+          trigger.dataset.optionPanel=kind;trigger.dataset.optionAttribute=key;trigger.dataset.optionValue=option;
+          trigger.setAttribute('aria-expanded','false');row.append(trigger);
+        }
         group.append(row);
       }
       chips.append(group);
     }
+    optionPanel(card).resume(openPanel);
     for(const choice of palette.children){choice.disabled=input.readOnly;choice.setAttribute('aria-pressed',String([...groups()].some(([key,values])=>/^colou?r$/i.test(key)&&values.some(option=>option.toLocaleLowerCase('es')===choice.dataset.color.toLocaleLowerCase('es')))));}
   }
   input.addEventListener('input',refresh);
   choices.set(panel,{refresh});
+}
+
+function filterLegacyInventory(card,panel,context){
+  if(panel.classList.contains('tt-commercial-editor'))return;
+  const labels=[...panel.querySelectorAll(':scope > label')];
+  let select=panel.querySelector(':scope > .tt-option-legacy-filter');
+  if(!context){select?.remove();for(const label of labels)label.hidden=false;return;}
+  if(!select){select=node('select','adm-input tt-option-legacy-filter');select.setAttribute('aria-label','Combinación disponible');panel.prepend(select);select.addEventListener('change',()=>{for(const label of labels)label.hidden=label.querySelector('input')?.getAttribute('aria-label')!==select.value;});}
+  const keys=card.querySelector('#prod-variants-text').value.split(/\r?\n/).map(line=>line.split(':')[0].trim()),index=keys.indexOf(context.attribute);
+  const matching=labels.filter(label=>label.querySelector('input')?.getAttribute('aria-label')?.replace(/^Stock de /,'').split('/').map(value=>value.trim())[index]===context.value);
+  const old=select.value;select.replaceChildren(...matching.map(label=>{const option=node('option','',label.querySelector('input').getAttribute('aria-label').replace(/^Stock de /,''));option.value=label.querySelector('input').getAttribute('aria-label');return option;}));
+  select.value=[...select.options].some(option=>option.value===old)?old:select.options[0]?.value || '';
+  select.hidden=!matching.length;
+  for(const label of labels)label.hidden=label.querySelector('input')?.getAttribute('aria-label')!==select.value;
 }
 
 export function refreshEditorControls(card) {

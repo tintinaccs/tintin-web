@@ -1,3 +1,34 @@
+## 2026-10-27 — Fotos y disponibilidad junto a cada opción, Codex /root
+
+Rama codex/editor-paneles-contextuales-20261027, base65ee3425 (#1262).
+Pedido vigente: una sola carga por configuración, sin saltos al editor inferior,
+fotos múltiples pequeñas y cantidades junto a cada opción, con guardado real del
+formulario y diseño responsive. Se trasladan los nodos canónicos; no se clonan
+campos ni se introduce un segundo escritor. Sólo hay un panel abierto; Cerrar y
+Escape restituyen el foco. El stock por opciones no se ofrece además debajo;
+la navegación de Stock conduce al control de la opción. Sin opciones, el stock
+general conserva su lugar. Se retira el segundo recorrido de asociaciones de
+fotos y la edición textual avanzada de las mismas opciones.
+
+Fotos mantiene portada general y asociaciones independientes por atributo o
+combinación, varias imágenes y orden propio. Se reutiliza una sola carga múltiple,
+plegada dentro del panel compacto. Cada cola/biblioteca conserva su destino
+original al cambiar de sección. Se conservan fotos sólo referenciadas por
+variantes, límites, precios, referencias históricas, cantidades, CAS, borradores,
+publicación y guardas del servidor. La actualización de asociaciones conserva
+imágenes y checkboxes; no agrega listeners de arrastre en cada pulsación.
+
+PASS_LOCAL:275 casos distintos de Chromium entre195 de guardado responsive,
+cierre del editor/componente comercial,79 de fotos/paneles/CSP y1 de reparto de
+stock legado, sin reintentos;69 Node del editor/escritor,221 de sincronización/
+productos y10 de avisos de versión. Los paneles cubren diez tamaños320–3840,
+rotación, opciones fuera de la primera página, cola de fotos con cambio de sección
+y carga múltiple con guardado/reapertura activo, inactivo, archivado y borrador.
+No se heredan los resultados de versiones intermedias. Se usan el controlador y el escritor
+originales con identidad/almacenamiento/proveedores ficticios. No compras,
+pagos, correos, cuentas ni stock reales. CI, integración y publicación se acreditan
+por SHA en el PR; no se confunden con la validación local.
+
 ## 2026-10-27 — Guardados del editor y CSP, Codex /root
 
 Rama codex/corregir-guardado-csp-20261027, base c105f61a. Los adjuntos de la

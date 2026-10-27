@@ -1,3 +1,16 @@
+## 2026-10-27 — Panel único por opción en Productos
+
+Controles, galería, matriz comercial y composición existentes del editor:
+Fotos/Disponibilidad despliegan el único editor canónico bajo su opción, sin
+asociador alternativo ni stock duplicado debajo. La carga múltiple conserva el
+atributo/combinación original aunque se navegue antes de guardar; los campos
+siguen en el formulario y serializer originales. Se mantienen límites, stock,
+precios, CAS, guardas históricas y estados editoriales. Sin cambios de dominio
+público/checkout, Rules, proveedores o dependencias. Versionado transitivo, CSP,
+proyección de publicación, caché, diagnóstico y plan mediante sus autoridades.
+Regresiones del formulario/editor sobre datos ficticios y tamaños320–3840;
+resultados y límites en CURRENT_STATE y PANELES-POR-OPCION.md.
+
 ## 2026-10-27 — Tablet y un único aviso de guardado
 
 Autoridades: CSS administrativo, workspace privado y controlador canónico de Productos. Dos columnas desde720px, estados/reintento en una sola región accesible y limpieza del error anterior del cuerpo al pulsar Guardar. Se mantienen validaciones, confirmación estricta del servidor, borrador/recuperación, fotos, modelos, permisos y publicación existentes. Pruebas en las suites CI vigentes amplían orientación y tamaños; URLs inmutables y derivados por constructores. Sin datos reales ni workflows modificados. Evidencia y límites: docs/product-editor-refactor/TABLET-Y-AVISO-GUARDADO.md y CURRENT_STATE.

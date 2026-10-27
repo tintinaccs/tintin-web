@@ -4,8 +4,9 @@ const element=(tag,text)=>{const node=document.createElement(tag);if(text!=null)
 const button=(text,action)=>{const node=element('button',text);node.type='button';node.className='adm-btn adm-btn-outline';node.addEventListener('click',action);return node;};
 
 export function mountCommercialEditor(panel, product, parseOptions, signal, persisted=product) {
-  let draft=structuredClone(product),page=0;
+  let draft=structuredClone(product),page=0,context=panel.dataset.optionInline==='availability'?{attribute:panel.dataset.optionAttribute,value:panel.dataset.optionValue}:null,contextVariant='';
   const selected=new Set();
+  const contextChoices=new Map();
   const effectivePrices=new Map();
   const options=document.getElementById('prod-variants-text'),total=document.getElementById('prod-stock');
   panel.closest('#prod-form-card')?.addEventListener('tintin:commercial-options-read',event=>{event.detail.product=draft;},{signal});
@@ -51,16 +52,29 @@ export function mountCommercialEditor(panel, product, parseOptions, signal, pers
     event.preventDefault();setOptionAvailability(attribute,value,active);
   },{signal});
   function effectivePrice(row){try{return `Precio efectivo: Gs. ${productVariantPrice(draft,{variantKey:row.variant}).price.toLocaleString('es-PY')}`;}catch{return 'Revisá el precio de la combinación.';}}
+  panel.addEventListener('tintin:option-context',event=>{if(context)contextChoices.set(JSON.stringify(context),contextVariant);context=event.detail;contextVariant=contextChoices.get(JSON.stringify(context)) || '';page=0;render();},{signal});
+  const combination=element('select');combination.className='adm-input';combination.setAttribute('aria-label','Combinación disponible');
+  combination.addEventListener('change',()=>{contextVariant=combination.value;render();});
+  rows.before(combination);
   function render(){
     rows.replaceChildren();
     effectivePrices.clear();
     page=Math.max(0,Math.min(page,Math.ceil(draft.variantInventory.length/25)-1));
-    for(const row of draft.variantInventory.slice(page*25,page*25+25)){
+    let visible=draft.variantInventory;
+    if(context){
+      const matches=visible.filter(row=>row.attributes?.[context.attribute]===context.value);
+      if(!matches.some(row=>row.variant===contextVariant))contextVariant=matches[0]?.variant || '';
+      combination.replaceChildren(...matches.map(row=>{const option=element('option',variantSelectionLabel(draft,{variantKey:row.variant}));option.value=row.variant;return option;}));
+      combination.value=contextVariant;visible=matches.filter(row=>row.variant===contextVariant);
+    }
+    combination.hidden=!context;advanced.hidden=pagination.hidden=Boolean(context);
+    heading.hidden=Boolean(context);
+    for(const row of (context?visible:visible.slice(page*25,page*25+25))){
       const card=element('fieldset');card.className='tt-commercial-row';
       const title=variantSelectionLabel(draft,{variantKey:row.variant});
       const legend=element('legend',title);card.append(legend);
       const choose=element('input');choose.type='checkbox';choose.checked=selected.has(row.variant);choose.setAttribute('aria-label',`Seleccionar ${title}`);
-      choose.addEventListener('change',()=>{if(choose.checked)selected.add(row.variant);else selected.delete(row.variant);});card.append(choose);
+      choose.hidden=Boolean(context);choose.addEventListener('change',()=>{if(choose.checked)selected.add(row.variant);else selected.delete(row.variant);});card.append(choose);
       for(const [key,label] of [['stock','Stock'],['price','Precio'],['priceBefore','Precio anterior']]){
         const wrap=element('label',label),input=element('input');input.type='number';input.min=key==='stock'?'0':'1';input.max=key==='stock'?'1000000':'1000000000';input.step='1';input.className='adm-input';input.value=row[key]??'';input.placeholder=key==='stock'?'Sin control':'Heredar';input.setAttribute('aria-label',`${label}: ${title}`);
         input.addEventListener('input',()=>{row[key]=parse(key,input.value);updateTotal();announce();});wrap.append(input);card.append(wrap);

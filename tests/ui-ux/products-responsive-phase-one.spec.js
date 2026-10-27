@@ -208,14 +208,15 @@ test('configurar stock por color exige cantidades explícitas y recalcula total 
   window.__stockEditor=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock,baseline:()=>productVariantStockBaseline};')();
   window.__stockEditor.renderProductVariantStock({stock:1});
  },{renderer:stockRenderer,inventory:inventorySource});
- await page.getByText('Formato avanzado',{exact:true}).click();await page.locator('#prod-variants-text').fill('Color: dorado, plateado');
+ for(const color of ['dorado','plateado']){await page.getByLabel('Nueva opción de variante',{exact:true}).fill(color);await page.getByRole('button',{name:'Agregar opción',exact:true}).click();}
+ await page.getByRole('button',{name:'Disponibilidad de Color: dorado',exact:true}).click();
  await expect(page.locator('#prod-stock')).toBeEditable();
  await expect(page.locator('#prod-variant-stock input')).toHaveCount(0);
  await page.getByRole('button',{name:'Asignar stock por color u opción',exact:true}).click();
  await expect(page.getByRole('button',{name:'Asignar stock por color u opción',exact:true})).toHaveCount(0);
  const quantities=page.locator('#prod-variant-stock input');await expect(quantities).toHaveCount(2);
  await expect(quantities.nth(0)).toHaveValue('');await expect(quantities.nth(1)).toHaveValue('');
- await quantities.nth(0).fill('1');await quantities.nth(1).fill('1');
+ await quantities.nth(0).fill('1');await page.getByRole('button',{name:'Disponibilidad de Color: plateado',exact:true}).click();await quantities.nth(1).fill('1');
  await expect(page.locator('#prod-stock')).toHaveValue('2');await expect(page.locator('#prod-stock')).toHaveAttribute('readonly','');
  await expect(page.locator('#prod-variants-text')).not.toHaveAttribute('readonly','');
  expect(await page.evaluate(()=>window.__stockEditor.baseline().expectedEntries)).toBe(null);

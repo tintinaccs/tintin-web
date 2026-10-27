@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "c105f61a0f518b25d3f33f0ae01e592e7a753d08",
-  "reason": "Corregir firmas de archivos y reintentos oficiales junto con eventos dinamicos CSP del editor",
+  "baseCommit": "65ee34250b20738591ec65cc097ee4e8bd452486",
+  "reason": "Unificar Fotos y Disponibilidad junto a cada opción, sin cargas duplicadas; conservar campos, escritor, identidades, precios, stock, borradores y publicación protegidos.",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "767520042ff6383e49efc0b03cd900186827d335e075a1efe3c487b3ab5262e5",
-      "newHash": "c14d7f607dd64a271958e5224189e1e3d8cb2e25aa47bb15667c2a12bc27d6e4"
+      "oldHash": "c14d7f607dd64a271958e5224189e1e3d8cb2e25aa47bb15667c2a12bc27d6e4",
+      "newHash": "4553e51987aaa022b831730c960c83668034fc6336a8e67b940388a2dda8610e"
     },
     {
-      "path": "config/csp-runtime.js",
-      "oldHash": "96fd423f31caaec37395c5e37c94cb46ba999dc473f58c1559caad77295b0533",
-      "newHash": "982f6679155475f932debc4339f146b4b7ef2687cbeb2c74c129a1da42a02505"
-    },
-    {
-      "path": "config/csp-runtime.json",
-      "oldHash": "7f2e25ba260df311aeb196504c60ce84c9d49471a8aa1bad03658baf67332eed",
-      "newHash": "fe579d9a957bc64c73e24dca5a90176ee63b70f418d65354bf6cb980128bc2d1"
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "958bbf83608577d800c32f06ce0e6cca447bb837a6294def980f4f39c8191452",
+      "newHash": "8a350d3ac64983cc523276ab5264bd06eca264d5170c877fd1f5ed024d36650b"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "71c67fb45e34d6803c2078ac8bdfea0a1a0d7c56564024d53c2b6aa2e180a76f",
-      "newHash": "4ff633f0182a038f1d8c41cad0b8a3e543453031dc4135380ca355fc40fe27f3"
+      "oldHash": "4ff633f0182a038f1d8c41cad0b8a3e543453031dc4135380ca355fc40fe27f3",
+      "newHash": "42edfcbd2a6054154930f57a4c78cf4154a938cd487b8e4e2075ed675ae65e0b"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "37aa2a0d331c1e179d5796499f7498a504d498ac988ae2c2ac85d810c587bc80",
+      "newHash": "cfb694c8793bfada9345f3b0bf94e1b73768b098b3c8ed2a47ab4497253f55e5"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "ad20ddf67e012c84a7ee976d35213302a064ff01a7912cd23634ed7420a13868",
-      "newHash": "01ac1480fd8bfddb9e50a3e696742e43060294877751561052f8e4d9a3ab1446"
+      "oldHash": "01ac1480fd8bfddb9e50a3e696742e43060294877751561052f8e4d9a3ab1446",
+      "newHash": "c0358f2e6825c21a98bc2c01bc44f625bf97aa3d1ba52016343e2db31964930a"
     }
   ],
   "affectedRecords": [
@@ -34,13 +34,7 @@
     "admin-guard__firestore-fuente-verdad__16",
     "apis-internas__correos__41",
     "apis-internas__pedidos__32",
-    "cf-functions",
-    "cf-functions__apis-internas__20",
-    "cf-functions__csp__29",
-    "cf-functions__reglas-firestore__28",
-    "cf-pages__cf-functions__19",
     "correos",
-    "csp",
     "pagina-perfil",
     "pedidos",
     "pedidos__inventario__33",
