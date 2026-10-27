@@ -66,6 +66,11 @@ sin reintentos. Después se reconcilia el panel simple en lugar de reconstruirlo
 la comprobación específica final aprueba13/13 (54s), incluidos diez ciclos de
 asociación en seis anchos, persistencia y el caso histórico. Capturas de móvil y
 escritorio inspeccionadas. CI del candidato pendiente; no se hereda CI de#1254.
+Repetición adicional de390px:3/3 sin reintentos, verificando también identidad
+de las casillas. CI inicial69fe1e07 detectó que el harness Node del controlador
+compatible no inyectaba readProductEditorResponse; se añade la función real al
+harness, sin sustituir el escritor ni relajar aserciones. audit:admin-sync completo
+repetido:78/78 Node más sus auditorías aprobados. CI del nuevo SHA pendiente.
 
 Una corrida intermedia de contexto simultánea con la batería amplia agotó60s
 en390px. Se canceló esa corrida y se limitaron notificaciones a cambios reales.

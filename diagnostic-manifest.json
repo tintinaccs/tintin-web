@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "800cd5bbab8358268b18dea726ad13435d45d80c94fcd3ce6e569da7a373abb4",
+  "sourceFingerprint": "31eccb9824d73d7f93ec638b513283a809d9a8b38535ca1816f1a3be9a8034a2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1576,
     "textFiles": 1445,
-    "totalBytes": 34666570,
+    "totalBytes": 34667343,
     "pages": 19,
     "modules": 1050
   },
@@ -42652,8 +42652,8 @@
     },
     {
       "path": "tests/admin/maestro-productos-controlador.test.mjs",
-      "bytes": 27132,
-      "sha256": "a50a804107b94db926b714450583ed135cfa94db68133cd2498a4ef9af905ee3",
+      "bytes": 27255,
+      "sha256": "558ffb5843a5b755e24a1a7c85c485bf9d549a5a84864317e6034c1ad47a7a74",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42666,84 +42666,90 @@
           "line": 1
         },
         {
+          "raw": "../../js/admin/products/respuesta-editor-producto.mjs",
+          "target": "js/admin/products/respuesta-editor-producto.mjs",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "../../cloudflare/product-editor-domain.mjs",
           "target": "cloudflare/product-editor-domain.mjs",
           "dynamic": false,
-          "line": 2
+          "line": 3
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "../../js/admin/products/editor-editorial-interfaz.js",
           "target": "js/admin/products/editor-editorial-interfaz.js",
           "dynamic": false,
-          "line": 4
+          "line": 5
         },
         {
           "raw": "../../js/core/store/estado-editorial-producto.mjs",
           "target": "js/core/store/estado-editorial-producto.mjs",
           "dynamic": false,
-          "line": 5
+          "line": 6
         },
         {
           "raw": "node:test",
           "target": null,
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "node:assert/strict",
           "target": null,
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "node:fs",
           "target": null,
           "dynamic": false,
-          "line": 8
+          "line": 9
         },
         {
           "raw": "node:vm",
           "target": null,
           "dynamic": false,
-          "line": 9
+          "line": 10
         },
         {
           "raw": "../../js/admin/products/maestro-productos-core.mjs",
           "target": "js/admin/products/maestro-productos-core.mjs",
           "dynamic": false,
-          "line": 10
+          "line": 11
         },
         {
           "raw": "../../js/core/store/inventario-variantes.mjs",
           "target": "js/core/store/inventario-variantes.mjs",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "../../js/core/auth/utilidades-seguridad.js",
           "target": "js/core/auth/utilidades-seguridad.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         }
       ],
       "endpoints": [
         {
           "url": "https://img.test/original",
-          "line": 19
+          "line": 20
         },
         {
           "url": "https://img.test/subida.png",
-          "line": 201
+          "line": 202
         },
         {
           "url": "https://img.test/portada.png",
-          "line": 216
+          "line": 217
         }
       ]
     },
@@ -59233,8 +59239,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 969926,
-      "sha256": "b8a70e334bc6ce2cf83cc10d633668e9b40c3e78cc5b64d8fbccabda7f459091"
+      "bytes": 970169,
+      "sha256": "5a6032e5b413e86455e23464dc7190067eebb9ea2fa0fb6db404c7f8a8e52ec4"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -60079,8 +60085,8 @@
     {
       "path": "docs/product-editor-refactor/UX-AGIL-AUTOGUARDADO.md",
       "extension": ".md",
-      "bytes": 5590,
-      "sha256": "9c14515430f832b2c8f1a23d9eb31df4a25395d8339acee493f8dc8cdf8108b6"
+      "bytes": 5997,
+      "sha256": "66f70a6c45c857d40dae4450b62f1c6989593cd8cf614e8198c23847baaac2d2"
     },
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/contexto-1024.png",
@@ -64507,8 +64513,8 @@
     {
       "path": "tests/admin/maestro-productos-controlador.test.mjs",
       "extension": ".mjs",
-      "bytes": 27132,
-      "sha256": "a50a804107b94db926b714450583ed135cfa94db68133cd2498a4ef9af905ee3"
+      "bytes": 27255,
+      "sha256": "558ffb5843a5b755e24a1a7c85c485bf9d549a5a84864317e6034c1ad47a7a74"
     },
     {
       "path": "tests/admin/maestro-productos.test.mjs",

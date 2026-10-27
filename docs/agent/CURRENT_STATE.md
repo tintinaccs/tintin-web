@@ -4151,6 +4151,9 @@ tras conservar nodos del panel (corridas solapadas), preflight oficial. Una prue
 intermedia390px detectó273px de salto; el spec final verifica diez ciclos sin
 reinicio en seis anchos. El histórico variantMedia conserva sus fotos al quitar
 una asociación. CI del candidato pendiente; no heredar resultados anteriores.
+390px repetido3/3. La CI inicial69fe1e07 detectó una dependencia real no inyectada
+en el harness Node compatible; corregido sólo el harness. audit:admin-sync
+completo repetido PASS_LOCAL78/78 y sus auditorías; nuevo SHA necesita CI propia.
 HTTP401 JSON no autenticado en producción: no se reprodujo la causa externa del
 HTML de la titular; no se afirma arreglada esa infraestructura ni sesión real.
 Evidencia y reversión: docs/product-editor-refactor/UX-AGIL-AUTOGUARDADO.md.

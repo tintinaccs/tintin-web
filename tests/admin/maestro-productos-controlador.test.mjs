@@ -1,4 +1,5 @@
 import {commercialPatch} from '../../js/admin/products/editor-comercial-core.mjs';
+import {readProductEditorResponse} from '../../js/admin/products/respuesta-editor-producto.mjs';
 import {saveProductEditor} from '../../cloudflare/product-editor-domain.mjs';
 import {encodeFirestoreFields,decodeFirestoreFields} from '../../cloudflare/firebase-admin-ligero.js';
 import {ensureEditorialFields} from '../../js/admin/products/editor-editorial-interfaz.js';
@@ -21,7 +22,7 @@ function runtime(product={}){
  let count=0;
  const ctx={crypto,Option:function(text,value){this.textContent=text;this.value=value;},window:{},document:{getElementById:control,querySelectorAll:selector=>selector==='#prod-variant-stock input'?variantInputs:[]},auth:{currentUser:{uid:'super'}},currentUser:{uid:'super'},navigator:{onLine:true},productMasterBusy:false,currentRole:'superadmin',can:()=>true,roleCanDo:()=>true,
   _allProducts:[original],_productSourceById:new Map([['source',structuredClone(original)]]),_allCollections:[{slug:'anillos'}],_productInventoryById:new Map([['source',{costUnit:100,purchased:5,stockMinimum:2,internalNotes:'Privado'}]]),productEditBaseline:null,productCommercialBaseline:null,productVariantStockBaseline:null,
-  ensureEditorialFields,editorialFields,productEditorialStatus,productTemplate,productCardPatch,productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,_formImageWidgets:new Map(),productColorPhotos:{serialize:()=>[],flush:async()=>{}},
+  readProductEditorResponse,ensureEditorialFields,editorialFields,productEditorialStatus,productTemplate,productCardPatch,productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,_formImageWidgets:new Map(),productColorPhotos:{serialize:()=>[],flush:async()=>{}},
   wristCategory:x=>x,sanitizeImageUrl:x=>typeof x==='string'&&x.startsWith('https://')?x:'',mountFormImageWidget:()=>{},mountProductColorPhotos:()=>{},
   renderProductVariantStock:product=>{variantInputs.length=0;ctx.productVariantStockBaseline=product?.variantInventory?{stock:product.stock,expectedEntries:variantInventoryEntries(product),entries:variantInventoryEntries(product),variants:product.variants}:null;for(const entry of product?.variantInventory || [])variantInputs.push({value:String(entry.stock)});},
   UnsavedGuard:{confirmLeave:fn=>fn(),track:()=>{},clear:()=>{}},toast:()=>{},db:{},collection:(_db,name)=>name,
