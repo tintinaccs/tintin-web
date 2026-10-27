@@ -7,7 +7,7 @@ import {
   mergeContent, sanitizeContentHref, setNested,
 } from '../../core/store/esquema-contenido.js?v=tintin-20261021-identidad-1';
 import { chooseRandomPreviewProduct, productPreviewTarget } from './preview-dynamic-targets.js?v=tintin-20260812-preview-dinamico-1';
-import { installWorkspaceSplitters } from './workspace-splitters.js?v=tintin-20261027-performance-1';
+import { installWorkspaceSplitters } from './workspace-splitters.js?v=tintin-20261027-global-fluidez-3';
 
 const $ = id => document.getElementById(id);
 const clone = value => JSON.parse(JSON.stringify(value));

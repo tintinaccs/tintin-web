@@ -1,3 +1,30 @@
+## 2026-10-27 — Tablet y aviso único de guardado, Codex /root
+
+Rama codex/editor-tablet-guardado-20261027. Parte de51e5e737 (#1256) y concilia
+main1467835415f7cf4ecc432b809bc118acb0b6197e (#1255) conservando Checkout,
+bienvenida e imports compartidos. El mismo error se escribía en cabecera y
+cuerpo; además, blur del nombre ocultaba Reintentar antes del clic. Workspace
+centraliza el fallo, mantiene el aviso ante eventos sin cambios y conserva el
+respaldo privado. Una edición nueva vuelve a programar guardado. Galería/datos
+en dos columnas desde720px; cabecera con un aviso/reintento y acciones compactas.
+
+PASS_LOCAL del candidato conciliado:144/144 Chromium de las seis suites del
+editor sin reintentos;33 tamaños entre320×568 y3840×2160, rotación, área reducida,
+reflujo200%, fotos, asociaciones, opciones, stock, borradores y guardado real
+sobre datos ficticios. WebKit12/12 de errores/reintento/rotación sin reintentos;
+matriz33 WebKit aprobada en la corrida anterior, cuyo fallo de interacción se
+reprodujo y corrigió con la nueva regresión. Node29/29, admin-sync78/78 y etapa
+oficial preflight39/39 aprobados después de conciliar main. Build Pages,
+versionado, plan y diagnóstico por autoridades canónicas. CI/merge/producción
+se registran por SHA en el PR y artifacts/editor-tablet-20261027/recibo.json;
+un PASS local no certifica esos resultados externos.
+
+NOT_VERIFIED: POST de guardado del producto real de la foto y hardware físico.
+La titular pide sesión fuera de TinyFish; se proporciona admin.html directo y
+se solicita abrirlo en Codex, pero el control de su navegador no está expuesto.
+No se modifican productos reales ni se relaja la confirmación del servidor.
+Informe: docs/product-editor-refactor/TABLET-Y-AVISO-GUARDADO.md.
+
 ## 2026-10-27 — Bienvenida al salir del checkout y confirmación organizada
 
 Codex /root. Alcance vigente confirmado por la titular: ninguna bienvenida en /checkout ni /checkout.html, tampoco en Pedido confirmado, ticket restaurado o pago pendiente. No se descarga desde el guardia ni consume sus flags; aparece al salir hacia otra página pública/Perfil. Se elimina el disparo de success y se conserva transacción por cuenta/configuración. En otras páginas, el controlador de superficies libera carrito/cuenta antes de la guía, sin vaciar productos. Confirmación organizada en secciones con fotos seguras/fallback, totales, entrega, cliente, pago y ticket; enlaces a Pedidos, PNG/compartir/PDF conservados. Se integra main51e5e737/#1256 preservando editor y tests.
@@ -4176,3 +4203,11 @@ PASS_LOCAL: 47/47 Node de scroll, navegación, versiones y Pedidos; 103/103
 Chromium de Pedidos (18 viewports/orientaciones), avisos y runtime visual.
 `audit:performance`, `audit:performance-regressions`, caché y build canónico
 aprobados; persisten sólo dos advertencias preexistentes de peso de Inicio.
+
+## Cierre global solicitado — 2026-10-27 (Codex GPT-6)
+
+Se concilia la mejora de fluidez #1257 con main `0b415d76d60a9ad49112467df15bb34b8b5534c1` (#1258). Se conservan el layout tablet, el estado único de guardado/reintento y la exclusión de bienvenida durante todo Checkout de #1255. URLs inmutables combinadas regeneradas desde los generadores canónicos; no se reusan los tags publicados por #1258 para bytes nuevos. La CI del candidato conciliado queda pendiente hasta su ejecución.
+
+Verificación operativa directa, no destructiva: PayPal público responde disabled/Sandbox, USD, feature_disabled, tasa BCP 26/10 actualizada `2026-10-26T21:30:59.460Z`; Push devuelve401 sin sesión. Backup Firestore40488957277 SUCCESS con Exportar Firestore aprobado. No se certifica restauración actual de datos ni entrega Push/captura PayPal real. El control del navegador autenticado no está expuesto entre las herramientas; no se accede por TinyFish ni se solicitan secretos. Issues735/372/373/312 mantienen aceptación externa pendiente;340 debe indexar evidencia actual.
+
+PASS_LOCAL del candidato conciliado:41/41 Node de scheduling/editor/versiones; preflight oficial completado sin fallos (39 gates); PayPal18/18, Push/social52/52 y cuentas72/72. Restauración aislada de código: bundle SHA256 `3e760721bae80f6efdda70450a93ea7d61974ad84fdf8b22def92a5e23901d37`, git bundle verify, clon nuevo, git fsck --full y checkout main `0b415d76d60a9ad49112467df15bb34b8b5534c1` aprobados en18.93s. Es copia local verificada, no copia cifrada externa ni recuperación Firestore. La primera preflight local coincidió con una reconstrucción de Monaco y terminó ENOENT; se repitió después del build completo y aprobó.

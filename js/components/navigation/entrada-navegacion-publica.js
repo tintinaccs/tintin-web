@@ -13,7 +13,7 @@ import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=ti
 import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261027-welcome-receipt-1';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js?v=tintin-20260916-final-production-stability-registry-1';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20261016-footer-gradient-layout-1';
-import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20261027-global-performance-1';
+import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20261027-global-fluidez-3';
 
 const LEGACY_SHELL_IDS = Object.freeze([
   'tt-mobile-brand',

@@ -1,3 +1,7 @@
+## 2026-10-27 — Tablet y un único aviso de guardado
+
+Autoridades: CSS administrativo, workspace privado y controlador canónico de Productos. Dos columnas desde720px, estados/reintento en una sola región accesible y limpieza del error anterior del cuerpo al pulsar Guardar. Se mantienen validaciones, confirmación estricta del servidor, borrador/recuperación, fotos, modelos, permisos y publicación existentes. Pruebas en las suites CI vigentes amplían orientación y tamaños; URLs inmutables y derivados por constructores. Sin datos reales ni workflows modificados. Evidencia y límites: docs/product-editor-refactor/TABLET-Y-AVISO-GUARDADO.md y CURRENT_STATE.
+
 ## 2026-10-27 — Primera bienvenida fuera del checkout y confirmación de pedido
 
 Autoridades: tutorial-bienvenida y guardia de perfil; renderConfirmedOrder del checkout seguro; checkout.html y checkout-maintenance.css. Checkout completo queda exento de la guía, incluida confirmación/restauración; conserva flags hasta visitar otra ruta. Otras páginas y Perfil usan el mismo runtime; el controlador libera carrito/cuenta antes de abrirlo. Ticket confirmado agrupado con fotos seguras, avisos compactos y enlace al pedido en Perfil; PNG/compartir/PDF se conservan. Recorridos reales resuelven la primera guía antes del banner de privacidad. Se preserva editor1256 y la paleta de marca. Referencias transitivas y derivados por autoridades existentes. Sin cambios de reglas/pagos/inventario ni escrituras comerciales de prueba reales.
