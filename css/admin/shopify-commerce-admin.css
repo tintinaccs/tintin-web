@@ -1816,3 +1816,88 @@ html.tt-product-workspace-active #prod-form-card.tt-editor-workspace {inset:0 !i
 .tt-work-exit-actions{display:flex;flex-wrap:wrap;gap:8px;}
 .tt-work-exit-actions button{min-height:44px;white-space:normal;flex:1 1 180px;}
 .tt-work-exit-actions .tt-work-discard{text-decoration:underline;}
+
+/* Un único bloque de edición: imágenes, controles comerciales y datos del producto. */
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-editor-layout {display:block;max-width:1480px;margin-inline:auto;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-fields {padding:20px;border:1px solid var(--editor-line);border-radius:18px;background:var(--tt-commerce-surface);gap:24px !important;align-items:start;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-editor-section {margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;min-width:0;scroll-margin-block-start:110px;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-editor-section-fields {padding:12px 0 0;gap:16px;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-editor-sidebar {position:static;max-width:none;margin-top:20px;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-section-nav {position:sticky;top:0;z-index:4;margin:0 0 16px;padding:10px;background:var(--tt-commerce-surface);border:1px solid var(--editor-line);border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;max-width:none;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-quick-actions {display:flex;flex:1 1 100%;gap:6px;overflow-x:auto;min-width:0;max-width:100%;padding:4px;}
+#prod-form-card.tt-editor-composer .tt-product-quick-actions button {flex:0 0 auto;min-height:44px;font-size:12px;padding:8px 12px;white-space:nowrap;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-section-nav > .tt-editor-preview-jump {display:inline-flex;width:auto;min-height:44px;flex:0 0 auto;font-size:12px;}
+#prod-form-card.tt-editor-composer [data-product-section=general] .tt-editor-section-fields {grid-template-columns:minmax(0,1fr);}
+#prod-form-card.tt-editor-composer [data-product-section=visibility] label:has(#prod-active) {display:none !important;}
+#prod-form-card.tt-editor-composer .tt-product-editorial-publication {grid-column:1/-1;margin:0 0 14px;padding:0;border:0;background:transparent;}
+#prod-form-card.tt-editor-composer .tt-product-editorial-seo,#prod-form-card.tt-editor-composer .tt-product-editorial-statistics {grid-column:1/-1;}
+#prod-form-card.tt-editor-composer .tt-photo-product-controls {grid-column:1/-1;min-width:0;border:1px solid var(--editor-line);border-radius:12px;padding:12px;background:var(--editor-soft);}
+#prod-form-card.tt-editor-composer .tt-photo-product-controls > summary {min-height:44px;cursor:pointer;font-size:13px;font-weight:650;}
+#prod-form-card.tt-editor-composer .tt-photo-product-controls > .tt-editor-section {margin-top:16px;padding-top:12px;border-top:1px solid var(--editor-line);}
+#prod-form-card.tt-editor-composer .tt-photo-product-controls .tt-editor-section-fields {grid-template-columns:minmax(0,1fr);}
+#prod-form-card.tt-editor-composer .tt-photo-selection-bar {display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-block:1px solid var(--editor-line);padding-block:12px;}
+#prod-form-card.tt-editor-composer .tt-photo-selection-bar > strong {flex:1 1 100%;font-size:13px;}
+#prod-form-card.tt-editor-composer .tt-photo-selection-bar button {min-height:44px;white-space:normal;}
+#prod-form-card.tt-editor-composer .tt-photo-context:empty {display:none;}
+#prod-form-card.tt-editor-composer .tt-photo-context {padding:14px;border:1px solid var(--editor-line);border-radius:12px;background:var(--tt-commerce-surface);}
+#prod-form-card.tt-editor-composer .tt-photo-context h4 {margin:0 0 8px;}
+#prod-form-card.tt-editor-composer .tt-photo-context p {font-size:12px;line-height:1.6;}
+#prod-form-card.tt-editor-composer .tt-photo-context > button {min-height:44px;max-width:100%;margin:4px 4px 4px 0;white-space:normal;}
+#prod-form-card.tt-editor-composer .tt-photo-color-choices {display:flex;flex-wrap:wrap;gap:8px;border:0;padding:8px 0;min-width:0;}
+#prod-form-card.tt-editor-composer .tt-photo-color-choices label,#prod-form-card.tt-editor-composer .tt-photo-pick {display:flex;align-items:center;gap:8px;min-height:44px;padding:6px;font-size:12px;cursor:pointer;}
+#prod-form-card.tt-editor-composer .tt-unified-photos input[type=checkbox] {width:20px;height:20px;min-height:20px;flex:0 0 20px;accent-color:var(--tt-commerce-brand);}
+#prod-form-card.tt-editor-composer .tt-unified-photo[data-selected=true] {border:2px solid #713C53;box-shadow:0 0 0 2px var(--tt-commerce-brand);}
+#prod-form-card.tt-editor-composer .tt-unified-photo > img {cursor:pointer;}
+#prod-form-card.tt-editor-composer .tt-category-fields {grid-column:1/-1;border-top:1px solid var(--editor-line);padding-top:14px;min-width:0;}
+#prod-form-card.tt-editor-composer .tt-category-fields h3 {font-size:14px;margin:0 0 8px;}
+#prod-form-card.tt-editor-composer .tt-category-fields p {font-size:12px;line-height:1.6;}
+#prod-form-card.tt-editor-composer .tt-category-fields .tt-editor-choices {margin-block:10px;}
+#prod-form-card.tt-editor-composer .tt-work-secondary {margin-top:20px;}
+
+@media(max-width:1099px) {
+ #prod-form-card.tt-editor-composer .tt-product-fields {grid-template-columns:minmax(0,1fr) !important;}
+}
+@media(max-width:600px) {
+ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-fields {padding:12px;gap:18px !important;}
+ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-section-nav {padding:6px;}
+ #prod-form-card.tt-editor-composer .tt-photo-context {padding:10px;}
+}
+@media(max-height:500px) {
+ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-section-nav {position:static;}
+}
+#prod-form-card.tt-editor-composer .tt-product-quick-actions {flex-wrap:wrap;overflow:visible;}
+@media(max-width:1099px) {
+ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-quick-actions {display:none;}
+}
+#prod-form-card.tt-editor-composer .tt-unified-photo-actions .adm-btn {flex:1 1 92px;min-width:min(92px,100%);padding:8px;font-size:11px;}
+/* La foto permanece junto a todos los campos, en el mismo bloque del formulario. */
+#prod-form-card.tt-editor-composer .tt-photo-product-controls {background:var(--tt-commerce-surface);}
+#prod-form-card.tt-editor-composer .tt-photo-price-scope {grid-column:1/-1;}
+@media(min-width:1100px) {
+ #prod-form-card.tt-editor-composer .tt-product-fields {grid-template-columns:minmax(0,1fr) !important;}
+ #prod-form-card.tt-editor-composer .tt-product-fields > [data-product-section=photos] {grid-column:1;grid-row:1;}
+ #prod-form-card.tt-editor-composer [data-product-section=photos] > .tt-editor-section-fields {grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;}
+ #prod-form-card.tt-editor-composer #prod-color-photos.tt-unified-photos {grid-column:1 !important;grid-row:1;position:sticky;top:120px;max-height:calc(100dvh - 250px);overflow-y:auto;padding:4px;}
+ #prod-form-card.tt-editor-composer [data-product-section=photos] > .tt-editor-section-fields > .tt-photo-product-controls {grid-column:2;grid-row:1;}
+}
+@media(max-width:1099px) {
+ #prod-form-card.tt-editor-composer [data-product-section=photos] > .tt-editor-section-fields {display:flex;flex-direction:column;}
+ #prod-form-card.tt-editor-composer #prod-color-photos.tt-unified-photos {order:-1;width:100%;}
+ #prod-form-card.tt-editor-composer .tt-photo-product-controls {width:100%;box-sizing:border-box;}
+}
+#prod-form-card.tt-editor-composer .tt-unified-photos > h3 {display:none;}
+@media(min-width:1100px) {
+ #prod-form-card.tt-editor-composer [data-product-section=photos] > .tt-editor-section-fields > .tt-photo-product-controls {grid-column:2 !important;}
+ #prod-form-card.tt-editor-composer .tt-photo-selection-bar {position:sticky;top:0;z-index:2;background:var(--tt-commerce-surface);}
+}
+#prod-form-card.tt-editor-composer .tt-photo-selection-preview {display:flex;gap:8px;max-width:100%;overflow-x:auto;padding:4px;}
+#prod-form-card.tt-editor-composer .tt-photo-selection-preview img {width:64px;height:64px;object-fit:contain;flex:0 0 64px;border:1px solid var(--editor-line);border-radius:8px;background:var(--tt-commerce-surface);}
+@media(max-width:1099px) {
+ html.tt-product-editor-open body #prod-form-card.tt-editor-composer #prod-editor-section {width:100% !important;max-width:none;grid-column:1/-1;flex:1 0 100%;}
+}
+/* Reservar la navegación fija al desplazar o enfocar campos del mismo bloque. */
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .adm-card-body {scroll-padding-block-start:160px;}
+#prod-form-card.tt-editor-composer .tt-unified-photos {scroll-padding-block-start:110px;}
+@media(max-height:500px) {
+ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .adm-card-body {scroll-padding-block-start:12px;}
+}

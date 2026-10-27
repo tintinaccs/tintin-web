@@ -23,3 +23,11 @@ CI y monitor propios pendientes al publicar; no se reutiliza PASS de#1247.
 Recibo: [UNIFICACION-SEIS-FASES.md](UNIFICACION-SEIS-FASES.md).
 La evidencia fechada de Fase6 funcional se conserva en sus informes. Las pruebas
 autenticadas con proveedores y dispositivos físicos siguen pendientes.
+
+## Continuidad contextual actual
+
+Se implementa el bloque único de fotografías y datos completos del producto, con
+asociaciones múltiples y propuestas específicas por categoría. Misma autoridad
+de seis fases, mismos campos y contratos. Ver
+[EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md) para la evidencia
+propia y limitaciones. No heredar los resultados anteriores como aprobación actual.

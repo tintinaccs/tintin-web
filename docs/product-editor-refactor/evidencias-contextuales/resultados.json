@@ -1,0 +1,81 @@
+{
+  "perf-before": {
+    "stats": {
+      "startTime": "2026-10-26T20:33:28.379Z",
+      "duration": 6073.746999999999,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "gallery": {
+      "removed": 0,
+      "sameNodes": true,
+      "times": [
+        51.80000000074506,
+        88.59999999776483,
+        114.70000000298023,
+        77.29999999701977,
+        58.600000001490116
+      ],
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+      "baselineRef": "899a6851100b9560e6e3520e71ea3100babaa9fb",
+      "browserVersion": "151.0.7922.173",
+      "playwright": "1.64.1"
+    }
+  },
+  "final": {
+    "stats": {
+      "startTime": "2026-10-26T20:34:06.409Z",
+      "duration": 225354.581,
+      "expected": 30,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "gallery": {
+      "removed": 0,
+      "sameNodes": true,
+      "times": [
+        88.80000000074506,
+        86.19999999925494,
+        84,
+        44.30000000074506,
+        81.5
+      ],
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+      "baselineRef": null,
+      "browserVersion": "151.0.7922.173",
+      "playwright": "1.64.1"
+    }
+  },
+  "responsive-final": {
+    "passed": 8,
+    "failed": 0,
+    "retried": 0,
+    "viewports": [
+      320,
+      390,
+      600,
+      768,
+      1024,
+      1440
+    ]
+  },
+  "autosave-final": {
+    "passed": 1,
+    "failed": 0,
+    "assertion": "Borrador actualizado por evento de asociación, producto público intacto"
+  },
+  "node-final": {
+    "passed": 58,
+    "failed": 0,
+    "skipped": 0
+  },
+  "context-release": {
+    "passed": 11,
+    "failed": 0,
+    "retried": 0,
+    "secondaryColorRegression": "RED1 antes; GREEN11 después; atributos secundarios separados del Color principal"
+  }
+}

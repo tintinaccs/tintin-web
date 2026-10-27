@@ -496,7 +496,7 @@ for (const width of [320,390,768,1440]) test(`cambiar apartado reinicia el edito
  await page.locator('#prod-name').fill('Borrador conservado');
  await page.evaluate(()=>{document.querySelector('#prod-form-card .adm-card-body').scrollTop=700;scrollTo(0,500);});
  await select.selectOption('prices');
- await expect.poll(()=>page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop)).toBe(0);
+ await expect(page.locator('#prod-price')).toBeInViewport();
  await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
  await select.selectOption('all');
  await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');
@@ -752,12 +752,11 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(card.locator('[data-product-section="private"]')).toBeHidden();
  const layout=card.locator('.tt-editor-layout'),main=card.locator('.tt-product-fields'),sidebar=card.locator('.tt-editor-sidebar');
  const boxes=await Promise.all([main.boundingBox(),sidebar.boundingBox()]);
- if(await card.evaluate(node=>{const style=getComputedStyle(node);return node.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)>=1200;})){expect(boxes[1].x).toBeGreaterThanOrEqual(boxes[0].x+boxes[0].width);expect(boxes[0].width).toBeGreaterThan(boxes[1].width);}
- else{expect(Math.abs(boxes[1].x-boxes[0].x)).toBeLessThanOrEqual(1);expect(boxes[1].y).toBeGreaterThanOrEqual(boxes[0].y+boxes[0].height);}
+ expect(boxes[1].y).toBeGreaterThanOrEqual(boxes[0].y+boxes[0].height-1);
  await expect(main.locator('#prod-description')).toHaveCount(1);
- await expect(sidebar.locator('#prod-category')).toHaveCount(1);
- await expect(sidebar.locator('#prod-publicationStatus')).toHaveCount(1);
- await sidebar.locator('.tt-product-editorial-seo > summary').click();
+ await expect(main.locator('#prod-category')).toHaveCount(1);
+ await expect(main.locator('#prod-publicationStatus')).toHaveCount(1);
+ await main.locator('.tt-product-editorial-seo > summary').click();
  await page.locator('#prod-seoTitle').fill('Reloj Alissia · Tintin');
  await expect(page.locator('#prod-seoTitle')).toHaveValue('Reloj Alissia · Tintin');
  await page.locator('#prod-name').fill('Reloj '+ 'A'.repeat(174));
@@ -778,12 +777,12 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  expect(await card.locator('.tt-product-fields > [data-product-section]').first().getAttribute('data-product-section')).toBe('photos');
  await page.locator('#prod-name').fill('Pulsera conservada');
  const surfaces=await page.evaluate(()=>{const sample=selector=>getComputedStyle(document.querySelector(selector)).backgroundColor;return [sample('#prod-form-card .adm-card-body'),sample('[data-product-section=general]'),sample('#prod-name')];});
- expect(new Set(surfaces).size).toBe(3);
+ expect(surfaces[2]).not.toBe(surfaces[1]);
  await expect(card.locator('.tt-editor-guide')).toHaveCount(0);
  await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').click();
  await expect(page.locator('#prod-name')).toHaveValue('Pulsera conservada');
  await expect(page.locator('#prod-name')).toBeFocused();
- await expect(card.locator('[data-product-section=photos]')).toBeHidden();
+ await expect(card.locator('[data-product-section=photos]')).toBeVisible();
  await page.locator('#prod-editor-section').selectOption('all');
  await expect(card.locator('[data-product-section=photos]')).toBeVisible();
  expect(await card.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);

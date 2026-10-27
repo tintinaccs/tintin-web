@@ -1,3 +1,30 @@
+## Ajuste final contextual — 26/10/2026
+
+Regresión reproducida con Color y Color de correa. Se separan el color principal
+y los atributos adicionales sin mezclar valores. RED1, GREEN11/11 Chromium
+completo tras el ajuste,39/39 preflight repetidos PASS_LOCAL. Candidato previo
+CI40421168969 sustituido/cancelado; sólo la nueva CI puede aprobar el merge.
+
+
+Conciliación de entrega: main0c3e4b9 (#1250/#1251) incorporado sin alterar sus
+workflows ni preparación APT. Fuentes del editor idénticas a43cf6bf. Repetidos
+build,39/39 preflight y plan protegido contra la nueva base: PASS_LOCAL.
+CI/merge/monitor del candidato combinado pendientes de confirmación externa.
+
+## 2026-10-26 — Edición contextual completa del producto
+
+Codex /root, rama codex/editor-bloque-contextual-completo-20261026, base899a685.
+Autorización expresa para implementar y terminar el merge protegido. Se reúnen
+fotos, asociaciones múltiples, nombre/descripción, categoría, opciones, precios,
+stock, material/especificaciones y publicación en el mismo bloque canónico.
+Se conservan los campos originales, modelos y permisos. Trece familias proponen
+detalles sólo por clic; sin inferencias ni escrituras de datos reales. Node58/58
+PASS_LOCAL; Chromium30/30, repetición responsive8/8 y autoguardado1/1 PASS_LOCAL.
+Build/caché/diagnóstico/protección y39/39 preflight PASS_LOCAL; CI/merge/monitor
+IN_PROGRESS hasta la confirmación externa del candidato exacto. La matriz inicial
+329PASS/11FAIL no se declara aprobada: cambios de navegación y selector recortado
+requieren repetición. Recibo EDICION-CONTEXTUAL-PRODUCTO.md. No hay otro diseño.
+
 ## 2026-10-26 — Completar consumidores de la preparación APT
 
 Codex /root, basec176e10e (#1250), conserva899a6851/editor y e78a9de2/Perfil. CI del candidato1250 aprobó40400258197; instalación Chromium en cuatro runners17–24s frente al timeout55min anterior. Su merge protegido40403203673SUCCESS conserva árbolffc56368. CI/producción de main se están verificando. El primer ajuste cubría cuatro jobs del gate central; se completa el mismo preparador existente en monitor producción, auditoría visual y cinco jobs de Diagnóstico Maestro, todos Linux Ubuntu. Once instalaciones de Chromium comparten ahora la preparación, sin cambiar helper, suites, dependencias, firmas, permisos ni escenarios. El runtime WebKit de CI hereda esa configuración. Validación YAML de todos los consumidores, build/cache/preflight y plan final; CI/merge del nuevo SHA pendientes. No afirmar como aprobada la CI posterior a1250 todavía en ejecución.

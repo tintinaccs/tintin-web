@@ -4,7 +4,8 @@ const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
 async function open(page,width=1440,height=900){await openProductSaveFixture(page,width,height,{fullShell:true,photos:true,workflow:true});await page.evaluate(()=>window.qaProductController.workspace.ready);}
 
 test('galería: eventos sin cambios conservan nodos y foco',async({page,browser},info)=>{
- if(process.env.EDITOR_MEASURE_BASELINE){const gallerySource=require('node:child_process').execFileSync('git',['show','5dc6f781:js/admin/products/galeria-unificada.js'],{encoding:'utf8'});await openProductSaveFixture(page,1440,900,{fullShell:true,photos:true,workflow:true,gallerySource});await page.evaluate(()=>window.qaProductController.workspace.ready);}
+ const baselineRef=process.env.EDITOR_MEASURE_BASELINE_REF;
+ if(baselineRef || process.env.EDITOR_MEASURE_BASELINE){const gallerySource=require('node:child_process').execFileSync('git',['show',`${baselineRef || '5dc6f781'}:js/admin/products/galeria-unificada.js`],{encoding:'utf8'});await openProductSaveFixture(page,1440,900,{fullShell:true,photos:true,workflow:true,gallerySource});await page.evaluate(()=>window.qaProductController.workspace.ready);}
  else await open(page);
  const result=await page.evaluate(async()=>{
   const input=document.getElementById('prod-images-extra');input.value=Array.from({length:5},(_,i)=>`https://img.test/${i}.webp`).join('\n');input.dispatchEvent(new Event('input',{bubbles:true}));
@@ -14,8 +15,8 @@ test('galería: eventos sin cambios conservan nodos y foco',async({page,browser}
   for(let sample=0;sample<5;sample++){const start=performance.now();for(let i=0;i<20;i++)input.dispatchEvent(new Event('input',{bubbles:true}));await new Promise(requestAnimationFrame);times.push(performance.now()-start);}
   observer.disconnect();return {removed,sameNodes:before.every((node,index)=>node===grid.children[index]),times,browser:navigator.userAgent};
  });
- await info.attach('gallery-events.json',{body:JSON.stringify({...result,browserVersion:browser.version(),playwright:require('@playwright/test/package.json').version}),contentType:'application/json'});
- if(process.env.EDITOR_MEASURE_BASELINE){expect(result.removed).toBe(500);expect(result.sameNodes).toBe(false);}
+ await info.attach('gallery-events.json',{body:JSON.stringify({...result,baselineRef:baselineRef || null,browserVersion:browser.version(),playwright:require('@playwright/test/package.json').version}),contentType:'application/json'});
+ if(process.env.EDITOR_MEASURE_BASELINE && !baselineRef){expect(result.removed).toBe(500);expect(result.sameNodes).toBe(false);}
  else{expect(result.removed).toBe(0);expect(result.sameNodes).toBe(true);}
 });
 

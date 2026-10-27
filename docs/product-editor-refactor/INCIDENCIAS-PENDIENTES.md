@@ -1,5 +1,12 @@
 # Incidencias pendientes y condiciones de publicación
 
+Actualización26/10/2026: la edición contextual completa continúa la única versión
+de seis fases sobre main899a685. El recibo vigente, sus pruebas y límites están
+en [EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md).
+La titular autorizó expresamente completar el merge protegido. Los resultados
+y restricciones de publicación del cuerpo siguiente son evidencia histórica de
+su ejecución anterior; no sustituyen la validación del candidato actual.
+
 Los resultados locales concretos están en MATRIZ-PRUEBAS-FINAL.md. Esta lista no
 convierte ausencia de evidencia en un defecto confirmado de producción.
 

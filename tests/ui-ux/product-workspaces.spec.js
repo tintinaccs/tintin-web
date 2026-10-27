@@ -15,7 +15,7 @@ test('crear incompleto, salir, recuperar, publicar, editar sin reemplazar públi
  await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('qa-tablet');
  await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('30000');
  await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-description').fill('Descripción completa');
- await page.locator('#prod-publicationStatus').selectOption('active');await page.evaluate(()=>window.prodGuardar());await expect(page.locator('#prod-form-card')).toBeHidden();
+ await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-publicationStatus').selectOption('active');await page.evaluate(()=>window.prodGuardar());await expect(page.locator('#prod-form-card')).toBeHidden();
  expect(await page.evaluate(key=>window.qaProductStore.get('products/'+key).publicationStatus,key)).toBe('active');
  await reopen(page,key,key);await page.locator('#prod-name').fill('Cambio privado');await saveProgress(page);
  expect(await page.evaluate(key=>window.qaProductStore.get('products/'+key).name,key)).toBe('Borrador recuperable');
@@ -76,10 +76,10 @@ test('archivar y restaurar exige acción explícita y no cambia stock',async({pa
  await open(page);await page.evaluate(()=>{window.qaProductStore.set('products/existing',{name:'Publicado',category:'qa-tablet',price:30000,priceBefore:null,stock:4,active:true,oferta:false,destacado:false,description:'Completa',imageUrl:'https://img.test/cover.webp',publicationStatus:'active'});window.prodCancelForm();});
  // Actualiza las colecciones del controlador con el mismo origen ficticio.
  await page.evaluate(()=>{window.qaProductController.refresh();});await reopen(page,'existing','existing');
- await page.locator('#prod-publicationStatus').selectOption('archived');await saveProgress(page);
+ await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-publicationStatus').selectOption('archived');await saveProgress(page);
  expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').active)).toBe(true);
  await page.evaluate(()=>window.prodGuardar());expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').publicationStatus)).toBe('archived');
- await reopen(page,'existing','existing');await page.locator('#prod-publicationStatus').selectOption('active');await page.evaluate(()=>window.prodGuardar());
+ await reopen(page,'existing','existing');await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-publicationStatus').selectOption('active');await page.evaluate(()=>window.prodGuardar());
  expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').stock)).toBe(4);expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').active)).toBe(true);
 });
 for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1366,768],[1920,1080]])test(`espacio dedicado ${width}x${height}`,async({page},info)=>{

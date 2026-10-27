@@ -1,5 +1,12 @@
 # Cambios y compatibilidad
 
+Actualización26/10/2026: la edición contextual completa continúa la única versión
+de seis fases sobre main899a685. El recibo vigente, sus pruebas y límites están
+en [EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md).
+La titular autorizó expresamente completar el merge protegido. Los resultados
+y restricciones de publicación del cuerpo siguiente son evidencia histórica de
+su ejecución anterior; no sustituyen la validación del candidato actual.
+
 Base `5dc6f781` · rama `codex/editor-fase6-integracion-20261026`.
 
 | Fuente canónica | Cambio y consumidores |

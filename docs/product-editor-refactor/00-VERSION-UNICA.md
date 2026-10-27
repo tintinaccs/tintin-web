@@ -26,6 +26,13 @@ Este documento es la única entrada de producto/editor. Los informes técnicos d
 las fases conservan pruebas fechadas; no habilitan otros diseños. La numeración de
 propuestas anteriores no modifica este contrato.
 
+## Edición contextual del producto
+
+Sobre main899a685 (#1248) se reúne el producto completo junto a la galería:
+fotos seleccionables, colores encima, campos comerciales/editoriales originales
+y opciones por categoría. Es continuidad de esta misma versión de seis fases.
+Evidencia vigente: [EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md).
+
 ## Implementación única
 
 - `admin.html` conserva el formulario y sus IDs canónicos.

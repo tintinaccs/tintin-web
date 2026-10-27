@@ -1,23 +1,52 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "c176e10e4b89df24d64148b737274f166ab52f56",
-  "reason": "Completar el preparador APT ya aprobado en todos los consumidores de navegador operativos, conservando instalacion, firmas, permisos y escenarios.",
+  "baseCommit": "0c3e4b9aac24f82a8438309577d5499ca36af4c2",
+  "reason": "Completar edición contextual y separar atributos secundarios de color preservando contratos",
   "files": [
     {
-      "path": ".github/workflows/auditoria-visual.yml",
-      "oldHash": "e5a45955a8913e74f9aec6ef8091735eebc7d686afe5f24a6565fd8bcd4f8cf7",
-      "newHash": "35f6097b104a83b47b2d4cb5b0b1328a7b5592d564c06ab65a57022b597f4e85"
+      "path": "admin.html",
+      "oldHash": "92d0dbc2d4d6a3fca82edf77be929ed07a83327e85dfd3d838a6291523bfb3a7",
+      "newHash": "591f3d301f4f6969156efe11ab66300204bfd05b7c393a018291870eb48cd00c"
     },
     {
-      "path": ".github/workflows/diagnostico-maestro.yml",
-      "oldHash": "f30bf30e05e5ba1bd4fcd54791e0a3663f55375996522c652615959ba7567958",
-      "newHash": "b2b5f09066c579152daf4f057fdb873a1be2f5eabeb8da2e2ce880a13310014a"
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "c2baa72f83b8ae847e9dd367f2d76779daca5d8f0af224d4b1eed7533f8263f4",
+      "newHash": "95e7842844cf9a39c1a800d643527735a9bd0ebbc891cd202657df6c06d49420"
     },
     {
-      "path": ".github/workflows/monitor-produccion.yml",
-      "oldHash": "7a8b43f11656229161488d36a685cdad8ebb26d7165863a9b52dd84a39a531ab",
-      "newHash": "765435aadf86d71c4daeb3f32eeb29a3f7d87e7bfc5cf4703fd69b36c20ebe58"
+      "path": "js/admin/admin-app.js",
+      "oldHash": "9404c5f1925adc53892eba0b1b1f28166afb29cdfb1e7455d808d30a180fa822",
+      "newHash": "d5aeeb556f9c193710e3603dc049b5be56f9e21949e1af9d80e80bde1c983c70"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "266829585494aca53c2225556c4b8595e948814feb0310a513b9d547f7028632",
+      "newHash": "616b18ee36bc4e4ab59a8fa9e0b3ecd686a438459609f3bd0788182e17dd10f9"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "740a7cbb5e535d1166857a1312a4bac974b525bac92cc0ca172dc4ccb830fbe7",
+      "newHash": "f87449e647ca3d6a804f55c75be2c424fa20340a2e692d69d32bf0c4848343a9"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "correos",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }
