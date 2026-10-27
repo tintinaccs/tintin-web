@@ -54,7 +54,7 @@
       "node scripts/auditar-superadmin-modulos-completos.mjs",
       "node scripts/auditar-superadmin-maestro-responsive.mjs",
       "node scripts/auditar-borrado-global-catalogo.mjs",
-      "node --test tests/admin/editor-comercial.test.mjs tests/admin/editor-editorial.test.mjs tests/admin/product-editor-category.test.mjs tests/admin/vision-productos.test.mjs tests/admin/product-workspaces.test.mjs tests/admin/firestore-list-page.test.mjs tests/admin/private-work-pagination-session.test.mjs tests/admin/product-progress-audit.test.mjs",
+      "node --test tests/admin/editor-comercial.test.mjs tests/admin/editor-editorial.test.mjs tests/admin/product-editor-category.test.mjs tests/admin/vision-productos.test.mjs tests/admin/product-workspaces.test.mjs tests/admin/firestore-list-page.test.mjs tests/admin/private-work-pagination-session.test.mjs tests/admin/product-progress-audit.test.mjs tests/admin/respuesta-editor-producto.test.mjs",
       "node --test tests/security/csp-cloudinary-upload.test.mjs tests/diagnostics/manifest-exclusions.test.mjs",
       "npx playwright test tests/ui-ux/editor-comercial-v2.spec.js --project=chromium --retries=0",
       "npx playwright test tests/ui-ux/product-workspaces.spec.js tests/ui-ux/product-color-gallery.spec.js tests/ui-ux/product-editor-final.spec.js tests/ui-ux/product-editor-single-version.spec.js tests/ui-ux/product-photo-context.spec.js tests/ui-ux/product-editor-space.spec.js --project=chromium --retries=0"

@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import {readProductEditorResponse} from '../../js/admin/products/respuesta-editor-producto.mjs';
 const source=fs.readFileSync('js/admin/shopify-commerce-admin.js','utf8');
 const code=source.slice(source.indexOf('let privateWorkOwner='),source.indexOf("window.addEventListener('tintin:product-work-saved'"));
 function harness(){
  const pending=[],state={user:{uid:'owner'},role:'superadmin'};
- const context=vm.createContext({state,document:{getElementById:()=>({classList:{contains:()=>true}})},renderProducts(){},authenticatedFetch:(_url,options)=>new Promise(resolve=>pending.push({body:JSON.parse(options.body),resolve:items=>resolve(Response.json({ok:true,result:{items,nextPageToken:''}}))}))});
+ const context=vm.createContext({state,readProductEditorResponse,document:{getElementById:()=>({classList:{contains:()=>true}})},renderProducts(){},authenticatedFetch:(_url,options)=>new Promise(resolve=>pending.push({body:JSON.parse(options.body),resolve:items=>resolve(Response.json({ok:true,result:{items,nextPageToken:''}}))}))});
  vm.runInContext(code,context);
  return {context,state,pending,load:()=>vm.runInContext('loadPrivateProductWorks()',context),items:()=>Array.from(vm.runInContext('privateWorks',context),x=>x.key)};
 }

@@ -1,4 +1,5 @@
-import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261026-editor-phase6-1';
+import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261027-editor-ux-3';
+import {readProductEditorResponse} from './products/respuesta-editor-producto.mjs?v=tintin-20261027-editor-ux-1';
 import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
 import {productStatistics} from './statistics/estadisticas-producto.mjs?v=tintin-20261024-editor-v2-3';
@@ -15,7 +16,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261026-editor-contextual-3';
+import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261027-editor-ux-3';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -6086,7 +6087,7 @@ function beginProductWorkspace(key,source) {
   productWorkspace=mountProductWorkspace({card:document.getElementById('prod-form-card'),uid:ownerUid,key,productId:source?key:null,source,privateAllowed:currentRole==='superadmin',serialize:serializeProductForm,restore,
     async request(body){
       const check=()=>{if(currentUser?.uid!==ownerUid)throw Object.assign(Error('La cuenta cambió. Reabrí el editor con la cuenta propietaria.'),{status:403});};
-      check();const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const payload=await response.json();check();return {...payload,status:response.status};
+      check();const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(30000)});const payload=await readProductEditorResponse(response);check();return {...payload,status:response.status};
     },
     async flushMedia(){await productColorPhotos?.flush();await Promise.all(['prod-image-widget','prod-gallery-widget'].map(id=>_formImageWidgets.get(id)?.flush()));},
     commit:()=>prodGuardar({commit:true}),close:_prodCloseForm});
@@ -6454,7 +6455,7 @@ async function prodGuardar({commit=false}={}) {
       if(pendingProductEditorSave?.signature!==signature)pendingProductEditorSave={signature,changeId:crypto.randomUUID()};
       document.getElementById('prod-id').value=targetId;
       const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...request,changeId:pendingProductEditorSave.changeId})});
-      const payload=await response.json();
+      const payload=await readProductEditorResponse(response);
       if(!response.ok || !payload.ok)throw new Error(payload.error || 'No se pudo guardar el producto.');
       document.getElementById('prod-id').value=targetId;
       productEditBaseline=productFingerprint(payload.result.product);

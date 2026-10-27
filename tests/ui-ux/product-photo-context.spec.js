@@ -12,8 +12,19 @@ for(const width of [320,390,600,768,1024,1440])test(`bloque contextual completo 
  await expect(page.locator('.tt-photo-product-controls #prod-variants-text')).toHaveCount(1);
  await page.getByRole('checkbox',{name:'Seleccionar foto 1',exact:true}).check();await page.getByRole('checkbox',{name:'Seleccionar foto 2',exact:true}).check();
  await expect(page.locator('.tt-photo-selection-bar')).toContainText('2 fotografías seleccionadas');
+ await expect(page.locator('.tt-work-status')).not.toHaveAttribute('data-state','pending');
  await page.getByRole('checkbox',{name:'Asociar color Plateado',exact:true}).check();
- await page.getByRole('button',{name:'Asociar fotografías',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Asociar fotografías',exact:true})).toHaveCount(0);
+ await expect(page.getByRole('checkbox',{name:'Asociar color Plateado',exact:true})).toBeFocused();
+ const body=page.locator('#prod-form-card .adm-card-body'),start=await body.evaluate(node=>node.scrollTop);
+ await page.evaluate(()=>{window.qaPhotoNodes=[...document.querySelectorAll('.tt-unified-photo > img')];window.qaColorNode=document.querySelector('[aria-label="Asociar color Plateado"]');});
+ for(let i=0;i<10;i++){
+   await page.getByRole('checkbox',{name:'Asociar color Plateado',exact:true}).uncheck();
+   await page.getByRole('checkbox',{name:'Asociar color Plateado',exact:true}).check();
+ }
+ expect(Math.abs(await body.evaluate(node=>node.scrollTop)-start)).toBeLessThanOrEqual(2);
+ expect(await page.evaluate(()=>window.qaPhotoNodes.every((node,index)=>node===document.querySelectorAll('.tt-unified-photo > img')[index]))).toBe(true);
+ expect(await page.evaluate(()=>window.qaColorNode===document.querySelector('[aria-label="Asociar color Plateado"]'))).toBe(true);
  await page.getByRole('button',{name:'Editar selección',exact:true}).click();
  const positions=await page.evaluate(()=>({context:document.querySelector('.tt-photo-context').getBoundingClientRect().top,gallery:document.querySelector('.tt-unified-photo-grid').getBoundingClientRect().top}));expect(positions.context).toBeLessThan(positions.gallery);
  await page.screenshot({path:info.outputPath(`seleccion-${width}.png`),animations:'disabled'});
@@ -42,12 +53,35 @@ for(const width of [320,390,600,768,1024,1440])test(`bloque contextual completo 
 });
 test('quitar asociaciones de varias fotos conserva las fotos y las demás asociaciones',async({page})=>{
  await open(page);await page.getByRole('button',{name:'Seleccionar todas',exact:true}).click();
- await page.getByRole('checkbox',{name:'Asociar color Dorado',exact:true}).check();await page.getByRole('button',{name:'Quitar asociación',exact:true}).click();
+ await page.getByRole('checkbox',{name:'Asociar color Dorado',exact:true}).check();await page.getByRole('checkbox',{name:'Asociar color Dorado',exact:true}).uncheck();
  await expect(page.locator('.tt-unified-photo')).toHaveCount(2);await expect(page.locator('#prod-imageUrl')).toHaveValue(product.imageUrl);
  await expect.poll(()=>page.evaluate(()=>{const rows=[...window.qaProductStore].find(([key])=>key.includes('productEditorWorkspaces/'))?.[1]?.snapshot?.variantMedia;return Boolean(rows && rows.every(row=>!row.imageUrls?.length && !row.imageUrl));})).toBe(true);
  expect(await page.evaluate(()=>window.qaProductStore.get('products/qa').variantMedia)).toEqual(product.variantMedia);
  const snapshot=await page.evaluate(()=>[...window.qaProductStore].find(([key])=>key.includes('productEditorWorkspaces/'))[1].snapshot);
  expect(snapshot.variantMedia.find(row=>row.Color==='Dorado')?.imageUrls || []).toEqual([]);
+});
+test('automatizar un color conserva asociaciones ajenas, portada y versión pública',async({page})=>{
+ await open(page);await page.getByRole('checkbox',{name:'Seleccionar foto 2',exact:true}).check();
+ await page.getByRole('checkbox',{name:'Asociar color Plateado',exact:true}).check();
+ await page.evaluate(()=>window.qaProductController.workspace.save());
+ await page.getByRole('checkbox',{name:'Asociar color Plateado',exact:true}).uncheck();
+ await page.evaluate(()=>window.qaProductController.workspace.save());
+ const snapshot=await page.evaluate(()=>[...window.qaProductStore].find(([key])=>key.includes('productEditorWorkspaces/'))[1].snapshot);
+ expect(snapshot.variantMedia.find(row=>row.Color==='Dorado').imageUrls).toEqual([product.imageUrl]);
+ expect(snapshot.variantMedia.find(row=>row.Color==='Plateado').imageUrls || []).toEqual([]);
+ expect(snapshot.imageUrl).toBe(product.imageUrl);
+ expect(await page.evaluate(()=>window.qaProductStore.get('products/qa'))).toEqual(product);
+});
+test('quitar un color conserva en galería una foto histórica sólo referenciada por variante',async({page})=>{
+ const historical={...product,imagesExtra:[],variantMedia:[{Color:'Dorado',imageUrls:['https://img.test/two.webp']}]};
+ await openProductSaveFixture(page,390,844,{fullShell:true,photos:true,workflow:true,initialRecords:[['products/qa',historical]]});await page.evaluate(()=>window.qaProductController.workspace.ready);await page.locator('.tt-work-back').click();await page.evaluate(()=>{window.qaProductController.refresh();window.prodEditar('qa');});await page.evaluate(()=>window.qaProductController.workspace.ready);
+ await page.getByRole('checkbox',{name:'Seleccionar foto 2',exact:true}).check();
+ await page.getByRole('checkbox',{name:'Asociar color Dorado',exact:true}).uncheck();
+ await expect(page.locator('.tt-unified-photo')).toHaveCount(2);await expect(page.locator('#prod-images-extra')).toHaveValue('https://img.test/two.webp');
+ await page.evaluate(()=>window.qaProductController.workspace.save());
+ const snapshot=await page.evaluate(()=>[...window.qaProductStore].find(([key])=>key.includes('productEditorWorkspaces/'))[1].snapshot);
+ expect(snapshot.imageUrl).toBe(product.imageUrl);expect(snapshot.imagesExtra).toBe('https://img.test/two.webp');
+ expect(await page.evaluate(()=>window.qaProductStore.get('products/qa'))).toEqual(historical);
 });
 
 test('precio y stock por combinación se editan junto a las fotos preservando IDs',async({page})=>{
@@ -64,7 +98,7 @@ test('agregar color desde el mismo bloque no distribuye stock de un producto sim
  await openProductSaveFixture(page,390,900,{fullShell:true,photos:true,workflow:true,initialRecords:[['products/qa',plain]]});await page.evaluate(()=>window.qaProductController.workspace.ready);await page.locator('.tt-work-back').click();await page.evaluate(()=>{window.qaProductController.refresh();window.prodEditar('qa');});await page.evaluate(()=>window.qaProductController.workspace.ready);
  await page.getByRole('checkbox',{name:'Seleccionar foto 1',exact:true}).check();await page.locator('.tt-category-fields').getByRole('button',{name:'Agregar variante Color',exact:true}).click();
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Negro');await page.getByRole('button',{name:'Agregar opción',exact:true}).click();
- await expect(page.locator('#prod-stock')).toHaveValue('5');await page.getByRole('checkbox',{name:'Asociar color Negro',exact:true}).check();await page.getByRole('button',{name:'Asociar fotografías',exact:true}).click();
+ await expect(page.locator('#prod-stock')).toHaveValue('5');await page.getByRole('checkbox',{name:'Asociar color Negro',exact:true}).check();
  await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();const saved=await page.evaluate(()=>window.qaProductStore.get('products/qa'));expect(saved.stock).toBe(5);expect(saved.variantInventory).toBeUndefined();expect(saved.variants.Color).toEqual(['Negro']);expect(saved.variantMedia[0].imageUrls).toEqual([product.imageUrl]);
 });
 test('un reemplazo pendiente no se pierde al intentar cambiar asociaciones y quitar su foto lo cancela',async({page})=>{
