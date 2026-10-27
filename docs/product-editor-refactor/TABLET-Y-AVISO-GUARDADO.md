@@ -56,3 +56,16 @@ La titular solicitó iniciar sesión fuera de TinyFish. Se proporcionó el acces
 directo y se solicitó abrir admin.html en Codex; el control del navegador de la
 titular no está expuesto en esta sesión. No se usan perfiles de TinyFish para
 inspeccionar la cuenta ni se solicitan credenciales por chat.
+
+## Cierre local sobre main conciliado
+
+Se incorpora1467835415f7cf4ecc432b809bc118acb0b6197e (#1255), preservando sus
+cambios de Checkout/bienvenida. La entrega final aprueba144/144 Chromium en
+las seis suites del editor,12/12 WebKit dirigidos,29/29 Node y78/78 admin-sync,
+sin reintentos de Playwright. Preflight oficial39/39 aprobado. Las corridas
+intermedias con fallos de fixture/blur quedan conservadas como evidencia; no se
+cuentan como PASS ni se suman corridas solapadas como casos únicos.
+
+Build Pages final, plan y diagnóstico se regeneran después de conciliar. El
+recibo local por SHA y el PR registran CI/merge/monitor de producción. Ningún
+monitor público sustituye el POST administrativo real ni una prueba física.

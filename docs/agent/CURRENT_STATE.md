@@ -1,22 +1,29 @@
-## 2026-10-27 — Tablet y error duplicado, Codex /root
+## 2026-10-27 — Tablet y aviso único de guardado, Codex /root
 
-Rama codex/editor-tablet-guardado-20261027, base51e5e737 (#1256). Se reproduce
-el fallo del botón Guardar con respuesta503/HTML: aviso duplicado y campos
-apilados bajo toda la galería en768/820. Se centraliza el error en workspace,
-Reintentar accesible junto al aviso, dos columnas desde720px y una columna
-por debajo. Conserva respuesta estricta, respaldo privado y escritores.
-PASS_LOCAL inicial6/6 Chromium tras RED3; Node29/29 y audit:admin-sync78/78,
-preflight nativo sin peticiones/escrituras aprobado. Matrices ampliadas,
-build/plan, CI/merge/producción IN_PROGRESS. Sesión/POST real de la foto y
-hardware físico NOT_VERIFIED. Informe TABLET-Y-AVISO-GUARDADO.md.
+Rama codex/editor-tablet-guardado-20261027. Parte de51e5e737 (#1256) y concilia
+main1467835415f7cf4ecc432b809bc118acb0b6197e (#1255) conservando Checkout,
+bienvenida e imports compartidos. El mismo error se escribía en cabecera y
+cuerpo; además, blur del nombre ocultaba Reintentar antes del clic. Workspace
+centraliza el fallo, mantiene el aviso ante eventos sin cambios y conserva el
+respaldo privado. Una edición nueva vuelve a programar guardado. Galería/datos
+en dos columnas desde720px; cabecera con un aviso/reintento y acciones compactas.
 
-Conciliado main1467835415f7cf4ecc432b809bc118acb0b6197e (#1255), sin retirar
-sus cambios de Checkout/bienvenida ni los imports compartidos. Reproducción
-adicional: blur del nombre ocultaba Reintentar antes del clic; se conserva el
-error mientras la instantánea no cambie. Node29/29 y admin-sync78/78 repetidos
-sobre la base conciliada PASS_LOCAL. WebKit12/12 de errores/reintento/rotación
-PASS_LOCAL; matriz33 WebKit aprobada en la corrida anterior, cuyo fallo restante
-de interacción se reprodujo y corrigió. Chromium144 en ejecución.
+PASS_LOCAL del candidato conciliado:144/144 Chromium de las seis suites del
+editor sin reintentos;33 tamaños entre320×568 y3840×2160, rotación, área reducida,
+reflujo200%, fotos, asociaciones, opciones, stock, borradores y guardado real
+sobre datos ficticios. WebKit12/12 de errores/reintento/rotación sin reintentos;
+matriz33 WebKit aprobada en la corrida anterior, cuyo fallo de interacción se
+reprodujo y corrigió con la nueva regresión. Node29/29, admin-sync78/78 y etapa
+oficial preflight39/39 aprobados después de conciliar main. Build Pages,
+versionado, plan y diagnóstico por autoridades canónicas. CI/merge/producción
+se registran por SHA en el PR y artifacts/editor-tablet-20261027/recibo.json;
+un PASS local no certifica esos resultados externos.
+
+NOT_VERIFIED: POST de guardado del producto real de la foto y hardware físico.
+La titular pide sesión fuera de TinyFish; se proporciona admin.html directo y
+se solicita abrirlo en Codex, pero el control de su navegador no está expuesto.
+No se modifican productos reales ni se relaja la confirmación del servidor.
+Informe: docs/product-editor-refactor/TABLET-Y-AVISO-GUARDADO.md.
 
 ## 2026-10-27 — Bienvenida al salir del checkout y confirmación organizada
 
