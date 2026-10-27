@@ -4190,3 +4190,26 @@ completo repetido PASS_LOCAL78/78 y sus auditorías; nuevo SHA necesita CI propi
 HTTP401 JSON no autenticado en producción: no se reprodujo la causa externa del
 HTML de la titular; no se afirma arreglada esa infraestructura ni sesión real.
 Evidencia y reversión: docs/product-editor-refactor/UX-AGIL-AUTOGUARDADO.md.
+## 2026-10-27 — Fluidez transversal: público, cliente y Super Admin
+
+Codex /root. Alcance ampliado por la titular a toda la web, conservando los
+loaders de entrada: cabecera pública, regreso al inicio, pop-ups globales,
+aviso de actualización y selección masiva de Pedidos agrupan el trabajo de
+scroll/viewport con `requestAnimationFrame`; el editor, las galerías y los
+separadores aplican el mismo límite y las listas extensas evitan trabajo fuera
+de pantalla. Las URLs inmutables se propagaron por shell, checkout, cuenta,
+catálogo, ficha, legales y Super Admin, sin tocar datos, permisos ni loaders.
+PASS_LOCAL: 47/47 Node de scroll, navegación, versiones y Pedidos; 103/103
+Chromium de Pedidos (18 viewports/orientaciones), avisos y runtime visual.
+`audit:performance`, `audit:performance-regressions`, caché y build canónico
+aprobados; persisten sólo dos advertencias preexistentes de peso de Inicio.
+
+## Cierre global solicitado — 2026-10-27 (Codex GPT-6)
+
+Se concilia la mejora de fluidez #1257 con main `0b415d76d60a9ad49112467df15bb34b8b5534c1` (#1258). Se conservan el layout tablet, el estado único de guardado/reintento y la exclusión de bienvenida durante todo Checkout de #1255. URLs inmutables combinadas regeneradas desde los generadores canónicos; no se reusan los tags publicados por #1258 para bytes nuevos. La CI del candidato conciliado queda pendiente hasta su ejecución.
+
+Verificación operativa directa, no destructiva: PayPal público responde disabled/Sandbox, USD, feature_disabled, tasa BCP 26/10 actualizada `2026-10-26T21:30:59.460Z`; Push devuelve401 sin sesión. Backup Firestore40488957277 SUCCESS con Exportar Firestore aprobado. No se certifica restauración actual de datos ni entrega Push/captura PayPal real. El control del navegador autenticado no está expuesto entre las herramientas; no se accede por TinyFish ni se solicitan secretos. Issues735/372/373/312 mantienen aceptación externa pendiente;340 debe indexar evidencia actual.
+
+PASS_LOCAL del candidato conciliado:41/41 Node de scheduling/editor/versiones; preflight oficial completado sin fallos (39 gates); PayPal18/18, Push/social52/52 y cuentas72/72. Restauración aislada de código: bundle SHA256 `3e760721bae80f6efdda70450a93ea7d61974ad84fdf8b22def92a5e23901d37`, git bundle verify, clon nuevo, git fsck --full y checkout main `0b415d76d60a9ad49112467df15bb34b8b5534c1` aprobados en18.93s. Es copia local verificada, no copia cifrada externa ni recuperación Firestore. La primera preflight local coincidió con una reconstrucción de Monaco y terminó ENOENT; se repitió después del build completo y aprobó.
+
+PASS_LOCAL de interfaz sobre el código conciliado:147/147 Chromium sin reintentos, cinco suites (product-editor-single-version, product-editor-space, product-workspaces, product-color-gallery y version-notice), servidor aislado desde este worktree en4175. Incluye320–3840px, rotación/reflujo, error/reintento, recuperación y avisos semánticos de actualización. Esta evidencia no certifica hardware físico ni la sesión administrativa productiva.

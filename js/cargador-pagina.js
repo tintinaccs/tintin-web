@@ -905,10 +905,10 @@
     try { framed = window.top !== window; } catch { framed = true; }
     if (isVisualPreviewFrame || framed) return;
     if (!window.TintinSiteChangesBooted) {
-      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261021-commerce-review-1');
+      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261027-global-fluidez-3');
     }
     if (!window.TintinVersionWatchBooted) {
-      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261021-commerce-review-1');
+      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261027-global-fluidez-3');
     }
   }
 

@@ -191,17 +191,20 @@ function showNotice(message = 'Hay una actualización para esta página.') {
   // Esos avisos aparecen, cambian de alto o se ocultan por clases y animaciones
   // que ningún evento anuncia, así que la posición se recalcula cada medio
   // segundo mientras el aviso está visible (unas pocas lecturas de tamaño).
-  const place = () => placeAboveNeighbours(box);
-  const timer = setInterval(place, 500);
-  window.addEventListener('resize', place);
-  window.visualViewport?.addEventListener('resize', place);
-  window.visualViewport?.addEventListener('scroll', place);
+  let placeFrame = 0;
+  const place = () => { placeFrame = 0; placeAboveNeighbours(box); };
+  const schedulePlace = () => { if (!placeFrame) placeFrame = requestAnimationFrame(place); };
+  const timer = setInterval(schedulePlace, 500);
+  window.addEventListener('resize', schedulePlace, { passive: true });
+  window.visualViewport?.addEventListener('resize', schedulePlace, { passive: true });
+  window.visualViewport?.addEventListener('scroll', schedulePlace, { passive: true });
   place();
   later.addEventListener('click', () => {
+    if (placeFrame) cancelAnimationFrame(placeFrame);
     clearInterval(timer);
-    window.removeEventListener('resize', place);
-    window.visualViewport?.removeEventListener('resize', place);
-    window.visualViewport?.removeEventListener('scroll', place);
+    window.removeEventListener('resize', schedulePlace);
+    window.visualViewport?.removeEventListener('resize', schedulePlace);
+    window.visualViewport?.removeEventListener('scroll', schedulePlace);
     box.remove();
   });
 }

@@ -6,7 +6,7 @@ import {attachMultiImageUploadWidget,attachImageUploadWidget} from '../../compon
 export const PRODUCT_PHOTO_LIMIT=13;
 export function attachProductGallery({container,product={},mainInput,imagesInput,variantsInput,openLibrary}) {
   const media=window.TintinProductMedia;
-  const abort=new AbortController();let destroyed=false,replacement=null,replacementTarget='',lastGalleryState='',lastPhotoState='',selectionState='',selectionLayoutState='';
+  const abort=new AbortController();let destroyed=false,replacement=null,replacementTarget='',lastGalleryState='',lastPhotoState='',selectionState='',selectionLayoutState='',renderFrame=0;
   const selectedPhotos=new Set();
   container.replaceChildren();container.classList.add('tt-unified-photos');
   const heading=document.createElement('h3');heading.textContent='FOTOGRAFÍAS DEL PRODUCTO';
@@ -140,7 +140,12 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     refreshSelection();
     if(focus)[...grid.querySelectorAll('[aria-label]')].find(node=>node.getAttribute('aria-label')===focus)?.focus({preventScroll:true});
   }
-  for(const [input,event] of [[mainInput,'change'],[imagesInput,'input'],[variantsInput,'input']])input.addEventListener(event,render,{signal:abort.signal});
+  function scheduleRender(){
+    if(renderFrame)return;
+    const schedule=window.requestAnimationFrame || (callback=>window.setTimeout(callback,16));
+    renderFrame=schedule(()=>{renderFrame=0;render();});
+  }
+  for(const [input,event] of [[mainInput,'change'],[imagesInput,'input'],[variantsInput,'input']])input.addEventListener(event,scheduleRender,{signal:abort.signal});
   render();
-  return {serialize:associations.serialize,refresh:render,pendingSignature:()=>[upload.pendingSignature(),replacement?.pendingSignature()||[]],async flush(){await upload.flush();await replacement?.flush();await associations.flush();if(urls().length>PRODUCT_PHOTO_LIMIT)throw Error('Este producto histórico supera las 13 fotos generales. Conservá sus asociaciones y revisá la galería antes de guardar.');},destroy(){destroyed=true;abort.abort();upload.destroy();replacement?.destroy();associations.destroy();container.replaceChildren();}};
+  return {serialize:associations.serialize,refresh:render,pendingSignature:()=>[upload.pendingSignature(),replacement?.pendingSignature()||[]],async flush(){await upload.flush();await replacement?.flush();await associations.flush();if(urls().length>PRODUCT_PHOTO_LIMIT)throw Error('Este producto histórico supera las 13 fotos generales. Conservá sus asociaciones y revisá la galería antes de guardar.');},destroy(){destroyed=true;if(renderFrame){const cancel=window.cancelAnimationFrame || window.clearTimeout;cancel(renderFrame);renderFrame=0;}abort.abort();upload.destroy();replacement?.destroy();associations.destroy();container.replaceChildren();}};
 }

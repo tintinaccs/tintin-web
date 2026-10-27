@@ -18,6 +18,19 @@ let editorWasOpen = false;
 let editorOpener = null;
 let installed = false;
 let lastError = '';
+let surfaceSyncFrame = 0;
+
+// ResizeObserver, visualViewport y los cambios de panel pueden llegar en ráfaga.
+// Medir y escribir geometría más de una vez por frame fuerza recálculos de layout
+// durante el scroll, especialmente cuando el teclado móvil está visible.
+export function scheduleProductSurfaceSync() {
+  if (surfaceSyncFrame) return;
+  const schedule = window.requestAnimationFrame || (callback => window.setTimeout(callback, 16));
+  surfaceSyncFrame = schedule(() => {
+    surfaceSyncFrame = 0;
+    syncProductSurfaces();
+  });
+}
 
 export function visibleProductEditor() {
   const card = document.getElementById('prod-form-card');
@@ -288,11 +301,11 @@ export function installProductInterface() {
   card?.addEventListener('change',()=>refreshEditorHeading(card));
   if (card) new MutationObserver(()=>{
     if (queued) return;
-    queued=true;queueMicrotask(()=>{queued=false;enhanceProductEditor();syncProductSurfaces();});
+    queued=true;queueMicrotask(()=>{queued=false;enhanceProductEditor();scheduleProductSurfaceSync();});
   }).observe(card,{childList:true,subtree:true,attributes:true,attributeFilter:['style','hidden']});
   // La navegación nativa oculta la sección sin modificar el formulario.
   const section=card?.closest('.adm-section');
-  if(section) new MutationObserver(syncProductSurfaces).observe(section,{attributes:true,attributeFilter:['class','style','hidden']});
+  if(section) new MutationObserver(scheduleProductSurfaceSync).observe(section,{attributes:true,attributeFilter:['class','style','hidden']});
   // La biblioteca se abre encima del editor; conserva el foco y sus controles.
   let pickerOpener=null;
   let previousPicker=null;
@@ -305,15 +318,15 @@ export function installProductInterface() {
     } else if(!picker && previousPicker && pickerOpener?.isConnected) pickerOpener.focus({preventScroll:true});
     previousPicker=picker;
   }).observe(document.body,{childList:true});
-  window.addEventListener('resize',syncProductSurfaces,{passive:true});
-  window.addEventListener('pageshow',syncProductSurfaces,{passive:true});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncProductSurfaces();});
+  window.addEventListener('resize',scheduleProductSurfaceSync,{passive:true});
+  window.addEventListener('pageshow',scheduleProductSurfaceSync,{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)scheduleProductSurfaceSync();});
   const header=document.querySelector('.adm-topbar');
-  if(header && typeof ResizeObserver==='function')new ResizeObserver(syncProductSurfaces).observe(header);
+  if(header && typeof ResizeObserver==='function')new ResizeObserver(scheduleProductSurfaceSync).observe(header);
   const sidebar=document.getElementById('adm-sidebar');
-  if(sidebar && typeof ResizeObserver==='function')new ResizeObserver(syncProductSurfaces).observe(sidebar);
-  window.visualViewport?.addEventListener('resize',syncProductSurfaces,{passive:true});
-  window.visualViewport?.addEventListener('scroll',syncProductSurfaces,{passive:true});
+  if(sidebar && typeof ResizeObserver==='function')new ResizeObserver(scheduleProductSurfaceSync).observe(sidebar);
+  window.visualViewport?.addEventListener('resize',scheduleProductSurfaceSync,{passive:true});
+  window.visualViewport?.addEventListener('scroll',scheduleProductSurfaceSync,{passive:true});
   document.addEventListener('error',event=>{
     const img=event.target;
     if (!(img instanceof HTMLImageElement) || !img.closest('#tt-commerce-products,.tt-commerce-product-preview')) return;

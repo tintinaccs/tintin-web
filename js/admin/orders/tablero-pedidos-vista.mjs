@@ -106,6 +106,7 @@ export function renderOrderBoard(root, model) {
 // La selección pertenece a Pedidos; respeta la cápsula móvil y el teclado visible.
 const selectionSurfaces = new WeakSet();
 export function syncOrderSelection(root) {
+  let frame = 0;
   const update = () => {
     const bar = root.querySelector('[data-order-bulk]');
     const bounds = root.getBoundingClientRect();
@@ -124,14 +125,18 @@ export function syncOrderSelection(root) {
     root.style.setProperty('--tt-order-selection-max-height', `${Math.max(44, (viewport?.height || innerHeight) - Math.max(0, viewportBottom-navTop) - 24)}px`);
     root.style.setProperty('--tt-order-selection-space', bar.hidden ? '0px' : `${bar.getBoundingClientRect().height + bottom + 24}px`);
   };
+  const scheduleUpdate = () => {
+    if (frame) return;
+    frame = requestAnimationFrame(() => { frame = 0; update(); });
+  };
   if (!selectionSurfaces.has(root)) {
     selectionSurfaces.add(root);
-    window.addEventListener('resize', update, { passive: true });
-    window.visualViewport?.addEventListener('resize', update, { passive: true });
-    window.visualViewport?.addEventListener('scroll', update, { passive: true });
-    const resize = new ResizeObserver(update); resize.observe(root);
+    window.addEventListener('resize', scheduleUpdate, { passive: true });
+    window.visualViewport?.addEventListener('resize', scheduleUpdate, { passive: true });
+    window.visualViewport?.addEventListener('scroll', scheduleUpdate, { passive: true });
+    const resize = new ResizeObserver(scheduleUpdate); resize.observe(root);
     const nav = document.getElementById('adm-mobile-tabs'); if(nav)resize.observe(nav);
-    const section=root.closest('.adm-section');if(section)new MutationObserver(update).observe(section,{attributes:true,attributeFilter:['class','hidden']});
+    const section=root.closest('.adm-section');if(section)new MutationObserver(scheduleUpdate).observe(section,{attributes:true,attributeFilter:['class','hidden']});
   }
   update();
 }

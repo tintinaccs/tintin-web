@@ -202,11 +202,15 @@ function schedulePopup(config) {
   if (popup.trigger === 'immediate') { window.setTimeout(fire, 80); return; }
   if (popup.trigger === 'delay') { window.setTimeout(fire, Math.max(0, Number(popup.triggerValue || 0)) * 1000); return; }
   if (popup.trigger === 'scroll') {
+    let frame = 0, fired = false;
     const handler = () => {
+      frame = 0;
+      if (fired) return;
       const max = Math.max(1, document.documentElement.scrollHeight - innerHeight); const percent = scrollY / max * 100;
-      if (percent >= Number(popup.triggerValue || 40)) { window.removeEventListener('scroll', handler); fire(); }
+      if (percent >= Number(popup.triggerValue || 40)) { fired = true; window.removeEventListener('scroll', schedule); fire(); }
     };
-    window.addEventListener('scroll', handler, { passive: true }); handler(); return;
+    const schedule = () => { if (!fired && !frame) frame = requestAnimationFrame(handler); };
+    window.addEventListener('scroll', schedule, { passive: true }); handler(); return;
   }
   if (popup.trigger === 'exit') {
     const handler = event => { if (event.clientY > 4) return; document.removeEventListener('mouseout', handler); fire(); };
