@@ -4215,6 +4215,11 @@ PASS_LOCAL del candidato conciliado:41/41 Node de scheduling/editor/versiones; p
 PASS_LOCAL de interfaz sobre el código conciliado:147/147 Chromium sin reintentos, cinco suites (product-editor-single-version, product-editor-space, product-workspaces, product-color-gallery y version-notice), servidor aislado desde este worktree en4175. Incluye320–3840px, rotación/reflujo, error/reintento, recuperación y avisos semánticos de actualización. Esta evidencia no certifica hardware físico ni la sesión administrativa productiva.
 ## 2026-10-27 — Corrección del contrato del notificador (PR1259)
 
+CI40507055019 de16a181fcf aprobó todas las suites. El cierre40510127886
+rechazó la huella de AGENTS.md pendiente de renovar. Se prepara el plan exacto
+con el helper canónico contra main34edd77b7, sin modificar sellos ni permisos.
+El resultado de la siguiente CI y del cierre protegido sigue pendiente.
+
 Codex /root GPT-6. CI40504800268, SHA93ad243de: preflight falla porque el
 receptor solicitado eleva workflows12→13. Excepción por nombre exclusivamente
 para notificar-resultados.yml: conserva otros12 y pipeline único de PR; exige
