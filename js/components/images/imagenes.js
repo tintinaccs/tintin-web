@@ -25,7 +25,7 @@ const imagePage = (window.location.pathname || '').toLowerCase();
 if (imagePage === '/' || imagePage.endsWith('/index.html') || imagePage === '') {
   Promise.all([
     import('../../pages/home/inicio-premium.js'),
-    import('../welcome/tutorial-bienvenida.js?v=tintin-20261022-avatar-inicial-1'),
+    import('../welcome/tutorial-bienvenida.js?v=tintin-20261027-welcome-receipt-1'),
   ]).catch(error => console.warn('[images] No se pudo iniciar la bienvenida:', error));
 }
 

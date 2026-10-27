@@ -21,6 +21,7 @@ const forceCart = hardening.slice(hardening.indexOf('function forceCart('), hard
 const cartListeners = hardening.slice(hardening.indexOf("  window.addEventListener('tt_cart_updated'"), hardening.indexOf('\n}', hardening.indexOf("  window.addEventListener('tt_cart_updated'")));
 const quote = secure.slice(secure.indexOf('  function renderQuote('), secure.indexOf('  async function reserveCheckoutGuard'));
 const whatsapp = secure.slice(secure.indexOf('  function shippingSummary('), secure.indexOf('  function renderConfirmedOrder('));
+const imageUtilities = read('js/components/images/utilidades-imagenes.js').replace(/^export /gm, '');
 const css = ['css/core/tema-unificado-tintin.css', 'css/pages/checkout/checkout.css', 'css/pages/checkout/checkout-maintenance.css', 'css/components/payments/payment-methods.css'].map(read).join('\n');
 
 // Execute the original success/submit/cart guards; only external services are
@@ -40,6 +41,7 @@ async function fixture(page) {
   await page.goto('/checkout?receipt-fixture=1', { waitUntil: 'domcontentloaded' });
   await page.addScriptTag({ content: state });
   await page.addScriptTag({ content: `(() => {
+    ${imageUtilities}
     const text = value => String(value ?? '');
     const escapeHtml = value => { const el = document.createElement('div'); el.textContent = text(value); return el.innerHTML; };
     const formatPrice = value => 'Gs. ' + Number(value).toLocaleString('es-PY');
@@ -64,7 +66,7 @@ async function fixture(page) {
     const buildDraft = async () => ({paymentMethod:'transferencia', shippingMethod:'encomienda'});
     const persistCheckoutDefaults = async () => {};
     const reserveCheckoutGuard = async () => {};
-    const createOrderOnServer = async () => { window.fixtureRequests++; if(window.fixtureReject) throw new Error('offline'); return {shortId:'QA-LOCAL-001',items:[{id:'qa-local',name:'Producto de prueba',variant:'Dorado / M',qty:1,price:35000}],subtotal:35000,total:35000,shippingCost:0,shippingMethod:'encomienda',shipping:{city:'San José de los Arroyos'},userName:'Persona de Prueba',userPhone:'+595981000000',userEmail:'persona.qa@example.invalid',paymentMethod:'transferencia'}; };
+    const createOrderOnServer = async () => { window.fixtureRequests++; if(window.fixtureReject) throw new Error('offline'); return {shortId:'QA-LOCAL-001',items:[{id:'qa-local',name:'Producto de prueba',imageUrl:'/assets-tintin/images/general/logo.png',variant:'Dorado / M',qty:1,price:35000}],subtotal:35000,total:35000,shippingCost:0,shippingMethod:'encomienda',shipping:{city:'San José de los Arroyos'},userName:'Persona de Prueba',userPhone:'+595981000000',userEmail:'persona.qa@example.invalid',paymentMethod:'transferencia'}; };
     const clearCart = async () => { cart = []; window.dispatchEvent(new CustomEvent('tt_cart_updated',{detail:{items:[]}})); await new Promise(resolve => window.fixtureFinishCleanup = resolve); };
     const message = () => 'No pudimos confirmar el pedido.';
     const forceBackToCart = forceCart;
@@ -81,6 +83,8 @@ async function fixture(page) {
     ${submit}
     ${paymentHandlers}
     const paymentMethodLabel = method => method.title;
+    window.fixtureWelcomeEvents = 0;
+    window.addEventListener('tintin:checkout:completed',()=>window.fixtureWelcomeEvents++);
     window.fixtureRequests = 0;
     window.fixtureSubmit = () => submit(document.getElementById('ck-confirm-btn'));
     window.fixtureQuote = () => { buildConfirmation(); renderQuote({items:cart,subtotal:35000,total:35000,shippingCost:0},'encomienda'); };
@@ -121,12 +125,18 @@ for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1280,7
     await expect(page.locator('#ck-success-head')).toBeVisible();
     await expect(page.locator('#panel-4')).toHaveClass(/active/);
     await expect(page.locator('#ck-order-num')).toHaveText('N° de pedido: QA-LOCAL-001');
+    expect(await page.evaluate(()=>fixtureWelcomeEvents)).toBe(1);
+    await page.locator('#panel-4').screenshot({path:`artifacts/receipt-organized-${width}.png`});
     // Cleanup is still pending: the confirmed ticket must already be visible.
     await page.evaluate(() => fixtureFinishCleanup());
     await page.evaluate(() => { fixtureEmptyCart(); TintinCheckoutState.persist(); });
     await page.locator('.ck-step[data-step="0"]').dispatchEvent('click');
     await expect(page.locator('#panel-4')).toHaveClass(/active/);
     await expect(page.locator('#ck-confirm-btn')).toBeHidden();
+    await expect(page.getByRole('region',{name:'Productos',exact:true})).toBeVisible();
+    await expect(page.getByRole('region',{name:'Entrega',exact:true})).toBeVisible();
+    await expect(page.getByRole('region',{name:'Tus datos',exact:true})).toBeVisible();
+    await expect(page.locator('.ck-receipt-photo img')).toHaveAttribute('src',/\/assets-tintin\/images\/general\/logo\.png$/);
     await expect(page.locator('#ck-save-receipt')).toBeVisible();
     await expect(page.locator('#ck-share-receipt')).toBeVisible();
     await expect(page.locator('.ck-step[data-step="0"]')).toHaveAttribute('aria-disabled','true');
@@ -248,7 +258,8 @@ test('a failed PNG encoder can retry without submitting another order', async ({
   });
   await expect(page.locator('#ck-receipt-status')).toContainText('No pudimos generar');
   await page.locator('#ck-save-receipt').click();
-  await expect(page.locator('#ck-receipt-status')).toContainText('listo como imagen');
+  await expect(page.locator('#ck-receipt-status')).toBeEmpty();
+  await expect(page.locator('#ck-save-receipt')).toBeEnabled();
   const pending = page.waitForEvent('download');
   await page.locator('#ck-save-receipt').click();
   expect((await pending).suggestedFilename()).toMatch(/\.png$/);

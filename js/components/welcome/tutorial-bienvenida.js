@@ -15,11 +15,9 @@ import {
   window.TintinWelcomeRuntimeBooted = true;
   window.TintinWelcomeTutorialInitBooted = true;
 
-  function isHome(){
-    const p = (location.pathname || '').replace(/\/+/g,'/').toLowerCase();
-    return p.endsWith('/') || p.endsWith('/index.html') || p === '';
-  }
-  if (!isHome()) return;
+  const pageName = (location.pathname || '').split('/').pop().replace(/\.html$/i, '').toLowerCase();
+  if (pageName === 'login' || pageName.startsWith('admin')) return;
+  const checkoutPending = () => pageName === 'checkout' && window.TintinCheckoutOrderCompleted !== true;
   const releaseWelcomeGate = () => document.documentElement.classList.remove('tt-welcome-pending');
 
   function previewMode(){
@@ -238,7 +236,8 @@ import {
   // paso 1 — se veía como si "se cerrara solo" sin que nadie lo tocara.
   let handledUid = null;
   let generation = 0;
-  subscribeAuthState(async user => {
+  let sessionUser = null;
+  async function handleWelcome(user) {
     if (user?.uid === handledUid) { releaseWelcomeGate(); return; }
     handledUid = user?.uid || null;
     const currentGeneration = ++generation;
@@ -248,11 +247,15 @@ import {
     }
     releaseWelcomeGate();
     if (!user) return;
+    // Entrar directamente a comprar no consume la primera bienvenida. El
+    // mismo runtime la reintenta después de una confirmación real del pedido.
+    if (checkoutPending()) return;
     try {
       const previewRequested = previewMode() && user.email === SUPER_ADMIN;
       const role = await bounded(() => getUserRole(user.uid, user.email));
       if (!previewRequested && role !== 'client') { releaseWelcomeGate(); return; }
       const [data, config] = await Promise.all([readUser(user.uid), readConfig()]);
+      if (currentGeneration !== generation || checkoutPending()) return;
       const preview = previewRequested && config.previewEnabled;
       if (previewRequested && !preview) {
         clearPreviewMode();
@@ -287,5 +290,15 @@ import {
       console.warn('[welcome-runtime] Tutorial omitido:', e);
       releaseWelcomeGate();
     }
+  }
+  subscribeAuthState(user => {
+    sessionUser = user;
+    void handleWelcome(user);
+  });
+  window.addEventListener('tintin:checkout:completed', () => {
+    if (pageName !== 'checkout' || checkoutPending() || !sessionUser) return;
+    if (document.getElementById('tt-welcome-tutorial')) return;
+    handledUid = null;
+    void handleWelcome(sessionUser);
   });
 })();
