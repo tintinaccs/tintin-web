@@ -1,3 +1,7 @@
+## 2026-10-26 — Portada compartida de WhatsApp
+
+Codex /root. Base 33af11a5 (#1252). Petición de la titular: rosa claro Tintin de su imagen download.png, logo original blanco plano, centrado, sin 3D; nombre y descripción en blanco dentro de portada minimalista/elegante. Portada assets/og-cover.jpg de 1200×630, referencia persistida en docs/identidad-visual-tintin.md. Inicio y Catálogo entregan imagen versionada y medidas/alt antes de JavaScript; la interfaz de WhatsApp controla el texto fuera de la imagen. No cambia la paleta global. PASS_LOCAL final: auditor SEO 1178 comprobaciones, 11/11 tests SEO Node y build Pages/caché. Portada revisada visualmente con rosa claro y logo/textos blancos. Preflight final 39/39 PASS_LOCAL tras npm ci; CI inicial rechazó deriva documental del manifiesto, regenerada desde el constructor canónico. CI final/merge/producción PENDING. PR1253. No se afirma envío real por WhatsApp ni archivado de los bytes del adjunto Windows.
+
 ## Ajuste final contextual — 26/10/2026
 
 Regresión reproducida con Color y Color de correa. Se separan el color principal

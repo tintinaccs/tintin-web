@@ -1,52 +1,42 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "0c3e4b9aac24f82a8438309577d5499ca36af4c2",
-  "reason": "Completar edición contextual y separar atributos secundarios de color preservando contratos",
+  "baseCommit": "33af11a56a432d2f2d65878b5284d2265582e4de",
+  "reason": "Actualizar la portada compartida de WhatsApp con logo blanco plano sobre rosa Tintin y metadatos descriptivos sin modificar datos ni flujos comerciales.",
   "files": [
     {
-      "path": "admin.html",
-      "oldHash": "92d0dbc2d4d6a3fca82edf77be929ed07a83327e85dfd3d838a6291523bfb3a7",
-      "newHash": "591f3d301f4f6969156efe11ab66300204bfd05b7c393a018291870eb48cd00c"
+      "path": "_headers",
+      "oldHash": "3c91a3b9258637d2e8551460880c646c426bdf44b3a79ff1f312921049bb265d",
+      "newHash": "983cd9be41c0fd817ce7103b817e05cda643f2a4f605ff9fb8d9da7288f23f5a"
     },
     {
-      "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "c2baa72f83b8ae847e9dd367f2d76779daca5d8f0af224d4b1eed7533f8263f4",
-      "newHash": "95e7842844cf9a39c1a800d643527735a9bd0ebbc891cd202657df6c06d49420"
+      "path": "catalogo.html",
+      "oldHash": "ba15249a80b1b3fc424f31a9e61c433fd6885d642eedfce72579b364e7ca004d",
+      "newHash": "0948938e64dec0bc76dacb96fbf328e5307e258570c51c92412c5e9914935839"
     },
     {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "9404c5f1925adc53892eba0b1b1f28166afb29cdfb1e7455d808d30a180fa822",
-      "newHash": "d5aeeb556f9c193710e3603dc049b5be56f9e21949e1af9d80e80bde1c983c70"
+      "path": "config/csp-runtime.js",
+      "oldHash": "341ba0871794404f4ad5bf82fa6f9b1d02b1fd21e6417914bd88d7e448f25cf7",
+      "newHash": "9769e913be43859b40a864675cda58bca44bb468b09d5768ad92f380a14fa160"
     },
     {
-      "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "266829585494aca53c2225556c4b8595e948814feb0310a513b9d547f7028632",
-      "newHash": "616b18ee36bc4e4ab59a8fa9e0b3ecd686a438459609f3bd0788182e17dd10f9"
+      "path": "config/csp-runtime.json",
+      "oldHash": "1f77436f64dd9c39a7442ff7fc821ac759071ad663c0da7ae8724a610f518a8b",
+      "newHash": "882f040fe5bdea2f7f4df6ba69aca617d7460368cdc0faa696b236ffedfea3fc"
     },
     {
-      "path": "scripts/cache-version-baseline.json",
-      "oldHash": "740a7cbb5e535d1166857a1312a4bac974b525bac92cc0ca172dc4ccb830fbe7",
-      "newHash": "f87449e647ca3d6a804f55c75be2c424fa20340a2e692d69d32bf0c4848343a9"
+      "path": "index.html",
+      "oldHash": "a39b119deb874827486fb0d47c5a4372cbeb9f8bd93b19e061c35a6482f1b2b4",
+      "newHash": "4c7e3ce43b25bcd7e950ce088a7540742007a6fa68e6a3e9f94b18b6c09eb23f"
     }
   ],
   "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
-    "apis-internas__correos__41",
-    "apis-internas__pedidos__32",
-    "correos",
-    "pagina-perfil",
-    "pedidos",
-    "pedidos__inventario__33",
+    "cf-functions",
+    "cf-functions__apis-internas__20",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
+    "csp",
     "productos",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-perfil__18",
-    "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
     "super-panel__productos__34"
   ]
 }
