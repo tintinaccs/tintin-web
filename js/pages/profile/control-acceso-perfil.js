@@ -178,7 +178,7 @@ function watchProfile(user) {
       return;
     }
     enforceProfileComplete(user, data);
-    if (!redirecting && data.role === 'client' && data.profileStatus === 'active' &&
+    if (!redirecting && currentPageName() !== 'checkout' && data.role === 'client' && data.profileStatus === 'active' &&
         data.welcomeTutorialPending === true && !data.welcomeTutorialSeen &&
         !data.welcomeTutorialFirstShownAt && !data.welcomeTutorialCompletedAt &&
         data.onboardingCompleted !== true && !welcomeRuntimeLoading) {

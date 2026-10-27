@@ -10,7 +10,7 @@ const helper = read('js/core/firebase/suscripcion-app-check.js');
 const gate = read('js/pages/profile/control-acceso-perfil.js').replace(/import\('[^']*tutorial-bienvenida\.js\?v=[^']+'\)/, 'loadWelcome()');
 const tick = () => new Promise(resolve => setImmediate(resolve));
 const client = { uid: 'client-a', email: 'client@example.test' };
-function setup() {
+function setup(pathname='/checkout') {
   let settle, session;
   const events = new Set(), calls = [], warnings = [], redirects = [], storage = new Map();
   let stops = 0, signOuts = 0, welcomeLoads = 0;
@@ -18,7 +18,7 @@ function setup() {
     loadWelcome: async () => { welcomeLoads++; },
     appCheckReady: new Promise(resolve => { settle = resolve; }),
     window: { addEventListener: (_name, listener) => events.add(listener), removeEventListener: (_name, listener) => events.delete(listener) },
-    location: { pathname: '/checkout', search: '', hash: '', replace: url => redirects.push(url) },
+    location: { pathname, search: '', hash: '', replace: url => redirects.push(url) },
     sessionStorage: { getItem: key => storage.get(key) || null, setItem: (key, value) => storage.set(key, value), removeItem: key => storage.delete(key) },
     auth: {}, db: {}, SUPER_ADMIN: 'owner@example.test', AUTH_STATES: { RESTORING: 'restoring', UNKNOWN: 'unknown' },
     subscribeSession: callback => { session = callback; }, recordAuthDiagnostic: () => {}, getProfileCompletionPlan,
@@ -73,11 +73,18 @@ test('cerrar sesión cancela la conexión e ignora respuestas antiguas de bloque
 
 test('perfil carga una sola guía pública para cuentas nuevas y no para cuentas existentes',async()=>{
   for(const pending of [true,false]){
-    const state=setup();state.settle(true);await tick();state.session(client);await tick();
+    const state=setup('/catalogo');state.settle(true);await tick();state.session(client);await tick();
     const data={role:'client',profileStatus:'active',firstName:'Lucía',lastName:'Benítez',name:'Lucía Benítez',phone:'+595981123456',savedLocation:{lat:-25.29,lng:-57.63,name:'Casa',address:'San Lorenzo'},welcomeTutorialPending:pending};
     state.calls[0].next({exists:()=>true,data:()=>data});
     state.calls[0].next({exists:()=>true,data:()=>data});await tick();
     assert.equal(state.welcomeLoads,pending?1:0);
     assert.deepEqual(state.redirects,[]);
   }
+});
+
+test('el guardia de checkout no descarga ni consume la primera bienvenida',async()=>{
+ const state=setup();state.settle(true);await tick();state.session(client);await tick();
+ const data={role:'client',profileStatus:'active',firstName:'Lucía',lastName:'Benítez',name:'Lucía Benítez',phone:'+595981123456',savedLocation:{lat:-25.29,lng:-57.63,name:'Casa',address:'San Lorenzo'},welcomeTutorialPending:true};
+ state.calls[0].next({exists:()=>true,data:()=>data});await tick();
+ assert.equal(state.welcomeLoads,0);assert.deepEqual(state.redirects,[]);
 });

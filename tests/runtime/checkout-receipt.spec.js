@@ -83,8 +83,6 @@ async function fixture(page) {
     ${submit}
     ${paymentHandlers}
     const paymentMethodLabel = method => method.title;
-    window.fixtureWelcomeEvents = 0;
-    window.addEventListener('tintin:checkout:completed',()=>window.fixtureWelcomeEvents++);
     window.fixtureRequests = 0;
     window.fixtureSubmit = () => submit(document.getElementById('ck-confirm-btn'));
     window.fixtureQuote = () => { buildConfirmation(); renderQuote({items:cart,subtotal:35000,total:35000,shippingCost:0},'encomienda'); };
@@ -125,7 +123,6 @@ for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1280,7
     await expect(page.locator('#ck-success-head')).toBeVisible();
     await expect(page.locator('#panel-4')).toHaveClass(/active/);
     await expect(page.locator('#ck-order-num')).toHaveText('N° de pedido: QA-LOCAL-001');
-    expect(await page.evaluate(()=>fixtureWelcomeEvents)).toBe(1);
     await page.locator('#panel-4').screenshot({path:`artifacts/receipt-organized-${width}.png`});
     // Cleanup is still pending: the confirmed ticket must already be visible.
     await page.evaluate(() => fixtureFinishCleanup());

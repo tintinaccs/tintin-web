@@ -16,8 +16,9 @@ import {
   window.TintinWelcomeTutorialInitBooted = true;
 
   const pageName = (location.pathname || '').split('/').pop().replace(/\.html$/i, '').toLowerCase();
-  if (pageName === 'login' || pageName.startsWith('admin')) return;
-  const checkoutPending = () => pageName === 'checkout' && window.TintinCheckoutOrderCompleted !== true;
+  // Checkout completo, incluida la confirmación, queda libre de la guía.
+  // La cuenta conserva su bienvenida pendiente hasta visitar otra página.
+  if (pageName === 'checkout' || pageName === 'login' || pageName.startsWith('admin')) return;
   const releaseWelcomeGate = () => document.documentElement.classList.remove('tt-welcome-pending');
 
   function previewMode(){
@@ -236,7 +237,6 @@ import {
   // paso 1 — se veía como si "se cerrara solo" sin que nadie lo tocara.
   let handledUid = null;
   let generation = 0;
-  let sessionUser = null;
   async function handleWelcome(user) {
     if (user?.uid === handledUid) { releaseWelcomeGate(); return; }
     handledUid = user?.uid || null;
@@ -247,15 +247,12 @@ import {
     }
     releaseWelcomeGate();
     if (!user) return;
-    // Entrar directamente a comprar no consume la primera bienvenida. El
-    // mismo runtime la reintenta después de una confirmación real del pedido.
-    if (checkoutPending()) return;
     try {
       const previewRequested = previewMode() && user.email === SUPER_ADMIN;
       const role = await bounded(() => getUserRole(user.uid, user.email));
       if (!previewRequested && role !== 'client') { releaseWelcomeGate(); return; }
       const [data, config] = await Promise.all([readUser(user.uid), readConfig()]);
-      if (currentGeneration !== generation || checkoutPending()) return;
+      if (currentGeneration !== generation) return;
       const preview = previewRequested && config.previewEnabled;
       if (previewRequested && !preview) {
         clearPreviewMode();
@@ -298,14 +295,5 @@ import {
       releaseWelcomeGate();
     }
   }
-  subscribeAuthState(user => {
-    sessionUser = user;
-    void handleWelcome(user);
-  });
-  window.addEventListener('tintin:checkout:completed', () => {
-    if (pageName !== 'checkout' || checkoutPending() || !sessionUser) return;
-    if (document.getElementById('tt-welcome-tutorial')) return;
-    handledUid = null;
-    void handleWelcome(sessionUser);
-  });
+  subscribeAuthState(user => { void handleWelcome(user); });
 })();

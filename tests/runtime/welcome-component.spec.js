@@ -185,33 +185,28 @@ for(const path of ['/catalogo','/product','/perfil','/carrito']) test(`primera b
   await expect(page.getByRole('dialog')).toBeVisible();
   expect(await page.evaluate(()=>fixture.writes)).toBe(1);
 });
-test('checkout directo conserva la bienvenida hasta confirmar y no la repite',async({page})=>{
+test('checkout directo y pedido confirmado conservan pendiente la bienvenida sin mostrarla',async({page})=>{
   await mount(page,{...fresh},{path:'/checkout'});
   await page.waitForTimeout(250);
   await expect(page.getByRole('dialog')).toHaveCount(0);
   expect(await page.evaluate(()=>fixture.writes)).toBe(0);
-  await page.evaluate(()=>window.dispatchEvent(new CustomEvent('tintin:checkout:completed')));
-  expect(await page.evaluate(()=>fixture.writes)).toBe(0);
   await page.evaluate(()=>{window.TintinCheckoutOrderCompleted=true;window.dispatchEvent(new CustomEvent('tintin:checkout:completed'));});
-  await expect(page.getByRole('dialog')).toBeVisible();
-  await page.evaluate(()=>window.dispatchEvent(new CustomEvent('tintin:checkout:completed')));
-  await expect(page.getByRole('dialog')).toBeVisible();
-  expect(await page.evaluate(()=>fixture.writes)).toBe(1);
-  await page.locator('#tt-welcome-close').click();
-  const profile=await page.evaluate(()=>fixture.profile);
-  await mount(page,profile,{path:'/checkout',completed:true});
   await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect(await page.evaluate(()=>fixture.profile.welcomeTutorialPending)).toBe(true);
 });
-test('ticket restaurado y módulo tardío muestran la bienvenida pendiente',async({page})=>{
+test('ticket restaurado y módulo tardío tampoco muestran la guía dentro del checkout',async({page})=>{
   await mount(page,{...fresh},{path:'/checkout.html',completed:true});
-  await expect(page.getByRole('dialog')).toBeVisible();
-});
-test('cerrar sesión durante checkout no muestra la bienvenida a otra cuenta',async({page})=>{
-  await mount(page,{...fresh},{path:'/checkout'});
-  await page.evaluate(()=>window.authCallback(null));
-  await page.evaluate(()=>{window.TintinCheckoutOrderCompleted=true;window.dispatchEvent(new CustomEvent('tintin:checkout:completed'));});
   await expect(page.getByRole('dialog')).toHaveCount(0);
   expect(await page.evaluate(()=>fixture.writes)).toBe(0);
+  const profile=await page.evaluate(()=>fixture.profile);
+  await mount(page,profile,{path:'/perfil'});
+  await expect(page.getByRole('dialog')).toBeVisible();
+});
+test('checkout no toca la cuenta ni cierra el carrito modal',async({page})=>{
+  await mount(page,{...fresh},{path:'/checkout',completed:true,cartOpen:true});
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect(await page.evaluate(()=>fixture.writes)).toBe(0);
+  expect(await page.evaluate(()=>TintinSurfaceController.surface)).toBe('cart');
 });
 test('salir del checkout sin comprar mantiene la bienvenida para la siguiente página',async({page})=>{
   await mount(page,{...fresh},{path:'/checkout'});

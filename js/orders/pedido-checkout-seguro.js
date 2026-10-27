@@ -1188,7 +1188,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
     document.querySelector('#ck-success-head .ck-confirm-title')?.focus({ preventScroll: true });
-    window.dispatchEvent(new CustomEvent('tintin:checkout:completed'));
   }
 
   window.addEventListener('popstate', () => {
