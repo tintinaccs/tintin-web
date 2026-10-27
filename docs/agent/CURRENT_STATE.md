@@ -1,3 +1,17 @@
+## 2026-10-26 — Editor amplio y vista previa inferior, Codex /root GPT-6
+
+Base main95091da9, worktree /workspace/tintin-editor-responsive, rama
+codex/editor-espacio-responsive. Pedido: corregir el área reducida en todos los
+tamaños y dejar vista previa al final. Se mantiene #1252; no se incorpora la
+propuesta paralela #1249. Cambios en organizador/CSS canónicos: preview inferior
+plegada, sin salto superior, navegación estática, galería sin scroll anidado,
+65/35 escritorio y una columna tablet/móvil, campos16px y márgenes reducidos.
+IDs/escritores/modelos/checkout/Rules intactos. PASS_LOCAL inicial19 y24finales
+solapados; capturas laptop/móvil inspeccionadas. Cierre local197/197 Chromium
+sin reintentos, stage oficial preflight y build/CSP/rutas/caché/diagnóstico
+aprobados. CI/proveedores/hardware NOT_VERIFIED. Informe en
+docs/product-editor-refactor/ESPACIO-EDICION-RESPONSIVO.md.
+
 ## 2026-10-26 — Portada compartida de WhatsApp
 
 Codex /root. Base 33af11a5 (#1252). Petición de la titular: rosa claro Tintin de su imagen download.png, logo original blanco plano, centrado, sin 3D; nombre y descripción en blanco dentro de portada minimalista/elegante. Portada assets/og-cover.jpg de 1200×630, referencia persistida en docs/identidad-visual-tintin.md. Inicio y Catálogo entregan imagen versionada y medidas/alt antes de JavaScript; la interfaz de WhatsApp controla el texto fuera de la imagen. No cambia la paleta global. PASS_LOCAL final: auditor SEO 1178 comprobaciones, 11/11 tests SEO Node y build Pages/caché. Portada revisada visualmente con rosa claro y logo/textos blancos. Preflight final 39/39 PASS_LOCAL tras npm ci; CI inicial rechazó deriva documental del manifiesto, regenerada desde el constructor canónico. CI final/merge/producción PENDING. PR1253. No se afirma envío real por WhatsApp ni archivado de los bytes del adjunto Windows.
