@@ -9,6 +9,7 @@ import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 import {productAdminState,productIsPublished} from './products/estado-administrativo-producto.mjs?v=tintin-20261026-editor-workspace-1';
+import {readProductEditorResponse} from './products/respuesta-editor-producto.mjs?v=tintin-20261027-editor-ux-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 /* ========================================================================
    TINTIN — Productos, Colecciones y Pedidos
@@ -41,7 +42,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261026-editor-closure-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
-const VERSION = 'tintin-20261027-editor-space-2';
+const VERSION = 'tintin-20261027-editor-ux-3';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -530,7 +531,7 @@ async function loadPrivateProductWorks(force=false,append=false) {
   if(!append){privateWorks=[];privateWorkLimited=false;privateWorkNext='';}
   try{
     const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'listProductWork',...(pageToken?{pageToken}:{})})});
-    const payload=await response.json();if(!response.ok || !payload.ok)throw Error(payload.error || 'No se pudo recuperar la lista de borradores.');
+    const payload=await readProductEditorResponse(response);
     if(state.user?.uid===uid && state.role===role && generation===privateWorkGeneration){
       privateWorks=[...new Map([...(append?privateWorks:[]),...(payload.result.items || [])].map(work=>[work.key,work])).values()];
       privateWorkNext=payload.result.nextPageToken || '';privateWorkLimited=payload.result.limited===true;

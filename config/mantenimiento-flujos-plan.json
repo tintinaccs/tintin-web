@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "fb0bede6461cc736ddfe34be1a286993d23f31b9",
-  "reason": "Diferir la bienvenida exclusivamente durante checkout; liberar el carrito modal mediante su controlador y organizar confirmación, fotos y ticket sin alterar pedidos/pagos/permisos; preservar editor1254.",
+  "baseCommit": "51e5e7376a355902a1eafdba78a3ffbb74ef58c6",
+  "reason": "Mantener checkout y confirmación libres de bienvenida hasta navegar a otra ruta; ordenar ticket/fotos y liberar carrito modal fuera de checkout, preservando editor1256, pagos y permisos.",
   "files": [
     {
       "path": "_headers",
@@ -25,8 +25,8 @@
     },
     {
       "path": "admin.html",
-      "oldHash": "2c6347ba15db84c0b47eef863f4f1c656e7187f5957a8790b5487ff85ae3b8bf",
-      "newHash": "59137f099cdbb915fd496b0dd041d19489ada0d328dc5540df40492b6cddd5ef"
+      "oldHash": "34e53a17261bec16597f08b9005c43490ad55535b8dbb4c73fd68422ff2414dc",
+      "newHash": "f731228bf3dc6a4a85fc6aadae45108fcb5819af3b2ec98267faec6d5f6d74c6"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -81,7 +81,7 @@
     {
       "path": "js/admin/content/control-bienvenida-admin.js",
       "oldHash": "b51e81e36bfbf5e8ce30b42d2d3734e1294bd86f6211dfa9d42bce5184e32f0f",
-      "newHash": "894831820fde14ee38a28a674d791f4acd045dc81f11f7da14cb8bba6750da73"
+      "newHash": "5025fd8a9b92ce3751da67c12a87c250da8c78a8a25307f068dc87ffba82d6c4"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -141,7 +141,7 @@
     {
       "path": "js/components/welcome/tutorial-bienvenida.js",
       "oldHash": "2eadb541ca5ee9aab4d866862ae690efe7ff2882aed4282a62104d01df9accf8",
-      "newHash": "896c194dbef9934d416ab3dfdc6ecaa7b4fb0d492426cb3357508317c85deb84"
+      "newHash": "c05fc523424662644ba5e194d96f7b73d457820aae874fe93b96c62df029558b"
     },
     {
       "path": "js/core/auth/proteccion-sesion.js",
@@ -161,7 +161,7 @@
     {
       "path": "js/orders/pedido-checkout-seguro.js",
       "oldHash": "473d509fe32d40a73dbd1b31b23c891ea3fe4498feed7e121b50e203670973f6",
-      "newHash": "633812c3dc3630ed03748310d1de41ee4a65bb43332c178c2a142d0516e0c339"
+      "newHash": "773509105a73d479c077081f3a810fb65b047b86ce497e16e25cae39ed737760"
     },
     {
       "path": "js/pages/checkout/checkout-hardening.js",
@@ -181,7 +181,7 @@
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
       "oldHash": "d105c621643ec523b920d90704464426644d78f6a35d0e340f6b63515aef0f7f",
-      "newHash": "92a2240986b9bdf8f6d5d5de114947a1e4558b3cf4b2021b9ae9106e482c03cf"
+      "newHash": "48da0e4e836fc80b0632654a62343ae59db626c660a1615ba805f48ada91e525"
     },
     {
       "path": "js/quality/calidad-interfaz.js",
@@ -220,8 +220,8 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "5241f00ff12c2d5f10e9a8010654266ab67b76e80282ba95ccd7e84350dd7726",
-      "newHash": "efd4bcbb4beb44b4c8c3bab100cc5a08a8ff25ce37ed7aed95e0e6f1a36c9207"
+      "oldHash": "2af7687584d84ab9b435425d77a7c03c67334caeec58bc31b7a9f15a4acf278b",
+      "newHash": "a893c23970980b02cc9ea5db3ff24098ff72785e0012348ab0078f380dbad1cd"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

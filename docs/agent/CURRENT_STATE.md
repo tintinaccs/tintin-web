@@ -1,6 +1,8 @@
-## 2026-10-26 — Bienvenida diferida sólo en checkout y confirmación organizada
+## 2026-10-27 — Bienvenida al salir del checkout y confirmación organizada
 
-Codex /root. Base95091da9 (#1253). La bienvenida canónica deja de limitarse a Inicio: se carga de forma diferida para cuentas activas pendientes desde el guardia público, y Perfil comparte el mismo runtime. En /checkout y /checkout.html no consume la aparición hasta success() del pedido; evento de confirmación y bandera existente recuperan también carga tardía/ticket restaurado. Fuera de checkout aparece normalmente, incluso tras abandonar la compra. Se mantienen transacción por cuenta, bloqueo de perfiles incompletos, permisos y configuración de Super Admin. La confirmación agrupa productos con fotos seguras/fallback, totales, entrega, cliente y pago; ticket/avisos/ayuda y enlace a Pedidos tienen estructura propia. PNG, compartir y PDF conservan datos confirmados. Sin pedidos/correos reales ni cambios de reglas/pagos/inventario. PASS_LOCAL final:205 Node de checkout/cuentas/perfil y37 Chromium sin reintentos (23 bienvenida,14 ticket), incluyendo cargador global, checkout directo, evento duplicado, logout, ticket restaurado, salida sin comprar, PNG/compartir/PDF y siete viewports320–1920. Auditor de checkout aprobado; capturas revisadas. Build/caché aprobados; preflight39/39 PASS_LOCAL. Se concilia con fb0bede6 (#1254) preservando editor, tests y reparto CI; Conjunto conciliado:205/205 Node,37/37 Chromium y39/39 preflight PASS_LOCAL repetidos; build/caché aprobados. CI/merge/producción PENDING. No heredar CI de1253. Caso adicional reproducido con controlador real: carrito modal retenía foco/scroll detrás de la guía. Se cierra mediante la autoridad de superficies antes de reclamar la primera aparición, sin vaciar productos; regresión de teclado/cierre agregada. RED del caso de carrito confirmado; GREEN final37/37 Chromium,205/205 Node y39/39 preflight. CI40434761248 aprobó preflight pero comercio detectó sanitizeImageUrl ausente en la fixture que ejecuta checkout sin imports. La aplicación ya importa la utilidad canónica; se incorpora también a esa fixture sin quitar aserciones.16/16 Chromium de disponibilidad/PayPal PASS_LOCAL. CI final/merge/producción pendientes en PR1255. Fuente y límites de la portada previa no cambian.
+Codex /root. Alcance vigente confirmado por la titular: ninguna bienvenida en /checkout ni /checkout.html, tampoco en Pedido confirmado, ticket restaurado o pago pendiente. No se descarga desde el guardia ni consume sus flags; aparece al salir hacia otra página pública/Perfil. Se elimina el disparo de success y se conserva transacción por cuenta/configuración. En otras páginas, el controlador de superficies libera carrito/cuenta antes de la guía, sin vaciar productos. Confirmación organizada en secciones con fotos seguras/fallback, totales, entrega, cliente, pago y ticket; enlaces a Pedidos, PNG/compartir/PDF conservados. Se integra main51e5e737/#1256 preservando editor y tests.
+
+Evidencia previa del mismo trabajo:205 Node,37 Chromium y39 preflight;16 pruebas de disponibilidad tras cargar la utilidad de fotos en su fixture; CI40435606414 aprobó comercio, interfaz, Rules y administración. Calidad detectó seis recorridos que intentaban usar cookies mientras la bienvenida estaba abierta (ocultamiento deliberado ya existente). Los dos recorridos de compra/perfil ahora comprueban la primera guía, su marca persistida y cierre antes de seguir;4/4 Chromium escritorio/móvil con Auth/Firestore reales aislados aprobaron. WebKit local no dispone de bibliotecas del host y queda a cargo de CI. PASS_LOCAL vigente tras la aclaración y conciliación con1256:206/206 Node,37/37 Chromium,39/39 preflight y4/4 recorridos reales aislados de compra/perfil en Chromium escritorio/móvil, sin reintentos. Build/caché aprobados. CI final/merge/producción PENDING. No se crean pedidos ni correos reales. PR1255.
 
 ## 2026-10-26 — Editor amplio y vista previa inferior, Codex /root GPT-6
 
@@ -4142,3 +4144,22 @@ obsoleta para recuperar funcionalidad ya conciliada. Las pruebas locales y sus
 límites están en el informe final. CI se comprueba sobre la nueva cabeza; no se
 atribuye anticipadamente PASS_CI ni producción. Estado definitivo: PR y entrega
 del chat. Después del merge se verifican main y los PR de Dependabot indicados.
+# 2026-10-26 — UX ágil del editor, base #1254
+
+Agente Codex, rama codex/editor-ux-agil sobre fb0bede6. Un solo clic de color
+aplica/quita asociaciones en borrador cuando es el único atributo; combinaciones
+siguen explícitas. Imágenes conservan nodos al cambiar asociaciones, foco y scroll
+estables. Estados de guardado discretos, respuesta HTML/JSON inválida falla con
+mensaje recuperable, backup y retry. Ningún dato comercial inferido ni publicación
+automática. No backend/checkout/pagos/pedidos/Auth/Rules ni datos reales tocados.
+PASS_LOCAL:64 Node;354 Chromium ampliados sin reintentos y13 de contexto final
+tras conservar nodos del panel (corridas solapadas), preflight oficial. Una prueba
+intermedia390px detectó273px de salto; el spec final verifica diez ciclos sin
+reinicio en seis anchos. El histórico variantMedia conserva sus fotos al quitar
+una asociación. CI del candidato pendiente; no heredar resultados anteriores.
+390px repetido3/3. La CI inicial69fe1e07 detectó una dependencia real no inyectada
+en el harness Node compatible; corregido sólo el harness. audit:admin-sync
+completo repetido PASS_LOCAL78/78 y sus auditorías; nuevo SHA necesita CI propia.
+HTTP401 JSON no autenticado en producción: no se reprodujo la causa externa del
+HTML de la titular; no se afirma arreglada esa infraestructura ni sesión real.
+Evidencia y reversión: docs/product-editor-refactor/UX-AGIL-AUTOGUARDADO.md.

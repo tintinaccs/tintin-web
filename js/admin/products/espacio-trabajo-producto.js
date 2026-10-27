@@ -24,7 +24,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   const acknowledge=node('button','Continuar sin las fotos pendientes');acknowledge.type='button';acknowledge.className='adm-btn adm-btn-outline';acknowledge.hidden=true;errors.append(acknowledge);
   const actual=source?.active===false && (!source.publicationStatus || source.publicationStatus==='active')?'inactive':source?.publicationStatus || (source?'active':'draft');
   card.dataset.productPublicState=actual;card.classList.add('tt-editor-workspace');document.documentElement.classList.add('tt-product-workspace-active');
-  const message=(text,error=false)=>{if(destroyed)return;status.textContent=text;status.dataset.error=String(error);retry.hidden=!error;};
+  const message=(text,error=false,state='idle')=>{if(destroyed)return;status.textContent=text;status.dataset.error=String(error);status.dataset.state=error?'error':state;retry.hidden=!error;};
   function label(){
     const selected=card.querySelector('#prod-publicationStatus')?.value;
     const save=card.querySelector('#prod-save-btn');if(!save)return;
@@ -34,7 +34,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   function backup(){try{sessionStorage.setItem(storageKey,JSON.stringify({snapshot:clone(),revision,baseExpected,time:Date.now()}));}catch{} }
   function clearBackup(){try{sessionStorage.removeItem(storageKey);}catch{}}
   function dirty(){return signature()!==lastSaved;}
-  function schedule(){if(destroyed || loading || applying)return;backup();message('Cambios pendientes · la versión pública no se modifica.');clearTimeout(timer);timer=setTimeout(()=>void save().catch(()=>{}),debounceMs);label();}
+  function schedule(){if(destroyed || loading || applying)return;label();if(!dirty() && !operation && !pending)return;backup();message('Cambios pendientes · la versión pública no se modifica.',false,'pending');clearTimeout(timer);timer=setTimeout(()=>void save().catch(()=>{}),debounceMs);}
   async function send(body){const response=await request(body);if(!response.ok || !response.result){const error=Object.assign(new Error(response.error || 'No se pudo guardar el progreso.'),{status:response.status});throw error;}return response.result;}
   let ready=(async()=>{
     try{
@@ -63,16 +63,16 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
         const snapshot=clone(),current=JSON.stringify(snapshot);backup();
         if(!pending && current===lastSaved && hasWork)break;
         if(!pending)pending={action:'saveProductWork',key,expectedRevision:revision,baseExpected,changeId:crypto.randomUUID(),snapshot,signature:current};
-        message('Guardando borrador…');
+        message('Guardando borrador…',false,'saving');
         const {signature:sent,...body}=pending;const result=await send(body);
         if(destroyed)return;revision=result.revision;conflict=result.conflict;lastSaved=sent;pending=null;retries=0;hasWork=true;
         if(signature()===sent)break;
       }
       if(mediaError)throw Object.assign(new Error('Texto guardado en servidor; quedan fotos pendientes: '+mediaError.message),{status:mediaError.status});
-      if(!dirty()){clearBackup();window.AdminUnsaved?.markClean('primary-editor');message(conflict?'Progreso guardado. La versión pública cambió; reabrí y conciliá antes de aplicar.':'Borrador guardado en servidor · '+new Date().toLocaleTimeString());window.dispatchEvent(new CustomEvent('tintin:product-work-saved'));}
+      if(!dirty()){clearBackup();window.AdminUnsaved?.markClean('primary-editor');message(conflict?'Progreso guardado. La versión pública cambió; reabrí y conciliá antes de aplicar.':'Borrador guardado en servidor · '+new Date().toLocaleTimeString(),false,'saved');window.dispatchEvent(new CustomEvent('tintin:product-work-saved'));}
       else {message('Hay cambios nuevos pendientes.');schedule();}
       return !dirty();
-    })().catch(error=>{message(error.message,true);backup();if(!destroyed && ![403,409,422].includes(error.status) && retries<3){timer=setTimeout(()=>void save().catch(()=>{}),[2000,5000,15000][retries++]);}throw error;}).finally(()=>{operation=null;});
+    })().catch(error=>{message(error.name==='TimeoutError' || error.name==='AbortError'?'El servidor tardó demasiado. No se confirmó el guardado; reintentá sin cerrar el editor.':error.message,true);backup();if(!destroyed && ![403,409,422].includes(error.status) && retries<3){timer=setTimeout(()=>void save().catch(()=>{}),[2000,5000,15000][retries++]);}throw error;}).finally(()=>{operation=null;});
     return operation;
   }
   let exitBusy=false;

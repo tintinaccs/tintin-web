@@ -1,6 +1,6 @@
-## 2026-10-26 — Primera bienvenida y confirmación de pedido
+## 2026-10-27 — Primera bienvenida fuera del checkout y confirmación de pedido
 
-Autoridades: tutorial-bienvenida y guardia de perfil; success/renderConfirmedOrder del checkout seguro; checkout.html y checkout-maintenance.css. Se difiere la primera guía únicamente durante checkout; el evento de success libera la guía pendiente sin consumirla al entrar. Otras páginas y Perfil reutilizan el mismo runtime. Ticket confirmado agrupado, fotos validadas con fallback, avisos compactos y enlace al pedido en Perfil; se conserva PNG/compartir/PDF. Sin cambios comerciales ni escrituras de prueba reales. Referencias transitivas renuevan URL desde consumidores/generador del shell y baseline de caché; CSP/rutas/diagnóstico/plan se regeneran. Evidencia actual en CURRENT_STATE y artefactos de pruebas.
+Autoridades: tutorial-bienvenida y guardia de perfil; renderConfirmedOrder del checkout seguro; checkout.html y checkout-maintenance.css. Checkout completo queda exento de la guía, incluida confirmación/restauración; conserva flags hasta visitar otra ruta. Otras páginas y Perfil usan el mismo runtime; el controlador libera carrito/cuenta antes de abrirlo. Ticket confirmado agrupado con fotos seguras, avisos compactos y enlace al pedido en Perfil; PNG/compartir/PDF se conservan. Recorridos reales resuelven la primera guía antes del banner de privacidad. Se preserva editor1256 y la paleta de marca. Referencias transitivas y derivados por autoridades existentes. Sin cambios de reglas/pagos/inventario ni escrituras comerciales de prueba reales.
 
 ## 2026-10-26 — Portada de WhatsApp con identidad Tintin
 

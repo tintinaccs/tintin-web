@@ -5,6 +5,20 @@ async function open(page,width=1366,height=768){await openProductSaveFixture(pag
 async function cancelSave(page){await page.locator('.tt-work-back').click();if(await page.locator('.tt-work-exit-dialog').isVisible())await page.getByRole('button',{name:'Guardar borrador y salir',exact:true}).click();}
 async function saveProgress(page){await page.evaluate(()=>window.qaProductController.workspace.save());await expect(page.locator('.tt-work-status')).toContainText('guardado en servidor');}
 async function reopen(page,key,productId=null){await page.evaluate(({key,productId})=>window.prodContinuarBorrador(key,productId),{key,productId});await page.evaluate(()=>window.qaProductController.workspace.ready);}
+test('respuesta HTML durante autoguardado conserva texto, muestra error recuperable y permite reintentar',async({page})=>{
+ await open(page,390,844);await page.evaluate(()=>window.qaHtmlResponse=true);
+ await page.locator('#prod-name').fill('Mi borrador recuperable');
+ await page.evaluate(()=>window.qaProductController.workspace.save().catch(()=>{}));
+ await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','error');
+ await expect(page.locator('.tt-work-status')).toContainText('El servidor no confirmó');
+ await expect(page.locator('.tt-work-status')).not.toContainText('DOCTYPE');
+ await expect(page.locator('#prod-name')).toHaveValue('Mi borrador recuperable');
+ expect(await page.evaluate(()=>Object.keys(sessionStorage).some(key=>key.startsWith('tt-product-work:')))).toBe(true);
+ await page.evaluate(()=>window.qaHtmlResponse=false);await page.getByRole('button',{name:'Reintentar',exact:true}).click();
+ await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','saved');
+ await expect(page.locator('.tt-work-status')).toContainText('guardado en servidor');
+ expect(await page.evaluate(()=>[...window.qaProductStore.keys()].some(key=>key.startsWith('products/')))).toBe(false);
+});
 test('crear incompleto, salir, recuperar, publicar, editar sin reemplazar público y recuperar cambios',async({page})=>{
  await open(page);await page.locator('#prod-name').fill('Borrador recuperable');
  await page.evaluate(()=>{document.getElementById('prod-imageUrl').value='https://img.test/cover.webp';document.getElementById('prod-imageUrl').dispatchEvent(new Event('change',{bubbles:true}));});
