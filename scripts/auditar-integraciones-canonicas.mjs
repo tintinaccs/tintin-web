@@ -105,7 +105,18 @@ const sheetsScheduler = read('.github/workflows/drenar-cola-sync-catalogo.yml');
 assert(!fs.existsSync(path.join(root, 'scripts/drenar-cola-sync-catalogo.mjs')), 'Sheets: no debe existir un drenador local alternativo con secretos estáticos.');
 assert(/id-token:\s*write/.test(sheetsScheduler) && /catalog-sheet-sync-drain/.test(sheetsScheduler), 'Sheets: el scheduler debe usar OIDC y el endpoint Cloudflare canónico.');
 assert(!/FIREBASE_SERVICE_ACCOUNT_(?:JSON|KEY)|SHEETS_ENGAGEMENT_SECRET/.test(sheetsScheduler), 'Sheets: el scheduler no debe transportar secretos estáticos.');
-assert(workflows.length <= 12, `GitHub Actions: hay ${workflows.length} workflows; el presupuesto de desfragmentación es 12.`);
+// Excepción acotada autorizada por el titular: el receptor de resultados tiene
+// un evento/permisos distintos del pipeline que observa. No amplía el cupo de
+// workflows comerciales ni permite otro pipeline de PR.
+const resultNotifier = 'notificar-resultados.yml';
+const operationalWorkflows = workflows.filter(name => name !== resultNotifier);
+assert(operationalWorkflows.length <= 12, `GitHub Actions: hay ${operationalWorkflows.length} workflows operativos; el presupuesto de desfragmentación es 12 más el receptor de resultados.`);
+if (workflows.includes(resultNotifier)) {
+  const notifier = read(`.github/workflows/${resultNotifier}`);
+  assert(/workflow_run:/.test(notifier) && /types: \[completed\]/.test(notifier), 'GitHub: el receptor debe observar resultados terminales.');
+  assert(/ref: \$\{\{ github.event.repository.default_branch \}\}/.test(notifier) && /persist-credentials: false/.test(notifier), 'GitHub: el receptor debe ejecutar sólo la rama confiable sin persistir credenciales.');
+  assert(!/contents:\s*write|actions:\s*write|id-token:\s*write/.test(notifier), 'GitHub: el receptor de avisos no puede escribir código, administrar Actions ni solicitar OIDC.');
+}
 assert(prWorkflows.length === 1 && prWorkflows[0] === 'auditar-tintin.yml', `GitHub Actions: solo auditar-tintin.yml debe dispararse en PR; encontrados: ${prWorkflows.join(', ') || 'ninguno'}.`);
 
 const workflowText = workflows.map(name => read(`.github/workflows/${name}`)).join('\n');

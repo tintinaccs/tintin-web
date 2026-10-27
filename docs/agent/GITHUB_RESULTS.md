@@ -11,6 +11,10 @@ cualquier otra conclusión, con enlace al run. Los PR cerrados emiten merged o
 closed_without_merge. Los runs sin PR se registran en un issue central. Los
 comentarios son deduplicados por run/intento y el workflow se excluye a sí mismo.
 No ejecuta código de PRs ni descarga artefactos con permisos de escritura.
+Este receptor tiene una excepción nominativa al presupuesto de workflows: los
+otros workflows operativos siguen limitados a 12 y se conserva un único
+pipeline de PR. El auditor comprueba su checkout de la rama confiable y prohíbe
+permisos de escritura de código, administración de Actions y OIDC.
 
 Para recibir avisos personales, suscribirse al PR y al issue de resultados y
 habilitar las notificaciones web/email deseadas en la cuenta GitHub. Esas
