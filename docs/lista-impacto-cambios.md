@@ -1,3 +1,7 @@
+## 2026-10-26 — Portada de WhatsApp con identidad Tintin
+
+Autoridades: assets/og-cover.jpg y metadatos estáticos de index.html/catalogo.html. Logo blanco plano sobre rosa claro de la referencia de la titular, nombre y descripción blancos, composición centrada. Se documenta la preferencia en docs/identidad-visual-tintin.md; no cambia la paleta global ni los logos de navegación. Inicio/Catálogo renuevan URL OG/Twitter y declaran formato, medidas y texto alternativo. Consumidores existentes de la portada reciben el mismo diseño; fichas con foto propia mantienen su metadata dinámica. CSP/diagnóstico/plan se regeneran por constructores. Sin datos comerciales ni reglas modificadas.
+
 ## 2026-10-26 — Producto completo junto a su galería
 
 Autoridades: interfaz-productos-adaptable, galeria-unificada, sugerencias-producto y CSS administrativo. Un solo bloque reúne los campos originales; selección múltiple aplica asociaciones por colores/atributos y notifica al workspace. Trece familias de categorías ofrecen propuestas explícitas sin inferir datos. Panel de datos estable fuera de la raíz destruible de galería. Mismos contratos V1/V2, IDs, stock/precios, privacidad y guardado; sin checkout/pagos/backend/Rules. Nuevos tests Node/Chromium en etapas existentes. Versionado y derivados por generadores. Evidencia: docs/product-editor-refactor/EDICION-CONTEXTUAL-PRODUCTO.md.
