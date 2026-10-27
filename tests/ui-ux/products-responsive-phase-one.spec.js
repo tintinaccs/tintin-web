@@ -397,8 +397,8 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
   await expect(page.locator('.tt-editor-stock-row').last()).toContainText('Agotado');
   await expect(page.locator('.tt-editor-stock-row').last().locator('img')).toHaveAttribute('src',/banda.webp/);
   const previewShell=page.locator('.tt-editor-preview-shell');
-  await expect(previewShell).toHaveJSProperty('open',width>=1100);
-  if(width<1100)await previewShell.locator('summary').click();
+  await expect(previewShell).toHaveJSProperty('open',false);
+  await previewShell.locator('summary').click();
   const preview=page.locator('#prod-live-preview');
   await expect(preview.locator('h2')).toHaveText('Anillo Amore');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('75.000');
@@ -454,8 +454,8 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  await expect(page.locator('#prod-images-extra')).toHaveValue('');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(1);
  expect(await page.evaluate(()=>window.__imageCleanup||0)).toBe(0);
- await page.locator('.tt-product-section-nav .tt-editor-preview-jump').click();
- await expect(page.locator('#prod-live-preview')).toBeFocused();
+ await page.locator('.tt-editor-preview-shell > summary').click();
+ await expect(page.locator('#prod-live-preview')).toBeVisible();
  await page.locator('#prod-live-preview').getByRole('button',{name:'Volver a editar'}).click();
  await expect(page.locator('#prod-editor-section')).toBeFocused();
  // Una selección pendiente del producto anterior nunca debe tocar el nuevo formulario.

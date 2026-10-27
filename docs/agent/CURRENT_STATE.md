@@ -1,6 +1,20 @@
 ## 2026-10-26 — Bienvenida diferida sólo en checkout y confirmación organizada
 
-Codex /root. Base95091da9 (#1253). La bienvenida canónica deja de limitarse a Inicio: se carga de forma diferida para cuentas activas pendientes desde el guardia público, y Perfil comparte el mismo runtime. En /checkout y /checkout.html no consume la aparición hasta success() del pedido; evento de confirmación y bandera existente recuperan también carga tardía/ticket restaurado. Fuera de checkout aparece normalmente, incluso tras abandonar la compra. Se mantienen transacción por cuenta, bloqueo de perfiles incompletos, permisos y configuración de Super Admin. La confirmación agrupa productos con fotos seguras/fallback, totales, entrega, cliente y pago; ticket/avisos/ayuda y enlace a Pedidos tienen estructura propia. PNG, compartir y PDF conservan datos confirmados. Sin pedidos/correos reales ni cambios de reglas/pagos/inventario. PASS_LOCAL final:205 Node de checkout/cuentas/perfil y36 Chromium sin reintentos (22 bienvenida,14 ticket), incluyendo cargador global, checkout directo, evento duplicado, logout, ticket restaurado, salida sin comprar, PNG/compartir/PDF y siete viewports320–1920. Auditor de checkout aprobado; capturas revisadas. Build/caché aprobados; preflight/CI/merge/producción PENDING. No heredar CI de1253. Fuente y límites de la portada previa no cambian.
+Codex /root. Base95091da9 (#1253). La bienvenida canónica deja de limitarse a Inicio: se carga de forma diferida para cuentas activas pendientes desde el guardia público, y Perfil comparte el mismo runtime. En /checkout y /checkout.html no consume la aparición hasta success() del pedido; evento de confirmación y bandera existente recuperan también carga tardía/ticket restaurado. Fuera de checkout aparece normalmente, incluso tras abandonar la compra. Se mantienen transacción por cuenta, bloqueo de perfiles incompletos, permisos y configuración de Super Admin. La confirmación agrupa productos con fotos seguras/fallback, totales, entrega, cliente y pago; ticket/avisos/ayuda y enlace a Pedidos tienen estructura propia. PNG, compartir y PDF conservan datos confirmados. Sin pedidos/correos reales ni cambios de reglas/pagos/inventario. PASS_LOCAL final:205 Node de checkout/cuentas/perfil y36 Chromium sin reintentos (22 bienvenida,14 ticket), incluyendo cargador global, checkout directo, evento duplicado, logout, ticket restaurado, salida sin comprar, PNG/compartir/PDF y siete viewports320–1920. Auditor de checkout aprobado; capturas revisadas. Build/caché aprobados; preflight39/39 PASS_LOCAL. Se concilia con fb0bede6 (#1254) preservando editor, tests y reparto CI; Conjunto conciliado:205/205 Node,36/36 Chromium y39/39 preflight PASS_LOCAL repetidos; build/caché aprobados. CI/merge/producción PENDING. No heredar CI de1253. Fuente y límites de la portada previa no cambian.
+
+## 2026-10-26 — Editor amplio y vista previa inferior, Codex /root GPT-6
+
+Base main95091da9, worktree /workspace/tintin-editor-responsive, rama
+codex/editor-espacio-responsive. Pedido: corregir el área reducida en todos los
+tamaños y dejar vista previa al final. Se mantiene #1252; no se incorpora la
+propuesta paralela #1249. Cambios en organizador/CSS canónicos: preview inferior
+plegada, sin salto superior, navegación estática, galería sin scroll anidado,
+65/35 escritorio y una columna tablet/móvil, campos16px y márgenes reducidos.
+IDs/escritores/modelos/checkout/Rules intactos. PASS_LOCAL inicial19 y24finales
+solapados; capturas laptop/móvil inspeccionadas. Cierre local197/197 Chromium
+sin reintentos, stage oficial preflight y build/CSP/rutas/caché/diagnóstico
+aprobados. CI/proveedores/hardware NOT_VERIFIED. Informe en
+docs/product-editor-refactor/ESPACIO-EDICION-RESPONSIVO.md.
 
 ## 2026-10-26 — Portada compartida de WhatsApp
 

@@ -1,5 +1,13 @@
 # Estado general del editor de productos
 
+## Ajuste actual de espacio en todas las pantallas
+
+Sobre main95091da9/#1252: vista previa únicamente al final, navegación sin
+superposición, galería con scroll del formulario, más ancho de edición y letra
+mínima16px. Ver `ESPACIO-EDICION-RESPONSIVO.md`. PASS_LOCAL:197/197 Chromium
+ampliados sin reintentos, preflight oficial y build/CSP/rutas/caché/diagnóstico.
+CI del candidato pendiente; no heredar CI anterior.
+
 ## Única versión vigente
 
 El editor de seis fases y sus correcciones es la única versión mantenida.

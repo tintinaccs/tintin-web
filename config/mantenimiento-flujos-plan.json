@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "95091da938af0bd05b4c2cf998aa447ef70473a6",
-  "reason": "Diferir la bienvenida exclusivamente durante checkout y organizar la confirmación con fotos, secciones, avisos y acciones conservando pedidos, pagos y permisos.",
+  "baseCommit": "fb0bede6461cc736ddfe34be1a286993d23f31b9",
+  "reason": "Diferir la bienvenida exclusivamente durante checkout y organizar la confirmación con fotos, secciones, avisos y acciones conservando pedidos, pagos y permisos; preservar editor1254.",
   "files": [
     {
       "path": "_headers",
@@ -25,8 +25,8 @@
     },
     {
       "path": "admin.html",
-      "oldHash": "591f3d301f4f6969156efe11ab66300204bfd05b7c393a018291870eb48cd00c",
-      "newHash": "d788585e77326c0674d15fcd861ccfa3b8bb8065de8708548eefb468988061f6"
+      "oldHash": "2c6347ba15db84c0b47eef863f4f1c656e7187f5957a8790b5487ff85ae3b8bf",
+      "newHash": "7dc3a5f79dd948bd42cb131e62e0cd3cabb11231fdaea08955301d5cf4c29a52"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -215,8 +215,8 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "f87449e647ca3d6a804f55c75be2c424fa20340a2e692d69d32bf0c4848343a9",
-      "newHash": "dd34343b690071aec6cee45ab58fcbf975192b22218035d615db0baf049be562"
+      "oldHash": "5241f00ff12c2d5f10e9a8010654266ab67b76e80282ba95ccd7e84350dd7726",
+      "newHash": "5b05a0286f79f818a2a7867d647b8d3e591735afb72ee781e8f361613783d2fe"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

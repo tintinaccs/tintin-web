@@ -144,13 +144,9 @@ export function enhanceProductEditor() {
         if (field) fields.append(field);
       }
     }
-    const previewShell=document.createElement('details');previewShell.className='tt-editor-preview-shell';previewShell.open=matchMedia('(min-width:1100px)').matches;
-    const previewSummary=document.createElement('summary');previewSummary.textContent='Vista previa';previewShell.append(previewSummary);sidebar.append(previewShell);
+    const previewShell=document.createElement('details');previewShell.className='tt-editor-preview-shell';
+    const previewSummary=document.createElement('summary');previewSummary.textContent='Vista previa';previewShell.append(previewSummary);body.append(previewShell);
     mountProductPreview(card,previewShell);
-    const previewButton = document.createElement('button'); previewButton.type='button';previewButton.className='adm-btn adm-btn-outline tt-editor-preview-jump';
-    previewButton.textContent='Ver vista previa';previewButton.setAttribute('aria-controls','prod-live-preview');
-    previewButton.addEventListener('click',()=>{const preview=card.querySelector('#prod-live-preview');const shell=preview.closest('details');if(shell)shell.open=true;preview.focus({preventScroll:true});preview.scrollIntoView({block:'start'});});
-    navigation.insertBefore(previewButton,navigation.querySelector('.tt-product-quick-actions'));
   }
   for (const [section,,ids] of sections) for (const id of ids) {
     // La galería se monta al abrir cada producto; se reubica sin recrear sus controles.
@@ -200,7 +196,8 @@ export function enhanceProductEditor() {
   const inventoryPanel=card.querySelector('#prod-variant-stock');
   const inventoryTarget=card.querySelector('[data-product-section="availability"] .tt-editor-section-fields');
   if(inventoryPanel && inventoryTarget && inventoryPanel.parentElement!==inventoryTarget)inventoryTarget.append(inventoryPanel);
-  const secondary=card.querySelector('.tt-work-secondary');if(secondary && body.lastElementChild!==secondary)body.append(secondary);
+  const preview=card.querySelector('.tt-editor-preview-shell');if(preview && body.lastElementChild!==preview)body.append(preview);
+  const secondary=card.querySelector('.tt-work-secondary');if(secondary && preview && secondary.nextElementSibling!==preview)body.insertBefore(secondary,preview);
   refreshEditorHeading(card);
   const error=card.querySelector('#prod-form-error');
   if (error) {
