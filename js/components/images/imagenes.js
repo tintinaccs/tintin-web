@@ -19,8 +19,8 @@ import {
 import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261017-domain-cutover-1';
 
-// La bienvenida sólo tiene destino en Inicio. Cargarla desde las fotos
-// institucionales también arrastraba sus módulos de sesión y configuración.
+// Este cargador conserva el arranque de Inicio. En las demás páginas, el
+// guardia de perfil carga la guía sólo si la cuenta tiene bienvenida pendiente.
 const imagePage = (window.location.pathname || '').toLowerCase();
 if (imagePage === '/' || imagePage.endsWith('/index.html') || imagePage === '') {
   Promise.all([
