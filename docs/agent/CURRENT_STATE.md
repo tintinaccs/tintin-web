@@ -1,3 +1,23 @@
+## 2026-10-27 — Fluidez transversal: público, cliente y Super Admin
+
+Codex /root. Alcance ampliado por la titular a toda la web, conservando los
+loaders de entrada: la cabecera pública y el botón de regreso al inicio agrupan
+el scroll con `requestAnimationFrame`; los pop-ups globales, el aviso de
+actualización y la selección masiva de Pedidos hacen lo mismo para evitar
+lecturas/escrituras de layout repetidas. El editor, galerías y separadores ya
+reciben la misma protección y las listas extensas usan contención visual fuera
+de pantalla. Se propagan URL inmutables de caché por shell público, checkout,
+cuenta, catálogo, ficha, legales y Super Admin, sin alterar datos, permisos ni
+la mecánica del loader. PASS_LOCAL: 47/47 Node de scroll, navegación, versiones
+y Pedidos; 103/103 Chromium de Pedidos (18 viewports/orientaciones), avisos y
+runtime visual. `audit:cache-versioning` correcto (379 recursos/67 cargas
+dinámicas), `audit:performance`, `audit:performance-regressions` y build
+canónico aprobados (quedan dos advertencias preexistentes de presupuesto: CSS
+de Inicio 471 KB y JS directo 272 KB). La prueba amplia del servidor estático
+local registró un duplicado
+preexistente del endpoint de colecciones y después perdió su proceso HTTP; no
+se atribuye a esta corrección ni se declara como validación completa.
+
 ## 2026-10-26 — Editor amplio y vista previa inferior, Codex /root GPT-6
 
 Base main95091da9, worktree /workspace/tintin-editor-responsive, rama

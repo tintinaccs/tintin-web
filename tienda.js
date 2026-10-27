@@ -594,7 +594,9 @@ function initHeaderScroll() {
   if (!headers.length) return;
   const hasFullBleedHomeHero = document.body?.classList.contains('tt-public-shell-home');
 
+  let frame = 0;
   function onScroll() {
+    frame = 0;
     if (!hasFullBleedHomeHero || window.scrollY > 80) {
       headers.forEach(header => header.classList.add('scrolled'));
     } else {
@@ -602,7 +604,8 @@ function initHeaderScroll() {
     }
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(onScroll); };
+  window.addEventListener('scroll', schedule, { passive: true });
   onScroll();
 }
 
@@ -2090,9 +2093,14 @@ function initBackToTop() {
   btn.setAttribute('aria-label', 'Volver al inicio');
   btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`;
   document.body.appendChild(btn);
-  window.addEventListener('scroll', () => {
+  let frame = 0;
+  const update = () => {
+    frame = 0;
     btn.classList.toggle('visible', window.scrollY > 320);
-  }, { passive: true });
+  };
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+  window.addEventListener('scroll', schedule, { passive: true });
+  update();
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
