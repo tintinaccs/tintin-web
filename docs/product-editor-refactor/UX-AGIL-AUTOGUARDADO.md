@@ -65,12 +65,12 @@ Preflight oficial aprobado. Regresión ampliada:354/354 Chromium (11,5min),
 sin reintentos. Después se reconcilia el panel simple en lugar de reconstruirlo;
 la comprobación específica final aprueba13/13 (54s), incluidos diez ciclos de
 asociación en seis anchos, persistencia y el caso histórico. Capturas de móvil y
-escritorio inspeccionadas. CI del candidato pendiente; no se hereda CI de#1254.
+escritorio inspeccionadas. CI del candidato APROBADA:#1256, run40436015944 SUCCESS.
 Repetición adicional de390px:3/3 sin reintentos, verificando también identidad
 de las casillas. CI inicial69fe1e07 detectó que el harness Node del controlador
 compatible no inyectaba readProductEditorResponse; se añade la función real al
 harness, sin sustituir el escritor ni relajar aserciones. audit:admin-sync completo
-repetido:78/78 Node más sus auditorías aprobados. CI del nuevo SHA pendiente.
+repetido:78/78 Node más sus auditorías aprobados. CI final APROBADA:#1256, run40436015944 SUCCESS.
 
 Una corrida intermedia de contexto simultánea con la batería amplia agotó60s
 en390px. Se canceló esa corrida y se limitaron notificaciones a cambios reales.
@@ -91,3 +91,6 @@ preview al final; ningún éxito ante HTML o error; relaciones/stock/IDs privado
 conservados. No promete generación automática de información comercial.
 Revertir mediante PR protegido al estado de#1254 y regenerar derivados; no hay
 migración de datos que deshacer. No aplicar la rama obsoleta#1249.
+
+Cierre remoto consultado el27/10/2026: [CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md).
+Las pruebas autenticadas se registran separadas de estos recorridos locales.

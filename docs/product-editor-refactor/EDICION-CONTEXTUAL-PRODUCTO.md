@@ -47,7 +47,7 @@ sesión autenticada siguen NO EJECUTADOS. No se hacen pagos ni pedidos reales.
 | Core comercial, editorial, workspace y13 categorías | APROBADA local58/58 | Node, cuatro archivos dirigidos; sin omisiones |
 | Editor único, ciclo editorial y nuevo bloque contextual | APROBADA local30/30 | product-editor-final, product-editor-single-version, product-photo-context; Chromium sin reintentos |
 | Bloque contextual final,11 casos incluyendo segundo atributo de color | APROBADA local11/11 | Repetición completa sin reintentos después del último ajuste |
-| Último CSS:320/390/600/768/1024/1440; selector móvil | APROBADA local8/8 | Repetición responsive-final,12capturas actuales |
+| Último CSS:320/390/600/768/1024/1440; selector móvil | APROBADA local8/8 | Repetición responsive-final,12capturas fechadas de #1252 |
 | Quitar asociación actualiza borrador por autoguardado y conserva público | APROBADA local1/1 | autosave-final, sin llamar manualmente a save |
 | Precio/stock por combinación, IDs estables y producto simple | APROBADA local | Incluidos en30/30; importes propios y total6 comprobados |
 | Reemplazo pendiente al asociar/quitar foto | APROBADA local | Incluido en30/30; no reaparece la foto eliminada |
@@ -82,15 +82,15 @@ npx playwright test tests/ui-ux/product-editor-final.spec.js --grep 'eventos sin
 npx playwright test tests/ui-ux/product-photo-context.spec.js tests/ui-ux/product-editor-single-version.spec.js tests/ui-ux/product-editor-final.spec.js --workers=2 --retries=0
 ```
 
-CI/merge/monitor: PENDING hasta obtener evidencia del candidato exacto. La entrega
-se completa mediante el flujo protegido autorizado, sin bypass. El recibo externo
-de la PR registra estos resultados después del merge para no certificar un SHA
-futuro dentro del mismo commit.
+CI/merge/monitor de #1252: APROBADOS. CI40421504536 del candidato dcea4556,
+merge33af11a5, CI de main40424020632 y producción40424022740:SUCCESS.
+Ver [cierre verificado](CIERRE-VERIFICADO-20261027.md) para SHA completos y
+continuaciones hasta #1262. La aceptación autenticada no se da por ejecutada.
 
 Conciliación de entrega: main0c3e4b9 (#1250/#1251) incorporado sin alterar sus
 workflows ni preparación APT. Fuentes del editor idénticas a43cf6bf. Repetidos
 build,39/39 preflight y plan protegido contra la nueva base: PASS_LOCAL.
-CI/merge/monitor del candidato combinado pendientes de confirmación externa.
+La confirmación remota del candidato combinado está completada en los recibos citados.
 
 Ajuste final comprobado RED/GREEN: Color y Color de correa coexistentes. Sólo
 el primer atributo de color usa selección múltiple; los demás conservan el

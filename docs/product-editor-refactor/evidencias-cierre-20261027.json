@@ -1,0 +1,887 @@
+{
+  "verifiedOn": "2026-10-27",
+  "verifiedBy": "Codex /root",
+  "source": "GitHub pull request and Actions APIs",
+  "runtimeBase": "65ee34250b20738591ec65cc097ee4e8bd452486",
+  "pullRequests": [
+    {
+      "checks": [
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385863831/job/121794453684",
+          "name": "VALIDACIÓN RÁPIDA — PREFLIGHT",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385858428/job/121793812555",
+          "name": "Analyze (actions)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385858428/job/121793812600",
+          "name": "Analyze (javascript-typescript)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385858428/job/121793812252",
+          "name": "Analyze (python)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385863831/job/121794456129",
+          "name": "Protected flows",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385863831/job/121794832360",
+          "name": "B — Comercio crítico",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385863831/job/121796550533",
+          "name": "C — Administración",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385863831/job/121796550587",
+          "name": "D — Calidad técnica",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385863831/job/121796550577",
+          "name": "D — Interfaz, SEO y rendimiento",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385863831/job/121796550930",
+          "name": "B — Reglas e identidad aisladas",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40385863831/job/121806609254",
+          "name": "Repository audit",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://dash.cloudflare.com/?to=/0e1d28b71c7e733022e86fd50790aa1f/pages/view/tintinaccesorios/93c4709e-43cf-410d-a71a-bda2f2abcf70",
+          "name": "Cloudflare Pages: tintinaccesorios",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121794128257",
+          "name": "CodeQL",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121806992861",
+          "name": "Protected flow integrity",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121806990369",
+          "name": "Protected flow maintenance",
+          "status": "COMPLETED"
+        }
+      ],
+      "headRefOid": "72a738987e08a7c942dfcc58936c15f2b72ed856",
+      "mergeCommit": {
+        "oid": "899a6851100b9560e6e3520e71ea3100babaa9fb"
+      },
+      "mergedAt": "2026-10-26T19:46:07Z",
+      "number": 1248,
+      "state": "MERGED",
+      "url": "https://github.com/tintinaccs/tintin-web/pull/1248"
+    },
+    {
+      "checks": [
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421504536/job/121916803031",
+          "name": "VALIDACIÓN RÁPIDA — PREFLIGHT",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421499981/job/121916792260",
+          "name": "Analyze (actions)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421499981/job/121916792183",
+          "name": "Analyze (javascript-typescript)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421499981/job/121916791854",
+          "name": "Analyze (python)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421504536/job/121916804832",
+          "name": "Protected flows",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421504536/job/121917220234",
+          "name": "B — Comercio crítico",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421504536/job/121918487437",
+          "name": "C — Administración",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421504536/job/121918487350",
+          "name": "D — Calidad técnica",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421504536/job/121918487410",
+          "name": "D — Interfaz, SEO y rendimiento",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421504536/job/121918487381",
+          "name": "B — Reglas e identidad aisladas",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40421504536/job/121924859748",
+          "name": "Repository audit",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://dash.cloudflare.com/?to=/0e1d28b71c7e733022e86fd50790aa1f/pages/view/tintinaccesorios/f35d8115-c247-4610-8bfd-9fd547220aa3",
+          "name": "Cloudflare Pages: tintinaccesorios",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121917014905",
+          "name": "CodeQL",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121925127135",
+          "name": "Protected flow integrity",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121925124749",
+          "name": "Protected flow maintenance",
+          "status": "COMPLETED"
+        }
+      ],
+      "headRefOid": "dcea45568c025ea1981c5c1267622801b947f82a",
+      "mergeCommit": {
+        "oid": "33af11a56a432d2f2d65878b5284d2265582e4de"
+      },
+      "mergedAt": "2026-10-27T00:04:36Z",
+      "number": 1252,
+      "state": "MERGED",
+      "url": "https://github.com/tintinaccs/tintin-web/pull/1252"
+    },
+    {
+      "checks": [
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430346855/job/121946211274",
+          "name": "VALIDACIÓN RÁPIDA — PREFLIGHT",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430343822/job/121946205872",
+          "name": "Analyze (actions)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430343822/job/121946205655",
+          "name": "Analyze (javascript-typescript)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430343822/job/121946205895",
+          "name": "Analyze (python)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430346855/job/121946213096",
+          "name": "Protected flows",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430346855/job/121946572544",
+          "name": "B — Comercio crítico",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430346855/job/121947718969",
+          "name": "C — Administración",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430346855/job/121947718997",
+          "name": "D — Calidad técnica",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430346855/job/121947719158",
+          "name": "D — Interfaz, SEO y rendimiento",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430346855/job/121947719144",
+          "name": "B — Reglas e identidad aisladas",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40430346855/job/121953456616",
+          "name": "Repository audit",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://dash.cloudflare.com/?to=/0e1d28b71c7e733022e86fd50790aa1f/pages/view/tintinaccesorios/3cd13b79-9fa5-41df-beb3-2e47161af501",
+          "name": "Cloudflare Pages: tintinaccesorios",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121946370748",
+          "name": "CodeQL",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121953652692",
+          "name": "Protected flow integrity",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121953650733",
+          "name": "Protected flow maintenance",
+          "status": "COMPLETED"
+        }
+      ],
+      "headRefOid": "e735cdb6e5a0c30a43b238cfab7c3b95e42941e5",
+      "mergeCommit": {
+        "oid": "fb0bede6461cc736ddfe34be1a286993d23f31b9"
+      },
+      "mergedAt": "2026-10-27T01:26:55Z",
+      "number": 1254,
+      "state": "MERGED",
+      "url": "https://github.com/tintinaccs/tintin-web/pull/1254"
+    },
+    {
+      "checks": [
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436015944/job/121964983061",
+          "name": "VALIDACIÓN RÁPIDA — PREFLIGHT",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436012472/job/121964733877",
+          "name": "Analyze (actions)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436012472/job/121964734164",
+          "name": "Analyze (javascript-typescript)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436012472/job/121964734086",
+          "name": "Analyze (python)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436015944/job/121964984560",
+          "name": "Protected flows",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436015944/job/121965304029",
+          "name": "B — Comercio crítico",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436015944/job/121966402474",
+          "name": "C — Administración",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436015944/job/121966402317",
+          "name": "D — Calidad técnica",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436015944/job/121966402340",
+          "name": "D — Interfaz, SEO y rendimiento",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436015944/job/121966402299",
+          "name": "B — Reglas e identidad aisladas",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40436015944/job/121972054287",
+          "name": "Repository audit",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://dash.cloudflare.com/?to=/0e1d28b71c7e733022e86fd50790aa1f/pages/view/tintinaccesorios/29985754-850b-4983-8c41-2cb87a22a56b",
+          "name": "Cloudflare Pages: tintinaccesorios",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121964923025",
+          "name": "CodeQL",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121972249891",
+          "name": "Protected flow integrity",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/121972244960",
+          "name": "Protected flow maintenance",
+          "status": "COMPLETED"
+        }
+      ],
+      "headRefOid": "00c0f610cd87ef1b364e6752bb66545b6976e39f",
+      "mergeCommit": {
+        "oid": "51e5e7376a355902a1eafdba78a3ffbb74ef58c6"
+      },
+      "mergedAt": "2026-10-27T02:25:21Z",
+      "number": 1256,
+      "state": "MERGED",
+      "url": "https://github.com/tintinaccs/tintin-web/pull/1256"
+    },
+    {
+      "checks": [
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500845002/job/122178114042",
+          "name": "VALIDACIÓN RÁPIDA — PREFLIGHT",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500839008/job/122177829581",
+          "name": "Analyze (actions)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500839008/job/122177829646",
+          "name": "Analyze (javascript-typescript)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500839008/job/122177829297",
+          "name": "Analyze (python)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500845002/job/122178115332",
+          "name": "Protected flows",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500845002/job/122178538232",
+          "name": "B — Comercio crítico",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500845002/job/122179887926",
+          "name": "C — Administración",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500845002/job/122179887867",
+          "name": "D — Calidad técnica",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500845002/job/122179887956",
+          "name": "D — Interfaz, SEO y rendimiento",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500845002/job/122179887779",
+          "name": "B — Reglas e identidad aisladas",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40500845002/job/122187304859",
+          "name": "Repository audit",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://dash.cloudflare.com/?to=/0e1d28b71c7e733022e86fd50790aa1f/pages/view/tintinaccesorios/be4becaa-877c-4411-b26f-16a86758697b",
+          "name": "Cloudflare Pages: tintinaccesorios",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122178104742",
+          "name": "CodeQL",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122187608205",
+          "name": "Protected flow integrity",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122187605947",
+          "name": "Protected flow maintenance",
+          "status": "COMPLETED"
+        }
+      ],
+      "headRefOid": "5426fdbb67cd74dcf593af40ac00f79e5d0a2db6",
+      "mergeCommit": {
+        "oid": "34edd77b7b779b45e1dc627e3b73d0a2f4c94001"
+      },
+      "mergedAt": "2026-10-27T12:26:21Z",
+      "number": 1257,
+      "state": "MERGED",
+      "url": "https://github.com/tintinaccs/tintin-web/pull/1257"
+    },
+    {
+      "checks": [
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497073535/job/122165107661",
+          "name": "VALIDACIÓN RÁPIDA — PREFLIGHT",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497067699/job/122165093311",
+          "name": "Analyze (actions)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497067699/job/122165094021",
+          "name": "Analyze (javascript-typescript)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497067699/job/122165093759",
+          "name": "Analyze (python)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497073535/job/122165109476",
+          "name": "Protected flows",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497073535/job/122165404629",
+          "name": "B — Comercio crítico",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497073535/job/122166921755",
+          "name": "C — Administración",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497073535/job/122166921907",
+          "name": "D — Calidad técnica",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497073535/job/122166921822",
+          "name": "D — Interfaz, SEO y rendimiento",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497073535/job/122166921905",
+          "name": "B — Reglas e identidad aisladas",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40497073535/job/122174231454",
+          "name": "Repository audit",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://dash.cloudflare.com/?to=/0e1d28b71c7e733022e86fd50790aa1f/pages/view/tintinaccesorios/29ae4280-59d6-45f8-a176-4400647e4208",
+          "name": "Cloudflare Pages: tintinaccesorios",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122165279900",
+          "name": "CodeQL",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122174524173",
+          "name": "Protected flow integrity",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122174521244",
+          "name": "Protected flow maintenance",
+          "status": "COMPLETED"
+        }
+      ],
+      "headRefOid": "f736ac6456a9240cc92f5526dd07576ad5a80edb",
+      "mergeCommit": {
+        "oid": "0b415d76d60a9ad49112467df15bb34b8b5534c1"
+      },
+      "mergedAt": "2026-10-27T11:56:18Z",
+      "number": 1258,
+      "state": "MERGED",
+      "url": "https://github.com/tintinaccs/tintin-web/pull/1258"
+    },
+    {
+      "checks": [
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506921403/job/122198946333",
+          "name": "VALIDACIÓN RÁPIDA — PREFLIGHT",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506915282/job/122198453778",
+          "name": "Analyze (actions)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506915282/job/122198453985",
+          "name": "Analyze (javascript-typescript)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506915282/job/122198453347",
+          "name": "Analyze (python)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506921403/job/122198947704",
+          "name": "Protected flows",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506921403/job/122199630768",
+          "name": "B — Comercio crítico",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506921403/job/122201308626",
+          "name": "C — Administración",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506921403/job/122201308584",
+          "name": "D — Calidad técnica",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506921403/job/122201308723",
+          "name": "D — Interfaz, SEO y rendimiento",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506921403/job/122201308600",
+          "name": "B — Reglas e identidad aisladas",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40506921403/job/122209817878",
+          "name": "Repository audit",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://dash.cloudflare.com/?to=/0e1d28b71c7e733022e86fd50790aa1f/pages/view/tintinaccesorios/097d229f-bbbf-4013-84a3-962ac8098db9",
+          "name": "Cloudflare Pages: tintinaccesorios",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122198704174",
+          "name": "CodeQL",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122210146736",
+          "name": "Protected flow integrity",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122210144339",
+          "name": "Protected flow maintenance",
+          "status": "COMPLETED"
+        }
+      ],
+      "headRefOid": "7cdde40bddb41e9b2086247ca99406b2448e6a57",
+      "mergeCommit": {
+        "oid": "c105f61a0f518b25d3f33f0ae01e592e7a753d08"
+      },
+      "mergedAt": "2026-10-27T13:14:41Z",
+      "number": 1260,
+      "state": "MERGED",
+      "url": "https://github.com/tintinaccs/tintin-web/pull/1260"
+    },
+    {
+      "checks": [
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556025563/job/122373066179",
+          "name": "VALIDACIÓN RÁPIDA — PREFLIGHT",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556018730/job/122372179112",
+          "name": "Analyze (actions)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556018730/job/122372178561",
+          "name": "Analyze (javascript-typescript)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556018730/job/122372179236",
+          "name": "Analyze (python)",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556025563/job/122373068759",
+          "name": "Protected flows",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556025563/job/122373656602",
+          "name": "B — Comercio crítico",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556025563/job/122376346730",
+          "name": "C — Administración",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556025563/job/122376346745",
+          "name": "D — Calidad técnica",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556025563/job/122376346960",
+          "name": "D — Interfaz, SEO y rendimiento",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556025563/job/122376346981",
+          "name": "B — Reglas e identidad aisladas",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/actions/runs/40556025563/job/122386689268",
+          "name": "Repository audit",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://dash.cloudflare.com/?to=/0e1d28b71c7e733022e86fd50790aa1f/pages/view/tintinaccesorios/6db4d297-bc56-41a9-8ef6-4baefc9c6ebc",
+          "name": "Cloudflare Pages: tintinaccesorios",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122372575842",
+          "name": "CodeQL",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122387171586",
+          "name": "Protected flow integrity",
+          "status": "COMPLETED"
+        },
+        {
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/tintinaccs/tintin-web/runs/122387168791",
+          "name": "Protected flow maintenance",
+          "status": "COMPLETED"
+        }
+      ],
+      "headRefOid": "ce277ed05f59eb961c07a317ca6725818718f6e5",
+      "mergeCommit": {
+        "oid": "65ee34250b20738591ec65cc097ee4e8bd452486"
+      },
+      "mergedAt": "2026-10-27T18:28:35Z",
+      "number": 1262,
+      "state": "MERGED",
+      "url": "https://github.com/tintinaccs/tintin-web/pull/1262"
+    }
+  ],
+  "runs": [
+    {
+      "conclusion": "success",
+      "head_sha": "899a6851100b9560e6e3520e71ea3100babaa9fb",
+      "html_url": "https://github.com/tintinaccs/tintin-web/actions/runs/40389685713",
+      "id": 40389685713,
+      "name": "Operación — salud de producción",
+      "run_attempt": 1,
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "33af11a56a432d2f2d65878b5284d2265582e4de",
+      "html_url": "https://github.com/tintinaccs/tintin-web/actions/runs/40424020632",
+      "id": 40424020632,
+      "name": "CI Tintin — contrato único",
+      "run_attempt": 1,
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "33af11a56a432d2f2d65878b5284d2265582e4de",
+      "html_url": "https://github.com/tintinaccs/tintin-web/actions/runs/40424022740",
+      "id": 40424022740,
+      "name": "Operación — salud de producción",
+      "run_attempt": 1,
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "65ee34250b20738591ec65cc097ee4e8bd452486",
+      "html_url": "https://github.com/tintinaccs/tintin-web/actions/runs/40560324289",
+      "id": 40560324289,
+      "name": "CI Tintin — contrato único",
+      "run_attempt": 1,
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "65ee34250b20738591ec65cc097ee4e8bd452486",
+      "html_url": "https://github.com/tintinaccs/tintin-web/actions/runs/40560326995",
+      "id": 40560326995,
+      "name": "Operación — salud de producción",
+      "run_attempt": 1,
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "65ee34250b20738591ec65cc097ee4e8bd452486",
+      "html_url": "https://github.com/tintinaccs/tintin-web/actions/runs/40568998469",
+      "id": 40568998469,
+      "name": "Operación — sincronización catálogo a Sheets",
+      "run_attempt": 1,
+      "status": "completed"
+    }
+  ],
+  "authenticatedAcceptance": {
+    "status": "BLOCKED",
+    "reason": "No Browser extension/js callable; TinyFish profile Tintin Super Admin exists but signed_in_sites is empty. User confirmation/login requested.",
+    "testProductCreated": false,
+    "cloudinaryUploadExecuted": false,
+    "sheetsProductRowVerified": false
+  }
+}

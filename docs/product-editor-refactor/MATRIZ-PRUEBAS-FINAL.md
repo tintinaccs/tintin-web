@@ -1,11 +1,11 @@
 # Matriz de pruebas final
 
-Actualización26/10/2026: la edición contextual completa continúa la única versión
-de seis fases sobre main899a685. El recibo vigente, sus pruebas y límites están
-en [EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md).
-La titular autorizó expresamente completar el merge protegido. Los resultados
-y restricciones de publicación del cuerpo siguiente son evidencia histórica de
-su ejecución anterior; no sustituyen la validación del candidato actual.
+Actualización verificada el 27/10/2026: CI, merge protegido y publicación ya
+aprobados. La versión de aplicación consultada es `65ee34250b20738591ec65cc097ee4e8bd452486`
+(PR #1262), que conserva la única versión de seis fases y sus continuaciones.
+Recibos por SHA y separación entre publicación y aceptación autenticada:
+[CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md). Los resultados anteriores que siguen abajo son evidencia
+fechada de su ejecución, no nuevas aprobaciones del código actual.
 
 Todos los PASS siguientes son locales/sintéticos o emulados, según la columna de evidencia.
 La inspección estática no se contabiliza como una prueba aprobada.
@@ -43,11 +43,11 @@ La inspección estática no se contabiliza como una prueba aprobada.
 | Calidad | Pageerror en recorridos instrumentados | APROBADA local | ciclo editorial, editor comercial y responsive con captura de pageerror |
 | Rendimiento | Comparación de eventos/DOM antes/después | APROBADA local, limitada | RENDIMIENTO.md;500→0 reemplazos; medianas descriptivas62→39ms |
 | Entrega | Build, referencias, caché y preflight | APROBADA local | build; preflight39; plan protegido; verificaciones finales |
-| Externo | Auth/Cloudinary/Sheets reales en staging | NO EJECUTADA | EXT-01; no staging/identidad de prueba configurados |
+| Externo | Sesión administrativa, carga real y fila de QA en Sheets | BLOQUEADA / NO EJECUTADA | EXT-01; perfil sin sesión de Tintin confirmada, todavía sin producto ni imagen de QA |
 | Dispositivos | Safari/iOS físico, teclado virtual, lector, safe areas no nulas | NO EJECUTADA | DEV-01; el navegador emulado no sustituye hardware |
 | Zoom | Zoom nativo en navegador/dispositivo real | NO EJECUTADA | DEV-01; reflujo equivalente registrado por separado |
 | Rendimiento | Perfil sintético histórico1/2/5/10/20 fotos | NO EJECUTADA | Excluido expresamente de la tanda amplia; no se presenta como aprobado. Comparación nueva en RENDIMIENTO.md. |
-| Publicación | CI del candidato, merge y deploy | NO EJECUTADA | REL-01; expresamente no autorizados |
+| Publicación | CI, merge y publicación de #1252 y continuación #1262 | APROBADA remota | REL-01 cerrada; CI/monitor por SHA en CIERRE-VERIFICADO-20261027.md |
 
 ## Ejecuciones y resolución de fallos
 

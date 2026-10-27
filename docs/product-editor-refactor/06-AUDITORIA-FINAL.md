@@ -1,11 +1,11 @@
 # Fase 6 — Integración y auditoría final
 
-Actualización26/10/2026: la edición contextual completa continúa la única versión
-de seis fases sobre main899a685. El recibo vigente, sus pruebas y límites están
-en [EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md).
-La titular autorizó expresamente completar el merge protegido. Los resultados
-y restricciones de publicación del cuerpo siguiente son evidencia histórica de
-su ejecución anterior; no sustituyen la validación del candidato actual.
+Actualización verificada el 27/10/2026: CI, merge protegido y publicación ya
+aprobados. La versión de aplicación consultada es `65ee34250b20738591ec65cc097ee4e8bd452486`
+(PR #1262), que conserva la única versión de seis fases y sus continuaciones.
+Recibos por SHA y separación entre publicación y aceptación autenticada:
+[CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md). Los resultados anteriores que siguen abajo son evidencia
+fechada de su ejecución, no nuevas aprobaciones del código actual.
 
 26/10/2026 · Codex /root · base `5dc6f781a81e0ae0dd07d84b0c742ec3d567e133`.
 Rama local `codex/editor-fase6-integracion-20261026`. Sin merge ni deploy.
@@ -74,8 +74,9 @@ Conteos exactos, intentos fallidos/resoluciones y pruebas individuales están en
 MATRIZ-PRUEBAS-FINAL.md y evidencias/. Versiones, caché, manifiestos y plan se
 regeneran desde sus autoridades; no se relajan gates, Rules ni permisos.
 
-La aceptación local no aprueba producción. Faltan CI del candidato, sesión y
-proveedores de staging, dispositivos/lector/safe areas reales. Las restricciones
+La aceptación local por sí sola no aprueba producción. La CI y la publicación
+ya están confirmadas en los recibos de cierre; faltan sesión/proveedores del
+producto de QA y dispositivos/lector/safe areas reales. Las restricciones
 y el siguiente paso de cada pendiente están en INCIDENCIAS-PENDIENTES.md. No se
 afirma que el proyecto esté completamente terminado ni que #1228 se haya
 fusionado: su delta de pagos sigue separado.
