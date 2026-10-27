@@ -66,3 +66,11 @@ Resultados y recibo de esta unificación: `UNIFICACION-SEIS-FASES.md`.
 
 Avances generales del proyecto y pendientes externos:
 [Seguimiento conciliado](../agent/SEGUIMIENTO_PENDIENTES_20261026.md).
+
+## Continuación responsive del 27/10/2026
+
+Sobre#1256, tablet utiliza dos columnas desde720px; móvil conserva una columna.
+El estado de guardado y Reintentar tienen una sola región en la cabecera.
+Es la misma versión del editor: [TABLET-Y-AVISO-GUARDADO.md](TABLET-Y-AVISO-GUARDADO.md).
+El informe ESPACIO-EDICION-RESPONSIVO registra el ajuste anterior de#1254; su
+columna única en tablet queda sustituida por esta corrección, sin recuperar#1249.

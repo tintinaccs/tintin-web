@@ -1,3 +1,30 @@
+## 2026-10-27 — Tablet y aviso único de guardado, Codex /root
+
+Rama codex/editor-tablet-guardado-20261027. Parte de51e5e737 (#1256) y concilia
+main1467835415f7cf4ecc432b809bc118acb0b6197e (#1255) conservando Checkout,
+bienvenida e imports compartidos. El mismo error se escribía en cabecera y
+cuerpo; además, blur del nombre ocultaba Reintentar antes del clic. Workspace
+centraliza el fallo, mantiene el aviso ante eventos sin cambios y conserva el
+respaldo privado. Una edición nueva vuelve a programar guardado. Galería/datos
+en dos columnas desde720px; cabecera con un aviso/reintento y acciones compactas.
+
+PASS_LOCAL del candidato conciliado:144/144 Chromium de las seis suites del
+editor sin reintentos;33 tamaños entre320×568 y3840×2160, rotación, área reducida,
+reflujo200%, fotos, asociaciones, opciones, stock, borradores y guardado real
+sobre datos ficticios. WebKit12/12 de errores/reintento/rotación sin reintentos;
+matriz33 WebKit aprobada en la corrida anterior, cuyo fallo de interacción se
+reprodujo y corrigió con la nueva regresión. Node29/29, admin-sync78/78 y etapa
+oficial preflight39/39 aprobados después de conciliar main. Build Pages,
+versionado, plan y diagnóstico por autoridades canónicas. CI/merge/producción
+se registran por SHA en el PR y artifacts/editor-tablet-20261027/recibo.json;
+un PASS local no certifica esos resultados externos.
+
+NOT_VERIFIED: POST de guardado del producto real de la foto y hardware físico.
+La titular pide sesión fuera de TinyFish; se proporciona admin.html directo y
+se solicita abrirlo en Codex, pero el control de su navegador no está expuesto.
+No se modifican productos reales ni se relaja la confirmación del servidor.
+Informe: docs/product-editor-refactor/TABLET-Y-AVISO-GUARDADO.md.
+
 ## 2026-10-27 — Bienvenida al salir del checkout y confirmación organizada
 
 Codex /root. Alcance vigente confirmado por la titular: ninguna bienvenida en /checkout ni /checkout.html, tampoco en Pedido confirmado, ticket restaurado o pago pendiente. No se descarga desde el guardia ni consume sus flags; aparece al salir hacia otra página pública/Perfil. Se elimina el disparo de success y se conserva transacción por cuenta/configuración. En otras páginas, el controlador de superficies libera carrito/cuenta antes de la guía, sin vaciar productos. Confirmación organizada en secciones con fotos seguras/fallback, totales, entrega, cliente, pago y ticket; enlaces a Pedidos, PNG/compartir/PDF conservados. Se integra main51e5e737/#1256 preservando editor y tests.
