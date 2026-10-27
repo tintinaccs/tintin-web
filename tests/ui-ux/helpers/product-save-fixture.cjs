@@ -63,9 +63,10 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
     const apply = (ref, data) => { rows.set(ref.path, { ...rows.get(ref.path), ...structuredClone(data) }); window.qaProductWrites.push(ref.path); };
     const galleryModule=await load('/js/admin/products/galeria-unificada.js');
     const workspaceModule=workflow?await load('/js/admin/products/espacio-trabajo-producto.js'):{};
+    const responseModule=await load('/js/admin/products/respuesta-editor-producto.mjs');
     const uploadModule=await load('/js/components/images/carga-imagenes.js?v=tintin-20261025-gallery-unified-1');
     const deps = {
-      ...workspaceModule,...galleryModule,...uploadModule,openMediaLibraryPicker:async()=>window.qaLibraryPhoto || null,
+      ...responseModule,...workspaceModule,...galleryModule,...uploadModule,openMediaLibraryPicker:async()=>window.qaLibraryPhoto || null,
       ...inventory, ...commercial, ...commercialUi, ...editorialUi, ...editorial, ...master,
       _allProducts: [], _productSourceById: new Map(), _productInventoryById: new Map(), adminRealtimeReady: { orders: false }, _allCollections: [{ slug: 'qa-tablet', name: 'Colección ficticia' }],
       productEditBaseline: null, productCommercialBaseline: null, _formImageWidgets: new Map(),
@@ -90,6 +91,7 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
         return result;
       },
       authenticatedFetch: async (_url, options) => {
+        if(window.qaHtmlResponse)return new Response('<!DOCTYPE html><title>Unavailable</title>',{status:503,headers:{'content-type':'text/html'}});
         if (window.qaRejectSave) return { ok: false, json: async () => ({ ok: false, error: 'Almacenamiento ficticio sin conexión' }) };
         if(window.qaHoldWork && JSON.parse(options.body).action==='saveProductWork')await new Promise(resolve=>window.qaReleaseWork=resolve);
         if(window.qaHoldCommit && JSON.parse(options.body).action==='saveProduct')await new Promise(resolve=>window.qaReleaseCommit=resolve);

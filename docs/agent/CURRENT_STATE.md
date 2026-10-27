@@ -4138,3 +4138,19 @@ obsoleta para recuperar funcionalidad ya conciliada. Las pruebas locales y sus
 límites están en el informe final. CI se comprueba sobre la nueva cabeza; no se
 atribuye anticipadamente PASS_CI ni producción. Estado definitivo: PR y entrega
 del chat. Después del merge se verifican main y los PR de Dependabot indicados.
+# 2026-10-26 — UX ágil del editor, base #1254
+
+Agente Codex, rama codex/editor-ux-agil sobre fb0bede6. Un solo clic de color
+aplica/quita asociaciones en borrador cuando es el único atributo; combinaciones
+siguen explícitas. Imágenes conservan nodos al cambiar asociaciones, foco y scroll
+estables. Estados de guardado discretos, respuesta HTML/JSON inválida falla con
+mensaje recuperable, backup y retry. Ningún dato comercial inferido ni publicación
+automática. No backend/checkout/pagos/pedidos/Auth/Rules ni datos reales tocados.
+PASS_LOCAL:64 Node;354 Chromium ampliados sin reintentos y13 de contexto final
+tras conservar nodos del panel (corridas solapadas), preflight oficial. Una prueba
+intermedia390px detectó273px de salto; el spec final verifica diez ciclos sin
+reinicio en seis anchos. El histórico variantMedia conserva sus fotos al quitar
+una asociación. CI del candidato pendiente; no heredar resultados anteriores.
+HTTP401 JSON no autenticado en producción: no se reprodujo la causa externa del
+HTML de la titular; no se afirma arreglada esa infraestructura ni sesión real.
+Evidencia y reversión: docs/product-editor-refactor/UX-AGIL-AUTOGUARDADO.md.

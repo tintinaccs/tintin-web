@@ -1784,8 +1784,13 @@ html.tt-product-workspace-active body:has(.adm-main) :is(.adm-sidebar,.adm-topba
 html.tt-product-workspace-active #prod-form-card.tt-editor-workspace {inset:0 !important;width:100% !important;max-width:none !important;height:100dvh !important;margin:0 !important;border-radius:0 !important;z-index:400;}
 #prod-form-card.tt-editor-workspace .adm-card-head {flex-wrap:wrap;gap:12px;}
 #prod-form-card.tt-editor-workspace .tt-work-back {order:-2;min-height:44px;flex:0 0 auto;}
-#prod-form-card.tt-editor-workspace .tt-work-status {flex:1 1 100%;margin:0;font-size:13px;color:var(--text-muted,#666);}
+#prod-form-card.tt-editor-workspace .tt-work-status {flex:1 1 100%;min-width:0;margin:0;padding:4px 0;font-size:13px;line-height:1.5;color:var(--text-muted,#666);background:transparent;overflow-wrap:anywhere;}
+#prod-form-card.tt-editor-workspace .tt-work-status::before {content:'';display:inline-block;width:8px;height:8px;margin-right:8px;border-radius:50%;background:#737373;}
+#prod-form-card.tt-editor-workspace .tt-work-status[data-state=saving]::before {background:#9a6c16;}
+#prod-form-card.tt-editor-workspace .tt-work-status[data-state=saved]::before {background:#28704b;}
 #prod-form-card.tt-editor-workspace .tt-work-status[data-error=true] {color:#9c234c;}
+#prod-form-card.tt-editor-workspace .tt-work-status[data-error=true]::before {background:currentColor;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-workspace .tt-work-status {background:transparent !important;}
 #prod-form-card.tt-editor-workspace .tt-work-exit-error {padding:16px;border:1px solid #e5b4c5;border-radius:12px;background:#fff5f8;grid-column:1/-1;}
 #prod-form-card.tt-editor-workspace .tt-work-exit-error button {min-height:44px;margin:4px;white-space:normal;}
 #prod-form-card.tt-editor-workspace #prod-editor-actions {flex-wrap:wrap;width:100%;}
@@ -1841,10 +1846,16 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-
 #prod-form-card.tt-editor-composer .tt-photo-context:empty {display:none;}
 #prod-form-card.tt-editor-composer .tt-photo-context {padding:14px;border:1px solid var(--editor-line);border-radius:12px;background:var(--tt-commerce-surface);}
 #prod-form-card.tt-editor-composer .tt-photo-context h4 {margin:0 0 8px;}
-#prod-form-card.tt-editor-composer .tt-photo-context p {font-size:12px;line-height:1.6;}
+#prod-form-card.tt-editor-composer .tt-photo-context p {font-size:13px;line-height:1.6;margin-block:8px 12px;}
 #prod-form-card.tt-editor-composer .tt-photo-context > button {min-height:44px;max-width:100%;margin:4px 4px 4px 0;white-space:normal;}
 #prod-form-card.tt-editor-composer .tt-photo-color-choices {display:flex;flex-wrap:wrap;gap:8px;border:0;padding:8px 0;min-width:0;}
 #prod-form-card.tt-editor-composer .tt-photo-color-choices label,#prod-form-card.tt-editor-composer .tt-photo-pick {display:flex;align-items:center;gap:8px;min-height:44px;padding:6px;font-size:12px;cursor:pointer;}
+#prod-form-card.tt-editor-composer .tt-photo-color-choices label {padding:8px 12px;border:1px solid var(--editor-line);border-radius:12px;font-size:14px;max-width:100%;overflow-wrap:anywhere;}
+#prod-form-card.tt-editor-composer .tt-photo-color-choices label:has(input:checked) {background:#fff1f6;border-color:#a14b70;color:#51263b;}
+#prod-form-card.tt-editor-composer .tt-photo-color-choices label:has(input:focus-visible) {outline:2px solid #713c53;outline-offset:3px;}
+#prod-form-card.tt-editor-composer .tt-photo-context > label {display:grid;gap:6px;margin-block:10px;min-width:0;}
+#prod-form-card.tt-editor-composer .tt-photo-context select {width:100%;min-width:0;max-width:100%;min-height:44px;border:1px solid var(--editor-line);border-radius:10px;background:var(--tt-commerce-surface);padding:8px;}
+#prod-form-card.tt-editor-composer .tt-unified-photos > [role=status]:empty {display:none;}
 #prod-form-card.tt-editor-composer .tt-unified-photos input[type=checkbox] {width:20px;height:20px;min-height:20px;flex:0 0 20px;accent-color:var(--tt-commerce-brand);}
 #prod-form-card.tt-editor-composer .tt-unified-photo[data-selected=true] {border:2px solid #713C53;box-shadow:0 0 0 2px var(--tt-commerce-brand);}
 #prod-form-card.tt-editor-composer .tt-unified-photo > img {cursor:pointer;}

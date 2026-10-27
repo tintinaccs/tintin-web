@@ -1,5 +1,16 @@
 # Estado general del editor de productos
 
+## UX ágil sobre la versión publicada #1254
+
+Base fb0bede6. Asociación por color con un clic cuando no hay combinaciones,
+galería sin reconstrucción de medios por asociación, controles táctiles y estado
+de guardado real. Respuestas HTML/JSON inválidas son errores recuperables, no
+confirmaciones. Vista previa permanece al final. Ver `UX-AGIL-AUTOGUARDADO.md`
+para evidencia propia, alcance y límites; no heredar PASS de entregas anteriores.
+PASS_LOCAL:64 Node,354 Chromium ampliados y13 específicos tras conservar el
+panel de colores (corridas solapadas); preflight oficial. CI del candidato
+pendiente. La causa externa del HTML productivo sigue sin reproducirse.
+
 ## Ajuste actual de espacio en todas las pantallas
 
 Sobre main95091da9/#1252: vista previa únicamente al final, navegación sin
