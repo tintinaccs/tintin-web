@@ -15,11 +15,10 @@ import {
   window.TintinWelcomeRuntimeBooted = true;
   window.TintinWelcomeTutorialInitBooted = true;
 
-  function isHome(){
-    const p = (location.pathname || '').replace(/\/+/g,'/').toLowerCase();
-    return p.endsWith('/') || p.endsWith('/index.html') || p === '';
-  }
-  if (!isHome()) return;
+  const pageName = (location.pathname || '').split('/').pop().replace(/\.html$/i, '').toLowerCase();
+  // Checkout completo, incluida la confirmación, queda libre de la guía.
+  // La cuenta conserva su bienvenida pendiente hasta visitar otra página.
+  if (pageName === 'checkout' || pageName === 'login' || pageName.startsWith('admin')) return;
   const releaseWelcomeGate = () => document.documentElement.classList.remove('tt-welcome-pending');
 
   function previewMode(){
@@ -238,7 +237,7 @@ import {
   // paso 1 — se veía como si "se cerrara solo" sin que nadie lo tocara.
   let handledUid = null;
   let generation = 0;
-  subscribeAuthState(async user => {
+  async function handleWelcome(user) {
     if (user?.uid === handledUid) { releaseWelcomeGate(); return; }
     handledUid = user?.uid || null;
     const currentGeneration = ++generation;
@@ -253,6 +252,7 @@ import {
       const role = await bounded(() => getUserRole(user.uid, user.email));
       if (!previewRequested && role !== 'client') { releaseWelcomeGate(); return; }
       const [data, config] = await Promise.all([readUser(user.uid), readConfig()]);
+      if (currentGeneration !== generation) return;
       const preview = previewRequested && config.previewEnabled;
       if (previewRequested && !preview) {
         clearPreviewMode();
@@ -280,6 +280,13 @@ import {
       }
       await waitReady();
       if (currentGeneration !== generation) return;
+      // El carrito/cuenta pueden seguir abiertos al volver del primer login.
+      // Su controlador libera foco, inert y scroll antes de abrir la guía.
+      const surfaces = window.TintinSurfaceController;
+      if (surfaces?.surface && surfaces.surface !== 'none') {
+        await bounded(() => surfaces.close('welcome', { restoreFocus: false }));
+      }
+      if (currentGeneration !== generation) return;
       if (!preview && !await claimWelcome(user, 'shown')) return;
       if (currentGeneration !== generation) return;
       show(user, config, preview);
@@ -287,5 +294,6 @@ import {
       console.warn('[welcome-runtime] Tutorial omitido:', e);
       releaseWelcomeGate();
     }
-  });
+  }
+  subscribeAuthState(user => { void handleWelcome(user); });
 })();

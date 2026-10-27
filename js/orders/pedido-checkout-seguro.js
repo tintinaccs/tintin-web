@@ -1,3 +1,4 @@
+import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { inspectCheckoutAvailability, showCheckoutAvailabilityDialog } from '../pages/checkout/disponibilidad-checkout.js?v=tintin-20261023-variant-engine-v2-2';
 import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
@@ -920,19 +921,44 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (!Array.isArray(result.items)) return;
     const target = document.getElementById('ck-confirm-summary');
     if (!target) return;
-    const rows = [
+    const row = ([label, value]) => `<div class="ck-summary-row"><span>${escapeHtml(label)}</span><span class="ck-summary-val">${escapeHtml(value)}</span></div>`;
+    const section = (title, rows) => {
+      const visible = rows.filter(([, value]) => value);
+      return visible.length ? `<section class="ck-receipt-section" aria-label="${escapeHtml(title)}"><h3 class="ck-receipt-heading">${escapeHtml(title)}</h3>${visible.map(row).join('')}</section>` : '';
+    };
+    const method = result.shipping?.method || result.shippingMethod;
+    const delivery = [
+      ['Envío', SHIPPING_LABELS[method] || method],
+      ['Modalidad', ENCOMIENDA_LABELS[result.shipping?.encomiendaMode || result.encomiendaMode]],
+      ['Ciudad', result.shipping?.city || result.shippingCity],
+      ['Departamento', result.shipping?.departamento || result.departamento],
+      ['Dirección', result.shipping?.address || result.address],
+      ['Referencia', result.shipping?.referencia],
+    ];
+    const customer = [
       ['Cliente', result.userName], ['Teléfono', result.userPhone], ['Correo del ticket', result.userEmail],
-      ['Ciudad', result.shipping?.city || result.shippingCity], ['Envío', SHIPPING_LABELS[result.shipping?.method || result.shippingMethod] || result.shippingMethod],
-      ['Dirección', result.shipping?.address || result.address], ['Referencia', result.shipping?.referencia],
-      ['Pago', PAYMENT_LABELS[result.payment?.method || result.paymentMethod] || result.paymentMethod],
-      ...(result.inventoryPolicy === 'reserve-on-checkout' && result.inventoryState === 'reserved' ? [['Reserva', 'Productos apartados para este pedido']] : []),
-      ['CI', result.ci], ['Notas', result.notes],
+      ['CI', result.ci],
       ...(result.invoice?.wanted ? [['Razón social', result.invoice.razonSocial], ['RUC', result.invoice.ruc]] : []),
     ];
-    target.innerHTML = `<div class="ck-summary-items">${result.items.map(item => `<div class="ck-summary-item"><span class="ck-summary-item-name">${escapeHtml(item.qty)}x ${escapeHtml(item.name)}${item.variant ? ` — ${escapeHtml(item.variant)}` : ''}</span><span>${escapeHtml(formatPrice(item.price * item.qty))}</span></div>`).join('')}</div>`
-      + [['Subtotal', formatPrice(result.subtotal)], ['Costo de envío', result.shippingMethod === 'encomienda' ? 'Se paga a la transportadora al recibir' : result.shippingPending ? 'A confirmar' : formatPrice(result.shippingCost || 0)], ['TOTAL', formatPrice(result.total) + (result.shippingPending ? ' + envío a confirmar' : '')]].map(([label, value]) => `<div class="ck-summary-total"><span>${escapeHtml(label)}</span><span class="ck-summary-total-val">${escapeHtml(value)}</span></div>`).join('')
-      + rows.filter(([, value]) => value).map(([label, value]) => `<div class="ck-summary-row"><span>${escapeHtml(label)}</span><span class="ck-summary-val">${escapeHtml(value)}</span></div>`).join('')
-      + (result.shippingMethod === 'retiro' ? '<p class="ck-summary-shipping-note">La ubicación exacta y el horario de retiro se coordinan por WhatsApp.</p>' : result.shippingMethod === 'encomienda' ? '<p class="ck-summary-shipping-note">El envío se paga a la transportadora al recibir y no está incluido en el total.</p>' : '');
+    const payment = [
+      ['Pago', PAYMENT_LABELS[result.payment?.method || result.paymentMethod] || result.paymentMethod],
+      ...(result.inventoryPolicy === 'reserve-on-checkout' && result.inventoryState === 'reserved' ? [['Reserva', 'Productos apartados para este pedido']] : []),
+      ['Notas', result.notes],
+    ];
+    const shippingNote = method === 'retiro' ? 'La ubicación exacta y el horario de retiro se coordinan por WhatsApp.' : method === 'encomienda' ? 'El envío se paga a la transportadora al recibir y no está incluido en el total.' : '';
+    target.innerHTML = `<section class="ck-receipt-section" aria-label="Productos"><h3 class="ck-receipt-heading">Tus productos</h3><div class="ck-summary-items">${result.items.map(item => {
+      const image = sanitizeImageUrl(item.imageUrl || item.imgUrl || '');
+      const fallback = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="m12 3 9 5v8l-9 5-9-5V8Zm0 9 9-4M3 8l9 4v9"/></svg>';
+      return `<div class="ck-summary-item"><span class="ck-summary-item-name"><span class="ck-receipt-photo" aria-hidden="true">${image ? `<img src="${escapeHtml(image)}" alt="" width="64" height="64" loading="eager">` : ''}${fallback}</span><span>${escapeHtml(item.qty)}x ${escapeHtml(item.name)}${item.variant ? ` — ${escapeHtml(item.variant)}` : ''}</span></span><span>${escapeHtml(formatPrice(item.price * item.qty))}</span></div>`;
+    }).join('')}</div></section>`
+      + `<section class="ck-receipt-section ck-receipt-totals" aria-label="Totales"><h3 class="ck-receipt-heading">Resumen del importe</h3>`
+      + [['Subtotal', formatPrice(result.subtotal)], ['Costo de envío', method === 'encomienda' ? 'Se paga a la transportadora al recibir' : result.shippingPending ? 'A confirmar' : formatPrice(result.shippingCost || 0)], ['TOTAL', formatPrice(result.total) + (result.shippingPending ? ' + envío a confirmar' : '')]].map(([label, value]) => `<div class="ck-summary-total"><span>${escapeHtml(label)}</span><span class="ck-summary-total-val">${escapeHtml(value)}</span></div>`).join('')
+      + (shippingNote ? `<p class="ck-summary-shipping-note">${escapeHtml(shippingNote)}</p>` : '') + '</section>'
+      + `<div class="ck-receipt-details">${section('Entrega', delivery)}${section('Tus datos', customer)}</div>`
+      + section('Pago y observaciones', payment);
+    target.querySelectorAll?.('.ck-receipt-photo img').forEach(image => {
+      image.addEventListener('error', () => { image.hidden = true; }, { once: true });
+    });
   }
 
   function beginPaypalPayment(result, draft) {
@@ -1077,7 +1103,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const prepare = () => {
       [save, share].forEach(button => { if (button) button.disabled = true; });
       notify('Preparando la imagen de tu ticket…');
-      receiptImage(result).then(file => { image = file; notify('Tu ticket está listo como imagen.'); })
+      receiptImage(result).then(file => { image = file; notify(''); })
         .catch(() => notify('No pudimos generar la imagen. Reintentá con Guardar ticket o usá Imprimir / PDF.'))
         .finally(() => [save, share].forEach(button => { if (button) button.disabled = false; }));
     };
@@ -1151,12 +1177,17 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       number.style.display = 'block';
       number.textContent = `N° de pedido: ${result.shortId}`;
     }
+    const ordersLink = document.getElementById('ck-view-orders');
+    if (ordersLink && /^[A-Za-z0-9_-]+$/.test(text(result.orderId))) {
+      ordersLink.href = `/perfil#pedido-${encodeURIComponent(result.orderId)}`;
+    }
     const whatsapp = document.getElementById('ck-wa-support');
     if (whatsapp) {
       const phone = text(result.storeWhatsapp || DEFAULT_STORE_WHATSAPP).replace(/\D/g, '');
       whatsapp.href = `https://wa.me/${phone}?text=${encodeURIComponent(buildWhatsAppMessage(result, draft))}`;
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelector('#ck-success-head .ck-confirm-title')?.focus({ preventScroll: true });
   }
 
   window.addEventListener('popstate', () => {

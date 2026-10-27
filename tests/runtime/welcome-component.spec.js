@@ -4,11 +4,12 @@ const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const source=fs.readFileSync('js/components/welcome/tutorial-bienvenida.js','utf8').replace(/^import[\s\S]*?from\s+['"][^'"]+['"];\s*/gm,'');
 const configSource=fs.readFileSync('js/components/welcome/configuracion-bienvenida.js','utf8').replace(/^import .*;\n/,'').replace(/^export /gm,'');
-async function mount(page,profile,{ready=true,failWrite=false,preview=false,settings={}}={}){
+async function mount(page,profile,{ready=true,failWrite=false,preview=false,settings={},path="/index.html",completed=false,cartOpen=false}={}){
   await page.route('https://welcome.test/**',r=>r.fulfill({contentType:'text/html',body:'<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><header class="tt-header">Tintin</header><main>Inicio</main><nav id="tt-tabbar">Menú</nav></body></html>'}));
-  await page.goto('https://welcome.test/index.html?welcome=1'+(preview?'&welcomePreview=1':''));
-  await page.evaluate(({profile,ready,failWrite,preview,settings})=>{
+  await page.goto('https://welcome.test'+path+'?welcome=1'+(preview?'&welcomePreview=1':''));
+  await page.evaluate(({profile,ready,failWrite,preview,settings,completed})=>{
     window.fixture={profile,writes:0,settings};
+    window.TintinCheckoutOrderCompleted=completed;
     window.auth={};window.db={};window.appCheckReady=Promise.resolve(ready);
     window.doc=(_db,...parts)=>parts.join('/');
     window.getDoc=async ref=>({exists:()=>true,data:()=>ref==='settings/welcomeTutorial'?{enabled:true,previewEnabled:true,...window.fixture.settings}:window.fixture.profile});
@@ -19,7 +20,17 @@ async function mount(page,profile,{ready=true,failWrite=false,preview=false,sett
     window.serverTimestamp=()=> 'confirmed-test-timestamp';
     window.SUPER_ADMIN='owner@example.test';window.getUserRole=async()=>profile.role||'client';
     window.subscribeAuthState=callback=>{window.authCallback=callback;callback({uid:'customer',email:preview?window.SUPER_ADMIN:'customer@example.test'});};
-  },{profile,ready,failWrite,preview,settings});
+  },{profile,ready,failWrite,preview,settings,completed});
+  if(cartOpen){
+    await page.addScriptTag({content:fs.readFileSync('js/components/navigation/compartido/control-paneles.js','utf8')});
+    await page.evaluate(async()=>{
+      window.fixtureCart=[{id:'local-product',qty:2}];
+      const cart=document.createElement('aside');cart.id='fixture-cart';cart.innerHTML='<button>Revisar carrito</button>';document.body.append(cart);
+      const controller=window.TintinSurfaceController;
+      controller.register('cart',{element:cart,modal:true});
+      await controller.open('cart');
+    });
+  }
   await page.addScriptTag({content:"const sanitizeImageUrl=value=>String(value||'');\n"+configSource});
   await page.addScriptTag({content:source});
 }
@@ -167,4 +178,50 @@ test('superficies reales conservan lectura y acciones en móvil pequeño y horiz
     await page.locator('#tt-welcome-next').click();
     await expect(page.getByRole('dialog')).toHaveCount(0);
   }
+});
+
+for(const path of ['/catalogo','/product','/perfil','/carrito']) test(`primera bienvenida pendiente en ${path}`,async({page})=>{
+  await mount(page,{...fresh},{path});
+  await expect(page.getByRole('dialog')).toBeVisible();
+  expect(await page.evaluate(()=>fixture.writes)).toBe(1);
+});
+test('checkout directo y pedido confirmado conservan pendiente la bienvenida sin mostrarla',async({page})=>{
+  await mount(page,{...fresh},{path:'/checkout'});
+  await page.waitForTimeout(250);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect(await page.evaluate(()=>fixture.writes)).toBe(0);
+  await page.evaluate(()=>{window.TintinCheckoutOrderCompleted=true;window.dispatchEvent(new CustomEvent('tintin:checkout:completed'));});
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect(await page.evaluate(()=>fixture.profile.welcomeTutorialPending)).toBe(true);
+});
+test('ticket restaurado y módulo tardío tampoco muestran la guía dentro del checkout',async({page})=>{
+  await mount(page,{...fresh},{path:'/checkout.html',completed:true});
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect(await page.evaluate(()=>fixture.writes)).toBe(0);
+  const profile=await page.evaluate(()=>fixture.profile);
+  await mount(page,profile,{path:'/perfil'});
+  await expect(page.getByRole('dialog')).toBeVisible();
+});
+test('checkout no toca la cuenta ni cierra el carrito modal',async({page})=>{
+  await mount(page,{...fresh},{path:'/checkout',completed:true,cartOpen:true});
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect(await page.evaluate(()=>fixture.writes)).toBe(0);
+  expect(await page.evaluate(()=>TintinSurfaceController.surface)).toBe('cart');
+});
+test('salir del checkout sin comprar mantiene la bienvenida para la siguiente página',async({page})=>{
+  await mount(page,{...fresh},{path:'/checkout'});
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  const profile=await page.evaluate(()=>fixture.profile);
+  await mount(page,profile,{path:'/catalogo'});
+  await expect(page.getByRole('dialog')).toBeVisible();
+});
+
+test('carrito modal abierto libera su foco antes de la bienvenida sin vaciar productos',async({page})=>{
+  await mount(page,{...fresh},{cartOpen:true});
+  await expect(page.getByRole('dialog')).toBeVisible();
+  expect(await page.evaluate(()=>window.TintinSurfaceController.surface)).toBe('none');
+  expect(await page.evaluate(()=>window.fixtureCart)).toEqual([{id:'local-product',qty:2}]);
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect(await page.evaluate(()=>document.body.style.position)).toBe('');
 });

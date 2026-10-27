@@ -1,22 +1,8 @@
-## 2026-10-27 — Fluidez transversal: público, cliente y Super Admin
+## 2026-10-27 — Bienvenida al salir del checkout y confirmación organizada
 
-Codex /root. Alcance ampliado por la titular a toda la web, conservando los
-loaders de entrada: la cabecera pública y el botón de regreso al inicio agrupan
-el scroll con `requestAnimationFrame`; los pop-ups globales, el aviso de
-actualización y la selección masiva de Pedidos hacen lo mismo para evitar
-lecturas/escrituras de layout repetidas. El editor, galerías y separadores ya
-reciben la misma protección y las listas extensas usan contención visual fuera
-de pantalla. Se propagan URL inmutables de caché por shell público, checkout,
-cuenta, catálogo, ficha, legales y Super Admin, sin alterar datos, permisos ni
-la mecánica del loader. PASS_LOCAL: 47/47 Node de scroll, navegación, versiones
-y Pedidos; 103/103 Chromium de Pedidos (18 viewports/orientaciones), avisos y
-runtime visual. `audit:cache-versioning` correcto (379 recursos/67 cargas
-dinámicas), `audit:performance`, `audit:performance-regressions` y build
-canónico aprobados (quedan dos advertencias preexistentes de presupuesto: CSS
-de Inicio 471 KB y JS directo 272 KB). La prueba amplia del servidor estático
-local registró un duplicado
-preexistente del endpoint de colecciones y después perdió su proceso HTTP; no
-se atribuye a esta corrección ni se declara como validación completa.
+Codex /root. Alcance vigente confirmado por la titular: ninguna bienvenida en /checkout ni /checkout.html, tampoco en Pedido confirmado, ticket restaurado o pago pendiente. No se descarga desde el guardia ni consume sus flags; aparece al salir hacia otra página pública/Perfil. Se elimina el disparo de success y se conserva transacción por cuenta/configuración. En otras páginas, el controlador de superficies libera carrito/cuenta antes de la guía, sin vaciar productos. Confirmación organizada en secciones con fotos seguras/fallback, totales, entrega, cliente, pago y ticket; enlaces a Pedidos, PNG/compartir/PDF conservados. Se integra main51e5e737/#1256 preservando editor y tests.
+
+Evidencia previa del mismo trabajo:205 Node,37 Chromium y39 preflight;16 pruebas de disponibilidad tras cargar la utilidad de fotos en su fixture; CI40435606414 aprobó comercio, interfaz, Rules y administración. Calidad detectó seis recorridos que intentaban usar cookies mientras la bienvenida estaba abierta (ocultamiento deliberado ya existente). Los dos recorridos de compra/perfil ahora comprueban la primera guía, su marca persistida y cierre antes de seguir;4/4 Chromium escritorio/móvil con Auth/Firestore reales aislados aprobaron. WebKit local no dispone de bibliotecas del host y queda a cargo de CI. PASS_LOCAL vigente tras la aclaración y conciliación con1256:206/206 Node,37/37 Chromium,39/39 preflight y4/4 recorridos reales aislados de compra/perfil en Chromium escritorio/móvil, sin reintentos. Build/caché aprobados. CI final/merge/producción PENDING. No se crean pedidos ni correos reales. PR1255.
 
 ## 2026-10-26 — Editor amplio y vista previa inferior, Codex /root GPT-6
 
@@ -4177,24 +4163,16 @@ completo repetido PASS_LOCAL78/78 y sus auditorías; nuevo SHA necesita CI propi
 HTTP401 JSON no autenticado en producción: no se reprodujo la causa externa del
 HTML de la titular; no se afirma arreglada esa infraestructura ni sesión real.
 Evidencia y reversión: docs/product-editor-refactor/UX-AGIL-AUTOGUARDADO.md.
-## 2026-10-27 — Fluidez de Super Admin, editor y galerías
+## 2026-10-27 — Fluidez transversal: público, cliente y Super Admin
 
-Codex /root. Pedido: eliminar trabas de carga y desplazamiento, manteniendo los
-loaders de entrada. Se confirmó trabajo redundante durante eventos de viewport:
-el editor de Productos medía/escribía la geometría completa por cada señal de
-`visualViewport`, incluso al desplazarse. Esas actualizaciones, la galería y el
-iframe del constructor ahora se agrupan como máximo una vez por frame; los
-separadores del constructor también aplican una sola geometría por frame. Las
-filas de combinaciones y fotos fuera de pantalla usan `content-visibility` con
-tamaño intrínseco para reducir pintura durante recorridos largos. No cambian
-CRUD, datos, permisos, loaders, inventario ni checkout.
-
-PASS_LOCAL: 47/47 Node dirigidos (incluye contratos comerciales, constructor y
-la nueva regresión de scheduling), auditorías de rendimiento/regresiones y
-cache-versioning, más build Pages completo. Chromium local del sistema:
-46/46 en el editor/comercial/preview, de móvil 320×568 a escritorio 3840×2160;
-la matriz incluye vertical y horizontal. Se regeneran CSP, rutas, diagnóstico,
-site-version y URLs inmutables desde sus autoridades. `audit:performance`
-mantiene sus dos advertencias informativas existentes sobre presupuesto sin
-comprimir de Inicio (471 KB CSS y 272 KB JS); no hay fallos críticos. CI y
-producción NOT_VERIFIED.
+Codex /root. Alcance ampliado por la titular a toda la web, conservando los
+loaders de entrada: cabecera pública, regreso al inicio, pop-ups globales,
+aviso de actualización y selección masiva de Pedidos agrupan el trabajo de
+scroll/viewport con `requestAnimationFrame`; el editor, las galerías y los
+separadores aplican el mismo límite y las listas extensas evitan trabajo fuera
+de pantalla. Las URLs inmutables se propagaron por shell, checkout, cuenta,
+catálogo, ficha, legales y Super Admin, sin tocar datos, permisos ni loaders.
+PASS_LOCAL: 47/47 Node de scroll, navegación, versiones y Pedidos; 103/103
+Chromium de Pedidos (18 viewports/orientaciones), avisos y runtime visual.
+`audit:performance`, `audit:performance-regressions`, caché y build canónico
+aprobados; persisten sólo dos advertencias preexistentes de peso de Inicio.

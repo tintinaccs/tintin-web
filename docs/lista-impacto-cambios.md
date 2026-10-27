@@ -1,3 +1,7 @@
+## 2026-10-27 — Primera bienvenida fuera del checkout y confirmación de pedido
+
+Autoridades: tutorial-bienvenida y guardia de perfil; renderConfirmedOrder del checkout seguro; checkout.html y checkout-maintenance.css. Checkout completo queda exento de la guía, incluida confirmación/restauración; conserva flags hasta visitar otra ruta. Otras páginas y Perfil usan el mismo runtime; el controlador libera carrito/cuenta antes de abrirlo. Ticket confirmado agrupado con fotos seguras, avisos compactos y enlace al pedido en Perfil; PNG/compartir/PDF se conservan. Recorridos reales resuelven la primera guía antes del banner de privacidad. Se preserva editor1256 y la paleta de marca. Referencias transitivas y derivados por autoridades existentes. Sin cambios de reglas/pagos/inventario ni escrituras comerciales de prueba reales.
+
 ## 2026-10-26 — Portada de WhatsApp con identidad Tintin
 
 Autoridades: assets/og-cover.jpg y metadatos estáticos de index.html/catalogo.html. Logo blanco plano sobre rosa claro de la referencia de la titular, nombre y descripción blancos, composición centrada. Se documenta la preferencia en docs/identidad-visual-tintin.md; no cambia la paleta global ni los logos de navegación. Inicio/Catálogo renuevan URL OG/Twitter y declaran formato, medidas y texto alternativo. Consumidores existentes de la portada reciben el mismo diseño; fichas con foto propia mantienen su metadata dinámica. CSP/diagnóstico/plan se regeneran por constructores. Sin datos comerciales ni reglas modificadas.

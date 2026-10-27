@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="da2490d6745a375c77d60ea65670823d98eb0f659d06bdc81ac0c049e5bdf66b">
+  <meta name="tintin-page-revision" content="94bfc33bd508247e1cd2c84ddf08aa69e741ccc012bca60af860c3b9b6c9537d">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261022-avatar-inicial-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261027-global-performance-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261027-global-performance-2"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261024-foco-paneles-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261027-global-performance-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261027-global-performance-2" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261021-iconos-rosa-1">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261021-iconos-rosa-1">
@@ -24,7 +24,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261027-global-performance-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261027-global-performance-2">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
   <link rel="canonical" href="https://tintinaccs.com/checkout.html" />
@@ -67,7 +67,7 @@
   <link id="tt-navigation-notification-surface-css" rel="stylesheet" href="css/components/navigation/compartido/superficie-notificaciones.css?v=tintin-20260918-header-system-solid-surfaces-1">
   <link id="tt-navigation-search-css" rel="stylesheet" href="css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1">
   <link id="tt-navigation-coherence-css" rel="stylesheet" href="css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4">
-  <link data-tt-checkout-maintenance="1" rel="stylesheet" href="css/pages/checkout/checkout-maintenance.css?v=tintin-20261026-checkout-readable-1">
+  <link data-tt-checkout-maintenance="1" rel="stylesheet" href="css/pages/checkout/checkout-maintenance.css?v=tintin-20261027-welcome-receipt-1">
   <link id="tt-payment-methods-style" rel="stylesheet" href="css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-palette-20261014-1">
 </head>
 <body>
@@ -392,7 +392,7 @@
     <!-- Success header (shown after confirming) -->
     <div id="ck-success-head" class="ck-confirm-check" style="display:none">
       <div class="ck-confirm-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div class="ck-confirm-title">¡Pedido confirmado!</div>
+      <h2 class="ck-confirm-title" tabindex="-1">¡Pedido confirmado!</h2>
       <div class="ck-confirm-sub">Tu pedido quedó registrado. Te confirmaremos disponibilidad, pago y entrega por WhatsApp dentro del próximo horario hábil.</div>
     </div>
     <div class="ck-panel-body">
@@ -413,17 +413,21 @@
 
       <!-- Post-confirmación: soporte WA y volver al inicio (oculto hasta confirmar) -->
       <div id="ck-post-confirm" class="ck-post-confirm" style="display:none">
+        <section class="ck-receipt-section ck-ticket-tools" aria-labelledby="ck-ticket-heading">
+        <h2 id="ck-ticket-heading" class="ck-receipt-heading">Tu ticket</h2>
+        <p class="ck-ticket-intro">Guardá una copia o compartila cuando la necesites.</p>
         <div class="ck-receipt-actions" aria-label="Opciones de tu ticket">
-          <button type="button" id="ck-save-receipt" class="ck-receipt-action">↓ Guardar ticket</button>
-          <button type="button" id="ck-share-receipt" class="ck-receipt-action" aria-describedby="ck-share-receipt-help">↗ Compartir ticket</button>
-          <button type="button" id="ck-print-receipt" class="ck-receipt-action">Imprimir / PDF</button>
+          <button type="button" id="ck-save-receipt" class="ck-receipt-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Guardar ticket</button>
+          <button type="button" id="ck-share-receipt" class="ck-receipt-action" aria-describedby="ck-share-receipt-help"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m9 10 6-4M9 14l6 4"/></svg>Compartir ticket</button>
+          <button type="button" id="ck-print-receipt" class="ck-receipt-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 8V3h10v5M6 17H3V8h18v9h-3M7 14h10v7H7z"/></svg>Imprimir / PDF</button>
         </div>
         <p id="ck-email-status" class="ck-receipt-status" role="status" aria-live="polite"></p>
-        <a id="ck-view-orders" href="/perfil" class="ck-receipt-action">Ver mis pedidos</a>
         <p id="ck-receipt-status" class="ck-receipt-status" role="status" aria-live="polite"></p>
-        <p id="ck-share-receipt-help" class="ck-receipt-status">Compartí la imagen y el mensaje juntos: elegí WhatsApp y Tintin (0981 299331) en las opciones de tu dispositivo.</p>
+        <details class="ck-ticket-help"><summary>Cómo compartir por WhatsApp</summary><p id="ck-share-receipt-help" class="ck-receipt-status">Compartí la imagen y el mensaje juntos: elegí WhatsApp y Tintin (0981 299331) en las opciones de tu dispositivo.</p></details>
         <a id="ck-share-whatsapp-fallback" class="ck-receipt-action" target="_blank" rel="noopener noreferrer" hidden>Abrir WhatsApp de Tintin</a>
         <p class="ck-receipt-disclaimer">Este ticket confirma el registro de tu pedido. No acredita el pago ni reemplaza la factura.</p>
+        </section>
+        <a id="ck-view-orders" href="/perfil#pedidos" class="ck-receipt-action">Ver mis pedidos</a>
         <div class="ck-post-confirm-card">
           <p>¿Necesitás ayuda con este pedido?</p>
           <a id="ck-wa-support" href="https://wa.me/595981299331" target="_blank" rel="noopener">
@@ -457,7 +461,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261024-ticket-image-2";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261027-welcome-receipt-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isNationalMobileInput, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial, isValidTaxpayerType } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
@@ -916,7 +920,7 @@ async function renderCart() {
     container.querySelectorAll('button.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261024-ticket-image-2');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261027-welcome-receipt-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -2058,10 +2062,10 @@ subscribeSession(snapshot => {
 });
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20261019-privacy-copy-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261024-perfil-appcheck-1"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261027-welcome-receipt-1"></script>
 <script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20261024-qa-productos-checkout-1"></script>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261027-global-performance-1" defer></script>
+<script src="tienda.js?v=tintin-20261027-global-performance-2" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">
