@@ -4,7 +4,7 @@ const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const source=fs.readFileSync('js/components/welcome/tutorial-bienvenida.js','utf8').replace(/^import[\s\S]*?from\s+['"][^'"]+['"];\s*/gm,'');
 const configSource=fs.readFileSync('js/components/welcome/configuracion-bienvenida.js','utf8').replace(/^import .*;\n/,'').replace(/^export /gm,'');
-async function mount(page,profile,{ready=true,failWrite=false,preview=false,settings={},path="/index.html",completed=false}={}){
+async function mount(page,profile,{ready=true,failWrite=false,preview=false,settings={},path="/index.html",completed=false,cartOpen=false}={}){
   await page.route('https://welcome.test/**',r=>r.fulfill({contentType:'text/html',body:'<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><header class="tt-header">Tintin</header><main>Inicio</main><nav id="tt-tabbar">Men√∫</nav></body></html>'}));
   await page.goto('https://welcome.test'+path+'?welcome=1'+(preview?'&welcomePreview=1':''));
   await page.evaluate(({profile,ready,failWrite,preview,settings,completed})=>{
@@ -21,6 +21,16 @@ async function mount(page,profile,{ready=true,failWrite=false,preview=false,sett
     window.SUPER_ADMIN='owner@example.test';window.getUserRole=async()=>profile.role||'client';
     window.subscribeAuthState=callback=>{window.authCallback=callback;callback({uid:'customer',email:preview?window.SUPER_ADMIN:'customer@example.test'});};
   },{profile,ready,failWrite,preview,settings,completed});
+  if(cartOpen){
+    await page.addScriptTag({content:fs.readFileSync('js/components/navigation/compartido/control-paneles.js','utf8')});
+    await page.evaluate(async()=>{
+      window.fixtureCart=[{id:'local-product',qty:2}];
+      const cart=document.createElement('aside');cart.id='fixture-cart';cart.innerHTML='<button>Revisar carrito</button>';document.body.append(cart);
+      const controller=window.TintinSurfaceController;
+      controller.register('cart',{element:cart,modal:true});
+      await controller.open('cart');
+    });
+  }
   await page.addScriptTag({content:"const sanitizeImageUrl=value=>String(value||'');\n"+configSource});
   await page.addScriptTag({content:source});
 }
@@ -209,4 +219,14 @@ test('salir del checkout sin comprar mantiene la bienvenida para la siguiente p√
   const profile=await page.evaluate(()=>fixture.profile);
   await mount(page,profile,{path:'/catalogo'});
   await expect(page.getByRole('dialog')).toBeVisible();
+});
+
+test('carrito modal abierto libera su foco antes de la bienvenida sin vaciar productos',async({page})=>{
+  await mount(page,{...fresh},{cartOpen:true});
+  await expect(page.getByRole('dialog')).toBeVisible();
+  expect(await page.evaluate(()=>window.TintinSurfaceController.surface)).toBe('none');
+  expect(await page.evaluate(()=>window.fixtureCart)).toEqual([{id:'local-product',qty:2}]);
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect(await page.evaluate(()=>document.body.style.position)).toBe('');
 });

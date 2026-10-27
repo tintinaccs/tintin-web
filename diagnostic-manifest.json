@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "b2f86ba3338e4e3ccce248bcb4d0016c041b1f0a3e3150992d659c3c46b5cf61",
+  "sourceFingerprint": "a5400543272902e393a687cccd745f73849f853fa438496acac798abe1f66056",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1573,
     "textFiles": 1442,
-    "totalBytes": 34675236,
+    "totalBytes": 34677181,
     "pages": 19,
     "modules": 1048
   },
@@ -33055,8 +33055,8 @@
     },
     {
       "path": "js/components/welcome/tutorial-bienvenida.js",
-      "bytes": 18926,
-      "sha256": "640efbf9f959053b3a4683f54cd300644b2574bad52950cb2646ec3b9a8b871e",
+      "bytes": 19339,
+      "sha256": "896c194dbef9934d416ab3dfdc6ecaa7b4fb0d492426cb3357508317c85deb84",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53566,8 +53566,8 @@
     },
     {
       "path": "tests/runtime/welcome-component.spec.js",
-      "bytes": 15153,
-      "sha256": "4d97502068e64c967532e338cf33707b9772dac32e17b16ae4a1d01002a11bd4",
+      "bytes": 16275,
+      "sha256": "68d4f10cd869c6c2174d992a10541abd6388a13d68f9346516eee1c3cec314ac",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53584,7 +53584,7 @@
         },
         {
           "url": "https://media.test/missing.png",
-          "line": 131
+          "line": 141
         }
       ]
     },
@@ -58525,8 +58525,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 12083,
-      "sha256": "b2f947ce00200c411461a3755daeae47703d448408ac24f4f62344be565a4ea4"
+      "bytes": 12103,
+      "sha256": "8252142799117409b6deab5b65f69edd51774af46b7b60e96cc6517fa680c1db"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -58538,7 +58538,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "8ad84a4fa5abc910b5beef0c099d3f94852c2c28f32fec9977963c37b8c0e3d0"
+      "sha256": "bb27f4a6e5ae28c9ba4309517a62636ef1924da7fdc466ad44932a8d81f6a938"
     },
     {
       "path": "config/public-site.json",
@@ -59197,8 +59197,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 970332,
-      "sha256": "589426ae0c46b63252068c83a5c8443dbb010139ee273bbd779f2466599fabe4"
+      "bytes": 970722,
+      "sha256": "130f47f854db50c31082a697d19aa86772fc8e5ef7f6b048c8d3bda9d3343eeb"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -61939,8 +61939,8 @@
     {
       "path": "js/components/welcome/tutorial-bienvenida.js",
       "extension": ".js",
-      "bytes": 18926,
-      "sha256": "640efbf9f959053b3a4683f54cd300644b2574bad52950cb2646ec3b9a8b871e"
+      "bytes": 19339,
+      "sha256": "896c194dbef9934d416ab3dfdc6ecaa7b4fb0d492426cb3357508317c85deb84"
     },
     {
       "path": "js/core/auth/cliente-api-autenticado.js",
@@ -63908,7 +63908,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 75884,
-      "sha256": "603b771cd478b4a406bcb8a2e02b0823fe21cb66f465e22bc064f1964d84c952"
+      "sha256": "efd4bcbb4beb44b4c8c3bab100cc5a08a8ff25ce37ed7aed95e0e6f1a36c9207"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -66169,8 +66169,8 @@
     {
       "path": "tests/runtime/welcome-component.spec.js",
       "extension": ".js",
-      "bytes": 15153,
-      "sha256": "4d97502068e64c967532e338cf33707b9772dac32e17b16ae4a1d01002a11bd4"
+      "bytes": 16275,
+      "sha256": "68d4f10cd869c6c2174d992a10541abd6388a13d68f9346516eee1c3cec314ac"
     },
     {
       "path": "tests/security/admin-http-contract.test.mjs",

@@ -283,6 +283,13 @@ import {
       }
       await waitReady();
       if (currentGeneration !== generation) return;
+      // El carrito/cuenta pueden seguir abiertos al volver del primer login.
+      // Su controlador libera foco, inert y scroll antes de abrir la guía.
+      const surfaces = window.TintinSurfaceController;
+      if (surfaces?.surface && surfaces.surface !== 'none') {
+        await bounded(() => surfaces.close('welcome', { restoreFocus: false }));
+      }
+      if (currentGeneration !== generation) return;
       if (!preview && !await claimWelcome(user, 'shown')) return;
       if (currentGeneration !== generation) return;
       show(user, config, preview);

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "fb0bede6461cc736ddfe34be1a286993d23f31b9",
-  "reason": "Diferir la bienvenida exclusivamente durante checkout y organizar la confirmación con fotos, secciones, avisos y acciones conservando pedidos, pagos y permisos; preservar editor1254.",
+  "reason": "Diferir la bienvenida exclusivamente durante checkout; liberar el carrito modal mediante su controlador y organizar confirmación, fotos y ticket sin alterar pedidos/pagos/permisos; preservar editor1254.",
   "files": [
     {
       "path": "_headers",
@@ -141,7 +141,7 @@
     {
       "path": "js/components/welcome/tutorial-bienvenida.js",
       "oldHash": "2eadb541ca5ee9aab4d866862ae690efe7ff2882aed4282a62104d01df9accf8",
-      "newHash": "640efbf9f959053b3a4683f54cd300644b2574bad52950cb2646ec3b9a8b871e"
+      "newHash": "896c194dbef9934d416ab3dfdc6ecaa7b4fb0d492426cb3357508317c85deb84"
     },
     {
       "path": "js/core/auth/proteccion-sesion.js",
@@ -221,7 +221,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "5241f00ff12c2d5f10e9a8010654266ab67b76e80282ba95ccd7e84350dd7726",
-      "newHash": "603b771cd478b4a406bcb8a2e02b0823fe21cb66f465e22bc064f1964d84c952"
+      "newHash": "efd4bcbb4beb44b4c8c3bab100cc5a08a8ff25ce37ed7aed95e0e6f1a36c9207"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
