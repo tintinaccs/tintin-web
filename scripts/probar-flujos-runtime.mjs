@@ -22,7 +22,7 @@ try{
   }
   const config=path.join(temporary,'firebase.json');
   fs.writeFileSync(config,JSON.stringify({firestore:{rules:path.join(root,'firestore.rules')},emulators:{auth:{host:'127.0.0.1',port:9099},firestore:{host:'127.0.0.1',port:8080},ui:{enabled:false},singleProjectMode:true}}));
-  await run(['node_modules/firebase-tools/lib/bin/firebase.js','emulators:exec','--only','auth,firestore','--project','demo-tintin-interactions','--config',config,'node node_modules/playwright/cli.js test --config=playwright.runtime.config.js'+(testFile?' '+testFile:'')]);
+  await run(['node_modules/firebase-tools/lib/bin/firebase.js','emulators:exec','--only','auth,firestore','--project','demo-tintin-interactions','--config',config,'node --test tests/admin/product-workspaces-firestore.test.mjs && node node_modules/playwright/cli.js test --config=playwright.runtime.config.js'+(testFile?' '+testFile:'')]);
 }catch(error){console.error(error.message);process.exitCode=1;}
 finally{
   if(fs.existsSync(htmlReport)){

@@ -99,6 +99,26 @@ test('sin conexión conserva datos, libera Continuar y permite un reintento real
   expect((await state(request,email)).profile.profileStatus).toBe('active');
 });
 
+test('Firestore reanuda la escucha tras reconectar sin perder el texto local',async({page,request})=>{
+  const email='listener-recovery@example.test';await otp(page,request,email);
+  const account=await state(request,email);
+  await page.evaluate(async uid=>{
+    const sdk=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
+    window.qaListenerSdk=sdk;window.qaListenerValues=[];window.qaListenerErrors=[];
+    window.qaStopListener=sdk.onSnapshot(sdk.doc(window.__runtimeDb,'users',uid),snapshot=>window.qaListenerValues.push(snapshot.data()?.name || ''),error=>window.qaListenerErrors.push(error.code));
+    const draft=document.createElement('input');draft.id='qa-local-draft';draft.value='Texto pendiente conservado';document.body.append(draft);
+  },account.uid);
+  await expect.poll(()=>page.evaluate(()=>window.qaListenerValues.length)).toBeGreaterThan(0);
+  await page.evaluate(()=>window.qaListenerSdk.disableNetwork(window.__runtimeDb));
+  const seeded=await request.post('/__test/seed',{data:{path:'users/'+account.uid,data:{name:'Nombre sincronizado tras reconectar'}}});expect(seeded.ok()).toBe(true);
+  await page.evaluate(()=>window.qaListenerSdk.enableNetwork(window.__runtimeDb));
+  await expect.poll(()=>page.evaluate(()=>window.qaListenerValues.at(-1))).toBe('Nombre sincronizado tras reconectar');
+  await expect(page.locator('#qa-local-draft')).toHaveValue('Texto pendiente conservado');
+  expect(await page.evaluate(()=>window.qaListenerErrors)).toEqual([]);
+  expect((await state(request,email)).uid).toBe(account.uid);
+  await page.evaluate(()=>window.qaStopListener());
+});
+
 test('teléfono reservado por otra cuenta se rechaza sin activar el perfil',async({page,request})=>{
   const email='duplicate@example.test';await otp(page,request,email);await fillProfile(page);
   await request.post('/__test/seed',{data:{path:'phoneReservations/595981123456',data:{uid:'another-customer'}}});

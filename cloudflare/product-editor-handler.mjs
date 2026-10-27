@@ -16,6 +16,7 @@ export async function handleProductEditor(context,body,origin) {
     try {await queueCatalogSheetSync(env,ids,new Error('Producto guardado desde editor v2'),actor);queued=true;} catch { /* reintento explícito desde el formulario */ }
     return jsonResponse({ok:true,result,sheetsSync:{queued}},200,origin,request.url);
   } catch(error) {
+    if(statusFromError(error,400)>=500)console.error('[product-editor]',{action:body.action,status:statusFromError(error,400),code:error.code || 'product_editor_failed'});
     return rateLimitErrorResponse(error,origin,request.url) || jsonResponse({ok:false,error:error.safe?error.message:error.status===409?'El producto cambió en otra sesión. Actualizá los datos antes de guardar.':'No se pudo guardar el producto.',code:error.code},statusFromError(error,400),origin,request.url);
   }
 }

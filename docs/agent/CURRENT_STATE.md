@@ -1,3 +1,43 @@
+## 2026-10-27 — Guardados del editor y CSP, Codex /root
+
+Rama codex/corregir-guardado-csp-20261027, base c105f61a. Los adjuntos de la
+propietaria muestran CSP repetida y POST admin-order-mutation502. Reproducción:
+serializeProductForm incluye tuplas de firmas de archivos dentro de otras listas;
+Firestore real aislado las rechaza con400 INVALID_ARGUMENT y el batch servidor
+las propaga como502. validateSnapshot conserva sólo pendingUploads y los campos
+recuperables; admite las firmas del editor ya abierto para permitir reintentar.
+No altera archivos, producto público, identidad, permisos, CAS ni confirmación.
+
+Reintentar tras un fallo oficial antes sólo repetía save privado y podía no
+enviar solicitudes: publish conserva la intención oficial y el botón repite
+commit/idempotencia, centralizando el error sin duplicarlo.
+
+Los handlers dinámicos con IDs reales no coinciden con los hashes de sus
+plantillas: se reemplazan por datos JSON escapados y listeners de callbacks
+permitidos, sin eval ni relajar CSP. Se elimina el mouseout heredado de filas;
+el hover existente en CSS permanece. Afecta las mismas acciones del admin
+compartido (usuarios, pedidos, plantillas, productos, colecciones y CSV).
+
+PASS_LOCAL: Firestore emulado real reproduce el formato inválido y confirma
+lectura, guardado privado, archivos pendientes y reintento idempotente. Recorre
+guardados oficiales inactivo→activo→inactivo→activo→archivado→activo→draft,
+verifica visibilidad/stock/cierre atómico del progreso y fallo previo al commit
+sin pérdida. La UI conserva el contrato draft privado: no modifica el producto
+oficial hasta elegir un estado oficial. La prueba real se integra en el runner
+Auth/Firestore ya existente. SDK Firestore desconecta/reconecta escritorio/móvil,
+recupera snapshot y conserva texto local; no reproduce el400 de transporte exacto.
+Node relacionados24/24 y admin-sync78/78; Chromium37/37 workspace/CSP y9/9 CSP/
+versión única previos a ampliar la matriz de estados. Build/caché aprobado.
+Matriz ampliada42/42 Chromium sin reintentos: CSP, borrador, oficial activo/
+inactivo/archivado, fallo HTML y recuperación del guardado oficial, diez tamaños
+y rotación. Preflight final39/39 tras el ajuste de Reintentar, build Pages, CSP,
+caché y plan protegido aprobados. CI, merge y producción PENDING al redactar.
+
+NOT_VERIFIED: guardar productos reales con la sesión de la propietaria; el control
+de su navegador no está expuesto. No se publican datos QA, pedidos ni correos,
+ni se afirma que cada502 de infraestructura tenga la misma causa. Las capturas
+crudas con identificadores de transporte no se incorporan al repositorio.
+
 ## 2026-10-27 — Tablet y aviso único de guardado, Codex /root
 
 Rama codex/editor-tablet-guardado-20261027. Parte de51e5e737 (#1256) y concilia

@@ -1,3 +1,4 @@
+import {adminEventAttributes} from '../../js/admin/eventos-dinamicos-admin.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -69,7 +70,7 @@ test('el paginador real de Usuarios ofrece los registros de la segunda página',
   const context = {
     document: { getElementById: id => fields.get(id) }, usersPage: 0, ADMIN_PAGE_SIZE: size,
     SUPER_ADMIN: 'owner@example.test', currentRole: 'viewer', ROLE_LABELS: { client: 'Cliente' }, can: () => false,
-    escapeHtmlAdmin: String, inlineArgumentAdmin: JSON.stringify, sanitizeImageUrl: () => '', formatPrice: String, _selectedUsers: new Set(), users,
+    escapeHtmlAdmin: String, adminEventAttributes, sanitizeImageUrl: () => '', formatPrice: String, _selectedUsers: new Set(), users,
   };
   vm.createContext(context);
   vm.runInContext(functionSource('renderUsersTable', '\nwindow.setUsersPage') + '\nrenderUsersTable(users);', context);

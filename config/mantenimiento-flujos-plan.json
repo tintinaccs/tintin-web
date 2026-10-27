@@ -1,37 +1,32 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "34edd77b7b779b45e1dc627e3b73d0a2f4c94001",
-  "reason": "Corregir caché del editor y consolidar recibos en el mantenimiento canónico",
+  "baseCommit": "c105f61a0f518b25d3f33f0ae01e592e7a753d08",
+  "reason": "Corregir firmas de archivos y reintentos oficiales junto con eventos dinamicos CSP del editor",
   "files": [
     {
-      "path": ".github/workflows/auditoria-dependencias.yml",
-      "oldHash": "d3e925b0fdec9d4987fe5d5f47040bc3de2339d6b8922c37d4d349072fd90eac",
-      "newHash": "e25b08a695c924cc59c3331cdb74a0134f27ae0be4a8de53fc67f1aa2d0e04d1"
-    },
-    {
       "path": "admin.html",
-      "oldHash": "75e3246faf7572013485f2fa2108e643cbfbf8cb7ca98903b3502aead5ca3761",
-      "newHash": "767520042ff6383e49efc0b03cd900186827d335e075a1efe3c487b3ab5262e5"
+      "oldHash": "767520042ff6383e49efc0b03cd900186827d335e075a1efe3c487b3ab5262e5",
+      "newHash": "c14d7f607dd64a271958e5224189e1e3d8cb2e25aa47bb15667c2a12bc27d6e4"
     },
     {
-      "path": "AGENTS.md",
-      "oldHash": "d75b5063915f451493681421aa42d41c2aae289d5dcdbd8a22ea33dcc1f82c31",
-      "newHash": "af843165479a2bed288004dc4d8ed7619bcd284e315e002be9fb56df509b75e8"
+      "path": "config/csp-runtime.js",
+      "oldHash": "96fd423f31caaec37395c5e37c94cb46ba999dc473f58c1559caad77295b0533",
+      "newHash": "982f6679155475f932debc4339f146b4b7ef2687cbeb2c74c129a1da42a02505"
+    },
+    {
+      "path": "config/csp-runtime.json",
+      "oldHash": "7f2e25ba260df311aeb196504c60ce84c9d49471a8aa1bad03658baf67332eed",
+      "newHash": "fe579d9a957bc64c73e24dca5a90176ee63b70f418d65354bf6cb980128bc2d1"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "d47663a6a18da2fa25aafe762869f3eff1aa86b0acfc8b2de084d3c7c1224204",
-      "newHash": "71c67fb45e34d6803c2078ac8bdfea0a1a0d7c56564024d53c2b6aa2e180a76f"
-    },
-    {
-      "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "5963a8ed261b41fa15e00b7478e74d846c10ea0ec6567d5eaa6204cabdc5db82",
-      "newHash": "37aa2a0d331c1e179d5796499f7498a504d498ac988ae2c2ac85d810c587bc80"
+      "oldHash": "71c67fb45e34d6803c2078ac8bdfea0a1a0d7c56564024d53c2b6aa2e180a76f",
+      "newHash": "4ff633f0182a038f1d8c41cad0b8a3e543453031dc4135380ca355fc40fe27f3"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "bc72ed0f7af73082d1ff2b98f4d02dc597420a5577266219087dcbcf219d3a8b",
-      "newHash": "ad20ddf67e012c84a7ee976d35213302a064ff01a7912cd23634ed7420a13868"
+      "oldHash": "ad20ddf67e012c84a7ee976d35213302a064ff01a7912cd23634ed7420a13868",
+      "newHash": "01ac1480fd8bfddb9e50a3e696742e43060294877751561052f8e4d9a3ab1446"
     }
   ],
   "affectedRecords": [
@@ -39,7 +34,13 @@
     "admin-guard__firestore-fuente-verdad__16",
     "apis-internas__correos__41",
     "apis-internas__pedidos__32",
+    "cf-functions",
+    "cf-functions__apis-internas__20",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
     "correos",
+    "csp",
     "pagina-perfil",
     "pedidos",
     "pedidos__inventario__33",

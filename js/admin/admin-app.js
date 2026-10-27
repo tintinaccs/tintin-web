@@ -1,4 +1,5 @@
-import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261027-editor-tablet-1';
+import {adminEventAttributes,installAdminEvents} from './eventos-dinamicos-admin.mjs?v=tintin-20261027-save-csp-1';
+import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261027-save-csp-1';
 import {readProductEditorResponse} from './products/respuesta-editor-producto.mjs?v=tintin-20261027-editor-ux-1';
 import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
@@ -227,15 +228,14 @@ async function pushProductsToSheets(productIds) {
 }
 window.tintinPushProductsToSheets = pushProductsToSheets;
 
+installAdminEvents();
+
 function escapeHtmlAdmin(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   })[char]);
 }
 
-function inlineArgumentAdmin(value) {
-  return escapeHtmlAdmin(JSON.stringify(String(value ?? '')));
-}
 
 function paraguayDayKeyAdmin() {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -2336,7 +2336,7 @@ function renderUsersTable(users) {
   const pageUsers = users.slice(usersPage * ADMIN_PAGE_SIZE, (usersPage + 1) * ADMIN_PAGE_SIZE);
   const pager = document.getElementById('users-pagination');
   if (pager) {
-    pager.innerHTML = totalPages > 1 ? `<button type="button" class="adm-btn adm-btn-sm" onclick="window.setUsersPage(${usersPage - 1})" ${usersPage <= 0 ? 'disabled' : ''}>Anterior</button><span>Página ${usersPage + 1} de ${totalPages}</span><button type="button" class="adm-btn adm-btn-sm" onclick="window.setUsersPage(${usersPage + 1})" ${usersPage >= totalPages - 1 ? 'disabled' : ''}>Siguiente</button>` : '';
+    pager.innerHTML = totalPages > 1 ? `<button type="button" class="adm-btn adm-btn-sm" ${adminEventAttributes('click','setUsersPage',[usersPage - 1])} ${usersPage <= 0 ? 'disabled' : ''}>Anterior</button><span>Página ${usersPage + 1} de ${totalPages}</span><button type="button" class="adm-btn adm-btn-sm" ${adminEventAttributes('click','setUsersPage',[usersPage + 1])} ${usersPage >= totalPages - 1 ? 'disabled' : ''}>Siguiente</button>` : '';
   }
   if (!users.length) {
     const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
@@ -2346,9 +2346,9 @@ function renderUsersTable(users) {
   tbody.innerHTML = pageUsers.map(u => {
     const isSuperAdmin = u.email === SUPER_ADMIN;
     const safeUid = escapeHtmlAdmin(u.uid);
-    const uidArg = inlineArgumentAdmin(u.uid);
-    const emailArg = inlineArgumentAdmin(u.email || '');
-    const nameArg = inlineArgumentAdmin(u.name || u.email || '');
+    const uidArg = String((u.uid) ?? '');
+    const emailArg = String((u.email || '') ?? '');
+    const nameArg = String((u.name || u.email || '') ?? '');
     const safeRole = Object.prototype.hasOwnProperty.call(ROLE_LABELS, u.role) ? u.role : 'client';
     // Se usa can(role,'manageUsers') en vez de comparar el nombre del rol a mano
     // — hoy solo superadmin tiene ese permiso, pero si el día de mañana cambia
@@ -2383,7 +2383,7 @@ function renderUsersTable(users) {
     // nunca quede el estado inconsistente blocked:true + role:'agent'/'admin'.
     const roleSelect = canEdit && can(currentRole, 'assignRoles') && !u.blocked && !deleted ? `
       <select class="adm-select" style="width:auto;font-size:11px;padding:4px 8px"
-        onchange="window.updateUserRole(${uidArg}, this.value, ${emailArg})"
+        ${adminEventAttributes('change','updateUserRole',[uidArg,{control:'value'},emailArg])}
         ${isSuperAdmin ? 'disabled' : ''}>
         <option value="superadmin" ${u.role==='superadmin'?'selected':''} ${!isSuperAdmin?'style="display:none"':''}>Super Admin</option>
         <option value="admin"      ${u.role==='admin'?'selected':''}>Admin</option>
@@ -2396,8 +2396,8 @@ function renderUsersTable(users) {
     const actions = canEdit ? `
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${!isSuperAdmin ? (u.blocked
-          ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser(${uidArg})">Desbloquear</button>`
-          : `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.blockUser(${uidArg}, ${emailArg})">Bloquear</button>`
+          ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" ${adminEventAttributes('click','restoreUser',[uidArg])}>Desbloquear</button>`
+          : `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" ${adminEventAttributes('click','blockUser',[uidArg,emailArg])}>Bloquear</button>`
         ) : ''}
       </div>
     ` : '<span style="color:#ccc;font-size:12px">—</span>';
@@ -2781,9 +2781,9 @@ function renderOrdersTable(orders) {
     const itemsText = (o.items || []).slice(0,2).map(it => `${it.qty}x ${it.name}`).join(', ') +
       (o.items?.length > 2 ? ` +${o.items.length - 2} más` : '');
     const safeOrderId = escapeHtmlAdmin(o.id);
-    const orderArg = inlineArgumentAdmin(o.id);
+    const orderArg = String((o.id) ?? '');
     const detailId = `order-detail-${o.id}`;
-    const detailArg = inlineArgumentAdmin(detailId);
+    const detailArg = String((detailId) ?? '');
     const payStatus = o.payment?.status || o.paymentStatus || 'pendiente';
     const orderStatus = o.status || 'pendiente';
     // manageOrders: cambiar estado/estado de pago — esto es lo único que el
@@ -2800,7 +2800,7 @@ function renderOrdersTable(orders) {
     const canDelete = can(currentRole, 'manageOrdersFull') && roleCanDo('pedidos', 'eliminar');
 
     return `
-      <tr class="adm-order-row" style="cursor:pointer" onclick="window.toggleOrderDetail(${detailArg})">
+      <tr class="adm-order-row" style="cursor:pointer" ${adminEventAttributes('click','toggleOrderDetail',[detailArg])}>
         <td class="col-select" data-label="Seleccionar" onclick="event.stopPropagation()"><input type="checkbox" class="order-row-check" data-id="${safeOrderId}" onclick="toggleOrderSelect(this)" ${_selectedOrders.has(o.id) ? 'checked' : ''}></td>
         <td data-label="Pedido" style="font-size:11px;color:#777;font-weight:700">#${escapeHtmlAdmin(o.orderNumber || o.shortId || o.id)}</td>
         <td data-label="Cliente">
@@ -2812,7 +2812,7 @@ function renderOrdersTable(orders) {
         <td data-label="Total" style="font-weight:800;color:var(--color-text-primary,#713C53)">${formatPrice(o.total || 0)}</td>
         <td data-label="Estado" onclick="event.stopPropagation()">
           ${orderStatusBadgeHtml(orderStatus)}
-          ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updateOrderStatus(${orderArg}, this.value)">
+          ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" ${adminEventAttributes('change','updateOrderStatus',[orderArg,{control:'value'}])}>
             ${orderStatusOptions(orderStatus)}
           </select>` : ''}
         </td>
@@ -2820,7 +2820,7 @@ function renderOrdersTable(orders) {
         <td data-label="Pago" onclick="event.stopPropagation()">
           <div style="font-size:11px;color:#713C53">${escapeHtmlAdmin(o.payment?.method || o.paymentMethod || '—')}</div>
           ${payStatusBadgeHtml(payStatus)}
-          ${canUpdatePay ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updatePayStatus(${orderArg}, this.value)">
+          ${canUpdatePay ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" ${adminEventAttributes('change','updatePayStatus',[orderArg,{control:'value'}])}>
             ${payStatusOptions(payStatus)}
           </select>` : ''}
         </td>
@@ -2829,13 +2829,13 @@ function renderOrdersTable(orders) {
           ${notifBadge(o.notificationStatus || 'pending')}
           ${o.resendCount ? `<div style="font-size:9px;color:#888;margin-top:2px">Reenviado (${o.resendCount})</div>` : ''}
           ${o.notificationError ? `<div style="font-size:9px;color:#c62828;margin-top:2px" title="${escapeHtmlAdmin(o.notificationError)}">ver error</div>` : ''}
-          ${canResend ? `<button type="button" class="adm-btn adm-btn-sm" id="resend-btn-${safeOrderId}" style="margin-top:4px;font-size:9px;padding:3px 8px" onclick="window.resendOrderEmail(${orderArg})" title="Reenviar el correo de este pedido"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 6l9 7 9-7"/></svg>Reenviar</button>` : ''}
+          ${canResend ? `<button type="button" class="adm-btn adm-btn-sm" id="resend-btn-${safeOrderId}" style="margin-top:4px;font-size:9px;padding:3px 8px" ${adminEventAttributes('click','resendOrderEmail',[orderArg])} title="Reenviar el correo de este pedido"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 6l9 7 9-7"/></svg>Reenviar</button>` : ''}
         </td>
         <td data-label="Editar" onclick="event.stopPropagation()">
-          ${canEditFull ? `<button type="button" class="adm-btn adm-btn-sm" onclick="openOrderEdit(${orderArg})" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
+          ${canEditFull ? `<button type="button" class="adm-btn adm-btn-sm" ${adminEventAttributes('click','openOrderEdit',[orderArg])} title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
         </td>
         <td class="col-actions-sticky" data-label="Eliminar" onclick="event.stopPropagation()">
-          ${canDelete ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder(${orderArg})" title="Mover pedido a Borrados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011 1v1h4V4a1 1 0 011 1v1"/></svg><span> Borrar</span></button>` : '—'}
+          ${canDelete ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" ${adminEventAttributes('click','deleteOrder',[orderArg])} title="Mover pedido a Borrados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011 1v1h4V4a1 1 0 011 1v1"/></svg><span> Borrar</span></button>` : '—'}
         </td>
       </tr>
       <tr id="${escapeHtmlAdmin(detailId)}" class="adm-order-detail-row" style="display:none">
@@ -4023,10 +4023,10 @@ function renderCorreosPedidosTab() {
       <tr>
         <td class="col-select" data-label="Sel."><input type="checkbox" class="cop-row-check" data-key="${key}" onclick="toggleOrderTypeSelect(this)" ${_selectedOrderTypes.has(key) ? 'checked' : ''}></td>
         <td data-label="Tipo">${ORDER_TYPE_NAMES[key]}</td>
-        <td data-label="Activo"><label class="adm-toggle" style="width:40px;height:22px"><input type="checkbox" ${enabled ? 'checked' : ''} onchange="window.toggleOrderTypeEnabled('${key}', this.checked)"><span class="adm-toggle-slider"></span></label></td>
-        <td data-label="Plantilla"><select class="adm-select" style="width:auto;font-size:12px" onchange="window.setOrderTypeTemplate('${key}', this.value)">${tplOptionsHtml}</select></td>
+        <td data-label="Activo"><label class="adm-toggle" style="width:40px;height:22px"><input type="checkbox" ${enabled ? 'checked' : ''} ${adminEventAttributes('change','toggleOrderTypeEnabled',[key,{control:'checked'}])}><span class="adm-toggle-slider"></span></label></td>
+        <td data-label="Plantilla"><select class="adm-select" style="width:auto;font-size:12px" ${adminEventAttributes('change','setOrderTypeTemplate',[key,{control:'value'}])}>${tplOptionsHtml}</select></td>
         <td data-label="Último envío" style="font-size:12px">${lastSent}</td>
-        <td data-label="Vista previa"><button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.previewOrderType('${key}')" type="button">Ver</button></td>
+        <td data-label="Vista previa"><button class="adm-btn adm-btn-sm adm-btn-outline" ${adminEventAttributes('click','previewOrderType',[key])} type="button">Ver</button></td>
       </tr>
     `;
   }).join('');
@@ -4329,11 +4329,11 @@ function renderCorreosPlantillasTab() {
         <td data-label="Editado por" style="font-size:12px">${t.updatedBy || '—'}</td>
         <td data-label="Acciones">
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.openTplEdit('${id}')" type="button">Editar</button>
-            <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.previewTemplateById('${id}')" type="button">Vista previa</button>
-            <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.duplicateTemplate('${id}')" type="button">Duplicar</button>
-            <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.toggleArchiveTemplate('${id}')" type="button">${t.archived ? 'Reactivar' : 'Archivar'}</button>
-            ${isCustom ? `<button class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteTemplate('${id}')" type="button">Eliminar</button>` : ''}
+            <button class="adm-btn adm-btn-sm adm-btn-outline" ${adminEventAttributes('click','openTplEdit',[id])} type="button">Editar</button>
+            <button class="adm-btn adm-btn-sm adm-btn-outline" ${adminEventAttributes('click','previewTemplateById',[id])} type="button">Vista previa</button>
+            <button class="adm-btn adm-btn-sm adm-btn-outline" ${adminEventAttributes('click','duplicateTemplate',[id])} type="button">Duplicar</button>
+            <button class="adm-btn adm-btn-sm adm-btn-outline" ${adminEventAttributes('click','toggleArchiveTemplate',[id])} type="button">${t.archived ? 'Reactivar' : 'Archivar'}</button>
+            ${isCustom ? `<button class="adm-btn adm-btn-sm adm-btn-danger" ${adminEventAttributes('click','deleteTemplate',[id])} type="button">Eliminar</button>` : ''}
           </div>
         </td>
       </tr>
@@ -4608,7 +4608,7 @@ function renderCorreosClientasTab() {
       const optIn = c.marketingOptIn === false ? 'No' : (c.marketingOptIn === true ? 'Sí' : 'No especificado');
       return `
         <tr class="adm-cliente-row">
-          <td data-label="Sel."><input type="checkbox" ${checked} ${disabledAttr} onchange="window.toggleClientSelected(${inlineArgumentAdmin(c.email)}, this.checked)" /></td>
+          <td data-label="Sel."><input type="checkbox" ${checked} ${disabledAttr} ${adminEventAttributes('change','toggleClientSelected',[String(c.email ?? ''),{control:'checked'}])} /></td>
           <td data-label="Nombre"><strong>${escapeHtmlAdmin(c.name || '—')}</strong></td>
           <td data-label="Email" style="font-size:12px">${escapeHtmlAdmin(c.email || '—')}</td>
           <td data-label="Teléfono" style="font-size:12px">${escapeHtmlAdmin(c.phone || '—')}</td>
@@ -4680,7 +4680,7 @@ function renderPromoChips_() {
   wrap.innerHTML = promoRecipients.map((r, i) => {
     const c = allClientUsers.find(x => x.email.toLowerCase() === r.email.toLowerCase());
     const blockedClass = c && c.blocked ? ' blocked' : '';
-    return `<span class="correos-chip${blockedClass}"><span>${r.name ? escapeHtmlAdmin(r.name) + ' — ' : ''}${escapeHtmlAdmin(r.email)}${c && c.blocked ? ' (bloqueada)' : ''}</span><button onclick="window.removePromoRecipient(${i})" title="Quitar" type="button"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>`;
+    return `<span class="correos-chip${blockedClass}"><span>${r.name ? escapeHtmlAdmin(r.name) + ' — ' : ''}${escapeHtmlAdmin(r.email)}${c && c.blocked ? ' (bloqueada)' : ''}</span><button ${adminEventAttributes('click','removePromoRecipient',[i])} title="Quitar" type="button"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>`;
   }).join('');
   const countEl = document.getElementById('promo-recipients-count');
   if (countEl) countEl.textContent = `${promoRecipients.length} destinatarias`;
@@ -4910,8 +4910,8 @@ function renderCorreosHistorialTab() {
       <td data-label="Automático/Manual" style="font-size:12px">${l.isAutomatic ? 'Automático' : 'Manual'}</td>
       <td data-label="Acciones">
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.viewLogDetail(${inlineArgumentAdmin(l.id)})" type="button">Ver</button>
-          ${l.status === 'failed' ? `<button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.retryFailedLog(${inlineArgumentAdmin(l.id)})" type="button">Reintentar</button>` : ''}
+          <button class="adm-btn adm-btn-sm adm-btn-outline" ${adminEventAttributes('click','viewLogDetail',[String(l.id ?? '')])} type="button">Ver</button>
+          ${l.status === 'failed' ? `<button class="adm-btn adm-btn-sm adm-btn-outline" ${adminEventAttributes('click','retryFailedLog',[String(l.id ?? '')])} type="button">Reintentar</button>` : ''}
         </div>
       </td>
     </tr>
@@ -5177,7 +5177,7 @@ function renderShipList(type) {
   }
   container.innerHTML = list.map((c, i) => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fef5f8;border:1px solid #f0d8e0;border-radius:8px;font-size:13px">
-      <input type="checkbox" class="ship-${type}-check" data-name="${escapeHtmlAdmin(c.name)}" onclick="toggleShipCitySelect('${type}', this)" ${_selectedShipCities[type].has(c.name) ? 'checked' : ''}>
+      <input type="checkbox" class="ship-${type}-check" data-name="${escapeHtmlAdmin(c.name)}" ${adminEventAttributes('click','toggleShipCitySelect',[type,{control:'element'}])} ${_selectedShipCities[type].has(c.name) ? 'checked' : ''}>
       <span style="font-weight:600;flex:1">${escapeHtmlAdmin(c.name)}${c.departamento ? ` <span style="font-weight:400;color:var(--adm-muted);font-size:11px">· ${escapeHtmlAdmin(c.departamento)}</span>` : ''}</span>
       <span style="font-size:12px;color:${c.price == null ? 'var(--gold-hover)' : 'var(--adm-muted)'}">${c.price == null ? 'Consultar precio' : formatPrice(c.price)}</span>
       <button type="button" class="adm-btn" data-ship-edit="${type}:${i}" style="padding:4px 10px;font-size:11px">Editar</button>
@@ -5647,15 +5647,15 @@ window.reintentarCargaProductos = function() {
 function productRowHtml(p) {
   const isSelected = _selectedProducts.has(p._docId);
   const safeDocId = escapeHtmlAdmin(p._docId);
-  const docIdArg = inlineArgumentAdmin(p._docId);
-  const nameArg = inlineArgumentAdmin(p.name || '');
+  const docIdArg = String((p._docId) ?? '');
+  const nameArg = String((p.name || '') ?? '');
   const imageUrl = sanitizeImageUrl(p.imageUrl || '');
   const fmt = n => 'Gs. ' + Number(n).toLocaleString('es-PY');
   const canEditProd = can(currentRole, 'editProducts') && roleCanDo('productos', 'editar');
   const canToggleProd = can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar');
   const canDeleteProd = can(currentRole, 'deleteProducts') && roleCanDo('productos', 'eliminar');
   return `
-    <tr style="border-top:1px solid var(--adm-border);transition:background .15s;background:${isSelected ? 'var(--adm-bg)' : ''}" onmouseover="this.style.background='var(--adm-bg)'" onmouseout="this.style.background='${isSelected ? 'var(--adm-bg)' : ''}'">
+    <tr style="border-top:1px solid var(--adm-border);transition:background .15s;background:${isSelected ? 'var(--adm-bg)' : ''}">
       <td style="padding:10px 16px;text-align:center">
         <input type="checkbox" class="prod-row-check" data-id="${safeDocId}" ${isSelected ? 'checked' : ''} onclick="toggleProductSelect(this)" style="cursor:pointer;width:15px;height:15px">
       </td>
@@ -5684,9 +5684,9 @@ function productRowHtml(p) {
       </td>
       <td style="padding:10px 16px;text-align:center">
         <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-          ${canEditProd ? `<button type="button" class="adm-btn adm-btn-sm" onclick="prodEditar(${docIdArg})" title="Editar producto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : ''}
-          ${canToggleProd ? `<button type="button" class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#bf360c' : '#2e7d32'}" onclick="prodToggleActive(${docIdArg}, ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
-          ${canDeleteProd ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar(${docIdArg},${nameArg})" title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>` : ''}
+          ${canEditProd ? `<button type="button" class="adm-btn adm-btn-sm" ${adminEventAttributes('click','prodEditar',[docIdArg])} title="Editar producto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : ''}
+          ${canToggleProd ? `<button type="button" class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#bf360c' : '#2e7d32'}" ${adminEventAttributes('click','prodToggleActive',[docIdArg,p.active !== false])} title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
+          ${canDeleteProd ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" ${adminEventAttributes('click','prodEliminar',[docIdArg,nameArg])} title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>` : ''}
           ${!canEditProd && !canToggleProd && !canDeleteProd ? '—' : ''}
         </div>
       </td>
@@ -6983,7 +6983,7 @@ function renderColeccionesGrid(list) {
   grid.innerHTML = list.map(c => {
     const count = _allProducts.filter(p => wristCategory(p.category || '') === wristCategory(c.slug)).length;
     const safeSlug = escapeHtmlAdmin(c.slug);
-    const slugArg = inlineArgumentAdmin(c.slug);
+    const slugArg = String((c.slug) ?? '');
     const imageUrl = sanitizeImageUrl(c.image || '');
     return `
     <div class="adm-card" style="margin:0;overflow:hidden;position:relative">
@@ -6998,15 +6998,15 @@ function renderColeccionesGrid(list) {
         <div style="color:var(--adm-muted);font-size:11px;margin-bottom:8px">/${safeSlug} · orden ${escapeHtmlAdmin(c.order ?? 0)}</div>
         <div style="font-size:12px;font-weight:700;color:var(--adm-primary);margin-bottom:12px">${count} producto${count===1?'':'s'}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button type="button" class="adm-btn adm-btn-sm" onclick="collVerProductos(${slugArg})">Ver productos</button>
-          ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button type="button" class="adm-btn adm-btn-sm" onclick="collEditar(${slugArg})">Editar</button>` : ''}
-          ${(can(currentRole, 'deleteCollections') && roleCanDo('colecciones', 'eliminar')) ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="collEliminar(${slugArg}, ${count})">Eliminar</button>` : ''}
+          <button type="button" class="adm-btn adm-btn-sm" ${adminEventAttributes('click','collVerProductos',[slugArg])}>Ver productos</button>
+          ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button type="button" class="adm-btn adm-btn-sm" ${adminEventAttributes('click','collEditar',[slugArg])}>Editar</button>` : ''}
+          ${(can(currentRole, 'deleteCollections') && roleCanDo('colecciones', 'eliminar')) ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" ${adminEventAttributes('click','collEliminar',[slugArg,count])}>Eliminar</button>` : ''}
         </div>
       </div>
     </div>`;
   }).join('') + unmanaged.map(u => {
     const safeSlug = escapeHtmlAdmin(u.slug);
-    const slugArg = inlineArgumentAdmin(u.slug);
+    const slugArg = String((u.slug) ?? '');
     return `
     <div class="adm-card" style="margin:0;overflow:hidden;border:1.5px dashed #e8a0b4">
       <div style="height:120px;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#bf360c">SIN GESTIONAR</div>
@@ -7015,8 +7015,8 @@ function renderColeccionesGrid(list) {
         <div style="color:var(--adm-muted);font-size:11px;margin-bottom:8px">Categoría usada en productos, sin colección creada</div>
         <div style="font-size:12px;font-weight:700;color:var(--adm-primary);margin-bottom:12px">${u.count} producto${u.count===1?'':'s'}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button type="button" class="adm-btn adm-btn-sm" onclick="collVerProductos(${slugArg})">Ver productos</button>
-          <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" onclick="collCrearDesdeCategoria(${slugArg})">Crear colección</button>
+          <button type="button" class="adm-btn adm-btn-sm" ${adminEventAttributes('click','collVerProductos',[slugArg])}>Ver productos</button>
+          <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" ${adminEventAttributes('click','collCrearDesdeCategoria',[slugArg])}>Crear colección</button>
         </div>
       </div>
     </div>`;
@@ -7158,8 +7158,8 @@ function renderCollCurrentList() {
     return `
     <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid var(--adm-border)">
       <div style="display:flex;flex-direction:column;gap:2px">
-        <button type="button" class="adm-btn adm-btn-sm" style="padding:2px 8px" ${(!inStockRow || i === 0) ? 'disabled' : ''} onclick="collMoveProduct('${p._docId}', -1)" title="Mover arriba">↑</button>
-        <button type="button" class="adm-btn adm-btn-sm" style="padding:2px 8px" ${(!inStockRow || i === inStock.length - 1) ? 'disabled' : ''} onclick="collMoveProduct('${p._docId}', 1)" title="Mover abajo">↓</button>
+        <button type="button" class="adm-btn adm-btn-sm" style="padding:2px 8px" ${(!inStockRow || i === 0) ? 'disabled' : ''} ${adminEventAttributes('click','collMoveProduct',[p._docId,-1])} title="Mover arriba">↑</button>
+        <button type="button" class="adm-btn adm-btn-sm" style="padding:2px 8px" ${(!inStockRow || i === inStock.length - 1) ? 'disabled' : ''} ${adminEventAttributes('click','collMoveProduct',[p._docId,1])} title="Mover abajo">↓</button>
       </div>
       ${p.imageUrl
         ? `<img src="${p.imageUrl}" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border);flex-shrink:0">`
@@ -7172,8 +7172,8 @@ function renderCollCurrentList() {
       <span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0;background:${p.active !== false ? '#e8f5e9' : '#fce4ec'};color:${p.active !== false ? '#2e7d32' : '#c62828'}">
         ${p.active !== false ? 'Activo' : 'Inactivo'}
       </span>
-      ${(can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar')) ? `<button type="button" class="adm-btn adm-btn-sm" style="flex-shrink:0;background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#bf360c' : '#2e7d32'}" onclick="collToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
-      ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" onclick="collRemoveFromCollection('${p._docId}')" title="Quitar de esta colección"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-1px;margin-right:2px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Quitar</button>` : ''}
+      ${(can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar')) ? `<button type="button" class="adm-btn adm-btn-sm" style="flex-shrink:0;background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#bf360c' : '#2e7d32'}" ${adminEventAttributes('click','collToggleActive',[p._docId,p.active !== false])} title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
+      ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" ${adminEventAttributes('click','collRemoveFromCollection',[p._docId])} title="Quitar de esta colección"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-1px;margin-right:2px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Quitar</button>` : ''}
     </div>`;
   }).join('');
 }
@@ -7873,7 +7873,7 @@ function loadImportar() {
         <td style="font-weight:700;max-width:200px;word-break:break-word">${escapeHtmlAdmin(p.name)}</td>
         <td>
           <select class="adm-select" style="padding:4px 8px;font-size:12px;border-radius:20px;width:auto"
-                  onchange="window.setCsvRowCategory(${i}, this.value)">
+                  ${adminEventAttributes('change','setCsvRowCategory',[i,{control:'value'}])}>
             ${['relojes','bolsos','aros','collares','pulseras','anillos','tobilleras','earcuff','armcuff','gafas','joyeros','otros'].map(c =>
               `<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`
             ).join('')}
@@ -8535,9 +8535,9 @@ function renderOeItems() {
       <div style="flex:1;font-size:13px;font-weight:600">${escapeHtmlAdmin(it.name||'—')}${it.variant ? `<div style="font-size:11px;font-weight:400;color:var(--adm-muted)">${escapeHtmlAdmin(it.variant)}</div>` : ''}</div>
       <div style="font-size:12px;color:var(--adm-muted)">${fmt(it.price||0)} c/u</div>
       <input type="number" min="1" value="${it.qty||1}" style="width:56px;padding:4px 8px;border:1px solid var(--adm-border);border-radius:6px;font-size:13px;text-align:center"
-        onchange="updateOeItemQty(${idx}, this.value)" oninput="updateOeItemQty(${idx}, this.value)">
+        ${adminEventAttributes('change','updateOeItemQty',[idx,{control:'value'}])} ${adminEventAttributes('input','updateOeItemQty',[idx,{control:'value'}])}>
       <div style="font-size:13px;font-weight:700;color:var(--adm-primary);min-width:90px;text-align:right">${fmt((it.price||0)*(it.qty||1))}</div>
-      <button type="button" onclick="removeOeItem(${idx})" style="background:none;border:none;color:#e53935;font-size:18px;cursor:pointer;padding:0 4px" title="Quitar del pedido">×</button>
+      <button type="button" ${adminEventAttributes('click','removeOeItem',[idx])} style="background:none;border:none;color:#e53935;font-size:18px;cursor:pointer;padding:0 4px" title="Quitar del pedido">×</button>
     </div>
   `).join('');
   recalcOeTotals();
