@@ -1,42 +1,28 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "33af11a56a432d2f2d65878b5284d2265582e4de",
-  "reason": "Actualizar la portada compartida de WhatsApp con logo blanco plano sobre rosa Tintin y metadatos descriptivos sin modificar datos ni flujos comerciales.",
+  "baseCommit": "95091da938af0bd05b4c2cf998aa447ef70473a6",
+  "reason": "Ampliar la edición en todos los tamaños y situar la vista previa al final",
   "files": [
     {
-      "path": "_headers",
-      "oldHash": "3c91a3b9258637d2e8551460880c646c426bdf44b3a79ff1f312921049bb265d",
-      "newHash": "983cd9be41c0fd817ce7103b817e05cda643f2a4f605ff9fb8d9da7288f23f5a"
+      "path": "admin.html",
+      "oldHash": "591f3d301f4f6969156efe11ab66300204bfd05b7c393a018291870eb48cd00c",
+      "newHash": "2c6347ba15db84c0b47eef863f4f1c656e7187f5957a8790b5487ff85ae3b8bf"
     },
     {
-      "path": "catalogo.html",
-      "oldHash": "ba15249a80b1b3fc424f31a9e61c433fd6885d642eedfce72579b364e7ca004d",
-      "newHash": "0948938e64dec0bc76dacb96fbf328e5307e258570c51c92412c5e9914935839"
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "95e7842844cf9a39c1a800d643527735a9bd0ebbc891cd202657df6c06d49420",
+      "newHash": "ed8b39ae8bdbbcfa264d9988b3e2db40dbe04a2e2abaf57c496936bee13e9b85"
     },
     {
-      "path": "config/csp-runtime.js",
-      "oldHash": "341ba0871794404f4ad5bf82fa6f9b1d02b1fd21e6417914bd88d7e448f25cf7",
-      "newHash": "9769e913be43859b40a864675cda58bca44bb468b09d5768ad92f380a14fa160"
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "616b18ee36bc4e4ab59a8fa9e0b3ecd686a438459609f3bd0788182e17dd10f9",
+      "newHash": "ea91a0ae1a9ee53fdcce98819f7d55c32fd826c62329cb747fa23c1f41bd7c69"
     },
     {
-      "path": "config/csp-runtime.json",
-      "oldHash": "1f77436f64dd9c39a7442ff7fc821ac759071ad663c0da7ae8724a610f518a8b",
-      "newHash": "882f040fe5bdea2f7f4df6ba69aca617d7460368cdc0faa696b236ffedfea3fc"
-    },
-    {
-      "path": "index.html",
-      "oldHash": "a39b119deb874827486fb0d47c5a4372cbeb9f8bd93b19e061c35a6482f1b2b4",
-      "newHash": "4c7e3ce43b25bcd7e950ce088a7540742007a6fa68e6a3e9f94b18b6c09eb23f"
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "f87449e647ca3d6a804f55c75be2c424fa20340a2e692d69d32bf0c4848343a9",
+      "newHash": "5241f00ff12c2d5f10e9a8010654266ab67b76e80282ba95ccd7e84350dd7726"
     }
   ],
-  "affectedRecords": [
-    "cf-functions",
-    "cf-functions__apis-internas__20",
-    "cf-functions__csp__29",
-    "cf-functions__reglas-firestore__28",
-    "cf-pages__cf-functions__19",
-    "csp",
-    "productos",
-    "super-panel__productos__34"
-  ]
+  "affectedRecords": []
 }
