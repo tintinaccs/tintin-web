@@ -1,0 +1,34 @@
+name: Operación — resultados GitHub
+
+on:
+  workflow_run:
+    workflows: ['*']
+    types: [completed]
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: github-result-${{ github.event.workflow_run.id || github.event.pull_request.number }}-${{ github.event.workflow_run.run_attempt || 'closed' }}
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.name != 'Operación — resultados GitHub'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Always execute trusted default-branch code, never the triggering PR.
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Publicar resultado terminal
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/notificar-resultados-github.mjs

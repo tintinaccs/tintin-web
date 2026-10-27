@@ -4213,3 +4213,13 @@ Verificación operativa directa, no destructiva: PayPal público responde disabl
 PASS_LOCAL del candidato conciliado:41/41 Node de scheduling/editor/versiones; preflight oficial completado sin fallos (39 gates); PayPal18/18, Push/social52/52 y cuentas72/72. Restauración aislada de código: bundle SHA256 `3e760721bae80f6efdda70450a93ea7d61974ad84fdf8b22def92a5e23901d37`, git bundle verify, clon nuevo, git fsck --full y checkout main `0b415d76d60a9ad49112467df15bb34b8b5534c1` aprobados en18.93s. Es copia local verificada, no copia cifrada externa ni recuperación Firestore. La primera preflight local coincidió con una reconstrucción de Monaco y terminó ENOENT; se repitió después del build completo y aprobó.
 
 PASS_LOCAL de interfaz sobre el código conciliado:147/147 Chromium sin reintentos, cinco suites (product-editor-single-version, product-editor-space, product-workspaces, product-color-gallery y version-notice), servidor aislado desde este worktree en4175. Incluye320–3840px, rotación/reflujo, error/reintento, recuperación y avisos semánticos de actualización. Esta evidencia no certifica hardware físico ni la sesión administrativa productiva.
+## 2026-10-27 — Recibos y seguimiento obligatorio de GitHub
+
+Codex /root GPT-6. Pedido explícito: recibir el estado terminal de cada PR/run
+y obligar a cualquier agente a comprobarlo. Se añade workflow de eventos
+workflow_run/completed y cierre de PR, con recibos deduplicados por run/intento,
+SHA y conclusión; sin PR asociado se usa issue central. AGENTS y Claude exigen
+espera activa, logs ante fallo y comprobación de merge/post-merge. La integración
+actual no expone receptor webhook para despertar Codex: ese extremo sigue
+BLOCKED; los recibos GitHub no se presentan como una notificación entregada a
+un agente dormido. PR1257 comprobado MERGED, todos sus checks SUCCESS.
