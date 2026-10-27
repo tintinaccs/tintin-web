@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a5400543272902e393a687cccd745f73849f853fa438496acac798abe1f66056",
+  "sourceFingerprint": "70e5bc8ad35d5ccb9a70c0f2fce4c1ad3dcd8cb44ed8d64a63f6d7d3aa60a0f4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1573,
     "textFiles": 1442,
-    "totalBytes": 34677181,
+    "totalBytes": 34677559,
     "pages": 19,
     "modules": 1048
   },
@@ -45700,8 +45700,8 @@
     },
     {
       "path": "tests/checkout/availability-browser.spec.js",
-      "bytes": 9027,
-      "sha256": "aed21e4b1fc8fe6ef8d9a17e5248ebeba5028025650658bfab780ed04b95a359",
+      "bytes": 9112,
+      "sha256": "658138f15db5a59fca3dfc38002704c8c5f6c69259cc462ae933d861b0358fdb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45720,6 +45720,12 @@
           "line": 13
         },
         {
+          "raw": "../../js/components/images/utilidades-imagenes.js",
+          "target": "js/components/images/utilidades-imagenes.js",
+          "dynamic": false,
+          "line": 14
+        },
+        {
           "raw": "../../js/quality/accesibilidad-global.js",
           "target": "js/quality/accesibilidad-global.js",
           "dynamic": false,
@@ -45729,7 +45735,7 @@
           "raw": "../../js/pages/checkout/paypal-checkout.js?fixture=late",
           "target": "js/pages/checkout/paypal-checkout.js",
           "dynamic": true,
-          "line": 103
+          "line": 104
         }
       ],
       "endpoints": [
@@ -59197,8 +59203,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 970722,
-      "sha256": "130f47f854db50c31082a697d19aa86772fc8e5ef7f6b048c8d3bda9d3343eeb"
+      "bytes": 971015,
+      "sha256": "10d4e28f78ef73abba5c2b655597faaf6e2f72ae96c31715b6c1d7903f09a879"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -64903,8 +64909,8 @@
     {
       "path": "tests/checkout/availability-browser.spec.js",
       "extension": ".js",
-      "bytes": 9027,
-      "sha256": "aed21e4b1fc8fe6ef8d9a17e5248ebeba5028025650658bfab780ed04b95a359"
+      "bytes": 9112,
+      "sha256": "658138f15db5a59fca3dfc38002704c8c5f6c69259cc462ae933d861b0358fdb"
     },
     {
       "path": "tests/checkout/availability.test.mjs",
