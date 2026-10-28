@@ -137,7 +137,11 @@ for (const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768
 
 test('el auditor excluye sólo el logotipo decorativo y conserva la detección de texto y controles',async({page})=>{
   const source=fs.readFileSync('scripts/auditar-contraste.mjs','utf8');
-  const scanner=source.slice(source.indexOf('        const lum ='),source.indexOf('\n      });\n      if (r.length)'));
+  const start=source.indexOf('        const lum =');
+  const end=source.indexOf('\n      });',start);
+  expect(start,'El auditor debe contener el scanner de contraste').toBeGreaterThanOrEqual(0);
+  expect(end,'El scanner debe terminar dentro de page.evaluate').toBeGreaterThan(start);
+  const scanner=source.slice(start,end);
   await page.setContent('<style>body{background:#F8AACA}span,a{font-size:24px;color:white}</style><div id="tt-loader-wordmark" aria-hidden="true"><span id="brand-glyph">i</span></div><a id="catalog-action" href="/catalogo">Ver catálogo completo</a><span id="ordinary-text" aria-hidden="true">Texto visible</span>');
   let failures=await page.evaluate(code=>new Function(code)(),scanner);
   expect(failures.some(row=>row.sel.includes('#brand-glyph'))).toBe(false);

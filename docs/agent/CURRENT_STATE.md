@@ -1,3 +1,19 @@
+## 2026-10-28 — Reparación del check de contraste de PR1266
+
+Codex /root. Autorización vigente: corregir fallos y volver a ejecutar CI en el
+mismo PR, sin bypass. Head inicial c899f2de7e870ac82edc26be883d0ba5daacbc8b;
+CI40696469266 intento1 FAILURE, job122846590357. CodeQL40696465427 intento1
+SUCCESS sólo para ese SHA. PR abierto, auto-merge protegido habilitado.
+La prueba extraía JavaScript hasta un delimitador que incluía la instrucción
+siguiente al scanner. Al añadir comprobadas++, dejó de encontrarlo y evaluó
+código Node sobrante: SyntaxError. Reproducido localmente (1 FAIL), corregido
+acotando la extracción al cierre de page.evaluate y validando ambos límites.
+Mismas aserciones de contraste, logo decorativo y controles:1 PASS sin reintentos.
+No cambia código de aplicación ni umbrales/excepciones de accesibilidad.
+Regresión completa del spec:63/63 PASS sin reintentos en Chromium (58.7s),
+incluyendo320–1920px y movimiento reducido. Nueva CI:PENDING; no heredar éxito.
+Main avanzó a0604d107a (#1265/#1267); preservar trabajo concurrente al integrar.
+
 ## 2026-10-28 — Autorización de publicación y seguimiento de merge
 
 La titular solicita «mergealo automatico y seguimiento». Esta instrucción nueva
