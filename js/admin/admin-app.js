@@ -6249,7 +6249,7 @@ window.prodCancelForm = function() {
 };
 
 async function prodGuardar({commit=false}={}) {
-  const errorBox=document.getElementById('prod-form-error');if(errorBox)delete errorBox.dataset.errorScope;
+  const errorBox=document.getElementById('prod-form-error');if(errorBox?.dataset)delete errorBox.dataset.errorScope;
   if(productWorkspace && !commit){
     const workspace=productWorkspace;
     const box=document.getElementById('prod-form-error');box.textContent='';box.style.display='none';
@@ -6548,7 +6548,7 @@ async function prodGuardar({commit=false}={}) {
       },
     });
     if (operation.status !== 'green') {
-      errEl.dataset.errorScope='operation';
+      if(errEl.dataset)errEl.dataset.errorScope='operation';
       errEl.textContent = 'No se pudo completar el guardado. Revisá el detalle de la operación y volvé a intentar.';
       errEl.style.display = '';
       return false;

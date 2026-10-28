@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d464371855f5721ae203ef7ba529923273be48715f788512b345a4e02dde821b",
+  "sourceFingerprint": "1f6ee895d7d9012610cf5b3af9d75fba2ab82b66ffd6259bd106807a4c3cbba5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1592,
     "textFiles": 1461,
-    "totalBytes": 34689749,
+    "totalBytes": 34689963,
     "pages": 19,
     "modules": 1060
   },
@@ -2893,7 +2893,7 @@
         "viewer"
       ],
       "bytes": 204424,
-      "sha256": "abba1ce36bc733a1225cd303b98ade67433cda764f154a1ed9cc5dbb8f00edb4",
+      "sha256": "0d5908546c70de4f84af5f2a51d7c9f095cbe465797ad7c90cdc50ff232abf8b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2947,7 +2947,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261028-product-tabs-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20261028-product-tabs-4",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -3302,7 +3302,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261028-product-tabs-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20261028-product-tabs-4",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -28244,8 +28244,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 522499,
-      "sha256": "8eb2fe6cc490dab33ec1d99ea7eddd392fd31997e0bdc48397765fd9d0dd131c",
+      "bytes": 522525,
+      "sha256": "b4df5c32688f2459443689440f67845fba02239849b9757875589d519dd4a76a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -58017,7 +58017,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204424,
-      "sha256": "abba1ce36bc733a1225cd303b98ade67433cda764f154a1ed9cc5dbb8f00edb4"
+      "sha256": "0d5908546c70de4f84af5f2a51d7c9f095cbe465797ad7c90cdc50ff232abf8b"
     },
     {
       "path": "apple-touch-icon.png",
@@ -59018,8 +59018,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1946,
-      "sha256": "4a856d0d4beca5766afc9e0459ea82271b225ad254858e5ba0544dfe05556ade"
+      "bytes": 1875,
+      "sha256": "62abd73a12769e3972b08b3407c9fcadb8eb1c28b0f78ae121dc912b5e227caf"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -59031,7 +59031,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "6753d63af621e1a0b334e0a2129a2e53f162f806056775f896d96efb677f967d"
+      "sha256": "2ca56401eb2e0349f430dd72c888440d47e1a54b22238a6f5d900ffa2926e035"
     },
     {
       "path": "config/public-site.json",
@@ -59690,8 +59690,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 995082,
-      "sha256": "0934ea7f66b2249be19395754da1af6cb0e977dcdb9d7e6eb37b255edf43f1ed"
+      "bytes": 995341,
+      "sha256": "da108b6c24849a54f7f127af8b59698f46a3a6a110da3bb664669b54cc4ec790"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -61460,8 +61460,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 522499,
-      "sha256": "8eb2fe6cc490dab33ec1d99ea7eddd392fd31997e0bdc48397765fd9d0dd131c"
+      "bytes": 522525,
+      "sha256": "b4df5c32688f2459443689440f67845fba02239849b9757875589d519dd4a76a"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -64455,7 +64455,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 76136,
-      "sha256": "8d4958ccad56876abe61f00e9ac3dd9d8525fb8c36ffb7ea10bbc837cf4fdf22"
+      "sha256": "b2e6cd757ad46baef5652938f1a1982b9ad7118c30936331eaa4d85d35b675c4"
     },
     {
       "path": "scripts/ci-commands.js",
