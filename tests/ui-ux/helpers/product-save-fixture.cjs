@@ -53,10 +53,10 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
   await expect(page.locator('[data-action="product-new"]')).toBeVisible();
   await page.evaluate(async ({code,workflow,initialRecords}) => {
     const load = file => import(new URL(file, location.origin).href);
-    const [inventory, commercial, commercialUi, editorialUi, editorial, master] = await Promise.all([
+    const [inventory, commercial, commercialUi, editorialUi, editorial, master, imageUtilities] = await Promise.all([
       load('/js/core/store/inventario-variantes.mjs'), load('/js/admin/products/editor-comercial-core.mjs'),
       load('/js/admin/products/editor-comercial-interfaz.js'), load('/js/admin/products/editor-editorial-interfaz.js'),
-      load('/js/core/store/estado-editorial-producto.mjs'), load('/js/admin/products/maestro-productos-core.mjs'),
+      load('/js/core/store/estado-editorial-producto.mjs'), load('/js/admin/products/maestro-productos-core.mjs'), load('/js/components/images/utilidades-imagenes.js'),
     ]);
     const rows = new Map(initialRecords); let counter = 0;
     window.qaProductStore = rows; window.qaProductWrites = []; window.qaProductOperations = [];
@@ -66,7 +66,7 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
     const responseModule=await load('/js/admin/products/respuesta-editor-producto.mjs');
     const uploadModule=await load('/js/components/images/carga-imagenes.js?v=tintin-20261025-gallery-unified-1');
     const deps = {
-      ...responseModule,...workspaceModule,...galleryModule,...uploadModule,openMediaLibraryPicker:async()=>window.qaLibraryPhoto || null,
+      ...responseModule,...workspaceModule,...galleryModule,...uploadModule,openMediaLibraryPicker:async()=>window.qaChooseLibraryPhoto?window.qaChooseLibraryPhoto():window.qaLibraryPhoto || null,
       ...inventory, ...commercial, ...commercialUi, ...editorialUi, ...editorial, ...master,
       _allProducts: [], _productSourceById: new Map(), _productInventoryById: new Map(), adminRealtimeReady: { orders: false }, _allCollections: [{ slug: 'qa-tablet', name: 'Colección ficticia' }],
       productEditBaseline: null, productCommercialBaseline: null, _formImageWidgets: new Map(),
@@ -74,7 +74,7 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
       mountFormImageWidget() {}, mountProductColorPhotos() {},
       currentRole: 'superadmin', currentUser: { uid: 'qa-admin' }, auth: { currentUser: { uid: 'qa-admin' } }, db: {},
       can: () => true, roleCanDo: () => true, wristCategory: value => value,
-      sanitizeImageUrl: value => /^https:\/\//.test(String(value)) ? value : '',
+      sanitizeImageUrl: imageUtilities.sanitizeImageUrl,
       UnsavedGuard: { confirmLeave: fn => fn(), track() {}, clear() {} },
       collection: (_db, name) => name,
       doc: (...args) => args.length === 1 ? { id: `qa-product-${++counter}`, path: `products/qa-product-${counter}` } : { id: args[2], path: args[1] + '/' + args[2] },
@@ -112,7 +112,7 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
     const category = document.getElementById('prod-category'); category.replaceChildren(new Option('Elegí colección', ''), new Option('Colección ficticia', 'qa-tablet'));
   }, {workflow,initialRecords,code:photos ? source.slice(source.indexOf('const _formImageWidgets = new Map();'),source.indexOf('let productVariantStockBaseline = null;'))+code : code});
   await page.locator('[data-action="product-new"]').click();
-  await expect(page.locator('#prod-editor-section')).toBeVisible();
+  await expect(page.locator('#prod-tab-general')).toBeVisible();
 }
 async function openOptionAvailability(page,value,attribute='Color',combination=null){
  const toggle=page.getByRole('button',{name:'Opciones y variantes',exact:true});

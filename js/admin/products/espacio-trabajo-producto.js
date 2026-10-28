@@ -125,8 +125,10 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
       const result=await commit();
       if(result===false){
         const error=card.querySelector('#prod-form-error');
-        reportError(new Error(error?.textContent || 'No se confirmó el guardado oficial. Reintentá sin cerrar el editor.'));
-        if(error){error.textContent='';error.style.display='none';}
+        const contextual=error?.textContent && error.dataset.errorScope!=='operation';
+        reportError(new Error(contextual?'No se aplicaron los cambios. Revisá el campo indicado.':error?.textContent || 'No se confirmó el guardado oficial. Reintentá sin cerrar el editor.'));
+        // Las validaciones conservan su campo; los fallos de operación usan el estado/reintento del workspace.
+        if(error && !contextual){error.textContent='';error.style.display='none';}
       }else retryPublish=false;
       return result;
     }finally{

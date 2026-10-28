@@ -20,18 +20,18 @@ for(const width of [320,390,600,768,1024,1440])test(`versión única: abrir, fot
   await expect(page.locator('link[href*="editor-producto-studio"]')).toHaveCount(0);
   if(opening<2)await page.locator('.tt-work-back').click();
  }
- await page.locator('#prod-editor-section').selectOption('photos');
+ await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  await expect(page.locator('.tt-unified-photo')).toHaveCount(1);
  await expect(page.locator('.tt-unified-photo img')).toHaveJSProperty('complete',true);
  await page.locator('#prod-form-card .adm-card-body').evaluate(node=>node.scrollTop=0);
  await page.evaluate(()=>document.activeElement?.blur());
  await page.screenshot({path:info.outputPath(`version-unica-fotos-${width}.png`),animations:'disabled'});
- await page.locator('#prod-editor-section').selectOption('inventory');
+ await page.getByRole('tab',{name:'Variantes',exact:true}).click();
  await expect(page.locator('.tt-option-group')).toHaveCount(1);
  await expect(page.locator('#prod-stock')).toHaveValue('5');
  await page.locator('#prod-form-card .adm-card-body').evaluate(node=>node.scrollTop=0);
  await page.screenshot({path:info.outputPath(`version-unica-variantes-${width}.png`),animations:'disabled'});
- await page.locator('#prod-editor-section').selectOption('general');
+ await page.getByRole('tab',{name:'Información',exact:true}).click();
  await page.locator('#prod-name').fill('Versión única conservada');
  await expect(page.locator('#prod-save-btn')).toBeInViewport();
  expect(await page.locator('#prod-form-card').evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);

@@ -1,3 +1,7 @@
+## 2026-10-28 — Nuevo y Editar producto en seis pestañas persistentes
+
+Autoridades existentes: interfaz-productos-adaptable, controles-editor-producto, galeria-unificada, sugerencias y vista previa; el workspace conserva errores del controlador para situarlos en su contexto. Mismos campos, serializer y escritores comerciales; matriz/galería se trasladan sin clonar ni perder identidades. Fotos por color y edición inline; permisos internos, precios e inventario conservados. CSS Montserrat/rosa/blanco con paneles exclusivos y teclado/movimiento reducido. Se migran recorridos de pruebas y se añade una vista local de QA en memoria. URLs transitivas y derivados generados con las autoridades actuales. Sin API, reglas, dependencias, datos reales, merge ni despliegue. Evidencia y límites en CURRENT_STATE y docs/product-editor-refactor/REDISENO-SEIS-PESTANAS-20261028.md.
+
 ## 2026-10-27 — Panel único por opción en Productos
 
 Controles, galería, matriz comercial y composición existentes del editor:
