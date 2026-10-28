@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "baseCommit": "bad42062290b4b780ba490abbb5f44bf685516a9",
-  "reason": "Conciliar corrección de guardado y buscadores con extracción concurrente del módulo Correos, conservando ambas autoridades",
+  "reason": "Alinear versión interna y URL del Panel Maestro conservando las correcciones de guardado y búsqueda y conciliación Correos",
   "files": [
     {
       "path": "_headers",
       "oldHash": "8de3058c1dc03c5f248983d4a8ce79a9a51fad956277ba7192ae58071f9f5055",
-      "newHash": "b4c95ed00936d8d82085316c862de72ddd53449820ace1c6995eae802b88cfb0"
+      "newHash": "31aba6d1ee523b8536afeef1f683a5fd49bd9deac9ede6d9959c366192326455"
     },
     {
       "path": "admin-images.html",
@@ -16,7 +16,7 @@
     {
       "path": "admin.html",
       "oldHash": "9f44d0f63ac1c5864d06a1653758b4c28f2c2e794bcd0430ba5c5de0dd3443a8",
-      "newHash": "9d4da0b75364db99bdaff8d4628a7024ecfa036da977e0e5de74c56baddec302"
+      "newHash": "1ffdee6ff3d495ac56ac60886816236b9110028e329f543d13e03d332289c39a"
     },
     {
       "path": "catalogo.html",
@@ -36,12 +36,12 @@
     {
       "path": "config/csp-runtime.js",
       "oldHash": "982f6679155475f932debc4339f146b4b7ef2687cbeb2c74c129a1da42a02505",
-      "newHash": "c2eb0059a47b4f3fb3d1e86a43fe46a5462e5b085bc3d121309611cb6c115982"
+      "newHash": "e7e07aa312e51d718b8711750c55bffa9d62083910525cdc6c9d764cf6564756"
     },
     {
       "path": "config/csp-runtime.json",
       "oldHash": "fe579d9a957bc64c73e24dca5a90176ee63b70f418d65354bf6cb980128bc2d1",
-      "newHash": "c4843b0c3fe9781e823b2410b397c3f07ab190106ad3d6c616c8995dcb67f6db"
+      "newHash": "5a9997551163b7182e69fbf6d71f9ea8cf76cdd7131f7ced959acf7e41fbbbae"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -66,7 +66,7 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "oldHash": "67f78b299f77458a9ada838b3b19e1e136543a5b677d4a478473d47c112263b3",
-      "newHash": "36af1c4ae7682a53379a1729b35e3fa8e33e90a9b4c2c5f22b40f0d568d3c039"
+      "newHash": "ae8c7491c159acc906c45aabfe31bc184328b6ec00bc05647cca5043c6ee26f8"
     },
     {
       "path": "js/admin/mayoristas/mayoristas-admin.js",
@@ -116,7 +116,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "9378f29940b335691b4cd3df07215e4942bc017d9b9872ebb9c60e8dbde955c6",
-      "newHash": "f45d01f1e38f2de8e738dd9babe91ddbe08b286ce5f99b78d3e889cc4fa9535c"
+      "newHash": "9704e04ceb0a8f9f00f6d8b2fdb89f1ffc19d35d319b3f71ad6f28927bfe58e8"
     }
   ],
   "affectedRecords": [

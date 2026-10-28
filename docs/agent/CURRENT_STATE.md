@@ -1,3 +1,7 @@
+## 2026-10-28 — Versionado propio del Panel Maestro
+
+Codex raíz: CI40788468875/1, SHA2a1047b2, admin job123169321418: auditor maestro-conexiones rechazó VERSION interna antigua frente a URL nueva. Se alinean constante y entrada con tag nuevo, baseline desde main vigente y plan regenerado; no se cambia el auditor ni se relaja gate. Auditores superadmin ejecutados antes de publicar; evidencias /tmp/tintin-maestro-audits.log. Se conserva merge1271 y normalización de búsqueda del Panel. El SHA corregido tendrá CI independiente; no se hereda PASS de2a1047b2.
+
 ## 2026-10-28 — Conciliación con extracción concurrente de Correos1271
 
 Codex raíz. main avanzó a bad42062 mientras corría1270; GitHub dejó PR dirty y no creó CI para69886994. Se integra main mediante merge normal, conservando ambas historias. Las ocho correcciones de búsqueda de Correos se migran a correos/correos-admin.js (autoridad nueva); se conservan imports de ambos módulos, controles de productos y los gates agregados por1271. Se regeneran URLs, baseline, plan protegido y manifiestos desde main vigente, sin escoger manualmente derivados ni forzar push. Operaciones+Admin307tests:306PASS/1SKIPemulador; browser Correos se comprueba en390/1440. Las ejecuciones previas pertenecen a SHA anteriores; el SHA conciliado tendrá su propia CI y seguimiento directo.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "004ffe1c88eec4697b225ca3ff182bd16e1730e622ca9216dc08e116d98645b7",
+  "sourceFingerprint": "eec7ab1c4abcb08ed3fb76e86984ec3b99a87e31d7472feea574915dc25b9e9f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1610,
     "textFiles": 1479,
-    "totalBytes": 34925368,
+    "totalBytes": 34925961,
     "pages": 19,
     "modules": 1070
   },
@@ -2893,7 +2893,7 @@
         "viewer"
       ],
       "bytes": 204611,
-      "sha256": "9d4da0b75364db99bdaff8d4628a7024ecfa036da977e0e5de74c56baddec302",
+      "sha256": "1ffdee6ff3d495ac56ac60886816236b9110028e329f543d13e03d332289c39a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3022,7 +3022,7 @@
           "line": 2302
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-3",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2303
         },
@@ -3392,7 +3392,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-3",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2303,
           "exists": true
@@ -29579,8 +29579,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 28163,
-      "sha256": "36af1c4ae7682a53379a1729b35e3fa8e33e90a9b4c2c5f22b40f0d568d3c039",
+      "bytes": 28188,
+      "sha256": "ae8c7491c159acc906c45aabfe31bc184328b6ec00bc05647cca5043c6ee26f8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -58426,7 +58426,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204611,
-      "sha256": "9d4da0b75364db99bdaff8d4628a7024ecfa036da977e0e5de74c56baddec302"
+      "sha256": "1ffdee6ff3d495ac56ac60886816236b9110028e329f543d13e03d332289c39a"
     },
     {
       "path": "apple-touch-icon.png",
@@ -59428,7 +59428,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 6566,
-      "sha256": "59f8f6631c378fe32577be23764e98d6af914bc543416686a99c1e3cda510949"
+      "sha256": "436a14dcc24a04ac86870766a10942090e922e2c305eb1b5b44fc61826c21066"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -59440,7 +59440,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "53cb4da28788e27cff80823b70950ac6b4008b0c0c4397c635204726b5beb770"
+      "sha256": "7512546286466a75cee3c8cff1912e8970f2c17673d901d4d15dbb8a72ad6b71"
     },
     {
       "path": "config/public-site.json",
@@ -60129,8 +60129,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1022658,
-      "sha256": "b26db7167fda5b174faf5d35ecfaa63874164c7df516a8cc91a35af9d660e96b"
+      "bytes": 1023226,
+      "sha256": "34dbad394dab831354ac72ee8045594992544bddb456bd8a19b11ddb97e90017"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -62097,8 +62097,8 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 28163,
-      "sha256": "36af1c4ae7682a53379a1729b35e3fa8e33e90a9b4c2c5f22b40f0d568d3c039"
+      "bytes": 28188,
+      "sha256": "ae8c7491c159acc906c45aabfe31bc184328b6ec00bc05647cca5043c6ee26f8"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -64918,7 +64918,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 77179,
-      "sha256": "f45d01f1e38f2de8e738dd9babe91ddbe08b286ce5f99b78d3e889cc4fa9535c"
+      "sha256": "9704e04ceb0a8f9f00f6d8b2fdb89f1ffc19d35d319b3f71ad6f28927bfe58e8"
     },
     {
       "path": "scripts/ci-commands.js",
