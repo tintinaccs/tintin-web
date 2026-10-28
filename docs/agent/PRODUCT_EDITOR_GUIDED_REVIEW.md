@@ -47,6 +47,8 @@ CI40784162914/1 (`3c6b4eb2`) aprobó preflight y falló en la prueba auxiliar de
 
 Un stock fraccional bloquea el guardado, abre Precio y stock y permite enfocar/corregir la cantidad sin modificar existencias hasta confirmar un valor válido. Regresión afectada: 42/42 PASS. La CI40785296600/1 detectó que la barra global tapaba Guardar a844x300; se reprodujo y se agregó espacio de desplazamiento según la altura real del panel. La nueva CI debe comprobar el SHA completo; los éxitos anteriores no se heredan.
 
+Administración completa tras las correcciones: **211/211 PASS**, sin reintentos. Se integra después mainbad42062 (#1271, extracción de Correos) en la rama de revisión porque el conflicto impedía iniciar la CI; los controles sobre esa combinación se registran por separado en el PR.
+
 ## Límites
 
 Las capturas adjuntas del editor real se examinaron. Las referencias originales `C:/Users/USER/.codex/visualizations/.../tintin-studio.html` y sus siete PNG de Windows no existen en este entorno Linux; no se declara haberlas abierto. No se verificó una sesión administrativa externa autenticada ni dispositivos físicos. No se relajaron reglas, permisos ni protecciones. El PR debe quedar draft porque el mantenimiento canónico puede fusionar PR no draft automáticamente; esta medida cumple la prohibición explícita de merge sin aprobación.

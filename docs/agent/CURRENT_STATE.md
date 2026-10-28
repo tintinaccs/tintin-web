@@ -1,3 +1,7 @@
+## 2026-10-28 — Integración de Correos en la rama de revisión del editor
+
+Se incorpora origin/main bad42062 (#1271) sólo en codex/product-editor-guided-review-20261028 para resolver el conflicto que impedía iniciar la CI del PR1269. Se conservan la extracción de Correos y todos los cambios del editor; admin-app combinado usa una URL nueva guided-editor-4. Antes de integrar: Administración completa211/211 PASS sin reintentos, build/preflight/protección PASS; vista QA guardó mediante clic real manteniendo stock1/0. Se repiten contratos y aceptación sobre la integración y se exige CI de su SHA final. PR draft, sin merge ni despliegue de producción.
+
 ## 2026-10-28 — Editor guiado solicitado desde capturas, Codex /root
 
 Rama `codex/product-editor-guided-review-20261028`, base `c031635b`. Pedido completo en adjunto Texto pegado.txt: asistente integrado en seis pasos, separación de opciones/fotos/comercio, contadores y galerías de asociaciones genéricas, formato PYG, detalles progresivos, SEO automático, integridad histórica y PR para revisión. Prohibición explícita nueva de merge sin aprobación; prevalece sobre autorización anterior y reglas generales. El PR se mantendrá draft para impedir el merge automático canónico. Sin producción comercial ni despliegue manual.
@@ -4707,3 +4711,23 @@ cerrar lote admin con evidencia terminal; Rules phone/username/editor y cierre
 preflight del diff final. Después quedan proveedores sandbox/cuentas autorizadas,
 hardware/WCAG manual, legal/retención y métricas de campo. No afirmar aprobación
 de todas las fases ni estabilidad global por contar tests solapados.
+
+## 2026-10-28 — Extracción inicial de Correos
+
+Codex /root, base9fcc8c570. Primer bloque del plan de la titular; dependencias
+y límites en CORREOS-EXTRACCION-20261028.md. Se encapsulan estado, renderers,
+handlers y cuatro listeners en iniciarCorreos con inyección explícita. Sesión,
+usuarios y pedidos se consultan mediante getters; toJsDate_ sigue compartida.
+Se conservan29 callbacks globales y el control de acceso existente. Sin cambios
+en autenticación, proveedores ni datos productivos.
+
+PASS_LOCAL: audit:emails, audit:email-messaging, audit:typography (42015
+comprobaciones), audit:integral y14 pruebas de content-security-boundaries.
+Pruebas locales del módulo completo sobre HTML/CSS reales y fuentes simuladas:
+pestañas, fuentes vivas, limpieza/reinicio de escuchas; historial hostil conserva
+sus comprobaciones. Se incorporan ambos recorridos de navegador al stage browser.
+Versionado y diagnóstico se regeneran por sus constructores canónicos.
+IN_PROGRESS: audit:final antes (worktree base independiente) y después; resultados
+terminales se registrarán en el cierre. CI/PR/merge pendientes de creación.
+NOT_VERIFIED: sesión productiva autenticada y envío real; no se ejecutan correos
+ni migraciones. Se mantiene detenido el avance al siguiente bloque.

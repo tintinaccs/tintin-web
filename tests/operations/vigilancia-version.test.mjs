@@ -84,7 +84,7 @@ test('propagar versiones de imports y del loader no altera su identidad visual',
 
 test('los recursos del servidor y terceros no forman parte de la interfaz cargada', () => {
   for (const ref of ['/functions/api/product.js?v=1', '/cloudflare/product.js?v=1', '/scripts/build.js?v=1', 'https://other.test/a.js?v=1', '/api/products', '/a.js']) assert.equal(clientResourcePath(ref, 'https://version.test/'), '');
-  assert.equal(clientResourcePath('/js/admin/admin-app.js?v=tintin-20261027-opciones-inline-1', 'https://version.test/'), 'js/admin/admin-app.js');
+  assert.equal(clientResourcePath('/js/admin/admin-app.js?v=tintin-20261028-guided-editor-4', 'https://version.test/'), 'js/admin/admin-app.js');
 });
 
 test('un cambio de otra pantalla no avisa aunque cambie la publicación global', async () => {
