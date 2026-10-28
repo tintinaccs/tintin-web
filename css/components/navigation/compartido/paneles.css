@@ -122,11 +122,11 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   grid-template-rows: auto minmax(0, 1fr);
   align-items: center;
   gap: 12px;
-  top: clamp(74px, 8vh, 104px) !important;
+  top: calc(var(--tt-panel-viewport-top, 0px) + clamp(12px, 8vh, 104px)) !important;
   left: 50% !important;
   right: auto !important;
   width: min(1120px, calc(100vw - 64px)) !important;
-  max-height: min(82dvh, 780px);
+  max-height: min(780px, calc(var(--tt-panel-viewport-height, 100dvh) - clamp(12px, 8vh, 104px) - 12px));
   transform: translate(-50%, -18px) scale(.97) !important;
   padding: 20px !important;
   border: 1px solid var(--tintin-border) !important;

@@ -25,9 +25,17 @@ test('el auditor exige campos, delegación clásica y política de visibilidad e
  ])assert.equal(audit(mutate),1);
 });
 test('controlador real excluye ocultos/inactivos y prioriza opciones disponibles antes de agotados',()=>{
- const c=vm.createContext({window:{TintinCatalogPolicy:{isCatalogVisible:p=>p.active!==false&&!p.hidden&&p.price>0}},productSearchText,productSearchScore,normalize:normalizeProductSearch,hasProductStock,MAX_RESULTS:10});
+ const c=vm.createContext({window:{TintinCatalogPolicy:{isCatalogVisible:p=>p.active!==false&&!p.hidden&&p.price>0}},productSearchText,productSearchScore,normalize:normalizeProductSearch,hasProductStock});
  vm.runInContext('let index=[];'+controller.slice(controller.indexOf('function buildIndex'),controller.indexOf('function stateNode')),c);
  const products=[{id:'out',name:'Anillo',price:1,stock:0},{id:'in',name:'Anillo corazón',price:1,stock:1},{id:'inactive',name:'Anillo secreto',price:1,stock:2,active:false},{id:'hidden',name:'Anillo oculto',price:1,stock:2,hidden:true}];
  c.buildIndex(products);
  assert.deepEqual(Array.from(c.searchProducts('anilo'),p=>p.id),['in','out']);
+});
+
+test('nombre exacto precede alternativas con stock y no recorta coincidencias',()=>{
+ const c=vm.createContext({window:{TintinCatalogPolicy:{isCatalogVisible:p=>p.active!==false}},productSearchText,productSearchScore,normalize:normalizeProductSearch,hasProductStock});
+ vm.runInContext('let index=[];'+controller.slice(controller.indexOf('function buildIndex'),controller.indexOf('function stateNode')),c);
+ c.buildIndex([{id:'exact',name:'ELIORA',price:1,stock:0},...Array.from({length:24},(_,i)=>({id:String(i),name:'Eliora '+i,price:1,stock:2}))]);
+ const result=Array.from(c.searchProducts('  éliora  '),p=>p.id);
+ assert.equal(result[0],'exact');assert.equal(result.length,25);
 });

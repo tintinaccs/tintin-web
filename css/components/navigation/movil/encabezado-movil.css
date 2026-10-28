@@ -232,15 +232,15 @@
   html[data-tt-mobile-home="hidden"] body #tt-tabbar:has(#tabbar-notifications:not([hidden])),
   html[data-tt-mobile-home="hidden"] body #tt-tabbar.tt-tabbar-compact:has(#tabbar-notifications:not([hidden])) {
     width:min(420px,calc(100vw - 24px)) !important;
-    min-height:76px !important;
-    padding:8px !important;
+    min-height:var(--tt-nav-min-height,76px) !important;
+    padding:var(--tt-nav-padding,8px) !important;
     gap:2px;
     border-radius:999px !important;
     transition:box-shadow .2s ease !important;
   }
   html body #tt-tabbar .tt-tabbar-btn,
   html body #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn, html body #tt-tabbar .tt-tabbar-btn:is(#tabbar-cart,#tabbar-notifications) {
-    min-height:58px;
+    min-height:var(--tt-nav-button-height,58px);
     padding:6px 4px;
     gap:5px;
     border-radius:999px !important;
@@ -279,4 +279,21 @@
   html body #notifications-drawer #tt-notifications-list {
     padding-bottom:calc(var(--tt-mobile-nav-clearance,108px) + env(safe-area-inset-bottom)) !important;
   }
+}
+
+/* Durante la búsqueda la barra conserva su presencia y reserva propia.
+   Panel y navegación comparten los límites del viewport visual del teclado. */
+@media (max-width:767px) {
+  html[data-tt-search-active] body #tt-tabbar {
+    bottom:calc(var(--tt-panel-keyboard-inset,0px) + max(16px,env(safe-area-inset-bottom)));
+  }
+  html[data-tt-panel-short] {
+    --tt-nav-min-height:52px;
+    --tt-nav-padding:4px;
+    --tt-nav-button-height:44px;
+  }
+  html[data-tt-panel-short] body #tt-tabbar {
+    bottom:calc(var(--tt-panel-keyboard-inset,0px) + max(8px,env(safe-area-inset-bottom)));
+  }
+  html[data-tt-panel-short] body #tt-tabbar .tt-tabbar-btn > span:last-child { display:none !important; }
 }

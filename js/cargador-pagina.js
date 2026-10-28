@@ -19,6 +19,10 @@
   try { history.scrollRestoration = 'manual'; } catch {}
   var entryScrollBehavior;
   var entryScrollRevision = 0;
+  var navigationSurfaceUsed = false;
+  window.addEventListener('tintin:surface-change', function (event) {
+    if (event.detail?.surface && event.detail.surface !== 'none') navigationSurfaceUsed = true;
+  }, { passive: true });
   function resetEntryScroll(surface) {
     window.TintinScrollLock?.resetPosition?.();
     if (surface?.nodeType === 1) {
@@ -53,8 +57,14 @@
   window.TintinPageScroll = { reset: resetEntryScroll };
   resetEntryScroll();
   document.addEventListener('DOMContentLoaded', resetEntryScroll, { once: true });
-  window.addEventListener('load', resetEntryScroll, { once: true, passive: true });
-  window.addEventListener('pageshow', resetEntryScroll, { passive: true });
+  window.addEventListener('load', function () {
+    // Recursos tardíos no deben reiniciar una posición que el usuario ya
+    // conservó al abrir/cerrar búsqueda, carrito o cuenta.
+    if (!navigationSurfaceUsed) resetEntryScroll();
+  }, { once: true, passive: true });
+  window.addEventListener('pageshow', function (event) {
+    if (event?.persisted || !navigationSurfaceUsed) resetEntryScroll();
+  }, { passive: true });
 
   // El sitio oficial vive en Cloudflare Pages. Conserva ruta, parámetros y hash
   // cuando alguien llega desde el dominio histórico de GitHub Pages.

@@ -1956,3 +1956,57 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-
 
 /* Símbolos proporcionados dentro del área táctil, también al editar cantidades. */
 #prod-form-card .tt-editor-stepper > button {display:grid;place-items:center;font-size:20px;line-height:1;padding:0;border-radius:6px!important;}
+
+/* Editor de producto: seis paneles persistentes sobre el formulario canónico. */
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-section-nav {
+  position:static;display:block;padding:0 0 20px;margin:0 auto 24px;width:100%;max-width:1080px;
+  border:0;border-bottom:1px solid var(--editor-line);border-radius:0;background:var(--tt-commerce-surface);
+}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-quick-actions {
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));overflow:visible;gap:6px;padding:0;
+}
+#prod-form-card.tt-editor-composer .tt-product-quick-actions [role=tab] {
+  white-space:normal;line-height:1.4;min-height:48px;padding:10px 6px;border:1px solid transparent;border-radius:12px;color:var(--tt-commerce-text);background:transparent;font-weight:500;
+}
+#prod-form-card.tt-editor-composer .tt-product-quick-actions [aria-selected=true] {
+  background:var(--tt-commerce-soft);border-color:var(--tt-commerce-brand);font-weight:700;
+}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-section-nav > label,
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer #prod-editor-section {display:none;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-editor-layout {
+  display:block;width:100%;max-width:900px;margin:0 auto;
+}
+#prod-form-card.tt-editor-composer .tt-product-fields {display:block;}
+#prod-form-card.tt-editor-composer .tt-editor-sidebar:empty {display:none;}
+#prod-form-card.tt-editor-composer .tt-product-tabpanel {min-width:0;outline-offset:6px;}
+#prod-form-card.tt-editor-composer .tt-product-tabpanel[hidden],
+#prod-form-card.tt-editor-composer [data-product-section][hidden] {display:none !important;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-tabpanel > .tt-editor-section {padding:0 0 28px;margin:0 0 28px;border-bottom:1px solid var(--editor-line);}
+#prod-form-card.tt-editor-composer .tt-product-tabpanel > .tt-editor-section:last-child {border-bottom:0;}
+#prod-form-card.tt-editor-composer .tt-product-tabpanel .tt-editor-section-fields {grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+#prod-form-card.tt-editor-composer .tt-product-tabpanel [data-product-section=photos] > .tt-editor-section-fields,
+#prod-form-card.tt-editor-composer .tt-product-tabpanel [data-product-section=inventory] > .tt-editor-section-fields,
+#prod-form-card.tt-editor-composer .tt-product-tabpanel [data-product-section=availability] > .tt-editor-section-fields {display:grid;grid-template-columns:minmax(0,1fr);}
+#prod-form-card.tt-editor-composer .tt-product-tabpanel [data-product-section=general] .tt-editor-section-fields > :has(#prod-name),
+#prod-form-card.tt-editor-composer .tt-product-tabpanel [data-product-section=general] .tt-editor-section-fields > :has(#prod-description),
+#prod-form-card.tt-editor-composer .tt-combination-inline {grid-column:1/-1;min-width:0;}
+#prod-form-card.tt-editor-composer .tt-combination-inline > summary {min-height:48px;align-content:center;cursor:pointer;font-weight:600;padding:12px 16px;background:var(--tt-commerce-soft);border-radius:12px;}
+#prod-form-card.tt-editor-composer .tt-combination-inline > #prod-variant-stock {margin-top:16px;}
+#prod-form-card.tt-editor-composer :is(button,input,textarea,select,summary,[role=tabpanel]):focus-visible {outline:2px solid var(--tt-commerce-text);outline-offset:3px;}
+#prod-form-card.tt-editor-composer [aria-invalid=true] {border-color:var(--tt-commerce-error);}
+#prod-form-card.tt-editor-composer .tt-editor-preview-shell {max-width:900px;margin:24px auto 0;}
+#prod-form-card.tt-editor-composer .tt-photo-colors {display:flex;flex-wrap:wrap;gap:8px;margin-block:0 16px;}
+#prod-form-card.tt-editor-composer .tt-photo-colors button[aria-pressed=true] {background:var(--tt-commerce-soft);border-color:var(--tt-commerce-brand);font-weight:700;}
+@media (prefers-reduced-motion:no-preference) {
+  #prod-form-card.tt-editor-composer .tt-product-tabpanel:not([hidden]) {animation:tt-product-panel-in .14s ease-out;}
+  #prod-form-card.tt-editor-composer .tt-product-quick-actions button {transition:background-color .12s ease,border-color .12s ease;}
+  @keyframes tt-product-panel-in {from {opacity:.6;} to {opacity:1;}}
+}
+@media(max-width:767px) {
+  html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-quick-actions {grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;}
+  html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-section-nav {margin-bottom:20px;padding-bottom:16px;}
+  #prod-form-card.tt-editor-composer .tt-product-tabpanel .tt-editor-section-fields {grid-template-columns:minmax(0,1fr);gap:16px;}
+}
+#prod-form-card.tt-editor-composer .tt-product-quick-actions [role=tab] {text-transform:none !important;letter-spacing:0 !important;}
+
+#prod-form-card.tt-editor-composer .tt-editor-error-region {max-width:900px;margin:0 auto 20px;}

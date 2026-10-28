@@ -11,7 +11,7 @@ for(const [width,height] of [[320,568],[360,800],[375,812],[390,844],[430,932],[
  const gallery=await page.locator('.tt-unified-photos').evaluate(node=>({position:getComputedStyle(node).position,maxHeight:getComputedStyle(node).maxHeight,overflow:getComputedStyle(node).overflowY}));
  expect(gallery.position).not.toBe('sticky');expect(gallery.maxHeight).toBe('none');expect(['auto','scroll']).not.toContain(gallery.overflow);
  expect(await page.locator('#prod-name').evaluate(node=>parseFloat(getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(16);
- if(width>=720){const controls=await page.locator('.tt-photo-product-controls').boundingBox(),photo=await page.locator('.tt-unified-photos').boundingBox();expect(controls.width).toBeGreaterThan(photo.width);expect(photo.x+photo.width).toBeLessThanOrEqual(controls.x+1);expect(Math.abs(controls.y-photo.y)).toBeLessThanOrEqual(2);}
+ await expect(page.locator('.tt-product-tabpanel:visible')).toHaveCount(1);await expect(page.locator('#prod-panel-general')).toBeVisible();
  expect(await page.locator('#prod-form-card').evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);
  await body.evaluate(node=>node.scrollTop=0);if(width<=1440)await page.screenshot({path:info.outputPath(`editor-${width}.png`)});
  await preview.locator('summary').click();await expect(page.locator('#prod-live-preview')).toBeVisible();
