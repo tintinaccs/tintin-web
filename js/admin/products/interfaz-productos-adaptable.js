@@ -1,4 +1,4 @@
-import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1-editor-search-20261028-1';
+import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1-editor-search-20261028-2';
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261028-product-tabs-1';
 import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261028-product-tabs-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';

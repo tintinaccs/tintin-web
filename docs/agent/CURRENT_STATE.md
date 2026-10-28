@@ -1,3 +1,7 @@
+## 2026-10-28 — Conciliación con extracción concurrente de Correos1271
+
+Codex raíz. main avanzó a bad42062 mientras corría1270; GitHub dejó PR dirty y no creó CI para69886994. Se integra main mediante merge normal, conservando ambas historias. Las ocho correcciones de búsqueda de Correos se migran a correos/correos-admin.js (autoridad nueva); se conservan imports de ambos módulos, controles de productos y los gates agregados por1271. Se regeneran URLs, baseline, plan protegido y manifiestos desde main vigente, sin escoger manualmente derivados ni forzar push. Operaciones+Admin307tests:306PASS/1SKIPemulador; browser Correos se comprueba en390/1440. Las ejecuciones previas pertenecen a SHA anteriores; el SHA conciliado tendrá su propia CI y seguimiento directo.
+
 ## 2026-10-28 — Historial de correo, fixtures y consumidores de búsqueda
 
 Codex raíz: SHA10e28fb8, CI40785708852/1: Comercio crítico y reglas PASS; Administración job123160272373 detectó fixture content-security-boundaries sin normalizeAdminSearch al extraer renderCorreosHistorialTab. Se inyecta el helper real manteniendo las aserciones XSS/IDs hostiles.124/124operations,608/608consumidores Node(flow-connections/engagement/catalog/accounts/orders/wholesale/import) y56/56visual-builder PASS. Son correcciones de infraestructura de pruebas; no permisos ni escrituras comerciales. El SHA siguiente se comprobará separadamente hasta merge y producción; no hereda resultados anteriores.
@@ -4701,3 +4705,23 @@ cerrar lote admin con evidencia terminal; Rules phone/username/editor y cierre
 preflight del diff final. Después quedan proveedores sandbox/cuentas autorizadas,
 hardware/WCAG manual, legal/retención y métricas de campo. No afirmar aprobación
 de todas las fases ni estabilidad global por contar tests solapados.
+
+## 2026-10-28 — Extracción inicial de Correos
+
+Codex /root, base9fcc8c570. Primer bloque del plan de la titular; dependencias
+y límites en CORREOS-EXTRACCION-20261028.md. Se encapsulan estado, renderers,
+handlers y cuatro listeners en iniciarCorreos con inyección explícita. Sesión,
+usuarios y pedidos se consultan mediante getters; toJsDate_ sigue compartida.
+Se conservan29 callbacks globales y el control de acceso existente. Sin cambios
+en autenticación, proveedores ni datos productivos.
+
+PASS_LOCAL: audit:emails, audit:email-messaging, audit:typography (42015
+comprobaciones), audit:integral y14 pruebas de content-security-boundaries.
+Pruebas locales del módulo completo sobre HTML/CSS reales y fuentes simuladas:
+pestañas, fuentes vivas, limpieza/reinicio de escuchas; historial hostil conserva
+sus comprobaciones. Se incorporan ambos recorridos de navegador al stage browser.
+Versionado y diagnóstico se regeneran por sus constructores canónicos.
+IN_PROGRESS: audit:final antes (worktree base independiente) y después; resultados
+terminales se registrarán en el cierre. CI/PR/merge pendientes de creación.
+NOT_VERIFIED: sesión productiva autenticada y envío real; no se ejecutan correos
+ni migraciones. Se mantiene detenido el avance al siguiente bloque.

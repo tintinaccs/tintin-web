@@ -264,7 +264,8 @@ for (const file of walk(ROOT)) {
 
 const adminSource = [
   fs.readFileSync(path.join(ROOT, 'admin.html'), 'utf8'),
-  fs.readFileSync(path.join(ROOT, 'js', 'admin', 'admin-app.js'), 'utf8')
+  fs.readFileSync(path.join(ROOT, 'js', 'admin', 'admin-app.js'), 'utf8'),
+  fs.readFileSync(path.join(ROOT, 'js', 'admin', 'correos', 'correos-admin.js'), 'utf8')
 ].join('\n');
 check(/function buildPreviewHtml_/.test(adminSource), 'No se encontró la vista previa de email del Super Admin.');
 check(/fontBase = new URL\('assets-tintin\/fonts\/'/.test(adminSource), 'El iframe de vista previa no carga Montserrat local.');

@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const source = fs.readFileSync(path.join(__dirname, '../../js/admin/admin-app.js'), 'utf8');
+const source = fs.readFileSync(path.join(__dirname, '../../js/admin/admin-app.js'), 'utf8') + '\n' + fs.readFileSync(path.join(__dirname, '../../js/admin/correos/correos-admin.js'), 'utf8');
 const eventsSource=fs.readFileSync(path.join(__dirname,'../../js/admin/eventos-dinamicos-admin.mjs'),'utf8').replace(/^export /gm,'');
 const names = ['escapeHtmlAdmin','templateLabel_','logStatusBadge_','categoryBadge_','renderCorreosHistorialTab','renderCorreosDashboard'];
 const functions = names.map(name => {

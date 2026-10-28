@@ -14,7 +14,7 @@ const files = {
   checkout: read('checkout.html'),
   cart: read('js/components/cart/sincronizacion-carrito.js'),
   rules: read('firestore.rules'),
-  admin: `${read('admin.html')}\n${read('js/admin/admin-app.js')}`,
+  admin: `${read('admin.html')}\n${read('js/admin/admin-app.js')}\n${read('js/admin/correos/correos-admin.js')}`,
   adminImages: read('admin-images.html'),
   adminGuard: read('js/admin/proteccion-cambios-pendientes-admin.js'),
   contentAdmin: read('js/admin/content/gestion-contenido-admin.js'),

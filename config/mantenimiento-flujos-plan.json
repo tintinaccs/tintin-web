@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "9fcc8c570b99fed5fdafedb35cfd8b35bcf09236",
-  "reason": "Corregir guardado del último paso y búsquedas administrativas y públicas sin perder foco ni respuestas vigentes",
+  "baseCommit": "bad42062290b4b780ba490abbb5f44bf685516a9",
+  "reason": "Conciliar corrección de guardado y buscadores con extracción concurrente del módulo Correos, conservando ambas autoridades",
   "files": [
     {
       "path": "_headers",
@@ -11,12 +11,12 @@
     {
       "path": "admin-images.html",
       "oldHash": "b7dd1ca2100f36eba311fd0d787c2c814af96e066f8bd2a2ab684874c4dfcb29",
-      "newHash": "4256981deebd283933e986597478aa495b065e462401bfa3baff9021b8293bfa"
+      "newHash": "7f1e9094aa4da178cdae510579678262e5567a5638828599b71c361f80011484"
     },
     {
       "path": "admin.html",
-      "oldHash": "926363f17276e8b59a76d6b64a3ce12ff197d71e22466c24e1da96a61e61f255",
-      "newHash": "01c7a0fecd31f9f42490b8c549ec2d7ddea5760b2a5aad6e59d937a5804cb5d1"
+      "oldHash": "9f44d0f63ac1c5864d06a1653758b4c28f2c2e794bcd0430ba5c5de0dd3443a8",
+      "newHash": "9d4da0b75364db99bdaff8d4628a7024ecfa036da977e0e5de74c56baddec302"
     },
     {
       "path": "catalogo.html",
@@ -26,7 +26,7 @@
     {
       "path": "checkout.html",
       "oldHash": "2b9b31c40ce55a4cd29cc0002bdfafa2e8f0b063d6bee91860c2d42747b35160",
-      "newHash": "e2c046570c1484045bd58083bc0789b244fd2a9f2acc692617e8886662075060"
+      "newHash": "1fee9bc7ae4d84df9f8b88abd86be7fae862b0373318ed25ff8a31dd8dfb9729"
     },
     {
       "path": "cloudflare/comentarios-sociales.js",
@@ -45,8 +45,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "06914e45fe6c39792fa7e8a8834f9836f98197043381906adaff991c6ca8ac00",
-      "newHash": "a95b9d99d91ee596c5a35773c8023f3621cac7d4e9682c1c4b7f654b0acb7197"
+      "oldHash": "5d62873aae94186e664d58f96c1c859261ea12e16c6717f2c2105b4c3a6f45c9",
+      "newHash": "2c55519a584fa82c0f61c73f580719846e2e97dc2c2c7ba66071407d9027a698"
     },
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
@@ -86,7 +86,7 @@
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
       "oldHash": "7b40aca3d83686217862927427b1d537ee95e07bf108f12f084dd59670f741ac",
-      "newHash": "d22e30ff5b21b64c0baa77efee097a3acc16ae218c2df5c1f386ac81c6fc1576"
+      "newHash": "d7574f14e0dbc13b3d64178f9d03a3e55b749d85e856f57a5dde305f86ec8899"
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
@@ -96,7 +96,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "8c33d1b86245b1bdad29f797e3d04e849467431bb6253b4711a35f682f8facd6",
-      "newHash": "408f36958295579611c70f08d7be41493cbee1a61fa31e1c7a2cc6d0408885f5"
+      "newHash": "47570ffc5f920eea4fd971ce3c47aa6f7a890977ebd2d8ea627dff209622c09c"
     },
     {
       "path": "js/components/location/mapa-ubicacion.js",
@@ -111,12 +111,12 @@
     {
       "path": "perfil.html",
       "oldHash": "e5d72243fd2d07f4a9f0cc2dfbf1a9a04040c91d2097ba35c3f67f0f7da7988e",
-      "newHash": "bd4b021a54b0d6eda579c27a826e2bf4c10c92b127463cb6128b84e127ad7661"
+      "newHash": "4e04fc26d4768f96c0d8ef9900f2e2559fc6c8e42e8d4d68798fc208221a7606"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "b6801b5829d573c56de73fd03b95967be1eb022b7773417e84b0be34b4baf56b",
-      "newHash": "d0c9e27e4ab938680594c02c5d587cf5f49aff0bf3acde325bc24f10c1812c0f"
+      "oldHash": "9378f29940b335691b4cd3df07215e4942bc017d9b9872ebb9c60e8dbde955c6",
+      "newHash": "f45d01f1e38f2de8e738dd9babe91ddbe08b286ce5f99b78d3e889cc4fa9535c"
     }
   ],
   "affectedRecords": [
