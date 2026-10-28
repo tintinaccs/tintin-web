@@ -1,3 +1,44 @@
+## 2026-10-28 — PR #1267: candidato con carga tardía y scroll corregidos, Codex /root
+
+La CI inicial40696772289/1 de27bfe553 falló en la medición del scroller390px.
+Se conserva la comprobación de sus extremos, descontando correctamente margen
+mediante posiciones independientes; el gesto usa un caso hasTouch/viewport nativo.
+Además, el evento load/pageshow inicial podía reiniciar la página después de
+usar/cerrar un panel: cargador-pagina omite sólo esos reinicios tardíos tras usar
+navegación; reset explícito y retorno bfcache mantienen el contrato. El controlador
+restaura scroll instantáneo y no ejecuta el callback sobre otra superficie abierta.
+PASS_LOCAL:23/23 Chromium búsqueda,18/18 Node navegación (nuevo caso load tardío),
+15/15 recorridos de paneles del controlador compartido,3 repeticiones de gesto
+nativo. Sin datos comerciales, permisos ni workflows modificados. Referencias,
+caché, plan protegido y diagnóstico regenerados antes de publicar el nuevo SHA.
+La consulta de branch-protection devuelve403 del conector; no se altera ninguna
+protección ni se omiten checks. GitHub conserva el bloqueo y auto-merge pendiente.
+Se sigue el nuevo SHA/runs por separado; no se hereda CI aprobada de otro SHA.
+
+## 2026-10-28 — PR #1267: corrección de medición de scroll en CI, Codex /root
+
+PR https://github.com/tintinaccs/tintin-web/pull/1267, HEAD inicial
+27bfe553ab0d9a00136fde34c6f090a028c51a94. Auto-merge habilitado y monitor
+horario activo (por sondeo; sin receptor webhook disponible). CodeQL40696767611
+intento1 y Cloudflare preview aprobaron. CI40696772289 intento1 falló en job
+122846087039, Comercio crítico:144 casos de navegador aprobaron y el caso390px
+falló dos veces al exigir que la última tarjeta completa cupiera en la altura
+exterior del contenedor, ignorando padding y margen inferior. Se conserva el
+control del extremo inferior y se comprueba siempre, mediante scroll instantáneo,
+que el principio de esa misma tarjeta también sea alcanzable. El recorrido
+actúa sólo sobre scrollTop del scroller, evitando que scrollIntoView desplace
+otros ancestros. El gesto se valida ahora en un caso independiente con viewport
+nativo y contexto hasTouch, separado de la simulación del teclado; conserva
+aserciones de scroll, barra visible y snapshot sin reconstrucciones. Tres
+repeticiones locales de ese caso aprobaron. Sin tolerancias
+ampliadas ni aserciones retiradas. Una comprobación local adicional detectó
+restauración de posición animada por scroll suave: SurfaceController ahora
+restaura instantáneamente y descarta el callback si ya se abrió otra superficie.
+Se renuevan sólo sus URLs transitivas y las huellas/plan canónicos;8 escenarios
+de viewport aprobaron con esta corrección.
+La rama local reproduce el objeto Git remoto exacto; árbol verificado por SHA.
+Se espera la CI del siguiente SHA; el resultado anterior no se hereda.
+
 ## 2026-10-28 — Merge automático y seguimiento de headers, Codex /root
 
 La titular autoriza expresamente merge automático y seguimiento. Base remota

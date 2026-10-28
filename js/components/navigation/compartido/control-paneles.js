@@ -209,7 +209,13 @@
       const returnY = this.lockedScrollY;
       this.savedBodyStyles = null;
       this.savedHtmlStyles = null;
-      requestAnimationFrame(() => window.scrollTo(0, returnY));
+      requestAnimationFrame(() => {
+        // La restauración no es una navegación animada. No heredar smooth
+        // scroll ni desplazar el documento si ya se abrió otro panel.
+        if (!html.classList.contains('tt-surface-locked')) {
+          window.scrollTo({ left: 0, top: returnY, behavior: 'instant' });
+        }
+      });
     }
 
     getMobileNavigation() {

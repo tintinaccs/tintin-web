@@ -46,6 +46,7 @@ Cambios funcionales:
 | `js/components/navigation/compartido/control-busqueda.js` | Exactos primero, todas las coincidencias, alternativas aproximadas etiquetadas, catálogo vacío, errores/reintento, descarte de UI tardía tras cierre y navegación de teclado consistente. |
 | `js/components/navigation/compartido/carga-navegacion.js` | Revalidación mediante el store al abrir nuevamente, manteniendo carga diferida y promesas compartidas. |
 | `js/core/store/estado-productos.js` | Propaga opciones de recarga al store existente. |
+| `js/cargador-pagina.js` | Evita que load/pageshow inicial tardío reinicie scroll después de utilizar un panel; preserva resets explícitos y bfcache. |
 | `scripts/auditar-firestore-lecturas-presupuesto.js` | Comprueba la carga del controlador realtime en su asignación real; antes dependía de un literal de una función ajena. No cambia presupuesto ni acceso. |
 | `tests/catalog/search-authority.test.mjs`, `tests/catalog/search-responsive.spec.js`, `tests/navigation/header-responsive.spec.js` | Exactos agotados, más de diez resultados, barra visible con teclado simulado, limpieza/foco, scroll, vacío/error/reintento y nuevo límite geométrico. |
 
@@ -126,7 +127,8 @@ El auditor responsive recorre12 anchos y13 rutas públicas.
 
 Los cambios de teclado se simulan mediante eventos resize/scroll de un
 visualViewport de prueba. El desplazamiento táctil usa eventos CDP sobre el
-scroller real. **No acredita Safari/iOS, Chrome Android físico ni navegador
+scroller real en un contexto hasTouch con viewport nativo, independiente de la
+simulación del teclado. **No acredita Safari/iOS, Chrome Android físico ni navegador
 integrado de iPhone.** Tampoco sustituye pruebas físicas de notch/safe areas o zoom.
 
 ## 7. Pruebas
@@ -139,10 +141,10 @@ integrado de iPhone.** Tampoco sustituye pruebas físicas de notch/safe areas o 
 | `npm run test:accounts` | PASS:72 pruebas. |
 | `npm run test:commerce` | PASS:463 pruebas de comercio/checkout/pagos/carrito/Auth (algunas se superponen con las suites específicas). |
 | `node --test tests/auth/*.test.mjs` | PASS:79 pruebas. |
-| `node --test tests/navigation/*.test.mjs` | PASS:17 pruebas. |
+| `node --test tests/navigation/*.test.mjs` | PASS:18 pruebas, incluida carga tardía tras usar navegación. |
 | Unitarios específicos de búsqueda/caché/autoridad | PASS:12 pruebas; también incluidos en productos. |
 | `header-responsive.spec.js` |83 casos del header aprobados;15 casos relevantes de paneles/foco/teclado/gestos reejecutados al cierre,15 aprobados. |
-| `search-responsive.spec.js` |22/22 aprobadas en la ejecución completa. Tras ampliar la cobertura a200px de altura visual, 8/8 recorridos de teclado/scroll aprobados al cierre;15/15 de paneles aprobados. |
+| `search-responsive.spec.js` |23/23 aprobadas en la ejecución completa final. Tras ampliar la cobertura a200px de altura visual, 8/8 recorridos de teclado/scroll aprobados al cierre;15/15 de paneles aprobados. |
 | `npm run audit:unified-navigation` | PASS: arquitectura modular, shell, contrato unificado, responsive12 anchos/13 rutas y búsqueda real sobre fixtures. |
 | `npm run audit:headers` | PASS:0 problemas en14 tamaños de320 a1920px. |
 | `npm run audit:public-shell` | PASS: shell y3 pruebas del generador/entrada/estilos. |
@@ -209,3 +211,28 @@ Super Admin/clienta con credenciales de producción.
 La regresión ampliada conserva las fallas preexistentes descritas; producción y
 dispositivos físicos permanecen **NOT_VERIFIED**. Ver secciones 7 y 9.
 Sin despliegue, cambios destructivos ni modificación de lógica comercial.
+
+## Seguimiento del PR #1267
+
+La titular autorizó merge automático y seguimiento. PR1267 se creó sin borrador
+contra5a2ea0f6; árbol remoto verificado idéntico al local. El candidato inicial
+27bfe553 pasó preflight, CodeQL y preview Cloudflare. CI40696772289 intento1
+falló en Comercio crítico (job122846087039) por la medición del comienzo de una
+tarjeta respecto de la altura externa del scroller, sin descontar padding/margen.
+La prueba ahora recorre explícitamente sus dos extremos dentro del scroller.
+El gesto táctil se comprueba en un caso independiente con viewport nativo y
+contexto hasTouch; tres repeticiones aprobaron. No se eliminan verificaciones
+ni se aumentan tolerancias. Se mantiene auto-merge protegido y un monitor horario
+por sondeo; el resultado terminal del siguiente SHA debe verificarse por separado.
+
+La restauración de scroll del controlador compartido se hace explícitamente
+instantánea y no desplaza una superficie nueva si se abrió antes de su callback.
+Esto evita heredar una animación de desplazamiento al liberar el modal. Se
+renuevan su URL inmutable, bootstrap y plan protegido desde las autoridades.
+Los8 escenarios de viewport aprobaron tras ese ajuste.
+
+Verificación final de esta corrección:23/23 casos Chromium de búsqueda y18/18
+Node de navegación;15/15 recorridos del controlador compartido aprobados.
+Se preservan los reinicios de entrada, explícitos y bfcache, evitando únicamente
+load/pageshow inicial tardío tras usar navegación. Consulta administrativa de
+branch-protection403 por alcance del conector: no se modifican protecciones.

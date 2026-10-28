@@ -93,6 +93,8 @@ for (const [width,height] of [[320,568],[390,844],[768,1024],[844,390],[1024,768
   await page.goto('/envios',{waitUntil:'domcontentloaded'});
   await page.waitForSelector('body.tt-public-shell-mounted');
   await page.waitForFunction(()=>document.querySelector('#tt-navigation-coherence-css')?.sheet || document.querySelector('#tt-navigation-coherence-css')?.disabled);
+  await expect(page.locator('#tt-loader')).toBeHidden();
+  await expect(page.locator('html')).not.toHaveClass(/tt-scroll-locked/);
   const opener=page.locator('[aria-controls="search-panel"]:visible').first();
   // La barra móvil permanece fija. En tablet/desktop el header se oculta al
   // bajar por diseño; iniciar arriba evita probar un click fuera de pantalla.
@@ -134,32 +136,14 @@ for (const [width,height] of [[320,568],[390,844],[768,1024],[844,390],[1024,768
    // A wrapped card may be taller than the remaining keyboard area. Its
    // beginning and end must both be reachable through the same scroller.
    expect(end).toBe(true);
-   if(last.height<=box.height)expect(last.y).toBeGreaterThanOrEqual(box.y-1);
-   else {
-    await links.last().evaluate(el=>el.scrollIntoView({block:'start',behavior:'instant'}));
-    expect((await links.last().boundingBox()).y).toBeGreaterThanOrEqual((await results.boundingBox()).y-1);
-   }
-  }
-  if(width===390) {
-   await page.evaluate(()=>window.__setKeyboard(innerHeight));
-   await expect.poll(async()=> (await results.boundingBox()).height).toBeGreaterThan(300);
-   await results.evaluate(el=>{el.scrollTop=0;});
-   const box=await results.boundingBox(),session=await page.context().newCDPSession(page);
-   const x=box.x+box.width/2,y=box.y+box.height-24;
-   await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
-   for(let step=1;step<=6;step++){
-    await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y-step*24}]});
-    await page.waitForTimeout(20);
-   }
-   await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
-   await expect.poll(()=>results.evaluate(el=>el.scrollTop)).toBeGreaterThan(0);
-   await session.detach();
-   expect(await results.evaluate(el=>{
-    const scroll=el.scrollTop,first=el.firstElementChild;
-    window.dispatchEvent(new CustomEvent('tintin:products-loaded',{detail:{products:window.PRODUCTS}}));
-    return el.scrollTop===scroll && el.firstElementChild===first;
-   })).toBe(true);
-   await page.screenshot({path:test.info().outputPath('busqueda-barra-visible.png')});
+   // Padding and the last card's margin also consume scroll space. Even a
+   // card shorter than the outer box can need two positions to read it all.
+   const start=await results.evaluate(el=>{
+    const item=el.querySelector('a:last-child');
+    el.scrollTop+=item.getBoundingClientRect().top-el.getBoundingClientRect().top-el.clientTop;
+    return {item:item.getBoundingClientRect().toJSON(),box:el.getBoundingClientRect().toJSON()};
+   });
+   expect(start.item.top).toBeGreaterThanOrEqual(start.box.top-1);
   }
   await page.keyboard.press('Tab');
   expect(await page.evaluate(()=>!!document.activeElement.closest('#search-panel,#tt-tabbar,#tt-privacy-consent'))).toBe(true);
@@ -220,4 +204,46 @@ test('error de catálogo permite reintentar y conserva la consulta más reciente
  await expect(page.locator('#search-results')).toContainText('Coincidencia aproximada');
  await page.keyboard.press('Escape');
  await expect(page.locator('#tt-tabbar')).toBeVisible();
+});
+
+test.describe('gesto táctil en viewport nativo',()=>{
+ test.use({hasTouch:true});
+ test('resultados admiten gesto real del navegador y conservan scroll ante el mismo catálogo',async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  const rows=[...products,...Array.from({length:30},(_,i)=>({id:'touch-'+i,name:'Anillo táctil '+i,category:'anillos',price:25000,stock:2,active:true}))];
+  await page.route('**/api/public-catalog?**',route=>{
+   const resource=new URL(route.request().url()).searchParams.get('resource');
+   if(!['products','collections'].includes(resource))return route.continue();
+   return route.fulfill({json:{ok:true,resource,items:(resource==='products'?rows:[{id:'anillos',name:'Anillos',visible:true},{id:'relojes',name:'Relojes',visible:true}]).map(({id,...data})=>({id,data}))}});
+  });
+  await page.goto('/envios',{waitUntil:'domcontentloaded'});
+  await page.locator('#tabbar-search').click();
+  await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('open');
+  await page.locator('#search-input').fill('anillo');
+  const results=page.locator('#search-results');
+  await expect(results.locator('a')).toHaveCount(32);
+  await expect.poll(()=>results.evaluate(el=>{
+   const box=el.getBoundingClientRect();
+   return el.contains(document.elementFromPoint(box.x+box.width/2,box.bottom-30));
+  })).toBe(true);
+  const box=await results.boundingBox(),session=await page.context().newCDPSession(page);
+  const x=box.x+box.width/2,y=box.y+box.height-30;
+  await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+  for(let step=1;step<=8;step++){
+   await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y-step*24}]});
+   await page.waitForTimeout(20);
+  }
+  await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  await expect.poll(()=>results.evaluate(el=>el.scrollTop)).toBeGreaterThan(0);
+  await session.detach();
+  expect(await results.evaluate(el=>{
+   const scroll=el.scrollTop,first=el.firstElementChild;
+   window.dispatchEvent(new CustomEvent('tintin:products-loaded',{detail:{products:window.PRODUCTS}}));
+   return el.scrollTop===scroll&&el.firstElementChild===first;
+  })).toBe(true);
+  await expect(page.locator('#tt-tabbar')).toBeVisible();
+  await page.screenshot({path:test.info().outputPath('busqueda-barra-visible.png')});
+  await page.keyboard.press('Escape');
+  await expect(page.locator('html')).not.toHaveClass(/tt-surface-locked/);
+ });
 });
