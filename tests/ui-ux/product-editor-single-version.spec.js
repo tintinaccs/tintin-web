@@ -20,14 +20,14 @@ for(const width of [320,390,600,768,1024,1440])test(`versión única: abrir, fot
   await expect(page.locator('link[href*="editor-producto-studio"]')).toHaveCount(0);
   if(opening<2)await page.locator('.tt-work-back').click();
  }
- await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await expect(page.locator('.tt-unified-photo')).toHaveCount(1);
  await expect(page.locator('.tt-unified-photo img')).toHaveJSProperty('complete',true);
  await page.locator('#prod-form-card .adm-card-body').evaluate(node=>node.scrollTop=0);
  await page.evaluate(()=>document.activeElement?.blur());
  await page.screenshot({path:info.outputPath(`version-unica-fotos-${width}.png`),animations:'disabled'});
  await page.getByRole('tab',{name:'Variantes',exact:true}).click();
- await expect(page.locator('.tt-option-group')).toHaveCount(1);
+ await expect(page.locator('.tt-variant-media-card')).toHaveCount(2);
  await expect(page.locator('#prod-stock')).toHaveValue('5');
  await page.locator('#prod-form-card .adm-card-body').evaluate(node=>node.scrollTop=0);
  await page.screenshot({path:info.outputPath(`version-unica-variantes-${width}.png`),animations:'disabled'});
@@ -39,6 +39,6 @@ for(const width of [320,390,600,768,1024,1440])test(`versión única: abrir, fot
  expect(await page.evaluate(()=>window.qaProductWrites.filter(path=>path==='products/qa').length)).toBe(1);
  await page.evaluate(()=>{window.qaProductController.refresh();window.prodEditar('qa');});await page.evaluate(()=>window.qaProductController.workspace.ready);
  await expect(page.locator('#prod-name')).toHaveValue('Versión única conservada');
- expect(await page.evaluate(()=>window.qaProductStore.get('products/qa').variantInventory)).toEqual(product.variantInventory);
+ expect(await page.evaluate(()=>window.qaProductStore.get('products/qa').variantInventory.map(({variant,stock})=>({variant,stock})))).toEqual(product.variantInventory);
  expect(errors).toEqual([]);
 });

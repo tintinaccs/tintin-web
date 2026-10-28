@@ -1,23 +1,23 @@
-import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
+import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261028-guided-editor-1';
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261028-product-tabs-1';
-import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261028-product-tabs-1';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261028-guided-editor-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
-import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261028-product-tabs-1';
+import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261028-guided-editor-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
   ['photos', 'Fotografías del producto', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
   ['general', 'Producto', ['prod-name','prod-description']],
   ['prices', 'Precio', ['prod-price','prod-price-before','prod-badge','prod-oferta']],
-  ['inventory', 'Opciones y variantes', ['prod-variants-text']],
-  ['availability', 'Inventario y disponibilidad', ['prod-stock']],
+  ['options', 'Opciones del producto', ['prod-variants-text']],
+  ['availability', 'Cantidades y disponibilidad', ['prod-stock']],
   ['specs', 'Detalles del producto', ['prod-material','prod-measurements','prod-color-finish','prod-care','prod-water-resistance','prod-warranty','prod-size-fit','prod-package-contents']],
   ['visibility', 'Organización', ['prod-category','prod-collection','prod-tags','prod-sku','prod-destacado','prod-active']],
   ['private', 'Inventario interno', ['prod-inventory-fields']],
 ];
 const tabs = [
   ['general','Información',['general']],
-  ['photos','Fotos y colores',['photos']],
-  ['inventory','Variantes',['inventory']],
+  ['photos','Fotos y opciones',['photos','options']],
+  ['inventory','Variantes',['associations']],
   ['prices','Precio y stock',['prices','availability','private']],
   ['specs','Detalles',['specs']],
   ['visibility','Publicación',['visibility']],
@@ -58,8 +58,10 @@ export function syncProductSurfaces() {
       window.TintinPageScroll?.reset(editor);
       (editor.querySelector('[role=tab][aria-selected=true]') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
     }
-    editor.setAttribute('role','dialog');
-    editor.setAttribute('aria-modal',String(editor.classList.contains('tt-editor-workspace')));
+    editor.setAttribute('role','region');
+    editor.removeAttribute('aria-modal');
+    const steps=editor.querySelector('.tt-editor-step-controls'),navigation=editor.querySelector('.tt-product-section-nav'),heading=editor.querySelector('.adm-card-head');const destination=innerWidth<768 && (window.visualViewport?.height || innerHeight)>560?navigation:heading;if(steps && destination && steps.parentElement!==destination)destination.append(steps);
+    const headingHeight=Math.ceil(heading?.getBoundingClientRect().height || 0);if(editor.style.getPropertyValue('--tt-editor-heading-height')!==headingHeight+'px')editor.style.setProperty('--tt-editor-heading-height',headingHeight+'px');
     editor.setAttribute('aria-labelledby','prod-form-title');
   } else if (editorWasOpen) {
     requestAnimationFrame(()=>{
@@ -129,6 +131,9 @@ export function enhanceProductEditor() {
       });shortcuts.append(button);
     }
     navigation.append(text,select,shortcuts);body.prepend(navigation);
+    const controls=document.createElement('div');controls.className='tt-editor-step-controls';
+    for(const [direction,label] of [[-1,'Anterior'],[1,'Siguiente']]){const button=document.createElement('button');button.type='button';button.className='adm-btn adm-btn-outline';button.textContent=label;button.dataset.stepDirection=direction;button.addEventListener('click',()=>{const index=tabs.findIndex(([id])=>id===tabFor(select.value));if(direction>0 && !validateStep(card,select.value))return;showSection(card,tabs[index+direction]?.[0] || select.value,true);card.querySelector('[role=tab][aria-selected=true]')?.focus({preventScroll:true});});controls.append(button);}
+    const progress=document.createElement('p');progress.className='tt-editor-step-progress';progress.setAttribute('role','status');controls.prepend(progress);card.querySelector('.adm-card-head')?.append(controls);
 
   }
   let layout = body.querySelector('.tt-editor-layout');
@@ -153,7 +158,7 @@ export function enhanceProductEditor() {
       const toggle = document.createElement('button');toggle.type='button';toggle.className='tt-editor-section-toggle';toggle.setAttribute('aria-label',title);
       const titleText=document.createElement('span');titleText.className='tt-editor-section-title';titleText.textContent=title;toggle.append(titleText);
       const valueText=document.createElement('span');valueText.className='tt-editor-section-value';valueText.id=`prod-section-${section}-value`;toggle.setAttribute('aria-describedby',valueText.id);toggle.append(valueText);
-      const open=['photos','general'].includes(section);
+      const open=section!=='private';
       group.dataset.advanced=String(!open);
 
       toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-controls',`prod-section-${section}`);
@@ -213,7 +218,6 @@ export function enhanceProductEditor() {
     for(const section of groups){const group=card.querySelector(`[data-product-section="${section}"]`);if(group && group.parentElement!==panel)panel.append(group);}
   }
   const priceFields=card.querySelector('[data-product-section=prices] .tt-editor-section-fields');
-  if(priceFields && !priceFields.querySelector('.tt-photo-price-scope')){const note=document.createElement('p');note.className='tt-editor-caption tt-photo-price-scope';note.textContent='Precio general del producto. Los precios propios de cada color o combinación se editan en Inventario y disponibilidad.';priceFields.prepend(note);}
   // El panel pertenece al formulario, fuera de la galería que se destruye al reabrir.
   // Nunca se recrean campos ni se trasladan filas fuera de su serializer.
   const privateSection=card.querySelector('[data-product-section="private"]');
@@ -225,8 +229,13 @@ export function enhanceProductEditor() {
   const inventoryPanel=card.querySelector('#prod-variant-stock');
   const inventoryTarget=card.querySelector('[data-product-section="availability"] .tt-editor-section-fields');
   if(inventoryPanel && !inventoryPanel.dataset.optionInline && inventoryTarget && inventoryPanel.parentElement!==inventoryTarget)inventoryTarget.append(inventoryPanel);
-  const preview=card.querySelector('.tt-editor-preview-shell');if(preview && body.lastElementChild!==preview)body.append(preview);
-  const secondary=card.querySelector('.tt-work-secondary');if(secondary && preview && secondary.nextElementSibling!==preview)body.insertBefore(secondary,preview);
+  const publicationPanel=card.querySelector('#prod-panel-visibility');
+  const preview=card.querySelector('.tt-editor-preview-shell');if(preview && publicationPanel && preview.parentElement!==publicationPanel){publicationPanel.append(preview);preview.open=true;}
+  const secondary=card.querySelector('.tt-work-secondary');if(secondary && publicationPanel && secondary.parentElement!==publicationPanel)publicationPanel.append(secondary);
+  organizeGuidedEditor(card);
+  let seo=card.querySelector('.tt-seo-preview');const publicationPanelForSeo=card.querySelector('#prod-panel-visibility');
+  if(!seo && publicationPanelForSeo){seo=document.createElement('section');seo.className='tt-seo-preview';const title=document.createElement('h3');title.textContent='Vista en Google';const name=document.createElement('strong');name.className='tt-seo-title';const description=document.createElement('p');description.className='tt-seo-description';seo.append(title,name,description);publicationPanelForSeo.prepend(seo);}
+  if(seo){const title=card.querySelector('#prod-seoTitle')?.value.trim() || (card.querySelector('#prod-name')?.value.trim() || 'Nombre del producto')+' | Tintin Accesorios & Relojes';const description=card.querySelector('#prod-seoDescription')?.value.trim() || card.querySelector('#prod-description')?.value.trim() || '';const titleNode=seo.querySelector('.tt-seo-title'),descriptionNode=seo.querySelector('.tt-seo-description');if(titleNode.textContent!==title)titleNode.textContent=title;if(descriptionNode.textContent!==description.slice(0,220))descriptionNode.textContent=description.slice(0,220);}
   refreshEditorHeading(card);
   const error=card.querySelector('#prod-form-error');
   if (error) {
@@ -256,12 +265,36 @@ export function enhanceProductEditor() {
     if(errorRegion.hidden!==!message)errorRegion.hidden=!message;
     const jump=errorRegion.querySelector('button');const hidden=!message || !error.dataset.editorField;if(jump.hidden!==hidden)jump.hidden=hidden;
   }
-  if(newError && visibleProductEditor()) {error.focus({preventScroll:true});error.scrollIntoView({block:'nearest'});}
+  if(newError && visibleProductEditor()) {const field=error.dataset.stepValidation==='true'?(card.querySelector(`[data-money-for="${error.dataset.editorField}"]`) || card.querySelector('#'+error.dataset.editorField)):error;delete error.dataset.stepValidation;field?.focus({preventScroll:true});field?.scrollIntoView({block:'nearest'});}
   lastError=message;
   refreshProductPreview(card);
   installEditorControls(card);refreshEditorControls(card);
   mountLocalVision(card);
   mountProductSuggestions(card);
+}
+
+function validateStep(card,value){
+  const ids=value==='general'?['prod-name','prod-category']:value==='prices'?['prod-price']:[];
+  for(const id of ids){const input=card.querySelector('#'+id);if(!input || (input.value.trim() && (id!=='prod-price' || Number(input.value)>0)))continue;
+    const error=card.querySelector('#prod-form-error');error.textContent=id==='prod-price'?'Ingresá un precio de venta válido.':id==='prod-name'?'Ingresá el nombre del producto.':'Elegí una colección.';error.style.display='';error.dataset.editorField=id;error.dataset.stepValidation='true';input.setAttribute('aria-invalid','true');const target=card.querySelector(`[data-money-for="${id}"]`) || input;target.focus();return false;
+  }return true;
+}
+function organizeGuidedEditor(card){
+  const options=card.querySelector('.tt-editor-variant-builder'),photos=card.querySelector('#prod-panel-photos');
+  if(options && photos && !photos.contains(options)){const group=card.querySelector('[data-product-section=options]');if(group)photos.append(group);}
+  const variants=card.querySelector('#prod-panel-inventory');
+  if(variants && !variants.querySelector('.tt-variant-media-list')){const list=document.createElement('div');list.className='tt-variant-media-list';variants.append(list);}
+  const variantsText=card.querySelector('#prod-variants-text')?.value || '';
+  for(const [id,pattern] of [['prod-material',/^material\s*:/im],['prod-color-finish',/^colou?r\s*:/im],['prod-size-fit',/^(talle|talla|tama[ñn]o|ajuste)\s*:/im]]){const input=card.querySelector('#'+id);if(input){const hidden=pattern.test(variantsText) && !input.value.trim();if(input.parentElement.hidden!==hidden)input.parentElement.hidden=hidden;}}
+  const privateFields=card.querySelector('#prod-inventory-fields');
+  if(privateFields && !privateFields.querySelector('.tt-private-history')){
+    const history=document.createElement('details');history.className='tt-private-history';const summary=document.createElement('summary');summary.textContent='Registros internos anteriores';history.append(summary);
+    for(const id of ['prod-purchased','prod-stock-minimum','prod-internal-notes']){const input=card.querySelector('#'+id),field=input?.parentElement;if(field)history.append(field);}
+    privateFields.append(history);const heading=privateFields.querySelector(':scope > div:not(:has(input))');if(heading)heading.hidden=true;
+  }
+  const history=privateFields?.querySelector('.tt-private-history');
+  if(history){let records=history.querySelector('.tt-private-history-records');if(!records){records=document.createElement('dl');records.className='tt-private-history-records';history.prepend(records);}const values=[];for(const [id,label] of [['prod-purchased','Comprado (registro anterior)'],['prod-stock-minimum','Mínimo (registro anterior)']]){const input=card.querySelector('#'+id);if(input){if(!input.readOnly)input.readOnly=true;if(!input.parentElement.hidden)input.parentElement.hidden=true;if(input.value!=='')values.push([label,input.value]);}}const signature=JSON.stringify(values);if(records.dataset.values!==signature){records.dataset.values=signature;records.replaceChildren(...values.flatMap(([label,value])=>{const title=document.createElement('dt'),text=document.createElement('dd');title.textContent=label;text.textContent=value;return [title,text];}));}}
+  for(const id of ['prod-price-before','prod-badge','prod-oferta']){const input=card.querySelector('#'+id);if(!input)continue;const section=card.querySelector('[data-product-section=prices] .tt-editor-section-fields');let advanced=section?.querySelector('.tt-price-advanced');if(!advanced && section){advanced=document.createElement('details');advanced.className='tt-price-advanced';const summary=document.createElement('summary');summary.textContent='Descuento y etiqueta';advanced.append(summary);section.append(advanced);}const field=input.closest('.tt-editor-money')?.parentElement || input.parentElement;if(advanced && field!==advanced && !advanced.contains(field))advanced.append(field);}
 }
 
 function refreshEditorHeading(card) {
@@ -301,16 +334,21 @@ function refreshSectionValues(card) {
 
 function errorSection(card,message) {
   const read=id=>card.querySelector('#'+id)?.value.trim();
-  let id;
-  if(/descripción/i.test(message))id='prod-description';
-  else if(/foto|imagen|carga/i.test(message))id='prod-imageUrl';
-  else if(/costo|comprada|mínimo|notas internas/i.test(message))id='prod-cost-unit';
-  else if(/variante|combinaci[oó]n|grupo|atributo|opci[oó]n.*quitar|quitar.*opci[oó]n/i.test(message))id='prod-variants-text';
-  else if(/precio anterior/i.test(message))id='prod-price-before';
-  else if(/stock|inventario|cantidad/i.test(message))id='prod-stock';
-  else if(/colección/i.test(message) && !/obligatorios/i.test(message))id='prod-category';
-  else if(/precio/i.test(message) && !/obligatorios/i.test(message))id='prod-price';
-  else if(/obligatorios/i.test(message))id=!read('prod-name')?'prod-name':!read('prod-category')?'prod-category':'prod-price';
+  const validation=card.querySelector('#prod-form-error');
+  let id=validation?.dataset.stepValidation==='true'?validation.dataset.editorField:null;
+  if(!id || !document.getElementById(id)){
+    if(/obligatorios/i.test(message))id=!read('prod-name')?'prod-name':!read('prod-category')?'prod-category':'prod-price';
+    else if(/nombre/i.test(message))id='prod-name';
+    else if(/descripción/i.test(message))id='prod-description';
+    else if(/foto|imagen|carga/i.test(message))id='prod-imageUrl';
+    else if(/costo|comprada|mínimo|notas internas/i.test(message))id='prod-cost-unit';
+    else if(/variante|combinaci[oó]n|grupo|atributo|opci[oó]n.*quitar|quitar.*opci[oó]n/i.test(message))id='prod-variants-text';
+    else if(/precio anterior/i.test(message))id='prod-price-before';
+    else if(/stock|inventario|cantidad/i.test(message))id='prod-stock';
+    else if(/colección/i.test(message) && !/obligatorios/i.test(message))id='prod-category';
+    else if(/precio/i.test(message) && !/obligatorios/i.test(message))id='prod-price';
+    else if(/obligatorios/i.test(message))id=!read('prod-name')?'prod-name':!read('prod-category')?'prod-category':'prod-price';
+  }
   const control=id && card.querySelector('#'+id),group=control?.closest('[data-product-section]');
   const error=card.querySelector('#prod-form-error');if(error)error.dataset.editorField=group?.dataset.permissionHidden==='true'?'':id || '';
   if(control && group?.dataset.permissionHidden!=='true'){
@@ -345,7 +383,10 @@ function showSection(card,value,expand=false) {
       const fields=field.querySelector(':scope > .tt-editor-section-fields');if(fields?.hidden)fields.hidden=false;
     }
   }
-  if(expand){window.TintinPageScroll?.reset(card);card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});}
+  const index=tabs.findIndex(([id])=>id===value);
+  const progress=card.querySelector('.tt-editor-step-progress');const text=`Paso ${index+1} de ${tabs.length} · ${tabs[index][1]}`;if(progress && progress.textContent!==text)progress.textContent=text;
+  for(const button of card.querySelectorAll('[data-step-direction]'))button.disabled=Number(button.dataset.stepDirection)<0?index===0:index===tabs.length-1;
+  if(expand){card.dataset.visitedSteps=[...new Set([...(card.dataset.visitedSteps || '').split(','),value])].filter(Boolean).join(',');window.TintinPageScroll?.reset(card);card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});}
 }
 
 export function installProductInterface() {
@@ -354,8 +395,9 @@ export function installProductInterface() {
   installed=true;
   let queued=false;
   const card=document.getElementById('prod-form-card');
+  card?.addEventListener('keydown',event=>{if((event.ctrlKey || event.metaKey) && event.key.toLowerCase()==='s'){event.preventDefault();card.querySelector('#prod-save-btn:not(:disabled)')?.click();}});
   card?.addEventListener('click',event=>{if(event.target.closest('#prod-save-btn'))lastError='';},{capture:true});
-  card?.addEventListener('input',event=>{refreshEditorHeading(card);if(event.target.getAttribute('aria-invalid')==='true'){event.target.removeAttribute('aria-invalid');event.target.removeAttribute('aria-describedby');}});
+  card?.addEventListener('input',event=>{refreshEditorHeading(card);const error=card.querySelector('#prod-form-error');if(error?.dataset.editorField===event.target.id){error.textContent='';error.style.display='none';lastError='';}if(event.target.getAttribute('aria-invalid')==='true'){event.target.removeAttribute('aria-invalid');event.target.removeAttribute('aria-describedby');}});
   card?.addEventListener('change',()=>refreshEditorHeading(card));
   if (card) new MutationObserver(()=>{
     if (queued) return;

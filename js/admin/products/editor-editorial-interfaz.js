@@ -11,9 +11,9 @@ export function ensureEditorialFields(card) {
             <select id="prod-productTemplate" class="adm-input"><option value="default">Actual</option><option value="gallery">Galería ampliada</option></select>
           </section>
           <details class="tt-editor-section tt-product-editorial tt-product-editorial-seo">
-            <summary>Vista en Google</summary>
+            <summary>Personalizar información de Google</summary>
             <div class="tt-editor-detail-fields">
-              <p class="tt-editor-caption">Si los dejás vacíos, se usan el nombre y la descripción del producto.</p>
+              <p class="tt-editor-caption">Dejá estos campos vacíos para usar los datos del producto. Se conservan las personalizaciones guardadas.</p>
               <label for="prod-seoTitle">Título para Google</label><input id="prod-seoTitle" class="adm-input" maxlength="70" placeholder="Título automático">
               <label for="prod-seoDescription">Descripción para Google</label><textarea id="prod-seoDescription" class="adm-input" maxlength="220" rows="3" placeholder="Descripción automática"></textarea>
             </div>

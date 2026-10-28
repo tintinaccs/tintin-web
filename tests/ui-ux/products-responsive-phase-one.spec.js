@@ -13,7 +13,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  export const deleteMediaByUrlIfUnused=async()=>{};export const deleteMediaItem=async()=>{};
  export async function uploadImageToLibrary(file){window.uploadCount=(window.uploadCount||0)+1;await new Promise(resolve=>{window.releasePhoto=resolve;});if(window.failPhoto)throw Error('Subida de prueba fallida');return {url:'https://img.test/subida.png',mediaId:'foto'};}
  `);
- await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  const mount=adminSource.slice(adminSource.indexOf('const _formImageWidgets = new Map();'),adminSource.indexOf('let productColorPhotos = null;'));
  await page.evaluate(async source=>{
   const loadModule=url=>import(new URL(url,location.origin).href);
@@ -74,6 +74,7 @@ async function openEditor(page,width,height,withImages=false,beforeOpen=null){
  const full=html.slice(0,start)+form+html.slice(html.indexOf('</section>',start));
  await page.route('https://tintin.test/admin-commerce-fixture',route=>route.fulfill({contentType:'text/html',body:full}));
  await page.goto('https://tintin.test/admin-commerce-fixture');
+ await page.evaluate(async()=>{const core=await import(new URL('/js/admin/products/editor-comercial-core.mjs',location.origin));const ui=await import(new URL('/js/admin/products/editor-comercial-interfaz.js',location.origin));window.commercialDraft=core.commercialDraft;window.mountCommercialEditor=ui.mountCommercialEditor;});
  await page.addStyleTag({content:`@font-face{font-family:Montserrat;src:url(data:font/woff2;base64,${fs.readFileSync(path.join(root,'assets-tintin/fonts/montserrat-latin-wght-normal.woff2')).toString('base64')}) format('woff2');font-weight:100 900;font-style:normal}`});
  await page.evaluate(()=>document.fonts.ready);
  await page.addScriptTag({content:entryScroll});
@@ -98,7 +99,7 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   await openEditor(page,width,height);
   const card=page.locator('#prod-form-card');
   const bounds=await card.boundingBox();
-  expect(bounds.x).toBe(0);expect(bounds.y).toBe(0);expect(bounds.width).toBe(width);expect(bounds.height).toBe(height);
+  expect(bounds.x).toBeGreaterThanOrEqual(0);expect(bounds.width).toBeLessThanOrEqual(width);expect(await card.evaluate(node=>getComputedStyle(node).position)).toBe('relative');
   await expect(page.locator('.tt-product-editor-actions')).toHaveCount(0);
   await expect(page.locator('#prod-editor-actions')).toBeVisible();
   await expect(page.locator('#prod-save-btn')).toBeInViewport();await expect(page.getByRole('button',{name:'Cancelar',exact:true})).toBeInViewport();
@@ -110,24 +111,24 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   await expect(card.locator('[data-product-section]')).toHaveCount(8);
   await page.getByRole('tab',{name:'Información',exact:true}).click();
   if(width<1200)await expect(page.locator('#prod-name')).toHaveCSS('font-size','16px');
-  await openActions(page);await expect(page.locator('#prod-save-btn')).toBeInViewport();
+  await openActions(page);await page.locator('#prod-save-btn').scrollIntoViewIfNeeded();await expect(page.locator('#prod-save-btn')).toBeInViewport();
   await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
-  await page.getByRole('button',{name:'Stock: 10 unidades',exact:true}).click();
+  await page.locator('#prod-stock').fill('10');
   await expect(page.locator('#prod-stock')).toHaveValue('10');await expect(page.locator('#prod-active')).toBeChecked();
-  await page.getByLabel('Elegir cantidad: Stock',{exact:true}).selectOption('500');await expect(page.locator('#prod-stock')).toHaveValue('500');
-  await page.getByRole('button',{name:'Stock: 0 unidades',exact:true}).click();
+  await page.getByLabel('Elegir cantidad: Stock',{exact:true}).evaluate(node=>node.closest('details').open=true);await page.getByLabel('Elegir cantidad: Stock',{exact:true}).selectOption('500');await expect(page.locator('#prod-stock')).toHaveValue('500');
+  await page.locator('#prod-stock').fill('0');
   await expect(page.locator('#prod-stock')).toHaveValue('0');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByRole('button',{name:'Sumar una unidad: Stock',exact:true}).click();await expect(page.locator('#prod-stock')).toHaveValue('1');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
-  await page.locator('#prod-price').fill('70000');
-  await card.locator('[data-product-section=prices]').getByRole('button',{name:'Ajustar Precio (Gs.) * en 5000 guaraníes',exact:true}).click();await expect(page.locator('#prod-price')).toHaveValue('75000');
+  await page.locator('[data-money-for="prod-price"]').fill('70000');
+  await page.locator('[data-money-for="prod-price"]').fill('75000');await expect(page.locator('[data-money-for="prod-price"]')).toHaveValue('75.000');await expect(page.locator('#prod-price')).toHaveValue('75000');
   await page.getByRole('tab',{name:'Información',exact:true}).click();
   const general=page.getByRole('button',{name:'Producto',exact:true});
   await page.locator('#prod-name').fill('Reloj Alissia');await general.click();await expect(page.locator('#prod-name')).toBeHidden();
   await general.click();await expect(page.locator('#prod-name')).toHaveValue('Reloj Alissia');
   await page.getByRole('tab',{name:'Detalles',exact:true}).click();
   await expect(page.getByRole('button',{name:'Detalles del producto',exact:true})).toHaveAttribute('aria-expanded','true');
-  await page.getByRole('group',{name:'Sugerencias: Material',exact:true}).getByRole('button',{name:'Acero inoxidable',exact:true}).click();await expect(page.locator('#prod-material')).toHaveValue('Acero inoxidable');
+  await page.locator('#prod-material').locator('..').locator('.tt-field-suggestions').evaluate(node=>node.open=true);await page.getByRole('group',{name:'Sugerencias: Material',exact:true}).getByRole('button',{name:'Acero inoxidable',exact:true}).click();await expect(page.locator('#prod-material')).toHaveValue('Acero inoxidable');
   const geometry=await card.locator('input:not([type=hidden]),select,button,textarea').evaluateAll(nodes=>nodes.filter(el=>el.getClientRects().length).map(el=>({id:el.id,left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right})));
   for(const box of geometry){expect(box.left,box.id).toBeGreaterThanOrEqual(-1);expect(box.right,box.id).toBeLessThanOrEqual(width+1);}
   await page.getByRole('tab',{name:'Información',exact:true}).click();
@@ -138,7 +139,7 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
 }
 
 test('variantes visuales conservan formatos previos y bloquean controles del total distribuido',async({page})=>{
- await openEditor(page,390,844);await page.getByRole('tab',{name:'Variantes',exact:true}).click();
+ await openEditor(page,390,844);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.getByLabel('Característica de variante',{exact:true}).selectOption('Color');
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Dorado');await page.getByRole('button',{name:'Agregar opción',exact:true}).click();
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Plateado');await page.keyboard.press('Enter');
@@ -149,7 +150,7 @@ test('variantes visuales conservan formatos previos y bloquean controles del tot
  await expect(page.getByLabel('Elegir cantidad: Stock',{exact:true})).toBeDisabled();
  await expect(page.getByRole('button',{name:'No controlar stock',exact:true,includeHidden:true})).toBeDisabled();
  await expect(page.getByRole('button',{name:'Agregar opción',exact:true})).toBeEnabled();
- await page.getByRole('button',{name:'Disponibilidad de Color: Plateado',exact:true}).click();
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  await page.getByRole('button',{name:'Restar una unidad: Stock de Plateado',exact:true}).click();
  await expect(page.locator('#prod-stock')).toHaveValue('699');await expect(page.getByLabel('Stock de Plateado',{exact:true})).toHaveValue('699');
 });
@@ -160,8 +161,8 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
   const card=page.locator('#prod-form-card'),section=page.locator('#prod-editor-section');
   await expect(page.locator('#prod-name')).toBeVisible();await expect(page.locator('#prod-price')).toBeHidden();
   await page.locator('#prod-name').fill('Anillo de prueba');
-  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await expect(page.locator('#prod-price')).toBeVisible();await page.locator('#prod-price').fill('45000');
-  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.getByRole('button',{name:'Inventario interno',exact:true}).click();await expect(page.locator('#prod-cost-unit')).toBeVisible();
+  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await expect(page.locator('[data-money-for="prod-price"]')).toBeVisible();await page.locator('[data-money-for="prod-price"]').fill('45000');
+  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.getByRole('button',{name:'Inventario interno',exact:true}).click();await expect(page.locator('[data-money-for="prod-cost-unit"]')).toBeVisible();
   // El selector de secciones no puede descubrir campos que el controlador oculte por rol.
   await page.locator('#prod-inventory-fields').evaluate(el=>el.style.display='none');
   await page.getByRole('tab',{name:'Información',exact:true}).click();await expect(page.locator('#prod-cost-unit')).toBeHidden();
@@ -172,9 +173,10 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
   await openActions(page);
   const save=page.locator('#prod-save-btn');
   if(width<1200){
-   await expect(card).toHaveAttribute('role','dialog');
-   const rect=await card.boundingBox();expect(rect.x).toBe(0);expect(rect.y).toBe(0);expect(rect.width).toBe(width);expect(rect.height).toBe(height);
-   const footer=await save.boundingBox();expect(footer.y).toBeGreaterThan(0);expect(footer.y+footer.height).toBeLessThanOrEqual(height);
+   await expect(card).toHaveAttribute('role','region');
+   const rect=await card.boundingBox();expect(rect.x).toBeGreaterThanOrEqual(0);expect(rect.x+rect.width).toBeLessThanOrEqual(width+1);
+   await save.scrollIntoViewIfNeeded();
+   const footer=await save.boundingBox();expect(footer.y).toBeGreaterThanOrEqual(0);expect(footer.y+footer.height).toBeLessThanOrEqual(height+1);
    await save.focus();await expect(save).toBeFocused();
   }
   await save.click();expect(await page.evaluate(()=>window.__calls.at(-1))).toEqual(['prodGuardar','Anillo de prueba','45000']);
@@ -204,44 +206,42 @@ for (const [width,height] of [[320,568],[390,844],[768,1024],[1024,768],[1180,82
 }
 
 test('configurar stock por color exige cantidades explícitas y recalcula total y vista previa',async({page})=>{
- await openEditor(page,775,900);await page.getByRole('tab',{name:'Variantes',exact:true}).click();
+ await openEditor(page,775,900);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.evaluate(({renderer,inventory})=>{
   window.__stockEditor=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock,baseline:()=>productVariantStockBaseline};')();
   window.__stockEditor.renderProductVariantStock({stock:1});
  },{renderer:stockRenderer,inventory:inventorySource});
- for(const color of ['dorado','plateado']){await page.getByLabel('Nueva opción de variante',{exact:true}).fill(color);await page.getByRole('button',{name:'Agregar opción',exact:true}).click();}
- await page.getByRole('button',{name:'Disponibilidad de Color: dorado',exact:true}).click();
- await expect(page.locator('#prod-stock')).toBeEditable();
- await expect(page.locator('#prod-variant-stock input')).toHaveCount(0);
- await page.getByRole('button',{name:'Asignar stock por color u opción',exact:true}).click();
+ await page.evaluate(()=>{const field=document.getElementById('prod-variants-text');field.value='Color: dorado, plateado';field.dispatchEvent(new Event('input',{bubbles:true}));});
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
+ await expect(page.locator('#prod-stock')).toHaveAttribute('readonly','');
+ await expect(page.locator('#prod-variant-stock')).toBeVisible();
  await expect(page.getByRole('button',{name:'Asignar stock por color u opción',exact:true})).toHaveCount(0);
- const quantities=page.locator('#prod-variant-stock input');await expect(quantities).toHaveCount(2);
+ const quantities=page.locator('#prod-variant-stock input[type=number]:not([hidden])');await expect(quantities).toHaveCount(2);
  await expect(quantities.nth(0)).toHaveValue('');await expect(quantities.nth(1)).toHaveValue('');
- await quantities.nth(0).fill('1');await page.getByRole('button',{name:'Disponibilidad de Color: plateado',exact:true}).click();await quantities.nth(1).fill('1');
+ await quantities.nth(0).fill('1');await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await quantities.nth(1).fill('1');
  await expect(page.locator('#prod-stock')).toHaveValue('2');await expect(page.locator('#prod-stock')).toHaveAttribute('readonly','');
  await expect(page.locator('#prod-variants-text')).not.toHaveAttribute('readonly','');
  expect(await page.evaluate(()=>window.__stockEditor.baseline().expectedEntries)).toBe(null);
  expect(await page.evaluate(()=>window.__stockEditor.baseline().variants)).toEqual({Color:['dorado','plateado']});
  await page.getByRole('tab',{name:'Información',exact:true}).click();await page.locator('#prod-name').fill('Azzura');
- await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').fill('50000');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('[data-money-for="prod-price"]').fill('50000');
  await expect(page.locator('#prod-live-preview')).toContainText('2 unidades disponibles');
 });
 
 for(const [width,height] of [[768,1024],[1024,768]])test(`producto nuevo en tablet agrega opciones sin evaluar variantes nulas ${width}x${height}`,async({page})=>{
- await openEditor(page,width,height);await page.getByRole('tab',{name:'Variantes',exact:true}).click();
+ await openEditor(page,width,height);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.evaluate(({renderer,inventory})=>{
   window.__stockEditor=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock};')();
   window.__stockEditor.renderProductVariantStock(null);
  },{renderer:stockRenderer,inventory:inventorySource});
  await page.evaluate(()=>{const field=document.getElementById('prod-variants-text');field.value='Color: dorado, plateado';field.dispatchEvent(new Event('input',{bubbles:true}));});
- await expect(page.locator('#prod-stock')).toBeEditable();
- await expect(page.locator('#prod-variant-stock input')).toHaveCount(0);
- await page.getByRole('button',{name:'Disponibilidad de Color: dorado',exact:true}).click();
- await page.getByRole('button',{name:'Asignar stock por color u opción',exact:true}).click();
+ await expect(page.locator('#prod-stock')).toHaveAttribute('readonly','');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
+ await expect(page.locator('#prod-variant-stock')).toBeVisible();
  expect(await page.evaluate(()=>({error:document.getElementById('prod-form-error').textContent,display:document.getElementById('prod-form-error').style.display,quantities:document.querySelectorAll('#prod-variant-stock input').length}))).toEqual({error:'',display:'none',quantities:2});
  const quantities=page.locator('#prod-variant-stock input');
- await quantities.nth(0).fill('1');await page.getByRole('button',{name:'Disponibilidad de Color: plateado',exact:true}).click();await quantities.nth(1).fill('2');await expect(page.locator('#prod-stock')).toHaveValue('3');
- await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await quantities.nth(0).fill('1');await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await quantities.nth(1).fill('2');await expect(page.locator('#prod-stock')).toHaveValue('3');
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await expect(page.locator('[data-product-section=photos]')).toBeVisible();
  const geometry=await page.locator('#prod-form-card').evaluate(card=>({scroll:card.scrollWidth,client:card.clientWidth}));expect(geometry.scroll).toBeLessThanOrEqual(geometry.client+1);
 });
@@ -296,6 +296,7 @@ test('foto vertical, horizontal y faltante no se recorta ni invade controles',as
  await page.setViewportSize({width:320,height:700});await mockRuntime(page);
  await page.route('https://img.test/**',route=>route.request().url().includes('rota') ? route.abort() : route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="900" height="120"><rect width="900" height="120" fill="pink"/></svg>'}));
  await page.goto('https://tintin.test/admin-commerce-fixture');
+ await page.evaluate(async()=>{const core=await import(new URL('/js/admin/products/editor-comercial-core.mjs',location.origin));const ui=await import(new URL('/js/admin/products/editor-comercial-interfaz.js',location.origin));window.commercialDraft=core.commercialDraft;window.mountCommercialEditor=ui.mountCommercialEditor;});
  await page.evaluate(()=>{window.__productRows[0].data.image='https://img.test/rota.webp';window.__publishProducts();});
  await page.locator('tr[data-id="p-reloj"] .tt-commerce-thumb').scrollIntoViewIfNeeded();
  await expect(page.locator('tr[data-id="p-reloj"] .tt-commerce-thumb')).toContainText('Imagen no disponible');
@@ -308,7 +309,7 @@ test('foto vertical, horizontal y faltante no se recorta ni invade controles',as
 });
 
 test('la biblioteca queda sobre el editor y Escape cierra sólo la biblioteca',async({page})=>{
- await openEditor(page,390,844);await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await openEditor(page,390,844);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.evaluate(()=>{
   const overlay=document.createElement('div');overlay.className='tt-mlib-overlay';overlay.style.cssText='position:fixed;inset:0;background:white;z-index:9000';
   const close=document.createElement('button');close.className='tt-mlib-close';close.textContent='Cerrar';close.onclick=()=>overlay.remove();overlay.append(close);document.body.append(overlay);
@@ -328,7 +329,7 @@ test('cancelar respeta el guard nativo: seguir editando conserva datos y descart
  });
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  expect(await page.evaluate(()=>window.AdminUnsaved.isDirty('primary-editor'))).toBe(false);
- await page.locator('#prod-price').fill('15000');
+ await page.locator('[data-money-for="prod-price"]').fill('15000');
  await openActions(page);await page.locator('#prod-form-card').getByRole('button',{name:'Cancelar',exact:true}).click();
  const guard=page.locator('#unsaved-modal');await expect(guard).toBeVisible();
  const box=await page.locator('#unsaved-modal-stay').boundingBox();expect(await page.evaluate(({x,y})=>Boolean(document.elementFromPoint(x+5,y+5)?.closest('#unsaved-modal')),box)).toBe(true);
@@ -337,9 +338,9 @@ test('cancelar respeta el guard nativo: seguir editando conserva datos y descart
 });
 
 test('validación revela campos y pone el mensaje en foco sin perder valores',async({page})=>{
- await openEditor(page,390,844);await page.locator('#prod-name').fill('Anillo');await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await openEditor(page,390,844);await page.locator('#prod-name').fill('Anillo');await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.evaluate(()=>{const error=document.getElementById('prod-form-error');error.textContent='Ingresá un precio válido';error.style.display='block';});
- await expect(page.locator('#prod-form-error')).toBeFocused();await expect(page.locator('#prod-form-error')).toBeInViewport();await expect(page.locator('#prod-editor-section')).toHaveValue('prices');await expect(page.locator('#prod-name')).toHaveValue('Anillo');await expect(page.locator('#prod-price')).toBeVisible();
+ await expect(page.locator('#prod-form-error')).toBeFocused();await expect(page.locator('#prod-form-error')).toBeInViewport();await expect(page.locator('#prod-editor-section')).toHaveValue('prices');await expect(page.locator('#prod-name')).toHaveValue('Anillo');await expect(page.locator('[data-money-for="prod-price"]')).toBeVisible();
 });
 
 test('selección entre páginas y barra sobre navegación sin tapar el último producto',async({page})=>{
@@ -358,11 +359,11 @@ test('selección entre páginas y barra sobre navegación sin tapar el último p
 });
 
 test('foto principal completa en editor real y rotación conserva borrador y acciones superiores',async({page})=>{
- await openEditor(page,390,844,true);await page.locator('#prod-name').fill('Borrador conservado');await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await openEditor(page,390,844,true);await page.locator('#prod-name').fill('Borrador conservado');await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.evaluate(async url=>{const {attachImageUploadWidget}=await import(url);attachImageUploadWidget(document.getElementById('prod-image-widget'),{label:'Imagen principal',value:'https://img.test/principal.webp'});},'/js/components/images/carga-imagenes.js?fixture');
- const image=page.locator('#prod-image-widget .tt-iuw-preview');await expect(image).toBeVisible();expect((await image.boundingBox()).width).toBeGreaterThan(250);await expect(image.locator('img')).toHaveCSS('object-fit','contain');
- await page.setViewportSize({width:844,height:390});await expect(page.locator('#prod-form-card')).toHaveCSS('height','390px');
- await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');await openActions(page);await expect(page.locator('#prod-save-btn')).toBeInViewport();
+ const image=page.locator('#prod-image-widget .tt-iuw-preview');await expect(image).toBeVisible();expect((await image.boundingBox()).width).toBeGreaterThanOrEqual(await page.locator('#prod-image-widget .tt-iuw').evaluate(widget=>{const css=getComputedStyle(widget);return widget.clientWidth-parseFloat(css.paddingLeft)-parseFloat(css.paddingRight)-1;}));await expect(image.locator('img')).toHaveCSS('object-fit','contain');
+ await page.setViewportSize({width:844,height:390});await expect(page.locator('#prod-form-card')).toHaveCSS('position','relative');expect(await page.locator('#prod-form-card').evaluate(card=>card.getBoundingClientRect().right<=innerWidth)).toBe(true);
+ await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');await openActions(page);await page.locator('#prod-save-btn').scrollIntoViewIfNeeded();await expect(page.locator('#prod-save-btn')).toBeInViewport();
  await page.screenshot({path:'test-results/product-editor-photo-landscape.png'});
 });
 
@@ -393,16 +394,15 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
    setProductPreviewMedia(card,[{'Diseño de anillo':'coctel',imageUrls:['https://img.test/coctel.webp']},{'Diseño de anillo':'banda',imageUrls:['https://img.test/banda.webp']}]);
    card.dispatchEvent(new Event('input',{bubbles:true}));
   },{renderer:stockRenderer,previewVersion:require('../../scripts/cache-version-baseline.json')['js/admin/products/vista-previa-producto.js'].version});
-  await page.getByRole('tab',{name:'Variantes',exact:true}).click();
-  await expect(page.getByLabel('Stock de coctel',{exact:true})).toHaveValue('1');
-  await page.getByRole('button',{name:'Disponibilidad de Diseño de anillo: banda',exact:true}).click();
-  await page.getByLabel('Stock de banda',{exact:true}).fill('0');
+  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
+  await expect(page.getByLabel('Stock: coctel',{exact:true})).toHaveValue('1');
+  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
+  await page.getByLabel('Stock: banda',{exact:true}).fill('0');
   await expect(page.locator('#prod-stock')).toHaveValue('1');
-  await expect(page.locator('.tt-editor-stock-row').last()).toContainText('Agotado');
-  await expect(page.locator('.tt-editor-stock-row').last().locator('img')).toHaveAttribute('src',/banda.webp/);
+  await expect(page.locator('.tt-commercial-row').last()).toContainText('Sin stock');
+  await page.getByRole('tab',{name:'Publicación',exact:true}).click();
   const previewShell=page.locator('.tt-editor-preview-shell');
-  await expect(previewShell).toHaveJSProperty('open',false);
-  await previewShell.locator('summary').click();
+  await expect(previewShell).toHaveJSProperty('open',true);
   const preview=page.locator('#prod-live-preview');
   await expect(preview.locator('h2')).toHaveText('Anillo Amore');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('75.000');
@@ -415,7 +415,7 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
   await expect(page.locator('#prod-stock')).toHaveValue('1');
   await expect(page.locator('#prod-variants-text')).toHaveValue('Diseño de anillo: coctel, banda');
   await preview.getByLabel('Vista previa: Diseño de anillo',{exact:true}).selectOption('');
-  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').fill('80000');
+  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('[data-money-for="prod-price"]').fill('80000');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('80.000');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('−20%');
   await page.getByRole('tab',{name:'Información',exact:true}).click();
@@ -423,7 +423,7 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
   for(const box of boxes){expect(box.left,box.id).toBeGreaterThanOrEqual(-1);expect(box.right,box.id).toBeLessThanOrEqual(width+1);}
   expect(errors).toEqual([]);
   expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
-  await page.getByRole('tab',{name:'Variantes',exact:true}).click();
+  await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
   await page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop=0);await page.evaluate(()=>scrollTo(0,0));
   await page.screenshot({path:`test-results/product-editor-visual-${width}x${height}.png`});
  });
@@ -442,7 +442,7 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
   let number=0;const library=async()=>window.__delayGalleryChoice ? new Promise(resolve=>{window.__resolveGalleryChoice=resolve;}) : `https://img.test/extra-${++number}.webp`;
   window.__remountGallery=new Function('attachImageUploadWidget','attachMultiImageUploadWidget','attachProductGallery','openMediaLibraryPicker','sanitizeImageUrl','_formImageWidgets',source+';mountProductColorPhotos({variants:{Diseño:["Coctel","Banda"]}});return mountProductColorPhotos;')(attachImageUploadWidget,attachMultiImageUploadWidget,attachProductGallery,library,sanitizeImageUrl,new Map());
  },mount);
- await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  const gallery=page.locator('.tt-unified-photos .tt-iuw-multiple');
  await expect(gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true})).toBeHidden();
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
@@ -458,10 +458,11 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  await expect(page.locator('#prod-images-extra')).toHaveValue('');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(1);
  expect(await page.evaluate(()=>window.__imageCleanup||0)).toBe(0);
- await page.locator('.tt-editor-preview-shell > summary').click();
+ await page.getByRole('tab',{name:'Publicación',exact:true}).click();await page.locator('.tt-editor-preview-shell').evaluate(section=>section.open=true);
  await expect(page.locator('#prod-live-preview')).toBeVisible();
  await page.locator('#prod-live-preview').getByRole('button',{name:'Volver a editar'}).click();
  await expect(page.locator('#prod-form-card [role=tab][aria-selected=true]')).toBeFocused();
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  // Una selección pendiente del producto anterior nunca debe tocar el nuevo formulario.
  await page.evaluate(()=>{window.__delayGalleryChoice=true;window.__oldGalleryRoot=document.querySelector('.tt-unified-photos .tt-iuw-multiple');});
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
@@ -472,12 +473,12 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
 
 for (const width of [1200,1440,1920]) test(`controles seleccionados conservan texto legible con el tema real ${width}`,async({page})=>{
  await openEditor(page,width,900);
- await page.getByRole('tab',{name:'Variantes',exact:true}).click();
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.addStyleTag({path:path.join(root,'css/core/tema-unificado-tintin.css')});
  for(const colors of [['#F8AACA','#222222'],['#222222','#FFFFFF']]) {
   await page.evaluate(([background,text])=>{document.documentElement.style.setProperty('--admin-color-button-primary-background',background);document.documentElement.style.setProperty('--admin-color-button-primary-text',text);},colors);
   await page.locator('.tt-editor-option-assistance').evaluate(node=>node.open=true);
-  const controls=page.locator('#prod-form-card [data-product-section=inventory] .tt-editor-choice[aria-pressed]');
+  const controls=page.locator('#prod-form-card [data-product-section=options] .tt-editor-choice[aria-pressed]');
   expect(await controls.count()).toBeGreaterThan(0);
   for (const button of await controls.all()) {
    await button.click();
@@ -500,7 +501,7 @@ for (const width of [320,390,768,1440]) test(`cambiar apartado reinicia el edito
  await page.locator('#prod-name').fill('Borrador conservado');
  await page.evaluate(()=>{document.querySelector('#prod-form-card .adm-card-body').scrollTop=700;scrollTo(0,500);});
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
- await expect(page.locator('#prod-price')).toBeInViewport();
+ await expect(page.locator('[data-money-for="prod-price"]')).toBeInViewport();
  await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
  await page.getByRole('tab',{name:'Información',exact:true}).click();
  await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');
@@ -543,7 +544,7 @@ test('un error persistente no reinicia scroll ni foco al editar precio',async({p
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  const before=await page.evaluate(()=>{
-  const input=document.querySelector('#prod-price');input.focus({preventScroll:true});
+  const input=document.querySelector('#prod-price');document.querySelector('[data-money-for="prod-price"]').focus({preventScroll:true});
   const body=document.querySelector('#prod-form-card .adm-card-body');body.scrollTop=300;
   window.__scrollResets=0;const reset=window.TintinPageScroll.reset;window.TintinPageScroll.reset=(...args)=>{window.__scrollResets++;return reset(...args);};
   input.value='65000';input.dispatchEvent(new Event('input',{bubbles:true}));
@@ -553,7 +554,7 @@ test('un error persistente no reinicia scroll ni foco al editar precio',async({p
  await page.screenshot({path:`artifacts/editor-phase1/error-${process.env.EDITOR_PROFILE_BASELINE==='1'?'before':'after'}.png`});
  expect(await page.evaluate(()=>window.__scrollResets)).toBe(0);
  expect(await page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop)).toBe(before);
- await expect(page.locator('#prod-price')).toBeFocused();
+ await expect(page.locator('[data-money-for="prod-price"]')).toBeFocused();
 });
 
 test('abrir conserva producto oculto y visibilidad manual independiente de la cantidad',async({page})=>{
@@ -567,16 +568,16 @@ test('abrir conserva producto oculto y visibilidad manual independiente de la ca
  });
  await expect(page.locator('.tt-editor-stock-status')).toHaveText('7 unidades disponibles');
  await expect(page.locator('#prod-active')).not.toBeChecked();
- await page.getByRole('button',{name:'Stock: 1 unidades',exact:true}).click();
+ await page.locator('#prod-stock').fill('1');
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await page.getByRole('tab',{name:'Publicación',exact:true}).click();
  await page.locator('#prod-publicationStatus').selectOption('draft');
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
- await page.locator('#prod-price').fill('50000');
+ await page.locator('[data-money-for="prod-price"]').fill('50000');
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await expect(page.locator('#prod-stock')).toHaveValue('1');
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
- await page.getByRole('button',{name:'Stock: 0 unidades',exact:true}).click();
+ await page.locator('#prod-stock').fill('0');
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await expect(page.locator('.tt-editor-stock-status')).toHaveText('Sin stock');
 });
@@ -587,17 +588,16 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  });
  const editor=page.locator('#prod-form-card');
  const header=await page.locator('.adm-topbar').boundingBox(),bounds=await editor.boundingBox();
- expect(bounds.x).toBe(0);expect(bounds.y).toBe(header.y+header.height);expect(bounds.width).toBe(width);expect(bounds.height).toBe(height-bounds.y);
- await expect(editor).toHaveCSS('border-radius','0px');
- await expect(editor).toHaveAttribute('role','dialog');
- await expect(editor).toHaveAttribute('aria-modal','false');
+ expect(bounds.x).toBeGreaterThanOrEqual(0);expect(bounds.x+bounds.width).toBeLessThanOrEqual(width+1);
+ await expect(editor).toHaveCSS('position','relative');
+ await expect(editor).toHaveAttribute('role','region');
+ expect(await editor.getAttribute('aria-modal')).toBeNull();
  const actions=editor.locator('#prod-editor-actions');
  await expect(actions).toBeVisible();
- const body=editor.locator('.adm-card-body');await body.evaluate(el=>el.scrollTop=el.scrollHeight);
- const contentBox=await body.boundingBox();expect(contentBox.y+contentBox.height).toBeGreaterThanOrEqual(height-1);
+ const body=editor.locator('.adm-card-body');await expect(body).toHaveCSS('overflow-y','visible');
  const buttons=actions.locator('button');await expect(buttons).toHaveCount(2);
  for(const button of await buttons.all()){
-  await expect(button).toBeInViewport();
+  await button.scrollIntoViewIfNeeded();await expect(button).toBeInViewport();
   expect(await button.evaluate(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===el;})).toBe(true);
  }
  await buttons.first().focus();await page.keyboard.press('Tab');await expect(editor.locator('#prod-save-btn')).toBeFocused();
@@ -618,7 +618,7 @@ for(const [width,height] of [[320,700],[768,1024],[1440,900]])test(`fotos por co
   main.value='https://img.test/rosa.webp';extra.value='https://img.test/rojo.webp';variants.value='Color: rosa, rojo';
   window.__colorPhotos=attachColorPhotos({container:document.getElementById('prod-color-photos'),product:{imageUrl:main.value,imagesExtra:[extra.value],variants:{Color:['rosa','rojo']},variantMedia:[{Color:'rosa',imageUrl:main.value},{Color:'rojo',imageUrl:extra.value}]},mainInput:main,imagesInput:extra,variantsInput:variants,attachUpload:attachImageUploadWidget,openLibrary:async()=>'https://img.test/biblioteca.webp'});
  });
- await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  const colors=page.locator('#prod-color-photos');
  await expect(colors.locator('fieldset')).toHaveCount(2);
  await colors.getByRole('checkbox',{name:'Asignar foto 2 a rosa',exact:true}).check();
@@ -633,7 +633,7 @@ for(const [width,height] of [[320,700],[768,1024],[1440,900]])test(`fotos por co
 });
 
 test('stock maestro retira opciones guardadas sin destruir cantidades ni referencias',async({page})=>{
- await openEditor(page,390,844);await page.getByRole('tab',{name:'Variantes',exact:true}).click();
+ await openEditor(page,390,844);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.evaluate(async({renderer,inventory})=>{
   const {commercialDraft}=await import(new URL('/js/admin/products/editor-comercial-core.mjs',location.origin));
   const {mountCommercialEditor}=await import(new URL('/js/admin/products/editor-comercial-interfaz.js',location.origin));
@@ -642,15 +642,14 @@ test('stock maestro retira opciones guardadas sin destruir cantidades ni referen
   window.__masterStock=new Function('commercialDraft','mountCommercialEditor',inventory+'\n'+renderer+'\nreturn {renderProductVariantStock,get:()=>productCommercialEditor.get()};')(commercialDraft,mountCommercialEditor);
   window.__masterStock.renderProductVariantStock({price:45000,stock:2,variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'Dorado',stock:1},{variant:'Plateado',stock:1}]});
  },{renderer:stockRenderer,inventory:inventorySource});
- await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('1');await expect(page.locator('#prod-stock')).toHaveValue('2');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
+ await expect(page.getByLabel('Stock: Dorado',{exact:true})).toHaveValue('1');await expect(page.locator('#prod-stock')).toHaveValue('2');
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Oro rosa');await page.getByRole('button',{name:'Agregar opción',exact:true}).click();
- await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('1');await expect(page.getByLabel('Stock de Oro rosa',{exact:true})).toHaveValue('');
- await page.getByRole('button',{name:'Disponibilidad de Color: Oro rosa',exact:true}).click();
- await page.getByLabel('Stock de Oro rosa',{exact:true}).fill('0');await expect(page.locator('#prod-stock')).toHaveValue('2');
- await page.getByRole('button',{name:'Quitar Color: Oro rosa',exact:true}).click();
- await expect(page.locator('#prod-variants-text')).not.toHaveValue(/Oro rosa/);
- await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();
- await expect(page.getByRole('button',{name:'Restaurar Color: Dorado',exact:true})).toBeVisible();
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
+ await expect(page.getByLabel('Stock: Dorado',{exact:true})).toHaveValue('1');await expect(page.getByLabel('Stock: Oro rosa',{exact:true})).toHaveValue('0');
+ await expect(page.locator('#prod-stock')).toHaveValue('2');
+ await page.getByLabel('Habilitada para la venta: Dorado',{exact:true}).uncheck();
  await expect(page.locator('#prod-form-error')).toBeHidden();
  expect(await page.evaluate(()=>window.__masterStock.get().variantInventory.find(row=>row.variant==='Dorado'))).toMatchObject({variant:'Dorado',stock:1,active:false});
  await expect(page.locator('#prod-stock')).toHaveValue('2');
@@ -658,7 +657,7 @@ test('stock maestro retira opciones guardadas sin destruir cantidades ni referen
 });
 
 test('portada por color es explícita, reordenable y conserva metadatos de variante',async({page})=>{
- await openEditor(page,1024,768,true);await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await openEditor(page,1024,768,true);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.evaluate(async()=>{
   const moduleUrl=new URL('/js/admin/products/fotos-por-color.js',location.origin);const {attachColorPhotos}=await import(moduleUrl.href);
   const container=document.createElement('div');container.id='master-color-photos';document.querySelector('[data-product-section=photos] .tt-editor-section-fields').append(container);
@@ -683,7 +682,7 @@ test('carga múltiple espera archivos, conserva fallidos y reintenta sin duplica
  await openEditor(page,390,844,`
  export const deleteMediaByUrlIfUnused=async()=>{},deleteMediaItem=async()=>{};
  export async function uploadImageToLibrary(file){window.__masterAttempts??={};window.__masterAttempts[file.name]=(window.__masterAttempts[file.name]||0)+1;if(file.name==='dos.png' && !window.__retryMaster)throw Error('Red interrumpida');return {url:'https://img.test/'+file.name,mediaId:file.name};}
- `);await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ `);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.evaluate(async()=>{const moduleUrl=new URL('/js/components/images/carga-imagenes.js',location.origin);const {attachMultiImageUploadWidget}=await import(moduleUrl.href);const container=document.createElement('div');container.id='master-multiple';document.querySelector('[data-product-section=photos] .tt-editor-section-fields').append(container);window.__masterUploaded=[];window.__bulk=attachMultiImageUploadWidget(container,{remaining:()=>2-window.__masterUploaded.length,onChange:url=>window.__masterUploaded.push(url)});});
  const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=40;canvas.height=40;return canvas.toDataURL('image/png').split(',')[1];});
  await page.locator('#master-multiple input[type=file]').setInputFiles(['uno.png','dos.png'].map(name=>({name,mimeType:'image/png',buffer:Buffer.from(png,'base64')})));
@@ -697,7 +696,7 @@ test('carga múltiple espera archivos, conserva fallidos y reintenta sin duplica
 });
 
 test('salir con fotos masivas pendientes activa el guard real sin subir ni borrar imágenes',async({page})=>{
- await openEditor(page,390,844,true);await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await openEditor(page,390,844,true);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.evaluate(markup=>{if(document.getElementById('unsaved-modal'))return;const parsed=new DOMParser().parseFromString(markup,'text/html');document.body.append(parsed.getElementById('unsaved-modal'));},prompt);
  await page.addScriptTag({url:'/js/admin/proteccion-cambios-pendientes-admin.js'});
  const serializer=adminSource.slice(adminSource.indexOf('function serializeProductForm()'),adminSource.indexOf('window.prodNuevo ='));
@@ -732,7 +731,7 @@ for(const [width,height] of [[320,700],[390,844],[768,1024],[1024,768],[1280,720
  await expect(page.locator('#prod-save-btn')).toBeInViewport();
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  for(const row of await page.locator('#prod-variant-stock .tt-editor-stock-row').all()){
-  const controls=row.locator('.tt-editor-stepper > *, .tt-editor-quantity-select');const boxes=await controls.evaluateAll(nodes=>nodes.map(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width};}));
+  const controls=row.locator('.tt-editor-stepper > *, .tt-editor-quantity-select');const boxes=await controls.evaluateAll(nodes=>nodes.filter(el=>el.getClientRects().length).map(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width};}));
   const bounds=await row.boundingBox();
   for(const box of boxes){expect(box.width).toBeGreaterThanOrEqual(44);expect(box.x).toBeGreaterThanOrEqual(bounds.x);expect(box.right).toBeLessThanOrEqual(bounds.x+bounds.width+1);}
   for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];expect(a.right<=b.x+1 || b.right<=a.x+1 || a.bottom<=b.y+1 || b.bottom<=a.y+1).toBe(true);}
@@ -748,7 +747,7 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  const card=page.locator('#prod-form-card');
  await page.locator('#prod-name').fill('Reloj Alissia');
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
- await page.locator('#prod-price').fill('70000');
+ await page.locator('[data-money-for="prod-price"]').fill('70000');
  await page.getByRole('tab',{name:'Información',exact:true}).click();
  await page.locator('#prod-description').fill('Acero inoxidable, para todos los días.');
  await page.getByRole('tab',{name:'Publicación',exact:true}).click();await page.locator('#prod-publicationStatus').selectOption('draft');
@@ -768,7 +767,7 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  expect((await card.locator('#prod-form-title').boundingBox()).height).toBeLessThanOrEqual(54);
  await page.locator('#prod-name').fill('Reloj Alissia');
  await card.locator('.adm-card-body').evaluate(el=>el.scrollTop=el.scrollHeight);
- for(const button of await card.locator('#prod-editor-actions button').all())await expect(button).toBeInViewport();
+ for(const button of await card.locator('#prod-editor-actions button').all()){await button.scrollIntoViewIfNeeded();await expect(button).toBeInViewport();}
  const dimensions=await card.evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.client+1);
  await page.locator('#prod-save-btn').click();
  expect(await page.evaluate(()=>window.__calls.filter(row=>row[0]==='prodGuardar'))).toEqual([['prodGuardar','Reloj Alissia','70000']]);
@@ -788,7 +787,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  await expect(page.locator('#prod-name')).toHaveValue('Pulsera conservada');
  await expect(page.locator('#prod-name')).toBeFocused();
  await expect(card.locator('[data-product-section=photos]')).toBeHidden();
- await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await expect(card.locator('[data-product-section=photos]')).toBeVisible();await expect(page.locator('#prod-name')).toHaveValue('Pulsera conservada');
  expect(await card.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
  if(width===390||width===1440){await card.locator('.adm-card-body').evaluate(el=>el.scrollTop=0);await page.screenshot({animations:'disabled',path:test.info().outputPath(`editor-intuitivo-${width}.png`)});}
@@ -802,7 +801,7 @@ test('visión es opcional, aplica sólo la categoría elegida y descarta resulta
   const select=document.getElementById('prod-category');select.add(new Option('Carteras','carteras'));
   const canvas=document.createElement('canvas');canvas.width=canvas.height=40;canvas.getContext('2d').fillRect(0,0,40,40);document.getElementById('prod-imageUrl').value=canvas.toDataURL();
  });
- await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();await page.locator('.tt-editor-vision summary').click();
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();await page.locator('.tt-editor-vision summary').click();
  expect(await page.evaluate(()=>window.__visionWorkers.length)).toBe(0);
  const before=await page.evaluate(()=>({material:document.getElementById('prod-material').value,stock:document.getElementById('prod-stock').value,variants:document.getElementById('prod-variants-text').value}));
  await page.getByRole('button',{name:'Analizar imagen principal',exact:true}).click();
@@ -818,8 +817,9 @@ test('visión es opcional, aplica sólo la categoría elegida y descarta resulta
  await expect(page.locator('#prod-category')).toHaveValue('carteras');
  const after=await page.evaluate(()=>({material:document.getElementById('prod-material').value,stock:document.getElementById('prod-stock').value,variants:document.getElementById('prod-variants-text').value}));expect(after).toEqual(before);
  await page.getByRole('tab',{name:'Detalles',exact:true}).click();
+ await page.locator('#prod-material').evaluate(input=>input.parentElement.querySelector('.tt-field-suggestions').open=true);
  await expect(page.getByRole('group',{name:'Sugerencias: Material',exact:true}).getByRole('button',{name:'Cuero sintético',exact:true})).toBeVisible();
- await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await page.getByRole('button',{name:'Analizar imagen principal',exact:true}).click();
  await expect(page.getByRole('button',{name:'Cancelar análisis',exact:true})).toBeVisible();
  await page.getByRole('button',{name:'Cancelar análisis',exact:true}).click();

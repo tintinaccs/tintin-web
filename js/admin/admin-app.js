@@ -1,11 +1,11 @@
 import {adminEventAttributes,installAdminEvents} from './eventos-dinamicos-admin.mjs?v=tintin-20261027-save-csp-1';
-import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261028-product-tabs-3';
+import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261028-guided-editor-1';
 import {readProductEditorResponse} from './products/respuesta-editor-producto.mjs?v=tintin-20261027-editor-ux-1';
-import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
+import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261028-guided-editor-1';
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
 import {productStatistics} from './statistics/estadisticas-producto.mjs?v=tintin-20261024-editor-v2-3';
 import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261026-editor-phase6-1';
-import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261027-opciones-inline-1';
+import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261028-guided-editor-1';
 import { reorderVariantInventory, variantAttributes } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
@@ -17,7 +17,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261028-product-tabs-1';
+import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261028-guided-editor-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -5899,28 +5899,16 @@ function renderProductVariantStock(product, configuration = null) {
   stockInput.readOnly = false;
   optionsInput.readOnly = false;
   if (product?.variantCommerceVersion === 2) {
-    productCommercialEditor = mountCommercialEditor(panel, product, productVariantStockConfiguration, productVariantStockEvents.signal, configuration?.commercialBaseline ?? product);
+    productCommercialEditor = mountCommercialEditor(panel, product, productVariantStockConfiguration, productVariantStockEvents.signal, configuration?.commercialBaseline ?? product,()=>{const retainedStock=stockInput.value;renderProductVariantStock(null);stockInput.value=retainedStock;stockInput.dispatchEvent(new Event('input',{bubbles:true}));});
     return;
   }
-  const enable = document.createElement('button');
-  enable.type='button';enable.className='adm-btn adm-btn-outline';enable.textContent='Usar precios y disponibilidad por combinación';
-  enable.addEventListener('click',()=>{
-    try {
-      if(!confirm('¿Preparar combinaciones con identidad estable? Se conservarán las referencias existentes. El cambio se aplica al guardar.'))return;
-      const variants=productVariantStockConfiguration(optionsInput.value).variants;
-      const entries=productVariantStockBaseline?.entries.map((entry,index)=>{
-        const raw=panel.querySelectorAll('input')[index]?.value ?? entry.stock;
-        if(raw==='' && product)throw new Error('Completá el stock de cada opción antes de activar precios por combinación.');
-        return {...entry,stock:raw===''?0:Number(raw)};
-      });
-      if(!entries && Number(stockInput.value)>0)throw new Error('Primero asigná el stock a cada opción antes de activar precios por combinación.');
-      const base={...product,...(entries?{variants:productVariantStockBaseline.variants,variantInventory:entries}:{}),price:Number(document.getElementById('prod-price').value),priceBefore:document.getElementById('prod-price-before').value===''?null:Number(document.getElementById('prod-price-before').value)};
-      renderProductVariantStock(commercialDraft(base,variants,product || {}),{commercialBaseline:product || {}});
-      panel.dispatchEvent(new Event('change',{bubbles:true}));
-    } catch(error){const target=document.getElementById('prod-form-error');target.textContent=error.message;target.style.display='';}
-  });
-  panel.append(enable);
   const expectedEntries = variantInventoryEntries(product);
+  // Existing allocations migrate through the commercial engine with identities intact.
+  // An aggregate legacy stock is never copied into every combination.
+  if(expectedEntries && !configuration && Number(document.getElementById('prod-price').value || product?.price)>0){
+    const base={...product,price:Number(document.getElementById('prod-price').value) || product.price};
+    try{renderProductVariantStock(commercialDraft(base,productVariantStockConfiguration(optionsInput.value).variants,product),{commercialBaseline:product});return;}catch(failure){const note=document.createElement('p');note.textContent='Las asignaciones históricas requieren revisión antes de cambiar su estructura. Se conservan sus cantidades y referencias.';panel.append(note);}
+  }
   if(expectedEntries)optionsInput.addEventListener('tintin:variant-option-availability',event=>{
     if(event.detail.active!==false || !productVariantStockBaseline)return;
     try {
@@ -5951,10 +5939,10 @@ function renderProductVariantStock(product, configuration = null) {
       }
       if (!optionsInput.value.trim() && !productVariantStockBaseline) return;
       // Agregar opciones no activa el control de unidades por combinación.
-      if (!productVariantStockBaseline) { acceptedOptions = optionsInput.value; return; }
-      const previous = productVariantStockBaseline?.entries.map((entry, index) => ({...entry, stock:panel.querySelectorAll('input')[index]?.value ?? entry.stock})) || [];
+      if (!productVariantStockBaseline) {const variants=productVariantStockConfiguration(optionsInput.value);if(Object.keys(variants.variants).length){renderProductVariantStock(product,variants);}acceptedOptions = optionsInput.value;return;}
+      const previous = productVariantStockBaseline?.entries.map((entry, index) => ({...entry, stock:panel.querySelectorAll('input')[index]?.value==='' && entry.stock===null?null:panel.querySelectorAll('input')[index]?.value ?? entry.stock})) || [];
       if (!optionsInput.value.trim() && !product && !document.getElementById('prod-id').value) {
-        if (previous.some(entry => Number(entry.stock) > 0)) throw new Error('Primero dejá en 0 el stock de la opción que querés quitar.');
+        if(previous.length>1 && previous.some(entry=>Number(entry.stock)>0))throw new Error('Primero revisá las cantidades de las opciones que querés quitar.');
         const unconfiguredStock = productVariantStockBaseline?.unconfiguredStock ?? '0';
         renderProductVariantStock(null);
         stockInput.value = unconfiguredStock;
@@ -5972,23 +5960,31 @@ function renderProductVariantStock(product, configuration = null) {
       const error = document.getElementById('prod-form-error');error.textContent=failure.message;error.style.display='';
     }
   }, {signal:productVariantStockEvents.signal});
-  if (expectedEntries === null && !configuration) {
-    const configure = document.createElement('button');
-    configure.type = 'button'; configure.className = 'adm-btn adm-btn-outline';
-    configure.textContent = 'Asignar stock por color u opción';
-    configure.addEventListener('click', () => {
-      const error = document.getElementById('prod-form-error');
-      try {
-        const draft = productVariantStockConfiguration(optionsInput.value);
-        renderProductVariantStock(product, draft);
-        error.style.display = 'none';
-        optionsInput.dispatchEvent(new Event('input', {bubbles:true}));
-      } catch (failure) {
-        error.textContent = failure.message; error.style.display = '';
-      }
-    });
-    panel.append(configure);
-    return;
+  if(expectedEntries===null && !configuration){
+    if(!optionsInput.value.trim())return;
+    configuration=productVariantStockConfiguration(optionsInput.value);
+    if(stockInput.value==='')for(const row of configuration.entries)row.stock=null;
+    else if(configuration.entries.length===1)configuration.entries[0].stock=Number(stockInput.value);
+  }
+  const aggregateStock=configuration?.unconfiguredStock ?? (product && product.variantInventory==null?(product.stock ?? ''):stockInput.value);
+  if(configuration?.entries?.length && (aggregateStock!=='' && Number(aggregateStock)===0 || configuration.entries.some(row=>Number.isInteger(row.stock))))configuration.entries=configuration.entries.map(row=>({...row,stock:row.stock===''?0:row.stock}));
+  if(configuration?.entries?.length && configuration.entries.every(row=>row.stock==='' || row.stock===null)){
+    if(aggregateStock==='')configuration.entries=configuration.entries.map(row=>({...row,stock:null}));
+    else if(configuration.entries.length===1)configuration.entries[0].stock=Number(aggregateStock);
+  }
+  if(configuration?.entries?.length && configuration.entries.every(row=>row.stock!=='') && (!product || product.variantInventory!=null) && Number(document.getElementById('prod-price').value)>0){
+    const untracked=new Set(configuration.entries.filter(row=>row.stock===null).map(row=>row.variant));
+    const base={...product,variants:configuration.variants,variantInventory:configuration.entries.map(row=>({...row,stock:row.stock===null?0:row.stock})),price:Number(document.getElementById('prod-price').value),priceBefore:document.getElementById('prod-price-before').value===''?null:Number(document.getElementById('prod-price-before').value)};
+    const draft=commercialDraft(base,configuration.variants,product || {});
+    for(const row of draft.variantInventory)if(untracked.has(row.variant))row.stock=null;
+    if(untracked.size)draft.stock=null;
+    renderProductVariantStock(draft,{commercialBaseline:product || {}});return;
+  }
+  // El backend protege reservas históricas de productos con stock agregado.
+  // Mantener su contrato legado; nunca habilitar v2 mediante una conversión silenciosa.
+  if(product && expectedEntries===null && configuration?.entries?.every(row=>row.stock===null)){
+    const note=document.createElement('p');note.textContent='Stock sin control para todas las opciones.';panel.append(note);
+    stockInput.addEventListener('input',()=>{if(stockInput.value!=='')renderProductVariantStock(product,productVariantStockConfiguration(optionsInput.value));},{signal:productVariantStockEvents.signal});return;
   }
   productVariantStockBaseline = { stock: product?.stock, expectedEntries, entries: configuration?.entries || expectedEntries, variants: configuration?.variants || product?.variants, ...(!product ? {unconfiguredStock:configuration?.unconfiguredStock ?? stockInput.value} : {}) };
   stockInput.readOnly = true;
@@ -6006,12 +6002,20 @@ function renderProductVariantStock(product, configuration = null) {
     input.type = 'number'; input.min = '0'; input.max = '1000000'; input.step = '1';
     input.className = 'adm-input'; input.value = String(entry.stock);input.setAttribute('aria-label', `Stock de ${entry.variant}`);
     input.addEventListener('input', () => {
-      stockInput.value = String([...panel.querySelectorAll('input')].reduce((sum, item) => sum + Number(item.value || 0), 0));
+      const inputs=[...panel.querySelectorAll('input')];
+      stockInput.value=inputs.every(item=>item.value!=='')?String(inputs.reduce((sum,item)=>sum+Number(item.value),0)):'';
+      if((!product || product.variantInventory!=null) && inputs.every(item=>item.value!=='')){const focus=input.getAttribute('aria-label')?.replace(/^Stock de /,'');queueMicrotask(()=>{if(!panel.isConnected || panel.classList.contains('tt-commercial-editor'))return;const entries=productVariantStockBaseline.entries.map((row,index)=>({...row,stock:Number(inputs[index].value)}));renderProductVariantStock(product,{entries,variants:productVariantStockBaseline.variants});[...panel.querySelectorAll('input')].find(item=>item.getAttribute('aria-label')==='Stock: '+focus)?.focus({preventScroll:true});});}
     });
     label.append(input); panel.append(label);
   }
+  document.getElementById('prod-price').addEventListener('input',()=>{
+    if(productCommercialEditor || product && product.variantInventory==null || Number(document.getElementById('prod-price').value)<=0)return;
+    const inputs=[...panel.querySelectorAll('input[type=number]')];
+    const entries=productVariantStockBaseline.entries.map((row,index)=>({...row,stock:inputs[index]?.value===''?(row.stock===null?null:''):Number(inputs[index]?.value ?? row.stock)}));
+    if(entries.every(row=>row.stock!==''))renderProductVariantStock(product,{entries,variants:productVariantStockBaseline.variants});
+  },{signal:productVariantStockEvents.signal});
   const complete = productVariantStockBaseline.entries.every(entry => entry.stock !== '');
-  stockInput.value = complete ? String(productVariantStockBaseline.entries.reduce((sum, entry) => sum + Number(entry.stock), 0)) : '';
+  stockInput.value = complete && !productVariantStockBaseline.entries.some(entry=>entry.stock===null) ? String(productVariantStockBaseline.entries.reduce((sum, entry) => sum + Number(entry.stock), 0)) : '';
 }
 
 function serializeProductForm() {
@@ -6217,7 +6221,7 @@ function _prodEditarNow(docId, duplicate=false) {
       // ese producto puntual — se filtra antes de leer sus entries.
       variantsText = p.variants
         .filter(v => v && typeof v === 'object')
-        .flatMap(v => Object.entries(v).filter(([k]) => !['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active'].includes(k)).map(([k,val]) => `${k}: ${val}`))
+        .flatMap(v => Object.entries(v).filter(([k]) => !['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active', 'colorHex', 'swatch'].includes(k)).map(([k,val]) => `${k}: ${val}`))
         .join('\n');
     } else if (typeof p.variants === 'object') {
       variantsText = Object.entries(p.variants).flatMap(([k, vals]) => Array.isArray(vals) ? vals.map(v => `${k}: ${v}`) : [`${k}: ${vals}`]).join('\n');
@@ -6250,6 +6254,8 @@ window.prodCancelForm = function() {
 
 async function prodGuardar({commit=false}={}) {
   const errorBox=document.getElementById('prod-form-error');if(errorBox?.dataset)delete errorBox.dataset.errorScope;
+  const invalidMoney=Array.from(document.querySelectorAll('#prod-form-card [data-money-for]')).find(input=>input.validity?.valid===false);
+  if(invalidMoney){errorBox.textContent='Revisá el importe: usá números enteros en guaraníes.';errorBox.style.display='';if(errorBox.dataset){errorBox.dataset.editorField=invalidMoney.id;errorBox.dataset.stepValidation='true';}invalidMoney.reportValidity();return false;}
   if(productWorkspace && !commit){
     const workspace=productWorkspace;
     const box=document.getElementById('prod-form-error');box.textContent='';box.style.display='none';
