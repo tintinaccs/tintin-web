@@ -1093,7 +1093,6 @@ html.tt-product-panel-open { overflow:hidden; }
 .tt-editor-variant-groups { display:flex; gap:6px; flex-wrap:wrap; min-width:0; }
 .tt-editor-control-error { margin:0; font-size:12px; line-height:1.6; color:var(--tt-commerce-error); }
 .tt-editor-control-error:empty { display:none; }
-.tt-editor-advanced summary { padding:12px 0; font-size:12px; cursor:pointer; }
 #prod-form-card .adm-card-head { background:var(--tt-commerce-surface); }
 #prod-form-card #prod-form-title { text-transform:none; letter-spacing:-.025em; }
 @media (min-width:1200px) and (pointer:fine), (min-width:1401px) {
@@ -1840,19 +1839,11 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-
 #prod-form-card.tt-editor-composer .tt-photo-product-controls > summary {min-height:44px;cursor:pointer;font-size:13px;font-weight:650;}
 #prod-form-card.tt-editor-composer .tt-photo-product-controls > .tt-editor-section {margin-top:16px;padding-top:12px;border-top:1px solid var(--editor-line);}
 #prod-form-card.tt-editor-composer .tt-photo-product-controls .tt-editor-section-fields {grid-template-columns:minmax(0,1fr);}
-#prod-form-card.tt-editor-composer .tt-photo-selection-bar {display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-block:1px solid var(--editor-line);padding-block:12px;}
-#prod-form-card.tt-editor-composer .tt-photo-selection-bar > strong {flex:1 1 100%;font-size:13px;}
-#prod-form-card.tt-editor-composer .tt-photo-selection-bar button {min-height:44px;white-space:normal;}
 #prod-form-card.tt-editor-composer .tt-photo-context:empty {display:none;}
 #prod-form-card.tt-editor-composer .tt-photo-context {padding:14px;border:1px solid var(--editor-line);border-radius:12px;background:var(--tt-commerce-surface);}
 #prod-form-card.tt-editor-composer .tt-photo-context h4 {margin:0 0 8px;}
 #prod-form-card.tt-editor-composer .tt-photo-context p {font-size:13px;line-height:1.6;margin-block:8px 12px;}
 #prod-form-card.tt-editor-composer .tt-photo-context > button {min-height:44px;max-width:100%;margin:4px 4px 4px 0;white-space:normal;}
-#prod-form-card.tt-editor-composer .tt-photo-color-choices {display:flex;flex-wrap:wrap;gap:8px;border:0;padding:8px 0;min-width:0;}
-#prod-form-card.tt-editor-composer .tt-photo-color-choices label,#prod-form-card.tt-editor-composer .tt-photo-pick {display:flex;align-items:center;gap:8px;min-height:44px;padding:6px;font-size:12px;cursor:pointer;}
-#prod-form-card.tt-editor-composer .tt-photo-color-choices label {padding:8px 12px;border:1px solid var(--editor-line);border-radius:12px;font-size:14px;max-width:100%;overflow-wrap:anywhere;}
-#prod-form-card.tt-editor-composer .tt-photo-color-choices label:has(input:checked) {background:#fff1f6;border-color:#a14b70;color:#51263b;}
-#prod-form-card.tt-editor-composer .tt-photo-color-choices label:has(input:focus-visible) {outline:2px solid #713c53;outline-offset:3px;}
 #prod-form-card.tt-editor-composer .tt-photo-context > label {display:grid;gap:6px;margin-block:10px;min-width:0;}
 #prod-form-card.tt-editor-composer .tt-photo-context select {width:100%;min-width:0;max-width:100%;min-height:44px;border:1px solid var(--editor-line);border-radius:10px;background:var(--tt-commerce-surface);padding:8px;}
 #prod-form-card.tt-editor-composer .tt-unified-photos > [role=status]:empty {display:none;}
@@ -1899,10 +1890,7 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-
 #prod-form-card.tt-editor-composer .tt-unified-photos > h3 {display:none;}
 @media(min-width:720px) {
  #prod-form-card.tt-editor-composer [data-product-section=photos] > .tt-editor-section-fields > .tt-photo-product-controls {grid-column:2 !important;}
- #prod-form-card.tt-editor-composer .tt-photo-selection-bar {position:static;background:var(--tt-commerce-surface);}
 }
-#prod-form-card.tt-editor-composer .tt-photo-selection-preview {display:flex;gap:8px;max-width:100%;overflow-x:auto;padding:4px;}
-#prod-form-card.tt-editor-composer .tt-photo-selection-preview img {width:64px;height:64px;object-fit:contain;flex:0 0 64px;border:1px solid var(--editor-line);border-radius:8px;background:var(--tt-commerce-surface);}
 @media(max-width:1099px) {
  html.tt-product-editor-open body #prod-form-card.tt-editor-composer #prod-editor-section {width:100% !important;max-width:none;grid-column:1/-1;flex:1 0 100%;}
 }
@@ -1934,3 +1922,37 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-
 @media(max-height:500px) {
  #prod-form-card.tt-editor-workspace .adm-card-head {gap:8px;}
 }
+
+/* Un único panel canónico junto a la opción; sin diálogos ni saltos de sección. */
+#prod-form-card .tt-option-inline {flex:1 0 100%;min-width:0;max-width:100%;padding:12px;border:1px solid var(--editor-line);border-radius:12px;background:var(--tt-commerce-surface);}
+#prod-form-card .tt-option-inline-heading {display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
+#prod-form-card .tt-option-inline-heading strong {overflow-wrap:anywhere;min-width:0;}
+#prod-form-card .tt-option-inline .tt-unified-photo-grid {grid-template-columns:repeat(auto-fit,minmax(min(100%,110px),1fr));gap:10px;}
+#prod-form-card .tt-option-inline .tt-unified-photo {min-width:0;padding:8px;}
+#prod-form-card .tt-option-inline .tt-option-photo-pick {display:grid;grid-template-columns:24px minmax(0,1fr);gap:6px;font-size:13px;}
+#prod-form-card .tt-option-inline .tt-option-photo-pick img {grid-column:1/-1;width:100%;height:96px;object-fit:contain;}
+#prod-form-card .tt-option-inline .tt-photo-order-actions {display:grid;grid-template-columns:repeat(3,minmax(44px,1fr));gap:2px;}
+#prod-form-card .tt-option-inline .tt-photo-order-actions button {display:grid;place-items:center;width:100%;min-width:44px;height:44px;min-height:44px;padding:0;border:0!important;border-radius:6px!important;background:transparent!important;box-shadow:none!important;color:var(--tt-commerce-text);}
+#prod-form-card .tt-option-inline .tt-photo-order-actions > :first-child {grid-column:auto;}
+#prod-form-card .tt-option-inline .tt-photo-order-actions button:hover {background:var(--editor-soft)!important;}
+#prod-form-card .tt-option-inline .tt-photo-order-actions button svg {display:block;width:20px;height:20px;flex:none;}
+#prod-form-card .tt-option-inline .tt-photo-order-actions button:focus-visible {outline:2px solid var(--tt-commerce-text);outline-offset:-2px;}
+#prod-form-card .tt-option-inline .tt-commercial-row {grid-template-columns:repeat(3,minmax(0,1fr));content-visibility:visible;}
+#prod-form-card .tt-option-inline .tt-commercial-availability {grid-column:1/-1;}
+#prod-form-card .tt-option-inline [hidden] {display:none!important;}
+@media(max-width:600px){#prod-form-card .tt-option-inline .tt-commercial-row {grid-template-columns:1fr;}#prod-form-card .tt-option-inline {padding:8px;}}
+
+#prod-form-card.tt-editor-composer.tt-option-photos-open [data-product-section=photos] > .tt-editor-section-fields {grid-template-columns:minmax(0,1fr);}
+#prod-form-card.tt-editor-composer.tt-option-photos-open [data-product-section=photos] > .tt-editor-section-fields > .tt-photo-product-controls {grid-column:1!important;}
+#prod-form-card .tt-option-group {min-width:0;padding:0;border:0;margin-inline:0;}
+#prod-form-card .tt-option-inline .tt-unified-photo-grid {grid-template-columns:repeat(auto-fit,minmax(min(100%,154px),1fr));max-height:300px;overflow:auto;overscroll-behavior:contain;}
+#prod-form-card .tt-option-inline .tt-option-photo-pick span {grid-column:1/-1;text-align:center;}
+#prod-form-card .tt-option-upload {margin-top:12px;min-width:0;}
+#prod-form-card .tt-option-upload > summary {min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:600;}
+#prod-form-card .tt-option-inline .tt-photo-order-actions button:disabled {display:none;}
+#prod-form-card .tt-option-upload > summary {padding:10px 12px;border:1px solid var(--editor-line);border-radius:10px;background:var(--editor-soft);font-size:14px;}
+#prod-form-card .tt-option-upload > summary::before {content:'+';font-size:20px;margin-right:8px;}
+#prod-form-card .tt-option-upload[open] > summary::before {content:'−';}
+
+/* Símbolos proporcionados dentro del área táctil, también al editar cantidades. */
+#prod-form-card .tt-editor-stepper > button {display:grid;place-items:center;font-size:20px;line-height:1;padding:0;border-radius:6px!important;}

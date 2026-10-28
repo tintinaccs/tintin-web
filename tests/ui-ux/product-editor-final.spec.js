@@ -1,6 +1,6 @@
 'use strict';
 const {test,expect}=require('@playwright/test');
-const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
+const {openProductSaveFixture,openOptionAvailability}=require('./helpers/product-save-fixture.cjs');
 async function open(page,width=1440,height=900){await openProductSaveFixture(page,width,height,{fullShell:true,photos:true,workflow:true});await page.evaluate(()=>window.qaProductController.workspace.ready);}
 
 test('galería: eventos sin cambios conservan nodos y foco',async({page,browser},info)=>{
@@ -124,8 +124,8 @@ test('quitar una opción nueva no pierde cantidades de una matriz histórica de 
  await openProductSaveFixture(page,390,844);
  await page.locator('#prod-editor-section').selectOption('inventory');await page.locator('#prod-stock').fill('0');
  for(const color of ['Oro','Plata']){await page.getByLabel('Nueva opción de variante',{exact:true}).fill(color);await page.getByRole('button',{name:'Agregar opción',exact:true}).click();}
- await page.getByRole('button',{name:'Asignar stock por color u opción',exact:true}).click();
- await page.getByLabel('Stock de Oro',{exact:true}).fill('2');await page.getByLabel('Stock de Plata',{exact:true}).fill('0');
+ await openOptionAvailability(page,'Oro');await page.getByRole('button',{name:'Asignar stock por color u opción',exact:true}).click();
+ await page.getByLabel('Stock de Oro',{exact:true}).fill('2');await openOptionAvailability(page,'Plata');await page.getByLabel('Stock de Plata',{exact:true}).fill('0');
  await page.getByRole('button',{name:'Quitar Color: Oro',exact:true}).click();
  await expect(page.locator('#prod-variants-text')).toHaveValue(/Oro/);await expect(page.getByLabel('Stock de Oro',{exact:true})).toHaveValue('2');
  await expect(page.locator('#prod-stock')).toHaveValue('2');

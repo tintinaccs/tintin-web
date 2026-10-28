@@ -1,6 +1,6 @@
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261025-gallery-unified-1';
+import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261028-opciones-inline-2';
 import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261026-editor-phase6-1';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload, headless=false }) {
@@ -220,7 +220,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
   if(headless) return {
     serialize, flush, pendingSignature:()=>[], refresh:render,
     setAppearance(color,appearance){appearances.set(color,appearance);notifyPreview();},
-    setPhotos(selected,urls){const keys=Object.keys(selected);if(keys.length===1 && media.isColorKey(keys[0])){activeKey=keys[0];assignments.set(selected[keys[0]],media.uniqueImages(urls));}else variantPhotos.setPhotos(selected,urls);notifyPreview();},
+    setPhotos(selected,urls){const keys=Object.keys(selected);if(keys.length===1 && /^colou?r$/i.test(keys[0])){activeKey=keys[0];assignments.set(selected[keys[0]],media.uniqueImages(urls));}else variantPhotos.setPhotos(selected,urls);notifyPreview();},
     replacePhoto(from,to){const key=media.imageKey(from);for(const [color,photos] of assignments)assignments.set(color,media.uniqueImages(photos.map(url=>media.imageKey(url)===key?to:url)));variantPhotos.replacePhoto(from,to);notifyPreview();},
     removePhoto(url){const key=media.imageKey(url);for(const [color,photos] of assignments)assignments.set(color,photos.filter(photo=>media.imageKey(photo)!==key));variantPhotos.removePhoto(url);notifyPreview();},
     destroy(){destroyed=true;controller.abort();variantPhotos.destroy();container.removeEventListener('input',onMediaInput);container.removeEventListener('change',onMediaInput);variantsInput.removeEventListener('input',render);imagesInput.removeEventListener('input',render);mainInput.removeEventListener('change',render);}

@@ -1,3 +1,16 @@
+## 2026-10-27 — Panel único por opción en Productos
+
+Controles, galería, matriz comercial y composición existentes del editor:
+Fotos/Disponibilidad despliegan el único editor canónico bajo su opción, sin
+asociador alternativo ni stock duplicado debajo. La carga múltiple conserva el
+atributo/combinación original aunque se navegue antes de guardar; los campos
+siguen en el formulario y serializer originales. Se mantienen límites, stock,
+precios, CAS, guardas históricas y estados editoriales. Sin cambios de dominio
+público/checkout, Rules, proveedores o dependencias. Versionado transitivo, CSP,
+proyección de publicación, caché, diagnóstico y plan mediante sus autoridades.
+Regresiones del formulario/editor sobre datos ficticios y tamaños320–3840;
+resultados y límites en CURRENT_STATE y PANELES-POR-OPCION.md.
+
 ## 2026-10-27 — Cierre documental del editor y aceptación real separada
 
 Autoridad: docs/product-editor-refactor/CIERRE-VERIFICADO-20261027.md y recibos JSON obtenidos por API GitHub para #1248/#1252 y continuaciones hasta #1262. Se corrigen estados de CI/merge/publicación que habían quedado pendientes pese a sus resultados SUCCESS. Se mantienen como no ejecutadas la carga real de QA, guardado/reapertura y verificación de fila en Sheets mientras falta sesión confirmada. Sin cambios de aplicación, contratos ni datos de proveedores. El job global de Sheets no certifica un producto. Los checks de esta revisión documental tendrán su propio SHA y recibo en la PR.

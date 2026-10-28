@@ -149,6 +149,7 @@ test('variantes visuales conservan formatos previos y bloquean controles del tot
  await expect(page.getByLabel('Elegir cantidad: Stock',{exact:true})).toBeDisabled();
  await expect(page.getByRole('button',{name:'No controlar stock',exact:true,includeHidden:true})).toBeDisabled();
  await expect(page.getByRole('button',{name:'Agregar opción',exact:true})).toBeEnabled();
+ await page.getByRole('button',{name:'Disponibilidad de Color: Plateado',exact:true}).click();
  await page.getByRole('button',{name:'Restar una unidad: Stock de Plateado',exact:true}).click();
  await expect(page.locator('#prod-stock')).toHaveValue('699');await expect(page.getByLabel('Stock de Plateado',{exact:true})).toHaveValue('699');
 });
@@ -208,14 +209,15 @@ test('configurar stock por color exige cantidades explícitas y recalcula total 
   window.__stockEditor=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock,baseline:()=>productVariantStockBaseline};')();
   window.__stockEditor.renderProductVariantStock({stock:1});
  },{renderer:stockRenderer,inventory:inventorySource});
- await page.getByText('Formato avanzado',{exact:true}).click();await page.locator('#prod-variants-text').fill('Color: dorado, plateado');
+ for(const color of ['dorado','plateado']){await page.getByLabel('Nueva opción de variante',{exact:true}).fill(color);await page.getByRole('button',{name:'Agregar opción',exact:true}).click();}
+ await page.getByRole('button',{name:'Disponibilidad de Color: dorado',exact:true}).click();
  await expect(page.locator('#prod-stock')).toBeEditable();
  await expect(page.locator('#prod-variant-stock input')).toHaveCount(0);
  await page.getByRole('button',{name:'Asignar stock por color u opción',exact:true}).click();
  await expect(page.getByRole('button',{name:'Asignar stock por color u opción',exact:true})).toHaveCount(0);
  const quantities=page.locator('#prod-variant-stock input');await expect(quantities).toHaveCount(2);
  await expect(quantities.nth(0)).toHaveValue('');await expect(quantities.nth(1)).toHaveValue('');
- await quantities.nth(0).fill('1');await quantities.nth(1).fill('1');
+ await quantities.nth(0).fill('1');await page.getByRole('button',{name:'Disponibilidad de Color: plateado',exact:true}).click();await quantities.nth(1).fill('1');
  await expect(page.locator('#prod-stock')).toHaveValue('2');await expect(page.locator('#prod-stock')).toHaveAttribute('readonly','');
  await expect(page.locator('#prod-variants-text')).not.toHaveAttribute('readonly','');
  expect(await page.evaluate(()=>window.__stockEditor.baseline().expectedEntries)).toBe(null);
@@ -234,10 +236,11 @@ for(const [width,height] of [[768,1024],[1024,768]])test(`producto nuevo en tabl
  await page.evaluate(()=>{const field=document.getElementById('prod-variants-text');field.value='Color: dorado, plateado';field.dispatchEvent(new Event('input',{bubbles:true}));});
  await expect(page.locator('#prod-stock')).toBeEditable();
  await expect(page.locator('#prod-variant-stock input')).toHaveCount(0);
+ await page.getByRole('button',{name:'Disponibilidad de Color: dorado',exact:true}).click();
  await page.getByRole('button',{name:'Asignar stock por color u opción',exact:true}).click();
  expect(await page.evaluate(()=>({error:document.getElementById('prod-form-error').textContent,display:document.getElementById('prod-form-error').style.display,quantities:document.querySelectorAll('#prod-variant-stock input').length}))).toEqual({error:'',display:'none',quantities:2});
  const quantities=page.locator('#prod-variant-stock input');
- await quantities.nth(0).fill('1');await quantities.nth(1).fill('2');await expect(page.locator('#prod-stock')).toHaveValue('3');
+ await quantities.nth(0).fill('1');await page.getByRole('button',{name:'Disponibilidad de Color: plateado',exact:true}).click();await quantities.nth(1).fill('2');await expect(page.locator('#prod-stock')).toHaveValue('3');
  await page.locator('#prod-editor-section').selectOption('photos');
  await expect(page.locator('[data-product-section=photos]')).toBeVisible();
  const geometry=await page.locator('#prod-form-card').evaluate(card=>({scroll:card.scrollWidth,client:card.clientWidth}));expect(geometry.scroll).toBeLessThanOrEqual(geometry.client+1);
@@ -392,6 +395,7 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
   },{renderer:stockRenderer,previewVersion:require('../../scripts/cache-version-baseline.json')['js/admin/products/vista-previa-producto.js'].version});
   await page.locator('#prod-editor-section').selectOption('inventory');
   await expect(page.getByLabel('Stock de coctel',{exact:true})).toHaveValue('1');
+  await page.getByRole('button',{name:'Disponibilidad de Diseño de anillo: banda',exact:true}).click();
   await page.getByLabel('Stock de banda',{exact:true}).fill('0');
   await expect(page.locator('#prod-stock')).toHaveValue('1');
   await expect(page.locator('.tt-editor-stock-row').last()).toContainText('Agotado');
@@ -640,6 +644,7 @@ test('stock maestro retira opciones guardadas sin destruir cantidades ni referen
  await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('1');await expect(page.locator('#prod-stock')).toHaveValue('2');
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Oro rosa');await page.getByRole('button',{name:'Agregar opción',exact:true}).click();
  await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('1');await expect(page.getByLabel('Stock de Oro rosa',{exact:true})).toHaveValue('');
+ await page.getByRole('button',{name:'Disponibilidad de Color: Oro rosa',exact:true}).click();
  await page.getByLabel('Stock de Oro rosa',{exact:true}).fill('0');await expect(page.locator('#prod-stock')).toHaveValue('2');
  await page.getByRole('button',{name:'Quitar Color: Oro rosa',exact:true}).click();
  await expect(page.locator('#prod-variants-text')).not.toHaveValue(/Oro rosa/);

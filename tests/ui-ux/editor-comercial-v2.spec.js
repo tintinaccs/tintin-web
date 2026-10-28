@@ -49,14 +49,12 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
   const inventory=await loadModule('/js/core/store/inventario-variantes.mjs');
   const {commercialDraft}=await loadModule('/js/admin/products/editor-comercial-core.mjs');
   const {mountCommercialEditor}=await loadModule('/js/admin/products/editor-comercial-interfaz.js');
-  const {enhanceProductEditor,syncProductSurfaces}=await loadModule('/js/admin/products/interfaz-productos-adaptable.js');
   window.prodGuardar=()=>{};window.prodCancelForm=()=>{};
   for(const [id,value] of Object.entries({'prod-name':product.name,'prod-price':product.price,'prod-price-before':product.priceBefore,'prod-variants-text':'Color: Oro, Plata\nTalle: M'}))document.getElementById(id).value=value;
-  const card=document.getElementById('prod-form-card');card.style.display='';enhanceProductEditor();syncProductSurfaces();
+  const card=document.getElementById('prod-form-card');card.style.display='';
   const factory=new Function('variantInventoryEntries','reorderVariantInventory','commercialDraft','mountCommercialEditor',renderer+';return {render:renderProductVariantStock,get:()=>productCommercialEditor.get(),patch:()=>productCommercialEditor.patch({price:30000,priceBefore:40000})};');
   window.editor=factory(inventory.variantInventoryEntries,inventory.reorderVariantInventory,commercialDraft,mountCommercialEditor);window.editor.render(product);
  },{renderer,product});
- await page.locator('#prod-editor-section').selectOption('inventory');
  await page.getByRole('spinbutton',{name:'Precio: Oro / M',exact:true}).fill('55000');
  await page.getByRole('checkbox',{name:'Seleccionar Plata / M',exact:true}).check();
  await page.locator('.tt-commercial-advanced').evaluate(node=>node.open=true);
