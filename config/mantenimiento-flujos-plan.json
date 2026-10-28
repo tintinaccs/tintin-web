@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "baseCommit": "5a2ea0f63306583df04ed47cc745d52902669a2c",
-  "reason": "Integrar seis pestañas y correcciones verificadas de apertura parcial y vista previa segura, preservando contratos comerciales y controles del SHA final.",
+  "reason": "Integrar seis pestañas y conservar feedback único de operación, validación contextual, borradores e integridad comercial con pruebas del SHA final.",
   "files": [
     {
       "path": "admin.html",
       "oldHash": "d2fe5c27d2546dbb14ee6582734a5dc66700396463dbfb1ab9fe113dbad86d28",
-      "newHash": "b9bc194c93128d86d9d8ae0d22020aad2e6bdd1516d858d585614c47ca7852e8"
+      "newHash": "abba1ce36bc733a1225cd303b98ade67433cda764f154a1ed9cc5dbb8f00edb4"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -16,7 +16,7 @@
     {
       "path": "js/admin/admin-app.js",
       "oldHash": "84b56acbaea272102f9413be82ca5e071138b960001991a1bfe8f2a0caa2fabd",
-      "newHash": "134bdf44494a3b0fc6927550d83b4d1405fbc070962bf6d5db753c46e4c468ce"
+      "newHash": "8eb2fe6cc490dab33ec1d99ea7eddd392fd31997e0bdc48397765fd9d0dd131c"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
@@ -26,7 +26,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "cbc544a5b96ce2baf3ab8fca7c1e3059923d0d3bba80d1f0b02f33e763921350",
-      "newHash": "b9c8f9530b9883d102063ec80216f73ea94b22ca50d2a1aaa0fcdc9373b95cb3"
+      "newHash": "8d4958ccad56876abe61f00e9ac3dd9d8525fb8c36ffb7ea10bbc837cf4fdf22"
     }
   ],
   "affectedRecords": [

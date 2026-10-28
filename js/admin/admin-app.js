@@ -1,5 +1,5 @@
 import {adminEventAttributes,installAdminEvents} from './eventos-dinamicos-admin.mjs?v=tintin-20261027-save-csp-1';
-import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261028-product-tabs-1';
+import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261028-product-tabs-3';
 import {readProductEditorResponse} from './products/respuesta-editor-producto.mjs?v=tintin-20261027-editor-ux-1';
 import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
@@ -6249,6 +6249,7 @@ window.prodCancelForm = function() {
 };
 
 async function prodGuardar({commit=false}={}) {
+  const errorBox=document.getElementById('prod-form-error');if(errorBox)delete errorBox.dataset.errorScope;
   if(productWorkspace && !commit){
     const workspace=productWorkspace;
     const box=document.getElementById('prod-form-error');box.textContent='';box.style.display='none';
@@ -6547,6 +6548,7 @@ async function prodGuardar({commit=false}={}) {
       },
     });
     if (operation.status !== 'green') {
+      errEl.dataset.errorScope='operation';
       errEl.textContent = 'No se pudo completar el guardado. Revisá el detalle de la operación y volvé a intentar.';
       errEl.style.display = '';
       return false;
