@@ -595,12 +595,15 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(actions).toBeVisible();
  const body=editor.locator('.adm-card-body');await body.evaluate(el=>el.scrollTop=el.scrollHeight);
  const contentBox=await body.boundingBox();expect(contentBox.y+contentBox.height).toBeGreaterThanOrEqual(height-1);
- const buttons=actions.locator('button');await expect(buttons).toHaveCount(2);
+ // Studio añade Vista previa sin reemplazar Cancelar ni Guardar canónicos.
+ const buttons=actions.locator('button');await expect(buttons).toHaveCount(3);
+ await expect(buttons).toHaveText(['Vista previa','Cancelar','Guardar producto']);
  for(const button of await buttons.all()){
   await expect(button).toBeInViewport();
   expect(await button.evaluate(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===el;})).toBe(true);
  }
- await buttons.first().focus();await page.keyboard.press('Tab');await expect(editor.locator('#prod-save-btn')).toBeFocused();
+ await buttons.first().focus();await page.keyboard.press('Tab');await expect(actions.getByRole('button',{name:'Cancelar',exact:true})).toBeFocused();
+ await page.keyboard.press('Tab');await expect(editor.locator('#prod-save-btn')).toBeFocused();
  await editor.locator('#prod-form-title').click();await expect(actions).toBeVisible();
  if(width===390||width===1440)await page.screenshot({path:test.info().outputPath(`editor-full-${width}.png`)});
  await editor.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(editor).toBeHidden();

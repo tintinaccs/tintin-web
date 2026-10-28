@@ -1,3 +1,19 @@
+## 2026-10-28 — Studio: contrato de tres acciones en el test responsive
+
+Codex /root, PR1268, head1b97da28269eb57d8144290285d3d09f1318be18,
+CI40761138832 intento1, job123076451805 FAILURE:409 PASS/9 FAIL en el lote
+responsive. El test aún exigía dos botones; Studio incorpora Vista previa junto
+a Cancelar y Guardar. Reproducido localmente a320px (1 FAIL; resto interrumpido
+intencionalmente tras confirmar la causa). Se actualiza únicamente el contrato
+del test a las tres acciones exactas y su secuencia de teclado; permanecen las
+comprobaciones de geometría, hit-testing, foco final, cancelación y devolución
+del foco. No hay cambios de runtime, URLs ni datos. La primera edición local
+usó por error el texto de edición Guardar cambios para un alta:1 FAIL, corregido
+a Guardar producto; no se acredita esa pasada. Repetición final9/9 PASS sin
+reintentos (13.0s),320–1920px. Regresión completa108/108 PASS sin reintentos;
+preflight39/39 PASS. Diagnóstico regenerado después de registrar estos resultados.
+CI nueva, merge, main CI y producción se verificarán por SHA/intento propios.
+
 ## 2026-10-28 — Studio: corregir cabecera conservando las comprobaciones
 
 PR1268, primer head50fc9edf7452a5b503b1d45631c80ce62891ec6c. La batería252

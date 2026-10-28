@@ -61,3 +61,12 @@ sin reintentos (34.7s); regresión59 PASS sin reintentos (2.6m), incluyendo scro
 workspaces y pestañas; build/preflight39/39 finales PASS. El tag1 ya está en el
 preview del PR1268, por lo que CSS/interfaz y su loader renuevan a tag2, sin
 reescribir una URL publicada. CI/merge se verifican por cabeza e intento nuevos.
+
+CI40761138832/1 de1b97da282 terminó FAILURE sólo por el contrato antiguo de dos
+botones en Administración (409 PASS/9 FAIL). Vista previa se había añadido sin
+actualizar esa cuenta. Reproducido y corregido en el test: tres acciones exactas,
+teclado Vista previa→Cancelar→Guardar, manteniendo geometría, hit-testing,
+cancelación y restitución del foco.9/9 casos afectados y108/108 del spec completo
+PASS sin reintentos; preflight39/39 PASS. Sin cambios de runtime ni de URLs.
+La puerta final falló por admin=failure; el resto de etapas efectivas aprobó,
+pero sus éxitos no se heredan al siguiente SHA.
