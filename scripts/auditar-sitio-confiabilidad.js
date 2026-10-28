@@ -174,7 +174,7 @@ check('Pedidos, usuarios, auditoría y correos se actualizan sin F5',
     admin.includes('startAfter(cursor), limit(ADMIN_REALTIME_LIMIT)') &&
   admin.includes('const usersSource = createAdminPagedSource({') && admin.includes('return onSnapshot(usersQuery, { includeMetadataChanges: true }') && admin.includes("query(collection(db, 'users'), orderBy('__name__'), limit(ADMIN_REALTIME_LIMIT))") && admin.includes('adminUsersUnsubscribe = usersSource.stop') &&
   admin.includes('_auditUnsubscribe = onSnapshot(') &&
-  admin.includes('function startCorreosRealtimeListeners()'));
+  read('js/admin/correos/correos-admin.js').includes('function startCorreosRealtimeListeners()'));
 check('Las estadísticas combinan pedidos, usuarios, catálogo, visitas y páginas',
   admin.includes('function renderGeneralStatistics()') &&
   admin.includes('statistics-top-products') &&

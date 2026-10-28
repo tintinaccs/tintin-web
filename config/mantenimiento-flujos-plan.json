@@ -1,32 +1,22 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "c031635b9d421ece436b878119247c34bcf93f2a",
-  "reason": "Aplicar referencia visual Studio y corregir alineación y altura sin alterar controles comerciales",
+  "baseCommit": "9fcc8c570b99fed5fdafedb35cfd8b35bcf09236",
+  "reason": "Extraer Correos con dependencias explícitas conservando handlers, fuentes vivas y comprobaciones existentes",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "88f356ad5691398c184a12169c9975befc3867b75e6b93f7c420a857fc4bd5db",
-      "newHash": "926363f17276e8b59a76d6b64a3ce12ff197d71e22466c24e1da96a61e61f255"
-    },
-    {
-      "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "24081a779290854082cf96e446c3f6319e55d612d38e23731096ba9d5a14967d",
-      "newHash": "23398ac18c05478515ab81bd46f8a85964e71150feb6a8ffe57186bf2cf0f532"
+      "oldHash": "926363f17276e8b59a76d6b64a3ce12ff197d71e22466c24e1da96a61e61f255",
+      "newHash": "9f44d0f63ac1c5864d06a1653758b4c28f2c2e794bcd0430ba5c5de0dd3443a8"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "b4df5c32688f2459443689440f67845fba02239849b9757875589d519dd4a76a",
-      "newHash": "06914e45fe6c39792fa7e8a8834f9836f98197043381906adaff991c6ca8ac00"
-    },
-    {
-      "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "f20d294313564d27577ca003d7c976e1be2e11d3d96dd1f57b342929c875221e",
-      "newHash": "8c33d1b86245b1bdad29f797e3d04e849467431bb6253b4711a35f682f8facd6"
+      "oldHash": "06914e45fe6c39792fa7e8a8834f9836f98197043381906adaff991c6ca8ac00",
+      "newHash": "5d62873aae94186e664d58f96c1c859261ea12e16c6717f2c2105b4c3a6f45c9"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "7c8e9f25d7f1f8893f9cf929a3c815fbd6ba96460cd9f50c113675caa0958bab",
-      "newHash": "b6801b5829d573c56de73fd03b95967be1eb022b7773417e84b0be34b4baf56b"
+      "oldHash": "b6801b5829d573c56de73fd03b95967be1eb022b7773417e84b0be34b4baf56b",
+      "newHash": "9378f29940b335691b4cd3df07215e4942bc017d9b9872ebb9c60e8dbde955c6"
     }
   ],
   "affectedRecords": [

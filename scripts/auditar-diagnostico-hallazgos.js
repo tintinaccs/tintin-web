@@ -89,7 +89,7 @@ check(
     adminApp.includes("startAfter(cursor), limit(ADMIN_REALTIME_LIMIT)") &&
     adminApp.includes('createAdminOrderSource({') &&
     adminApp.includes('const usersSource = createAdminPagedSource({') && adminApp.includes('return onSnapshot(usersQuery, { includeMetadataChanges: true }') && adminApp.includes("query(collection(db, 'users'), orderBy('__name__'), limit(ADMIN_REALTIME_LIMIT))") && adminApp.includes('adminUsersUnsubscribe = usersSource.stop') &&
-    adminApp.includes("onSnapshot(query(collection(db, 'emailTemplates'), limit(500))")
+    read('js/admin/correos/correos-admin.js').includes("onSnapshot(query(collection(db, 'emailTemplates'), limit(500))")
 );
 check(
   'Usuarios tiene una sola escucha runtime y la ficha consulta bajo demanda',
