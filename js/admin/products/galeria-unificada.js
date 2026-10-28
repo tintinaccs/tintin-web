@@ -11,15 +11,25 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
   let optionContext=null,optionSelection={},queuedSelection={};
   const librarySelections=new Map();
   container.replaceChildren();container.classList.add('tt-unified-photos');
-  const heading=document.createElement('h3');heading.textContent='FOTOGRAFÍAS DEL PRODUCTO';
+  const heading=document.createElement('h3');heading.textContent='Fotos y colores';
   const colors=document.createElement('div');colors.className='tt-photo-colors';colors.setAttribute('role','group');colors.setAttribute('aria-label','Fotos por color');let colorSignature='';
-  const hint=document.createElement('p');hint.textContent='Elegí una portada para todo el producto. Las asociaciones conservan la imagen propia de cada color o combinación.';
+  const hint=document.createElement('p');hint.textContent='Elegí un color y editá todo acá mismo. La portada general y las asociaciones se conservan por separado.';
   const uploadHost=document.createElement('div'),grid=document.createElement('div'),context=document.createElement('div');grid.className='tt-unified-photo-grid';
   const status=document.createElement('p');status.setAttribute('role','status');
   const associationHost=document.createElement('div');associationHost.hidden=true;
   const optionUpload=document.createElement('details'),uploadTitle=document.createElement('summary');optionUpload.className='tt-option-upload';uploadTitle.textContent='Agregar fotos a esta opción';optionUpload.append(uploadTitle);
   context.className='tt-photo-context';
-  container.append(heading,hint,colors,context,status,grid,uploadHost,associationHost);
+  const layout=document.createElement('div'),visual=document.createElement('div'),side=document.createElement('div');
+  layout.className='tt-studio-photo-layout';visual.className='tt-studio-photo-visual';side.className='tt-studio-photo-side';
+  const hero=document.createElement('figure'),heroImage=document.createElement('img'),heroCaption=document.createElement('figcaption'),heroActions=document.createElement('div');
+  hero.className='tt-studio-photo';heroActions.className='tt-studio-photo-actions';heroImage.alt='Imagen seleccionada del producto';hero.append(heroImage,heroCaption,heroActions);
+  const tools=document.createElement('div'),selectedLabel=document.createElement('small'),selectedName=document.createElement('strong');tools.className='tt-studio-photo-tools';selectedLabel.textContent='COLOR SELECCIONADO';tools.append(selectedLabel,selectedName);
+  let heroUrl='';
+  button('Reemplazar imagen seleccionada',()=>{if(heroUrl)replace(heroUrl);},heroActions);
+  button('Quitar imagen seleccionada',()=>{if(heroUrl)removePhoto(heroUrl);},heroActions);
+  const coverControl=button('Portada del producto',()=>{if(heroUrl)publish([heroUrl,...urls().filter(url=>url!==heroUrl)],heroUrl);},tools,'Marcar imagen seleccionada como portada');
+  visual.append(hero,colors,grid,uploadHost);side.append(tools,context);layout.append(visual,side);
+  container.append(heading,hint,status,layout,associationHost);
   const associations=attachColorPhotos({container:associationHost,product,mainInput,imagesInput,variantsInput,openLibrary,headless:true});
   const card=container.closest('#prod-form-card');
   card?.addEventListener('tintin:option-media-read',event=>{event.detail.rows=associations.serialize();},{signal:abort.signal});
@@ -31,6 +41,11 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     imagesInput.value=next.filter(url=>media.imageKey(url)!==media.imageKey(mainInput.value)).join('\n');
     mainInput.dispatchEvent(new Event('change',{bubbles:true}));imagesInput.dispatchEvent(new Event('input',{bubbles:true}));
     render();
+  }
+  function removePhoto(url){
+    if(replacementTarget===media.imageKey(url)){replacement?.destroy();replacement=null;replacementTarget='';}
+    associations.removePhoto(url);publish(urls().filter(photo=>photo!==url));
+    status.textContent='Quitada del producto. El archivo compartido permanece en la biblioteca.';grid.querySelector('button')?.focus({preventScroll:true});
   }
   function add(value,meta={}){
     if(destroyed)throw Error('El producto cambió.');
@@ -109,8 +124,9 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
   function render(){
     if(destroyed)return;const photos=urls(),rows=associations.serialize();
     colors.hidden=container.dataset.optionInline==='photos';
+    container.classList.toggle('tt-studio-color-selected',Boolean(optionContext));
     const colorGroups=groups().filter(([key])=>media.isColorKey(key));
-    const nextColorSignature=JSON.stringify([colorGroups,optionContext]);
+    const nextColorSignature=JSON.stringify([colorGroups,optionContext,rows]);
     if(nextColorSignature!==colorSignature){
       colorSignature=nextColorSignature;colors.replaceChildren();
       const choose=(label,selected,pressed)=>{
@@ -118,15 +134,34 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
           const check={accepted:true};container.dispatchEvent(new CustomEvent('tintin:option-context-check',{detail:check}));if(!check.accepted)return;
           card?.dispatchEvent(new CustomEvent('tintin:close-option-panel'));
           container.dispatchEvent(new CustomEvent('tintin:option-context',{detail:selected}));
-          [...colors.querySelectorAll('button')].find(button=>button.textContent===label)?.focus({preventScroll:true});
+          // Editar el color y su disponibilidad en la misma superficie, usando
+          // el panel canónico; la galería inline de Variantes conserva su flujo.
+          if(selected && container.dataset.optionInline!=='photos')context.querySelector('button[aria-expanded="false"]')?.click();
+          [...colors.querySelectorAll('button')].find(button=>button.getAttribute('aria-label')===label)?.focus({preventScroll:true});
         },colors);control.setAttribute('aria-pressed',String(pressed));
+        if(selected){
+          const photos=photosFor({[selected.attribute]:selected.value}),copy=document.createElement('span');copy.textContent=label;
+          const thumbnail=photos.map(sanitizeImageUrl).find(Boolean);
+          if(thumbnail){const thumb=document.createElement('img');thumb.src=thumbnail;thumb.alt='';thumb.loading='lazy';control.replaceChildren(thumb,copy);}else control.replaceChildren(copy);
+          const count=document.createElement('small');count.textContent=photos.length===1?'1 foto':`${photos.length} fotos`;count.setAttribute('aria-hidden','true');control.append(count);
+        }
       };
       if(colorGroups.length){choose('Todo el producto',null,!optionContext);for(const [attribute,values] of colorGroups)for(const value of values)choose(value,{attribute,value},optionContext?.attribute===attribute && optionContext?.value===value);}
     }
 
     const state=JSON.stringify([photos,mainInput.value,groups(),rows,optionContext,optionSelection]);
     if(state===lastGalleryState)return;lastGalleryState=state;
-    heading.hidden=hint.hidden=Boolean(optionContext);
+    heading.hidden=hint.hidden=container.dataset.optionInline==='photos';
+    const selectedPhotos=optionContext?optionPhotos():photos;
+    heroUrl=selectedPhotos.map(photo=>photos.find(url=>media.imageKey(url)===media.imageKey(photo))).find(Boolean) || photos[0] || '';
+    hero.hidden=!heroUrl;coverControl.disabled=!heroUrl;
+    if(heroUrl && heroImage.getAttribute('src')!==heroUrl)heroImage.src=heroUrl;
+    const selected=optionContext?Object.values(optionSelection).join(' / '):'Todo el producto';
+    if(selectedName.textContent!==selected)selectedName.textContent=selected;
+    const associated=optionContext && selectedPhotos.some(photo=>media.imageKey(photo)===media.imageKey(heroUrl));
+    const caption=heroUrl?(optionContext?(associated?'Imagen asociada a '+selected:'Imagen general · sin asociación a '+selected):'Imagen del producto'):'';
+    if(heroCaption.textContent!==caption)heroCaption.textContent=caption;
+    coverControl.setAttribute('aria-pressed',String(Boolean(heroUrl) && media.imageKey(heroUrl)===media.imageKey(mainInput.value)));
     const photoState=JSON.stringify([photos,mainInput.value,groups(),optionContext,optionSelection]);
     // Cambiar asociaciones no vuelve a crear imágenes, controles ni sus cargas.
     if(!optionContext && photoState===lastPhotoState){for(const tile of grid.children){const assigned=tile.querySelector('small');if(assigned)assigned.textContent=associationText(rows,photos.find(url=>media.imageKey(url)===tile.dataset.photoKey));}return;}
@@ -172,7 +207,7 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
       const move=to=>{const next=[...photos];next.splice(index,1);next.splice(to,0,url);publish(next);refocus(url);};
       for(const [label,to] of [['Anterior',index-1],['Siguiente',index+1]]){const control=button(label,()=>move(to),actions,`${label}: foto ${index+1}`);control.disabled=to<0||to>=photos.length;}
       button('Reemplazar',()=>replace(url),actions,`Reemplazar foto ${index+1}`);
-      button('Quitar',()=>{if(replacementTarget===media.imageKey(url)){replacement?.destroy();replacement=null;replacementTarget='';}associations.removePhoto(url);publish(photos.filter(photo=>photo!==url));status.textContent='Quitada del producto. El archivo compartido permanece en la biblioteca.';grid.querySelector('button')?.focus({preventScroll:true});},actions,`Quitar foto ${index+1}`);
+      button('Quitar',()=>removePhoto(url),actions,`Quitar foto ${index+1}`);
       tile.draggable=true;tile.addEventListener('dragstart',event=>{event.dataTransfer.setData('application/x-tintin-product-photo',url);});tile.addEventListener('dragover',event=>{if(event.dataTransfer.types.includes('application/x-tintin-product-photo'))event.preventDefault();});tile.addEventListener('drop',event=>{event.preventDefault();const from=photos.indexOf(event.dataTransfer.getData('application/x-tintin-product-photo'));if(from<0||from===index)return;const next=[...photos];const [photo]=next.splice(from,1);next.splice(index,0,photo);publish(next);refocus(photo);});
       grid.append(tile);
     });

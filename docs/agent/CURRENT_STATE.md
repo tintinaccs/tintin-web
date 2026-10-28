@@ -1,3 +1,25 @@
+## 2026-10-28 — Editor Studio según la captura de la titular
+
+Codex /root; base main c031635b9d421ece436b878119247c34bcf93f2a, rama
+fix/editor-studio-reference-20261028. La titular confirma que #1265 no coincidía
+con su referencia y aporta la captura faltante. No era prueba de caché antigua.
+Cambio solicitado sólo en la presentación del editor canónico; captura leída,
+misma identidad y lógica comercial, ningún dato real tocado. Cabecera/tarjeta/
+pestañas, galería con imagen grande y colores, panel comercial a la derecha y
+navegación entre pasos. Permisos, writers, inputs y asociaciones no se duplican.
+Evidencia/alcance: docs/product-editor-refactor/STUDIO-REFERENCIA-20261028.md.
+17 pruebas de pestañas/referencia PASS en320–1440px sin reintentos;6 adicionales
+con shell completo y30 Node de dominio PASS. Primer fallo de captura por selector
+ambiguo corregido; la ampliada detectó orden del contexto inline, restablecido
+sin retirar la aserción. Reinicio del entorno interrumpió las suites252 y24 y
+preflight; ninguna se acredita como PASS. Preflight reiniciado:39/39 PASS;
+252 reiniciadas aún en curso. Ajuste final acotado a posición de Cancelar para
+evitar una fila vacía:6 geometrías +10 errores/reintentos PASS sin reintentos
+(2.1m). Build:pages y preflight finales39/39 PASS tras regenerar caché y plan. La fuente
+final renueva huellas/caché y diagnóstico canónicos antes de commit; resultados
+terminales en recibos de la PR y artifacts/editor-studio/FOLLOWUP.json.
+CI/merge/producción de esta rama:PENDING al preparar, no heredar éxitos de #1266.
+
 ## 2026-10-28 — Escenario de scroll real tras integrar las seis pestañas
 
 Codex /root; PR1266, head dd23c660978a9ce21fcea433f66be71685942f9d,
