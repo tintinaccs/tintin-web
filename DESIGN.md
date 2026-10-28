@@ -44,6 +44,14 @@ de tarjeta; no aumentar blur/sombras globales sin medir su coste.
 
 ## Componentes y fuentes
 
+Para Nuevo/Editar producto, la captura Studio entregada por la titular el
+28/10/2026 precisa la composición aprobada: lienzo neutro suave, tarjeta blanca
+continua, pestañas con subrayado rosa y fotos junto a los controles del color.
+Esta excepción de superficie se deriva de los tokens del tema y se limita al
+editor; no sustituye el rosa de marca ni rediseña otras páginas. Montserrat,
+semántica de permisos/estados y campos originales se conservan. Detalle y
+evidencia en `docs/product-editor-refactor/STUDIO-REFERENCIA-20261028.md`.
+
 | Familia | Fuente canónica | Regla |
 | --- | --- | --- |
 | Botones públicos | `styles.css`, `css/core/tema-unificado-tintin.css` | Una acción primaria; secundarias outline; destructivas explícitas |

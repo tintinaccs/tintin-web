@@ -103,7 +103,7 @@ export function enhanceProductEditor() {
   const grid = body?.querySelector('.tt-product-fields, :scope > div[style*="grid-template-columns"]');
   if (!grid) return;
   grid.classList.add('tt-product-fields');
-  card.classList.add('tt-editor-composer');
+  card.classList.add('tt-editor-composer','tt-editor-studio');
   let navigation = body.querySelector('.tt-product-section-nav');
   if (!navigation) {
     navigation = document.createElement('div');
@@ -120,6 +120,9 @@ export function enhanceProductEditor() {
     const shortcuts=document.createElement('nav');shortcuts.className='tt-product-quick-actions';shortcuts.setAttribute('role','tablist');shortcuts.setAttribute('aria-label','Editar producto');
     for(const [value,title] of tabs){
       const button=document.createElement('button');button.type='button';button.className='adm-btn adm-btn-outline';button.textContent=title;
+      const paths={general:'M5 4h14M12 4v16M8 20h8',photos:'M4 4h16v16H4zM7 15l4-4 3 3 3-5 3 4M8 8h.01',inventory:'M12 3l9 5-9 5-9-5zM3 12l9 5 9-5M3 16l9 5 9-5',prices:'M3 3h8l10 10-8 8L3 11zM7 7h.01',specs:'M4 5h16M4 12h12M4 19h8',visibility:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18M3 12h18M12 3c5 5 5 13 0 18M12 3c-5 5-5 13 0 18'};
+      const icon=document.createElementNS('http://www.w3.org/2000/svg','svg'),path=document.createElementNS('http://www.w3.org/2000/svg','path');
+      icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('width','16');icon.setAttribute('height','16');icon.setAttribute('aria-hidden','true');icon.setAttribute('fill','none');icon.setAttribute('stroke','currentColor');icon.setAttribute('stroke-width','1.4');icon.setAttribute('stroke-linecap','round');icon.setAttribute('stroke-linejoin','round');path.setAttribute('d',paths[value]);icon.append(path);button.prepend(icon);
       button.id='prod-tab-'+value;button.dataset.editorTab=value;button.setAttribute('role','tab');button.setAttribute('aria-controls','prod-panel-'+value);
       button.addEventListener('click',()=>{select.value=value;select.dispatchEvent(new Event('change',{bubbles:true}));});
       button.addEventListener('keydown',event=>{
@@ -259,9 +262,47 @@ export function enhanceProductEditor() {
   if(newError && visibleProductEditor()) {error.focus({preventScroll:true});error.scrollIntoView({block:'nearest'});}
   lastError=message;
   refreshProductPreview(card);
+  refreshStudioFrame(card,body);
   installEditorControls(card);refreshEditorControls(card);
   mountLocalVision(card);
   mountProductSuggestions(card);
+}
+
+function refreshStudioFrame(card,body) {
+  const head=card.querySelector('.adm-card-head');
+  if(!head)return;
+  let breadcrumb=head.querySelector('.tt-studio-breadcrumb');
+  if(!breadcrumb){
+    breadcrumb=document.createElement('div');breadcrumb.className='tt-studio-breadcrumb';
+    const back=document.createElement('button');back.type='button';back.textContent='Productos';
+    back.addEventListener('click',()=>{const cancel=card.querySelector('.tt-work-back');if(cancel)cancel.click();else window.prodCancelForm?.();});
+    const name=document.createElement('span');breadcrumb.append(back,document.createTextNode(' › '),name);head.prepend(breadcrumb);
+    const subtitle=document.createElement('p');subtitle.className='tt-studio-subtitle';subtitle.textContent='Editá cada detalle, sin salir de tu producto.';card.querySelector('.tt-product-editor-heading')?.append(subtitle);
+    const preview=document.createElement('button');preview.type='button';preview.className='adm-btn adm-btn-outline tt-studio-preview';preview.textContent='Vista previa';
+    preview.addEventListener('click',()=>{const panel=body.querySelector('.tt-editor-preview-shell');if(panel){panel.open=true;panel.scrollIntoView({block:'nearest',behavior:'instant'});panel.querySelector('summary')?.focus({preventScroll:true});}});
+    card.querySelector('.tt-product-primary-actions')?.prepend(preview);
+  }
+  // Cancelar conserva el guard del workspace, dentro de la misma fila de
+  // acciones; no reserva otra fila ni se superpone a la ruta del producto.
+  const actions=card.querySelector('.tt-product-primary-actions'),back=card.querySelector('.tt-work-back');
+  if(back && actions && back.parentElement!==actions)actions.insertBefore(back,card.querySelector('#prod-save-btn'));
+  const name=card.querySelector('#prod-name')?.value.trim() || 'Nuevo producto';
+  if(breadcrumb.lastElementChild.textContent!==name)breadcrumb.lastElementChild.textContent=name;
+  let footer=body.querySelector('.tt-studio-pagination');
+  if(!footer){
+    footer=document.createElement('nav');footer.className='tt-studio-pagination';footer.setAttribute('aria-label','Pasos del editor');
+    const previous=document.createElement('button'),next=document.createElement('button'),position=document.createElement('span');
+    for(const button of [previous,next]){button.type='button';button.className='adm-btn adm-btn-outline';}
+    previous.textContent='← Anterior';previous.dataset.studioDirection='-1';next.dataset.studioDirection='1';position.setAttribute('aria-live','polite');
+    for(const button of [previous,next])button.addEventListener('click',()=>{const index=tabs.findIndex(([id])=>id===card.querySelector('#prod-editor-section').value);const target=tabs[index+Number(button.dataset.studioDirection)];if(target)card.querySelector('#prod-tab-'+target[0])?.click();});
+    footer.append(previous,position,next);body.querySelector('.tt-editor-layout').after(footer);
+  }
+  const index=Math.max(0,tabs.findIndex(([id])=>id===card.querySelector('#prod-editor-section').value));
+  footer.firstElementChild.disabled=index===0;footer.lastElementChild.disabled=index===tabs.length-1;
+  const label=`${tabs[index][1]} · ${index+1} de ${tabs.length}`;
+  if(footer.children[1].textContent!==label)footer.children[1].textContent=label;
+  const next=index<tabs.length-1?'Continuar a '+tabs[index+1][1]+' →':'Último paso';
+  if(footer.lastElementChild.textContent!==next)footer.lastElementChild.textContent=next;
 }
 
 function refreshEditorHeading(card) {

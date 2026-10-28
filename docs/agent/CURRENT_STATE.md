@@ -1,3 +1,75 @@
+## 2026-10-28 — Studio: distinguir clase visual de un editor paralelo
+
+Codex /root, PR1268, head36c9babaf1dbb51bf555d9f42cba31013d8d3c75,
+CI40765146379/1 FAILURE. Job123090136465:188 PASS/6 FAIL, porque el contrato
+de versión única prohibía cualquier `.tt-editor-studio`, ahora clase visual del
+formulario canónico existente. Reproducido a320px,1 FAIL (20.0s). Se exige una
+sola clase Studio en #prod-form-card y cero editores Studio fuera de él; se
+mantienen todos los controles de nodos únicos, CSS antiguo ausente, escrituras,
+inventario, reapertura y recuperación. Sólo test, no runtime ni URLs nuevas.
+Repository audit123099186403 falló exclusivamente por admin=failure. CodeQL y
+las otras etapas efectivas aprobaron para36c9, sin heredar al próximo SHA.
+La primera batería local194 se interrumpió tras dos fallos de galería porque
+el servidor4189 de la sesión anterior ya no estaba activo (curl:connection
+refused); no se cambió galería por esos resultados. Se reinició el servidor
+canónico y se verificó HTTP antes de repetir194 casos sin reintentos:194/194
+PASS (9.4m), incluidos los seis tamaños afectados y los otros siete specs del
+comando de CI. Preflight y nueva CI pendientes al registrar esta evidencia.
+
+## 2026-10-28 — Studio: contrato de tres acciones en el test responsive
+
+Codex /root, PR1268, head1b97da28269eb57d8144290285d3d09f1318be18,
+CI40761138832 intento1, job123076451805 FAILURE:409 PASS/9 FAIL en el lote
+responsive. El test aún exigía dos botones; Studio incorpora Vista previa junto
+a Cancelar y Guardar. Reproducido localmente a320px (1 FAIL; resto interrumpido
+intencionalmente tras confirmar la causa). Se actualiza únicamente el contrato
+del test a las tres acciones exactas y su secuencia de teclado; permanecen las
+comprobaciones de geometría, hit-testing, foco final, cancelación y devolución
+del foco. No hay cambios de runtime, URLs ni datos. La primera edición local
+usó por error el texto de edición Guardar cambios para un alta:1 FAIL, corregido
+a Guardar producto; no se acredita esa pasada. Repetición final9/9 PASS sin
+reintentos (13.0s),320–1920px. Regresión completa108/108 PASS sin reintentos;
+preflight39/39 PASS. Diagnóstico regenerado después de registrar estos resultados.
+CI nueva, merge, main CI y producción se verificarán por SHA/intento propios.
+
+## 2026-10-28 — Studio: corregir cabecera conservando las comprobaciones
+
+PR1268, primer head50fc9edf7452a5b503b1d45631c80ce62891ec6c. La batería252
+reiniciada terminó249 PASS/3 FAIL, sin skips/flaky: dos casos alineaban Cancelar
+con las acciones y uno exigía al menos64px útiles en568x320. No son una aprobación
+total. La posición absoluta posterior ya cerraba el caso móvil en la pasada16,
+pero no la alineación de escritorio. Ahora se traslada el botón canónico del
+workspace dentro del grupo de acciones (mismo guard/listener), sin clonar ni
+ocultar Cancelar. En pantallas bajas se omiten sólo ruta/ayuda decorativas para
+reservar el formulario y el reintento. Los12 casos originales afectados pasan
+sin reintentos (34.7s), sin modificar sus aserciones. Regresión59 PASS sin
+reintentos (2.6m): pestañas, workspaces y scroll. Build/preflight39/39 finales PASS.
+CSS/interfaz/loader renuevan URL a studio-reference-2 porque el tag1 ya fue
+publicado en preview; galería y admin-app sin cambios conservan su tag1.
+La nueva cabeza requiere CI propia; el CI40759342037/1 anterior no se hereda.
+
+## 2026-10-28 — Editor Studio según la captura de la titular
+
+Codex /root; base main c031635b9d421ece436b878119247c34bcf93f2a, rama
+fix/editor-studio-reference-20261028. La titular confirma que #1265 no coincidía
+con su referencia y aporta la captura faltante. No era prueba de caché antigua.
+Cambio solicitado sólo en la presentación del editor canónico; captura leída,
+misma identidad y lógica comercial, ningún dato real tocado. Cabecera/tarjeta/
+pestañas, galería con imagen grande y colores, panel comercial a la derecha y
+navegación entre pasos. Permisos, writers, inputs y asociaciones no se duplican.
+Evidencia/alcance: docs/product-editor-refactor/STUDIO-REFERENCIA-20261028.md.
+17 pruebas de pestañas/referencia PASS en320–1440px sin reintentos;6 adicionales
+con shell completo y30 Node de dominio PASS. Primer fallo de captura por selector
+ambiguo corregido; la ampliada detectó orden del contexto inline, restablecido
+sin retirar la aserción. Reinicio del entorno interrumpió las suites252 y24 y
+preflight; ninguna se acredita como PASS. Preflight reiniciado:39/39 PASS;
+252 reiniciadas aún en curso. Ajuste final acotado a posición de Cancelar para
+evitar una fila vacía:6 geometrías +10 errores/reintentos PASS sin reintentos
+(2.1m). Build:pages y preflight finales39/39 PASS tras regenerar caché y plan. La fuente
+final renueva huellas/caché y diagnóstico canónicos antes de commit; resultados
+terminales en recibos de la PR y artifacts/editor-studio/FOLLOWUP.json.
+CI/merge/producción de esta rama:PENDING al preparar, no heredar éxitos de #1266.
+
 ## 2026-10-28 — Escenario de scroll real tras integrar las seis pestañas
 
 Codex /root; PR1266, head dd23c660978a9ce21fcea433f66be71685942f9d,
