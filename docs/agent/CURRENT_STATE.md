@@ -1,3 +1,7 @@
+## 2026-10-28 — #1265 regeneración final de diagnóstico
+
+Preflight 40709274095/1 de d2d2ea0d detectó únicamente diagnóstico/site-version desactualizados: el recibo de 34 pruebas se añadió a este documento después del build. Se regenera con el contenido final y se verifica sin editar fuentes posteriormente. Sin cambio de runtime ni plan protegido.
+
 ## 2026-10-28 — #1265 actualizado tras merge concurrente de #1267
 
 Candidato 2d03f3cf: CI 40704867838 intento 1, CodeQL 40704857949 y Cloudflare PASS; Administración incluyó 26 + 188 Chromium PASS. Mantenimiento 40708645677 intento 1 bloqueó integración por main avanzado a ffde3441. Se integra main por merge normal, conservando navegación pública y ambas evidencias; se regeneran plan protegido y artefactos. PASS_LOCAL de la integración: build, preflight, protección y 34 Chromium (23 búsqueda y 11 pestañas). Primer intento de búsqueda apuntó al servidor de preview sólo-editor y falló al no servir /catalogo; repetición completa sobre servidor canónico 4184 PASS. Se sigue el nuevo SHA, sin heredar aprobaciones.
