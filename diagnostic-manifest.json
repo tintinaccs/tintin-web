@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6784de80654de77608647a99a8cdbf11becc13a2f98bc2eeb52300c7464818f1",
+  "sourceFingerprint": "ad518b9839ce2c36e3feafa9b8876abae9d24cefabaf5c4c78740156390079ea",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1607,
     "textFiles": 1476,
-    "totalBytes": 34912758,
+    "totalBytes": 34913555,
     "pages": 19,
     "modules": 1068
   },
@@ -50949,8 +50949,8 @@
     },
     {
       "path": "tests/operations/content-security-boundaries.test.mjs",
-      "bytes": 6355,
-      "sha256": "b51553d6bd28ecd06f26ae0c288a7ab7ef914ff0eb70f60676dbb4c9a1ed5084",
+      "bytes": 6455,
+      "sha256": "ee5885272298d4abfd6dd2e12e7fea96ad6aa807c51be1d97b144cca1d8dfb65",
       "syntax": {
         "ok": true,
         "error": ""
@@ -50963,48 +50963,54 @@
           "line": 1
         },
         {
+          "raw": "../../js/admin/datos/busqueda-admin.mjs",
+          "target": "js/admin/datos/busqueda-admin.mjs",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "../../js/admin/eventos-dinamicos-admin.mjs",
           "target": "js/admin/eventos-dinamicos-admin.mjs",
           "dynamic": false,
-          "line": 2
+          "line": 3
         },
         {
           "raw": "node:assert/strict",
           "target": null,
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "node:fs",
           "target": null,
           "dynamic": false,
-          "line": 4
+          "line": 5
         },
         {
           "raw": "node:module",
           "target": null,
           "dynamic": false,
-          "line": 5
+          "line": 6
         },
         {
           "raw": "../../cloudflare/contenido-pagina-seguro.js",
           "target": "cloudflare/contenido-pagina-seguro.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/pages/fixture",
-          "line": 9
+          "line": 10
         },
         {
           "url": "https://example.test/",
-          "line": 21
+          "line": 22
         },
         {
           "url": "https://res.cloudinary.com/demo/image/upload/a.png",
-          "line": 34
+          "line": 35
         }
       ]
     },
@@ -60081,8 +60087,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1019895,
-      "sha256": "54ab87f21c56deb04966f7613d91c63b32ec03bf9bf3c90bbba2dc7a1199a9fe"
+      "bytes": 1020592,
+      "sha256": "dc2c8e2d899b638592f07e28814c57d0fdb9b4986474c43b8a8c610d3f9526b6"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -66657,8 +66663,8 @@
     {
       "path": "tests/operations/content-security-boundaries.test.mjs",
       "extension": ".mjs",
-      "bytes": 6355,
-      "sha256": "b51553d6bd28ecd06f26ae0c288a7ab7ef914ff0eb70f60676dbb4c9a1ed5084"
+      "bytes": 6455,
+      "sha256": "ee5885272298d4abfd6dd2e12e7fea96ad6aa807c51be1d97b144cca1d8dfb65"
     },
     {
       "path": "tests/operations/custom-page-revision.test.mjs",

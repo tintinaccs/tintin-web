@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {normalizeAdminSearch} from '../../js/admin/datos/busqueda-admin.mjs';
 import {adminEventAttributes} from '../../js/admin/eventos-dinamicos-admin.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -56,7 +57,7 @@ test('historial y dashboard representan etiquetas y IDs hostiles como datos', ()
     if (!elements.has(name)) elements.set(name, { value:'', innerHTML:'' });
     return elements.get(name);
   }};
-  const deps = { document, adminEventAttributes, allEmailLogs:[{id,type:key,status:'failed',category:'pedido'}], allEmailTemplates:[], allEmailCampaigns:[], emailSettingsCache:{senderEmail:key}, EMAIL_WEBHOOK_URL:'',EMAIL_SENDER_ADDRESS:'sender@example.test', ORDER_TYPE_NAMES:{},_selectedLogs:new Set(),formatDate:()=> 'fecha',updateLogsBulkToolbar:()=>{} };
+  const deps = { document, normalizeAdminSearch, adminEventAttributes, allEmailLogs:[{id,type:key,status:'failed',category:'pedido'}], allEmailTemplates:[], allEmailCampaigns:[], emailSettingsCache:{senderEmail:key}, EMAIL_WEBHOOK_URL:'',EMAIL_SENDER_ADDRESS:'sender@example.test', ORDER_TYPE_NAMES:{},_selectedLogs:new Set(),formatDate:()=> 'fecha',updateLogsBulkToolbar:()=>{} };
   const run = new Function('deps', 'const {'+Object.keys(deps).join(',')+'}=deps;'+['escapeHtmlAdmin','templateLabel_','logStatusBadge_','categoryBadge_','renderCorreosHistorialTab','renderCorreosDashboard'].map(body).join('\n')+'; renderCorreosHistorialTab(); renderCorreosDashboard();');
   run(deps);
   for (const name of ['hist-tbody','hist-filter-type','correos-dash-recent','correos-system-status']) {
