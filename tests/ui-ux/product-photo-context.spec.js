@@ -239,3 +239,16 @@ test('la disponibilidad de una opción fuera de la primera página conserva toda
  expect(saved.stock).toBe(33);expect(saved.variantInventory).toHaveLength(32);expect(saved.variantInventory.find(row=>row.variant==='key-31').stock).toBe(2);
  expect(saved.variantInventory.filter(row=>row.variant!=='key-31').every(row=>row.stock===1)).toBe(true);
 });
+
+for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768],[1366,768],[1920,1080],[3840,2160]])test(`acciones de miniaturas compactas y centradas ${width}x${height}`,async({page},info)=>{
+ const three={...product,imagesExtra:['https://img.test/two.webp','https://img.test/three.webp'],variantMedia:[{Color:'Dorado',imageUrls:['https://img.test/one.webp','https://img.test/two.webp','https://img.test/three.webp']}]};
+ await open(page,width,three);await page.setViewportSize({width,height});const panel=await editPhotos(page,'Dorado');
+ const middle=panel.locator('.tt-unified-photo').nth(1);await middle.scrollIntoViewIfNeeded();
+ const geometry=await middle.evaluate(tile=>{const parent=tile.getBoundingClientRect();return [...tile.querySelectorAll('.tt-photo-order-actions button')].map(button=>{const box=button.getBoundingClientRect(),css=getComputedStyle(button),icon=button.querySelector('svg')?.getBoundingClientRect();return {left:box.left,right:box.right,top:box.top,width:box.width,height:box.height,radius:parseFloat(css.borderRadius),icon:icon?.width || 0,parentLeft:parent.left,parentRight:parent.right};});});
+ expect(geometry).toHaveLength(3);
+ for(const box of geometry){expect(box.left).toBeGreaterThanOrEqual(box.parentLeft);expect(box.right).toBeLessThanOrEqual(box.parentRight+1);expect(box.width).toBeGreaterThanOrEqual(44);expect(box.height).toBe(44);expect(box.radius).toBeLessThanOrEqual(8);expect(box.icon).toBe(20);expect(Math.abs(box.top-geometry[0].top)).toBeLessThanOrEqual(1);}
+ await page.screenshot({path:info.outputPath(`opcion-${width}x${height}.png`)});
+ await middle.getByRole('button',{name:'Usar como primera foto de Dorado',exact:true}).click();
+ await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ expect(await page.evaluate(()=>window.qaProductStore.get('products/qa').variantMedia.find(row=>row.Color==='Dorado').imageUrls)).toEqual(['https://img.test/two.webp','https://img.test/one.webp','https://img.test/three.webp']);
+});

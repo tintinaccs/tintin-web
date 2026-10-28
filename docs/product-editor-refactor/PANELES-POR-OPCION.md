@@ -35,3 +35,20 @@ móvil, orientación horizontal, tablet, laptop y escritorio hasta3840px, sin
 reintentos ni eliminar los controles obligatorios de CI. Las pruebas de matriz,
 edición múltiple y orden siguen ejecutándose en su fixture de componente; las
 de formulario usan los nuevos accesos, conservando sus aserciones de datos.
+
+## Cierre de iconos y regresión de administración
+
+Los controles de portada/orden usan símbolos SVG de20px, centrados en un área
+44px sin los círculos de la regla global. Las tres acciones comparten una fila;
+la cuadrícula reserva el ancho necesario incluso en320px. Las cantidades usan
+símbolos centrados y proporcionados. Se conservan nombre accesible, tooltip,
+foco y acciones originales. Ocho tamaños320–3840 incluyen móvil horizontal,
+tablet vertical/horizontal, laptop y desktop; se comprueba además guardar la
+portada elegida. No se acredita hardware físico.
+
+La CI40567497292 de a095770b falló14 casos de Administración: buscaban controles
+de stock fuera del nuevo panel por opción. Los recorridos ahora abren
+Disponibilidad de la opción correspondiente, conservando todas las aserciones
+comerciales, de vista previa y geometría. Los14 aprobaron localmente. Se integra
+main69c38967 sin retirar sus recibos ni confundir QA ficticio con acceso real.
+La autorización actual incluye cierre, merge y seguimiento posterior.
