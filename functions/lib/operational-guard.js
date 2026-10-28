@@ -1,4 +1,32 @@
 const buckets = new Map();
+
+// Content-Length es sólo una pista: puede faltar o ser menor que el cuerpo.
+// Acota los bytes leídos antes de decodificar y parsear JSON.
+export async function readLimitedJson(request, maxBytes) {
+  if (!Number.isSafeInteger(maxBytes) || maxBytes <= 0) throw new TypeError('Invalid body limit');
+  const reader = request.body?.getReader();
+  if (!reader) return JSON.parse('');
+  const chunks = [];
+  let size = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > maxBytes) {
+        await reader.cancel();
+        throw Object.assign(new Error('payload_too_large'), { status: 413 });
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const bytes = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
 const MAX_BUCKETS = 5_000;
 let overflowBucket = null;
 let nextCleanupAt = 0;

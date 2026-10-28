@@ -40,9 +40,15 @@ export function corsHeaders(origin, requestUrl = '') {
 }
 
 export function jsonResponse(body, status, origin, requestUrl = '') {
+  const headers = corsHeaders(origin, requestUrl);
+  // La cuota ya calcula la espera en servidor. Comunicarla también en HTTP
+  // permite a los clientes respetar el backoff sin interpretar nuestro JSON.
+  if (status === 429 && Number.isFinite(body?.retryAfterSeconds) && body.retryAfterSeconds > 0) {
+    headers['retry-after'] = String(Math.ceil(body.retryAfterSeconds));
+  }
   return new Response(JSON.stringify(body), {
     status,
-    headers: corsHeaders(origin, requestUrl)
+    headers
   });
 }
 

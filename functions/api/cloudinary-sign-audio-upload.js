@@ -4,7 +4,8 @@ import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
-  requireSuperAdmin
+  requireSuperAdmin,
+  statusFromError
 } from '../../cloudflare/seguridad-cloudinary.js';
 
 // Autoriza la subida de un tono corto desde el Centro maestro. El archivo no
@@ -38,6 +39,6 @@ export async function onRequest(context) {
     const limited = rateLimitErrorResponse(error, origin, request.url);
     if (limited) return limited;
     const message = error?.message || 'No se pudo autorizar el tono';
-    return jsonResponse({ error: message }, /Cloudinary todavía no está configurado/i.test(message) ? 503 : 400, origin, request.url);
+    return jsonResponse({ error: message }, statusFromError(error, /Cloudinary todavía no está configurado/i.test(message) ? 503 : 400), origin, request.url);
   }
 }

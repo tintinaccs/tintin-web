@@ -1,3 +1,111 @@
+## 2026-10-28 — Escenario de scroll real tras integrar las seis pestañas
+
+Codex /root; PR1266, head dd23c660978a9ce21fcea433f66be71685942f9d,
+CI40714684764 intento1, browser job122912108552 FAILURE. Contraste y313 UI
+aprueban en CI; el nuevo bloqueo es editor-scroll.performance.spec.js a1920px:
+Información vacía ya cabe en su pestaña y la prueba exige scroll>100, pero mide0.
+Reproducido localmente1 FAIL. Se despliega la vista previa real antes del gesto,
+sin alturas CSS ficticias, tolerancias nuevas, skips ni aserciones eliminadas.
+7/7 viewports360–1920px PASS sin reintentos: scroll y nodo conservados; a1920px
+scroll357→357. Suite completa de rendimiento local:88/88 PASS sin reintentos
+(2.8m), con ambos orígenes fijados a127.0.0.1:4173. Nueva CI:PENDING al preparar.
+La reparación afecta sólo al escenario de prueba, no al runtime del editor.
+Primera ejecución amplia interrumpida: faltaban PERF_BASE_URL/PLAYWRIGHT_BASE_URL
+y el helper usó el origen público predeterminado (dos fallos de presupuesto de
+solicitudes en informativas). No acredita el árbol local ni se modifica código
+por esos resultados. Repetición con ambos orígenes explícitos127.0.0.1:4173.
+
+## 2026-10-28 — Reparación del check de contraste de PR1266
+
+Codex /root. Autorización vigente: corregir fallos y volver a ejecutar CI en el
+mismo PR, sin bypass. Head inicial c899f2de7e870ac82edc26be883d0ba5daacbc8b;
+CI40696469266 intento1 FAILURE, job122846590357. CodeQL40696465427 intento1
+SUCCESS sólo para ese SHA. PR abierto, auto-merge protegido habilitado.
+La prueba extraía JavaScript hasta un delimitador que incluía la instrucción
+siguiente al scanner. Al añadir comprobadas++, dejó de encontrarlo y evaluó
+código Node sobrante: SyntaxError. Reproducido localmente (1 FAIL), corregido
+acotando la extracción al cierre de page.evaluate y validando ambos límites.
+Mismas aserciones de contraste, logo decorativo y controles:1 PASS sin reintentos.
+No cambia código de aplicación ni umbrales/excepciones de accesibilidad.
+Regresión completa del spec:63/63 PASS sin reintentos en Chromium (58.7s),
+incluyendo320–1920px y movimiento reducido. Nueva CI:PENDING; no heredar éxito.
+Main avanzado a0604d107a (#1265/#1267) integrado mediante merge normal,
+conservando editor de seis pestañas, navegación y ambos historiales. Conflictos
+de HTML limitados al tag de tienda.js: versión combinada wa-layout-nav-3 desde
+el generador de shell; caché, protección y diagnóstico regenerados canónicamente.
+PASS_LOCAL de la integración:build:pages, ci:preflight completo (39 comandos,
+incluidos89 Node y5 Chromium de test:fast), caché y11 regresiones Node de
+scroll/búsqueda. Batería313 UI y41 recorridos editor/búsqueda/flotante en curso
+al preparar el commit; resultados terminales en el recibo de seguimiento del PR.
+CI/merge/producción siguen PENDING para el nuevo SHA.
+
+## 2026-10-28 — Autorización de publicación y seguimiento de merge
+
+La titular solicita «mergealo automatico y seguimiento». Esta instrucción nueva
+autoriza commit/push, PR listo para revisión, auto-merge protegido y seguimiento
+hasta merge/checks terminales, incluidos los posteriores al merge; sustituye la
+prohibición anterior sólo para esta publicación. No autoriza saltar protecciones,
+force-push ni operaciones comerciales reales. Repositorio:tintinaccs/tintin-web;
+rama:audit/profesional-local-20261028; base5a2ea0f63306583df04ed47cc745d52902669a2c.
+Fetch confirma main en esa misma base al preparar el PR. PR/SHA/runs:PENDING
+hasta crearlos y verificarlos; no confundir los PASS_LOCAL siguientes con CI.
+
+## 2026-10-28 — Pendientes locales cerrados con evidencia terminal
+
+Codex /root; rama audit/profesional-local-20261028, base5a2ea0f63, cambios locales.
+La instrucción vigente sigue siendo NO push/merge/deploy. No hay PASS_CI ni
+PASS_PRODUCTION para este diff.
+
+PASS_LOCAL:620/620admin,2workers,0reintentos/omitidas/flaky; JSON durable
+artifacts/professional/admin-ui-final.json. Matriz global187/187 en17viewports;
+artifacts/global-responsive/report.json y capturas, además del log
+artifacts/professional/global-responsive-verified.log. Smoke18rutas PASS.
+Rules phone18/username16/editor21 PASS en proyectos demo. npm audit0.
+140regresiones de operaciones/rendimiento PASS. Se mantienen los51E2E críticos
+con Chromium desktop/móvil y WebKit y las155Node/7regresiones del flotante de
+la etapa anterior, con el alcance preciso de QA_REPORT; no sumar solapamientos.
+
+La primera pasada global nueva dio186/187por medir404antes de window.load;
+se reprodujo579px→0al completar carga. Se corrige sólo el auditor:espera load,
+scroll instantáneo y rechazo si no alcanza el final.3tests RED→GREEN y posterior
+187/187. Segundo intento antiguo interrumpido, no se acredita como PASS.
+Nueva prueba:tests/operations/responsive-audit-scroll.test.mjs. No cambia
+comportamiento de scroll del producto ni datos reales.
+
+Queda fuera de la aprobación local:proveedores reales/sandbox no suministrado,
+sesión autorizada Super Admin para aceptación real, dispositivos físicos/WCAG
+manual, retención/legal y métricas de usuarios. No declarar todo100%seguro o
+sin lag en cualquier equipo. Build y39/39preflight finales PASS después del
+arreglo del auditor, huellas protegidas sin desajustes y diff --check limpio.
+Logs:artifacts/professional/build-complete.log y preflight-complete.log.
+
+Estado vigente ampliado:ver entrada «Ampliación profesional local, continuidad
+verificable» y docs/QA_REPORT.md. No heredar PASS del cierre inicial.
+
+## 2026-10-28 — Auditoría profesional local, primera entrega
+
+Codex /root GPT-6; base5a2ea0f63306583df04ed47cc745d52902669a2c,
+rama audit/profesional-local-20261028. La nueva instrucción prohíbe
+push/merge/deploy; prevalece sobre la autorización permanente de AGENTS.
+Inventario19 HTML/58 APIs/23 secciones admin; documentación DESIGN,
+AUDITORIA_PROFESIONAL, QA_REPORT e índice ARCHITECTURE_OVERVIEW. No rediseño.
+qs6.16.0→6.17.0 dentro del rango compatible resuelve2 avisos moderados de npm,
+un único origen qs/Express de desarrollo; auditoría posterior0.
+PASS_LOCAL:202 Node seguridad/cuentas/scheduling;362 comercio;79 Chromium de
+formularios/Pedidos;233 ataques/controles de Rules,15 integraciones Firestore
+y1 cuota concurrente;22 E2E críticos Chromium desktop/móvil con Auth/Firestore
+demo y reglas efectivas. Dos preparaciones E2E inválidas (JSON temporal sin
+cerrar y ruta del navegador ausente) se descartan y documentan, sin cambiar
+reglas/tests del producto. Sonda pública puntual Inicio LCP1564ms/CLS0/
+interacción sintética48ms: no es INP de campo ni auditoría de todas las rutas.
+Arquitectura, seguridad estática, rendimiento/regresiones y builds inicial/final
+aprobados;2 advertencias de peso en Inicio. Plan local de package-lock generado
+canónicamente; preflight39/39 aprobada. Cierre documental/diagnóstico detallado
+en QA_REPORT. Fases amplias3–9 siguen
+parciales: faltan matriz por endpoint/pantalla, WebKit/hardware, WCAG manual,
+proveedores y aceptación de Super Admin. No afirmar estabilidad global ni
+auditoría de diez fases completada. Continuidad precisa en los informes.
+
 ## 2026-10-28 — #1265 regeneración final de diagnóstico
 
 Preflight 40709274095/1 de d2d2ea0d detectó únicamente diagnóstico/site-version desactualizados: el recibo de 34 pruebas se añadió a este documento después del build. Se regenera con el contenido final y se verifica sin editar fuentes posteriormente. Sin cambio de runtime ni plan protegido.
@@ -4473,3 +4581,37 @@ La PR1259 falló en40504800268: contrato de integración detectó13 workflows fr
 PASS_LOCAL de recibos/merge:3/3 pruebas del notificador y del enrutado de eventos,48/48 regresiones de mantenimiento/protección, sintaxis JS/YAML e integración canónica aprobadas (12 workflows). La comprobación de rutas evalúa las condiciones reales: un workflow ajeno, un fork, un PR cerrado o un schedule no habilitan el merge; el notificador tiene permisos propios, checkout confiable y exclusión del workflow de mantenimiento. No se atribuye entrega a Codex dormido: sigue bloqueada por ausencia de receptor soportado.
 
 El candidato combinado conserva12 workflows y aprueba la preflight secuencial39/39 después del build. El notificador se prueba sin llamadas reales a GitHub; los recibos reales y el seguimiento post-merge se verifican por separado tras integrar.
+## 2026-10-28 — Ampliación profesional local, continuidad verificable
+
+Instrucción vigente:NO push/merge/deploy. Rama audit/profesional-local-20261028,
+base5a2ea0f63306583df04ed47cc745d52902669a2c. Cambios locales propios de esta
+auditoría; conservarlos. QA_REPORT y AUDITORIA_PROFESIONAL distinguen pruebas,
+fallos, correcciones y límites. No heredar el cierre inicial de39preflight.
+
+Corregidos:qs compatible, Retry-After OTP, cuerpo real8KB de telemetría,
+clasificación401 en7adaptadores, espera correcta de loaders en tests y guard
+WhatsApp para clases de html/estilos tardíos. Identidad visual conservada.
+tienda.js versionada canónicamente en15documentos como
+tintin-20261028-wa-layout-2. Generar siempre plan protegido/build al cerrar;
+no tocar hashes/sellos manualmente.
+
+Evidencia durable:runtime-results.json registra51/51PASS,0flaky, con SDK oficiales
+y Auth/Firestore emulados en Chromium desktop/móvil y WebKit. Harness excluye
+sólo el resolver OAuth externo no necesario para Custom Tokens; antes hubo
+473/474y48/51por gapi503, documentados.222comercio PASS observado; lote admin620
+sin resultado terminal conservado, más de500aprobados observados. ci:browser
+NO aprobado completo:14comandos PASS y fallo global responsive; canónicos144/144.
+Último solape CSS reproducido y corregido;7regresiones PASS, global posterior
+pendiente. Logs nuevos bajo artifacts/professional; los/tmp de sesión anterior
+se perdieron al retomar el entorno y sus procesos ya no estaban activos.
+
+Cierre de reanudación:155Node y7regresiones PASS; build y39/39preflight PASS;
+git diff --check limpio. Plan protegido29archivos/57registros, calculado desde
+la base. Se corrigió el tag del generador de shell tras un primer build fallido;
+el build posterior y su caché380/67 son coherentes. No se publica.
+
+Continuar con:repetir matriz global y test:pages;
+cerrar lote admin con evidencia terminal; Rules phone/username/editor y cierre
+preflight del diff final. Después quedan proveedores sandbox/cuentas autorizadas,
+hardware/WCAG manual, legal/retención y métricas de campo. No afirmar aprobación
+de todas las fases ni estabilidad global por contar tests solapados.

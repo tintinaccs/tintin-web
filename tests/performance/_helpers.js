@@ -11,6 +11,7 @@ const VIEWPORTS = [
   { name: '1024 Tablet horizontal', width: 1024, height: 768 },
   { name: '768 Tablet vertical', width: 768, height: 1024 },
   { name: '390 Mobile', width: 390, height: 844 },
+  { name: '360 Mobile pequeño', width: 360, height: 640 },
   { name: '320 Mini mobile', width: 320, height: 568 }
 ];
 
@@ -82,7 +83,7 @@ async function waitLoaderGone(page, timeout = 12000) {
   await page.waitForFunction(() => {
     const loader = document.getElementById('tt-loader');
     return !loader || getComputedStyle(loader).display === 'none' || loader.classList.contains('tt-out');
-  }, { timeout }).catch(() => {});
+  }, null, { timeout });
 }
 
 async function probeInteraction(page) {

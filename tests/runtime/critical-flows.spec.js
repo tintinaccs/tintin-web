@@ -15,6 +15,7 @@ test.beforeEach(async({page,context,request})=>{
   });
   // SDK files are real. Any accidental access to production data/services fails.
   await context.route(/https:\/\/(?:identitytoolkit|firestore|securetoken)\.googleapis\.com\//,route=>{productionRequests.push(route.request().url().split('?')[0]);return route.abort('blockedbyclient');});
+  await context.route('https://apis.google.com/**',route=>{productionRequests.push(new URL(route.request().url()).origin);return route.abort('blockedbyclient');});
   await context.route('https://tintinaccesorios.pages.dev/api/**',route=>{productionRequests.push(route.request().url().split('?')[0]);return route.abort('blockedbyclient');});
 });
 test.afterEach(async({page,context},testInfo)=>{

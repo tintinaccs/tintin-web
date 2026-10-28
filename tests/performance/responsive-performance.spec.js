@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Estabilidad visual en las 7 resoluciones obligatorias: sin scroll horizontal,
+ * Estabilidad visual en los siete anchos solicitados más 320px: sin scroll horizontal,
  * sin header superpuesto, contenido utilizable y loader cerrado, en el home y
  * en el catálogo.
  */

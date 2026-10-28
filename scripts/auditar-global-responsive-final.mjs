@@ -213,15 +213,21 @@ async function inspectBase(page, width) {
 }
 
 async function inspectMobileBottom(page) {
+  // El contrato de navegación restaura el inicio durante window.load. Medir
+  // antes permite que una imagen tardía reinicie el scroll entre dos lecturas.
+  await page.waitForLoadState('load', { timeout: 15000 });
+  await settleFrames(page);
+  let remaining = Infinity;
   for (let attempt = 0; attempt < 5; attempt += 1) {
-    await page.evaluate(() => window.scrollTo(0,document.documentElement.scrollHeight));
+    await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
     await page.waitForTimeout(140);
     await settleFrames(page);
-    const remaining = await page.evaluate(() => Math.max(0,
+    remaining = await page.evaluate(() => Math.max(0,
       document.documentElement.scrollHeight - innerHeight - scrollY
     ));
     if (remaining <= 2) break;
   }
+  if (remaining > 2) throw new Error(`No se pudo alcanzar el final de la página (${Math.round(remaining)}px pendientes).`);
   return page.evaluate(() => {
     const issues = [];
     const tabbar = document.getElementById('tt-tabbar');
@@ -251,21 +257,25 @@ async function inspectMobileBottom(page) {
 }
 
 async function resetSurfaces(page) {
-  await page.keyboard.press('Escape').catch(() => {});
-  await page.evaluate(() => {
-    ['tt-tienda-dropdown-panel','search-panel','account-panel','cart-drawer','collections-sheet','tt-tablet-menu'].forEach(id => document.getElementById(id)?.classList.remove('open'));
-    document.querySelectorAll('.tt-nav-dropdown.open').forEach(node => node.classList.remove('open'));
-    document.querySelectorAll('[aria-expanded="true"]').forEach(node => node.setAttribute('aria-expanded','false'));
-  });
-  await page.waitForTimeout(50);
+  await page.keyboard.press('Escape');
+  // No modificar clases por fuera de la máquina de estados del producto.
+  await page.waitForFunction(() => window.TintinSurfaceController?.state === 'idle', null, { timeout: 3000 });
 }
 
 async function checkSurface(page,trigger,surface,label) {
   const button = page.locator(trigger).first();
-  if (!(await button.count()) || !(await button.isVisible().catch(() => false))) return [];
+  if (!(await button.count()) || !(await button.isVisible())) return [`${label}: control no disponible`];
   await page.evaluate(() => { const consent = document.querySelector('.tt-privacy-consent'); if (consent) consent.hidden = true; });
-  await button.click({ force:true }).catch(() => {});
-  await page.waitForTimeout(140);
+  await button.click({ timeout: 3000 });
+  // La apertura usa dos rAF antes de revelar el panel. Una espera fija de
+  // 140ms falla bajo carga y no prueba que la interacción haya terminado.
+  await page.waitForFunction(selector => {
+    const node = document.querySelector(selector);
+    if (!node) return false;
+    const style = getComputedStyle(node), rect = node.getBoundingClientRect();
+    return window.TintinSurfaceController?.state === 'open' &&
+      style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > .01 && rect.width > 0 && rect.height > 0;
+  }, surface, { timeout: 3000 });
   const issues = await page.evaluate(({surface,label}) => {
     const node = document.querySelector(surface);
     if (!node) return [`${label}: falta ${surface}`];

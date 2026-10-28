@@ -6,6 +6,33 @@ const end = source.indexOf('\n/* ─', start);
 const behavior = source.slice(start, end);
 const css = fs.readFileSync('styles.css', 'utf8');
 
+test('una hoja de estilos tardía puede mover el aviso sin cambiar su tamaño', async ({ page }) => {
+  await page.setViewportSize({ width: 430, height: 932 });
+  await page.setContent(`<style>${css}</style>
+    <a id="wa-float" class="tt-wa-float" style="position:fixed;right:20px;bottom:100px;width:50px;height:50px">WhatsApp</a>
+    <aside class="tt-privacy-consent" style="position:fixed;right:10px;bottom:300px;width:200px;height:100px;animation:none">Privacidad</aside>`);
+  await page.addScriptTag({ content: `${behavior}\ninitWaFloatVisibility();` });
+  await page.waitForTimeout(250);
+  await expect(page.locator('#wa-float')).toBeVisible();
+  await page.addStyleTag({ content: '.tt-privacy-consent { bottom:90px !important; }' });
+  await expect(page.locator('#wa-float')).toBeHidden({ timeout: 1000 });
+});
+
+test('un aviso revelado por una clase del documento también reserva el espacio del flotante', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.setContent(`<style>${css}
+    html.qa-notice-pending .tt-privacy-consent { visibility:hidden; }
+    </style><a id="wa-float" class="tt-wa-float" style="position:fixed;right:20px;bottom:100px;width:50px;height:50px">WhatsApp</a>
+    <aside class="tt-privacy-consent" style="position:fixed;right:10px;bottom:90px;width:200px;height:100px">Privacidad</aside>`);
+  await page.evaluate(() => document.documentElement.classList.add('qa-notice-pending'));
+  await page.addScriptTag({ content: `${behavior}\ninitWaFloatVisibility();` });
+  await page.waitForTimeout(250);
+  await expect(page.locator('#wa-float')).toBeVisible();
+  // Cambia visibilidad, no tamaño: ResizeObserver no puede detectar este caso.
+  await page.evaluate(() => document.documentElement.classList.remove('qa-notice-pending'));
+  await expect(page.locator('#wa-float')).toBeHidden();
+});
+
 for (const width of [320, 390, 768, 1440]) {
   test(`WhatsApp reserva el aviso de privacidad y vuelve al cerrarlo en ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height:850 });

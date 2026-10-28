@@ -73,7 +73,7 @@ async function verify(store, body, ip = '203.0.113.7') {
     body: JSON.stringify(body),
   });
   const response = await handleEmailOtpVerify({ request, env: {} }, store.deps);
-  return { status: response.status, ...(await response.json()) };
+  return { status: response.status, retryAfter: response.headers.get('retry-after'), ...(await response.json()) };
 }
 
 test('200 intentos simultáneos no superan el límite de 5 comparaciones por código', async () => {
@@ -233,6 +233,7 @@ test('una IP con demasiados códigos fallidos en el día queda frenada', async (
   assert.equal(limited.status, 429);
   assert.equal(limited.error, 'rate_limit_exceeded');
   assert.ok(limited.retryAfterSeconds > 0);
+  assert.equal(Number(limited.retryAfter), limited.retryAfterSeconds);
   assert.equal(store.deps.logins, 0);
 
   const otherIp = await verify(store, { email: EMAIL, code: CODE }, '192.0.2.11');

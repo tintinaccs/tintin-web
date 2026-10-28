@@ -2182,6 +2182,7 @@ function initWaFloatVisibility() {
   const overlaysIn = node => node.nodeType === 1
     ? [...(node.matches(overlaySelector) ? [node] : []), ...node.querySelectorAll(overlaySelector)]
     : [];
+  const isStylesheet = node => node.nodeType === 1 && node.matches('style,link[rel~="stylesheet"]');
   watch(wa);
   document.querySelectorAll(overlaySelector).forEach(watch);
   if (typeof MutationObserver === 'function') {
@@ -2190,6 +2191,9 @@ function initWaFloatVisibility() {
       for (const record of records) {
         if (record.target.nodeType === 1 && record.target.closest(overlaySelector)) changed = true;
         if (record.type === 'childList') {
+          // CSS tardío puede mover un aviso sin cambiar su tamaño: no dispara
+          // ResizeObserver ni modifica atributos del propio aviso.
+          if (isStylesheet(record.target) || [...record.addedNodes, ...record.removedNodes].some(isStylesheet)) changed = true;
           for (const node of [...record.addedNodes, ...record.removedNodes]) {
             const overlays = overlaysIn(node);
             if (overlays.length) changed = true;
@@ -2203,8 +2207,13 @@ function initWaFloatVisibility() {
         }
       }
       if (changed) requestCheck();
-    }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class', 'style'] });
+    // El loader y el tema también revelan avisos cambiando clases en <html>.
+    // Su visibilidad puede variar sin resize ni mutaciones dentro de <body>.
+    }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class', 'style'] });
   }
+  document.addEventListener('load', event => {
+    if (event.target instanceof Element && isStylesheet(event.target)) requestCheck();
+  }, true);
   for (const name of ['transitionend', 'animationend']) {
     document.addEventListener(name, event => {
       if (event.target.closest?.(overlaySelector)) requestCheck();

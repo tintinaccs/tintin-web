@@ -216,9 +216,12 @@ await listen();
 const browser = await chromium.launch({ headless:true, ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH } : {}) });
 const failures = [];
 const report = [];
+// Conserva las siete geometrías canónicas del manifiesto y añade el móvil de
+// 360px requerido por la auditoría profesional, sin redefinir el manifiesto.
+const auditViewports = [...canonicalViewports, { width:360, height:640, id:'mobile-360' }];
 
 try {
-  for (const viewport of canonicalViewports) {
+  for (const viewport of auditViewports) {
     const context = await browser.newContext({ viewport:{ width:viewport.width, height:viewport.height }, ignoreHTTPSErrors:true, serviceWorkers:'block', reducedMotion:'reduce' });
     await context.addInitScript(() => {
       window.TT_DISABLE_STORE_GATE = true;
@@ -260,6 +263,6 @@ try {
 }
 
 fs.writeFileSync(path.join(artifactDir,'report.json'), JSON.stringify({ failures,report }, null,2));
-fs.writeFileSync(path.join(artifactDir,'report.txt'), failures.length ? failures.join('\n') : 'Todas las páginas pasaron en los siete viewports canónicos.\n');
+fs.writeFileSync(path.join(artifactDir,'report.txt'), failures.length ? failures.join('\n') : `Todas las páginas pasaron en los ${auditViewports.length} viewports auditados.\n`);
 console.log(`\nResultado canónico: ${report.length - failures.length}/${report.length} combinaciones correctas.`);
 if (failures.length) process.exit(1);
