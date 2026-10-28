@@ -7,6 +7,10 @@ for (const [width, height] of [[360, 640], [390, 844], [768, 1024], [1024, 768],
   test(`editor conserva scroll y nodos durante actualizaciones locales en ${width}px`, async ({ page }, info) => {
     await openProductSaveFixture(page, width, height, { fullShell: true, photos: true, workflow: true });
     await page.evaluate(() => window.qaProductController.workspace.ready);
+    // Información vacía cabe sin scroll en pantallas grandes tras separar las
+    // pestañas. Desplegar contenido real, sin forzar tamaños ni omitir el gate.
+    await page.locator('.tt-editor-preview-shell > summary').click();
+    await expect(page.locator('#prod-live-preview')).toBeVisible();
     const geometry = await page.evaluate(() => {
       let scroller = document.querySelector('#prod-form-card .adm-card-body');
       while (scroller && !(scroller.scrollHeight > scroller.clientHeight + 100 && /auto|scroll/.test(getComputedStyle(scroller).overflowY))) scroller = scroller.parentElement;

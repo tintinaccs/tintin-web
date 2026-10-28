@@ -1,3 +1,20 @@
+## 2026-10-28 — Escenario de scroll real tras integrar las seis pestañas
+
+Codex /root; PR1266, head dd23c660978a9ce21fcea433f66be71685942f9d,
+CI40714684764 intento1, browser job122912108552 FAILURE. Contraste y313 UI
+aprueban en CI; el nuevo bloqueo es editor-scroll.performance.spec.js a1920px:
+Información vacía ya cabe en su pestaña y la prueba exige scroll>100, pero mide0.
+Reproducido localmente1 FAIL. Se despliega la vista previa real antes del gesto,
+sin alturas CSS ficticias, tolerancias nuevas, skips ni aserciones eliminadas.
+7/7 viewports360–1920px PASS sin reintentos: scroll y nodo conservados; a1920px
+scroll357→357. Suite completa de rendimiento local:88/88 PASS sin reintentos
+(2.8m), con ambos orígenes fijados a127.0.0.1:4173. Nueva CI:PENDING al preparar.
+La reparación afecta sólo al escenario de prueba, no al runtime del editor.
+Primera ejecución amplia interrumpida: faltaban PERF_BASE_URL/PLAYWRIGHT_BASE_URL
+y el helper usó el origen público predeterminado (dos fallos de presupuesto de
+solicitudes en informativas). No acredita el árbol local ni se modifica código
+por esos resultados. Repetición con ambos orígenes explícitos127.0.0.1:4173.
+
 ## 2026-10-28 — Reparación del check de contraste de PR1266
 
 Codex /root. Autorización vigente: corregir fallos y volver a ejecutar CI en el
