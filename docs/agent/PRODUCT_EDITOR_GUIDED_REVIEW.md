@@ -2,6 +2,10 @@
 
 Implementación compartida por Nuevo y Editar producto. El formulario y sus controladores canónicos permanecen; la superficie ahora es una región integrada en Productos. No se autoriza merge ni despliegue de producción para esta entrega.
 
+## Integración de cambios simultáneos
+
+Mientras se verificaba esta rama, main recibió Studio en el PR #1268 (`9fcc8c57`). Se integra esa base: imagen grande, lienzo neutro derivado del tema, tarjeta continua, pestañas subrayadas e iconos. Sus funciones de navegación se conectan al flujo validado del asistente; el acceso a Vista previa abre Publicación explícitamente. Se conserva la separación comercial solicitada en esta tarea, sin volver a ubicar stock/precios dentro de la galería. La comprobación de la combinación renovada incluye 33 casos de pestañas/Studio/aceptación, 135 de regresión responsive/guardado/scroll y 114 contratos Node PASS; build/preflight y protección de flujos PASS; las baterías anteriores se documentan como evidencia previa a esta integración y no acreditan el SHA nuevo.
+
 ## Recorrido y datos conservados
 
 | Paso | Contenido |

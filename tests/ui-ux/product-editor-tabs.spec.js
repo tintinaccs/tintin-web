@@ -67,3 +67,28 @@ test('abrir y cerrar la superficie antes de montar campos no provoca errores ni 
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));await expect(page.locator('#prod-form-card')).toHaveAttribute('role','region');expect(errors).toEqual([]);
  await page.evaluate(()=>{document.getElementById('prod-form-card').style.display='none';});await expect(page.locator('[data-action="product-new"]')).toBeFocused();expect(errors).toEqual([]);
 });
+
+for(const width of [320,390,768,854,1024,1440])test(`referencia Studio: galería y controles canónicos sin recorte ${width}`,async({page},info)=>{
+ const image='https://img.test/studio-gold.webp',silver='https://img.test/studio-silver.webp';
+ const product={name:'Anillo de prueba',description:'Producto ficticio para revisión visual',category:'qa-tablet',price:50000,stock:10,active:true,publicationStatus:'active',imageUrl:image,imagesExtra:[silver],variants:{Color:['Dorado','Plateado']},variantMedia:[{Color:'Dorado',imageUrls:[image]},{Color:'Plateado',imageUrls:[silver]}],variantInventory:[{variant:'Dorado',stock:4},{variant:'Plateado',stock:6}]};
+ await openProductSaveFixture(page,width,1000,{fullShell:true,photos:true,workflow:true,initialRecords:[['products/studio',product]]});
+ await page.route('https://img.test/studio-*.webp',route=>route.fulfill({contentType:'image/webp',body:require('node:fs').readFileSync('assets-tintin/images/collections/col-anillos.webp')}));
+ await page.evaluate(()=>window.qaProductController.workspace.ready);await page.locator('.tt-work-back').click();
+ await page.evaluate(()=>{window.qaProductController.refresh();window.prodEditar('studio');});await page.evaluate(()=>window.qaProductController.workspace.ready);
+ await tab(page,'Fotos y opciones').click();
+
+ await expect(page.locator('.tt-studio-photo > img')).toHaveAttribute('src',image);
+ await page.waitForFunction(()=>{const image=document.querySelector('.tt-studio-photo > img');return image.complete && image.naturalWidth>0;});
+ await expect(page.locator('.tt-studio-photo figcaption')).toHaveText('Imagen del producto');
+ await expect(page.locator('#prod-variant-stock')).toBeHidden();
+ await expect(page.locator('#prod-variant-stock')).toHaveCount(1);
+ const geometry=await page.locator('.tt-studio-photo-layout').evaluate(el=>{const visual=el.querySelector('.tt-studio-photo-visual').getBoundingClientRect(),side=el.querySelector('.tt-studio-photo-side').getBoundingClientRect();return {width:el.clientWidth,scroll:el.scrollWidth,visual:{x:visual.x,right:visual.right},side:{x:side.x,right:side.right}};});
+ expect(geometry.scroll).toBeLessThanOrEqual(geometry.width+1);
+ if(geometry.width>620 && width>=768)expect(geometry.side.x).toBeGreaterThanOrEqual(geometry.visual.right);
+ await expect(page.locator('.tt-studio-pagination')).toContainText('Fotos y opciones · 2 de 6');
+ await page.locator('.tt-studio-pagination').getByRole('button',{name:'Continuar a Variantes →',exact:true}).click();await expect(tab(page,'Variantes')).toHaveAttribute('aria-selected','true');
+ await tab(page,'Fotos y opciones').click();await expect(page.locator('.tt-studio-photo > img')).toHaveAttribute('src',image);
+ await tab(page,'Precio y stock').click();await expect(page.getByLabel('Stock: Dorado',{exact:true})).toBeVisible();await tab(page,'Fotos y opciones').click();
+ await page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop=0);
+ await page.screenshot({path:info.outputPath(`studio-reference-${width}.png`),animations:'disabled'});
+});

@@ -1,5 +1,5 @@
-import {quantity} from './controles-editor-producto.js?v=tintin-20261028-guided-editor-1';
-import {mountProductMoney,formatGuarani} from './importe-producto.js?v=tintin-20261028-guided-editor-1';
+import {quantity} from './controles-editor-producto.js?v=tintin-20261028-guided-editor-2';
+import {mountProductMoney,formatGuarani} from './importe-producto.js?v=tintin-20261028-guided-editor-2';
 import {commercialDraft,commercialPatch,setCommercialOptionAvailability} from './editor-comercial-core.mjs?v=tintin-20261026-editor-phase6-1';
 import {productVariantPrice,variantSelectionLabel} from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 const element=(tag,text)=>{const node=document.createElement(tag);if(text!=null)node.textContent=text;return node;};

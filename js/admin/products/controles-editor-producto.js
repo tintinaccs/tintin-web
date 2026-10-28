@@ -1,4 +1,4 @@
-import {mountProductMoney} from './importe-producto.js?v=tintin-20261028-guided-editor-1';
+import {mountProductMoney} from './importe-producto.js?v=tintin-20261028-guided-editor-2';
 // Controles visuales sobre los campos nativos: una sola autoridad de datos/guardado.
 const mounted = new WeakSet();
 const quantityControls = new WeakMap();

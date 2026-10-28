@@ -595,12 +595,13 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  const actions=editor.locator('#prod-editor-actions');
  await expect(actions).toBeVisible();
  const body=editor.locator('.adm-card-body');await expect(body).toHaveCSS('overflow-y','visible');
- const buttons=actions.locator('button');await expect(buttons).toHaveCount(2);
+ const buttons=actions.locator('button');await expect(buttons).toHaveCount(3);await expect(buttons.nth(0)).toHaveText('Vista previa');await expect(buttons.nth(1)).toHaveText('Cancelar');
  for(const button of await buttons.all()){
   await button.scrollIntoViewIfNeeded();await expect(button).toBeInViewport();
   expect(await button.evaluate(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===el;})).toBe(true);
  }
- await buttons.first().focus();await page.keyboard.press('Tab');await expect(editor.locator('#prod-save-btn')).toBeFocused();
+ await buttons.first().focus();await page.keyboard.press('Tab');await expect(actions.getByRole('button',{name:'Cancelar',exact:true})).toBeFocused();
+ await page.keyboard.press('Tab');await expect(editor.locator('#prod-save-btn')).toBeFocused();
  await editor.locator('#prod-form-title').click();await expect(actions).toBeVisible();
  if(width===390||width===1440)await page.screenshot({path:test.info().outputPath(`editor-full-${width}.png`)});
  await editor.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(editor).toBeHidden();

@@ -16,7 +16,10 @@ for(const width of [320,390,600,768,1024,1440])test(`versión única: abrir, fot
   await expect(page.locator('.tt-editor-layout')).toHaveCount(1);
   await expect(page.locator('.tt-product-section-nav')).toHaveCount(1);
   await expect(page.locator('.tt-unified-photos')).toHaveCount(1);
-  await expect(page.locator('.tt-editor-guide,.tt-editor-studio,.tt-editor-section-links')).toHaveCount(0);
+  // Studio es ahora una clase visual del formulario canónico, no otro editor.
+  await expect(page.locator('.tt-editor-studio')).toHaveCount(1);
+  await expect(page.locator('#prod-form-card')).toHaveClass(/\btt-editor-studio\b/);
+  await expect(page.locator('.tt-editor-guide,.tt-editor-studio:not(#prod-form-card),.tt-editor-section-links')).toHaveCount(0);
   await expect(page.locator('link[href*="editor-producto-studio"]')).toHaveCount(0);
   if(opening<2)await page.locator('.tt-work-back').click();
  }
