@@ -1,26 +1,27 @@
 # Incidencias pendientes y condiciones de publicación
 
-Actualización26/10/2026: la edición contextual completa continúa la única versión
-de seis fases sobre main899a685. El recibo vigente, sus pruebas y límites están
-en [EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md).
-La titular autorizó expresamente completar el merge protegido. Los resultados
-y restricciones de publicación del cuerpo siguiente son evidencia histórica de
-su ejecución anterior; no sustituyen la validación del candidato actual.
+Actualización verificada el 27/10/2026: CI, merge protegido y publicación ya
+aprobados. La versión de aplicación consultada es `65ee34250b20738591ec65cc097ee4e8bd452486`
+(PR #1262), que conserva la única versión de seis fases y sus continuaciones.
+Recibos por SHA y separación entre publicación y aceptación autenticada:
+[CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md). Los resultados anteriores que siguen abajo son evidencia
+fechada de su ejecución, no nuevas aprobaciones del código actual.
 
-Los resultados locales concretos están en MATRIZ-PRUEBAS-FINAL.md. Esta lista no
-convierte ausencia de evidencia en un defecto confirmado de producción.
+Los resultados locales históricos permanecen en la matriz. Estado actual
+comprobado y evidencia remota: [CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md).
+Una ausencia de prueba no se convierte en un defecto confirmado.
 
-| ID / clasificación | Estado | Evidencia, impacto y siguiente paso |
-| --- | --- | --- | --- |
-| CONT-01 MEDIUM | NOT_VERIFIED | La carpeta y los cambios originales del adjunto no aparecen en las 701 referencias remotas ni el historial accesible. Se reconstruye la continuidad disponible. Si aparece el entorno de origen, comparar ese diff con esta rama antes de incorporarlo; no sobrescribirlo. |
-| REL-01 HIGH, condición de release | NO EJECUTADA | CI remota del candidato, merge y despliegue no autorizados. La rama local no certifica el artefacto publicado. Revisar el diff, autorizar la publicación de un candidato sin auto-merge y exigir todos los gates de su SHA. |
-| EXT-01 HIGH, aceptación externa | NO EJECUTADA | Sesión administrativa autenticada contra staging, subidas reales de Cloudinary y confirmación real de Sheets. Los fixtures ejecutan los componentes reales con proveedor/identidad/almacén sintéticos; emulador verifica REST/CAS y Rules locales. Validar con recursos de staging autorizados antes de uso productivo sin reservas. |
-| DEV-01 MEDIUM | NO EJECUTADA | iOS/Safari físico, teclado virtual real, lector de pantalla, safe areas no nulas y zoom nativo del navegador. Chromium/táctil emulado, viewport reducido y reflujo equivalente no certifican esos dispositivos. Completar matriz física y accesibilidad en staging. |
-| MEDIA-01 MEDIUM, compatibilidad existente | LÍMITE CONSERVADO | Galería histórica con más de 13 fotos únicas bloquea guardar hasta revisarla; no se trunca. El límite era anterior y sigue explícito. Revisar ejemplos de staging antes de cambiar capacidad; no reducir datos automáticamente. |
-| PERF-01 LOW | MEDICIÓN ACOTADA | La comparación de galería mide eventos sintéticos y reemplazos de tarjetas. No certifica velocidad con red real ni ausencia de fugas de heap a largo plazo. Perfil de sesión de staging pendiente si se reproduce lentitud. |
-| PAY-1228 HIGH, alcance separado | NO MODIFICADA | #1228 contiene cambios de captura/notificaciones PayPal y UI de checkout además del editor. La instrucción actual los excluye. La rama original sigue pendiente; revisar ese delta en otra incidencia, sin importarlo ni afirmar que su problema está reproducido en producción. |
+| ID / clasificación | Estado actual | Evidencia, impacto y siguiente paso |
+| --- | --- | --- |
+| REL-01, entrega | CERRADA / APROBADA remota | #1248/#1252 y continuaciones integradas. CI actual de main40560324289 y producción40560326995 SUCCESS para65ee3425; SHA/intentos/enlaces en recibo. No falta autorización de merge. |
+| EXT-01 HIGH, aceptación externa | BLOQUEADA | Perfil «Tintin Super Admin» sin inicio registrado; confirmación/login solicitados. Subida Cloudinary, guardado/reapertura y fila específica en Sheets aún NO EJECUTADOS. La operación global40568998469 SUCCESS no certifica ese recorrido. |
+| DEV-01 MEDIUM | NO EJECUTADA | Safari/iOS físico, teclado virtual, lector, safe areas no nulas y zoom nativo. Completar en dispositivo real; emulación no sustituye hardware. |
+| MEDIA-01 MEDIUM, compatibilidad existente | LÍMITE CONSERVADO | Máximo13 fotos. Productos históricos mayores bloquean guardar hasta revisión, sin truncarlos; no ampliar capacidad ni reducir datos implícitamente. |
+| PERF-01 LOW | MEDICIÓN ACOTADA | Evidencia sintética fechada disponible. Perfil con red real y sesión larga no ejecutado; realizarlo si se requiere certificar esos escenarios. |
+| CONT-01, reconstrucción original | HISTÓRICA | La búsqueda previa del adjunto y la continuidad reconstruida se conservan como antecedente; no se presenta como un bloqueo actual de CI/merge. |
+| PAY-1228, fuera del editor | FUERA DE ALCANCE | #1228 está CLOSED sin merge según GitHub; no es una rama abierta a integrar automáticamente ni una falla actual demostrada. Revisar pagos sólo en su tarea propia. |
 
-No se ejecutan pagos reales, correos, compras, pedidos productivos, escrituras de
-catálogo real, migraciones, cambios de DNS, deploy de Rules ni operaciones de
-borrado físico. La futura aprobación debe corresponder al candidato revisado,
-no a checks históricos de #1228 o #1241.
+Al obtener acceso, escribir únicamente el producto exclusivo de QA autorizado,
+inactivo y con stock0. No tocar productos comerciales, pedidos, clientes ni pagos.
+No borrar archivos compartidos o filas ajenas. Registrar IDs y referencias para
+comprobar guardado, reapertura y sincronización sin simular una sesión real.

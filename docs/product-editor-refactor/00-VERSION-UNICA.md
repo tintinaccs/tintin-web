@@ -6,12 +6,12 @@ anteriores no constituyen versiones disponibles ni instrucciones de implementaci
 
 ## Autoridad de la entrega
 
-Entrega vigente: continuación final de Fase6, PR#1244, rama
-`codex/editor-fase6-integracion-20261026`, cabeza
-8b171b76fe8d2442c6f69b3025707fb3f44ada48, integrada
-8e922503881d49e17e24fbe4c14a39f2c43bf9dc. Incluye los antecedentes ya integrados
-por#1241; no se recupera su presentación anterior como otra versión.
-Se mantienen también#1245 y Perfil#1246 de main e78a9de2f.
+Entrega vigente comprobada el27/10/2026: main `65ee34250b20738591ec65cc097ee4e8bd452486`
+(PR #1262). Conserva las seis fases de #1241/#1244, la unificación #1248, el bloque
+contextual #1252 y las correcciones #1254/#1256/#1258/#1257/#1260/#1262.
+No se recupera una presentación anterior como otra versión. CI/merge/publicación
+están aprobados para los SHA de sus [recibos verificados](CIERRE-VERIFICADO-20261027.md).
+La aceptación con sesión y proveedores reales continúa abierta por separado.
 
 | Fase de la versión vigente | Código y contrato conservados |
 | --- | --- |
@@ -31,7 +31,8 @@ propuestas anteriores no modifica este contrato.
 Sobre main899a685 (#1248) se reúne el producto completo junto a la galería:
 fotos seleccionables, colores encima, campos comerciales/editoriales originales
 y opciones por categoría. Es continuidad de esta misma versión de seis fases.
-Evidencia vigente: [EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md).
+Evidencia fechada del bloque: [EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md).
+Cierre y estado actual: [CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md).
 
 ## Implementación única
 

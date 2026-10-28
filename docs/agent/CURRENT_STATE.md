@@ -29,6 +29,24 @@ originales con identidad/almacenamiento/proveedores ficticios. No compras,
 pagos, correos, cuentas ni stock reales. CI, integración y publicación se acreditan
 por SHA en el PR; no se confunden con la validación local.
 
+## 2026-10-27 — Cierre documental y acceso para QA real, Codex /root
+
+Rama codex/editor-cierre-documental-qa-real-20261027, base65ee3425/#1262.
+Se consultan los PR/Checks/Actions actuales: #1248/#1252 y continuaciones hasta
+#1262 están MERGED con controles aprobados. CI de main40560324289 y monitor
+40560326995 SUCCESS para65ee3425; CI posterior a #1252 también SUCCESS.
+Se corrigen indicadores pendientes de publicación sin convertir fixtures en QA
+real. Recibos con SHA e intento en docs/product-editor-refactor/CIERRE-VERIFICADO-20261027.md.
+La tarea autoriza el producto de QA. Perfil TinyFish «Tintin Super Admin» existe,
+pero signed_in_sites está vacío; no hay sesión confirmada de Tintin ni identidad
+administrativa en el entorno. Se solicita confirmar/login mientras sigue el
+trabajo documental. EXT-01 BLOQUEADA, sin crear producto/subir imagen/escribir
+Sheets; el job global de sincronización40568998469 SUCCESS no prueba esa fila.
+Sin cambios de aplicación. PASS_LOCAL:44 enlaces locales verificados, recibos
+JSON/8 PR MERGED/6 runs SUCCESS y ancestros comprobados, diagnóstico/protección/
+caché correctos y39/39 preflight. CI/merge de esta revisión se siguen en su propia
+PR; los recibos de65ee no aprueban un SHA futuro.
+
 ## 2026-10-27 — Guardados del editor y CSP, Codex /root
 
 Rama codex/corregir-guardado-csp-20261027, base c105f61a. Los adjuntos de la

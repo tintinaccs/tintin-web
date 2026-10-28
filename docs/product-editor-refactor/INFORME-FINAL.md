@@ -1,18 +1,29 @@
 # Informe final — Editor Tintin, Fase 6
 
-Actualización26/10/2026: la edición contextual completa continúa la única versión
-de seis fases sobre main899a685. El recibo vigente, sus pruebas y límites están
-en [EDICION-CONTEXTUAL-PRODUCTO.md](EDICION-CONTEXTUAL-PRODUCTO.md).
-La titular autorizó expresamente completar el merge protegido. Los resultados
-y restricciones de publicación del cuerpo siguiente son evidencia histórica de
-su ejecución anterior; no sustituyen la validación del candidato actual.
+Actualización verificada el 27/10/2026: CI, merge protegido y publicación ya
+aprobados. La versión de aplicación consultada es `65ee34250b20738591ec65cc097ee4e8bd452486`
+(PR #1262), que conserva la única versión de seis fases y sus continuaciones.
+Recibos por SHA y separación entre publicación y aceptación autenticada:
+[CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md). Los resultados anteriores que siguen abajo son evidencia
+fechada de su ejecución, no nuevas aprobaciones del código actual.
 
-**Aceptación local con pendientes externos. Integración protegida autorizada por la titular.**
+**Integración protegida y publicación aprobadas; aceptación autenticada todavía abierta.**
 
-Actualización posterior a la entrega local: la titular solicitó terminar y hacer
-merge. Ver07-INTEGRACION-AUTORIZADA.md. Las frases de sólo entrega local siguientes
-describen la situación anterior; el estado final de CI/merge se consulta en el PR.
-Base `5dc6f781a81e0ae0dd07d84b0c742ec3d567e133`, rama local `codex/editor-fase6-integracion-20261026`.
+Estado comprobado: main65ee3425 (#1262). CI de main40560324289 y monitor40560326995
+SUCCESS. #1252 está mergeada en33af11a5, con CI40421504536, CI posterior40424020632
+y producción40424022740 aprobados. El recibo contiene SHA completos y resultados
+por intento. Las continuaciones del editor están conservadas, sin otro diseño.
+
+La comprobación de acceso encontró «Tintin Super Admin» sin sesión registrada.
+Se solicitó confirmación/login; aún no se creó producto de QA, subió imagen real
+ni leyó su fila de Sheets. EXT-01 sigue BLOQUEADA. La operación global de Sheets
+aprobada no equivale a aceptación por producto. Hardware físico y medición de red
+real siguen no ejecutados. No afirmar aceptación total del proyecto.
+
+## Evidencia histórica de la auditoría funcional
+
+Las cifras siguientes corresponden a la ejecución local de Fase6 sobre5dc6f781,
+no a una nueva corrida ni a los proveedores reales del estado actual.
 
 Se reconstruyó la continuidad del adjunto sobre main y se concilió la funcionalidad
 de editor/presentación de#1228. Cancelar confirma cambios incluso autoguardados;
@@ -35,19 +46,13 @@ No se modifican fuentes de checkout/pagos, Rules, contratos de pedidos/reservas,
 package/lock ni datos reales. El backend de compra se ejecuta como consumidor en
 emulador. Las actualizaciones de referencias de caché en HTML son metadatos de
 integridad. #1228 completo sigue separado: sus cambios de PayPal/checkout no se
-importan ni se marca su PR integrado. No hubo push, PR nuevo, merge ni deploy.
+importan ni se marca su PR integrado. En aquella ejecución local aún no había publicación; ese estado fue superado
+por los merges y recibos remotos enlazados al inicio.
 
-Faltan CI del candidato, flujo autenticado/proveedores reales en staging y
-validación física de Safari/iOS, teclado, lector, safe areas y zoom nativo. La
-carpeta original del adjunto no se recuperó tras buscar701 cabezas remotas y
-chats accesibles; se documenta la reconstrucción y no se inventan sus archivos.
-No se afirma que el proyecto esté completamente terminado.
-
-Antes de publicar: revisar este diff y compatibilidad, completar staging y matriz
-física; autorizar expresamente un candidato de publicación y ejecutar CI de su
-SHA sin permitir que el mantenimiento automático se adelante a esa decisión.
-Conservar permisos, CAS y validaciones; hacer una verificación posterior del
-artefacto aprobado. No realizar compras ni escrituras productivas como QA.
+CI, merge y publicación de esas entregas ya se completaron. La aceptación real
+requiere confirmar la sesión y ejecutar la matriz de QA autorizada, sin compras,
+pedidos, pagos ni modificación de productos comerciales. Las evidencias locales
+y emuladas conservan su alcance y no se convierten en pruebas autenticadas.
 
 - [Auditoría y hallazgos](06-AUDITORIA-FINAL.md).
 - [Matriz completa y evidencia](MATRIZ-PRUEBAS-FINAL.md).
