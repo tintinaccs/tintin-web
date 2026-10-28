@@ -37,7 +37,7 @@ export function mountProductPreview(card, layout) {
     <p class="tt-editor-preview-visibility"></p><p class="tt-editor-caption">Vista orientativa. Los cambios se publican al guardar.</p>`;
   layout.append(aside);
   const back = node('button','adm-btn adm-btn-outline tt-editor-preview-jump','Volver a editar'); back.type='button';
-  back.addEventListener('click',()=>{const section=card.querySelector('#prod-editor-section');section?.focus();section?.scrollIntoView({block:'start'});});
+  back.addEventListener('click',()=>{const section=card.querySelector('[role=tab][aria-selected=true]') || card.querySelector('#prod-editor-section');section?.focus();section?.scrollIntoView({block:'start'});});
   aside.prepend(back);
   const refresh = () => refreshProductPreview(card);
   // Las URLs blob son sólo una vista local: nunca pasan al campo persistido

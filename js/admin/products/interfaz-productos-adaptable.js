@@ -1,8 +1,8 @@
 import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
-import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261026-editor-phase6-1';
-import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261027-opciones-inline-1';
+import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261028-product-tabs-1';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261028-product-tabs-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
-import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261026-editor-contextual-1';
+import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261028-product-tabs-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
   ['photos', 'Fotografías del producto', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
@@ -14,6 +14,15 @@ const sections = [
   ['visibility', 'Organización', ['prod-category','prod-collection','prod-tags','prod-sku','prod-destacado','prod-active']],
   ['private', 'Inventario interno', ['prod-inventory-fields']],
 ];
+const tabs = [
+  ['general','Información',['general']],
+  ['photos','Fotos y colores',['photos']],
+  ['inventory','Variantes',['inventory']],
+  ['prices','Precio y stock',['prices','availability','private']],
+  ['specs','Detalles',['specs']],
+  ['visibility','Publicación',['visibility']],
+];
+const tabFor = value => tabs.find(([id,,groups])=>id===value || groups.includes(value))?.[0] || 'general';
 let editorWasOpen = false;
 let editorOpener = null;
 let installed = false;
@@ -45,9 +54,9 @@ export function syncProductSurfaces() {
   if (editor) {
     if (!editorWasOpen) {
       editorOpener = document.activeElement;
-      const photoControls=editor.querySelector('.tt-photo-product-controls');if(photoControls)photoControls.open=true;
+      showSection(editor,'general',true);
       window.TintinPageScroll?.reset(editor);
-      (editor.querySelector('#prod-editor-section') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
+      (editor.querySelector('[role=tab][aria-selected=true]') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
     }
     editor.setAttribute('role','dialog');
     editor.setAttribute('aria-modal',String(editor.classList.contains('tt-editor-workspace')));
@@ -101,15 +110,23 @@ export function enhanceProductEditor() {
     navigation.className = 'tt-product-section-nav';
     const text = document.createElement('label');text.htmlFor = 'prod-editor-section';text.textContent = 'Ir a sección';
     const select = document.createElement('select');select.id = 'prod-editor-section';select.className = 'adm-input';
-    for (const [value,label] of [['all','Todos los campos'],...sections.map(([id,title])=>[id,title])]) {
+    for (const [value,label] of tabs) {
       const option = document.createElement('option');option.value=value;option.textContent=label;select.append(option);
     }
-    select.value = 'all';
+    // Compatibilidad para consumidores internos que todavía apuntan a un bloque.
+    for(const value of ['availability','private','all']) {const option=new Option(value,value);option.hidden=true;select.append(option);}
+    select.value = 'general';
     select.addEventListener('change',()=>showSection(card,select.value,true));
-    const shortcuts=document.createElement('nav');shortcuts.className='tt-product-quick-actions';shortcuts.setAttribute('aria-label','Editar datos del producto');
-    for(const [value,title] of [['photos','Fotos y colores'],['general','Nombre y descripción'],['inventory','Opciones'],['prices','Precios'],['availability','Stock'],['specs','Material y detalles'],['visibility','Publicación']]){
+    const shortcuts=document.createElement('nav');shortcuts.className='tt-product-quick-actions';shortcuts.setAttribute('role','tablist');shortcuts.setAttribute('aria-label','Editar producto');
+    for(const [value,title] of tabs){
       const button=document.createElement('button');button.type='button';button.className='adm-btn adm-btn-outline';button.textContent=title;
-      button.addEventListener('click',()=>{select.value=value;select.dispatchEvent(new Event('change',{bubbles:true}));});shortcuts.append(button);
+      button.id='prod-tab-'+value;button.dataset.editorTab=value;button.setAttribute('role','tab');button.setAttribute('aria-controls','prod-panel-'+value);
+      button.addEventListener('click',()=>{select.value=value;select.dispatchEvent(new Event('change',{bubbles:true}));});
+      button.addEventListener('keydown',event=>{
+        const buttons=[...shortcuts.querySelectorAll('[role=tab]')],index=buttons.indexOf(button);
+        const next=event.key==='Home'?0:event.key==='End'?buttons.length-1:event.key==='ArrowRight'?(index+1)%buttons.length:event.key==='ArrowLeft'?(index+buttons.length-1)%buttons.length:null;
+        if(next===null)return;event.preventDefault();buttons[next].click();buttons[next].focus({preventScroll:true});
+      });shortcuts.append(button);
     }
     navigation.append(text,select,shortcuts);body.prepend(navigation);
 
@@ -182,7 +199,6 @@ export function enhanceProductEditor() {
     header?.querySelector('button[onclick="prodCancelForm()"]')?.remove();
     header?.append(actions);
   }
-  const sidebar=layout.querySelector('.tt-editor-sidebar');
   const organization=grid.querySelector('[data-product-section="visibility"] .tt-editor-section-fields');
   const publication=card.querySelector('.tt-product-editorial-publication');
   if(publication && organization && organization.firstElementChild!==publication)organization.prepend(publication);
@@ -190,17 +206,17 @@ export function enhanceProductEditor() {
   const category=card.querySelector('#prod-category')?.parentElement;
   const identity=grid.querySelector('[data-product-section="general"] .tt-editor-section-fields');
   if(category && identity && category.parentElement!==identity)identity.prepend(category);
-  const photoFields=grid.querySelector('[data-product-section="photos"] .tt-editor-section-fields');
-  let photoControls=photoFields?.querySelector(':scope > .tt-photo-product-controls');
-  if(photoFields && !photoControls){photoControls=document.createElement('details');photoControls.className='tt-photo-product-controls';photoControls.open=true;const title=document.createElement('summary');title.textContent='Datos, opciones, precios y stock del producto';photoControls.append(title);photoFields.prepend(photoControls);}
-  for(const section of ['general','inventory','prices','availability','specs','visibility','private']){
-    const group=card.querySelector(`[data-product-section="${section}"]`);if(group && photoControls && group.parentElement!==photoControls)photoControls.append(group);
+  // Cada pestaña contiene nodos originales; nunca se desmonta el formulario.
+  for(const [id,,groups] of tabs){
+    let panel=grid.querySelector('#prod-panel-'+id);
+    if(!panel){panel=document.createElement('div');panel.id='prod-panel-'+id;panel.className='tt-product-tabpanel';panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby','prod-tab-'+id);panel.tabIndex=0;grid.append(panel);}
+    for(const section of groups){const group=card.querySelector(`[data-product-section="${section}"]`);if(group && group.parentElement!==panel)panel.append(group);}
   }
   const priceFields=card.querySelector('[data-product-section=prices] .tt-editor-section-fields');
   if(priceFields && !priceFields.querySelector('.tt-photo-price-scope')){const note=document.createElement('p');note.className='tt-editor-caption tt-photo-price-scope';note.textContent='Precio general del producto. Los precios propios de cada color o combinación se editan en Inventario y disponibilidad.';priceFields.prepend(note);}
   // El panel pertenece al formulario, fuera de la galería que se destruye al reabrir.
   // Nunca se recrean campos ni se trasladan filas fuera de su serializer.
-  const privateSection=grid.querySelector('[data-product-section="private"]');
+  const privateSection=card.querySelector('[data-product-section="private"]');
   const privateField=card.querySelector('#prod-inventory-fields');
   const privateHidden=!privateField || privateField.hidden || privateField.style.display==='none';
   if(privateSection)privateSection.dataset.permissionHidden=String(privateHidden);
@@ -215,7 +231,18 @@ export function enhanceProductEditor() {
   const error=card.querySelector('#prod-form-error');
   if (error) {
     error.setAttribute('role','alert');error.setAttribute('tabindex','-1');
-    if(error.nextElementSibling!==layout) body.insertBefore(error,layout);
+    let region=card.querySelector('.tt-editor-error-region');
+    if(!region){
+      region=document.createElement('div');region.className='tt-editor-error-region';
+      const jump=document.createElement('button');jump.type='button';jump.className='adm-btn adm-btn-outline';jump.textContent='Ir al campo';
+      jump.addEventListener('click',()=>{
+        const input=card.querySelector('#'+error.dataset.editorField);
+        const visible=element=>element && !element.disabled && element.getClientRects().length;
+        const candidates=[input,...(input?.closest('[data-product-section]')?.querySelectorAll('input,textarea,select,button') || []),...(card.querySelector('#prod-variant-stock')?.querySelectorAll('input,select,button') || [])];
+        const target=candidates.find(element=>visible(element) && element.matches('input,textarea,select')) || candidates.find(element=>visible(element) && !element.matches('.tt-editor-section-toggle'));target?.focus({preventScroll:true});target?.scrollIntoView({block:'center',behavior:'instant'});
+      });region.append(error,jump);
+    }
+    if(region.nextElementSibling!==layout)body.insertBefore(region,layout);
   }
   const selected=privateHidden && card.querySelector('#prod-editor-section').value==='private'?'all':card.querySelector('#prod-editor-section').value;
   const message=error?.style.display !== 'none' ? error?.textContent.trim() || '' : '';
@@ -223,7 +250,12 @@ export function enhanceProductEditor() {
   // controles: un mensaje persistente no debe reiniciar scroll ni desplegar
   // otra vez todos los bloques en cada pulsación.
   const newError=Boolean(message && message!==lastError);
-  showSection(card,newError ? 'all' : selected,newError);
+  showSection(card,newError ? errorSection(card,message) : selected,newError);
+  const errorRegion=card.querySelector('.tt-editor-error-region');
+  if(errorRegion){
+    if(errorRegion.hidden!==!message)errorRegion.hidden=!message;
+    const jump=errorRegion.querySelector('button');const hidden=!message || !error.dataset.editorField;if(jump.hidden!==hidden)jump.hidden=hidden;
+  }
   if(newError && visibleProductEditor()) {error.focus({preventScroll:true});error.scrollIntoView({block:'nearest'});}
   lastError=message;
   refreshProductPreview(card);
@@ -257,6 +289,7 @@ function refreshSectionValues(card) {
   const values={
     prices:price ? `Gs. ${Number(price).toLocaleString('es-PY')}` : 'Sin precio',
     inventory:stock==='' ? 'Stock sin control' : `${stock} unidades`,
+    availability:stock==='' ? 'Stock sin control' : `${stock} unidades`,
     specs:read('prod-material') || 'Opcionales',
     private:'Sólo administración',
   };
@@ -266,31 +299,51 @@ function refreshSectionValues(card) {
   }
 }
 
-function showSection(card,value,expand=false) {
-  const optionStock=value==='availability' && Boolean(card.querySelector('#prod-variants-text')?.value.trim());
-  if(optionStock)value='inventory';
-  card.querySelector('#prod-editor-section').value=value;
-  card.querySelector('.tt-editor-layout').dataset.editorSection=value;
-  for (const field of card.querySelectorAll('[data-product-section]')) {
-    const hidden=field.dataset.permissionHidden==='true' || field.dataset.productSection==='availability' && Boolean(card.querySelector('#prod-variants-text')?.value.trim());
-    if(field.hidden!==hidden)field.hidden=hidden;
-    const selected=value==='all' || field.dataset.productSection===value || value==='inventory' && field.dataset.productSection==='availability';
-    if(!hidden && expand && selected){
-      field.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
-      const fields=field.querySelector(':scope > .tt-editor-section-fields');if(fields)fields.hidden=false;
-      for(let parent=field.parentElement;parent && parent!==card;parent=parent.parentElement){
-        if(parent.tagName==='DETAILS')parent.open=true;
-        if(parent.classList.contains('tt-editor-section-fields'))parent.hidden=false;
-        if(parent.matches('[data-product-section]'))parent.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
-      }
+function errorSection(card,message) {
+  const read=id=>card.querySelector('#'+id)?.value.trim();
+  let id;
+  if(/descripción/i.test(message))id='prod-description';
+  else if(/foto|imagen|carga/i.test(message))id='prod-imageUrl';
+  else if(/costo|comprada|mínimo|notas internas/i.test(message))id='prod-cost-unit';
+  else if(/variante|combinaci[oó]n|grupo|atributo|opci[oó]n.*quitar|quitar.*opci[oó]n/i.test(message))id='prod-variants-text';
+  else if(/precio anterior/i.test(message))id='prod-price-before';
+  else if(/stock|inventario|cantidad/i.test(message))id='prod-stock';
+  else if(/colección/i.test(message) && !/obligatorios/i.test(message))id='prod-category';
+  else if(/precio/i.test(message) && !/obligatorios/i.test(message))id='prod-price';
+  else if(/obligatorios/i.test(message))id=!read('prod-name')?'prod-name':!read('prod-category')?'prod-category':'prod-price';
+  const control=id && card.querySelector('#'+id),group=control?.closest('[data-product-section]');
+  const error=card.querySelector('#prod-form-error');if(error)error.dataset.editorField=group?.dataset.permissionHidden==='true'?'':id || '';
+  if(control && group?.dataset.permissionHidden!=='true'){
+    control.setAttribute('aria-invalid','true');control.setAttribute('aria-describedby','prod-form-error');
+    if(group?.dataset.productSection==='private'){
+      group.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
+      const fields=group.querySelector('.tt-editor-section-fields');if(fields)fields.hidden=false;
     }
   }
-  if(optionStock && expand)queueMicrotask(()=>card.querySelector('[data-option-panel=availability]')?.click());
-  if(expand){
-    window.TintinPageScroll?.reset(card);
-    if(value==='all'){card.scrollTop=0;card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});}
-    else card.querySelector(`[data-product-section="${value}"]`)?.scrollIntoView({block:'start',behavior:'instant'});
+  return tabFor(group?.dataset.productSection || card.querySelector('#prod-editor-section').value);
+}
+
+function showSection(card,value,expand=false) {
+  value=tabFor(value);
+  const select=card.querySelector('#prod-editor-section');if(select.value!==value)select.value=value;
+  const layout=card.querySelector('.tt-editor-layout');if(layout.dataset.editorSection!==value)layout.dataset.editorSection=value;
+  for(const panel of card.querySelectorAll('.tt-product-tabpanel')){
+    const hidden=panel.id!=='prod-panel-'+value;if(panel.hidden!==hidden)panel.hidden=hidden;
   }
+  for(const button of card.querySelectorAll('[data-editor-tab]')){
+    const selected=button.dataset.editorTab===value;
+    if(button.getAttribute('aria-selected')!==String(selected))button.setAttribute('aria-selected',String(selected));
+    button.tabIndex=selected?0:-1;
+  }
+  for(const field of card.querySelectorAll('[data-product-section]')){
+    const hidden=field.dataset.permissionHidden==='true';if(field.hidden!==hidden)field.hidden=hidden;
+    // Los campos principales están abiertos; los internos conservan su despliegue.
+    if(expand && field.dataset.productSection!=='private' && tabs.find(([id])=>id===value)[2].includes(field.dataset.productSection)){
+      field.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
+      const fields=field.querySelector(':scope > .tt-editor-section-fields');if(fields?.hidden)fields.hidden=false;
+    }
+  }
+  if(expand){window.TintinPageScroll?.reset(card);card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});}
 }
 
 export function installProductInterface() {
@@ -300,7 +353,7 @@ export function installProductInterface() {
   let queued=false;
   const card=document.getElementById('prod-form-card');
   card?.addEventListener('click',event=>{if(event.target.closest('#prod-save-btn'))lastError='';},{capture:true});
-  card?.addEventListener('input',()=>refreshEditorHeading(card));
+  card?.addEventListener('input',event=>{refreshEditorHeading(card);if(event.target.getAttribute('aria-invalid')==='true'){event.target.removeAttribute('aria-invalid');event.target.removeAttribute('aria-describedby');}});
   card?.addEventListener('change',()=>refreshEditorHeading(card));
   if (card) new MutationObserver(()=>{
     if (queued) return;

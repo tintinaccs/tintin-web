@@ -1,5 +1,5 @@
 import {adminEventAttributes,installAdminEvents} from './eventos-dinamicos-admin.mjs?v=tintin-20261027-save-csp-1';
-import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261027-save-csp-1';
+import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261028-product-tabs-1';
 import {readProductEditorResponse} from './products/respuesta-editor-producto.mjs?v=tintin-20261027-editor-ux-1';
 import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
@@ -17,7 +17,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261028-opciones-inline-2';
+import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261028-product-tabs-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";

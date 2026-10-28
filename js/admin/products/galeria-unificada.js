@@ -1,5 +1,5 @@
 import {appendPhotoOrderControls as appendOptionPhotoOrder} from './fotos-por-variante.js?v=tintin-20261028-opciones-inline-2';
-import {attachColorPhotos} from './fotos-por-color.js?v=tintin-20261028-opciones-inline-2';
+import {attachColorPhotos} from './fotos-por-color.js?v=tintin-20261028-product-tabs-1';
 import {sanitizeImageUrl} from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import {attachMultiImageUploadWidget,attachImageUploadWidget} from '../../components/images/carga-imagenes.js?v=tintin-20261025-gallery-unified-1';
 
@@ -12,13 +12,14 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
   const librarySelections=new Map();
   container.replaceChildren();container.classList.add('tt-unified-photos');
   const heading=document.createElement('h3');heading.textContent='FOTOGRAFÍAS DEL PRODUCTO';
+  const colors=document.createElement('div');colors.className='tt-photo-colors';colors.setAttribute('role','group');colors.setAttribute('aria-label','Fotos por color');let colorSignature='';
   const hint=document.createElement('p');hint.textContent='Elegí una portada para todo el producto. Las asociaciones conservan la imagen propia de cada color o combinación.';
   const uploadHost=document.createElement('div'),grid=document.createElement('div'),context=document.createElement('div');grid.className='tt-unified-photo-grid';
   const status=document.createElement('p');status.setAttribute('role','status');
   const associationHost=document.createElement('div');associationHost.hidden=true;
   const optionUpload=document.createElement('details'),uploadTitle=document.createElement('summary');optionUpload.className='tt-option-upload';uploadTitle.textContent='Agregar fotos a esta opción';optionUpload.append(uploadTitle);
   context.className='tt-photo-context';
-  container.append(heading,hint,context,status,grid,uploadHost,associationHost);
+  container.append(heading,hint,colors,context,status,grid,uploadHost,associationHost);
   const associations=attachColorPhotos({container:associationHost,product,mainInput,imagesInput,variantsInput,openLibrary,headless:true});
   const card=container.closest('#prod-form-card');
   card?.addEventListener('tintin:option-media-read',event=>{event.detail.rows=associations.serialize();},{signal:abort.signal});
@@ -66,7 +67,11 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     }));
   }
   function renderOptionContext(){
+    if(context.querySelector('#prod-variant-stock'))card?.dispatchEvent(new CustomEvent('tintin:close-option-panel'));
     context.replaceChildren();
+    const controls=document.createElement('div');controls.className='tt-option-row';controls.hidden=container.dataset.optionInline==='photos';context.append(controls);
+    const availability=button('Precio y stock de '+optionContext.value,()=>card?.dispatchEvent(new CustomEvent('tintin:photo-availability',{detail:{trigger:availability,...optionContext}})),controls);
+    availability.setAttribute('aria-expanded','false');
     const note=document.createElement('p');note.textContent='Marcá las fotos de esta opción. La primera elegida será su portada. Los cambios se aplican al guardar el producto.';context.append(note);
     for(const [key,values] of groups()){
       if(key===optionContext.attribute)continue;
@@ -103,6 +108,22 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
   function associationText(rows,url){return rows.filter(row=>media.rowImages(row).some(photo=>media.imageKey(photo)===media.imageKey(url))).map(row=>Object.entries(row).filter(([key])=>!metadata.has(key)).map(([key,value])=>`${key}: ${value}`).join(' / ')).join(' · ');}
   function render(){
     if(destroyed)return;const photos=urls(),rows=associations.serialize();
+    colors.hidden=container.dataset.optionInline==='photos';
+    const colorGroups=groups().filter(([key])=>media.isColorKey(key));
+    const nextColorSignature=JSON.stringify([colorGroups,optionContext]);
+    if(nextColorSignature!==colorSignature){
+      colorSignature=nextColorSignature;colors.replaceChildren();
+      const choose=(label,selected,pressed)=>{
+        const control=button(label,()=>{
+          const check={accepted:true};container.dispatchEvent(new CustomEvent('tintin:option-context-check',{detail:check}));if(!check.accepted)return;
+          card?.dispatchEvent(new CustomEvent('tintin:close-option-panel'));
+          container.dispatchEvent(new CustomEvent('tintin:option-context',{detail:selected}));
+          [...colors.querySelectorAll('button')].find(button=>button.textContent===label)?.focus({preventScroll:true});
+        },colors);control.setAttribute('aria-pressed',String(pressed));
+      };
+      if(colorGroups.length){choose('Todo el producto',null,!optionContext);for(const [attribute,values] of colorGroups)for(const value of values)choose(value,{attribute,value},optionContext?.attribute===attribute && optionContext?.value===value);}
+    }
+
     const state=JSON.stringify([photos,mainInput.value,groups(),rows,optionContext,optionSelection]);
     if(state===lastGalleryState)return;lastGalleryState=state;
     heading.hidden=hint.hidden=Boolean(optionContext);
@@ -117,7 +138,10 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     if(optionContext)renderOptionContext();else if(!replacement?.hasPending())context.replaceChildren();
     const focus=grid.contains(document.activeElement)?document.activeElement?.getAttribute('aria-label'):null;
     grid.replaceChildren();
-    photos.forEach((url,index)=>{
+    const assigned=optionContext?optionPhotos().map(photo=>photos.find(url=>media.imageKey(url)===media.imageKey(photo))).filter(Boolean):[];
+    const displayed=optionContext?media.uniqueImages([...assigned,...photos]):photos;
+    displayed.forEach(url=>{
+      const index=photos.indexOf(url);
       const tile=document.createElement('article');tile.className='tt-unified-photo';tile.dataset.photoKey=media.imageKey(url);
       if(optionContext){
         const label=document.createElement('label');label.className='tt-option-photo-pick';

@@ -125,8 +125,8 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
       const result=await commit();
       if(result===false){
         const error=card.querySelector('#prod-form-error');
-        reportError(new Error(error?.textContent || 'No se confirmó el guardado oficial. Reintentá sin cerrar el editor.'));
-        if(error){error.textContent='';error.style.display='none';}
+        reportError(new Error(error?.textContent ? 'No se aplicaron los cambios. Revisá el campo indicado.' : 'No se confirmó el guardado oficial. Reintentá sin cerrar el editor.'));
+        // Conservá el error canónico para su pestaña y los campos asociados.
       }else retryPublish=false;
       return result;
     }finally{

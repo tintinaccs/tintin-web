@@ -63,10 +63,10 @@ test('crear incompleto, salir, recuperar, publicar, editar sin reemplazar públi
  await cancelSave(page);await expect(page.locator('#prod-form-card')).toBeHidden();
  expect(await page.evaluate(()=>[...window.qaProductStore.keys()].filter(key=>key.startsWith('products/')).length)).toBe(0);
  await reopen(page,key);await expect(page.locator('#prod-name')).toHaveValue('Borrador recuperable');await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/cover.webp');
- await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-category').selectOption('qa-tablet');
- await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('30000');
- await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-description').fill('Descripción completa');
- await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-publicationStatus').selectOption('active');await page.evaluate(()=>window.prodGuardar());await expect(page.locator('#prod-form-card')).toBeHidden();
+ await page.getByRole('tab',{name:'Publicación',exact:true}).click();await page.getByRole('tab',{name:'Información',exact:true}).click();await page.locator('#prod-category').selectOption('qa-tablet');await page.getByRole('tab',{name:'Publicación',exact:true}).click();
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').fill('30000');
+ await page.getByRole('tab',{name:'Información',exact:true}).click();await page.locator('#prod-description').fill('Descripción completa');
+ await page.getByRole('tab',{name:'Publicación',exact:true}).click();await page.locator('#prod-publicationStatus').selectOption('active');await page.evaluate(()=>window.prodGuardar());await expect(page.locator('#prod-form-card')).toBeHidden();
  expect(await page.evaluate(key=>window.qaProductStore.get('products/'+key).publicationStatus,key)).toBe('active');
  await reopen(page,key,key);await page.locator('#prod-name').fill('Cambio privado');await saveProgress(page);
  expect(await page.evaluate(key=>window.qaProductStore.get('products/'+key).name,key)).toBe('Borrador recuperable');
@@ -111,7 +111,7 @@ test('conflicto de progreso no pisa otra pestaña y no publica',async({page})=>{
  expect(await page.evaluate(()=>[...window.qaProductStore.keys()].filter(key=>key.startsWith('products/')).length)).toBe(0);
 });
 test('fotos pendientes: fallo guarda texto, recuperar advierte y reintento/cancelación no pierde fotos previas',async({page})=>{
- await open(page);await page.locator('#prod-name').fill('Fotos recuperables');
+ await open(page);await page.locator('#prod-name').fill('Fotos recuperables');await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  const gallery=page.locator('.tt-unified-photos');
  const buffer=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=','base64');
  await gallery.locator('input[multiple]').setInputFiles({name:'pending.png',mimeType:'image/png',buffer});await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(1);
@@ -119,7 +119,7 @@ test('fotos pendientes: fallo guarda texto, recuperar advierte y reintento/cance
  const key=await page.evaluate(()=>window.qaProductController.workspace.key);
  expect(await page.evaluate(key=>window.qaProductStore.get('productEditorWorkspaces/qa-admin/items/'+key).snapshot.pendingUploads,key)).toBe(true);
  await page.getByRole('button',{name:'Descartar cambios pendientes y volver',exact:true}).click();await reopen(page,key);await expect(page.locator('.tt-work-status')).toContainText('faltan archivos');
- await page.getByRole('button',{name:'Continuar sin las fotos pendientes',exact:true}).click();await page.evaluate(()=>window.qaUploadFailure=false);
+ await page.getByRole('button',{name:'Continuar sin las fotos pendientes',exact:true}).click();await page.evaluate(()=>window.qaUploadFailure=false);await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  await gallery.locator('input[multiple]').setInputFiles({name:'retry.png',mimeType:'image/png',buffer});await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(1);await saveProgress(page);await expect(gallery.locator('.tt-unified-photo')).toHaveCount(1);
  await gallery.locator('input[multiple]').setInputFiles({name:'cancel.png',mimeType:'image/png',buffer});await gallery.getByRole('button',{name:'Quitar pendiente cancel.png',exact:true}).click();await saveProgress(page);await expect(gallery.locator('.tt-unified-photo')).toHaveCount(1);
 });
@@ -127,10 +127,10 @@ test('archivar y restaurar exige acción explícita y no cambia stock',async({pa
  await open(page);await page.evaluate(()=>{window.qaProductStore.set('products/existing',{name:'Publicado',category:'qa-tablet',price:30000,priceBefore:null,stock:4,active:true,oferta:false,destacado:false,description:'Completa',imageUrl:'https://img.test/cover.webp',publicationStatus:'active'});window.prodCancelForm();});
  // Actualiza las colecciones del controlador con el mismo origen ficticio.
  await page.evaluate(()=>{window.qaProductController.refresh();});await reopen(page,'existing','existing');
- await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-publicationStatus').selectOption('archived');await saveProgress(page);
+ await page.getByRole('tab',{name:'Publicación',exact:true}).click();await page.locator('#prod-publicationStatus').selectOption('archived');await saveProgress(page);
  expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').active)).toBe(true);
  await page.evaluate(()=>window.prodGuardar());expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').publicationStatus)).toBe('archived');
- await reopen(page,'existing','existing');await page.locator('#prod-editor-section').selectOption('visibility');await page.locator('#prod-publicationStatus').selectOption('active');await page.evaluate(()=>window.prodGuardar());
+ await reopen(page,'existing','existing');await page.getByRole('tab',{name:'Publicación',exact:true}).click();await page.locator('#prod-publicationStatus').selectOption('active');await page.evaluate(()=>window.prodGuardar());
  expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').stock)).toBe(4);expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').active)).toBe(true);
 });
 for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1366,768],[1920,1080]])test(`espacio dedicado ${width}x${height}`,async({page},info)=>{
@@ -146,8 +146,8 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await page.setViewportSize({width,height:Math.max(300,Math.round(height*.6))});
  const save=page.locator('#prod-save-btn');await expect(save).toBeInViewport();
  expect(await save.evaluate(node=>{const box=node.getBoundingClientRect();return node.contains(document.elementFromPoint(box.x+box.width/2,box.y+box.height/2));})).toBe(true);
- await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('45000');
- await page.locator('#prod-editor-section').selectOption('general');await expect(page.locator('#prod-name')).toHaveValue('Trabajo con teclado');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').fill('45000');
+ await page.getByRole('tab',{name:'Información',exact:true}).click();await expect(page.locator('#prod-name')).toHaveValue('Trabajo con teclado');
  await save.focus();await page.keyboard.press('Tab');
  expect(await page.locator('#prod-form-card').evaluate(card=>card.contains(document.activeElement))).toBe(true);
  await page.keyboard.press('Shift+Tab');await expect(save).toBeFocused();
@@ -159,15 +159,13 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
 
 for(const width of [320,390])test(`sección elegida legible sin recorte ${width}`,async({page},info)=>{
  await open(page,width,844);
- const select=page.locator('#prod-editor-section');
- for(const section of ['all','visibility']){
-  await select.selectOption(section);
-  const size=await select.evaluate(node=>{const style=getComputedStyle(node),context=document.createElement('canvas').getContext('2d');context.font=style.font;return {text:context.measureText(node.selectedOptions[0].textContent).width,available:node.getBoundingClientRect().width-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)-24};});
-  expect(size.available).toBeGreaterThanOrEqual(size.text);
+ for(const name of ['Información','Fotos y colores','Variantes','Precio y stock','Detalles','Publicación']){
+  const button=page.getByRole('tab',{name,exact:true});await button.click();await expect(button).toBeInViewport();
+  expect(await button.evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);
  }
  await expect(page.locator('.tt-editor-guide')).toHaveCount(0);
- await select.selectOption('prices');await page.locator('#prod-price').focus();await expect(page.locator('#prod-price')).toBeFocused();
- await select.selectOption('visibility');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').focus();await expect(page.locator('#prod-price')).toBeFocused();
+ await page.getByRole('tab',{name:'Publicación',exact:true}).click();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  await page.screenshot({path:info.outputPath(`navigation-${width}.png`)});
 });

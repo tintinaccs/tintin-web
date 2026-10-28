@@ -1,3 +1,24 @@
+## 2026-10-28 — Rediseño de seis pestañas para revisión local, Codex /root
+
+Rama `codex/redesign-product-editor-20261028`, base main `5a2ea0f63306583df04ed47cc745d52902669a2c` comprobada por fetch; checkout inicial limpio. Pedido actual: implementar/verificar sin merge, deploy ni datos productivos, por encima de la instrucción general de merge automático. No se crea PR ni se despachan workflows de publicación.
+
+PASS_LOCAL: Nuevo/Editar comparten seis paneles persistentes sobre los campos, galería y matriz originales. Información; Fotos y colores; Variantes; Precio y stock; Detalles; Publicación. Colores con asociaciones y controles canónicos; «Editar aquí» permanece en Variantes; un solo inventario. Borradores, CAS, herencia de precios, límites, disponibilidad e identidades históricas conservan sus autoridades. Costo/notas/inventario privados siguen sujetos a permiso. Errores contextuales con «Ir al campo» y retorno de foco; movimiento reducido, teclado y anchos 320/390/768/1024/1440 cubiertos.
+
+Evidencia de esta implementación (no resultados heredados):
+- 266 casos Node de editor/workspaces/respuestas/categorías/sincronización: 265 PASS, 1 SKIP del caso que exige un emulador Firestore externo; sin fallos.
+- 10 Chromium de pestañas: persistencia y mismos nodos; alta/guardado/reapertura en los cinco anchos; combinación inline; fotos por color con stock asociado; teclado/reducción de movimiento; ocultación por permisos; restitución del editor al cerrar fotos inline; foto propia del color primero y selección conservada. PASS.
+- 155 Chromium de guardado responsive: 154 PASS iniciales; el recorrido de stock simple se actualiza para entrar en Precio y stock y su repetición PASS. Cubren creación/edición, doble acción, error/reintento, galerías 1–13, portada, biblioteca, orden/reemplazo/eliminación, combinaciones y stock nullable. No se retira ninguna aserción de datos.
+- 35 Chromium de workspaces y 38 de fotos contextuales: 34 y 37 PASS iniciales; dos recorridos de fotos pendientes se migran a la pestaña correspondiente y ambos repiten PASS. Recuperación, conflicto, archivo, publicación, cancelación, carga pendiente y asociaciones históricas incluidos. La ejecución final completa de 38 fotos junto con 10 pestañas termina 48 PASS, sin reintentos automáticos.
+- 26 Chromium de editor comercial: 25 PASS iniciales; reconocimiento local fallaba porque el servidor de QA no servía el WASM de vendor. Se corrige sólo el servidor local; la inferencia real y abstención pasan en repetición (sin API externa). Sin cambios al modelo o worker productivos.
+- 108 Chromium de la batería responsive canónica: PASS en ejecución completa final, sin reintentos automáticos, tras migrar recorridos y expectativas a pestañas (no al antiguo panel conjunto). Incluye SEO, permisos visuales, foco, biblioteca, cantidades, protección de salida, análisis opcional, contraste, rotación, perfiles sintéticos y tamaños hasta 3840.
+- 6 Chromium de versión única y 34 de espacio/rotación: PASS. 14 del cierre editorial: 13 PASS iniciales; el caso de quitar una opción con stock descubre navegación errónea del error; se conserva el contexto en Variantes y repite PASS, sin cambiar inventario ni permitir el borrado.
+- El caso de validación de precio explícito se repite PASS al corregir su selección de campo; el mensaje persistente no reinicia scroll ni foco. Galería y retorno de foco repiten PASS con selector de prueba acotado al editor.
+- Auditorías de productos/imágenes (42), tipografía (41622), colores (153 tokens globales/36 administrativos) y estilos: PASS. `build:pages`/rutas/CSP/diagnóstico/caché: PASS_LOCAL desde sus generadores. Versiones transitivas coherentes; sin nueva dependencia.
+
+Vista local: `node scripts/preview-product-editor.cjs`, puerto 4173; formulario y escritores reales con identidad/almacenamiento/proveedores de QA en memoria. Smoke en navegador PASS: seis pestañas, foto real del repositorio cargada localmente, guardado y recuperación del borrador, sin errores JS. Capturas de escritorio/móvil en `artifacts/product-editor-tabs/`; logs en `artifacts/product-editor-tabs/evidence/`. Detalles y reproducción: `docs/product-editor-refactor/REDISENO-SEIS-PESTANAS-20261028.md`.
+
+NOT_VERIFIED: no están accesibles el HTML y las siete capturas Windows indicadas; no se afirma haberlas visto ni fidelidad a ellas. Sin sesión administrativa de QA externa: fixtures no acreditan Auth/Firestore/Sheets/biblioteca reales, concurrencia remota ni dispositivos físicos. No se ejecuta el emulador omitido, CI ni aceptación en producción. Ninguna escritura comercial en producción, despliegue o merge.
+
 ## 2026-10-28 — Cierre de #1263, Codex /root
 
 La titular autoriza terminar el editor, mergearlo y seguir sus resultados.

@@ -13,7 +13,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  export const deleteMediaByUrlIfUnused=async()=>{};export const deleteMediaItem=async()=>{};
  export async function uploadImageToLibrary(file){window.uploadCount=(window.uploadCount||0)+1;await new Promise(resolve=>{window.releasePhoto=resolve;});if(window.failPhoto)throw Error('Subida de prueba fallida');return {url:'https://img.test/subida.png',mediaId:'foto'};}
  `);
- await page.locator('#prod-editor-section').selectOption('photos');
+ await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  const mount=adminSource.slice(adminSource.indexOf('const _formImageWidgets = new Map();'),adminSource.indexOf('let productColorPhotos = null;'));
  await page.evaluate(async source=>{
   const loadModule=url=>import(new URL(url,location.origin).href);
@@ -84,7 +84,7 @@ async function openEditor(page,width,height,withImages=false,beforeOpen=null){
   window.prodCancelForm=()=>{window.__calls.push(['prodCancelForm']);document.getElementById('prod-form-card').style.display='none';};
   window.prodGuardar=()=>window.__calls.push(['prodGuardar',document.getElementById('prod-name').value,document.getElementById('prod-price').value]);
  });
- await page.locator('[data-action="product-new"]').click();await expect(page.locator('#prod-editor-section')).toBeVisible();
+ await page.locator('[data-action="product-new"]').click();await expect(page.locator('#prod-tab-general')).toBeVisible();
 }
 
 async function openActions(page) {
@@ -105,32 +105,32 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   await page.evaluate(()=>{
    const select=document.getElementById('prod-category');for(const [value,title]of [['relojes','Relojes'],['anillos','Anillos'],['collares','Collares']]){const option=document.createElement('option');option.value=value;option.textContent=title;select.append(option);}
   });
-  await page.locator('#prod-editor-section').selectOption('visibility');
+  await page.getByRole('tab',{name:'Información',exact:true}).click();
   await page.locator('#prod-category').selectOption('relojes');await expect(page.locator('#prod-category')).toHaveValue('relojes');
   await expect(card.locator('[data-product-section]')).toHaveCount(8);
-  await page.locator('#prod-editor-section').selectOption('general');
+  await page.getByRole('tab',{name:'Información',exact:true}).click();
   if(width<1200)await expect(page.locator('#prod-name')).toHaveCSS('font-size','16px');
   await openActions(page);await expect(page.locator('#prod-save-btn')).toBeInViewport();
-  await page.locator('#prod-editor-section').selectOption('inventory');
+  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
   await page.getByRole('button',{name:'Stock: 10 unidades',exact:true}).click();
   await expect(page.locator('#prod-stock')).toHaveValue('10');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByLabel('Elegir cantidad: Stock',{exact:true}).selectOption('500');await expect(page.locator('#prod-stock')).toHaveValue('500');
   await page.getByRole('button',{name:'Stock: 0 unidades',exact:true}).click();
   await expect(page.locator('#prod-stock')).toHaveValue('0');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByRole('button',{name:'Sumar una unidad: Stock',exact:true}).click();await expect(page.locator('#prod-stock')).toHaveValue('1');await expect(page.locator('#prod-active')).toBeChecked();
-  await page.locator('#prod-editor-section').selectOption('prices');
+  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
   await page.locator('#prod-price').fill('70000');
   await card.locator('[data-product-section=prices]').getByRole('button',{name:'Ajustar Precio (Gs.) * en 5000 guaraníes',exact:true}).click();await expect(page.locator('#prod-price')).toHaveValue('75000');
-  await page.locator('#prod-editor-section').selectOption('general');
+  await page.getByRole('tab',{name:'Información',exact:true}).click();
   const general=page.getByRole('button',{name:'Producto',exact:true});
   await page.locator('#prod-name').fill('Reloj Alissia');await general.click();await expect(page.locator('#prod-name')).toBeHidden();
   await general.click();await expect(page.locator('#prod-name')).toHaveValue('Reloj Alissia');
-  await page.locator('#prod-editor-section').selectOption('specs');
+  await page.getByRole('tab',{name:'Detalles',exact:true}).click();
   await expect(page.getByRole('button',{name:'Detalles del producto',exact:true})).toHaveAttribute('aria-expanded','true');
   await page.getByRole('group',{name:'Sugerencias: Material',exact:true}).getByRole('button',{name:'Acero inoxidable',exact:true}).click();await expect(page.locator('#prod-material')).toHaveValue('Acero inoxidable');
   const geometry=await card.locator('input:not([type=hidden]),select,button,textarea').evaluateAll(nodes=>nodes.filter(el=>el.getClientRects().length).map(el=>({id:el.id,left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right})));
   for(const box of geometry){expect(box.left,box.id).toBeGreaterThanOrEqual(-1);expect(box.right,box.id).toBeLessThanOrEqual(width+1);}
-  await page.locator('#prod-editor-section').selectOption('all');
+  await page.getByRole('tab',{name:'Información',exact:true}).click();
   await card.locator('.adm-card-body').evaluate(el=>el.scrollTop=0);await page.evaluate(()=>scrollTo(0,0));
   await page.screenshot({path:`test-results/product-minimal-${width}x${height}.png`});
   expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
@@ -138,7 +138,7 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
 }
 
 test('variantes visuales conservan formatos previos y bloquean controles del total distribuido',async({page})=>{
- await openEditor(page,390,844);await page.locator('#prod-editor-section').selectOption('inventory');
+ await openEditor(page,390,844);await page.getByRole('tab',{name:'Variantes',exact:true}).click();
  await page.getByLabel('Característica de variante',{exact:true}).selectOption('Color');
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Dorado');await page.getByRole('button',{name:'Agregar opción',exact:true}).click();
  await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Plateado');await page.keyboard.press('Enter');
@@ -160,11 +160,11 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
   const card=page.locator('#prod-form-card'),section=page.locator('#prod-editor-section');
   await expect(page.locator('#prod-name')).toBeVisible();await expect(page.locator('#prod-price')).toBeHidden();
   await page.locator('#prod-name').fill('Anillo de prueba');
-  await section.selectOption('prices');await expect(page.locator('#prod-price')).toBeVisible();await page.locator('#prod-price').fill('45000');
-  await section.selectOption('private');await expect(page.locator('#prod-cost-unit')).toBeVisible();
+  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await expect(page.locator('#prod-price')).toBeVisible();await page.locator('#prod-price').fill('45000');
+  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.getByRole('button',{name:'Inventario interno',exact:true}).click();await expect(page.locator('#prod-cost-unit')).toBeVisible();
   // El selector de secciones no puede descubrir campos que el controlador oculte por rol.
   await page.locator('#prod-inventory-fields').evaluate(el=>el.style.display='none');
-  await section.selectOption('all');await expect(page.locator('#prod-cost-unit')).toBeHidden();
+  await page.getByRole('tab',{name:'Información',exact:true}).click();await expect(page.locator('#prod-cost-unit')).toBeHidden();
   await expect(page.locator('#prod-name')).toHaveValue('Anillo de prueba');await expect(page.locator('#prod-price')).toHaveValue('45000');
   await expect(page.locator('#prod-name')).toHaveAccessibleName('Nombre *');
   const boxes=await card.locator('input:not([type=hidden]),textarea,select,button').evaluateAll(nodes=>nodes.map(el=>{const r=el.getBoundingClientRect();return{id:el.id,x:r.x,right:r.right,width:r.width};}).filter(r=>r.width>0));
@@ -204,7 +204,7 @@ for (const [width,height] of [[320,568],[390,844],[768,1024],[1024,768],[1180,82
 }
 
 test('configurar stock por color exige cantidades explícitas y recalcula total y vista previa',async({page})=>{
- await openEditor(page,775,900);await page.locator('#prod-editor-section').selectOption('inventory');
+ await openEditor(page,775,900);await page.getByRole('tab',{name:'Variantes',exact:true}).click();
  await page.evaluate(({renderer,inventory})=>{
   window.__stockEditor=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock,baseline:()=>productVariantStockBaseline};')();
   window.__stockEditor.renderProductVariantStock({stock:1});
@@ -222,13 +222,13 @@ test('configurar stock por color exige cantidades explícitas y recalcula total 
  await expect(page.locator('#prod-variants-text')).not.toHaveAttribute('readonly','');
  expect(await page.evaluate(()=>window.__stockEditor.baseline().expectedEntries)).toBe(null);
  expect(await page.evaluate(()=>window.__stockEditor.baseline().variants)).toEqual({Color:['dorado','plateado']});
- await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Azzura');
- await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('50000');
+ await page.getByRole('tab',{name:'Información',exact:true}).click();await page.locator('#prod-name').fill('Azzura');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').fill('50000');
  await expect(page.locator('#prod-live-preview')).toContainText('2 unidades disponibles');
 });
 
 for(const [width,height] of [[768,1024],[1024,768]])test(`producto nuevo en tablet agrega opciones sin evaluar variantes nulas ${width}x${height}`,async({page})=>{
- await openEditor(page,width,height);await page.locator('#prod-editor-section').selectOption('inventory');
+ await openEditor(page,width,height);await page.getByRole('tab',{name:'Variantes',exact:true}).click();
  await page.evaluate(({renderer,inventory})=>{
   window.__stockEditor=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock};')();
   window.__stockEditor.renderProductVariantStock(null);
@@ -241,7 +241,7 @@ for(const [width,height] of [[768,1024],[1024,768]])test(`producto nuevo en tabl
  expect(await page.evaluate(()=>({error:document.getElementById('prod-form-error').textContent,display:document.getElementById('prod-form-error').style.display,quantities:document.querySelectorAll('#prod-variant-stock input').length}))).toEqual({error:'',display:'none',quantities:2});
  const quantities=page.locator('#prod-variant-stock input');
  await quantities.nth(0).fill('1');await page.getByRole('button',{name:'Disponibilidad de Color: plateado',exact:true}).click();await quantities.nth(1).fill('2');await expect(page.locator('#prod-stock')).toHaveValue('3');
- await page.locator('#prod-editor-section').selectOption('photos');
+ await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  await expect(page.locator('[data-product-section=photos]')).toBeVisible();
  const geometry=await page.locator('#prod-form-card').evaluate(card=>({scroll:card.scrollWidth,client:card.clientWidth}));expect(geometry.scroll).toBeLessThanOrEqual(geometry.client+1);
 });
@@ -308,7 +308,7 @@ test('foto vertical, horizontal y faltante no se recorta ni invade controles',as
 });
 
 test('la biblioteca queda sobre el editor y Escape cierra sólo la biblioteca',async({page})=>{
- await openEditor(page,390,844);await page.locator('#prod-editor-section').selectOption('photos');
+ await openEditor(page,390,844);await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  await page.evaluate(()=>{
   const overlay=document.createElement('div');overlay.className='tt-mlib-overlay';overlay.style.cssText='position:fixed;inset:0;background:white;z-index:9000';
   const close=document.createElement('button');close.className='tt-mlib-close';close.textContent='Cerrar';close.onclick=()=>overlay.remove();overlay.append(close);document.body.append(overlay);
@@ -326,7 +326,7 @@ test('cancelar respeta el guard nativo: seguir editando conserva datos y descart
   window.AdminUnsaved.register('primary-editor',{root:'#prod-form-card',serialize:()=>JSON.stringify({name:document.getElementById('prod-name').value,price:document.getElementById('prod-price').value}),save:window.prodGuardar});
   window.prodCancelForm=()=>window.AdminUnsaved.requestNavigation(()=>{window.AdminUnsaved.unregister('primary-editor');document.getElementById('prod-form-card').style.display='none';});
  });
- await page.locator('#prod-editor-section').selectOption('prices');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  expect(await page.evaluate(()=>window.AdminUnsaved.isDirty('primary-editor'))).toBe(false);
  await page.locator('#prod-price').fill('15000');
  await openActions(page);await page.locator('#prod-form-card').getByRole('button',{name:'Cancelar',exact:true}).click();
@@ -337,9 +337,9 @@ test('cancelar respeta el guard nativo: seguir editando conserva datos y descart
 });
 
 test('validación revela campos y pone el mensaje en foco sin perder valores',async({page})=>{
- await openEditor(page,390,844);await page.locator('#prod-name').fill('Anillo');await page.locator('#prod-editor-section').selectOption('photos');
+ await openEditor(page,390,844);await page.locator('#prod-name').fill('Anillo');await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  await page.evaluate(()=>{const error=document.getElementById('prod-form-error');error.textContent='Ingresá un precio válido';error.style.display='block';});
- await expect(page.locator('#prod-form-error')).toBeFocused();await expect(page.locator('#prod-form-error')).toBeInViewport();await expect(page.locator('#prod-editor-section')).toHaveValue('all');await expect(page.locator('#prod-name')).toHaveValue('Anillo');await expect(page.locator('#prod-price')).toBeVisible();
+ await expect(page.locator('#prod-form-error')).toBeFocused();await expect(page.locator('#prod-form-error')).toBeInViewport();await expect(page.locator('#prod-editor-section')).toHaveValue('prices');await expect(page.locator('#prod-name')).toHaveValue('Anillo');await expect(page.locator('#prod-price')).toBeVisible();
 });
 
 test('selección entre páginas y barra sobre navegación sin tapar el último producto',async({page})=>{
@@ -358,7 +358,7 @@ test('selección entre páginas y barra sobre navegación sin tapar el último p
 });
 
 test('foto principal completa en editor real y rotación conserva borrador y acciones superiores',async({page})=>{
- await openEditor(page,390,844,true);await page.locator('#prod-name').fill('Borrador conservado');await page.locator('#prod-editor-section').selectOption('photos');
+ await openEditor(page,390,844,true);await page.locator('#prod-name').fill('Borrador conservado');await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  await page.evaluate(async url=>{const {attachImageUploadWidget}=await import(url);attachImageUploadWidget(document.getElementById('prod-image-widget'),{label:'Imagen principal',value:'https://img.test/principal.webp'});},'/js/components/images/carga-imagenes.js?fixture');
  const image=page.locator('#prod-image-widget .tt-iuw-preview');await expect(image).toBeVisible();expect((await image.boundingBox()).width).toBeGreaterThan(250);await expect(image.locator('img')).toHaveCSS('object-fit','contain');
  await page.setViewportSize({width:844,height:390});await expect(page.locator('#prod-form-card')).toHaveCSS('height','390px');
@@ -393,7 +393,7 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
    setProductPreviewMedia(card,[{'Diseño de anillo':'coctel',imageUrls:['https://img.test/coctel.webp']},{'Diseño de anillo':'banda',imageUrls:['https://img.test/banda.webp']}]);
    card.dispatchEvent(new Event('input',{bubbles:true}));
   },{renderer:stockRenderer,previewVersion:require('../../scripts/cache-version-baseline.json')['js/admin/products/vista-previa-producto.js'].version});
-  await page.locator('#prod-editor-section').selectOption('inventory');
+  await page.getByRole('tab',{name:'Variantes',exact:true}).click();
   await expect(page.getByLabel('Stock de coctel',{exact:true})).toHaveValue('1');
   await page.getByRole('button',{name:'Disponibilidad de Diseño de anillo: banda',exact:true}).click();
   await page.getByLabel('Stock de banda',{exact:true}).fill('0');
@@ -415,15 +415,15 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
   await expect(page.locator('#prod-stock')).toHaveValue('1');
   await expect(page.locator('#prod-variants-text')).toHaveValue('Diseño de anillo: coctel, banda');
   await preview.getByLabel('Vista previa: Diseño de anillo',{exact:true}).selectOption('');
-  await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('80000');
+  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').fill('80000');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('80.000');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('−20%');
-  await page.locator('#prod-editor-section').selectOption('all');
+  await page.getByRole('tab',{name:'Información',exact:true}).click();
   const boxes=await page.locator('#prod-form-card input:not([type=hidden]),#prod-form-card button,#prod-form-card select,#prod-form-card textarea,#prod-live-preview').evaluateAll(nodes=>nodes.filter(n=>n.getClientRects().length).map(n=>({id:n.id,left:n.getBoundingClientRect().left,right:n.getBoundingClientRect().right})));
   for(const box of boxes){expect(box.left,box.id).toBeGreaterThanOrEqual(-1);expect(box.right,box.id).toBeLessThanOrEqual(width+1);}
   expect(errors).toEqual([]);
   expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
-  await page.locator('#prod-editor-section').selectOption('inventory');
+  await page.getByRole('tab',{name:'Variantes',exact:true}).click();
   await page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop=0);await page.evaluate(()=>scrollTo(0,0));
   await page.screenshot({path:`test-results/product-editor-visual-${width}x${height}.png`});
  });
@@ -442,7 +442,7 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
   let number=0;const library=async()=>window.__delayGalleryChoice ? new Promise(resolve=>{window.__resolveGalleryChoice=resolve;}) : `https://img.test/extra-${++number}.webp`;
   window.__remountGallery=new Function('attachImageUploadWidget','attachMultiImageUploadWidget','attachProductGallery','openMediaLibraryPicker','sanitizeImageUrl','_formImageWidgets',source+';mountProductColorPhotos({variants:{Diseño:["Coctel","Banda"]}});return mountProductColorPhotos;')(attachImageUploadWidget,attachMultiImageUploadWidget,attachProductGallery,library,sanitizeImageUrl,new Map());
  },mount);
- await page.locator('#prod-editor-section').selectOption('photos');
+ await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  const gallery=page.locator('.tt-unified-photos .tt-iuw-multiple');
  await expect(gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true})).toBeHidden();
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
@@ -461,7 +461,7 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  await page.locator('.tt-editor-preview-shell > summary').click();
  await expect(page.locator('#prod-live-preview')).toBeVisible();
  await page.locator('#prod-live-preview').getByRole('button',{name:'Volver a editar'}).click();
- await expect(page.locator('#prod-editor-section')).toBeFocused();
+ await expect(page.locator('#prod-form-card [role=tab][aria-selected=true]')).toBeFocused();
  // Una selección pendiente del producto anterior nunca debe tocar el nuevo formulario.
  await page.evaluate(()=>{window.__delayGalleryChoice=true;window.__oldGalleryRoot=document.querySelector('.tt-unified-photos .tt-iuw-multiple');});
  await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
@@ -472,7 +472,7 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
 
 for (const width of [1200,1440,1920]) test(`controles seleccionados conservan texto legible con el tema real ${width}`,async({page})=>{
  await openEditor(page,width,900);
- await page.locator('#prod-editor-section').selectOption('inventory');
+ await page.getByRole('tab',{name:'Variantes',exact:true}).click();
  await page.addStyleTag({path:path.join(root,'css/core/tema-unificado-tintin.css')});
  for(const colors of [['#F8AACA','#222222'],['#222222','#FFFFFF']]) {
   await page.evaluate(([background,text])=>{document.documentElement.style.setProperty('--admin-color-button-primary-background',background);document.documentElement.style.setProperty('--admin-color-button-primary-text',text);},colors);
@@ -496,13 +496,13 @@ for (const width of [1200,1440,1920]) test(`controles seleccionados conservan te
 for (const width of [320,390,768,1440]) test(`cambiar apartado reinicia el editor sin perder el borrador ${width}`,async({page})=>{
  await openEditor(page,width,800);
  const select=page.locator('#prod-editor-section');
- await select.selectOption('all');
+ await page.getByRole('tab',{name:'Información',exact:true}).click();
  await page.locator('#prod-name').fill('Borrador conservado');
  await page.evaluate(()=>{document.querySelector('#prod-form-card .adm-card-body').scrollTop=700;scrollTo(0,500);});
- await select.selectOption('prices');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  await expect(page.locator('#prod-price')).toBeInViewport();
  await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
- await select.selectOption('all');
+ await page.getByRole('tab',{name:'Información',exact:true}).click();
  await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  const before=await page.evaluate(()=>{const body=document.querySelector('#prod-form-card .adm-card-body');body.scrollTop=250;scrollTo(0,250);return {window:scrollY,body:body.scrollTop};});
@@ -540,6 +540,7 @@ test('un error persistente no reinicia scroll ni foco al editar precio',async({p
  await openEditor(page,390,844);
  await page.evaluate(()=>{const error=document.querySelector('#prod-form-error');error.textContent='Completá el nombre';error.style.display='block';});
  await expect(page.locator('#prod-form-error')).toBeFocused();
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  const before=await page.evaluate(()=>{
   const input=document.querySelector('#prod-price');input.focus({preventScroll:true});
@@ -557,7 +558,7 @@ test('un error persistente no reinicia scroll ni foco al editar precio',async({p
 
 test('abrir conserva producto oculto y visibilidad manual independiente de la cantidad',async({page})=>{
  await openEditor(page,390,844);
- await page.locator('#prod-editor-section').selectOption('inventory');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  await page.evaluate(()=>{
   document.getElementById('prod-stock').value='7';
   document.getElementById('prod-active').checked=false;
@@ -568,13 +569,13 @@ test('abrir conserva producto oculto y visibilidad manual independiente de la ca
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await page.getByRole('button',{name:'Stock: 1 unidades',exact:true}).click();
  await expect(page.locator('#prod-active')).not.toBeChecked();
- await page.locator('#prod-editor-section').selectOption('visibility');
+ await page.getByRole('tab',{name:'Publicación',exact:true}).click();
  await page.locator('#prod-publicationStatus').selectOption('draft');
- await page.locator('#prod-editor-section').selectOption('prices');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  await page.locator('#prod-price').fill('50000');
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await expect(page.locator('#prod-stock')).toHaveValue('1');
- await page.locator('#prod-editor-section').selectOption('inventory');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  await page.getByRole('button',{name:'Stock: 0 unidades',exact:true}).click();
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await expect(page.locator('.tt-editor-stock-status')).toHaveText('Sin stock');
@@ -617,7 +618,7 @@ for(const [width,height] of [[320,700],[768,1024],[1440,900]])test(`fotos por co
   main.value='https://img.test/rosa.webp';extra.value='https://img.test/rojo.webp';variants.value='Color: rosa, rojo';
   window.__colorPhotos=attachColorPhotos({container:document.getElementById('prod-color-photos'),product:{imageUrl:main.value,imagesExtra:[extra.value],variants:{Color:['rosa','rojo']},variantMedia:[{Color:'rosa',imageUrl:main.value},{Color:'rojo',imageUrl:extra.value}]},mainInput:main,imagesInput:extra,variantsInput:variants,attachUpload:attachImageUploadWidget,openLibrary:async()=>'https://img.test/biblioteca.webp'});
  });
- await page.locator('#prod-editor-section').selectOption('photos');
+ await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  const colors=page.locator('#prod-color-photos');
  await expect(colors.locator('fieldset')).toHaveCount(2);
  await colors.getByRole('checkbox',{name:'Asignar foto 2 a rosa',exact:true}).check();
@@ -632,7 +633,7 @@ for(const [width,height] of [[320,700],[768,1024],[1440,900]])test(`fotos por co
 });
 
 test('stock maestro retira opciones guardadas sin destruir cantidades ni referencias',async({page})=>{
- await openEditor(page,390,844);await page.locator('#prod-editor-section').selectOption('inventory');
+ await openEditor(page,390,844);await page.getByRole('tab',{name:'Variantes',exact:true}).click();
  await page.evaluate(async({renderer,inventory})=>{
   const {commercialDraft}=await import(new URL('/js/admin/products/editor-comercial-core.mjs',location.origin));
   const {mountCommercialEditor}=await import(new URL('/js/admin/products/editor-comercial-interfaz.js',location.origin));
@@ -657,7 +658,7 @@ test('stock maestro retira opciones guardadas sin destruir cantidades ni referen
 });
 
 test('portada por color es explícita, reordenable y conserva metadatos de variante',async({page})=>{
- await openEditor(page,1024,768,true);await page.locator('#prod-editor-section').selectOption('photos');
+ await openEditor(page,1024,768,true);await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  await page.evaluate(async()=>{
   const moduleUrl=new URL('/js/admin/products/fotos-por-color.js',location.origin);const {attachColorPhotos}=await import(moduleUrl.href);
   const container=document.createElement('div');container.id='master-color-photos';document.querySelector('[data-product-section=photos] .tt-editor-section-fields').append(container);
@@ -682,7 +683,7 @@ test('carga múltiple espera archivos, conserva fallidos y reintenta sin duplica
  await openEditor(page,390,844,`
  export const deleteMediaByUrlIfUnused=async()=>{},deleteMediaItem=async()=>{};
  export async function uploadImageToLibrary(file){window.__masterAttempts??={};window.__masterAttempts[file.name]=(window.__masterAttempts[file.name]||0)+1;if(file.name==='dos.png' && !window.__retryMaster)throw Error('Red interrumpida');return {url:'https://img.test/'+file.name,mediaId:file.name};}
- `);await page.locator('#prod-editor-section').selectOption('photos');
+ `);await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  await page.evaluate(async()=>{const moduleUrl=new URL('/js/components/images/carga-imagenes.js',location.origin);const {attachMultiImageUploadWidget}=await import(moduleUrl.href);const container=document.createElement('div');container.id='master-multiple';document.querySelector('[data-product-section=photos] .tt-editor-section-fields').append(container);window.__masterUploaded=[];window.__bulk=attachMultiImageUploadWidget(container,{remaining:()=>2-window.__masterUploaded.length,onChange:url=>window.__masterUploaded.push(url)});});
  const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=40;canvas.height=40;return canvas.toDataURL('image/png').split(',')[1];});
  await page.locator('#master-multiple input[type=file]').setInputFiles(['uno.png','dos.png'].map(name=>({name,mimeType:'image/png',buffer:Buffer.from(png,'base64')})));
@@ -696,7 +697,7 @@ test('carga múltiple espera archivos, conserva fallidos y reintenta sin duplica
 });
 
 test('salir con fotos masivas pendientes activa el guard real sin subir ni borrar imágenes',async({page})=>{
- await openEditor(page,390,844,true);await page.locator('#prod-editor-section').selectOption('photos');
+ await openEditor(page,390,844,true);await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  await page.evaluate(markup=>{if(document.getElementById('unsaved-modal'))return;const parsed=new DOMParser().parseFromString(markup,'text/html');document.body.append(parsed.getElementById('unsaved-modal'));},prompt);
  await page.addScriptTag({url:'/js/admin/proteccion-cambios-pendientes-admin.js'});
  const serializer=adminSource.slice(adminSource.indexOf('function serializeProductForm()'),adminSource.indexOf('window.prodNuevo ='));
@@ -729,7 +730,7 @@ for(const [width,height] of [[320,700],[390,844],[768,1024],[1024,768],[1280,720
  const title=await page.locator('#prod-form-title').boundingBox(),actions=await page.locator('#prod-editor-actions').boundingBox();
  expect(actions.y>=title.y+title.height-1 || actions.x>=title.x+title.width-1).toBe(true);
  await expect(page.locator('#prod-save-btn')).toBeInViewport();
- await page.locator('#prod-editor-section').selectOption('inventory');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  for(const row of await page.locator('#prod-variant-stock .tt-editor-stock-row').all()){
   const controls=row.locator('.tt-editor-stepper > *, .tt-editor-quantity-select');const boxes=await controls.evaluateAll(nodes=>nodes.map(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width};}));
   const bounds=await row.boundingBox();
@@ -746,25 +747,24 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await openEditor(page,width,height);
  const card=page.locator('#prod-form-card');
  await page.locator('#prod-name').fill('Reloj Alissia');
- await page.locator('#prod-editor-section').selectOption('prices');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  await page.locator('#prod-price').fill('70000');
- await page.locator('#prod-editor-section').selectOption('all');
+ await page.getByRole('tab',{name:'Información',exact:true}).click();
  await page.locator('#prod-description').fill('Acero inoxidable, para todos los días.');
- await page.locator('#prod-publicationStatus').selectOption('draft');
+ await page.getByRole('tab',{name:'Publicación',exact:true}).click();await page.locator('#prod-publicationStatus').selectOption('draft');
  await expect(card.locator('#prod-form-title')).toHaveText('Reloj Alissia');
  await expect(card.locator('.tt-product-editor-state')).toHaveText('Borrador');
  await page.locator('#prod-inventory-fields').evaluate(el=>el.style.display='none');
  await expect(card.locator('[data-product-section="private"]')).toBeHidden();
  const layout=card.locator('.tt-editor-layout'),main=card.locator('.tt-product-fields'),sidebar=card.locator('.tt-editor-sidebar');
- const boxes=await Promise.all([main.boundingBox(),sidebar.boundingBox()]);
- expect(boxes[1].y).toBeGreaterThanOrEqual(boxes[0].y+boxes[0].height-1);
+ await expect(sidebar).toBeHidden();await expect(card.locator('.tt-product-tabpanel:visible')).toHaveCount(1);
  await expect(main.locator('#prod-description')).toHaveCount(1);
  await expect(main.locator('#prod-category')).toHaveCount(1);
  await expect(main.locator('#prod-publicationStatus')).toHaveCount(1);
  await main.locator('.tt-product-editorial-seo > summary').click();
  await page.locator('#prod-seoTitle').fill('Reloj Alissia · Tintin');
  await expect(page.locator('#prod-seoTitle')).toHaveValue('Reloj Alissia · Tintin');
- await page.locator('#prod-name').fill('Reloj '+ 'A'.repeat(174));
+ await page.getByRole('tab',{name:'Información',exact:true}).click();await page.locator('#prod-name').fill('Reloj '+ 'A'.repeat(174));
  expect((await card.locator('#prod-form-title').boundingBox()).height).toBeLessThanOrEqual(54);
  await page.locator('#prod-name').fill('Reloj Alissia');
  await card.locator('.adm-card-body').evaluate(el=>el.scrollTop=el.scrollHeight);
@@ -776,20 +776,20 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  if(width===390||width===1440){await card.locator('.adm-card-body').evaluate(el=>el.scrollTop=0);await page.screenshot({path:test.info().outputPath(`shopify-editor-${width}.png`)});}
 });
 
-for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768],[1440,900]])test(`editor guiado: fotos primero, contraste y borrador ${width}x${height}`,async({page})=>{
+for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768],[1440,900]])test(`editor por pestañas: información, contraste y borrador ${width}x${height}`,async({page})=>{
  await openEditor(page,width,height);
  const card=page.locator('#prod-form-card');
- expect(await card.locator('.tt-product-fields > [data-product-section]').first().getAttribute('data-product-section')).toBe('photos');
+ await expect(card.locator('.tt-product-tabpanel:visible')).toHaveAttribute('id','prod-panel-general');
  await page.locator('#prod-name').fill('Pulsera conservada');
  const surfaces=await page.evaluate(()=>{const sample=selector=>getComputedStyle(document.querySelector(selector)).backgroundColor;return [sample('#prod-form-card .adm-card-body'),sample('[data-product-section=general]'),sample('#prod-name')];});
- expect(surfaces[2]).not.toBe(surfaces[1]);
+ expect(surfaces[2]).not.toBe('rgba(0, 0, 0, 0)');
  await expect(card.locator('.tt-editor-guide')).toHaveCount(0);
- await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').click();
+ await page.getByRole('tab',{name:'Información',exact:true}).click();await page.locator('#prod-name').click();
  await expect(page.locator('#prod-name')).toHaveValue('Pulsera conservada');
  await expect(page.locator('#prod-name')).toBeFocused();
- await expect(card.locator('[data-product-section=photos]')).toBeVisible();
- await page.locator('#prod-editor-section').selectOption('all');
- await expect(card.locator('[data-product-section=photos]')).toBeVisible();
+ await expect(card.locator('[data-product-section=photos]')).toBeHidden();
+ await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await expect(card.locator('[data-product-section=photos]')).toBeVisible();await expect(page.locator('#prod-name')).toHaveValue('Pulsera conservada');
  expect(await card.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
  if(width===390||width===1440){await card.locator('.adm-card-body').evaluate(el=>el.scrollTop=0);await page.screenshot({animations:'disabled',path:test.info().outputPath(`editor-intuitivo-${width}.png`)});}
 });
@@ -802,7 +802,7 @@ test('visión es opcional, aplica sólo la categoría elegida y descarta resulta
   const select=document.getElementById('prod-category');select.add(new Option('Carteras','carteras'));
   const canvas=document.createElement('canvas');canvas.width=canvas.height=40;canvas.getContext('2d').fillRect(0,0,40,40);document.getElementById('prod-imageUrl').value=canvas.toDataURL();
  });
- await page.locator('.tt-editor-vision summary').click();
+ await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();await page.locator('.tt-editor-vision summary').click();
  expect(await page.evaluate(()=>window.__visionWorkers.length)).toBe(0);
  const before=await page.evaluate(()=>({material:document.getElementById('prod-material').value,stock:document.getElementById('prod-stock').value,variants:document.getElementById('prod-variants-text').value}));
  await page.getByRole('button',{name:'Analizar imagen principal',exact:true}).click();
@@ -817,9 +817,9 @@ test('visión es opcional, aplica sólo la categoría elegida y descarta resulta
  await page.getByRole('button',{name:'Usar categoría Carteras',exact:true}).click();
  await expect(page.locator('#prod-category')).toHaveValue('carteras');
  const after=await page.evaluate(()=>({material:document.getElementById('prod-material').value,stock:document.getElementById('prod-stock').value,variants:document.getElementById('prod-variants-text').value}));expect(after).toEqual(before);
- await page.locator('#prod-editor-section').selectOption('specs');
+ await page.getByRole('tab',{name:'Detalles',exact:true}).click();
  await expect(page.getByRole('group',{name:'Sugerencias: Material',exact:true}).getByRole('button',{name:'Cuero sintético',exact:true})).toBeVisible();
- await page.locator('#prod-editor-section').selectOption('photos');
+ await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
  await page.getByRole('button',{name:'Analizar imagen principal',exact:true}).click();
  await expect(page.getByRole('button',{name:'Cancelar análisis',exact:true})).toBeVisible();
  await page.getByRole('button',{name:'Cancelar análisis',exact:true}).click();
