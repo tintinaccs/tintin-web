@@ -325,8 +325,10 @@ function errorSection(card,message) {
 
 function showSection(card,value,expand=false) {
   value=tabFor(value);
-  const select=card.querySelector('#prod-editor-section');if(select.value!==value)select.value=value;
-  const layout=card.querySelector('.tt-editor-layout');if(layout.dataset.editorSection!==value)layout.dataset.editorSection=value;
+  const select=card.querySelector('#prod-editor-section'),layout=card.querySelector('.tt-editor-layout');
+  if(!select || !layout)return; // La superficie también puede abrirse antes de montar los campos.
+  if(select.value!==value)select.value=value;
+  if(layout.dataset.editorSection!==value)layout.dataset.editorSection=value;
   for(const panel of card.querySelectorAll('.tt-product-tabpanel')){
     const hidden=panel.id!=='prod-panel-'+value;if(panel.hidden!==hidden)panel.hidden=hidden;
   }

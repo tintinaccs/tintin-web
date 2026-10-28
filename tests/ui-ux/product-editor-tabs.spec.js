@@ -66,3 +66,10 @@ test('seleccionar color muestra primero su foto real y conserva la selección en
  await expect(page.locator('.tt-unified-photo img').first()).toHaveAttribute('src','https://img.test/dorado.webp');await expect(page.getByLabel('Usar foto 2 en Dorado',{exact:true})).toBeChecked();
  await tab(page,'Detalles').click();await tab(page,'Fotos y colores').click();await expect(page.locator('.tt-unified-photo img').first()).toHaveAttribute('src','https://img.test/dorado.webp');await expect(page.getByRole('group',{name:'Fotos por color'}).getByRole('button',{name:'Dorado',exact:true})).toHaveAttribute('aria-pressed','true');
 });
+
+test('abrir y cerrar la superficie antes de montar campos no provoca errores ni pierde foco',async({page})=>{
+ const {mockRuntime}=require('./helpers/admin-commerce-fixture.cjs');const errors=[];page.on('pageerror',error=>errors.push(error.message));
+ await mockRuntime(page);await page.goto('https://tintin.test/admin-commerce-fixture');await page.locator('[data-action="product-new"]').click();await expect(page.locator('#prod-form-card')).toBeVisible();
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));await expect(page.locator('#prod-form-card')).toHaveAttribute('role','dialog');expect(errors).toEqual([]);
+ await page.evaluate(()=>{document.getElementById('prod-form-card').style.display='none';});await expect(page.locator('[data-action="product-new"]')).toBeFocused();expect(errors).toEqual([]);
+});
