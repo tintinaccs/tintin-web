@@ -25,6 +25,28 @@ test('enlaces iniciales a pedido o reseña no vuelven a desplazar la página tra
   assert.ok(!orders.includes('scrollIntoView'));
 });
 
+test('load tardío tras usar navegación conserva scroll y los reinicios explícitos siguen funcionando',()=>{
+ const listeners=new Map(),frames=[];
+ const root={style:{scrollBehavior:'smooth'},scrollTop:0},body={scrollTop:0};
+ const context=vm.createContext({history:{},document:{documentElement:root,body,addEventListener:(name,fn)=>listeners.set(name,fn)},window:{scrollTo:(_x,y)=>{root.scrollTop=body.scrollTop=y;},addEventListener:(name,fn)=>listeners.set(name,fn)},requestAnimationFrame:fn=>frames.push(fn),console});
+ vm.runInContext(loader.slice(loader.indexOf("  try { history.scrollRestoration"),loader.indexOf('  // El sitio oficial')),context);
+ while(frames.length)frames.shift()();
+ listeners.get('tintin:surface-change')({detail:{surface:'search',state:'opening'}});
+ listeners.get('tintin:surface-change')({detail:{surface:'none',state:'idle'}});
+ root.scrollTop=body.scrollTop=540;
+ listeners.get('load')();
+ listeners.get('pageshow')({persisted:false});
+ while(frames.length)frames.shift()();
+ assert.equal(root.scrollTop,540);assert.equal(body.scrollTop,540);
+ context.window.TintinPageScroll.reset();
+ while(frames.length)frames.shift()();
+ assert.equal(root.scrollTop,0);assert.equal(body.scrollTop,0);
+ root.scrollTop=body.scrollTop=700;
+ listeners.get('pageshow')({persisted:true});
+ while(frames.length)frames.shift()();
+ assert.equal(root.scrollTop,0);assert.equal(body.scrollTop,0);
+});
+
 test('navegar durante un bloqueo lleva arriba y cerrar un modal normal conserva su posición',()=>{
  const listeners=new Map(),frames=[];
  const style=()=>({overflow:'',overscrollBehavior:'',position:'',top:'',left:'',right:'',width:'',touchAction:'',scrollBehavior:'smooth'});

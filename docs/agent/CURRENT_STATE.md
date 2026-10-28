@@ -1,3 +1,7 @@
+## 2026-10-28 — #1265 actualizado tras merge concurrente de #1267
+
+Candidato 2d03f3cf: CI 40704867838 intento 1, CodeQL 40704857949 y Cloudflare PASS; Administración incluyó 26 + 188 Chromium PASS. Mantenimiento 40708645677 intento 1 bloqueó integración por main avanzado a ffde3441. Se integra main por merge normal, conservando navegación pública y ambas evidencias; se regeneran plan protegido y artefactos. PASS_LOCAL de la integración: build, preflight, protección y 34 Chromium (23 búsqueda y 11 pestañas). Primer intento de búsqueda apuntó al servidor de preview sólo-editor y falló al no servir /catalogo; repetición completa sobre servidor canónico 4184 PASS. Se sigue el nuevo SHA, sin heredar aprobaciones.
+
 ## 2026-10-28 — Integración automática autorizada del rediseño, Codex /root
 
 La titular pide «mergealo automatico y seguimiento» después de revisar la entrega local. Esta autorización posterior reemplaza la prohibición de merge del alcance anterior. Se publica la rama `codex/redesign-product-editor-20261028` y se prepara PR con integración automática sujeta a las protecciones. No se hacen escrituras comerciales de prueba en producción ni despliegues manuales. PR/SHA/runs/intentos se seguirán por el conector de GitHub: el CLI gh del entorno no autentica. CI del candidato 18bb0325, run 40698927099 intento 1, aprobó Comercio, reglas e Interfaz/SEO/rendimiento; Administración (job 122856337681) detectó tres pruebas CSP que exigían un único feedback de fallo de operación. Se marca ese alcance desde el controlador y se conserva el error contextual sólo para validaciones; pruebas cubren error/reintento de operación y validación de precio con versión pública intacta. CI del candidato d5e944c7 (40703215996 intento 1) detectó que los dobles mínimos del DOM no tienen dataset: se comprueba su existencia al marcar el alcance del error, sin alterar guardado ni escrituras. La batería completa audit:admin-sync repite 78 PASS. Estado: IN_PROGRESS; no se confunde auto-merge habilitado con merge confirmado. PR #1265, candidato inicial `6e8776e73204e5ede17a0fadb6cf88f5477c01c7`, CI 40696458055 intento 1. CodeQL detectó tres alertas HIGH de rutas HTTP en scripts/preview-product-editor.cjs (check 122844727673); se reemplaza la construcción de rutas por un índice cerrado de assets públicos, excluyendo enlaces simbólicos. Se agregan regresiones de traversal y se seguirá el nuevo SHA, sin suprimir alertas ni relajar controles. CodeQL del candidato 774d0816 aprobó las tres alertas corregidas. Una comprobación adicional reproduce TypeError al abrir una superficie con formulario todavía incompleto: showSection asumía selector/layout montados. Se conserva la apertura y geometría sin navegar hasta que existan ambos nodos; nueva regresión cubre apertura/cierre y foco sin errores.
@@ -22,6 +26,94 @@ Evidencia de esta implementación (no resultados heredados):
 Vista local: `node scripts/preview-product-editor.cjs`, puerto 4173; formulario y escritores reales con identidad/almacenamiento/proveedores de QA en memoria. Smoke en navegador PASS: seis pestañas, foto real del repositorio cargada localmente, guardado y recuperación del borrador, sin errores JS. Capturas de escritorio/móvil en `artifacts/product-editor-tabs/`; logs en `artifacts/product-editor-tabs/evidence/`. Detalles y reproducción: `docs/product-editor-refactor/REDISENO-SEIS-PESTANAS-20261028.md`.
 
 NOT_VERIFIED: no están accesibles el HTML y las siete capturas Windows indicadas; no se afirma haberlas visto ni fidelidad a ellas. Sin sesión administrativa de QA externa: fixtures no acreditan Auth/Firestore/Sheets/biblioteca reales, concurrencia remota ni dispositivos físicos. No se ejecuta el emulador omitido, CI ni aceptación en producción. Ninguna escritura comercial en producción, despliegue o merge.
+## 2026-10-28 — PR #1267: candidato con carga tardía y scroll corregidos, Codex /root
+
+La CI inicial40696772289/1 de27bfe553 falló en la medición del scroller390px.
+Se conserva la comprobación de sus extremos, descontando correctamente margen
+mediante posiciones independientes; el gesto usa un caso hasTouch/viewport nativo.
+Además, el evento load/pageshow inicial podía reiniciar la página después de
+usar/cerrar un panel: cargador-pagina omite sólo esos reinicios tardíos tras usar
+navegación; reset explícito y retorno bfcache mantienen el contrato. El controlador
+restaura scroll instantáneo y no ejecuta el callback sobre otra superficie abierta.
+PASS_LOCAL:23/23 Chromium búsqueda,18/18 Node navegación (nuevo caso load tardío),
+15/15 recorridos de paneles del controlador compartido,3 repeticiones de gesto
+nativo. Sin datos comerciales, permisos ni workflows modificados. Referencias,
+caché, plan protegido y diagnóstico regenerados antes de publicar el nuevo SHA.
+La consulta de branch-protection devuelve403 del conector; no se altera ninguna
+protección ni se omiten checks. GitHub conserva el bloqueo y auto-merge pendiente.
+Se sigue el nuevo SHA/runs por separado; no se hereda CI aprobada de otro SHA.
+
+## 2026-10-28 — PR #1267: corrección de medición de scroll en CI, Codex /root
+
+PR https://github.com/tintinaccs/tintin-web/pull/1267, HEAD inicial
+27bfe553ab0d9a00136fde34c6f090a028c51a94. Auto-merge habilitado y monitor
+horario activo (por sondeo; sin receptor webhook disponible). CodeQL40696767611
+intento1 y Cloudflare preview aprobaron. CI40696772289 intento1 falló en job
+122846087039, Comercio crítico:144 casos de navegador aprobaron y el caso390px
+falló dos veces al exigir que la última tarjeta completa cupiera en la altura
+exterior del contenedor, ignorando padding y margen inferior. Se conserva el
+control del extremo inferior y se comprueba siempre, mediante scroll instantáneo,
+que el principio de esa misma tarjeta también sea alcanzable. El recorrido
+actúa sólo sobre scrollTop del scroller, evitando que scrollIntoView desplace
+otros ancestros. El gesto se valida ahora en un caso independiente con viewport
+nativo y contexto hasTouch, separado de la simulación del teclado; conserva
+aserciones de scroll, barra visible y snapshot sin reconstrucciones. Tres
+repeticiones locales de ese caso aprobaron. Sin tolerancias
+ampliadas ni aserciones retiradas. Una comprobación local adicional detectó
+restauración de posición animada por scroll suave: SurfaceController ahora
+restaura instantáneamente y descarta el callback si ya se abrió otra superficie.
+Se renuevan sólo sus URLs transitivas y las huellas/plan canónicos;8 escenarios
+de viewport aprobaron con esta corrección.
+La rama local reproduce el objeto Git remoto exacto; árbol verificado por SHA.
+Se espera la CI del siguiente SHA; el resultado anterior no se hereda.
+
+## 2026-10-28 — Merge automático y seguimiento de headers, Codex /root
+
+La titular autoriza expresamente merge automático y seguimiento. Base remota
+verificada mediante el conector GitHub:5a2ea0f63306583df04ed47cc745d52902669a2c.
+La salida Git/gh del entorno devuelve503 del proxy; se utiliza el conector
+GitHub autorizado, preservando protecciones y el plan canónico de mantenimiento.
+PR/SHA/runs se registrarán con sus resultados reales; auto-merge habilitado no
+se considerará finalizado hasta verificar merge y ejecuciones posteriores.
+
+## 2026-10-28 — Headers, navegación y búsqueda responsive, Codex /root
+
+Base5a2ea0f6, rama local work. Alcance: shell público canónico, paneles,
+búsqueda, integración con catálogo/carrito/cuenta. La indicación posterior de
+la titular exige conservar visible la barra móvil; no se oculta al buscar.
+Panel y barra comparten viewport visual y reserva separada, con safe areas.
+Body fijo conserva scroll de fondo sin bloquear los gestos de resultados.
+Foco temprano/estable, limpiar/cerrar, exactos antes de alternativas incluso
+agotados, coincidencias completas, nombres multilínea, errores/vacío/reintento,
+placeholders de imagen y snapshots repetidos sin reconstruir el scroller.
+Reabrir consulta el TTL/single-flight existente; force llega al store.
+Sin cambios de backend, índices, Rules, Auth, inventario/precios ni dependencias.
+URLs transitivas, shell, bundles y diagnóstico desde generadores canónicos.
+
+PASS_LOCAL: build Pages/rutas/CSP/diagnóstico/caché;222 productos/sync,30 carrito,
+72 cuentas,463 comercio,79 Auth,17 navegación Node y12 búsqueda/caché/autoridad
+(solapamiento entre suites, no sumar como casos distintos). Header83 aprobadas;
+15 casos finales de paneles/foco/viewport/gestos aprobados. Búsqueda22/22 PASS;
+tras añadir el modo compacto con200px de altura visual,8/8 recorridos de
+viewport/scroll PASS. Iconos siempre visibles, controles44px y resultados
+con altura positiva; etiquetas visuales regresan al recuperar espacio.
+PASS_LOCAL: auditorías unified-navigation (12 anchos/13 rutas), headers (14
+anchos/0 problemas), public-shell, arquitectura, CSS, accesibilidad12 ySEO1179.
+
+Regresión ampliada:82 PASS/8 FAIL/1 SKIP. Fallas en marcador de logo404 y
+superficie inicial de Login en7 anchos. Se ejecutaron404/320 contra una copia
+intacta de5a2ea0f6 en4175: ambas causas fallan igual en la base. La omitida
+requiere preview Pages Functions. No se retiraron aserciones ni gates existentes.
+
+Evidencia externa puntual: API pública265 productos/265 IDs únicos,0 inactivos,
+sin nombre exactamenteELIORA ni campos privados comprobados. Sondeos posteriores
+a ficha/colecciones NOT_VERIFIED por503 del proxy Envoy con upstream connect
+error; no se atribuye al sitio. Sin escrituras externas ni datos ficticios reales.
+NOT_VERIFIED: Safari/iOS y Android físicos, safe areas/zoom reales, sesiones
+productivas por rol, CI del cambio, merge y publicación. No se hizo push/merge/
+deploy. No se hereda PASS de informes históricos. Revisión final del diff y
+sintaxis JS correctas; sin archivos temporales de prueba agregados al repositorio.
+Reporte: [AUDITORIA_HEADERS_BUSQUEDA_20261028.md](AUDITORIA_HEADERS_BUSQUEDA_20261028.md).
 
 ## 2026-10-28 — Cierre de #1263, Codex /root
 

@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "5a2ea0f63306583df04ed47cc745d52902669a2c",
-  "reason": "Rediseñar editor compartido y verificar compatibilidad del feedback de guardado",
+  "baseCommit": "ffde3441a03d686fd595381af1c565fc90f0cd0a",
+  "reason": "Integrar editor de seis pestañas conservando navegación pública y validación protegida",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "d2fe5c27d2546dbb14ee6582734a5dc66700396463dbfb1ab9fe113dbad86d28",
-      "newHash": "0d5908546c70de4f84af5f2a51d7c9f095cbe465797ad7c90cdc50ff232abf8b"
+      "oldHash": "c863800aff02ecaf7cec291d732f71057a9a30e6affd6a748dd14670d7f16e5f",
+      "newHash": "88f356ad5691398c184a12169c9975befc3867b75e6b93f7c420a857fc4bd5db"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -25,8 +25,8 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "cbc544a5b96ce2baf3ab8fca7c1e3059923d0d3bba80d1f0b02f33e763921350",
-      "newHash": "b2e6cd757ad46baef5652938f1a1982b9ad7118c30936331eaa4d85d35b675c4"
+      "oldHash": "1fa83090ddd35f5177e78821da7156af903c56aefc43392ee005b5914ead7589",
+      "newHash": "6602cbb253e9f986e0be10055bea8cacd5815947fdae9a3dead6f08d4ee2e928"
     }
   ],
   "affectedRecords": [
