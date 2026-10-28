@@ -20,7 +20,7 @@ function runtime(product={}){
  const original={_docId:'source',name:'Anillo',sku:'SKU-1',category:'anillos',price:30000,stock:4,active:true,description:'Descripción',image:'https://img.test/original',tags:['regalo'],...product};rows.set('products/source',structuredClone(original));
  const apply=(ref,data)=>{const current={...rows.get(ref.path)};for(const [key,value]of Object.entries(data)){if(value?.__delete)delete current[key];else current[key]=structuredClone(value);}rows.set(ref.path,current);writes.push(ref.path);};
  let count=0;
- const ctx={crypto,Option:function(text,value){this.textContent=text;this.value=value;},window:{},document:{getElementById:control,querySelectorAll:selector=>selector==='#prod-variant-stock input'?variantInputs:[]},auth:{currentUser:{uid:'super'}},currentUser:{uid:'super'},navigator:{onLine:true},productMasterBusy:false,currentRole:'superadmin',can:()=>true,roleCanDo:()=>true,
+ const ctx={crypto,AbortSignal,Option:function(text,value){this.textContent=text;this.value=value;},window:{},document:{getElementById:control,querySelectorAll:selector=>selector==='#prod-variant-stock input'?variantInputs:[]},auth:{currentUser:{uid:'super'}},currentUser:{uid:'super'},navigator:{onLine:true},productMasterBusy:false,currentRole:'superadmin',can:()=>true,roleCanDo:()=>true,
   _allProducts:[original],_productSourceById:new Map([['source',structuredClone(original)]]),_allCollections:[{slug:'anillos'}],_productInventoryById:new Map([['source',{costUnit:100,purchased:5,stockMinimum:2,internalNotes:'Privado'}]]),productEditBaseline:null,productCommercialBaseline:null,productVariantStockBaseline:null,
   readProductEditorResponse,ensureEditorialFields,editorialFields,productEditorialStatus,productTemplate,productCardPatch,productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,_formImageWidgets:new Map(),productColorPhotos:{serialize:()=>[],flush:async()=>{}},
   wristCategory:x=>x,sanitizeImageUrl:x=>typeof x==='string'&&x.startsWith('https://')?x:'',mountFormImageWidget:()=>{},mountProductColorPhotos:()=>{},
@@ -277,4 +277,23 @@ test('editor compatible conecta prodGuardar real con el escritor comercial y con
  assert.equal(r.rows.get('products/source').name,'Anillo editado');assert.equal(r.rows.get('products/source').variantInventory[0].price,40000);
  assert.equal(r.rows.get('products/source').internalNotes,undefined);assert.equal(r.rows.get('productInventory/source').internalNotes,'Privado');
  assert.equal(r.writes.filter(path=>path.startsWith('auditLog/')).length,1);
+});
+
+test('crear sin permiso de editar permite reintentar transporte fallido con el mismo ID',async()=>{
+ const r=runtime();r.ctx.currentRole='admin';r.ctx.can=(_role,action)=>action!=='editProducts';r.ctx.roleCanDo=(_module,action)=>action!=='editar';
+ r.ctx._prodNuevoNow();r.control('prod-name').value='Nuevo recuperable';r.control('prod-category').value='anillos';r.control('prod-price').value='30000';
+ r.ctx.compatibleController={get:()=>null,patch:base=>base};
+ vm.runInContext('productCommercialEditor=compatibleController;',r.ctx);
+ const requests=[];
+ r.ctx.authenticatedFetch=async(_url,options)=>{
+  assert.ok(options.signal instanceof AbortSignal);assert.equal(options.signal.aborted,false);
+  const request=JSON.parse(options.body);requests.push(request);
+  if(requests.length===1)throw Error('Transporte interrumpido antes de confirmar');
+  const result=await saveProductEditor({},request,{uid:'admin',role:'admin'},{get:async(_env,path)=>path==='collections/anillos'?{fields:encodeFirestoreFields({name:'Anillos'}),updateTime:'collection'}:r.rows.has(path)?{fields:encodeFirestoreFields(r.rows.get(path)),updateTime:'version'}:null,commit:async(_env,writes)=>{for(const write of writes){r.rows.set(write.path,{...r.rows.get(write.path),...decodeFirestoreFields(write.fields)});r.writes.push(write.path);}}});
+  return {ok:true,json:async()=>({ok:true,result})};
+ };
+ assert.equal(await r.ctx.window.saveTest(),false);assert.equal(r.control('prod-id').value,'new-1');
+ assert.equal(await r.ctx.window.saveTest(),true,r.control('prod-form-error').textContent);
+ assert.equal(requests.length,2);assert.equal(requests[0].productId,requests[1].productId);assert.equal(requests[0].changeId,requests[1].changeId);
+ assert.equal(r.writes.filter(path=>path.startsWith('products/new-')).length,1);
 });

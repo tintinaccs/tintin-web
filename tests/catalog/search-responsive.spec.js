@@ -247,3 +247,19 @@ test.describe('gesto táctil en viewport nativo',()=>{
   await expect(page.locator('html')).not.toHaveClass(/tt-surface-locked/);
  });
 });
+
+
+test('catálogo prioriza el nombre exacto y conserva el orden elegido explícitamente', async ({ page }) => {
+ const rows=[{id:'prefix',name:'ELIORA accesorios',price:100,stock:2,active:true,category:'anillos'},{id:'exact',name:'ELIORA',price:200,stock:0,active:true,category:'anillos'}];
+ await page.route('**/api/public-catalog?**',route=>{
+  const resource=new URL(route.request().url()).searchParams.get('resource');
+  if(!['products','collections'].includes(resource))return route.continue();
+  return route.fulfill({json:{ok:true,resource,items:(resource==='products'?rows:[{id:'anillos',name:'Anillos',visible:true}]).map(({id,...data})=>({id,data}))}});
+ });
+ await page.goto('/catalogo');
+ await expect(page.locator('#cat-grid [data-product-id]')).toHaveCount(2);
+ await page.locator('#cat-search').fill('  éliora  ');
+ await expect(page.locator('#cat-grid [data-product-id]').first()).toHaveAttribute('data-product-id','exact');
+ await page.locator('#cat-sort').selectOption('precio-asc');
+ await expect(page.locator('#cat-grid [data-product-id]').first()).toHaveAttribute('data-product-id','prefix');
+});

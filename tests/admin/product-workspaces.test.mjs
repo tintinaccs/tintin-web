@@ -93,3 +93,35 @@ test('fotos de progreso privado bloquean borrado entre cuentas y páginas; error
  await assert.rejects(findProductWorkMediaUsage({},[id],'qa-cloud',{listPage:async()=>{throw Error('offline');}}),/offline/);
  await assert.rejects(findProductWorkMediaUsage({},[id],'qa-cloud',{listPage:async()=>first}),/no avanzó/);
 });
+
+test('alta confirmada sin respuesta se reconoce con su comprobante privado aunque el rol no pueda editar',async()=>{
+ const admin={uid:'qa-create-only',role:'admin'};
+ const s=store({'collections/anillos':{},'rolePermissions/main':{admin:{productos:{ver:true,crear:true,editar:false,activarDesactivar:true}}}});
+ const saved=await draft(s,{},admin);
+ const body={productId:key,expected:null,changeId:'qa_create_lost_reply',workspace:{key,revision:saved.revision},product};
+ await saveProductEditor({},body,admin,s.io);
+ const count=s.writes.length;
+ assert.equal((await saveProductEditor({},body,admin,s.io)).duplicate,true);
+ assert.equal(s.writes.length,count);
+ for(const changed of [
+  {...body,workspace:{key,revision:saved.revision+1}},
+  {...body,workspace:null},
+  {...body,expected:productFingerprint(s.data('products/'+key))},
+ ])await assert.rejects(saveProductEditor({},changed,admin,s.io),e=>e.status===403);
+ await assert.rejects(saveProductEditor({},body,{uid:'another-create-only',role:'admin'},s.io),e=>e.status===403);
+ s.docs.set('rolePermissions/main',{fields:encode({admin:{productos:{ver:true,crear:false,editar:false}}})});
+ await assert.rejects(saveProductEditor({},body,admin,s.io),e=>e.status===403);
+ assert.equal(s.writes.length,count);
+});
+
+test('el recibo de una edición no autoriza un reintento con permiso exclusivo de crear',async()=>{
+ const admin={uid:'qa-edit-revoked',role:'admin'};
+ const s=store({['products/'+key]:product,'collections/anillos':{},'rolePermissions/main':{admin:{productos:{ver:true,crear:true,editar:true}}}});
+ const saved=await draft(s,{},admin);
+ const body={productId:key,expected:productFingerprint(product),changeId:'qa_edit_lost_reply',workspace:{key,revision:saved.revision},product:{...product,name:'Cambio'}};
+ await saveProductEditor({},body,admin,s.io);
+ const count=s.writes.length;
+ s.docs.set('rolePermissions/main',{fields:encode({admin:{productos:{ver:true,crear:true,editar:false}}})});
+ await assert.rejects(saveProductEditor({},{...body,expected:null},admin,s.io),e=>e.status===403);
+ assert.equal(s.writes.length,count);
+});

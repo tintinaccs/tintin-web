@@ -1,4 +1,5 @@
 import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
+import { normalizeAdminSearch, debounceAdminSearch, renderAdminSearchMarkup } from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
@@ -44,21 +45,29 @@ function canUse() { return isSuperAdmin(auth.currentUser); }
 function showError(message) { const el = document.getElementById('tt-pages-error'); if (el) { el.textContent = message; el.classList.add('is-visible'); } }
 function clearError() { document.getElementById('tt-pages-error')?.classList.remove('is-visible'); }
 
+const scheduleSearch = debounceAdminSearch(() => render());
+const boundSearchInputs = new WeakSet();
 function render() {
   const host = root();
   if (!host || !canUse()) return;
   if (editing) { renderEditor(host); return; }
-  const query = String(document.getElementById('tt-pages-search')?.value || '').toLowerCase().trim();
+  const searchInput = host.querySelector('#tt-pages-search');
+  const rawQuery = searchInput?.value || '';
+  const query = normalizeAdminSearch(rawQuery);
   const filter = document.getElementById('tt-pages-filter')?.value || 'all';
-  const filtered = pages.filter(page => (!query || `${page.title} ${page.slug}`.toLowerCase().includes(query)) && (filter === 'all' || (filter === 'live' ? page.published !== false : page.published === false)));
-  host.innerHTML = `<div class="tt-pages-admin">
+  const filtered = pages.filter(page => (!query || normalizeAdminSearch(`${page.title} ${page.slug}`).includes(query)) && (filter === 'all' || (filter === 'live' ? page.published !== false : page.published === false)));
+  renderAdminSearchMarkup(host, `<div class="tt-pages-admin">
     <div class="tt-pages-head"><div><h2>Páginas</h2><p>Administrá las páginas existentes de Tintin y creá nuevas páginas personalizadas desde un solo módulo.</p></div><div class="tt-pages-actions"><button type="button" class="adm-btn adm-btn-primary" id="tt-pages-new">+ Nueva página</button></div></div>
-    <div class="tt-pages-toolbar"><div class="tt-pages-filters"><input class="adm-input" id="tt-pages-search" type="search" placeholder="Buscar por título o slug…" value="${esc(query)}"><select class="adm-input" id="tt-pages-filter"><option value="all" ${filter==='all'?'selected':''}>Todas</option><option value="live" ${filter==='live'?'selected':''}>Publicadas</option><option value="draft" ${filter==='draft'?'selected':''}>Borradores</option></select></div><span class="adm-badge">${filtered.length} de ${pages.length}</span></div>
+    <div class="tt-pages-toolbar"><div class="tt-pages-filters"><input class="adm-input" id="tt-pages-search" type="search" placeholder="Buscar por título o slug…" value="${esc(rawQuery)}"><select class="adm-input" id="tt-pages-filter"><option value="all" ${filter==='all'?'selected':''}>Todas</option><option value="live" ${filter==='live'?'selected':''}>Publicadas</option><option value="draft" ${filter==='draft'?'selected':''}>Borradores</option></select></div><span class="adm-badge">${filtered.length} de ${pages.length}</span></div>
     <div class="tt-pages-notice">Las páginas del sistema son las rutas que ya existen en la web. Las personalizadas se publican en <strong>/pages/slug</strong>; los borradores no son visibles públicamente.</div>
     <div class="tt-pages-table">${filtered.length ? `<table><thead><tr><th>Título</th><th>Tipo</th><th>Visibilidad</th><th>Plantilla</th><th>Actualización</th><th></th></tr></thead><tbody>${filtered.map(page => { const builtin = page.pageType === 'builtin'; const href = builtin ? page.path : `/pages/${encodeURIComponent(page.slug)}`; return `<tr><td><span class="tt-pages-title">${esc(page.title || page.slug)}</span><span class="tt-pages-slug">${esc(href)}</span></td><td><span class="tt-pages-status ${builtin ? 'is-system' : 'is-custom'}">${builtin ? 'Sistema' : 'Personalizada'}</span></td><td><span class="tt-pages-status ${page.published !== false ? 'is-live':'is-draft'}">${page.published !== false ? 'Publicada':'Borrador'}</span></td><td>${esc(page.template || 'standard')}</td><td>${esc(dateLabel(page.updatedAt))}</td><td><div class="tt-pages-actions-cell">${builtin ? `<a class="adm-btn adm-btn-sm" href="${esc(href)}" target="_blank" rel="noopener">Ver</a>` : `<button type="button" class="adm-btn adm-btn-sm" data-page-edit="${esc(page.slug)}">Editar</button>${page.published !== false ? `<a class="adm-btn adm-btn-sm" href="${esc(href)}" target="_blank" rel="noopener">Ver</a>`:''}<button type="button" class="adm-btn adm-btn-sm" data-page-duplicate="${esc(page.slug)}">Duplicar</button><button type="button" class="adm-btn adm-btn-sm adm-btn-danger" data-page-delete="${esc(page.slug)}">Eliminar</button>`}</div></td></tr>`; }).join('')}</tbody></table>` : '<div class="tt-pages-empty">No se encontraron páginas con esos filtros.</div>'}</div>
-  </div>`;
+  </div>`, '#tt-pages-search');
   host.querySelector('#tt-pages-new')?.addEventListener('click', () => openEditor());
-  host.querySelector('#tt-pages-search')?.addEventListener('input', render);
+  const nextSearch = host.querySelector('#tt-pages-search');
+  if (nextSearch && !boundSearchInputs.has(nextSearch)) {
+    boundSearchInputs.add(nextSearch);
+    nextSearch.addEventListener('input', scheduleSearch);
+  }
   host.querySelector('#tt-pages-filter')?.addEventListener('change', render);
   host.querySelectorAll('[data-page-edit]').forEach(button => button.addEventListener('click', () => openEditor(button.dataset.pageEdit)));
   host.querySelectorAll('[data-page-duplicate]').forEach(button => button.addEventListener('click', () => openEditor(button.dataset.pageDuplicate, true)));

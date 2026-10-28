@@ -3,6 +3,7 @@ import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
+import { normalizeAdminSearch, debounceAdminSearch } from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { collection, doc, getDoc, limit,  query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { runAdminBulk } from '../utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
@@ -133,23 +134,45 @@ async function api(input) {
   return result;
 }
 
+let reportsGeneration = 0;
+let reportsRequest = null;
+function cancelReports() {
+  ++reportsGeneration;
+  reportsRequest?.abort();
+  reportsRequest = null;
+}
 async function loadReports() {
-  if (!user) return;
-  const token = await user.getIdToken();
+  cancelReports();
+  const generation = reportsGeneration;
+  const owner = user;
+  if (!owner) return;
+  const controller = new AbortController();
+  reportsRequest = controller;
+  const current = () => generation === reportsGeneration && user === owner;
   const status = $('#reports-filter')?.value || '';
   const search = $('#reports-search')?.value || '';
   const params = new URLSearchParams({ action: 'commentReports' });
   if (status) params.set('status', status);
   if (search) params.set('search', search);
-  const response = await fetch(`/api/admin-engagement?${params}`, {
-    cache: 'no-store', headers: { Authorization: `Bearer ${token}` },
-  });
-  const result = await response.json().catch(() => ({}));
-  if (!response.ok || !result.ok) throw new Error(result.error || 'No se pudieron cargar las denuncias');
-  reports = Array.isArray(result.reports) ? result.reports : [];
-  reportPage = 1;
-  renderReports();
+  try {
+    const token = await owner.getIdToken();
+    if (!current()) return;
+    const response = await fetch(`/api/admin-engagement?${params}`, {
+      cache: 'no-store', signal: controller.signal, headers: { Authorization: `Bearer ${token}` },
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!current()) return;
+    if (!response.ok || !result.ok) throw new Error(result.error || 'No se pudieron cargar las denuncias');
+    reports = Array.isArray(result.reports) ? result.reports : [];
+    reportPage = 1;
+    renderReports();
+  } catch (error) {
+    if (current() && error.name !== 'AbortError') throw error;
+  } finally {
+    if (current()) reportsRequest = null;
+  }
 }
+const scheduleReports = debounceAdminSearch(() => loadReports().catch(error => toast(error.message, 'error')));
 
 function profileFor(uid) {
   return usersByUid.get(String(uid || '')) || {};
@@ -463,7 +486,7 @@ function renderLikeKpis() {
 }
 
 function reviewFiltered() {
-  const term = ($('#reviews-search')?.value || '').trim().toLowerCase();
+  const term = normalizeAdminSearch($('#reviews-search')?.value);
   const status = $('#reviews-filter')?.value || 'all';
   const rating = $('#reviews-rating')?.value || 'all';
   const reply = $('#reviews-reply')?.value || 'all';
@@ -482,7 +505,7 @@ function reviewFiltered() {
     if (reply === 'customer-last' && (review.conversation || []).at(-1)?.authorType !== 'customer') return false;
     if (!daysAgo(review.createdAt, period)) return false;
     if (term && ![profileName(review), review.realName, review.email, review.productName, review.comment, review.reviewId]
-      .some(value => String(value || '').toLowerCase().includes(term))) return false;
+      .some(value => normalizeAdminSearch(value).includes(term))) return false;
     return true;
   });
   if (reviewQuickFilter === 'low') data = data.filter(review => Number(review.rating) <= 2);
@@ -497,7 +520,7 @@ function reviewFiltered() {
   return data;
 }
 function likeFiltered() {
-  const term = ($('#likes-search')?.value || '').trim().toLowerCase();
+  const term = normalizeAdminSearch($('#likes-search')?.value);
   const status = $('#likes-filter')?.value || 'active';
   const period = $('#likes-period')?.value || 'all';
   const sort = $('#likes-sort')?.value || settings.likeDefaultSort;
@@ -507,7 +530,7 @@ function likeFiltered() {
     if (status === 'unread' && !item.unread) return false;
     if (!daysAgo(item.createdAt, period)) return false;
     if (term && ![profileName(item), item.realName, item.email, item.productName, item.likeId]
-      .some(value => String(value || '').toLowerCase().includes(term))) return false;
+      .some(value => normalizeAdminSearch(value).includes(term))) return false;
     return true;
   });
   data.sort((a, b) => {
@@ -604,13 +627,13 @@ function renderReviews() {
 }
 
 function reportFiltered() {
-  const term = ($('#reports-search')?.value || '').trim().toLowerCase();
+  const term = normalizeAdminSearch($('#reports-search')?.value);
   const status = $('#reports-filter')?.value || '';
   return reports.filter(report => {
     if (status && report.status !== status) return false;
     if (!term) return true;
     return [report.reportId, report.commentId, report.productId, report.reason, report.commentText]
-      .some(value => String(value || '').toLowerCase().includes(term));
+      .some(value => normalizeAdminSearch(value).includes(term));
   });
 }
 
@@ -1105,7 +1128,12 @@ function bindEvents() {
       if (event.target.id === 'likes-sort') event.target.dataset.userChanged = '1';
       likePage = 1; renderLikes();
     }
-    if (event.target.matches('#reports-search,#reports-filter')) loadReports().catch(error => toast(error.message, 'error'));
+    if (event.target.matches('#reports-search,#reports-filter')) {
+      // Invalidar ahora: una respuesta anterior tampoco puede pintar durante
+      // el debounce de la consulta nueva.
+      cancelReports();
+      scheduleReports();
+    }
   });
   document.addEventListener('change', event => {
     if (event.target.matches('[data-eg-select-review]')) {
@@ -1253,6 +1281,8 @@ subscribeAuthState(async current => {
   // listeners seguían corriendo tras una pérdida real de sesión y cada uno
   // chocaba por separado con "Missing or insufficient permissions".
   stopEngagementRealtime();
+  scheduleReports.cancel();
+  cancelReports();
   if (!isSuperAdmin(current)) { user = null; linkedReview = null; linkedLike = null; return; }
   user = current;
   engagementRealtimeErrorNotified = false;

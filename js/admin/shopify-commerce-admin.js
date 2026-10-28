@@ -1,10 +1,11 @@
+import { normalizeAdminSearch, renderAdminSearchMarkup } from './datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 import { productFingerprint } from './products/maestro-productos-core.mjs?v=tintin-20261024-editor-v2-4';
 import { variantInventoryEntries, firstAvailableVariant } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { productVariantImage } from '../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { ordersForView, testOrderNumber, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
-import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261024-editor-v2-4';
-import { installProductInterface, syncProductSurfaces, visibleProductEditor } from './products/interfaz-productos-adaptable.js?v=tintin-20261028-studio-reference-2';
+import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261024-editor-v2-4-editor-search-20261028-1';
+import { installProductInterface, syncProductSurfaces, visibleProductEditor } from './products/interfaz-productos-adaptable.js?v=tintin-20261028-studio-reference-2-editor-search-20261028-1';
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261027-global-fluidez-3';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
@@ -152,7 +153,7 @@ function esc(value) {
 }
 
 function normalizeText(value) {
-  return String(value ?? '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return normalizeAdminSearch(value);
 }
 
 function safeImage(value) {
@@ -570,7 +571,7 @@ function renderProducts() {
     ? `<div class="tt-commerce-error" role="alert">${esc(state.productsError)}${state.products.length ? ' Se muestran los últimos datos confirmados.' : ''} <button type="button" class="tt-commerce-btn" data-action="products-retry">Reintentar</button></div>`
     : '';
 
-  root.innerHTML = `
+  renderAdminSearchMarkup(root, `
     <div class="tt-commerce-pagehead">
       <div class="tt-commerce-titlegroup">
         <h1 class="tt-commerce-title">Productos <span class="tt-commerce-count">${state.productsError ? "—" : state.products.length}</span></h1>
@@ -666,7 +667,7 @@ function renderProducts() {
           ${canExport ? button('Exportar selección', 'products-export-selected') : ''}
         </div>
       </div>
-    </div>`;
+    </div>`);
   syncProductSurfaces();
   if (state.busy) root.querySelectorAll('button,input,select').forEach(control=>{control.disabled=true;});
   if (focusSelector) {
@@ -696,7 +697,7 @@ function renderCollections() {
     ? `<div class="tt-commerce-error" role="alert">${esc(state.collectionsError)}${state.collections.length ? ' Se muestran los últimos datos confirmados.' : ''} <button type="button" class="tt-commerce-btn" data-action="collections-retry">Reintentar</button></div>`
     : '';
 
-  root.innerHTML = `
+  renderAdminSearchMarkup(root, `
     <div class="tt-commerce-pagehead">
       <div class="tt-commerce-titlegroup">
         <h1 class="tt-commerce-title">Colecciones <span class="tt-commerce-count">${state.collectionsError ? "—" : state.collections.length}</span></h1>
@@ -752,7 +753,7 @@ function renderCollections() {
         </table>
       </div>` : '<div class="tt-commerce-empty">No hay colecciones que coincidan con esta vista.</div>'}
       <div class="tt-commerce-footer"><span>${rangeLabel(page, 'colecciones', collectionsUnavailable)}</span><span>El orden y la visibilidad impactan la tienda pública.</span>${pageControls('collections-page', page.page, page.pages)}</div>
-    </div>`;
+    </div>`);
   if(focusedId)root.querySelector(`[data-collection-visible="${CSS.escape(focusedId)}"]`)?.focus({preventScroll:true});
   else if(pageSelectionFocused)root.querySelector('[data-check-all="collections"]')?.focus({preventScroll:true});
 }
@@ -1534,7 +1535,7 @@ function onChange(event) {
   }
 }
 
-let searchTimer = null;
+const searchTimers = new Map();
 function onInput(event) {
   if (event.target.matches('[data-card-stock]')) {
     const input=event.target, product=state.products.find(item=>item._docId===input.dataset.cardStock);
@@ -1548,13 +1549,20 @@ function onInput(event) {
   if(event.target.matches('[data-drawer-order-note]') && state.drawer?.type==='order') { state.drawer.pending={...(state.drawer.pending || {}),statusNote:event.target.value};const save=document.querySelector('[data-action="drawer-order-save"]');if(save)save.disabled=!drawerOrderHasPending(state.drawer.id);return; }
   const filter = event.target.dataset.filter;
   if (!['product-search', 'collection-search', 'order-search'].includes(filter)) return;
-  clearTimeout(searchTimer);
+  clearTimeout(searchTimers.get(filter));
   const value = event.target.value;
-  searchTimer = setTimeout(() => {
-    if (filter === 'product-search') { state.productSearch = value; state.productPage = 0; renderProducts(); }
-    if (filter === 'collection-search') { state.collectionSearch = value; state.collectionPage = 0; renderCollections(); }
-    if (filter === 'order-search') { state.orderSearch = value; state.orderPage = 0; renderOrders(); }
-  }, 120);
+  // El dato se actualiza al escribir, antes de snapshots remotos o renders de
+  // otros filtros. El debounce sólo difiere el trabajo de la lista.
+  if (filter === 'product-search') { state.productSearch = value; state.productPage = 0; }
+  if (filter === 'collection-search') { state.collectionSearch = value; state.collectionPage = 0; }
+  if (filter === 'order-search') { state.orderSearch = value; state.orderPage = 0; }
+  if (event.isComposing) return;
+  searchTimers.set(filter, setTimeout(() => {
+    searchTimers.delete(filter);
+    if (filter === 'product-search') renderProducts();
+    if (filter === 'collection-search') renderCollections();
+    if (filter === 'order-search') renderOrders();
+  }, 120));
 }
 
 function mountShells() {
@@ -1836,6 +1844,7 @@ function boot() {
   document.addEventListener('click', onClick);
   document.addEventListener('change', onChange);
   document.addEventListener('input', onInput);
+  document.addEventListener('compositionend', onInput);
   document.addEventListener('click', event => {
     if (!event.target.closest('#tt-commerce-menu,[data-menu]')) closeMenu();
   }, true);
@@ -1902,6 +1911,8 @@ function boot() {
     // Sin esto, los listeners de products/collections/orders/orderTrash
     // seguían corriendo tras una pérdida real de sesión y cada uno chocaba
     // por separado con "Missing or insufficient permissions" en Firestore.
+    for (const timer of searchTimers.values()) clearTimeout(timer);
+    searchTimers.clear();
     state.unsubscribers.forEach(unsub => { try { unsub(); } catch {} });
     state.unsubscribers = [];
     orderSourceStop?.();orderSourceStop=null;orderSourceUid='';state.orders=[];state.orderHistory.clear();state.orderContacts.clear();state.drawer=null;renderOrders();renderDrawer();

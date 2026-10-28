@@ -6,7 +6,7 @@ export function ensureEditorialFields(card) {
             <h2 id="prod-publication-heading">Publicación</h2>
             <label for="prod-publicationStatus">Estado del producto</label>
             <select id="prod-publicationStatus" class="adm-input"><option value="active">Activo</option><option value="draft">Borrador</option><option value="archived">Archivado</option></select>
-            <p class="tt-editor-caption">El stock y el estado se gestionan por separado.</p>
+            <p class="tt-editor-caption">Borrador guarda el progreso privado. Activo publica el producto al guardar. El stock se gestiona por separado.</p>
             <label for="prod-productTemplate">Presentación de la ficha</label>
             <select id="prod-productTemplate" class="adm-input"><option value="default">Actual</option><option value="gallery">Galería ampliada</option></select>
           </section>

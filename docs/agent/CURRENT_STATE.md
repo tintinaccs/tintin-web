@@ -1,3 +1,9 @@
+## 2026-10-28 — Guardado final del editor y búsquedas de clienta a Super Admin
+
+Agente: Codex raíz, con inspección paralela de los buscadores públicos/administrativos y escritor comercial. Rama `codex/editor-buscadores-20261028`, base9fcc8c57. Se reproduce `Último paso` deshabilitado; ahora invoca el guardado canónico, indica espera y distingue borrador privado/publicación. Alta reintentable con el mismo ID/changeId y permisos originales: baseline confirmado en cliente y recibo privado atómico para respuesta perdida en servidor. Timeout30s. Búsquedas conservan campos/foco/composición; normalización, debounce, generación/cancelación donde corresponde. Inventario y límites completos en EDITOR-Y-BUSCADORES-20261028.md. Sin datos reales, cambios de Rules, servicios ni dependencias.
+
+PASS_LOCAL:182 Node administrativos +1omitido emulador,63participación,29públicos/ubicación;37Chromium públicos y44comercio/admin. Último paso3/3Chromium(320/768/1440);Páginas3/3con CSP intacta tras corregir fixture. Fallo preexistente del fixture private-work-media-guard (statusFromError no inyectado) corregido, sin runtime alterado. Build canónico y preflight PASS_LOCAL (1073 JS,72 funciones;381 recursos/67 cargas dinámicas). Regresión final211editor en curso; CI PENDING en el candidato que se prepara. Safari físico y guardado con sesión real de la titular NOT_VERIFIED. No heredar PASS de #1267/#1268 ni certificar publicación antes de comprobar SHA/huella.
+
 ## 2026-10-28 — Studio: distinguir clase visual de un editor paralelo
 
 Codex /root, PR1268, head36c9babaf1dbb51bf555d9f42cba31013d8d3c75,

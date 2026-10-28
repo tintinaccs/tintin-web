@@ -1,3 +1,4 @@
+import { normalizeAdminSearch } from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
@@ -274,9 +275,9 @@ import {
   }
 
   function moduleRows(filter = '') {
-    const needle = String(filter || '').trim().toLowerCase();
+    const needle = normalizeAdminSearch(filter);
     return MAESTRO_MODULES
-      .filter(module => !needle || `${module.label} ${module.id} ${module.policy} ${module.description}`.toLowerCase().includes(needle))
+      .filter(module => !needle || normalizeAdminSearch(`${module.label} ${module.id} ${module.policy} ${module.description}`).includes(needle))
       .map(module => {
         const cells = CAP_COLUMNS.map(([key]) => {
           const value = module.capabilities[key];

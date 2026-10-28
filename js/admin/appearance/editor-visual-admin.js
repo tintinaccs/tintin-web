@@ -1,3 +1,4 @@
+import { normalizeAdminSearch } from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { collection, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -162,8 +163,8 @@ function ensureStudioUi() {
 }
 function toggleLibrary(open) { libraryOpen=Boolean(open); const overlay=$('visual-library-overlay'); if(!overlay)return; overlay.hidden=!libraryOpen; if(libraryOpen){renderLibrary();setTimeout(()=>$('visual-library-search')?.focus(),20);} }
 function renderLibrary() {
-  const grid=$('visual-library-grid'); if(!grid)return; const query=String($('visual-library-search')?.value||'').trim().toLowerCase(); grid.replaceChildren();
-  LIBRARY.filter(item=>!(pageId === 'index' && item.type === 'banner')).filter(item=>!query||`${item.label} ${item.desc} ${item.type}`.toLowerCase().includes(query)).forEach(preset=>{const button=make('button','visual-library-card');button.type='button';button.append(make('span','visual-library-icon',preset.icon),make('strong','',preset.label),make('small','',preset.desc));button.addEventListener('click',()=>{addBlockFromPreset(preset);toggleLibrary(false);});grid.appendChild(button);});
+  const grid=$('visual-library-grid'); if(!grid)return; const query=normalizeAdminSearch($('visual-library-search')?.value); grid.replaceChildren();
+  LIBRARY.filter(item=>!(pageId === 'index' && item.type === 'banner')).filter(item=>!query||normalizeAdminSearch(`${item.label} ${item.desc} ${item.type}`).includes(query)).forEach(preset=>{const button=make('button','visual-library-card');button.type='button';button.append(make('span','visual-library-icon',preset.icon),make('strong','',preset.label),make('small','',preset.desc));button.addEventListener('click',()=>{addBlockFromPreset(preset);toggleLibrary(false);});grid.appendChild(button);});
 }
 
 function renderPages() {

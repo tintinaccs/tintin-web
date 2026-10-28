@@ -45,3 +45,34 @@ test(`checkout conserva búsqueda, nombre, coordenadas y confirmación · ${widt
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 }
+
+
+test('cerrar búsqueda de ubicación cancela debounce y respuestas pendientes sin reabrir resultados', async ({ page }) => {
+ await page.route('**/__checkout-location-contract', route => route.fulfill({ contentType: 'text/html; charset=utf-8', body: fixture }));
+ let calls = 0, release;
+ await page.route('**/api/geo-search?*', async route => {
+  calls++;
+  await new Promise(resolve => { release = resolve; });
+  await route.fulfill({ json: { places: [{lat:-25.29,lng:-57.63,name:'Lugar anterior',address:'Asunción'}] } }).catch(() => {});
+ });
+ await page.goto('/__checkout-location-contract');
+ await page.waitForFunction(() => window.mapReady);
+ const input = page.locator('#ck-map-search'), results = page.locator('#ck-map-search-results');
+ await input.fill('Primera');
+ await input.press('Escape');
+ await page.waitForTimeout(400);
+ expect(calls).toBe(0);
+ await input.fill('Segunda');
+ await expect.poll(() => calls).toBe(1);
+ await input.press('Escape');
+ release();
+ await page.waitForTimeout(200);
+ await expect(results).not.toHaveClass(/show/);
+ await expect(input).toHaveAttribute('aria-expanded', 'false');
+ await input.fill('Tercera');
+ await expect.poll(() => calls).toBe(2);
+ await page.locator('#ck-location-name').click();
+ release();
+ await page.waitForTimeout(200);
+ await expect(results).not.toHaveClass(/show/);
+});
