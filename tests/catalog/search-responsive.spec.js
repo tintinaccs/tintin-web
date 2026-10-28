@@ -72,3 +72,152 @@ test('motor comercial v2 comparte precio y descuento entre tarjeta y búsqueda',
  await expect(page.locator('#search-results .tt-search-result-copy')).toContainText('Gs. 250');
  await expect(page.locator('#search-results s')).toHaveText('Gs. 300');
 });
+
+// Test-only visual viewport: sends native event names through the controller's
+// actual listeners. This does not certify an iOS virtual keyboard.
+for (const [width,height] of [[320,568],[390,844],[768,1024],[844,390],[1024,768],[1180,820],[1440,900],[3840,2160]]) {
+ test(`resultados completos, teclado y restauración ${width}×${height}`,async({page})=>{
+  await page.setViewportSize({width,height});
+  await page.addInitScript(()=>{
+   const viewport=new EventTarget();
+   viewport.height=innerHeight;viewport.offsetTop=0;viewport.scale=1;
+   Object.defineProperty(window,'visualViewport',{value:viewport,configurable:true});
+   window.__setKeyboard=(height,top=0)=>{viewport.height=height;viewport.offsetTop=top;viewport.dispatchEvent(new Event('resize'));viewport.dispatchEvent(new Event('scroll'));};
+  });
+  const rows=[{id:'exact',name:'ELIORA',price:25000,stock:0,active:true,category:'anillos'},...Array.from({length:30},(_,i)=>({id:'match-'+i,name:'Eliora accesorio '+String(i).padStart(2,'0')+' con nombre completo muy extenso para comprobar lectura sin recortes',price:35000,stock:2,active:true,category:'anillos'})),{id:'secret',name:'ELIORA privado',active:false,price:1,stock:2,category:'anillos'}];
+  await page.route('**/api/public-catalog?**',route=>{
+   const resource=new URL(route.request().url()).searchParams.get('resource');
+   if(!['products','collections'].includes(resource))return route.continue();
+   return route.fulfill({json:{ok:true,resource,items:(resource==='products'?rows:[{id:'anillos',name:'Anillos',visible:true}]).map(({id,...data})=>({id,data}))}});
+  });
+  await page.goto('/envios',{waitUntil:'domcontentloaded'});
+  await page.waitForSelector('body.tt-public-shell-mounted');
+  await page.waitForFunction(()=>document.querySelector('#tt-navigation-coherence-css')?.sheet || document.querySelector('#tt-navigation-coherence-css')?.disabled);
+  const opener=page.locator('[aria-controls="search-panel"]:visible').first();
+  // La barra móvil permanece fija. En tablet/desktop el header se oculta al
+  // bajar por diseño; iniciar arriba evita probar un click fuera de pantalla.
+  if(width<768)await page.evaluate(()=>scrollTo(0,160));
+  await expect(opener).toBeInViewport();
+  await page.evaluate(()=>addEventListener('click',()=>{window.__searchOpenY=scrollY;},{capture:true,once:true}));
+  await opener.click();
+  const input=page.locator('#search-input'),results=page.locator('#search-results'),panel=page.locator('#search-panel');
+  await expect(input).toBeFocused();
+  await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('open');
+  await input.fill('  éliora  ');
+  const links=results.locator('a');
+  await expect(links).toHaveCount(31);
+  await expect(results.locator('img')).toHaveCount(0);
+  await expect(results.locator('.tt-search-result-image--empty')).toHaveCount(31);
+  await expect(links.first()).toHaveAttribute('href','/product?id=exact');
+  if(width<768)await expect(page.locator('#tt-tabbar')).toBeVisible();
+  for(const available of [Math.min(height,320),height,Math.min(height,200)]) {
+   await page.evaluate(h=>window.__setKeyboard(h,12),available);
+   await expect.poll(()=>page.locator('html').evaluate(el=>el.style.getPropertyValue('--tt-panel-viewport-height'))).toBe(`${available}px`);
+   await expect.poll(async()=>{const b=await panel.boundingBox();return b.y+b.height<=available+13;}).toBe(true);
+   await expect(input).toBeFocused();
+   if(width<768) {
+    const nav=await page.locator('#tt-tabbar').boundingBox(),search=await panel.boundingBox();
+    expect(nav.y+nav.height).toBeLessThanOrEqual(available+13);
+    expect(search.y+search.height).toBeLessThanOrEqual(nav.y);
+    await expect(page.locator('#tt-tabbar')).toBeVisible();
+    const button=await page.locator('#tabbar-search').boundingBox();
+    expect(button.width).toBeGreaterThanOrEqual(44);
+    expect(button.height).toBeGreaterThanOrEqual(44);
+   }
+   expect((await results.boundingBox()).height).toBeGreaterThan(0);
+   const {last,box,end}=await results.evaluate(el=>{
+    el.scrollTop=el.scrollHeight;
+    return {last:el.querySelector('a:last-child').getBoundingClientRect().toJSON(),box:el.getBoundingClientRect().toJSON(),end:el.scrollTop+el.clientHeight>=el.scrollHeight-1};
+   });
+   expect(last.height).toBeGreaterThan(0);
+   expect(last.y+last.height).toBeLessThanOrEqual(box.y+box.height+1);
+   // A wrapped card may be taller than the remaining keyboard area. Its
+   // beginning and end must both be reachable through the same scroller.
+   expect(end).toBe(true);
+   if(last.height<=box.height)expect(last.y).toBeGreaterThanOrEqual(box.y-1);
+   else {
+    await links.last().evaluate(el=>el.scrollIntoView({block:'start',behavior:'instant'}));
+    expect((await links.last().boundingBox()).y).toBeGreaterThanOrEqual((await results.boundingBox()).y-1);
+   }
+  }
+  if(width===390) {
+   await page.evaluate(()=>window.__setKeyboard(innerHeight));
+   await expect.poll(async()=> (await results.boundingBox()).height).toBeGreaterThan(300);
+   await results.evaluate(el=>{el.scrollTop=0;});
+   const box=await results.boundingBox(),session=await page.context().newCDPSession(page);
+   const x=box.x+box.width/2,y=box.y+box.height-24;
+   await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+   for(let step=1;step<=6;step++){
+    await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y-step*24}]});
+    await page.waitForTimeout(20);
+   }
+   await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+   await expect.poll(()=>results.evaluate(el=>el.scrollTop)).toBeGreaterThan(0);
+   await session.detach();
+   expect(await results.evaluate(el=>{
+    const scroll=el.scrollTop,first=el.firstElementChild;
+    window.dispatchEvent(new CustomEvent('tintin:products-loaded',{detail:{products:window.PRODUCTS}}));
+    return el.scrollTop===scroll && el.firstElementChild===first;
+   })).toBe(true);
+   await page.screenshot({path:test.info().outputPath('busqueda-barra-visible.png')});
+  }
+  await page.keyboard.press('Tab');
+  expect(await page.evaluate(()=>!!document.activeElement.closest('#search-panel,#tt-tabbar,#tt-privacy-consent'))).toBe(true);
+  await page.locator('#btn-search-clear').click();
+  await expect(input).toHaveValue('');await expect(input).toBeFocused();await expect(results).toBeHidden();
+  await input.fill('zzzzzzzz');await expect(results).toContainText('No encontramos resultados');
+  await page.locator('#btn-search-close').click();
+  await expect(panel).toHaveAttribute('aria-hidden','true');
+  await expect(opener).toBeFocused();
+  if(width<768)await expect(page.locator('#tt-tabbar')).toBeVisible();
+  await expect.poll(()=>page.evaluate(()=>Math.round(scrollY))).toBe(await page.evaluate(()=>Math.round(window.__searchOpenY)));
+  await expect(page.locator('html')).not.toHaveClass(/tt-surface-locked/);
+  await page.evaluate(()=>window.__setKeyboard(innerHeight));
+  await opener.click();await expect(input).toHaveValue('');await page.keyboard.press('Escape');
+ });
+}
+
+test('catálogo vacío y error tardío no dejan carga infinita ni reabren búsqueda cerrada',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.route('**/api/public-catalog?**',route=>{
+  const resource=new URL(route.request().url()).searchParams.get('resource');
+  return route.fulfill({json:{ok:true,resource,items:[]}});
+ });
+ await page.goto('/envios',{waitUntil:'domcontentloaded'});
+ await page.locator('[aria-controls="search-panel"]:visible').first().click();
+ await page.locator('#search-input').fill('Eliora');
+ await expect(page.locator('#search-results')).toContainText('No encontramos resultados');
+ await page.locator('#btn-search-close').click();
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('tintin:products-error',{detail:{error:'Test de red tardío'}})));
+ await expect(page.locator('#search-panel')).toHaveAttribute('aria-hidden','true');
+ await expect(page.locator('#search-results')).toBeHidden();
+ await expect(page.locator('#tt-tabbar')).toBeVisible();
+});
+
+test('error de catálogo permite reintentar y conserva la consulta más reciente',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.route('**/__search-fixture-missing.jpg',route=>route.fulfill({status:404,body:''}));
+ let fail=true;
+ await page.exposeFunction('__recoverCatalog',()=>{fail=false;});
+ await page.addInitScript(()=>document.addEventListener('pointerdown',event=>{
+  if(event.target.closest?.('.tt-search-retry'))void window.__recoverCatalog();
+ },true));
+ await page.route('**/api/public-catalog?**',async route=>{
+  const resource=new URL(route.request().url()).searchParams.get('resource');
+  if(resource==='products'&&fail)return route.fulfill({status:502,json:{ok:false,error:'catalog_unavailable'}});
+  if(resource==='products')await new Promise(resolve=>setTimeout(resolve,200));
+  return route.fulfill({json:{ok:true,resource,items:(resource==='products'?products.map(p=>({...p,imageUrl:'https://tintinaccs.com/__search-fixture-missing.jpg'})):[{id:'anillos',name:'Anillos',visible:true}]).map(({id,...data})=>({id,data}))}});
+ });
+ await page.goto('/envios',{waitUntil:'domcontentloaded'});
+ await page.locator('[aria-controls="search-panel"]:visible').first().click();
+ await page.locator('#search-input').fill('reloj');
+ await expect(page.locator('#search-results')).toContainText('No pudimos cargar');
+ await page.getByRole('button',{name:'Reintentar',exact:true}).click();
+ await page.locator('#search-input').fill('anillo corazón');
+ await expect(page.locator('#search-results .tt-search-result-copy strong')).toHaveText(['Anillo corazón']);
+ await expect(page.locator('#search-results .tt-search-result-image--empty')).toHaveCount(1);
+ await page.locator('#search-input').fill('anilo');
+ await expect(page.locator('#search-results')).toContainText('Coincidencia aproximada');
+ await page.keyboard.press('Escape');
+ await expect(page.locator('#tt-tabbar')).toBeVisible();
+});

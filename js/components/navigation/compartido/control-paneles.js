@@ -69,11 +69,19 @@
 
     syncViewport() {
       const viewport = window.visualViewport;
-      const style = document.documentElement.style;
+      const html = document.documentElement;
+      const style = html.style;
+      const shortSearch = this.surface === 'search' && this.getBreakpoint() === 'mobile'
+        && (viewport?.height || innerHeight) < 320;
+      html.toggleAttribute('data-tt-panel-short', shortSearch);
       style.setProperty('--tt-panel-viewport-height', `${viewport?.height || innerHeight}px`);
       style.setProperty('--tt-panel-viewport-top', `${viewport?.offsetTop || 0}px`);
-      const keyboardOpen = viewport && innerHeight - viewport.height > 150;
-      style.setProperty('--tt-panel-nav-space', keyboardOpen ? '12px' : 'calc(108px + env(safe-area-inset-bottom))');
+      // Reservar la barra visible también con teclado: sus coordenadas y las
+      // del panel proceden del mismo viewport, sin capas que oculten productos.
+      const inset = !viewport || (viewport.scale || 1) !== 1 ? 0
+        : Math.max(0, innerHeight - viewport.height - viewport.offsetTop);
+      style.setProperty('--tt-panel-keyboard-inset', `${inset}px`);
+      style.setProperty('--tt-panel-nav-space', `calc(${shortSearch ? 72 : 108}px + env(safe-area-inset-bottom))`);
     }
 
     onResize() {
@@ -179,7 +187,9 @@
         right: '0',
         width: '100%',
         overflow: 'hidden',
-        touchAction: 'none',
+        // El body fijo bloquea el fondo; touch-action:none también bloqueaba
+        // el desplazamiento táctil de los resultados y demás paneles.
+        touchAction: 'auto',
       });
     }
 
@@ -242,6 +252,8 @@
     }
 
     emit() {
+      document.documentElement.toggleAttribute('data-tt-search-active', this.surface === 'search');
+      this.syncViewport();
       dispatchEvent(new CustomEvent('tintin:surface-change', {
         detail: { state: this.state, surface: this.surface },
       }));
@@ -270,7 +282,7 @@
       this.surface = name;
       this.trigger = trigger instanceof HTMLElement ? trigger : null;
       this.emit();
-      await config.beforeOpen?.({ trigger: this.trigger, controller: this });
+      if (config.beforeOpen) await config.beforeOpen({ trigger: this.trigger, controller: this });
       if (token !== this.operation) return false;
 
       config.element.classList.add('open', 'tt-surface-preparing');
@@ -288,6 +300,9 @@
         this.syncModalAccessibility();
       }
 
+      // Safari requiere enfocar durante el gesto que abrió la búsqueda.
+      // No esperar la animación ni volver a mover el cursor al terminarla.
+      if (name === 'search') this.focusFirst(config);
       await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
       await this.animateMorph(this.trigger, config.element, true, token);
       if (token !== this.operation) return false;
@@ -296,7 +311,7 @@
       await this.animateSurface(config.element, true);
       if (token !== this.operation) return false;
       this.state = 'open';
-      if (config.modal || this.trigger?.matches?.(':focus-visible')) this.focusFirst(config);
+      if (!config.element.contains(document.activeElement) && (config.modal || this.trigger?.matches?.(':focus-visible'))) this.focusFirst(config);
       config.afterOpen?.({ trigger: this.trigger, controller: this });
       this.emit();
       return true;
@@ -330,6 +345,7 @@
       // focus before hiding the dialog from assistive technology. Switches do
       // not restore the opener; the next surface will establish its own focus.
       if (config) this.setBackgroundInert(config.element, false);
+      document.documentElement.removeAttribute('data-tt-search-active');
       if (restoreFocus && returnTarget?.isConnected && !config?.element.contains(returnTarget)) {
         returnTarget.focus({ preventScroll: true });
       }

@@ -1,3 +1,51 @@
+## 2026-10-28 — Merge automático y seguimiento de headers, Codex /root
+
+La titular autoriza expresamente merge automático y seguimiento. Base remota
+verificada mediante el conector GitHub:5a2ea0f63306583df04ed47cc745d52902669a2c.
+La salida Git/gh del entorno devuelve503 del proxy; se utiliza el conector
+GitHub autorizado, preservando protecciones y el plan canónico de mantenimiento.
+PR/SHA/runs se registrarán con sus resultados reales; auto-merge habilitado no
+se considerará finalizado hasta verificar merge y ejecuciones posteriores.
+
+## 2026-10-28 — Headers, navegación y búsqueda responsive, Codex /root
+
+Base5a2ea0f6, rama local work. Alcance: shell público canónico, paneles,
+búsqueda, integración con catálogo/carrito/cuenta. La indicación posterior de
+la titular exige conservar visible la barra móvil; no se oculta al buscar.
+Panel y barra comparten viewport visual y reserva separada, con safe areas.
+Body fijo conserva scroll de fondo sin bloquear los gestos de resultados.
+Foco temprano/estable, limpiar/cerrar, exactos antes de alternativas incluso
+agotados, coincidencias completas, nombres multilínea, errores/vacío/reintento,
+placeholders de imagen y snapshots repetidos sin reconstruir el scroller.
+Reabrir consulta el TTL/single-flight existente; force llega al store.
+Sin cambios de backend, índices, Rules, Auth, inventario/precios ni dependencias.
+URLs transitivas, shell, bundles y diagnóstico desde generadores canónicos.
+
+PASS_LOCAL: build Pages/rutas/CSP/diagnóstico/caché;222 productos/sync,30 carrito,
+72 cuentas,463 comercio,79 Auth,17 navegación Node y12 búsqueda/caché/autoridad
+(solapamiento entre suites, no sumar como casos distintos). Header83 aprobadas;
+15 casos finales de paneles/foco/viewport/gestos aprobados. Búsqueda22/22 PASS;
+tras añadir el modo compacto con200px de altura visual,8/8 recorridos de
+viewport/scroll PASS. Iconos siempre visibles, controles44px y resultados
+con altura positiva; etiquetas visuales regresan al recuperar espacio.
+PASS_LOCAL: auditorías unified-navigation (12 anchos/13 rutas), headers (14
+anchos/0 problemas), public-shell, arquitectura, CSS, accesibilidad12 ySEO1179.
+
+Regresión ampliada:82 PASS/8 FAIL/1 SKIP. Fallas en marcador de logo404 y
+superficie inicial de Login en7 anchos. Se ejecutaron404/320 contra una copia
+intacta de5a2ea0f6 en4175: ambas causas fallan igual en la base. La omitida
+requiere preview Pages Functions. No se retiraron aserciones ni gates existentes.
+
+Evidencia externa puntual: API pública265 productos/265 IDs únicos,0 inactivos,
+sin nombre exactamenteELIORA ni campos privados comprobados. Sondeos posteriores
+a ficha/colecciones NOT_VERIFIED por503 del proxy Envoy con upstream connect
+error; no se atribuye al sitio. Sin escrituras externas ni datos ficticios reales.
+NOT_VERIFIED: Safari/iOS y Android físicos, safe areas/zoom reales, sesiones
+productivas por rol, CI del cambio, merge y publicación. No se hizo push/merge/
+deploy. No se hereda PASS de informes históricos. Revisión final del diff y
+sintaxis JS correctas; sin archivos temporales de prueba agregados al repositorio.
+Reporte: [AUDITORIA_HEADERS_BUSQUEDA_20261028.md](AUDITORIA_HEADERS_BUSQUEDA_20261028.md).
+
 ## 2026-10-28 — Cierre de #1263, Codex /root
 
 La titular autoriza terminar el editor, mergearlo y seguir sus resultados.

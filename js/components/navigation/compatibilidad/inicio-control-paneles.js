@@ -12,7 +12,7 @@
   }
   if (window.TintinSurfaceControllerReady) return;
 
-  const MODULE_VERSION = 'tintin-20261024-foco-paneles-1';
+  const MODULE_VERSION = 'tintin-20261024-foco-paneles-1-nav-20261028-2';
   const scriptUrl = document.currentScript?.src || new URL('js/components/navigation/compatibilidad/inicio-control-paneles.js', window.location.href).href;
   const controllerUrl = new URL('../compartido/control-paneles.js', scriptUrl);
   controllerUrl.searchParams.set('v', MODULE_VERSION);
