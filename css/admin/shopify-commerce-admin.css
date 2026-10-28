@@ -2024,8 +2024,7 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-composer .tt-product-
 html.tt-product-editor-open body #prod-form-card.tt-editor-studio .adm-card-body {background:var(--editor-canvas);padding:24px 28px 32px;}
 html.tt-product-editor-open body #prod-form-card.tt-editor-studio > .adm-card-head {padding:16px 28px;gap:12px;background:var(--editor-canvas);border-bottom:0;}
 #prod-form-card.tt-editor-studio .tt-studio-breadcrumb {flex:1 0 100%;font-size:12px;color:var(--tt-commerce-muted);display:flex;align-items:center;gap:12px;min-width:0;}
-#prod-form-card.tt-editor-studio .tt-work-back {position:absolute;top:16px;right:28px;z-index:1;}
-#prod-form-card.tt-editor-studio .tt-studio-breadcrumb {padding-right:110px;box-sizing:border-box;}
+#prod-form-card.tt-editor-studio .tt-work-back {position:static;order:0;}
 #prod-form-card.tt-editor-studio .tt-studio-breadcrumb button {border:0;background:transparent;color:inherit;padding:8px 0;min-height:44px;font:inherit;cursor:pointer;}
 #prod-form-card.tt-editor-studio .tt-studio-breadcrumb span {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 #prod-form-card.tt-editor-studio .tt-product-editor-heading {display:flex;flex:1 1 260px;align-items:center;min-width:0;}
@@ -2102,7 +2101,6 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-studio .tt-product-ta
 @media(max-width:767px) {
   html.tt-product-editor-open body #prod-form-card.tt-editor-studio .adm-card-body {padding:16px 12px 24px;}
   html.tt-product-editor-open body #prod-form-card.tt-editor-studio > .adm-card-head {padding:12px;}
-  #prod-form-card.tt-editor-studio .tt-work-back {top:12px;right:12px;}
   html.tt-product-editor-open body #prod-form-card.tt-editor-studio .tt-product-section-nav {padding-inline:8px;padding-bottom:0;margin-bottom:0;}
   html.tt-product-editor-open body #prod-form-card.tt-editor-studio .tt-editor-layout {padding:20px 16px;}
   #prod-form-card.tt-editor-studio .tt-studio-photo-layout {grid-template-columns:minmax(0,1fr);gap:24px;}
@@ -2110,4 +2108,10 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-studio .tt-product-ta
   #prod-form-card.tt-editor-studio .tt-studio-pagination {padding:12px;gap:8px;flex-wrap:wrap;}
   #prod-form-card.tt-editor-studio .tt-studio-pagination span {flex:1 0 100%;order:3;}
   #prod-form-card.tt-editor-studio .tt-studio-pagination button {max-width:48%;}
+}
+@media(max-height:500px) and (min-width:480px) {
+  html.tt-product-editor-open body #prod-form-card.tt-editor-studio > .adm-card-head {padding:8px 12px!important;gap:6px;}
+  #prod-form-card.tt-editor-studio .tt-studio-breadcrumb,
+  #prod-form-card.tt-editor-studio .tt-studio-subtitle {display:none;}
+  #prod-form-card.tt-editor-studio .tt-product-editor-heading {flex-basis:150px;}
 }

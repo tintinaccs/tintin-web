@@ -282,6 +282,10 @@ function refreshStudioFrame(card,body) {
     preview.addEventListener('click',()=>{const panel=body.querySelector('.tt-editor-preview-shell');if(panel){panel.open=true;panel.scrollIntoView({block:'nearest',behavior:'instant'});panel.querySelector('summary')?.focus({preventScroll:true});}});
     card.querySelector('.tt-product-primary-actions')?.prepend(preview);
   }
+  // Cancelar conserva el guard del workspace, dentro de la misma fila de
+  // acciones; no reserva otra fila ni se superpone a la ruta del producto.
+  const actions=card.querySelector('.tt-product-primary-actions'),back=card.querySelector('.tt-work-back');
+  if(back && actions && back.parentElement!==actions)actions.insertBefore(back,card.querySelector('#prod-save-btn'));
   const name=card.querySelector('#prod-name')?.value.trim() || 'Nuevo producto';
   if(breadcrumb.lastElementChild.textContent!==name)breadcrumb.lastElementChild.textContent=name;
   let footer=body.querySelector('.tt-studio-pagination');

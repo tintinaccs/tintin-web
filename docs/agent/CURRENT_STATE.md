@@ -1,3 +1,19 @@
+## 2026-10-28 — Studio: corregir cabecera conservando las comprobaciones
+
+PR1268, primer head50fc9edf7452a5b503b1d45631c80ce62891ec6c. La batería252
+reiniciada terminó249 PASS/3 FAIL, sin skips/flaky: dos casos alineaban Cancelar
+con las acciones y uno exigía al menos64px útiles en568x320. No son una aprobación
+total. La posición absoluta posterior ya cerraba el caso móvil en la pasada16,
+pero no la alineación de escritorio. Ahora se traslada el botón canónico del
+workspace dentro del grupo de acciones (mismo guard/listener), sin clonar ni
+ocultar Cancelar. En pantallas bajas se omiten sólo ruta/ayuda decorativas para
+reservar el formulario y el reintento. Los12 casos originales afectados pasan
+sin reintentos (34.7s), sin modificar sus aserciones. Regresión59 PASS sin
+reintentos (2.6m): pestañas, workspaces y scroll. Build/preflight39/39 finales PASS.
+CSS/interfaz/loader renuevan URL a studio-reference-2 porque el tag1 ya fue
+publicado en preview; galería y admin-app sin cambios conservan su tag1.
+La nueva cabeza requiere CI propia; el CI40759342037/1 anterior no se hereda.
+
 ## 2026-10-28 — Editor Studio según la captura de la titular
 
 Codex /root; base main c031635b9d421ece436b878119247c34bcf93f2a, rama

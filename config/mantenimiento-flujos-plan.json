@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
   "baseCommit": "c031635b9d421ece436b878119247c34bcf93f2a",
-  "reason": "Aplicar referencia visual Studio al editor preservando controles y escritores comerciales existentes",
+  "reason": "Aplicar referencia visual Studio y corregir alineación y altura sin alterar controles comerciales",
   "files": [
     {
       "path": "admin.html",
       "oldHash": "88f356ad5691398c184a12169c9975befc3867b75e6b93f7c420a857fc4bd5db",
-      "newHash": "329b441d6e4662ce08e8987f10504b823932f66163d5a392513ea246b2b14155"
+      "newHash": "926363f17276e8b59a76d6b64a3ce12ff197d71e22466c24e1da96a61e61f255"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "oldHash": "24081a779290854082cf96e446c3f6319e55d612d38e23731096ba9d5a14967d",
-      "newHash": "2a7ac33ef0f67679db75041aba634c9972ef4b612de9d471784c4ec76c8944e3"
+      "newHash": "23398ac18c05478515ab81bd46f8a85964e71150feb6a8ffe57186bf2cf0f532"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -21,12 +21,12 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "f20d294313564d27577ca003d7c976e1be2e11d3d96dd1f57b342929c875221e",
-      "newHash": "484c482fbe7f94e6c2f7480d9aed577362b024daebf69a2053dfe08cb076558c"
+      "newHash": "8c33d1b86245b1bdad29f797e3d04e849467431bb6253b4711a35f682f8facd6"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "7c8e9f25d7f1f8893f9cf929a3c815fbd6ba96460cd9f50c113675caa0958bab",
-      "newHash": "bd78269dccdc0ae18c4ed8564b33d0620c4d79c37e13ce001d4d1ac1018dd707"
+      "newHash": "b6801b5829d573c56de73fd03b95967be1eb022b7773417e84b0be34b4baf56b"
     }
   ],
   "affectedRecords": [

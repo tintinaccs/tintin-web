@@ -52,3 +52,12 @@ No heredar aprobaciones de #1265/#1266. Evidencias locales bajo
 `artifacts/editor-studio/`; actualizar CURRENT_STATE con resultados terminales.
 La aceptación con una sesión administrativa real y hardware físico no está
 acreditada por fixtures. Ninguna prueba escribe datos comerciales productivos.
+
+La batería252 reiniciada terminó249 PASS/3 FAIL (sin skips/flaky). Detectó dos
+alineaciones de Cancelar en escritorio y el área útil de568x320. Se conserva cada
+aserción: el botón canónico vuelve al grupo de acciones y en pantallas bajas se
+ocultan sólo breadcrumb/ayuda, no campos.12/12 pruebas originales afectadas PASS
+sin reintentos (34.7s); regresión59 PASS sin reintentos (2.6m), incluyendo scroll,
+workspaces y pestañas; build/preflight39/39 finales PASS. El tag1 ya está en el
+preview del PR1268, por lo que CSS/interfaz y su loader renuevan a tag2, sin
+reescribir una URL publicada. CI/merge se verifican por cabeza e intento nuevos.
