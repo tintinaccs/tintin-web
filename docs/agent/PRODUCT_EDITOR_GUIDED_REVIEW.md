@@ -39,6 +39,10 @@ Opcional: `PRODUCT_EDITOR_PREVIEW_SAMPLE=/ruta/producto-publico.json` carga una 
 
 Capturas locales: `artifacts/product-guided-editor/real-{390,1440}-{1..6}.png`, además de las capturas QA automatizadas. El servidor de la sesión de revisión se inicia en el puerto 4175. Los artefactos son locales y están excluidos del repositorio.
 
+## Corrección del primer resultado de CI
+
+CI40784162914/1 (`3c6b4eb2`) aprobó preflight y falló en la prueba auxiliar de cantidades por un fixture sin los campos canónicos de precio/ID. Se completó ese DOM mínimo y el caso afectado pasó localmente, sin cambiar la lógica ni retirar aserciones. Dos casos locales de carrito que importan SDK desde www.gstatic.com no se acreditan por bloqueo de red del entorno; sus pruebas se conservan para la repetición en GitHub. No se heredan los resultados del candidato anterior.
+
 ## Límites
 
 Las capturas adjuntas del editor real se examinaron. Las referencias originales `C:/Users/USER/.codex/visualizations/.../tintin-studio.html` y sus siete PNG de Windows no existen en este entorno Linux; no se declara haberlas abierto. No se verificó una sesión administrativa externa autenticada ni dispositivos físicos. No se relajaron reglas, permisos ni protecciones. El PR debe quedar draft porque el mantenimiento canónico puede fusionar PR no draft automáticamente; esta medida cumple la prohibición explícita de merge sin aprobación.
