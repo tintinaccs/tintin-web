@@ -1,3 +1,7 @@
+## 2026-10-28 — Integración automática autorizada del rediseño, Codex /root
+
+La titular pide «mergealo automatico y seguimiento» después de revisar la entrega local. Esta autorización posterior reemplaza la prohibición de merge del alcance anterior. Se publica la rama `codex/redesign-product-editor-20261028` y se prepara PR con integración automática sujeta a las protecciones. No se hacen escrituras comerciales de prueba en producción ni despliegues manuales. PR/SHA/runs/intentos se seguirán por el conector de GitHub: el CLI gh del entorno no autentica. Estado: IN_PROGRESS; no se confunde auto-merge habilitado con merge confirmado.
+
 ## 2026-10-28 — Rediseño de seis pestañas para revisión local, Codex /root
 
 Rama `codex/redesign-product-editor-20261028`, base main `5a2ea0f63306583df04ed47cc745d52902669a2c` comprobada por fetch; checkout inicial limpio. Pedido actual: implementar/verificar sin merge, deploy ni datos productivos, por encima de la instrucción general de merge automático. No se crea PR ni se despachan workflows de publicación.
