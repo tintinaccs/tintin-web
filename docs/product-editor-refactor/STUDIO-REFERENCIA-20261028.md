@@ -70,3 +70,12 @@ cancelación y restitución del foco.9/9 casos afectados y108/108 del spec compl
 PASS sin reintentos; preflight39/39 PASS. Sin cambios de runtime ni de URLs.
 La puerta final falló por admin=failure; el resto de etapas efectivas aprobó,
 pero sus éxitos no se heredan al siguiente SHA.
+
+CI40765146379/1 de36c9 terminó FAILURE en el siguiente contrato de versión
+única:188 PASS/6 FAIL. La clase visual `.tt-editor-studio` del formulario se
+confundía con el editor paralelo retirado. Se exige exactamente una clase en el
+formulario canónico y ninguna fuera, conservando todas las aserciones de datos,
+CSS antiguo ausente y ausencia de duplicados. Reproducido1 FAIL; batería exacta
+del comando CI194/194 PASS sin reintentos (9.4m). La primera batería local se
+interrumpió por servidor4189 apagado (dos errores de galería); se repitió tras
+comprobar HTTP, sin modificar galería. Sólo cambia el test, no el runtime.

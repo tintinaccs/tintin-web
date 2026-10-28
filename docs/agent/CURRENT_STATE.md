@@ -1,3 +1,21 @@
+## 2026-10-28 — Studio: distinguir clase visual de un editor paralelo
+
+Codex /root, PR1268, head36c9babaf1dbb51bf555d9f42cba31013d8d3c75,
+CI40765146379/1 FAILURE. Job123090136465:188 PASS/6 FAIL, porque el contrato
+de versión única prohibía cualquier `.tt-editor-studio`, ahora clase visual del
+formulario canónico existente. Reproducido a320px,1 FAIL (20.0s). Se exige una
+sola clase Studio en #prod-form-card y cero editores Studio fuera de él; se
+mantienen todos los controles de nodos únicos, CSS antiguo ausente, escrituras,
+inventario, reapertura y recuperación. Sólo test, no runtime ni URLs nuevas.
+Repository audit123099186403 falló exclusivamente por admin=failure. CodeQL y
+las otras etapas efectivas aprobaron para36c9, sin heredar al próximo SHA.
+La primera batería local194 se interrumpió tras dos fallos de galería porque
+el servidor4189 de la sesión anterior ya no estaba activo (curl:connection
+refused); no se cambió galería por esos resultados. Se reinició el servidor
+canónico y se verificó HTTP antes de repetir194 casos sin reintentos:194/194
+PASS (9.4m), incluidos los seis tamaños afectados y los otros siete specs del
+comando de CI. Preflight y nueva CI pendientes al registrar esta evidencia.
+
 ## 2026-10-28 — Studio: contrato de tres acciones en el test responsive
 
 Codex /root, PR1268, head1b97da28269eb57d8144290285d3d09f1318be18,
