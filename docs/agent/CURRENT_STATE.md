@@ -4687,3 +4687,23 @@ cerrar lote admin con evidencia terminal; Rules phone/username/editor y cierre
 preflight del diff final. Después quedan proveedores sandbox/cuentas autorizadas,
 hardware/WCAG manual, legal/retención y métricas de campo. No afirmar aprobación
 de todas las fases ni estabilidad global por contar tests solapados.
+
+## 2026-10-28 — Extracción inicial de Correos
+
+Codex /root, base9fcc8c570. Primer bloque del plan de la titular; dependencias
+y límites en CORREOS-EXTRACCION-20261028.md. Se encapsulan estado, renderers,
+handlers y cuatro listeners en iniciarCorreos con inyección explícita. Sesión,
+usuarios y pedidos se consultan mediante getters; toJsDate_ sigue compartida.
+Se conservan29 callbacks globales y el control de acceso existente. Sin cambios
+en autenticación, proveedores ni datos productivos.
+
+PASS_LOCAL: audit:emails, audit:email-messaging, audit:typography (42015
+comprobaciones), audit:integral y14 pruebas de content-security-boundaries.
+Pruebas locales del módulo completo sobre HTML/CSS reales y fuentes simuladas:
+pestañas, fuentes vivas, limpieza/reinicio de escuchas; historial hostil conserva
+sus comprobaciones. Se incorporan ambos recorridos de navegador al stage browser.
+Versionado y diagnóstico se regeneran por sus constructores canónicos.
+IN_PROGRESS: audit:final antes (worktree base independiente) y después; resultados
+terminales se registrarán en el cierre. CI/PR/merge pendientes de creación.
+NOT_VERIFIED: sesión productiva autenticada y envío real; no se ejecutan correos
+ni migraciones. Se mantiene detenido el avance al siguiente bloque.

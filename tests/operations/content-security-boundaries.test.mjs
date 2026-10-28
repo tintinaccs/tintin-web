@@ -43,7 +43,7 @@ test('contenido profundamente anidado y excesivo conserva límites del editor si
   assert.ok(sanitizeCustomPageHtml('a'.repeat(100001), origin).length <= 100000);
 });
 
-const source = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
+const source = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8') + '\n' + fs.readFileSync(new URL('../../js/admin/correos/correos-admin.js', import.meta.url), 'utf8');
 function body(name) {
   const match = source.match(new RegExp('function ' + name + '\\([^)]*\\) \\{[\\s\\S]*?\\n\\}'));
   assert.ok(match, name); return match[0];
