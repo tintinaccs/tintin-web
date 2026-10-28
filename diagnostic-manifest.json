@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c090a0eb7a2aaaf6c95ac819ab98bbdb60a5bfbb19d9206a95146ca6186c4a5d",
+  "sourceFingerprint": "ed27db6044996860a1dfca0e1cfca36183aebb452575bf0bb23a37bb87fe9fe1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1607,
     "textFiles": 1476,
-    "totalBytes": 34911355,
+    "totalBytes": 34911565,
     "pages": 19,
     "modules": 1068
   },
@@ -55088,8 +55088,8 @@
     },
     {
       "path": "tests/sync/clientes-pedidos.test.mjs",
-      "bytes": 2505,
-      "sha256": "ee7625a9b51720746da64ff9b2c99994f65420672023ca6d80a411a294490931",
+      "bytes": 2715,
+      "sha256": "a91cb30a4cb37b4176d86c9337651d2e92939dc29e701ab565493a4720e2fcfb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55118,6 +55118,12 @@
           "target": null,
           "dynamic": false,
           "line": 4
+        },
+        {
+          "raw": "../../js/admin/datos/busqueda-admin.mjs",
+          "target": "js/admin/datos/busqueda-admin.mjs",
+          "dynamic": false,
+          "line": 5
         }
       ],
       "endpoints": []
@@ -67311,8 +67317,8 @@
     {
       "path": "tests/sync/clientes-pedidos.test.mjs",
       "extension": ".mjs",
-      "bytes": 2505,
-      "sha256": "ee7625a9b51720746da64ff9b2c99994f65420672023ca6d80a411a294490931"
+      "bytes": 2715,
+      "sha256": "a91cb30a4cb37b4176d86c9337651d2e92939dc29e701ab565493a4720e2fcfb"
     },
     {
       "path": "tests/sync/comercio-local.test.mjs",
