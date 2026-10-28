@@ -1,9 +1,9 @@
 import { normalizeProductSearch as normalize, productSearchText, productSearchScore } from '../../../core/store/busqueda-productos.mjs?v=tintin-20261021-commerce-review-1';
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261027-welcome-receipt-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261027-welcome-receipt-1-nav-20261028-2';
 
-const MAX_RESULTS = 10;
+// El área desplazable conserva todas las coincidencias del catálogo público.
 import { hasProductStock, firstAvailableVariant, productDefaultPrice } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { productVariantImage } from '../../images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-2';
 const INPUT_DELAY_MS = 120;
@@ -12,8 +12,11 @@ let index = [];
 let timer = 0;
 let activeIndex = -1;
 let loadPromise = null;
+let catalogLoaded = false;
+let catalogSignature = '';
 
 function safeImageUrl(value) {
+  if (!String(value || '').trim()) return '';
   try {
     const url = new URL(String(value || ''), location.href);
     if (!['http:', 'https:'].includes(url.protocol)) return '';
@@ -48,8 +51,7 @@ function searchProducts(query) {
   return index
     .map(entry => ({ ...entry, score: resultScore(entry, normalizedQuery) }))
     .filter(entry => entry.score > 0)
-    .sort((a, b) => Number(hasProductStock(b.product)) - Number(hasProductStock(a.product)) || b.score - a.score || String(a.product.name).localeCompare(String(b.product.name), 'es'))
-    .slice(0, MAX_RESULTS)
+    .sort((a, b) => (b.score === 100) - (a.score === 100) || Number(hasProductStock(b.product)) - Number(hasProductStock(a.product)) || b.score - a.score || String(a.product.name).localeCompare(String(b.product.name), 'es'))
     .map(entry => entry.product);
 }
 
@@ -69,14 +71,21 @@ function stateNode(message, { error = false, retry = false } = {}) {
     button.textContent = 'Reintentar';
     button.addEventListener('click', () => {
       loadPromise = null;
-      void ensureProducts(true);
+      void ensureProducts(true).catch(() => {});
     });
     wrap.appendChild(button);
   }
   return wrap;
 }
 
-function createResult(product, position) {
+function imagePlaceholder() {
+  const placeholder = document.createElement('span');
+  placeholder.className = 'tt-search-result-image tt-search-result-image--empty';
+  placeholder.setAttribute('aria-hidden', 'true');
+  return placeholder;
+}
+
+function createResult(product, position, query) {
   const link = document.createElement('a');
   link.className = 'tt-search-result-item';
   const inStock = hasProductStock(product);
@@ -98,12 +107,10 @@ function createResult(product, position) {
     image.alt = '';
     image.loading = 'lazy';
     image.decoding = 'async';
+    image.addEventListener('error', () => image.replaceWith(imagePlaceholder()), { once: true });
     media.appendChild(image);
   } else {
-    const placeholder = document.createElement('span');
-    placeholder.className = 'tt-search-result-image tt-search-result-image--empty';
-    placeholder.setAttribute('aria-hidden', 'true');
-    media.appendChild(placeholder);
+    media.appendChild(imagePlaceholder());
   }
 
   if (!inStock) {
@@ -127,6 +134,7 @@ function createResult(product, position) {
     meta.append(' · ', oldPrice, discount);
   }
   if (!inStock) meta.append(' · Agotado');
+  if (productSearchScore(product, query) === 10) meta.append(' · Coincidencia aproximada');
   body.append(name, meta);
   link.appendChild(body);
   return link;
@@ -136,12 +144,14 @@ function showResultsContainer(results) {
   results.hidden = false;
   results.style.display = 'block';
   document.getElementById('search-panel')?.classList.add('tt-has-results');
+  document.getElementById('search-input')?.setAttribute('aria-expanded', 'true');
 }
 
 function hideResultsContainer(results) {
   results.hidden = true;
   results.style.display = 'none';
   document.getElementById('search-panel')?.classList.remove('tt-has-results');
+  document.getElementById('search-input')?.setAttribute('aria-expanded', 'false');
 }
 
 function renderResults(query) {
@@ -149,6 +159,8 @@ function renderResults(query) {
   const input = document.getElementById('search-input');
   if (!results || !input) return;
 
+  const clear = document.getElementById('btn-search-clear');
+  if (clear) clear.hidden = !input.value;
   activeIndex = -1;
   input.removeAttribute('aria-activedescendant');
   results.replaceChildren();
@@ -160,9 +172,9 @@ function renderResults(query) {
   }
 
   showResultsContainer(results);
-  if (!index.length) {
+  if (!catalogLoaded) {
     results.appendChild(stateNode('Cargando catálogo…'));
-    void ensureProducts();
+    void ensureProducts().catch(() => {});
     return;
   }
 
@@ -172,14 +184,20 @@ function renderResults(query) {
     return;
   }
   const fragment = document.createDocumentFragment();
-  matches.forEach((product, position) => fragment.appendChild(createResult(product, position)));
+  matches.forEach((product, position) => fragment.appendChild(createResult(product, position, cleaned)));
   results.appendChild(fragment);
 }
 
 export function syncSearchCatalog(products) {
+  const catalog = Array.isArray(products) ? products : [];
+  // El mismo single-flight puede publicar a varios consumidores. No destruir
+  // los resultados ni su scroll cuando vuelve a llegar el mismo snapshot.
+  const signature = JSON.stringify(catalog);
+  if (catalogLoaded && signature === catalogSignature) return catalog.length;
   window.clearTimeout(timer);
   timer = 0;
-  const catalog = Array.isArray(products) ? products : [];
+  catalogLoaded = true;
+  catalogSignature = signature;
   buildIndex(catalog);
   renderResults(document.getElementById('search-input')?.value || '');
   return catalog.length;
@@ -195,6 +213,8 @@ export function resetSearchState() {
   if (input) {
     input.value = '';
     input.removeAttribute('aria-activedescendant');
+    const clear = document.getElementById('btn-search-clear');
+    if (clear) clear.hidden = true;
   }
   if (results) {
     results.replaceChildren();
@@ -231,10 +251,6 @@ function setActiveResult(nextIndex) {
 }
 
 async function ensureProducts(force = false) {
-  if (!force && Array.isArray(window.PRODUCTS) && window.PRODUCTS.length) {
-    syncSearchCatalog(window.PRODUCTS);
-    return window.PRODUCTS;
-  }
   if (loadPromise && !force) return loadPromise;
 
   const results = document.getElementById('search-results');
@@ -255,7 +271,7 @@ async function ensureProducts(force = false) {
     .catch(error => {
       loadPromise = null;
       console.warn('[SearchController] No se pudo cargar el catálogo.', error);
-      if (results) {
+      if (results && document.getElementById('search-input')?.value && document.getElementById('search-panel')?.classList.contains('open')) {
         showResultsContainer(results);
         results.replaceChildren(stateNode('No pudimos cargar el catálogo. Revisá tu conexión y volvé a intentar.', { error: true, retry: true }));
       }
@@ -269,12 +285,23 @@ export function initSearchController() {
   const results = document.getElementById('search-results');
   if (!input || !results || input.dataset.ttModularSearchReady === '1') return;
   input.dataset.ttModularSearchReady = '1';
+  input.setAttribute('role', 'combobox');
+  input.setAttribute('aria-expanded', 'false');
   input.setAttribute('aria-autocomplete', 'list');
   input.setAttribute('aria-controls', 'search-results');
 
   if (Array.isArray(window.PRODUCTS)) syncSearchCatalog(window.PRODUCTS);
 
+  document.getElementById('btn-search-clear')?.addEventListener('click', () => {
+    resetSearchState();
+    input.focus({ preventScroll: true });
+  });
+
   input.addEventListener('input', () => {
+    activeIndex = -1;
+    input.removeAttribute('aria-activedescendant');
+    const clear = document.getElementById('btn-search-clear');
+    if (clear) clear.hidden = !input.value;
     window.clearTimeout(timer);
     timer = window.setTimeout(() => {
       timer = 0;
@@ -283,9 +310,10 @@ export function initSearchController() {
   });
 
   input.addEventListener('keydown', event => {
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    if (timer && ['ArrowDown', 'ArrowUp', 'Enter'].includes(event.key)) {
       window.clearTimeout(timer);
       timer = 0;
+      renderResults(input.value);
     }
 
     const items = [...results.querySelectorAll('.tt-search-result-item')];
@@ -294,7 +322,7 @@ export function initSearchController() {
       setActiveResult(activeIndex + 1);
     } else if (event.key === 'ArrowUp' && items.length) {
       event.preventDefault();
-      setActiveResult(activeIndex - 1);
+      setActiveResult(activeIndex < 0 ? items.length - 1 : activeIndex - 1);
     } else if (event.key === 'Enter' && activeIndex >= 0 && items[activeIndex]) {
       event.preventDefault();
       items[activeIndex].click();
@@ -306,7 +334,7 @@ export function initSearchController() {
   });
 
   window.addEventListener('tintin:products-error', event => {
-    if (!input.value) return;
+    if (!input.value || !document.getElementById('search-panel')?.classList.contains('open')) return;
     console.warn('[SearchController] Catálogo no disponible.', event.detail?.error);
     showResultsContainer(results);
     results.replaceChildren(stateNode('No pudimos cargar el catálogo. Revisá tu conexión y volvé a intentar.', { error: true, retry: true }));

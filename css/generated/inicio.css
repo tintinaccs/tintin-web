@@ -8067,15 +8067,15 @@ html body #tt-mobile-brand { display: none !important; }
   html[data-tt-mobile-home="hidden"] body #tt-tabbar:has(#tabbar-notifications:not([hidden])),
   html[data-tt-mobile-home="hidden"] body #tt-tabbar.tt-tabbar-compact:has(#tabbar-notifications:not([hidden])) {
     width:min(420px,calc(100vw - 24px)) !important;
-    min-height:76px !important;
-    padding:8px !important;
+    min-height:var(--tt-nav-min-height,76px) !important;
+    padding:var(--tt-nav-padding,8px) !important;
     gap:2px;
     border-radius:999px !important;
     transition:box-shadow .2s ease !important;
   }
   html body #tt-tabbar .tt-tabbar-btn,
   html body #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn, html body #tt-tabbar .tt-tabbar-btn:is(#tabbar-cart,#tabbar-notifications) {
-    min-height:58px;
+    min-height:var(--tt-nav-button-height,58px);
     padding:6px 4px;
     gap:5px;
     border-radius:999px !important;
@@ -8114,6 +8114,23 @@ html body #tt-mobile-brand { display: none !important; }
   html body #notifications-drawer #tt-notifications-list {
     padding-bottom:calc(var(--tt-mobile-nav-clearance,108px) + env(safe-area-inset-bottom)) !important;
   }
+}
+
+/* Durante la búsqueda la barra conserva su presencia y reserva propia.
+   Panel y navegación comparten los límites del viewport visual del teclado. */
+@media (max-width:767px) {
+  html[data-tt-search-active] body #tt-tabbar {
+    bottom:calc(var(--tt-panel-keyboard-inset,0px) + max(16px,env(safe-area-inset-bottom)));
+  }
+  html[data-tt-panel-short] {
+    --tt-nav-min-height:52px;
+    --tt-nav-padding:4px;
+    --tt-nav-button-height:44px;
+  }
+  html[data-tt-panel-short] body #tt-tabbar {
+    bottom:calc(var(--tt-panel-keyboard-inset,0px) + max(8px,env(safe-area-inset-bottom)));
+  }
+  html[data-tt-panel-short] body #tt-tabbar .tt-tabbar-btn > span:last-child { display:none !important; }
 }
 
 }
@@ -8278,11 +8295,11 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   grid-template-rows: auto minmax(0, 1fr);
   align-items: center;
   gap: 12px;
-  top: clamp(74px, 8vh, 104px) !important;
+  top: calc(var(--tt-panel-viewport-top, 0px) + clamp(12px, 8vh, 104px)) !important;
   left: 50% !important;
   right: auto !important;
   width: min(1120px, calc(100vw - 64px)) !important;
-  max-height: min(82dvh, 780px);
+  max-height: min(780px, calc(var(--tt-panel-viewport-height, 100dvh) - clamp(12px, 8vh, 104px) - 12px));
   transform: translate(-50%, -18px) scale(.97) !important;
   padding: 20px !important;
   border: 1px solid var(--tintin-border) !important;
@@ -8571,7 +8588,7 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
 /* Shared search content. Panel geometry lives in surfaces.css. */
 #search-panel.tt-search-panel.open {
   display: grid !important;
-  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  grid-template-columns: auto minmax(0, 1fr) auto auto !important;
   grid-template-rows: minmax(48px, auto) minmax(0, 1fr) !important;
   align-items: center !important;
 }
@@ -8612,7 +8629,7 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   right: auto !important;
   bottom: auto !important;
   left: auto !important;
-  grid-column: 3 !important;
+  grid-column: 4 !important;
   grid-row: 1 !important;
   z-index: 4 !important;
   transform: none !important;
@@ -8687,12 +8704,11 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
 }
 
 .tt-search-result-copy strong {
-  overflow: hidden;
+  overflow-wrap: anywhere;
   color:#222222;
   font-size: .94rem;
   line-height: 1.3;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .tt-search-result-copy > span {
@@ -8700,8 +8716,7 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   color: #7b6971;
   font-size: .78rem;
   line-height: 1.35;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .tt-search-state p { margin: 0; }
@@ -8729,6 +8744,15 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   .tt-search-result-item { transition: none; }
 }
 /* Header surfaces bundle 2026-08-27: shared cache invalidation marker. */
+
+#search-panel .tt-search-clear {
+  grid-column:3; grid-row:1; min-width:44px; min-height:44px;
+  border:0; border-radius:12px; background:#fff3f7; color:#222; cursor:pointer;
+}
+#search-panel .tt-search-input { font-size:16px !important; }
+@media (max-width:767px) {
+  html[data-tt-panel-short] body #search-panel.tt-search-panel { padding:8px !important; gap:4px; }
+}
 
 
 /* css/components/navigation/compartido/coherencia-visual.css */

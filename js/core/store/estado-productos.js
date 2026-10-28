@@ -538,8 +538,8 @@ export async function loadProductPage(options = {}) {
   return runSingleFlight(`product:page:${id}`, () => startProductRealtime(id));
 }
 
-export async function ensureProductsForSearch() {
-  return loadAllProducts();
+export async function ensureProductsForSearch(options = {}) {
+  return loadAllProducts(options);
 }
 
 export async function ensureProductsForCurrentPage(options = {}) {

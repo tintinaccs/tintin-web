@@ -569,6 +569,7 @@ for (const [width, height] of [[320,375],[320,700],[390,844],[667,375],[768,1024
       expect(bounds.x + bounds.width).toBeLessThanOrEqual(width + 1);
       expect(bounds.y + bounds.height).toBeLessThanOrEqual(height + 1);
       if (mobile) {
+        await expect(page.locator('#tt-tabbar')).toBeVisible();
         const nav = await page.locator('#tt-tabbar').boundingBox();
         expect(bounds.y + bounds.height).toBeLessThanOrEqual(nav.y);
         await expect(page.locator(panel)).toHaveCSS('border-top-left-radius','24px');
@@ -632,7 +633,7 @@ test('búsqueda se adapta al teclado y cierra al cruzar de dispositivo', async (
     // Invoke the same resize path used by the real visual viewport.
     window.dispatchEvent(new Event('resize'));
   });
-  await expect.poll(() => page.locator('#search-panel').evaluate(el => Math.round(el.getBoundingClientRect().bottom))).toBe(432);
+  await expect.poll(() => page.locator('#search-panel').evaluate(el => Math.round(el.getBoundingClientRect().bottom))).toBe(336);
   await expect(page.locator('#search-input')).toBeFocused();
   await page.setViewportSize({width:1024,height:768});
   await expect(page.locator('#search-panel')).toHaveAttribute('aria-hidden','true');

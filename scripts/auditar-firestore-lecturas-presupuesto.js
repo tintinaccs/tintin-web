@@ -37,7 +37,7 @@ const quotaLoadCount = (pageLoader.match(quotaLoadPattern) || []).length;
 check(
   'Catálogo público evita un listener completo por visitante',
   products.includes('startPublicProductsRealtime') &&
-    products.includes('return loadAllProducts();') &&
+    products.includes('publicProductsReady = loadAllProducts();') &&
     !/catalogo\|collections[\s\S]{0,160}return startPublicProductsRealtime\(\)/.test(products),
   'Catálogo y colecciones deben usar carga cacheada; el listener completo no puede abrirse automáticamente.'
 );
