@@ -1,4 +1,4 @@
-import { rateLimitErrorResponse, jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser } from '../../cloudflare/seguridad-cloudinary.js';
+import { rateLimitErrorResponse, jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, statusFromError } from '../../cloudflare/seguridad-cloudinary.js';
 import { createPaypalOrder } from '../../cloudflare/paypal-seguro.js';
 
 export async function onRequest({ request, env }) {
@@ -15,7 +15,7 @@ export async function onRequest({ request, env }) {
   } catch (error) {
     const limited = rateLimitErrorResponse(error, origin, request.url);
     if (limited) return limited;
-    return jsonResponse({ success: false, error: cleanError(error) }, 400, origin, request.url);
+    return jsonResponse({ success: false, error: cleanError(error) }, statusFromError(error, 400), origin, request.url);
   }
 }
 

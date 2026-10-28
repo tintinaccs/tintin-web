@@ -2,7 +2,8 @@ import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
-  requireFirebaseUser
+  requireFirebaseUser,
+  statusFromError
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { firestoreAdminGet, decodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
 import { findCountryByCode, phoneKey, isValidPhone } from '../../js/components/forms/utilidades-telefono.js';
@@ -45,6 +46,6 @@ export async function handlePhoneAvailability(context, { requireUser = requireFi
     const limited = rateLimitErrorResponse(error, origin, requestUrl);
     if (limited) return limited;
     const message = clean(error?.message || 'No se pudo comprobar el teléfono.', 160);
-    return jsonResponse({ available: false, error: message }, /sesión/i.test(message) ? 401 : 500, origin, requestUrl);
+    return jsonResponse({ available: false, error: message }, statusFromError(error, /sesión/i.test(message) ? 401 : 500), origin, requestUrl);
   }
 }

@@ -6,7 +6,8 @@ import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
-  requireSuperAdmin
+  requireSuperAdmin,
+  statusFromError
 } from '../../cloudflare/seguridad-cloudinary.js';
 
 async function destroyAsset(publicId, config) {
@@ -90,7 +91,7 @@ export async function onRequest(context) {
     const limited = rateLimitErrorResponse(error, origin, requestUrl);
     if (limited) return limited;
     const message = error?.message || 'No se pudo borrar la imagen';
-    const status = /Cloudinary todavía no está configurado/i.test(message) ? 503 : 400;
+    const status = statusFromError(error, /Cloudinary todavía no está configurado/i.test(message) ? 503 : 400);
     return jsonResponse({ error: message }, status, origin, requestUrl);
   }
 }

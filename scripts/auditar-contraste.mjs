@@ -24,6 +24,8 @@ const browser = await chromium.launch({
   executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || chromium.executablePath(),
 });
 const fallos = [];
+const errores = [];
+let comprobadas = 0;
 
 for (const pag of paginas) {
   for (const [nom, w, h] of pantallas) {
@@ -84,20 +86,24 @@ for (const pag of paginas) {
         const vistos = new Set();
         return malos.filter(m => { const k = m.sel + m.r; if (vistos.has(k)) return false; vistos.add(k); return true; });
       });
+      comprobadas++;
       if (r.length) { fallos.push({ pag, nom, r }); }
-    } catch {}
+    } catch (error) {
+      errores.push({ pag, nom, error: String(error?.message || error).slice(0, 300) });
+    }
     await ctx.close();
   }
 }
 await browser.close(); server.close();
 
 const total = fallos.reduce((n, f) => n + f.r.length, 0);
-if (!total) console.log('Contraste correcto en todas las paginas y resoluciones.');
+if (!total && !errores.length) console.log('Sin candidatos en la muestra automática; no equivale a certificación WCAG ni valida todos los puntos de un gradiente.');
 const agrupado = {};
 for (const f of fallos) for (const x of f.r) {
   const k = `${f.pag} :: ${x.sel}`;
   (agrupado[k] ||= { r: x.r, min: x.min, txt: x.txt, pantallas: [] }).pantallas.push(f.nom);
 }
-for (const [k, v] of Object.entries(agrupado)) console.log(`FALLA ${k}\n   ${v.r}:1 (minimo ${v.min}) "${v.txt}"  en: ${[...new Set(v.pantallas)].join(', ')}`);
-console.log(`\nElementos con contraste insuficiente: ${Object.keys(agrupado).length}`);
-process.exit(Object.keys(agrupado).length ? 1 : 0);
+for (const [k, v] of Object.entries(agrupado)) console.log(`REVISAR ${k}\n   ${v.r}:1 (minimo ${v.min}) "${v.txt}"  en: ${[...new Set(v.pantallas)].join(', ')}`);
+for (const error of errores) console.error('ERROR DE COBERTURA', JSON.stringify(error));
+console.log(`\nComprobadas: ${comprobadas}/${paginas.length * pantallas.length}; candidatos: ${Object.keys(agrupado).length}; errores de cobertura: ${errores.length}`);
+process.exit(Object.keys(agrupado).length || errores.length ? 1 : 0);

@@ -95,6 +95,11 @@ let firebaseSource = fs.readFileSync(path.join(root, 'js/core/firebase/firebase.
   .replace('import { getAuth,', 'import { connectAuthEmulator, getAuth,')
   .replace(/apiKey: "[^"]+"/, 'apiKey: "demo-key"')
   .replace('projectId: "tintin-accesorios"', `projectId: "${project}"`)
+  // Estos E2E firman Custom Tokens del emulador, no hacen OAuth de Google.
+  // El resolver de popup inicia gapi/iframes externos proactivamente en móvil
+  // y puede bloquear Auth local si ese proveedor responde503. Mantener el
+  // resolver real en producción y en las pruebas específicas del flujo Google.
+  .replace('popupRedirectResolver: browserPopupRedirectResolver', 'popupRedirectResolver: undefined')
   .replace('if (FIREBASE_APP_CHECK_SITE_KEY) {', 'if (false) {')
   // Auth/Firestore emulators no validan App Check: habilitar sólo el contrato
   // de readiness del fixture local, sin cambiar bootstrap/enforcement real.

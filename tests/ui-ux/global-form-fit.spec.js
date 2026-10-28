@@ -8,7 +8,7 @@ const cards = '#contact-form,.tt-contact-alt,.perfil-card,.ck-panel';
 
 // HTML y cascada reales. La sesión y los envíos quedan fuera de esta prueba
 // geométrica: abrir el paso Datos no debe crear pedidos ni alterar perfiles.
-for (const [width, height] of [[320,568],[390,844],[844,390],[768,1024],
+for (const [width, height] of [[320,568],[360,640],[390,844],[844,390],[768,1024],
   [1024,768],[1280,720],[1440,900],[1920,1080],[2560,1440]]) {
   test(`formularios comparten bordes y espacio sin solapes ${width}x${height}`, async ({ page }, info) => {
     await page.setViewportSize({ width, height });

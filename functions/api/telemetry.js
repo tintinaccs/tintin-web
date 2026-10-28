@@ -1,4 +1,4 @@
-import { jsonResponse, rateLimit, safePath, sanitizeText } from '../lib/operational-guard.js';
+import { jsonResponse, rateLimit, readLimitedJson, safePath, sanitizeText } from '../lib/operational-guard.js';
 
 const ALLOWED_KINDS = new Set(['js_error','promise_error','resource_error','api_error','performance','offline','recovered']);
 const ALLOWED_METRICS = new Set(['LCP','CLS','INP','FCP','TTFB','request_ms','request_ms_avg','request_ms_max']);
@@ -51,7 +51,10 @@ export async function onRequestPost({ request, env, waitUntil }) {
   if (length > 8_192) return jsonResponse({ ok: false, code: 'payload_too_large' }, 413, limiter.headers);
 
   let body;
-  try { body = await request.json(); } catch { return jsonResponse({ ok: false, code: 'invalid_json' }, 400, limiter.headers); }
+  try { body = await readLimitedJson(request, 8_192); }
+  catch (error) {
+    return jsonResponse({ ok: false, code: error?.status === 413 ? 'payload_too_large' : 'invalid_json' }, error?.status === 413 ? 413 : 400, limiter.headers);
+  }
   const events = Array.isArray(body?.events) ? body.events.slice(0, 20) : [body];
   const normalized = events.map(normalizeEvent);
 

@@ -2,7 +2,8 @@ import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
-  requireFirebaseUser
+  requireFirebaseUser,
+  statusFromError
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { firestoreAdminGet, decodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
 import {
@@ -53,6 +54,6 @@ export async function onRequest(context) {
     const limited = rateLimitErrorResponse(error, origin, requestUrl);
     if (limited) return limited;
     const message = String(error?.message || 'No se pudo comprobar el cupón.').slice(0, 160);
-    return jsonResponse({ valid: false, error: message }, /sesión/i.test(message) ? 401 : 500, origin, requestUrl);
+    return jsonResponse({ valid: false, error: message }, statusFromError(error, /sesión/i.test(message) ? 401 : 500), origin, requestUrl);
   }
 }

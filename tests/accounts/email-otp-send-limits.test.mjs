@@ -40,7 +40,7 @@ async function sendCode(store, email='client@example.com', ip='203.0.113.8', cha
   const response=await handleEmailOtpSend({request,env:{RESEND_API_KEY:'isolated-test-provider'}},{
     ...store.deps,send:async()=>{store.sent=(store.sent||0)+1;return 'isolated-email';},status:async()=> 'delivered',pause:async()=>{},...changes,
   });
-  return {status:response.status,...await response.json()};
+  return {status:response.status,retryAfter:response.headers.get('retry-after'),...await response.json()};
 }
 
 test('200 solicitudes del mismo correo desde diferentes IPs sólo envían un OTP',async()=>{
@@ -60,6 +60,7 @@ test('consumir el código no reinicia el límite persistente de ocho envíos dia
   }
   const denied=await sendCode(store,'client@example.com','203.0.113.100');
   assert.equal(denied.status,429);assert.equal(denied.error,'daily_limit_exceeded');assert.equal(store.sent,8);
+  assert.equal(Number(denied.retryAfter), denied.retryAfterSeconds);
 });
 
 test('la primera reserva conserva el cooldown y contador del código anterior',async()=>{
@@ -91,4 +92,5 @@ test('un fallo del proveedor conserva el OTP previo y retiene la reserva contra 
   assert.equal(failed.status,502);assert.equal(store.read(path).codeHash,'previous-valid-verifier');
   const retry=await sendCode(store,'client@example.com','203.0.113.2');
   assert.equal(retry.status,429);assert.equal(retry.error,'cooldown_active');assert.equal(store.sent||0,0);
+  assert.equal(Number(retry.retryAfter), retry.retryAfterSeconds);
 });
