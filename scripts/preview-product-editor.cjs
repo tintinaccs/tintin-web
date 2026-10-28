@@ -4,6 +4,8 @@
 const {chromium}=require('playwright');
 const http=require('node:http');
 const fs=require('node:fs');const path=require('node:path');
+const {indexPreviewAssets,previewAsset}=require('./lib/preview-static-assets.cjs');
+const publicAssets=indexPreviewAssets(path.resolve(__dirname,'..'));
 const {openProductSaveFixture}=require('../tests/ui-ux/helpers/product-save-fixture.cjs');
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || (fs.existsSync('/usr/bin/chromium')?'/usr/bin/chromium':undefined),args:['--no-sandbox']});
@@ -30,8 +32,8 @@ const toolbar=document.createElement('div');toolbar.style.cssText='padding:16px;
    if(req.url==='/__qa/write' && req.method==='POST'){let body='';for await(const chunk of req){body+=chunk;if(body.length>2000000)throw Error('Solicitud demasiado grande');}const result=await exposed.get('qaCommercialWrite')(JSON.parse(body));res.writeHead(200,{'content-type':'application/json'});res.end(JSON.stringify(result));return;}
    if(!['GET','HEAD'].includes(req.method)){res.writeHead(405);res.end();return;}
    const pathname=req.url==='/'?'/admin-commerce-fixture':req.url;
-   const asset=path.resolve(__dirname,'..','.'+decodeURIComponent(pathname.split('?')[0]));
-   if([path.resolve(__dirname,'../assets-tintin'),path.resolve(__dirname,'../vendor')].some(folder=>asset.startsWith(folder+path.sep)) && fs.existsSync(asset) && fs.statSync(asset).isFile()){
+   const asset=previewAsset(publicAssets,pathname);
+   if(asset){
     const mime={'.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml','.woff2':'font/woff2','.wasm':'application/wasm','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json'}[path.extname(asset)] || 'application/octet-stream';res.writeHead(200,{'content-type':mime});fs.createReadStream(asset).pipe(res);return;
    }
    const url=pathname.startsWith('/__external/')?'https://'+pathname.slice('/__external/'.length):'https://tintin.test'+pathname;

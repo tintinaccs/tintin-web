@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "800fdd6a903d2d1d22b9c8ff0b967366725988e8497d7d1822d48751233aeb8d",
+  "sourceFingerprint": "a1567ad62984428263783c01901906f62d6df0472db70c4131d65bc0f887dc28",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1591,
-    "textFiles": 1460,
-    "totalBytes": 34683437,
+    "files": 1592,
+    "textFiles": 1461,
+    "totalBytes": 34686225,
     "pages": 19,
-    "modules": 1059
+    "modules": 1060
   },
   "viewports": [
     {
@@ -54138,6 +54138,54 @@
       ]
     },
     {
+      "path": "tests/security/product-editor-preview-static.test.mjs",
+      "bytes": 2306,
+      "sha256": "d408edb9aa5f73c8aeb28a09c054d098c494a5cabd6464b8fa56ae69a7413e2c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/security/secretos-sheets.test.mjs",
       "bytes": 1665,
       "sha256": "a28bedb6490f650dc9cb99cfcded8b21899e4610313dbd80b47bdbd51453fa3b",
@@ -58948,8 +58996,8 @@
     {
       "path": "config/ci-stages.json",
       "extension": ".json",
-      "bytes": 6796,
-      "sha256": "114a9468ba8ae9a139dd016a9021cc721b960ea0b2fac49fb138e142f3533d17"
+      "bytes": 6850,
+      "sha256": "e2e57da22d06086d0e70691272fe2418019b42fa7ac2accd15813cbf89c4a44f"
     },
     {
       "path": "config/csp-runtime.js",
@@ -59638,8 +59686,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 993869,
-      "sha256": "6f5e9474d2f180290799af2442d6bff1e4d04378e16b45217dd96d5d2a376ade"
+      "bytes": 994297,
+      "sha256": "22a277a03da291ca2478dc52d7493dc56b5311fc7004ce9651fa7bdb8012754a"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -66732,6 +66780,12 @@
       "extension": ".mjs",
       "bytes": 8062,
       "sha256": "1cae67d3ccfd06684a722ed264e5be262432129ba826d4a485ad742550aeb148"
+    },
+    {
+      "path": "tests/security/product-editor-preview-static.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2306,
+      "sha256": "d408edb9aa5f73c8aeb28a09c054d098c494a5cabd6464b8fa56ae69a7413e2c"
     },
     {
       "path": "tests/security/secretos-sheets.test.mjs",
