@@ -43,6 +43,10 @@ Capturas locales: `artifacts/product-guided-editor/real-{390,1440}-{1..6}.png`, 
 
 CI40784162914/1 (`3c6b4eb2`) aprobó preflight y falló en la prueba auxiliar de cantidades por un fixture sin los campos canónicos de precio/ID. Se completó ese DOM mínimo y el caso afectado pasó localmente, sin cambiar la lógica ni retirar aserciones. Dos casos locales de carrito que importan SDK desde www.gstatic.com no se acreditan por bloqueo de red del entorno; sus pruebas se conservan para la repetición en GitHub. No se heredan los resultados del candidato anterior.
 
+## Correcciones de validación y altura reducida
+
+Un stock fraccional bloquea el guardado, abre Precio y stock y permite enfocar/corregir la cantidad sin modificar existencias hasta confirmar un valor válido. Regresión afectada: 42/42 PASS. La CI40785296600/1 detectó que la barra global tapaba Guardar a844x300; se reprodujo y se agregó espacio de desplazamiento según la altura real del panel. La nueva CI debe comprobar el SHA completo; los éxitos anteriores no se heredan.
+
 ## Límites
 
 Las capturas adjuntas del editor real se examinaron. Las referencias originales `C:/Users/USER/.codex/visualizations/.../tintin-studio.html` y sus siete PNG de Windows no existen en este entorno Linux; no se declara haberlas abierto. No se verificó una sesión administrativa externa autenticada ni dispositivos físicos. No se relajaron reglas, permisos ni protecciones. El PR debe quedar draft porque el mantenimiento canónico puede fusionar PR no draft automáticamente; esta medida cumple la prohibición explícita de merge sin aprobación.

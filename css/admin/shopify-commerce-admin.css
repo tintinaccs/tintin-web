@@ -1289,7 +1289,7 @@ html.tt-product-order-open #unsaved-modal { z-index:9500 !important; }
 }
 
 /* El editor usa la superficie disponible; sólo el contenido se desplaza. */
-html.tt-product-editor-open { overflow:auto; }
+html.tt-product-editor-open { overflow:auto; scroll-padding-block-start:calc(var(--tt-product-shell-top,0px) + 8px); }
 html.tt-product-editor-open #adm-mobile-tabs { visibility:hidden !important; pointer-events:none; }
 html.adm-auth-ready.tt-product-editor-open body:has(.adm-main) #adm-sidebar { z-index:8600 !important; }
 html.adm-auth-ready.tt-product-editor-open.adm-mobile-sidebar-open body:has(.adm-main) #adm-sidebar.open { z-index:8600 !important; }

@@ -79,3 +79,11 @@ for(const width of [320,390,768,1024,1440])test(`controles comerciales completos
  const stock=page.getByLabel('Stock: Dorado',{exact:true}),price=page.getByLabel('Precio: Dorado',{exact:true});await expect(stock).toBeVisible();await expect(price).toBeVisible();expect((await stock.boundingBox()).width).toBeGreaterThanOrEqual(64);expect((await price.boundingBox()).width).toBeGreaterThanOrEqual(96);
  expect(await page.locator('.tt-commercial-availability').evaluate(el=>el.getBoundingClientRect().width>=150)).toBe(true);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
 });
+
+ test('un stock inválido abre su contexto y permite corregir sin perder existencias',async({page})=>{
+ const original={name:'Stock validado',category:'qa-tablet',description:'Prueba de validación',price:35000,imageUrl:'https://img.test/gold.jpg',active:true,publicationStatus:'active',stock:1,variantCommerceVersion:2,variants:{Color:['Dorado']},variantInventory:[{variant:'stable-gold',attributes:{Color:'Dorado'},stock:1}]};
+ await openProductSaveFixture(page,390,844,{photos:true,initialRecords:[['products/stock-context',original]]});await page.evaluate(()=>{window.qaProductController.refresh();window.prodEditar('stock-context');});
+ await tab(page,'Precio y stock').click();const stock=page.getByLabel('Stock: Dorado',{exact:true});await stock.fill('0.5');await tab(page,'Información').click();await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-error')).toBeVisible();await expect(tab(page,'Precio y stock')).toHaveAttribute('aria-selected','true');
+ await page.getByRole('button',{name:'Ir al campo',exact:true}).click();await expect(stock).toBeFocused();expect(await page.evaluate(()=>window.qaProductStore.get('products/stock-context').stock)).toBe(1);
+ await stock.fill('2');await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();const saved=await page.evaluate(()=>window.qaProductStore.get('products/stock-context'));expect(saved.stock).toBe(2);expect(saved.variantInventory).toEqual([{variant:'stable-gold',attributes:{Color:'Dorado'},stock:2}]);
+ });

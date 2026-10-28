@@ -90,6 +90,7 @@ export function syncProductSurfaces() {
   const viewportTop = viewport?.offsetTop || 0;
   const viewportHeight = viewport?.height || innerHeight;
   const preferredTop = Math.max(viewportTop, headerBottom);
+  document.documentElement.style.setProperty('--tt-product-shell-top', `${preferredTop}px`);
   // Teclado, zoom o una cabecera alta no pueden dejar el editor con altura cero.
   // Si no caben ambas barras, la del editor conserva sus propias acciones.
   const editorTop = preferredTop + Math.min(240, viewportHeight) > viewportTop + viewportHeight
@@ -383,12 +384,16 @@ function errorSection(card,message) {
     else if(/descripción/i.test(message))id='prod-description';
     else if(/foto|imagen|carga/i.test(message))id='prod-imageUrl';
     else if(/costo|comprada|mínimo|notas internas/i.test(message))id='prod-cost-unit';
-    else if(/variante|combinaci[oó]n|grupo|atributo|opci[oó]n.*quitar|quitar.*opci[oó]n/i.test(message))id='prod-variants-text';
     else if(/precio anterior/i.test(message))id='prod-price-before';
     else if(/stock|inventario|cantidad/i.test(message))id='prod-stock';
     else if(/colección/i.test(message) && !/obligatorios/i.test(message))id='prod-category';
     else if(/precio/i.test(message) && !/obligatorios/i.test(message))id='prod-price';
+    else if(/variante|combinaci[oó]n|grupo|atributo|opci[oó]n.*quitar|quitar.*opci[oó]n/i.test(message))id='prod-variants-text';
     else if(/obligatorios/i.test(message))id=!read('prod-name')?'prod-name':!read('prod-category')?'prod-category':'prod-price';
+  }
+  if(id==='prod-stock'){
+    const invalid=[...card.querySelectorAll('#prod-variant-stock input[type=number]')].find(input=>!input.validity.valid);
+    if(invalid){const target=invalid.closest('.tt-editor-money')?.querySelector('[data-money-for]') || invalid;if(!target.id)target.id='prod-combination-error-'+crypto.randomUUID();id=target.id;}
   }
   const control=id && card.querySelector('#'+id),group=control?.closest('[data-product-section]');
   const error=card.querySelector('#prod-form-error');if(error)error.dataset.editorField=group?.dataset.permissionHidden==='true'?'':id || '';
