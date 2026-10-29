@@ -1,6 +1,6 @@
 # Editor guiado de productos — revisión del 28 de octubre de 2026
 
-Implementación compartida por Nuevo y Editar producto. El formulario y sus controladores canónicos permanecen; la superficie ahora es una región integrada en Productos. No se autoriza merge ni despliegue de producción para esta entrega.
+Implementación compartida por Nuevo y Editar producto. El formulario y sus controladores canónicos permanecen; la superficie ahora es una región integrada en Productos. La titular autorizó completar y fusionar esta entrega en el mensaje «HACE TODO Y MERGEALO» posterior a su revisión de PR pendientes. Se conserva la validación protegida y el seguimiento de publicación.
 
 ## Integración de cambios simultáneos
 
@@ -55,4 +55,4 @@ CI40789565346/1 falló en dos pruebas: navegación concurrente de WebKit al comp
 
 ## Límites
 
-Las capturas adjuntas del editor real se examinaron. Las referencias originales `C:/Users/USER/.codex/visualizations/.../tintin-studio.html` y sus siete PNG de Windows no existen en este entorno Linux; no se declara haberlas abierto. No se verificó una sesión administrativa externa autenticada ni dispositivos físicos. No se relajaron reglas, permisos ni protecciones. El PR debe quedar draft porque el mantenimiento canónico puede fusionar PR no draft automáticamente; esta medida cumple la prohibición explícita de merge sin aprobación.
+Las capturas adjuntas del editor real se examinaron. Las referencias originales `C:/Users/USER/.codex/visualizations/.../tintin-studio.html` y sus siete PNG de Windows no existen en este entorno Linux; no se declara haberlas abierto. No se verificó una sesión administrativa externa autenticada ni dispositivos físicos. No se relajaron reglas, permisos ni protecciones. La retención histórica como draft respondió a la prohibición inicial de merge; la autorización posterior de la titular permite marcarlo listo tras conciliar y validar. No permite omitir checks ni modificar datos comerciales.

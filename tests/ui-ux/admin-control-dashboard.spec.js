@@ -203,3 +203,33 @@ for(const width of [320,390]) {
     await expect(page.locator('#adm-hamburger')).toBeFocused();
   });
 }
+
+for (const width of [320, 768, 1440]) {
+  test(`Páginas conserva input, cursor y teclado al buscar a ${width}px`, async ({ page }) => {
+    const fs = require('node:fs');
+    const source = fs.readFileSync(require('node:path').join(__dirname, '../../js/admin/pages/paginas-admin.js'), 'utf8');
+    const code = source.slice(source.indexOf('const scheduleSearch ='), source.indexOf('\nfunction renderEditor('));
+    await load(page, width);
+    await page.evaluate(async code => {
+      const { normalizeAdminSearch, debounceAdminSearch, renderAdminSearchMarkup } = await import('https://tintin.test/js/admin/datos/busqueda-admin.mjs');
+      const host = document.createElement('div'); host.id = 'search-test-pages'; document.body.replaceChildren(host);
+      const deps = { normalizeAdminSearch, debounceAdminSearch, renderAdminSearchMarkup,
+        root: () => host, canUse: () => true, editing: null,
+        pages: [{ title: 'Guía   de regalos', slug: 'guia', pageType: 'builtin', path: '/guia', published: true }],
+        esc: value => String(value ?? '').replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;'),
+        dateLabel: () => '—', openEditor() {}, removePage() {}, renderEditor() {} };
+      window.__pagesDeps = deps;
+      const script = document.createElement('script');script.nonce = 'dGludGluLWZpeHR1cmU=';
+      script.textContent = `{ const {${Object.keys(deps).join(',')}} = window.__pagesDeps; ${code}; window.__pagesRender = render; render(); }`;
+      document.body.append(script);
+    }, code);
+    const input = page.locator('#tt-pages-search'); await input.focus();
+    await page.evaluate(() => { window.__pagesInput = document.activeElement; window.__pagesBlur = 0; document.activeElement.addEventListener('blur', () => window.__pagesBlur++); });
+    await input.pressSequentially('GUIA  DE', { delay: 25 });
+    await expect(page.locator('.tt-pages-title')).toHaveText('Guía   de regalos');
+    await input.evaluate(node => { node.setSelectionRange(2, 4); window.__pagesRender(); });
+    expect(await input.evaluate(node => ({ same: node === window.__pagesInput, focus: node === document.activeElement, blur: window.__pagesBlur, start: node.selectionStart, end: node.selectionEnd, value: node.value }))).toEqual({ same: true, focus: true, blur: 0, start: 2, end: 4, value: 'GUIA  DE' });
+    await input.fill('sin coincidencias'); await expect(page.locator('.tt-pages-empty')).toBeVisible();
+    await input.fill(''); await expect(page.locator('.tt-pages-title')).toHaveCount(1);
+  });
+}

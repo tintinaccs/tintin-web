@@ -1,3 +1,4 @@
+import { normalizeAdminSearch, debounceAdminSearch } from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261022-avatar-inicial-1";
 // =============================================================
 // TINTIN ACCESORIOS — Flujo real de decisiones y conexiones (render)
@@ -384,11 +385,11 @@ export function initConnectionsFlow({ role } = {}) {
   }
 
   function matchesFilter(record, state, isEdge = false) {
-    const term = searchEl.value.trim().toLowerCase();
+    const term = normalizeAdminSearch(searchEl.value);
     const stateFilter = stateFilterEl.value;
     const from = isEdge ? nodeById(record.from)?.label || record.from : '';
     const to = isEdge ? nodeById(record.to)?.label || record.to : '';
-    const haystack = [record.id, record.label, record.category, from, to, searchableEvidence(record), state, record.baselineState].filter(Boolean).join(' ').toLowerCase();
+    const haystack = [record.id, record.label, record.category, from, to, searchableEvidence(record), state, record.baselineState].filter(Boolean).map(normalizeAdminSearch).join(' ');
     if (term && !haystack.includes(term)) return false;
     if (stateFilter === '__attention' || stateFilter === '__no-green') return isAttentionState(state, ESTADOS);
     if (stateFilter && state !== stateFilter) return false;
@@ -512,7 +513,7 @@ export function initConnectionsFlow({ role } = {}) {
     selectedNodeId = null;
     renderAll();
   });
-  searchEl.addEventListener('input', renderAll);
+  searchEl.addEventListener('input', debounceAdminSearch(renderAll));
   stateFilterEl.addEventListener('change', renderAll);
 
   const liveErrorTextEl = root.querySelector("#tfc-live-error-text");

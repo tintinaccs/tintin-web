@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { normalizeProductSearch } from '../../js/core/store/busqueda-productos.mjs';
 import { withDeadline } from '../../js/core/auth/estado-perfil-sesion.mjs';
 
 const source = fs.readFileSync(new URL('../../js/pages/profile/mayorista-perfil.js', import.meta.url), 'utf8').replace(/^import .*;\r?\n/gm, '');
@@ -12,7 +13,7 @@ function fixture({ request, catalogFetch } = {}) {
   let sessionCallback, currentUser, resets = 0, stops = 0;
   const form = { querySelector: () => button, reset: () => { resets++; } };
   const context = vm.createContext({
-    console, crypto: { randomUUID: () => 'abcdefghijklmnop' }, AbortController,
+    normalizeProductSearch, console, crypto: { randomUUID: () => 'abcdefghijklmnop' }, AbortController,
     fetch: catalogFetch, authenticatedFetch: request, apiFailureMessage: () => 'error',
     withDeadline: (promise, ms) => withDeadline(promise, ms, { set(fn) { const timer = { fn }; timers.push(timer); return timer; }, clear(t) { t.cleared = true; } }),
     FormData: class { get() { return 'Emprendimiento'; } },

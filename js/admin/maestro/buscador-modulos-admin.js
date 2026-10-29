@@ -1,7 +1,8 @@
+import { normalizeAdminSearch } from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import { MAESTRO_MODULES } from './registro-maestro.js?v=tintin-20261021-identidad-1';
 
 // Navega mediante los controles originales: conserva autorización y borradores.
-const normalize = value => String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+const normalize = normalizeAdminSearch;
 const visible = node => node.getClientRects().length && getComputedStyle(node).visibility !== 'hidden';
 let dialog, input, results, status, opener;
 let matches = [];

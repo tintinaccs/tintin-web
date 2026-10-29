@@ -1,12 +1,13 @@
-import { iniciarCorreos } from './correos/correos-admin.js?v=tintin-20261028-correos-1';
+import { normalizeAdminSearch, debounceAdminSearch } from './datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
+import { iniciarCorreos } from './correos/correos-admin.js?v=tintin-20261028-correos-1-editor-search-20261028-2';
 import {adminEventAttributes,installAdminEvents} from './eventos-dinamicos-admin.mjs?v=tintin-20261027-save-csp-1';
-import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261028-guided-editor-2';
+import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261028-product-tabs-3-editor-search-20261028-2-guiado-1269-20261029-1';
 import {readProductEditorResponse} from './products/respuesta-editor-producto.mjs?v=tintin-20261027-editor-ux-1';
-import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261028-guided-editor-2';
+import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1-editor-search-20261028-2-guiado-1269-20261029-1';
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
 import {productStatistics} from './statistics/estadisticas-producto.mjs?v=tintin-20261024-editor-v2-3';
 import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261026-editor-phase6-1';
-import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261028-guided-editor-2';
+import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261027-opciones-inline-1-guiado-1269-20261029-1';
 import { reorderVariantInventory, variantAttributes } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
@@ -18,7 +19,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261028-guided-editor-2';
+import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261028-studio-reference-1-guiado-1269-20261029-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -51,11 +52,11 @@ import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
 import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261025-gallery-unified-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1";
-import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1";
-import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261022-avatar-inicial-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261022-avatar-inicial-1";
-import "./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1-editor-search-20261028-2";
+import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1-editor-search-20261028-2";
+import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2";
+import "./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES,
@@ -2291,10 +2292,10 @@ function compareUsersByRecentCustomerActivity(a, b) {
 
 let _lastFilteredUsers = [];
 function applyUserFilters() {
-  const q = document.getElementById('user-search').value.toLowerCase();
+  const q = normalizeAdminSearch(document.getElementById('user-search').value);
   let filtered = allUsers.filter(u =>
-    (u.name||'').toLowerCase().includes(q) ||
-    (u.email||'').toLowerCase().includes(q)
+    normalizeAdminSearch(u.name).includes(q) ||
+    normalizeAdminSearch(u.email).includes(q)
   );
   filtered = userStatusFilter === 'blocked'
     ? filtered.filter(u => u.blocked && u.deleted !== true && u.profileStatus !== 'deleted')
@@ -2429,7 +2430,7 @@ window.setUsersPage = function(page) {
 };
 
 // Búsqueda y pestañas Usuarios/Bloqueados — comparten applyUserFilters()
-document.getElementById('user-search').oninput = applyUserFilters;
+document.getElementById('user-search').oninput = debounceAdminSearch(() => { usersPage = 0; applyUserFilters(); });
 document.getElementById('user-sort').onchange = (e) => { userSortMode = e.target.value; applyUserFilters(); };
 document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(btn => {
   btn.addEventListener('click', () => window.filterUsersByStatus(btn.dataset.userTab));
@@ -3066,18 +3067,18 @@ window.deleteOrder = async (orderId) => {
 
 let _lastFilteredOrders = [];
 function applyOrderFilters() {
-  const search = (document.getElementById('order-search')?.value || '').toLowerCase();
+  const search = normalizeAdminSearch(document.getElementById('order-search')?.value);
   const statusVal = document.getElementById('filter-status')?.value || '';
   const payVal = document.getElementById('filter-pay-status')?.value || '';
   let filtered = allOrders;
   if (statusVal) filtered = filtered.filter(o => o.status === statusVal);
   if (payVal) filtered = filtered.filter(o => (o.payment?.status || o.paymentStatus || 'pendiente') === payVal);
   if (search) filtered = filtered.filter(o =>
-    (o.userName||'').toLowerCase().includes(search) ||
-    (o.userEmail||'').toLowerCase().includes(search) ||
-    (o.userPhone||'').toLowerCase().includes(search) ||
-    (o.id||'').toLowerCase().includes(search) ||
-    (o.orderNumber||o.shortId||'').toLowerCase().includes(search)
+    normalizeAdminSearch(o.userName).includes(search) ||
+    normalizeAdminSearch(o.userEmail).includes(search) ||
+    normalizeAdminSearch(o.userPhone).includes(search) ||
+    normalizeAdminSearch(o.id).includes(search) ||
+    normalizeAdminSearch(o.orderNumber || o.shortId).includes(search)
   );
   _lastFilteredOrders = filtered;
   // Una selección deja de tener sentido si el pedido seleccionado ya no
@@ -3091,7 +3092,7 @@ function applyOrderFilters() {
 // Filter orders by status
 document.getElementById('filter-status').onchange = applyOrderFilters;
 document.getElementById('filter-pay-status').onchange = applyOrderFilters;
-document.getElementById('order-search').oninput = applyOrderFilters;
+document.getElementById('order-search').oninput = debounceAdminSearch(applyOrderFilters);
 
 document.getElementById('btn-cleanup-stale-orders')?.addEventListener('click', async event => {
   const button = event.currentTarget;
@@ -4133,17 +4134,17 @@ function renderProductosGrouped(list) {
 
 // Search + category filter
 function applyProductFilters() {
-  const q = (document.getElementById('prod-search')?.value || '').toLowerCase();
+  const q = normalizeAdminSearch(document.getElementById('prod-search')?.value);
   const cat = document.getElementById('prod-filter-cat')?.value || '';
   let result = _allProducts;
   if (q === 'sin nombre' || q === 'sin-nombre') {
     result = result.filter(p => !p.name || !p.name.trim());
   } else if (q) {
     result = result.filter(p =>
-      (p.name||'').toLowerCase().includes(q) ||
-      (p.category||'').toLowerCase().includes(q) ||
-      (p.collection||'').toLowerCase().includes(q) ||
-      (p.tags||[]).join(' ').toLowerCase().includes(q)
+      normalizeAdminSearch(p.name).includes(q) ||
+      normalizeAdminSearch(p.category).includes(q) ||
+      normalizeAdminSearch(p.collection).includes(q) ||
+      normalizeAdminSearch(Array.isArray(p.tags) ? p.tags.join(' ') : p.tags).includes(q)
     );
   }
   if (cat) result = result.filter(p => wristCategory(p.category || '') === wristCategory(cat));
@@ -4155,7 +4156,7 @@ function applyProductFilters() {
   if (document.getElementById('coll-picker-card').style.display !== 'none') renderCollPicker();
   updateBulkToolbar();
 }
-document.getElementById('prod-search').addEventListener('input', applyProductFilters);
+document.getElementById('prod-search').addEventListener('input', debounceAdminSearch(applyProductFilters));
 document.getElementById('prod-filter-cat').addEventListener('change', applyProductFilters);
 
 // Widgets de imagen de formulario: la carga real (validar/optimizar/subir a
@@ -4654,7 +4655,9 @@ async function prodGuardar({commit=false}={}) {
   if(existingProduct?.variantCommerceVersion===2 && !productCommercialEditor){const error=document.getElementById('prod-form-error');error.textContent='Este producto requiere el editor compatible.';error.style.display='';return false;}
   if (document.getElementById('prod-save-btn')?.disabled) return false;
   const errEl = document.getElementById('prod-form-error');
-  const _isEdit = !!document.getElementById('prod-id').value;
+  // El ID se reserva antes del transporte para reintentos idempotentes. Tener
+  // ese ID no convierte un alta fallida en una edición que exija otro permiso.
+  const _isEdit = productEditBaseline != null;
   const _permOk = _isEdit
     ? (can(currentRole, 'editProducts') && roleCanDo('productos', 'editar'))
     : (can(currentRole, 'addProducts') && roleCanDo('productos', 'crear'));
@@ -4854,7 +4857,7 @@ async function prodGuardar({commit=false}={}) {
       const signature=JSON.stringify(request);
       if(pendingProductEditorSave?.signature!==signature)pendingProductEditorSave={signature,changeId:crypto.randomUUID()};
       document.getElementById('prod-id').value=targetId;
-      const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...request,changeId:pendingProductEditorSave.changeId})});
+      const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...request,changeId:pendingProductEditorSave.changeId}),signal:AbortSignal.timeout(30000)});
       const payload=await readProductEditorResponse(response);
       if(!response.ok || !payload.ok)throw new Error(payload.error || 'No se pudo guardar el producto.');
       document.getElementById('prod-id').value=targetId;
@@ -5234,11 +5237,11 @@ function syncCategorySelects() {
 }
 
 function applyCollFilter(list) {
-  const q = (document.getElementById('coll-search')?.value || '').toLowerCase();
+  const q = normalizeAdminSearch(document.getElementById('coll-search')?.value);
   if (!q) return list;
-  return list.filter(c => (c.name||'').toLowerCase().includes(q) || (c.slug||'').toLowerCase().includes(q));
+  return list.filter(c => normalizeAdminSearch(c.name).includes(q) || normalizeAdminSearch(c.slug).includes(q));
 }
-document.getElementById('coll-search').addEventListener('input', () => renderColeccionesGrid(applyCollFilter(_allCollections)));
+document.getElementById('coll-search').addEventListener('input', debounceAdminSearch(() => renderColeccionesGrid(applyCollFilter(_allCollections))));
 
 // ══════════════════════════════════════════════
 // COLECCIONES: SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS
@@ -5662,9 +5665,9 @@ window.collClosePicker = function() {
 };
 
 function renderCollPicker() {
-  const q = (document.getElementById('coll-picker-search').value || '').toLowerCase().trim();
+  const q = normalizeAdminSearch(document.getElementById('coll-picker-search').value);
   const filtered = q
-    ? _allProducts.filter(p => (p.name || '').toLowerCase().includes(q))
+    ? _allProducts.filter(p => normalizeAdminSearch(p.name).includes(q))
     : _allProducts;
 
   document.getElementById('coll-picker-list').innerHTML = filtered.map(p => {
@@ -5685,12 +5688,12 @@ function renderCollPicker() {
   }).join('');
   updatePickerSelCount();
 }
-document.getElementById('coll-picker-search').addEventListener('input', renderCollPicker);
+document.getElementById('coll-picker-search').addEventListener('input', debounceAdminSearch(renderCollPicker));
 
 function updatePickerSelCount() {
   document.getElementById('coll-picker-sel-count').textContent = `${_collPickerSelected.size} seleccionados`;
-  const q = (document.getElementById('coll-picker-search').value || '').toLowerCase().trim();
-  const filtered = q ? _allProducts.filter(p => (p.name || '').toLowerCase().includes(q)) : _allProducts;
+  const q = normalizeAdminSearch(document.getElementById('coll-picker-search').value);
+  const filtered = q ? _allProducts.filter(p => normalizeAdminSearch(p.name).includes(q)) : _allProducts;
   document.getElementById('coll-picker-select-all').checked = filtered.length > 0 && filtered.every(p => _collPickerSelected.has(p._docId));
 }
 
@@ -5702,8 +5705,8 @@ window.collPickerToggleOne = function(input) {
 };
 
 window.collPickerToggleAll = function(checkbox) {
-  const q = (document.getElementById('coll-picker-search').value || '').toLowerCase().trim();
-  const filtered = q ? _allProducts.filter(p => (p.name || '').toLowerCase().includes(q)) : _allProducts;
+  const q = normalizeAdminSearch(document.getElementById('coll-picker-search').value);
+  const filtered = q ? _allProducts.filter(p => normalizeAdminSearch(p.name).includes(q)) : _allProducts;
   if (checkbox.checked) filtered.forEach(p => _collPickerSelected.add(p._docId));
   else filtered.forEach(p => _collPickerSelected.delete(p._docId));
   renderCollPicker();
@@ -6407,7 +6410,7 @@ async function loadPermisosSection() {
 
   renderPermisosMatrix();
 
-  document.getElementById('perm-search').oninput = renderPermisosMatrix;
+  document.getElementById('perm-search').oninput = debounceAdminSearch(renderPermisosMatrix);
   document.getElementById('perm-filter-module').onchange = renderPermisosMatrix;
   document.getElementById('perm-filter-role').onchange = renderPermisosMatrix;
   document.getElementById('btn-perm-save').onclick = savePermisosChanges;
@@ -6421,7 +6424,7 @@ async function loadPermisosSection() {
 }
 
 function renderPermisosMatrix() {
-  const q = (document.getElementById('perm-search').value || '').toLowerCase();
+  const q = normalizeAdminSearch(document.getElementById('perm-search').value);
   const modFilter = document.getElementById('perm-filter-module').value;
   const roleFilter = document.getElementById('perm-filter-role').value;
   const wrap = document.getElementById('perm-modules-wrap');
@@ -6433,7 +6436,7 @@ function renderPermisosMatrix() {
     const mod = PERMISSION_MODULES[modKey];
     const actionEntries = Object.entries(mod.actions).filter(([actKey, act]) => {
       if (!q) return true;
-      return act.label.toLowerCase().includes(q) || mod.label.toLowerCase().includes(q);
+      return normalizeAdminSearch(act.label).includes(q) || normalizeAdminSearch(mod.label).includes(q);
     });
     if (!actionEntries.length) return '';
 
@@ -7324,7 +7327,7 @@ async function loadApariencia() {
 
   const searchEl = document.getElementById('apar-search');
   searchEl.value = aparSearchTerm;
-  searchEl.oninput = () => { aparSearchTerm = searchEl.value.trim().toLowerCase(); aparRenderCategories(); };
+  searchEl.oninput = () => { aparSearchTerm = normalizeAdminSearch(searchEl.value); aparRenderCategories(); };
 }
 
 async function aparLoadSchemesList(scope) {
@@ -7480,7 +7483,7 @@ function aparRenderCategories() {
   categories.forEach(cat => {
     const allCatTokens = tokens.filter(t => t.category === cat.key);
     const catTokens = allCatTokens.filter(t => !term ||
-      t.label.toLowerCase().includes(term) || t.key.toLowerCase().includes(term) || cat.label.toLowerCase().includes(term));
+      normalizeAdminSearch(t.label).includes(term) || normalizeAdminSearch(t.key).includes(term) || normalizeAdminSearch(cat.label).includes(term));
     if (!catTokens.length) return;
     const details = document.createElement('details');
     details.open = !!term;

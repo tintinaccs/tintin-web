@@ -1,3 +1,4 @@
+import { normalizeAdminSearch, debounceAdminSearch } from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import {
@@ -1263,7 +1264,7 @@ function calculateCoverage(report) {
 
 function filters() {
   return {
-    search: ($('site-diagnostic-search')?.value || '').trim().toLowerCase(),
+    search: normalizeAdminSearch($('site-diagnostic-search')?.value),
     severity: $('site-diagnostic-severity')?.value || '',
     confirmation: $('site-diagnostic-confirmation')?.value || '',
     category: $('site-diagnostic-category')?.value || '',
@@ -1299,7 +1300,7 @@ function matchesFilters(item, current) {
     const haystack = [
       item.title, item.description, item.category, item.page, item.pageLabel, item.route,
       item.section, item.component, item.file, item.evidence, item.actual, item.suggestion
-    ].join(' ').toLowerCase();
+    ].map(normalizeAdminSearch).join(' ');
     if (!haystack.includes(current.search)) return false;
   }
   return true;
@@ -1820,7 +1821,7 @@ function bindFilters() {
     'site-diagnostic-date'
   ].forEach(id => {
     const node = $(id);
-    node?.addEventListener(id.endsWith('search') ? 'input' : 'change', renderResults);
+    node?.addEventListener(id.endsWith('search') ? 'input' : 'change', id.endsWith('search') ? debounceAdminSearch(renderResults) : renderResults);
   });
 }
 

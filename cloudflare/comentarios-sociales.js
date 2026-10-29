@@ -148,14 +148,15 @@ function publicReportResult(report) {
 }
 
 export async function listCommentReports(env, filters = {}) {
-  const term = clean(filters.search, 160).toLowerCase();
+  const normalizeSearch = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim().replace(/\s+/g, ' ');
+  const term = normalizeSearch(clean(filters.search, 160));
   const status = filters.status ? reportStatus(filters.status) : '';
   const documents = await firestoreAdminList(env, 'commentReports', MAX_REPORTS);
   return documents.map(decoded).filter(Boolean).filter(report => {
     if (status && report.status !== status) return false;
     if (!term) return true;
     return [report.reportId, report.commentId, report.productId, report.reason, report.commentText]
-      .some(value => String(value || '').toLowerCase().includes(term));
+      .some(value => normalizeSearch(value).includes(term));
   }).sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 }
 

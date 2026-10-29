@@ -1,4 +1,4 @@
-import {quantity} from './controles-editor-producto.js?v=tintin-20261028-guided-editor-2';
+import {quantity} from './controles-editor-producto.js?v=tintin-20261028-product-tabs-1-guiado-1269-20261029-1';
 import {mountProductMoney,formatGuarani} from './importe-producto.js?v=tintin-20261028-guided-editor-2';
 import {commercialDraft,commercialPatch,setCommercialOptionAvailability} from './editor-comercial-core.mjs?v=tintin-20261026-editor-phase6-1';
 import {productVariantPrice,variantSelectionLabel} from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';

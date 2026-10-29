@@ -2,7 +2,7 @@ const {test,expect}=require('@playwright/test');
 const fs=require('fs'),path=require('path');
 const root=path.resolve(__dirname,'../..');
 const source=p=>fs.readFileSync(path.join(root,p),'utf8').replace(/^import\s[\s\S]*?;\s*$/gm,'').replace(/^export /gm,'');
-const identity=source('js/pages/profile/estado-canonico-perfil.mjs');
+const identity=source('js/admin/datos/busqueda-admin.mjs')+ '\n'+source('js/pages/profile/estado-canonico-perfil.mjs');
 async function fixture(page,width,body){
  await page.setViewportSize({width,height:900});
  await page.route('**/*.png',route=>route.fulfill({contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jxioAAAAASUVORK5CYII=','base64')}));

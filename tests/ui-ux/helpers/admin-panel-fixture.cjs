@@ -21,10 +21,10 @@ async function load(page, width, file = 'admin.html', options = {}) {
       contentType: 'text/html', body: shell,
       headers: { 'Content-Security-Policy': "default-src 'none'; script-src 'nonce-dGludGluLWZpeHR1cmU=' 'strict-dynamic'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none';" },
     });
-    const allowed = /\.(css|woff2|png|svg|ico)$/.test(url.pathname) || scripts.includes(url.pathname) || url.pathname === '/js/admin/maestro/registro-maestro.js';
+    const allowed = /\.(css|woff2|png|svg|ico)$/.test(url.pathname) || scripts.includes(url.pathname) || ['/js/admin/maestro/registro-maestro.js','/js/admin/datos/busqueda-admin.mjs'].includes(url.pathname);
     const filePath = path.resolve(root, `.${url.pathname}`);
     if (!allowed || !filePath.startsWith(root + path.sep) || !fs.existsSync(filePath)) return route.abort();
-    return route.fulfill({ path: filePath, contentType: /\.js$/.test(filePath) ? 'text/javascript' : undefined });
+    return route.fulfill({ path: filePath, contentType: /\.m?js$/.test(filePath) ? 'text/javascript' : undefined });
   });
   await page.goto('https://tintin.test/fixture');
   await page.evaluate(() => {

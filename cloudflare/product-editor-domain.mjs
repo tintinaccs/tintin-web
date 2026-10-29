@@ -59,7 +59,14 @@ export async function saveProductEditor(env, body, actor, io={get:firestoreAdmin
   if(actor.role!=='superadmin') {
     const permissions=decodeFirestoreFields((await io.get(env,'rolePermissions/main'))?.fields || {});
     if(permissions?.admin?.productos?.ver===false)fail('Tu rol no tiene permiso para acceder a Productos.',403);
-    const action=document?'editar':'crear';
+    let action=document?'editar':'crear';
+    // Una respuesta perdida del alta no convierte el reintento en una edición.
+    // El recibo privado se cerró en el mismo commit que el producto y acredita
+    // propietario, alta, cambio y revisión originales; no concede escritura.
+    if(document && body.expected===null && before.lastEditorChangeId===body.changeId && body.workspace?.key===id){
+      const receipt=decodeFirestoreFields((await io.get(env,productWorkPath(actor.uid,id)))?.fields || {});
+      if(receipt.ownerUid===actor.uid && !receipt.private && receipt.productId===null && receipt.closed===true && receipt.appliedChangeId===body.changeId && Number.isInteger(body.workspace.revision) && receipt.revision===body.workspace.revision+1)action='crear';
+    }
     if(permissions?.admin?.productos?.[action]!==undefined && permissions.admin.productos[action]!==true) fail('Tu rol no tiene permiso para esta acción.',403);
     if((Boolean(document) && productIsPublished(before))!==(body.product?.publicationStatus!=null?body.product.publicationStatus==='active':body.product?.active!==false) && permissions?.admin?.productos?.activarDesactivar!==undefined && permissions.admin.productos.activarDesactivar!==true) fail('Tu rol no tiene permiso para publicar productos.',403);
     if(body.inventory!=null) fail('El inventario privado requiere Super Admin.',403);

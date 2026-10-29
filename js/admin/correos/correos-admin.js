@@ -1,3 +1,4 @@
+import {normalizeAdminSearch,debounceAdminSearch} from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 // Dependencias explícitas; el estado de sesión y las fuentes vivas se leen al usarse.
 export function iniciarCorreos({
   db, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, orderBy, limit, writeBatch, serverTimestamp, onSnapshot, getDocsPaginated, withAdminSiteChange, sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail, EMAIL_WEBHOOK_URL, ORDER_STATUS_LABELS, adminEventAttributes, addAdminBulkSelection, rejectOversizedAdminBulkSelection, batchUpdateChunked, downloadCsv, emailErrorMessage_, escapeHtmlAdmin, formatDate, formatPrice, logAudit, toast, toJsDate_, getCurrentUser, getAllUsers, getAllOrders
@@ -777,7 +778,7 @@ function renderCorreosPlantillasTab() {
   let list = allEmailTemplates.slice();
   if (!tplShowArchived) list = list.filter(t => !t.archived);
   if (tplFilterCategory) list = list.filter(t => t.category === tplFilterCategory);
-  if (tplSearchQuery) list = list.filter(t => (t.name || '').toLowerCase().includes(tplSearchQuery) || (t.subject || '').toLowerCase().includes(tplSearchQuery));
+  if (tplSearchQuery) list = list.filter(t => normalizeAdminSearch(t.name).includes(tplSearchQuery) || normalizeAdminSearch(t.subject).includes(tplSearchQuery));
   list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
   const tbody = document.getElementById('tpl-tbody');
@@ -814,7 +815,7 @@ function renderCorreosPlantillasTab() {
   updateTemplatesBulkToolbar();
 }
 
-document.getElementById('tpl-search').oninput = (e) => { tplSearchQuery = e.target.value.toLowerCase(); renderCorreosPlantillasTab(); };
+document.getElementById('tpl-search').oninput = debounceAdminSearch(e => { tplSearchQuery = normalizeAdminSearch(e.target.value); renderCorreosPlantillasTab(); });
 document.getElementById('tpl-filter-category').onchange = (e) => { tplFilterCategory = e.target.value; renderCorreosPlantillasTab(); };
 document.getElementById('tpl-show-archived').onchange = (e) => { tplShowArchived = e.target.checked; renderCorreosPlantillasTab(); };
 
@@ -1058,9 +1059,9 @@ window.deleteTemplate = async (id) => {
 
 // ---- Clientas registradas ----
 function filteredClients_() {
-  const q = (document.getElementById('cli-search').value || '').toLowerCase();
+  const q = normalizeAdminSearch(document.getElementById('cli-search').value);
   const filterVal = document.getElementById('cli-filter').value;
-  let list = allClientUsers.filter(c => (c.name || '').toLowerCase().includes(q) || (c.email || '').toLowerCase().includes(q));
+  let list = allClientUsers.filter(c => normalizeAdminSearch(c.name).includes(q) || normalizeAdminSearch(c.email).includes(q));
   if (filterVal === 'active') list = list.filter(c => !c.blocked);
   if (filterVal === 'blocked') list = list.filter(c => c.blocked);
   if (filterVal === 'with_orders') list = list.filter(c => c.orderCount > 0);
@@ -1105,7 +1106,7 @@ function updateClientSelectionCount_() {
   if (el) el.textContent = `${cliSelected.size} seleccionadas`;
 }
 
-document.getElementById('cli-search').oninput = () => renderCorreosClientasTab();
+document.getElementById('cli-search').oninput = debounceAdminSearch(renderCorreosClientasTab);
 document.getElementById('cli-filter').onchange = () => renderCorreosClientasTab();
 document.getElementById('cli-select-all').onchange = (e) => {
   const list = filteredClients_().filter(c => !c.blocked);
@@ -1348,7 +1349,7 @@ function renderCorreosHistorialTab() {
   typeSelect.innerHTML = '<option value="">Todos los tipos</option>' + types.map(t => `<option value="${escapeHtmlAdmin(t)}">${escapeHtmlAdmin(templateLabel_(t))}</option>`).join('');
   typeSelect.value = types.includes(currentVal) ? currentVal : '';
 
-  const q = (document.getElementById('hist-search').value || '').toLowerCase();
+  const q = normalizeAdminSearch(document.getElementById('hist-search').value);
   const statusVal = document.getElementById('hist-filter-status').value;
   const categoryVal = document.getElementById('hist-filter-category').value;
   const typeVal = document.getElementById('hist-filter-type').value;
@@ -1356,7 +1357,7 @@ function renderCorreosHistorialTab() {
   const toVal = document.getElementById('hist-filter-to').value;
 
   let list = allEmailLogs.slice();
-  if (q) list = list.filter(l => (l.recipient || '').toLowerCase().includes(q));
+  if (q) list = list.filter(l => normalizeAdminSearch(l.recipient).includes(q));
   if (statusVal) list = list.filter(l => l.status === statusVal);
   if (categoryVal) list = list.filter(l => (l.category || 'pedido') === categoryVal);
   if (typeVal) list = list.filter(l => l.type === typeVal);
@@ -1471,7 +1472,7 @@ window.bulkExportLogs = function() {
   toast(`Exportados ${list.length} envío(s) a CSV`);
 };
 
-document.getElementById('hist-search').oninput = () => renderCorreosHistorialTab();
+document.getElementById('hist-search').oninput = debounceAdminSearch(renderCorreosHistorialTab);
 document.getElementById('hist-filter-status').onchange = () => renderCorreosHistorialTab();
 document.getElementById('hist-filter-category').onchange = () => renderCorreosHistorialTab();
 document.getElementById('hist-filter-type').onchange = () => renderCorreosHistorialTab();

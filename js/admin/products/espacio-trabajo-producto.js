@@ -29,8 +29,8 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   function label(){
     const selected=card.querySelector('#prod-publicationStatus')?.value;
     const save=card.querySelector('#prod-save-btn');if(!save)return;
-    const text=selected==='archived'?'Archivar':'Guardar cambios';
-    if(!applying && save.textContent!==text)save.textContent=text;
+    const text=selected==='archived'?'Archivar':selected==='draft'?'Guardar borrador':'Guardar cambios';
+    if(!publishing && !applying && save.textContent!==text)save.textContent=text;
   }
   function backup(){try{sessionStorage.setItem(storageKey,JSON.stringify({snapshot:clone(),revision,baseExpected,time:Date.now()}));}catch{} }
   function clearBackup(){try{sessionStorage.removeItem(storageKey);}catch{}}
@@ -111,6 +111,8 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
   async function publish(){
     if(publishing || destroyed)return false;
     publishing=true;retryPublish=false;back.disabled=true;discard.disabled=true;
+    card.setAttribute('aria-busy','true');
+    const saveButton=card.querySelector('#prod-save-btn');if(saveButton)saveButton.textContent='Guardando…';
     let frozen=[];
     try{
       await ready;await save();if(conflict) {message('La versión pública cambió. Reabrí y conciliá el progreso antes de aplicar.',true);return false;}
@@ -133,7 +135,7 @@ export function mountProductWorkspace({card,uid,key,productId,source,request,ser
       return result;
     }finally{
       for(const control of frozen)if(control.isConnected)control.disabled=false;
-      publishing=false;applying=false;back.disabled=false;discard.disabled=false;if(!destroyed)label();
+      publishing=false;applying=false;back.disabled=false;discard.disabled=false;card.removeAttribute('aria-busy');if(!destroyed)label();
     }
   }
   back.addEventListener('click',()=>void leave());retry.addEventListener('click',()=>void (retryPublish?publish():save()).catch(reportError));

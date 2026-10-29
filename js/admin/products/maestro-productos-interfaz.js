@@ -1,3 +1,4 @@
+import { normalizeAdminSearch, debounceAdminSearch } from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import {productBulkPatch,productFingerprint} from './maestro-productos-core.mjs?v=tintin-20261024-editor-v2-4';
 let modalSequence=0;
 const labels={price:'Precio fijo',pricePercent:'Ajustar precio por porcentaje',priceBefore:'Precio anterior',stock:'Establecer stock',stockDelta:'Sumar o restar stock',category:'Colección',active:'Activo',oferta:'En oferta',destacado:'Destacado en Inicio',badge:'Etiqueta visible',tags:'Etiquetas de búsqueda'};
@@ -80,8 +81,8 @@ export function openProductOrderLink({products,orders,onEdit}){
  const code=element('input',null,'tt-commerce-input');code.id='tt-product-order-code';code.maxLength=180;code.placeholder='Ej.: TINPED123 o ID del pedido';
  view.body.append(element('h3','Agregar a una compra existente'),field('Buscar en pedidos cargados',search),field('Elegí un pedido',list),field('O ingresá su código o ID exacto',code));
  const edit=element('button','Abrir pedido y agregar la selección','tt-commerce-btn');edit.type='button';view.footer.append(edit);
- const render=()=>{const q=search.value.trim().toLocaleLowerCase('es');list.replaceChildren();option(list,'','Elegí un pedido…');for(const order of orders.filter(order=>[order.id,order.orderNumber,order.shortId,order.userName,order.userPhone,order.userEmail].some(value=>String(value || '').toLocaleLowerCase('es').includes(q))))option(list,order.id,`${order.orderNumber || order.shortId || order.id} · ${order.userName || 'Sin nombre'} · ${order.status || 'Sin estado'}`);};
- search.addEventListener('input',render);list.addEventListener('change',()=>{code.value=list.value;});render();
+ const render=()=>{const q=normalizeAdminSearch(search.value);list.replaceChildren();option(list,'','Elegí un pedido…');for(const order of orders.filter(order=>[order.id,order.orderNumber,order.shortId,order.userName,order.userPhone,order.userEmail].some(value=>normalizeAdminSearch(value).includes(q))))option(list,order.id,`${order.orderNumber || order.shortId || order.id} · ${order.userName || 'Sin nombre'} · ${order.status || 'Sin estado'}`);};
+ search.addEventListener('input',debounceAdminSearch(render));list.addEventListener('change',()=>{code.value=list.value;});render();
  async function open(callback){if(view.dialog.dataset.busy==='true')return;view.busy(true);try{await callback();view.finish(false);document.getElementById('tinped-modal-close')?.focus({preventScroll:true});}catch(error){view.busy(false);view.fail(error);}}
  edit.addEventListener('click',()=>{const id=code.value.trim();if(!id){view.fail(Error('Elegí un pedido o ingresá su código.'));return;}open(()=>onEdit(id,{productIds:ids,returnFocus:view.opener}));});
  view.show();search.focus();return view.dialog;

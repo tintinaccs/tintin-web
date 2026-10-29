@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '../..');
 const source = fs.readFileSync(path.join(root, 'js/pages/profile/mayorista-perfil.js'), 'utf8').replace(/^import .*;\r?\n/gm, '');
+const searchHelper = fs.readFileSync(path.join(root, 'js/core/store/busqueda-productos.mjs'), 'utf8').replace(/export /g, '');
 const helper = fs.readFileSync(path.join(root, 'js/core/auth/estado-perfil-sesion.mjs'), 'utf8').replace(/\r\n/g, '\n');
 const deadlineStart = helper.indexOf('export function withDeadline');
 const deadline = helper.slice(deadlineStart, helper.indexOf('\n}\n', deadlineStart) + 2).replace('export ', '');
@@ -12,7 +13,7 @@ for (const width of [390, 768, 1440]) test(`Mayoristas recupera envío y limpia 
   await page.route('**/api/**', route => route.abort());
   await page.clock.install();
   await page.setContent('<main style="max-width:800px;margin:auto"><section id="perfil-wholesale-card"><div id="perfil-wholesale-root"></div></section></main>');
-  await page.addScriptTag({ content: deadline + `
+  await page.addScriptTag({ content: searchHelper + deadline + `
     const AUTH_STATES={RESTORING:'restoring',UNKNOWN:'unknown'},db={},appCheckReady=Promise.resolve(true);
     let sessionUser; const getSessionUser=()=>sessionUser;
     const subscribeSession=fn=>window.sessionCallback=fn;
@@ -36,4 +37,35 @@ for (const width of [390, 768, 1440]) test(`Mayoristas recupera envío y limpia 
   await expect(page.locator('[data-wholesale-lines]')).not.toContainText('Aros');
   await page.evaluate(() => window.quoteCallbacks[0]({docs:[{id:'alice-private',data:()=>({quoteNumber:'ALICE-PRIVATE',items:[]})}]}));
   await expect(page.locator('[data-wholesale-quotes]')).not.toContainText('ALICE-PRIVATE');
+});
+
+
+test('Mayoristas usa la última consulta, normaliza tildes y no revive una búsqueda borrada', async ({ page }) => {
+ await page.setContent('<section id="perfil-wholesale-card"><div id="perfil-wholesale-root"></div></section>');
+ await page.addScriptTag({ content: searchHelper + deadline + `
+  const AUTH_STATES={RESTORING:'restoring',UNKNOWN:'unknown'},db={},appCheckReady=Promise.resolve(true);
+  let sessionUser;const getSessionUser=()=>sessionUser;
+  const subscribeSession=fn=>window.sessionCallback=fn;
+  const collection=()=>({}),where=()=>({}),limit=()=>({}),query=()=>({}),onSnapshot=()=>()=>{};
+  const authenticatedFetch=()=>{},apiFailureMessage=()=>'';
+  window.catalogCalls=0;window.fetch=()=>{window.catalogCalls++;return new Promise(resolve=>{window.resolveCatalog=()=>resolve({ok:true,json:async()=>({ok:true,items:[{id:'prefix',data:{name:'Aros corazón especiales',price:200}},{id:'exact',data:{name:'Aros corazón',price:100}}]})})})};
+ ` + source + `
+  window.setWholesaleUser=uid=>{sessionUser={uid};window.sessionCallback({status:'ready',user:sessionUser});};
+ ` });
+ await page.evaluate(() => window.setWholesaleUser('alice'));
+ const input=page.locator('[data-wholesale-search]'),results=page.locator('[data-wholesale-results]');
+ await input.fill('aros');
+ await expect.poll(()=>page.evaluate(()=>window.catalogCalls)).toBe(1);
+ await input.fill('no existe');
+ await input.fill('');
+ await page.evaluate(()=>window.resolveCatalog());
+ await expect(results).toBeEmpty();
+ await input.fill('  AROS   CORAZON  ');
+ await expect(results.locator('[data-add-product]')).toHaveCount(2);
+ await expect(results.locator('[data-add-product]').first()).toHaveAttribute('data-add-product','exact');
+ expect(await page.evaluate(()=>window.catalogCalls)).toBe(1);
+ await input.fill('no existe');
+ await expect(results).toContainText('No encontramos');
+ await input.fill('aros');
+ await expect(results.locator('[data-add-product]')).toHaveCount(2);
 });

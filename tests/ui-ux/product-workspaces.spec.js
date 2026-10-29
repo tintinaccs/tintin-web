@@ -88,6 +88,23 @@ test('publicación en vuelo bloquea doble acción y salida, sin duplicar product
  await page.evaluate(async()=>{window.qaReleaseCommit();await window.qaPendingCommit;});await expect(page.locator('#prod-form-card')).toBeHidden();
  expect(await page.evaluate(()=>window.qaProductWrites.filter(path=>path.startsWith('products/')).length)).toBe(1);
 });
+test('guardado desde Publicación indica espera, recupera error y conserva un único producto',async({page})=>{
+ await open(page,390,844);
+ await page.evaluate(()=>{
+  for(const [id,value] of Object.entries({'prod-publicationStatus':'active','prod-name':'Último paso real','prod-description':'Completa','prod-price':'30000','prod-category':'qa-tablet','prod-imageUrl':'https://img.test/cover.webp'}))document.getElementById(id).value=value;
+  document.getElementById('prod-name').dispatchEvent(new Event('input',{bubbles:true}));window.qaHoldWork=true;
+ });
+ await page.getByRole('tab',{name:'Publicación',exact:true}).click();
+ const finish=page.locator('.tt-studio-pagination button').last();await finish.click();
+ await expect(page.locator('#prod-form-card')).toHaveAttribute('aria-busy','true');await expect(finish).toBeDisabled();await expect(finish).toHaveText('Guardando…');
+ await expect.poll(()=>page.evaluate(()=>typeof window.qaReleaseWork)).toBe('function');
+ await page.evaluate(()=>{window.qaHtmlResponse=true;window.qaHoldWork=false;window.qaReleaseWork();});
+ await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','error');
+ await expect(finish).toBeEnabled();await expect(page.locator('#prod-name')).toHaveValue('Último paso real');
+ expect(await page.evaluate(()=>window.qaProductWrites.filter(key=>key.startsWith('products/')).length)).toBe(0);
+ await page.evaluate(()=>window.qaHtmlResponse=false);await finish.click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ expect(await page.evaluate(()=>window.qaProductWrites.filter(key=>key.startsWith('products/')).length)).toBe(1);
+});
 test('Borradores lista progreso privado y permite continuar sin inventario público ficticio',async({page})=>{
  await open(page);
  await page.route('https://tintin.test/api/admin-order-mutation*',async route=>{
