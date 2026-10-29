@@ -13,6 +13,6 @@ for (const [width, height, device] of [[390,844,'mobile'],[820,1180,'tablet-vert
     });
     await page.setContent(`<base href="http://tintin.test/">${preload}${hero}`);
     await expect.poll(() => page.locator('#tt-hero-img').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
-    expect(requests).toEqual([`/assets-tintin/images/home/hero-nuevo/hero-nuevo-${device}-optimized.webp`]);
+    expect(requests).toEqual([`/assets-tintin/images/home/hero-nuevo/hero-nuevo-${device}-lossless.webp`]);
   });
 }

@@ -10,7 +10,7 @@ const { CATEGORIES } = require('../js/components/navigation/compartido/iconos.js
 const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.css', versionPrefix: 'tintin-about' };
+const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.css', versionPrefix: 'tintin-about-e9f78c18973f8f56' };
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
@@ -155,7 +155,7 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-navigation-coherence-css\"",
     "css/components/navigation/compartido/coherencia-visual.css",
-    "tintin-20261023-header-dropup-4"
+    "tintin-20261023-header-dropup-4-perf-20261029-1"
   ]
 ];
 const INITIAL_PAGE_STYLES = {

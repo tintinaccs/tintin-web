@@ -946,13 +946,13 @@
 
   function bootImagePerformance() {
     if (!window.TintinImagePerformanceBooted) {
-      importSibling('components/images/rendimiento-imagenes.js', 'Image Performance', undefined, 'tintin-20261021-commerce-review-1');
+      importSibling('components/images/rendimiento-imagenes.js', 'Image Performance', undefined, 'tintin-20261021-commerce-review-1-perf-20261029-1');
     }
   }
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261029-performance-1');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261027-welcome-receipt-1-perf-20261029-1');
     }
   }
 

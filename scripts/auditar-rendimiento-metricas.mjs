@@ -13,8 +13,9 @@
 //          sensación de "ya cargó")
 //   TBT  — cuánto tiempo el hilo principal estuvo bloqueado y la página no
 //          respondía a toques ni clics
-//   INP  — cuánto tarda en responder a una interacción real
+//   Clic y apertura del carrito — latencia de laboratorio, no INP de usuarios
 import { chromium } from 'playwright';
+import { createHash } from 'node:crypto';
 import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -29,7 +30,7 @@ fs.mkdirSync(outDir, { recursive: true });
 // Latencia por request. Un móvil en 4G real ronda 50-150 ms; 60 ms es
 // conservador y deja ver el costo de encadenar descargas.
 const LATENCY_MS = 60;
-const RUNS = 3; // se reporta la mediana, para que un pico no ensucie el número
+const RUNS = Math.max(1, Math.min(5, Number(process.env.PERF_RUNS) || 3)); // se reporta la mediana, para que un pico no ensucie el número
 // Espejo local del SDK de Firebase (ver replicar-firebase-sdk.sh). Si no existe,
 // los pedidos a gstatic se cortan y la medición excluye el camino de Firebase.
 const MIRROR_DIR = path.join(root, 'artifacts', 'fbmirror');
@@ -69,6 +70,12 @@ const median = xs => { const s = [...xs].sort((a, b) => a - b); return s[Math.fl
 async function measure(browser, route) {
   const ctx = await browser.newContext({ viewport });
   const page = await ctx.newPage();
+  if (process.env.PERF_DOWNLOAD_KBPS) {
+    const cdp = await ctx.newCDPSession(page);
+    await cdp.send('Network.enable');
+    await cdp.send('Network.emulateNetworkConditions', {offline:false,latency:100,downloadThroughput:Number(process.env.PERF_DOWNLOAD_KBPS)*1024,uploadThroughput:100*1024});
+    await cdp.send('Emulation.setCPUThrottlingRate',{rate:4});
+  }
   page.on('pageerror', () => {});
   page.on('dialog', d => d.dismiss().catch(() => {}));
 
@@ -121,7 +128,7 @@ async function measure(browser, route) {
 
   const t0 = Date.now();
   await page.goto(`${baseURL}${route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await page.waitForTimeout(4000); // deja que termine la carga diferida
+  await page.waitForTimeout(Number(process.env.PERF_SETTLE_MS) || 4000); // deja que termine la carga diferida
 
   const m = await page.evaluate(() => {
     const nav = performance.getEntriesByType('navigation')[0] || {};
@@ -140,6 +147,7 @@ async function measure(browser, route) {
       cls: Number(p.cls.toFixed(4)),
       dcl: Math.round(nav.domContentLoadedEventEnd || 0),
       domInteractive: Math.round(nav.domInteractive || 0),
+      imageBytes: res.filter(r=>/\.(png|webp|jpe?g|svg)(\?|$)/.test(r.name)).reduce((n,r)=>n+(r.encodedBodySize||0),0),
       cssCount: css.length,
       jsCount: js.length,
       cssBytes: css.reduce((s, r) => s + (r.transferSize || r.encodedBodySize || 0), 0),
@@ -162,25 +170,48 @@ async function measure(browser, route) {
     }
   } catch { interaction = null; }
   m.interactionMs = interaction;
+  m.cartOpenMs = null;
+  try {
+    const cart=page.locator('#tabbar-cart:visible, [data-nav-action="cart"]:visible').first();
+    if (await cart.count()) {
+      const started=Date.now();await cart.click({timeout:3000});
+      await page.locator('#cart-drawer[aria-hidden="false"]').waitFor({state:'visible',timeout:3000});
+      m.cartOpenMs=Date.now()-started;
+    }
+  } catch {};
   m.wallMs = Date.now() - t0;
 
   await ctx.close();
   return m;
 }
 
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
-const out = {};
+const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined, args: ['--no-sandbox'] });
+const mirrorHash = MIRROR ? createHash('sha256').update(fs.readdirSync(MIRROR).filter(file=>file.endsWith('.js')).sort().map(file=>file+':'+createHash('sha256').update(fs.readFileSync(path.join(MIRROR,file))).digest('hex')).join('\n')).digest('hex') : null;
+const context = {browser:browser.version(),runs:RUNS,viewport,latencyMs:LATENCY_MS,networkLatencyMs:process.env.PERF_DOWNLOAD_KBPS?100:0,firebaseLatencyMs:FB_LATENCY,downloadKBps:Number(process.env.PERF_DOWNLOAD_KBPS)||null,cpuRate:process.env.PERF_DOWNLOAD_KBPS?4:1,settleMs:Number(process.env.PERF_SETTLE_MS)||4000,firebaseMirror:Boolean(MIRROR),firebaseMirrorHash:mirrorHash,thirdParties:'aborted except local Firebase mirror; not a production benchmark'};
+if (compareWith) {
+  const contextFile=path.join(outDir, `${compareWith}-context.json`);
+  if (!fs.existsSync(contextFile) || JSON.stringify(JSON.parse(fs.readFileSync(contextFile,'utf8')))!==JSON.stringify(context)) {
+    await browser.close();server.close();throw new Error('Comparación inválida: repetir ambas mediciones con el mismo navegador, red, CPU, espera, repeticiones y espejo Firebase.');
+  }
+}
+fs.writeFileSync(path.join(outDir, `${label}-context.json`),JSON.stringify(context,null,2));
+const out = {}, raw = {};
 for (const [name, route] of routes) {
   const runs = [];
   for (let i = 0; i < RUNS; i++) runs.push(await measure(browser, route));
-  const keys = Object.keys(runs[0]).filter(k => typeof runs[0][k] === 'number');
+  raw[name] = runs;
+  const keys = [...new Set(runs.flatMap(run => Object.keys(run)))];
   const agg = {};
-  for (const k of keys) agg[k] = median(runs.map(r => r[k] ?? 0));
+  for (const key of keys) {
+    const samples = runs.map(run => run[key]).filter(Number.isFinite);
+    agg[key] = samples.length ? median(samples) : null;
+  }
   out[name] = agg;
   process.stderr.write(`${name}: FCP ${agg.fcp}ms · LCP ${agg.lcp}ms · TBT ${agg.tbt}ms · CSS ${agg.cssCount} · JS ${agg.jsCount}\n`);
 }
 await browser.close(); server.close();
 
+fs.writeFileSync(path.join(outDir, `${label}-runs.json`),JSON.stringify(raw,null,2));
 fs.writeFileSync(path.join(outDir, `${label}.json`), JSON.stringify(out, null, 2));
 console.log(`\nGuardado en artifacts/perf/${label}.json`);
 
@@ -193,10 +224,12 @@ const FIELDS = [
   ['cls', 'Saltos de layout (CLS)', ''],
   ['domInteractive', 'DOM interactivo', 'ms'],
   ['lastCssStart', 'Arranque de la última hoja CSS', 'ms'],
+  ['imageBytes', 'Peso de imágenes transferidas', 'B'],
   ['cssCount', 'Hojas CSS descargadas', ''],
   ['jsCount', 'Archivos JS descargados', ''],
   ['jsBytes', 'Peso de JS', 'B'],
-  ['interactionMs', 'Respuesta al tocar el menú', 'ms'],
+  ['interactionMs', 'Clic de navegación (laboratorio)', 'ms'],
+  ['cartOpenMs', 'Apertura de carrito comprobada', 'ms'],
 ];
 
 if (compareWith) {

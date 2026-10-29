@@ -14,7 +14,7 @@ const nav = read('js/components/navigation/compartido/carga-navegacion.js');
 const firebase = read('js/core/firebase/firebase.js');
 const heroDir = path.join(root, 'assets-tintin/images/home/hero-nuevo');
 for (const name of ['hero-nuevo-desktop.png','hero-nuevo-mobile.png','hero-nuevo-tablet-horizontal.png','hero-nuevo-tablet-vertical.png']) check(`hero HD ${name}`, fs.existsSync(path.join(heroDir, name)), 'variante de máxima fidelidad presente');
-check('picture prioriza fidelidad del hero', index.includes('type="image/webp"') && index.includes('hero-nuevo-desktop-optimized.webp') && index.includes('hero-nuevo-desktop.png'), 'WebP del arte vigente con precarga prioritaria y PNG original como respaldo');
+check('picture prioriza fidelidad del hero', index.includes('type="image/webp"') && index.includes('hero-nuevo-desktop-lossless.webp') && index.includes('hero-nuevo-desktop.png'), 'Codificación sin pérdida por dispositivo con precarga prioritaria y PNG original de respaldo');
 check('responsive runtime bajo demanda', nav.includes('loadNavigationSurface') && nav.includes('currentSurface'), 'superficie actual bajo demanda');
 check('resize/orientation idempotente', nav.includes('navigationBehaviorsPromise') && nav.includes('orientationchange'), 'sin listeners duplicados');
 check('App Check conserva enforcement', firebase.includes('initializeAppCheck') && firebase.includes('ReCaptchaEnterpriseProvider') && firebase.includes('getAppCheckToken'), 'certificación intacta');

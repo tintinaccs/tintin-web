@@ -67,7 +67,7 @@ ok(has(cart, /users\/\{uid\}\/cart|users\/\$\{uid\}/) || has(cart, "collection(d
 ok(has(rules, 'function cartItemValid'), 'Firestore no conserva validación server-side del carrito.');
 
 // 6. Super Admin: ficha integral reutilizando autoridad canónica.
-ok(has(adminLoader, 'perfil-usuario-superadmin.js?v=tintin-20260829-final-stability-1-brand-runtime-20261004-1'), 'Usuarios no carga la ficha integral nueva.');
+ok(has(adminLoader, 'perfil-usuario-superadmin.js?v=tintin-20260829-final-stability-1-brand-runtime-20261004-1-owner-pink-20261004-1'), 'Usuarios no carga la ficha integral nueva.');
 ok(!has(adminProfile, /onSnapshot\s*\(/), 'La ficha integral crea un listener paralelo de users.');
 ok(!has(adminProfile, /setDoc\s*\(|updateDoc\s*\(|deleteDoc\s*\(/), 'La ficha integral crea mutaciones paralelas a admin-app.js.');
 ok(has(adminProfile, 'Ir a gestión del usuario'), 'La ficha integral no devuelve a la gestión canónica CRUD.');

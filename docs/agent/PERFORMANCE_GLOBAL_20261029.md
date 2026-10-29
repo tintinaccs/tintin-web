@@ -1,6 +1,6 @@
 # Reparación global de rendimiento — 2026-10-29
 
-Codex /root. Rama `codex/global-performance-repair-20261029`, base `a936e6dd91be338f00e104c11bc48b8dbc865ad3`.
+Codex /root. Rama `codex/global-performance-repair-20261029`, base inicial `a936e6dd91be338f00e104c11bc48b8dbc865ad3`; integración posterior de `eac9a327` (#1273).
 
 Auditoría reproducida: `/workspace/audit-global-20261029/AUDITORIA-GLOBAL.md`, `findings.json` y sondas acompañantes. No se heredan sus PASS a los cambios actuales. Sin escrituras comerciales de producción.
 
@@ -8,8 +8,8 @@ Los seis informes externos suministrados están BLOCKED: el lector web no pudo a
 
 | ID | Fuente canónica y corrección | Estado / evidencia |
 |---|---|---|
-| G01 | `index.html`, `gestion-imagenes.js`: WebP nuevos derivados del PNG vigente, sin reutilizar artes distintos; PNG original de respaldo y personalizaciones conservadas. | PASS_LOCAL: cuatro viewports, una descarga por banner; 109–163 KB frente a 1,7–2 MB. SSIM móvil 0,9756. |
-| G02 | `scripts/lib/estilos-inicio.js`: compresión sintáctica de paquetes con Lightning CSS 1.33.0, dependencia de desarrollo fijada. | PASS_LOCAL del compilador; Inicio 483.284→394.495 bytes, Brotli local 74.080→52.094; Nosotros 401.182→335.022, Brotli 62.283→45.488. No se elimina CSS por cobertura de un único viewport: reglas responsive/estados siguen disponibles. |
+| G01 | Se adopta íntegramente el hero sin pérdida de main #1273, sus PNG de respaldo y sus pruebas de fidelidad. El ensayo WebP con pérdida de esta rama se retiró al integrar main. | PASS_LOCAL de cuatro comparaciones RGBA y precarga/snapshot. La reducción vigente es31,2–34,5%, con píxeles idénticos, no92–94%. Los109–163 KB y SSIM.9756 describen sólo el ensayo descartado. |
+| G02 | `scripts/lib/estilos-inicio.js`: compresión sintáctica de paquetes con Lightning CSS 1.33.0, dependencia de desarrollo fijada. | PASS_LOCAL del compilador; Sobre main #1273: Inicio483.620→394.539 bytes, Brotli local74.281→52.151; Nosotros401.348→335.038, Brotli62.370→45.547. No se elimina CSS por cobertura de un único viewport: reglas responsive/estados siguen disponibles. |
 | G03 | `carga-navegacion.js`, `catalogo-publico-api.js`, `public-catalog.js`, `favoritos-perfil.js`: catálogo del menú a demanda; favoritos por lotes de identidades, con proyección pública, validación, caché separada y límite de trabajo por solicitud. | PASS_LOCAL de lotes/permisos públicos y menú. PENDING: el pool de Inicio todavía requiere catálogo completo para selección aleatoria, combinador y destacados. No se impuso un límite que ocultara productos. |
 | G04 | `css/pages/catalog/catalog-maintenance.css`: borde inicial de 1 px estrechaba el título; el flujo global lo quitaba después y cambiaba el salto de línea. | PASS_LOCAL: ancho del título estable 324,625 px y altura39 px en390; CLS de una comparación lenta .089185→.002480. |
 | G05 | `revelado-desplazamiento-global.js`: deduplicación y medición de todos los candidatos antes de escribir clases. | PASS_LOCAL: tres candidatos, tres mediciones, cero lecturas tras escribir. Conserva exclusiones y movimiento reducido. |
@@ -30,14 +30,26 @@ SpeedVitals Hicjlc y onSOcx; Site24x7 público suministrado; PageSpeed2o2e4ri953
 
 No se puede afirmar coincidencia, diferencia ni exhaustividad de la unión hasta acceder a esos resultados. Tampoco se pueden comparar puntuaciones tomadas en fechas/dispositivos distintos como si fueran una misma ejecución.
 
-## Mediciones comparables y límites
+## Mediciones anteriores a integrar #1273 — no acreditan el candidato actual
 
-Una muestra por ruta/versión en Chromium local,390×844, CPU×4,80 ms y200.000 bytes/s de bajada: Inicio LCP21.640→8.700 ms; catálogo CLS .089185→.002480. Ambas versiones usaron el mismo catálogo público capturado, sin escrituras. Firebase/Cloudinary bloqueados por red; no son fallos atribuidos al producto. Inicio aún supera5 s bajo este perfil; no se declara resuelto todo el rendimiento ni se convierten estas muestras en Web Vitals de campo.
+Antes de integrar #1273: una muestra por ruta/versión en Chromium local,390×844, CPU×4,80 ms y200.000 bytes/s de bajada: Inicio LCP21.640→8.700 ms; catálogo CLS .089185→.002480. Ambas versiones usaron el mismo catálogo público capturado, sin escrituras. Firebase/Cloudinary bloqueados por red; no son fallos atribuidos al producto. Inicio aún supera5 s bajo este perfil; no se declara resuelto todo el rendimiento ni se convierten estas muestras en Web Vitals de campo.
 
 La auditoría anterior de producción tenía tres muestras de Inicio (mediana17.216 ms) y dos del catálogo (CLS .177338); esos valores son otra sesión y no se mezclan con la comparación local.
 
 ## Verificación y entrega
 
-Evidencia de trabajo: `/workspace/tintin-performance-evidence/`. Contratos nuevos/globales31PASS; regresiones relacionadas395 casos (392 iniciales, tres fallos aislados corregidos/repetidos: entorno Chromium e identidades de versiones). Chromium dirigido24PASS, comercio7PASS, paridad del menú12 casos cubiertos tras corregir un export roto detectado durante la ejecución, rendimiento real2PASS. Los gates de build, caché, protección y el SHA final se registran al cerrar; no se heredan estos resultados a producción.
+Evidencia de trabajo: `/workspace/tintin-performance-evidence/`. **Integración con main #1273:**402/402Node PASS,89/89Chromium PASS sin reintentos (fidelidad, seis pestañas, guardado, variantes, disponibilidad, teclado, movimiento y responsividad),10/10 rutas públicas PASS con apertura real del carrito y3/3 casos extra de demanda del menú en Nosotros PASS. Las15 combinaciones de Inicio/Catálogo/Nosotros en320,390,768,1024 y1440 px no desbordan. Hay capturas390/1440 en `screenshots/`; muestran el estado degradado real del entorno: Firebase y Cloudinary bloqueados, sin reemplazar las URL originales de las fotos.
+
+Build de páginas, CSP, diagnóstico, rutas, caché y preflight local PASS.65 archivos del plan de mantenimiento respecto de eac9a327 se verifican mediante la protección canónica; no se cambian sus controles ni metadatos de aprobación. Se requiere CI del SHA final. Las mediciones anteriores de compresión con pérdida no se atribuyen a esta integración.
+
+## Hallazgos adicionales coincidentes con #1273
+
+| ID | Problema y fuente | Estado |
+|---|---|---|
+| G16 | `rendimiento-imagenes.js` elevaba todas las imágenes visibles a prioridad alta, compitiendo con la portada. | PASS_LOCAL integrado: prioridad explícita conservada y miniaturas en auto. |
+| G17 | El mismo runtime procesaba listas sin cota y alternaba lecturas/escrituras de geometría. | PASS_LOCAL integrado: deduplicación, lecturas previas a escrituras y lote acotado. |
+| G18 | La portada esperaba una transición de opacidad adicional después de descargar y decodificar. | PASS_LOCAL integrado: primer frame opaco en cuatro dispositivos y portada completa. |
+
+Las evidencias históricas de esa publicación están en `RENDIMIENTO-GLOBAL-20261029.md`; no se presentan como pruebas del candidato combinado.
 
 Este resultado sigue **en curso**: G03/Inicio, G09, informes externos y aceptación autenticada pendientes. No merge ni despliegue manual de esta rama. No se han modificado pedidos, productos, stock, precios ni cuentas de producción.

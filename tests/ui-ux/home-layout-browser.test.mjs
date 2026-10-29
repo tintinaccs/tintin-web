@@ -21,15 +21,25 @@ test('la fachada usa las definiciones actuales y conserva copys personalizados',
   assert.equal(normalizeContentValue('index', 'trust', 'items.2.label', 'Tu compra está protegida'), 'Tu compra está protegida');
 });
 
-test('el arte del hero usa un único tag de caché en el HTML y en el runtime de imágenes', async () => {
-  // /assets-tintin/images/* es inmutable por un año: si el runtime pidiera el arte con otra URL que
-  // el HTML, quien ya visitó la tienda seguiría viendo el arte anterior debajo del rótulo nuevo.
+test('el arte del hero comparte su URL versionada entre precarga, picture y runtime por formato', async () => {
+  // Cada representación es inmutable: WebP y PNG tienen versiones propias,
+  // pero HTML y runtime deben pedir los mismos bytes por la misma URL.
   const home = await fs.readFile(path.join(root, 'index.html'), 'utf8');
   const runtime = await fs.readFile(path.join(root, 'js/components/images/gestion-imagenes.js'), 'utf8');
-  const references = [...home.matchAll(/hero-nuevo\/[a-z-]+\.(?:webp|png|svg)\?v=([A-Za-z0-9._-]+)/g)].map(match => match[1]);
-  assert.equal(references.length, 9, 'Se esperan 4 fuentes PNG originales, el rótulo y 4 precargas exclusivas por dispositivo, todas versionadas');
-  assert.equal(new Set(references).size, 1, `El arte del hero mezcla tags: ${[...new Set(references)].join(', ')}`);
-  assert.ok(runtime.includes(`const HERO_ART_QUERY = '?v=${references[0]}';`), 'El runtime debe pedir el arte por defecto con el mismo tag que index.html');
+  const references = [...home.matchAll(/hero-nuevo\/([a-z-]+)\.(webp|png|svg)\?v=([A-Za-z0-9._-]+)/g)]
+    .map(([, name, format, version]) => ({ name, format, version }));
+  const webp = references.filter(ref => ref.format === 'webp');
+  const originals = references.filter(ref => ref.format === 'png' || ref.format === 'svg');
+  assert.equal(webp.length, 8, 'Cuatro precargas WebP y cuatro sources WebP, todos versionados');
+  assert.equal(originals.length, 5, 'Cuatro PNG originales de respaldo y el rótulo SVG, todos versionados');
+  assert.equal(new Set(webp.map(ref => ref.version)).size, 1, 'Una versión WebP entre HTML y precargas');
+  assert.equal(new Set(originals.map(ref => ref.version)).size, 1, 'Una versión original entre PNG, SVG y runtime');
+  for (const device of ['desktop', 'mobile', 'tablet-horizontal', 'tablet-vertical']) {
+    assert.equal(webp.filter(ref => ref.name === `hero-nuevo-${device}-lossless`).length, 2, `Precarga y source lossless para ${device}`);
+    assert.equal(originals.filter(ref => ref.name === `hero-nuevo-${device}` && ref.format === 'png').length, 1, `Respaldo original para ${device}`);
+  }
+  assert.ok(runtime.includes(`const HERO_ART_QUERY = '?v=${originals[0].version}';`), 'El runtime conserva el tag de los originales');
+  assert.ok(runtime.includes(`-lossless.webp?v=${webp[0].version}`), 'El runtime conserva la URL WebP precargada');
   for (const key of ['hero_bg_desktop', 'hero_bg_tablet_landscape', 'hero_bg_tablet', 'hero_bg_mobile']) {
     assert.match(runtime, new RegExp(`${key}: HERO_IMAGE_FALLBACKS\\.\\w+ \\+ HERO_ART_QUERY`), `${key} sin versión de caché`);
   }
@@ -106,7 +116,7 @@ test('el reloj llena su marco sin franjas antes y después del snapshot en table
   const section = home.match(/<section[^>]*data-tt-section="editorial_relojes"[\s\S]*?<\/section>/)?.[0];
   assert.ok(section);
   const bundle = await fs.readFile(path.join(root, 'css/generated/inicio.css'), 'utf8');
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } : {}) });
   try {
     const page = await browser.newPage();
     await page.route('**/*', async route => {
