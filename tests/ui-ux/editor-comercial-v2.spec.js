@@ -35,7 +35,10 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(page.locator('#prod-warranty')).toHaveValue('Cobertura confirmada en el certificado.');
  await suggestions.getByRole('button',{name:'Revisar garantía',exact:true}).click();await expect(page.locator('#prod-warranty')).toBeFocused();
  await page.getByRole('tab',{name:'Información',exact:true}).click();await expect(page.locator('#prod-name')).toHaveValue('Pulsera ficticia');
- await expect(page.locator('#prod-save-btn')).toBeInViewport();
+ // En poca altura la cabecera sigue el flujo de página para no tapar los campos.
+ const save=page.locator('#prod-save-btn');await save.scrollIntoViewIfNeeded();
+ await expect(save).toBeInViewport();
+ expect(await save.evaluate(node=>{const box=node.getBoundingClientRect();return node.contains(document.elementFromPoint(box.x+box.width/2,box.y+box.height/2));})).toBe(true);
  const geometry=await page.locator('#prod-form-card').evaluate(card=>({fits:card.scrollWidth<=card.clientWidth+1,fields:[...card.querySelectorAll('input:not([type=hidden]),select,textarea,button')].filter(el=>el.getClientRects().length).every(el=>{const r=el.getBoundingClientRect(),c=card.getBoundingClientRect();return r.left>=c.left-1 && r.right<=c.right+1;})}));
  expect(geometry).toEqual({fits:true,fields:true});expect(errors).toEqual([]);
  fs.mkdirSync('artifacts/editor-atelier',{recursive:true});await page.screenshot({animations:"disabled",path:`artifacts/editor-atelier/editor-${width}x${height}.png`});

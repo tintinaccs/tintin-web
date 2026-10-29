@@ -49,6 +49,10 @@ Un stock fraccional bloquea el guardado, abre Precio y stock y permite enfocar/c
 
 Administración completa tras las correcciones: **211/211 PASS**, sin reintentos. Se integra después mainbad42062 (#1271, extracción de Correos) en la rama de revisión porque el conflicto impedía iniciar la CI; los controles sobre esa combinación se registran por separado en el PR.
 
+## Repetición de CI tras integrar Correos
+
+CI40789565346/1 falló en dos pruebas: navegación concurrente de WebKit al comprobar sesión (497PASS/1FAIL), y expectativa de cabecera siempre visible en poca altura (25PASS/1FAIL). Se sincroniza la bienvenida y el inicio de navegación, conservando OTP/perfil/identidad; se verifica alcance de Guardar mediante scroll, viewport y hit test, conservando datos/foco/geometría. No se modifica el runtime de autenticación ni se omiten pruebas. La descarga local de WebKit devuelve403 Domain forbidden, por lo que ese navegador requiere la repetición en GitHub.
+
 ## Límites
 
 Las capturas adjuntas del editor real se examinaron. Las referencias originales `C:/Users/USER/.codex/visualizations/.../tintin-studio.html` y sus siete PNG de Windows no existen en este entorno Linux; no se declara haberlas abierto. No se verificó una sesión administrativa externa autenticada ni dispositivos físicos. No se relajaron reglas, permisos ni protecciones. El PR debe quedar draft porque el mantenimiento canónico puede fusionar PR no draft automáticamente; esta medida cumple la prohibición explícita de merge sin aprobación.

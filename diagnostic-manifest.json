@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f69f56e7b1478e105577adc56c7bb8a155b0ec20831cd39fa5f3ad841828aee4",
+  "sourceFingerprint": "c95c6ad1c17dd98f65ebc09bff8af1deb480af079c4668edd97aba9b884b9869",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1610,
     "textFiles": 1479,
-    "totalBytes": 34939271,
+    "totalBytes": 34941312,
     "pages": 19,
     "modules": 1070
   },
@@ -53920,8 +53920,8 @@
     },
     {
       "path": "tests/runtime/critical-flows.spec.js",
-      "bytes": 19464,
-      "sha256": "2738e6f417ee2bf8bc44318d858da275bd22a654a08061c5b2d1559148ad8a59",
+      "bytes": 19675,
+      "sha256": "26bc98f604585fba3e7dae563e40ba0806d54cf987a88ef8012ad00d1d67477d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53931,19 +53931,19 @@
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 107
+          "line": 110
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 183
+          "line": 186
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 229
+          "line": 232
         }
       ],
       "endpoints": [
@@ -53961,7 +53961,7 @@
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 107
+          "line": 110
         }
       ]
     },
@@ -56230,8 +56230,8 @@
     },
     {
       "path": "tests/ui-ux/editor-comercial-v2.spec.js",
-      "bytes": 17555,
-      "sha256": "af6f4250de9bba7dab12869192afa1c135e509a2dbd905cc91b85d0d0c588d40",
+      "bytes": 17868,
+      "sha256": "22e371f346f6e958f121627715dfe790298b176c897d80ff3823a6e224003ec6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -56240,7 +56240,7 @@
       "endpoints": [
         {
           "url": "http://127.0.0.1:4173/",
-          "line": 77
+          "line": 80
         }
       ]
     },
@@ -60040,8 +60040,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1024682,
-      "sha256": "3ec7c46d485e0f6022222ae6222d5ffa2b0d52e2e603b0820217779323d1025f"
+      "bytes": 1025592,
+      "sha256": "3805a763d8bea3b2506da7e361a95796c22455fb68e0a2c2aefe0d39f462bd83"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -60136,8 +60136,8 @@
     {
       "path": "docs/agent/PRODUCT_EDITOR_GUIDED_REVIEW.md",
       "extension": ".md",
-      "bytes": 8438,
-      "sha256": "7ad168ff8f42a6a9579ffb41873e4c8624ef8fd632a942a9299496c5267e79fd"
+      "bytes": 9045,
+      "sha256": "da4907c6c08c0621760b7f543d12e7a05e2f946798b788e5a921adfad09e424f"
     },
     {
       "path": "docs/agent/PROPUESTA_MFA_20261010.md",
@@ -67114,8 +67114,8 @@
     {
       "path": "tests/runtime/critical-flows.spec.js",
       "extension": ".js",
-      "bytes": 19464,
-      "sha256": "2738e6f417ee2bf8bc44318d858da275bd22a654a08061c5b2d1559148ad8a59"
+      "bytes": 19675,
+      "sha256": "26bc98f604585fba3e7dae563e40ba0806d54cf987a88ef8012ad00d1d67477d"
     },
     {
       "path": "tests/runtime/email-history-safety.spec.js",
@@ -67468,8 +67468,8 @@
     {
       "path": "tests/ui-ux/editor-comercial-v2.spec.js",
       "extension": ".js",
-      "bytes": 17555,
-      "sha256": "af6f4250de9bba7dab12869192afa1c135e509a2dbd905cc91b85d0d0c588d40"
+      "bytes": 17868,
+      "sha256": "22e371f346f6e958f121627715dfe790298b176c897d80ff3823a6e224003ec6"
     },
     {
       "path": "tests/ui-ux/global-form-fit.spec.js",

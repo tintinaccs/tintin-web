@@ -1,3 +1,7 @@
+## 2026-10-29 — Repetición de CI del editor guiado
+
+CI40789565346/1, SHA99bd58d6: comercio, reglas y CodeQL PASS. Calidad técnica497PASS/1FAIL en WebKit: la nueva visita de comprobación a login coincidía con la navegación de bienvenida. La prueba ahora espera/cierra la bienvenida real y espera commit de login antes de verificar el destino y la identidad persistida; no modifica autenticación ni elimina aserciones. WebKit local no disponible: descarga403 Domain forbidden; se repite en GitHub. Administración25PASS/1FAIL en editor-comercial-v2 a844x390: aserción de cabecera siempre visible, incompatible con la cabecera en flujo deliberada para poca altura. Se comprueba desplazamiento hasta Guardar, viewport y hit test libre de superposición; se mantienen foco, datos y geometría. Se repiten ambos grupos afectados y preflight antes del nuevo SHA. Sin cambios de runtime ni merge/despliegue.
+
 ## 2026-10-28 — Integración de Correos en la rama de revisión del editor
 
 Se incorpora origin/main bad42062 (#1271) sólo en codex/product-editor-guided-review-20261028 para resolver el conflicto que impedía iniciar la CI del PR1269. Se conservan la extracción de Correos y todos los cambios del editor; admin-app combinado usa una URL nueva guided-editor-4. Antes de integrar: Administración completa211/211 PASS sin reintentos, build/preflight/protección PASS; vista QA guardó mediante clic real manteniendo stock1/0. Se repiten contratos y aceptación sobre la integración y se exige CI de su SHA final. PR draft, sin merge ni despliegue de producción.
