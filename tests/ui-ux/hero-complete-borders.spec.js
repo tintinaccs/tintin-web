@@ -5,7 +5,7 @@ const { restoreStyleSources } = require('../../scripts/lib/estilos-inicio.js');
 const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
 const root = path.resolve(__dirname, '../..');
 const html = restoreStyleSources(removeFixtureScripts(fs.readFileSync(path.join(root, 'index.html'), 'utf8'), { removeModulePreloads: true }));
-const types = { '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2' };
+const types = { '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2' };
 for (const [width,height] of [[320,568],[390,844],[430,932],[667,375],[844,390],[768,1024],[820,1180],[1024,768],[1120,840],[1121,800],[1280,720],[1366,768],[1440,900],[1920,1080]]) {
   test(`banner completo sin recorte ni deformación · ${width}x${height}`, async ({page}, testInfo) => {
     await page.setViewportSize({width,height});
@@ -35,6 +35,9 @@ for (const [width,height] of [[320,568],[390,844],[430,932],[667,375],[844,390],
       const box=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
       return {image:box(image),media:box(media),hero:box(hero),ratio:image.naturalWidth/image.naturalHeight,scrollWidth:document.documentElement.scrollWidth,whatsapp:box(document.querySelector('.tt-wa-float')),actions:[...hero.querySelectorAll('.tt-hero-actions a')].map(box)};
     });
+    const geometryPath = testInfo.outputPath('geometria-banner.json');
+    fs.writeFileSync(geometryPath, JSON.stringify(result, null, 2));
+    await testInfo.attach('geometria-banner', { path: geometryPath, contentType: 'application/json' });
     expect(result.scrollWidth).toBeLessThanOrEqual(width+1);
     expect(Math.abs(result.image.width/result.image.height-result.ratio)).toBeLessThan(.002);
     for(const edge of ['left','right','top','bottom']) expect(Math.abs(result.image[edge]-result.media[edge])).toBeLessThanOrEqual(1);

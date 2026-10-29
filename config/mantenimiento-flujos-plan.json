@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "a936e6dd91be338f00e104c11bc48b8dbc865ad3",
-  "reason": "Rendimiento global: portada sin perdida, revelado atomico y cola compartida de imagenes con regresiones verificadas",
+  "reason": "Rendimiento global lossless, revelado inicial, cola de imagenes y reserva movil de WhatsApp con contratos y regresiones verificados",
   "files": [
     {
       "path": "404.html",
@@ -54,6 +54,11 @@
       "newHash": "4aba05d349c87e331e9029191d4f292550d1d799088bfd062f33a4fcd0d62902"
     },
     {
+      "path": "css/pages/home/ajuste-inicio.css",
+      "oldHash": "1ded5adc6dbb79fe1bdf1d72593b8d2f4cdfbb8cb4c20a3453b2f10cea67bb7b",
+      "newHash": "4c79d1a0ff0c87c787d0b21ad8937a612ba16e504a18b557ecec79dfdbd8d790"
+    },
+    {
       "path": "envios.html",
       "oldHash": "fba530065283583a75b2f64ebd2a4b828d4ce3fb142336d4dfcf91181bc4b1b0",
       "newHash": "0917defe110a9f995f3cea0d3f0d316d80ccdcb785dbb521360eb355330d678d"
@@ -61,7 +66,7 @@
     {
       "path": "index.html",
       "oldHash": "9ac62042e2bb462d50f576726ffbdefbdbc0360186ce2fa34429b3852167dde2",
-      "newHash": "a1a60b8283653fe822cabbe2802f608eb7c6003b37ff6a4b32514024346dca0c"
+      "newHash": "a1ab51e152ee9ecdf24a95c40f995d0cbeda2cad51157816abded77a896a29b3"
     },
     {
       "path": "js/cargador-pagina.js",
@@ -131,7 +136,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "42111617d457883f3a6b4216cfa329b72d5167df4ae24133d44121828c89b396",
-      "newHash": "7861d27c88c5ef0709a83035c734a8dbd65e5ed1cd6ee18261acfa92a016fe5a"
+      "newHash": "9fd7771f6a1057cfa4f6eadc00418442a5132ae79f7b6fcc8b41fe1d97b9886f"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

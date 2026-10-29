@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "12803505e267b54ae53a82e9a207f8e988598b68892324cb8826f2b78ca7d25c",
+  "sourceFingerprint": "f3c18c759823a1979d9a4a9ab7ca40b74f94f1d3c6effe0fe69afa9c3ceb27f8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1619,
     "textFiles": 1484,
-    "totalBytes": 39847020,
+    "totalBytes": 39852516,
     "pages": 19,
     "modules": 1072
   },
@@ -15768,8 +15768,8 @@
         "guest",
         "client"
       ],
-      "bytes": 48140,
-      "sha256": "a1a60b8283653fe822cabbe2802f608eb7c6003b37ff6a4b32514024346dca0c",
+      "bytes": 48156,
+      "sha256": "a1ab51e152ee9ecdf24a95c40f995d0cbeda2cad51157816abded77a896a29b3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15907,7 +15907,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-5ea5cbbe3a4a4510",
+          "raw": "css/generated/inicio.css?v=tintin-home-deb19272ffb396dc",
           "target": "css/generated/inicio.css",
           "line": 63
         },
@@ -15977,7 +15977,7 @@
           "line": 91
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261025-mobile-shell-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261025-mobile-shell-1-perf-20261029-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 92
         },
@@ -16883,7 +16883,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-5ea5cbbe3a4a4510",
+          "raw": "css/generated/inicio.css?v=tintin-home-deb19272ffb396dc",
           "target": "css/generated/inicio.css",
           "line": 63,
           "exists": true
@@ -16967,7 +16967,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261025-mobile-shell-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261025-mobile-shell-1-perf-20261029-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 92,
           "exists": true
@@ -56501,8 +56501,8 @@
     },
     {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
-      "bytes": 3933,
-      "sha256": "1de793260a9bd1d6b20350334aec724f4e55dc4a0d46d06bbb4c7cbaa8c1ac01",
+      "bytes": 4200,
+      "sha256": "d486443e11664a6b624daa2ebc8d76aad42815f8265d2e3dda3730da91f12409",
       "syntax": {
         "ok": true,
         "error": ""
@@ -56584,8 +56584,8 @@
     },
     {
       "path": "tests/ui-ux/home-layout-browser.test.mjs",
-      "bytes": 12894,
-      "sha256": "580f66e3b4c3bb5cf659c9d803ec9f335e29a54db028e44a2e4b0e6fcb38198b",
+      "bytes": 13800,
+      "sha256": "e87a10a7bc734513c03eb6cf9a9ab54215d1892e25107d59a8b18c7125773c7b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -56631,18 +56631,18 @@
       "endpoints": [
         {
           "url": "https://tintin.test/",
-          "line": 54
+          "line": 64
         },
         {
           "url": "https://tintin.test/index.html",
-          "line": 124
+          "line": 134
         }
       ]
     },
     {
       "path": "tests/ui-ux/home-render-performance.spec.js",
-      "bytes": 1213,
-      "sha256": "bdd740ce7b50a657007e71781535dd7c0a0f86937b1efa8510b64ff6105764c7",
+      "bytes": 1271,
+      "sha256": "33afe948f0f5a8ada290e6151d58c97bd6334c2142ddb6aaa13abac70679f2bf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -59603,8 +59603,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 7326,
-      "sha256": "6224ae025cd15954af17096f1442f909af05a989cac59131a2ce43635d5aa89e"
+      "bytes": 7574,
+      "sha256": "af4fba9f578c5f65bf46e0d13f6c703306ad8731e0956ee23c635e46f90a3ba9"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -59616,7 +59616,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "06b5136e84cb26e9f93111460e811780bfdc02107ebc470d4a1e6419bcba8f14"
+      "sha256": "3d7f9d8bfc8f0ca8d7feadcea610e76e36c49258600074ef5cc2119178a476e2"
     },
     {
       "path": "config/public-site.json",
@@ -59927,8 +59927,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 483450,
-      "sha256": "5ea5cbbe3a4a45103aca695fa8edb5fd7a66eee0d02d53c87e9ca18837395510"
+      "bytes": 483605,
+      "sha256": "deb19272ffb396dc2597c01bc30664186de962848b924c68a1bda8fc0c8742a6"
     },
     {
       "path": "css/generated/nosotros.css",
@@ -59975,8 +59975,8 @@
     {
       "path": "css/pages/home/ajuste-inicio.css",
       "extension": ".css",
-      "bytes": 44751,
-      "sha256": "1ded5adc6dbb79fe1bdf1d72593b8d2f4cdfbb8cb4c20a3453b2f10cea67bb7b"
+      "bytes": 44906,
+      "sha256": "4c79d1a0ff0c87c787d0b21ad8937a612ba16e504a18b557ecec79dfdbd8d790"
     },
     {
       "path": "css/pages/home/carrusel-colecciones.css",
@@ -60311,8 +60311,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1036126,
-      "sha256": "bb35255b63c3c20d8aa3b00e7cd99832a72bf20237e4fa274539eadfff4301f5"
+      "bytes": 1037602,
+      "sha256": "c022d155795d1f1e64fad1b5312e2412e4176daa8816ee8270730a0556721be4"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -60455,8 +60455,8 @@
     {
       "path": "docs/agent/RENDIMIENTO-GLOBAL-20261029.md",
       "extension": ".md",
-      "bytes": 8087,
-      "sha256": "b68bba1126f8cb7d4c7e2772245156f5b99d632c9345c07040d8ca4668e34d5a"
+      "bytes": 10046,
+      "sha256": "236bde447b805019ca430c69e06b0f2ee1e8f2e2e42d1fdaaf8eedc79f252022"
     },
     {
       "path": "docs/agent/REVISION-RESPONSIVE-GLOBAL-2026-10-25.md",
@@ -61025,8 +61025,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 137281,
-      "sha256": "e6259978c8f9f995b7c67d80fb22c3e796bced249b9836593d825d5574a0f2b3"
+      "bytes": 137521,
+      "sha256": "1746ff8e0c5b847ad07b86301ec398d71fc73b1d9bee19fcad66feb6d0d0b87e"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -62099,8 +62099,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 48140,
-      "sha256": "a1a60b8283653fe822cabbe2802f608eb7c6003b37ff6a4b32514024346dca0c"
+      "bytes": 48156,
+      "sha256": "a1ab51e152ee9ecdf24a95c40f995d0cbeda2cad51157816abded77a896a29b3"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -65117,8 +65117,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 77720,
-      "sha256": "7861d27c88c5ef0709a83035c734a8dbd65e5ed1cd6ee18261acfa92a016fe5a"
+      "bytes": 77736,
+      "sha256": "9fd7771f6a1057cfa4f6eadc00418442a5132ae79f7b6fcc8b41fe1d97b9886f"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -67775,8 +67775,8 @@
     {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
       "extension": ".js",
-      "bytes": 3933,
-      "sha256": "1de793260a9bd1d6b20350334aec724f4e55dc4a0d46d06bbb4c7cbaa8c1ac01"
+      "bytes": 4200,
+      "sha256": "d486443e11664a6b624daa2ebc8d76aad42815f8265d2e3dda3730da91f12409"
     },
     {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
@@ -67793,14 +67793,14 @@
     {
       "path": "tests/ui-ux/home-layout-browser.test.mjs",
       "extension": ".mjs",
-      "bytes": 12894,
-      "sha256": "580f66e3b4c3bb5cf659c9d803ec9f335e29a54db028e44a2e4b0e6fcb38198b"
+      "bytes": 13800,
+      "sha256": "e87a10a7bc734513c03eb6cf9a9ab54215d1892e25107d59a8b18c7125773c7b"
     },
     {
       "path": "tests/ui-ux/home-render-performance.spec.js",
       "extension": ".js",
-      "bytes": 1213,
-      "sha256": "bdd740ce7b50a657007e71781535dd7c0a0f86937b1efa8510b64ff6105764c7"
+      "bytes": 1271,
+      "sha256": "33afe948f0f5a8ada290e6151d58c97bd6334c2142ddb6aaa13abac70679f2bf"
     },
     {
       "path": "tests/ui-ux/home-styles-bundle.spec.js",

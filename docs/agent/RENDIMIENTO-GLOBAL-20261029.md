@@ -33,7 +33,7 @@ El primer piloto usó espejos Firebase distintos entre árboles y se descarta co
 
 ## Resultados locales del candidato
 
-Medianas de tres corridas por ruta (ms; base → candidato). Producto utiliza el ID inexistente de la sonda, sin certificar una ficha comercial real.
+Primera comparación global sobre la aplicación c4635ea9, antes de ajustar la reserva lateral móvil. Medianas de tres corridas por ruta (ms; base → candidato). Producto utiliza el ID inexistente de la sonda, sin certificar una ficha comercial real.
 
 | Ruta | FCP | LCP | Bloqueo TBT | Apertura del carrito vacío | CLS |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -58,3 +58,13 @@ Verificaciones adicionales: 30/30Node carrito; 10/10Node shell, bundle y scroll;
 - coherencia-visual.css: revelado opaco al terminar la preparación del shell; recursos/entry/bootstrap/loader/generador actualizan sus URLs conjuntamente. CSS generado, versiones, manifiesto y plan protegidos se regeneran canónicamente.
 - Medidor, auditor de fidelidad, pruebas y generador offline: evidencia reproducible sin dependencias nuevas del sitio.
 - Backend, búsqueda comercial, roles y sesiones: sin cambios; se conservan las correcciones ya integradas1269–1272. No nuevas consultas, índices ni reglas.
+
+## Cierre de las regresiones detectadas durante CI
+
+CI40877008123/1 del candidato c4635ea9, job123460488069: una prueba del contrato de caché había quedado sin migrar. Se reemplaza la suposición de9referencias PNG con las invariantes de los dos formatos:8WebP (precarga+source por dispositivo),4PNG originales y1SVG, una versión coherente por representación y runtime alineado. La prueba de entrega mantiene la exigencia de una sola descarga y sirve el MIME real.
+
+Al ejecutar las comprobaciones de geometría surgieron4fallos también presentes en la base a936e6dd: el botón flotante WhatsApp cubría parte del segundo CTA móvil. La regla canónica `ajuste-inicio.css` del banner imponía padding24px y anulaba la reserva previa. Se reserva lateralmente el tamaño real del control48px+16px al borde+16px de separación, respetando safe-area. No se cambia la prueba para tolerar la colisión: las14resoluciones originales pasan y conservan su separación estricta, proporciones, límites y objetivos táctiles. Se conservan capturas y JSON geométricos para cada viewport.
+
+Validación posterior a esta corrección:29/29Chromium (14geometrías+4precargas+11fidelidad) y13/13Node del grupo exacto de CI PASS, sin reintentos. Una prueba Node del reloj se alinea con el ejecutable configurable de la otra prueba del mismo archivo; sin cambios de comportamiento en CI cuando no hay override.
+
+Última repetición aislada sobre el CSS final,3corridas y contexto idéntico: LCP7404ms e imágenes1842251B. Base fresca: LCP8340ms e imágenes2463690B. Se conserva una reducción de LCP de11,2% y de transferencia de imágenes de25,2%; TBT1188ms no acredita una mejora global. Evidencia: artifacts/perf/confirmacion-cierre{,-runs,-context}.json. El nuevo SHA necesita sus propios checks y recibo de publicación; ningún resultado de CI anterior se hereda.
