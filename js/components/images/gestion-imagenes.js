@@ -319,7 +319,7 @@ if (!window.TintinImagesPhase5Booted) {
         // Un WebP disponible sigue siendo la URL principal. PNG es respaldo
         // para navegadores sin WebP o para un error real de carga.
         source.srcset = custom ? absolute(custom) : absolute(originalType === 'image/webp'
-          ? defaults[device].replace('.png?', '.webp?') : defaults[device]);
+          ? defaults[device].replace(/\.png(?:\?.*)?$/, '-optimized.webp?v=tintin-20261029-performance-1') : defaults[device]);
         if (custom || originalType === 'fallback') source.removeAttribute('type');
         else source.type = originalType;
       }

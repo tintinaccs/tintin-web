@@ -1,4 +1,4 @@
-import {quantity} from './controles-editor-producto.js?v=tintin-20261028-product-tabs-1-guiado-1269-20261029-1';
+import {quantity} from './controles-editor-producto.js?v=tintin-20261029-performance-1';
 import {mountProductMoney,formatGuarani} from './importe-producto.js?v=tintin-20261028-guided-editor-2';
 import {commercialDraft,commercialPatch,setCommercialOptionAvailability} from './editor-comercial-core.mjs?v=tintin-20261026-editor-phase6-1';
 import {productVariantPrice,variantSelectionLabel} from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
@@ -41,7 +41,7 @@ export function mountCommercialEditor(panel, product, parseOptions, signal, pers
   const previous=button('Anteriores',()=>{page--;render();});
   const next=button('Siguientes',()=>{page++;render();});
   pagination.append(previous,status,next);
-  const search=element('input');search.className='adm-input';search.type='search';search.placeholder='Buscar variante o combinación';search.setAttribute('aria-label','Buscar combinación');search.addEventListener('input',()=>{query=search.value;page=0;render();});
+  const search=element('input');search.className='adm-input';search.type='search';search.placeholder='Buscar variante o combinación';search.setAttribute('aria-label','Buscar combinación');let searchTimer;search.addEventListener('input',()=>{query=search.value;page=0;clearTimeout(searchTimer);searchTimer=setTimeout(()=>{if(!signal?.aborted)render();},120);});signal?.addEventListener('abort',()=>clearTimeout(searchTimer),{once:true});
   const help=element('details');help.className='tt-commercial-help';help.append(element('summary','Ayuda sobre precios y stock'),element('p','El precio vacío hereda el general. Stock 0 indica agotado; vacío mantiene stock sin control. Retirar de la venta conserva existencias e historial.'));panel.append(heading,help,search,advanced,error,notice,rows,pagination);
   function setOptionAvailability(attribute,value,active) {
     try {
@@ -62,6 +62,7 @@ export function mountCommercialEditor(panel, product, parseOptions, signal, pers
   combination.addEventListener('change',()=>{contextVariant=combination.value;render();});
   rows.before(combination);
   function render(){
+    clearTimeout(searchTimer);
     rows.replaceChildren();
     effectivePrices.clear();
     let visible=draft.variantInventory.filter(row=>!query || variantSelectionLabel(draft,{variantKey:row.variant}).toLocaleLowerCase('es').includes(query.trim().toLocaleLowerCase('es')));

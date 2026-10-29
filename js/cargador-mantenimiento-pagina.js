@@ -16,21 +16,21 @@ function load(file, version = 'tintin-20261009-whatsapp-responsive-1') {
 // envíos, contacto o textos legales.
 if (!/\/(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad)(?:\.html)?$/.test(pathName())) {
   Promise.all([
-    load('pages/catalog/politica-visibilidad-catalogo.js', 'tintin-20261026-editor-closure-1'),
+    load('pages/catalog/politica-visibilidad-catalogo.js', 'tintin-20261029-performance-1'),
     load('pages/catalog/prioridad-stock-catalogo.js', 'tintin-20261023-variant-engine-v2-2'),
   ]).catch(error => console.warn('[PageMaintenance] No se pudo cargar la política de catálogo:', error));
 }
 
 export function loadPageMaintenance() {
   const path = pathName();
-  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261023-global-layout-2');
-  if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1');
+  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261029-performance-1');
+  if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-20261029-performance-1');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261022-avatar-inicial-1');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     const version = 'tintin-20261009-whatsapp-responsive-1-photos-20261008-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261027-welcome-receipt-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261029-performance-1'),
       load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261027-welcome-receipt-1'),
       load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261017-domain-cutover-1'),
       load('pages/checkout/checkout-control-cuota.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-photos-20261008-1'),

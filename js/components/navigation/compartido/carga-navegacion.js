@@ -14,9 +14,9 @@ const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar
 const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261027-welcome-receipt-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261026-editor-closure-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261027-welcome-receipt-1-nav-20261028-2';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261029-performance-1';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261029-performance-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261029-performance-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -152,40 +152,25 @@ function loadNotificationsRuntime() {
   return notificationsRuntimePromise;
 }
 
-function loadCollectionsRuntime() {
+function loadCollectionsRuntime({ withProducts = false } = {}) {
   if (!collectionsRuntimePromise) {
     collectionsRuntimePromise = import(COLLECTIONS_RUNTIME_URL)
-      .then(module => {
-        // Informational pages do not auto-start this module. Initialize it
-        // after the idle import so the first open uses the canonical snapshot.
-        // La foto de respaldo depende del catálogo, también en Nosotros,
-        // Contacto y cualquier otra ruta. La misma API edge/cache alimenta
-        // todas las superficies; nunca se abre un listener público de Firestore.
-        // Inicio y las páginas de catálogo ya inician su propia lectura.
-        // Reutilizarla evita otra petición desde la búsqueda del menú.
-        const path = window.location.pathname.toLowerCase();
-        const pageLoadsCatalog = path.endsWith('/') || /(?:^|\/)(?:index|catalogo|collections|product)(?:\.html)?$/.test(path);
-        return Promise.allSettled([
-          module.initNavCollections?.(),
-          loadProductsRuntime({ forSearch: !pageLoadsCatalog }),
-        ]).then(results => {
-          reportRuntimeFailures(results);
-          return module;
-        });
-      })
-      .catch(error => {
-        collectionsRuntimePromise = null;
-        throw error;
-      });
+      .then(async module => { await module.initNavCollections?.(); return module; })
+      .catch(error => { collectionsRuntimePromise = null; throw error; });
   }
-  return collectionsRuntimePromise;
+  return collectionsRuntimePromise.then(async module => {
+    // El respaldo por producto sólo hace falta al abrir el menú. La carga
+    // inicial de una página informativa usa las imágenes locales canónicas.
+    if (withProducts) await loadProductsRuntime({ forSearch: true });
+    return module;
+  });
 }
 
 // En páginas informativas, la búsqueda se inicia al usarla. Conserva la
 // consulta escrita mientras termina de cargar el controlador compartido.
 function loadSearchRuntime() {
   if (!searchControllerPromise) {
-    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261027-welcome-receipt-1-nav-20261028-2')
+    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261029-performance-1')
       .then(module => {
         module.initSearchController();
         window.TintinSearchController?.renderCurrentQuery();
@@ -251,7 +236,7 @@ function attachLightweightCommerceDemand() {
   );
   bindDemand(
     '#btn-tienda,#btn-tablet-tienda,#tabbar-tienda,[data-collections-nav],#collections-sheet',
-    loadCollectionsRuntime,
+    () => loadCollectionsRuntime({ withProducts: true }),
     // El menú ya ofrece enlaces e imágenes locales. En páginas informativas,
     // un simple paso del puntero no debe generar una lectura remota.
     { prefetchOnPointer: false }

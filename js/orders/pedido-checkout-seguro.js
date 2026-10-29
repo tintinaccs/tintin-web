@@ -51,7 +51,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
-    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20261017-domain-cutover-1').catch(error => {
+    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20261029-performance-1').catch(error => {
       console.error('[secure-checkout-order] No se pudo cargar el puente de correo del pedido:', error);
     });
   }
@@ -114,11 +114,13 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           : `req_${Date.now()}_${Math.random().toString(36).slice(2)}_${Math.random().toString(36).slice(2)}`;
         sessionStorage.setItem(REQUEST_KEY, value);
       }
+      window.dispatchEvent(new CustomEvent('tintin:checkout-request', { detail: { requestId: value } }));
       return value;
     } catch {
       if (!inMemoryRequestId) {
         inMemoryRequestId = `req_${Date.now()}_${Math.random().toString(36).slice(2)}_${Math.random().toString(36).slice(2)}`;
       }
+      window.dispatchEvent(new CustomEvent('tintin:checkout-request', { detail: { requestId: inMemoryRequestId } }));
       return inMemoryRequestId;
     }
   }

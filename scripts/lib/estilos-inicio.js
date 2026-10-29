@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { parse } = require('parse5');
+const { transform } = require('lightningcss');
 
 const BUNDLE_ID = 'tt-home-css-bundle';
 const BUNDLE_FILE = 'css/generated/inicio.css';
@@ -55,10 +56,11 @@ function bundleHomeStyles(markup, readStyle, options = {}) {
   }
   visit(document);
   if (!entries.length) throw new Error('La página no contiene hojas de estilo locales.');
-  const css = entries.map(entry => {
+  let css = entries.map(entry => {
     const source = rebaseCss(readStyle(entry.file), entry.file);
     return `/* ${entry.file} */\n${entry.media ? `@media ${entry.media} {\n${source}\n}` : source}`;
   }).join('\n\n').trimEnd() + '\n';
+  if (options.minify) css = transform({ filename: bundleFile, code: Buffer.from(css), minify: true }).code.toString() + '\n';
   const version = `${versionPrefix}-${crypto.createHash('sha256').update(css).digest('hex').slice(0, 16)}`;
   let result = html;
   for (const entry of [...entries].reverse()) {
@@ -77,7 +79,7 @@ function writeHomeStyles(html, root, options = {}) {
     const resolved = path.resolve(root, file);
     if (!resolved.startsWith(path.resolve(root) + path.sep)) throw new Error(`CSS fuera del proyecto: ${file}`);
     return fs.readFileSync(resolved, 'utf8').replace(/\r\n?/g, '\n');
-  }, options);
+  }, { ...options, minify: true });
   const destination = path.join(root, options.file || BUNDLE_FILE);
   fs.mkdirSync(path.dirname(destination), { recursive: true });
   if (!fs.existsSync(destination) || fs.readFileSync(destination, 'utf8') !== bundle.css) fs.writeFileSync(destination, bundle.css);

@@ -4,7 +4,7 @@
   const selector = 'body > section:not([role="dialog"]), main > section:not([role="dialog"]), [role="main"] > section:not([role="dialog"]), .cat-wrap > section, .cat-layout, .tinsel, .tt-footer, .tt-visual-block, .login-page, .ck-body, .perfil-wrap, .tt-404-wrap, .adm-content > .adm-section';
   let queued = false;
   const measured = new WeakSet();
-  const excluded = '[role="dialog"], [aria-modal="true"], .tt-privacy-consent, .tt-drawer, .adm-sidebar';
+  const excluded = '[role="dialog"], [aria-modal="true"], .tt-privacy-consent, .tt-drawer, .adm-sidebar, .tt-cart-drawer, .tt-search-panel, .tt-collections-sheet, .tt-account-panel';
   const appliedStyles = new WeakMap();
   const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(schedule) : null;
   const set = (node, property, value, priority = '') => {
@@ -96,6 +96,7 @@
     };
     const observer = new MutationObserver(records => {
       if (records.some(record => {
+        if (record.target.closest?.(excluded)) return false;
         if (record.type === 'childList') {
           const changed = [...record.addedNodes, ...record.removedNodes].filter(affectsFlow);
           if (!changed.length) return false;

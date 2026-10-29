@@ -1,9 +1,10 @@
+import { collectionImageUrl } from './iconos.js?v=tintin-20261029-performance-1';
+
 // Debe empezar en la raíz del sitio: el header vive también en /contact,
 // /product, /perfil, etc. Una ruta relativa haría que el navegador busque
 // /contact/assets-… y el mismo menú perdería sus imágenes fuera de Inicio.
 const COLL_IMG_BASE = '/assets-tintin/images/collections/';
 const COLL_PLACEHOLDER = `${COLL_IMG_BASE}col-placeholder.webp`;
-const SLUG_FILE_MAP = { bolsos: 'bags' };
 const MOBILE_GRADIENT = 'linear-gradient(135deg,#e8c5d0,#c48a9e)';
 let started = false;
 let lastCollections = null;
@@ -38,8 +39,7 @@ function firstProductImage(slug) {
 }
 
 function collImgFile(slug) {
-  const normalized = text(slug).replace(/[^a-z0-9_-]/gi, '');
-  return SLUG_FILE_MAP[normalized] || normalized;
+  return collectionImageUrl(slug).match(/col-([^/]+)\.webp$/)[1];
 }
 
 function safeUrl(value, fallback = '') {
@@ -63,7 +63,7 @@ function imageCandidates(collection) {
   return [...new Set([
     safeUrl(collection?.image),
     safeUrl(firstProductImage(collection?.slug)),
-    safeUrl(`${COLL_IMG_BASE}col-${collImgFile(collection?.slug)}.webp`),
+    safeUrl(collectionImageUrl(collection?.slug)),
     safeUrl(COLL_PLACEHOLDER),
   ].filter(Boolean))];
 }
@@ -268,7 +268,7 @@ export function initNavCollections(force = false) {
   renderLoading();
 
   // Metadata pública canónica: el menú no espera Firebase/Auth para responder.
-  return import('../../../pages/collections/datos-publicos-colecciones.js?v=tintin-20261026-editor-closure-1')
+  return import('../../../pages/collections/datos-publicos-colecciones.js?v=tintin-20261029-performance-1')
     .then(({ loadCollections }) => loadCollections({
       force,
       onData(collections) {

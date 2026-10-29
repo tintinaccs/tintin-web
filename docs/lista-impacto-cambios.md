@@ -885,3 +885,7 @@ regresiones; sin workflows nuevos. Rules, datos reales, checkout y pagos intacto
 Reintentar conserva la intención de guardado oficial y no sólo del borrador;
 el aviso se centraliza sin duplicarlo. Versiones, CSP, diagnóstico y protección
 mediante herramientas canónicas.
+
+### 2026-10-29 — Rendimiento global en revisión
+
+Cambios canónicos en revelado/alternancia de secciones (excluir paneles fijos y agrupar mediciones), respaldo compartido de colecciones, filtrado del catálogo sin doble renderer, carga del menú a demanda, favoritos por lotes públicos, asociaciones de variantes paginadas y controles del editor por contexto. Se preservan lectores/escritores comerciales, publicación, permisos e historial. Hero comprimido desde los PNG vigentes con fallback original; CSS de Inicio/Nosotros compilado por el generador existente con Lightning CSS fijado. Checkout emite la correlación antes de la transacción; observabilidad agrega INP y CLS sin datos personales. Las URL transitivas se renuevan mediante la misma autoridad de caché y el plan de mantenimiento protegido. Ledger y límites: `docs/agent/PERFORMANCE_GLOBAL_20261029.md`.

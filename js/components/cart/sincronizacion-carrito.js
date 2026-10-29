@@ -1206,7 +1206,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261027-welcome-receipt-1').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261029-performance-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

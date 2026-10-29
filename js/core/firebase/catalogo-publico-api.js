@@ -11,11 +11,23 @@ export async function fetchPublicCatalogResource(resource) {
   return runSingleFlight('public-catalog:' + normalized, () => fetchResource(normalized));
 }
 
-async function fetchResource(normalized) {
+export async function fetchPublicProductsByIds(ids) {
+  const unique=[...new Set(ids.map(id=>String(id).trim()).filter(Boolean))].sort();
+  const items=[];
+  for(let offset=0;offset<unique.length;offset+=30) {
+    const batch=unique.slice(offset,offset+30);
+    items.push(...await runSingleFlight('public-catalog:products:'+JSON.stringify(batch),()=>fetchResource('products',batch)));
+  }
+  return items;
+}
+
+async function fetchResource(normalized, ids = []) {
   const controller = new AbortController();
   const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const response = await fetch(ENDPOINT + '?resource=' + encodeURIComponent(normalized), {
+    const params=new URLSearchParams({resource:normalized});
+    if(ids.length)params.set('ids',JSON.stringify(ids));
+    const response = await fetch(ENDPOINT + '?' + params, {
       method: 'GET',
       credentials: 'omit',
       cache: 'no-store',

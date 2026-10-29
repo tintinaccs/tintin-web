@@ -30,7 +30,8 @@ function url(page) { return `${BASE_URL}/${page.replace(/^\//, '')}`; }
 
 async function installVitalsObserver(page) {
   await page.addInitScript(() => {
-    window.__ttVitals = { lcp: null, cls: 0, inp: null, shifts: [] };
+    window.__ttVitals = { lcp: null, cls: 0, eventTimingMaxMs: null, shifts: [] };
+    let windowStart=0,lastShift=0,windowValue=0;
     const describeNode = node => {
       if (!(node instanceof Element)) return String(node?.nodeName || 'unknown');
       const id = node.id ? `#${node.id}` : '';
@@ -45,7 +46,9 @@ async function installVitalsObserver(page) {
       new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
           if (entry.hadRecentInput) continue;
-          window.__ttVitals.cls += entry.value;
+          if(!windowValue || entry.startTime-lastShift>1000 || entry.startTime-windowStart>5000){windowStart=entry.startTime;windowValue=0;}
+          lastShift=entry.startTime;windowValue+=entry.value;
+          window.__ttVitals.cls=Math.max(window.__ttVitals.cls,windowValue);
           const sources = (entry.sources || []).map(source => ({
             node: describeNode(source.node),
             previous: source.previousRect ? {
@@ -72,7 +75,7 @@ async function installVitalsObserver(page) {
         for (const entry of list.getEntries()) {
           if (!entry.interactionId) continue;
           const duration = Math.round(entry.duration || 0);
-          window.__ttVitals.inp = Math.max(window.__ttVitals.inp || 0, duration);
+          window.__ttVitals.eventTimingMaxMs = Math.max(window.__ttVitals.eventTimingMaxMs || 0, duration);
         }
       }).observe({ type: 'event', buffered: true, durationThreshold: 16 });
     } catch {}
@@ -87,24 +90,24 @@ async function waitLoaderGone(page, timeout = 12000) {
 }
 
 async function probeInteraction(page) {
-  await page.evaluate(() => {
-    const probe = document.createElement('button');
-    probe.id = 'tt-inp-probe';
-    probe.type = 'button';
-    probe.setAttribute('aria-label', 'Sonda de interacción');
-    probe.style.cssText = 'position:fixed;left:1px;bottom:1px;width:4px;height:4px;opacity:.01;z-index:2147483647';
-    document.body.appendChild(probe);
-  });
-  await page.locator('#tt-inp-probe').click({ force: true }).catch(() => {});
-  await page.waitForTimeout(180);
-  await page.evaluate(() => document.getElementById('tt-inp-probe')?.remove());
+  const trigger=page.locator('[data-nav-action="cart"]:visible,#tabbar-cart:visible,[data-shell-route="cart"]:visible').first();
+  await trigger.waitFor({state:'visible'});
+  await page.evaluate(()=>{window.__ttInteractionStarted=performance.now();});
+  await trigger.click();
+  await page.waitForFunction(()=>document.getElementById('cart-drawer')?.getAttribute('aria-hidden')==='false');
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    window.__ttVitals.interactionMs=performance.now()-window.__ttInteractionStarted;resolve();
+  }))));
+  await page.locator('#btn-cart-close').click();
+  await page.waitForFunction(()=>document.getElementById('cart-drawer')?.getAttribute('aria-hidden')==='true');
 }
 
 async function collectVitals(page) {
   return page.evaluate(() => new Promise(resolve => {
     const out = {
       fcp: null, lcp: window.__ttVitals?.lcp ?? null, cls: 0,
-      inp: window.__ttVitals?.inp ?? null, ttfb: null, dcl: null, load: null,
+      interactionMs: window.__ttVitals?.interactionMs ?? null,
+      eventTimingMaxMs: window.__ttVitals?.eventTimingMaxMs ?? null, ttfb: null, dcl: null, load: null,
       requests: 0, firstPartyRequests: 0, thirdPartyRequests: 0, transferKB: 0, firstPartyTransferKB: 0, duplicateRequests: 0, duplicateUrls: [],
       thirdPartyDuplicateUrls: [], firestoreReads: 0,
       firestoreSources: {}, shifts: window.__ttVitals?.shifts || []
@@ -161,7 +164,7 @@ async function collectVitals(page) {
     window.setTimeout(() => {
       out.lcp = window.__ttVitals?.lcp ?? out.lcp;
       out.cls = Math.round((window.__ttVitals?.cls || out.cls) * 1000) / 1000;
-      out.inp = window.__ttVitals?.inp ?? out.inp;
+      out.eventTimingMaxMs = window.__ttVitals?.eventTimingMaxMs ?? out.eventTimingMaxMs;
       out.shifts = window.__ttVitals?.shifts || out.shifts;
       resolve(out);
     }, 350);

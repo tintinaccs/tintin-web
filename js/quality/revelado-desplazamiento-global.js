@@ -51,9 +51,7 @@
     if (!element?.isConnected || element.classList.contains('tt-visible') || element.classList.contains('tt-auto-reveal')) return false;
     if (element.closest(fixedExclusions)) return false;
     if (element.closest('[hidden],.tt-no-reveal,.no-reveal,[data-no-reveal="true"]')) return false;
-    if (element.getClientRects().length === 0) return false;
-    const rect = element.getBoundingClientRect();
-    return rect.width >= 6 && rect.height >= 6;
+    return true;
   }
 
   function variantFor(element, index) {
@@ -108,10 +106,14 @@
     scheduled = false;
     const roots = pendingRoots.size ? [...pendingRoots] : [document];
     pendingRoots.clear();
-    const candidates = roots.flatMap(elementsInside).filter(canReveal);
+    // Las raíces pueden solaparse. Medir cada elemento una sola vez y terminar
+    // todas las lecturas antes de agregar clases que invalidan el layout.
+    const candidates = [...new Set(roots.flatMap(elementsInside))].filter(canReveal)
+      .map(element => ({ element, rect: element.getBoundingClientRect() }))
+      .filter(({ rect }) => rect.width >= 6 && rect.height >= 6);
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
     const toObserve = [];
-    candidates.forEach((element, index) => {
+    candidates.forEach(({ element, rect }, index) => {
       if (element.matches(hoverSelectors)) element.classList.add('tt-premium-hover');
       // Lo que ya está a la vista al cargar no necesita "aparecer": animarlo
       // igual desde el estado oculto (opacity:0 + translateY) es exactamente
@@ -119,7 +121,6 @@
       // sea intencional y dure poco — el navegador lo cuenta igual. Se marca
       // visible en el mismo turno síncrono en que se agrega .tt-auto-reveal,
       // así nunca pasa por el estado desplazado y no hay salto que medir.
-      const rect = element.getBoundingClientRect();
       const alreadyInViewport = rect.top <= viewportHeight * triggerRatio && rect.bottom > 0;
       element.classList.add('tt-auto-reveal', variantFor(element, index));
       element.style.setProperty('--tt-r-delay', `${Math.min(index % 5, 4) * 28}ms`);

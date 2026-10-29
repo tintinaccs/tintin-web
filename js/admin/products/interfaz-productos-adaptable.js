@@ -1,8 +1,8 @@
 import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1-editor-search-20261028-2-guiado-1269-20261029-1';
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261028-product-tabs-1';
-import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261028-product-tabs-1-guiado-1269-20261029-1';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261029-performance-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
-import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261028-product-tabs-1-guiado-1269-20261029-1';
+import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261029-performance-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
   ['photos', 'Fotografías del producto', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
@@ -448,7 +448,9 @@ export function installProductInterface() {
   card?.addEventListener('click',event=>{if(event.target.closest('#prod-save-btn'))lastError='';},{capture:true});
   card?.addEventListener('input',event=>{refreshEditorHeading(card);const error=card.querySelector('#prod-form-error');if(error?.dataset.editorField===event.target.id){error.textContent='';error.style.display='none';lastError='';}if(event.target.getAttribute('aria-invalid')==='true'){event.target.removeAttribute('aria-invalid');event.target.removeAttribute('aria-describedby');}});
   card?.addEventListener('change',()=>refreshEditorHeading(card));
-  if (card) new MutationObserver(()=>{
+  if (card) new MutationObserver(records=>{
+    // Texto derivado del formulario no exige volver a montar sus controles.
+    if(records.every(record=>record.target.closest?.('.tt-product-editor-heading,.tt-editor-section-value,.tt-editor-preview,.tt-seo-preview,.tt-studio-breadcrumb,.tt-work-feedback')))return;
     if (queued) return;
     queued=true;queueMicrotask(()=>{queued=false;enhanceProductEditor();scheduleProductSurfaceSync();});
   }).observe(card,{childList:true,subtree:true,attributes:true,attributeFilter:['style','hidden','aria-busy']});
