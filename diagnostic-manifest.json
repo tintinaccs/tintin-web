@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "07149308e2575544914bf04eec598322212bf5ae6636544c9a7f2ef8814555f5",
+  "sourceFingerprint": "8546ff6f08f3ff6697925ace390ab992d421ec00abefec44119b440880dfbe18",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1613,
-    "textFiles": 1482,
-    "totalBytes": 34991120,
+    "files": 1614,
+    "textFiles": 1483,
+    "totalBytes": 34995564,
     "pages": 19,
     "modules": 1072
   },
@@ -2257,8 +2257,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 44837,
-      "sha256": "7f1e9094aa4da178cdae510579678262e5567a5638828599b71c361f80011484",
+      "bytes": 44842,
+      "sha256": "6a86406520d288e27e42f2867853ec807358a8626df3b5685248ea08cc307720",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2318,7 +2318,7 @@
           "line": 806
         },
         {
-          "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261021-identidad-1",
+          "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261029-admin-fluidity-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
           "line": 807
         }
@@ -2471,7 +2471,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261021-identidad-1",
+          "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261029-admin-fluidity-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
           "line": 807,
           "exists": true
@@ -2892,8 +2892,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204657,
-      "sha256": "fcb3a8db6e390bfdfc195cd0b0dbb074be07da4cdc262912861bbcf8f900e4aa",
+      "bytes": 204662,
+      "sha256": "569080f8c77384194190a1c8e9e564b3912f362a3c4a874605b0b04d0043a943",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3027,7 +3027,7 @@
           "line": 2303
         },
         {
-          "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261021-identidad-1",
+          "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261029-admin-fluidity-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
           "line": 2304
         },
@@ -3398,7 +3398,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261021-identidad-1",
+          "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261029-admin-fluidity-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
           "line": 2304,
           "exists": true
@@ -29550,8 +29550,8 @@
     },
     {
       "path": "js/admin/maestro/espacio-modulos-admin.js",
-      "bytes": 8057,
-      "sha256": "0b478b147d0ec5c5bc918cc230f1ff1a475b22747c9b71c4999743b526a0fc1b",
+      "bytes": 8928,
+      "sha256": "66dfdbf993cdb9b0c0cb23d5a3533e357809418933616d6388ebcbe03fe46d25",
       "syntax": {
         "ok": true,
         "error": ""
@@ -56318,8 +56318,8 @@
     },
     {
       "path": "tests/ui-ux/admin-workspaces.spec.js",
-      "bytes": 10285,
-      "sha256": "616337b608b9691be1111a759bd8618b90f363b51e0edfdf887e0fbb79598c19",
+      "bytes": 12181,
+      "sha256": "28059680fcd1eb5f9a1319837dcb3c6bdb25f286c0dca3146bda455846870b81",
       "syntax": {
         "ok": true,
         "error": ""
@@ -56328,7 +56328,7 @@
       "endpoints": [
         {
           "url": "https://tintin.test/admin-commerce-fixture",
-          "line": 111
+          "line": 135
         }
       ]
     },
@@ -58503,8 +58503,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 44837,
-      "sha256": "7f1e9094aa4da178cdae510579678262e5567a5638828599b71c361f80011484"
+      "bytes": 44842,
+      "sha256": "6a86406520d288e27e42f2867853ec807358a8626df3b5685248ea08cc307720"
     },
     {
       "path": "admin-manifest.json",
@@ -58515,8 +58515,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204657,
-      "sha256": "fcb3a8db6e390bfdfc195cd0b0dbb074be07da4cdc262912861bbcf8f900e4aa"
+      "bytes": 204662,
+      "sha256": "569080f8c77384194190a1c8e9e564b3912f362a3c4a874605b0b04d0043a943"
     },
     {
       "path": "apple-touch-icon.png",
@@ -59517,8 +59517,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 6170,
-      "sha256": "f0602f392a462f6f320107bf355b419ea88cbd5033f30f1307fbfdb46b500cb6"
+      "bytes": 898,
+      "sha256": "4e27ba7de9cf9477ffa5db6d0a92fff2d523dec86c18f4768a554e5b101d5769"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -59530,7 +59530,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "1d4364dc5107746e3dc8f007bd522e211a66e511b50c2092165554d6a5e884f8"
+      "sha256": "b1799140510df2a202b28c50b9adf18fd62358d9fa44e16d5c96913f108bf75a"
     },
     {
       "path": "config/public-site.json",
@@ -60133,6 +60133,12 @@
       "sha256": "12691040b3b8112dc0f54d01b7c1f092d6f47ecf9f21cda7e688ab2b0c317432"
     },
     {
+      "path": "docs/SUPERADMIN_FLUIDEZ.md",
+      "extension": ".md",
+      "bytes": 4093,
+      "sha256": "658998d3c14981fed34852c30d9f0bd14f0f94069362e4881ab8e56e81020072"
+    },
+    {
       "path": "docs/accesibilidad-fase-10.md",
       "extension": ".md",
       "bytes": 411,
@@ -60219,8 +60225,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1032352,
-      "sha256": "a57a9982715df478024164392f29d6c8170acfa3a35f913fc40cb3e4f6d8e31b"
+      "bytes": 1034563,
+      "sha256": "28f1413c501f7abad5c2764a663353ba9eafe171424e8fc4cca2283e4c620c8e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -60927,8 +60933,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 135960,
-      "sha256": "fbbe5ac5bb3a658056a6582baad791a367b21c71c542a07c38fb9359efef3f00"
+      "bytes": 136590,
+      "sha256": "6142c743563c61a0a152a6101d1bc85ceb0009e57166688a0f815382e5139516"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -62181,8 +62187,8 @@
     {
       "path": "js/admin/maestro/espacio-modulos-admin.js",
       "extension": ".js",
-      "bytes": 8057,
-      "sha256": "0b478b147d0ec5c5bc918cc230f1ff1a475b22747c9b71c4999743b526a0fc1b"
+      "bytes": 8928,
+      "sha256": "66dfdbf993cdb9b0c0cb23d5a3533e357809418933616d6388ebcbe03fe46d25"
     },
     {
       "path": "js/admin/maestro/navegacion-movil-admin.js",
@@ -65019,8 +65025,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 77587,
-      "sha256": "8f6a0e28e32ad6f8c0ffaeb465b63165fdafff7338d39b166ca2aa39af84a13b"
+      "bytes": 77592,
+      "sha256": "42111617d457883f3a6b4216cfa329b72d5167df4ae24133d44121828c89b396"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -67641,8 +67647,8 @@
     {
       "path": "tests/ui-ux/admin-workspaces.spec.js",
       "extension": ".js",
-      "bytes": 10285,
-      "sha256": "616337b608b9691be1111a759bd8618b90f363b51e0edfdf887e0fbb79598c19"
+      "bytes": 12181,
+      "sha256": "28059680fcd1eb5f9a1319837dcb3c6bdb25f286c0dca3146bda455846870b81"
     },
     {
       "path": "tests/ui-ux/alternating-section-colors.spec.js",
