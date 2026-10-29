@@ -307,6 +307,7 @@ if (!window.TintinImagesPhase5Booted) {
     tabletSource.media = '(max-width: 1120px)';
     const sourceDevice = source => source.media?.includes('767') ? 'mobile'
       : source.media?.includes('landscape') ? 'tabletLandscape'
+      : source.media?.includes('1121') ? 'desktop'
       : source.media ? 'tablet' : 'desktop';
     const configured = { desktop: configuredDesktop, tablet: configuredTablet, tabletLandscape: configuredTablet, mobile: configuredMobile };
     const defaults = { desktop: STATIC.hero_bg_desktop, tablet: STATIC.hero_bg_tablet, tabletLandscape: STATIC.hero_bg_tablet_landscape, mobile: STATIC.hero_bg_mobile };
@@ -319,7 +320,7 @@ if (!window.TintinImagesPhase5Booted) {
         // Un WebP disponible sigue siendo la URL principal. PNG es respaldo
         // para navegadores sin WebP o para un error real de carga.
         source.srcset = custom ? absolute(custom) : absolute(originalType === 'image/webp'
-          ? defaults[device].replace('.png?', '.webp?') : defaults[device]);
+          ? defaults[device].replace('.png' + HERO_ART_QUERY, '-lossless.webp?v=tintin-20261029-lossless-1') : defaults[device]);
         if (custom || originalType === 'fallback') source.removeAttribute('type');
         else source.type = originalType;
       }

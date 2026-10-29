@@ -16,11 +16,11 @@ const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-sec
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
 const TIENDA_VERSION = 'tintin-20261028-wa-layout-nav-3-guiado-1269-20261029-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
-const LOADER_VERSION = 'tintin-20261027-global-fluidez-3-nav-scroll-1';
+const LOADER_VERSION = 'tintin-20261027-global-fluidez-3-nav-scroll-1-perf-20261029-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261024-foco-paneles-1-nav-20261028-2-scroll-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261027-global-fluidez-3-nav-20261028-2';
-const NAV_ENTRY_VERSION = 'tintin-20261027-global-fluidez-3-nav-20261028-2';
+const PUBLIC_SHELL_VERSION = 'tintin-20261027-global-fluidez-3-nav-20261028-2-perf-20261029-1';
+const NAV_ENTRY_VERSION = 'tintin-20261027-global-fluidez-3-nav-20261028-2-perf-20261029-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261023-variant-engine-v2-2';
 const SESSION_PROTECTION_VERSION = 'tintin-20261027-welcome-receipt-1';
@@ -155,7 +155,7 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-navigation-coherence-css\"",
     "css/components/navigation/compartido/coherencia-visual.css",
-    "tintin-20261023-header-dropup-4"
+    "tintin-20261023-header-dropup-4-perf-20261029-1"
   ]
 ];
 const INITIAL_PAGE_STYLES = {

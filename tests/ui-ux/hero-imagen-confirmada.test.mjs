@@ -10,7 +10,7 @@ const home = await fs.readFile(path.join(root, 'index.html'), 'utf8');
 const hero = home.match(/<section class="tt-hero"[\s\S]*?<\/section>/)[0];
 const fallbackRoot = 'assets-tintin/images/home/hero-nuevo/hero-nuevo-';
 
-test('Firestore conserva PNG original por dispositivo y no vuelve a descargar el banner tras confirmar', async () => {
+test('Firestore conserva el arte sin pérdida por dispositivo y no vuelve a descargar el banner tras confirmar', async () => {
   const browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } : {}) });
   try {
     for (const [width,height,art] of [[390,844,'mobile'],[820,1180,'tablet-vertical'],[1024,768,'tablet-horizontal'],[1440,900,'desktop']]) {
@@ -39,8 +39,8 @@ test('Firestore conserva PNG original por dispositivo y no vuelve a descargar el
       await page.evaluate(()=>window.confirmImages({}));
       await page.waitForFunction(()=>document.getElementById('tt-hero-img').dataset.ttHeroPhase5Signature);
       await page.waitForLoadState('networkidle');
-      assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),new RegExp(`hero-nuevo-${art}\\.png`));
-      assert.equal(requests.filter(url=>url.endsWith('.png')).length,0,'sin segunda descarga PNG ni precarga desktop');
+      assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),new RegExp(`hero-nuevo-${art}-lossless\\.webp`));
+      assert.equal(requests.length,0,'sin segunda descarga del arte confirmado ni precarga de otra variante');
       assert.ok(logoRequests.every(url=>url.endsWith('?v=fixture-logo')), 'el snapshot no quita la versión del logo publicado');
       assert.match(await page.locator('.tt-logo-img').evaluate(img=>img.src), /logo\.png\?v=fixture-logo$/);
       requests.length=0;
@@ -52,7 +52,7 @@ test('Firestore conserva PNG original por dispositivo y no vuelve a descargar el
       assert.ok(requests.filter(url=>url.endsWith('.png')).every(url=>url.endsWith(`hero-nuevo-${customArt}.png`)), `se predecodifica solamente la personalización activa: ${requests.join(',')}`);
       assert.ok(await page.locator('#tt-hero-img').evaluate(img=>[...img.closest('picture').querySelectorAll('source')].every(source=>source.srcset.includes('?custom=1')&&!source.type)), 'todos los sources usan el formato real de la personalización');
       await page.evaluate(()=>window.confirmImages({}));
-      await page.waitForFunction(()=>document.getElementById('tt-hero-img').currentSrc.includes('.png?'));
+      await page.waitForFunction(()=>document.getElementById('tt-hero-img').currentSrc.includes('-lossless.webp?'));
       await page.evaluate(()=>document.getElementById('tt-hero-img').dispatchEvent(new Event('error')));
       await page.waitForFunction(()=>{const img=document.getElementById('tt-hero-img');return /\.png\?v=/.test(img.currentSrc)&&img.complete&&img.naturalWidth>0;});
       assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),new RegExp(`hero-nuevo-${art}\\.png`));

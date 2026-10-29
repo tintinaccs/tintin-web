@@ -973,12 +973,14 @@ html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions a:focus-visible
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-cta { left:9%!important; top:55%!important; width:35%!important; height:8%!important; }
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-link { left:14%!important; top:74%!important; width:24%!important; height:9%!important; }
 }
+/* Se reserva el carril de WhatsApp a ambos lados para mantener el eje
+   centrado: 48px de botón + 16px al borde + 16px de separación. */
 @media(max-width:767px) {
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-media { aspect-ratio:auto!important; }
   html body.tt-home-premium #hero[data-tt-banner] #tt-hero-img { object-fit:contain!important; transform:none!important; }
-  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-content { position:relative!important; inset:auto!important; height:auto!important; padding:20px max(24px,env(safe-area-inset-right),env(safe-area-inset-left)) 28px!important; }
+  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-content { position:relative!important; inset:auto!important; height:auto!important; padding:20px max(80px,env(safe-area-inset-right),env(safe-area-inset-left)) 28px!important; }
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions { display:grid!important; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; width:min(100%,640px)!important; margin-inline:auto!important; }
-  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions a { position:static!important; display:flex!important; align-items:center; justify-content:center; width:100%!important; max-width:none!important; height:auto!important; min-height:48px!important; padding:12px 20px!important; font-size:14px!important; line-height:1.4!important; color:#222!important; border-radius:999px!important; text-align:center; text-decoration:none; }
+  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions a { position:static!important; display:flex!important; align-items:center; justify-content:center; width:100%!important; max-width:none!important; height:auto!important; min-height:48px!important; padding:12px 8px!important; font-size:14px!important; line-height:1.4!important; white-space:normal!important; color:#222!important; border-radius:999px!important; text-align:center; text-decoration:none; }
   /* Más específico que el hotspot transparente del banner de escritorio. */
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions .tt-hero-cta { background:var(--color-brand-primary,#F8AACA)!important; border:1px solid var(--color-brand-primary,#F8AACA)!important; }
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions .tt-hero-link { background:#fff!important; border:1px solid var(--color-brand-primary,#F8AACA)!important; }
