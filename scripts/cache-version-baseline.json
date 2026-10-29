@@ -48,8 +48,8 @@
     "sha256": "1250e8f1efcc9860a190cc34c829b8b968fbe968b4c24130820921e8d868d9c3"
   },
   "css/admin/shopify-commerce-admin.css": {
-    "version": "tintin-20261028-studio-reference-2",
-    "sha256": "23398ac18c05478515ab81bd46f8a85964e71150feb6a8ffe57186bf2cf0f532"
+    "version": "tintin-20261028-guided-editor-3",
+    "sha256": "e3609c99f533110725f05b8d80f2d406b37c0873976ea95e0c8051f063960425"
   },
   "css/admin/sidebar-interaccion.css": {
     "version": "tintin-20261019-superadmin-live-1",
@@ -340,8 +340,8 @@
     "sha256": "de5f789d28a5d132bcaeda507df5371112be6ff20c8e8f6e367ef17e327c2fdc"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20261028-correos-1-editor-search-20261028-2",
-    "sha256": "2c55519a584fa82c0f61c73f580719846e2e97dc2c2c7ba66071407d9027a698"
+    "version": "tintin-20261028-correos-1-editor-search-20261028-2-guiado-1269-20261029-1",
+    "sha256": "91fc0387971113820d92e4ceea134ade5f2ede8d665dd021a9b7fa0d45ad1e4a"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20261021-commerce-review-1",
@@ -540,24 +540,24 @@
     "sha256": "7001d5221b6bf851de4e789ebc0fcb9c72ce99b204906602f89202884e5f7a65"
   },
   "js/admin/products/controles-editor-producto.js": {
-    "version": "tintin-20261028-product-tabs-1",
-    "sha256": "3db344fc242ba399555a027997a9c81450f3b2b6ea05d03e7a6ca78e7ee10c69"
+    "version": "tintin-20261028-product-tabs-1-guiado-1269-20261029-1",
+    "sha256": "284281ffa328c4cf4109afe530f8456b4935d02bb45d963e5f2a8ae602ee9c55"
   },
   "js/admin/products/editor-comercial-core.mjs": {
     "version": "tintin-20261026-editor-phase6-1",
     "sha256": "c8e53974fc8ef501edc6d4286ae47619ccbe1b740555151c6a4fbe9555ce03c8"
   },
   "js/admin/products/editor-comercial-interfaz.js": {
-    "version": "tintin-20261027-opciones-inline-1",
-    "sha256": "fea038d09d971508062ae3ce8bf32abedf0db65bde7aea1124f3c2eea8fefd55"
+    "version": "tintin-20261027-opciones-inline-1-guiado-1269-20261029-1",
+    "sha256": "9be5bf8efc53e0eb73d6b4c3d4abc9dbbf32050496e9a0081fa72fc68ce4b5f2"
   },
   "js/admin/products/editor-editorial-interfaz.js": {
-    "version": "tintin-20261024-editor-shopify-1-editor-search-20261028-2",
-    "sha256": "106cfe9d2a095596fe6bb51c69a6edd9f0cd55b800c799a3c0b55e93e85d4fb1"
+    "version": "tintin-20261024-editor-shopify-1-editor-search-20261028-2-guiado-1269-20261029-1",
+    "sha256": "165b2f384fbf36c080d3d8ba2c9241c431e6785d1345f3a021dc9dcf7d3f8bac"
   },
   "js/admin/products/espacio-trabajo-producto.js": {
-    "version": "tintin-20261028-product-tabs-3-editor-search-20261028-2",
-    "sha256": "149c6bdede970d3ced730e3dccb7d4c85a46f9b2b75e6e7bae3d35b5bd24c2e2"
+    "version": "tintin-20261028-product-tabs-3-editor-search-20261028-2-guiado-1269-20261029-1",
+    "sha256": "4c8f2a0124aa4d7bcef7969d12056f28873f1ce75c5bdac808a844f22e9af3bf"
   },
   "js/admin/products/estado-administrativo-producto.mjs": {
     "version": "tintin-20261026-editor-workspace-1",
@@ -572,20 +572,24 @@
     "sha256": "2d04409110e54221e080bd90fb09d35cb2e3316d1de94c5279de4795720a2e22"
   },
   "js/admin/products/galeria-unificada.js": {
-    "version": "tintin-20261028-studio-reference-1",
-    "sha256": "01a02a798676fe019a258e453c033f37306d3c9fd80dbd8c60da3b80f7ace130"
+    "version": "tintin-20261028-studio-reference-1-guiado-1269-20261029-1",
+    "sha256": "b3c45fcf876797de9b8b6f33103b02bba6839a62ccb5d06d0ffb54d9a76fbb20"
   },
   "js/admin/products/gestion-imagenes-admin.js": {
     "version": "tintin-20261027-welcome-receipt-1",
     "sha256": "ed3f5c3ce524e25f6263e1d66a9d5d8b39d9e78001a7bfd2735f4cec85263f63"
+  },
+  "js/admin/products/importe-producto.js": {
+    "version": "tintin-20261028-guided-editor-2",
+    "sha256": "08aae706d9e3d556171ad46e7950db35e767e50c36c401a65ec34345cbed4ddb"
   },
   "js/admin/products/integridad-inventario-admin.js": {
     "version": "tintin-20261023-variant-engine-v2-2",
     "sha256": "1c49c41a2c8a71e9d8251b0d9fe7ff0b425ac06fc35d82b9aa03b42e7c16872a"
   },
   "js/admin/products/interfaz-productos-adaptable.js": {
-    "version": "tintin-20261028-studio-reference-2-editor-search-20261028-2",
-    "sha256": "20c7c72356e33977ae315a281b23c553bbf7c0bf91791d17b8c384d3e9815ba0"
+    "version": "tintin-20261028-studio-reference-2-editor-search-20261028-2-guiado-1269-20261029-1",
+    "sha256": "18bb286860354d7de98a967429ad1154101afbcf81efe256a973a85d3416b2f0"
   },
   "js/admin/products/maestro-productos-core.mjs": {
     "version": "tintin-20261024-editor-v2-4",
@@ -604,8 +608,8 @@
     "sha256": "b2638c73d37c082329c0e2ff95be45ae5c25cac51dbdc50ce22ca423fe123d7b"
   },
   "js/admin/products/sugerencias-producto-interfaz.js": {
-    "version": "tintin-20261028-product-tabs-1",
-    "sha256": "611dca13337111fd3264c7c51d4a30d01eba0d55459860c44091f63e68a47c55"
+    "version": "tintin-20261028-product-tabs-1-guiado-1269-20261029-1",
+    "sha256": "de39858a3feb99ec0edbaceea293023b738b0494d87db6c3688779425dc04076"
   },
   "js/admin/products/vision-productos-core.mjs": {
     "version": "tintin-20261024-editor-intuitivo-1",
@@ -656,8 +660,8 @@
     "sha256": "fdf849e528365ade7bd0ee85a707661c0c92b8ffd39bf8392b76db7999e48be8"
   },
   "js/admin/shopify-commerce-admin.js": {
-    "version": "tintin-20261028-studio-reference-2-editor-search-20261028-2",
-    "sha256": "47570ffc5f920eea4fd971ce3c47aa6f7a890977ebd2d8ea627dff209622c09c"
+    "version": "tintin-20261028-studio-reference-2-editor-search-20261028-2-guiado-1269-20261029-1",
+    "sha256": "3c4a04c7ade341e3c95be1046807e66cf417811d27b76d7ace4bbbf6d7fedc7c"
   },
   "js/admin/sidebar-expandible-admin.js": {
     "version": "tintin-20261004-admin-connections-3",
@@ -1540,8 +1544,8 @@
     "sha256": "cb4ab1be22ae05b9594f2e35012ef958ec1dcf3636d17feed9fbbdbcddd5f2ef"
   },
   "tienda.js": {
-    "version": "tintin-20261028-wa-layout-nav-3",
-    "sha256": "f38033b730f1243ae1d6310490ce695382757b567e71d6cd7d9074c4ae53425a"
+    "version": "tintin-20261028-wa-layout-nav-3-guiado-1269-20261029-1",
+    "sha256": "1d4f3279925297f979e92e8422e39c7f7a516d3fc47f4d69e9df721da8484fe6"
   },
   "vendor/onnxruntime-web-1.22.0/ort.wasm.bundle.min.mjs": {
     "version": "tintin-20261024-editor-intuitivo-1",

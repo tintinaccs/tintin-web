@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b1d90594ba672d66acfc5c88bf3aad381707bb29",
-  "reason": "Reducir invalidaciones globales de layout del workspace compartido de Super Admin sin cambiar negocio",
+  "baseCommit": "a7f55df7e798b9685e31742e187d9abe5fd03fd1",
+  "reason": "Integrar main1269 conservando editor guiado y mejora del scheduler global sin revertir flujos",
   "files": [
     {
       "path": "admin-images.html",
@@ -10,13 +10,13 @@
     },
     {
       "path": "admin.html",
-      "oldHash": "1ffdee6ff3d495ac56ac60886816236b9110028e329f543d13e03d332289c39a",
-      "newHash": "38f61c76e3fcd4815f20ca43a4e8d81986db2820255069409c01e73b3d25ea00"
+      "oldHash": "fcb3a8db6e390bfdfc195cd0b0dbb074be07da4cdc262912861bbcf8f900e4aa",
+      "newHash": "569080f8c77384194190a1c8e9e564b3912f362a3c4a874605b0b04d0043a943"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "9704e04ceb0a8f9f00f6d8b2fdb89f1ffc19d35d319b3f71ad6f28927bfe58e8",
-      "newHash": "4c33b502343bc62373fec9e154be0a567230ee7ba96aa1f6818734a311c5a879"
+      "oldHash": "8f6a0e28e32ad6f8c0ffaeb465b63165fdafff7338d39b166ca2aa39af84a13b",
+      "newHash": "42111617d457883f3a6b4216cfa329b72d5167df4ae24133d44121828c89b396"
     }
   ],
   "affectedRecords": []

@@ -71,12 +71,15 @@ test('correo → OTP real → Continuar → perfil persistido → sesión conser
   await expect(page.locator('#tt-privacy-consent')).toHaveCount(0);
   expect(await page.evaluate(()=>window.TintinActivityPrivacy.preferences.statistics)).toBe(false);
   await continueProfile(page);expect((await availability).status()).toBe(200);
-  await expect(page).toHaveURL(/index\.html/);
+  await expect(page).toHaveURL(url=>url.pathname==='/index.html');
   const saved=await state(request,email);
   expect(saved.profile).toMatchObject({name:'María González',phone:'+595981123456',profileStatus:'active',role:'client'});
   expect(saved.requests.filter(r=>r.path==='/api/phone-availability')).toHaveLength(1);
+  await closeFirstWelcome(page,request,email);
   await page.screenshot({path:testInfo.outputPath('correo-completado.png'),fullPage:true});
-  await page.goto('/login',{waitUntil:'domcontentloaded'});await expect(page).toHaveURL(/index\.html/);
+  // La sesión activa redirige antes de DOMContentLoaded, especialmente en WebKit.
+  // Confirmar el inicio de esta visita y luego su destino conserva la prueba de sesión.
+  await page.goto('/login',{waitUntil:'commit'});await expect(page).toHaveURL(url=>url.pathname==='/index.html');
   expect((await state(request,email)).uid).toBe(saved.uid);
 });
 

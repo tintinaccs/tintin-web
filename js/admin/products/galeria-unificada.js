@@ -11,9 +11,9 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
   let optionContext=null,optionSelection={},queuedSelection={};
   const librarySelections=new Map();
   container.replaceChildren();container.classList.add('tt-unified-photos');
-  const heading=document.createElement('h3');heading.textContent='Fotos y colores';
-  const colors=document.createElement('div');colors.className='tt-photo-colors';colors.setAttribute('role','group');colors.setAttribute('aria-label','Fotos por color');let colorSignature='';
-  const hint=document.createElement('p');hint.textContent='Elegí un color y editá todo acá mismo. La portada general y las asociaciones se conservan por separado.';
+  const heading=document.createElement('h3');heading.textContent='FOTOGRAFÍAS DEL PRODUCTO';
+  const colors=document.createElement('div');colors.className='tt-photo-colors';colors.setAttribute('role','group');colors.setAttribute('aria-label','Fotos por opción');let colorSignature='';
+  const hint=document.createElement('p');hint.textContent='La portada presenta el producto. Asociá sus fotos en Variantes.';
   const uploadHost=document.createElement('div'),grid=document.createElement('div'),context=document.createElement('div');grid.className='tt-unified-photo-grid';
   const status=document.createElement('p');status.setAttribute('role','status');
   const associationHost=document.createElement('div');associationHost.hidden=true;
@@ -23,7 +23,7 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
   layout.className='tt-studio-photo-layout';visual.className='tt-studio-photo-visual';side.className='tt-studio-photo-side';
   const hero=document.createElement('figure'),heroImage=document.createElement('img'),heroCaption=document.createElement('figcaption'),heroActions=document.createElement('div');
   hero.className='tt-studio-photo';heroActions.className='tt-studio-photo-actions';heroImage.alt='Imagen seleccionada del producto';hero.append(heroImage,heroCaption,heroActions);
-  const tools=document.createElement('div'),selectedLabel=document.createElement('small'),selectedName=document.createElement('strong');tools.className='tt-studio-photo-tools';selectedLabel.textContent='COLOR SELECCIONADO';tools.append(selectedLabel,selectedName);
+  const tools=document.createElement('div'),selectedLabel=document.createElement('small'),selectedName=document.createElement('strong');tools.className='tt-studio-photo-tools';selectedLabel.textContent='OPCIÓN SELECCIONADA';tools.append(selectedLabel,selectedName);
   let heroUrl='';
   button('Reemplazar imagen seleccionada',()=>{if(heroUrl)replace(heroUrl);},heroActions);
   button('Quitar imagen seleccionada',()=>{if(heroUrl)removePhoto(heroUrl);},heroActions);
@@ -68,7 +68,7 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     if(replacement?.hasPending() || upload.hasPending()){event.detail.accepted=false;status.textContent=replacement?.hasPending()?'Terminá o cancelá el reemplazo pendiente antes de cambiar de opción.':'Terminá o cancelá la carga pendiente antes de cambiar las fotos de otra opción.';}
   },{signal:abort.signal});
   container.addEventListener('tintin:option-context',event=>{
-    optionContext=event.detail;optionSelection=optionContext?{[optionContext.attribute]:optionContext.value}:{};
+    optionContext=event.detail;optionSelection=optionContext?{...(optionContext.selection || {[optionContext.attribute]:optionContext.value})}:{};
     if(optionContext){uploadHost.before(optionUpload);optionUpload.append(uploadHost);optionUpload.open=upload.hasPending();}
     else if(optionUpload.isConnected){optionUpload.before(uploadHost);optionUpload.remove();}
     lastGalleryState='';lastPhotoState='';render();
@@ -84,10 +84,8 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
   function renderOptionContext(){
     if(context.querySelector('#prod-variant-stock'))card?.dispatchEvent(new CustomEvent('tintin:close-option-panel'));
     context.replaceChildren();
-    const controls=document.createElement('div');controls.className='tt-option-row';controls.hidden=container.dataset.optionInline==='photos';context.append(controls);
-    const availability=button('Precio y stock de '+optionContext.value,()=>card?.dispatchEvent(new CustomEvent('tintin:photo-availability',{detail:{trigger:availability,...optionContext}})),controls);
-    availability.setAttribute('aria-expanded','false');
-    const note=document.createElement('p');note.textContent='Marcá las fotos de esta opción. La primera elegida será su portada. Los cambios se aplican al guardar el producto.';context.append(note);
+    const title=document.createElement('h3');title.className='tt-option-photo-title';context.append(title);
+    const help=document.createElement('details');const summary=document.createElement('summary');summary.textContent='Ayuda';const note=document.createElement('p');note.textContent='Marcá las fotos que pertenecen a esta opción. La estrella elige su portada; las flechas cambian su orden.';help.append(summary,note);context.append(help);
     for(const [key,values] of groups()){
       if(key===optionContext.attribute)continue;
       const label=document.createElement('label');label.textContent=key;
@@ -120,13 +118,25 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     }});
     button('Cancelar reemplazo',()=>{replacement?.destroy();replacement=null;context.replaceChildren();refocus(url);},context);
   }
+  function viewPhoto(url,photos){
+    container.querySelector('.tt-photo-viewer')?.remove();
+    const viewer=document.createElement('section');viewer.className='tt-photo-viewer';viewer.setAttribute('aria-label','Vista de fotografías');
+    const image=document.createElement('img'),count=document.createElement('p');count.setAttribute('role','status');let index=Math.max(0,photos.indexOf(url));
+    const draw=()=>{image.src=photos[index];image.alt=`Foto ${index+1} de ${photos.length}`;count.textContent=`${index+1} / ${photos.length}`;};
+    const actions=document.createElement('div');actions.className='tt-photo-viewer-actions';
+    button('Foto anterior',()=>{index=(index+photos.length-1)%photos.length;draw();},actions);
+    button('Foto siguiente',()=>{index=(index+1)%photos.length;draw();},actions);
+    const close=button('Cerrar vista',()=>{viewer.remove();refocus(url);},actions);
+    viewer.append(image,count,actions);grid.before(viewer);draw();close.focus({preventScroll:true});viewer.scrollIntoView({block:'nearest'});
+    viewer.addEventListener('keydown',event=>{if(event.key==='Escape'){viewer.remove();refocus(url);}if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();index=(index+photos.length+(event.key==='ArrowRight'?1:-1))%photos.length;draw();}});
+  }
   function associationText(rows,url){return rows.filter(row=>media.rowImages(row).some(photo=>media.imageKey(photo)===media.imageKey(url))).map(row=>Object.entries(row).filter(([key])=>!metadata.has(key)).map(([key,value])=>`${key}: ${value}`).join(' / ')).join(' · ');}
   function render(){
     if(destroyed)return;const photos=urls(),rows=associations.serialize();
     colors.hidden=container.dataset.optionInline==='photos';
     container.classList.toggle('tt-studio-color-selected',Boolean(optionContext));
-    const colorGroups=groups().filter(([key])=>media.isColorKey(key));
-    const nextColorSignature=JSON.stringify([colorGroups,optionContext,rows]);
+    const colorGroups=[]; // Las asociaciones se administran únicamente en Variantes.
+    const nextColorSignature=JSON.stringify([colorGroups,optionContext]);
     if(nextColorSignature!==colorSignature){
       colorSignature=nextColorSignature;colors.replaceChildren();
       const choose=(label,selected,pressed)=>{
@@ -151,7 +161,8 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
 
     const state=JSON.stringify([photos,mainInput.value,groups(),rows,optionContext,optionSelection]);
     if(state===lastGalleryState)return;lastGalleryState=state;
-    heading.hidden=hint.hidden=container.dataset.optionInline==='photos';
+    heading.hidden=hint.hidden=Boolean(optionContext);
+    const title=context.querySelector('.tt-option-photo-title');if(title)title.textContent=`Fotos de ${Object.values(optionSelection).join(' / ')} — ${optionPhotos().length} imágenes`;
     const selectedPhotos=optionContext?optionPhotos():photos;
     heroUrl=selectedPhotos.map(photo=>photos.find(url=>media.imageKey(url)===media.imageKey(photo))).find(Boolean) || photos[0] || '';
     hero.hidden=!heroUrl;coverControl.disabled=!heroUrl;
@@ -170,7 +181,7 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
       return;
     }
     lastPhotoState=photoState;
-    if(optionContext)renderOptionContext();else if(!replacement?.hasPending())context.replaceChildren();
+    if(optionContext){renderOptionContext();context.querySelector('.tt-option-photo-title').textContent=`Fotos de ${Object.values(optionSelection).join(' / ')} — ${optionPhotos().length} imágenes`;}else if(!replacement?.hasPending())context.replaceChildren();
     const focus=grid.contains(document.activeElement)?document.activeElement?.getAttribute('aria-label'):null;
     grid.replaceChildren();
     const assigned=optionContext?optionPhotos().map(photo=>photos.find(url=>media.imageKey(url)===media.imageKey(photo))).filter(Boolean):[];
@@ -195,6 +206,7 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
           [...grid.querySelectorAll('[aria-label]')].find(node=>node.getAttribute('aria-label')===check.getAttribute('aria-label'))?.focus({preventScroll:true});
           container.dispatchEvent(new Event('change',{bubbles:true}));
         });
+        button('Ver foto',()=>viewPhoto(url,optionPhotos().length?optionPhotos():photos),tile,`Ver foto ${index+1}`);
         updateOptionTile(tile,url);
         grid.append(tile);return;
       }
@@ -202,7 +214,7 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
       const cover=media.imageKey(mainInput.value)===media.imageKey(url),badge=document.createElement('strong');badge.textContent=cover?'PORTADA':`Foto ${index+1}`;tile.append(badge);
       const assigned=document.createElement('small');assigned.textContent=associationText(rows,url);tile.append(assigned);
       const actions=document.createElement('div');actions.className='tt-unified-photo-actions';tile.append(actions);
-      button('Ver imagen',()=>{const dialog=document.createElement('dialog');const img=document.createElement('img');img.src=url;img.alt=`Fotografía ${index+1}`;img.style.cssText='max-width:85vw;max-height:75vh';dialog.append(img);button('Cerrar imagen',()=>dialog.close(),dialog);dialog.addEventListener('close',()=>{dialog.remove();refocus(url);},{once:true});container.append(dialog);dialog.showModal();},actions,`Ver foto ${index+1}`);
+      button('Ver imagen',()=>viewPhoto(url,photos),actions,`Ver foto ${index+1}`);
       const choose=button(cover?'Portada':'Elegir portada',()=>{publish([url,...photos.filter(photo=>photo!==url)],url);refocus(url);},actions,`Portada: foto ${index+1}`);choose.setAttribute('aria-pressed',String(cover));
       const move=to=>{const next=[...photos];next.splice(index,1);next.splice(to,0,url);publish(next);refocus(url);};
       for(const [label,to] of [['Anterior',index-1],['Siguiente',index+1]]){const control=button(label,()=>move(to),actions,`${label}: foto ${index+1}`);control.disabled=to<0||to>=photos.length;}

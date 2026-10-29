@@ -64,13 +64,13 @@ test('retiro y restauración de opción guardada preserva el producto público h
   window.qaProductController.refresh();window.prodEditar('existing');
  });
  await page.evaluate(()=>window.qaProductController.workspace.ready);await page.getByRole('tab',{name:'Variantes',exact:true}).click();
- await page.getByRole('button',{name:'Quitar Color: Oro',exact:true}).click();
- await expect(page.getByRole('button',{name:'Restaurar Color: Oro',exact:true})).toBeVisible();
+ await openOptionAvailability(page,'Oro','Color','Oro / M');await page.getByLabel('Habilitada para la venta: Oro / M',{exact:true}).uncheck();
+ await expect(page.getByLabel('Habilitada para la venta: Oro / M',{exact:true})).not.toBeChecked();
  expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').variantInventory[0].active)).not.toBe(false);
  await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
  let product=await page.evaluate(()=>window.qaProductStore.get('products/existing'));expect(product.variantInventory[0]).toMatchObject({variant:'gold',stock:3,price:45000,active:false});expect(product.stock).toBe(5);expect(product.variantMedia.find(row=>row.Color==='Oro').imageUrls).toEqual(['https://img.test/gold.webp']);
  await page.evaluate(()=>window.prodEditar('existing'));await page.evaluate(()=>window.qaProductController.workspace.ready);await page.getByRole('tab',{name:'Variantes',exact:true}).click();
- await page.getByRole('button',{name:'Restaurar Color: Oro',exact:true}).click();await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ await openOptionAvailability(page,'Oro','Color','Oro / M');await page.getByLabel('Habilitada para la venta: Oro / M',{exact:true}).check();await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
  product=await page.evaluate(()=>window.qaProductStore.get('products/existing'));expect(product.variantInventory[0]).toMatchObject({variant:'gold',stock:3,price:45000,active:true});
 });
 
@@ -122,13 +122,13 @@ test('salida con escritura en vuelo bloquea decisiones contradictorias',async({p
 
 test('quitar una opción nueva no pierde cantidades de una matriz histórica de stock',async({page})=>{
  await openProductSaveFixture(page,390,844);
- await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-stock').fill('0');await page.getByRole('tab',{name:'Variantes',exact:true}).click();
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-stock').fill('0');await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  for(const color of ['Oro','Plata']){await page.getByLabel('Nueva opción de variante',{exact:true}).fill(color);await page.getByRole('button',{name:'Agregar opción',exact:true}).click();}
- await openOptionAvailability(page,'Oro');await page.getByRole('button',{name:'Asignar stock por color u opción',exact:true}).click();
+ await openOptionAvailability(page,'Oro');
  await page.getByLabel('Stock de Oro',{exact:true}).fill('2');await openOptionAvailability(page,'Plata');await page.getByLabel('Stock de Plata',{exact:true}).fill('0');
- await page.getByRole('button',{name:'Quitar Color: Oro',exact:true}).click();
- await expect(page.locator('#prod-variants-text')).toHaveValue(/Oro/);await expect(page.getByLabel('Stock de Oro',{exact:true})).toHaveValue('2');
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();await page.getByRole('button',{name:'Quitar Color: Oro',exact:true}).click();
+ await expect(page.locator('#prod-variants-text')).toHaveValue(/Oro/);await openOptionAvailability(page,'Oro');await expect(page.getByLabel('Stock de Oro',{exact:true})).toHaveValue('2');
  await expect(page.locator('#prod-stock')).toHaveValue('2');
- await page.getByRole('button',{name:'Quitar Color: Plata',exact:true}).click();
- await expect(page.locator('#prod-variants-text')).not.toHaveValue(/Plata/);await expect(page.getByLabel('Stock de Oro',{exact:true})).toHaveValue('2');
+ await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();await page.getByRole('button',{name:'Quitar Color: Plata',exact:true}).click();
+ await expect(page.locator('#prod-variants-text')).not.toHaveValue(/Plata/);await openOptionAvailability(page,'Oro');await expect(page.getByLabel('Stock de Oro',{exact:true})).toHaveValue('2');
 });

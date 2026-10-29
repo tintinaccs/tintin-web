@@ -53,3 +53,16 @@ un INP de campo, una mejora porcentual de FPS, ausencia absoluta de lag o que se
 comprobaron físicamente todos los dispositivos. Si persiste lentitud tras la
 entrega, el siguiente paso es capturar una traza de la pantalla y operación
 concretas con una sesión autorizada, sin exportar datos privados.
+
+## Conciliación con el editor guiado de main
+
+El primer candidato14d2490f5 aprobó CI40807751960/1 y CodeQL40807749406/1.
+Mientras corría se integró #1269 en main a7f55df7e798b9685e31742e187d9abe5fd03fd1.
+La integración protegida40809820629/1 falló con «El PR o main cambiaron: se
+requiere actualizar la rama y volver a verificar», sin ejecutar un bypass.
+Se fusiona main normalmente en la misma rama y se regeneran únicamente los
+conflictos derivados de política/plan/manifiestos. El diff contra main sigue
+acotado al scheduler compartido, sus consumidores, regresión y documentación;
+se conserva íntegro el editor guiado entrante y las correcciones de #1270.
+Regresión combinada131/131 PASS,0reintentos,4.4m, incluyendo17 casos guiados.
+Build:pages PASS; la cabeza de merge requiere CI nueva, sin heredar14d2490f5.
