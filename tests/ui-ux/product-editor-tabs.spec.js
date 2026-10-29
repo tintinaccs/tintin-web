@@ -2,6 +2,23 @@ const {test,expect}=require('@playwright/test');
 const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
 const names=['Información','Fotos y colores','Variantes','Precio y stock','Detalles','Publicación'];
 const tab=(page,name)=>page.getByRole('tab',{name,exact:true});
+for(const width of [320,768,1440])test(`último paso permite guardar borrador y publicar sin duplicar ${width}`,async({page})=>{
+ await openProductSaveFixture(page,width,900,{photos:true,workflow:true});
+ await page.evaluate(()=>window.qaProductController.workspace.ready);
+ await page.locator('#prod-name').fill('Trabajo desde el último paso');
+ const key=await page.evaluate(()=>window.qaProductController.workspace.key);
+ await tab(page,'Publicación').click();
+ const finish=page.locator('.tt-studio-pagination button').last();
+ await expect(finish).toBeEnabled();await expect(finish).toHaveText('Guardar borrador');
+ await finish.click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ expect(await page.evaluate(key=>window.qaProductStore.has('products/'+key),key)).toBe(false);
+ await page.evaluate(key=>window.prodContinuarBorrador(key),key);await page.evaluate(()=>window.qaProductController.workspace.ready);
+ await expect(page.locator('#prod-name')).toHaveValue('Trabajo desde el último paso');
+ await valid(page);await tab(page,'Publicación').click();await page.locator('#prod-publicationStatus').selectOption('active');
+ await expect(finish).toHaveText('Guardar cambios');await finish.click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ expect(await page.evaluate(key=>window.qaProductStore.get('products/'+key).publicationStatus,key)).toBe('active');
+ expect(await page.evaluate(()=>window.qaProductWrites.filter(key=>key.startsWith('products/')).length)).toBe(1);
+});
 async function valid(page){
  await tab(page,'Información').click();await page.locator('#prod-name').fill('Producto de prueba');await page.locator('#prod-description').fill('Descripción de prueba');await page.locator('#prod-category').selectOption('qa-tablet');
  await page.locator('#prod-imageUrl').evaluate(input=>{input.value='https://img.test/real-product.jpg';input.dispatchEvent(new Event('change',{bubbles:true}));});

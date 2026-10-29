@@ -20,3 +20,21 @@ for(const [width,height] of [[320,740],[390,844],[768,1024],[1024,768],[820,1180
   }
  });
 }
+
+test('ventas locales busca sin tildes y conserva teclado, selección y mayúsculas durante escritura',async({page})=>{
+  await page.route('**/__local-search',route=>route.fulfill({contentType:'text/html',body:html}));
+  await page.route('**/js/core/auth/cliente-api-autenticado.js?*',route=>route.fulfill({contentType:'text/javascript',body:`export async function authenticatedFetch(){return Response.json({ok:true,revision:'fixture',checkedAt:'2026-10-28',contacts:[],customers:[],webOrders:[],entries:[{id:'LOCAL_fixture',kind:'sale',year:2026,month:10,customerName:'María González',total:50000,paymentStatus:'pagado',notes:'Reloj Clásico'}]});}`}));
+  await page.goto('/__local-search');
+  await page.evaluate(()=>{document.documentElement.classList.add('adm-auth-ready');document.querySelectorAll('.adm-section').forEach(node=>node.classList.toggle('active',node.id==='section-ventas-locales'));});
+  await page.addScriptTag({type:'module',url:'/js/admin/comercio-local-admin.js'});
+  await expect(page.locator('#local-ledger .local-record')).toHaveCount(1);
+  const input=page.locator('[data-local-search]');await input.focus();
+  await input.evaluate(node=>{window.__input=node;window.__blur=0;node.addEventListener('blur',()=>window.__blur++);});
+  await page.keyboard.type('MARIA',{delay:160});
+  await expect(input).toHaveValue('MARIA');await expect(input).toBeFocused();
+  await expect(page.locator('#local-ledger .local-record')).toHaveCount(1);
+  expect(await input.evaluate(node=>({same:node===window.__input,blur:window.__blur}))).toEqual({same:true,blur:0});
+  await input.fill('Reloj   Clasico');await expect(page.locator('#local-ledger .local-record')).toHaveCount(1);
+  await input.fill('inexistente');await expect(page.locator('#local-ledger .local-record')).toHaveCount(0);
+  await input.fill('');await expect(page.locator('#local-ledger .local-record')).toHaveCount(1);
+});

@@ -1,3 +1,4 @@
+import { normalizeAdminSearch, debounceAdminSearch } from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 // =============================================================
 // TINTIN — Panel "Pedidos mayoristas" (solo Super Admin)
 // =============================================================
@@ -46,8 +47,8 @@ async function markSeen(quote){
 function renderUsers(){
  const container=root?.querySelector('[data-wholesale-users]');
  if(!container)return;
- const term=state.search.toLowerCase().trim();
- const users=state.users.filter(user=>user.wholesaleStatus==='aprobado'&&(!term||[user.name,user.firstName,user.lastName,user.email,user.wholesaleBusinessName,user.username].some(value=>String(value||'').toLowerCase().includes(term))));
+ const term=normalizeAdminSearch(state.search);
+ const users=state.users.filter(user=>user.wholesaleStatus==='aprobado'&&(!term||[user.name,user.firstName,user.lastName,user.email,user.wholesaleBusinessName,user.username].some(value=>normalizeAdminSearch(value).includes(term))));
  container.innerHTML=users.length?users.map(user=>{
   const identity=readAccountIdentity(user,{email:user.email,displayName:user.name});
   return '<article class="wholesale-user-card">'+avatar({userId:user.id,customerName:identity.name})+'<div><strong>'+escapeHtml(identity.name||user.email||'Cuenta mayorista')+'</strong><p>'+escapeHtml(user.wholesaleBusinessName||'Emprendimiento sin nombre')+'</p><p>'+escapeHtml(user.email||'')+'</p><p>'+escapeHtml(identity.phone||'Teléfono sin registrar')+'</p><span class="wholesale-status-approved">Mayorista aprobada</span></div></article>';
@@ -89,10 +90,10 @@ function updateBadge() {
 }
 
 function visibleQuotes() {
-  const term = state.search.trim().toLowerCase();
+  const term = normalizeAdminSearch(state.search);
   return state.quotes.filter(quote => (!state.filter || (state.filter==='new'?quoteTone(quote)==='new':state.filter==='seen'?quote.status==='pendiente'&&!!quote.seenAt:quote.status===state.filter)) && (!term || [
     quote.quoteNumber, quote.customerName, quote.businessName, quote.userEmail, quote.whatsapp, quote.city,
-  ].some(value => String(value || '').toLowerCase().includes(term))));
+  ].some(value => normalizeAdminSearch(value).includes(term))));
 }
 
 function shell() {
@@ -145,8 +146,8 @@ function shell() {
     root.querySelectorAll('[data-wholesale-search],[data-wholesale-user-search]').forEach(input=>{input.value='';});
     renderRows();renderUsers();
   }));
-  root.querySelector('[data-wholesale-user-search]').addEventListener('input',event=>{state.search=event.target.value;renderUsers();});
-  root.querySelector('[data-wholesale-search]').addEventListener('input', event => { state.search = event.target.value; renderRows(); renderUsers(); });
+  root.querySelector('[data-wholesale-user-search]').addEventListener('input',debounceAdminSearch(event=>{state.search=event.target.value;renderUsers();}));
+  root.querySelector('[data-wholesale-search]').addEventListener('input', debounceAdminSearch(event => { state.search = event.target.value; renderRows(); renderUsers(); }));
   const filter = root.querySelector('[data-wholesale-filter]');
   filter.value = state.filter;
   filter.addEventListener('change', event => { state.filter = event.target.value; renderRows(); });

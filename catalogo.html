@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="09e326ae5b85798f2e946fb9e0fa6342b9f77c9513032e0da2467a755ce2cbf5">
+  <meta name="tintin-page-revision" content="e0d12b372b226539e077529d05654371430844a370901c76b3d0f7d94f2470d2">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -684,7 +684,12 @@ function aplicarFiltros({ resetLimit = true } = {}) {
   if (catActual !== 'todos') lista = lista.filter(p => catMatches(p, catActual));
 
   const q = normalizeSearch(document.getElementById('cat-search').value);
-  if (q) lista = lista.filter(p => productSearchScore(p, q, cachedSearchText(p)) > 0);
+  const scores = new Map();
+  if (q) lista = lista.filter(p => {
+    const score = productSearchScore(p, q, cachedSearchText(p));
+    scores.set(p, score);
+    return score > 0;
+  });
 
   if (document.getElementById('filtro-stock').checked) {
     lista = lista.filter(isInStockCat);
@@ -698,6 +703,10 @@ function aplicarFiltros({ resetLimit = true } = {}) {
         const bAvailable = isInStockCat(b) ? 0 : 1;
         return aAvailable - bAvailable || nameSorter.compare(a.name || '', b.name || '');
       });
+
+  // Buscar por nombre conserva la relevancia; precio/nombre explícitos siguen
+  // respetando la elección de la clienta. El merchandising desempata.
+  if (q && sort === 'default') lista.sort((a, b) => scores.get(b) - scores.get(a));
 
   if (resetLimit) visibleProductLimit = PRODUCT_BATCH_SIZE;
   renderGrid(lista);

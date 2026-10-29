@@ -209,13 +209,19 @@ export async function createLocationMap({
     activeIndex = -1;
   };
 
-  const applyPlace = (place, { scroll = true } = {}) => {
-    if (!usablePlace(place)) return;
-    map.setView([Number(place.lat), Number(place.lng)], PICKED_ZOOM, { animate: false });
-    placeMarker(Number(place.lat), Number(place.lng), place);
+  const cancelSearch = () => {
+    clearTimeout(debounce);
     searchGeneration += 1;
     inFlight?.abort();
+    inFlight = null;
     closeResults();
+  };
+
+  const applyPlace = (place, { scroll = true } = {}) => {
+    if (!usablePlace(place)) return;
+    cancelSearch();
+    map.setView([Number(place.lat), Number(place.lng)], PICKED_ZOOM, { animate: false });
+    placeMarker(Number(place.lat), Number(place.lng), place);
     requestAnimationFrame(() => map.invalidateSize());
     if (scroll) mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
@@ -346,19 +352,14 @@ export async function createLocationMap({
 
   const onSearchInput = event => {
     event.stopImmediatePropagation();
-    clearTimeout(debounce);
-    searchGeneration += 1;
-    inFlight?.abort();
+    cancelSearch();
     const query = searchInput.value.trim();
-    if (query.length < MIN_QUERY_LENGTH) {
-      closeResults();
-      return;
-    }
+    if (query.length < MIN_QUERY_LENGTH) return;
     debounce = setTimeout(() => runSearch(query), SEARCH_DEBOUNCE_MS);
   };
 
   const onSearchKeyDown = event => {
-    if (event.key === 'Escape') closeResults();
+    if (event.key === 'Escape') cancelSearch();
     if (['ArrowDown', 'ArrowUp'].includes(event.key) && resultPlaces.length) {
       event.preventDefault();
       activeIndex = (activeIndex + (event.key === 'ArrowDown' ? 1 : -1) + resultPlaces.length) % resultPlaces.length;
@@ -376,7 +377,7 @@ export async function createLocationMap({
   };
 
   const onDocumentClick = event => {
-    if (event.target !== searchInput && !resultsEl?.contains(event.target)) closeResults();
+    if (event.target !== searchInput && !resultsEl?.contains(event.target)) cancelSearch();
   };
 
   if (searchInput && resultsEl) {

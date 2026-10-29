@@ -96,3 +96,41 @@ test('un fallo de montaje conserva el listado de Productos en todos los tamaños
     await expect(page.locator('#section-productos')).not.toHaveClass(/tt-commerce-mounted/);
   }
 });
+
+for (const width of [320,768,1440]) test(`búsquedas conservan input, cursor y escritura pausada con datos remotos a ${width}px`, async ({page}) => {
+  await page.setViewportSize({width,height:900});
+  for (const [filter,query,publish,expected] of [
+    ['product-search','cafe','__publishProducts','Pulsera Cuero Café'],
+    ['collection-search','relojes','__publishCollections','Relojes'],
+    ['order-search','maria','__publishOrders','María González']
+  ]) {
+    const input=page.locator(`[data-filter="${filter}"]`);
+    await input.focus();
+    await input.evaluate(node=>{window.__searchInput=node;window.__searchBlur=0;node.addEventListener('blur',()=>window.__searchBlur++);});
+    // Cada pausa supera el debounce: antes el buscador de colecciones perdía
+    // el foco después de la primera letra y no recibía las siguientes.
+    await page.keyboard.type(query,{delay:160});
+    await expect(input).toHaveValue(query);
+    await expect(input).toBeFocused();
+    await input.evaluate((node,publish)=>{node.setSelectionRange(1,2);window[publish]();},publish);
+    await expect(input).toHaveValue(query);
+    await expect(input).toBeFocused();
+    expect(await input.evaluate(node=>({same:node===window.__searchInput,blur:window.__searchBlur,start:node.selectionStart,end:node.selectionEnd}))).toEqual({same:true,blur:0,start:1,end:2});
+    await expect(page.locator(`#tt-commerce-${filter==='product-search'?'products':filter==='collection-search'?'collections':'orders'}`)).toContainText(expected);
+  }
+});
+
+test('la búsqueda pendiente no pierde texto ante un snapshot ni interrumpe composición',async({page})=>{
+  const input=page.locator('[data-filter="product-search"]');
+  await input.focus();
+  await input.evaluate(node=>{window.__searchInput=node;node.value='café';node.dispatchEvent(new InputEvent('input',{bubbles:true,isComposing:true,data:'é'}));window.__publishProducts();});
+  await expect(input).toHaveValue('café');await expect(input).toBeFocused();
+  expect(await input.evaluate(node=>node===window.__searchInput)).toBe(true);
+  await input.dispatchEvent('compositionend');
+  await expect(page.locator('#tt-commerce-products tbody tr')).toHaveCount(1);
+  await expect(page.locator('#tt-commerce-products tbody')).toContainText('Pulsera Cuero Café');
+  await input.fill('reloj  clásico');
+  await input.evaluate(()=>window.__publishProducts());
+  await expect(input).toHaveValue('reloj  clásico');
+  await expect(page.locator('#tt-commerce-products tbody')).toContainText('Reloj Clásico Negro');
+});

@@ -1,3 +1,29 @@
+## 2026-10-29 UTC — Seguridad del historial de Correos, fixture completo
+
+Codex raíz. SHA63cb5f22: CI40790203241/1 confirma Administración completa,Comercio y reglas SUCCESS. Calidad y Browser jobs123175389772/123175389765 fallan exclusivamente email-history-safety (renderer extraído sin normalizeAdminSearch). Se incluye helper real en el script de fixture; conserva pruebas de DOM/URLs hostiles y ausencia de solicitudes externas. Se ejecutan completos correos-module y email-history-safety:4/4Chromium PASS(390/1440), /tmp/tintin-correos-full-final.log. Build doble y SHA posterior se comprobarán aparte; no se hereda aprobación ni se marca publicación. WebKit de CI aún pendiente del nuevo candidato.
+
+## 2026-10-28 — Versionado propio del Panel Maestro
+
+Codex raíz: CI40788468875/1, SHA2a1047b2, admin job123169321418: auditor maestro-conexiones rechazó VERSION interna antigua frente a URL nueva. Se alinean constante y entrada con tag nuevo, baseline desde main vigente y plan regenerado; no se cambia el auditor ni se relaja gate. Auditores superadmin ejecutados antes de publicar; evidencias /tmp/tintin-maestro-audits.log. Se conserva merge1271 y normalización de búsqueda del Panel. El SHA corregido tendrá CI independiente; no se hereda PASS de2a1047b2.
+
+## 2026-10-28 — Conciliación con extracción concurrente de Correos1271
+
+Codex raíz. main avanzó a bad42062 mientras corría1270; GitHub dejó PR dirty y no creó CI para69886994. Se integra main mediante merge normal, conservando ambas historias. Las ocho correcciones de búsqueda de Correos se migran a correos/correos-admin.js (autoridad nueva); se conservan imports de ambos módulos, controles de productos y los gates agregados por1271. Se regeneran URLs, baseline, plan protegido y manifiestos desde main vigente, sin escoger manualmente derivados ni forzar push. Operaciones+Admin307tests:306PASS/1SKIPemulador; browser Correos se comprueba en390/1440. Las ejecuciones previas pertenecen a SHA anteriores; el SHA conciliado tendrá su propia CI y seguimiento directo.
+
+## 2026-10-28 — Historial de correo, fixtures y consumidores de búsqueda
+
+Codex raíz: SHA10e28fb8, CI40785708852/1: Comercio crítico y reglas PASS; Administración job123160272373 detectó fixture content-security-boundaries sin normalizeAdminSearch al extraer renderCorreosHistorialTab. Se inyecta el helper real manteniendo las aserciones XSS/IDs hostiles.124/124operations,608/608consumidores Node(flow-connections/engagement/catalog/accounts/orders/wholesale/import) y56/56visual-builder PASS. Son correcciones de infraestructura de pruebas; no permisos ni escrituras comerciales. El SHA siguiente se comprobará separadamente hasta merge y producción; no hereda resultados anteriores.
+
+## 2026-10-28 — Seguimiento directo del PR1270, fixtures y resultado del editor
+
+Codex raíz. SHA6b9620e2: CI40784056212/1, comercio job123153103278 falló tres pruebas de account-wholesale-sync porque el fixture retiraba imports y no inyectaba normalizeAdminSearch/debounceAdminSearch. Se añade el helper canónico al runtime del fixture;13/13Chromium PASS(390/768/1440), sin cambiar runtime comercial ni quitar aserciones. Fallo previo40783635156/1: fixture clientes-pedidos perdió segundo import al agregar helper; corregido con imports globales y dependencias explícitas;222/222sync PASS. Fallo40783332432/1 por manifiesto generado antes de actualizar reporte, ya corregido con build doble reproducible. No son fallos del nuevo candidato. Regresión final del editor211/211 PASS(8.5min,320–3840). Admin182PASS+1emuladorSKIP;63participación,29públicos;37browserpúblicos,44comercio,56dashboard+3Páginas. Datos/usuarios comerciales reales no se modificaron. CI/merge/publicación pendientes del SHA posterior; seguimiento activo directo en esta sesión. Limitaciones: Safari físico y guardado en sesión de titular NOT_VERIFIED.
+
+## 2026-10-28 — Guardado final del editor y búsquedas de clienta a Super Admin
+
+Agente: Codex raíz, con inspección paralela de los buscadores públicos/administrativos y escritor comercial. Rama `codex/editor-buscadores-20261028`, base9fcc8c57. Se reproduce `Último paso` deshabilitado; ahora invoca el guardado canónico, indica espera y distingue borrador privado/publicación. Alta reintentable con el mismo ID/changeId y permisos originales: baseline confirmado en cliente y recibo privado atómico para respuesta perdida en servidor. Timeout30s. Búsquedas conservan campos/foco/composición; normalización, debounce, generación/cancelación donde corresponde. Inventario y límites completos en EDITOR-Y-BUSCADORES-20261028.md. Sin datos reales, cambios de Rules, servicios ni dependencias.
+
+PASS_LOCAL:182 Node administrativos +1omitido emulador,63participación,29públicos/ubicación;37Chromium públicos y44comercio/admin. Último paso3/3Chromium(320/768/1440);Páginas3/3con CSP intacta tras corregir fixture. Fallo preexistente del fixture private-work-media-guard (statusFromError no inyectado) corregido, sin runtime alterado. Build canónico y preflight PASS_LOCAL (1073 JS,72 funciones;381 recursos/67 cargas dinámicas). Regresión final211editor en curso; CI PENDING en el candidato que se prepara. CI40783332432/1, SHA952b9469: preflight1073/72 y test:fast89Node+5Chromium aprobados; fallo posterior de reproducibilidad por CURRENT_STATE actualizado tras generar el manifiesto. Se regeneran diagnóstico/site-version al final y se exige segundo build sin diferencias; no se omite ningún gate. Safari físico y guardado con sesión real de la titular NOT_VERIFIED. No heredar PASS de #1267/#1268 ni certificar publicación antes de comprobar SHA/huella.
+
 ## 2026-10-28 — Studio: distinguir clase visual de un editor paralelo
 
 Codex /root, PR1268, head36c9babaf1dbb51bf555d9f42cba31013d8d3c75,

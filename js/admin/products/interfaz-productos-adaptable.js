@@ -1,4 +1,4 @@
-import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
+import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1-editor-search-20261028-2';
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261028-product-tabs-1';
 import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261028-product-tabs-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
@@ -294,14 +294,21 @@ function refreshStudioFrame(card,body) {
     const previous=document.createElement('button'),next=document.createElement('button'),position=document.createElement('span');
     for(const button of [previous,next]){button.type='button';button.className='adm-btn adm-btn-outline';}
     previous.textContent='← Anterior';previous.dataset.studioDirection='-1';next.dataset.studioDirection='1';position.setAttribute('aria-live','polite');
-    for(const button of [previous,next])button.addEventListener('click',()=>{const index=tabs.findIndex(([id])=>id===card.querySelector('#prod-editor-section').value);const target=tabs[index+Number(button.dataset.studioDirection)];if(target)card.querySelector('#prod-tab-'+target[0])?.click();});
+    for(const button of [previous,next])button.addEventListener('click',()=>{
+      const index=tabs.findIndex(([id])=>id===card.querySelector('#prod-editor-section').value);
+      if(button===next && index===tabs.length-1){card.querySelector('#prod-save-btn')?.click();return;}
+      const target=tabs[index+Number(button.dataset.studioDirection)];if(target)card.querySelector('#prod-tab-'+target[0])?.click();
+    });
     footer.append(previous,position,next);body.querySelector('.tt-editor-layout').after(footer);
   }
   const index=Math.max(0,tabs.findIndex(([id])=>id===card.querySelector('#prod-editor-section').value));
-  footer.firstElementChild.disabled=index===0;footer.lastElementChild.disabled=index===tabs.length-1;
+  const save=card.querySelector('#prod-save-btn');
+  const busy=card.getAttribute('aria-busy')==='true' || Boolean(save?.disabled);
+  if(footer.firstElementChild.disabled!==(index===0 || busy))footer.firstElementChild.disabled=index===0 || busy;
+  if(footer.lastElementChild.disabled!==busy)footer.lastElementChild.disabled=busy;
   const label=`${tabs[index][1]} · ${index+1} de ${tabs.length}`;
   if(footer.children[1].textContent!==label)footer.children[1].textContent=label;
-  const next=index<tabs.length-1?'Continuar a '+tabs[index+1][1]+' →':'Último paso';
+  const next=index<tabs.length-1?'Continuar a '+tabs[index+1][1]+' →':save?.textContent || 'Guardar cambios';
   if(footer.lastElementChild.textContent!==next)footer.lastElementChild.textContent=next;
 }
 
@@ -401,7 +408,9 @@ export function installProductInterface() {
   if (card) new MutationObserver(()=>{
     if (queued) return;
     queued=true;queueMicrotask(()=>{queued=false;enhanceProductEditor();scheduleProductSurfaceSync();});
-  }).observe(card,{childList:true,subtree:true,attributes:true,attributeFilter:['style','hidden']});
+  }).observe(card,{childList:true,subtree:true,attributes:true,attributeFilter:['style','hidden','aria-busy']});
+  const save=card?.querySelector('#prod-save-btn');
+  if(save)new MutationObserver(()=>refreshStudioFrame(card,card.querySelector('.adm-card-body'))).observe(save,{attributes:true,attributeFilter:['disabled']});
   // La navegación nativa oculta la sección sin modificar el formulario.
   const section=card?.closest('.adm-section');
   if(section) new MutationObserver(scheduleProductSurfaceSync).observe(section,{attributes:true,attributeFilter:['class','style','hidden']});

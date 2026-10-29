@@ -1,3 +1,4 @@
+import { normalizeAdminSearch, debounceAdminSearch } from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 /* =============================================================
    TINTIN — UI de la biblioteca multimedia (Super Admin)
 
@@ -70,8 +71,8 @@ function formatDate(value) {
 
 function matchesQuery(item, needle) {
   if (!needle) return true;
-  const haystack = `${item.originalName || ''} ${item.format || ''}`.toLowerCase();
-  return haystack.includes(needle.toLowerCase());
+  const haystack = normalizeAdminSearch(`${item.originalName || ''} ${item.format || ''}`);
+  return haystack.includes(normalizeAdminSearch(needle));
 }
 
 function renderGrid(grid, items, query, { onSelect, onDelete, onlyIds }) {
@@ -234,10 +235,10 @@ function mountLibraryUI(host, { title, onSelect, showDelete, showOrphanScan }) {
     }
   }
 
-  search.addEventListener('input', () => {
+  search.addEventListener('input', debounceAdminSearch(() => {
     query = search.value.trim();
     renderGrid(grid, items, query, { onSelect, onDelete: showDelete ? handleDelete : null, onlyIds: orphanIds });
-  });
+  }));
 
   const unsubscribe = onMediaLibraryUpdate(nextItems => {
     items = nextItems;

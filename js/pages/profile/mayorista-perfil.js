@@ -6,6 +6,7 @@
 // la aprueba, los precios mayoristas y el aviso de que la contactan por
 // WhatsApp. El navegador solo propone productos y cantidades: precios y
 // estado mayorista los decide el servidor (/api/wholesale-quote).
+import { normalizeProductSearch } from '../../core/store/busqueda-productos.mjs?v=tintin-20261021-commerce-review-1';
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { authenticatedFetch, apiFailureMessage } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
@@ -71,6 +72,7 @@ async function loadCatalog() {
       .map(item => ({
         id: item.id,
         name: String(item.data?.name || item.data?.title || '').trim(),
+        searchName: normalizeProductSearch(item.data?.name || item.data?.title),
         price: Number(item.data?.price) || 0,
         image: String(item.data?.imageUrl || item.data?.image || '').trim(),
       }))
@@ -162,9 +164,10 @@ function renderLines() {
 function renderResults(term) {
   const results = root()?.querySelector('[data-wholesale-results]');
   if (!results) return;
-  const needle = term.trim().toLowerCase();
+  const needle = normalizeProductSearch(term);
   if (needle.length < 2 || !state.catalog) { results.innerHTML = ''; return; }
-  const matches = state.catalog.filter(item => item.name.toLowerCase().includes(needle)).slice(0, 8);
+  const matches = state.catalog.filter(item => (item.searchName ?? normalizeProductSearch(item.name)).includes(needle))
+    .sort((a, b) => Number(normalizeProductSearch(b.name) === needle) - Number(normalizeProductSearch(a.name) === needle)).slice(0, 8);
   results.innerHTML = matches.length ? matches.map(item => `
     <button type="button" role="option" class="perfil-btn" data-add-product="${escapeHtml(item.id)}" style="display:flex;align-items:center;gap:10px;text-align:left;justify-content:flex-start">
       ${item.image ? `<img src="${escapeHtml(item.image)}" alt="" width="36" height="36" loading="lazy" style="border-radius:8px;object-fit:cover">` : ''}
@@ -189,13 +192,16 @@ function bindForm(container) {
       if (generation === state.generation) message('No pudimos cargar el catálogo. Probá de nuevo en un momento.', 'error');
     });
   }, { once: true });
+  let searchRevision = 0;
   search.addEventListener('input', async () => {
+    const revision = ++searchRevision;
     const generation = state.generation;
+    if (normalizeProductSearch(search.value).length < 2) { renderResults(''); return; }
     try { await loadCatalog(); } catch {
-      if (generation === state.generation) message('No pudimos cargar los productos. Volvé a buscar para reintentar.', 'error');
+      if (generation === state.generation && revision === searchRevision) message('No pudimos cargar los productos. Volvé a buscar para reintentar.', 'error');
       return;
     }
-    if (generation !== state.generation) return;
+    if (generation !== state.generation || revision !== searchRevision || !search.isConnected) return;
     message('');
     renderResults(search.value);
   });

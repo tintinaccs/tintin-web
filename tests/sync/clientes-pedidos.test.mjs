@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFileSync } from 'node:fs';
+import {normalizeAdminSearch,debounceAdminSearch} from '../../js/admin/datos/busqueda-admin.mjs';
 
 test('compradores dentro de Pedidos usan el mismo espejo y se actualizan al llegar nuevas compras', async () => {
   const listeners = new Map(), roots = new Map();
@@ -10,6 +11,7 @@ test('compradores dentro de Pedidos usan el mismo espejo y se actualizan al lleg
   let customers = [{ id: 'CUS_LOCAL_fixture', name: 'Cliente <local>', orderCount: 2, totalPurchased: 150000, totalPaid: 150000, lastPurchase: '2026-01-03', hasWebAccount: false }];
   const requests = [];
   const context = vm.createContext({
+    normalizeAdminSearch,debounceAdminSearch,renderAdminSearchMarkup:(root,markup)=>{root.innerHTML=markup;},
     Date, console, queueMicrotask, AbortSignal, URLSearchParams, setInterval: () => {},
     MutationObserver: class { observe() {} },
     window: { addEventListener: (name, fn) => listeners.set(name, fn) },
@@ -24,7 +26,7 @@ test('compradores dentro de Pedidos usan el mismo espejo y se actualizan al lleg
       return { ok: true, json: async () => ({ ok: true, checkedAt: new Date().toISOString(), entries: [], contacts: [], customers }) };
     },
   });
-  const source = readFileSync(new URL('../../js/admin/comercio-local-admin.js', import.meta.url), 'utf8').replace(/^import[^\n]*\n/, '');
+  const source = readFileSync(new URL('../../js/admin/comercio-local-admin.js', import.meta.url), 'utf8').replace(/^import[^\n]*\n/gm, '');
   vm.runInContext(source, context);
   await new Promise(setImmediate);
   assert.equal(roots.get('local-order-buyers').innerHTML, roots.get('local-buyers').innerHTML);

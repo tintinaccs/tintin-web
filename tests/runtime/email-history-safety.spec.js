@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 const source = fs.readFileSync(path.join(__dirname, '../../js/admin/admin-app.js'), 'utf8') + '\n' + fs.readFileSync(path.join(__dirname, '../../js/admin/correos/correos-admin.js'), 'utf8');
+const searchSource=fs.readFileSync(path.join(__dirname,'../../js/admin/datos/busqueda-admin.mjs'),'utf8').replace(/^export /gm,'');
 const eventsSource=fs.readFileSync(path.join(__dirname,'../../js/admin/eventos-dinamicos-admin.mjs'),'utf8').replace(/^export /gm,'');
 const names = ['escapeHtmlAdmin','templateLabel_','logStatusBadge_','categoryBadge_','renderCorreosHistorialTab','renderCorreosDashboard'];
 const functions = names.map(name => {
@@ -17,7 +18,7 @@ for (const width of [390, 1440]) test(`correos representa datos hostiles como te
   await page.route('**/*', route => { unexpected.push(route.request().url()); return route.abort(); });
   await page.setContent('<!doctype html><html><body><select id="hist-filter-type"></select><input id="hist-search"><select id="hist-filter-status"></select><select id="hist-filter-category"></select><input id="hist-filter-from"><input id="hist-filter-to"><table><tbody id="hist-tbody"></tbody></table><div id="correos-stats"></div><div id="correos-system-status"></div><table><tbody id="correos-dash-recent"></tbody></table></body></html>');
   const data = JSON.stringify({id,type:hostile,status:'failed',category:'pedido'}).replace(/</g,'\\u003c');
-  await page.addScriptTag({content:`${eventsSource};installAdminEvents();const allEmailLogs=[${data}];const allEmailTemplates=[];const allEmailCampaigns=[];const ORDER_TYPE_NAMES={};const emailSettingsCache={senderEmail:allEmailLogs[0].type};const EMAIL_WEBHOOK_URL='';const EMAIL_SENDER_ADDRESS='sender@example.test';const _selectedLogs=new Set();function formatDate(){return 'fecha';}function updateLogsBulkToolbar(){};window.calls=[];window.viewLogDetail=value=>window.calls.push(value);window.retryFailedLog=value=>window.calls.push(value);${functions};renderCorreosHistorialTab();renderCorreosDashboard();`});
+  await page.addScriptTag({content:`${searchSource};${eventsSource};installAdminEvents();const allEmailLogs=[${data}];const allEmailTemplates=[];const allEmailCampaigns=[];const ORDER_TYPE_NAMES={};const emailSettingsCache={senderEmail:allEmailLogs[0].type};const EMAIL_WEBHOOK_URL='';const EMAIL_SENDER_ADDRESS='sender@example.test';const _selectedLogs=new Set();function formatDate(){return 'fecha';}function updateLogsBulkToolbar(){};window.calls=[];window.viewLogDetail=value=>window.calls.push(value);window.retryFailedLog=value=>window.calls.push(value);${functions};renderCorreosHistorialTab();renderCorreosDashboard();`});
   await expect(page.locator('img,svg,script[src]')).toHaveCount(0);
   await expect(page.locator('#hist-tbody')).toContainText(hostile);
   await expect(page.locator('#correos-dash-recent')).toContainText(hostile);
