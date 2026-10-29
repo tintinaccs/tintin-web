@@ -10,17 +10,17 @@ const { CATEGORIES } = require('../js/components/navigation/compartido/iconos.js
 const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.css', versionPrefix: 'tintin-about' };
+const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.css', versionPrefix: 'tintin-about-e9f78c18973f8f56' };
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261028-wa-layout-nav-3-guiado-1269-20261029-1';
+const TIENDA_VERSION = 'tintin-20261029-performance-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
-const LOADER_VERSION = 'tintin-20261027-global-fluidez-3-nav-scroll-1-perf-20261029-1';
+const LOADER_VERSION = 'tintin-20261029-cart-reveal-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
-const PANEL_COMPAT_VERSION = 'tintin-20261024-foco-paneles-1-nav-20261028-2-scroll-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261027-global-fluidez-3-nav-20261028-2-perf-20261029-1';
-const NAV_ENTRY_VERSION = 'tintin-20261027-global-fluidez-3-nav-20261028-2-perf-20261029-1';
+const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-2';
+const PUBLIC_SHELL_VERSION = 'tintin-20261029-performance-1';
+const NAV_ENTRY_VERSION = 'tintin-20261029-performance-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261023-variant-engine-v2-2';
 const SESSION_PROTECTION_VERSION = 'tintin-20261027-welcome-receipt-1';
@@ -71,7 +71,7 @@ function ensureSectionFlow(html, absolute = false) {
   if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(out)) return out;
   const beforeHeadEnd = out.slice(0, out.indexOf('</head>'));
   const join = beforeHeadEnd.endsWith('\n') ? '' : '\n';
-  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1" defer></script>\n</head>`);
+  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261029-performance-1" defer></script>\n</head>`);
 }
 function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   let out = ensureSectionFlow(html, absolute).replace(/\s*<!-- Estructura pública disponible desde el primer render -->/g, '');
@@ -170,7 +170,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-catalog-maintenance=\"1\"",
       "css/pages/catalog/catalog-maintenance.css",
-      "tintin-20261023-global-layout-2"
+      "tintin-20261029-performance-1"
     ]
   ],
   "about.html": [
@@ -643,6 +643,7 @@ for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') &&
   if (page === '404.html') {
     html = replaceSharedFooter(html, true);
     html = ensureMobileBrandHeader(html, page);
+    html = html.replace(/(\/?js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${PANEL_COMPAT_VERSION}`);
     html = html.replace(/(\/?js\/inicio-navegacion-publica\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${PUBLIC_SHELL_VERSION}`);
     html = html.replace(/(\/?js\/components\/navigation\/entrada-navegacion-publica\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${NAV_ENTRY_VERSION}`);
     html = html.replace(/(\b(?:src|href)=["'])(?=(?:js|css|assets-tintin)\/)/g, '$1/');

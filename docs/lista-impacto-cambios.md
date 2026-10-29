@@ -1,3 +1,7 @@
+## 2026-10-29 — Apertura del carrito y medición de rendimiento del PR1274
+
+Autoridades: control-paneles compartido y compatibilidad-cuenta-movil. El carrito abre en180ms sin descargar el reveal exclusivo de Cuenta en páginas informativas; cierre, foco, movimiento reducido y Cuenta se conservan. La sonda mide desde el clic real capturado antes del controlador hasta apertura completa y pintura, con regresión de espera del automatizador. Rendimiento se ejecuta secuencialmente para no competir con CPU limitada, sin aumentar presupuestos ni quitar casos. URLs transitivas y manifiestos mediante generadores canónicos. Sin permisos, datos comerciales ni dependencias nuevas. Evidencia del candidato en CURRENT_STATE y PERFORMANCE_GLOBAL_20261029.
+
 ## 2026-10-29 — Velocidad global de imágenes y portada sin pérdida
 
 Autoridades: index.html, gestión de imágenes y rendimiento de imágenes compartidos. Precarga/picture y confirmación de configuración conservan la misma variante optimizada, originales PNG/respaldo y URLs personalizadas. Cola global deduplicada de hasta64 imágenes por frame; geometrías antes de escrituras, lazy/prioridad explícitas intactas. Sin datos comerciales, SDK/servicios nuevos, reglas ni cambios de sesión/carrito. Generadores de URLs/CSP/caché/diagnóstico y plan canónicos; medidor exige escenarios comparables. Evidencia y límites en docs/agent/RENDIMIENTO-GLOBAL-20261029.md y CURRENT_STATE.
@@ -891,3 +895,7 @@ el aviso se centraliza sin duplicarlo. Versiones, CSP, diagnóstico y protecció
 mediante herramientas canónicas.
 
 - 2026-10-29, seguimiento PR1273: ajuste canónico y simétrico del padding móvil del banner para conservar el carril de WhatsApp y el centrado; pruebas estrictas de geometría/precarga/cache por formato, con PNG de respaldo y sin cambios de enlaces o navegación.
+
+### 2026-10-29 — Rendimiento global en revisión
+
+Cambios canónicos en revelado/alternancia de secciones (excluir paneles fijos y agrupar mediciones), respaldo compartido de colecciones, filtrado del catálogo sin doble renderer, carga del menú a demanda, favoritos por lotes públicos, asociaciones de variantes paginadas y controles del editor por contexto. Se preservan lectores/escritores comerciales, publicación, permisos e historial. Hero comprimido desde los PNG vigentes con fallback original; CSS de Inicio/Nosotros compilado por el generador existente con Lightning CSS fijado. Checkout emite la correlación antes de la transacción; observabilidad agrega INP y CLS sin datos personales. Las URL transitivas se renuevan mediante la misma autoridad de caché y el plan de mantenimiento protegido. Ledger y límites: `docs/agent/PERFORMANCE_GLOBAL_20261029.md`.

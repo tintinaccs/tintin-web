@@ -28,7 +28,7 @@ async function mockPublicReads(page) {
   });
   await page.route('**/js/pages/collections/presentacion-colecciones.js?*', async route => {
     const source = fs.readFileSync('js/pages/collections/presentacion-colecciones.js', 'utf8').replace(/\r\n/g, '\n')
-      .replace(/^import .*;\n/gm, '');
+      .replace(/^import .*estado-colecciones\.js.*;\n/gm, '');
     await route.fulfill({ contentType: 'text/javascript', body:
       `const onCollectionsUpdate = listener => listener([{ id:'relojes', slug:'relojes', name:'Relojes y accesorios con un nombre de colección largo', description:'Toda la descripción de esta colección debe permanecer disponible.' }]);\n` + source });
   });

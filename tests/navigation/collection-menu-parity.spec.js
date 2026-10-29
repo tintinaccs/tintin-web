@@ -22,6 +22,10 @@ for (const width of [390, 768, 1440]) {
       await page.goto(route, { waitUntil: 'load' });
       await page.waitForSelector('body.tt-public-shell-mounted');
       await page.evaluate(() => window.TintinLoader?.hide?.());
+      if (route === '/about') {
+        await page.waitForTimeout(1600);
+        expect(productRequests, 'Una página informativa no debe leer productos antes de abrir el menú').toBe(0);
+      }
       const surface = width < 768 ? 'sheet' : width <= 1024 ? 'tablet' : 'desktop';
       if (surface === 'tablet') {
         await page.locator('#btn-menu-tablet').click();

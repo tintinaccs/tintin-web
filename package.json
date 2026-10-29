@@ -91,7 +91,7 @@
     "audit:premium-performance": "node scripts/auditar-performance-premium.mjs",
     "audit:performance-regressions": "node scripts/auditar-rendimiento-regresiones.js",
     "audit:page-loading": "node scripts/auditar-pagina-carga.js && node scripts/auditar-cargador-solid.js",
-    "test:performance": "playwright test tests/performance",
+    "test:performance": "playwright test tests/performance --workers=1",
     "test:pages": "node scripts/smoke-todas-paginas.mjs",
     "audit:critical-healing": "node scripts/auditar-critico-recuperacion.js && node scripts/probar-modelo-inventario.mjs",
     "test:otp-rate-emulator": "firebase emulators:exec --only firestore --project demo-tintin-otp-limits \"node --test scripts/probar-otp-limites-emulador.mjs\"",
@@ -151,6 +151,7 @@
     "@playwright/test": "^1.64.0",
     "firebase": "^13.1.0",
     "firebase-tools": "^15.34.1",
+    "lightningcss": "1.33.0",
     "monaco-editor": "0.57.0",
     "parse5": "8.0.1",
     "playwright": "^1.62.1"

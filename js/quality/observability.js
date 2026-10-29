@@ -9,6 +9,12 @@
   const originalFetch = window.fetch;
   let latestLcp = null;
   let cumulativeCls = 0;
+  let clsWindow = { start: 0, last: 0, value: 0 };
+  let clsDirty = false;
+  let inpDirty = false;
+  let firstInteractionId = Infinity, lastInteractionId = 0;
+  const interactions = new Map();
+  let interactionOffset = performance.interactionCount || 0;
   let timer = null;
 
   function route() { return location.pathname || '/'; }
@@ -28,7 +34,7 @@
     // Las métricas de rendimiento se agregan en el navegador y se envían como
     // máximo una vez por ventana. Evita convertir la observabilidad en tráfico
     // adicional por cada request de la tienda.
-    scheduleFlush(20000);
+    if (timer == null) timer = setTimeout(flush, 20000);
   }
 
   function takePerformanceSummary() {
@@ -60,9 +66,18 @@
       events.push({ kind: 'performance', metric: 'LCP', value: latestLcp, code: 'web_vital', route: route(), online: navigator.onLine });
       latestLcp = null;
     }
-    if (cumulativeCls > 0) {
+    if (clsDirty) {
       events.push({ kind: 'performance', metric: 'CLS', value: cumulativeCls, code: 'web_vital', route: route(), online: navigator.onLine });
-      cumulativeCls = 0;
+      clsDirty = false;
+    }
+    if (inpDirty && interactions.size) {
+      const count = typeof performance.interactionCount === 'number'
+        ? performance.interactionCount - interactionOffset
+        : Math.round((lastInteractionId - firstInteractionId) / 7) + 1;
+      const durations = [...interactions.values()].sort((a,b) => b-a);
+      const inp = durations[Math.min(durations.length-1, Math.floor(count/50))];
+      events.push({ kind: 'performance', metric: 'INP', value: inp, code: 'web_vital', route: route(), online: navigator.onLine });
+      inpDirty = false;
     }
     return events;
   }
@@ -166,9 +181,39 @@
     } catch {}
     try {
       new PerformanceObserver(list => {
-        list.getEntries().forEach(entry => { if (!entry.hadRecentInput) cumulativeCls += entry.value; });
+        list.getEntries().forEach(entry => {
+          if (entry.hadRecentInput) return;
+          if (!clsWindow.value || entry.startTime-clsWindow.last>1000 || entry.startTime-clsWindow.start>5000) clsWindow={start:entry.startTime,last:entry.startTime,value:0};
+          clsWindow.last=entry.startTime;clsWindow.value+=entry.value;
+          if (clsWindow.value>cumulativeCls) { cumulativeCls=clsWindow.value;clsDirty=true; }
+        });
         markPerformancePending();
       }).observe({ type: 'layout-shift', buffered: true });
     } catch {}
+    try {
+      new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) {
+          if (!entry.interactionId) continue;
+          firstInteractionId=Math.min(firstInteractionId,entry.interactionId);
+          lastInteractionId=Math.max(lastInteractionId,entry.interactionId);
+          const duration=Math.max(0,entry.duration || 0);
+          if (duration>(interactions.get(entry.interactionId) ?? -1)) interactions.set(entry.interactionId,duration);
+          // INP descarta un extremo por cada 50 interacciones. Conservar las
+          // diez más lentas limita memoria sin retener nodos, textos ni eventos.
+          if (interactions.size>10) {
+            const slowest=[...interactions].sort((a,b)=>b[1]-a[1]).slice(0,10);
+            interactions.clear();for(const [id,value] of slowest)interactions.set(id,value);
+          }
+          inpDirty=true;
+        }
+        if(inpDirty)markPerformancePending();
+      }).observe({type:'event',buffered:true,durationThreshold:16});
+    } catch {}
+    window.addEventListener('pageshow',event=>{
+      if(!event.persisted)return;
+      cumulativeCls=0;clsWindow={start:0,last:0,value:0};clsDirty=false;
+      interactions.clear();firstInteractionId=Infinity;lastInteractionId=0;inpDirty=false;
+      interactionOffset=performance.interactionCount || 0;
+    });
   }
 })();

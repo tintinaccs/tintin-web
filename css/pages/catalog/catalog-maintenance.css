@@ -20,7 +20,9 @@ body.tt-catalog-maintenance .cat-layout {
 
 body.tt-catalog-maintenance .cat-hero {
   background: var(--color-background-surface-soft, #FDECF2) !important;
-  border: 1px solid var(--color-border-primary, #FDECF2);
+  /* El flujo global ya elimina este borde. Reservar la misma geometría desde
+     la primera pintura evita que el título cambie entre una y dos líneas. */
+  border: 0;
   box-shadow: 0 10px 30px var(--color-card-shadow, rgba(248,170,202,.10));
   padding: 24px 28px;
   margin-bottom: 20px;

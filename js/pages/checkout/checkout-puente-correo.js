@@ -35,7 +35,12 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
   // La transacción elimina el requestId justo antes de mostrar el éxito. Se
   // conserva una copia en memoria para poder localizar el documento exacto.
   captureRequestId();
-  const captureTimer = window.setInterval(captureRequestId, 250);
+  // El escritor avisa antes de enviar la transacción, incluso sin storage.
+  const onCheckoutRequest = event => {
+    const value = clean(event.detail?.requestId);
+    if (/^[A-Za-z0-9_-]{12,100}$/.test(value)) capturedRequestId = value;
+  };
+  window.addEventListener('tintin:checkout-request', onCheckoutRequest);
 
   function successVisible() {
     const success = document.getElementById('ck-success-head');
@@ -159,7 +164,7 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
 
   start();
   window.addEventListener('pagehide', () => {
-    window.clearInterval(captureTimer);
+    window.removeEventListener('tintin:checkout-request', onCheckoutRequest);
     observer?.disconnect();
   }, { once: true });
 }

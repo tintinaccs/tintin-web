@@ -19,6 +19,11 @@ for (const [route, width] of [['envios', 390], ['preguntas-frecuentes', 820], ['
     const resources = await page.evaluate(() => performance.getEntriesByType('resource').map(r => r.name));
     expect(new Set(resources.filter(name => new URL(name).pathname.endsWith('/images/general/logo.png'))).size).toBe(1);
     expect(resources.some(name => name.includes('/extension-revelado-marca.js'))).toBe(false);
+    await page.locator('[data-nav-action="cart"]:visible,#tabbar-cart:visible').first().click();
+    await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('open');
+    expect(await page.evaluate(() => performance.getEntriesByType('resource').some(r => r.name.includes('/extension-revelado-marca.js')))).toBe(false);
+    await page.locator('#btn-cart-close').click();
+    await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('idle');
     await page.locator('#btn-cuenta, #btn-cuenta-tablet, #tabbar-cuenta').filter({ visible: true }).first().click();
     await expect.poll(() => page.evaluate(() => window.TintinBrandRevealExtensionBooted === true)).toBe(true);
     await expect(page.locator('#tt-brand-reveal-extension-style')).toHaveCount(1);
@@ -28,6 +33,8 @@ for (const [route, width] of [['envios', 390], ['preguntas-frecuentes', 820], ['
 
 test('panel ya abierto conserva reveal cuando llega el runtime informativo diferido',async({page})=>{
  await page.setViewportSize({width:390,height:844});
+ const decorativeRequests=[];
+ page.on('request',request=>{if(request.url().includes('extension-revelado-marca.js'))decorativeRequests.push(request.url());});
  let release;const delayed=new Promise(resolve=>{release=resolve;});
  await page.route('**/compatibilidad-cuenta-movil.js?**',async route=>{await delayed;await route.continue();});
  await page.goto(url('envios'),{waitUntil:'domcontentloaded'});
@@ -37,4 +44,10 @@ test('panel ya abierto conserva reveal cuando llega el runtime informativo difer
  release();
  await expect.poll(()=>page.evaluate(()=>window.TintinBrandRevealExtensionBooted===true)).toBe(true);
  await expect(page.locator('#tt-brand-reveal-extension-style')).toHaveCount(1);
+ expect(decorativeRequests).toHaveLength(1);
+ await page.keyboard.press('Escape');
+ await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('idle');
+ await page.locator('#tabbar-cuenta').click();
+ await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('open');
+ expect(decorativeRequests).toHaveLength(1);
 });

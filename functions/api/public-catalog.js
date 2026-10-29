@@ -46,7 +46,12 @@ function documentId(document) {
   return String(document?.name || '').split('/').pop() || '';
 }
 
-async function buildPayload(env, resource, productId = '') {
+async function buildPayload(env, resource, productId = '', productIds = []) {
+  if (productIds.length) {
+    const results = await Promise.all(productIds.map(id => buildPayload(env, 'products', id)));
+    const items = results.map(result => result.item).filter(Boolean);
+    return { ok: true, resource, items, count: items.length };
+  }
   if (resource === 'storeGate') {
     const document = await firestoreAdminGet(env, 'settings/storeGate');
     // Documento inexistente no es "tienda cerrada confirmada" — firestore.rules
@@ -143,8 +148,20 @@ export async function onRequest({ request, env, waitUntil }) {
     });
   }
 
+  let productIds = [];
+  if (url.searchParams.has('ids')) {
+    try {
+      const requested = JSON.parse(url.searchParams.get('ids'));
+      if (resource !== 'products' || requestedProductId != null || !Array.isArray(requested) || !requested.length || requested.length>30 || requested.some(id=>typeof id!=='string' || !normalizeProductId(id))) throw Error('invalid');
+      productIds=[...new Set(requested.map(normalizeProductId))].sort();
+    } catch {
+      return Response.json({ok:false,error:'product_ids_invalid'},{status:400,headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}});
+    }
+  }
+
   const cacheUrl = new URL(request.url);
   cacheUrl.search = '?resource=' + resource + (productId ? '&id=' + encodeURIComponent(productId) : '');
+  if (productIds.length) cacheUrl.searchParams.set('ids',JSON.stringify(productIds));
   if (resource === 'collections') cacheUrl.searchParams.set('schema', 'unified-v2');
   const cacheKey = new Request(cacheUrl.toString(), { method: 'GET' });
   const cache = caches.default;
@@ -156,7 +173,7 @@ export async function onRequest({ request, env, waitUntil }) {
   }
 
   try {
-    const payload = await buildPayload(env, resource, productId);
+    const payload = await buildPayload(env, resource, productId, productIds);
     const response = Response.json(payload, {
       headers: {
         'cache-control': 'public, max-age=5, s-maxage=10',

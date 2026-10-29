@@ -41,7 +41,7 @@ test('[producto] ficha real: render principal e interacción de compra', async (
 
   const vitals = await collectVitals(page);
   console.log(
-    `[product.html] DCL=${vitals.dcl}ms LCP=${vitals.lcp}ms INP=${vitals.inp}ms ` +
+    `[product.html] DCL=${vitals.dcl}ms LCP=${vitals.lcp}ms máximo-evento=${vitals.eventTimingMaxMs}ms respuesta-carrito=${vitals.interactionMs}ms ` +
     `CLS=${vitals.cls} reqs=${vitals.requests} transfer=${vitals.transferKB}KB ` +
     `firestore=${vitals.firestoreReads}`
   );

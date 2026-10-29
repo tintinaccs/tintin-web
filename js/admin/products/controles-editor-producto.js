@@ -280,6 +280,7 @@ function variantBuilder(input) {
 }
 
 const mediaSignatures=new WeakMap();
+const mediaPages=new WeakMap();
 function refreshVariantPhotos(card){
   const list=card.querySelector('.tt-variant-media-list');if(!list)return;
   const input=card.querySelector('#prod-variants-text');const groupMap=new Map();
@@ -287,13 +288,19 @@ function refreshVariantPhotos(card){
   const groups=[...groupMap];
   const detail={rows:[]};card.dispatchEvent(new CustomEvent('tintin:option-media-read',{detail}));
   const metadata=new Set(['imageUrl','imageUrls','stock','price','sku','active','colorHex','swatch']);
+  const selectionKey=selection=>JSON.stringify(Object.entries(selection).filter(([key])=>!metadata.has(key)).sort(([a],[b])=>a.localeCompare(b)));
+  const mediaBySelection=new Map();
+  for(const row of detail.rows){const key=selectionKey(row);if(!mediaBySelection.has(key))mediaBySelection.set(key,row);}
+  const state=mediaPages.get(card)||{page:0,options:input.value};
+  const product=card.querySelector('#prod-id')?.value;
+  if(state.options!==input.value || state.product!==product){state.page=0;state.options=input.value;state.product=product;}mediaPages.set(card,state);
   const combinations=commercialDrafts.get(card)?.variantInventory || [];
-  const signature=JSON.stringify([groups,combinations.map(row=>[row.variant,row.attributes])]);if(mediaSignatures.get(card)===signature){for(const row of list.querySelectorAll('.tt-variant-media-card')){const selection=JSON.parse(row.dataset.selection),media=detail.rows.find(item=>{const keys=Object.keys(item).filter(key=>!metadata.has(key));return keys.length===Object.keys(selection).length && keys.every(key=>item[key]===selection[key]);});const photos=window.TintinProductMedia?.rowImages(media) || [];const text=row.querySelector('.tt-variant-media-copy span'),cover=row.querySelector('.tt-variant-media-cover');const caption=`${photos.length} ${photos.length===1?'foto':'fotos'}`;if(text.textContent!==caption)text.textContent=caption;let image=cover.querySelector('img');if(photos[0]){if(!image){image=node('img');image.alt='Portada de '+Object.values(selection).join(' / ');image.loading='lazy';cover.replaceChildren(image);}if(image.getAttribute('src')!==photos[0])image.src=photos[0];}else if(image)cover.replaceChildren(node('span','','Sin foto'));}return;}
+  const signature=JSON.stringify([state.page,groups,combinations.map(row=>[row.variant,row.attributes])]);if(mediaSignatures.get(card)===signature){for(const row of list.querySelectorAll('.tt-variant-media-card')){const selection=JSON.parse(row.dataset.selection),media=mediaBySelection.get(selectionKey(selection));const photos=window.TintinProductMedia?.rowImages(media) || [];const text=row.querySelector('.tt-variant-media-copy span'),cover=row.querySelector('.tt-variant-media-cover');const caption=`${photos.length} ${photos.length===1?'foto':'fotos'}`;if(text.textContent!==caption)text.textContent=caption;let image=cover.querySelector('img');if(photos[0]){if(!image){image=node('img');image.alt='Portada de '+Object.values(selection).join(' / ');image.loading='lazy';cover.replaceChildren(image);}if(image.getAttribute('src')!==photos[0])image.src=photos[0];}else if(image)cover.replaceChildren(node('span','','Sin foto'));}return;}
   const current=optionPanel(card).suspend();mediaSignatures.set(card,signature);list.replaceChildren();
   const heading=node('h2','','Fotos de las variantes');list.append(heading);
   if(!groups.length)list.append(node('p','','Este producto usa la galería general. Agregá opciones en Fotos y opciones si las necesitás.'));
   const add=(selection,label)=>{
-    const media=detail.rows.find(row=>{const keys=Object.keys(row).filter(key=>!metadata.has(key));return keys.length===Object.keys(selection).length && keys.every(key=>row[key]===selection[key]);});
+    const media=mediaBySelection.get(selectionKey(selection));
     const photos=window.TintinProductMedia?.rowImages(media) || [];
     const row=node('section','tt-option-row tt-variant-media-card');row.dataset.selection=JSON.stringify(selection);const cover=node('div','tt-variant-media-cover');
     if(photos[0]){const image=node('img');image.src=photos[0];image.alt='Portada de '+label;image.loading='lazy';cover.append(image);}else cover.append(node('span','','Sin foto'));
@@ -301,8 +308,17 @@ function refreshVariantPhotos(card){
     const trigger=button('Abrir galería','Fotos de '+label,()=>{const [attribute,value]=Object.entries(selection)[0];optionPanel(card).open(trigger,'photos',attribute,value,selection);});
     trigger.dataset.optionPanel='photos';trigger.dataset.optionAttribute=Object.keys(selection)[0];trigger.dataset.optionValue=Object.values(selection)[0];trigger.dataset.selection=JSON.stringify(selection);trigger.setAttribute('aria-expanded','false');row.append(cover,text,trigger);list.append(row);
   };
-  for(const [key,values] of groups)for(const value of values)add({[key]:value},key+': '+value);
-  if(groups.length>1)for(const row of combinations)if(row.attributes)add(row.attributes,Object.values(row.attributes).join(' / '));
+  const entries=[];
+  for(const [key,values] of groups)for(const value of values)entries.push([{[key]:value},key+': '+value]);
+  if(groups.length>1)for(const row of combinations)if(row.attributes)entries.push([row.attributes,Object.values(row.attributes).join(' / ')]);
+  state.page=Math.max(0,Math.min(state.page,Math.ceil(entries.length/25)-1));
+  for(const [selection,label] of entries.slice(state.page*25,state.page*25+25))add(selection,label);
+  if(entries.length>25){
+    const pager=node('nav','tt-commercial-toolbar');pager.setAttribute('aria-label','Páginas de fotos de variantes');
+    const move=(direction,label)=>{const control=button(label,label+' fotos de variantes',()=>{const check={accepted:true};card.querySelector('.tt-unified-photos')?.dispatchEvent(new CustomEvent('tintin:option-context-check',{detail:check}));if(!check.accepted)return;state.page+=direction;refreshVariantPhotos(card);const target=list.querySelector(`[data-media-page="${direction}"]`);(target?.disabled?list.querySelector(`[data-media-page="${-direction}"]`):target)?.focus({preventScroll:true});});control.dataset.mediaPage=direction;control.disabled=direction<0?state.page===0:(state.page+1)*25>=entries.length;return control;};
+    const status=node('span','',`${entries.length} opciones y combinaciones · página ${state.page+1} de ${Math.ceil(entries.length/25)}`);status.setAttribute('role','status');
+    pager.append(move(-1,'Anteriores'),status,move(1,'Siguientes'));list.append(pager);
+  }
   optionPanel(card).resume(current);
 }
 
@@ -373,8 +389,11 @@ export function installEditorControls(card) {
     commercialDrafts.set(card,event.detail);
     refreshEditorControls(card);
   });
-  card.addEventListener('input',event=>{
-    refreshEditorControls(card);
-  });
-  card.addEventListener('change',()=>refreshEditorControls(card));
+  // Los campos de texto no alteran cantidades, asociaciones ni sugerencias.
+  // Sus propios controladores conservan borradores, validación y encabezado.
+  const refreshAffected = event => {
+    if(event.target.matches?.('#prod-stock,#prod-variants-text,#prod-price,#prod-price-before,#prod-cost-unit,#prod-category,#prod-badge,input[list],#prod-variant-stock input')) refreshEditorControls(card);
+  };
+  card.addEventListener('input',refreshAffected);
+  card.addEventListener('change',refreshAffected);
 }

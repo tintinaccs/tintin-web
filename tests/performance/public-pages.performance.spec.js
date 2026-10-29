@@ -44,7 +44,7 @@ for (const pageName of GENERIC_PERFORMANCE_PAGES) {
 
     console.log(
       `[${pageName}] DCL=${vitals.dcl}ms LCP=${vitals.lcp}ms CLS=${vitals.cls} ` +
-      `INP=${vitals.inp}ms reqs=${vitals.requests} reqs-propios=${firstPartyRequests} reqs-efectivas=${effectiveRequests} ` +
+      `máximo-evento=${vitals.eventTimingMaxMs}ms respuesta-carrito=${vitals.interactionMs}ms reqs=${vitals.requests} reqs-propios=${firstPartyRequests} reqs-efectivas=${effectiveRequests} ` +
       `duplicadas-first-party=${vitals.duplicateRequests} transfer=${vitals.transferKB}KB ` +
       `transfer-first-party=${vitals.firstPartyTransferKB}KB ` +
       `firestore=${vitals.firestoreReads}`
@@ -61,7 +61,8 @@ for (const pageName of GENERIC_PERFORMANCE_PAGES) {
 
     if (vitals.dcl != null) expect(vitals.dcl, 'DOMContentLoaded dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.dclMs);
     if (vitals.lcp != null) expect(vitals.lcp, 'LCP dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.lcpMs);
-    if (vitals.inp != null) expect(vitals.inp, 'INP de laboratorio dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.inpMs);
+    expect(vitals.interactionMs, 'La apertura real del carrito debe producir una medición').not.toBeNull();
+    expect(vitals.interactionMs, 'Respuesta de apertura del carrito, no INP de campo').toBeLessThanOrEqual(BUDGETS.inpMs);
     expect(vitals.cls, 'CLS dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.clsMax);
     expect(vitals.transferKB, 'peso transferido dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.transferKB);
     expect(

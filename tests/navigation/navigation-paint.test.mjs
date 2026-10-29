@@ -5,7 +5,7 @@ import { navigationPaintState } from '../../scripts/lib/superficie-navegacion.mj
 const { chromium } = createRequire(import.meta.url)('playwright');
 
 test('la auditoría reconoce pintura real y rechaza capas vacías u ocultas', async () => {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined, args: ['--no-sandbox'] });
   try {
     const page = await browser.newPage();
     await page.setContent(`<style>

@@ -103,7 +103,9 @@ function countMatches(source, regex) {
 }
 
 function normalizeFontValue(value) {
-  return String(value)
+  // CSS permite omitir comillas en nombres de una palabra. La familia
+  // primaria debe verificarse igual en fuentes autoras y CSS minificado.
+  return String(value).split(',')[0]
     .replace(/\s*!important\s*$/i, '')
     .replace(/^['"]|['"]$/g, '')
     .trim();

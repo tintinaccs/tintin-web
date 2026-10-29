@@ -2,7 +2,7 @@ import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcio
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { collection} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1-bags-20261014-1';
+import { fetchPublicProductsByIds } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20261029-performance-1';
 import { hasProductStock, firstAvailableVariant, productDefaultPrice } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-2';
 
@@ -71,7 +71,7 @@ subscribeAuthState(async user => {
     const myRevision = ++revision;
     const items = snapshot.docs.map(item => ({ productId: item.id, ...item.data() }));
     let products = [];
-    try { if (items.length) products = await fetchPublicCatalogResource('products'); } catch { /* Nunca mostrar un precio histórico como vigente. */ }
+    try { if (items.length) products = await fetchPublicProductsByIds(items.map(item=>item.productId)); } catch { /* Nunca mostrar un precio histórico como vigente. */ }
     if (myGeneration !== generation || myRevision !== revision) return;
     render(resolveFavoriteProducts(items, products).sort((a,b) => String(a.name).localeCompare(String(b.name), 'es')));
   }, () => { if (myGeneration === generation) renderError(); });

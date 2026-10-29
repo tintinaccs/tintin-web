@@ -35,9 +35,9 @@ export function mountProductSuggestions(card) {
   const refresh=()=>{
     const category=card.querySelector('#prod-category');
     const input={category:category?.selectedOptions?.[0]?.textContent || '',name:card.querySelector('#prod-name')?.value,material:card.querySelector('#prod-material')?.value};
-    const next=JSON.stringify(input);if(next===signature)return;signature=next;status.textContent='';
     renderCategory(input);
     const profile=productSuggestionProfile(input);
+    const next=JSON.stringify(profile);if(next===signature)return;signature=next;status.textContent='';
     summary.textContent=`Sugerencias · ${profile.type}`;
     choices.replaceChildren();
     for(const suggestion of profile.care){

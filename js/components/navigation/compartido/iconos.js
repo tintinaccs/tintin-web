@@ -33,7 +33,8 @@ export const CATEGORIES = Object.freeze([
 // Contacto, Producto y las demás rutas se ven iguales aun sin red.
 export function collectionImageUrl(slug) {
   const normalized = String(slug || '').replace(/[^a-z0-9_-]/gi, '').toLowerCase();
-  const file = normalized === 'bolsos' ? 'bags' : normalized;
+  const file = normalized === 'bolsos' || normalized === 'bags' ? 'bags'
+    : Object.hasOwn(CATEGORY_ICONS, normalized) ? normalized : 'placeholder';
   return `/assets-tintin/images/collections/col-${file || 'placeholder'}.webp`;
 }
 

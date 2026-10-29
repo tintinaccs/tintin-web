@@ -562,6 +562,7 @@ test('abrir conserva producto oculto y visibilidad manual independiente de la ca
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  await page.evaluate(()=>{
   document.getElementById('prod-stock').value='7';
+  document.getElementById('prod-stock').dispatchEvent(new Event('input',{bubbles:true}));
   document.getElementById('prod-active').checked=false;
   document.getElementById('prod-publicationStatus').value='draft';
   document.getElementById('prod-form-title').textContent='Editar producto';

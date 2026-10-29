@@ -7,14 +7,14 @@
    renderer legado vuelva a dejar categorías antiguas después del snapshot.
    ============================================================= */
 
-import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20261026-editor-closure-1';
+import { collectionImageUrl } from '../../components/navigation/compartido/iconos.js?v=tintin-20261029-performance-1';
+import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20261029-performance-1';
 
 if (!window.TintinCollectionsPhase4Booted) {
   window.TintinCollectionsPhase4Booted = true;
 
   const COLL_IMG_BASE = 'assets-tintin/images/collections/';
   const COLL_PLACEHOLDER = `${COLL_IMG_BASE}col-placeholder.webp`;
-  const SLUG_FILE_MAP = { bolsos: 'bags' };
 
   let collections = null;
   let collectionError = null;
@@ -97,11 +97,10 @@ if (!window.TintinCollectionsPhase4Booted) {
 
   function imageCandidates(collection) {
     const slug = clean(collection?.slug);
-    const file = SLUG_FILE_MAP[slug] || slug;
     return [...new Set([
       withShopifyCardWidth(safeUrl(collection?.image)),
       safeUrl(firstProductImage(slug)),
-      safeUrl(`${COLL_IMG_BASE}col-${file}.webp`),
+      safeUrl(collectionImageUrl(slug)),
       safeUrl(COLL_PLACEHOLDER)
     ].filter(Boolean))];
   }
@@ -312,6 +311,8 @@ if (!window.TintinCollectionsPhase4Booted) {
 
   function navigateCatalog(slug) {
     const normalized = normalizeSlug(slug);
+    const intent = new CustomEvent('tintin:catalog-category', { cancelable: true, detail: { slug: normalized } });
+    if (!document.dispatchEvent(intent)) return;
     if (normalized === 'todos') {
       window.location.assign('/catalogo');
       return;
