@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c95c6ad1c17dd98f65ebc09bff8af1deb480af079c4668edd97aba9b884b9869",
+  "sourceFingerprint": "3e940a86c8e197c797c4da4ced2b39cafcec2055a1da2ba18be7049fff8e6b28",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1610,
     "textFiles": 1479,
-    "totalBytes": 34941312,
+    "totalBytes": 34941352,
     "pages": 19,
     "modules": 1070
   },
@@ -53920,8 +53920,8 @@
     },
     {
       "path": "tests/runtime/critical-flows.spec.js",
-      "bytes": 19675,
-      "sha256": "26bc98f604585fba3e7dae563e40ba0806d54cf987a88ef8012ad00d1d67477d",
+      "bytes": 19715,
+      "sha256": "5f173836d45aca802a52db517d34469b0b942c8a87c96342bb36f033bab4f217",
       "syntax": {
         "ok": true,
         "error": ""
@@ -67114,8 +67114,8 @@
     {
       "path": "tests/runtime/critical-flows.spec.js",
       "extension": ".js",
-      "bytes": 19675,
-      "sha256": "26bc98f604585fba3e7dae563e40ba0806d54cf987a88ef8012ad00d1d67477d"
+      "bytes": 19715,
+      "sha256": "5f173836d45aca802a52db517d34469b0b942c8a87c96342bb36f033bab4f217"
     },
     {
       "path": "tests/runtime/email-history-safety.spec.js",
