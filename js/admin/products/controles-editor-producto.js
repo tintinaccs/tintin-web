@@ -1,3 +1,4 @@
+import {mountProductMoney} from './importe-producto.js?v=tintin-20261028-guided-editor-2';
 // Controles visuales sobre los campos nativos: una sola autoridad de datos/guardado.
 const mounted = new WeakSet();
 const quantityControls = new WeakMap();
@@ -35,7 +36,7 @@ function optionPanel(card) {
     host.remove();trigger.setAttribute('aria-expanded','false');trigger.removeAttribute('aria-controls');
     if(focus && trigger.isConnected)trigger.focus({preventScroll:true});
   }
-  function open(trigger,kind,attribute,value){
+  function open(trigger,kind,attribute,value,selection=null){
     if(current?.trigger===trigger){close(true);return;}
     const content=card.querySelector(kind==='photos'?'.tt-unified-photos':'#prod-variant-stock');
     if(!content)return;
@@ -56,15 +57,15 @@ function optionPanel(card) {
     host.append(content);
     content.dataset.optionInline=kind;content.dataset.optionAttribute=attribute;content.dataset.optionValue=value;card.classList.toggle('tt-option-photos-open',kind==='photos');
     trigger.setAttribute('aria-expanded','true');trigger.setAttribute('aria-controls',host.id);
-    current={content,anchor,host,trigger,kind,attribute,value,extras,product:card.querySelector('#prod-id')?.value};
-    content.dispatchEvent(new CustomEvent('tintin:option-context',{detail:{attribute,value}}));
+    current={content,anchor,host,trigger,kind,attribute,value,selection,extras,product:card.querySelector('#prod-id')?.value};
+    content.dispatchEvent(new CustomEvent('tintin:option-context',{detail:{attribute,value,...(selection?{selection}: {})}}));
     if(kind==='availability')filterLegacyInventory(card,content,{attribute,value});
     content.querySelector('[aria-label="Combinación disponible"],.tt-photo-context select')?.focus({preventScroll:true});
   }
   const api={open,close,suspend(){const saved=current?{...current}:null;close();return saved;},resume(saved){
     if(!saved || saved.product!==card.querySelector('#prod-id')?.value)return;
-    const trigger=[...card.querySelectorAll('[data-option-panel]')].find(el=>el.dataset.optionPanel===saved.kind && el.dataset.optionAttribute===saved.attribute && el.dataset.optionValue===saved.value);
-    if(trigger)open(trigger,saved.kind,saved.attribute,saved.value);
+    const trigger=[...card.querySelectorAll('[data-option-panel]')].find(el=>el.dataset.optionPanel===saved.kind && el.dataset.optionAttribute===saved.attribute && el.dataset.optionValue===saved.value && (!saved.selection || el.dataset.selection===JSON.stringify(saved.selection)));
+    if(trigger)open(trigger,saved.kind,saved.attribute,saved.value,trigger.dataset.selection?JSON.parse(trigger.dataset.selection):null);
   }};
   card.addEventListener('keydown',event=>{if(event.key==='Escape' && current?.host.contains(event.target)){event.preventDefault();event.stopPropagation();close(true);}});
   card.querySelector('#prod-editor-section')?.addEventListener('change',()=>close());
@@ -72,7 +73,7 @@ function optionPanel(card) {
   optionPanels.set(card,api);return api;
 }
 
-function quantity(input, label, main = false) {
+export function quantity(input, label, main = false) {
   let state = quantityControls.get(input);
   if (!state) {
     const wrap = node('div', 'tt-editor-quantity');
@@ -100,18 +101,15 @@ function quantity(input, label, main = false) {
     // El input nativo de select ocurre antes de change: no refrescarlo aún con el valor anterior.
     select.addEventListener('input', event => event.stopPropagation());
     select.addEventListener('change', () => { if (select.value !== '') set(select.value); });
-    wrap.append(select);
+    const chooser=node('details','tt-quantity-picker');chooser.append(node('summary','','Elegir cantidad'),select);wrap.append(chooser);
     const quick = [];
     if (main) {
-      const presets = node('div', 'tt-editor-choices');
-      for (const count of [0,1,5,10,25,50]) {
-        const choice = button(String(count), `Stock: ${count} unidades`, () => set(String(count)));
-        presets.append(choice); quick.push(choice);
-      }
-      const unlimited=button('Sin control', 'No controlar stock', () => set(''));presets.append(unlimited);quick.push(unlimited);
-      wrap.append(presets);
+      const unlimited=button('Sin control', 'No controlar stock', () => set(''));quick.push(unlimited);
+      // Un único stepper; el selector completo permanece a demanda.
+      // Sin control sigue disponible, separado de stock cero.
+      wrap.append(unlimited);
       const status = node('p', 'tt-editor-stock-status'); status.setAttribute('role','status'); wrap.append(status);
-      const hint = node('small', 'tt-editor-caption', '0 significa agotado; vacío significa sin control. El estado de publicación se cambia por separado.'); wrap.append(hint);
+      const hint = node('small', 'tt-editor-caption', '0 significa agotado; vacío significa sin control. El estado de publicación se cambia por separado.'); const help=node('details','tt-quantity-help');help.append(node('summary','','Ayuda sobre stock'),hint);wrap.append(help);
       state = {minus,plus,select,quick,status};
     } else state = {minus,plus,select,quick};
     quantityControls.set(input, state);
@@ -139,7 +137,7 @@ function selection(input, values, label) {
   const signature = JSON.stringify(values);
   if (!state) {
     const row = node('div', 'tt-editor-choices'); row.setAttribute('role','group'); row.setAttribute('aria-label',label);
-    input.before(row); state = {row,signature:''}; choices.set(input,state);
+    const disclosure=node('details','tt-field-suggestions');disclosure.append(node('summary','','Sugerencias'),row);input.after(disclosure); state = {row,signature:''}; choices.set(input,state);
   }
   if (state.signature !== signature) {
     state.signature = signature; state.row.replaceChildren();
@@ -154,18 +152,7 @@ function selection(input, values, label) {
   }
 }
 
-function money(input) {
-  if (mounted.has(input)) return;
-  mounted.add(input); input.inputMode = 'numeric'; input.step = '1';
-  const wrap = node('div', 'tt-editor-money'); input.before(wrap);
-  wrap.append(node('span', '', 'Gs.'), input);
-  const row = node('div', 'tt-editor-choices');
-  for (const delta of [-1000,1000,5000,10000]) row.append(button(`${delta > 0 ? '+' : '−'} ${Math.abs(delta).toLocaleString('es-PY')}`, `Ajustar ${input.labels?.[0]?.textContent || 'importe'} en ${delta} guaraníes`, () => {
-    input.value = String(Math.min(1000000000, Math.max(0, Number(input.value || 0) + delta))); emit(input);
-  }));
-  if (input.id === 'prod-price-before') row.append(button('Sin descuento', null, () => {input.value=''; emit(input);}));
-  wrap.after(row);
-}
+function money(input) {mountProductMoney(input);}
 
 function variantBuilder(input) {
   if (mounted.has(input)) return;
@@ -239,7 +226,7 @@ function variantBuilder(input) {
       const group=node('fieldset','tt-option-group'),legend=node('legend','',key);group.append(legend);
       const original=baseline(),persisted=Boolean(card?.querySelector('#prod-id')?.value);
       const protectedValues=persisted && Array.isArray(original?.variants?.[key])?original.variants[key]:[];
-      if(protectedValues.length)group.append(node('p','tt-editor-caption','Las opciones guardadas conservan sus referencias. Podés cambiar cantidades o dejar combinaciones sin disponibilidad; no eliminar su identidad histórica.'));
+      if(protectedValues.length){const help=node('details','tt-option-history');help.append(node('summary','','Opciones guardadas'),node('p','tt-editor-caption','Conservan sus referencias históricas. Podés retirar una opción de la venta en Precio y stock.'));group.append(help);}
       for(const [index,option] of values.entries()){
         const protectedOption=protectedValues.includes(option);
         const row=node('div','tt-option-row'),title=node('strong','',option);row.append(title);
@@ -261,7 +248,7 @@ function variantBuilder(input) {
           if(handled){refresh();[...chips.querySelectorAll('button')].find(button=>button.getAttribute('aria-label')===(isRetired?'Quitar ':'Restaurar ')+key+': '+option)?.focus({preventScroll:true});return;}
           if(protectedOption || isRetired){error.textContent='Conservá esta identidad histórica y revisá su disponibilidad en la matriz.';return;}
           if(hasDraftData(key,option)){error.textContent='Esta opción tiene cantidades o precios configurados. Revisalos antes de quitarla o dejala sin disponibilidad.';return;}const map=groups();map.set(key,values.filter(other=>other!==option));write(map);});
-        remove.disabled=input.readOnly;if(remove.disabled)remove.title='Esta opción tiene inventario o referencias históricas. Conservá su identidad y revisá su disponibilidad.';
+        remove.disabled=input.readOnly || protectedOption;if(remove.disabled)remove.title='Esta opción tiene inventario o referencias históricas. Conservá su identidad y revisá su disponibilidad.';
         row.append(remove);
         for(const [label,to] of [['Anterior',index-1],['Siguiente',index+1]]){
           const move=button(label,label+' opción '+key+': '+option,()=>{const next=[...values];next.splice(index,1);next.splice(to,0,option);const map=groups();map.set(key,next);write(map);});
@@ -271,12 +258,12 @@ function variantBuilder(input) {
         if(window.TintinProductMedia?.isColorKey(key)){
           const detail={rows:[]};card?.dispatchEvent(new CustomEvent('tintin:option-media-read',{detail}));
           const media=detail.rows.find(media=>media[key]===option && Object.keys(media).filter(k=>!['imageUrl','imageUrls','stock','price','sku','active','colorHex','swatch'].includes(k)).length===1) || {};
-          const label=node('label','','Círculo visual (no cambia el nombre)');
+          const label=node('label','','Muestra de color');
           const color=node('input');color.type='color';color.value=media.colorHex || window.TintinProductColors?.preset(media.swatch || option)?.hex || '#CFD4DA';color.setAttribute('aria-label','Círculo de '+option);
           color.addEventListener('input',()=>{card.dispatchEvent(new CustomEvent('tintin:color-appearance',{detail:{color:option,colorHex:color.value}}));card.dispatchEvent(new Event('change',{bubbles:true}));});
           label.append(color);row.append(label);
         }
-        for(const [kind,text] of [['photos','Fotos'],['availability','Disponibilidad']]){
+        for(const [kind,text] of []){
           const trigger=button(text,text+' de '+key+': '+option,()=>optionPanel(card).open(trigger,kind,key,option));
           trigger.dataset.optionPanel=kind;trigger.dataset.optionAttribute=key;trigger.dataset.optionValue=option;
           trigger.setAttribute('aria-expanded','false');row.append(trigger);
@@ -290,6 +277,33 @@ function variantBuilder(input) {
   }
   input.addEventListener('input',refresh);
   choices.set(panel,{refresh});
+}
+
+const mediaSignatures=new WeakMap();
+function refreshVariantPhotos(card){
+  const list=card.querySelector('.tt-variant-media-list');if(!list)return;
+  const input=card.querySelector('#prod-variants-text');const groupMap=new Map();
+  for(const line of input.value.split(/\r?\n/)){const i=line.indexOf(':');if(i>0){const key=line.slice(0,i).trim();groupMap.set(key,[...new Set([...(groupMap.get(key)||[]),...line.slice(i+1).split(',').map(v=>v.trim()).filter(Boolean)])]);}}
+  const groups=[...groupMap];
+  const detail={rows:[]};card.dispatchEvent(new CustomEvent('tintin:option-media-read',{detail}));
+  const metadata=new Set(['imageUrl','imageUrls','stock','price','sku','active','colorHex','swatch']);
+  const combinations=commercialDrafts.get(card)?.variantInventory || [];
+  const signature=JSON.stringify([groups,combinations.map(row=>[row.variant,row.attributes])]);if(mediaSignatures.get(card)===signature){for(const row of list.querySelectorAll('.tt-variant-media-card')){const selection=JSON.parse(row.dataset.selection),media=detail.rows.find(item=>{const keys=Object.keys(item).filter(key=>!metadata.has(key));return keys.length===Object.keys(selection).length && keys.every(key=>item[key]===selection[key]);});const photos=window.TintinProductMedia?.rowImages(media) || [];const text=row.querySelector('.tt-variant-media-copy span'),cover=row.querySelector('.tt-variant-media-cover');const caption=`${photos.length} ${photos.length===1?'foto':'fotos'}`;if(text.textContent!==caption)text.textContent=caption;let image=cover.querySelector('img');if(photos[0]){if(!image){image=node('img');image.alt='Portada de '+Object.values(selection).join(' / ');image.loading='lazy';cover.replaceChildren(image);}if(image.getAttribute('src')!==photos[0])image.src=photos[0];}else if(image)cover.replaceChildren(node('span','','Sin foto'));}return;}
+  const current=optionPanel(card).suspend();mediaSignatures.set(card,signature);list.replaceChildren();
+  const heading=node('h2','','Fotos de las variantes');list.append(heading);
+  if(!groups.length)list.append(node('p','','Este producto usa la galería general. Agregá opciones en Fotos y opciones si las necesitás.'));
+  const add=(selection,label)=>{
+    const media=detail.rows.find(row=>{const keys=Object.keys(row).filter(key=>!metadata.has(key));return keys.length===Object.keys(selection).length && keys.every(key=>row[key]===selection[key]);});
+    const photos=window.TintinProductMedia?.rowImages(media) || [];
+    const row=node('section','tt-option-row tt-variant-media-card');row.dataset.selection=JSON.stringify(selection);const cover=node('div','tt-variant-media-cover');
+    if(photos[0]){const image=node('img');image.src=photos[0];image.alt='Portada de '+label;image.loading='lazy';cover.append(image);}else cover.append(node('span','','Sin foto'));
+    const text=node('div','tt-variant-media-copy');text.append(node('strong','',label),node('span','',`${photos.length} ${photos.length===1?'foto':'fotos'}`));
+    const trigger=button('Abrir galería','Fotos de '+label,()=>{const [attribute,value]=Object.entries(selection)[0];optionPanel(card).open(trigger,'photos',attribute,value,selection);});
+    trigger.dataset.optionPanel='photos';trigger.dataset.optionAttribute=Object.keys(selection)[0];trigger.dataset.optionValue=Object.values(selection)[0];trigger.dataset.selection=JSON.stringify(selection);trigger.setAttribute('aria-expanded','false');row.append(cover,text,trigger);list.append(row);
+  };
+  for(const [key,values] of groups)for(const value of values)add({[key]:value},key+': '+value);
+  if(groups.length>1)for(const row of combinations)if(row.attributes)add(row.attributes,Object.values(row.attributes).join(' / '));
+  optionPanel(card).resume(current);
 }
 
 function filterLegacyInventory(card,panel,context){
@@ -320,10 +334,9 @@ export function refreshEditorControls(card) {
     if(stock?.readOnly){if(!total){total=node('p','tt-inventory-total');total.setAttribute('role','status');inventory.prepend(total);}const text=stock.value===''?(inventory.classList.contains('tt-commercial-editor')?'Total: inventario sin control':'Completá las cantidades de cada opción'):'Total: '+stock.value+' unidades';if(total.textContent!==text)total.textContent=text;}
     else total?.remove();
   }
+  refreshVariantPhotos(card);
   if(!card.querySelector('.tt-commercial-editor'))for(const input of card.querySelectorAll('#prod-variant-stock input')) quantity(input,input.getAttribute('aria-label') || 'Variante');
-  for(const id of ['prod-purchased','prod-stock-minimum']) {
-    const input=card.querySelector(`#${id}`);if(input)quantity(input,input.labels?.[0]?.textContent || id);
-  }
+
   for(const id of ['prod-price','prod-price-before','prod-cost-unit']) {const input=card.querySelector(`#${id}`);if(input)money(input);}
   for(const id of ['prod-badge']) {
     const input=card.querySelector(`#${id}`); if(input)selection(input,[...input.options].filter(option=>option.value || id==='prod-badge').slice(0,id==='prod-category'?4:6).map(option=>[option.value,option.textContent]),id==='prod-category'?'Categorías rápidas':'Etiqueta del producto');
@@ -348,21 +361,7 @@ export function refreshEditorControls(card) {
 export function installEditorControls(card) {
   if(mounted.has(card))return;
   mounted.add(card);
-  card.addEventListener('tintin:photo-availability',event=>{const {trigger,attribute,value}=event.detail;optionPanel(card).open(trigger,'availability',attribute,value);});
-  const variants=card.querySelector('[data-product-section=inventory] .tt-editor-section-fields');
-  if(variants){
-    const inline=node('details','tt-combination-inline'),summary=node('summary','','Combinaciones · Editar aquí');inline.append(summary);variants.append(inline);
-    let marker=null;
-    const close=()=>{const panel=inline.querySelector('#prod-variant-stock');if(panel && marker?.isConnected){delete panel.dataset.optionInline;marker.replaceWith(panel);}marker=null;inline.open=false;};
-    inline.addEventListener('toggle',()=>{
-      if(!inline.open){close();return;}
-      optionPanel(card).close();
-      const panel=card.querySelector('#prod-variant-stock');if(!panel || inline.contains(panel))return;
-      marker=document.createComment('Inventario canónico');panel.before(marker);panel.dataset.optionInline='combinations';inline.append(panel);
-    });
-    card.addEventListener('tintin:close-combinations',close);
-    card.querySelector('#prod-editor-section')?.addEventListener('change',close);
-  }
+
   const pendingPhoto=event=>{if(event.detail?.pending)window.AdminUnsaved?.markDirty('primary-editor');};
   card.addEventListener('tintin:image-pending',pendingPhoto);card.addEventListener('tintin:image-preview',pendingPhoto);
   card.addEventListener('change',event=>{

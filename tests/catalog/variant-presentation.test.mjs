@@ -5,7 +5,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 const source=fs.readFileSync(new URL('../../tienda.js',import.meta.url),'utf8');
-const context=vm.createContext({});
+const context=vm.createContext({window:{}});
+vm.runInContext(source.slice(source.indexOf('function isInStock('),source.indexOf('/** Guards against')),context);
 vm.runInContext(source.slice(source.indexOf('function productVariantGroups'),source.indexOf('function _pdGetSelectedVariant')),context);
 test('opciones importadas excluyen metadata y mantienen el orden contractual',()=>{
   const product={variants:[{Color:'Dorado',Talle:'M',price:100,stock:0,imageUrl:'a'},{Color:'Negro',Talle:'M',price:100,stock:2},{Color:'Negro',Talle:'L',sku:'x'}]};
@@ -65,3 +66,14 @@ test('invalid opt-in commerce cannot crash the whole catalog or remain purchasab
  assert.equal(vm.runInContext('normalizeProduct(input).active',c),false);
  c.input.variantCommerceVersion=3;assert.equal(vm.runInContext('normalizeProduct(input).active',c),false);
 });
+
+test('catálogo prioriza una opción disponible con foto para atributos genéricos',()=>{
+ const product={price:100,stock:2,variantCommerceVersion:2,imageUrl:'https://img.test/out.jpg',variants:{Material:['A','B','C']},variantInventory:[{variant:'a',attributes:{Material:'A'},stock:1},{variant:'b',attributes:{Material:'B'},stock:1},{variant:'c',attributes:{Material:'C'},stock:0}],variantMedia:[{Material:'C',imageUrls:['https://img.test/out.jpg']},{Material:'B',imageUrls:['https://img.test/available.jpg']}]};
+ assert.deepEqual(JSON.parse(JSON.stringify(context.productPreferredSelection(product))),{Material:'B'});assert.equal(product.imageUrl,'https://img.test/out.jpg');assert.equal(product.variantInventory[2].stock,0);
+ assert.deepEqual(JSON.parse(JSON.stringify(context.productPreferredSelection(product,{Material:'A'}))),{Material:'A'});
+});
+
+ test('stock legado sin control prefiere una opción con fotos sin mutar datos',()=>{
+ const product={price:100,stock:null,active:true,variants:{Material:['A','B']},variantMedia:[{Material:'B',imageUrls:['https://img.test/b.jpg']}]};
+ const before=JSON.stringify(product);assert.deepEqual(JSON.parse(JSON.stringify(context.productPreferredSelection(product))),{Material:'B'});assert.equal(JSON.stringify(product),before);
+ });

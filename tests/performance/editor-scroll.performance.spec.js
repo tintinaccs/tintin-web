@@ -9,7 +9,8 @@ for (const [width, height] of [[360, 640], [390, 844], [768, 1024], [1024, 768],
     await page.evaluate(() => window.qaProductController.workspace.ready);
     // Información vacía cabe sin scroll en pantallas grandes tras separar las
     // pestañas. Desplegar contenido real, sin forzar tamaños ni omitir el gate.
-    await page.locator('.tt-editor-preview-shell > summary').click();
+    await page.getByRole('tab',{name:'Publicación',exact:true}).click();
+    await page.locator('.tt-editor-preview-shell').evaluate(section=>section.open=true);
     await expect(page.locator('#prod-live-preview')).toBeVisible();
     const geometry = await page.evaluate(() => {
       let scroller = document.querySelector('#prod-form-card .adm-card-body');

@@ -758,8 +758,7 @@ function renderProductCardMarkup(p, options = {}) {
   const savedColor = cardColorSelections.get(String(p.id));
   const preferred = productPreferredSelection(p, colorGroup && savedColor ? { [colorGroup[0]]: savedColor } : {});
   const selectedColor = colorGroup && preferred[colorGroup[0]] || '';
-  const hasColorVariants = productVariantGroups(p).some(([key]) => window.TintinProductMedia.isColorKey(key));
-  const imgUrl = sanitizeClassicImageUrl(selectedColor && hasColorVariants ? window.TintinProductMedia.galleryImages(p, preferred)[0] || '' : p.imageUrl || p.image || getProductImage(p.id), 480);
+  const imgUrl = sanitizeClassicImageUrl(Object.keys(preferred).length ? window.TintinProductMedia.galleryImages(p, preferred)[0] || '' : p.imageUrl || p.image || getProductImage(p.id), 480);
   const initialRow = productVariantMediaRows(p).find(row => window.TintinProductMedia.rowImages(row).some(src => productPhotoIdentity(src) === productPhotoIdentity(imgUrl)));
   const activeColor = selectedColor || (colorGroup && initialRow?.[colorGroup[0]]) || (colorGroup?.[1].length === 1 ? colorGroup[1][0] : '');
   const colorsHTML = colorGroup ? `<div class="tt-card-colors" role="group" aria-label="Colores de ${escapeAttribute(p.name)}">${colorGroup[1].map(color => {
@@ -1138,11 +1137,15 @@ function productVariantMediaRows(product) {
 function productPreferredSelection(product, preferred = {}, keepUnavailable = false) {
   const groups = productVariantGroups(product);
   if (!groups.length) return {};
+  const media=[...(Array.isArray(product.variantMedia)?product.variantMedia:[]),...(Array.isArray(product.variants)?product.variants:[])];
+  const hasSelectionPhoto=selection=>media.some(row=>row && groups.some(([key])=>row[key]!=null) && groups.every(([key])=>row[key]==null || row[key]===selection[key]) && (row.imageUrl || row.imageUrls?.length));
   if (product?.variantCommerceVersion === 2) {
     const rows = Array.isArray(product.variantInventory)?product.variantInventory.filter(row=>row && typeof row==='object'):[];
     const matches = row => groups.every(([key, options]) => options.includes(row.attributes?.[key]) && (preferred[key] == null || row.attributes?.[key] === preferred[key]));
     const available = row => row.active !== false && (row.stock === null || row.stock > 0);
-    const row = rows.find(row => matches(row) && (keepUnavailable || available(row))) || rows.find(available) || rows[0];
+    const hasPhotos=row=>hasSelectionPhoto(row.attributes || {});
+    const matching=rows.filter(row=>matches(row) && (keepUnavailable || available(row)));
+    const row=matching.find(hasPhotos) || matching[0] || rows.find(row=>available(row) && hasPhotos(row)) || rows.find(available) || rows[0];
     return row ? {...row.attributes} : {};
   }
   const valid = values => groups.every(([key, options]) => options.includes(String(values[key] || '')));
@@ -1151,11 +1154,18 @@ function productPreferredSelection(product, preferred = {}, keepUnavailable = fa
   const available = () => isInStock(product);
   if (valid(preferred) && (keepUnavailable || (available(preferred) && (!entries || entries.some(row => row.variant === variant(preferred) && Number.isInteger(row.stock) && row.stock > 0))))) return { ...preferred };
   if (available({}) && entries) {
-    for (const row of entries) {
+    const ordered=[...entries].sort((a,b)=>{const selection=row=>Object.fromEntries(groups.map(([key],index)=>[key,String(row.variant).split('/')[index]?.trim()]));const hasPhoto=row=>hasSelectionPhoto(selection(row));return Number(hasPhoto(b))-Number(hasPhoto(a));});
+    for (const row of ordered) {
       if (!Number.isInteger(row.stock) || row.stock <= 0) continue;
       const parts = String(row.variant || '').split('/').map(value => value.trim());
       const values = Object.fromEntries(groups.map(([key], index) => [key, parts[index]]));
       if (parts.length === groups.length && valid(values)) return values;
+    }
+  }
+  if(available({}) && !entries){
+    for(const row of media){
+      const selection=Object.fromEntries(groups.map(([key,options])=>[key,options.includes(row?.[key])?row[key]:options[0]]));
+      if(hasSelectionPhoto(selection))return selection;
     }
   }
   const cover = productVariantMediaRows(product).find(row => window.TintinProductMedia.rowImages(row).some(src => productPhotoIdentity(src) === productPhotoIdentity(product.imageUrl || product.image)));

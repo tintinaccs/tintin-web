@@ -64,7 +64,7 @@ test('crear incompleto, salir, recuperar, publicar, editar sin reemplazar públi
  expect(await page.evaluate(()=>[...window.qaProductStore.keys()].filter(key=>key.startsWith('products/')).length)).toBe(0);
  await reopen(page,key);await expect(page.locator('#prod-name')).toHaveValue('Borrador recuperable');await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/cover.webp');
  await page.getByRole('tab',{name:'Publicación',exact:true}).click();await page.getByRole('tab',{name:'Información',exact:true}).click();await page.locator('#prod-category').selectOption('qa-tablet');await page.getByRole('tab',{name:'Publicación',exact:true}).click();
- await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').fill('30000');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('[data-money-for="prod-price"]').fill('30000');
  await page.getByRole('tab',{name:'Información',exact:true}).click();await page.locator('#prod-description').fill('Descripción completa');
  await page.getByRole('tab',{name:'Publicación',exact:true}).click();await page.locator('#prod-publicationStatus').selectOption('active');await page.evaluate(()=>window.prodGuardar());await expect(page.locator('#prod-form-card')).toBeHidden();
  expect(await page.evaluate(key=>window.qaProductStore.get('products/'+key).publicationStatus,key)).toBe('active');
@@ -128,7 +128,7 @@ test('conflicto de progreso no pisa otra pestaña y no publica',async({page})=>{
  expect(await page.evaluate(()=>[...window.qaProductStore.keys()].filter(key=>key.startsWith('products/')).length)).toBe(0);
 });
 test('fotos pendientes: fallo guarda texto, recuperar advierte y reintento/cancelación no pierde fotos previas',async({page})=>{
- await open(page);await page.locator('#prod-name').fill('Fotos recuperables');await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await open(page);await page.locator('#prod-name').fill('Fotos recuperables');await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  const gallery=page.locator('.tt-unified-photos');
  const buffer=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=','base64');
  await gallery.locator('input[multiple]').setInputFiles({name:'pending.png',mimeType:'image/png',buffer});await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(1);
@@ -136,7 +136,7 @@ test('fotos pendientes: fallo guarda texto, recuperar advierte y reintento/cance
  const key=await page.evaluate(()=>window.qaProductController.workspace.key);
  expect(await page.evaluate(key=>window.qaProductStore.get('productEditorWorkspaces/qa-admin/items/'+key).snapshot.pendingUploads,key)).toBe(true);
  await page.getByRole('button',{name:'Descartar cambios pendientes y volver',exact:true}).click();await reopen(page,key);await expect(page.locator('.tt-work-status')).toContainText('faltan archivos');
- await page.getByRole('button',{name:'Continuar sin las fotos pendientes',exact:true}).click();await page.evaluate(()=>window.qaUploadFailure=false);await page.getByRole('tab',{name:'Fotos y colores',exact:true}).click();
+ await page.getByRole('button',{name:'Continuar sin las fotos pendientes',exact:true}).click();await page.evaluate(()=>window.qaUploadFailure=false);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  await gallery.locator('input[multiple]').setInputFiles({name:'retry.png',mimeType:'image/png',buffer});await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(1);await saveProgress(page);await expect(gallery.locator('.tt-unified-photo')).toHaveCount(1);
  await gallery.locator('input[multiple]').setInputFiles({name:'cancel.png',mimeType:'image/png',buffer});await gallery.getByRole('button',{name:'Quitar pendiente cancel.png',exact:true}).click();await saveProgress(page);await expect(gallery.locator('.tt-unified-photo')).toHaveCount(1);
 });
@@ -152,8 +152,8 @@ test('archivar y restaurar exige acción explícita y no cambia stock',async({pa
 });
 for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1366,768],[1920,1080]])test(`espacio dedicado ${width}x${height}`,async({page},info)=>{
  await open(page,width,height);await expect(page.locator('.tt-work-back')).toBeVisible();await expect(page.locator('#prod-save-btn')).toBeVisible();
- expect(await page.locator('#prod-form-card').evaluate(node=>Math.abs(node.getBoundingClientRect().left))).toBeLessThan(2);
- expect(await page.locator('.adm-sidebar').evaluate(node=>getComputedStyle(node).visibility)).toBe('hidden');
+ expect(await page.locator('#prod-form-card').evaluate(node=>getComputedStyle(node).position)).toBe('relative');
+ expect(await page.locator('#prod-form-card').getAttribute('aria-modal')).toBe(null);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  await page.screenshot({path:info.outputPath(`phase4-${width}x${height}.png`)});
 });
@@ -161,9 +161,9 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1366,768]
 for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768],[1920,1080]])test(`progreso y acciones con altura reducida ${width}x${height}`,async({page},info)=>{
  await open(page,width,height);await page.locator('#prod-name').fill('Trabajo con teclado');
  await page.setViewportSize({width,height:Math.max(300,Math.round(height*.6))});
- const save=page.locator('#prod-save-btn');await expect(save).toBeInViewport();
+ const save=page.locator('#prod-save-btn');await save.scrollIntoViewIfNeeded();await expect(save).toBeInViewport();
  expect(await save.evaluate(node=>{const box=node.getBoundingClientRect();return node.contains(document.elementFromPoint(box.x+box.width/2,box.y+box.height/2));})).toBe(true);
- await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').fill('45000');
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('[data-money-for="prod-price"]').fill('45000');
  await page.getByRole('tab',{name:'Información',exact:true}).click();await expect(page.locator('#prod-name')).toHaveValue('Trabajo con teclado');
  await save.focus();await page.keyboard.press('Tab');
  expect(await page.locator('#prod-form-card').evaluate(card=>card.contains(document.activeElement))).toBe(true);
@@ -176,12 +176,12 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
 
 for(const width of [320,390])test(`sección elegida legible sin recorte ${width}`,async({page},info)=>{
  await open(page,width,844);
- for(const name of ['Información','Fotos y colores','Variantes','Precio y stock','Detalles','Publicación']){
+ for(const name of ['Información','Fotos y opciones','Variantes','Precio y stock','Detalles','Publicación']){
   const button=page.getByRole('tab',{name,exact:true});await button.click();await expect(button).toBeInViewport();
   expect(await button.evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);
  }
  await expect(page.locator('.tt-editor-guide')).toHaveCount(0);
- await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').focus();await expect(page.locator('#prod-price')).toBeFocused();
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('[data-money-for="prod-price"]').focus();await expect(page.locator('[data-money-for="prod-price"]')).toBeFocused();
  await page.getByRole('tab',{name:'Publicación',exact:true}).click();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  await page.screenshot({path:info.outputPath(`navigation-${width}.png`)});

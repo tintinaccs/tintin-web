@@ -68,7 +68,7 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
     const deps = {
       ...responseModule,...workspaceModule,...galleryModule,...uploadModule,openMediaLibraryPicker:async()=>window.qaChooseLibraryPhoto?window.qaChooseLibraryPhoto():window.qaLibraryPhoto || null,
       ...inventory, ...commercial, ...commercialUi, ...editorialUi, ...editorial, ...master,
-      _allProducts: [], _productSourceById: new Map(), _productInventoryById: new Map(), adminRealtimeReady: { orders: false }, _allCollections: [{ slug: 'qa-tablet', name: 'Colección ficticia' }],
+      _allProducts: [], _productSourceById: new Map(), _productInventoryById: new Map(), adminRealtimeReady: { orders: false }, _allCollections: [{ slug: 'qa-tablet', name: 'Colección ficticia' },...initialRecords.filter(([key])=>key.startsWith('collections/')).map(([key,data])=>({slug:key.slice('collections/'.length),name:data.name}))],
       productEditBaseline: null, productCommercialBaseline: null, _formImageWidgets: new Map(),
       productColorPhotos: { serialize: () => [], flush: async () => {} },
       mountFormImageWidget() {}, mountProductColorPhotos() {},
@@ -109,16 +109,15 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
     };
     // Original controller and DOM; only identity, storage and external services are fictitious.
     new Function('__deps', `with (__deps) { ${code}\nwindow.prodGuardar = prodGuardar; window.qaProductController = { serializeProductForm,refresh:()=>loadProductos(),get workspace(){return productWorkspace;} }; }`)(deps);
-    const category = document.getElementById('prod-category'); category.replaceChildren(new Option('Elegí colección', ''), new Option('Colección ficticia', 'qa-tablet'));
+    const category = document.getElementById('prod-category'); category.replaceChildren(new Option('Elegí colección', ''),...deps._allCollections.map(row=>new Option(row.name,row.slug)));
   }, {workflow,initialRecords,code:photos ? source.slice(source.indexOf('const _formImageWidgets = new Map();'),source.indexOf('let productVariantStockBaseline = null;'))+code : code});
   await page.locator('[data-action="product-new"]').click();
   await expect(page.locator('#prod-tab-general')).toBeVisible();
 }
 async function openOptionAvailability(page,value,attribute='Color',combination=null){
- const toggle=page.getByRole('button',{name:'Opciones y variantes',exact:true});
- if(await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();
- const trigger=page.getByRole('button',{name:`Disponibilidad de ${attribute}: ${value}`,exact:true});
- if(await trigger.getAttribute('aria-expanded')!=='true')await trigger.click();
- if(combination)await page.getByLabel('Combinación disponible',{exact:true}).selectOption({label:combination});
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
+ const panel=page.locator('#prod-variant-stock');const search=panel.getByRole('searchbox',{name:'Buscar combinación',exact:true});if(await search.count())await search.fill(combination || value);
+ const fields=panel.locator('.tt-commercial-row').filter({has:page.locator('legend').filter({hasText:combination || value})});
+ if(await fields.count()===1)await fields.scrollIntoViewIfNeeded();
 }
 module.exports = { openProductSaveFixture,openOptionAvailability };

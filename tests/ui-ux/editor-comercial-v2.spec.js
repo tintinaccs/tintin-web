@@ -13,7 +13,7 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await openProductSaveFixture(page,width,height);
  await expect(page.locator('[data-product-section="general"] .tt-editor-section-toggle')).toHaveAttribute('aria-expanded','true');
- for(const section of ['prices','inventory','specs','private'])await expect(page.locator(`[data-product-section="${section}"] .tt-editor-section-toggle`)).toHaveAttribute('aria-expanded','false');
+ for(const section of ['prices','options','specs'])await expect(page.locator(`[data-product-section="${section}"] .tt-editor-section-toggle`)).toHaveAttribute('aria-expanded','true');await expect(page.locator('[data-product-section=private] .tt-editor-section-toggle')).toHaveAttribute('aria-expanded','false');
  await page.getByRole('tab',{name:'Información',exact:true}).click();await page.locator('#prod-name').fill('Pulsera ficticia');
  await page.getByRole('button',{name:'Producto',exact:true}).click();
  await page.getByRole('tab',{name:'Información',exact:true}).click();
@@ -35,7 +35,10 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(page.locator('#prod-warranty')).toHaveValue('Cobertura confirmada en el certificado.');
  await suggestions.getByRole('button',{name:'Revisar garantía',exact:true}).click();await expect(page.locator('#prod-warranty')).toBeFocused();
  await page.getByRole('tab',{name:'Información',exact:true}).click();await expect(page.locator('#prod-name')).toHaveValue('Pulsera ficticia');
- await expect(page.locator('#prod-save-btn')).toBeInViewport();
+ // En poca altura la cabecera sigue el flujo de página para no tapar los campos.
+ const save=page.locator('#prod-save-btn');await save.scrollIntoViewIfNeeded();
+ await expect(save).toBeInViewport();
+ expect(await save.evaluate(node=>{const box=node.getBoundingClientRect();return node.contains(document.elementFromPoint(box.x+box.width/2,box.y+box.height/2));})).toBe(true);
  const geometry=await page.locator('#prod-form-card').evaluate(card=>({fits:card.scrollWidth<=card.clientWidth+1,fields:[...card.querySelectorAll('input:not([type=hidden]),select,textarea,button')].filter(el=>el.getClientRects().length).every(el=>{const r=el.getBoundingClientRect(),c=card.getBoundingClientRect();return r.left>=c.left-1 && r.right<=c.right+1;})}));
  expect(geometry).toEqual({fits:true,fields:true});expect(errors).toEqual([]);
  fs.mkdirSync('artifacts/editor-atelier',{recursive:true});await page.screenshot({animations:"disabled",path:`artifacts/editor-atelier/editor-${width}x${height}.png`});
@@ -55,7 +58,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
   const factory=new Function('variantInventoryEntries','reorderVariantInventory','commercialDraft','mountCommercialEditor',renderer+';return {render:renderProductVariantStock,get:()=>productCommercialEditor.get(),patch:()=>productCommercialEditor.patch({price:30000,priceBefore:40000})};');
   window.editor=factory(inventory.variantInventoryEntries,inventory.reorderVariantInventory,commercialDraft,mountCommercialEditor);window.editor.render(product);
  },{renderer,product});
- await page.getByRole('spinbutton',{name:'Precio: Oro / M',exact:true}).fill('55000');
+ await page.getByRole('textbox', { name: 'Precio: Oro / M',exact:true}).fill('55000');
  await page.getByRole('checkbox',{name:'Seleccionar Plata / M',exact:true}).check();
  await page.locator('.tt-commercial-advanced').evaluate(node=>node.open=true);
  await page.getByRole('combobox',{name:'Campo para editar combinaciones seleccionadas'}).selectOption('stock');
@@ -63,9 +66,9 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  await page.getByRole('button',{name:'Aplicar a seleccionadas'}).click();
  await expect(page.locator('#prod-stock')).toHaveValue('5');
  await page.getByRole('button',{name:'Invertir orden de atributos'}).click();
- await expect(page.getByRole('spinbutton',{name:'Precio: M / Oro',exact:true})).toHaveValue('55000');
+ await expect(page.getByRole('textbox', { name: 'Precio: M / Oro',exact:true})).toHaveValue('55.000');
  const patch=await page.evaluate(()=>window.editor.patch());expect(patch.variantInventory[0].variant).toBe('gold');expect(patch.stock).toBe(5);
- await page.getByRole('checkbox',{name:'Disponible: M / Oro',exact:true}).uncheck();
+ await page.getByRole('checkbox',{name:'Habilitada para la venta: M / Oro',exact:true}).uncheck();
  expect(await page.evaluate(()=>window.editor.patch().variantInventory[0].active)).toBe(false);
  const overflow=await page.locator('#prod-form-card').evaluate(card=>card.scrollWidth>card.clientWidth+1);expect(overflow).toBe(false);
  expect(errors).toEqual([]);
@@ -100,7 +103,7 @@ for(const [width,height] of [[320,700],[768,1024],[1024,768],[1440,900]])test(`e
  await openProductSaveFixture(page,width,height);
  const card=page.locator('#prod-form-card');
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
- await page.locator('#prod-price').fill('45000');
+ await page.locator('[data-money-for="prod-price"]').fill('45000');
  const priceToggle=page.locator('[data-product-section="prices"] .tt-editor-section-toggle');
  await priceToggle.focus();await page.keyboard.press('Enter');
  await expect(priceToggle).toHaveAttribute('aria-expanded','false');
@@ -145,7 +148,7 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  });
  expect(colors.placeholder).toBeGreaterThanOrEqual(4.5);expect(colors.distinct).toBe(true);expect(colors.border).toBeGreaterThanOrEqual(3);expect(colors.text).toBeGreaterThanOrEqual(4.5);expect(colors.opacity).toBe('1');expect(colors.field).not.toBe(colors.canvas);
  await name.focus();expect(await name.evaluate(el=>getComputedStyle(el).outlineStyle)).not.toBe('none');
- await name.fill('Pulsera de prueba');await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').fill('45000');await page.getByRole('tab',{name:'Información',exact:true}).click();await expect(name).toHaveValue('Pulsera de prueba');
+ await name.fill('Pulsera de prueba');await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('[data-money-for="prod-price"]').fill('45000');await page.getByRole('tab',{name:'Información',exact:true}).click();await expect(name).toHaveValue('Pulsera de prueba');
  expect(await page.locator('#prod-form-card').evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
  fs.mkdirSync('artifacts/editor-contrast',{recursive:true});await name.fill('');await name.blur();await page.evaluate(()=>document.fonts.ready);await page.screenshot({animations:'disabled',path:`artifacts/editor-contrast/agregar-${test.info().project.name}-${width}.png`});
 });

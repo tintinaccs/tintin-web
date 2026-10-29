@@ -94,7 +94,7 @@ test('una validación de precio conserva el mensaje junto al campo y no modifica
  const product={name:'Producto publicado',category:'qa-tablet',price:30000,stock:4,active:true,publicationStatus:'active',oferta:false,destacado:false,description:'Descripción completa',imageUrl:'https://img.test/cover.webp'};
  await openProductSaveFixture(page,390,844,{fullShell:true,photos:true,workflow:true,initialRecords:[['products/existing',product]]});await page.evaluate(()=>window.qaProductController.workspace.ready);await page.evaluate(()=>window.qaProductController.workspace.leave());
  await page.evaluate(()=>{window.qaProductController.refresh();window.prodEditar('existing');});await page.evaluate(()=>window.qaProductController.workspace.ready);
- await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('#prod-price').fill('0');await page.locator('#prod-save-btn').click();
+ await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();await page.locator('[data-money-for="prod-price"]').fill('0');await page.locator('#prod-save-btn').click();
  await expect(page.locator('#prod-form-error')).toBeVisible();await expect(page.locator('#prod-form-error')).toContainText('precio entero mayor a cero');await expect(page.locator('.tt-work-status')).toHaveAttribute('data-state','error');
- await page.getByRole('button',{name:'Ir al campo',exact:true}).click();await expect(page.locator('#prod-price')).toBeFocused();expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').price)).toBe(30000);
+ await page.getByRole('button',{name:'Ir al campo',exact:true}).click();await expect(page.locator('[data-money-for="prod-price"]')).toBeFocused();expect(await page.evaluate(()=>window.qaProductStore.get('products/existing').price)).toBe(30000);
 });

@@ -8,7 +8,7 @@ test('admin stock editor labels each option, sums quantities and resets for a ne
   const editor = source.slice(source.indexOf('let productVariantStockBaseline = null;'), source.indexOf('function serializeProductForm()'));
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await page.evaluate(async editor => {
-    document.body.innerHTML = '<input id="prod-stock" value="3"><div><textarea id="prod-variants-text"></textarea></div>';
+    document.body.innerHTML = '<input id="prod-id" value=""><input id="prod-price" type="number" value=""><input id="prod-price-before" type="number" value=""><p id="prod-form-error"></p><input id="prod-stock" value="3"><div><textarea id="prod-variants-text"></textarea></div>';
     const inventoryUrl = new URL('/js/core/store/inventario-variantes.mjs', location.origin);
     inventoryUrl.searchParams.set('v', 'tintin-20261003-variant-inventory-1-brand-20261004-1-brand-runtime-20261004-1');
     const { variantInventoryEntries } = await import(inventoryUrl.href);
