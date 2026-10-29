@@ -5,6 +5,7 @@ const modules = new Map(MAESTRO_MODULES.map(module => [module.id, module]));
 const roots = new Map();
 const visible = element => element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden';
 const text = element => element.textContent.replace(/\s+/g, ' ').trim();
+const setHidden = (element, hidden) => { if (element.hidden !== hidden) element.hidden = hidden; };
 let sequence = 0;
 
 function create(tag, className, content) {
@@ -66,7 +67,7 @@ function enhanceFields(root) {
 
 function refresh(root, state) {
   if (!visible(root)) return;
-  state.title.hidden = Boolean(root.querySelector('.tt-commerce-pagehead,.adm-statistics-hero,.tt-dashboard-hero'));
+  setHidden(state.title, Boolean(root.querySelector('.tt-commerce-pagehead,.adm-statistics-hero,.tt-dashboard-hero')));
   enhanceFields(root);
   const candidates = [...root.querySelectorAll('.adm-card-title,.adm-section-head h2,.adm-card > h2,.adm-card-label,.tt-welcome-admin-title,.tt-maestro-panel h2')];
   const targets = candidates.filter(target => !target.closest('[role="dialog"],dialog') && visible(target) && text(target));
@@ -79,10 +80,10 @@ function refresh(root, state) {
     state.select.replaceChildren(placeholder, ...targets.map((target, index) => new Option(text(target), String(index))));
     state.select.value = '';
   }
-  state.label.hidden = targets.length < 2 || Boolean(root.querySelector('.tt-dashboard-hero'));
+  setHidden(state.label, targets.length < 2 || Boolean(root.querySelector('.tt-dashboard-hero')));
   state.searchTarget = [...root.querySelectorAll('input[type="search"],input[id*="search"],input[data-filter$="-search"]')].find(target => visible(target) && !target.disabled && !target.closest('dialog,[role="dialog"]'));
-  state.search.hidden = !state.searchTarget;
-  state.bar.hidden = state.title.hidden && state.label.hidden && state.search.hidden;
+  setHidden(state.search, !state.searchTarget);
+  setHidden(state.bar, state.title.hidden && state.label.hidden && state.search.hidden);
 
   for (const table of root.querySelectorAll('.adm-table-wrap')) {
     const overflow = visible(table) && table.scrollWidth > table.clientWidth + 1;
@@ -99,23 +100,32 @@ function refresh(root, state) {
       const descriptions = table.getAttribute('aria-describedby') || '';
       table.setAttribute('aria-describedby', `${descriptions} ${hint.id}`.trim());
     }
-    hint.hidden = !overflow;
+    setHidden(hint, !overflow);
   }
 }
 
 let resetNavigation = true;
 let queued = false;
-function schedule() {
+const rootSelector = '.adm-content > .adm-section,[data-admin-workspace]';
+const dirtyRoots = new Set();
+let refreshAll = false;
+function schedule(root) {
+  // Un contador, filtro o editor local no invalida la geometría de todos
+  // los módulos. Resize/montaje de secciones sí requiere descubrirlos otra vez.
+  if (root instanceof Element && root.matches(rootSelector)) dirtyRoots.add(root);
+  else refreshAll = true;
   if (queued) return;
   queued = true;
   requestAnimationFrame(() => {
     queued = false;
-    for (const root of document.querySelectorAll('.adm-content > .adm-section,[data-admin-workspace]')) {
+    const pending = refreshAll ? new Set([...roots.keys(), ...document.querySelectorAll(rootSelector)]) : new Set(dirtyRoots);
+    refreshAll = false;
+    dirtyRoots.clear();
+    for (const root of pending) {
+      if (!root.isConnected) { roots.delete(root); continue; }
       mount(root, root.dataset.adminWorkspace || root.id.replace('section-', ''));
-    }
-    for (const [root, state] of roots) {
-      if (!root.isConnected) roots.delete(root);
-      else refresh(root, state);
+      const state = roots.get(root);
+      if (state) refresh(root, state);
     }
     if (resetNavigation) {
       resetNavigation = false;
@@ -129,7 +139,10 @@ function schedule() {
 // No se observa class/aria: las mejoras no realimentan el observer ni interceptan eventos.
 const observer = new MutationObserver(records => {
   if (records.some(record => [...record.addedNodes].some(node => node.matches?.('.adm-section.active')))) resetNavigation = true;
-  if (records.some(record => !record.target.closest?.('.tt-admin-workspace-bar,.tt-admin-table-hint'))) schedule();
+  for (const record of records) {
+    if (record.target.closest?.('.tt-admin-workspace-bar,.tt-admin-table-hint')) continue;
+    schedule(record.target.closest?.(rootSelector));
+  }
 });
 for (const surface of document.querySelectorAll('.adm-content,[data-admin-workspace]')) {
   observer.observe(surface, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'hidden'] });
@@ -139,11 +152,12 @@ const sections = new MutationObserver(records => {
   // Sólo una navegación aceptada reinicia la posición; editar o renderizar datos no lo hace.
   for (const record of records) {
     const target = record.target;
+    if (record.oldValue === target.getAttribute(record.attributeName) || target.closest('.tt-admin-workspace-bar,.tt-admin-table-hint')) continue;
     if (target.closest('dialog,[role="dialog"]')) continue;
     if (record.attributeName === 'class' && target.matches('.adm-section,.correos-panel,.ship-tab-panel,.correos-tab-btn,.ship-tab-btn,.user-tab-btn,[role="tab"]') && target.classList.contains('active') && !(record.oldValue || '').split(/\s+/).includes('active')) resetNavigation = true;
     if (record.attributeName === 'aria-selected' && target.matches('[role="tab"]') && target.getAttribute('aria-selected') === 'true' && record.oldValue === 'false') resetNavigation = true;
+    schedule(target.closest(rootSelector));
   }
-  schedule();
 });
 for (const root of document.querySelectorAll('.adm-content')) sections.observe(root, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-selected'], attributeOldValue: true });
 window.addEventListener('resize', schedule, { passive: true });

@@ -1,158 +1,23 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "bad42062290b4b780ba490abbb5f44bf685516a9",
-  "reason": "Alinear versión interna y URL del Panel Maestro conservando las correcciones de guardado y búsqueda y conciliación Correos",
+  "baseCommit": "b1d90594ba672d66acfc5c88bf3aad381707bb29",
+  "reason": "Reducir invalidaciones globales de layout del workspace compartido de Super Admin sin cambiar negocio",
   "files": [
     {
-      "path": "_headers",
-      "oldHash": "8de3058c1dc03c5f248983d4a8ce79a9a51fad956277ba7192ae58071f9f5055",
-      "newHash": "31aba6d1ee523b8536afeef1f683a5fd49bd9deac9ede6d9959c366192326455"
-    },
-    {
       "path": "admin-images.html",
-      "oldHash": "b7dd1ca2100f36eba311fd0d787c2c814af96e066f8bd2a2ab684874c4dfcb29",
-      "newHash": "7f1e9094aa4da178cdae510579678262e5567a5638828599b71c361f80011484"
+      "oldHash": "7f1e9094aa4da178cdae510579678262e5567a5638828599b71c361f80011484",
+      "newHash": "6a86406520d288e27e42f2867853ec807358a8626df3b5685248ea08cc307720"
     },
     {
       "path": "admin.html",
-      "oldHash": "9f44d0f63ac1c5864d06a1653758b4c28f2c2e794bcd0430ba5c5de0dd3443a8",
-      "newHash": "1ffdee6ff3d495ac56ac60886816236b9110028e329f543d13e03d332289c39a"
-    },
-    {
-      "path": "catalogo.html",
-      "oldHash": "2a1feef0a638828561aff4d2e0a46077c1f77727e2e05d1f87eae8f3087cb917",
-      "newHash": "71157580d8d6b623e0ae64de0cf78618a800c4abf079fa57480a6bbed1d54815"
-    },
-    {
-      "path": "checkout.html",
-      "oldHash": "2b9b31c40ce55a4cd29cc0002bdfafa2e8f0b063d6bee91860c2d42747b35160",
-      "newHash": "1fee9bc7ae4d84df9f8b88abd86be7fae862b0373318ed25ff8a31dd8dfb9729"
-    },
-    {
-      "path": "cloudflare/comentarios-sociales.js",
-      "oldHash": "2a5cf6d7ab2591b6faa12c4480347c16901775d42c0a3bd4e8e61a5d8984cab3",
-      "newHash": "5949ac1eae3aa2cd2cb3a08e9b032d34f745b6849e55f15c3f8b57e5f7c62681"
-    },
-    {
-      "path": "config/csp-runtime.js",
-      "oldHash": "982f6679155475f932debc4339f146b4b7ef2687cbeb2c74c129a1da42a02505",
-      "newHash": "e7e07aa312e51d718b8711750c55bffa9d62083910525cdc6c9d764cf6564756"
-    },
-    {
-      "path": "config/csp-runtime.json",
-      "oldHash": "fe579d9a957bc64c73e24dca5a90176ee63b70f418d65354bf6cb980128bc2d1",
-      "newHash": "5a9997551163b7182e69fbf6d71f9ea8cf76cdd7131f7ced959acf7e41fbbbae"
-    },
-    {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "5d62873aae94186e664d58f96c1c859261ea12e16c6717f2c2105b4c3a6f45c9",
-      "newHash": "2c55519a584fa82c0f61c73f580719846e2e97dc2c2c7ba66071407d9027a698"
-    },
-    {
-      "path": "js/admin/appearance/editor-visual-admin.js",
-      "oldHash": "3b22b5420ba90ebeba03529fe7ad1c6fcaa9bc28c606074425b23ec8d2a557da",
-      "newHash": "63dc995170ba54c3cc2ce2593483ce8104df21a3102cbfb685f1ed1216695410"
-    },
-    {
-      "path": "js/admin/diagnostics/diagnostico-sitio-admin.js",
-      "oldHash": "879132bfb2055501f60eca18b66ea56757ee01a5e4e16776d16b73235c6e746e",
-      "newHash": "b4922dcedfb5c2598308645322d28719a2ce7892da11bd75a7a50217ab3b8ac2"
-    },
-    {
-      "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "oldHash": "cbac570472acabc6286e227a2926e2108bb7139654e9f5b33444c31ea649a7d3",
-      "newHash": "614b395ef54b31ffb7558dd3e2a5253e86628ca96d34c30e6e86ad959efeb17c"
-    },
-    {
-      "path": "js/admin/maestro/panel-maestro.js",
-      "oldHash": "67f78b299f77458a9ada838b3b19e1e136543a5b677d4a478473d47c112263b3",
-      "newHash": "ae8c7491c159acc906c45aabfe31bc184328b6ec00bc05647cca5043c6ee26f8"
-    },
-    {
-      "path": "js/admin/mayoristas/mayoristas-admin.js",
-      "oldHash": "e3a2a845d6af443e1bf3cd2f3277cac8c29036a0b9da08200dd6f3d3aaba4a34",
-      "newHash": "4d340af62ac4a1c96e5795b1b21b1c8198901dfe21e34031c17d001f536a2537"
-    },
-    {
-      "path": "js/admin/pages/paginas-admin.js",
-      "oldHash": "edfdc06244483136a79a67dfb2079c3a1f131f9778e0a6c2b56d52bc07e2922b",
-      "newHash": "da5f4da1990fffcef2bab98964dcde048174e9d23b7beafb757791d81f6f7c35"
-    },
-    {
-      "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
-      "oldHash": "fe03ca4b899af9d06ed8a1e8fe1645c26abd2a902349f0cbb912681a8657c66c",
-      "newHash": "7e0a860ab7f745b2bdf8e4bbdac95b94a3ccdb6d8152f95edeec1819d9336ad3"
-    },
-    {
-      "path": "js/admin/participacion/gestion-participacion-admin.js",
-      "oldHash": "7b40aca3d83686217862927427b1d537ee95e07bf108f12f084dd59670f741ac",
-      "newHash": "d7574f14e0dbc13b3d64178f9d03a3e55b749d85e856f57a5dde305f86ec8899"
-    },
-    {
-      "path": "js/admin/products/biblioteca-multimedia-admin.js",
-      "oldHash": "deea78f0102189eb56e2bbd6d441cfa6593e6e8479f3e8094c6fb4207cb48225",
-      "newHash": "1ecedf0aafef5f706405411e9753f9a04f57027ff3658b5ba377df04ae98bb70"
-    },
-    {
-      "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "8c33d1b86245b1bdad29f797e3d04e849467431bb6253b4711a35f682f8facd6",
-      "newHash": "47570ffc5f920eea4fd971ce3c47aa6f7a890977ebd2d8ea627dff209622c09c"
-    },
-    {
-      "path": "js/components/location/mapa-ubicacion.js",
-      "oldHash": "a8404639703c053e7ec948c7c2f47268ce53f304d17fd3588f211422fd3be93f",
-      "newHash": "60f2089161c3dc1fe23cd4f491d1afaa5d744b61c111e08260b05cea267536f1"
-    },
-    {
-      "path": "js/pages/profile/mayorista-perfil.js",
-      "oldHash": "6cd2278652694148925f21183e65b6cad6eb1ce75445c2de2d36bfbea18a2ee8",
-      "newHash": "7926ac45db20ea834080ee7af12730e00737bdb86a81e394a73b75f5bca1ccda"
-    },
-    {
-      "path": "perfil.html",
-      "oldHash": "e5d72243fd2d07f4a9f0cc2dfbf1a9a04040c91d2097ba35c3f67f0f7da7988e",
-      "newHash": "4e04fc26d4768f96c0d8ef9900f2e2559fc6c8e42e8d4d68798fc208221a7606"
+      "oldHash": "1ffdee6ff3d495ac56ac60886816236b9110028e329f543d13e03d332289c39a",
+      "newHash": "38f61c76e3fcd4815f20ca43a4e8d81986db2820255069409c01e73b3d25ea00"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "9378f29940b335691b4cd3df07215e4942bc017d9b9872ebb9c60e8dbde955c6",
-      "newHash": "9704e04ceb0a8f9f00f6d8b2fdb89f1ffc19d35d319b3f71ad6f28927bfe58e8"
+      "oldHash": "9704e04ceb0a8f9f00f6d8b2fdb89f1ffc19d35d319b3f71ad6f28927bfe58e8",
+      "newHash": "4c33b502343bc62373fec9e154be0a567230ee7ba96aa1f6818734a311c5a879"
     }
   ],
-  "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
-    "apis-internas",
-    "apis-internas__apps-script__22",
-    "apis-internas__comentarios__39",
-    "apis-internas__correos__41",
-    "apis-internas__favoritos__37",
-    "apis-internas__firestore__21",
-    "apis-internas__likes__38",
-    "apis-internas__notificaciones__40",
-    "apis-internas__pedidos__32",
-    "cf-functions",
-    "cf-functions__apis-internas__20",
-    "cf-functions__csp__29",
-    "cf-functions__reglas-firestore__28",
-    "cf-pages__cf-functions__19",
-    "comentarios",
-    "correos",
-    "csp",
-    "favoritos",
-    "likes",
-    "pagina-perfil",
-    "pedidos",
-    "pedidos__inventario__33",
-    "productos",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-perfil__18",
-    "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
-    "super-panel__productos__34"
-  ]
+  "affectedRecords": []
 }

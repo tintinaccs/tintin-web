@@ -1,3 +1,13 @@
+## 2026-10-28 — Actualizaciones locales en el workspace de Super Admin
+
+Autoridad: `js/admin/maestro/espacio-modulos-admin.js`, compartida por admin y
+admin-images. Scheduler por raíces afectadas en lugar de medir todos los módulos
+por cada cambio; montaje/resize conservan descubrimiento global. Visibilidad
+idempotente y descarte de notificaciones propias/sin cambio efectivo. Se conservan
+scroll, foco, navegación, acceso a tablas, campos tardíos y controladores de
+negocio. No cambian diseño, loaders, consultas ni datos. URL inmutable nueva y
+derivados canónicos; mediciones/alcance en `docs/SUPERADMIN_FLUIDEZ.md`.
+
 ## 2026-10-28 — Referencia visual Studio recibida y composición del editor
 
 Autoridades: interfaz-productos-adaptable, galeria-unificada y CSS administrativo.

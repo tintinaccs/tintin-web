@@ -4,6 +4,30 @@ const { mockRuntime } = require('./helpers/admin-commerce-fixture.cjs');
 
 const { load } = require('./helpers/admin-panel-fixture.cjs');
 
+for(const width of [360,390,768,1024,1280,1440,1920])test(`actualizar un módulo no vuelve a medir todos los paneles ${width}`,async({page},info)=>{
+ await load(page,width);
+ const result=await page.evaluate(async()=>{
+  const active=document.querySelector('.adm-section.active');active.classList.remove('active');
+  const section=document.getElementById('section-configuracion');section.classList.add('active');
+  const frame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
+  await frame();await frame();await frame();
+  const original=Element.prototype.getClientRects,reads={};let redundantVisibilityWrites=0;
+  const observer=new MutationObserver(records=>{redundantVisibilityWrites+=records.filter(record=>record.target.closest('.tt-admin-workspace-bar,.tt-admin-table-hint')).length;});
+  observer.observe(section,{subtree:true,attributes:true,attributeFilter:['hidden']});
+  Element.prototype.getClientRects=function(...args){if(this.matches('.adm-section'))reads[this.id]=(reads[this.id]||0)+1;return original.apply(this,args);};
+  try{
+   const title=section.querySelector('.adm-card-title');
+   for(let i=0;i<5;i++){title.textContent=`Sección de prueba ${i}`;await frame();await frame();}
+   return {reads,redundantVisibilityWrites,otherPanels:Object.entries(reads).filter(([id])=>id!==section.id).reduce((sum,[,count])=>sum+count,0)};
+  }finally{Element.prototype.getClientRects=original;observer.disconnect();}
+ });
+ await info.attach('workspace-layout-reads.json',{body:JSON.stringify(result),contentType:'application/json'});
+ console.log('[workspace-layout-reads]',JSON.stringify({width,...result}));
+ expect(result.reads['section-configuracion']).toBeGreaterThan(0);
+ expect(result.otherPanels,'los cambios locales no deben medir módulos ajenos').toBe(0);
+ expect(result.redundantVisibilityWrites,'no realimentar observers con estados hidden idénticos').toBe(0);
+});
+
 for (const width of [320, 390, 768, 1440]) {
   test(`todos los módulos: navegación interna y controles adaptables a ${width}px`, async ({ page }, testInfo) => {
     await load(page, width);

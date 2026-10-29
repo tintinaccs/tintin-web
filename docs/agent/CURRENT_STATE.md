@@ -24,6 +24,26 @@ Agente: Codex raíz, con inspección paralela de los buscadores públicos/admini
 
 PASS_LOCAL:182 Node administrativos +1omitido emulador,63participación,29públicos/ubicación;37Chromium públicos y44comercio/admin. Último paso3/3Chromium(320/768/1440);Páginas3/3con CSP intacta tras corregir fixture. Fallo preexistente del fixture private-work-media-guard (statusFromError no inyectado) corregido, sin runtime alterado. Build canónico y preflight PASS_LOCAL (1073 JS,72 funciones;381 recursos/67 cargas dinámicas). Regresión final211editor en curso; CI PENDING en el candidato que se prepara. CI40783332432/1, SHA952b9469: preflight1073/72 y test:fast89Node+5Chromium aprobados; fallo posterior de reproducibilidad por CURRENT_STATE actualizado tras generar el manifiesto. Se regeneran diagnóstico/site-version al final y se exige segundo build sin diferencias; no se omite ningún gate. Safari físico y guardado con sesión real de la titular NOT_VERIFIED. No heredar PASS de #1267/#1268 ni certificar publicación antes de comprobar SHA/huella.
 
+## 2026-10-28 — Fluidez compartida de Super Admin
+
+Codex /root, base b1d90594ba672d66acfc5c88bf3aad381707bb29, rama
+fix/superadmin-fluidity-20261029. Nuevo pedido de fluidez global del panel tras
+Studio y #1270. Se reproduce trabajo sobrante en el workspace compartido:
+5 cambios en Configuración provocan115 consultas de geometría de secciones,
+110 en22 módulos ajenos (390px).1 FAIL inicial antes de modificar runtime;
+otros2 casos no ejecutados por fail-fast. Scheduler por raíces afectadas,
+visibilidad idempotente y descarte de clases sin cambio. Resultado final7/7
+en360–1920px:5 lecturas propias,0 ajenas,0 escrituras hidden redundantes.
+No es FPS/INP de usuarios reales ni prueba de una causa única de lentitud.
+Regresión final114/114 Chromium PASS sin reintentos,3.7m (todos los módulos,
+sidebar/tablets/móvil, tablas, foco, borradores/reintento y scroll del editor).
+Node scheduling3/3 PASS; build:pages PASS. Plan protegido canónico3 archivos,
+0 registros, versión nueva del módulo compartido en admin/admin-images; sólo
+presentación/scheduler, sin loaders/diseño/negocio/permisos/datos modificados.
+Preflight/CI/merge/producción se verifican por SHA nuevo; recibos terminales en
+artifacts/admin-fluidity/FOLLOWUP.json y el PR. Alcance/límites detallados en
+docs/SUPERADMIN_FLUIDEZ.md. No se acredita sesión autenticada ni hardware físico.
+
 ## 2026-10-28 — Studio: distinguir clase visual de un editor paralelo
 
 Codex /root, PR1268, head36c9babaf1dbb51bf555d9f42cba31013d8d3c75,
