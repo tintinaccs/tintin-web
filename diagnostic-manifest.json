@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "eec7ab1c4abcb08ed3fb76e86984ec3b99a87e31d7472feea574915dc25b9e9f",
+  "sourceFingerprint": "81abefad553670b03ea60b157e234adfeeff89138b81607c60201c9694d9217d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1610,
     "textFiles": 1479,
-    "totalBytes": 34925961,
+    "totalBytes": 34926825,
     "pages": 19,
     "modules": 1070
   },
@@ -54081,8 +54081,8 @@
     },
     {
       "path": "tests/runtime/email-history-safety.spec.js",
-      "bytes": 3133,
-      "sha256": "c54fb8c9146bd66e205169a751b8196d7c7590cde20ee04c08e91e53baf208b2",
+      "bytes": 3281,
+      "sha256": "7a4a36c263e5edecd1975f8be662f2df56fa54d04918e13ac31b885650a73370",
       "syntax": {
         "ok": true,
         "error": ""
@@ -54091,7 +54091,7 @@
       "endpoints": [
         {
           "url": "https://untrusted.invalid/tracker",
-          "line": 12
+          "line": 13
         }
       ]
     },
@@ -60129,8 +60129,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1023226,
-      "sha256": "34dbad394dab831354ac72ee8045594992544bddb456bd8a19b11ddb97e90017"
+      "bytes": 1023942,
+      "sha256": "4a33800d5af631c8fc277f4cc6b65b898a82ecad3fc54aee1c7785797d7fb352"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -67215,8 +67215,8 @@
     {
       "path": "tests/runtime/email-history-safety.spec.js",
       "extension": ".js",
-      "bytes": 3133,
-      "sha256": "c54fb8c9146bd66e205169a751b8196d7c7590cde20ee04c08e91e53baf208b2"
+      "bytes": 3281,
+      "sha256": "7a4a36c263e5edecd1975f8be662f2df56fa54d04918e13ac31b885650a73370"
     },
     {
       "path": "tests/runtime/error-monitor.spec.js",

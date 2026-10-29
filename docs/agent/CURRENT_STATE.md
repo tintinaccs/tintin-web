@@ -1,3 +1,7 @@
+## 2026-10-29 UTC — Seguridad del historial de Correos, fixture completo
+
+Codex raíz. SHA63cb5f22: CI40790203241/1 confirma Administración completa,Comercio y reglas SUCCESS. Calidad y Browser jobs123175389772/123175389765 fallan exclusivamente email-history-safety (renderer extraído sin normalizeAdminSearch). Se incluye helper real en el script de fixture; conserva pruebas de DOM/URLs hostiles y ausencia de solicitudes externas. Se ejecutan completos correos-module y email-history-safety:4/4Chromium PASS(390/1440), /tmp/tintin-correos-full-final.log. Build doble y SHA posterior se comprobarán aparte; no se hereda aprobación ni se marca publicación. WebKit de CI aún pendiente del nuevo candidato.
+
 ## 2026-10-28 — Versionado propio del Panel Maestro
 
 Codex raíz: CI40788468875/1, SHA2a1047b2, admin job123169321418: auditor maestro-conexiones rechazó VERSION interna antigua frente a URL nueva. Se alinean constante y entrada con tag nuevo, baseline desde main vigente y plan regenerado; no se cambia el auditor ni se relaja gate. Auditores superadmin ejecutados antes de publicar; evidencias /tmp/tintin-maestro-audits.log. Se conserva merge1271 y normalización de búsqueda del Panel. El SHA corregido tendrá CI independiente; no se hereda PASS de2a1047b2.
