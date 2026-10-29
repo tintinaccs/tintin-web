@@ -20,6 +20,9 @@ body.tt-home-premium.tt-hero-atomic-pending .tt-hero-media {
 }
 body.tt-home-premium.tt-hero-atomic-ready .tt-hero-media {
   opacity: 1 !important;
+  /* El shell ya esperó la decodificación: revelar de una vez evita que el
+     primer frame visible dependa de otra animación de opacidad. */
+  transition: none;
 }
 body.tt-home-premium .tt-hero-media {
   transition: opacity 140ms ease-out;

@@ -1,3 +1,7 @@
+## 2026-10-29 — Velocidad global de imágenes y portada sin pérdida
+
+Autoridades: index.html, gestión de imágenes y rendimiento de imágenes compartidos. Precarga/picture y confirmación de configuración conservan la misma variante optimizada, originales PNG/respaldo y URLs personalizadas. Cola global deduplicada de hasta64 imágenes por frame; geometrías antes de escrituras, lazy/prioridad explícitas intactas. Sin datos comerciales, SDK/servicios nuevos, reglas ni cambios de sesión/carrito. Generadores de URLs/CSP/caché/diagnóstico y plan canónicos; medidor exige escenarios comparables. Evidencia y límites en docs/agent/RENDIMIENTO-GLOBAL-20261029.md y CURRENT_STATE.
+
 ## 2026-10-28 — Actualizaciones locales en el workspace de Super Admin
 
 Autoridad: `js/admin/maestro/espacio-modulos-admin.js`, compartida por admin y

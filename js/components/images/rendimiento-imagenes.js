@@ -6,22 +6,24 @@
 
   const processed = new WeakSet();
   const pendingRoots = new Set();
+  const pendingImages = new Set();
   let scheduled = false;
+  let imageFrame = 0;
 
   function isPriorityImage(image) {
     if (image.matches('[fetchpriority="high"], [loading="eager"]')) return true;
+    if (image.getAttribute('loading') === 'lazy') return false;
     if (image.closest('.tt-header, .tt-hero, .tt-page-hero, .ck-header, .login-brand, .adm-sidebar-logo')) return true;
     const rect = image.getBoundingClientRect();
     return rect.top < window.innerHeight * 1.15 && rect.bottom > -80;
   }
 
-  function tuneImage(image) {
-    if (!(image instanceof HTMLImageElement) || processed.has(image)) return;
-    processed.add(image);
-    const priority = isPriorityImage(image);
+  function tuneImage(image, priority) {
     image.decoding = 'async';
     image.loading = priority ? 'eager' : 'lazy';
-    if ('fetchPriority' in image) image.fetchPriority = priority ? 'high' : 'low';
+    // La prioridad alta pertenece al LCP/branding explícitos. Una lista de
+    // miniaturas visibles no debe competir en bloque con la portada.
+    if ('fetchPriority' in image && !image.hasAttribute('fetchpriority')) image.fetchPriority = priority ? 'auto' : 'low';
     if (!image.hasAttribute('draggable')) image.draggable = false;
   }
 
@@ -33,12 +35,34 @@
     return images;
   }
 
+  function processImages() {
+    imageFrame = 0;
+    const batch = [];
+    for (const image of pendingImages) {
+      pendingImages.delete(image);
+      if (image.isConnected && !processed.has(image)) batch.push(image);
+      if (batch.length === 64) break;
+    }
+    // Primero medir, después escribir; un único lote por frame evita bloquear
+    // escritura/scroll al recibir listas grandes o varios snapshots seguidos.
+    const priorities = batch.map(isPriorityImage);
+    batch.forEach((image, index) => { processed.add(image); tuneImage(image, priorities[index]); });
+    if (pendingImages.size) imageFrame = window.requestAnimationFrame(processImages);
+  }
+
   function flush() {
     scheduled = false;
-    const roots = pendingRoots.size ? [...pendingRoots] : [document];
+    const roots = pendingRoots.size ? [...pendingRoots].filter(root => {
+      for (let parent = root.parentNode; parent; parent = parent.parentNode) {
+        if (pendingRoots.has(parent)) return false;
+      }
+      return true;
+    }) : [document];
     pendingRoots.clear();
-    const images = roots.flatMap(imagesInside);
-    window.requestAnimationFrame(() => images.forEach(tuneImage));
+    for (const root of roots) for (const image of imagesInside(root)) {
+      if (image instanceof HTMLImageElement && image.isConnected && !processed.has(image)) pendingImages.add(image);
+    }
+    if (pendingImages.size && !imageFrame) imageFrame = window.requestAnimationFrame(processImages);
   }
 
   function schedule(root = document) {
