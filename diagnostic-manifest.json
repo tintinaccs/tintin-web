@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "31a0ee2d527c4900c3083d07341bb9982535d852762cc1d160eebb4b1c2b0f54",
+  "sourceFingerprint": "8f333fd17f5fb9f51c4f9979285ae93b41a51bd9f238bb005b989f82453d4bc8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1627,
     "textFiles": 1492,
-    "totalBytes": 39743707,
+    "totalBytes": 39748525,
     "pages": 19,
     "modules": 1079
   },
@@ -2893,7 +2893,7 @@
         "viewer"
       ],
       "bytes": 204547,
-      "sha256": "15efca05cd1ad532c6733cf85fd8548e33a8da4ee65fa5d9fae100fcdcd4f37a",
+      "sha256": "8951209b4c5fa569a8759c6bd497b22be44c32b7ecaea6606b93d4b8f4b52759",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2947,7 +2947,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261029-performance-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261029-performance-2",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -3302,7 +3302,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261029-performance-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261029-performance-2",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -28301,7 +28301,7 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 438003,
-      "sha256": "5959ce84c196024af2dda2f9271f2a28ca938e5423e14bbc442f8ea39e9b897a",
+      "sha256": "a86fc373748c09a12d866d023209e561cea552a60c482cadc20255047749cf50",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28362,7 +28362,7 @@
           "line": 9
         },
         {
-          "raw": "./products/editor-comercial-interfaz.js?v=tintin-20261029-performance-1",
+          "raw": "./products/editor-comercial-interfaz.js?v=tintin-20261029-performance-2",
           "target": "js/admin/products/editor-comercial-interfaz.js",
           "dynamic": false,
           "line": 10
@@ -30374,8 +30374,8 @@
     },
     {
       "path": "js/admin/products/editor-comercial-interfaz.js",
-      "bytes": 12688,
-      "sha256": "bd7aa02601c4b62f59468192aad43fe770daacf2a2d3f2385ac35597a981ef86",
+      "bytes": 12788,
+      "sha256": "bcccea5091963b25eaafc098807fc2fd795780b9511e4120029915096ed0bc26",
       "syntax": {
         "ok": true,
         "error": ""
@@ -39706,8 +39706,8 @@
     },
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
-      "bytes": 20935,
-      "sha256": "ee01edd6b9a3a5a20823a3967293472c3d9f8d6902cf17f10ba515dece0545e7",
+      "bytes": 21203,
+      "sha256": "f5e36dacf5ef31caf7af4193380ec80400011e01af08a08b101365c99a3ab43e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -39717,37 +39717,43 @@
           "raw": "./consentimiento-privacidad.js?v=${consentVersion}",
           "target": null,
           "dynamic": false,
-          "line": 130
+          "line": 131
         },
         {
           "raw": "./consentimiento-privacidad.js?v=${consentVersion}",
           "target": null,
           "dynamic": false,
-          "line": 132
+          "line": 133
         },
         {
           "raw": "../core/firebase/origen-funciones.js",
           "target": "core/firebase/origen-funciones.js",
           "dynamic": false,
-          "line": 141
+          "line": 142
         },
         {
           "raw": "./configuracion-bienvenida.js?v=${welcomeConfigVersion}",
           "target": null,
           "dynamic": false,
-          "line": 191
+          "line": 192
         },
         {
           "raw": "../../components/welcome/configuracion-bienvenida.js?v=${welcomeConfigVersion}",
           "target": null,
           "dynamic": false,
-          "line": 192
+          "line": 193
+        },
+        {
+          "raw": ") &&\n  collectionsPhase4.includes(",
+          "target": "scripts/) &&\n  collectionsPhase4.includes(",
+          "dynamic": false,
+          "line": 249
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccs.com/",
-          "line": 144
+          "line": 145
         }
       ]
     },
@@ -57263,8 +57269,8 @@
     },
     {
       "path": "tests/ui-ux/product-editor-performance.spec.js",
-      "bytes": 2146,
-      "sha256": "dff8694c85857d668552fc9948363519c1a224af327f42a60b79308ab72b53d2",
+      "bytes": 3787,
+      "sha256": "8a8e1b96c126ac90764d9ed222339ec898f7c1d016e90872a0cb89462b2271cf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57650,8 +57656,8 @@
     },
     {
       "path": "tests/ui-ux/products-responsive-phase-one.spec.js",
-      "bytes": 80251,
-      "sha256": "162a30b9bdef091c6afe3524e4f37ad6ad72790328c593543d504a81cf896434",
+      "bytes": 80341,
+      "sha256": "54563aef0c7843718e4932131ba01c23cdfbb77314ab45c168c5c8b6d17508fe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57720,50 +57726,50 @@
         },
         {
           "url": "https://img.test/rosa.webp",
-          "line": 619
-        },
-        {
-          "url": "https://img.test/rojo.webp",
-          "line": 619
-        },
-        {
-          "url": "https://img.test/biblioteca.webp",
           "line": 620
         },
         {
+          "url": "https://img.test/rojo.webp",
+          "line": 620
+        },
+        {
+          "url": "https://img.test/biblioteca.webp",
+          "line": 621
+        },
+        {
           "url": "https://img.test/a.webp",
-          "line": 665
+          "line": 666
         },
         {
           "url": "https://img.test/b.webp/nhttps://img.test/c.webp",
-          "line": 665
+          "line": 666
         },
         {
           "url": "https://img.test/b.webp",
-          "line": 666
+          "line": 667
         },
         {
           "url": "https://img.test/c.webp",
-          "line": 666
+          "line": 667
         },
         {
           "url": "https://img.test/",
-          "line": 685
+          "line": 686
         },
         {
           "url": "https://img.test/uno.png",
-          "line": 693
+          "line": 694
         },
         {
           "url": "https://img.test/dos.png",
-          "line": 695
+          "line": 696
         }
       ]
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",
-      "bytes": 19359,
-      "sha256": "dfc88d8f0ed73c71aa6009db71b0b291cd89e6d2349abf75f63adddebf914016",
+      "bytes": 19383,
+      "sha256": "48092400e982b9cd78f41fde7e33a9a45f526b9e055533a33425d596ba85639d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -58808,7 +58814,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204547,
-      "sha256": "15efca05cd1ad532c6733cf85fd8548e33a8da4ee65fa5d9fae100fcdcd4f37a"
+      "sha256": "8951209b4c5fa569a8759c6bd497b22be44c32b7ecaea6606b93d4b8f4b52759"
     },
     {
       "path": "apple-touch-icon.png",
@@ -59815,8 +59821,8 @@
     {
       "path": "config/ci-stages.json",
       "extension": ".json",
-      "bytes": 7057,
-      "sha256": "8493d46a092d7be93144f7679277b9a6c73087488faf61b02919b0710e87ccbb"
+      "bytes": 7273,
+      "sha256": "40911305f33c2df917bb6cc9c3b6b740ecccdf7be72e57114d5289bf104cf027"
     },
     {
       "path": "config/csp-runtime.js",
@@ -59834,7 +59840,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 16652,
-      "sha256": "fba6726d8a6602ae22206c04d3b048a3f8ec0ee9fabc8a45d758558ed10fd749"
+      "sha256": "1dd75777e6115c8094022f222256655a420aa62698f6593cb3758c3be47cc570"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -59846,7 +59852,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "0e60e1c0227d383e0a9d466801ece9d6c892cda296d239c559d1f0082904611f"
+      "sha256": "32e4c0dbb887c031b79751a534983b052ba8ceae7a833f8f3bd68ef11db714eb"
     },
     {
       "path": "config/public-site.json",
@@ -60541,8 +60547,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1040743,
-      "sha256": "0063434ea54346c93028f2cc670654f331c0a7c3f545834534ce7f16b4b1fb71"
+      "bytes": 1042829,
+      "sha256": "45313cde2c0577c4bfdb373e452df6be6a2c6860837ebc4ce41b8ee4a00ca247"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -60607,8 +60613,8 @@
     {
       "path": "docs/agent/PERFORMANCE_GLOBAL_20261029.md",
       "extension": ".md",
-      "bytes": 8814,
-      "sha256": "916119364f325463fb849175e0cb209d92fe39661b3eac81140b5ea93ef17bf1"
+      "bytes": 9207,
+      "sha256": "0d75a492e514692e1a31f9bd3886502a6bf977a162b0a6f568f8cc364e91cdfd"
     },
     {
       "path": "docs/agent/PRECUTOVER_PEDIDOS_20261013.md",
@@ -62342,7 +62348,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 438003,
-      "sha256": "5959ce84c196024af2dda2f9271f2a28ca938e5423e14bbc442f8ea39e9b897a"
+      "sha256": "a86fc373748c09a12d866d023209e561cea552a60c482cadc20255047749cf50"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -62659,8 +62665,8 @@
     {
       "path": "js/admin/products/editor-comercial-interfaz.js",
       "extension": ".js",
-      "bytes": 12688,
-      "sha256": "bd7aa02601c4b62f59468192aad43fe770daacf2a2d3f2385ac35597a981ef86"
+      "bytes": 12788,
+      "sha256": "bcccea5091963b25eaafc098807fc2fd795780b9511e4120029915096ed0bc26"
     },
     {
       "path": "js/admin/products/editor-editorial-interfaz.js",
@@ -65233,8 +65239,8 @@
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
       "extension": ".js",
-      "bytes": 20935,
-      "sha256": "ee01edd6b9a3a5a20823a3967293472c3d9f8d6902cf17f10ba515dece0545e7"
+      "bytes": 21203,
+      "sha256": "f5e36dacf5ef31caf7af4193380ec80400011e01af08a08b101365c99a3ab43e"
     },
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
@@ -65354,7 +65360,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 76534,
-      "sha256": "ad01f78f2849f435238b30ea32974d839c17e9ec3f90e3768c5c3f7ca7c5613e"
+      "sha256": "d07600f591bd0f66969c0273759d1b161472c1adb1e6b90654f8ec7921fcb1bb"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -68167,8 +68173,8 @@
     {
       "path": "tests/ui-ux/product-editor-performance.spec.js",
       "extension": ".js",
-      "bytes": 2146,
-      "sha256": "dff8694c85857d668552fc9948363519c1a224af327f42a60b79308ab72b53d2"
+      "bytes": 3787,
+      "sha256": "8a8e1b96c126ac90764d9ed222339ec898f7c1d016e90872a0cb89462b2271cf"
     },
     {
       "path": "tests/ui-ux/product-editor-single-version.spec.js",
@@ -68257,14 +68263,14 @@
     {
       "path": "tests/ui-ux/products-responsive-phase-one.spec.js",
       "extension": ".js",
-      "bytes": 80251,
-      "sha256": "162a30b9bdef091c6afe3524e4f37ad6ad72790328c593543d504a81cf896434"
+      "bytes": 80341,
+      "sha256": "54563aef0c7843718e4932131ba01c23cdfbb77314ab45c168c5c8b6d17508fe"
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",
       "extension": ".js",
-      "bytes": 19359,
-      "sha256": "dfc88d8f0ed73c71aa6009db71b0b291cd89e6d2349abf75f63adddebf914016"
+      "bytes": 19383,
+      "sha256": "48092400e982b9cd78f41fde7e33a9a45f526b9e055533a33425d596ba85639d"
     },
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
@@ -71813,7 +71819,7 @@
           },
           {
             "file": "scripts/auditar-sitio-confiabilidad.js",
-            "line": 175,
+            "line": 176,
             "operation": "collection"
           }
         ]

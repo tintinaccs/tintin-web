@@ -20,7 +20,8 @@
       "npx playwright test tests/checkout/coupon-recovery.spec.js tests/ui-ux/product-small-controls.spec.js tests/login/profile-availability-recovery.spec.js --project=chromium",
       "npx playwright test tests/checkout/paypal-fictitious-browser.spec.js tests/checkout/login-required-browser.spec.js tests/checkout/availability-browser.spec.js tests/catalog/search-responsive.spec.js tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium",
       "npx playwright test tests/profile/wholesale-session-recovery.spec.js --project=chromium",
-      "npx playwright test tests/cart/color-choice-browser.spec.js --project=chromium --retries=0"
+      "npx playwright test tests/cart/color-choice-browser.spec.js --project=chromium --retries=0",
+      "node --test tests/catalog/public-catalog-batch.test.mjs tests/checkout/request-correlation-event.test.mjs"
     ]
   },
   "admin": {
@@ -57,7 +58,7 @@
       "node --test tests/admin/editor-comercial.test.mjs tests/admin/editor-editorial.test.mjs tests/admin/product-editor-category.test.mjs tests/admin/vision-productos.test.mjs tests/admin/product-workspaces.test.mjs tests/admin/firestore-list-page.test.mjs tests/admin/private-work-pagination-session.test.mjs tests/admin/product-progress-audit.test.mjs tests/admin/respuesta-editor-producto.test.mjs",
       "node --test tests/security/product-editor-preview-static.test.mjs tests/security/csp-cloudinary-upload.test.mjs tests/diagnostics/manifest-exclusions.test.mjs",
       "npx playwright test tests/ui-ux/editor-comercial-v2.spec.js --project=chromium --retries=0",
-      "npx playwright test tests/ui-ux/product-guided-editor.spec.js tests/ui-ux/product-editor-tabs.spec.js tests/ui-ux/product-editor-csp.spec.js tests/ui-ux/product-workspaces.spec.js tests/ui-ux/product-color-gallery.spec.js tests/ui-ux/product-editor-final.spec.js tests/ui-ux/product-editor-single-version.spec.js tests/ui-ux/product-photo-context.spec.js tests/ui-ux/product-editor-space.spec.js --project=chromium --retries=0"
+      "npx playwright test tests/ui-ux/product-editor-performance.spec.js tests/ui-ux/product-guided-editor.spec.js tests/ui-ux/product-editor-tabs.spec.js tests/ui-ux/product-editor-csp.spec.js tests/ui-ux/product-workspaces.spec.js tests/ui-ux/product-color-gallery.spec.js tests/ui-ux/product-editor-final.spec.js tests/ui-ux/product-editor-single-version.spec.js tests/ui-ux/product-photo-context.spec.js tests/ui-ux/product-editor-space.spec.js --project=chromium --retries=0"
     ]
   },
   "quality": {
@@ -75,7 +76,9 @@
       "test:shopify-product-redirect",
       "audit:login-profile"
     ],
-    "commands": []
+    "commands": [
+      "node --test tests/performance/*.test.mjs"
+    ]
   },
   "browser": {
     "audits": [],

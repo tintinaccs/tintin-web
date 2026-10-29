@@ -116,7 +116,7 @@ async function openProductSaveFixture(page, width, height, {fullShell=false,phot
 }
 async function openOptionAvailability(page,value,attribute='Color',combination=null){
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
- const panel=page.locator('#prod-variant-stock');const search=panel.getByRole('searchbox',{name:'Buscar combinación',exact:true});if(await search.count())await search.fill(combination || value);
+ const panel=page.locator('#prod-variant-stock');const search=panel.getByRole('searchbox',{name:'Buscar combinación',exact:true});if(await search.count()){await search.fill(combination || value);await search.press('Tab');}
  const fields=panel.locator('.tt-commercial-row').filter({has:page.locator('legend').filter({hasText:combination || value})});
  if(await fields.count()===1)await fields.scrollIntoViewIfNeeded();
 }

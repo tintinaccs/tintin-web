@@ -66,6 +66,7 @@ const phase7CatalogPolicy = read('js/pages/catalog/politica-visibilidad-catalogo
 const catalog = read('catalogo.html');
 const loadImagesInit = read('js/components/images/inicio-carga-imagenes.js');
 const collectionsPhase4 = read('js/pages/collections/presentacion-colecciones.js');
+const collectionIcons = read('js/components/navigation/compartido/iconos.js');
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
 check('El menú de cuenta arranca también en el runtime público',
@@ -245,8 +246,10 @@ check('El loader pasa de un punto a otro sin un cross-fade visible',
   loader.includes("transition:opacity .01s linear,visibility .01s linear") &&
   !loader.includes('.38s ease'));
 check('La colección Bolsos conserva su portada real después de sincronizar',
-  collectionsPhase4.includes("const SLUG_FILE_MAP = { bolsos: 'bags' }") &&
-  collectionsPhase4.includes('col-${file}.webp') &&
+  collectionsPhase4.includes("import { collectionImageUrl } from ") &&
+  collectionsPhase4.includes('safeUrl(collectionImageUrl(slug))') &&
+  collectionIcons.includes("normalized === 'bolsos' || normalized === 'bags' ? 'bags'") &&
+  fs.existsSync(path.join(root, 'assets-tintin/images/collections/col-bags.webp')) &&
   collectionsPhase4.includes('label.textContent = (clean(collection.name) || clean(collection.slug)).toUpperCase()'));
 check('Buscador, carrito, menú y colecciones comunican apertura y cierre',
   publicShell.includes('id="search-panel" role="dialog"') &&

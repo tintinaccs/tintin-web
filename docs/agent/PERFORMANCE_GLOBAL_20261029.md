@@ -53,3 +53,5 @@ Build de páginas, CSP, diagnóstico, rutas, caché y preflight local PASS.65 ar
 Las evidencias históricas de esa publicación están en `RENDIMIENTO-GLOBAL-20261029.md`; no se presentan como pruebas del candidato combinado.
 
 Este resultado sigue **en curso**: G03/Inicio, G09, informes externos y aceptación autenticada pendientes. No merge ni despliegue manual de esta rama. No se han modificado pedidos, productos, stock, precios ni cuentas de producción.
+
+CI del candidato: se repara la auditoría estática del alias de Bolsos y el fixture que eliminaba el helper puro. El buscador comercial aplica el filtrado pendiente al perder foco, evitando reemplazar campos que ya se están editando; nueva regresión de identidad/foco y stock con reloj controlado. Evidencia final de cada SHA en el PR y el recibo de revisión, sin heredar checks previos.
