@@ -21,7 +21,7 @@ function css(){
  });
 }
 function bootThemeSanitizer(){import(versioned('../components/color/normalizador-color-tema.js', 'tintin-20261021-commerce-review-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}
-function bootMobileHeader(){import(versioned('../components/navigation/compartido/compatibilidad-cuenta-movil.js', 'tintin-20261022-informational-merged-2')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}
+function bootMobileHeader(){import(versioned('../components/navigation/compartido/compatibilidad-cuenta-movil.js', 'tintin-20261029-cart-reveal-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}
 function bootPageAudit(){import(versioned('./correccion-auditoria-pagina.js', 'tintin-20261012-checkout-ready-3-control-paneles-js-palette-20261014-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Page Audit Fix:',e)})}
 function bootCollectionsPhase4(){import(versioned('../pages/collections/presentacion-colecciones.js', 'tintin-20261029-performance-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Collections Phase 4:',e)})}
 function bootAdminCollectionsPhase4(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('../admin/collections/gestion-colecciones-admin.js', 'tintin-20261029-performance-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Collections Phase 4:',e)})}

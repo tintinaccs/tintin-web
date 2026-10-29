@@ -1,5 +1,15 @@
 # Reparación global de rendimiento — 2026-10-29
 
+## Reparación de los tres fallos de CI40913551602/1
+
+Sobre el candidato `0b7a6a48bb15323b314763eee0d96fab4e6d4d3f`, job123589864290, Inicio superó500ms al abrir carrito; Contacto descargó121 recursos propios frente a120; Envíos presentó ambos límites en sus intentos. No se heredan esos resultados al siguiente candidato ni se incrementan los presupuestos.
+
+El runtime informativo cargaba `extension-revelado-marca.js` al abrir cualquier superficie. Ahora se solicita al abrir Cuenta, incluso si el runtime llega después de su apertura, y se conserva el caso de mapas. El carrito tiene su animación canónica propia: su apertura completa pasa de300 a180ms, conservando cierre, foco, movimiento reducido y las demás superficies.
+
+La sonda empieza en captura de `window`, durante el clic real, antes del controlador que detiene la propagación en captura de `document`. Termina después del estado abierto y de dos frames; incluye trabajo síncrono y toda la animación, pero excluye las esperas de Playwright. La regresión específica introduce700ms de espera previa y200ms de trabajo/apertura, y exige medir el segundo período dentro del presupuesto original. La suite se ejecuta con un worker para evitar competencia entre pruebas que aplican CPU×4; se mantienen todos los casos y límites.
+
+PASS_LOCAL dirigido: diez rutas públicas y una regresión de la sonda,11/11 sin reintentos. Inicio262ms y Envíos239ms en esa corrida; no son INP de campo ni evidencia de sesiones comerciales. La suite final y navegación del candidato se registran en CURRENT_STATE y en el recibo de seguimiento. URLs inmutables actualizadas desde el generador y auditor canónicos; no se modifican permisos, datos ni dependencias.
+
 Codex /root. Rama `codex/global-performance-repair-20261029`, base inicial `a936e6dd91be338f00e104c11bc48b8dbc865ad3`; integración posterior de `eac9a327` (#1273).
 
 Auditoría reproducida: `/workspace/audit-global-20261029/AUDITORIA-GLOBAL.md`, `findings.json` y sondas acompañantes. No se heredan sus PASS a los cambios actuales. Sin escrituras comerciales de producción.

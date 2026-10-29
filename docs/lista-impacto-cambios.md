@@ -1,3 +1,7 @@
+## 2026-10-29 — Apertura del carrito y medición de rendimiento del PR1274
+
+Autoridades: control-paneles compartido y compatibilidad-cuenta-movil. El carrito abre en180ms sin descargar el reveal exclusivo de Cuenta en páginas informativas; cierre, foco, movimiento reducido y Cuenta se conservan. La sonda mide desde el clic real capturado antes del controlador hasta apertura completa y pintura, con regresión de espera del automatizador. Rendimiento se ejecuta secuencialmente para no competir con CPU limitada, sin aumentar presupuestos ni quitar casos. URLs transitivas y manifiestos mediante generadores canónicos. Sin permisos, datos comerciales ni dependencias nuevas. Evidencia del candidato en CURRENT_STATE y PERFORMANCE_GLOBAL_20261029.
+
 ## 2026-10-29 — Velocidad global de imágenes y portada sin pérdida
 
 Autoridades: index.html, gestión de imágenes y rendimiento de imágenes compartidos. Precarga/picture y confirmación de configuración conservan la misma variante optimizada, originales PNG/respaldo y URLs personalizadas. Cola global deduplicada de hasta64 imágenes por frame; geometrías antes de escrituras, lazy/prioridad explícitas intactas. Sin datos comerciales, SDK/servicios nuevos, reglas ni cambios de sesión/carrito. Generadores de URLs/CSP/caché/diagnóstico y plan canónicos; medidor exige escenarios comparables. Evidencia y límites en docs/agent/RENDIMIENTO-GLOBAL-20261029.md y CURRENT_STATE.

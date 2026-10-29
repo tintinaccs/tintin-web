@@ -113,7 +113,7 @@
       const animation = element.animate(
         opening ? [{ translate: start }, { translate: '0 0' }]
           : [{ translate: '0 0' }, { translate: start }],
-        { duration: opening ? 300 : 200, easing: 'cubic-bezier(.2,.82,.2,1)', fill: 'both' }
+        { duration: opening ? (this.surface === 'cart' ? 180 : 300) : 200, easing: 'cubic-bezier(.2,.82,.2,1)', fill: 'both' }
       );
       this.animations.add(animation);
       try { await animation.finished; } catch {}
@@ -138,7 +138,7 @@
           ? [{ transform: start, borderRadius: '999px', opacity: .72 }, { transform: end, borderRadius: '24px', opacity: .18 }]
           : [{ transform: end, borderRadius: '24px', opacity: .18 }, { transform: start, borderRadius: '999px', opacity: .72 }],
         {
-          duration: opening ? 300 : 220,
+          duration: opening ? (this.surface === 'cart' ? 180 : 300) : 220,
           easing: opening ? 'cubic-bezier(.2,.82,.2,1)' : 'cubic-bezier(.4,0,.6,1)',
           fill: 'both',
         }

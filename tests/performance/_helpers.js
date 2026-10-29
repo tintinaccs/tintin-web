@@ -92,12 +92,33 @@ async function waitLoaderGone(page, timeout = 12000) {
 async function probeInteraction(page) {
   const trigger=page.locator('[data-nav-action="cart"]:visible,#tabbar-cart:visible,[data-shell-route="cart"]:visible').first();
   await trigger.waitFor({state:'visible'});
-  await page.evaluate(()=>{window.__ttInteractionStarted=performance.now();});
+  // Start inside the actual gesture, excluding Playwright's actionability wait.
+  // Finish only after the controller's opening animation and the next paint.
+  await trigger.evaluate(element => {
+    window.__ttInteractionMeasured = new Promise(resolve => {
+      function onGesture(event) {
+        if (!event.composedPath().includes(element)) return;
+        window.removeEventListener('click', onGesture, true);
+        const started = performance.now();
+        function painted() {
+          const drawer = document.getElementById('cart-drawer');
+          if (drawer?.getAttribute('aria-hidden') !== 'false' || window.TintinSurfaceController?.state !== 'open') {
+            requestAnimationFrame(painted);
+            return;
+          }
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            window.__ttVitals.interactionMs = performance.now() - started;
+            resolve();
+          }));
+        }
+        requestAnimationFrame(painted);
+      }
+      // The controller stops propagation at document capture; observe before it.
+      window.addEventListener('click', onGesture, true);
+    });
+  });
   await trigger.click();
-  await page.waitForFunction(()=>document.getElementById('cart-drawer')?.getAttribute('aria-hidden')==='false');
-  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    window.__ttVitals.interactionMs=performance.now()-window.__ttInteractionStarted;resolve();
-  }))));
+  await page.evaluate(() => window.__ttInteractionMeasured);
   await page.locator('#btn-cart-close').click();
   await page.waitForFunction(()=>document.getElementById('cart-drawer')?.getAttribute('aria-hidden')==='true');
 }

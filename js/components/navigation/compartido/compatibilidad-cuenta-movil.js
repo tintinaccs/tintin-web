@@ -44,9 +44,10 @@ function scheduleBrandReveal(){
  var informational=/\/(?:about|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad|404)(?:\.html)?\/?$/i.test(location.pathname);
  if(!informational){bootBrandReveal();return;}
  ready(function(){
-  if(document.querySelector('.tt-map-block')||['opening','open'].includes(window.TintinSurfaceController&&window.TintinSurfaceController.state)){bootBrandReveal();return;}
+  var controller=window.TintinSurfaceController;
+  if(document.querySelector('.tt-map-block')||(controller&&controller.surface==='account'&&['opening','open'].includes(controller.state))){bootBrandReveal();return;}
   function openSurface(event){
-   if(!['opening','open'].includes(event.detail&&event.detail.state))return;
+   if(event.detail?.surface!=='account'||!['opening','open'].includes(event.detail?.state))return;
    removeEventListener('tintin:surface-change',openSurface);
    bootBrandReveal();
   }
