@@ -67,4 +67,12 @@ Al ejecutar las comprobaciones de geometría surgieron4fallos también presentes
 
 Validación posterior a esta corrección:29/29Chromium (14geometrías+4precargas+11fidelidad) y13/13Node del grupo exacto de CI PASS, sin reintentos. Una prueba Node del reloj se alinea con el ejecutable configurable de la otra prueba del mismo archivo; sin cambios de comportamiento en CI cuando no hay override.
 
-Última repetición aislada sobre el CSS final,3corridas y contexto idéntico: LCP7404ms e imágenes1842251B. Base fresca: LCP8340ms e imágenes2463690B. Se conserva una reducción de LCP de11,2% y de transferencia de imágenes de25,2%; TBT1188ms no acredita una mejora global. Evidencia: artifacts/perf/confirmacion-cierre{,-runs,-context}.json. El nuevo SHA necesita sus propios checks y recibo de publicación; ningún resultado de CI anterior se hereda.
+Repetición tras la primera reserva móvil,3corridas y contexto idéntico: LCP7404ms e imágenes1842251B. Base fresca: LCP8340ms e imágenes2463690B. Se conserva una reducción de LCP de11,2% y de transferencia de imágenes de25,2%; TBT1188ms no acredita una mejora global. Evidencia: artifacts/perf/confirmacion-cierre{,-runs,-context}.json. El nuevo SHA necesita sus propios checks y recibo de publicación; ningún resultado de CI anterior se hereda.
+
+## Candidato final: centrado y seguridad del CTA
+
+CI40879402392/1 (e61247b7), job123469750415: la reserva asimétrica introdujo un desplazamiento de28px detectado por las5pruebas de centrado. La implementación final reserva el carril simétricamente y permite texto flexible en botones estrechos. Se mantienen ambas exigencias: centrado y ninguna superposición con WhatsApp; tampoco se toleran recortes de texto. Las aserciones originales no se relajan.
+
+Comprobación local posterior:47/47geometría/footer; navegación completa250PASS/1SKIP sin reintentos (la omitida exige Pages Functions, ausente en el servidor estático);14/14geometrías con texto sin recorte;13/13Node del grupo exacto de CI;13/13de fidelidad, precarga, prioridad y cola. La suite de rendimiento incluida en CI comprueba centrado y reserva juntos en320/390/540, más precargas tablet/desktop. El CSS y su tag se publican conjuntamente con el bundle, manifiesto, versión y plan canónicos.
+
+Medición final aislada,3corridas: LCP7432ms frente a8340ms (−10,9%), imágenes1842251B frente a2463690B (−25,2%), TBT1030ms y carrito vacío254ms. Son resultados de laboratorio; no acreditan una mejora general de TBT/INP ni de operaciones comerciales reales. Raw/contexto: artifacts/perf/confirmacion-centrado{,-runs,-context}.json. Capturas y geometrías: artifacts/perf-ui-centered-20261029. CI y publicación final se registran con su SHA/run/intento propios en el recibo del PR.

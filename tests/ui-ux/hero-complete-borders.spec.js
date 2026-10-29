@@ -33,7 +33,7 @@ for (const [width,height] of [[320,568],[390,844],[430,932],[667,375],[844,390],
     const result=await page.evaluate(()=>{
       const image=document.querySelector('#tt-hero-img'), media=image.closest('.tt-hero-media'), hero=document.querySelector('#hero');
       const box=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
-      return {image:box(image),media:box(media),hero:box(hero),ratio:image.naturalWidth/image.naturalHeight,scrollWidth:document.documentElement.scrollWidth,whatsapp:box(document.querySelector('.tt-wa-float')),actions:[...hero.querySelectorAll('.tt-hero-actions a')].map(box)};
+      return {image:box(image),media:box(media),hero:box(hero),ratio:image.naturalWidth/image.naturalHeight,scrollWidth:document.documentElement.scrollWidth,whatsapp:box(document.querySelector('.tt-wa-float')),actions:[...hero.querySelectorAll('.tt-hero-actions a')].map(a=>({...box(a),clipped:a.scrollWidth>a.clientWidth+1}))};
     });
     const geometryPath = testInfo.outputPath('geometria-banner.json');
     fs.writeFileSync(geometryPath, JSON.stringify(result, null, 2));
@@ -46,6 +46,7 @@ for (const [width,height] of [[320,568],[390,844],[430,932],[667,375],[844,390],
     expect(result.image.top).toBeGreaterThanOrEqual(0);
     expect(result.image.bottom).toBeLessThanOrEqual(result.hero.bottom+1);
     for(const action of result.actions) {
+      expect(action.clipped).toBe(false);
       expect(action.left).toBeGreaterThanOrEqual(0);
       expect(action.right).toBeLessThanOrEqual(width);
       expect(action.top).toBeGreaterThanOrEqual(width<=767?result.image.bottom:result.image.top);

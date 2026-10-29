@@ -890,4 +890,4 @@ Reintentar conserva la intención de guardado oficial y no sólo del borrador;
 el aviso se centraliza sin duplicarlo. Versiones, CSP, diagnóstico y protección
 mediante herramientas canónicas.
 
-- 2026-10-29, seguimiento PR1273: ajuste canónico del padding móvil del banner para conservar el carril de WhatsApp; pruebas estrictas de geometría/precarga/cache por formato, con PNG de respaldo y sin cambios de enlaces o navegación.
+- 2026-10-29, seguimiento PR1273: ajuste canónico y simétrico del padding móvil del banner para conservar el carril de WhatsApp y el centrado; pruebas estrictas de geometría/precarga/cache por formato, con PNG de respaldo y sin cambios de enlaces o navegación.

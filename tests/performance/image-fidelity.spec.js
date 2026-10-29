@@ -91,7 +91,7 @@ test('imágenes globales: prioridad explícita y lecturas agrupadas sin promover
   expect(await page.evaluate(()=>window.readsAfterWrite)).toBe(0);
 });
 
-for(const [width,height,device] of [[390,844,'mobile'],[820,1180,'tablet-vertical'],[1024,768,'tablet-horizontal'],[1440,900,'desktop']])test(`precarga y picture comparten una sola portada ${width}`,async({page})=>{
+for(const [width,height,device] of [[320,568,'mobile'],[390,844,'mobile'],[540,900,'mobile'],[820,1180,'tablet-vertical'],[1024,768,'tablet-horizontal'],[1440,900,'desktop']])test(`precarga y picture comparten una sola portada ${width}`,async({page})=>{
   const fs=require('node:fs'),path=require('node:path');
   const {removeFixtureScripts}=require('../../scripts/lib/html-layout-fixture.js');
   const html=removeFixtureScripts(fs.readFileSync(path.resolve(__dirname,'../../index.html'),'utf8'),{removeModulePreloads:true});
@@ -114,4 +114,20 @@ for(const [width,height,device] of [[390,844,'mobile'],[820,1180,'tablet-vertica
     return { opacity: getComputedStyle(media).opacity, duration: getComputedStyle(media).transitionDuration };
   });
   expect(reveal).toEqual({ opacity: '1', duration: '0s' });
+  if (width < 768) {
+    await page.evaluate(() => document.fonts.ready);
+    const geometry = await page.evaluate(() => {
+      const hero = document.getElementById('hero').getBoundingClientRect();
+      const group = document.querySelector('#hero .tt-hero-actions').getBoundingClientRect();
+      const whatsapp = document.querySelector('.tt-wa-float').getBoundingClientRect();
+      return { axis: hero.left + hero.width / 2, center: group.left + group.width / 2, whatsappLeft: whatsapp.left,
+        actions: [...document.querySelectorAll('#hero .tt-hero-actions a')].map(a => ({ right: a.getBoundingClientRect().right, clipped: a.scrollWidth > a.clientWidth + 1 })) };
+    });
+    expect(Math.abs(geometry.center - geometry.axis)).toBeLessThanOrEqual(1);
+    expect(geometry.actions).toHaveLength(2);
+    for (const action of geometry.actions) {
+      expect(action.right).toBeLessThanOrEqual(geometry.whatsappLeft - 8);
+      expect(action.clipped).toBe(false);
+    }
+  }
 });
