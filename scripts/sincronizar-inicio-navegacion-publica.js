@@ -18,7 +18,7 @@ const TIENDA_VERSION = 'tintin-20261029-performance-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
 const LOADER_VERSION = 'tintin-20261029-cart-reveal-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
-const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-1';
+const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20261029-performance-1';
 const NAV_ENTRY_VERSION = 'tintin-20261029-performance-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
@@ -643,6 +643,7 @@ for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') &&
   if (page === '404.html') {
     html = replaceSharedFooter(html, true);
     html = ensureMobileBrandHeader(html, page);
+    html = html.replace(/(\/?js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${PANEL_COMPAT_VERSION}`);
     html = html.replace(/(\/?js\/inicio-navegacion-publica\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${PUBLIC_SHELL_VERSION}`);
     html = html.replace(/(\/?js\/components\/navigation\/entrada-navegacion-publica\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${NAV_ENTRY_VERSION}`);
     html = html.replace(/(\b(?:src|href)=["'])(?=(?:js|css|assets-tintin)\/)/g, '$1/');

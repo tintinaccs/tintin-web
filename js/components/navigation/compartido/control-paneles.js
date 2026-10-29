@@ -378,7 +378,8 @@
     }
 
     toggle(name, trigger) {
-      return this.surface === name ? this.close('toggle') : this.open(name, trigger);
+      return this.surface === name && this.state !== 'closing'
+        ? this.close('toggle') : this.open(name, trigger);
     }
 
     onClick(event) {

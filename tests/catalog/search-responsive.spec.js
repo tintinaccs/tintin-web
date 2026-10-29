@@ -41,6 +41,8 @@ for(const [width,height,path] of [[390,844,'envios'],[844,390,'preguntas-frecuen
   if(!['products','collections'].includes(resource))return route.continue();
   return route.fulfill({json:{ok:true,resource,items:(resource==='products'?products:[{id:'anillos',name:'Anillos',slug:'anillos',visible:true}]).map(({id,...data})=>({id,data}))}});
  });
+ const decorativeRequests=[];
+ page.on('request',request=>{if(request.url().includes('extension-revelado-marca.js'))decorativeRequests.push(request.url());});
  await page.goto('/'+path,{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>window.TintinAccountMobileFixBooted);
  await page.waitForTimeout(1000);
@@ -50,10 +52,31 @@ for(const [width,height,path] of [[390,844,'envios'],[844,390,'preguntas-frecuen
  await page.locator('[aria-controls="search-panel"]:visible').first().click();
  await page.locator('#search-input').fill('TIN-00042');
  await expect(page.locator('#search-results .tt-search-result-copy strong')).toHaveText(['Anillo corazón']);
- await expect.poll(()=>page.evaluate(()=>window.TintinBrandRevealExtensionBooted===true)).toBe(true);
- await page.locator('#btn-search-close').click();
- await page.locator('[aria-controls="search-panel"]:visible').first().click();
+ await expect(page.locator('#search-results a')).toHaveAttribute('href','/product?id=ring');
+ expect(decorativeRequests).toHaveLength(0);
+ expect(await page.evaluate(()=>window.TintinBrandRevealExtensionBooted===true)).toBe(false);
+ // Ambas acciones en el mismo turno reproducen el cierre aún pendiente.
+ await page.evaluate(()=>{
+  document.querySelector('#btn-search-close').click();
+  [...document.querySelectorAll('[aria-controls="search-panel"]')].find(el=>el.getClientRects().length).click();
+ });
+ await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('open');
+ await expect(page.locator('#search-panel')).toBeVisible();
+ await expect(page.locator('#search-panel')).toHaveAttribute('aria-hidden','false');
+ await expect(page.locator('#search-input')).toBeVisible();
+ await expect(page.locator('#search-input')).toBeFocused();
  await expect(page.locator('#search-input')).toHaveValue('');
+ expect(decorativeRequests).toHaveLength(0);
+ await page.keyboard.press('Escape');
+ await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('idle');
+ await page.locator('[aria-controls="account-drawer"]:visible').first().click();
+ await expect.poll(()=>page.evaluate(()=>window.TintinBrandRevealExtensionBooted===true)).toBe(true);
+ expect(decorativeRequests).toHaveLength(1);
+ await page.keyboard.press('Escape');
+ await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('idle');
+ await page.locator('[aria-controls="account-drawer"]:visible').first().click();
+ await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('open');
+ expect(decorativeRequests).toHaveLength(1);
 });
 
 test('motor comercial v2 comparte precio y descuento entre tarjeta y búsqueda',async({page})=>{
