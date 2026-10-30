@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "c610f9d9ec5c2c418ca9422d6a90b2308c4758f4",
-  "reason": "Cerrar suplantacion e inyeccion HTML en Auditoria preservando escritores comerciales y controles",
+  "reason": "Cerrar suplantacion e inyeccion en Auditoria y actualizar dependencia CLI vulnerable sin debilitar controles",
   "files": [
     {
       "path": "admin-images.html",
@@ -52,6 +52,11 @@
       "path": "js/components/images/carga-imagenes.js",
       "oldHash": "45a7695ddcc9b8132055971e6a795397754b90f2807ebeb90218d9cbd1b5cd03",
       "newHash": "ef446274558c59936b05db2de2bd581a6f4885aa567dc552de7e4742be3a063b"
+    },
+    {
+      "path": "package-lock.json",
+      "oldHash": "16dc8ab4872db960640cb8f4ef8fa89a37e71db1ac2264f2cd2999d6c2a55dec",
+      "newHash": "d7054ae4cee441822b2c908747de5fcc4dc946b9b732991416525f2a0b1dbfa0"
     },
     {
       "path": "package.json",
