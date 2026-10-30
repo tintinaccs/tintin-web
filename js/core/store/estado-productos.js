@@ -24,6 +24,7 @@ let homeIndexSavedAt = 0;
 let homeSelection = null;
 let completeCatalog = null;
 let homeSelectionTask = Promise.resolve();
+let homeRequestVersion = 0;
 const HOME_CACHE_TTL = 10 * 1000;
 // La caché local acompaña la frescura del edge (10 segundos) para mostrar
 // cambios de precio, stock y estado al volver a la categoría.
@@ -202,30 +203,37 @@ function publishHome(products, source) {
 }
 
 async function fetchHomeProducts({reroll = '', force = false} = {}) {
-  await catalogVisibilityReady;
-  const reuseIndex = !force && homeIndex.length && Date.now()-homeIndexSavedAt < HOME_CACHE_TTL;
-  const rows = reuseIndex ? homeIndex : await fetchPublicHomeIndex();
-  const index = rows.filter(item => window.TintinCatalogPolicy?.isCollectionVisible?.(item.data.category) !== false);
-  const ids = index.filter(item=>item.data.available!==false).map(item => String(item.id));
-  const selection = {
-    discovery: chooseHomeIds(ids, document.getElementById('products-grid') ? 5 : 0, homeSelection?.discovery, reroll === 'discovery'),
-    look: chooseHomeIds(ids, document.getElementById('look-grid') ? 3 : 0, homeSelection?.look, reroll === 'look'),
-    featured: index.filter(item => item.data.destacado === true && item.data.available !== false).slice(0, 4).map(item => String(item.id)),
-    poolSize: ids.length,
-  };
-  const wanted = [...new Set([...selection.discovery, ...selection.look, ...selection.featured])];
-  const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
-  const cachedById = new Map((Array.isArray(cached) ? cached : []).map(product => [String(product.id), product]));
-  const missing = wanted.filter(id => !cachedById.has(id));
-  const items = missing.length ? await fetchPublicProductsByIds(missing) : [];
-  // El filtro de IDs también protege frente a respuestas ajenas al lote.
-  const received = new Map(items.filter(item => missing.includes(String(item.id))).map(item => [String(item.id), mapProduct(item.id, item.data)]));
-  const products = normalizeList(wanted.map(id => cachedById.get(id) || received.get(id)).filter(Boolean));
-  homeIndex = index;
-  if (!reuseIndex) homeIndexSavedAt = Date.now();
-  homeSelection = selection;
-  writeCached(HOME_CACHE_KEY, {products: products.map(compactProduct), selection, index, indexAt: homeIndexSavedAt});
-  return publishHome(products, 'home-selection');
+  const requestVersion = ++homeRequestVersion;
+  try {
+    await catalogVisibilityReady;
+    const reuseIndex = !force && homeIndex.length && Date.now()-homeIndexSavedAt < HOME_CACHE_TTL;
+    const rows = reuseIndex ? homeIndex : await fetchPublicHomeIndex();
+    const index = rows.filter(item => window.TintinCatalogPolicy?.isCollectionVisible?.(item.data.category) !== false);
+    const ids = index.filter(item=>item.data.available!==false).map(item => String(item.id));
+    const selection = {
+      discovery: chooseHomeIds(ids, document.getElementById('products-grid') ? 5 : 0, homeSelection?.discovery, reroll === 'discovery'),
+      look: chooseHomeIds(ids, document.getElementById('look-grid') ? 3 : 0, homeSelection?.look, reroll === 'look'),
+      featured: index.filter(item => item.data.destacado === true && item.data.available !== false).slice(0, 4).map(item => String(item.id)),
+      poolSize: ids.length,
+    };
+    const wanted = [...new Set([...selection.discovery, ...selection.look, ...selection.featured])];
+    const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
+    const cachedById = new Map((Array.isArray(cached) ? cached : []).map(product => [String(product.id), product]));
+    const missing = wanted.filter(id => !cachedById.has(id));
+    const items = missing.length ? await fetchPublicProductsByIds(missing) : [];
+    // El filtro de IDs también protege frente a respuestas ajenas al lote.
+    const received = new Map(items.filter(item => missing.includes(String(item.id))).map(item => [String(item.id), mapProduct(item.id, item.data)]));
+    const products = normalizeList(wanted.map(id => cachedById.get(id) || received.get(id)).filter(Boolean));
+    if (requestVersion !== homeRequestVersion) return window.PRODUCTS || [];
+    homeIndex = index;
+    if (!reuseIndex) homeIndexSavedAt = Date.now();
+    homeSelection = selection;
+    writeCached(HOME_CACHE_KEY, {products: products.map(compactProduct), selection, index, indexAt: homeIndexSavedAt});
+    return publishHome(products, 'home-selection');
+  } catch (error) {
+    if (requestVersion !== homeRequestVersion) return window.PRODUCTS || [];
+    throw error;
+  }
 }
 
 export function rerollHomeSelection(kind) {
