@@ -25,7 +25,7 @@ test('Últimos datos mantiene una columna, foco continuo y errores junto al camp
     await page.route('**/*', route => route.abort());
     await page.setContent(html);
     const ids = ['login-profile-first-name','login-profile-phone'];
-    assert.equal(await page.locator('#login-profile-phone').getAttribute('placeholder'), '0912 345 678');
+    assert.equal(await page.locator('#login-profile-phone').getAttribute('placeholder'), '0981-123-456');
     assert.equal(await page.locator('#login-profile-phone').inputValue(), '', 'El ejemplo no debe ser un valor guardado');
     for (const [width,height] of sizes) {
       await page.setViewportSize({width,height});

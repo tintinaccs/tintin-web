@@ -4936,3 +4936,9 @@ Se incluyen Delete/Backspace sobre separadores y conservación del sufijo al
 pegar más dígitos que la selección. No se redujeron aserciones ni se usaron
 reintentos. Preflight canónica inicial y build PASS; repetir generación del
 plan después de esta evidencia y del HTML definitivo antes del commit.
+
+CI inicial del teléfono41142599303/intento1, SHAa64390ba:Comercio PASS.
+Interfaz detectó una expectativa exacta del placeholder antiguo con espacios
+(onboarding-form-browser). Se actualiza al ejemplo0981-123-456 solicitado,
+conservando las aserciones de geometría/foco/errores/contraste. Lote canónico
+correspondiente con Node22:13/13 PASS. No se cambia el código del producto.
