@@ -316,6 +316,7 @@ for (const width of [320,390,540,768]) test(`categorías mobile completas sin re
  expect(spacing.bottom).toBeGreaterThanOrEqual(23);
  expect(spacing.fade).toContain('linear-gradient');
  expect(spacing.pointerEvents).toBe('none');
+ expect(geometry.width).toBe(width);
  expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.width+1);
  for(const {rect,width:buttonWidth,scrollWidth} of geometry.buttons){
   expect(rect.left).toBeGreaterThanOrEqual(geometry.box.left-1);

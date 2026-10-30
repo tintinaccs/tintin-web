@@ -4953,3 +4953,10 @@ buscaba el iframe que la sonda retiraba. Se pausa antes de crear la sonda y
 se avanza sólo mediante runFor;3/3 casos dirigidos PASS sin reintentos.
 No se cambia la sonda, los límites ni las aserciones. Las etapas pendientes
 del SHA anterior no acreditan el nuevo; se repite CI completa.
+
+Inspección tardía del CSS completo:experiencia-interfaz volvía a imponer
+max-width100% después del inline, dejando el fondo menor que el viewport.
+Se especifica la excepción únicamente en categorías móviles, manteniendo
+márgenes de controles y clipping global. La regresión ahora mide clientWidth
+igual al viewport, además del espacio/fondo y ausencia de desbordamiento.
+No se hereda el resultado visual de una captura previa al runtime completo.
