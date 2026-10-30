@@ -4945,3 +4945,11 @@ Se trasladan fuera del repositorio a /workspace/work/tintin-push y se regenera
 con el constructor canónico, conservando el gate. No es fallo funcional de
 push ni se hereda su CI para el siguiente SHA. La siguiente ejecución debe
 aprobar sin archivos ajenos al checkout reproducible.
+
+CI c1886012/41089123481/intento1:Comercio e identidad PASS; Calidad FAIL por
+cancelación30s en cart-render-probe del PR1279, reproducida localmente2/3
+con Chromium instalado. El reloj instalado seguía avanzando mientras el test
+buscaba el iframe que la sonda retiraba. Se pausa antes de crear la sonda y
+se avanza sólo mediante runFor;3/3 casos dirigidos PASS sin reintentos.
+No se cambia la sonda, los límites ni las aserciones. Las etapas pendientes
+del SHA anterior no acreditan el nuevo; se repite CI completa.

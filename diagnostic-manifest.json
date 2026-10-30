@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c0b23fbf9258cab71d6e71df34dcd747431bff125a4d9562162b5b9eeacf2deb",
+  "sourceFingerprint": "51030f1c01270449b2bc5be71aaa4fae4789da6e7341b1ad474e63db30d030e6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1643,
     "textFiles": 1508,
-    "totalBytes": 39867165,
+    "totalBytes": 39867946,
     "pages": 19,
     "modules": 1095
   },
@@ -48479,8 +48479,8 @@
     },
     {
       "path": "tests/flow-connections/cart-render-probe.test.mjs",
-      "bytes": 3950,
-      "sha256": "0d721fe6a978adc6870d22d9fd816a17c5bab5db480e8f8f1c4462f04797ab6a",
+      "bytes": 4211,
+      "sha256": "dc7c05f058a97b24761e30a94ef15fb2f4e372c7d6ece464e313d34fd37d2b12",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48508,11 +48508,11 @@
       "endpoints": [
         {
           "url": "http://cart-flow.test/**",
-          "line": 19
+          "line": 22
         },
         {
           "url": "http://cart-flow.test/fixture",
-          "line": 37
+          "line": 40
         }
       ]
     },
@@ -61134,8 +61134,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1067559,
-      "sha256": "c5ebe5c586665207d166114d3e6cbdbde2dfd8f4a5d475d2639afa4003208b6a"
+      "bytes": 1068079,
+      "sha256": "947ade3aa6723c60c2c71e5053974d475e3d3f6b0edfc0fa1ce942ee6eb99c23"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -67326,8 +67326,8 @@
     {
       "path": "tests/flow-connections/cart-render-probe.test.mjs",
       "extension": ".mjs",
-      "bytes": 3950,
-      "sha256": "0d721fe6a978adc6870d22d9fd816a17c5bab5db480e8f8f1c4462f04797ab6a"
+      "bytes": 4211,
+      "sha256": "dc7c05f058a97b24761e30a94ef15fb2f4e372c7d6ece464e313d34fd37d2b12"
     },
     {
       "path": "tests/flow-connections/color-readiness-recovery.test.mjs",
