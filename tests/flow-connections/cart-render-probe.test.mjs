@@ -15,7 +15,10 @@ async function fixture({ drawer = true, slowImage = false } = {}) {
   const requests = [];
   let releaseImage;
   const imageGate = new Promise(resolve => { releaseImage = resolve; });
-  await page.clock.install();
+  // Inspeccionar el iframe antes de que el poll de la sonda pueda retirarlo.
+  // install() solo sustituye el reloj: sigue avanzando en tiempo real.
+  await page.clock.install({ time: new Date('2026-10-30T12:00:00Z') });
+  await page.clock.pauseAt(new Date('2026-10-30T12:00:01Z'));
   await page.route('http://cart-flow.test/**', async route => {
     const request = route.request();
     requests.push(request.method());

@@ -11,7 +11,7 @@ import { normalizeAdminSearch, debounceAdminSearch } from '../datos/busqueda-adm
      "Biblioteca" del panel de Imágenes.
    ============================================================= */
 
-import { onMediaLibraryUpdate, uploadImageToLibrary, deleteMediaItem, updateMediaMetadata, findOrphanedMedia } from '../../components/images/biblioteca-multimedia.js?v=tintin-20261019-variant-links-1';
+import { onMediaLibraryUpdate, uploadImageToLibrary, deleteMediaItem, updateMediaMetadata, findOrphanedMedia } from '../../components/images/biblioteca-multimedia.js?v=tintin-20261030-audit-integrity-1';
 
 function ensureStyles() {
   if (document.getElementById('tt-media-library-style')) return;
