@@ -71,17 +71,17 @@ async function probeRenderedCart(signal) {
   const drawerProbe = new Promise(resolve => {
     const frame = document.createElement('iframe');
     let settled = false;
+    let inspectionTimer = null;
     const cleanup = value => {
       if (settled) return;
       settled = true;
       window.clearTimeout(timeoutId);
-      observer?.disconnect();
+      window.clearInterval(inspectionTimer);
       signal?.removeEventListener('abort', onAbort);
       frame.remove();
       resolve(value);
     };
     const onAbort = () => cleanup(false);
-    let observer;
     const timeoutId = window.setTimeout(() => cleanup(false), 10_000);
     // El sitio evita inicializar algunos componentes cuando el documento queda
     // fuera del árbol de renderizado. Lo mantenemos imperceptible y fuera de la
@@ -94,17 +94,18 @@ async function probeRenderedCart(signal) {
     frame.style.cssText = 'position:fixed;left:-10000px;top:0;width:390px;height:844px;opacity:0;pointer-events:none;border:0';
     frame.tabIndex = -1;
     frame.setAttribute('aria-hidden', 'true');
-    frame.addEventListener('load', () => {
-      const doc = frame.contentDocument;
-      if (!doc) return;
-      if (doc.getElementById('cart-drawer')) return cleanup(true);
-      observer = new MutationObserver(() => {
-        if (doc.getElementById('cart-drawer')) cleanup(true);
-      });
-      observer.observe(doc.documentElement, { childList: true, subtree: true });
-    }, { once: true });
+    // El DOM del carrito puede estar listo antes de load: una imagen ajena
+    // que tarde retenía ese evento y daba rojo pese a que el panel ya existía.
+    // Inspeccionar el documento también durante la navegación permite detectar
+    // el panel real sin depender de la descarga de toda la página.
+    const inspect = () => {
+      if (frame.contentDocument?.getElementById('cart-drawer')) cleanup(true);
+    };
+    frame.addEventListener('load', inspect, { once: true });
     frame.src = `/?tfc-cart-probe=${Date.now()}`;
     document.body.append(frame);
+    inspectionTimer = window.setInterval(inspect, 100);
+    inspect();
   });
 
   const [route, hasCartDrawer] = await Promise.all([routeProbe, drawerProbe]);
