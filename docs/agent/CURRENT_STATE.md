@@ -4938,3 +4938,10 @@ Candidato final PASS_LOCAL:4/4 categorías repetidas tras anular max-width,
 preflight canónica completa, build:pages, auditor push y caché385/67;
 plan protegido8 archivos/25 registros, regenerado después del HTML definitivo.
 Diff revisado, sin cambios de Rules, permisos ni escrituras comerciales.
+
+CI inicial41088728172/intento1, SHA16d05280:FAIL en Reject generated artifact
+drift. El generador incluyó archivos temporales no versionados bajo work/.
+Se trasladan fuera del repositorio a /workspace/work/tintin-push y se regenera
+con el constructor canónico, conservando el gate. No es fallo funcional de
+push ni se hereda su CI para el siguiente SHA. La siguiente ejecución debe
+aprobar sin archivos ajenos al checkout reproducible.
