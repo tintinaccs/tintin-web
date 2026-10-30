@@ -1,4 +1,28 @@
 /* TINTIN — Mantenimiento integral 05: Checkout */
+#ck-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(440px, calc(100vw - 32px));
+  box-sizing: border-box;
+  padding: 12px 24px;
+  border-radius: 24px;
+  background: var(--color-button-primary-background, #F8AACA);
+  color: var(--color-button-primary-text, #222222);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  overflow-wrap: anywhere;
+  box-shadow: 0 4px 20px rgba(184,76,114,.2);
+  z-index: 99999;
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  #ck-toast { bottom: calc(var(--tt-mobile-nav-clearance, 108px) + env(safe-area-inset-bottom)); }
+}
+
 body:has(.ck-body) {
   --ck-surface: var(--tt-surface, #fff);
   --ck-page: var(--tt-page-bg, #FDECF2);

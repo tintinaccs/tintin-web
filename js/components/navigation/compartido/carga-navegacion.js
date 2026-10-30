@@ -15,8 +15,8 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261029-performance-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261029-performance-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261029-performance-1';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261029-mobile-review-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261029-mobile-review-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -170,7 +170,7 @@ function loadCollectionsRuntime({ withProducts = false } = {}) {
 // consulta escrita mientras termina de cargar el controlador compartido.
 function loadSearchRuntime() {
   if (!searchControllerPromise) {
-    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261029-performance-1')
+    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261029-mobile-review-1')
       .then(module => {
         module.initSearchController();
         window.TintinSearchController?.renderCurrentQuery();

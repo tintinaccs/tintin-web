@@ -286,3 +286,64 @@ test('catálogo prioriza el nombre exacto y conserva el orden elegido explícita
  await page.locator('#cat-sort').selectOption('precio-asc');
  await expect(page.locator('#cat-grid [data-product-id]').first()).toHaveAttribute('data-product-id','prefix');
 });
+
+for (const width of [320,390,540,768]) test(`categorías mobile completas sin recortes ${width}`, async ({page}) => {
+ const collections=['Relojes','Bolsos','Aros','Collares','Pulseras','Anillos','Tobilleras','Earcuff','Armcuff','Gafas','Joyeros',
+  'Accesorios especiales para acompañarte todos los días'].map((name,index)=>({id:`collection-${index}`,slug:`collection-${index}`,name,visible:true,order:index}));
+ await page.setViewportSize({width,height:844});
+ await page.route('**/api/public-catalog?**',route=>{
+  const resource=new URL(route.request().url()).searchParams.get('resource');
+  if(!['products','collections'].includes(resource))return route.continue();
+  return route.fulfill({json:{ok:true,resource,items:(resource==='products'?products:collections).map(({id,...data})=>({id,data}))}});
+ });
+ await page.goto('/catalogo',{waitUntil:'domcontentloaded'});
+ const nav=page.locator('#cat-tabs-mobile'),buttons=nav.locator('button');
+ await expect(buttons).toHaveCount(collections.length+1);
+ const geometry=await nav.evaluate(el=>{
+  const box=el.getBoundingClientRect();
+  return {width:el.clientWidth,scrollWidth:el.scrollWidth,box:box.toJSON(),buttons:[...el.querySelectorAll('button')].map(button=>{
+   const rect=button.getBoundingClientRect();
+   return {rect:rect.toJSON(),width:button.clientWidth,scrollWidth:button.scrollWidth};
+  })};
+ });
+ expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.width+1);
+ for(const {rect,width:buttonWidth,scrollWidth} of geometry.buttons){
+  expect(rect.left).toBeGreaterThanOrEqual(geometry.box.left-1);
+  expect(rect.right).toBeLessThanOrEqual(geometry.box.right+1);
+  expect(rect.top).toBeGreaterThanOrEqual(geometry.box.top-1);
+  expect(rect.bottom).toBeLessThanOrEqual(geometry.box.bottom+1);
+  expect(rect.height).toBeGreaterThanOrEqual(44);
+  expect(scrollWidth).toBeLessThanOrEqual(buttonWidth+1);
+ }
+ expect(geometry.buttons.at(-1).rect.top).toBeGreaterThan(geometry.buttons[0].rect.top);
+ const last=buttons.last();
+ await last.click();
+ await expect(last).toHaveAttribute('aria-pressed','true');
+ await expect(page.locator('#cat-titulo')).toHaveText(collections.at(-1).name);
+ const filters=page.locator('#filter-toggle');
+ await expect(filters).toHaveAccessibleName('Filtros');
+ await filters.click();
+ await expect(filters).toHaveAttribute('aria-expanded','true');
+ await expect(filters).toHaveText('Ocultar filtros');
+ await expect(page.getByLabel('Solo con stock')).toBeVisible();
+ await filters.click();
+ await expect(filters).toHaveAttribute('aria-expanded','false');
+ await expect(filters).toHaveText('Filtros');
+ await page.screenshot({path:test.info().outputPath(`categorias-completas-${width}.png`),fullPage:true});
+});
+
+test('favoritos conservan nombre accesible después de buscar y ordenar',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.route('**/api/public-catalog?**',route=>{
+  const resource=new URL(route.request().url()).searchParams.get('resource');
+  if(!['products','collections'].includes(resource))return route.continue();
+  return route.fulfill({json:{ok:true,resource,items:(resource==='products'?products:[{id:'anillos',name:'Anillos',slug:'anillos',visible:true},{id:'relojes',name:'Relojes',slug:'relojes',visible:true}]).map(({id,...data})=>({id,data}))}});
+ });
+ await page.goto('/catalogo',{waitUntil:'domcontentloaded'});
+ await expect(page.locator('#cat-grid [data-product-id]')).toHaveCount(3);
+ await page.locator('#cat-search').fill('TIN-00042');
+ await expect(page.locator('#cat-grid [data-product-id]')).toHaveCount(1);
+ await expect(page.locator('#cat-grid [data-favorite-id="ring"]')).toHaveAccessibleName('Guardar Anillo corazón en favoritos');
+ await page.locator('#cat-sort').selectOption('precio-desc');
+ await expect(page.locator('#cat-grid [data-favorite-id="ring"]')).toHaveAccessibleName('Guardar Anillo corazón en favoritos');
+});

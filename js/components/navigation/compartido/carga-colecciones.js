@@ -193,8 +193,9 @@ function renderInto(container, collections, buildNode) {
   container.removeAttribute('aria-busy');
 
   if (!collections.length) {
-    container.dataset.phase4CollectionsState = hasUsableFallback(container) ? 'fallback' : 'empty';
-    if (!hasUsableFallback(container)) container.appendChild(createStateNode('No hay colecciones disponibles'));
+    container.replaceChildren(createStateNode('No hay colecciones disponibles'));
+    container.dataset.collectionsSignature = '[]';
+    container.dataset.phase4CollectionsState = 'empty';
     return;
   }
 

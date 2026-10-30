@@ -156,7 +156,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
       requestAnimationFrame(() => {
         const open = sidebar?.classList.contains('open');
         filterToggle.setAttribute('aria-expanded', String(!!open));
-        filterToggle.textContent = open ? 'Cerrar filtros' : 'Filtrar por categoría';
+        filterToggle.textContent = open ? 'Ocultar filtros' : 'Filtros';
       });
     });
 
@@ -167,7 +167,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
       if (target.closest('.cat-filter-option, .tt-filtro-btn, #btn-limpiar-filtros')) {
         sidebar.classList.remove('open');
         filterToggle?.setAttribute('aria-expanded', 'false');
-        if (filterToggle) filterToggle.textContent = 'Filtrar por categoría';
+        if (filterToggle) filterToggle.textContent = 'Filtros';
       }
     });
   }

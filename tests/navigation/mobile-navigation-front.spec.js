@@ -58,3 +58,39 @@ test('desktop conserva aislamiento modal y foco',async({page})=>{
  await page.keyboard.press('Tab');await expect(page.locator('#btn-account-close')).toBeFocused();
  await page.keyboard.press('Escape');expect(await page.locator('#background').evaluate(el=>el.inert)).toBe(false);
 });
+
+for(const [width,height] of [[320,568],[390,844],[767,800],[844,390],[1440,900]])test(`aviso de checkout deja la navegación operable incluso al ocultarse ${width}×${height}`,async({page})=>{
+ await page.setViewportSize({width,height});
+ await page.route('**/__navigation-front',r=>r.fulfill({contentType:'text/html',body:fixture('checkout.html')}));
+ await page.goto('/__navigation-front');
+ await expect(page.locator('body')).toHaveAttribute('data-ready','true');
+ const toastSource=fs.readFileSync('checkout.html','utf8').match(/function showCkToast\(message\) \{[\s\S]*?\n\}/)[0];
+ await page.addScriptTag({content:toastSource});
+ await page.clock.install();
+ await page.evaluate(()=>showCkToast('Ya alcanzaste el máximo disponible de este producto'));
+ const toast=page.locator('#ck-toast');
+ await expect(toast).toBeVisible();
+ const box=await toast.boundingBox();
+ expect(box.x).toBeGreaterThanOrEqual(0);
+ expect(box.x+box.width).toBeLessThanOrEqual(width);
+ if(width<768){
+  const nav=await page.locator('#tt-tabbar').boundingBox();
+  expect(box.y+box.height).toBeLessThanOrEqual(nav.y-12);
+  expect(await page.locator('#tabbar-search').evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));})).toBe(true);
+ }
+ // A second notification extends its own lifetime; an old timeout must not
+ // hide the replacement. The hidden message must stop taking pointer hits.
+ await page.clock.fastForward(1600);
+ await page.evaluate(()=>showCkToast('Ubicación guardada en tu cuenta.'));
+ await page.clock.fastForward(1200);
+ await expect(toast).toBeVisible();
+ await expect(toast).toHaveText('Ubicación guardada en tu cuenta.');
+ await page.clock.fastForward(1800);
+ await expect(toast).toBeHidden();
+ if(width<768){
+  const point=await page.locator('#tabbar-search').boundingBox();
+  await page.mouse.click(point.x+point.width/2,point.y+point.height/2);
+  await page.clock.runFor(500);
+  await expect(page.locator('#search-panel')).toHaveAttribute('aria-hidden','false');
+ }
+});
