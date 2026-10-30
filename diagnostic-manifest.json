@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "71ce9b9d6512df07f60b0536c6058239c22511c49019502f33a72fd45ecb6cc6",
+  "sourceFingerprint": "d30fc8d3106a15d30c9f2d6e3704e0b9d4137a9fb9076c9b980d8196287da05a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1641,
-    "textFiles": 1506,
-    "totalBytes": 39841676,
+    "files": 1642,
+    "textFiles": 1507,
+    "totalBytes": 39848903,
     "pages": 19,
-    "modules": 1093
+    "modules": 1094
   },
   "viewports": [
     {
@@ -2881,8 +2881,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204544,
-      "sha256": "64cbe18951ca8094cff04cfc23b0a65204d7ac9c63bd4ac41047e7a7ce359d4f",
+      "bytes": 204542,
+      "sha256": "f931a1e534d9104371262e70cf43897804f64964aca41e6ab355428c2c670de2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2936,7 +2936,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261030-home-history-5",
+          "raw": "js/admin/admin-app.js?v=tintin-20261030-cart-probe-1",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -3291,7 +3291,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261030-home-history-5",
+          "raw": "js/admin/admin-app.js?v=tintin-20261030-cart-probe-1",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -28276,8 +28276,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 437949,
-      "sha256": "7deb5bc984aacd856a39ec16b54060a845f92a4bb6907974558af39dfd760014",
+      "bytes": 437920,
+      "sha256": "507905ee6f09767ddd43976a352bbabeacf37292408d932b2956f1814015f35c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28566,7 +28566,7 @@
           "line": 57
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261030-cart-probe-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 58
@@ -29347,8 +29347,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 37412,
-      "sha256": "614b395ef54b31ffb7558dd3e2a5253e86628ca96d34c30e6e86ad959efeb17c",
+      "bytes": 37598,
+      "sha256": "3a8b2822d5a9a6b1ba2f1105c8ff231e4945f43b067fa00804ffb4350a4176e0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48478,6 +48478,45 @@
       "endpoints": []
     },
     {
+      "path": "tests/flow-connections/cart-render-probe.test.mjs",
+      "bytes": 3950,
+      "sha256": "0d721fe6a978adc6870d22d9fd816a17c5bab5db480e8f8f1c4462f04797ab6a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "http://cart-flow.test/**",
+          "line": 19
+        },
+        {
+          "url": "http://cart-flow.test/fixture",
+          "line": 37
+        }
+      ]
+    },
+    {
       "path": "tests/flow-connections/color-readiness-recovery.test.mjs",
       "bytes": 2907,
       "sha256": "dfb6b1029bba72a3a58781b3bdd88283b4d0eb2798ce0fd22e87fd3052bc1c81",
@@ -59307,8 +59346,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204544,
-      "sha256": "64cbe18951ca8094cff04cfc23b0a65204d7ac9c63bd4ac41047e7a7ce359d4f"
+      "bytes": 204542,
+      "sha256": "f931a1e534d9104371262e70cf43897804f64964aca41e6ab355428c2c670de2"
     },
     {
       "path": "apple-touch-icon.png",
@@ -60339,8 +60378,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 481,
-      "sha256": "5d4936b16fb77488df4332ee53b12d0f0403975ba4541110e797db0f197da51e"
+      "bytes": 1686,
+      "sha256": "58588bb42c02a2b1784254b1815bf7e03a1dae0840d2b43611943d5dc8153b13"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -60352,7 +60391,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "39ac4b939396f70f0fefd7ffa77b41eb8329a0bb80e25b629fc27e7f5908ea0d"
+      "sha256": "f58dc79ae0bed892fe7ce362842126df15d326c19958777b71a0dd6961209c27"
     },
     {
       "path": "config/public-site.json",
@@ -61047,8 +61086,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1062572,
-      "sha256": "ad24a39775709f5c80998f2412f50d8aafd5c56d2766b63ee62a0a0e7ee44a11"
+      "bytes": 1064520,
+      "sha256": "fc63ec1c717061849041d1733906fdad72b2b9da60aaad04bee4e69795c0e185"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -62847,8 +62886,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 437949,
-      "sha256": "7deb5bc984aacd856a39ec16b54060a845f92a4bb6907974558af39dfd760014"
+      "bytes": 437920,
+      "sha256": "507905ee6f09767ddd43976a352bbabeacf37292408d932b2956f1814015f35c"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -62985,8 +63024,8 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 37412,
-      "sha256": "614b395ef54b31ffb7558dd3e2a5253e86628ca96d34c30e6e86ad959efeb17c"
+      "bytes": 37598,
+      "sha256": "3a8b2822d5a9a6b1ba2f1105c8ff231e4945f43b067fa00804ffb4350a4176e0"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
@@ -65871,8 +65910,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 76735,
-      "sha256": "879673155d035a06634ea2d56afe7eeb9664021e53296f4a22a7c4a8bb246419"
+      "bytes": 76704,
+      "sha256": "8cad2b06d6648fd9ae355ba01bf3b289cd450dd076d16a2a339d358430857b60"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -67235,6 +67274,12 @@
       "extension": ".mjs",
       "bytes": 14004,
       "sha256": "a6961b29485fbbb6e316bef0c31d2e849d5f5d0d0d0ed3f102668b8ff27da55b"
+    },
+    {
+      "path": "tests/flow-connections/cart-render-probe.test.mjs",
+      "extension": ".mjs",
+      "bytes": 3950,
+      "sha256": "0d721fe6a978adc6870d22d9fd816a17c5bab5db480e8f8f1c4462f04797ab6a"
     },
     {
       "path": "tests/flow-connections/color-readiness-recovery.test.mjs",
@@ -69334,7 +69379,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 575,
+      "line": 576,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -70733,13 +70778,13 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 238,
+      "line": 239,
       "target": "/api/sheets-products-webhook",
       "method": "GET"
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 575,
+      "line": 576,
       "target": "/admin.html",
       "method": "GET"
     },
@@ -70867,7 +70912,7 @@
         "references": [
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 160,
+            "line": 161,
             "operation": "collection"
           },
           {
@@ -71322,7 +71367,7 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 169,
+            "line": 170,
             "operation": "collection"
           },
           {
@@ -71612,12 +71657,12 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 166,
+            "line": 167,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 181,
+            "line": 182,
             "operation": "collection"
           },
           {
@@ -72202,17 +72247,17 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 157,
+            "line": 158,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 163,
+            "line": 164,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 279,
+            "line": 280,
             "operation": "doc"
           },
           {

@@ -1,13 +1,47 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "e5308fb836fc37758b90b8c612060e0378f3e9e6",
-  "reason": "Reconocer el check real de Cloudflare Pages conservando identidad de app, proyecto y resultado reciente",
+  "baseCommit": "c610f9d9ec5c2c418ca9422d6a90b2308c4758f4",
+  "reason": "Corregir falso rojo del carrito observando su DOM antes de load y conservar pruebas de ausencia y cancelación",
   "files": [
     {
-      "path": "functions/api/master-diagnostics.js",
-      "oldHash": "d066560c0e2f9f3fece09a9117ed39a3326e7116957110edbbf2acf1d7eb7f48",
-      "newHash": "5d1b8c267b78e19fce6d7bf95c95444bb1959906a947c06cbce4587b3e9e662f"
+      "path": "admin.html",
+      "oldHash": "64cbe18951ca8094cff04cfc23b0a65204d7ac9c63bd4ac41047e7a7ce359d4f",
+      "newHash": "f931a1e534d9104371262e70cf43897804f64964aca41e6ab355428c2c670de2"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "7deb5bc984aacd856a39ec16b54060a845f92a4bb6907974558af39dfd760014",
+      "newHash": "507905ee6f09767ddd43976a352bbabeacf37292408d932b2956f1814015f35c"
+    },
+    {
+      "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
+      "oldHash": "614b395ef54b31ffb7558dd3e2a5253e86628ca96d34c30e6e86ad959efeb17c",
+      "newHash": "3a8b2822d5a9a6b1ba2f1105c8ff231e4945f43b067fa00804ffb4350a4176e0"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "879673155d035a06634ea2d56afe7eeb9664021e53296f4a22a7c4a8bb246419",
+      "newHash": "8cad2b06d6648fd9ae355ba01bf3b289cd450dd076d16a2a339d358430857b60"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "correos",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }
