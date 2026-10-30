@@ -520,7 +520,7 @@ function centralizeRuntime(html, page) {
   // Las páginas informativas no pintan tarjetas antes de pedir Buscar.
   // El loader de productos carga su autoridad de fotos antes de publicar datos.
   if (/^(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad|404)\.html$/.test(page)) {
-    return out.replace(/\s*<script\b[^>]*src=["']\/?js\/components\/images\/galeria-producto\.js[^"']*["'][^>]*><\/script>/gi, '');
+    return replaceUntilStable(out, /\s*<script\b[^>]*src=["']\/?js\/components\/images\/galeria-producto\.js[^"']*["'][^>]*><\/script>/gi, '');
   }
   // Todas las tarjetas comparten la misma autoridad de fotos y paleta.
   // Los scripts defer conservan este orden antes del renderer clásico.

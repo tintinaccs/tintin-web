@@ -1,3 +1,7 @@
+## 2026-10-30 — PR1276: corrección de CodeQL sin omitir alerta
+
+Codex /root. Head df98db2e: los tres análisis de CodeQL40988135977/1 terminaron, pero el check de alertas123844059505 falló con una alerta high de sanitización incompleta en sincronizar-inicio-navegacion-publica.js:523. La retirada nueva de galería se hacía en una sola pasada. Regresión RED con etiqueta anidada; se usa replaceUntilStable, autoridad existente del mismo generador, conservando contenido ajeno y verificando idempotencia. No se descarta ni se suprime la alerta; CodeQL del SHA posterior debe confirmar la corrección. CI40988139659/1 continúa en Comercio al preparar este cambio y no acredita el siguiente SHA. Se mantienen resultados funcionales locales del runtime, sin nuevos cambios al cliente ni datos comerciales. Evidencia /tmp/tintin-home-gallery-generator-red.log y /tmp/tintin-home-gallery-generator-final.log; publicación todavía PENDING en el recibo.
+
 ## 2026-10-30 — PR1276: auditoría de consulta REST y revisiones de Inicio
 
 Codex /root. Head0609ce7c: CI40987328665/1 falló en Comercio123841634041, auditoría store-gate74/75: confundía el POST oficial de runQuery con escritura. Preflight, CodeQL40987325941/1 y compilación Cloudflare f6b0762a SUCCESS; preview requiere Cloudflare Access y no se elude. Se conserva auditoría GET exclusiva del respaldo público y se agrega comprobación del único POST privado: endpoint runQuery, ID token, App Check, cuerpo de consulta y ningún método/endpoint de escritura.76/76 PASS_LOCAL.
