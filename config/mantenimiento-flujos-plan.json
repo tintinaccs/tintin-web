@@ -1,77 +1,50 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "96bf4fc45988efe5c35ea39d51b1414bf314c693",
-  "reason": "Conciliar auditoría1280 con main y reparar prueba de sonda de carrito sin alterar verificaciones",
+  "baseCommit": "57d81e4a184fbf0805b2f7d18ce37d42de4101dc",
+  "reason": "Conciliar push1281 con auditoría1280 y corregir harness de aborto Node22 preservando las aserciones",
   "files": [
     {
-      "path": "admin-images.html",
-      "oldHash": "3737b10ec4bd813265a049b4aa94f15a4996642422a585c0d8c7375546ea03e5",
-      "newHash": "047919ff3fb9ba9e710abafce9b9802debab01b0921e6c81d0f5fbef2ac4e8e9"
-    },
-    {
       "path": "admin.html",
-      "oldHash": "f931a1e534d9104371262e70cf43897804f64964aca41e6ab355428c2c670de2",
-      "newHash": "bf2dcec67e4816a0b08b1b71b915012a78f5e3375472cdc4c706e035959b1eac"
+      "oldHash": "bf2dcec67e4816a0b08b1b71b915012a78f5e3375472cdc4c706e035959b1eac",
+      "newHash": "f50aa39f168403c4f8cedb41e63c14cab95ef10705d5b89c7248c6709de01230"
     },
     {
-      "path": "config/csp-runtime.js",
-      "oldHash": "576b2c64308eab9f1a82f7b07bf7a2ae3e549d1aab15f0c415ccadb3c14e913f",
-      "newHash": "a12f5a99dc0565e1fbbf528144e741998a813862ab56f90702e6132eb0db5617"
+      "path": "catalogo.html",
+      "oldHash": "fe49fcf749006d37e89d157b5d5ba542d48acc2ce3534e622d3050aa638485e3",
+      "newHash": "63b055c821bc999df1cc1b118f5eed6aa9c27a66b13054e306f407cbf07bcf34"
     },
     {
-      "path": "config/csp-runtime.json",
-      "oldHash": "8e12f453c30c70fab6575be030b8ce5fec5290b3e4762337fe1e7bdb9164c240",
-      "newHash": "f427ae7f72fa6dfda95b941c0e147bcaafb2fe428fdb9a240d4656db2dc80bd8"
+      "path": "cloudflare/servicio-push.js",
+      "oldHash": "b9c9e7c05faa606a20d7599ffafdece0d3b335f0d4144f3c047b177b4e816823",
+      "newHash": "4c0f266637dab5ac89dac118101efeb971142596a99c60cb1e748e0afe7d637a"
     },
     {
-      "path": "firestore.rules",
-      "oldHash": "6000a1c182df3b25be7c22d755c36e93bf83bde00c1d7950d2d84b52aac894a0",
-      "newHash": "02b44680a4d14b5f13fac02556091ce15b26900b9077118fb334dc81cbcd4d47"
+      "path": "functions/api/apps-script-bridge.js",
+      "oldHash": "2696d3d672eae3fcca659a93383b40ab5a546648a59f82c3fb861aa985097aa5",
+      "newHash": "22be50c29523dba0d58abcad1bf81fa1902577d9729c3234f0bcdc50890c0ad7"
     },
     {
-      "path": "functions/api/admin-order-mutation.js",
-      "oldHash": "de42345030f77f3494b902b7826b7ddeaaf0a0d850f8780c233aae4d88b23724",
-      "newHash": "5c4ee240b3031ccea3d16267f25cd88dcb650edd1a97911af6bc889bb5b4193e"
+      "path": "functions/api/order-email.js",
+      "oldHash": "78b474e1e483e574dd8d67ed0029c3956e722df4de7240897dc4b03353fe13f4",
+      "newHash": "4c04e8a770b18aa9cd0d690e78ca69eb7c27934d1a88993507eeadf7ef2cc04b"
     },
     {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "507905ee6f09767ddd43976a352bbabeacf37292408d932b2956f1814015f35c",
-      "newHash": "7e2a5dcbbbe0d7d45baac9a1d31c2751219d2834f647c19720a7861f5e13031e"
+      "path": "functions/api/push-admin.js",
+      "oldHash": "563492a341f1e0e66934f908d17fd337cf53ca7319a7532e42b368829c5295a7",
+      "newHash": "b9003e5ff9610799c3ffd83880c91bf0f0caadb329be88ba3a67663308726d9c"
     },
     {
-      "path": "js/admin/products/biblioteca-multimedia-admin.js",
-      "oldHash": "1ecedf0aafef5f706405411e9753f9a04f57027ff3658b5ba377df04ae98bb70",
-      "newHash": "ad7e5d7a739010110838b7c8e82a18422a4730d8c8ed7e132c235bb4d0fd2679"
-    },
-    {
-      "path": "js/components/images/biblioteca-multimedia.js",
-      "oldHash": "81a173b5061b05d29a07890aa7cad42183e7750abcdb8ce291355160d486fdab",
-      "newHash": "53a538f3c99395bba42c152f27e792e7ba1f45cd589d889cd56841a6337c2200"
-    },
-    {
-      "path": "js/components/images/carga-imagenes.js",
-      "oldHash": "45a7695ddcc9b8132055971e6a795397754b90f2807ebeb90218d9cbd1b5cd03",
-      "newHash": "ef446274558c59936b05db2de2bd581a6f4885aa567dc552de7e4742be3a063b"
-    },
-    {
-      "path": "package-lock.json",
-      "oldHash": "16dc8ab4872db960640cb8f4ef8fa89a37e71db1ac2264f2cd2999d6c2a55dec",
-      "newHash": "d7054ae4cee441822b2c908747de5fcc4dc946b9b732991416525f2a0b1dbfa0"
-    },
-    {
-      "path": "package.json",
-      "oldHash": "77ffeeac37c7eb422e799255a766d4f9ae5a65a14b4d4fcba87a9f04acc5de0c",
-      "newHash": "326b79c4a5f5956b567e4b224f8e33c650d5c5a19f36e1ad0a50c634b58e1fc1"
+      "path": "js/admin/notifications/notificaciones-push-maestro.js",
+      "oldHash": "81d6500e496091238d061d0bd6d1ccad1c635b8f5ce132bb9889a00178859c0d",
+      "newHash": "f44d329843947bddef4a5fcf440b9e46706450d90fe8c862ecf51041f8962b1e"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "8cad2b06d6648fd9ae355ba01bf3b289cd450dd076d16a2a339d358430857b60",
-      "newHash": "188376d0ec108296e958caf5b051fe17baea598c750eb110fa4549aa9bc2cbeb"
+      "oldHash": "188376d0ec108296e958caf5b051fe17baea598c750eb110fa4549aa9bc2cbeb",
+      "newHash": "6f16c4e7335f9b03f299e1987dd09c764aac408bbdfb1233bbd35eb226dd4923"
     }
   ],
   "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
     "apis-internas",
     "apis-internas__apps-script__22",
     "apis-internas__comentarios__39",
@@ -81,35 +54,20 @@
     "apis-internas__likes__38",
     "apis-internas__notificaciones__40",
     "apis-internas__pedidos__32",
-    "carrito",
-    "cf-functions",
+    "apps-script",
+    "apps-script__google-sheets__24",
+    "apps-script__sheets-products-webhook__26",
     "cf-functions__apis-internas__20",
-    "cf-functions__csp__29",
-    "cf-functions__reglas-firestore__28",
-    "cf-pages__cf-functions__19",
     "comentarios",
-    "correos",
-    "csp",
     "favoritos",
-    "firestore",
-    "firestore-fuente-verdad",
     "firestore__apps-script__23",
-    "firestore__carrito__36",
-    "firestore__users-uid__8",
-    "notificaciones",
-    "pagina-perfil",
+    "google-sheets__apps-script__25",
+    "likes",
     "pedidos",
     "pedidos__inventario__33",
     "productos",
-    "redirect-result__sesion-estado__6",
-    "reglas-firestore",
-    "roles__pagina-perfil__18",
-    "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
+    "sheets-products-webhook",
     "sheets-products-webhook__firestore__27",
-    "super-panel",
-    "super-panel__admin-guard__15",
     "super-panel__pedidos__35",
     "super-panel__productos__34"
   ]

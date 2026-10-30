@@ -31,6 +31,8 @@ const FCM_SCOPE = 'https://www.googleapis.com/auth/firebase.messaging';
 
 const PROCESSING_TAKEOVER_MS = 60 * 1000;
 const MAX_EVENT_ATTEMPTS = 5;
+const PUSH_REQUEST_TIMEOUT_MS = 8000;
+const PUSH_CONCURRENCY = 6;
 const PUSH_SETTINGS_PATH = 'pushSettings/global';
 
 export function pushEnabled(env) {
@@ -44,9 +46,11 @@ function documentsUrl(projectId) {
 
 async function firestoreFetch(env, path, init = {}) {
   const sa = parseServiceAccount(env);
-  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const signal = AbortSignal.timeout(PUSH_REQUEST_TIMEOUT_MS);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE], { signal });
   const response = await fetch(`${documentsUrl(sa.project_id)}${path}`, {
     ...init,
+    signal,
     headers: {
       authorization: `Bearer ${accessToken}`,
       'content-type': 'application/json',
@@ -90,11 +94,11 @@ export async function readOrder(env, orderId) {
   return decodeFields(result.data.fields || {});
 }
 
-async function patchDocument(env, path, fields) {
+async function patchDocument(env, path, fields, updateTime) {
   const mask = Object.keys(fields)
     .map(key => `updateMask.fieldPaths=${encodeURIComponent(key)}`)
     .join('&');
-  const result = await firestoreFetch(env, `/${path}?${mask}`, {
+  const result = await firestoreFetch(env, `/${path}?${mask}${updateTime ? `&currentDocument.updateTime=${encodeURIComponent(updateTime)}` : ''}`, {
     method: 'PATCH',
     body: JSON.stringify({ fields })
   });
@@ -112,9 +116,11 @@ async function getDocument(env, path) {
 /** Crea el documento sólo si todavía no existe (precondición del servidor). */
 async function createDocumentIfAbsent(env, path, fields) {
   const sa = parseServiceAccount(env);
-  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const signal = AbortSignal.timeout(PUSH_REQUEST_TIMEOUT_MS);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE], { signal });
   const response = await fetch(`${documentsUrl(sa.project_id)}:commit`, {
     method: 'POST',
+    signal,
     headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
     body: JSON.stringify({
       writes: [{
@@ -123,7 +129,10 @@ async function createDocumentIfAbsent(env, path, fields) {
       }]
     })
   });
-  if (response.ok) return { created: true };
+  if (response.ok) {
+    await response.body?.cancel();
+    return { created: true };
+  }
   const data = await response.json().catch(() => ({}));
   const status = cleanText(data?.error?.status, 40).toUpperCase();
   if (response.status === 409 || status === 'ALREADY_EXISTS' || status === 'FAILED_PRECONDITION') {
@@ -134,9 +143,11 @@ async function createDocumentIfAbsent(env, path, fields) {
 
 async function runQuery(env, structuredQuery) {
   const sa = parseServiceAccount(env);
-  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const signal = AbortSignal.timeout(PUSH_REQUEST_TIMEOUT_MS);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE], { signal });
   const response = await fetch(`${documentsUrl(sa.project_id)}:runQuery`, {
     method: 'POST',
+    signal,
     headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
     body: JSON.stringify({ structuredQuery })
   });
@@ -382,16 +393,21 @@ async function disableDeviceById(env, deviceDocId, reason) {
 
 async function sendToDevice(env, device, content) {
   const sa = parseServiceAccount(env);
-  const accessToken = await getGoogleAccessToken(env, [FCM_SCOPE]);
+  const signal = AbortSignal.timeout(PUSH_REQUEST_TIMEOUT_MS);
+  const accessToken = await getGoogleAccessToken(env, [FCM_SCOPE], { signal });
   const response = await fetch(
     `https://fcm.googleapis.com/v1/projects/${sa.project_id}/messages:send`,
     {
       method: 'POST',
+      signal,
       headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
       body: JSON.stringify(buildFcmMessage({ token: device.token, content }))
     }
   );
-  if (response.ok) return { ok: true };
+  if (response.ok) {
+    await response.body?.cancel();
+    return { ok: true };
+  }
   const payload = await response.json().catch(() => ({}));
   return { ok: false, ...classifyFcmError(response.status, payload) };
 }
@@ -403,24 +419,26 @@ export async function sendToDevices(env, devices, content) {
   let disabledCount = 0;
   let lastError = '';
 
-  for (const device of devices) {
-    let result;
-    try {
-      result = await sendToDevice(env, device, content);
-    } catch (error) {
-      result = { ok: false, permanent: false, reason: sanitizeError(error, 80) };
-    }
-    if (result.ok) {
-      successCount += 1;
-      continue;
-    }
-    failureCount += 1;
-    lastError = cleanText(result.reason, 80);
-    if (result.permanent) {
-      await disableDeviceById(env, device.id, result.reason);
-      disabledCount += 1;
+  let cursor = 0;
+  async function worker() {
+    while (cursor < devices.length) {
+      const device = devices[cursor++];
+      let result;
+      try {
+        result = await sendToDevice(env, device, content);
+      } catch (error) {
+        result = { ok: false, permanent: false, reason: sanitizeError(error, 80) };
+      }
+      if (result.ok) { successCount += 1; continue; }
+      failureCount += 1;
+      lastError = cleanText(result.reason, 80);
+      if (result.permanent) {
+        await disableDeviceById(env, device.id, result.reason);
+        disabledCount += 1;
+      }
     }
   }
+  await Promise.all(Array.from({ length: Math.min(PUSH_CONCURRENCY, devices.length) }, worker));
 
   return { attempted: devices.length, successCount, failureCount, disabledCount, lastError };
 }
@@ -458,10 +476,11 @@ async function claimEvent(env, { eventId, type, orderId }) {
   const created = await createDocumentIfAbsent(env, path, baseFields);
   if (created.created) return { claimed: true, path, attempts: 1 };
 
-  const existing = await getDocument(env, path);
-  if (!existing) return { claimed: true, path, attempts: 1 };
+  const snapshot = await firestoreFetch(env, `/${path}`);
+  if (!snapshot.ok) throw new Error('No se pudo leer el evento de notificación.');
+  const existing = decodeFields(snapshot.data.fields || {});
 
-  if (existing.status === 'sent') return { claimed: false, duplicate: true, path };
+  if (existing.status === 'sent' || Number(existing.successCount) > 0) return { claimed: false, duplicate: true, path };
 
   const attempts = Number(existing.attempts) || 0;
   const updatedAtMs = Date.parse(existing.updatedAt || '') || 0;
@@ -477,7 +496,7 @@ async function claimEvent(env, { eventId, type, orderId }) {
     status: fsString('processing'),
     attempts: fsInt(attempts + 1),
     updatedAt: fsTime(now)
-  });
+  }, snapshot.data.updateTime);
   return { claimed: true, path, attempts: attempts + 1 };
 }
 
@@ -491,7 +510,7 @@ async function closeEvent(env, path, result) {
     successCount: fsInt(result.successCount),
     failureCount: fsInt(result.failureCount),
     lastError: fsString(cleanText(result.lastError, 200))
-  }).catch(() => {});
+  });
   return status;
 }
 
@@ -516,7 +535,8 @@ export async function recordPushFailure(env, { eventId, type, orderId = '', erro
     lastError: fsString(sanitizeError(error, 200))
   };
   const created = await createDocumentIfAbsent(env, path, { ...fields, attempts: fsInt(1), createdAt: fsTime(now) }).catch(() => ({ created: false }));
-  if (!created.created) await patchDocument(env, path, fields).catch(() => {});
+  // Si ya existe, dispatch registra su propio fallo; no pisar un envío concurrente.
+  return { recorded: created.created };
 }
 
 /** Últimos eventos de push, para el panel de diagnóstico del Push Center. */
@@ -566,23 +586,43 @@ export async function dispatchOrderPushEvent(env, type, orderId, externalEventId
     return { ok: false, error: 'attempts_exhausted' };
   }
 
-  const devices = await listActiveDevices(env);
-  const sound = soundForType(settings, type);
-  const content = buildPushContent({ type, orderId, order, eventId, foregroundSound: sound.mode, foregroundSoundUrl: sound.url });
-  const result = devices.length
-    ? await sendToDevices(env, devices, content)
-    : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
-  const status = await closeEvent(env, claim.path, result);
-  return {
-    ok: status === 'sent' || status === 'partial' || status === 'no_devices',
-    duplicate: false,
-    status,
-    attempted: result.attempted,
-    successCount: result.successCount,
-    failureCount: result.failureCount,
-    disabledCount: result.disabledCount,
-    lastError: sanitizeError(result.lastError, 120)
-  };
+  let deliveryResult;
+  try {
+    const devices = await listActiveDevices(env);
+    const sound = soundForType(settings, type);
+    const content = buildPushContent({ type, orderId, order, eventId, foregroundSound: sound.mode, foregroundSoundUrl: sound.url });
+    const result = devices.length
+      ? await sendToDevices(env, devices, content)
+      : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
+    deliveryResult = result;
+    const status = await closeEvent(env, claim.path, result);
+    return {
+      ok: status === 'sent' || status === 'partial' || status === 'no_devices',
+      duplicate: false,
+      status,
+      attempted: result.attempted,
+      successCount: result.successCount,
+      failureCount: result.failureCount,
+      disabledCount: result.disabledCount,
+      lastError: sanitizeError(result.lastError, 120)
+    };
+  } catch (error) {
+    await closeEvent(env, claim.path, {
+      ...(deliveryResult || { attempted: 1, successCount: 0, failureCount: 1 }),
+      lastError: sanitizeError(error, 200)
+    }).catch(() => {});
+    throw error;
+  }
+}
+
+/** Recuperación explícita de un pedido fallido, conservando su clave de evento. */
+export async function retryOrderPushEvent(env, eventId) {
+  const id = cleanText(eventId, 260);
+  const event = await getDocument(env, `${PUSH_EVENTS_COLLECTION}/${await eventDocumentId(id)}`);
+  if (!event || event.type !== 'order.created' || id !== `order.created:${event.orderId}`) {
+    throw new Error('Evento de pedido inválido.');
+  }
+  return dispatchOrderPushEvent(env, event.type, event.orderId, id);
 }
 
 /** Notificación de prueba: contenido fijo del servidor y eventId siempre único. */

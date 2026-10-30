@@ -915,3 +915,15 @@ mediante herramientas canónicas.
 ### 2026-10-29 — Rendimiento global en revisión
 
 Cambios canónicos en revelado/alternancia de secciones (excluir paneles fijos y agrupar mediciones), respaldo compartido de colecciones, filtrado del catálogo sin doble renderer, carga del menú a demanda, favoritos por lotes públicos, asociaciones de variantes paginadas y controles del editor por contexto. Se preservan lectores/escritores comerciales, publicación, permisos e historial. Hero comprimido desde los PNG vigentes con fallback original; CSS de Inicio/Nosotros compilado por el generador existente con Lightning CSS fijado. Checkout emite la correlación antes de la transacción; observabilidad agrega INP y CLS sin datos personales. Las URL transitivas se renuevan mediante la misma autoridad de caché y el plan de mantenimiento protegido. Ledger y límites: `docs/agent/PERFORMANCE_GLOBAL_20261029.md`.
+
+## 2026-10-30 — Despacho push de pedidos y categorías móviles
+
+Fuentes: servicio-push, apps-script-bridge, respaldo order-email y catálogo inline.
+Se inicia push antes de correo/Sheets, se acota OAuth/FCM/Firestore y se envía
+con concurrencia6. Diagnóstico registra fallos tras claim; recuperación explícita
+SuperAdmin conserva evento y reclama con CAS, sin repetir eventos con éxitos.
+Consumidor: centro push con botón Reintentar aviso y URL inmutable nueva.
+Catálogo: espacio vertical/lateral y degradado de fondo con las uniones del
+flujo compartido. Pruebas nuevas en glob push y specs existentes de checkout
+y catálogo. Sin proveedores nuevos, Rules, pedidos reales ni cambios de datos.
+Derivados de CSP/caché/diagnóstico/protección mediante generadores canónicos.

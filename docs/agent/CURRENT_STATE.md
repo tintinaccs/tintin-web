@@ -1,3 +1,17 @@
+## 2026-10-30 — Segunda integración de los PR pendientes,1281
+
+Codex /root.1280 MERGED57d81e4a184fbf0805b2f7d18ce37d42de4101dc, CI y
+CodeQL de77a83f17a aprobados; mainCI/producción se verifican por separado en
+recibos maestros.1281 integra main57d81e4 normalmente; conflicto sólo en comentario
+de la misma pausa de carttest y derivados regenerados. Se preservan Auditoría,
+sonda y mejoras push/móvil; nuevo caso Node22 tiene referencia temporal acotada
+en harness, no en transporte productivo.62 push/social Node22,466 comercio,
+176 flow-connections y29 Chromium catálogo PASS sin reintentos; build PASS.
+Plan8files/25records, preflight/CI del nuevo SHA pendientes al preparar. No QA
+con datos/envíos reales ni deploy manual Rules.1282 lo lleva otro agente, no
+se duplica su trabajo. Ver MERGE-ALL-20261030.md y registro maestro absoluto
+/workspace/tintin-web/artifacts/merge-all/FOLLOWUP.json.
+
 ## 2026-10-30 — Corregir y mergear todos los PR abiertos
 
 Codex /root. La titular autoriza explícitamente «arregla y mergea TODOS».
@@ -4926,3 +4940,64 @@ Codex /root, base c610f9d, rama codex/corregir-sonda-carrito. PR1278 ya MERGED: 
 La sesión del panel volvió a estar accesible al reabrirla. Se confirma que Sheets conserva acuses de otro despliegue y no hay ningún registro real de reseña; no son errores de escritura reproducidos. PayPal continúa opcional/deshabilitado por indicación de la titular. Se observa además Carrito en rojo mientras el carrito real abre sin errores. Causa reproducida contra la página pública: cart-drawer existe desde aproximadamente1s, pero una imagen que retiene load hace que la sonda anterior termine hasCartDrawer:false a10s. Regresión nueva RED con ese mismo caso y reloj controlado.
 
 La sonda comprueba el DOM real cada100ms desde que se monta el iframe, sin esperar load de imágenes. Conserva el plazo, el fallo si falta el panel, GET únicamente y limpieza de iframe/intervalo al terminar o cancelar. Reproducción con imágenes retenidas pasa hasCartDrawer:true;176/176 pruebas canónicas de conexiones PASS_LOCAL sin reintentos, incluidas tres nuevas de carga bloqueada, panel ausente y cancelación. URLs nuevas para el módulo y admin-app; caché desde el auditor canónico. Build:pages/cache y preflight1099 módulos/72funciones PASS_LOCAL. Plan canónico de cuatro archivos protegidos y18 registros afectados. Las tres pruebas nuevas corren en la CI obligatoria; su import de Playwright sigue el patrón dinámico existente para no interpretarlo como recurso publicable local. CI y publicación del segundo candidato se registran por su propio SHA, sin heredar el PASS de1278.
+
+## 2026-10-30 — Push de pedidos y espacio móvil del catálogo
+
+Codex /root GPT-6, rama codex/push-pedidos-mobile-20261030, base96bf4fc4.
+Se retoma el caso TINPED30 descrito por la titular; este entorno no conserva
+los cambios sin publicar ni la sesión administrativa del chat anterior.
+Autoridades: apps-script-bridge, order-email, servicio-push y catálogo inline.
+El push empieza antes de la cola de correo/Sheets, con trabajo conservado por
+waitUntil y respaldo sin waitUntil. OAuth/transporte tienen cancelación8s;
+envíos con seis trabajadores evitan que un dispositivo lento bloquee al resto.
+Errores posteriores a la reserva cierran el evento y preservan contadores de
+entregas ante fallos de persistencia. Recuperación SuperAdmin usa el evento
+almacenado, conserva eventId y aplica CAS por updateTime al reclamarlo;
+processing reciente, eventos con éxitos y límite5 impiden reenvíos globales.
+El registro tardío de fallos no pisa eventos existentes. El catálogo móvil
+reserva28px arriba/abajo y24px laterales, con fondo degradado que comparte
+los colores de unión del flujo canónico; texto/controles conservan nitidez.
+
+PASS_LOCAL final:62/62 Node push/social y315/315 checkout/pedidos, auditor
+push y preflight canónica. El harness de checkout incorpora el nuevo despacho
+para comprobar que la respuesta no espera ni push ni correo; conserva su aserción
+de encolar antes del correo. La primera geometría detectó12px de desborde
+decorativo y se corrigió. Verificación móvil final, build, CI y publicación
+se registran tras ejecutarse; ningún PASS de otro SHA se hereda.
+NOT_VERIFIED: entrega en teléfonos físicos y recuperación real de TINPED30;
+no se crean pedidos, correos ni mensajes reales de QA. No se promete latencia
+absoluta del sistema operativo/FCM a partir de la aceptación del proveedor.
+
+PASS_LOCAL de navegador:11/11 geometría/navegación del catálogo,320–2560px
+y horizontal;4/4 categorías completas320/390/540/768px. La revisión de la
+captura descubrió max-width global limitando el fondo; se anula sólo en la
+navegación móvil. Se añade prueba de liberación de cuerpos HTTP para no
+agotar conexiones del worker (10/10 pruebas nuevas del despacho). El build
+y caché finales se regeneran antes del commit; CI/merge siguen pendientes.
+
+Candidato final PASS_LOCAL:4/4 categorías repetidas tras anular max-width,
+preflight canónica completa, build:pages, auditor push y caché385/67;
+plan protegido8 archivos/25 registros, regenerado después del HTML definitivo.
+Diff revisado, sin cambios de Rules, permisos ni escrituras comerciales.
+
+CI inicial41088728172/intento1, SHA16d05280:FAIL en Reject generated artifact
+drift. El generador incluyó archivos temporales no versionados bajo work/.
+Se trasladan fuera del repositorio a /workspace/work/tintin-push y se regenera
+con el constructor canónico, conservando el gate. No es fallo funcional de
+push ni se hereda su CI para el siguiente SHA. La siguiente ejecución debe
+aprobar sin archivos ajenos al checkout reproducible.
+
+CI c1886012/41089123481/intento1:Comercio e identidad PASS; Calidad FAIL por
+cancelación30s en cart-render-probe del PR1279, reproducida localmente2/3
+con Chromium instalado. El reloj instalado seguía avanzando mientras el test
+buscaba el iframe que la sonda retiraba. Se pausa antes de crear la sonda y
+se avanza sólo mediante runFor;3/3 casos dirigidos PASS sin reintentos.
+No se cambia la sonda, los límites ni las aserciones. Las etapas pendientes
+del SHA anterior no acreditan el nuevo; se repite CI completa.
+
+Inspección tardía del CSS completo:experiencia-interfaz volvía a imponer
+max-width100% después del inline, dejando el fondo menor que el viewport.
+Se especifica la excepción únicamente en categorías móviles, manteniendo
+márgenes de controles y clipping global. La regresión ahora mide clientWidth
+igual al viewport, además del espacio/fondo y ausencia de desbordamiento.
+No se hereda el resultado visual de una captura previa al runtime completo.

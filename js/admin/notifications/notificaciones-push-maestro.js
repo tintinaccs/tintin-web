@@ -86,7 +86,16 @@ function renderEvents(events = []) {
     body.innerHTML = '<tr><td colspan="5" style="padding:14px;color:var(--adm-muted)">Todavía no hay eventos de push registrados.</td></tr>';
     return;
   }
-  body.innerHTML = events.map(event => `<tr><td style="padding:9px"><strong>${esc(event.type || '—')}</strong><br><small style="color:var(--adm-muted)">${esc(event.eventId || '')}</small></td><td style="padding:9px"><span class="adm-badge">${esc(event.status || '—')}</span></td><td style="padding:9px">${esc(event.successCount ?? 0)} / ${esc(event.failureCount ?? 0)}</td><td style="padding:9px;max-width:260px;overflow-wrap:anywhere">${esc(event.lastError || '—')}</td><td style="padding:9px">${esc(event.updatedAt || '—')}</td></tr>`).join('');
+  body.innerHTML = events.map(event => `<tr><td style="padding:9px"><strong>${esc(event.type || '—')}</strong><br><small style="color:var(--adm-muted)">${esc(event.eventId || '')}</small></td><td style="padding:9px"><span class="adm-badge">${esc(event.status || '—')}</span></td><td style="padding:9px">${esc(event.successCount ?? 0)} / ${esc(event.failureCount ?? 0)}</td><td style="padding:9px;max-width:260px;overflow-wrap:anywhere">${esc(event.lastError || '—')}</td><td style="padding:9px">${esc(event.updatedAt || '—')}${event.type === 'order.created' && !event.successCount && ['failed', 'processing', 'no_devices'].includes(event.status) ? `<br><button type="button" class="adm-btn adm-btn-sm" data-push-retry="${esc(event.eventId)}">Reintentar aviso</button>` : ''}</td></tr>`).join('');
+  body.querySelectorAll('[data-push-retry]').forEach(button => button.addEventListener('click', async () => {
+    button.disabled = true;
+    try {
+      const result = await call('retry-order', { method: 'POST', body: JSON.stringify({ action: 'retry-order', eventId: button.dataset.pushRetry }) });
+      notice(result.duplicate ? 'El aviso ya fue enviado.' : result.skipped ? (result.skipped === 'in_progress' ? 'El aviso todavía se está procesando.' : 'Los avisos push están desactivados o pausados.') : result.status === 'no_devices' ? 'No hay dispositivos activos para recibir el aviso.' : `Aviso enviado a ${result.successCount || 0} dispositivos.`);
+      await refresh();
+    } catch (error) { notice(error.message, true); button.disabled = false; }
+  }));
+
 }
 
 function applySettings(settings = {}) {
