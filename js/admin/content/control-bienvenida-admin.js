@@ -18,7 +18,7 @@ import {
   normalizeWelcomeConfig,
   normalizeWelcomeStep,
   welcomeIconSvg
-} from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20261021-welcome-guide-1';
+} from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20261030-home-history-4';
 
 const REF = doc(db, 'settings', 'welcomeTutorial');
 

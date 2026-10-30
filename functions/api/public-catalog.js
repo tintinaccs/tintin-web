@@ -191,7 +191,7 @@ export async function onRequest({ request, env, waitUntil }) {
       if(typeof waitUntil==='function')waitUntil(task);else await task;
     }
     if (homeIndex) {
-      payload.items = homeProductIndex(payload.items);
+      payload.items = homeProductIndex(payload.items,{baseUrl:cacheUrl.origin+'/'});
       payload.count = payload.items.length;
     }
     const response = Response.json(payload, {

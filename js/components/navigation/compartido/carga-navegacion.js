@@ -14,9 +14,9 @@ const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar
 const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261029-performance-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261030-home-history-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261030-home-history-2';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-4';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261030-home-history-4';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261030-home-history-4';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -122,7 +122,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 function loadAuthRuntime() {
   if (IS_VISUAL_PREVIEW_FRAME) return Promise.resolve(null);
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261022-avatar-inicial-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261030-home-history-4').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
@@ -173,7 +173,7 @@ function loadCollectionsRuntime({ withProducts = false } = {}) {
 // consulta escrita mientras termina de cargar el controlador compartido.
 function loadSearchRuntime() {
   if (!searchControllerPromise) {
-    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261030-home-history-2')
+    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261030-home-history-4')
       .then(module => {
         module.initSearchController();
         window.TintinSearchController?.renderCurrentQuery();
@@ -237,11 +237,14 @@ function attachLightweightCommerceDemand() {
     '[data-nav-action="cart"],[data-shell-route="cart"],#tabbar-cart',
     loadCartRuntime
   );
+}
+
+function attachCollectionsProductsDemand() {
   bindDemand(
     '#btn-tienda,#btn-tablet-tienda,#tabbar-tienda,[data-collections-nav],#collections-sheet',
     () => loadCollectionsRuntime({ withProducts: true }),
-    // El menú ya ofrece enlaces e imágenes locales. En páginas informativas,
-    // un simple paso del puntero no debe generar una lectura remota.
+    // El catálogo de Inicio es parcial. El menú pide su respaldo completo
+    // sólo al usarse, en cualquier ruta; pasar el puntero no consulta datos.
     { prefetchOnPointer: false }
   );
 }
@@ -340,6 +343,7 @@ export function loadSharedRuntime() {
 
   attachNotificationsDemand();
   attachFooterCollectionsDemand();
+  attachCollectionsProductsDemand();
 
   // Las páginas informativas resuelven Auth globalmente para que el header
   // conozca la sesión en cualquier ruta. El menú ya tiene el mismo respaldo

@@ -420,7 +420,7 @@ check(
 
 check(
   'Las imágenes de productos se sanean al leer Firestore',
-  files.products.includes("from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1'") &&
+  /from ['"]\.\.\/\.\.\/components\/images\/utilidades-imagenes\.js\?v=[A-Za-z0-9._-]+['"]/.test(files.products) &&
     files.products.includes('sanitizeImageUrl') &&
     files.products.includes('return sanitizeImageUrl(img);'),
   'ningún renderer público debe recibir una URL cruda'

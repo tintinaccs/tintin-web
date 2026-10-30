@@ -1,4 +1,4 @@
-import { CACHE_KEY, loadCollections as loadCollectionMetadata, normalizeCollectionDoc, normalizeCollectionSlug, canonicalPublicCollections, sortCols } from './datos-publicos-colecciones.js?v=tintin-20261030-home-history-1';
+import { CACHE_KEY, loadCollections as loadCollectionMetadata, normalizeCollectionDoc, normalizeCollectionSlug, canonicalPublicCollections, sortCols } from './datos-publicos-colecciones.js?v=tintin-20261030-home-history-4';
 export { normalizeCollectionDoc, normalizeCollectionSlug, canonicalPublicCollections };
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import {
@@ -10,7 +10,7 @@ import {
   orderBy,
   startAfter
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20261017-domain-cutover-1';
+import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20261030-home-history-4';
 import {
   recordFirestoreRead,
   writeCached
@@ -26,7 +26,7 @@ if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
 
 function withResolvedImages(cols) {
   const products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
-  return cols.map(col => ({ ...col, image: resolveCollectionImage(col, products) }));
+  return cols.map(col => ({ ...col, image: resolveCollectionImage(col, products, {productFallback: window.TintinProductsStore?.homeCollectionImage?.(col.slug) || ''}) }));
 }
 
 let latestVisibleCollections = null;

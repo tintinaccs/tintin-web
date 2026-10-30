@@ -3,11 +3,12 @@ import assert from 'node:assert/strict';
 import {homeProductIndex} from '../../cloudflare/indice-inicio.mjs';
 import {chooseHomeIds} from '../../js/pages/catalog/politica-exhibicion-catalogo.js';
 const product=(id,data={})=>({id,data:{name:'Anillo '+id,category:'anillos',active:true,price:25000,stock:2,...data}});
-test('el índice conserva todo el pool elegible y destacados sin descripciones, fotos ni matrices comerciales',()=>{
+test('el índice conserva todo el pool elegible y destacados sin descripciones ni matrices, con una portada de colección',()=>{
  const items=Array.from({length:1501},(_,i)=>product(String(i),{destacado:i===1500,description:'X'.repeat(4000),imageUrl:'https://img.example/'+i,internalNotes:'privado'}));
  const index=homeProductIndex([...items,product('hidden',{active:false}),product('empty',{stock:0})]);
  assert.equal(index.length,1502);assert.equal(index.filter(p=>p.data.available).length,1501);assert.ok(index.some(p=>p.id==='1500'&&p.data.destacado));
- assert.ok(index.every(p=>Object.keys(p.data).sort().join(',')==='available,category,destacado'));
+ assert.ok(index.every(p=>Object.keys(p.data).every(key=>['available','category','destacado','collectionImage'].includes(key))));
+ assert.equal(index.filter(p=>p.data.collectionImage).length,1);
  assert.ok(JSON.stringify(index).length<JSON.stringify(items).length/20);
 });
 test('disponibilidad v2 proviene de la autoridad de variantes, incluso con stock agregado cero',()=>{
@@ -20,4 +21,18 @@ test('selecciones estables, sin duplicados y con alcance a todo el índice al vo
  let seed=42;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};const reached=new Set();
  for(let i=0;i<500;i++){const pick=chooseHomeIds(ids,5,previous,true,random);assert.equal(new Set(pick).size,5);pick.forEach(id=>reached.add(id));}
  assert.equal(reached.size,100);assert.deepEqual(chooseHomeIds([],5),[]);
+});
+
+test('portada por colección respeta orden canónico, aliases, fotos seguras y agotados sin hidratar fichas',()=>{
+ const rows=homeProductIndex([
+  product('unsafe',{category:'Bags',collectionOrder:0,imageUrl:'javascript:alert(1)'}),
+  product('cover',{category:'bolsos',collectionOrder:1,stock:0,imageUrl:'/portada.svg'}),
+  product('featured',{category:'Bags',collectionOrder:10,destacado:true,imageUrl:'https://img.example/featured.jpg'}),
+  product('hidden',{category:'bolsos',collectionOrder:-1,active:false,imageUrl:'https://img.example/private.jpg'}),
+ ],{baseUrl:'https://example.test/'});
+ assert.equal(rows.filter(row=>row.data.collectionImage).length,1);
+ assert.equal(rows.find(row=>row.id==='cover').data.collectionImage,'https://example.test/portada.svg');
+ assert.equal(rows.find(row=>row.id==='cover').data.available,false);
+ assert.ok(rows.every(row=>row.data.category==='bolsos'));
+ assert.ok(!rows.some(row=>row.id==='hidden'));
 });

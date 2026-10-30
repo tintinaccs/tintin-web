@@ -47,7 +47,8 @@ export function sanitizeImageUrl(value, options = {}) {
   }
 
   try {
-    const parsed = new URL(raw, window.location.href);
+    const base = options.baseUrl ? new URL(options.baseUrl) : window.location;
+    const parsed = new URL(raw, base.href);
     if (!['https:', 'http:'].includes(parsed.protocol)) return '';
 
     if (!allowRelative) {
@@ -56,9 +57,9 @@ export function sanitizeImageUrl(value, options = {}) {
     }
 
     if (
-      window.location.protocol === 'https:' &&
+      base.protocol === 'https:' &&
       parsed.protocol === 'http:' &&
-      parsed.origin !== window.location.origin &&
+      parsed.origin !== base.origin &&
       !allowHttpOnHttps
     ) {
       return '';

@@ -7,7 +7,7 @@ import {
   WELCOME_VERSION,
   normalizeWelcomeConfig,
   welcomeIconSvg
-} from './configuracion-bienvenida.js?v=tintin-20261021-welcome-guide-1';
+} from './configuracion-bienvenida.js?v=tintin-20261030-home-history-4';
 
 (function(){
   'use strict';

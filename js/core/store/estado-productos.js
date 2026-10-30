@@ -1,10 +1,11 @@
+import { normalizeCollectionSlug } from './colecciones-publicas.mjs?v=tintin-20261030-home-history-4';
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261030-home-history-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261030-home-history-1';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261030-home-history-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261030-home-history-4';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261030-home-history-4';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261030-home-history-1';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
-import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
+import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-4';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
 
 import {
@@ -18,13 +19,16 @@ import { fetchPublicCatalogResource, fetchPublicHomeIndex, fetchPublicProductsBy
 import { chooseHomeIds, sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20261030-home-history-1';
 
 const ALL_CACHE_KEY = 'products:cards';
-const HOME_CACHE_KEY = 'products:home-selection-v2';
+const HOME_CACHE_KEY = 'products:home-selection-v3';
 let homeIndex = [];
 let homeIndexSavedAt = 0;
 let homeSelection = null;
 let completeCatalog = null;
 let homeSelectionTask = Promise.resolve();
 let homeRequestVersion = 0;
+let catalogRevision = 0;
+let completeCatalogRevision = 0;
+let homeIndexRevision = 0;
 const HOME_CACHE_TTL = 10 * 1000;
 // La caché local acompaña la frescura del edge (10 segundos) para mostrar
 // cambios de precio, stock y estado al volver a la categoría.
@@ -208,6 +212,7 @@ async function fetchHomeProducts({reroll = '', force = false} = {}) {
     await catalogVisibilityReady;
     const reuseIndex = !force && homeIndex.length && Date.now()-homeIndexSavedAt < HOME_CACHE_TTL;
     const rows = reuseIndex ? homeIndex : await fetchPublicHomeIndex();
+    const indexRevision = reuseIndex ? homeIndexRevision : ++catalogRevision;
     const index = rows.filter(item => window.TintinCatalogPolicy?.isCollectionVisible?.(item.data.category) !== false);
     const ids = index.filter(item=>item.data.available!==false).map(item => String(item.id));
     const selection = {
@@ -226,6 +231,7 @@ async function fetchHomeProducts({reroll = '', force = false} = {}) {
     const products = normalizeList(wanted.map(id => cachedById.get(id) || received.get(id)).filter(Boolean));
     if (requestVersion !== homeRequestVersion) return window.PRODUCTS || [];
     homeIndex = index;
+    homeIndexRevision = indexRevision;
     if (!reuseIndex) homeIndexSavedAt = Date.now();
     homeSelection = selection;
     writeCached(HOME_CACHE_KEY, {products: products.map(compactProduct), selection, index, indexAt: homeIndexSavedAt});
@@ -262,6 +268,7 @@ async function fetchAllProducts() {
   // por red o un despliegue nunca debe dejar al navegador mostrando "0 productos".
   if (cards.length) writeCached(ALL_CACHE_KEY, cards);
   completeCatalog = products;
+  completeCatalogRevision = ++catalogRevision;
   return publish(products, 'edge-cache');
 }
 
@@ -281,6 +288,7 @@ export async function loadHomeProducts(options = {}) {
   const cached = readCached(HOME_CACHE_KEY, HOME_CACHE_TTL);
   if (!options.force && cached?.selection && Array.isArray(cached.products) && Array.isArray(cached.index)) {
     homeSelection = cached.selection;
+    homeIndexRevision = 0;
     homeIndex = cached.index;
     homeIndexSavedAt = cached.indexAt || 0;
     return publishHome(cached.products, 'home-cache');
@@ -288,6 +296,8 @@ export async function loadHomeProducts(options = {}) {
   const all = !options.force && readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
   if (Array.isArray(all) && all.length) {
     completeCatalog = all;
+    completeCatalogRevision = ++catalogRevision;
+    homeIndexRevision = completeCatalogRevision;
     homeIndex = all.map(product=>({id:product.id,data:{category:product.category||product.cat,destacado:product.destacado===true,available:window.TintinCatalogPolicy?.isPurchasable?.(product) ?? product.active!==false}}));
     homeIndexSavedAt = Date.now();
     return fetchHomeProducts();
@@ -315,10 +325,10 @@ export async function loadAllProducts(options = {}) {
   const force = options.force === true;
   if (!force) {
     const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
-    if (Array.isArray(cached) && cached.length) { completeCatalog = cached; return publish(cached, 'cache'); }
+    if (Array.isArray(cached) && cached.length) { completeCatalog = cached; completeCatalogRevision = ++catalogRevision; return publish(cached, 'cache'); }
   }
   const stale = readStaleCached(ALL_CACHE_KEY);
-  if (!force && Array.isArray(stale) && stale.length) { completeCatalog = stale; publish(stale, 'stale-cache'); }
+  if (!force && Array.isArray(stale) && stale.length) { completeCatalog = stale; completeCatalogRevision = ++catalogRevision; publish(stale, 'stale-cache'); }
   try {
     return await runSingleFlight('products:all', fetchAllProducts);
   } catch (error) {
@@ -660,6 +670,10 @@ window.TintinProductsStore = {
   loadHome: loadHomeProducts,
   rerollHome: rerollHomeSelection,
   readHomeBlock: readHomeBlockProducts,
+  homeCollectionImage(slug) {
+    if (!homeSelection || completeCatalogRevision > homeIndexRevision) return '';
+    return homeIndex.find(item => normalizeCollectionSlug(item.data.category) === normalizeCollectionSlug(slug) && item.data.collectionImage)?.data.collectionImage || '';
+  },
   get homeIndex() { return homeSelection ? homeIndex : null; },
   get homeSelection() { return homeSelection; },
   loadProductPage,

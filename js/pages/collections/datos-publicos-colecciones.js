@@ -1,7 +1,9 @@
+import { normalizeCollectionSlug } from '../../core/store/colecciones-publicas.mjs?v=tintin-20261030-home-history-4';
+export { normalizeCollectionSlug };
 /* Metadata pública compartida: sin Firebase, imágenes de configuración ni Auth. */
-import { wristCategory, unifyWristCollections } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
+import { unifyWristCollections } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 import { cleanText, cleanMultilineText } from '../../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
-import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
+import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-4';
 import { readCached, readStaleCached, runSingleFlight, writeCached } from '../../core/firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
 import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20261030-home-history-1';
 export const CACHE_KEY = 'collections:public:unified-v2';
@@ -18,13 +20,6 @@ export function normalizeCollectionDoc(id, data) {
     order: Number.isFinite(orderNum) ? orderNum : 9999,
     visible: d.visible !== false
   };
-}
-
-export function normalizeCollectionSlug(value) {
-  return String(wristCategory(value) ?? '').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
-    .replace(/^bags?$/, 'bolsos').replace(/^ear-cuffs?$/, 'earcuff')
-    .replace(/^arm-cuffs?$/, 'armcuff').replace(/^jewelry-box$/, 'joyeros');
 }
 
 export function canonicalPublicCollections(collections) {

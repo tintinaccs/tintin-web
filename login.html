@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="96547f7ce0ea7ed3ace8e58bb29d32f35992caf78d3daf922f6f1840250135cd">
+  <meta name="tintin-page-revision" content="ec0340af584a5b895a2034d64ddab2471034fd98f16136852e5d6cb348acc9c9">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261022-avatar-inicial-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261030-home-history-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261030-home-history-4"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261029-cart-motion-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261030-home-history-2" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261030-home-history-4" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261021-iconos-rosa-1">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261021-iconos-rosa-1">
@@ -24,7 +24,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261030-home-history-2">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261030-home-history-4">
   <link rel="preconnect" href="https://www.google.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -209,7 +209,7 @@ import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { waitForGooglePopup } from "./js/core/auth/espera-popup-google.mjs?v=tintin-20261021-google-popup-confirmation-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20261017-domain-cutover-1";
-import { clearProfileGateCache, consumeBlockedEmail } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20261027-welcome-receipt-1";
+import { clearProfileGateCache, consumeBlockedEmail } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20261030-home-history-4";
 import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1";
 import { recordAuthDiagnostic } from "./js/core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 import { showBlockedModal, accountProblemHtml } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
@@ -547,7 +547,7 @@ async function ensureProfileComplete(user, role, options = {}) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20261027-welcome-receipt-1 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20261030-home-history-4 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -1296,7 +1296,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20261019-privacy-copy-1"></script>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261030-home-history-2" defer></script>
+<script src="tienda.js?v=tintin-20261030-home-history-4" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1"></script>
 </body>
 </html>

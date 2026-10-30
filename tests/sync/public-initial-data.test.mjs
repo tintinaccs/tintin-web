@@ -7,7 +7,7 @@ const source = fs.readFileSync(new URL('../../js/core/store/estado-productos.js'
 const loads = source.slice(source.indexOf('export async function loadHomeProducts'), source.indexOf('async function fetchSingleProduct(')).replaceAll('export ', '');
 
 function loadContext(overrides={}) {
-  const context=vm.createContext({HOME_CACHE_KEY:'home-v2',ALL_CACHE_KEY:'products:cards',HOME_CACHE_TTL:60000,ALL_CACHE_TTL:60000,homeSelection:null,homeIndex:[],homeIndexSavedAt:0,completeCatalog:null,window:{TintinCatalogPolicy:{isPurchasable:()=>true}},readCached:()=>null,readStaleCached:()=>null,...overrides});
+  const context=vm.createContext({catalogRevision:0,homeIndexRevision:0,completeCatalogRevision:0,HOME_CACHE_KEY:'home-v2',ALL_CACHE_KEY:'products:cards',HOME_CACHE_TTL:60000,ALL_CACHE_TTL:60000,homeSelection:null,homeIndex:[],homeIndexSavedAt:0,completeCatalog:null,window:{TintinCatalogPolicy:{isPurchasable:()=>true}},readCached:()=>null,readStaleCached:()=>null,...overrides});
   vm.runInContext(loads,context);return context;
 }
 for (const target of ['loadHomeProducts','loadAllProducts']) {

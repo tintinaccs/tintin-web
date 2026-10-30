@@ -7,21 +7,30 @@ for (const width of [390, 768, 1440]) {
     test(`colecciones e imágenes compartidas ${route} en ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 1000 });
       const origin = new URL(test.info().project.use.baseURL).origin;
-      let productRequests = 0;
+      let productRequests = 0, fullProductRequests = 0;
       await page.route('**/api/public-catalog?resource=*', async request => {
         const resource = new URL(request.request().url()).searchParams.get('resource');
-        if (resource === 'products') productRequests += 1;
+        const params = new URL(request.request().url()).searchParams;
+        if (resource === 'products') {
+          productRequests += 1;
+          if (!params.has('view') && !params.has('ids')) fullProductRequests += 1;
+        }
         if (!['products', 'collections'].includes(resource)) return request.continue();
         const items = resource === 'collections'
           ? categories.map(id => ({ id, data: { name: id === 'bolsos' ? 'Bags' : id, visible: true } }))
           : categories.map((category, i) => ({ id: `fixture-${i}`, data: { name: `Producto ${i}`, price: 100000, stock: 5, active: true, category, imageUrl: `${origin}/__collection-test-${category}.svg`, createdAt: '2026-01-01' } }));
-        return request.fulfill({ json: { ok: true, resource, items } });
+        const payload = params.get('view') === 'home-index' ? items.map(({id,data})=>({id,data:{category:data.category,destacado:false,available:true}})) : items;
+        return request.fulfill({ json: { ok: true, resource, items: payload } });
       });
       await page.route('**/__collection-test-*.svg', request => request.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200"><rect width="600" height="200" fill="#F8AACA"/></svg>' }));
       // El catálogo es simulado; no se crean sesiones ni datos comerciales.
       await page.goto(route, { waitUntil: 'load' });
       await page.waitForSelector('body.tt-public-shell-mounted');
       await page.evaluate(() => window.TintinLoader?.hide?.());
+      if (route === '/') {
+        await expect.poll(()=>page.evaluate(()=>Boolean(window.TintinProductsStore?.homeSelection))).toBe(true);
+        expect(fullProductRequests, 'Inicio conserva el índice sin catálogo completo antes de usar el menú').toBe(0);
+      }
       if (route === '/about') {
         await page.waitForTimeout(1600);
         expect(productRequests, 'Una página informativa no debe leer productos antes de abrir el menú').toBe(0);
@@ -60,7 +69,8 @@ for (const width of [390, 768, 1440]) {
         window.dispatchEvent(new CustomEvent('tintin:products-loaded', { detail: { products: window.PRODUCTS } }));
       });
       expect(await grid.evaluate(container => container.firstElementChild === window.__collectionFirstCard)).toBe(true);
-      expect(productRequests).toBe(1);
+      expect(productRequests).toBe(route === '/' ? 2 : 1);
+      expect(fullProductRequests).toBe(1);
     });
   }
 }

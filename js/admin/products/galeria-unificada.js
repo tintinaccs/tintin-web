@@ -1,6 +1,6 @@
 import {appendPhotoOrderControls as appendOptionPhotoOrder} from './fotos-por-variante.js?v=tintin-20261028-opciones-inline-2';
-import {attachColorPhotos} from './fotos-por-color.js?v=tintin-20261028-product-tabs-1';
-import {sanitizeImageUrl} from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
+import {attachColorPhotos} from './fotos-por-color.js?v=tintin-20261030-home-history-4';
+import {sanitizeImageUrl} from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-4';
 import {attachMultiImageUploadWidget,attachImageUploadWidget} from '../../components/images/carga-imagenes.js?v=tintin-20261025-gallery-unified-1';
 
 // Contrato existente: portada + doce adicionales. No se amplía almacenamiento.
