@@ -1,3 +1,44 @@
+## 2026-10-30 — Segunda integración de los PR pendientes,1281
+
+Codex /root.1280 MERGED57d81e4a184fbf0805b2f7d18ce37d42de4101dc, CI y
+CodeQL de77a83f17a aprobados; mainCI/producción se verifican por separado en
+recibos maestros.1281 integra main57d81e4 normalmente; conflicto sólo en comentario
+de la misma pausa de carttest y derivados regenerados. Se preservan Auditoría,
+sonda y mejoras push/móvil; nuevo caso Node22 tiene referencia temporal acotada
+en harness, no en transporte productivo.62 push/social Node22,466 comercio,
+176 flow-connections y29 Chromium catálogo PASS sin reintentos; build PASS.
+Plan8files/25records, preflight/CI del nuevo SHA pendientes al preparar. No QA
+con datos/envíos reales ni deploy manual Rules.1282 lo lleva otro agente, no
+se duplica su trabajo. Ver MERGE-ALL-20261030.md y registro maestro absoluto
+/workspace/tintin-web/artifacts/merge-all/FOLLOWUP.json.
+
+## 2026-10-30 — Corregir y mergear todos los PR abiertos
+
+Codex /root. La titular autoriza explícitamente «arregla y mergea TODOS».
+Se toman1280 y1281 abiertos; main96bf4fc tiene timeout del test de carrito.
+1280 integra main mediante merge normal; fuentes auto-conciliadas conservan
+Auditoría y la sonda vigente; conflictos derivados regenerados canónicamente,
+admin-app combinado con URL nueva audit-integrity-2. Reproducción carrito1
+cancelado por timeout30s; pausa explícita del reloj del harness, no del runtime:
+3/3 PASS, flow-connections176/176 PASS. Auditoría Node8/8, Chromium3/3 y
+rules-critical emulado PASS (incluye49 adversariales de Auditoría).
+1281 se prepara en worktree separado: el fallo se reproduce en Node22, no24,
+por AbortSignal.timeout sin referencia en fetch simulado. Referencia temporal
+acotada/limpiada y plazo del test;62/62 PASS en ambas versiones sin quitar casos.
+No datos reales, dispatch ni despliegue manual de Rules. Merge/CI posteriores
+pendientes del nuevo SHA; seguir recibos y artifacts/merge-all/FOLLOWUP.json.
+Alcance, evaluación limitada de Rules y límites: MERGE-ALL-20261030.md.
+
+## 2026-10-30 — Corrección de integridad de Auditoría
+
+Codex /root. Base c610f9d9, rama codex/corregir-auditoria-20261030. Se reproducen los dos hallazgos de Auditoría sobre main vigente. Autoridad nueva de ingreso: appendAudit en /api/admin-order-mutation y registro-auditoria.mjs, mediante autenticación/cuotas/perfil confiables existentes. Autor UID/correo/rol y fecha se asignan en servidor; esquema, límites, contador e historial completo se validan. Los dos escritores SDK (panel y biblioteca multimedia) migran juntos. Rules niega todas las escrituras directas, incluso del propietario; lectura sigue exclusiva y las transacciones comerciales Admin REST no cambian. Registros históricos con contador inválido no generan HTML. No se modifican usuarios, productos, pedidos ni logs históricos reales.
+
+PASS_LOCAL con npm ci bloqueado:271 pruebas Node de seguridad/operaciones/dominio relacionado;233 controles críticos de Rules,49 casos adversariales nuevos y17 pruebas de integración/cuotas/proyección en el emulador. 81/81 Chromium sin reintentos del renderer real, galería y workspace en320–1920, incluidos390/820/1440 para HTML histórico hostil. Preflight canónico39/39 y544 huellas protegidas verificadas, plan13 archivos/42 registros. Preflight sintáctico:1103 fuentes/72 funciones importadas sin red. Build canónico aprobado tras conservar el límite de100 rutas: se usa appendAudit en la API existente, sin endpoint nuevo. Nuevo gate de Rules se incorpora al comando crítico existente; el navegador al gate browser existente. CI/merge/producción y publicación de Rules aún PENDING; no basta publicar Pages para cerrar la suplantación. El nombre de RELOJ GIANNA aún difiere de «Reloj Celeste» en su descripción/tags reales: dato comercial de Firestore, no texto del código. La sesión integrada del titular sigue sin control de navegador disponible en este chat; no se intenta extraer cookies ni credenciales. Revisión autenticada y edición comercial real NOT_VERIFIED/BLOCKED.
+
+Al publicar el PR1280 se confirmó también GHSA-rmxm-3fg6-px4f en @hono/node-server2.1.0, dependencia de desarrollo de Firebase CLI vía MCP SDK. Se actualiza sólo ese paquete del lock a2.1.5 compatible con el rango existente; sin override, servicios ni cambios al runtime público. npm audit final0 y Firebase CLI15.34.1 inicia correctamente. Se repite el comando de reglas y se exige CI del nuevo SHA; no se hereda la del primer candidato fcfc2045.
+
+CI41045428554/1, head8e7ade03: Preflight124028257968 falló al rechazar drift de diagnostic-manifest/site-version. Causa confirmada: dos documentos se actualizaron de plan12 a13 después de generar diagnóstico (sus bytes seguían iguales, sus hashes cambiaron). Se regeneran los artefactos canónicos después de la última edición, sin cambiar gates, Rules ni caché de código. Se exige build repetido sin drift y CI del SHA siguiente. CI inicial41045267093 cancelada al ser reemplazada, CodeQL41045262661 SUCCESS; no se reejecuta ese head obsoleto.
+
 ## 2026-10-30 — PR1276: integrar main1277 y recuperar CI de PR
 
 Codex /root. Candidato c9e83de0 aprobó CodeQL41002420413/1 y Cloudflare, pero no se creó CI de pull_request: main avanzó a db506e9dfe288b25f6fd9456a2c5d4fdf23241fb (#1277), dejando mergeable_state=dirty. Se integra main mediante merge normal, sin force-push. Se conservan sus correcciones de catálogo móvil, checkout, contacto, consentimiento/actividad y colecciones vacías; conflictos de HTML/derivados se resuelven desde main y las autoridades canónicas regeneran versiones/CSP/diagnóstico. No se hereda el plan sobre850a9c21: se recalcula sobre db506e9d. Las URLs propias se renuevan a home-history5; mantenimiento de checkout conserva la versión mobile-review publicada en main.

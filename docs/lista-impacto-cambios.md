@@ -1,3 +1,7 @@
+## 2026-10-30 — Escritor confiable de Auditoría y representación histórica segura
+
+Autoridades: registro-auditoria de servidor, acción appendAudit de la API administrativa existente, escritor compartido del panel/biblioteca y renderAuditLogTable. Identidad y fecha confiables, permiso staff existente, tienda abierta/acceso de mantenimiento y cuotas existentes; validación de cada fila de historial. Rules prohíbe CRUD cliente y conserva lectura exclusiva del propietario. No se altera ninguna colección comercial, escritor transaccional, espejo de Sheets, consulta histórica ni CSP. Consumidores transitivos/versionado, rutas y diagnóstico se regeneran canónicamente. Emulador adversarial, pruebas del endpoint y renderer real se conectan a etapas existentes. Publicar Rules es un paso independiente de Pages, con su workflow y entorno protegido existentes. Evidencia/límites en CURRENT_STATE; ninguna modificación de datos comerciales de producción.
+
 ## 2026-10-30 — Conciliación de Inicio/historial con main1277
 
 Integración por merge normal de db506e9d. Se conserva catálogo móvil, aviso de checkout, contacto, reset de consentimiento/actividad y limpieza de colecciones vacías de1277 junto con índice/portadas Inicio y paginación privada de1276. Autoridades de shell/caché/CSP/diagnóstico y plan protegido se regeneran sobre main vigente, sin escoger manualmente derivados como definición final. Evidencia del árbol integrado en CURRENT_STATE y recibo del PR; los checks del head anterior no acreditan el nuevo.

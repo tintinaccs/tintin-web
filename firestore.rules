@@ -1549,11 +1549,9 @@ service cloud.firestore {
 
     match /auditLog/{logId} {
       allow read: if isSuperAdmin();
-      allow create: if isSuperAdmin() ||
-        (
-          isStoreOpenOrAllowed() &&
-          (hasRole("admin") || hasRole("agent"))
-        );
+      // Autor/rol/fecha y esquema se validan en el ingreso appendAudit de la API. Los escritores
+      // comerciales confiables ya usan Admin REST y no dependen de estas reglas.
+      allow create: if false;
       allow update, delete: if false;
     }
 

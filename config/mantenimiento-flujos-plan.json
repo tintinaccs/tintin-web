@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "96bf4fc45988efe5c35ea39d51b1414bf314c693",
-  "reason": "Priorizar push de pedidos, recuperar eventos fallidos y suavizar categorías móviles",
+  "baseCommit": "57d81e4a184fbf0805b2f7d18ce37d42de4101dc",
+  "reason": "Conciliar push1281 con auditoría1280 y corregir harness de aborto Node22 preservando las aserciones",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "f931a1e534d9104371262e70cf43897804f64964aca41e6ab355428c2c670de2",
-      "newHash": "66ec315b1533d4c268369e3c9e7aa62a4283f211b09121c0073e33bddc245fe9"
+      "oldHash": "bf2dcec67e4816a0b08b1b71b915012a78f5e3375472cdc4c706e035959b1eac",
+      "newHash": "f50aa39f168403c4f8cedb41e63c14cab95ef10705d5b89c7248c6709de01230"
     },
     {
       "path": "catalogo.html",
@@ -40,8 +40,8 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "8cad2b06d6648fd9ae355ba01bf3b289cd450dd076d16a2a339d358430857b60",
-      "newHash": "b912cccb6f20146a9a57276ffb6205fd9c59187df38292bcec5b6ae659d5aced"
+      "oldHash": "188376d0ec108296e958caf5b051fe17baea598c750eb110fa4549aa9bc2cbeb",
+      "newHash": "6f16c4e7335f9b03f299e1987dd09c764aac408bbdfb1233bbd35eb226dd4923"
     }
   ],
   "affectedRecords": [
