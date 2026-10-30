@@ -25,13 +25,15 @@ const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 const html = htmlFiles.map(file => [file, read(file)]);
 
 check(
-  'La portada usa una consulta acotada sin listener masivo',
+  'La portada usa índice compacto y fichas por demanda sin listener masivo',
   products.includes("fetchPublicCatalogResource('products')") &&
-    products.includes("runSingleFlight('products:home', fetchHomeProducts)") &&
+    products.includes("fetchPublicHomeIndex()") &&
+    products.includes("fetchPublicProductsByIds(missing)") &&
+    /runSingleFlight\('products:home',\s*\(\)\s*=>\s*fetchHomeProducts\(/.test(products) &&
     !/onSnapshot\(\s*(?:query\()?collection\(db,\s*['"]products['"]\)/.test(products) &&
     products.includes("return loadHomeProducts(") &&
     /catalogo\|collections/.test(products),
-  'Inicio debe leer por la API edge (un solo vuelo, sin listener masivo); catálogo y colecciones usan la misma API.'
+  'Inicio debe leer índice y lotes por la API edge con un solo vuelo; Buscar conserva catálogo completo y no hay listener masivo.'
 );
 check(
   'Páginas informativas no importan products-store al iniciar',

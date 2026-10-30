@@ -198,12 +198,14 @@ test('Operaciones aclara que su estado pertenece al navegador actual', async () 
   assert.match(source, /Operaciones de este navegador/);
 });
 
-test('perfil no presenta compras ni "sin pedidos" sin confirmar todas las consultas', async () => {
-  const profile = await read('js/pages/profile/pedidos-perfil.js');
-  assert.match(profile, /const complete = ready\.every\(Boolean\) && !failures\.some\(Boolean\);/);
-  assert.match(profile, /onStats\(complete \? calculateOrderStats\(current\) : null\)/);
-  assert.match(profile, /empty:current\.length===0 && complete/);
-  assert.match(profile, /failures\[index\] = failure;\s*ready\[index\] = true;\s*onStats\(null\);/);
+test('perfil no presenta compras ni "sin pedidos" sin confirmar todas las páginas del índice', async () => {
+  const {profileOrdersFactory}=await import('../helpers/profile-orders-controller.mjs');
+  const stats=[],renders=[];
+  const controller=profileOrdersFactory()({readIndexPage:async({cursor})=>{if(cursor)throw Error('red');return {items:[{id:'known',total:500}],cursor:'next',readTime:'same'};},subscribe(){throw Error('No debe hidratar detalles de un índice incompleto');},render:(rows,options)=>renders.push({rows,options}),onStats:value=>stats.push(value),onStatus(){}});
+  await controller.start({uid:'owner'});
+  assert.equal(stats.at(-1),null);
+  assert.notEqual(renders.at(-1).options.empty,true);
+  assert.ok(renders.at(-1).options.error);
 });
 
 test('presentación de especificaciones: slugs y acabados legibles sin tocar texto libre', async () => {

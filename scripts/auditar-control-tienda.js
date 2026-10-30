@@ -26,6 +26,9 @@ const pageAudit = read('js/quality/correccion-auditoria-pagina.js');
 const rules = read('firestore.rules');
 const checkout = read('checkout.html');
 const restFallback = read('js/core/firebase/respaldo-rest-firestore.js');
+const privateQueryStart = restFallback.indexOf('export async function runAuthenticatedQueryRest');
+const publicRestFallback = privateQueryStart < 0 ? restFallback : restFallback.slice(0, privateQueryStart);
+const privateRestQuery = privateQueryStart < 0 ? '' : restFallback.slice(privateQueryStart);
 const productsStore = read('js/core/store/estado-productos.js');
 const collectionsStore = (read('js/pages/collections/estado-colecciones.js') + '\n' + read('js/pages/collections/datos-publicos-colecciones.js'));
 
@@ -170,10 +173,21 @@ check(
 );
 check(
   'Respaldo REST es estrictamente de solo lectura',
-  restFallback.includes("method: 'GET'") &&
-    !/\b(?:POST|PUT|PATCH|DELETE)\b/.test(restFallback) &&
+  publicRestFallback.includes("method: 'GET'") &&
+    !/\b(?:POST|PUT|PATCH|DELETE)\b/.test(publicRestFallback) &&
     restFallback.includes('REQUEST_TIMEOUT_MS'),
   'la recuperación no debe permitir escrituras ni quedar esperando indefinidamente'
+);
+check(
+  'El único POST privado consulta runQuery autenticado y no admite escrituras',
+  (restFallback.match(/method:\s*['"]POST['"]/g) || []).length === 1 &&
+    privateRestQuery.includes('fetch(`${BASE_URL}:runQuery?key=') &&
+    privateRestQuery.includes('if (!idToken || !appCheckToken)') &&
+    privateRestQuery.includes('authorization:`Bearer ${idToken}`') &&
+    privateRestQuery.includes("'X-Firebase-AppCheck':appCheckToken") &&
+    privateRestQuery.includes('JSON.stringify({structuredQuery, ...(readTime ? {readTime} : {})})') &&
+    !/\b(?:PUT|PATCH|DELETE)\b|:commit|:batchWrite/.test(restFallback),
+  'runQuery usa POST para leer con ID token, App Check y Rules; el respaldo público conserva exclusivamente GET'
 );
 check(
   'Sin apertura por error',

@@ -15,6 +15,7 @@ const activityApi = read('functions/api/site-activity.js');
 const loader = read('js/cargador-pagina.js');
 const products = read('js/core/store/estado-productos.js');
 const publicCatalogApi = read('functions/api/public-catalog.js');
+const firestoreAdmin = read('cloudflare/firebase-admin-ligero.js');
 const collections = (read('js/pages/collections/estado-colecciones.js') + '\n' + read('js/pages/collections/datos-publicos-colecciones.js'));
 const inventory = read('js/admin/products/integridad-inventario-admin.js');
 const orderDomain = read('cloudflare/order-admin-domain.js');
@@ -137,10 +138,12 @@ check(
 );
 check(
   'Las consultas públicas tienen límites explícitos',
-  products.includes("fetchPublicCatalogResource('products')") && /firestoreAdminListAll\(env,\s*resource,\s*resource === 'products' \? 1000 : 300\)/.test(publicCatalogApi) &&
+  products.includes("fetchPublicCatalogResource('products')") && /firestoreAdminListAll\(env,\s*resource,\s*resource === 'products' \? 5000 : 300,\s*\{failOnTruncation:true\}\)/.test(publicCatalogApi) &&
+    firestoreAdmin.includes('Math.min(5000, Number(maxDocuments)') &&
+    firestoreAdmin.includes('if (pageToken && failOnTruncation) throw') &&
     !/getDocs\(query\(collection\(db,\s*['"]products['"]\)/.test(products) && collections.includes('limit(200)') &&
     rules.includes('request.query.limit <= 1000') && rules.includes('request.query.limit <= 200'),
-  'El catálogo público no debe permitir enumeraciones ilimitadas.'
+  'El servidor mantiene un presupuesto paginado y rechaza truncamientos; los límites públicos de Rules permanecen intactos.'
 );
 check(
   'El guard de checkout limita sus reintentos internos',

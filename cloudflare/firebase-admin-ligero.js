@@ -654,7 +654,7 @@ export async function firestoreAdminList(env,path,pageSize=300) {
 }
 
 /** Lista una colección completa de forma paginada, con un techo explícito. */
-export async function firestoreAdminListAll(env, path, maxDocuments = 1000) {
+export async function firestoreAdminListAll(env, path, maxDocuments = 1000, { failOnTruncation = false } = {}) {
   const sa = parseServiceAccount(env);
   const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
   const limit = Math.max(1, Math.min(5000, Number(maxDocuments) || 1000));
@@ -676,6 +676,7 @@ export async function firestoreAdminListAll(env, path, maxDocuments = 1000) {
     pageToken = data.nextPageToken || '';
   } while (pageToken && documents.length < limit);
 
+  if (pageToken && failOnTruncation) throw new Error('La colección supera el presupuesto seguro; no se publica un catálogo parcial.');
   return documents;
 }
 

@@ -310,9 +310,22 @@ function el(tag, className = '', text = '') {
 }
 
 function renderProductCards(root, block) {
-  const all = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
-  const matching = all.filter(item => item?.active !== false && (!block.category || String(item.category || item.cat || '').toLowerCase() === block.category.toLowerCase()));
-  const products = [...matching.filter(hasProductStock), ...matching.filter(item => !hasProductStock(item))].slice(0, block.count);
+  const store=window.TintinProductsStore;
+  const token={};root.__ttProductRequest=token;
+  if(store?.homeSelection && store.readHomeBlock) {
+    root.setAttribute('aria-busy','true');
+    store.readHomeBlock(block).then(products=>{
+      if(root.__ttProductRequest!==token)return;
+      paintProductCards(root,products);root.setAttribute('aria-busy','false');
+    }).catch(()=>{if(root.__ttProductRequest===token){root.setAttribute('aria-busy','false');if(!root.childNodes.length)paintProductCards(root,[]);}});
+    return;
+  }
+  const all=Array.isArray(window.PRODUCTS)?window.PRODUCTS:[];
+  const matching=all.filter(item=>item?.active!==false && (!block.category || String(item.category||item.cat||'').toLowerCase()===block.category.toLowerCase()));
+  paintProductCards(root,[...matching.filter(hasProductStock),...matching.filter(item=>!hasProductStock(item))].slice(0,block.count));
+}
+
+function paintProductCards(root, products) {
   root.replaceChildren();
   if (!products.length) {
     const fallback = el('a', 'tt-visual-product-card tt-visual-product-fallback', 'Explorar productos');
@@ -332,7 +345,9 @@ function renderProductCards(root, block) {
 }
 
 function renderCollectionCards(root, block) {
-  const labels = [...new Set((Array.isArray(window.PRODUCTS) ? window.PRODUCTS : []).filter(item => item?.active !== false).map(item => plain(item.category || item.cat || '', 120)).filter(Boolean))].slice(0, block.count);
+  const homeIndex=window.TintinProductsStore?.homeIndex;
+  const categories=homeIndex ? homeIndex.map(item=>item.data.category) : (Array.isArray(window.PRODUCTS)?window.PRODUCTS:[]).filter(item=>item?.active!==false).map(item=>item.category||item.cat||'');
+  const labels=[...new Set(categories.map(value=>plain(value,120)).filter(Boolean))].slice(0,block.count);
   root.replaceChildren();
   (labels.length ? labels : ['Ver colecciones']).forEach(label => {
     const link = el('a', '', label); link.href = label === 'Ver colecciones' ? '/collections' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);

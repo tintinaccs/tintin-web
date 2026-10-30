@@ -2,7 +2,7 @@ import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcio
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { collection} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { fetchPublicProductsByIds } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20261029-performance-1';
+import { fetchPublicProductsByIds } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20261030-home-history-5';
 import { hasProductStock, firstAvailableVariant, productDefaultPrice } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-2';
 

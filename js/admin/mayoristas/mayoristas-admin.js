@@ -6,7 +6,7 @@ import { normalizeAdminSearch, debounceAdminSearch } from '../datos/busqueda-adm
 // precio mayorista de cada línea y la guarda, la aprueba o la rechaza. Las
 // escrituras pasan por /api/admin-wholesale: las reglas de Firestore no dejan
 // que el navegador toque las cotizaciones directamente.
-import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
+import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261022-avatar-inicial-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';

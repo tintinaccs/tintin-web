@@ -102,3 +102,33 @@ export async function listPublicCollectionRest(collectionName, maxDocuments = 10
 
   return documents.slice(0, limit);
 }
+
+/** Consulta autenticada oficial: conserva Rules y App Check del navegador.
+ * Las proyecciones evitan descargar líneas, direcciones y datos fiscales al
+ * calcular el índice del historial. No hay credenciales administrativas. */
+export async function runAuthenticatedQueryRest(structuredQuery, {idToken, appCheckToken, readTime = '', signal} = {}) {
+  if (!idToken || !appCheckToken) throw Object.assign(new Error('La conexión segura todavía no está disponible.'), {code:'unauthenticated'});
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  signal?.addEventListener('abort', abort, {once:true});
+  if (signal?.aborted) controller.abort();
+  const timer = window.setTimeout(abort, REQUEST_TIMEOUT_MS);
+  try {
+    const response = await fetch(`${BASE_URL}:runQuery?key=${encodeURIComponent(API_KEY)}`, {
+      method:'POST', mode:'cors', cache:'no-store', credentials:'omit', signal:controller.signal,
+      headers:{'content-type':'application/json', authorization:`Bearer ${idToken}`, 'X-Firebase-AppCheck':appCheckToken},
+      body:JSON.stringify({structuredQuery, ...(readTime ? {readTime} : {})})
+    });
+    const payload = await response.json();
+    if (!response.ok || !Array.isArray(payload) || payload.some(row => row.error)) {
+      const code = response.status === 403 ? 'permission-denied' : response.status === 401 ? 'unauthenticated' : 'unavailable';
+      throw Object.assign(new Error('No se pudo consultar el historial.'), {code});
+    }
+    const documents = payload.filter(row => row.document).map(row => ({name:row.document.name, id:String(row.document.name || '').split('/').pop(), data:decodeFields(row.document.fields || {})}));
+    if (documents.some(row => !row.id || !row.name)) throw new Error('Índice de historial inválido.');
+    return {documents, readTime:payload.findLast(row => row.readTime)?.readTime || ''};
+  } finally {
+    window.clearTimeout(timer);
+    signal?.removeEventListener('abort', abort);
+  }
+}

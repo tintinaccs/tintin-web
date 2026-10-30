@@ -9,7 +9,8 @@ function available(product) {
 }
 
 function selected(products) {
-  return products.filter(product => product.destacado === true && available(product)).slice(0, LIMIT);
+  const ids = window.TintinProductsStore?.homeSelection?.featured;
+  return products.filter(product => product.destacado === true && available(product) && (!ids || ids.includes(String(product.id)))).slice(0, LIMIT);
 }
 
 function render(products) {

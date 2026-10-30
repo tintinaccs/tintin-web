@@ -1,10 +1,11 @@
-import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261029-performance-1';
+import { normalizeCollectionSlug } from './colecciones-publicas.mjs?v=tintin-20261030-home-history-4';
+import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261030-home-history-5';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261029-mobile-review-1';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261029-performance-1';
-import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261023-variant-engine-v2-2';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261030-home-history-5';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261030-home-history-5';
+import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261030-home-history-5';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
-import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
+import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
 
 import {
@@ -14,11 +15,20 @@ import {
   runSingleFlight,
   writeCached
 } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
-import { fetchPublicCatalogResource } from '../firebase/catalogo-publico-api.js?v=tintin-20261029-performance-1';
-import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20261023-variant-engine-v2-2';
+import { fetchPublicCatalogResource, fetchPublicHomeIndex, fetchPublicProductsByIds } from '../firebase/catalogo-publico-api.js?v=tintin-20261030-home-history-5';
+import { chooseHomeIds, sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20261030-home-history-5';
 
 const ALL_CACHE_KEY = 'products:cards';
-const HOME_CACHE_KEY = 'products:home-featured';
+const HOME_CACHE_KEY = 'products:home-selection-v3';
+let homeIndex = [];
+let homeIndexSavedAt = 0;
+let homeSelection = null;
+let completeCatalog = null;
+let homeSelectionTask = Promise.resolve();
+let homeRequestVersion = 0;
+let catalogRevision = 0;
+let completeCatalogRevision = 0;
+let homeIndexRevision = 0;
 const HOME_CACHE_TTL = 10 * 1000;
 // La caché local acompaña la frescura del edge (10 segundos) para mostrar
 // cambios de precio, stock y estado al volver a la categoría.
@@ -184,19 +194,69 @@ function publish(products, source) {
   return normalized;
 }
 
-async function fetchHomeProducts() {
-  // El catálogo público debe pasar siempre por la API edge cacheada. No se
-  // permite un fallback automático desde cada navegador a Firestore: un bot
-  // podría provocar miles de lecturas cambiando de red o forzando errores de
-  // caché. El caché local/stale de loadHomeProducts mantiene la UX cuando la
-  // API está temporalmente fuera de servicio.
-  const items = await fetchPublicCatalogResource('products');
-  let products = items.map(item => mapProduct(item.id, item.data));
+function publishHome(products, source) {
+  // Buscar puede haber completado el catálogo mientras llegaba el lote de
+  // Inicio. Una respuesta parcial tardía nunca reemplaza esa autoridad.
+  if (completeCatalog) {
+    const merged = new Map(completeCatalog.map(product => [product.id, product]));
+    products.forEach(product => merged.set(product.id, product));
+    completeCatalog = [...merged.values()];
+    return publish(completeCatalog, source);
+  }
+  return publish(products, source);
+}
 
-  products = normalizeList(products);
-  const cards = products.map(compactProduct);
-  if (cards.length) writeCached(HOME_CACHE_KEY, cards);
-  return publish(products, 'home-limited');
+async function fetchHomeProducts({reroll = '', force = false} = {}) {
+  const requestVersion = ++homeRequestVersion;
+  try {
+    await catalogVisibilityReady;
+    const reuseIndex = !force && homeIndex.length && Date.now()-homeIndexSavedAt < HOME_CACHE_TTL;
+    const rows = reuseIndex ? homeIndex : await fetchPublicHomeIndex();
+    const indexRevision = reuseIndex ? homeIndexRevision : ++catalogRevision;
+    const index = rows.filter(item => window.TintinCatalogPolicy?.isCollectionVisible?.(item.data.category) !== false);
+    const ids = index.filter(item=>item.data.available!==false).map(item => String(item.id));
+    const selection = {
+      discovery: chooseHomeIds(ids, document.getElementById('products-grid') ? 5 : 0, homeSelection?.discovery, reroll === 'discovery'),
+      look: chooseHomeIds(ids, document.getElementById('look-grid') ? 3 : 0, homeSelection?.look, reroll === 'look'),
+      featured: index.filter(item => item.data.destacado === true && item.data.available !== false).slice(0, 4).map(item => String(item.id)),
+      poolSize: ids.length,
+    };
+    const wanted = [...new Set([...selection.discovery, ...selection.look, ...selection.featured])];
+    const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
+    const cachedById = new Map((Array.isArray(cached) ? cached : []).map(product => [String(product.id), product]));
+    const missing = wanted.filter(id => !cachedById.has(id));
+    const items = missing.length ? await fetchPublicProductsByIds(missing) : [];
+    // El filtro de IDs también protege frente a respuestas ajenas al lote.
+    const received = new Map(items.filter(item => missing.includes(String(item.id))).map(item => [String(item.id), mapProduct(item.id, item.data)]));
+    const products = normalizeList(wanted.map(id => cachedById.get(id) || received.get(id)).filter(Boolean));
+    if (requestVersion !== homeRequestVersion) return window.PRODUCTS || [];
+    homeIndex = index;
+    homeIndexRevision = indexRevision;
+    if (!reuseIndex) homeIndexSavedAt = Date.now();
+    homeSelection = selection;
+    writeCached(HOME_CACHE_KEY, {products: products.map(compactProduct), selection, index, indexAt: homeIndexSavedAt});
+    return publishHome(products, 'home-selection');
+  } catch (error) {
+    if (requestVersion !== homeRequestVersion) return window.PRODUCTS || [];
+    throw error;
+  }
+}
+
+export function rerollHomeSelection(kind) {
+  if (!['discovery', 'look'].includes(kind)) return Promise.reject(new Error('Selección de Inicio inválida'));
+  const next = homeSelectionTask.then(() => fetchHomeProducts({reroll: kind}));
+  homeSelectionTask = next.catch(() => {});
+  return next;
+}
+
+export async function readHomeBlockProducts({category = '', count = 4} = {}) {
+  if (!homeSelection) await loadHomeProducts();
+  const size = Math.max(1,Math.min(24,Number(count)||4));
+  const ids = homeIndex.filter(item=>!category || String(item.data.category).toLowerCase()===String(category).toLowerCase()).slice(0,size).map(item=>String(item.id));
+  const known = new Map((Array.isArray(window.PRODUCTS)?window.PRODUCTS:[]).map(product=>[String(product.id),product]));
+  const missing = ids.filter(id=>!known.has(id));
+  if(missing.length)for(const item of await fetchPublicProductsByIds(missing))if(missing.includes(String(item.id)))known.set(String(item.id),mapProduct(item.id,item.data));
+  return normalizeList(ids.map(id=>known.get(id)).filter(Boolean));
 }
 
 async function fetchAllProducts() {
@@ -207,6 +267,8 @@ async function fetchAllProducts() {
   // Un catálogo vacío no es una caché útil. Una lectura transitoria bloqueada
   // por red o un despliegue nunca debe dejar al navegador mostrando "0 productos".
   if (cards.length) writeCached(ALL_CACHE_KEY, cards);
+  completeCatalog = products;
+  completeCatalogRevision = ++catalogRevision;
   return publish(products, 'edge-cache');
 }
 
@@ -223,19 +285,38 @@ async function startPublicProductsRealtime() {
 }
 
 export async function loadHomeProducts(options = {}) {
-  const force = options.force === true;
-  if (!force) {
-    const cached = readCached(HOME_CACHE_KEY, HOME_CACHE_TTL) || readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
-    if (Array.isArray(cached) && cached.length) return publish(cached, 'home-cache');
+  const cached = readCached(HOME_CACHE_KEY, HOME_CACHE_TTL);
+  if (!options.force && cached?.selection && Array.isArray(cached.products) && Array.isArray(cached.index)) {
+    homeSelection = cached.selection;
+    homeIndexRevision = 0;
+    homeIndex = cached.index;
+    homeIndexSavedAt = cached.indexAt || 0;
+    return publishHome(cached.products, 'home-cache');
   }
-
-  const stale = readStaleCached(HOME_CACHE_KEY) || readStaleCached(ALL_CACHE_KEY);
-  if (!force && Array.isArray(stale) && stale.length) publish(stale, 'home-stale-cache');
+  const all = !options.force && readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
+  if (Array.isArray(all) && all.length) {
+    completeCatalog = all;
+    completeCatalogRevision = ++catalogRevision;
+    homeIndexRevision = completeCatalogRevision;
+    homeIndex = all.map(product=>({id:product.id,data:{category:product.category||product.cat,destacado:product.destacado===true,available:window.TintinCatalogPolicy?.isPurchasable?.(product) ?? product.active!==false}}));
+    homeIndexSavedAt = Date.now();
+    return fetchHomeProducts();
+  }
+  const stale = readStaleCached(HOME_CACHE_KEY);
+  if (!options.force && stale?.selection && Array.isArray(stale.products) && stale.products.length) {
+    homeSelection=stale.selection; homeIndex=stale.index||[]; homeIndexSavedAt=stale.indexAt||0;
+    publishHome(stale.products,'home-stale-cache');
+  }
   try {
-    return await runSingleFlight('products:home', fetchHomeProducts);
+    return await runSingleFlight('products:home', () => fetchHomeProducts({force: options.force === true}));
   } catch (error) {
-    window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
-    if (Array.isArray(stale) && stale.length) return stale;
+    window.dispatchEvent(new CustomEvent('tintin:products-error', {detail: {error}}));
+    const stale = readStaleCached(HOME_CACHE_KEY);
+    if (stale?.selection && Array.isArray(stale.products) && stale.products.length) {
+      homeSelection = stale.selection;
+      homeIndex = stale.index || [];
+      return publishHome(stale.products, 'home-stale-cache');
+    }
     throw error;
   }
 }
@@ -243,11 +324,11 @@ export async function loadHomeProducts(options = {}) {
 export async function loadAllProducts(options = {}) {
   const force = options.force === true;
   if (!force) {
-    const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL) || readCached(HOME_CACHE_KEY, HOME_CACHE_TTL);
-    if (Array.isArray(cached) && cached.length) return publish(cached, 'cache');
+    const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
+    if (Array.isArray(cached) && cached.length) { completeCatalog = cached; completeCatalogRevision = ++catalogRevision; return publish(cached, 'cache'); }
   }
-  const stale = readStaleCached(ALL_CACHE_KEY) || readStaleCached(HOME_CACHE_KEY);
-  if (!force && Array.isArray(stale) && stale.length) publish(stale, 'stale-cache');
+  const stale = readStaleCached(ALL_CACHE_KEY);
+  if (!force && Array.isArray(stale) && stale.length) { completeCatalog = stale; completeCatalogRevision = ++catalogRevision; publish(stale, 'stale-cache'); }
   try {
     return await runSingleFlight('products:all', fetchAllProducts);
   } catch (error) {
@@ -587,6 +668,14 @@ window.TintinProductsStore = {
   readProduct: id => runSingleFlight(`product:cart:${String(id)}`, () => fetchSingleProductFromEdge(String(id))),
   loadAll: loadAllProducts,
   loadHome: loadHomeProducts,
+  rerollHome: rerollHomeSelection,
+  readHomeBlock: readHomeBlockProducts,
+  homeCollectionImage(slug) {
+    if (!homeSelection || completeCatalogRevision > homeIndexRevision) return '';
+    return homeIndex.find(item => normalizeCollectionSlug(item.data.category) === normalizeCollectionSlug(slug) && item.data.collectionImage)?.data.collectionImage || '';
+  },
+  get homeIndex() { return homeSelection ? homeIndex : null; },
+  get homeSelection() { return homeSelection; },
   loadProductPage,
   startRealtime: startPublicProductsRealtime,
   ensureSearch: ensureProductsForSearch,

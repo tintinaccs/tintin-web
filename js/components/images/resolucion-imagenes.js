@@ -1,6 +1,6 @@
+import { firstEligibleCollectionProduct } from '../../core/store/colecciones-publicas.mjs?v=tintin-20261030-home-history-4';
 // La lectura pública no descarga las herramientas de guardado administrativo.
 const withAdminSiteChange = async action => (await import('../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1')).withAdminSiteChange(action);
-import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 /* =============================================================
    TINTIN — Resolución centralizada de imágenes
 
@@ -20,7 +20,7 @@ import {
   serverTimestamp,
   setDoc,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261015-images-1';
+import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 
 const DEFAULTS_DOC_PATH = ['settings', 'imageDefaults'];
 export const DEFAULT_IMAGE_TYPES = Object.freeze(['collection', 'category', 'product', 'banner', 'general']);
@@ -123,15 +123,8 @@ export function resolveDeviceImage(images = {}, device = 'desktop') {
  * desactivados o sin imagen — nunca hace falta filtrarlos antes de llamar.
  */
 export function firstEligibleProductImage(slug, products) {
-  if (!slug || !Array.isArray(products)) return '';
-  const eligible = products
-    .filter(p => p && wristCategory(p.category) === wristCategory(slug) && p.active !== false && p.name && sanitizeImageUrl(p.imageUrl))
-    .sort((a, b) =>
-      (Number.isFinite(Number(a.collectionOrder)) ? Number(a.collectionOrder) : 9999) -
-        (Number.isFinite(Number(b.collectionOrder)) ? Number(b.collectionOrder) : 9999) ||
-      String(a.name).localeCompare(String(b.name), 'es')
-    );
-  return eligible.length ? sanitizeImageUrl(eligible[0].imageUrl) : '';
+  const product = firstEligibleCollectionProduct(slug, products, sanitizeImageUrl);
+  return product ? sanitizeImageUrl(product.imageUrl) : '';
 }
 
 /**
@@ -142,11 +135,11 @@ export function firstEligibleProductImage(slug, products) {
  * Siempre devuelve una URL válida o '' si genuinamente no hay nada que mostrar
  * (ni imagen propia, ni producto con imagen, ni respaldo global configurado).
  */
-export function resolveCollectionImage(collectionDoc, products) {
+export function resolveCollectionImage(collectionDoc, products, { productFallback = '' } = {}) {
   const own = sanitizeImageUrl(collectionDoc?.image);
   if (own) return own;
 
-  const fromProduct = firstEligibleProductImage(collectionDoc?.slug, products);
+  const fromProduct = sanitizeImageUrl(productFallback) || firstEligibleProductImage(collectionDoc?.slug, products);
   if (fromProduct) return fromProduct;
 
   return getDefaultImage('collection');

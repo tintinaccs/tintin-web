@@ -26,3 +26,18 @@ test('redirecciones no cargan runtime y 404 conserva la URL absoluta', () => {
   assert.equal(apply(stub), stub);
   assert.ok(apply('<html><head></head><body>404</body></html>', true).includes('src="/js/theme/alternancia-secciones.js'));
 });
+
+test('galería informativa se retira hasta estabilizar sin reconstruir una etiqueta anidada', () => {
+  const helpers = source.slice(source.indexOf('function replaceUntilStable('), source.indexOf('function removeLegacyComments('));
+  const runtime = source.slice(source.indexOf('function centralizeRuntime('), source.indexOf('function versionFirstPaint('));
+  const scope = vm.createContext({TIENDA_VERSION:'fixture'});
+  vm.runInContext(helpers+runtime,scope);
+  const gallery = '<script src="js/components/images/galeria-producto.js?v=fixture"></script>';
+  const nested = '<scr'+gallery+'ipt src="js/components/images/galeria-producto.js?v=fixture"></script>';
+  const html = '<html><body><p>Contenido</p>'+nested+'<script src="tienda.js?v=fixture" defer></script></body></html>';
+  const result = scope.centralizeRuntime(html,'contact.html');
+  assert.ok(!result.includes('galeria-producto'));
+  assert.equal((result.match(/<script\b/g)||[]).length,1);
+  assert.ok(result.includes('<p>Contenido</p>'));
+  assert.equal(scope.centralizeRuntime(result,'contact.html'),result);
+});
