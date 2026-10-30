@@ -54,12 +54,16 @@ test('un dispositivo lento no retrasa los demás y la concurrencia permanece aco
     assert.deepEqual(await task,{attempted:9,successCount:9,failureCount:0,disabledCount:0,lastError:''});
   });
 });
-test('un transporte colgado se cancela y se cuenta como fallo sin perder los éxitos',async()=>{
+test('un transporte colgado se cancela y se cuenta como fallo sin perder los éxitos',{timeout:1500},async()=>{
   const original=AbortSignal.timeout;let timeout;
+  // Node22 no mantiene el loop vivo por AbortSignal.timeout. El fetch ficticio
+  // tampoco tiene un socket: mantener una referencia sólo durante este caso,
+  // para comprobar el aborto nativo en vez de cancelar toda la suite.
+  const keepAlive=setTimeout(()=>{},2000);
   AbortSignal.timeout=ms=>{timeout=ms;return original(20);};
   const store=fixture({send:(token,signal)=>token==='slow'?new Promise((resolve,reject)=>{signal.addEventListener('abort',()=>reject(signal.reason),{once:true});}):Response.json({name:'sent'})});
   try { await using(store,async()=>{const result=await sendToDevices(env,[{token:'slow'},{token:'fast'}],content);assert.equal(result.successCount,1);assert.equal(result.failureCount,1);assert.equal(timeout,8000);}); }
-  finally {AbortSignal.timeout=original;}
+  finally {clearTimeout(keepAlive);AbortSignal.timeout=original;}
 });
 test('un fallo al leer dispositivos cierra el evento en failed, con diagnóstico',async()=>{
  const store=fixture({failQuery:true});await using(store,async()=>{await assert.rejects(dispatchOrderPushEvent(env,'order.created','fixture_order',eventId));assert.equal(store.event.status,'failed');assert.match(store.event.lastError,/fixture query unavailable/);});
