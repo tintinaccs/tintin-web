@@ -4899,3 +4899,40 @@ Codex /root, base c610f9d, rama codex/corregir-sonda-carrito. PR1278 ya MERGED: 
 La sesión del panel volvió a estar accesible al reabrirla. Se confirma que Sheets conserva acuses de otro despliegue y no hay ningún registro real de reseña; no son errores de escritura reproducidos. PayPal continúa opcional/deshabilitado por indicación de la titular. Se observa además Carrito en rojo mientras el carrito real abre sin errores. Causa reproducida contra la página pública: cart-drawer existe desde aproximadamente1s, pero una imagen que retiene load hace que la sonda anterior termine hasCartDrawer:false a10s. Regresión nueva RED con ese mismo caso y reloj controlado.
 
 La sonda comprueba el DOM real cada100ms desde que se monta el iframe, sin esperar load de imágenes. Conserva el plazo, el fallo si falta el panel, GET únicamente y limpieza de iframe/intervalo al terminar o cancelar. Reproducción con imágenes retenidas pasa hasCartDrawer:true;176/176 pruebas canónicas de conexiones PASS_LOCAL sin reintentos, incluidas tres nuevas de carga bloqueada, panel ausente y cancelación. URLs nuevas para el módulo y admin-app; caché desde el auditor canónico. Build:pages/cache y preflight1099 módulos/72funciones PASS_LOCAL. Plan canónico de cuatro archivos protegidos y18 registros afectados. Las tres pruebas nuevas corren en la CI obligatoria; su import de Playwright sigue el patrón dinámico existente para no interpretarlo como recurso publicable local. CI y publicación del segundo candidato se registran por su propio SHA, sin heredar el PASS de1278.
+
+## 2026-10-30 — Guiones automáticos en teléfono del registro
+
+Codex /root, rama aislada codex/telefono-formato-20261030, base 96bf4fc4.
+La titular pide 0XXX-XXX-XXX con separadores automáticos al completar 4 y 7
+dígitos; espacios y guiones tempranos no alteran los grupos. Autoridad única:
+ensureProfileComplete y su campo login-profile-phone en login.html. Se elimina
+el maxlength de caracteres que recortaba números con espacios; la presentación
+limita 10 dígitos y conserva selección/cursor, pegado y borrado de separadores.
+La entrada nacional de 9 dígitos conserva la compatibilidad agregando el cero
+local. Antes de validar/disponibilidad/guardar se retiran sólo los guiones;
+normalización internacional, unicidad, reservas y políticas quedan en sus
+servicios existentes. Los otros formularios no cambian su contrato.
+
+Pruebas: se extiende profile-availability-recovery (ya ejecutada por CI de
+Comercio) con escritura, espacio, guion prematuro0981-95-, pegado con espacios
+repetidos, reemplazo central, borrado y límite. Transporte aislado; no usuarios,
+pedidos ni cambios comerciales reales. Evidencia terminal propia se registra
+al terminar. La reparación de CI/push/carrito de 1281 y conflictos 1280 fue
+asignada expresamente por la titular a otro agente; no se modifica su rama.
+
+PASS_LOCAL del candidato: 222/222 pruebas Node22 de login/cuentas y 66/66
+Chromium de registro, sin reintentos, con Google/correo, touch/Enter, errores,
+recuperación y guardado canónico simulado entre 320 y 2560px. Las 4 regresiones
+nuevas incluyen específicamente 0981-95- y pegado con espacios repetidos.
+El primer lote Node no encontró Chromium en su ruta predeterminada; se repitió
+usando el motor instalado en PLAYWRIGHT_BROWSERS_PATH y Node22, con resultado
+terminal aprobado. Build:pages y caché 385/67 aprobados; CI/merge pendientes.
+
+Cierre local del comportamiento definitivo:66/66 recorridos completos repetidos
+tras reforzar pegado parcial y bloqueo de inserciones al llenar los10 dígitos;
+222/222 Node22 repetidas. Se detectó y corrigió el cursor que quedaba antes
+del guion tras pegar sobre un grupo completo;4/4 regresiones finales PASS.
+Se incluyen Delete/Backspace sobre separadores y conservación del sufijo al
+pegar más dígitos que la selección. No se redujeron aserciones ni se usaron
+reintentos. Preflight canónica inicial y build PASS; repetir generación del
+plan después de esta evidencia y del HTML definitivo antes del commit.

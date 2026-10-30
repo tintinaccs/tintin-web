@@ -1,47 +1,62 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "c610f9d9ec5c2c418ca9422d6a90b2308c4758f4",
-  "reason": "Corregir falso rojo del carrito observando su DOM antes de load y conservar pruebas de ausencia y cancelación",
+  "baseCommit": "96bf4fc45988efe5c35ea39d51b1414bf314c693",
+  "reason": "Formatear teléfono nacional del registro con guiones automáticos y conservar identidad",
   "files": [
     {
-      "path": "admin.html",
-      "oldHash": "64cbe18951ca8094cff04cfc23b0a65204d7ac9c63bd4ac41047e7a7ce359d4f",
-      "newHash": "f931a1e534d9104371262e70cf43897804f64964aca41e6ab355428c2c670de2"
+      "path": "_headers",
+      "oldHash": "4e77dfc6f01e70abac3479a32d45467ef4fedbd64a0bc0ef64469e714bee8aaa",
+      "newHash": "e35bf583847eff1bfe0dada44cb15eefc58f06afeeb8f62a5ae08418c5ac771b"
     },
     {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "7deb5bc984aacd856a39ec16b54060a845f92a4bb6907974558af39dfd760014",
-      "newHash": "507905ee6f09767ddd43976a352bbabeacf37292408d932b2956f1814015f35c"
+      "path": "config/csp-runtime.js",
+      "oldHash": "576b2c64308eab9f1a82f7b07bf7a2ae3e549d1aab15f0c415ccadb3c14e913f",
+      "newHash": "1d109c2ea925888f7f06c344625370899cf2a2d420d73eddc7d82674efc2e2ff"
     },
     {
-      "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "oldHash": "614b395ef54b31ffb7558dd3e2a5253e86628ca96d34c30e6e86ad959efeb17c",
-      "newHash": "3a8b2822d5a9a6b1ba2f1105c8ff231e4945f43b067fa00804ffb4350a4176e0"
+      "path": "config/csp-runtime.json",
+      "oldHash": "8e12f453c30c70fab6575be030b8ce5fec5290b3e4762337fe1e7bdb9164c240",
+      "newHash": "0775b63cd28689970c8abac33077a0e86a7b7fcdeb4bfdd35a4ee0cedd51ca1d"
     },
     {
-      "path": "scripts/cache-version-baseline.json",
-      "oldHash": "879673155d035a06634ea2d56afe7eeb9664021e53296f4a22a7c4a8bb246419",
-      "newHash": "8cad2b06d6648fd9ae355ba01bf3b289cd450dd076d16a2a339d358430857b60"
+      "path": "login.html",
+      "oldHash": "647d80da1408ebd9e22a85d4059b56645d55d62eb2ed69d8a9b13ea7058fd4ef",
+      "newHash": "3900efa81c9db21616f0e8a3241afd8314a4d676a428f140fb0c65edc4f37ce0"
     }
   ],
   "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
-    "apis-internas__correos__41",
-    "apis-internas__pedidos__32",
-    "correos",
-    "pagina-perfil",
-    "pedidos",
-    "pedidos__inventario__33",
-    "productos",
+    "cf-functions",
+    "cf-functions__apis-internas__20",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
+    "csp",
+    "cuenta-bloqueada",
+    "entrada-login",
+    "entrada-login__google-btn__1",
+    "entrada-login__login-codigo__2",
+    "firebase-auth__redirect-result__5",
+    "firestore__users-uid__8",
+    "google-btn",
+    "google-btn__firebase-auth__3",
+    "login-codigo",
+    "login-codigo__firebase-auth__4",
+    "pagina-principal",
+    "perfil",
+    "perfil__ultimos-datos__11",
+    "redirect-result",
     "redirect-result__sesion-estado__6",
-    "roles__pagina-perfil__18",
+    "roles__pagina-principal__17",
+    "roles__perfil__10",
     "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
     "super-panel",
     "super-panel__admin-guard__15",
     "super-panel__pedidos__35",
-    "super-panel__productos__34"
+    "super-panel__productos__34",
+    "ultimos-datos",
+    "ultimos-datos__perfil__13",
+    "users-uid",
+    "users-uid__cuenta-bloqueada__12",
+    "users-uid__roles__9"
   ]
 }

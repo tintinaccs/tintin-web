@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d30fc8d3106a15d30c9f2d6e3704e0b9d4137a9fb9076c9b980d8196287da05a",
+  "sourceFingerprint": "f3e2346305800b4aec3e1c06cb0018f7c9d1515d1523ae12ba03507c1705dc53",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1642,
     "textFiles": 1507,
-    "totalBytes": 39848903,
+    "totalBytes": 39857259,
     "pages": 19,
     "modules": 1094
   },
@@ -17571,8 +17571,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 72695,
-      "sha256": "647d80da1408ebd9e22a85d4059b56645d55d62eb2ed69d8a9b13ea7058fd4ef",
+      "bytes": 75264,
+      "sha256": "3900efa81c9db21616f0e8a3241afd8314a4d676a428f140fb0c65edc4f37ce0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17640,22 +17640,22 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 1297
+          "line": 1347
         },
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 1298
+          "line": 1348
         },
         {
           "raw": "tienda.js?v=tintin-20261030-home-history-5",
           "target": "tienda.js",
-          "line": 1299
+          "line": 1349
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1300
+          "line": 1350
         }
       ],
       "styles": [
@@ -17937,25 +17937,25 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 1297,
+          "line": 1347,
           "exists": true
         },
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 1298,
+          "line": 1348,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261030-home-history-5",
           "target": "tienda.js",
-          "line": 1299,
+          "line": 1349,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1300,
+          "line": 1350,
           "exists": true
         },
         {
@@ -26007,7 +26007,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 265129,
-      "sha256": "576b2c64308eab9f1a82f7b07bf7a2ae3e549d1aab15f0c415ccadb3c14e913f",
+      "sha256": "1d109c2ea925888f7f06c344625370899cf2a2d420d73eddc7d82674efc2e2ff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -50632,8 +50632,8 @@
     },
     {
       "path": "tests/login/profile-availability-recovery.spec.js",
-      "bytes": 14668,
-      "sha256": "fcba6379556edc45fd081f06004730013b167d181dff1b2636278bc005be372b",
+      "bytes": 16980,
+      "sha256": "63ac3284e50e1e0dd0e2b5b5b8c134f8f334332c6b0f08e3c81f05d7438a6826",
       "syntax": {
         "ok": true,
         "error": ""
@@ -59311,7 +59311,7 @@
       "path": "_headers",
       "extension": "",
       "bytes": 4589,
-      "sha256": "4e77dfc6f01e70abac3479a32d45467ef4fedbd64a0bc0ef64469e714bee8aaa"
+      "sha256": "e35bf583847eff1bfe0dada44cb15eefc58f06afeeb8f62a5ae08418c5ac771b"
     },
     {
       "path": "_redirects",
@@ -60367,19 +60367,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 265129,
-      "sha256": "576b2c64308eab9f1a82f7b07bf7a2ae3e549d1aab15f0c415ccadb3c14e913f"
+      "sha256": "1d109c2ea925888f7f06c344625370899cf2a2d420d73eddc7d82674efc2e2ff"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 265044,
-      "sha256": "8e12f453c30c70fab6575be030b8ce5fec5290b3e4762337fe1e7bdb9164c240"
+      "sha256": "0775b63cd28689970c8abac33077a0e86a7b7fcdeb4bfdd35a4ee0cedd51ca1d"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1686,
-      "sha256": "58588bb42c02a2b1784254b1815bf7e03a1dae0840d2b43611943d5dc8153b13"
+      "bytes": 2056,
+      "sha256": "80ed277aefbad6431ce2c5b163a7c9dc989fdb500ad43d9642dc79b1044dda3e"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -60391,7 +60391,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "f58dc79ae0bed892fe7ce362842126df15d326c19958777b71a0dd6961209c27"
+      "sha256": "7debad4686a5c3a10c0ab4557a1afd1f1a61e09156a139a3a898e8b1d1cdee9c"
     },
     {
       "path": "config/public-site.json",
@@ -61086,8 +61086,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1064520,
-      "sha256": "fc63ec1c717061849041d1733906fdad72b2b9da60aaad04bee4e69795c0e185"
+      "bytes": 1066996,
+      "sha256": "3db9727d5b67316f3988e7d01e2715384d5a237832b32b42434e51c385908b60"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -61806,8 +61806,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 142123,
-      "sha256": "69f491d5b959b072fc1238f9e41816fad1f63799e0c5fe67725a22883de632fb"
+      "bytes": 142752,
+      "sha256": "1f3a7c9c94c224900c3f0f218dd941bb527548dc42219a574a5c57dc23c81c32"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -64830,8 +64830,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 72695,
-      "sha256": "647d80da1408ebd9e22a85d4059b56645d55d62eb2ed69d8a9b13ea7058fd4ef"
+      "bytes": 75264,
+      "sha256": "3900efa81c9db21616f0e8a3241afd8314a4d676a428f140fb0c65edc4f37ce0"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -67566,8 +67566,8 @@
     {
       "path": "tests/login/profile-availability-recovery.spec.js",
       "extension": ".js",
-      "bytes": 14668,
-      "sha256": "fcba6379556edc45fd081f06004730013b167d181dff1b2636278bc005be372b"
+      "bytes": 16980,
+      "sha256": "63ac3284e50e1e0dd0e2b5b5b8c134f8f334332c6b0f08e3c81f05d7438a6826"
     },
     {
       "path": "tests/login/profile-availability-recovery.test.mjs",
@@ -70880,7 +70880,7 @@
     },
     {
       "file": "login.html",
-      "line": 637,
+      "line": 687,
       "target": "/api/phone-availability",
       "method": "POST"
     }
@@ -72407,7 +72407,7 @@
           },
           {
             "file": "login.html",
-            "line": 944,
+            "line": 994,
             "operation": "doc"
           },
           {

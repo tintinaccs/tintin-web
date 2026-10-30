@@ -911,3 +911,13 @@ mediante herramientas canónicas.
 ### 2026-10-29 — Rendimiento global en revisión
 
 Cambios canónicos en revelado/alternancia de secciones (excluir paneles fijos y agrupar mediciones), respaldo compartido de colecciones, filtrado del catálogo sin doble renderer, carga del menú a demanda, favoritos por lotes públicos, asociaciones de variantes paginadas y controles del editor por contexto. Se preservan lectores/escritores comerciales, publicación, permisos e historial. Hero comprimido desde los PNG vigentes con fallback original; CSS de Inicio/Nosotros compilado por el generador existente con Lightning CSS fijado. Checkout emite la correlación antes de la transacción; observabilidad agrega INP y CLS sin datos personales. Las URL transitivas se renuevan mediante la misma autoridad de caché y el plan de mantenimiento protegido. Ledger y límites: `docs/agent/PERFORMANCE_GLOBAL_20261029.md`.
+
+## 2026-10-30 — Presentación nacional del teléfono al completar el registro
+
+Autoridad: ensureProfileComplete en login.html, único consumidor del campo.
+Guiones al completar 4/7 dígitos, máximo 10 dígitos, pegado/edición/borrado sin
+contar separadores. Espacios y guiones tempranos no desplazan los grupos.
+Validador, API de disponibilidad y reserva reciben dígitos con el normalizador
+existente; no cambian autenticación, unicidad, contratos de otros formularios
+ni Rules. Regresiones nuevas en el spec canónico del registro de Comercio.
+CSP, diagnóstico y protección se regeneran desde constructores existentes.
