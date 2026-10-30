@@ -16,6 +16,7 @@ const COOKIE_MAX_AGE = 180 * 24 * 60 * 60;
 
 let memoryChoice = '';
 let preferenceOpener = null;
+let initialChoiceTimer = null;
 
 function cookiePath() {
   if (!/\.github\.io$/i.test(location.hostname)) return '/';
@@ -92,6 +93,10 @@ function privacyUrl() {
 }
 
 function renderConsent(customize = false, focusDetails = false) {
+  if (initialChoiceTimer !== null) {
+    window.clearTimeout(initialChoiceTimer);
+    initialChoiceTimer = null;
+  }
   if (isAdminPage()) {
     document.getElementById('tt-privacy-consent')?.remove();
     return;
@@ -178,7 +183,11 @@ function showInitialChoice() {
   // En mobile el banner se ancla abajo, igual que el CTA del hero — un
   // pequeño retraso deja que la clienta vea el hero completo antes de que
   // aparezca, en vez de taparlo apenas carga la página.
-  window.setTimeout(() => renderConsent(false), 1500);
+  if (initialChoiceTimer !== null) return;
+  initialChoiceTimer = window.setTimeout(() => {
+    initialChoiceTimer = null;
+    if (!privacyPreferences().decided) renderConsent(false);
+  }, 1500);
 }
 
 window.TintinActivityPrivacy = {

@@ -893,13 +893,13 @@
     window.TintinSiteActivityScheduled = true;
     // El aviso ya necesita este módulo. Reutilizarlo evita cargar actividad,
     // latidos y endpoint antes de que la persona acepte estadísticas.
-    importSibling('analytics/consentimiento-privacidad.js', 'Privacy Consent', undefined, 'tintin-20261019-privacy-copy-1').then(privacy => {
+    importSibling('analytics/consentimiento-privacidad.js', 'Privacy Consent', undefined, 'tintin-20261029-mobile-review-1').then(privacy => {
       if (!privacy) { window.TintinSiteActivityScheduled = false; return; }
       const start = () => {
         if (!privacy.hasStatisticsConsent()) return;
         if (!window.TintinSiteActivityBooted) {
           window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261019-privacy-copy-1');
+          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261029-mobile-review-1');
         }
       };
       privacy.onPrivacyConsentChange(start);

@@ -192,7 +192,12 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
     }, true);
   }
 
-  // La hoja de estilo forma parte del HTML inicial. setMeta(); ensureAccessibility(); networkState(); bindForm(); updatePublicContact();
+  // La hoja de estilo forma parte del HTML inicial.
+  setMeta();
+  ensureAccessibility();
+  networkState();
+  bindForm();
+  updatePublicContact();
   window.addEventListener('online', networkState); window.addEventListener('offline', networkState);
   appCheckReady.then(ready => {
     if (!ready) return;

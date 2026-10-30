@@ -59,6 +59,14 @@ for (const width of [390, 768, 1440]) {
       await module.initNavCollections(true);
     });
     await expect(footer.locator('a')).toHaveText(['Catálogo']);
+    // An authoritative empty response retires cached/default categories from
+    // every navigation surface, including the mobile catalogue sheet.
+    for (const surface of ['sheet', 'desktop', 'tablet']) {
+      const menu = page.locator(`[data-collections-nav="${surface}"]`);
+      await expect(menu.locator('a[href]')).toHaveCount(0);
+      await expect(menu).toHaveAttribute('data-phase4-collections-state', 'empty');
+      await expect(menu.locator('[role="status"]')).toHaveText('No hay colecciones disponibles');
+    }
     expect(productRequests).toBe(0);
   });
 }
