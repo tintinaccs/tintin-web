@@ -6,7 +6,7 @@ import {
   SUPERADMIN_EMAIL
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { enforceAuthenticatedRateLimit } from '../../cloudflare/rate-limit-compartido.js';
-import { dispatchOrderPushEvent, pushEnabled } from '../../cloudflare/servicio-push.js';
+import { dispatchOrderPushEvent, pushEnabled, recordPushFailure } from '../../cloudflare/servicio-push.js';
 import { queuePendingOrderEmail } from '../../cloudflare/resiliencia-correo-pedido.js';
 import { normalizePaymentCatalog } from '../../js/orders/nucleo-metodos-pago.js';
 import { sendInitialOrderEmailOnce } from '../../cloudflare/recibo-correo-pedido.js';
@@ -546,6 +546,16 @@ export async function onRequest(context) {
       throw new Error('Solo el Super Admin puede reenviar correos.');
     }
 
+    // El respaldo push empieza antes del correo y conserva la clave canónica.
+    const pushTask = (!isResend && pushEnabled(env))
+      ? dispatchOrderPushEvent(env, 'order.created', orderId, `order.created:${orderId}`)
+          .catch(async error => {
+            await recordPushFailure(env, { eventId: `order.created:${orderId}`, type: 'order.created', orderId, error });
+            return { ok: false, error: 'push_failed' };
+          })
+      : Promise.resolve(null);
+    context.waitUntil?.(pushTask);
+
     const sendAdmin = body.sendAdmin !== false;
     const sendCustomer = body.sendCustomer !== false;
     const transfer = sendCustomer ? await fetchTransferInstructions(idToken, order, appCheckToken) : null;
@@ -575,16 +585,7 @@ export async function onRequest(context) {
       else await pendingRetry;
     }
 
-    // Respaldo del aviso push: este camino ya validó a la usuaria y leyó el
-    // pedido real desde Firestore, así que sirve para recuperar los casos en
-    // que el webhook de Apps Script falló. Usa exactamente el mismo eventId,
-    // por lo que la idempotencia impide un segundo aviso. Un reenvío manual
-    // de correo NO vuelve a notificar. Que falle el push no impide el correo,
-    // ni al revés: son dos caminos independientes.
-    const pushResult = (!isResend && pushEnabled(env))
-      ? await dispatchOrderPushEvent(env, 'order.created', orderId, `order.created:${orderId}`)
-          .catch(() => ({ ok: false, error: 'push_failed' }))
-      : null;
+    const pushResult = await pushTask;
 
     // `push` es aditivo: notificationStatusFromResult() y el resto de los
     // consumidores siguen leyendo success/adminSent/customerSent/error igual.

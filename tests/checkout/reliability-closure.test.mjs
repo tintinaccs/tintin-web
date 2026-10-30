@@ -58,13 +58,13 @@ test('delivery metadata preserves sent channels and retries an optimistic confli
   assert.equal(attempts,2);assert.equal(fields.notificationStatus,'sent');assert.equal(fields.notificationError,'');
 });
 
-test('order response does not wait for email delivery and queues recovery first',async()=>{
+test('order response starts push before the email queue and waits for neither delivery',async()=>{
   const source=read('functions/api/apps-script-bridge.js');const events=[];const jobs=[];let release;
   const delivery=new Promise(resolve=>{release=resolve;});
-  const context=vm.createContext({created:{orderId:'public_uid_req',duplicate:false,order:{notificationStatus:'pending'}},env:{RESEND_API_KEY:'test-only'},context:{waitUntil:job=>jobs.push(job)},queuePendingOrderEmail:async()=>{events.push('queued');},sendOrderEmails:async()=>{events.push('sending');await delivery;return {success:true};},console:quiet});
+  const context=vm.createContext({created:{orderId:'public_uid_req',duplicate:false,order:{notificationStatus:'pending'}},env:{RESEND_API_KEY:'test-only'},context:{waitUntil:job=>jobs.push(job)},dispatchOrderPushEvent:async()=>{events.push('push');await delivery;return {ok:true};},recordPushFailure:async()=>{throw Error('Unexpected push failure');},queuePendingOrderEmail:async()=>{events.push('queued');},sendOrderEmails:async()=>{events.push('sending');await delivery;return {success:true};},console:quiet});
   const block=source.slice(source.indexOf('      const emailStatus ='),source.indexOf('        context.waitUntil?.(syncOrderOwnerStats'));
   vm.runInContext('async function run(){'+block+'} return emailStatus;}',context);
-  assert.equal(await context.run(),'pending');assert.deepEqual(events,['queued','sending']);assert.equal(jobs.length,1);release();await jobs[0];
+  assert.equal(await context.run(),'pending');assert.deepEqual(events,['push','queued','sending']);assert.equal(jobs.length,2);release();await Promise.all(jobs);
 });
 
 

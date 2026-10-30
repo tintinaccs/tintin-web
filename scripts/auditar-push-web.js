@@ -108,7 +108,7 @@ check('Apps Script reintenta como máximo tres veces', appsScript.includes('PHAS
 check('La rama created:false también reintenta el aviso', /created: false/.test(appsScript) && appsScript.split('created: false')[0].includes('phase4NotifyOrderCreated_'));
 check('El correo actúa como respaldo con el mismo eventId', orderEmail.includes('order.created:${orderId}') && orderEmail.includes('dispatchOrderPushEvent'));
 check('El reenvío manual de correo no vuelve a notificar', orderEmail.includes('!isResend && pushEnabled(env)'));
-check('El push no rompe el correo', orderEmail.includes(".catch(() => ({ ok: false, error: 'push_failed' }))"));
+check('El push no rompe el correo', /\.catch\(async error => \{[\s\S]*?await recordPushFailure[\s\S]*?return \{ ok: false, error: 'push_failed' \};[\s\S]*?\}\)/.test(orderEmail));
 
 console.log('\n== Panel administrativo ==');
 check('Existe el módulo del cliente', exists('js/admin/notifications/notificaciones-push.js'));

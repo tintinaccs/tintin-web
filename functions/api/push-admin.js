@@ -13,6 +13,7 @@ import { rateLimitErrorResponse,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { cleanText, sanitizeError } from '../../cloudflare/nucleo-push.js';
 import {
+  retryOrderPushEvent,
   listAdminDevices,
   listRecentEvents,
   dispatchAdminBroadcast,
@@ -23,13 +24,13 @@ import {
 } from '../../cloudflare/servicio-push.js';
 
 const MAX_BODY_BYTES = 4000;
-const ALLOWED_ACTIONS = ['list', 'revoke', 'revoke-all', 'save-settings', 'broadcast'];
+const ALLOWED_ACTIONS = ['list', 'revoke', 'revoke-all', 'save-settings', 'broadcast', 'retry-order'];
 
 function parseBody(raw) {
   if (raw.length > MAX_BODY_BYTES) throw new Error('Solicitud demasiado grande.');
   const body = raw ? JSON.parse(raw) : {};
   if (!body || typeof body !== 'object' || Array.isArray(body)) throw new Error('Solicitud inválida.');
-  if (Object.keys(body).some(key => !['action', 'deviceId', 'enabled', 'foregroundSound', 'foregroundSoundUrl', 'foregroundSoundOrder', 'foregroundSoundOrderUrl', 'foregroundSoundReview', 'foregroundSoundReviewUrl', 'foregroundSoundLike', 'foregroundSoundLikeUrl', 'title', 'body'].includes(key))) {
+  if (Object.keys(body).some(key => !['action', 'eventId', 'deviceId', 'enabled', 'foregroundSound', 'foregroundSoundUrl', 'foregroundSoundOrder', 'foregroundSoundOrderUrl', 'foregroundSoundReview', 'foregroundSoundReviewUrl', 'foregroundSoundLike', 'foregroundSoundLikeUrl', 'title', 'body'].includes(key))) {
     throw new Error('La solicitud tiene campos no permitidos.');
   }
   return body;
@@ -52,6 +53,10 @@ export async function onRequest(context) {
     const action = cleanText(body.action, 20);
     if (!ALLOWED_ACTIONS.includes(action)) throw new Error('Acción no permitida.');
     if (action === 'list') return jsonResponse({ success: true, devices: await listAdminDevices(env), settings: await readPushSettings(env), events: await listRecentEvents(env) }, 200, origin, requestUrl);
+    if (action === 'retry-order') {
+      const result = await retryOrderPushEvent(env, body.eventId);
+      return jsonResponse({ success: result.ok, ...result }, result.ok ? 200 : 502, origin, requestUrl);
+    }
     if (action === 'revoke') {
       const result = await revokeDeviceByDocumentId(env, body.deviceId);
       return jsonResponse({ success: true, ...result }, 200, origin, requestUrl);
