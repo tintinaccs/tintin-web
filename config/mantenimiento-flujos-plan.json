@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "c610f9d9ec5c2c418ca9422d6a90b2308c4758f4",
-  "reason": "Cerrar suplantacion e inyeccion en Auditoria y actualizar dependencia CLI vulnerable sin debilitar controles",
+  "baseCommit": "96bf4fc45988efe5c35ea39d51b1414bf314c693",
+  "reason": "Conciliar auditoría1280 con main y reparar prueba de sonda de carrito sin alterar verificaciones",
   "files": [
     {
       "path": "admin-images.html",
@@ -10,8 +10,8 @@
     },
     {
       "path": "admin.html",
-      "oldHash": "64cbe18951ca8094cff04cfc23b0a65204d7ac9c63bd4ac41047e7a7ce359d4f",
-      "newHash": "2f4ba466ebc642993e9624c872ad06aaa5ff5bdf2273285fbd8ce948c463426f"
+      "oldHash": "f931a1e534d9104371262e70cf43897804f64964aca41e6ab355428c2c670de2",
+      "newHash": "bf2dcec67e4816a0b08b1b71b915012a78f5e3375472cdc4c706e035959b1eac"
     },
     {
       "path": "config/csp-runtime.js",
@@ -35,8 +35,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "7deb5bc984aacd856a39ec16b54060a845f92a4bb6907974558af39dfd760014",
-      "newHash": "050028b1fa87f1da8806fd255fc6cbba3f1d7a54aeca0685470c4bae31a7e1c4"
+      "oldHash": "507905ee6f09767ddd43976a352bbabeacf37292408d932b2956f1814015f35c",
+      "newHash": "7e2a5dcbbbe0d7d45baac9a1d31c2751219d2834f647c19720a7861f5e13031e"
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
@@ -65,8 +65,8 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "879673155d035a06634ea2d56afe7eeb9664021e53296f4a22a7c4a8bb246419",
-      "newHash": "77b61cefa71cada6a2e40d372472dbe5abf2512100dfa6c2a9d5d43397d4dfe6"
+      "oldHash": "8cad2b06d6648fd9ae355ba01bf3b289cd450dd076d16a2a339d358430857b60",
+      "newHash": "188376d0ec108296e958caf5b051fe17baea598c750eb110fa4549aa9bc2cbeb"
     }
   ],
   "affectedRecords": [

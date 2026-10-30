@@ -1,3 +1,20 @@
+## 2026-10-30 — Corregir y mergear todos los PR abiertos
+
+Codex /root. La titular autoriza explícitamente «arregla y mergea TODOS».
+Se toman1280 y1281 abiertos; main96bf4fc tiene timeout del test de carrito.
+1280 integra main mediante merge normal; fuentes auto-conciliadas conservan
+Auditoría y la sonda vigente; conflictos derivados regenerados canónicamente,
+admin-app combinado con URL nueva audit-integrity-2. Reproducción carrito1
+cancelado por timeout30s; pausa explícita del reloj del harness, no del runtime:
+3/3 PASS, flow-connections176/176 PASS. Auditoría Node8/8, Chromium3/3 y
+rules-critical emulado PASS (incluye49 adversariales de Auditoría).
+1281 se prepara en worktree separado: el fallo se reproduce en Node22, no24,
+por AbortSignal.timeout sin referencia en fetch simulado. Referencia temporal
+acotada/limpiada y plazo del test;62/62 PASS en ambas versiones sin quitar casos.
+No datos reales, dispatch ni despliegue manual de Rules. Merge/CI posteriores
+pendientes del nuevo SHA; seguir recibos y artifacts/merge-all/FOLLOWUP.json.
+Alcance, evaluación limitada de Rules y límites: MERGE-ALL-20261030.md.
+
 ## 2026-10-30 — Corrección de integridad de Auditoría
 
 Codex /root. Base c610f9d9, rama codex/corregir-auditoria-20261030. Se reproducen los dos hallazgos de Auditoría sobre main vigente. Autoridad nueva de ingreso: appendAudit en /api/admin-order-mutation y registro-auditoria.mjs, mediante autenticación/cuotas/perfil confiables existentes. Autor UID/correo/rol y fecha se asignan en servidor; esquema, límites, contador e historial completo se validan. Los dos escritores SDK (panel y biblioteca multimedia) migran juntos. Rules niega todas las escrituras directas, incluso del propietario; lectura sigue exclusiva y las transacciones comerciales Admin REST no cambian. Registros históricos con contador inválido no generan HTML. No se modifican usuarios, productos, pedidos ni logs históricos reales.
@@ -4901,3 +4918,11 @@ ni migraciones. Se mantiene detenido el avance al siguiente bloque.
 Codex /root, rama codex/corregir-flujos-conexiones, base e5308fb. Se reproduce que buildCurrentEvidence no reconoce `Cloudflare Pages: tintinaccesorios` y deja GitHub Actions → Deployments sin confirmar pese al despliegue exitoso. Se acepta el nombre actual y el anterior sólo de la app oficial85455 y del commit consultado; el check de ID más reciente prevalece aunque esté pendiente o fallido. Sin cambios a controles de CI ni a los requisitos de evidencia de producción. Dos regresiones RED antes del cambio; seis pruebas del diagnóstico y438 pruebas combinadas de diagnóstico, conexiones, Sheets y participación PASS_LOCAL sin reintentos. Suite canónica test:flow-connections173/173, autenticación/diagnóstico4/4 y preflight1098 módulos/72funciones PASS_LOCAL. Las tres regresiones nuevas corren en el glob de conexiones de la CI obligatoria. Build:pages/cache PASS_LOCAL. Logs locales artifacts/flow-repair. CI/merge/publicación del candidato aún PENDING y se seguirán por SHA.
 
 Los otros nueve indicadores previamente parciales no acreditan defectos de escritura: cinco dependen de un acuse real de entrada de Sheets vigente, dos de un registro real de reseña y dos de PayPal deshabilitado por configuración. Se conservan sus verificaciones; no se inventan reseñas ni se editan productos para pintar verde. Revisión autenticada actual BLOCKED: creación de pestaña Chrome agotó el plazo y la pestaña previa ya no pudo localizarse. El30/10 a09:47UTC salud pública200/ok:true y webhook200/products-canonical-v3/configured; PayPal200/enabled:false/feature_disabled. La titular confirmó mantener PayPal deshabilitado; ese estado es esperado, sin cambiar la política de colores. No se accede a secretos ni se realizan escrituras comerciales reales.
+
+## 2026-10-30 — Carrito rojo por esperar imágenes ajenas en la sonda
+
+Codex /root, base c610f9d, rama codex/corregir-sonda-carrito. PR1278 ya MERGED: candidato9d423610, CI41036484090/1 y CodeQL41036479747 SUCCESS, mantenimiento41039724673 SUCCESS, mergec610f9d, CI de main41039779972/1 y CodeQL41039780458 SUCCESS; salud productiva41039782320 SUCCESS y manifiesto público idéntico al commit publicado. Recibos locales artifacts/flow-repair.
+
+La sesión del panel volvió a estar accesible al reabrirla. Se confirma que Sheets conserva acuses de otro despliegue y no hay ningún registro real de reseña; no son errores de escritura reproducidos. PayPal continúa opcional/deshabilitado por indicación de la titular. Se observa además Carrito en rojo mientras el carrito real abre sin errores. Causa reproducida contra la página pública: cart-drawer existe desde aproximadamente1s, pero una imagen que retiene load hace que la sonda anterior termine hasCartDrawer:false a10s. Regresión nueva RED con ese mismo caso y reloj controlado.
+
+La sonda comprueba el DOM real cada100ms desde que se monta el iframe, sin esperar load de imágenes. Conserva el plazo, el fallo si falta el panel, GET únicamente y limpieza de iframe/intervalo al terminar o cancelar. Reproducción con imágenes retenidas pasa hasCartDrawer:true;176/176 pruebas canónicas de conexiones PASS_LOCAL sin reintentos, incluidas tres nuevas de carga bloqueada, panel ausente y cancelación. URLs nuevas para el módulo y admin-app; caché desde el auditor canónico. Build:pages/cache y preflight1099 módulos/72funciones PASS_LOCAL. Plan canónico de cuatro archivos protegidos y18 registros afectados. Las tres pruebas nuevas corren en la CI obligatoria; su import de Playwright sigue el patrón dinámico existente para no interpretarlo como recurso publicable local. CI y publicación del segundo candidato se registran por su propio SHA, sin heredar el PASS de1278.

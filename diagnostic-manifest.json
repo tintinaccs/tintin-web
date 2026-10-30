@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "92dbc1aef3f825c71f7e2e900cdd13106a74405984f311b4d7a63d1edb567c04",
+  "sourceFingerprint": "1c9aeea460a1814d8b1670529fc53d619f4a05ff05668e728c3e7c732e0af727",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1647,
-    "textFiles": 1512,
-    "totalBytes": 39872982,
+    "files": 1649,
+    "textFiles": 1514,
+    "totalBytes": 39883562,
     "pages": 19,
-    "modules": 1098
+    "modules": 1099
   },
   "viewports": [
     {
@@ -2882,7 +2882,7 @@
         "viewer"
       ],
       "bytes": 204547,
-      "sha256": "2f4ba466ebc642993e9624c872ad06aaa5ff5bdf2273285fbd8ce948c463426f",
+      "sha256": "bf2dcec67e4816a0b08b1b71b915012a78f5e3375472cdc4c706e035959b1eac",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2936,7 +2936,7 @@
           "line": 2078
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261030-audit-integrity-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261030-audit-integrity-2",
           "target": "js/admin/admin-app.js",
           "line": 2079
         },
@@ -3291,7 +3291,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261030-audit-integrity-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261030-audit-integrity-2",
           "target": "js/admin/admin-app.js",
           "line": 2079,
           "exists": true
@@ -28312,8 +28312,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 438075,
-      "sha256": "050028b1fa87f1da8806fd255fc6cbba3f1d7a54aeca0685470c4bae31a7e1c4",
+      "bytes": 438046,
+      "sha256": "7e2a5dcbbbe0d7d45baac9a1d31c2751219d2834f647c19720a7861f5e13031e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28608,7 +28608,7 @@
           "line": 58
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261030-cart-probe-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 59
@@ -29407,8 +29407,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 37412,
-      "sha256": "614b395ef54b31ffb7558dd3e2a5253e86628ca96d34c30e6e86ad959efeb17c",
+      "bytes": 37598,
+      "sha256": "3a8b2822d5a9a6b1ba2f1105c8ff231e4945f43b067fa00804ffb4350a4176e0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48574,6 +48574,45 @@
       "endpoints": []
     },
     {
+      "path": "tests/flow-connections/cart-render-probe.test.mjs",
+      "bytes": 4204,
+      "sha256": "4b35c28c4a367f62fe3d265da98b0fd4383500172417aa7542b6dbe4b90f55a4",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "http://cart-flow.test/**",
+          "line": 22
+        },
+        {
+          "url": "http://cart-flow.test/fixture",
+          "line": 40
+        }
+      ]
+    },
+    {
       "path": "tests/flow-connections/color-readiness-recovery.test.mjs",
       "bytes": 2907,
       "sha256": "dfb6b1029bba72a3a58781b3bdd88283b4d0eb2798ce0fd22e87fd3052bc1c81",
@@ -59491,7 +59530,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204547,
-      "sha256": "2f4ba466ebc642993e9624c872ad06aaa5ff5bdf2273285fbd8ce948c463426f"
+      "sha256": "bf2dcec67e4816a0b08b1b71b915012a78f5e3375472cdc4c706e035959b1eac"
     },
     {
       "path": "apple-touch-icon.png",
@@ -60528,8 +60567,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 4409,
-      "sha256": "1adbc87a654467945445c5b32e9b3f2da315f766f657d2f5273ef164b308c568"
+      "bytes": 4398,
+      "sha256": "8ce0ec59d67160175cc9e45734b7d2e034bd98f8d197640c255e8c03ab7d5829"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -60541,7 +60580,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "a2d3551f223b32cf9a89b8db6d21623d7fda77aba7b0ab95b5f6f706588bf79f"
+      "sha256": "82b4be8c447da357318ce1bbcc5457f2bfa2e9199d3bb7dc03a6b3532a53ebe0"
     },
     {
       "path": "config/public-site.json",
@@ -61242,8 +61281,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1065603,
-      "sha256": "2a0682307a8bfaa1653b735b9ff91cc2bed4ad841f6372f6259d5c13d3e6c823"
+      "bytes": 1068689,
+      "sha256": "c3374d672ab7762c60cf1ef81f6bf998c44ef1f5ab87c2b8507338a99dd38a5e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -61286,6 +61325,12 @@
       "extension": ".md",
       "bytes": 6061,
       "sha256": "e3bcd2bc698bbea61d05278101109e5e142ec7a4d5dfd0c8722320b04a555392"
+    },
+    {
+      "path": "docs/agent/MERGE-ALL-20261030.md",
+      "extension": ".md",
+      "bytes": 3173,
+      "sha256": "763e71b11d5f686e19f3fc16fe98872b501e902e9faf6dbfd35c950dd96fa7c7"
     },
     {
       "path": "docs/agent/MIGRACION_CONTROL_20261010.md",
@@ -63042,8 +63087,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 438075,
-      "sha256": "050028b1fa87f1da8806fd255fc6cbba3f1d7a54aeca0685470c4bae31a7e1c4"
+      "bytes": 438046,
+      "sha256": "7e2a5dcbbbe0d7d45baac9a1d31c2751219d2834f647c19720a7861f5e13031e"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -63186,8 +63231,8 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 37412,
-      "sha256": "614b395ef54b31ffb7558dd3e2a5253e86628ca96d34c30e6e86ad959efeb17c"
+      "bytes": 37598,
+      "sha256": "3a8b2822d5a9a6b1ba2f1105c8ff231e4945f43b067fa00804ffb4350a4176e0"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
@@ -66072,8 +66117,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 76906,
-      "sha256": "77b61cefa71cada6a2e40d372472dbe5abf2512100dfa6c2a9d5d43397d4dfe6"
+      "bytes": 76877,
+      "sha256": "188376d0ec108296e958caf5b051fe17baea598c750eb110fa4549aa9bc2cbeb"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -67442,6 +67487,12 @@
       "extension": ".mjs",
       "bytes": 14004,
       "sha256": "a6961b29485fbbb6e316bef0c31d2e849d5f5d0d0d0ed3f102668b8ff27da55b"
+    },
+    {
+      "path": "tests/flow-connections/cart-render-probe.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4204,
+      "sha256": "4b35c28c4a367f62fe3d265da98b0fd4383500172417aa7542b6dbe4b90f55a4"
     },
     {
       "path": "tests/flow-connections/color-readiness-recovery.test.mjs",
@@ -69553,7 +69604,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 575,
+      "line": 576,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -70952,13 +71003,13 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 238,
+      "line": 239,
       "target": "/api/sheets-products-webhook",
       "method": "GET"
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 575,
+      "line": 576,
       "target": "/admin.html",
       "method": "GET"
     },
@@ -71086,7 +71137,7 @@
         "references": [
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 160,
+            "line": 161,
             "operation": "collection"
           },
           {
@@ -71531,7 +71582,7 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 169,
+            "line": 170,
             "operation": "collection"
           },
           {
@@ -71821,12 +71872,12 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 166,
+            "line": 167,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 181,
+            "line": 182,
             "operation": "collection"
           },
           {
@@ -72411,17 +72462,17 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 157,
+            "line": 158,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 163,
+            "line": 164,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 279,
+            "line": 280,
             "operation": "doc"
           },
           {

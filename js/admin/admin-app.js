@@ -56,7 +56,7 @@ import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../compon
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261030-audit-integrity-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1-editor-search-20261028-2";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261030-home-history-5";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261030-cart-probe-1";
 import "./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {
