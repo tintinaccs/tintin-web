@@ -65,9 +65,15 @@ function compactCurrentCheck(check,key,label){
 }
 export function buildCurrentEvidence(commit,checkRuns=[]){
   const find=name=>checkRuns.find(check=>String(check?.name||'')===name)||null;
+  // Pages publica el nombre del proyecto. Aceptar únicamente la app oficial
+  // y este proyecto; entre el nombre anterior y el actual manda el check nuevo.
+  const pages=checkRuns.filter(check=>
+    ['Cloudflare Pages','Cloudflare Pages: tintinaccesorios'].includes(String(check?.name||''))&&
+    Number(check?.app?.id)===85455&&check.head_sha===commit
+  ).sort((a,b)=>Number(b.id||0)-Number(a.id||0))[0]||null;
   return{commit,checks:{
     repositoryAudit:compactCurrentCheck(find('Repository audit'),'repositoryAudit','Repository audit'),
-    cloudflarePages:compactCurrentCheck(find('Cloudflare Pages'),'cloudflarePages','Cloudflare Pages'),
+    cloudflarePages:compactCurrentCheck(pages,'cloudflarePages','Cloudflare Pages'),
     productionHealth:compactCurrentCheck(find('Producción real'),'productionHealth','Producción real')
   }};
 }

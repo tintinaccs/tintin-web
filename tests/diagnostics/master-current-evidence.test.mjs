@@ -35,6 +35,8 @@ test('la evidencia actual usa checks del commit consultado y conserva los faltan
     },
     {
       name: 'Cloudflare Pages',
+      app: { id: 85455 },
+      head_sha: 'abc123def456',
       status: 'completed',
       conclusion: 'success',
       completed_at: '2026-09-20T16:01:00Z',
