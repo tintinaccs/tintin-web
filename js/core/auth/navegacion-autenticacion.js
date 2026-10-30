@@ -7,7 +7,7 @@ import { doc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestor
 import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20261017-domain-cutover-1';
-import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-4';
+import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261022-avatar-inicial-1';
 
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');

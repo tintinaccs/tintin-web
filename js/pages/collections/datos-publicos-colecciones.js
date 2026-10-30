@@ -3,9 +3,9 @@ export { normalizeCollectionSlug };
 /* Metadata pública compartida: sin Firebase, imágenes de configuración ni Auth. */
 import { unifyWristCollections } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 import { cleanText, cleanMultilineText } from '../../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
-import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-4';
+import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { readCached, readStaleCached, runSingleFlight, writeCached } from '../../core/firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
-import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20261030-home-history-1';
+import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20261030-home-history-5';
 export const CACHE_KEY = 'collections:public:unified-v2';
 const CACHE_TTL = 30 * 60 * 1000;
 let pageRead = null;

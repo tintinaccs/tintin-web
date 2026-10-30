@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="94bfc33bd508247e1cd2c84ddf08aa69e741ccc012bca60af860c3b9b6c9537d">
+  <meta name="tintin-page-revision" content="3696fb0506ef80794a89c4af77534cde4f529d084581151ff8a498975889dada">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261022-avatar-inicial-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261030-home-history-4"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261030-home-history-5"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261029-cart-motion-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261030-home-history-4" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261030-home-history-5" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261021-iconos-rosa-1">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261021-iconos-rosa-1">
@@ -24,7 +24,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261030-home-history-4">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261030-home-history-5">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
   <link rel="canonical" href="https://tintinaccs.com/checkout.html" />
@@ -67,7 +67,7 @@
   <link id="tt-navigation-notification-surface-css" rel="stylesheet" href="css/components/navigation/compartido/superficie-notificaciones.css?v=tintin-20260918-header-system-solid-surfaces-1">
   <link id="tt-navigation-search-css" rel="stylesheet" href="css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1-nav-20261028-2">
   <link id="tt-navigation-coherence-css" rel="stylesheet" href="css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4-perf-20261029-1">
-  <link data-tt-checkout-maintenance="1" rel="stylesheet" href="css/pages/checkout/checkout-maintenance.css?v=tintin-20261027-welcome-receipt-1">
+  <link data-tt-checkout-maintenance="1" rel="stylesheet" href="css/pages/checkout/checkout-maintenance.css?v=tintin-20261029-mobile-review-1">
   <link id="tt-payment-methods-style" rel="stylesheet" href="css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-palette-20261014-1">
 </head>
 <body>
@@ -461,7 +461,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-4";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-5";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isNationalMobileInput, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial, isValidTaxpayerType } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
@@ -471,14 +471,14 @@ import {
   renderStoreClosedOverlay,
   renderStoreConfigUnavailableOverlay,
   removeStoreClosedOverlay
-} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20261030-home-history-1";
+} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20261030-home-history-5";
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20261017-domain-cutover-1";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20261012-checkout-ready-3-checkout-encomienda-js";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261021-location-profile-layout-3-editor-search-20261028-2";
 import { readAddressBook, addressBookPatch, addAddress } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261015-images-1";
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20261021-location-recovery-1";
-import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-4";
+import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5";
 import { apiUrl } from "./js/core/firebase/origen-funciones.js?v=tintin-20261017-domain-cutover-1";
 import { withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261015-images-1";
 
@@ -920,7 +920,7 @@ async function renderCart() {
     container.querySelectorAll('button.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-4');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-5');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -969,13 +969,15 @@ function showCkToast(message) {
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'ck-toast';
-    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#b84c72;color:#fff!important;padding:12px 24px;border-radius:50px;font-size:13px;font-weight:600;z-index:99999;opacity:0;transition:opacity .3s;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(184,76,114,0.35)';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    toast.setAttribute('aria-atomic', 'true');
     document.body.appendChild(toast);
   }
   toast.textContent = message;
-  toast.style.opacity = '1';
+  toast.hidden = false;
   clearTimeout(toast._hideTimer);
-  toast._hideTimer = setTimeout(() => { toast.style.opacity = '0'; }, 2600);
+  toast._hideTimer = setTimeout(() => { toast.hidden = true; }, 2600);
 }
 
 // Fase E: cuenta bloqueada — tapa todo el checkout con el mismo modal que
@@ -2061,11 +2063,11 @@ subscribeSession(snapshot => {
     });
 });
 </script>
-<script type="module" src="js/analytics/analitica.js?v=tintin-20261019-privacy-copy-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-4"></script>
+<script type="module" src="js/analytics/analitica.js?v=tintin-20261029-mobile-review-1"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5"></script>
 <script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20261024-qa-productos-checkout-1"></script>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261030-home-history-4" defer></script>
+<script src="tienda.js?v=tintin-20261030-home-history-5" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

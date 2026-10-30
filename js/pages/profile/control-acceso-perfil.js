@@ -182,7 +182,7 @@ function watchProfile(user) {
         data.welcomeTutorialPending === true && !data.welcomeTutorialSeen &&
         !data.welcomeTutorialFirstShownAt && !data.welcomeTutorialCompletedAt &&
         data.onboardingCompleted !== true && !welcomeRuntimeLoading) {
-      welcomeRuntimeLoading = import('../../components/welcome/tutorial-bienvenida.js?v=tintin-20261030-home-history-4')
+      welcomeRuntimeLoading = import('../../components/welcome/tutorial-bienvenida.js?v=tintin-20261030-home-history-5')
         .catch(error => {
           welcomeRuntimeLoading = null;
           console.warn('[profile-gate] Bienvenida pendiente:', error);

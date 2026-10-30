@@ -1,4 +1,4 @@
-import { readAccountOrdersIndexPage } from './indice-pedidos-perfil.js?v=tintin-20261030-home-history-1';
+import { readAccountOrdersIndexPage } from './indice-pedidos-perfil.js?v=tintin-20261030-home-history-5';
 import { ordersForView } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';

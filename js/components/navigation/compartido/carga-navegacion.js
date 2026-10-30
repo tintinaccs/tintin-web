@@ -14,9 +14,9 @@ const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar
 const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-4';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261030-home-history-4';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261030-home-history-4';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-5';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261030-home-history-5';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261030-home-history-5';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -122,7 +122,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 function loadAuthRuntime() {
   if (IS_VISUAL_PREVIEW_FRAME) return Promise.resolve(null);
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261030-home-history-4').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261030-home-history-5').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
@@ -173,7 +173,7 @@ function loadCollectionsRuntime({ withProducts = false } = {}) {
 // consulta escrita mientras termina de cargar el controlador compartido.
 function loadSearchRuntime() {
   if (!searchControllerPromise) {
-    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261030-home-history-4')
+    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261030-home-history-5')
       .then(module => {
         module.initSearchController();
         window.TintinSearchController?.renderCurrentQuery();

@@ -1,4 +1,4 @@
-import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20261030-home-history-4';
+import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 
 // Cambiar la presentación no debe reactivar una guía que la cuenta ya completó.
 export const WELCOME_VERSION = 'home-welcome-v5-media';

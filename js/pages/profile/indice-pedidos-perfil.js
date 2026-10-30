@@ -1,6 +1,6 @@
 import { appCheck } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { getToken } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
-import { runAuthenticatedQueryRest } from '../../core/firebase/respaldo-rest-firestore.js?v=tintin-20261030-home-history-1';
+import { runAuthenticatedQueryRest } from '../../core/firebase/respaldo-rest-firestore.js?v=tintin-20261030-home-history-5';
 
 export const ORDER_INDEX_FIELDS = ['createdAt','updatedAt','total','status','payment.status','paymentStatus','orderNumber','shortId','orderCode'];
 export const ORDER_INDEX_PAGE_SIZE = 100;

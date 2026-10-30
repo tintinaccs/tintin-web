@@ -862,13 +862,13 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261030-home-history-4');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261030-home-history-5');
     }
   }
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261030-home-history-1');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261030-home-history-5');
   }
 
   function bootHeaderMode() {
@@ -893,13 +893,13 @@
     window.TintinSiteActivityScheduled = true;
     // El aviso ya necesita este módulo. Reutilizarlo evita cargar actividad,
     // latidos y endpoint antes de que la persona acepte estadísticas.
-    importSibling('analytics/consentimiento-privacidad.js', 'Privacy Consent', undefined, 'tintin-20261019-privacy-copy-1').then(privacy => {
+    importSibling('analytics/consentimiento-privacidad.js', 'Privacy Consent', undefined, 'tintin-20261029-mobile-review-1').then(privacy => {
       if (!privacy) { window.TintinSiteActivityScheduled = false; return; }
       const start = () => {
         if (!privacy.hasStatisticsConsent()) return;
         if (!window.TintinSiteActivityBooted) {
           window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261019-privacy-copy-1');
+          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261029-mobile-review-1');
         }
       };
       privacy.onPrivacyConsentChange(start);
@@ -932,7 +932,7 @@
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
       importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261020-orders-clean-2');
-      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261030-home-history-4');
+      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261030-home-history-5');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix', undefined, 'tintin-20261021-commerce-review-1');
       importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261022-avatar-inicial-1');
     }
@@ -952,18 +952,18 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261030-home-history-4');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261030-home-history-5');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261030-home-history-4');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261030-home-history-5');
     }
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261030-home-history-4');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261030-home-history-5');
   }
 
   function bootThemeColorSanitizerPublic() {

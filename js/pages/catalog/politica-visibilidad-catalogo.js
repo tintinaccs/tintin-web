@@ -5,8 +5,8 @@ import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin
    Mantiene una sola definición de producto comprable para portada,
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
-import { loadCollections, normalizeCollectionSlug } from '../collections/datos-publicos-colecciones.js?v=tintin-20261030-home-history-4';
-import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20261030-home-history-1';
+import { loadCollections, normalizeCollectionSlug } from '../collections/datos-publicos-colecciones.js?v=tintin-20261030-home-history-5';
+import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20261030-home-history-5';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 import { variantStockLimit, hasProductStock, resolveProductVariant, productVariantPrice, productStockTotal, stableVariantSelection, variantSelectionLabel } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-2';

@@ -1,2 +1,2 @@
 /* Modulo de compatibilidad. Source of truth: components/navigation/compartido/carga-colecciones.js */
-export * from '../compartido/carga-colecciones.js?v=tintin-20261030-home-history-4';
+export * from '../compartido/carga-colecciones.js?v=tintin-20261030-home-history-5';

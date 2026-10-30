@@ -11,7 +11,7 @@ import {
   getDoc
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN } from '../auth/roles.js?v=tintin-20261017-domain-cutover-1';
-import { getPublicDocumentRest } from '../firebase/respaldo-rest-firestore.js?v=tintin-20261030-home-history-1';
+import { getPublicDocumentRest } from '../firebase/respaldo-rest-firestore.js?v=tintin-20261030-home-history-5';
 
 const OVERLAY_ID = 'tt-store-closed-overlay';
 const DEGRADED_NOTICE_ID = 'tt-store-gate-network-notice';

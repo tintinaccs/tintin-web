@@ -20,7 +20,7 @@ import {
   serverTimestamp,
   setDoc,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261030-home-history-4';
+import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 
 const DEFAULTS_DOC_PATH = ['settings', 'imageDefaults'];
 export const DEFAULT_IMAGE_TYPES = Object.freeze(['collection', 'category', 'product', 'banner', 'general']);

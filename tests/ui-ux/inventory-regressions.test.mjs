@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFile } from 'node:fs/promises';
+import vm from 'node:vm';
+import { isValidCustomerName } from '../../js/pages/profile/configuracion-inicial-perfil.mjs';
 
 const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8');
 
@@ -24,6 +26,112 @@ test('contacto conserva email en todas las rutas de WhatsApp', async () => {
   // Las tres rutas validan el email opcional antes de armar el mensaje.
   assert.match(tienda, /if \(email && !emailInput\.checkValidity\(\)\)/);
   assert.ok(runtime.includes("values.email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(values.email)"));
+});
+
+test('contacto valida, usa el WhatsApp configurado y permite una segunda consulta sin duplicar aperturas', async () => {
+  const [html, source, tienda] = await Promise.all([
+    read('contact.html'),
+    read('js/pages/institutional/mantenimiento-contacto.js'),
+    read('tienda.js'),
+  ]);
+  const nodes = new Map();
+  let focused = '';
+  function element(id = '') {
+    const node = {
+      id, style: {}, attributes: {}, dataset: {}, children: [], listeners: [], value: '', hidden: false,
+      classList: { add() {} },
+      setAttribute(name, value) { this.attributes[name] = value; },
+      removeAttribute(name) { delete this.attributes[name]; },
+      appendChild(child) { this.children.push(child); nodes.set(child.id, child); },
+      insertAdjacentElement(_position, child) { nodes.set(child.id, child); },
+      before(child) { nodes.set(child.id, child); },
+      addEventListener(type, callback, capture) { this.listeners.push({ type, callback, capture: capture === true }); },
+      focus() { focused = this.id; },
+      checkValidity() { return !this.value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value); },
+    };
+    if (id) nodes.set(id, node);
+    return node;
+  }
+  const form = element('contact-form');
+  const submit = element('submit');
+  const success = element('form-success');
+  const fallback = element('form-wa-fallback');
+  const inputs = ['f-nombre', 'f-email', 'f-tel', 'f-msg'].map(element);
+  form.querySelector = selector => selector === '[type="submit"]' ? submit : inputs.find(input => input.attributes['aria-invalid'] === 'true');
+  form.reset = () => inputs.forEach(input => { input.value = ''; });
+  const opened = [];
+  const windowListeners = new Map();
+  let receiveSettings;
+  const navigator = { onLine: true };
+  const context = vm.createContext({
+    window: {
+      addEventListener: (type, callback) => windowListeners.set(type, callback),
+      open: url => { opened.push(url); return null; },
+    },
+    document: {
+      getElementById: id => nodes.get(id),
+      createElement: () => element(),
+      querySelector: () => null,
+      querySelectorAll: () => [],
+    },
+    location: { pathname: '/contact', origin: 'https://tintin.example' },
+    navigator, URL, console, isValidCustomerName,
+    appCheckReady: Promise.resolve(true), db: {}, doc: () => ({}),
+    onSnapshot: (_ref, callback) => { receiveSettings = callback; },
+  });
+  // Run all real handlers. Capture must suppress the legacy handlers from the
+  // document and tienda.js, otherwise a submission opens multiple windows.
+  const inline = html.match(/<script>\s*(\(function\(\) \{[\s\S]*?\}\)\(\);)\s*<\/script>/)[1];
+  vm.runInContext(inline, context);
+  const legacyHandler = tienda.match(/function initContactForm\(\) \{[\s\S]*?\r?\n\}/)[0];
+  vm.runInContext(`${legacyHandler}\ninitContactForm();`, context);
+  vm.runInContext(source.replace(/^import .*;\r?\n/gm, ''), context);
+  await Promise.resolve();
+  function send() {
+    let stopped = false;
+    const event = { preventDefault() {}, stopImmediatePropagation() { stopped = true; } };
+    for (const listener of form.listeners.filter(listener => listener.type === 'submit').sort((a, b) => Number(b.capture) - Number(a.capture))) {
+      listener.callback(event);
+      if (stopped) break;
+    }
+  }
+  assert.equal(inputs[0].attributes['aria-invalid'], 'false', 'accessibility initializes on first load');
+  send();
+  assert.equal(opened.length, 0);
+  assert.equal(inputs[0].attributes['aria-invalid'], 'true');
+  assert.equal(focused, 'f-nombre');
+  inputs.forEach((input, index) => { input.value = ['Ana Perez', 'ana@example.com', '0981111111', 'Quiero consultar por un bolso'][index]; });
+  inputs[1].value = 'invalid-email';
+  send();
+  assert.equal(opened.length, 0);
+  assert.equal(focused, 'f-email');
+  inputs[1].value = 'ana@example.com';
+  receiveSettings({ exists: () => true, data: () => ({ whatsappNumber: '595981999999' }) });
+  navigator.onLine = false;
+  send();
+  assert.equal(opened.length, 0, 'offline submission preserves the editable form');
+  assert.equal(form.hidden, false);
+  assert.equal(nodes.get('tt-contact-net-state').hidden, false);
+  navigator.onLine = true;
+  windowListeners.get('online')();
+  send();
+  assert.equal(opened.length, 1);
+  assert.equal(new URL(opened[0]).pathname, '/595981999999');
+  assert.match(new URL(opened[0]).searchParams.get('text'), /ana@example\.com/);
+  assert.equal(form.hidden, true);
+  assert.equal(success.style.display, 'block');
+  assert.equal(fallback.href, opened[0], 'blocked popup retains the configured destination');
+  assert.equal(fallback.style.display, 'inline-flex');
+  send();
+  assert.equal(opened.length, 1, 'repeat submit while complete does not reopen WhatsApp');
+  nodes.get('tt-contact-new-message').listeners.find(listener => listener.type === 'click').callback();
+  assert.equal(form.hidden, false);
+  assert.equal(submit.disabled, false);
+  assert.equal(inputs[0].value, '');
+  inputs.forEach((input, index) => { input.value = ['Maria Lopez', '', '', 'Tengo otra consulta'][index]; });
+  send();
+  assert.equal(opened.length, 2);
+  assert.match(new URL(opened[1]).searchParams.get('text'), /Maria Lopez/);
 });
 
 test('reseñas no encoge el CTA y permite wrap cerca de 924px', async () => {

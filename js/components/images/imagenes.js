@@ -16,8 +16,8 @@ import {
   onSnapshot,
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261030-home-history-4';
-import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261030-home-history-4';
+import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261030-home-history-5';
+import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261030-home-history-5';
 
 // Este cargador conserva el arranque de Inicio. En las demás páginas, el
 // guardia de perfil carga la guía sólo si la cuenta tiene bienvenida pendiente.
@@ -25,7 +25,7 @@ const imagePage = (window.location.pathname || '').toLowerCase();
 if (imagePage === '/' || imagePage.endsWith('/index.html') || imagePage === '') {
   Promise.all([
     import('../../pages/home/inicio-premium.js'),
-    import('../welcome/tutorial-bienvenida.js?v=tintin-20261030-home-history-4'),
+    import('../welcome/tutorial-bienvenida.js?v=tintin-20261030-home-history-5'),
   ]).catch(error => console.warn('[images] No se pudo iniciar la bienvenida:', error));
 }
 

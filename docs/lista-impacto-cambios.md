@@ -1,6 +1,14 @@
+## 2026-10-30 — Conciliación de Inicio/historial con main1277
+
+Integración por merge normal de db506e9d. Se conserva catálogo móvil, aviso de checkout, contacto, reset de consentimiento/actividad y limpieza de colecciones vacías de1277 junto con índice/portadas Inicio y paginación privada de1276. Autoridades de shell/caché/CSP/diagnóstico y plan protegido se regeneran sobre main vigente, sin escoger manualmente derivados como definición final. Evidencia del árbol integrado en CURRENT_STATE y recibo del PR; los checks del head anterior no acreditan el nuevo.
+
 ## 2026-10-30 — Inicio por demanda e historial privado paginado
 
 Autoridades: public-catalog/catalogo-publico-api/estado-productos para índice y lotes públicos; pedidos-perfil/indice-pedidos-perfil/respaldo-rest-firestore para consultas privadas autenticadas. Se conservan catálogo completo de Buscar y respaldo del menú al usarlo, carrito, stock/colecciones, bloques visuales, identidades UID/correos verificados, fechas legacy, totales completos y enlaces profundos. El carrusel recibe una URL de portada por categoría desde el índice, seleccionada por la misma autoridad pura que la resolución de imágenes; no se hidratan fichas ajenas. El sanitizador conserva base del navegador y admite una base explícita en servidor. Revisiones de Inicio descartan lotes y errores anteriores; la auditoría distingue GET público y POST privado de lectura runQuery sin admitir escrituras. La galería de producto en páginas informativas se solicita con productos, antes de publicar Buscar; carrito guardado conserva su imagen sin ese helper. Se mantiene el presupuesto120 solicitudes. No migración ni datos de producción. Proyecciones paginadas evitan descargar todos los detalles, con snapshot consistente y aislamiento por sesión; listeners sólo de filas visibles. Imports transitivos renovados mediante auditor/generador canónicos, CSP/diagnóstico y mantenimiento protegido derivados. Evidencia/límites en CURRENT_STATE y PERFORMANCE_GLOBAL_20261029; CI y publicación se verifican por SHA nuevo.
+
+## 2026-10-29 — Correcciones mobile del catálogo y superficies públicas
+
+Autoridades: catálogo inline y su mantenimiento, showCkToast y checkout-maintenance, mantenimiento-contacto, renderInto de colecciones y consentimiento-privacidad. Categorías completas, nombres accesibles de favoritos, filtros coherentes, status de Checkout sin interceptar navegación, número de Contacto configurable y segunda consulta, retiro de colecciones ante respuesta vacía y elección de privacidad sin reapertura. Consumidores públicos reciben URLs transitivas únicas mediante fuentes canónicas. Pruebas nuevas se ejecutan en etapas CI existentes, con regresiones de navegación/formularios/disponibilidad. Sin SDK/dependencias nuevas, pagos/pedidos reales, permisos, Rules ni datos comerciales. Evidencia propia en CURRENT_STATE y recibo del PR de esta rama.
 
 ## 2026-10-29 — Apertura del carrito y medición de rendimiento del PR1274
 
