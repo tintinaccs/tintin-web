@@ -10,6 +10,7 @@ import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=
    guarda únicamente la metadata y las URLs públicas de la biblioteca.
    ============================================================= */
 
+import { recordAuditEntry } from '../../admin/auditoria/registro-auditoria.js?v=tintin-20261030-audit-integrity-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20261017-domain-cutover-1';
 import {
@@ -279,7 +280,7 @@ export async function findImageUsage(url, { productsSnapshot = null } = {}) {
 /** Registra el borrado en auditLog, igual que las demás acciones sensibles del panel. */
 async function logMediaDeletion(mediaId, data, reason) {
   try {
-    await addDoc(collection(db, 'auditLog'), {
+    await recordAuditEntry({
       action: 'eliminar_imagen_biblioteca',
       targetType: 'media',
       targetId: mediaId,
@@ -287,9 +288,6 @@ async function logMediaDeletion(mediaId, data, reason) {
       details: `${reason} · publicId=${data.publicId || ''} · url=${data.url || ''}`,
       bulk: false,
       bulkCount: 0,
-      actorEmail: auth.currentUser?.email || '',
-      actorRole: '',
-      createdAt: serverTimestamp(),
     });
   } catch (error) {
     console.warn('[media-library] No se pudo registrar el borrado en auditLog:', error);

@@ -97,7 +97,7 @@
     "test:otp-rate-emulator": "firebase emulators:exec --only firestore --project demo-tintin-otp-limits \"node --test scripts/probar-otp-limites-emulador.mjs\"",
     "test:rules-phone": "firebase emulators:exec --only firestore --project demo-tintin-phone \"node scripts/probar-firestore-telefono-unico.mjs\"",
     "test:rules-username": "firebase emulators:exec --only firestore --project demo-tintin-username \"node scripts/probar-firestore-username-unico.mjs\"",
-    "test:rules-critical": "firebase emulators:exec --only firestore --project demo-tintin-critical \"node scripts/probar-firestore-critico.mjs && node --test tests/integration/commerce-firestore.test.mjs && node --test scripts/probar-api-limites-emulador.mjs && node --test scripts/probar-indice-pedidos-emulador.mjs\"",
+    "test:rules-critical": "firebase emulators:exec --only firestore --project demo-tintin-critical \"node scripts/probar-firestore-critico.mjs && node scripts/probar-auditoria-emulador.mjs && node --test tests/integration/commerce-firestore.test.mjs && node --test scripts/probar-api-limites-emulador.mjs && node --test scripts/probar-indice-pedidos-emulador.mjs\"",
     "audit:login-isolation": "node scripts/auditar-acceso-aislamiento.js && node --test tests/auth/*.test.mjs",
     "audit:login-profile": "node scripts/auditar-acceso-perfil-incorporacion.js && node --test tests/login/*.test.mjs tests/profile/*.test.mjs tests/navigation/controller-bootstrap.test.mjs && playwright test tests/login/google-loader-recovery.spec.js tests/login/location-map-browser.spec.js tests/profile/order-history-pagination.spec.js --project=chromium && npm run test:critical-runtime",
     "audit:hero-background-controls": "node scripts/auditar-hero-fondo-controles.js",

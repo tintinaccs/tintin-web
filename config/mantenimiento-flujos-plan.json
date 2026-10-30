@@ -1,13 +1,111 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "e5308fb836fc37758b90b8c612060e0378f3e9e6",
-  "reason": "Reconocer el check real de Cloudflare Pages conservando identidad de app, proyecto y resultado reciente",
+  "baseCommit": "c610f9d9ec5c2c418ca9422d6a90b2308c4758f4",
+  "reason": "Cerrar suplantacion e inyeccion HTML en Auditoria preservando escritores comerciales y controles",
   "files": [
     {
-      "path": "functions/api/master-diagnostics.js",
-      "oldHash": "d066560c0e2f9f3fece09a9117ed39a3326e7116957110edbbf2acf1d7eb7f48",
-      "newHash": "5d1b8c267b78e19fce6d7bf95c95444bb1959906a947c06cbce4587b3e9e662f"
+      "path": "admin-images.html",
+      "oldHash": "3737b10ec4bd813265a049b4aa94f15a4996642422a585c0d8c7375546ea03e5",
+      "newHash": "047919ff3fb9ba9e710abafce9b9802debab01b0921e6c81d0f5fbef2ac4e8e9"
+    },
+    {
+      "path": "admin.html",
+      "oldHash": "64cbe18951ca8094cff04cfc23b0a65204d7ac9c63bd4ac41047e7a7ce359d4f",
+      "newHash": "2f4ba466ebc642993e9624c872ad06aaa5ff5bdf2273285fbd8ce948c463426f"
+    },
+    {
+      "path": "config/csp-runtime.js",
+      "oldHash": "576b2c64308eab9f1a82f7b07bf7a2ae3e549d1aab15f0c415ccadb3c14e913f",
+      "newHash": "a12f5a99dc0565e1fbbf528144e741998a813862ab56f90702e6132eb0db5617"
+    },
+    {
+      "path": "config/csp-runtime.json",
+      "oldHash": "8e12f453c30c70fab6575be030b8ce5fec5290b3e4762337fe1e7bdb9164c240",
+      "newHash": "f427ae7f72fa6dfda95b941c0e147bcaafb2fe428fdb9a240d4656db2dc80bd8"
+    },
+    {
+      "path": "firestore.rules",
+      "oldHash": "6000a1c182df3b25be7c22d755c36e93bf83bde00c1d7950d2d84b52aac894a0",
+      "newHash": "02b44680a4d14b5f13fac02556091ce15b26900b9077118fb334dc81cbcd4d47"
+    },
+    {
+      "path": "functions/api/admin-order-mutation.js",
+      "oldHash": "de42345030f77f3494b902b7826b7ddeaaf0a0d850f8780c233aae4d88b23724",
+      "newHash": "5c4ee240b3031ccea3d16267f25cd88dcb650edd1a97911af6bc889bb5b4193e"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "7deb5bc984aacd856a39ec16b54060a845f92a4bb6907974558af39dfd760014",
+      "newHash": "050028b1fa87f1da8806fd255fc6cbba3f1d7a54aeca0685470c4bae31a7e1c4"
+    },
+    {
+      "path": "js/admin/products/biblioteca-multimedia-admin.js",
+      "oldHash": "1ecedf0aafef5f706405411e9753f9a04f57027ff3658b5ba377df04ae98bb70",
+      "newHash": "ad7e5d7a739010110838b7c8e82a18422a4730d8c8ed7e132c235bb4d0fd2679"
+    },
+    {
+      "path": "js/components/images/biblioteca-multimedia.js",
+      "oldHash": "81a173b5061b05d29a07890aa7cad42183e7750abcdb8ce291355160d486fdab",
+      "newHash": "53a538f3c99395bba42c152f27e792e7ba1f45cd589d889cd56841a6337c2200"
+    },
+    {
+      "path": "js/components/images/carga-imagenes.js",
+      "oldHash": "45a7695ddcc9b8132055971e6a795397754b90f2807ebeb90218d9cbd1b5cd03",
+      "newHash": "ef446274558c59936b05db2de2bd581a6f4885aa567dc552de7e4742be3a063b"
+    },
+    {
+      "path": "package.json",
+      "oldHash": "77ffeeac37c7eb422e799255a766d4f9ae5a65a14b4d4fcba87a9f04acc5de0c",
+      "newHash": "326b79c4a5f5956b567e4b224f8e33c650d5c5a19f36e1ad0a50c634b58e1fc1"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "879673155d035a06634ea2d56afe7eeb9664021e53296f4a22a7c4a8bb246419",
+      "newHash": "77b61cefa71cada6a2e40d372472dbe5abf2512100dfa6c2a9d5d43397d4dfe6"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas",
+    "apis-internas__apps-script__22",
+    "apis-internas__comentarios__39",
+    "apis-internas__correos__41",
+    "apis-internas__favoritos__37",
+    "apis-internas__firestore__21",
+    "apis-internas__likes__38",
+    "apis-internas__notificaciones__40",
+    "apis-internas__pedidos__32",
+    "carrito",
+    "cf-functions",
+    "cf-functions__apis-internas__20",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
+    "comentarios",
+    "correos",
+    "csp",
+    "favoritos",
+    "firestore",
+    "firestore-fuente-verdad",
+    "firestore__apps-script__23",
+    "firestore__carrito__36",
+    "firestore__users-uid__8",
+    "notificaciones",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "reglas-firestore",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "sheets-products-webhook__firestore__27",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

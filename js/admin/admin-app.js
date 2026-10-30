@@ -1,3 +1,4 @@
+import { recordAuditEntry } from './auditoria/registro-auditoria.js?v=tintin-20261030-audit-integrity-1';
 import { normalizeAdminSearch, debounceAdminSearch } from './datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import { iniciarCorreos } from './correos/correos-admin.js?v=tintin-20261028-correos-1-editor-search-20261028-2';
 import {adminEventAttributes,installAdminEvents} from './eventos-dinamicos-admin.mjs?v=tintin-20261027-save-csp-1';
@@ -19,7 +20,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261030-home-history-5';
+import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261030-audit-integrity-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -51,8 +52,8 @@ import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tint
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261025-gallery-unified-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1-editor-search-20261028-2";
+import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261030-audit-integrity-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261030-audit-integrity-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1-editor-search-20261028-2";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261030-home-history-5";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2";
@@ -414,9 +415,6 @@ async function logAudit(action, targetType, targetId, targetLabel, details, meta
       details: details || '',
       bulk: !!(meta && meta.bulk),
       bulkCount: (meta && meta.count) || 0,
-      actorEmail: currentUser?.email || '',
-      actorRole: currentRole || '',
-      createdAt: serverTimestamp()
     };
     // Los cambios de precio/stock necesitan una trazabilidad consultable,
     // no solamente una frase humana. Se mantienen en el mismo auditLog
@@ -424,7 +422,7 @@ async function logAudit(action, targetType, targetId, targetLabel, details, meta
     if (meta?.productHistory) {
       entry.productHistory = meta.productHistory;
     }
-    await addDoc(collection(db, 'auditLog'), entry);
+    await recordAuditEntry(entry);
   } catch (e) {
     console.error('No se pudo registrar en auditLog:', e);
   }
@@ -518,8 +516,9 @@ function renderAuditLogTable() {
   [..._selectedAuditLogs].forEach(id => { if (!visibleIds.has(id)) _selectedAuditLogs.delete(id); });
   tbody.innerHTML = _allAuditLogs.map(l => {
     const actionLabel = AUDIT_ACTION_LABELS[l.action] || l.action;
-    const bulkTag = l.bulk ? `<span class="adm-badge" style="background:#fff3e0;color:#bf360c;margin-left:6px">Masivo${l.bulkCount ? ` (${l.bulkCount})` : ''}</span>` : '';
-    const history = Array.isArray(l.productHistory) ? l.productHistory : [];
+    const count = Number.isSafeInteger(l.bulkCount) && l.bulkCount > 0 && l.bulkCount <= 1000000 ? l.bulkCount : 0;
+    const bulkTag = l.bulk ? `<span class="adm-badge" style="background:#fff3e0;color:#bf360c;margin-left:6px">Masivo${count ? ` (${count})` : ''}</span>` : '';
+    const history = Array.isArray(l.productHistory) ? l.productHistory.filter(row => row && typeof row === 'object' && !Array.isArray(row)) : [];
     const historyText = history.length
       ? ` · Historial: ${history.length === 1 ? `precio ${history[0].priceBefore ?? '—'} → ${history[0].priceAfter ?? '—'} · stock ${history[0].stockBefore ?? 'ilimitado'} → ${history[0].stockAfter ?? 'ilimitado'}` : `${history.length} productos con valores anteriores y posteriores`}`
       : '';
