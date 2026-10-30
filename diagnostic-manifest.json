@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "74a2cb73d51fb05ba2aeee2f921f47e2c6dfa42f7c1ed23549a478feb3edc529",
+  "sourceFingerprint": "71ce9b9d6512df07f60b0536c6058239c22511c49019502f33a72fd45ecb6cc6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1640,
-    "textFiles": 1505,
-    "totalBytes": 39855783,
+    "files": 1641,
+    "textFiles": 1506,
+    "totalBytes": 39841676,
     "pages": 19,
-    "modules": 1092
+    "modules": 1093
   },
   "viewports": [
     {
@@ -27050,8 +27050,8 @@
     },
     {
       "path": "functions/api/master-diagnostics.js",
-      "bytes": 14124,
-      "sha256": "d066560c0e2f9f3fece09a9117ed39a3326e7116957110edbbf2acf1d7eb7f48",
+      "bytes": 14520,
+      "sha256": "5d1b8c267b78e19fce6d7bf95c95444bb1959906a947c06cbce4587b3e9e662f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48128,8 +48128,8 @@
     },
     {
       "path": "tests/diagnostics/master-current-evidence.test.mjs",
-      "bytes": 2522,
-      "sha256": "4384c3c2be09f8fcf8331d807313c160ab57d7659c60410770c8378a620aba75",
+      "bytes": 2580,
+      "sha256": "16c5f1e83d6a52144d73a8421095a21ffe81c612f0565ae09957c82c6160ad5d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48167,7 +48167,7 @@
         },
         {
           "url": "https://dash.cloudflare.com/pages/deployments/1",
-          "line": 41
+          "line": 43
         }
       ]
     },
@@ -48581,6 +48581,54 @@
           "line": 458
         }
       ]
+    },
+    {
+      "path": "tests/flow-connections/current-ci-evidence.test.mjs",
+      "bytes": 2433,
+      "sha256": "ad1663929f8dd83cf16757943a3304c857708672fd9b39e067cf26720705f12c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../functions/api/master-diagnostics.js",
+          "target": "functions/api/master-diagnostics.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/live-checks.js",
+          "target": "js/admin/flujo-conexiones/live-checks.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/datos-flujo-conexiones.js",
+          "target": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/estado-flujo.js",
+          "target": "js/admin/flujo-conexiones/estado-flujo.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
@@ -60291,8 +60339,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 19340,
-      "sha256": "4b5bc67e0a55601e5b1cf55ba4b87b88f844cf14726bcdd9f81ceda027882884"
+      "bytes": 481,
+      "sha256": "5d4936b16fb77488df4332ee53b12d0f0403975ba4541110e797db0f197da51e"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -60304,7 +60352,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "09f96a34afb72023970fd7af2bff9e40959476f557e7da51308c193e66e2d40e"
+      "sha256": "39ac4b939396f70f0fefd7ffa77b41eb8329a0bb80e25b629fc27e7f5908ea0d"
     },
     {
       "path": "config/public-site.json",
@@ -60999,8 +61047,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1060707,
-      "sha256": "57cac218f2c21e8debda3c65e6be708dc7c7935efa94df08acdce18da88c1d20"
+      "bytes": 1062572,
+      "sha256": "ad24a39775709f5c80998f2412f50d8aafd5c56d2766b63ee62a0a0e7ee44a11"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -62499,8 +62547,8 @@
     {
       "path": "functions/api/master-diagnostics.js",
       "extension": ".js",
-      "bytes": 14124,
-      "sha256": "d066560c0e2f9f3fece09a9117ed39a3326e7116957110edbbf2acf1d7eb7f48"
+      "bytes": 14520,
+      "sha256": "5d1b8c267b78e19fce6d7bf95c95444bb1959906a947c06cbce4587b3e9e662f"
     },
     {
       "path": "functions/api/notifications.js",
@@ -67137,8 +67185,8 @@
     {
       "path": "tests/diagnostics/master-current-evidence.test.mjs",
       "extension": ".mjs",
-      "bytes": 2522,
-      "sha256": "4384c3c2be09f8fcf8331d807313c160ab57d7659c60410770c8378a620aba75"
+      "bytes": 2580,
+      "sha256": "16c5f1e83d6a52144d73a8421095a21ffe81c612f0565ae09957c82c6160ad5d"
     },
     {
       "path": "tests/diagnostics/master-emulator-runtime.test.mjs",
@@ -67199,6 +67247,12 @@
       "extension": ".mjs",
       "bytes": 34557,
       "sha256": "702e76979c92fac90900a0e74bc4a06530baa2deb7bb747fc1859c1220115f55"
+    },
+    {
+      "path": "tests/flow-connections/current-ci-evidence.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2433,
+      "sha256": "ad1663929f8dd83cf16757943a3304c857708672fd9b39e067cf26720705f12c"
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
