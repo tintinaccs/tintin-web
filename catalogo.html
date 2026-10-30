@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="a4a245e265ff03a5eabd100c6edaa8bd465cbb15446b6b85297020382c5ac47d">
+  <meta name="tintin-page-revision" content="886287afba712c8fb8c2853a2ebc6c7ad43af31b493f16bd1d6d2f07a6ac567c">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -322,7 +322,17 @@
         .cat-sidebar.open { max-height: calc(100dvh - 128px); }
       }
       .cat-filter-toggle { display: block; }
-      .cat-tabs-mobile { display: flex; }
+      body.tt-catalog-maintenance .cat-hero { margin-bottom: 0; }
+      body.tt-catalog-maintenance .cat-tabs-mobile {
+        display: flex; position: relative; isolation: isolate; box-sizing: border-box;
+        width: 100vw; max-width: none; margin-inline: calc((100% - 100vw) / 2);
+        gap: 10px 8px; padding: 28px 24px; margin-block: 0 12px;
+      }
+      .cat-tabs-mobile::before {
+        content: ''; position: absolute; z-index: -1; pointer-events: none;
+        inset: 0 0 -12px;
+        background: linear-gradient(to bottom, var(--tt-flow-join), var(--tt-flow-light) 28px, var(--tt-flow-light) calc(100% - 28px), var(--tt-flow-join));
+      }
       .cat-top { align-items: stretch; }
       .cat-count { width: 100%; }
       .cat-controls { width: 100%; justify-content: stretch; }

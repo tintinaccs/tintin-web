@@ -4899,3 +4899,42 @@ Codex /root, base c610f9d, rama codex/corregir-sonda-carrito. PR1278 ya MERGED: 
 La sesión del panel volvió a estar accesible al reabrirla. Se confirma que Sheets conserva acuses de otro despliegue y no hay ningún registro real de reseña; no son errores de escritura reproducidos. PayPal continúa opcional/deshabilitado por indicación de la titular. Se observa además Carrito en rojo mientras el carrito real abre sin errores. Causa reproducida contra la página pública: cart-drawer existe desde aproximadamente1s, pero una imagen que retiene load hace que la sonda anterior termine hasCartDrawer:false a10s. Regresión nueva RED con ese mismo caso y reloj controlado.
 
 La sonda comprueba el DOM real cada100ms desde que se monta el iframe, sin esperar load de imágenes. Conserva el plazo, el fallo si falta el panel, GET únicamente y limpieza de iframe/intervalo al terminar o cancelar. Reproducción con imágenes retenidas pasa hasCartDrawer:true;176/176 pruebas canónicas de conexiones PASS_LOCAL sin reintentos, incluidas tres nuevas de carga bloqueada, panel ausente y cancelación. URLs nuevas para el módulo y admin-app; caché desde el auditor canónico. Build:pages/cache y preflight1099 módulos/72funciones PASS_LOCAL. Plan canónico de cuatro archivos protegidos y18 registros afectados. Las tres pruebas nuevas corren en la CI obligatoria; su import de Playwright sigue el patrón dinámico existente para no interpretarlo como recurso publicable local. CI y publicación del segundo candidato se registran por su propio SHA, sin heredar el PASS de1278.
+
+## 2026-10-30 — Push de pedidos y espacio móvil del catálogo
+
+Codex /root GPT-6, rama codex/push-pedidos-mobile-20261030, base96bf4fc4.
+Se retoma el caso TINPED30 descrito por la titular; este entorno no conserva
+los cambios sin publicar ni la sesión administrativa del chat anterior.
+Autoridades: apps-script-bridge, order-email, servicio-push y catálogo inline.
+El push empieza antes de la cola de correo/Sheets, con trabajo conservado por
+waitUntil y respaldo sin waitUntil. OAuth/transporte tienen cancelación8s;
+envíos con seis trabajadores evitan que un dispositivo lento bloquee al resto.
+Errores posteriores a la reserva cierran el evento y preservan contadores de
+entregas ante fallos de persistencia. Recuperación SuperAdmin usa el evento
+almacenado, conserva eventId y aplica CAS por updateTime al reclamarlo;
+processing reciente, eventos con éxitos y límite5 impiden reenvíos globales.
+El registro tardío de fallos no pisa eventos existentes. El catálogo móvil
+reserva28px arriba/abajo y24px laterales, con fondo degradado que comparte
+los colores de unión del flujo canónico; texto/controles conservan nitidez.
+
+PASS_LOCAL final:62/62 Node push/social y315/315 checkout/pedidos, auditor
+push y preflight canónica. El harness de checkout incorpora el nuevo despacho
+para comprobar que la respuesta no espera ni push ni correo; conserva su aserción
+de encolar antes del correo. La primera geometría detectó12px de desborde
+decorativo y se corrigió. Verificación móvil final, build, CI y publicación
+se registran tras ejecutarse; ningún PASS de otro SHA se hereda.
+NOT_VERIFIED: entrega en teléfonos físicos y recuperación real de TINPED30;
+no se crean pedidos, correos ni mensajes reales de QA. No se promete latencia
+absoluta del sistema operativo/FCM a partir de la aceptación del proveedor.
+
+PASS_LOCAL de navegador:11/11 geometría/navegación del catálogo,320–2560px
+y horizontal;4/4 categorías completas320/390/540/768px. La revisión de la
+captura descubrió max-width global limitando el fondo; se anula sólo en la
+navegación móvil. Se añade prueba de liberación de cuerpos HTTP para no
+agotar conexiones del worker (10/10 pruebas nuevas del despacho). El build
+y caché finales se regeneran antes del commit; CI/merge siguen pendientes.
+
+Candidato final PASS_LOCAL:4/4 categorías repetidas tras anular max-width,
+preflight canónica completa, build:pages, auditor push y caché385/67;
+plan protegido8 archivos/25 registros, regenerado después del HTML definitivo.
+Diff revisado, sin cambios de Rules, permisos ni escrituras comerciales.

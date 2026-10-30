@@ -19,7 +19,7 @@ import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.
 import { createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
 import { preparePublicCheckoutOrder } from '../../cloudflare/politica-checkout-publico.js';
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
-import { dispatchOrderPushEvent } from '../../cloudflare/servicio-push.js';
+import { dispatchOrderPushEvent, recordPushFailure } from '../../cloudflare/servicio-push.js';
 import { sendOrderEmails } from './order-email.js';
 import { queuePendingOrderEmail } from '../../cloudflare/resiliencia-correo-pedido.js';
 
@@ -283,6 +283,15 @@ export async function onRequest(context) {
       const emailStatus = created.order.notificationStatus || 'pending';
       const emailResult = { success: emailStatus === 'sent', adminSent: created.order.notificationAdminSent ?? null, customerSent: created.order.notificationCustomerSent ?? null, error: '' };
       if (!created.duplicate) {
+        // Iniciar antes de correo/Sheets; waitUntil conserva el trabajo al responder.
+        const push = dispatchOrderPushEvent(env, 'order.created', created.orderId, `order.created:${created.orderId}`)
+          .catch(async error => {
+            console.error('[apps-script-bridge] Falló el push del pedido.');
+            await recordPushFailure(env, { eventId: `order.created:${created.orderId}`, type: 'order.created', orderId: created.orderId, error });
+          });
+        if (context.waitUntil) context.waitUntil(push);
+        else await push;
+
         try {
           await queuePendingOrderEmail(env, { orderId: created.orderId, retryAdmin: true, retryCustomer: true, lastError: '' });
         } catch (error) { console.error('[apps-script-bridge] No se pudo encolar el ticket:', error?.message); }
@@ -298,13 +307,6 @@ export async function onRequest(context) {
         context.waitUntil?.(syncOrderOwnerStats(env, created.order).catch(error => {
           console.error('[apps-script-bridge] order stats sync failed', error?.message || error);
         }));
-        // El checkout público canónico ya no pasa por el webhook antiguo de
-        // Apps Script. Disparar aquí el mismo evento garantiza la push de
-        // pedido nuevo sin duplicarla en reintentos idempotentes.
-        context.waitUntil?.(
-          dispatchOrderPushEvent(env, 'order.created', created.orderId, `order.created:${created.orderId}`)
-            .catch(() => {})
-        );
         context.waitUntil?.(syncOrderToSheetsBestEffort(env, { orderId: created.orderId, order: created.order }));
       }
       return new Response(JSON.stringify({

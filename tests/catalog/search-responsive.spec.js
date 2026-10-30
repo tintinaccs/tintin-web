@@ -306,6 +306,16 @@ for (const width of [320,390,540,768]) test(`categorías mobile completas sin re
    return {rect:rect.toJSON(),width:button.clientWidth,scrollWidth:button.scrollWidth};
   })};
  });
+ const spacing=await nav.evaluate(el=>{
+  const css=getComputedStyle(el),fade=getComputedStyle(el,'::before');
+  const buttons=[...el.querySelectorAll('button')].map(button=>button.getBoundingClientRect());
+  const box=el.getBoundingClientRect();
+  return {top:Math.min(...buttons.map(b=>b.top))-box.top,bottom:box.bottom-Math.max(...buttons.map(b=>b.bottom)),fade:fade.backgroundImage,pointerEvents:fade.pointerEvents};
+ });
+ expect(spacing.top).toBeGreaterThanOrEqual(23);
+ expect(spacing.bottom).toBeGreaterThanOrEqual(23);
+ expect(spacing.fade).toContain('linear-gradient');
+ expect(spacing.pointerEvents).toBe('none');
  expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.width+1);
  for(const {rect,width:buttonWidth,scrollWidth} of geometry.buttons){
   expect(rect.left).toBeGreaterThanOrEqual(geometry.box.left-1);
