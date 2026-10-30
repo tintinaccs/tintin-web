@@ -14,15 +14,15 @@ const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261029-performance-1';
+const TIENDA_VERSION = 'tintin-20261030-home-history-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
-const LOADER_VERSION = 'tintin-20261029-cart-reveal-1';
-const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
+const LOADER_VERSION = 'tintin-20261030-home-history-1';
+const STORE_GATE_VERSION = 'tintin-20261030-home-history-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20261029-performance-1';
-const NAV_ENTRY_VERSION = 'tintin-20261029-performance-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261030-home-history-1';
+const NAV_ENTRY_VERSION = 'tintin-20261030-home-history-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20261023-variant-engine-v2-2';
+const VISUAL_BUILDER_VERSION = 'tintin-20261030-home-history-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261027-welcome-receipt-1';
 const PROFILE_GATE_VERSION = 'tintin-20261027-welcome-receipt-1';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
@@ -506,7 +506,7 @@ function ensureShellScript(html) {
   return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
 }
 
-function centralizeRuntime(html) {
+function centralizeRuntime(html, page) {
   let out = replaceUntilStable(
     html,
     /\s*<script\b[^>]*src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js[^"']*["'][^>]*><\/script\s*>/gi,
@@ -516,6 +516,11 @@ function centralizeRuntime(html) {
     out = out.replace('</body>', `<script src="tienda.js?v=${TIENDA_VERSION}" defer></script>\n</body>`);
   } else {
     out = out.replace(/(<script\b[^>]*src=["']tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${TIENDA_VERSION}$2`);
+  }
+  // Las páginas informativas no pintan tarjetas antes de pedir Buscar.
+  // El loader de productos carga su autoridad de fotos antes de publicar datos.
+  if (/^(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad|404)\.html$/.test(page)) {
+    return out.replace(/\s*<script\b[^>]*src=["']\/?js\/components\/images\/galeria-producto\.js[^"']*["'][^>]*><\/script>/gi, '');
   }
   // Todas las tarjetas comparten la misma autoridad de fotos y paleta.
   // Los scripts defer conservan este orden antes del renderer clásico.
@@ -611,7 +616,7 @@ for (const page of PUBLIC_PAGES) {
   html = ensureStyles(html);
   html = ensureNavigationPreloads(html);
   html = ensureShellScript(html);
-  html = centralizeRuntime(html);
+  html = centralizeRuntime(html, page);
   html = versionFirstPaint(html);
   html = versionRuntimeLoader(html);
   html = versionStoreGate(html);

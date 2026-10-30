@@ -1,9 +1,9 @@
+import { readAccountOrdersIndexPage } from './indice-pedidos-perfil.js?v=tintin-20261030-home-history-1';
 import { ordersForView } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
-import { collection, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
-import { reconcileAccountOrders } from './estado-canonico-perfil.mjs?v=tintin-20261022-avatar-inicial-1';
 import { ORDER_LIFECYCLE_LABELS, orderStatusLabel, orderTimeline, customerOrderMessage } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 
 const PAGE = /(?:^|\/)perfil(?:\.html)?\/?$/i;
@@ -74,67 +74,103 @@ function orderMarkup(order) {
   return `<article class="perfil-order-row" id="pedido-${anchor}" data-order-id="${escapeHtml(id)}" aria-label="Pedido ${escapeHtml(displayNumber)}"><div class="tt-profile-order-head"><h3 class="tt-profile-order-meta">Pedido #${escapeHtml(displayNumber)}<span class="tt-profile-order-date">${dateText}</span></h3>${statusBadge(order)}</div><div class="tt-profile-order-items">${summary || 'Sin detalle de productos'}${extra}</div><div class="tt-profile-order-total">Total: ${money(order.total)}</div><details class="tt-profile-order-details"><summary>Ver seguimiento y detalle</summary>${timeline(order)}<div class="tt-profile-order-grid"><div><strong>Pago</strong>${escapeHtml(paymentText(order))}</div><div><strong>Entrega</strong>${escapeHtml(deliveryText(order))}</div><div><strong>Dirección</strong>${escapeHtml(addressText(order))}</div><div><strong>Número de pedido</strong>${escapeHtml(displayNumber)}</div><div class="tt-profile-order-lines"><strong>Productos</strong>${lines || 'Sin detalle de productos'}${breakdown}<div class="tt-profile-order-line"><span>Total</span><strong>${money(order.total)}</strong></div></div>${invoice}</div></details></article>`;
 }
 
-export function createProfileOrdersController({ subscribe, render, onStatus, onStats }) {
-  let generation = 0;
-  let stops = [];
-  let identity = null;
-  let slices = [];
-  let ready = [];
-  let current = [];
-  let failures = [];
-  const stop = () => { generation++; stops.forEach(fn => fn()); stops=[]; identity=null; slices=[]; ready=[]; current=[]; failures=[]; };
-  function start(user) {
-    stop();
-    if (!user?.uid) { render([],{empty:true,reset:true}); onStats(null); onStatus('signed-out'); return; }
-    identity = {uid:user.uid,email:clean(user.email).toLowerCase()};
-    const token = generation;
-    const filters = [['userId',user.uid]];
-    if (user.email) filters.push(['userEmail',user.email]);
-    if (identity.email && identity.email !== user.email) filters.push(['userEmail',identity.email]);
-    slices = filters.map(() => []);
-    ready = filters.map(() => false);
-    failures = filters.map(() => null);
-    onStatus('loading');
-    render([],{loading:true});
-    const callbacks = filters.map(([field,value],index) => ({
-      next: rows => {
-        if (token !== generation || !identity) return;
-        slices[index] = rows;
-        failures[index] = null;
-        ready[index] = true;
-        current = ordersForView(reconcileAccountOrders(slices)).sort((a,b) => timestamp(b)-timestamp(a));
-        // Compras/total sólo son confirmados cuando respondieron todas las
-        // identidades sin error; si no, "—" en vez de un cero o un parcial.
-        const complete = ready.every(Boolean) && !failures.some(Boolean);
-        onStats(complete ? calculateOrderStats(current) : null);
-        if (!current.length && !ready.every(Boolean)) return;
-        render(current,{empty:current.length===0 && complete,partial:failures.some(Boolean)});
-        onStatus(failures.some(Boolean) ? 'partial' : complete ? 'ready' : 'loading', failures.find(Boolean) || null);
-      },
-      fail: failure => {
-        if (token !== generation) return;
-        failures[index] = failure;
-        ready[index] = true;
-        onStats(null);
-        // Una consulta secundaria (por correo) no debe ocultar los pedidos
-        // ya encontrados por UID ni cancelar su onSnapshot.
-        if (current.length || slices.some(rows => rows.length)) {
-          render(current,{partial:true});
-          onStatus('partial', failure);
-          return;
-        }
-        if (ready.every(Boolean)) {
-          onStatus('error',failure);
-          render([], {error:failure});
-        }
-      }, field, value
-    }));
-    for (const callback of callbacks) {
-      const unsubscribe = subscribe(callback.field,callback.value,callback.next,callback.fail);
-      stops.push(unsubscribe);
+export function createProfileOrdersController({ readIndexPage, subscribe, subscribeRevision = () => () => {}, render, onStatus, onStats, requestedId = () => '' }) {
+  let generation = 0, revision = 0, identity = null, user = null;
+  let abort = null, stopRevision = null, visible = 5;
+  let index = new Map(), details = new Map(), listeners = new Map(), pending = new Set(), failures = new Map();
+  let current = [], indexReady = false, indexFailure = null;
+  const ordered = () => [...index.values()].sort((a,b) => timestamp(b)-timestamp(a) || String(a.id).localeCompare(String(b.id)));
+  const wanted = () => {
+    const ids = ordered().slice(0,visible).map(order => order.id);
+    const requested = requestedId();
+    if (index.has(requested) && !ids.includes(requested)) ids.push(requested);
+    return ids;
+  };
+  function paint() {
+    const ids = wanted();
+    current = ids.map(id => details.get(id)).filter(Boolean).sort((a,b) => timestamp(b)-timestamp(a));
+    const failed = indexFailure || [...failures.values()][0];
+    const complete = indexReady && !failed;
+    onStats(complete ? calculateOrderStats([...index.values()]) : null);
+    render(current,{loading:!indexReady || pending.size>0, empty:complete && index.size===0, partial:!!failed, stale:!!failed && current.length>0, error:failed && !current.length ? failed : null, hasMore:complete && visible<index.size});
+    onStatus(failed ? current.length ? 'partial' : 'error' : !indexReady || pending.size ? 'loading' : 'ready', failed || null);
+  }
+  function clearListeners() {
+    listeners.forEach(stop => stop());
+    listeners.clear();
+    pending.clear();
+    failures.clear();
+  }
+  function syncListeners(token, operation) {
+    const ids = wanted();
+    for (const [id,stop] of listeners) if (!ids.includes(id)) {stop(); listeners.delete(id); details.delete(id); pending.delete(id); failures.delete(id);}
+    for (const id of ids) {
+      if (listeners.has(id)) continue;
+      pending.add(id);
+      // Registrar primero: un adaptador puede responder sincrónicamente.
+      listeners.set(id,()=>{});
+      const stop = subscribe(id, order => {
+        if (token !== generation || operation !== revision) return;
+        pending.delete(id); failures.delete(id);
+        if (order) {details.set(id,{...order,id}); index.set(id,{...order,id});}
+        else {details.delete(id); index.delete(id);}
+        paint();
+      }, error => {
+        if (token !== generation || operation !== revision) return;
+        pending.delete(id); failures.set(id,error); paint();
+      });
+      if (token !== generation || operation !== revision) stop?.();
+      else listeners.set(id,stop || (()=>{}));
+    }
+    paint();
+  }
+  async function refresh() {
+    if (!user) return;
+    abort?.abort();
+    clearListeners();
+    const token = generation, operation = ++revision, actor = user;
+    abort = new AbortController();
+    const signal = abort.signal;
+    indexReady=false; indexFailure=null;
+    onStats(null); onStatus('loading');
+    render(current,{loading:true,stale:current.length>0});
+    try {
+      const rows = new Map(), seen = new Set();
+      let cursor='', readTime='';
+      do {
+        const page = await readIndexPage({user:actor,cursor,readTime,signal});
+        if (token !== generation || operation !== revision) return;
+        if (!Array.isArray(page.items) || page.items.some(row=>!row || typeof row.id!=='string' || !row.id)) throw new Error('Índice de historial inválido.');
+        if (readTime && page.readTime !== readTime) throw new Error('La revisión del historial cambió durante la lectura.');
+        if (page.cursor && (!page.readTime || seen.has(page.cursor))) throw new Error('El historial no pudo avanzar.');
+        page.items.forEach(row => rows.set(row.id,row));
+        cursor=page.cursor || ''; readTime=page.readTime || readTime;
+        if(cursor)seen.add(cursor);
+      } while(cursor);
+      index=new Map(ordersForView([...rows.values()]).map(order=>[order.id,order]));
+      indexReady=true;
+      for (const id of details.keys()) if (!index.has(id)) details.delete(id);
+      syncListeners(token,operation);
+    } catch(error) {
+      if(token!==generation || operation!==revision || signal.aborted)return;
+      indexFailure=error; paint();
     }
   }
-  return { start, stop, get identity(){return identity;}, get orders(){return current.slice();} };
+  function stop() {
+    generation++; revision++;
+    abort?.abort(); abort=null;
+    clearListeners(); stopRevision?.(); stopRevision=null;
+    identity=null; user=null; index.clear(); details.clear(); current=[]; indexReady=false; indexFailure=null;
+  }
+  function start(actor) {
+    stop(); visible=5;
+    if(!actor?.uid) {render([],{empty:true,reset:true}); onStats(null); onStatus('signed-out'); return Promise.resolve();}
+    user=actor; identity={uid:actor.uid,email:clean(actor.email).toLowerCase()};
+    const token=generation;
+    stopRevision=subscribeRevision(actor,()=>{if(token===generation)void refresh();},error=>{if(token===generation){indexFailure=error;paint();}});
+    return refresh();
+  }
+  return {start,stop,refresh,more(){visible+=10;if(indexReady)syncListeners(generation,revision);},reveal(){if(indexReady)syncListeners(generation,revision);},get identity(){return identity;},get orders(){return current.slice();}};
 }
 
 export function startProfileOrders() {
@@ -151,28 +187,24 @@ export function startProfileOrders() {
   status.setAttribute('role','status');
   status.setAttribute('aria-live','polite');
   list.before(status);
-  let visible = 5;
-  let lastOrders = [];
-  let lastOptions = {};
   let currentUser = null;
   let authStop = null;
   let permissionRecoveryAttempted = false;
   let stopped = false;
   let focusedOrderId = '';
   const render = (orders,options={}) => {
-    lastOrders = orders;
-    lastOptions = options;
     if (card) card.style.display = 'block';
     if (options.reset) { list.replaceChildren(); list.setAttribute('aria-busy','true'); return; }
     if (options.error && !options.stale) { list.innerHTML = '<div class="tt-profile-state" role="alert">No pudimos cargar tus pedidos. <button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-retry>Reintentar</button></div>'; list.setAttribute('aria-busy','false'); return; }
     if (options.empty) { list.innerHTML = '<div class="tt-profile-state">Todavía no tenés pedidos.<br><a href="/catalogo" class="perfil-btn perfil-btn-outline">Ver productos →</a></div>'; list.setAttribute('aria-busy','false'); return; }
+    const focusedMore = document.activeElement?.matches?.('[data-profile-orders-more]');
     const openIds = new Set([...list.querySelectorAll('article[data-order-id] details[open]')].map(node=>node.closest('article').dataset.orderId));
     const requested = String(location.hash||'').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1];
-    const requestedIndex = requested ? orders.findIndex(order => order.id === requested) : -1;
-    if (requestedIndex >= visible) visible = requestedIndex + 1;
-    list.innerHTML = orders.slice(0,visible).map(orderMarkup).join('') + (orders.length > visible ? '<button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-more>Cargar más pedidos</button>' : '') + (options.partial ? '<button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-retry>Reintentar sincronización</button>' : '');
+    if(options.loading && !orders.length) {list.innerHTML='<div class="tt-profile-state">Cargando pedidos…</div>';list.setAttribute('aria-busy','true');return;}
+    list.innerHTML = orders.map(orderMarkup).join('') + (options.hasMore ? '<button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-more>Cargar más pedidos</button>' : '') + (options.partial ? '<button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-retry>Reintentar sincronización</button>' : '');
     for (const article of list.querySelectorAll('article[data-order-id]')) if (openIds.has(article.dataset.orderId)) article.querySelector('details')?.setAttribute('open','');
-    list.setAttribute('aria-busy','false');
+    list.setAttribute('aria-busy',String(Boolean(options.loading)));
+    if(focusedMore)list.querySelector('[data-profile-orders-more]')?.focus({preventScroll:true});
     if (requested) {
       const target=document.getElementById(`pedido-${requested}`);
       if (target) {
@@ -187,7 +219,7 @@ export function startProfileOrders() {
       }
     }
   };
-  window.addEventListener('hashchange', () => render(lastOrders,lastOptions));
+  window.addEventListener('hashchange', () => controller.reveal());
   const profileAppCheckReady = async () => {
     if (window.TintinAppCheckStatus === 'enabled') return true;
     const ready = await Promise.resolve(appCheckReady).catch(() => false);
@@ -195,7 +227,18 @@ export function startProfileOrders() {
   };
   const secureUnavailable = () => { status.dataset.state='error'; status.textContent='No pudimos validar la conexión segura para sincronizar tus pedidos. Reintentaremos cuando esté disponible.'; };
   const controller = createProfileOrdersController({
-    subscribe: (field,value,next,fail) => onSnapshot(query(collection(db,'orders'),where(field,'==',value)),snapshot=>next(snapshot.docs.map(doc=>({id:doc.id,...doc.data()}))),fail),
+    readIndexPage: readAccountOrdersIndexPage,
+    requestedId: () => String(location.hash||'').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1] || '',
+    subscribe: (id,next,fail) => onSnapshot(doc(db,'orders',id),snapshot=>next(snapshot.exists()?{...snapshot.data(),id:snapshot.id}:null),fail),
+    subscribeRevision: (user,next,fail) => {
+      let previous=null;
+      return onSnapshot(doc(db,'users',user.uid),snapshot=>{
+        const data=snapshot.data()||{};
+        const signature=JSON.stringify([data.profileStatsUpdatedAt,data.orderStats,data.orderCount,data.totalSpent]);
+        if(previous!==null && previous!==signature)next();
+        previous=signature;
+      },fail);
+    },
     render,
     onStatus: (state,error) => {
       status.dataset.state=state;
@@ -220,9 +263,9 @@ export function startProfileOrders() {
     }
     const secure = await profileAppCheckReady();
     if (!secure) { secureUnavailable(); return; }
-    if (!stopped && getSessionUser()?.uid===currentUser.uid) controller.start(currentUser);
+    if (!stopped && getSessionUser()?.uid===currentUser.uid) void controller.refresh();
   };
-  list.addEventListener('click',event=>{ if(event.target.closest('[data-profile-orders-more]')){visible+=10;render(lastOrders,lastOptions);} if(event.target.closest('[data-profile-orders-retry]'))void retry(); });
+  list.addEventListener('click',event=>{ if(event.target.closest('[data-profile-orders-more]')){controller.more();} if(event.target.closest('[data-profile-orders-retry]'))void retry(); });
   const onOnline = () => void retry();
   const onVisible = () => { if(!document.hidden && ['error','partial'].includes(status.dataset.state))void retry(); };
   const onAppCheckReady = event => { if (event?.detail?.ready === true) void retry(); };
@@ -234,9 +277,12 @@ export function startProfileOrders() {
     if(stopped || snapshot.status===AUTH_STATES.RESTORING) return;
     if(snapshot.status===AUTH_STATES.UNKNOWN){ status.textContent='Verificando tu sesión…'; return; }
     const user=snapshot.user;
+    if(user?.uid!==currentUser?.uid) {
+      controller.stop(); render([],{reset:true});
+      if(count)count.textContent='—'; if(total)total.textContent='—';
+    }
     currentUser=user;
     permissionRecoveryAttempted=false;
-    visible=5;
     void (async()=>{const secure=user?await profileAppCheckReady():true;if(user&&!secure){secureUnavailable();return;}if(!stopped && getSessionUser()?.uid===user?.uid)controller.start(user);})();
   });
   window.TintinProfileOrders={refresh:retry,stop:()=>controller.stop()};

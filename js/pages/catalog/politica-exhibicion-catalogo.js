@@ -158,7 +158,7 @@ export function productMerchandisingState(product, now = Date.now()) {
   };
 }
 
-window.TintinCatalogMerchandising = Object.freeze({
+if (typeof window !== 'undefined') window.TintinCatalogMerchandising = Object.freeze({
   NEW_PRODUCT_WINDOW_MS,
   timestampToMillis,
   productCreatedAtMillis,
@@ -170,3 +170,14 @@ window.TintinCatalogMerchandising = Object.freeze({
   sortCatalogProducts,
   productMerchandisingState,
 });
+
+export function chooseHomeIds(ids, count, previous = [], reroll = false, random = Math.random) {
+  const pool = [...new Set(ids)];
+  const size = Math.min(count, pool.length);
+  if (!reroll && previous.length === size && previous.every(id => pool.includes(id))) return previous.slice();
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, size);
+}

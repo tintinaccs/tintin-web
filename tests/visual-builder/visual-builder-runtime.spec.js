@@ -198,3 +198,39 @@ test('la variante "Dividido" arma 2 columnas con imagen y no deja una columna va
   await expect(withImage).toHaveCSS('display', 'grid');
   await expect(withoutImage).not.toHaveCSS('display', 'grid');
 });
+
+test('bloques de Inicio hidratan su categoría fuera de los destacados y conservan todas las colecciones', async ({ page }) => {
+  await page.goto(`${baseUrl}/index.html`);
+  await page.evaluate(() => {
+    document.body.replaceChildren();
+    const frame = document.createElement('iframe');
+    frame.id = 'demand-preview';
+    frame.src = '/index.html?ttVisualPreview=1';
+    document.body.appendChild(frame);
+  });
+  const frame = page.frameLocator('#demand-preview');
+  await expect(frame.locator('html')).toHaveAttribute('data-tt-visual-builder', /ready|fallback/, { timeout: 30000 });
+  await page.evaluate(() => {
+    const target = document.getElementById('demand-preview').contentWindow;
+    target.__homeBlockReads = [];
+    target.PRODUCTS = [{id:'featured',name:'Destacado',category:'anillos',price:100,stock:1}];
+    target.TintinProductsStore = {
+      homeSelection: {featured:['featured']},
+      homeIndex: [{id:'featured',data:{category:'anillos'}},{id:'bag',data:{category:'bolsos'}}],
+      readHomeBlock: async block => {
+        target.__homeBlockReads.push({category:block.category,count:block.count});
+        return [{id:'bag',name:'Bolso fuera de destacados',category:'bolsos',price:100,stock:1}];
+      }
+    };
+    target.postMessage({type:'tintin:visual-preview',pageId:'index',config:{customBlocks:[
+      {id:'demand-products',type:'products',afterSection:'hero',category:'bolsos',count:4},
+      {id:'all-categories',type:'collections',afterSection:'hero',count:8}
+    ]}},location.origin);
+  });
+  const block = frame.locator('[data-tt-visual-block="demand-products"]');
+  await expect(block).toContainText('Bolso fuera de destacados');
+  await expect(block.locator('.tt-visual-product-card')).toHaveAttribute('href','/product?id=bag');
+  await expect(frame.locator('[data-tt-visual-block="all-categories"]')).toContainText('bolsos');
+  expect(await page.evaluate(()=>document.getElementById('demand-preview').contentWindow.__homeBlockReads)).toEqual([{category:'bolsos',count:4}]);
+  expect(await page.evaluate(()=>document.getElementById('demand-preview').contentWindow.PRODUCTS.map(product=>product.id))).toEqual(['featured']);
+});

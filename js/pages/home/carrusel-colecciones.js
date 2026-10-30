@@ -1,4 +1,4 @@
-import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261029-performance-1';
+import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261030-home-history-1';
 
 const IMAGE_BASE = '/assets-tintin/images/collections/';
 const PLACEHOLDER = `${IMAGE_BASE}col-placeholder.webp`;

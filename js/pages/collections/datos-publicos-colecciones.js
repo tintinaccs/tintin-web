@@ -3,7 +3,7 @@ import { wristCategory, unifyWristCollections } from '../../core/store/categoria
 import { cleanText, cleanMultilineText } from '../../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { readCached, readStaleCached, runSingleFlight, writeCached } from '../../core/firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
-import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20261029-performance-1';
+import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20261030-home-history-1';
 export const CACHE_KEY = 'collections:public:unified-v2';
 const CACHE_TTL = 30 * 60 * 1000;
 let pageRead = null;

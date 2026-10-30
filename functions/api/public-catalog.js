@@ -1,3 +1,4 @@
+import { homeProductIndex } from '../../cloudflare/indice-inicio.mjs';
 import {productIsPublished} from '../../js/core/store/estado-editorial-producto.mjs';
 import { wristCategory, unifyWristCollections } from '../../js/core/store/categorias-pulseras.mjs';
 import {
@@ -89,7 +90,7 @@ async function buildPayload(env, resource, productId = '', productIds = []) {
     };
   }
 
-  const docs = await firestoreAdminListAll(env, resource, resource === 'products' ? 1000 : 300);
+  const docs = await firestoreAdminListAll(env, resource, resource === 'products' ? 5000 : 300, {failOnTruncation:true});
   const allowed = resource === 'products' ? PRODUCT_FIELDS : COLLECTION_FIELDS;
   let items = docs.map(document => ({
     id: documentId(document),
@@ -159,9 +160,14 @@ export async function onRequest({ request, env, waitUntil }) {
     }
   }
 
+  const homeIndex = url.searchParams.get('view') === 'home-index';
+  if (url.searchParams.has('view') && (!homeIndex || resource !== 'products' || productId || productIds.length)) {
+    return Response.json({ok:false,error:'catalog_view_invalid'},{status:400,headers:{'cache-control':'no-store'}});
+  }
   const cacheUrl = new URL(request.url);
   cacheUrl.search = '?resource=' + resource + (productId ? '&id=' + encodeURIComponent(productId) : '');
   if (productIds.length) cacheUrl.searchParams.set('ids',JSON.stringify(productIds));
+  if (homeIndex) cacheUrl.searchParams.set('view','home-index');
   if (resource === 'collections') cacheUrl.searchParams.set('schema', 'unified-v2');
   const cacheKey = new Request(cacheUrl.toString(), { method: 'GET' });
   const cache = caches.default;
@@ -173,7 +179,21 @@ export async function onRequest({ request, env, waitUntil }) {
   }
 
   try {
-    const payload = await buildPayload(env, resource, productId, productIds);
+    // Índice y catálogo completo comparten el snapshot edge: abrir Buscar
+    // después de Inicio no vuelve a recorrer Firestore.
+    const fullUrl = new URL(cacheUrl);
+    fullUrl.searchParams.delete('view');
+    const fullKey = new Request(fullUrl.toString(), {method:'GET'});
+    const base = homeIndex ? await cache.match(fullKey) : null;
+    const payload = base ? await base.json() : await buildPayload(env, resource, productId, productIds);
+    if (homeIndex && !base) {
+      const task = cache.put(fullKey, Response.json(payload,{headers:{'cache-control':'public, max-age=5, s-maxage=10','x-content-type-options':'nosniff'}}));
+      if(typeof waitUntil==='function')waitUntil(task);else await task;
+    }
+    if (homeIndex) {
+      payload.items = homeProductIndex(payload.items);
+      payload.count = payload.items.length;
+    }
     const response = Response.json(payload, {
       headers: {
         'cache-control': 'public, max-age=5, s-maxage=10',

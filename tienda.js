@@ -620,7 +620,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261029-performance-1')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261030-home-history-1')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -839,11 +839,13 @@ function renderRandomHomeProducts(options = {}) {
     seen.add(key);
     return true;
   });
-  const selection = pickStable(pool, 5, homeSelectionKeys, options.reroll === true);
+  const home = window.TintinProductsStore?.homeSelection;
+  const selection = home ? home.discovery.map(id => pool.find(product => String(product.id) === id)).filter(Boolean)
+    : pickStable(pool, 5, homeSelectionKeys, options.reroll === true);
   homeSelectionKeys = selection.map(productKey);
   renderProductsGrid('products-grid', selection);
   // "Ver otra selección" solo tiene sentido si quedan productos sin mostrar.
-  setHomeRefreshVisible(pool.length > selection.length);
+  setHomeRefreshVisible((home?.poolSize ?? pool.length) > selection.length);
 }
 window.renderRandomHomeProducts = renderRandomHomeProducts;
 
@@ -882,10 +884,12 @@ function renderLookCombo(options = {}) {
     return;
   }
   setLookSectionVisible(true);
-  currentCombo = pickStable(productPool, 3, lookSelectionKeys, options.reroll === true);
+  const home = window.TintinProductsStore?.homeSelection;
+  currentCombo = home ? home.look.map(id => productPool.find(product => String(product.id) === id)).filter(Boolean)
+    : pickStable(productPool, 3, lookSelectionKeys, options.reroll === true);
   lookSelectionKeys = currentCombo.map(productKey);
   const otra = document.getElementById('btn-otra-combo');
-  if (otra) otra.style.display = productPool.length > currentCombo.length ? '' : 'none';
+  if (otra) otra.style.display = (home?.poolSize ?? productPool.length) > currentCombo.length ? '' : 'none';
   const add = document.getElementById('btn-add-combo');
   if (add) add.disabled = false;
 
@@ -913,6 +917,33 @@ function renderLookCombo(options = {}) {
   }).join(''));
 }
 
+async function rerollHome(kind, button) {
+  button.disabled = true;
+  button.setAttribute('aria-busy', 'true');
+  try {
+    if (window.TintinProductsStore?.rerollHome) await window.TintinProductsStore.rerollHome(kind);
+    else if (kind === 'look') renderLookCombo({reroll:true});
+    else renderRandomHomeProducts({reroll:true});
+    button.removeAttribute('title');
+    const status = document.getElementById('home-selection-status');
+    if (status) status.textContent = '';
+  } catch (error) {
+    console.warn('[home-selection]', error);
+    button.title = 'No pudimos actualizar la selección. Volvé a intentar.';
+    let status = document.getElementById('home-selection-status');
+    if (!status) {
+      status = document.createElement('p');
+      status.id = 'home-selection-status';
+      status.setAttribute('role', 'status');
+      button.after(status);
+    }
+    status.textContent = button.title;
+  } finally {
+    button.disabled = false;
+    button.removeAttribute('aria-busy');
+  }
+}
+
 function initLookCombinator() {
   const btnOtra = document.getElementById('btn-otra-combo');
   const btnAdd = document.getElementById('btn-add-combo');
@@ -926,7 +957,7 @@ function initLookCombinator() {
   if (btnOtra && !btnOtra.dataset.ttBound) {
     btnOtra.dataset.ttBound = '1';
     btnOtra.addEventListener('click', () => {
-      renderLookCombo({ reroll: true });
+      void rerollHome('look', btnOtra);
     });
   }
 
@@ -2416,7 +2447,7 @@ function initProductsLoadState() {
     if (event.persisted && grid.dataset.loadState === 'error') retryProductsLoad();
   });
   document.getElementById('btn-home-random-products')
-    ?.addEventListener('click', () => renderRandomHomeProducts({ reroll: true }));
+    ?.addEventListener('click', event => void rerollHome('discovery', event.currentTarget));
 }
 
 document.addEventListener('DOMContentLoaded', () => {

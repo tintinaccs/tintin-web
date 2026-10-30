@@ -49,18 +49,20 @@ test('preferencia aislada por usuario y rol; los snapshots originales sobreviven
  assert.equal(samples[0].orderNumber,'TINPED01');
 });
 
-test('el controlador real del perfil filtra antes de renderizar y sumar aunque una consulta tardía vuelva a traer pruebas',async()=>{
- const {reconcileAccountOrders}=await import('../../js/pages/profile/estado-canonico-perfil.mjs');
- const source=fs.readFileSync(new URL('../../js/pages/profile/pedidos-perfil.js',import.meta.url),'utf8');
+test('el controlador real del perfil filtra pruebas antes de hidratar detalles y sumar, e ignora entregas de otra cuenta',async()=>{
+ const {profileOrdersFactory}=await import('../helpers/profile-orders-controller.mjs');
  const callbacks=[],renders=[],stats=[];
- const context={ordersForView,reconcileAccountOrders,calculateOrderStats:statsRuntime(),clean:v=>String(v??'').trim(),timestamp:()=>0};vm.createContext(context);
- vm.runInContext(source.slice(source.indexOf('export function createProfileOrdersController'),source.indexOf('export function startProfileOrders')).replace('export ',''),context);
- const controller=context.createProfileOrdersController({subscribe:(field,value,next,fail)=>{callbacks.push({next,fail});return()=>{};},render:rows=>renders.push(rows),onStatus(){},onStats:value=>stats.push(value)});
- controller.start({uid:'real_customer',email:'customer@example.test'});callbacks[0].next(samples);callbacks[1].next(samples.slice(0,25));
- assert.deepEqual(Array.from(renders.at(-1),o=>o.id),['fixture_26','fixture_27']);assert.equal(stats.at(-1).totalOrders,2);assert.equal(stats.at(-1).totalSpent,215000);
- controller.start({uid:'other'});callbacks[0].next(samples);assert.equal(renders.at(-1).length,0);assert.equal(controller.orders.length,0);
+ const controller=profileOrdersFactory()({
+  readIndexPage:async({user})=>({items:user.uid==='real_customer'?samples:[],cursor:'',readTime:'same'}),
+  subscribe:(id,next,fail)=>{callbacks.push({id,next,fail});return()=>{};},
+  render:rows=>renders.push(rows),onStatus(){},onStats:value=>stats.push(value),
+ });
+ await controller.start({uid:'real_customer',email:'customer@example.test'});
+ assert.deepEqual(callbacks.map(c=>c.id).sort(),['fixture_26','fixture_27']);
+ for(const c of callbacks)c.next(samples.find(order=>order.id===c.id));
+ assert.deepEqual(Array.from(renders.at(-1),o=>o.id).sort(),['fixture_26','fixture_27']);assert.equal(stats.at(-1).totalOrders,2);assert.equal(stats.at(-1).totalSpent,215000);
+ await controller.start({uid:'other'});callbacks[0].next(samples[26]);assert.equal(renders.at(-1).length,0);assert.equal(controller.orders.length,0);
 });
-
 
 test('la exportación legacy aplica el corte también cuando el código sólo existe como ID del documento',async()=>{
  const source=fs.readFileSync(new URL('../../js/admin/admin-app.js',import.meta.url),'utf8');

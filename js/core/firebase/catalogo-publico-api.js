@@ -21,11 +21,16 @@ export async function fetchPublicProductsByIds(ids) {
   return items;
 }
 
-async function fetchResource(normalized, ids = []) {
+export function fetchPublicHomeIndex() {
+  return runSingleFlight('public-catalog:home-index',()=>fetchResource('products', [], 'home-index'));
+}
+
+async function fetchResource(normalized, ids = [], view = '') {
   const controller = new AbortController();
   const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
     const params=new URLSearchParams({resource:normalized});
+    if(view)params.set('view',view);
     if(ids.length)params.set('ids',JSON.stringify(ids));
     const response = await fetch(ENDPOINT + '?' + params, {
       method: 'GET',
