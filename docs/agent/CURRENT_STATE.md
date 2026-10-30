@@ -4978,3 +4978,11 @@ regenerados desde las fuentes combinadas y la política de main vigente.
 Dependencias instaladas desde el lock actual en el worktree aislado.
 PASS_LOCAL tras conciliar:238/238 Node22 (login/cuentas, carrito y presentación
 canónica) y4/4 Chromium de formato. El nuevo SHA exige CI propia.
+
+Barrido de consumidores del campo:se alinean otras dos aserciones de valor
+visible (whatsapp-feedback-responsive y critical-flows/offline) al teléfono
+con guiones. Se conservan sus comprobaciones de errores, reconexión y guardado.
+PASS_LOCAL:7/7 recorridos de feedback del registro;2/2 offline en Chromium
+desktop/móvil con SDK oficiales y Auth/Firestore emulados;2/2 alta completa,
+OTP, teléfono internacional persistido y sesión conservada en el mismo entorno
+local aislado. Sin servicios ni datos productivos. No cambia código de producto.

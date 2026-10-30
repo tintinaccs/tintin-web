@@ -97,7 +97,7 @@ test('sin conexión conserva datos, libera Continuar y permite un reintento real
   await context.setOffline(true);await continueProfile(page);
   await expect(page.locator('#login-error')).toContainText('No tenés conexión');
   await expect(page.locator('#btn-save-profile')).toBeEnabled();
-  await expect(page.locator('#login-profile-phone')).toHaveValue('0981123456');
+  await expect(page.locator('#login-profile-phone')).toHaveValue('0981-123-456');
   await context.setOffline(false);
   await page.locator('#login-profile-phone').press('Enter');await expect(page).toHaveURL(/index\.html/);
   expect((await state(request,email)).profile.profileStatus).toBe('active');
