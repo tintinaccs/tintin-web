@@ -1,4 +1,5 @@
 import {handleProductEditor} from '../../cloudflare/product-editor-handler.mjs';
+import {handleAuditRequest} from '../../cloudflare/registro-auditoria.mjs';
 import { rateLimitErrorResponse,
   assertOrderStaffPermission,
   jsonResponse,
@@ -52,6 +53,7 @@ export async function onRequest(context) {
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > 750000) throw new Error('Solicitud inválida.');
     const body = JSON.parse(raw);
+    if (body.action === 'appendAudit') return handleAuditRequest(context, { input: body.entry });
     if(['saveProduct','bulkProducts','readProductWork','saveProductWork','listProductWork','discardProductWork'].includes(body.action))return handleProductEditor(context,body,origin);
     if(new TextEncoder().encode(raw).byteLength > 64 * 1024)throw new Error('Solicitud inválida.');
     const actor = body.action === 'updatePayment' || body.action === 'recordEmailResend'

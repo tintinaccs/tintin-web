@@ -214,10 +214,10 @@ check(
 // ===========================================================================
 check(
   'Cada registro de auditoría guarda actor, acción, objetivo, fecha y si fue masivo',
-  admin.includes('actorEmail: currentUser?.email') &&
-    admin.includes('actorRole: currentRole') &&
+  read('cloudflare/registro-auditoria.mjs').includes('actorId: actor.uid, actorEmail: actor.email, actorRole: actor.role, createdAt: now()') &&
+    admin.includes('await recordAuditEntry(entry)') &&
     admin.includes('bulk: !!(meta && meta.bulk)') &&
-    admin.includes('createdAt: serverTimestamp()'),
+    /allow create: if false;/.test(rules.slice(rules.indexOf('match /auditLog/{logId}'))),
   'El log debe registrar quién, qué, sobre qué, cuándo y si fue una acción en lote.'
 );
 check(
