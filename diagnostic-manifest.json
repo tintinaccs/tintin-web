@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "4b1ad0adbfbff03e63454a7631cbd698b1920b18a6d332fdf1cf21abaa736e15",
+  "sourceFingerprint": "b925a8866cd3551e1d2784cf5073f9b2544d2fed48278efeb34b3cb90a4818f3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1650,
     "textFiles": 1515,
-    "totalBytes": 39902689,
+    "totalBytes": 39911920,
     "pages": 19,
     "modules": 1100
   },
@@ -17571,8 +17571,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 72695,
-      "sha256": "647d80da1408ebd9e22a85d4059b56645d55d62eb2ed69d8a9b13ea7058fd4ef",
+      "bytes": 75264,
+      "sha256": "3900efa81c9db21616f0e8a3241afd8314a4d676a428f140fb0c65edc4f37ce0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17640,22 +17640,22 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 1297
+          "line": 1347
         },
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 1298
+          "line": 1348
         },
         {
           "raw": "tienda.js?v=tintin-20261030-home-history-5",
           "target": "tienda.js",
-          "line": 1299
+          "line": 1349
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1300
+          "line": 1350
         }
       ],
       "styles": [
@@ -17937,25 +17937,25 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 1297,
+          "line": 1347,
           "exists": true
         },
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 1298,
+          "line": 1348,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261030-home-history-5",
           "target": "tienda.js",
-          "line": 1299,
+          "line": 1349,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1300,
+          "line": 1350,
           "exists": true
         },
         {
@@ -26037,7 +26037,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 265129,
-      "sha256": "a12f5a99dc0565e1fbbf528144e741998a813862ab56f90702e6132eb0db5617",
+      "sha256": "5c70ae67b25d5c0d18004a8265b058bbb12b8d249494d3ad99a7fd205363614f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -50728,8 +50728,8 @@
     },
     {
       "path": "tests/login/profile-availability-recovery.spec.js",
-      "bytes": 14668,
-      "sha256": "fcba6379556edc45fd081f06004730013b167d181dff1b2636278bc005be372b",
+      "bytes": 16980,
+      "sha256": "63ac3284e50e1e0dd0e2b5b5b8c134f8f334332c6b0f08e3c81f05d7438a6826",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55092,8 +55092,8 @@
     },
     {
       "path": "tests/runtime/critical-flows.spec.js",
-      "bytes": 19715,
-      "sha256": "5f173836d45aca802a52db517d34469b0b942c8a87c96342bb36f033bab4f217",
+      "bytes": 19717,
+      "sha256": "cf3bac7e44daa6d17fa31eb6e176d430137b358307aefeb3b0bb052a9d909c61",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57759,7 +57759,7 @@
     {
       "path": "tests/ui-ux/onboarding-form-browser.test.mjs",
       "bytes": 7136,
-      "sha256": "86c633e67c2960bb0245443b64a3ada08991b99806611f5baa604241ca2cab66",
+      "sha256": "b2639b0e95bada5e037f7584f2ebae24808a078d66072e51f226b7d324367194",
       "syntax": {
         "ok": true,
         "error": ""
@@ -58641,8 +58641,8 @@
     },
     {
       "path": "tests/ui-ux/whatsapp-feedback-responsive.spec.js",
-      "bytes": 11044,
-      "sha256": "82b4ffa378651c8ad01000a84414c67dd187cdcdeb78d8aa4e8a3ea7fb7cfb05",
+      "bytes": 11046,
+      "sha256": "a1505d58082257e3879d063fe6666f28deef1902dde89e54e556d78abb0ab9f9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -59542,7 +59542,7 @@
       "path": "_headers",
       "extension": "",
       "bytes": 4589,
-      "sha256": "4e77dfc6f01e70abac3479a32d45467ef4fedbd64a0bc0ef64469e714bee8aaa"
+      "sha256": "e35bf583847eff1bfe0dada44cb15eefc58f06afeeb8f62a5ae08418c5ac771b"
     },
     {
       "path": "_redirects",
@@ -60604,19 +60604,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 265129,
-      "sha256": "a12f5a99dc0565e1fbbf528144e741998a813862ab56f90702e6132eb0db5617"
+      "sha256": "5c70ae67b25d5c0d18004a8265b058bbb12b8d249494d3ad99a7fd205363614f"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 265044,
-      "sha256": "f427ae7f72fa6dfda95b941c0e147bcaafb2fe428fdb9a240d4656db2dc80bd8"
+      "sha256": "c9cbcbc5df1d99274e70149b754f7cf77e824194e41475951e9b5a8d55471c3d"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 2854,
-      "sha256": "8b94272da5cd2a9151fd4489761f454065a588b60929fc5bd241bb11370e971a"
+      "bytes": 2056,
+      "sha256": "b319b5541a4c8cc9995c5d139dad4035e4ed5997c7a4442cd52c6496200ac944"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -60628,7 +60628,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "d74d470e77fade1cb4a0a8c8085e9c072b5e5076a74741d87c0aa934093ee1ef"
+      "sha256": "1fd034bce37f2b806a2d9d81eaba650d06dd512a0fead7c3a6b49dd0326e6225"
     },
     {
       "path": "config/public-site.json",
@@ -61329,8 +61329,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1073612,
-      "sha256": "cc893f8f2b7745ce6f69df469d3c1d1fab9b9b486f866f5f707afee963952305"
+      "bytes": 1078127,
+      "sha256": "270fd88abb0fdf43f80242cfdf895431a9c24df40c27fde53777f74e1a3f1693"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -62055,8 +62055,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 143879,
-      "sha256": "e56160d87fcf5cd9bcc95c281a6131843f0c00fa28335aa767b9e6c807536208"
+      "bytes": 144508,
+      "sha256": "80cdb5d728f393bb12091fada7d2f7b5557a0bd43800693c7e76525e1d655748"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -65085,8 +65085,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 72695,
-      "sha256": "647d80da1408ebd9e22a85d4059b56645d55d62eb2ed69d8a9b13ea7058fd4ef"
+      "bytes": 75264,
+      "sha256": "3900efa81c9db21616f0e8a3241afd8314a4d676a428f140fb0c65edc4f37ce0"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -67827,8 +67827,8 @@
     {
       "path": "tests/login/profile-availability-recovery.spec.js",
       "extension": ".js",
-      "bytes": 14668,
-      "sha256": "fcba6379556edc45fd081f06004730013b167d181dff1b2636278bc005be372b"
+      "bytes": 16980,
+      "sha256": "63ac3284e50e1e0dd0e2b5b5b8c134f8f334332c6b0f08e3c81f05d7438a6826"
     },
     {
       "path": "tests/login/profile-availability-recovery.test.mjs",
@@ -68589,8 +68589,8 @@
     {
       "path": "tests/runtime/critical-flows.spec.js",
       "extension": ".js",
-      "bytes": 19715,
-      "sha256": "5f173836d45aca802a52db517d34469b0b942c8a87c96342bb36f033bab4f217"
+      "bytes": 19717,
+      "sha256": "cf3bac7e44daa6d17fa31eb6e176d430137b358307aefeb3b0bb052a9d909c61"
     },
     {
       "path": "tests/runtime/email-history-safety.spec.js",
@@ -69022,7 +69022,7 @@
       "path": "tests/ui-ux/onboarding-form-browser.test.mjs",
       "extension": ".mjs",
       "bytes": 7136,
-      "sha256": "86c633e67c2960bb0245443b64a3ada08991b99806611f5baa604241ca2cab66"
+      "sha256": "b2639b0e95bada5e037f7584f2ebae24808a078d66072e51f226b7d324367194"
     },
     {
       "path": "tests/ui-ux/orders-board.spec.js",
@@ -69201,8 +69201,8 @@
     {
       "path": "tests/ui-ux/whatsapp-feedback-responsive.spec.js",
       "extension": ".js",
-      "bytes": 11044,
-      "sha256": "82b4ffa378651c8ad01000a84414c67dd187cdcdeb78d8aa4e8a3ea7fb7cfb05"
+      "bytes": 11046,
+      "sha256": "a1505d58082257e3879d063fe6666f28deef1902dde89e54e556d78abb0ab9f9"
     },
     {
       "path": "tests/ui-ux/wrist-collections.spec.js",
@@ -71159,7 +71159,7 @@
     },
     {
       "file": "login.html",
-      "line": 637,
+      "line": 687,
       "target": "/api/phone-availability",
       "method": "POST"
     }
@@ -72676,7 +72676,7 @@
           },
           {
             "file": "login.html",
-            "line": 944,
+            "line": 994,
             "operation": "doc"
           },
           {

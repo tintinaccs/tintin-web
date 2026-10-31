@@ -927,3 +927,13 @@ Catálogo: espacio vertical/lateral y degradado de fondo con las uniones del
 flujo compartido. Pruebas nuevas en glob push y specs existentes de checkout
 y catálogo. Sin proveedores nuevos, Rules, pedidos reales ni cambios de datos.
 Derivados de CSP/caché/diagnóstico/protección mediante generadores canónicos.
+
+## 2026-10-30 — Presentación nacional del teléfono al completar el registro
+
+Autoridad: ensureProfileComplete en login.html, único consumidor del campo.
+Guiones al completar 4/7 dígitos, máximo 10 dígitos, pegado/edición/borrado sin
+contar separadores. Espacios y guiones tempranos no desplazan los grupos.
+Validador, API de disponibilidad y reserva reciben dígitos con el normalizador
+existente; no cambian autenticación, unicidad, contratos de otros formularios
+ni Rules. Regresiones nuevas en el spec canónico del registro de Comercio.
+CSP, diagnóstico y protección se regeneran desde constructores existentes.

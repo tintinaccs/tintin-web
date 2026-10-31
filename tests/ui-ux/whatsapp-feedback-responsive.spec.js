@@ -49,7 +49,7 @@ for(const width of [320,390,768,1024,1280,1440,1920]) test(`registro breve valid
  await expect(page.locator('#login-phone-error')).toContainText('ya está registrado');expect(await page.evaluate(()=>window.profileWrites)).toBe(0);
  expect(await name.inputValue()).toBe('María González');await expect(phone).toBeFocused();
  duplicate=false;
- if(width===390){await page.evaluate(()=>window.stallWrites=true);await button.click();await expect(page.locator('#login-error')).toContainText('La conexión está tardando');await expect(page.locator('#login-error')).toBeFocused();await expect(button).toBeEnabled();expect(await phone.inputValue()).toBe('0912345678');await page.evaluate(()=>window.stallWrites=false);}
+ if(width===390){await page.evaluate(()=>window.stallWrites=true);await button.click();await expect(page.locator('#login-error')).toContainText('La conexión está tardando');await expect(page.locator('#login-error')).toBeFocused();await expect(button).toBeEnabled();expect(await phone.inputValue()).toBe('0912-345-678');await page.evaluate(()=>window.stallWrites=false);}
  await button.dblclick();await page.waitForFunction(()=>window.registrationComplete);
  expect(await page.evaluate(()=>window.profileWrites)).toBe(1);
  const stored=await page.evaluate(()=>window.savedProfile);expect(stored.name).toBe('María González');expect(stored.profileStatus).toBe('active');expect(stored.phone).toBe('+595912345678');

@@ -54,7 +54,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
     expect(await page.evaluate(()=>window.__aborted)).toBe(1);
     expect(await page.evaluate(()=>window.__writes)).toBe(0);
     expect(await page.evaluate(()=>window.__loading)).toBe(false);
-    expect(await phone.inputValue()).toBe('0912345678');expect(await name.inputValue()).toBe('María González');
+    expect(await phone.inputValue()).toBe('0912-345-678');expect(await name.inputValue()).toBe('María González');
     await expect(page.locator('#login-phone-error')).toBeEmpty();
     await phone.fill('0918765432');await page.evaluate(()=>{window.__resolveOld();window.__allowReservation=true;});
     await expect(page.locator('#login-phone-error')).toBeEmpty();
@@ -214,5 +214,41 @@ for (const [width, height] of [
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await expect(phone.locator('..')).toHaveCSS('animation-name', 'none');
     await expect(phone.locator('..')).toHaveCSS('transition-duration', '0s');
+  });
+}
+
+for (const width of [320, 390, 768, 1440]) {
+  test(`teléfono de registro inserta sólo guiones completos y conserva edición a ${width}px`, async ({page}) => {
+    await page.setViewportSize({width,height:900});
+    await page.route('**/__availability-recovery',route=>route.fulfill({contentType:'text/html',body:fixture}));
+    await page.goto('/__availability-recovery');
+    const phone=page.locator('#login-profile-phone');
+    await phone.pressSequentially('0981');
+    await expect(phone).toHaveValue('0981-');
+    await phone.pressSequentially('95-');
+    await expect(phone).toHaveValue('0981-95');
+    await phone.pressSequentially('4');
+    await expect(phone).toHaveValue('0981-954-');
+    await phone.pressSequentially('3219');
+    await expect(phone).toHaveValue('0981-954-321');
+    await phone.fill('');await phone.pressSequentially('0981 954 321');
+    await expect(phone).toHaveValue('0981-954-321');
+    await phone.fill('');
+    await phone.evaluate(el=>{const data=new DataTransfer();data.setData('text',' 0981  954\t321 ');el.dispatchEvent(new ClipboardEvent('paste',{clipboardData:data,bubbles:true,cancelable:true}));});
+    await expect(phone).toHaveValue('0981-954-321');
+    await phone.evaluate(el=>el.setSelectionRange(5,5));await phone.pressSequentially('9');
+    await expect(phone).toHaveValue('0981-954-321');
+    await phone.evaluate(el=>{el.setSelectionRange(5,8);const data=new DataTransfer();data.setData('text','123456');el.dispatchEvent(new ClipboardEvent('paste',{clipboardData:data,bubbles:true,cancelable:true}));});
+    await expect(phone).toHaveValue('0981-123-321');
+    expect(await phone.evaluate(el=>el.selectionStart)).toBe(9);
+    await phone.evaluate(el=>el.setSelectionRange(5,5));await phone.press('Backspace');
+    await expect(phone).toHaveValue('0981-233-21');
+    await phone.press('End');for(let index=0;index<10;index++)await phone.press('Backspace');
+    await expect(phone).toHaveValue('');
+    await phone.fill('981954321');await expect(phone).toHaveValue('0981-954-321');
+    await phone.evaluate(el=>el.setSelectionRange(4,4));await phone.press('Delete');
+    await expect(phone).toHaveValue('0981-543-21');
+    await expect(page.locator('#login-phone-error')).toBeEmpty();
+    expect(await page.evaluate(()=>window.__writes)).toBe(0);
   });
 }

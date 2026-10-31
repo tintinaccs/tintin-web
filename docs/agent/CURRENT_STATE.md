@@ -5001,3 +5001,71 @@ Se especifica la excepción únicamente en categorías móviles, manteniendo
 márgenes de controles y clipping global. La regresión ahora mide clientWidth
 igual al viewport, además del espacio/fondo y ausencia de desbordamiento.
 No se hereda el resultado visual de una captura previa al runtime completo.
+
+## 2026-10-30 — Guiones automáticos en teléfono del registro
+
+Codex /root, rama aislada codex/telefono-formato-20261030, base 96bf4fc4.
+La titular pide 0XXX-XXX-XXX con separadores automáticos al completar 4 y 7
+dígitos; espacios y guiones tempranos no alteran los grupos. Autoridad única:
+ensureProfileComplete y su campo login-profile-phone en login.html. Se elimina
+el maxlength de caracteres que recortaba números con espacios; la presentación
+limita 10 dígitos y conserva selección/cursor, pegado y borrado de separadores.
+La entrada nacional de 9 dígitos conserva la compatibilidad agregando el cero
+local. Antes de validar/disponibilidad/guardar se retiran sólo los guiones;
+normalización internacional, unicidad, reservas y políticas quedan en sus
+servicios existentes. Los otros formularios no cambian su contrato.
+
+Pruebas: se extiende profile-availability-recovery (ya ejecutada por CI de
+Comercio) con escritura, espacio, guion prematuro0981-95-, pegado con espacios
+repetidos, reemplazo central, borrado y límite. Transporte aislado; no usuarios,
+pedidos ni cambios comerciales reales. Evidencia terminal propia se registra
+al terminar. La reparación de CI/push/carrito de 1281 y conflictos 1280 fue
+asignada expresamente por la titular a otro agente; no se modifica su rama.
+
+PASS_LOCAL del candidato: 222/222 pruebas Node22 de login/cuentas y 66/66
+Chromium de registro, sin reintentos, con Google/correo, touch/Enter, errores,
+recuperación y guardado canónico simulado entre 320 y 2560px. Las 4 regresiones
+nuevas incluyen específicamente 0981-95- y pegado con espacios repetidos.
+El primer lote Node no encontró Chromium en su ruta predeterminada; se repitió
+usando el motor instalado en PLAYWRIGHT_BROWSERS_PATH y Node22, con resultado
+terminal aprobado. Build:pages y caché 385/67 aprobados; CI/merge pendientes.
+
+Cierre local del comportamiento definitivo:66/66 recorridos completos repetidos
+tras reforzar pegado parcial y bloqueo de inserciones al llenar los10 dígitos;
+222/222 Node22 repetidas. Se detectó y corrigió el cursor que quedaba antes
+del guion tras pegar sobre un grupo completo;4/4 regresiones finales PASS.
+Se incluyen Delete/Backspace sobre separadores y conservación del sufijo al
+pegar más dígitos que la selección. No se redujeron aserciones ni se usaron
+reintentos. Preflight canónica inicial y build PASS; repetir generación del
+plan después de esta evidencia y del HTML definitivo antes del commit.
+
+CI inicial del teléfono41142599303/intento1, SHAa64390ba:Comercio PASS.
+Interfaz detectó una expectativa exacta del placeholder antiguo con espacios
+(onboarding-form-browser). Se actualiza al ejemplo0981-123-456 solicitado,
+conservando las aserciones de geometría/foco/errores/contraste. Lote canónico
+correspondiente con Node22:13/13 PASS. No se cambia el código del producto.
+
+Conciliación con main57d81e4a (#1280) mediante merge normal: fuentes de
+registro y sus pruebas permanecen idénticas a feca580a; se conservan auditoría,
+imágenes, Rules y reparación del reloj del carrito integradas por el otro
+agente. Conflictos limitados a derivados de CSP/diagnóstico/protección,
+regenerados desde las fuentes combinadas y la política de main vigente.
+Dependencias instaladas desde el lock actual en el worktree aislado.
+PASS_LOCAL tras conciliar:238/238 Node22 (login/cuentas, carrito y presentación
+canónica) y4/4 Chromium de formato. El nuevo SHA exige CI propia.
+
+Barrido de consumidores del campo:se alinean otras dos aserciones de valor
+visible (whatsapp-feedback-responsive y critical-flows/offline) al teléfono
+con guiones. Se conservan sus comprobaciones de errores, reconexión y guardado.
+PASS_LOCAL:7/7 recorridos de feedback del registro;2/2 offline en Chromium
+desktop/móvil con SDK oficiales y Auth/Firestore emulados;2/2 alta completa,
+OTP, teléfono internacional persistido y sesión conservada en el mismo entorno
+local aislado. Sin servicios ni datos productivos. No cambia código de producto.
+
+Conciliación final con main ec9bd674 (#1281): se conservan push, catálogo
+mobile y sus pruebas del otro agente. Teléfono y consumidores permanecen
+idénticos a3a99831f. Se preservan ambos bloques documentales y se regeneran
+derivados desde la fuente combinada, con política base del main actual.
+PASS_LOCAL:300/300 Node22 (login/cuentas/presentación/carrito/push/social)
+y4/4 Chromium de formato. Sin cambios adicionales al comportamiento del campo.
+El SHA combinado requiere CI y publicación propias.

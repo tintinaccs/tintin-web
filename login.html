@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="a4d591d274a3164fee70e2d5758cd9554a49d4596d7951c028e03e9461c6d17c">
+  <meta name="tintin-page-revision" content="98ada67c34ef63a81d43be903a677c419b27c41a944833d8e26103c4bf9db465">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -146,8 +146,8 @@
             <div class="login-outlined-field login-phone-row">
               <label class="login-email-label" for="login-profile-phone">Número de teléfono</label>
               <span class="login-phone-prefix" aria-hidden="true">+595</span>
-              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="0912 345 678" autocomplete="tel-national" inputmode="numeric" maxlength="10" enterkeyhint="done" aria-describedby="login-phone-prefix-description login-phone-error" />
-              <span id="login-phone-prefix-description" class="tt-sr-only">Prefijo de Paraguay: +595</span>
+              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="0981-123-456" autocomplete="tel-national" inputmode="numeric" enterkeyhint="done" aria-describedby="login-phone-prefix-description login-phone-error" />
+              <span id="login-phone-prefix-description" class="tt-sr-only">Prefijo de Paraguay: +595. Formato nacional: 0981-123-456; los guiones se completan automáticamente.</span>
             </div>
             <p class="login-profile-field-error" id="login-phone-error" aria-live="polite"></p>
             <p class="login-phone-help" id="login-phone-help" style="display:none">
@@ -620,8 +620,58 @@ async function ensureProfileComplete(user, role, options = {}) {
     input.focus({ preventScroll: true });
     input.scrollIntoView({ block: 'center', behavior: 'auto' });
   };
+  // Presentación local 0XXX-XXX-XXX; la identidad sigue usando sólo dígitos.
+  const formatPhoneInput = () => {
+    const raw = phoneInput.value;
+    let caretDigits = raw.slice(0, phoneInput.selectionStart ?? raw.length).replace(/\D/g, '').length;
+    let digits = raw.replace(/\D/g, '');
+    if (digits.startsWith('9')) { digits = '0' + digits; caretDigits += 1; }
+    digits = digits.slice(0, 10);
+    const formatted = digits.slice(0, 4) + (digits.length >= 4 ? '-' : '') +
+      digits.slice(4, 7) + (digits.length >= 7 ? '-' : '') + digits.slice(7);
+    if (raw !== formatted) phoneInput.value = formatted;
+    let caret = 0, seen = 0;
+    while (caret < formatted.length && seen < caretDigits) {
+      if (/\d/.test(formatted[caret])) seen += 1;
+      caret += 1;
+    }
+    if (formatted[caret] === '-') caret += 1;
+    phoneInput.setSelectionRange(caret, caret);
+  };
+  phoneInput.onbeforeinput = event => {
+    if (event.isComposing) return;
+    if (event.inputType === 'insertText' && /^[-\s]+$/.test(event.data || '')) {
+      event.preventDefault();
+      return;
+    }
+    const start = phoneInput.selectionStart, end = phoneInput.selectionEnd;
+    const retained = (phoneInput.value.slice(0, start) + phoneInput.value.slice(end)).replace(/\D/g, '').length;
+    if (event.inputType.startsWith('insert') && event.data && retained >= 10) {
+      event.preventDefault();
+      return;
+    }
+    if (start !== end) return;
+    if (event.inputType === 'deleteContentBackward' && phoneInput.value[start - 1] === '-') {
+      phoneInput.setSelectionRange(start - 2, start);
+    } else if (event.inputType === 'deleteContentForward' && phoneInput.value[start] === '-') {
+      if (start + 1 < phoneInput.value.length) phoneInput.setSelectionRange(start, start + 2);
+      else event.preventDefault();
+    }
+  };
+  phoneInput.onpaste = event => {
+    if (!event.clipboardData) return;
+    event.preventDefault();
+    const start = phoneInput.selectionStart, end = phoneInput.selectionEnd;
+    const retained = (phoneInput.value.slice(0, start) + phoneInput.value.slice(end)).replace(/\D/g, '').length;
+    const inserted = event.clipboardData.getData('text').replace(/\D/g, '').slice(0, 10 - retained);
+    if (!inserted) return;
+    phoneInput.setRangeText(inserted, start, end, 'end');
+    phoneInput.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+  phoneInput.oncompositionend = formatPhoneInput;
   for (const [input, id] of [[firstNameInput, 'login-first-name-error'], [phoneInput, 'login-phone-error']]) {
-    input.oninput = () => {
+    input.oninput = event => {
+      if (input === phoneInput && !event.isComposing) formatPhoneInput();
       input.removeAttribute('aria-invalid');
       const error = document.getElementById(id);
       error.textContent = ''; error.classList.remove('show');
@@ -673,14 +723,14 @@ async function ensureProfileComplete(user, role, options = {}) {
         document.getElementById(id).textContent = '';
       }
       const name = firstNameInput.value.trim().replace(/\s+/g, ' ');
-      const phoneRaw = phoneInput.value.trim();
+      const phoneRaw = phoneInput.value.replace(/-/g, '');
       const country = findCountryByCode(countrySelect.value);
       if (plan.needsName && !isValidCustomerName(name)) {
         fieldError(firstNameInput, 'login-first-name-error', 'Ingresá tu nombre y apellido reales: al menos dos palabras de tres letras. No uses etiquetas como Cliente, Prueba o Demo.');
         return;
       }
       if (plan.needsPhone && !isNationalMobileInput(phoneRaw)) {
-        fieldError(phoneInput, 'login-phone-error', 'Ingresá un celular paraguayo válido, por ejemplo 0912 345 678.');
+        fieldError(phoneInput, 'login-phone-error', 'Ingresá un celular paraguayo válido, por ejemplo 0981-123-456.');
         return;
       }
       saving = true;

@@ -1,74 +1,62 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "57d81e4a184fbf0805b2f7d18ce37d42de4101dc",
-  "reason": "Conciliar push1281 con auditoría1280 y corregir harness de aborto Node22 preservando las aserciones",
+  "baseCommit": "ec9bd6749ebd98f477b6c23a3fb5acb6483a8529",
+  "reason": "Formatear teléfono nacional del registro con guiones automáticos y conservar identidad",
   "files": [
     {
-      "path": "admin.html",
-      "oldHash": "bf2dcec67e4816a0b08b1b71b915012a78f5e3375472cdc4c706e035959b1eac",
-      "newHash": "f50aa39f168403c4f8cedb41e63c14cab95ef10705d5b89c7248c6709de01230"
+      "path": "_headers",
+      "oldHash": "4e77dfc6f01e70abac3479a32d45467ef4fedbd64a0bc0ef64469e714bee8aaa",
+      "newHash": "e35bf583847eff1bfe0dada44cb15eefc58f06afeeb8f62a5ae08418c5ac771b"
     },
     {
-      "path": "catalogo.html",
-      "oldHash": "fe49fcf749006d37e89d157b5d5ba542d48acc2ce3534e622d3050aa638485e3",
-      "newHash": "63b055c821bc999df1cc1b118f5eed6aa9c27a66b13054e306f407cbf07bcf34"
+      "path": "config/csp-runtime.js",
+      "oldHash": "a12f5a99dc0565e1fbbf528144e741998a813862ab56f90702e6132eb0db5617",
+      "newHash": "5c70ae67b25d5c0d18004a8265b058bbb12b8d249494d3ad99a7fd205363614f"
     },
     {
-      "path": "cloudflare/servicio-push.js",
-      "oldHash": "b9c9e7c05faa606a20d7599ffafdece0d3b335f0d4144f3c047b177b4e816823",
-      "newHash": "4c0f266637dab5ac89dac118101efeb971142596a99c60cb1e748e0afe7d637a"
+      "path": "config/csp-runtime.json",
+      "oldHash": "f427ae7f72fa6dfda95b941c0e147bcaafb2fe428fdb9a240d4656db2dc80bd8",
+      "newHash": "c9cbcbc5df1d99274e70149b754f7cf77e824194e41475951e9b5a8d55471c3d"
     },
     {
-      "path": "functions/api/apps-script-bridge.js",
-      "oldHash": "2696d3d672eae3fcca659a93383b40ab5a546648a59f82c3fb861aa985097aa5",
-      "newHash": "22be50c29523dba0d58abcad1bf81fa1902577d9729c3234f0bcdc50890c0ad7"
-    },
-    {
-      "path": "functions/api/order-email.js",
-      "oldHash": "78b474e1e483e574dd8d67ed0029c3956e722df4de7240897dc4b03353fe13f4",
-      "newHash": "4c04e8a770b18aa9cd0d690e78ca69eb7c27934d1a88993507eeadf7ef2cc04b"
-    },
-    {
-      "path": "functions/api/push-admin.js",
-      "oldHash": "563492a341f1e0e66934f908d17fd337cf53ca7319a7532e42b368829c5295a7",
-      "newHash": "b9003e5ff9610799c3ffd83880c91bf0f0caadb329be88ba3a67663308726d9c"
-    },
-    {
-      "path": "js/admin/notifications/notificaciones-push-maestro.js",
-      "oldHash": "81d6500e496091238d061d0bd6d1ccad1c635b8f5ce132bb9889a00178859c0d",
-      "newHash": "f44d329843947bddef4a5fcf440b9e46706450d90fe8c862ecf51041f8962b1e"
-    },
-    {
-      "path": "scripts/cache-version-baseline.json",
-      "oldHash": "188376d0ec108296e958caf5b051fe17baea598c750eb110fa4549aa9bc2cbeb",
-      "newHash": "6f16c4e7335f9b03f299e1987dd09c764aac408bbdfb1233bbd35eb226dd4923"
+      "path": "login.html",
+      "oldHash": "647d80da1408ebd9e22a85d4059b56645d55d62eb2ed69d8a9b13ea7058fd4ef",
+      "newHash": "3900efa81c9db21616f0e8a3241afd8314a4d676a428f140fb0c65edc4f37ce0"
     }
   ],
   "affectedRecords": [
-    "apis-internas",
-    "apis-internas__apps-script__22",
-    "apis-internas__comentarios__39",
-    "apis-internas__correos__41",
-    "apis-internas__favoritos__37",
-    "apis-internas__firestore__21",
-    "apis-internas__likes__38",
-    "apis-internas__notificaciones__40",
-    "apis-internas__pedidos__32",
-    "apps-script",
-    "apps-script__google-sheets__24",
-    "apps-script__sheets-products-webhook__26",
+    "cf-functions",
     "cf-functions__apis-internas__20",
-    "comentarios",
-    "favoritos",
-    "firestore__apps-script__23",
-    "google-sheets__apps-script__25",
-    "likes",
-    "pedidos",
-    "pedidos__inventario__33",
-    "productos",
-    "sheets-products-webhook",
-    "sheets-products-webhook__firestore__27",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
+    "csp",
+    "cuenta-bloqueada",
+    "entrada-login",
+    "entrada-login__google-btn__1",
+    "entrada-login__login-codigo__2",
+    "firebase-auth__redirect-result__5",
+    "firestore__users-uid__8",
+    "google-btn",
+    "google-btn__firebase-auth__3",
+    "login-codigo",
+    "login-codigo__firebase-auth__4",
+    "pagina-principal",
+    "perfil",
+    "perfil__ultimos-datos__11",
+    "redirect-result",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-principal__17",
+    "roles__perfil__10",
+    "roles__super-panel__14",
+    "super-panel",
+    "super-panel__admin-guard__15",
     "super-panel__pedidos__35",
-    "super-panel__productos__34"
+    "super-panel__productos__34",
+    "ultimos-datos",
+    "ultimos-datos__perfil__13",
+    "users-uid",
+    "users-uid__cuenta-bloqueada__12",
+    "users-uid__roles__9"
   ]
 }
