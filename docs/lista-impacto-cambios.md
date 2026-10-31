@@ -1,14 +1,14 @@
-## 2026-10-31 — Admin móvil y ficha de usuarios
+## 2026-10-31 — Experiencia móvil del Super Admin y ficha de usuarios
 
-Autoridades: renderUsersTable, ficha-usuario-admin y espacio-modulos-admin
-(JS/CSS). Filas existentes se muestran como tarjetas hasta1024px con todos
-sus campos/acciones y etiquetas de sus encabezados; escritorio conserva tabla.
-La fila/miniatura abre la ficha; foto ampliable con dialog nativo e iniciales
-sin foto. Se reutiliza setupAdminOverlayA11y para foco/Escape/scroll, sin otra
-autoridad de cuentas, pedidos ni permisos. Versionado transitivo y derivados
-CSP/caché/diagnóstico/protección por sus constructores. Pruebas aisladas con
-listas pobladas, textos largos, orientación y regresiones de comercio.
-Sin datos reales ni nuevas dependencias. Evidencia/límites en CURRENT_STATE.
+Autoridades: renderUsersTable, ficha-usuario-admin, navegación de admin-app y
+workspace compartido (JS/CSS), manifest administrativo existente. Identidad de
+Usuarios, tablas internas/tardías, controles/pestañas/modales, áreas seguras y
+historial móvil con borradores; tablet/escritorio conservados. Productos y
+Pedidos mantienen sus vistas especializadas. Dos entradas PWA coherentes sin
+caché de datos privados. Mismos escritores, permisos y validaciones; sin datos
+reales ni dependencias nuevas.26 superficies inventariadas y decisiones en
+ADMIN-MOBILE-EXPERIENCE. Cache/CSP/diagnóstico/protección por constructores.
+Evidencia y límites del candidato en CURRENT_STATE y recibo del PR1294.
 
 ## 2026-10-30 — Prompt maestro: integridad del mensaje, lectura voluntaria y superficies
 

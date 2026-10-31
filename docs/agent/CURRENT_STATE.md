@@ -1,35 +1,40 @@
-## 2026-10-31 — Admin adaptable y fotos de usuarios (Codex)
+## 2026-10-31 — Prompt maestro: experiencia móvil del Super Admin (Codex)
 
-Rama codex/admin-mobile-fichas, base origin/main ed03b8c7 (integrado tras PR1292).
-- Implementación: tarjetas de registros hasta1024px, encabezados como etiquetas,
-  campos y controles completos; misma tabla en escritorio. Fila y miniatura
-  abren la ficha; nombre/rol/estado y foto ampliable con iniciales de respaldo.
-- Ficha reutiliza el controlador de accesibilidad de admin-app; foto usa dialog
-  nativo, X/Escape/fondo, object-fit contain. Cargas descartadas tras cerrar o
-  abrir otra ficha. No se modifican escritores, permisos, listeners ni datos.
-- PASS_LOCAL: 70 pruebas finales admin-all-devices/admin-workspaces y
-  admin-user-mobile; incluyen todas las tablas pobladas con texto largo a
-  320/390/768/844/1024px y ficha/foto hasta1440, usando accesibilidad compartida.
-- PASS_LOCAL: 77 regresiones de comercio/pedidos; 15 pruebas de paginación,
-  cuentas bloqueadas y avisos de actualización. Usuarios/Roles25 comprobaciones,
-  seguridad fase8, preflight de sintaxis/imports e integridad de estilos.
-- PASS_LOCAL: build:pages completo y derivados CSP/caché/diagnóstico; diff
-  revisado. Se conserva el plan de mantenimiento protegido generado.
-- PASS_LOCAL tras integrar PR1292: 10 casos ficha/listas pobladas y preflight
-  (1114 archivos/72 imports); build y protección regenerados sobre ed03b8c7.
-  Las70/77/15 regresiones anteriores corresponden al candidato previo, cuyo
-  código de admin se conserva. CI verificará el SHA integrado completo.
-- Corrección CI del primer candidato integrado: dashboard-data contaba sólo
-  `<tr>` sin atributos. Ahora acepta atributos y verifica UID de segunda página;
-  audit:admin-sync vuelve a pasar79/79. Sin cambio adicional de aplicación.
-- PASS_LOCAL final ampliado: las10 pruebas incluyen también tablas internas
-  de productos, dispositivos, eventos y Maestro, sin depender de adm-table-wrap;
-  se revelan contenedores ocultos en la fixture para comprobar su geometría.
-  Auditorías Maestro27/27, conexiones25/25, cierre85/85 y módulos140/140.
-- IN_PROGRESS: CI/merge protegido. Los resultados de GitHub quedan en el
-  recibo del PR de esta rama.
-- NOT_VERIFIED: sesión real de Super Admin, Safari/iOS/Android físicos y app
-  instalada; las pruebas usan Chromium y datos ficticios aislados.
+Rama codex/admin-mobile-fichas, PR1294; base main ed03b8c7.
+Solicitud precisada por los dos adjuntos idénticos del usuario. Inventario,
+sistema visual,26 superficies reales y decisiones por módulo en
+`docs/agent/ADMIN-MOBILE-EXPERIENCE.md`.
+
+- Teléfono: tablas completas adaptables, Usuarios con identidad compacta,
+  patrones especializados existentes de Productos/Pedidos preservados; pestañas
+  Correos/Envíos sin carrusel horizontal; campos44px/16px, modales con cierre
+  sticky y áreas seguras. Tablet/escritorio mantienen la cascada anterior.
+- Ficha y visor responsive en todos los formatos: foto contain, iniciales,
+  rol/estado reales y apertura por fila/miniatura. Control de foco canónico;
+  sin escritores ni listeners de datos paralelos.
+- Navegación aceptada en teléfono conserva historial; popstate/hashchange con
+  guardia de borradores y mismas comprobaciones de permiso. Escritorio conserva
+  replaceState. Las dos rutas privadas declaran la PWA existente y viewport-fit.
+- PASS_LOCAL ampliado:142 casos de panel/dashboard/workspaces/fichas y
+  experiencia móvil; repaso final24/24 tras áreas seguras y acciones masivas
+  contextuales. Incluye comparación tablet/escritorio e historial cancelado.
+- PASS_LOCAL:18 contratos PWA/versiones/paginación; preflight1116 archivos,
+  72 imports. build:pages completo y versionado inmutable2 para recursos nuevos.
+- PASS_LOCAL: audit:admin-sync79/79 tras actualizar el conteo de filas para
+  admitir data-user-uid y comprobar el UID de segunda página. Usuarios/Roles y
+  seguridad fase8 correctos; watcher de versiones12 pruebas junto con PWA.
+- Ensayos previos del mismo trabajo:70 panel/fichas,77 comercio/pedidos,15
+  cuentas/paginación/avisos. No certifican automáticamente la ampliación actual.
+- GitHub previo: run41226018330/1, SHA22c5a0c7, C falló por el conteo obsoleto;
+  sustituido/cancelado. run41226643071/1, SHAb070693e, sustituido/cancelado.
+  run41226954481/1, SHAd8444ae7, corresponde al candidato anterior al prompt.
+  Auto-merge suspendido mientras se completa la ampliación solicitada.
+- PASS_LOCAL: diff revisado, derivados CSP/caché/diagnóstico y plan de
+  mantenimiento desde constructores canónicos.
+- IN_PROGRESS: CI y merge protegido del candidato ampliado. Recibos terminales
+  de cada SHA/run/intento en el PR1294.
+- NOT_VERIFIED: sesión real de Super Admin, instalación y teclado físicos de
+  iPhone/Android, Safari real y pinch-zoom físico. Fixtures no escriben producción.
 
 ## 2026-10-31 — Responsive y accesibilidad de la tienda pública (base main 2db63462f)
 Claude Code, rama claude/beautiful-planck-3dz88l (PR nuevo).

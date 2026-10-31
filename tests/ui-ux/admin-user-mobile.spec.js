@@ -19,7 +19,7 @@ async function mountFicha(page,photo=false){
   document.head.append(script);
  },{source:ficha,photo,overlayA11y});
 }
-for(const [width,height] of [[320,568],[390,844],[844,390],[1440,900]])test(`ficha y foto accesibles ${width}x${height}`,async({page})=>{
+for(const [width,height] of [[320,568],[390,844],[844,390],[1440,900]])test(`ficha y foto accesibles ${width}x${height}`,async({page},info)=>{
  await load(page,width);await page.setViewportSize({width,height});
  await page.evaluate(()=>{
   document.querySelectorAll('.adm-section').forEach(node=>node.classList.toggle('active',node.id==='section-usuarios'));
@@ -29,15 +29,17 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[1440,900]])test(`fic
  const overlay=page.locator('#client-ficha-overlay');
  await page.locator('.user-row-check').check();await expect(overlay).toBeHidden();
  await page.locator('#users-tbody select').selectOption({label:'Cliente'});await expect(overlay).toBeHidden();
+ if(width===390)await page.screenshot({path:info.outputPath('usuarios-mobile.png'),fullPage:true});
  await page.locator('.adm-tbl-avatar').click();await expect(overlay).toBeVisible();
  await expect(overlay).toContainText('Cliente de prueba');await expect(overlay).toContainText('Cliente');
+ if(width===390)await page.screenshot({path:info.outputPath('ficha-mobile.png')});
  await page.getByRole('button',{name:'Ampliar foto de perfil'}).click();
  await expect(page.locator('dialog')).toBeVisible();await expect(page.locator('.ficha-avatar-large')).toHaveText('CD');
  await page.keyboard.press('Escape');await expect(page.locator('dialog')).toHaveCount(0);await expect(overlay).toBeVisible();
  await page.getByRole('button',{name:'Cerrar ficha de cliente'}).click();await expect(overlay).toBeHidden();
  await page.locator('#users-tbody tr').focus();await page.keyboard.press('Enter');await expect(overlay).toBeVisible();
  await page.keyboard.press('Escape');await expect(overlay).toBeHidden();
- if(width<=1024){
+ if(width<=540||height<=500){
   const wrap=page.locator('#section-usuarios .adm-table-wrap');
   expect(await wrap.evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);
   await expect(page.locator('#users-tbody td').nth(3)).toHaveAttribute('data-label',/Email|Correo/i);
@@ -52,7 +54,7 @@ test('la foto real se amplía sin recortar y se cierra con X',async({page})=>{
  expect(await img.evaluate(node=>getComputedStyle(node).objectFit)).toBe('contain');
  await page.getByRole('button',{name:'× Cerrar',exact:true}).click();await expect(page.locator('dialog')).toHaveCount(0);
 });
-for(const [width,height] of [[320,568],[390,844],[768,1024],[844,390],[1024,768]])test(`listas pobladas sin deslizamiento lateral ${width}x${height}`,async({page})=>{
+for(const [width,height] of [[320,568],[390,844],[540,960],[844,390],[932,430]])test(`listas pobladas sin deslizamiento lateral ${width}x${height}`,async({page})=>{
  await load(page,width);await page.setViewportSize({width,height});
  await page.evaluate(()=>{
   const wrapper=document.createElement('div');wrapper.className='tt-maestro-table-wrap';wrapper.style.overflow='auto';

@@ -709,7 +709,10 @@ function canAccessUnifiedAppearance(role = currentRole) {
   return can(role, 'manageSettings') || role === 'superadmin' || canDo(role, 'contenido', 'ver');
 }
 
-function switchSection(target) {
+let admHistoryIndex = Number(history.state?.ttAdminIndex) || 0;
+const adminPhoneViewport = () => matchMedia('(max-width: 540px), (max-width: 1024px) and (max-height: 500px)').matches;
+
+function switchSection(target, navigation = 'replace') {
   if (target === 'contenido') target = 'apariencia';
   const requiredPerm = SECTION_PERMISSION[target];
   const allowedByPermission = target === 'apariencia'
@@ -772,12 +775,19 @@ function switchSection(target) {
   const targetSection = document.getElementById(`section-${target}`);
   if (targetSection) targetSection.classList.add('active');
   topbarTitle.textContent = SECTION_LABELS[target] || target;
-  // Refleja la sección activa en la URL (#hash) sin crear entradas de historial
-  // ni provocar scroll, para que el estado sea compartible y coherente con la
-  // navegación por hash de abajo.
+  // En teléfonos, una navegación aceptada conserva Atrás/Adelante. Restaurar
+  // rutas e iniciar el panel no crea entradas; escritorio conserva replaceState.
   if (!admSuppressHashSync && location.hash.slice(1) !== target) {
     admSuppressHashSync = true;
-    try { history.replaceState(null, '', `#${target}`); } finally { admSuppressHashSync = false; }
+    try {
+      if (navigation === 'push' && adminPhoneViewport()) {
+        history.replaceState({ ...history.state, ttAdminIndex: admHistoryIndex }, '', location.href);
+        const nextUrl = new URL(location.href);
+        if (nextUrl.searchParams.has('section')) nextUrl.searchParams.set('section', target);
+        nextUrl.hash = target;
+        history.pushState({ ...history.state, ttAdminIndex: ++admHistoryIndex }, '', nextUrl);
+      } else history.replaceState(history.state, '', `#${target}`);
+    } finally { admSuppressHashSync = false; }
   }
   if (target === 'usuarios') loadUsers();
   if (target === 'estadisticas') renderGeneralStatistics();
@@ -798,11 +808,11 @@ function switchSection(target) {
 navItems.forEach(btn => {
   btn.addEventListener('click', () => {
     if (window.AdminUnsaved) {
-      window.AdminUnsaved.requestNavigation(() => switchSection(btn.dataset.section));
+      window.AdminUnsaved.requestNavigation(() => switchSection(btn.dataset.section, 'push'));
     } else if (typeof UnsavedGuard !== 'undefined') {
-      UnsavedGuard.confirmLeave(() => switchSection(btn.dataset.section));
+      UnsavedGuard.confirmLeave(() => switchSection(btn.dataset.section, 'push'));
     } else {
-      switchSection(btn.dataset.section);
+      switchSection(btn.dataset.section, 'push');
     }
   });
 });
@@ -843,15 +853,28 @@ function applyInitialSectionFromUrl() {
     consumeAdminDestination(location.href, adminReturnStorage(window), location.origin);
   }
 }
-window.addEventListener('hashchange', () => {
-  if (admSuppressHashSync) return;
-  const target = sectionFromUrl();
-  if (!target) return;
+let admHistoryRestoring = false;
+async function restoreAdminSection(event) {
+  if (admSuppressHashSync || admHistoryRestoring) return;
+  const target = sectionFromUrl() || 'dashboard';
   const active = document.querySelector('.adm-section.active');
   if (active && active.id === `section-${target}`) return;
-  const go = () => switchSection(target);
-  window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(go) : go();
-});
+  const destinationUrl = event.newURL || location.href;
+  const nextIndex = Number(history.state?.ttAdminIndex) || 0;
+  const previousIndex = admHistoryIndex;
+  const go = () => { admHistoryIndex = nextIndex; switchSection(target); };
+  if (!window.AdminUnsaved) { go(); return; }
+  admHistoryRestoring = true;
+  try {
+    const accepted = await window.AdminUnsaved.requestNavigation(go);
+    if (!accepted && location.href === destinationUrl) {
+      if (history.state?.ttAdminIndex != null && nextIndex !== previousIndex) history.go(previousIndex - nextIndex);
+      else if (event.oldURL) history.replaceState(history.state, '', event.oldURL);
+    }
+  } finally { admHistoryRestoring = false; }
+}
+window.addEventListener('popstate', restoreAdminSection);
+window.addEventListener('hashchange', restoreAdminSection);
 
 // ---- ACCESIBILIDAD DE MODALES OPERATIVOS (compartido) ----
 // El modal de "cambios sin guardar" (#unsaved-modal) ya trae su propio manejo
@@ -2408,7 +2431,7 @@ function renderUsersTable(users) {
 
     return `
       <tr data-user-uid="${safeUid}">
-        <td class="col-select">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${safeUid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
+        <td class="col-select">${!isSuperAdmin ? `<label class="adm-user-select" aria-label="Seleccionar usuario"><input type="checkbox" class="user-row-check" data-id="${safeUid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}></label>` : ''}</td>
         <td>${avatar}</td>
         <td><strong>${escapeHtmlAdmin(u.name || '—')}</strong></td>
         <td style="font-size:12px;color:#713C53">${escapeHtmlAdmin(u.email || '—')}</td>
