@@ -291,7 +291,7 @@ function getStockLimit(productId, variant) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-5');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261031-seo-espacios-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -620,7 +620,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261031-galeria-sticky-1')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261031-seo-espacios-1')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -990,7 +990,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-5');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261031-seo-espacios-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1405,12 +1405,14 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
   const data = {
     '@context': 'https://schema.org/',
     '@type': 'Product',
+    // Mismo @id que el JSON-LD del servidor: ambos describen una sola entidad.
+    '@id': `${canonicalProductUrl.href}#product`,
     name: product.name,
     image: images.length ? images : undefined,
     description: description || undefined,
     sku: String(product.id),
     category: product.category || product.cat || undefined,
-    brand: { '@type': 'Brand', name: 'Tintin' },
+    brand: { '@type': 'Brand', name: 'Tintin Accesorios & Relojes' },
     offers: {
       '@type': 'Offer',
       url: canonicalProductUrl.href,
@@ -1420,6 +1422,24 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
       itemCondition: 'https://schema.org/NewCondition',
     },
   };
+  const variants = window.TintinCatalogPolicy?.variantOffers?.(product);
+  if (Array.isArray(variants) && variants.length > 1) {
+    data['@type'] = 'ProductGroup';
+    data.productGroupID = data.sku;
+    data.hasVariant = variants.map((variant, index) => ({
+      '@type': 'Product',
+      name: `${product.name} — ${variant.label}`,
+      sku: variant.sku || `${data.sku}-${index + 1}`,
+      offers: {
+        '@type': 'Offer',
+        url: canonicalProductUrl.href,
+        priceCurrency: 'PYG',
+        price: variant.price,
+        availability: variant.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        itemCondition: 'https://schema.org/NewCondition',
+      },
+    }));
+  }
   tag.textContent = JSON.stringify(data);
 }
 
@@ -1962,7 +1982,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-5');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261031-seo-espacios-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

@@ -32,7 +32,7 @@ const missing = [];
 for (const token of requiredHtml) if (!html.includes(token)) missing.push(`contact.html: ${token}`);
 for (const token of requiredRuntime) if (!runtime.includes(token)) missing.push(`mantenimiento-contacto.js: ${token}`);
 if (!runtime.includes('contact(?:\\.html)?')) missing.push('mantenimiento-contacto.js: clean + legacy route recognition');
-if (!runtime.includes("new URL('/contact', location.origin)")) missing.push('mantenimiento-contacto.js: clean canonical /contact');
+if (!runtime.includes("new URL('/contact', 'https://tintinaccs.com')")) missing.push('mantenimiento-contacto.js: clean canonical /contact');
 const contactVersion = JSON.parse(fs.readFileSync('scripts/cache-version-baseline.json','utf8'))['js/pages/institutional/mantenimiento-contacto.js'].version;
 if (!pageFunction.includes('mantenimiento-contacto.js?v=' + contactVersion)) missing.push('functions/[page].js: versioned contact runtime injection');
 if (!pageFunction.includes('page === \'contact\'')) missing.push('functions/[page].js: contact-only runtime guard');

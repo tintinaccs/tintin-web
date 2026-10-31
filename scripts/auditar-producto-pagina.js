@@ -48,7 +48,7 @@ requireText(runtime, /visibilitychange/, 'Falta recuperación al regresar a la p
 requireText(runtime, /pageshow/, 'Falta recuperación bfcache.');
 requireText(runtime, /window\.addEventListener\('online'/, 'Falta recuperación online.');
 requireText(runtime, /window\.addEventListener\('offline'/, 'Falta estado offline.');
-requireText(runtime, /location\.origin/, 'Falta normalización del dominio.');
+requireText(runtime, /https:\/\/tintinaccs\.com\//, 'Los metadatos no usan el dominio canónico https://tintinaccs.com.');
 requireText(runtime, /getFullYear/, 'Falta año automático.');
 requireText(loader, /product[\s\S]*load\('pages\/product\/mantenimiento-producto\.js'(?:,\s*'[^']+')?\)/, 'Runtime de Producto no se carga desde el cargador por página.');
 requireText(record, /Desktop grande|desktop grande/i, 'Registro no contempla desktop grande.');

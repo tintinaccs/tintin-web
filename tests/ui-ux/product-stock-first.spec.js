@@ -112,5 +112,6 @@ for(const width of [390,1440])test(`ficha y SEO conservan descripción y disponi
  await expect(page.locator('#product-specifications')).toContainText('2 cm');
  await expect(page.locator('#product-specifications')).toContainText('Limpiar con paño suave');
  expect(await page.locator('#tt-product-jsonld').evaluate(el=>JSON.parse(el.textContent).offers.availability)).toBe('https://schema.org/OutOfStock');
+ expect(await page.locator('#tt-product-jsonld').evaluate(el=>JSON.parse(el.textContent).hasVariant.map(v=>v.offers.availability))).toEqual(['https://schema.org/OutOfStock','https://schema.org/OutOfStock']);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });

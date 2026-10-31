@@ -3,7 +3,7 @@
 (() => {
   'use strict';
 
-  const expectedUrl = () => new URL('/about', window.location.origin).href;
+  const expectedUrl = () => new URL('/about', 'https://tintinaccs.com').href;
 
   function normalizeAboutMetadata() {
     const expected = expectedUrl();

@@ -1,4 +1,4 @@
-import { normalizeVariantSelection } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { normalizeVariantSelection } from './inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
 
 const TERMINAL_STATUSES = new Set(['cancelado', 'rechazado']);
 

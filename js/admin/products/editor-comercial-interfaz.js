@@ -1,7 +1,7 @@
 import {quantity} from './controles-editor-producto.js?v=tintin-20261029-performance-1';
 import {mountProductMoney,formatGuarani} from './importe-producto.js?v=tintin-20261028-guided-editor-2';
-import {commercialDraft,commercialPatch,setCommercialOptionAvailability} from './editor-comercial-core.mjs?v=tintin-20261026-editor-phase6-1';
-import {productVariantPrice,variantSelectionLabel} from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import {commercialDraft,commercialPatch,setCommercialOptionAvailability} from './editor-comercial-core.mjs?v=tintin-20261031-seo-espacios-1';
+import {productVariantPrice,variantSelectionLabel} from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
 const element=(tag,text)=>{const node=document.createElement(tag);if(text!=null)node.textContent=text;return node;};
 const button=(text,action)=>{const node=element('button',text);node.type='button';node.className='adm-btn adm-btn-outline';node.addEventListener('click',action);return node;};
 

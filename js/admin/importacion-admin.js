@@ -29,12 +29,12 @@ import {
   safeImportUrl,
   sanitizeShopifyBodyHtml,
   summarizeImportRecords,
-} from '../core/store/shopify-import-core.mjs?v=tintin-20261023-variant-engine-v2-2';
-import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20261023-variant-engine-v2-2';
-import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20261023-variant-engine-v2-2';
+} from '../core/store/shopify-import-core.mjs?v=tintin-20261031-seo-espacios-1';
+import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20261031-seo-espacios-1';
+import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20261031-seo-espacios-1';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261023-variant-engine-v2-2';
-import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261031-seo-espacios-1';
+import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261031-seo-espacios-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;
