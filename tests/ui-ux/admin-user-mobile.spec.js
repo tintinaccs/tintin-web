@@ -54,14 +54,20 @@ test('la foto real se amplía sin recortar y se cierra con X',async({page})=>{
 });
 for(const [width,height] of [[320,568],[390,844],[768,1024],[844,390],[1024,768]])test(`listas pobladas sin deslizamiento lateral ${width}x${height}`,async({page})=>{
  await load(page,width);await page.setViewportSize({width,height});
+ await page.evaluate(()=>{
+  const wrapper=document.createElement('div');wrapper.className='tt-maestro-table-wrap';wrapper.style.overflow='auto';
+  wrapper.innerHTML='<table class="tt-maestro-table" style="min-width:1120px"><thead><tr><th>Módulo</th><th>Acciones</th></tr></thead><tbody></tbody></table>';
+  document.getElementById('section-configuracion').append(wrapper);
+ });
  const sections=await page.locator('.adm-content > .adm-section').evaluateAll(nodes=>nodes.map(node=>node.id));
  let checked=0;
  for(const id of sections){
   const count=await page.evaluate(id=>{
    document.querySelectorAll('.adm-section').forEach(node=>node.classList.toggle('active',node.id===id));
    let count=0;
-   for(const table of document.getElementById(id).querySelectorAll('.adm-table-wrap table')){
+   for(const table of document.getElementById(id).querySelectorAll('table')){
     const headings=[...table.querySelectorAll('thead tr:last-child th')];if(!headings.length)continue;
+    for(let parent=table.parentElement;parent&&parent.id!==id;parent=parent.parentElement){if(getComputedStyle(parent).display==='none')parent.style.display='block';}
     const body=table.tBodies[0]||table.createTBody();body.replaceChildren();
     const row=body.insertRow();
     headings.forEach((heading,index)=>{
@@ -72,8 +78,8 @@ for(const [width,height] of [[320,568],[390,844],[768,1024],[844,390],[1024,768]
   },id);
   if(!count)continue;
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-  const overflow=await page.locator(`#${id} .adm-table-wrap`).evaluateAll(nodes=>nodes.filter(node=>node.getClientRects().length&&node.scrollWidth>node.clientWidth+1).map(node=>({html:node.outerHTML.slice(0,250),width:node.clientWidth,scroll:node.scrollWidth})));
+  const overflow=await page.locator(`#${id} table.tt-admin-records`).evaluateAll(nodes=>nodes.filter(node=>node.getClientRects().length&&node.scrollWidth>node.clientWidth+1).map(node=>({html:node.outerHTML.slice(0,250),width:node.clientWidth,scroll:node.scrollWidth})));
   expect(overflow,id).toEqual([]);checked+=count;
  }
- expect(checked).toBeGreaterThan(8);
+ expect(checked).toBeGreaterThanOrEqual(12);
 });

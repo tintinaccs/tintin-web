@@ -22,6 +22,10 @@ Rama codex/admin-mobile-fichas, base origin/main ed03b8c7 (integrado tras PR1292
 - Corrección CI del primer candidato integrado: dashboard-data contaba sólo
   `<tr>` sin atributos. Ahora acepta atributos y verifica UID de segunda página;
   audit:admin-sync vuelve a pasar79/79. Sin cambio adicional de aplicación.
+- PASS_LOCAL final ampliado: las10 pruebas incluyen también tablas internas
+  de productos, dispositivos, eventos y Maestro, sin depender de adm-table-wrap;
+  se revelan contenedores ocultos en la fixture para comprobar su geometría.
+  Auditorías Maestro27/27, conexiones25/25, cierre85/85 y módulos140/140.
 - IN_PROGRESS: CI/merge protegido. Los resultados de GitHub quedan en el
   recibo del PR de esta rama.
 - NOT_VERIFIED: sesión real de Super Admin, Safari/iOS/Android físicos y app
