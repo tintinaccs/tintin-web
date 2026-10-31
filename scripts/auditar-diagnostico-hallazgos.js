@@ -21,6 +21,26 @@ function check(label, condition) {
   console.error(`FAIL — ${label}`);
 }
 
+// Acepta el enlace directo o el paquete generado, siempre que el paquete esté al día e incluya perfil.css.
+function profileStylesInInitialHead() {
+  const html = read('perfil.html');
+  const head = (html.match(/<head\b[^>]*>[\s\S]*?<\/head>/i) || [''])[0];
+  if (/<link\b[^>]*rel="stylesheet"[^>]*href="css\/pages\/perfil\.css\?v=[^"]+"/i.test(head)) return true;
+  const { bundleHomeStyles } = require('./lib/estilos-inicio.js');
+  const options = { id: 'tt-perfil-css-bundle', file: 'css/generated/perfil.css', versionPrefix: 'tintin-perfil', minify: true };
+  let result;
+  try {
+    result = bundleHomeStyles(html, file => read(file).replace(/\r\n?/g, '\n'), options);
+  } catch {
+    return false;
+  }
+  const bundle = result.bundles.find(item => item.entries.some(entry => entry.file === 'css/pages/perfil.css'));
+  return Boolean(bundle)
+    && result.html === html
+    && head.includes(`<link rel="stylesheet" id="${bundle.id}" href="${bundle.file}?v=${bundle.version}">`)
+    && exists(bundle.file) && read(bundle.file) === bundle.css;
+}
+
 function sha256(source) {
   const canonical = String(source).replace(/\r\n?/g, '\n');
   return crypto.createHash('sha256').update(canonical).digest('hex');
@@ -179,7 +199,7 @@ const touchAssertions = [
 ];
 check(
   'El perfil carga sus controles táctiles desde el head inicial',
-  /<head\b[^>]*>[\s\S]*?<link\b[^>]*rel="stylesheet"[^>]*href="css\/pages\/perfil\.css\?v=[^"]+"[\s\S]*?<\/head>/i.test(read('perfil.html'))
+  profileStylesInInitialHead()
 );
 check(
   'Los controles táctiles independientes corregidos conservan su tamaño mínimo',

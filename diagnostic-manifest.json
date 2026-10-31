@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5232db62c01b29c455ef38d42fd2bc4faf92e85c95d3d56001f239ccce064d41",
+  "sourceFingerprint": "4aaeb5afeb9ef285ca3b8bbdb1ada007ce774b4d51880191c2f7e3607d39816d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1673,
     "textFiles": 1538,
-    "totalBytes": 44127444,
+    "totalBytes": 44128385,
     "pages": 19,
     "modules": 1104
   },
@@ -38340,8 +38340,8 @@
     },
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
-      "bytes": 9725,
-      "sha256": "c1521f7485c026b37cdab78e3c216d77801908d0f5021c7360267ad11e172e21",
+      "bytes": 10666,
+      "sha256": "c7b54dff541b7caeac14631696ea785bed278653832f6ed1f1f10858b0c3a560",
       "syntax": {
         "ok": true,
         "error": ""
@@ -66042,8 +66042,8 @@
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
       "extension": ".js",
-      "bytes": 9725,
-      "sha256": "c1521f7485c026b37cdab78e3c216d77801908d0f5021c7360267ad11e172e21"
+      "bytes": 10666,
+      "sha256": "c7b54dff541b7caeac14631696ea785bed278653832f6ed1f1f10858b0c3a560"
     },
     {
       "path": "scripts/auditar-diagnostico.js",
@@ -72025,7 +72025,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 92,
+            "line": 112,
             "operation": "collection"
           }
         ]
@@ -72150,7 +72150,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 88,
+            "line": 108,
             "operation": "collection"
           },
           {
@@ -73125,7 +73125,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 91,
+            "line": 111,
             "operation": "collection"
           },
           {
