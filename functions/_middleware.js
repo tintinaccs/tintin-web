@@ -146,9 +146,28 @@ async function applyPagesDevIndexPolicy(request, pathname, response) {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
+// La tienda pública vive solo en el dominio comercial. El host técnico de
+// producción redirige las páginas; /api/* (Apps Script y webhooks lo usan como
+// destino por defecto) y /__/auth/* (proxy de Firebase Auth) siguen respondiendo.
+const TECHNICAL_PAGES_HOST = 'tintinaccesorios.pages.dev';
+const PUBLIC_ORIGIN = 'https://tintinaccs.com';
+
+function redirectTechnicalStorefront(request) {
+  const url = new URL(request.url);
+  if (url.hostname.toLowerCase() !== TECHNICAL_PAGES_HOST) return null;
+  if (request.method !== 'GET' && request.method !== 'HEAD') return null;
+  if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/__/')) return null;
+  return new Response(null, {
+    status: 301,
+    headers: { Location: PUBLIC_ORIGIN + url.pathname + url.search, 'X-Robots-Tag': 'noindex', 'Cache-Control': 'public, max-age=3600' },
+  });
+}
+
 export async function onRequest(context, { sharedLimit = limitByIp } = {}) {
   const pathname = new URL(context.request.url).pathname;
   if (pathname.startsWith('/__/auth/')) return context.next();
+  const canonical = redirectTechnicalStorefront(context.request);
+  if (canonical) return canonical;
 
   const blocked = await enforceMutationLimit(context.request, pathname, context.env, sharedLimit);
   if (blocked) return applyPagesDevIndexPolicy(context.request, pathname, blocked);

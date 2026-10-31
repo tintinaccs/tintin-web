@@ -299,24 +299,36 @@ for (const width of [320,390,540,768]) test(`categorías mobile completas sin re
  await page.goto('/catalogo',{waitUntil:'domcontentloaded'});
  const nav=page.locator('#cat-tabs-mobile'),buttons=nav.locator('button');
  await expect(buttons).toHaveCount(collections.length+1);
- const geometry=await nav.evaluate(el=>{
+ // Contrato compacto: una sola fila deslizable + botón accesible que la despliega.
+ const measure=()=>nav.evaluate(el=>{
   const box=el.getBoundingClientRect();
-  return {width:el.clientWidth,scrollWidth:el.scrollWidth,box:box.toJSON(),buttons:[...el.querySelectorAll('button')].map(button=>{
-   const rect=button.getBoundingClientRect();
-   return {rect:rect.toJSON(),width:button.clientWidth,scrollWidth:button.scrollWidth};
-  })};
+  return {width:el.clientWidth,scrollWidth:el.scrollWidth,box:box.toJSON(),page:document.documentElement.scrollWidth,
+   buttons:[...el.querySelectorAll('button')].map(button=>({rect:button.getBoundingClientRect().toJSON(),width:button.clientWidth,scrollWidth:button.scrollWidth}))};
  });
- const spacing=await nav.evaluate(el=>{
-  const css=getComputedStyle(el),fade=getComputedStyle(el,'::before');
-  const buttons=[...el.querySelectorAll('button')].map(button=>button.getBoundingClientRect());
-  const box=el.getBoundingClientRect();
-  return {top:Math.min(...buttons.map(b=>b.top))-box.top,bottom:box.bottom-Math.max(...buttons.map(b=>b.bottom)),fade:fade.backgroundImage,pointerEvents:fade.pointerEvents};
- });
- expect(spacing.top).toBeGreaterThanOrEqual(23);
- expect(spacing.bottom).toBeGreaterThanOrEqual(23);
- expect(spacing.fade).toContain('linear-gradient');
- expect(spacing.pointerEvents).toBe('none');
- expect(geometry.width).toBe(width);
+ const fade=await page.locator('#cat-tabs-shell').evaluate(el=>{const css=getComputedStyle(el,'::before');return {image:css.backgroundImage,pointerEvents:css.pointerEvents};});
+ expect(fade.image).toContain('linear-gradient');
+ expect(fade.pointerEvents).toBe('none');
+ const more=page.locator('#cat-tabs-more');
+ await expect(more).toBeVisible();
+ await expect(more).toHaveAttribute('aria-expanded','false');
+ await expect(more).toHaveAccessibleName('Ver todas las categorías');
+ const compact=await measure();
+ expect(compact.page).toBeLessThanOrEqual(width);
+ // Una fila: a 320 px el nombre largo de prueba ocupa dos líneas dentro de su botón.
+ expect(compact.box.height).toBeLessThanOrEqual(100);
+ for(const {rect,width:buttonWidth,scrollWidth} of compact.buttons){
+  expect(Math.abs(rect.top-compact.buttons[0].rect.top)).toBeLessThanOrEqual(1);
+  expect(rect.width).toBeLessThanOrEqual(compact.width+1);
+  expect(rect.top).toBeGreaterThanOrEqual(compact.box.top-1);
+  expect(rect.bottom).toBeLessThanOrEqual(compact.box.bottom+1);
+  expect(rect.height).toBeGreaterThanOrEqual(44);
+  expect(scrollWidth).toBeLessThanOrEqual(buttonWidth+1);
+ }
+ await more.click();
+ await expect(more).toHaveAttribute('aria-expanded','true');
+ await expect(more).toHaveAccessibleName('Mostrar menos categorías');
+ const geometry=await measure();
+ expect(geometry.page).toBeLessThanOrEqual(width);
  expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.width+1);
  for(const {rect,width:buttonWidth,scrollWidth} of geometry.buttons){
   expect(rect.left).toBeGreaterThanOrEqual(geometry.box.left-1);

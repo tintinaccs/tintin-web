@@ -1,3 +1,40 @@
+## 2026-10-31 — Ficha en vivo y dominio único (base main 430fd836e)
+Claude Code, rama claude/nifty-newton-o7j9wc (mismo PR que el catálogo).
+- Ficha: `estado-productos.js` compara una huella estable del documento
+  (claves ordenadas, Timestamps a ms) y emite `tintin:product-live-updated`
+  solo ante un cambio real posterior a la primera entrega; `tienda.js` muestra
+  un aviso role=status en `#tt-cart-feedback` solo si el id coincide con la
+  ficha abierta. Otras páginas no escuchan. `product-live-update.spec.js`:
+  falla sin el cambio, pasa con él.
+- `functions/_middleware.js`: GET/HEAD a `tintinaccesorios.pages.dev` → 301 a
+  `https://tintinaccs.com` + ruta; excluye `/api/` (Apps Script) y `/__/`
+  (Firebase Auth). Test de middleware 6/6; CSP/cloudinary 10/10.
+- `verify:csp`: CSP reproducible, 101 handlers por hash generados desde las
+  fuentes actuales; no quedan hashes obsoletos.
+- `?v=` subido a tintin-20261031-ficha-en-vivo-1 en cascada.
+- NOT_VERIFIED: redirección y aviso en producción tras el deploy.
+
+## 2026-10-31 — Catálogo móvil compacto (base main 430fd836e)
+Claude Code, rama claude/nifty-newton-o7j9wc.
+- Pedido: en móvil las 13 categorías ocupaban 5 filas y el primer producto
+  quedaba fuera de pantalla (y=748 a 390x740; y=881 a 320x568).
+- `catalogo.html` (≤768 px): categorías en una fila deslizable con botón
+  accesible `#cat-tabs-more` (aria-expanded/aria-controls, 44x44, teclado) que
+  despliega/contrae; al contraer se recentra la categoría activa. Hero y barra
+  de búsqueda/orden más compactos (grilla buscador / cantidad+orden). Filtros,
+  orden, búsqueda y navegación por categoría sin cambios funcionales.
+- Causa del recentrado fallido: los botones animaban `all` 0,2 s y el centrado
+  medía posiciones intermedias; ahora solo animan color/sombra.
+- Medición local (Playwright, API simulada con datos públicos reales): primer
+  producto y=420 (390x740), 416 (320x568), 447 (768x1024); escritorio sin
+  cambios (383). CLS 0,004/0,005/0,003 a 390/320/768. Sin scroll horizontal.
+- `search-responsive.spec.js` actualizado al contrato compacto (una fila,
+  botones sin recorte ≥44 px, toggle accesible, desplegado sin desborde).
+- WebKit (`audit:login-profile`): 518 pasaron, 1 falla en
+  `color-choice-browser` v2=false bajo carga; 3 corridas aisladas con
+  emuladores: 18/18 cada una. Intermitente, causa no determinada.
+- NOT_VERIFIED: comportamiento en producción tras el deploy.
+
 ## 2026-10-31 — Pendientes del catálogo (base main 73951ca07)
 Claude Code, rama claude/nifty-newton-o7j9wc.
 - CLS móvil del catálogo: `#cat-tabs-mobile` pasaba de 100 a 316 px cuando
