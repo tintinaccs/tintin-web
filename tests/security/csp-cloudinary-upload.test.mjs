@@ -119,7 +119,7 @@ test('una revalidación 304 de /perfil conserva la CSP de la ruta (subida de fot
     headers: { 'Content-Security-Policy': "default-src 'self'; connect-src 'self'" },
   });
   const response = await onRequest({
-    request: new Request('https://tintinaccesorios.pages.dev/perfil', { headers: { 'If-None-Match': '"x"' } }),
+    request: new Request('https://tintinaccs.com/perfil', { headers: { 'If-None-Match': '"x"' } }),
     next: async () => stale,
   });
   assert.equal(response.status, 304);
@@ -131,7 +131,7 @@ test('una revalidación 304 de /perfil conserva la CSP de la ruta (subida de fot
 
 test('un 304 de un recurso que no es página se deja intacto', async () => {
   const response = await onRequest({
-    request: new Request('https://tintinaccesorios.pages.dev/tienda.js'),
+    request: new Request('https://tintinaccs.com/tienda.js'),
     next: async () => new Response(null, { status: 304 }),
   });
   assert.equal(response.status, 304);

@@ -1,7 +1,7 @@
 import { normalizeCollectionSlug } from './colecciones-publicas.mjs?v=tintin-20261030-home-history-4';
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261030-home-history-5';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261030-home-history-5';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261031-galeria-sticky-1';
 import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261030-home-history-5';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261030-home-history-5';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
@@ -412,6 +412,16 @@ function stopProductRealtime() {
   publicProductCurrent = null;
 }
 
+// Orden de claves estable: el mismo documento produce siempre la misma huella.
+function stableFingerprint(value) {
+  if (Array.isArray(value)) return `[${value.map(stableFingerprint).join(',')}]`;
+  if (value && typeof value === 'object') {
+    if (typeof value.toMillis === 'function') return String(value.toMillis());
+    return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stableFingerprint(value[key])}`).join(',')}}`;
+  }
+  return JSON.stringify(value ?? null);
+}
+
 function isCurrentProductRequest(id, requestVersion) {
   return publicProductId === id && publicProductRequestVersion === requestVersion;
 }
@@ -442,6 +452,10 @@ async function startProductRealtime(id) {
   // descarga si el plazo para nuevas tomas vence mientras procesa el producto.
   const pagePrefetch = getProductPagePrefetch(normalizedId);
   let realtimeConfirmed = false;
+  // Huella del último documento recibido por el listener. La primera entrega
+  // sólo confirma lo que ya se ve; una huella distinta después es un cambio
+  // real hecho mientras la persona mira esta ficha.
+  let realtimeFingerprint = '';
   let relatedRequestVersion = 0;
   let relatedPendingCategory = '';
 
@@ -547,6 +561,11 @@ async function startProductRealtime(id) {
           'realtime-product'
         );
         settle(current);
+        const fingerprint = stableFingerprint(snapshot.data());
+        if (realtimeFingerprint && fingerprint !== realtimeFingerprint) {
+          window.dispatchEvent(new CustomEvent('tintin:product-live-updated', { detail: { id: normalizedId } }));
+        }
+        realtimeFingerprint = fingerprint;
 
         scheduleRelated(product);
       },

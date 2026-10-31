@@ -620,7 +620,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261030-home-history-5')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261031-galeria-sticky-1')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -1976,10 +1976,43 @@ async function _addToCartWithQty(product, qty, variantStr) {
 }
 window._addToCartWithQty = _addToCartWithQty;
 
+// La ficha abierta ya se repintó con el documento nuevo (precio, stock, fotos).
+// Sólo la ficha de ese producto recibe la señal; otras páginas no escuchan.
+window.addEventListener('tintin:product-live-updated', event => {
+  if (!document.getElementById('product-detail') || !_pdProduct) return;
+  if (String(event.detail?.id) !== String(_pdProduct.id)) return;
+  _showProductFeedback('Esta ficha se actualizó con los últimos cambios de precio, stock o fotos.', 'info');
+});
+
+// En dos columnas la galería acompaña el scroll (sticky en CSS). Si es más alta
+// que la pantalla, su tope pasa a ser negativo: primero se desplaza hasta mostrar
+// su borde inferior (miniaturas y colores) y recién ahí queda fija.
+(function _initProductGallerySticky() {
+  const gallery = document.querySelector('#product-detail .tt-product-gallery');
+  if (!gallery) return;
+  const gap = 16;
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 72;
+    const preferred = header + gap;
+    const fit = window.innerHeight - gallery.offsetHeight - gap;
+    gallery.style.setProperty('--tt-product-gallery-sticky-top', `${Math.round(Math.min(preferred, fit))}px`);
+  };
+  const request = () => { if (!frame) frame = requestAnimationFrame(update); };
+  window.addEventListener('resize', request);
+  if (typeof ResizeObserver === 'function') new ResizeObserver(request).observe(gallery);
+  request();
+})();
+
 // Si el módulo del carrito no carga (red caída, SDK bloqueado), el cliente debe
 // ver el fallo en lugar de un botón que vuelve a su estado sin explicación.
 function _showProductCartError(error) {
   console.error('[product] No se pudo agregar al carrito:', error);
+  _showProductFeedback('No pudimos agregar el producto al carrito. Revisá tu conexión e intentá de nuevo.', 'warning');
+}
+
+function _showProductFeedback(message, state) {
   let node = document.getElementById('tt-cart-feedback');
   if (!node) {
     node = document.createElement('div');
@@ -1990,8 +2023,8 @@ function _showProductCartError(error) {
     node.setAttribute('aria-atomic', 'true');
     document.body.appendChild(node);
   }
-  node.textContent = 'No pudimos agregar el producto al carrito. Revisá tu conexión e intentá de nuevo.';
-  node.dataset.state = 'warning';
+  node.textContent = message;
+  node.dataset.state = state;
   node.classList.add('is-visible');
   window.clearTimeout(node._hideTimer);
   node._hideTimer = window.setTimeout(() => node.classList.remove('is-visible'), 4200);
