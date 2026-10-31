@@ -1,3 +1,25 @@
+## 2026-10-31 — Admin adaptable y fotos de usuarios (Codex)
+
+Rama codex/admin-mobile-fichas, base origin/main 2db63462.
+- Implementación: tarjetas de registros hasta1024px, encabezados como etiquetas,
+  campos y controles completos; misma tabla en escritorio. Fila y miniatura
+  abren la ficha; nombre/rol/estado y foto ampliable con iniciales de respaldo.
+- Ficha reutiliza el controlador de accesibilidad de admin-app; foto usa dialog
+  nativo, X/Escape/fondo, object-fit contain. Cargas descartadas tras cerrar o
+  abrir otra ficha. No se modifican escritores, permisos, listeners ni datos.
+- PASS_LOCAL: 70 pruebas finales admin-all-devices/admin-workspaces y
+  admin-user-mobile; incluyen todas las tablas pobladas con texto largo a
+  320/390/768/844/1024px y ficha/foto hasta1440, usando accesibilidad compartida.
+- PASS_LOCAL: 77 regresiones de comercio/pedidos; 15 pruebas de paginación,
+  cuentas bloqueadas y avisos de actualización. Usuarios/Roles25 comprobaciones,
+  seguridad fase8, preflight de sintaxis/imports e integridad de estilos.
+- PASS_LOCAL: build:pages completo y derivados CSP/caché/diagnóstico; diff
+  revisado. Se conserva el plan de mantenimiento protegido generado.
+- IN_PROGRESS: CI/merge protegido. Los resultados de GitHub quedan en el
+  recibo del PR de esta rama.
+- NOT_VERIFIED: sesión real de Super Admin, Safari/iOS/Android físicos y app
+  instalada; las pruebas usan Chromium y datos ficticios aislados.
+
 ## 2026-10-31 — Galería de la ficha acompaña el scroll (base main 762610d5c)
 Claude Code, rama claude/nifty-newton-o7j9wc (PR nuevo).
 - Pedido: en dos columnas la ficha derecha es mucho más alta y la galería

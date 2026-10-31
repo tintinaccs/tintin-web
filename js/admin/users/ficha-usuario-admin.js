@@ -95,8 +95,6 @@ if (!window.TintinAdminUserFichaBooted) {
   }
 
   let requestVersion = 0;
-  let returnFocus;
-  let previousOverflow = '';
   function profilePhoto(user, large = false) {
     const initials = text(user.name || user.email || '?').trim().split(/\s+/).slice(0, 2).map(part => part[0]).join('').toUpperCase();
     const avatar = el('span', large ? 'ficha-avatar ficha-avatar-large' : 'ficha-avatar', initials || '?');
@@ -130,15 +128,9 @@ if (!window.TintinAdminUserFichaBooted) {
     if (!auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return false;
     const ownerUid = auth.currentUser.uid;
     const version = ++requestVersion;
-    if (overlay.style.display === 'none') {
-      returnFocus = document.activeElement;
-      previousOverflow = document.body.style.overflow;
-    }
-    document.body.style.overflow = 'hidden';
 
     body.replaceChildren(el('div', 'adm-loading', 'Cargando ficha…'));
     overlay.style.display = 'block';
-    overlay.querySelector('button')?.focus();
 
     try {
       let user = await loadUser(uid);
@@ -161,7 +153,7 @@ if (!window.TintinAdminUserFichaBooted) {
       photo.append(profilePhoto(user));
       photo.addEventListener('click', () => openPhoto(user));
       const summary = el('div');
-      summary.append(el('h2', '', user.name || user.email || 'Usuario'), el('p', '', ROLE_LABELS[canonicalRole(user)] || canonicalRole(user)), el('span', 'adm-badge', user.blocked ? 'Bloqueado' : 'Activo'));
+      summary.append(el('h2', '', user.name || user.email || 'Usuario'), el('p', '', ROLE_LABELS[canonicalRole(user)] || canonicalRole(user)), el('span', `adm-badge ${user.blocked || user.deleted || user.profileStatus === 'deleted' ? 'badge-cancelado' : 'badge-entregado'}`, user.deleted || user.profileStatus === 'deleted' ? 'Eliminado' : user.blocked ? 'Bloqueado' : 'Activo'));
       header.append(photo, summary);
       const identity = section('Identidad');
       identity.grid.append(
@@ -260,8 +252,6 @@ if (!window.TintinAdminUserFichaBooted) {
     ++requestVersion;
     if (overlay) overlay.style.display = 'none';
     document.querySelector('.ficha-photo-dialog')?.close();
-    document.body.style.overflow = previousOverflow;
-    if (returnFocus?.isConnected) returnFocus.focus();
   }
 
   function enhanceRows() {
@@ -329,16 +319,8 @@ if (!window.TintinAdminUserFichaBooted) {
     const overlay = document.getElementById('client-ficha-overlay');
     if (overlay && !overlay.dataset.dismissReady) {
       overlay.dataset.dismissReady = 'true';
+      overlay.querySelector('.adm-icon-close')?.addEventListener('click', closeClientFicha);
       overlay.addEventListener('click', event => { if (event.target === overlay) closeClientFicha(); });
-      document.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && overlay.style.display !== 'none' && !document.querySelector('.ficha-photo-dialog[open]')) closeClientFicha();
-        if (event.key === 'Tab' && overlay.style.display !== 'none' && !document.querySelector('.ficha-photo-dialog[open]')) {
-          const nodes = [...overlay.querySelectorAll('button,a[href],input,select,textarea,[tabindex="0"]')].filter(node => !node.disabled && node.getClientRects().length);
-          const first = nodes[0], last = nodes.at(-1);
-          if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
-          else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
-        }
-      });
     }
     enhanceRows();
     const tbody = document.getElementById('users-tbody');

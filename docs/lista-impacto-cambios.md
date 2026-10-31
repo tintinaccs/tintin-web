@@ -1,3 +1,15 @@
+## 2026-10-31 — Admin móvil y ficha de usuarios
+
+Autoridades: renderUsersTable, ficha-usuario-admin y espacio-modulos-admin
+(JS/CSS). Filas existentes se muestran como tarjetas hasta1024px con todos
+sus campos/acciones y etiquetas de sus encabezados; escritorio conserva tabla.
+La fila/miniatura abre la ficha; foto ampliable con dialog nativo e iniciales
+sin foto. Se reutiliza setupAdminOverlayA11y para foco/Escape/scroll, sin otra
+autoridad de cuentas, pedidos ni permisos. Versionado transitivo y derivados
+CSP/caché/diagnóstico/protección por sus constructores. Pruebas aisladas con
+listas pobladas, textos largos, orientación y regresiones de comercio.
+Sin datos reales ni nuevas dependencias. Evidencia/límites en CURRENT_STATE.
+
 ## 2026-10-30 — Prompt maestro: integridad del mensaje, lectura voluntaria y superficies
 
 Autoridades existentes: contactos-pedido y ciclo-pedido; políticas de checkout
