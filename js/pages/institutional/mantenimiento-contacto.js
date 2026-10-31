@@ -24,10 +24,10 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
 
 
   function setMeta() {
-    const url = new URL('/contact', location.origin);
+    const url = new URL('/contact', 'https://tintinaccs.com');
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', url.href);
     document.querySelector('meta[property="og:url"]')?.setAttribute('content', url.href);
-    const image = new URL('/assets/og-cover.jpg', location.origin).href;
+    const image = new URL('/assets/og-cover.jpg', 'https://tintinaccs.com').href;
     document.querySelector('meta[property="og:image"]')?.setAttribute('content', image);
     document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', image);
   }

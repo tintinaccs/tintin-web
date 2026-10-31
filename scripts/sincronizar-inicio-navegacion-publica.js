@@ -21,15 +21,15 @@ function pageStyles(page) {
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261031-a11y-checkout-1';
+const TIENDA_VERSION = 'tintin-20261031-seo-espacios-2';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
-const LOADER_VERSION = 'tintin-20261031-admin-mobile-2';
+const LOADER_VERSION = 'tintin-20261031-seo-espacios-2';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5';
 const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20261031-a11y-checkout-1';
-const NAV_ENTRY_VERSION = 'tintin-20261031-a11y-checkout-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261031-seo-espacios-2';
+const NAV_ENTRY_VERSION = 'tintin-20261031-seo-espacios-2';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20261030-home-history-5';
+const VISUAL_BUILDER_VERSION = 'tintin-20261031-seo-espacios-2';
 const SESSION_PROTECTION_VERSION = 'tintin-20261030-home-history-5';
 const PROFILE_GATE_VERSION = 'tintin-20261030-home-history-5';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
@@ -203,7 +203,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-login-maintenance=\"1\"",
       "css/pages/login/login-maintenance.css",
-      "tintin-20261021-workspace-account-1"
+      "tintin-20261031-seo-espacios-2"
     ],
     [
       "data-tt-login-fluid=\"1\"",

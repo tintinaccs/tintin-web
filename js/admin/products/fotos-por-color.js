@@ -1,7 +1,7 @@
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261028-opciones-inline-2';
-import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261030-home-history-5';
+import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261031-seo-espacios-2';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload, headless=false }) {
   const media = window.TintinProductMedia;

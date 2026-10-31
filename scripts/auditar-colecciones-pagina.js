@@ -34,7 +34,7 @@ requireText(runtime, /visibilitychange/, 'Falta actualización al regresar a la 
 requireText(runtime, /pageshow/, 'Falta recuperación de bfcache.');
 requireText(runtime, /window\.addEventListener\('online'/, 'Falta recuperación al volver internet.');
 requireText(runtime, /window\.addEventListener\('offline'/, 'Falta estado sin conexión.');
-requireText(runtime, /location\.origin/, 'Metadatos no se normalizan al dominio actual.');
+requireText(runtime, /https:\/\/tintinaccs\.com\//, 'Metadatos no usan el dominio canónico https://tintinaccs.com.');
 requireText(runtime, /getFullYear/, 'Footer no usa año automático.');
 requireText(runtime, /tt-collections-runtime-state/, 'Faltan estados visibles de recuperación.');
 requireText(loader, /collections[\s\S]*load\('pages\/collections\/mantenimiento-colecciones\.js'\)/, 'Runtime no se carga desde el cargador por página.');

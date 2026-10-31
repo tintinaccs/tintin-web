@@ -7,20 +7,20 @@ import {readProductEditorResponse} from './products/respuesta-editor-producto.mj
 import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1-editor-search-20261028-2-guiado-1269-20261029-1';
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
 import {productStatistics} from './statistics/estadisticas-producto.mjs?v=tintin-20261024-editor-v2-3';
-import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261026-editor-phase6-1';
-import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261029-performance-2';
-import { reorderVariantInventory, variantAttributes } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261031-seo-espacios-2';
+import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261031-seo-espacios-2';
+import { reorderVariantInventory, variantAttributes } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261025-mobile-shell-1';
-import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261024-editor-v2-4';
+import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261031-seo-espacios-2';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261022-avatar-inicial-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261030-audit-integrity-1';
+import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261031-seo-espacios-2';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -49,7 +49,7 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, render
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261030-home-history-5";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
-import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
 import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261030-audit-integrity-1";
@@ -66,9 +66,9 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261030-home-history-5';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261031-seo-espacios-2';
 import './settings/cupones-admin.js?v=tintin-20261022-avatar-inicial-1';
-import './products/integridad-inventario-admin.js?v=tintin-20261023-variant-engine-v2-2';
+import './products/integridad-inventario-admin.js?v=tintin-20261031-seo-espacios-2';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 

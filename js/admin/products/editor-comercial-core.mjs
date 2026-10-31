@@ -1,4 +1,4 @@
-import {variantInventoryEntries, variantInventoryTotal, reorderVariantInventory, assertVariantCompatibility, variantAttributes, attributesKey} from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import {variantInventoryEntries, variantInventoryTotal, reorderVariantInventory, assertVariantCompatibility, variantAttributes, attributesKey} from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 
 // Borrador del editor: las identidades y los cálculos siguen en el motor compartido.
 export function commercialDraft(product, variants = product.variants, protectedProduct=product) {

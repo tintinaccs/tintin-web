@@ -40,7 +40,7 @@ requireText(runtime, /popstate/, 'Falta restauración Atrás/Adelante.');
 requireText(runtime, /history\.replaceState/, 'Los filtros no sincronizan la URL.');
 requireText(runtime, /MutationObserver/, 'Falta vigilancia de render fuera de orden.');
 requireText(runtime, /tt-catalog-runtime-state/, 'Faltan estados de recuperación.');
-requireText(runtime, /location\.origin/, 'Los metadatos no se normalizan al dominio actual.');
+requireText(runtime, /https:\/\/tintinaccs\.com\//, 'Los metadatos no usan el dominio canónico https://tintinaccs.com.');
 requireText(runtime, /new Date\(\)\.getFullYear/, 'El año del footer no es automático.');
 requireText(loader, /catalogo[\s\S]*load\('pages\/catalog\/mantenimiento-catalogo\.js'(?:,\s*'[^']+')?\)/, 'El runtime del Catálogo no se carga desde el cargador por página.');
 requireText(maintenance, /Desktop grande:|Desktop grande|desktop grande/i, 'El registro no contempla desktop grande.');

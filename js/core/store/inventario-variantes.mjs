@@ -290,3 +290,22 @@ export function productDefaultPrice(product) {
   const entry = entries.find(row => row.active !== false && (row.stock === null || row.stock > 0)) || entries[0];
   return productVariantPrice(product,{variantKey:entry.variant});
 }
+
+// Ofertas públicas por combinación para datos estructurados (JSON-LD).
+// Usa la misma regla comercial que el carrito: activa y con stock (o sin control).
+// Devuelve null si el producto no tiene variantes o su inventario es inválido.
+export function variantOffers(product) {
+  try {
+    const entries = variantInventoryEntries(product);
+    if (!entries?.length) return null;
+    const v2 = product?.variantCommerceVersion === 2;
+    return entries.map(entry => {
+      const label = v2 ? variantSelectionLabel(product, { variantKey: entry.variant }) : entry.variant;
+      const price = v2 ? productVariantPrice(product, { variantKey: entry.variant }).price : product?.price;
+      const available = product?.active !== false && (v2
+        ? entry.active !== false && (entry.stock === null || entry.stock > 0)
+        : entry.stock > 0 && hasProductStock(product));
+      return { label: label || entry.variant, sku: entry.sku ? String(entry.sku) : '', price, available };
+    });
+  } catch { return null; }
+}
