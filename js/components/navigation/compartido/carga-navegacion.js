@@ -17,6 +17,8 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261030-home-history-5';
 const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261030-home-history-5';
 const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261031-galeria-sticky-1';
+// Mismo ?v= que el import de estado-productos.js: una sola instancia por página.
+const PAGE_MAINTENANCE_URL = '../../../cargador-mantenimiento-pagina.js?v=tintin-20261031-galeria-sticky-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -363,6 +365,12 @@ export function loadSharedRuntime() {
 
   scheduleNonCritical(() => {
     Promise.allSettled([loadCollectionsRuntime()]).then(reportRuntimeFailures);
+    // Checkout, Login y Perfil no cargan el catálogo al entrar, que era la
+    // única vía que importaba su mantenimiento (pasos navegables, controles
+    // de avance del checkout, semántica de formularios). Se carga directo.
+    if (page === 'cart' || page === 'account') {
+      Promise.allSettled([import(PAGE_MAINTENANCE_URL)]).then(reportRuntimeFailures);
+    }
     Promise.allSettled([loadHomeMaintenance()]).then(reportRuntimeFailures);
   });
 }
