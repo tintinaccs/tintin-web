@@ -44,7 +44,7 @@ function subscriptionHarness() {
     notificationsSurfaceIsOpen: () => false, markVisibleNotificationsRead() {}, scheduleSubscriptionRecovery() {},
   });
   vm.runInContext(source.slice(source.indexOf('function isVisibleCustomerNotification'), source.indexOf('function groupedNotifications')), context);
-  vm.runInContext(source.slice(source.indexOf('function subscribe(user'), source.indexOf('function optimisticRead')), context);
+  vm.runInContext(source.slice(source.indexOf('function subscribe(user'), source.indexOf('async function markVisibleNotificationsRead')), context);
   return { context, subscriptions, notices };
 }
 const snapshot = items => ({ docs: items.map(item => ({ id: item.id, data: () => item })) });

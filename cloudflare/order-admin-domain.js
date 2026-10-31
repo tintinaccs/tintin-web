@@ -881,7 +881,8 @@ export async function applyOrderAdminMutation(
   const detailChanges = customerOrderChanges(beforeOrder, nextOrder);
   const statusChanged = nextOrder.status !== beforeOrder.status || auditSummary(nextOrder).paymentStatus !== auditSummary(beforeOrder).paymentStatus;
   if (statusChanged || detailChanges.length) {
-    const notice = orderCustomerNotice(orderId, nextOrder, actor, { detailChanges: statusChanged ? [] : detailChanges });
+    const paymentChanged = auditSummary(nextOrder).paymentStatus !== auditSummary(beforeOrder).paymentStatus;
+    const notice = orderCustomerNotice(orderId, nextOrder, actor, { detailChanges: statusChanged ? [] : detailChanges, paymentChanged: paymentChanged && nextOrder.status === beforeOrder.status });
     if (notice) {
       const built = await buildUserNotificationWrite(notice.uid, { ...notice.event, createdAt: now }, notice.key);
       writes.push({ ...built.write, currentDocument: { exists: false } });

@@ -1,3 +1,21 @@
+## 2026-10-30 — Prompt maestro de capturas: pedidos, editor, búsqueda y notificaciones
+
+Codex /root, base c1baeb4d, worktree aislado codex/prompt-maestro-20261030.
+Seis adjuntos idénticos: una sola solicitud. Diagnóstico y fases en
+PROMPT-MAESTRO-20261030.md. Autoridad WhatsApp corregida desde el snapshot real;
+pagos/entregas y guardias existentes conservados. Editor con descripción adaptable
+y pestañas por ancho disponible; buscador compacto con límite visualViewport.
+Bandejas con lectura explícita, confirmación de servidor, cursores masivos y CAS
+sin sobrescritura del evento; logo oficial/avatares e iconos de estados reales.
+433 Node y 33 Chromium de editor PASS_LOCAL; 12 Chromium notificaciones, 15 del
+ticket y 85 controles administrativos aprobados antes de regresiones finales.
+Build/cache/preflight previos aprobados; se regeneran para el árbol final.
+No pedidos, cuentas, envíos, reseñas ni datos comerciales de producción.
+Safari físico, sesión real y recepción externa NOT_VERIFIED. 103 recorridos
+Chromium y 220 combinaciones responsive PASS_LOCAL. Build/caché/preflight PASS;
+plan protegido 32 archivos/50 registros. CI, merge y publicación PENDING:
+registrar SHA/run/intento al concluir.
+
 ## 2026-10-30 — Segunda integración de los PR pendientes,1281
 
 Codex /root.1280 MERGED57d81e4a184fbf0805b2f7d18ce37d42de4101dc, CI y
@@ -5069,3 +5087,13 @@ derivados desde la fuente combinada, con política base del main actual.
 PASS_LOCAL:300/300 Node22 (login/cuentas/presentación/carrito/push/social)
 y4/4 Chromium de formato. Sin cambios adicionales al comportamiento del campo.
 El SHA combinado requiere CI y publicación propias.
+
+## 2026-10-31 — Continuación del PR #1283
+
+Codex /root revisó el candidato 288742c6. Reprodujo un cruce de sesión durante
+la lectura agrupada: al cambiar de cuenta entre dos peticiones, la segunda
+intentaba usar la sesión nueva. Ambos consumidores ahora verifican el UID
+original antes de cada aviso. La regresión falla antes y pasa después del cambio.
+Las cinco pruebas de integridad de lectura pasan. CI, merge y publicación del
+candidato final requieren evidencia por su SHA; no se heredan los PASS locales
+de la sesión anterior. No se escribieron datos comerciales reales.

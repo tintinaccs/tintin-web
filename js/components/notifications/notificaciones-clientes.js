@@ -1,3 +1,4 @@
+import { notificationIconKey, notificationIconSvg as iconSvg, notificationActionLabel } from './presentacion-notificacion.mjs?v=tintin-20261030-notificaciones-explicitas-1';
 import { testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1';
 import { appCheckReady, auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
@@ -38,19 +39,10 @@ function ensureStyles() {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.dataset.ttSocialNotifications = '1';
-  link.href = 'css/components/notifications/notificaciones-sociales.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
+  link.href = 'css/components/notifications/notificaciones-sociales.css?v=tintin-20261030-notificaciones-explicitas-1';
   document.head.appendChild(link);
 }
 
-function iconSvg(iconKey) {
-  const common = 'width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
-  if (iconKey === 'heart') return `<svg ${common}><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>`;
-  if (iconKey === 'comment' || iconKey === 'review') return `<svg ${common}><path d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4z"/><path d="M8 9h8M8 13h5"/></svg>`;
-  if (iconKey === 'order') return `<svg ${common}><path d="M6 7V5a6 6 0 0112 0v2"/><path d="M4 7h16l-1 14H5L4 7z"/></svg>`;
-  if (iconKey === 'user') return `<svg ${common}><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>`;
-  if (iconKey === 'sparkle') return `<svg ${common}><path d="M12 3l1.3 4.1L17 9l-3.7 1.9L12 15l-1.3-4.1L7 9l3.7-1.9L12 3z"/><path d="M19 15l.7 2.1L22 18l-2.3.9L19 21l-.7-2.1L16 18l2.3-.9L19 15z"/></svg>`;
-  return `<svg ${common}><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>`;
-}
 
 function safeTarget(value) {
   const target = String(value || '').trim();
@@ -111,7 +103,7 @@ function ensureDrawer() {
     </div>
     <div class="tt-notifications-toolbar">
       <span class="tt-notifications-count" id="tt-notifications-count">Sin novedades</span>
-      <span class="tt-notifications-auto-read">Al abrir, las novedades quedan vistas</span>
+<button type="button" class="tt-notifications-mark-all" id="tt-notifications-mark-all">Marcar todas como leídas</button>
     </div>
     <div class="tt-notifications-list" id="tt-notifications-list" aria-live="polite"><div class="tt-notifications-loading">Cargando tu actividad…</div></div>`;
   document.body.appendChild(drawer);
@@ -142,7 +134,9 @@ function updateBadge() {
     badge.textContent = unread > 99 ? '99+' : String(unread);
   });
   const count = document.getElementById('tt-notifications-count');
-  if (count) count.textContent = unread ? `${unread} sin leer` : 'Todo al día';
+  if (count) count.textContent = unread ? `${unread} sin leer${hasOlderNotifications ? ' en esta lista' : ''}` : hasOlderNotifications ? 'Sin pendientes en esta lista' : 'Todo al día';
+  const markAll = document.getElementById('tt-notifications-mark-all');
+  if (markAll) markAll.disabled = markingVisibleRead || !currentUser;
 }
 
 function notificationGroupKey(notification) {
@@ -207,17 +201,21 @@ function render() {
   }
   root.innerHTML = groupedNotifications(notifications).map(notification => {
     const image = safeImageUrl(notification.productImageUrl);
-    const trailing = image
+    const customer = notification.actorType === 'customer';
+    const photo = safeImageUrl(notification.actorPhotoUrl);
+    const trailing = customer ? (photo ? `<img class="tt-notification-thumb" src="${escapeHtml(photo)}" alt="Foto de ${escapeHtml(notification.actorName || 'cliente')}" loading="lazy">` : `<span class="tt-notification-customer-avatar" aria-label="Cliente">${escapeHtml(String(notification.actorName || '?').trim().slice(0,2).toUpperCase())}</span>`) : notification.actorType === 'store' ? `<span class="tt-notification-brand"><img src="/assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1" alt="Tintin Accesorios" width="44" height="32"></span>` : image
       ? `<img class="tt-notification-thumb" src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async">`
-      : `<span class="tt-notification-thumb-placeholder" aria-hidden="true">T</span>`;
-    return `<button type="button" class="tt-notification-card${notification.read === true ? '' : ' is-unread'}" data-notification-id="${escapeHtml(notification.id)}" data-notification-target="${escapeHtml(safeTarget(notification.targetUrl))}">
-      <span class="tt-notification-icon" data-icon="${escapeHtml(notification.iconKey || 'bell')}">${iconSvg(notification.iconKey)}</span>
+      : `<span class="tt-notification-brand"><img src="/assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1" alt="Tintin Accesorios" width="44" height="32"></span>`;
+    return `<article class="tt-notification-entry"><button type="button" class="tt-notification-card${notification.read === true ? '' : ' is-unread'}" data-notification-id="${escapeHtml(notification.id)}" data-notification-target="${escapeHtml(safeTarget(notification.targetUrl))}">
+      <span class="tt-notification-icon" data-icon="${escapeHtml(notificationIconKey(notification))}">${iconSvg(notificationIconKey(notification))}</span>
       <span class="tt-notification-copy">
+        <span class="tt-notification-sender">${escapeHtml(notification.actorType === 'store' ? 'Tintin Accesorios' : notification.actorType === 'customer' ? notification.actorName || 'Cliente' : 'Sistema Tintin')}</span>
         <strong>${escapeHtml(notification.title || 'Nueva actividad')}</strong>
         ${notification.body ? `<p>${escapeHtml(notification.body)}</p>` : ''}
-        <span class="tt-notification-meta">${notification.read === true ? '' : '<span class="tt-notification-dot" aria-label="Sin leer"></span>'}<span>${escapeHtml(relativeTime(notification.createdAt))}</span></span>
+        <span class="tt-notification-meta">${notification.read === true ? '' : '<span class="tt-notification-dot" aria-label="Sin leer"></span>'}<time title="${escapeHtml(timeValue(notification.createdAt).toLocaleString('es-PY'))}" datetime="${timeValue(notification.createdAt).toISOString()}">${escapeHtml(relativeTime(notification.createdAt))}</time></span>
+        <span class="tt-notification-action">${escapeHtml(notificationActionLabel(notification))}</span>
       </span>${trailing}
-    </button>`;
+    </button>${notification.read === true ? '' : `<button type="button" class="tt-notification-read" data-notification-read="${escapeHtml(notification.id)}">Marcar como leída</button>`}</article>`;
   }).join('');
   if (hasOlderNotifications) root.insertAdjacentHTML('beforeend', '<button type="button" class="tt-notification-card" data-notifications-older>Ver notificaciones anteriores</button>');
   updateBadge();
@@ -258,15 +256,6 @@ async function apiWithRetry(action, payload = {}, attempts = 3) {
     }
   }
   throw lastError || new Error('No se pudo completar la operación');
-}
-
-function notificationsSurfaceIsOpen() {
-  const drawer = document.getElementById('notifications-drawer');
-  if (!drawer) return false;
-  return drawer.getAttribute('aria-hidden') === 'false'
-    || drawer.classList.contains('open')
-    || (window.TintinSurfaceController?.surface === 'notifications'
-      && ['opening', 'open'].includes(window.TintinSurfaceController?.state));
 }
 
 function listenerErrorCode(error) {
@@ -340,7 +329,6 @@ function subscribe(user, { preserve = false } = {}) {
     subscribeRetryAttempt = 0;
     subscribeAuthRecoveryAttempted = false;
     render();
-    if (notificationsSurfaceIsOpen()) void markVisibleNotificationsRead();
   }, error => {
     if (generation !== subscriptionGeneration || currentUser?.uid !== user.uid) return;
     console.warn('[notifications] No se pudo escuchar la actividad:', error);
@@ -351,26 +339,48 @@ function subscribe(user, { preserve = false } = {}) {
   });
 }
 
-function optimisticRead(id) {
-  const item = notifications.find(notification => notification.id === id);
-  if (item) item.read = true;
-  render();
-}
-
 async function markVisibleNotificationsRead() {
-  if (!currentUser || markingVisibleRead || !notifications.some(item => item.read !== true)) return;
+  if (!currentUser || markingVisibleRead) return;
   const targetUser = currentUser;
   markingVisibleRead = true;
-  notifications.forEach(item => { if (item.read !== true) item.read = true; });
   render();
   try {
-    await apiWithRetry(isSuperAdmin(targetUser) ? 'adminNotificationsSeenAll' : 'notificationsSeenAll');
+    let pageToken = '';
+    const pages = new Set();
+    do {
+      if (currentUser?.uid !== targetUser.uid) return;
+      const result = await apiWithRetry(isSuperAdmin(targetUser) ? 'adminNotificationsSeenAll' : 'notificationsSeenAll', { pageToken });
+      pageToken = result.nextPageToken || '';
+      if (pageToken && pages.has(pageToken)) throw new Error('No se pudo avanzar en el historial');
+      pages.add(pageToken);
+    } while (pageToken);
+    if (currentUser?.uid === targetUser.uid) subscribe(currentUser, { preserve: true });
   } catch (error) {
     console.warn('[notifications] No se pudieron confirmar como vistas:', error);
-    if (currentUser?.uid === targetUser.uid) subscribe(currentUser);
+    if (currentUser?.uid === targetUser.uid) showReadError();
   } finally {
-    if (currentUser?.uid === targetUser.uid) markingVisibleRead = false;
+    if (currentUser?.uid === targetUser.uid) { markingVisibleRead = false; updateBadge(); }
   }
+}
+
+function showReadError() {
+  const root = document.getElementById('tt-notifications-list');
+  root?.querySelector('[data-read-error]')?.remove();
+  root?.insertAdjacentHTML('afterbegin', '<p role="alert" data-read-error>No pudimos confirmar la lectura. Volvé a intentarlo.</p>');
+}
+async function readNotification(id) {
+  const targetUser = currentUser;
+  const item = notifications.find(item => item.id === id);
+  if (!targetUser || !item || item.read === true) return;
+  try {
+    const key = notificationGroupKey(item);
+    const ids = key ? notifications.filter(row => notificationGroupKey(row) === key && row.read !== true).map(row => row.id) : [id];
+    for (const notificationId of ids) {
+      if (currentUser?.uid !== targetUser.uid) return;
+      await apiWithRetry(isSuperAdmin(targetUser) ? 'adminNotificationSeen' : 'notificationSeen', { notificationId });
+    }
+    if (currentUser?.uid === targetUser.uid) subscribe(currentUser, { preserve: true });
+  } catch { if (currentUser?.uid === targetUser.uid) showReadError(); }
 }
 
 function wireEvents() {
@@ -384,11 +394,13 @@ function wireEvents() {
         subscribeAuthRecoveryAttempted = false;
         subscribe(currentUser, { preserve: true });
       }
-      void markVisibleNotificationsRead();
     }
   });
 
   document.addEventListener('click', event => {
+    if (event.target.closest?.('#tt-notifications-mark-all')) { event.preventDefault(); void markVisibleNotificationsRead(); return; }
+    const readButton = event.target.closest?.('[data-notification-read]');
+    if (readButton) { event.preventDefault(); void readNotification(readButton.dataset.notificationRead); return; }
     if (event.target.closest?.('[data-notifications-older]') && currentUser) {
       event.preventDefault();
       historyLimit += 100;
@@ -401,8 +413,7 @@ function wireEvents() {
       event.preventDefault();
       const id = card.dataset.notificationId;
       const target = safeTarget(card.dataset.notificationTarget);
-      optimisticRead(id);
-      const work = api(isSuperAdmin(currentUser) ? 'adminNotificationSeen' : 'notificationSeen', { notificationId: id }).catch(error => console.warn('[notifications] No se pudo marcar como leída:', error));
+      const work = readNotification(id);
       Promise.race([work, new Promise(resolve => setTimeout(resolve, 220))]).finally(() => {
         window.location.href = target;
       });

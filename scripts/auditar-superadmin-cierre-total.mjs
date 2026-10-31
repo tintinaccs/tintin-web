@@ -174,20 +174,20 @@ for (const module of syncModules) {
 check('sync-contract-coverage', 'Todo módulo sincronizable tiene una comprobación global explícita',
   syncModules.every(module => typeof connectionContracts[module.id] === 'function'), syncModules.map(module => module.id).join(', '));
 
-// 4. Notificaciones: abrir significa leer, incluso si Firestore responde después del clic.
-check('admin-notifications-auto-read', 'Super Admin marca automáticamente al abrir',
-  hasAll(adminNotifications, ['markVisibleNotificationsRead', "apiWithRetry('adminNotificationsSeenAll')", 'if (opening)', 'panelIsOpen()']));
-check('admin-notifications-snapshot-race', 'Super Admin resuelve la carrera abrir-antes-del-snapshot',
-  /onSnapshot[\s\S]*panelIsOpen\(\)[\s\S]*markVisibleNotificationsRead/.test(adminNotifications));
-check('admin-notifications-no-manual-dependency', 'Super Admin ya no depende de Marcar todo leído',
-  !adminNotifications.includes('adm-notifications-mark-all') && !adminNotifications.includes('Marcar todo leído'));
-check('client-notifications-controller-event', 'Cliente usa el evento canónico del controlador para autolectura',
-  hasAll(clientNotifications, ["'tintin:surface-change'", "surface === 'notifications'", 'markVisibleNotificationsRead']));
-check('client-notifications-snapshot-race', 'Cliente resuelve la carrera abrir-antes-del-snapshot',
-  /onSnapshot[\s\S]*notificationsSurfaceIsOpen\(\)[\s\S]*markVisibleNotificationsRead/.test(clientNotifications));
-check('notifications-server-persistence', 'API persiste autolectura para cliente y Super Admin',
+// 4. Abrir y recibir snapshots conserva la lectura; los botones la confirman.
+check('admin-notifications-explicit-read', 'Super Admin ofrece lectura individual y masiva explícita',
+  hasAll(adminNotifications, ['markVisibleNotificationsRead', 'adm-notifications-mark-all', 'data-adm-notification-read', 'readNotification']));
+check('admin-notifications-snapshot-race', 'Un snapshot no marca automáticamente notificaciones administrativas',
+  !adminNotifications.includes('panelIsOpen()') && !adminNotifications.includes('if (opening) window.setTimeout'));
+check('admin-notifications-confirmed-read', 'Super Admin espera persistencia antes de cambiar su contador',
+  adminNotifications.includes("await apiWithRetry('adminNotificationsSeenAll'") && !adminNotifications.includes('notification.read = true'));
+check('client-notifications-controller-event', 'Cliente usa el evento canónico sólo para recuperar la escucha',
+  hasAll(clientNotifications, ["'tintin:surface-change'", "surface === 'notifications'", 'listenerFailed']));
+check('client-notifications-snapshot-race', 'Cliente no marca lecturas al abrir ni recibir snapshots',
+  !clientNotifications.includes('notificationsSurfaceIsOpen()') && hasAll(clientNotifications,['tt-notifications-mark-all','data-notification-read','readNotification']));
+check('notifications-server-persistence', 'API persiste lectura explícita para cliente y Super Admin',
   hasAll(notificationApi, ["action === 'notificationsSeenAll'", "action === 'adminNotificationsSeenAll'", 'markAllNotificationsRead']));
-check('notifications-source-seen', 'Autolectura administrativa limpia también unread de reseñas y likes',
+check('notifications-source-seen', 'Lectura administrativa explícita limpia también unread de reseñas y likes',
   hasAll(notificationApi, ['markSourceSeen', 'reviewRecords', 'likeRecords']));
 check('surface-controller-contract', 'El controlador publica estado oficial de apertura/cierre',
   hasAll(surfaceController, ["'tintin:surface-change'", "setAttribute('aria-hidden', 'false')", "setAttribute('aria-hidden', 'true')"]));

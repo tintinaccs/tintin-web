@@ -446,3 +446,22 @@
     animation: none !important;
   }
 }
+
+/* Lectura voluntaria, emisor real y acciones accesibles. */
+.tt-notifications-mark-all,.tt-notification-read {min-height:44px;padding:8px 12px;border:1px solid var(--color-brand-primary,#F8AACA);border-radius:14px;background:#fff;color:var(--color-text-primary,#222222);font:inherit;font-size:12px;line-height:1.4;white-space:normal;cursor:pointer;}
+.tt-notifications-mark-all:disabled {opacity:.6;cursor:wait;}
+.tt-notification-read {margin:0 12px 10px 68px;max-width:calc(100% - 80px);}
+.tt-notification-sender,.tt-notification-action {display:block;font-size:11px;line-height:1.5;overflow-wrap:anywhere;}
+.tt-notification-sender {font-weight:600;margin-bottom:3px;}
+.tt-notification-action {margin-top:5px;text-decoration:underline;}
+.tt-notification-customer-avatar,.tt-notification-brand {display:grid;place-items:center;width:52px;height:52px;border-radius:14px;background:var(--color-brand-primary,#F8AACA);font-weight:700;}
+.tt-notification-brand img {width:44px;height:32px;object-fit:contain;filter:brightness(0) invert(1);}
+.tt-notification-customer-avatar {border:1px solid var(--color-text-primary,#222222);border-radius:50%;background:#fff;}
+.tt-notifications-mark-all:focus-visible,.tt-notification-read:focus-visible {outline:2px solid var(--color-text-primary,#222222);outline-offset:2px;}
+.tt-notification-icon[data-icon=preparing],.tt-notification-icon[data-icon=ready],.tt-notification-icon[data-icon=shipping] {background:#fff2f7;color:#222222;}
+.tt-notification-icon[data-icon=delivered],.tt-notification-icon[data-icon=payment-confirmed] {background:#e0f5e6;color:#166534;}
+.tt-notification-icon[data-icon=incident],.tt-notification-icon[data-icon=payment-pending] {background:#fff3e0;color:#803000;}
+.tt-notifications-header {flex-wrap:wrap;}
+
+.tt-notification-entry {margin-bottom:6px;}
+.tt-notifications-toolbar {flex-wrap:wrap;}

@@ -19,8 +19,8 @@ const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
 const LOADER_VERSION = 'tintin-20261030-home-history-5';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5';
 const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20261030-home-history-5';
-const NAV_ENTRY_VERSION = 'tintin-20261030-home-history-5';
+const PUBLIC_SHELL_VERSION = 'tintin-20261030-maestro-1';
+const NAV_ENTRY_VERSION = 'tintin-20261030-maestro-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261030-home-history-5';
 const SESSION_PROTECTION_VERSION = 'tintin-20261030-home-history-5';
@@ -110,7 +110,7 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-navigation-notifications-css\" data-tt-social-notifications=\"1\"",
     "css/components/notifications/notificaciones-sociales.css",
-    "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
+    "tintin-20261030-notificaciones-explicitas-1"
   ],
   [
     "id=\"tt-navigation-desktop-css\" media=\"(min-width: 1025px)\"",
@@ -150,7 +150,7 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-navigation-search-css\"",
     "css/components/navigation/compartido/busqueda.css",
-    "tintin-20261023-search-panel-height-1-nav-20261028-2"
+    "tintin-20261030-busqueda-compacta-1"
   ],
   [
     "id=\"tt-navigation-coherence-css\"",
@@ -218,7 +218,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-adm-social-notifications=\"1\"",
       "css/admin/notificaciones-admin.css",
-      "tintin-20260925-cache-converge-notifications-auto-read-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
+      "tintin-20261030-notificaciones-explicitas-1"
     ]
   ]
 };

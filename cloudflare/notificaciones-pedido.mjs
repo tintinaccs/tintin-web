@@ -17,7 +17,7 @@ export function customerOrderChanges(before = {}, after = {}) {
 
 // La campana conserva cada transición confirmada, con la misma clave en el
 // guardado atómico y en cualquier recuperación posterior del aviso.
-export function orderCustomerNotice(orderId, order, actor = {}, { created = false, detailChanges = [] } = {}) {
+export function orderCustomerNotice(orderId, order, actor = {}, { created = false, detailChanges = [], paymentChanged = false } = {}) {
   const uid = String(order?.userId || '').trim();
   if (!uid || order?.localEntryId) return null;
   const id = String(orderId);
@@ -26,6 +26,8 @@ export function orderCustomerNotice(orderId, order, actor = {}, { created = fals
   const payment = String(order.paymentStatus || order.payment?.status || '').trim();
   const revision = Math.max(0, Number(order.inventoryRevision) || 0);
   if (!created && revision <= 1 && ['pendiente', 'inventory_pending'].includes(status) && (!payment || payment === 'pendiente')) return null;
+  const paymentConfirmed = ['pagado','paid','approved','completed'].includes(payment);
+  const paymentTitle = paymentConfirmed ? `Pago confirmado de tu pedido ${number}` : `Actualizamos el pago de tu pedido ${number}`;
   const stage = lifecycleStatus(order);
   const method = shippingMethod(order);
   const titles = {
@@ -46,9 +48,9 @@ export function orderCustomerNotice(orderId, order, actor = {}, { created = fals
     key: created ? `order_created:${id}` : `order_status:${id}:${revision}:${status}:${payment}`,
     event: {
       kind: created ? 'order_created' : detailChanges.length ? 'order_updated' : 'order_status', actorType: 'store', actorUid: actor.uid || '', actorName: 'Tintin Accesorios',
-      title: created ? `Recibimos tu pedido ${number}` : detailChanges.length ? `Actualizamos los detalles de tu pedido ${number}` : titles[stage] || `Tu pedido ${number} fue actualizado`,
+      title: created ? `Recibimos tu pedido ${number}` : paymentChanged ? paymentTitle : detailChanges.length ? `Actualizamos los detalles de tu pedido ${number}` : titles[stage] || `Tu pedido ${number} fue actualizado`,
       body: created ? 'Tu pedido ya está registrado. Acá vas a recibir cada avance hasta la entrega.' : detailChanges.length ? `Revisá los cambios de ${detailChanges.join(', ')} en el detalle de tu pedido.` : `${customerOrderMessage(order)}${payment ? ` Pago: ${payment.replace(/_/g, ' ')}.` : ''}`,
-      iconKey: 'order', targetUrl: `perfil.html#pedido-${encodeURIComponent(id)}`,
+      iconKey: paymentChanged ? (paymentConfirmed ? 'payment-confirmed' : 'payment-pending') : 'order', targetUrl: `perfil.html#pedido-${encodeURIComponent(id)}`,
       orderId: id, orderNumber: number, status, sourceType: 'order', sourceId: id,
     },
   };

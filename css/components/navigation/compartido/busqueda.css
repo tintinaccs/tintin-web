@@ -7,14 +7,17 @@
   align-items: center !important;
 }
 
-/* .tt-search-results usa overflow:auto, así que su tamaño mínimo automático
-   colapsa a 0 (regla de CSS Sizing) y la fila 1fr se queda sin espacio salvo
-   que el panel tenga una altura definida en vez de auto. Solo se fuerza
-   cuando hay contenido real (carga, resultados o error) para no mostrar un
-   recuadro vacío mientras el usuario todavía no escribió nada. */
+/* En escritorio la lista crece con su contenido hasta el límite del viewport.
+   En móvil se conserva la superficie estable y su scroll independiente. */
 @media (min-width: 1025px) {
-  #search-panel.tt-search-panel.open.tt-has-results {
-    height: min(82dvh, 780px) !important;
+  #search-panel.tt-search-panel.open {
+    grid-template-rows: minmax(48px, auto) minmax(0, auto) !important;
+    height: auto !important;
+    max-height: min(780px, calc(var(--tt-panel-viewport-height, 100dvh) - clamp(12px, 8vh, 104px) - 12px)) !important;
+  }
+  #search-panel.tt-search-panel .tt-search-results {
+    height: auto !important;
+    max-height: min(670px, calc(var(--tt-panel-viewport-height, 100dvh) - clamp(12px, 8vh, 104px) - 122px)) !important;
   }
 }
 
@@ -34,6 +37,15 @@
   z-index: 3 !important;
   min-width: 0 !important;
   width: 100% !important;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none !important;
+  outline: none !important;
+}
+#search-panel.tt-search-panel .tt-search-input:focus {
+  border-color: var(--color-text-primary, #222222) !important;
 }
 
 #search-panel.tt-search-panel .tt-search-close {
@@ -73,10 +85,10 @@
 
 .tt-search-result-item {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
+  grid-template-columns: 56px minmax(0, 1fr);
   align-items: center;
   gap: 14px;
-  min-height: 84px;
+  min-height: 68px;
   margin: 0 0 8px;
   padding: 8px 14px 8px 8px;
   border: 1px solid rgba(248,170,202, .14);
@@ -99,8 +111,8 @@
 
 .tt-search-result-image {
   display: block;
-  width: 72px;
-  height: 68px;
+  width: 56px;
+  height: 52px;
   border-radius: 12px;
   background: #f8eef2;
   object-fit: contain;
