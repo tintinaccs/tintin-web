@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "4aaeb5afeb9ef285ca3b8bbdb1ada007ce774b4d51880191c2f7e3607d39816d",
+  "sourceFingerprint": "11a8634a9ca38999cae35d93775871425108feceeff2a7762b1b9f0ef4340459",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1673,
     "textFiles": 1538,
-    "totalBytes": 44128385,
+    "totalBytes": 44128609,
     "pages": 19,
     "modules": 1104
   },
@@ -58038,8 +58038,8 @@
     },
     {
       "path": "tests/ui-ux/onboarding-form-browser.test.mjs",
-      "bytes": 7136,
-      "sha256": "b2639b0e95bada5e037f7584f2ebae24808a078d66072e51f226b7d324367194",
+      "bytes": 7360,
+      "sha256": "582707530c74c814b520a52a0fd3c5d38ab7fbdf9653141972f1df1bd0b0d76e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -58074,6 +58074,12 @@
           "target": null,
           "dynamic": false,
           "line": 5
+        },
+        {
+          "raw": "../../scripts/lib/estilos-inicio.js",
+          "target": "scripts/lib/estilos-inicio.js",
+          "dynamic": true,
+          "line": 8
         }
       ],
       "endpoints": []
@@ -69444,8 +69450,8 @@
     {
       "path": "tests/ui-ux/onboarding-form-browser.test.mjs",
       "extension": ".mjs",
-      "bytes": 7136,
-      "sha256": "b2639b0e95bada5e037f7584f2ebae24808a078d66072e51f226b7d324367194"
+      "bytes": 7360,
+      "sha256": "582707530c74c814b520a52a0fd3c5d38ab7fbdf9653141972f1df1bd0b0d76e"
     },
     {
       "path": "tests/ui-ux/orders-board.spec.js",
