@@ -11,12 +11,19 @@ const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.j
 
 const ROOT = path.resolve(__dirname, '..');
 const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.css', versionPrefix: 'tintin-about-e9f78c18973f8f56' };
+// Cada página pública descarga sus hojas en uno o pocos paquetes en lugar de decenas de archivos bloqueantes.
+function pageStyles(page) {
+  if (page === 'index.html') return {};
+  if (page === 'about.html') return ABOUT_STYLES;
+  const slug = page.replace(/\.html$/, '');
+  return { id: `tt-${slug}-css-bundle`, file: `css/generated/${slug}.css`, versionPrefix: `tintin-${slug}` };
+}
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
 const TIENDA_VERSION = 'tintin-20261030-home-history-5';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
-const LOADER_VERSION = 'tintin-20261030-home-history-5';
+const LOADER_VERSION = 'tintin-20261031-css-bundles-1';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5';
 const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20261030-maestro-1';
@@ -28,7 +35,7 @@ const PROFILE_GATE_VERSION = 'tintin-20261030-home-history-5';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1-nav-20261028-2';
-const UNIFIED_THEME_VERSION = 'tintin-20261023-tema-unico-1';
+const UNIFIED_THEME_VERSION = 'tintin-20261031-tema-unico-2';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
@@ -605,8 +612,8 @@ for (const page of PUBLIC_PAGES) {
   let html = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
   const before = html;
 
-  if (page === 'index.html') html = restoreStyleSources(html);
-  if (page === 'about.html') html = restoreStyleSources(html, ABOUT_STYLES.id);
+  const styles = pageStyles(page);
+  html = restoreStyleSources(html, styles.id);
 
   for (const id of SHELL_IDS) html = removeElementById(html, id);
   html = removeLegacyComments(html);
@@ -629,8 +636,7 @@ for (const page of PUBLIC_PAGES) {
   html = ensurePublicStructuralStyles(html, false, page);
   html = ensureInitialRuntimeStyles(html, page);
   html = normalizeWhitespace(html);
-  if (page === 'index.html') html = writeHomeStyles(html, ROOT);
-  if (page === 'about.html') html = writeHomeStyles(html, ROOT, ABOUT_STYLES);
+  html = writeHomeStyles(html, ROOT, styles);
 
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');

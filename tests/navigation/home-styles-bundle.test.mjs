@@ -32,3 +32,21 @@ test('Nosotros reutiliza el empaquetado con identidad independiente, reversible 
  assert.deepEqual(bundleHomeStyles(result.html,()=>'.about{color:pink}',options),result);
  assert.equal(restoreStyleSources(result.html,options.id),html);
 });
+
+test('corta el empaquetado en estilos en línea y hojas con integridad para conservar la cascada', () => {
+  const html = '<html><head>\n  <link rel="stylesheet" href="css/a.css">\n  <link rel="stylesheet" href="/js/vendor/x.css" integrity="sha384-x" crossorigin="anonymous">\n  <link rel="stylesheet" href="css/b.css">\n  <style>.inline{color:red}</style>\n  <link rel="stylesheet" href="css/c.css">\n</head><body></body></html>';
+  const files = { 'css/a.css': '.a{}', 'css/b.css': '.b{}', 'css/c.css': '.c{}' };
+  const options = { id: 'tt-page-css-bundle', file: 'css/generated/pagina.css', versionPrefix: 'tintin-page' };
+  const result = bundleHomeStyles(html, file => files[file], options);
+  assert.deepEqual(result.bundles.map(bundle => [bundle.id, bundle.file, bundle.entries.map(entry => entry.file)]), [
+    ['tt-page-css-bundle', 'css/generated/pagina.css', ['css/a.css']],
+    ['tt-page-css-bundle-2', 'css/generated/pagina-2.css', ['css/b.css']],
+    ['tt-page-css-bundle-3', 'css/generated/pagina-3.css', ['css/c.css']],
+  ]);
+  const order = ['id="tt-page-css-bundle"', 'integrity="sha384-x"', 'id="tt-page-css-bundle-2"', '<style>', 'id="tt-page-css-bundle-3"'].map(part => result.html.indexOf(part));
+  assert.deepEqual([...order].sort((a, b) => a - b), order);
+  assert.ok(!order.includes(-1));
+  assert.match(result.html, /rel="stylesheet" href="\/js\/vendor\/x\.css" integrity="sha384-x"/);
+  assert.deepEqual(bundleHomeStyles(result.html, file => files[file], options), result);
+  assert.equal(restoreStyleSources(result.html, options.id), html);
+});
