@@ -21,7 +21,13 @@ admin-orders, admin-sync, products-media, products-sync y fases PASS_LOCAL.
 Playwright del repo requiere PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH en este
 contenedor (navegador 1243 vs 1248). Sin pedidos, correos, Sheets ni datos
 reales. Sesión real del titular y Safari físico NOT_VERIFIED.
-CI/merge/producción: registrar SHA/run/intento al concluir.
+CI de c81442ca: CI Tintin 41173188284 intento 1 SUCCESS (preflight, comercio,
+reglas, admin, calidad, interfaz/SEO/rendimiento, Repository audit), CodeQL
+41173185624 SUCCESS, Cloudflare Pages SUCCESS. Validación automática
+41174762295 rechazó «Huella candidata incorrecta: 404.html»: 28 archivos
+protegidos cambiaban sin plan. Plan regenerado con el helper canónico contra
+main 71d66d385 (28 archivos, 45 registros); 52 pruebas del mecanismo y
+preflight PASS_LOCAL. Merge y producción: pendientes del CI del SHA final.
 
 ## 2026-10-30 — Prompt maestro de capturas: pedidos, editor, búsqueda y notificaciones
 
