@@ -74,12 +74,13 @@ test('el paginador real de Usuarios ofrece los registros de la segunda página',
   };
   vm.createContext(context);
   vm.runInContext(functionSource('renderUsersTable', '\nwindow.setUsersPage') + '\nrenderUsersTable(users);', context);
-  assert.equal((fields.get('users-tbody').innerHTML.match(/<tr>/g) || []).length, size);
+  assert.equal((fields.get('users-tbody').innerHTML.match(/<tr\b[^>]*>/g) || []).length, size);
   assert.match(fields.get('users-pagination').innerHTML, /Página 1 de 2/);
   vm.runInContext('usersPage=1; renderUsersTable(users);', context);
-  assert.equal((fields.get('users-tbody').innerHTML.match(/<tr>/g) || []).length, 5);
+  assert.equal((fields.get('users-tbody').innerHTML.match(/<tr\b[^>]*>/g) || []).length, 5);
   assert.match(fields.get('users-tbody').innerHTML, new RegExp(`Cuenta ${size}`));
   assert.match(fields.get('users-pagination').innerHTML, /Página 2 de 2/);
+  assert.match(fields.get('users-tbody').innerHTML, new RegExp(`data-user-uid="u${size}"`));
 });
 
 

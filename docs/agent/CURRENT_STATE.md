@@ -19,6 +19,9 @@ Rama codex/admin-mobile-fichas, base origin/main ed03b8c7 (integrado tras PR1292
   (1114 archivos/72 imports); build y protección regenerados sobre ed03b8c7.
   Las70/77/15 regresiones anteriores corresponden al candidato previo, cuyo
   código de admin se conserva. CI verificará el SHA integrado completo.
+- Corrección CI del primer candidato integrado: dashboard-data contaba sólo
+  `<tr>` sin atributos. Ahora acepta atributos y verifica UID de segunda página;
+  audit:admin-sync vuelve a pasar79/79. Sin cambio adicional de aplicación.
 - IN_PROGRESS: CI/merge protegido. Los resultados de GitHub quedan en el
   recibo del PR de esta rama.
 - NOT_VERIFIED: sesión real de Super Admin, Safari/iOS/Android físicos y app
