@@ -1,20 +1,56 @@
 {
   "schemaVersion": 1,
   "baseCommit": "13604502b3590ee4613552250d428253097b1b8a",
-  "reason": "Editor de productos: etiquetas accesibles, vista Google con estilo y catálogo con imágenes de ancho limitado",
+  "reason": "Editor de productos: etiquetas accesibles, vista Google y catálogo con imágenes de ancho limitado; CSP y versiones de caché regeneradas",
   "files": [
+    {
+      "path": "_headers",
+      "oldHash": "e35bf583847eff1bfe0dada44cb15eefc58f06afeeb8f62a5ae08418c5ac771b",
+      "newHash": "b820c84c21069e3b99dd75e2ffbb18f11c55db91e329d6161e9e315141436a06"
+    },
+    {
+      "path": "admin.html",
+      "oldHash": "7a0c9ae7faf667da44d92391571bf2ecc6f00261a8f5386966ce9754db00bb40",
+      "newHash": "ae987061e921601aa37a37fb8e98ba14674973c834e58f8e25798cae2bc33099"
+    },
     {
       "path": "catalogo.html",
       "oldHash": "2e7caed87c62211ad5d2a3f449644e8e6e882437fde909048518145723d8e09e",
-      "newHash": "6a3ffc0885bc4a6460f5102639ae755559dbd1e057e75bdfff436e1d17918222"
+      "newHash": "d39af142eb9fffef221495f898682c537dd9a0c2d2a971a96be0e05f63a6b104"
+    },
+    {
+      "path": "config/csp-runtime.js",
+      "oldHash": "22c4b8ede759930d265151e4c934be294546a591013dfc0d3f80ec1c91cf937d",
+      "newHash": "bdc77192d306456cd485c684a500c950441d94c6963c10fbd3120671c2a32290"
+    },
+    {
+      "path": "config/csp-runtime.json",
+      "oldHash": "7b226b12f5614766c16e78c777881afa9c6e50ebd7ff86d0da1027425b3f131c",
+      "newHash": "582ef24f020ad212c1643f5674c2cd4566326b941a5b883aecceecd3e97a62f5"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "oldHash": "1d37a4405b07dedb804cd0314d4a9b01bdc23f00c5382f24f8bac4bf1ccdde1c",
       "newHash": "a5acf65a06dbd8268f4a1cfdba967f39decd61625dd7a729678b428a860b9972"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "5859534cfc099f4267b86cebaeba2c5c5de82b17d27c3a3727b101c7a5850b9d",
+      "newHash": "cfcebafa7010f2fb2268301dce1db0b7085d4d510efe0032f3b6d2cfa69ebfbd"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "0ccf9a6673223c6ea746b7d24c82fedbd0a25286346d3bd6d452a4e21541dea4",
+      "newHash": "27361dba1294c2f048d88f469ac7f6857f8016b96e81769156b898753afba139"
     }
   ],
   "affectedRecords": [
+    "cf-functions",
+    "cf-functions__apis-internas__20",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
+    "csp",
     "productos",
     "super-panel__productos__34"
   ]

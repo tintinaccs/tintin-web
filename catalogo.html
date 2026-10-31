@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="7623e9875e9f8d5838c0ea0cab147db29b2911f64b764e8e8289d693e633082f">
+  <meta name="tintin-page-revision" content="c21c69fc55e738b7935c640b9e223b3d1652b4c72dcaab9402d9f6690b219199">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -593,12 +593,15 @@ function catalogCloudinaryWidth(href, width) {
   }
 }
 
-function catalogImageAttributes(imageUrl) {
-  const widths = [320, 480, 720];
-  const variants = widths.map(width => [catalogCloudinaryWidth(imageUrl, width), width]);
-  if (variants.some(([href]) => !href)) return `src="${escapeCatalogHtml(imageUrl)}"`;
+function catalogImageSrc(imageUrl) {
+  return escapeCatalogHtml(catalogCloudinaryWidth(imageUrl, 480) || imageUrl);
+}
+
+function catalogImageSrcset(imageUrl) {
+  const variants = [320, 480, 720].map(width => [catalogCloudinaryWidth(imageUrl, width), width]);
+  if (variants.some(([href]) => !href)) return '';
   const srcset = variants.map(([href, width]) => `${href} ${width}w`).join(', ');
-  return `src="${escapeCatalogHtml(variants[1][0])}" srcset="${escapeCatalogHtml(srcset)}" sizes="(max-width: 767px) 50vw, (max-width: 1099px) 33vw, 300px"`;
+  return ` srcset="${escapeCatalogHtml(srcset)}" sizes="(max-width: 767px) 50vw, (max-width: 1099px) 33vw, 300px"`;
 }
 
 const catalogSearchCache = new WeakMap();
@@ -742,7 +745,7 @@ function renderGrid(lista) {
     const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
     const imageUrl = safeCatalogImageUrl(productVariantImage(p, firstAvailableVariant(p), p.imageUrl));
     const imgHtml = imageUrl
-      ? `<img ${catalogImageAttributes(imageUrl)} alt="${safeAlt}" width="480" height="480" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`
+      ? `<img src="${catalogImageSrc(imageUrl)}"${catalogImageSrcset(imageUrl)} alt="${safeAlt}" width="480" height="480" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`
       : `<div class="cat-card-placeholder" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`;
     const inStock = isInStockCat(p);
     const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));
