@@ -81,6 +81,9 @@
       z-index: 0;
     }
     .ck-step.done:not(:last-child)::after { background: var(--acc); }
+    /* superficies-solidas-interfaz.css fija outline:0 !important en html body .ck-steps .ck-step;
+       este selector es más específico para que el foco de teclado siga siendo visible. */
+    html body .ck-steps .ck-step:focus-visible { outline: 2px solid #292329 !important; outline-offset: 3px !important; }
 
     .ck-step-num {
       width: 32px;
