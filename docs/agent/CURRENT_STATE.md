@@ -1,3 +1,44 @@
+## 2026-10-31 — Prompt maestro: experiencia móvil del Super Admin (Codex)
+
+Rama codex/admin-mobile-fichas, PR1294; base main ed03b8c7.
+Solicitud precisada por los dos adjuntos idénticos del usuario. Inventario,
+sistema visual,26 superficies reales y decisiones por módulo en
+`docs/agent/ADMIN-MOBILE-EXPERIENCE.md`.
+
+- Teléfono: tablas completas adaptables, Usuarios con identidad compacta,
+  patrones especializados existentes de Productos/Pedidos preservados; pestañas
+  Correos/Envíos sin carrusel horizontal; campos44px/16px, modales con cierre
+  sticky y áreas seguras. Tablet/escritorio mantienen la cascada anterior.
+- Ficha y visor responsive en todos los formatos: foto contain, iniciales,
+  rol/estado reales y apertura por fila/miniatura. Control de foco canónico;
+  sin escritores ni listeners de datos paralelos.
+- Navegación aceptada en teléfono conserva historial; popstate/hashchange con
+  guardia de borradores y mismas comprobaciones de permiso. Escritorio conserva
+  replaceState. Las dos rutas privadas declaran la PWA existente y viewport-fit.
+- PASS_LOCAL ampliado:142 casos de panel/dashboard/workspaces/fichas y
+  experiencia móvil; repaso final24/24 tras áreas seguras y acciones masivas
+  contextuales. Incluye comparación tablet/escritorio e historial cancelado.
+- PASS_LOCAL adicional final15/15: campos de todas las clases, incluidos los
+  tardíos de Bienvenida con CSS real. Se conservan alturas de áreas extensas.
+  CSS administrativo versión3; los demás recursos nuevos mantienen versión2.
+- PASS_LOCAL:18 contratos PWA/versiones/paginación; preflight1116 archivos,
+  72 imports. build:pages completo y versionado inmutable2 para recursos nuevos.
+- PASS_LOCAL: audit:admin-sync79/79 tras actualizar el conteo de filas para
+  admitir data-user-uid y comprobar el UID de segunda página. Usuarios/Roles y
+  seguridad fase8 correctos; watcher de versiones12 pruebas junto con PWA.
+- Ensayos previos del mismo trabajo:70 panel/fichas,77 comercio/pedidos,15
+  cuentas/paginación/avisos. No certifican automáticamente la ampliación actual.
+- GitHub previo: run41226018330/1, SHA22c5a0c7, C falló por el conteo obsoleto;
+  sustituido/cancelado. run41226643071/1, SHAb070693e, sustituido/cancelado.
+  run41226954481/1, SHAd8444ae7, corresponde al candidato anterior al prompt.
+  Auto-merge suspendido mientras se completa la ampliación solicitada.
+- PASS_LOCAL: diff revisado, derivados CSP/caché/diagnóstico y plan de
+  mantenimiento desde constructores canónicos.
+- IN_PROGRESS: CI y merge protegido del candidato ampliado. Recibos terminales
+  de cada SHA/run/intento en el PR1294.
+- NOT_VERIFIED: sesión real de Super Admin, instalación y teclado físicos de
+  iPhone/Android, Safari real y pinch-zoom físico. Fixtures no escriben producción.
+
 ## 2026-10-31 — Responsive y accesibilidad de la tienda pública (base main 2db63462f)
 Claude Code, rama claude/beautiful-planck-3dz88l (PR nuevo).
 - Recorrido Chromium de inicio, catálogo, colecciones, ficha, carrito,

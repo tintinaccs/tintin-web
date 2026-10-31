@@ -1,3 +1,15 @@
+## 2026-10-31 — Experiencia móvil del Super Admin y ficha de usuarios
+
+Autoridades: renderUsersTable, ficha-usuario-admin, navegación de admin-app y
+workspace compartido (JS/CSS), manifest administrativo existente. Identidad de
+Usuarios, tablas internas/tardías, controles/pestañas/modales, áreas seguras y
+historial móvil con borradores; tablet/escritorio conservados. Productos y
+Pedidos mantienen sus vistas especializadas. Dos entradas PWA coherentes sin
+caché de datos privados. Mismos escritores, permisos y validaciones; sin datos
+reales ni dependencias nuevas.26 superficies inventariadas y decisiones en
+ADMIN-MOBILE-EXPERIENCE. Cache/CSP/diagnóstico/protección por constructores.
+Evidencia y límites del candidato en CURRENT_STATE y recibo del PR1294.
+
 ## 2026-10-30 — Prompt maestro: integridad del mensaje, lectura voluntaria y superficies
 
 Autoridades existentes: contactos-pedido y ciclo-pedido; políticas de checkout
