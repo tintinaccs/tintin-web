@@ -723,17 +723,23 @@ document.addEventListener('click', event => {
   const button = event.target.closest?.('[data-card-color]');
   if (!button) return;
   if (button.disabled || button.dataset.cardAvailable === 'false') return;
-  const card = button.closest('.tt-product-card');
+  const card = button.closest('.tt-product-card, .tt-card');
   if (!card) return;
   event.preventDefault();
   if (button.dataset.cardAvailable === 'false') return;
-  cardColorSelections.set(card.dataset.id, button.dataset.cardColor);
+  cardColorSelections.set(card.dataset.id || card.dataset.productId, button.dataset.cardColor);
   if (cardColorSelections.size > 500) cardColorSelections.delete(cardColorSelections.keys().next().value);
   card.querySelectorAll('[data-card-color]').forEach(option => option.setAttribute('aria-pressed', String(option === button)));
-  const image = card.querySelector('.tt-product-img-real');
+  const image = card.querySelector('.tt-product-img-real, .tt-card-img-wrap > img');
   const src = sanitizeClassicImageUrl(button.dataset.cardImage, 480);
-  if (image && src) { image.src = src; image.alt = `${button.dataset.productName} — ${button.dataset.cardColor}`; }
-  else if (src) {
+  const catalogCard = card.classList.contains('tt-card');
+  if (image && src) {
+    // El srcset del catálogo pertenece a la foto inicial; sin quitarlo el navegador no cambiaría la imagen.
+    if (catalogCard) { image.removeAttribute('srcset'); image.removeAttribute('sizes'); }
+    image.src = src; image.alt = `${button.dataset.productName} — ${button.dataset.cardColor}`;
+  } else if (catalogCard) {
+    // Catálogo: si el color no tiene foto propia se conserva la actual.
+  } else if (src) {
     const next = document.createElement('img'); next.className = 'tt-product-img-real'; next.src = src;
     next.alt = `${button.dataset.productName} — ${button.dataset.cardColor}`;
     card.querySelector('.tt-prod-placeholder')?.replaceWith(next);
@@ -744,8 +750,32 @@ document.addEventListener('click', event => {
   card.classList.toggle('tt-stock-unavailable', unavailable);
   const stockLabel = card.querySelector('.tt-stock-label');
   if (stockLabel) stockLabel.hidden = !unavailable;
-  if (button.dataset.cardTarget) card.querySelectorAll('a[href*="/product?"]').forEach(link => { link.href = button.dataset.cardTarget; });
+  if (button.dataset.cardTarget) card.querySelectorAll('a[href*="/product?"], a[href^="product.html?"]').forEach(link => { link.href = button.dataset.cardTarget; });
 });
+
+// Fila de colores compartida por todas las tarjetas (tienda, relacionados, catálogo).
+function productCardColorsMarkup(p, colorGroup, selectedColor, activeColor) {
+  const inStock = isInStock(p);
+  return colorGroup ? `<div class="tt-card-colors" role="group" aria-label="Colores de ${escapeAttribute(p.name)}">${colorGroup[1].map(color => {
+    const media = productMediaForOption(p, colorGroup[0], color) || (productVariantGroups(p).some(([key]) => window.TintinProductMedia.isColorKey(key)) ? '' : p.imageUrl || p.image || '');
+    const index = productVariantGroups(p).findIndex(([key]) => key === colorGroup[0]);
+    const available = inStock && (index < 0 || !productOptionUnavailable(p, index, color));
+    const targetColor = available ? color : selectedColor;
+    const target = `/product?id=${encodeURIComponent(String(p.id))}${targetColor ? `&color=${encodeURIComponent(targetColor)}` : ''}`;
+    const label = `${color}${available ? '' : ' — Agotado'}`;
+    return `<button type="button" ${available ? '' : 'disabled aria-disabled="true"'} class="tt-card-color${available ? '' : ' tt-stock-unavailable'}" data-card-color="${escapeAttribute(color)}" data-card-image="${escapeAttribute(media)}" data-card-available="${available}" data-card-target="${escapeAttribute(target)}" data-product-name="${escapeAttribute(p.name)}" aria-label="${escapeAttribute(label)}" title="${escapeAttribute(label)}" aria-pressed="${activeColor === color}"><span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(color, p) || 'repeating-linear-gradient(45deg,#eee 0 4px,#999 4px 8px)'}"></span></button>`;
+  }).join('')}</div>` : '';
+}
+
+// Catálogo: misma fila; el color activo es el de la foto que muestra la tarjeta.
+function renderProductCardColors(p, imageUrl = '') {
+  const colorGroup = productCardColorOptions(p);
+  if (!colorGroup) return '';
+  const shown = productPhotoIdentity(imageUrl);
+  const row = shown ? productVariantMediaRows(p).find(item => window.TintinProductMedia.rowImages(item).some(src => productPhotoIdentity(src) === shown)) : null;
+  const activeColor = row?.[colorGroup[0]] || (colorGroup[1].length === 1 ? colorGroup[1][0] : '');
+  return productCardColorsMarkup(p, colorGroup, '', activeColor);
+}
 
 function renderProductCardMarkup(p, options = {}) {
   const inStock = isInStock(p);
@@ -761,15 +791,7 @@ function renderProductCardMarkup(p, options = {}) {
   const imgUrl = sanitizeClassicImageUrl(Object.keys(preferred).length ? window.TintinProductMedia.galleryImages(p, preferred)[0] || '' : p.imageUrl || p.image || getProductImage(p.id), 480);
   const initialRow = productVariantMediaRows(p).find(row => window.TintinProductMedia.rowImages(row).some(src => productPhotoIdentity(src) === productPhotoIdentity(imgUrl)));
   const activeColor = selectedColor || (colorGroup && initialRow?.[colorGroup[0]]) || (colorGroup?.[1].length === 1 ? colorGroup[1][0] : '');
-  const colorsHTML = colorGroup ? `<div class="tt-card-colors" role="group" aria-label="Colores de ${escapeAttribute(p.name)}">${colorGroup[1].map(color => {
-    const media = productMediaForOption(p, colorGroup[0], color) || (productVariantGroups(p).some(([key]) => window.TintinProductMedia.isColorKey(key)) ? '' : p.imageUrl || p.image || '');
-    const index = productVariantGroups(p).findIndex(([key]) => key === colorGroup[0]);
-    const available = inStock && (index < 0 || !productOptionUnavailable(p, index, color));
-    const targetColor = available ? color : selectedColor;
-    const target = `/product?id=${encodeURIComponent(String(p.id))}${targetColor ? `&color=${encodeURIComponent(targetColor)}` : ''}`;
-    const label = `${color}${available ? '' : ' — Agotado'}`;
-    return `<button type="button" ${available ? '' : 'disabled aria-disabled="true"'} class="tt-card-color${available ? '' : ' tt-stock-unavailable'}" data-card-color="${escapeAttribute(color)}" data-card-image="${escapeAttribute(media)}" data-card-available="${available}" data-card-target="${escapeAttribute(target)}" data-product-name="${escapeAttribute(p.name)}" aria-label="${escapeAttribute(label)}" title="${escapeAttribute(label)}" aria-pressed="${activeColor === color}"><span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(color, p) || 'repeating-linear-gradient(45deg,#eee 0 4px,#999 4px 8px)'}"></span></button>`;
-  }).join('')}</div>` : '';
+  const colorsHTML = productCardColorsMarkup(p, colorGroup, selectedColor, activeColor);
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
   const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
@@ -2516,6 +2538,7 @@ window.formatPrice = formatPrice;
 window.directWAProduct = directWAProduct;
 window.renderProductsGrid = renderProductsGrid;
 window.renderProductCardMarkup = renderProductCardMarkup;
+window.renderProductCardColors = renderProductCardColors;
 window.isFeaturable = isFeaturable;
 window.renderCart = renderCart;
 window.updateCartBadge = updateCartBadge;

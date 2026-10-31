@@ -2237,3 +2237,11 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-studio .tt-product-ta
 /* Las seis pestañas se reparten según el ancho real disponible del editor. */
 html.tt-product-editor-open body #prod-form-card.tt-editor-studio .tt-product-quick-actions {grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr));}
 #prod-form-card.tt-editor-studio .tt-product-quick-actions [role=tab] {overflow-wrap:normal;word-break:normal;}
+
+/* Vista previa de Google: bloque propio dentro de Publicación y acordeones con área táctil de 44px. */
+#prod-form-card .tt-seo-preview {display:grid;gap:4px;margin:0 0 18px;padding:14px 16px;border:1px solid var(--tt-commerce-border);border-radius:12px;background:var(--tt-commerce-surface);min-width:0;}
+#prod-form-card .tt-seo-preview h3 {margin:0 0 4px;font-size:12px;font-weight:650;color:var(--tt-commerce-muted);}
+#prod-form-card .tt-seo-preview .tt-seo-title {display:block;font-size:16px;font-weight:600;line-height:1.35;color:var(--tt-commerce-brand);overflow-wrap:anywhere;}
+#prod-form-card .tt-seo-preview .tt-seo-description {margin:0;font-size:13px;line-height:1.5;color:var(--tt-commerce-muted);overflow-wrap:anywhere;}
+#prod-form-card .tt-seo-preview .tt-seo-description:empty {display:none;}
+#prod-form-card :is(.tt-category-fields,.tt-editor-option-assistance) > summary {min-height:44px;display:list-item;line-height:44px;cursor:pointer;font-size:13px;font-weight:600;}
