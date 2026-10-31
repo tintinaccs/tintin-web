@@ -3,8 +3,8 @@ import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tinti
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { collection} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { fetchPublicProductsByIds } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20261030-home-history-5';
-import { hasProductStock, firstAvailableVariant, productDefaultPrice } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
-import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { hasProductStock, firstAvailableVariant, productDefaultPrice } from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261031-seo-espacios-1';
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const money = value => `Gs. ${Math.round(Number(value) || 0).toLocaleString('es-PY')}`;

@@ -1,3 +1,27 @@
+## 2026-10-31 — SEO, rendimiento y espacios (base main 762610d)
+Claude Code, rama claude/laughing-albattani-n84ngy.
+- canonical/og:url/og:image de catálogo, colecciones, ficha, contacto, legales
+  y /about fijados a `https://tintinaccs.com` (antes `window.location.origin`).
+  `about-canonical-clean-v1.js` ahora se sirve con `?v=` para invalidar caché.
+- Ficha: JSON-LD `ProductGroup` + `hasVariant` (Offer por variante con
+  InStock/OutOfStock) en `functions/product.js` y `tienda.js` cuando hay más de
+  una variante; `variantOffers()` en `inventario-variantes.mjs`. Producto
+  simple sin cambios.
+- Login/perfil: padding interior de la tarjeta con `clamp()` (botón Google a
+  49–87 px de los bordes a 1280/820) y separador "o" con gap 18 px.
+- Escaneo de espacios (Playwright): 15 páginas públicas y 23 secciones admin
+  a 1280/390 sin bordes a <6 px de texto. Admin medido con el fixture estático:
+  el contenido que pintan los controladores Firebase no se renderiza ahí.
+- CLS local: /catalogo móvil 0,1287→0,0189 (de #1288); /product escritorio
+  0,002→0,0001. /, escritorio: CLS intermitente 0,064 (2/4 y 0/6 corridas),
+  anterior a este cambio; no corregido.
+- PASS_LOCAL: audit:phase11 1190; auditoría /about; public-product-policy 6/6;
+  server-import + tests/seo + product-stock-first 24/24.
+- Entorno: client-navigation-actions.spec.js falla 18/18 también en main
+  (runtime-test-server sin red); no es regresión.
+- `?v=` subido a tintin-20261031-seo-espacios-1 en cascada; CSP regenerada.
+- NOT_VERIFIED: CI y producción tras el merge.
+
 ## 2026-10-31 — Ficha en vivo y dominio único (base main 430fd836e)
 Claude Code, rama claude/nifty-newton-o7j9wc (mismo PR que el catálogo).
 - Ficha: `estado-productos.js` compara una huella estable del documento

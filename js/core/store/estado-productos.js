@@ -1,9 +1,9 @@
 import { normalizeCollectionSlug } from './colecciones-publicas.mjs?v=tintin-20261030-home-history-4';
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261030-home-history-5';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261030-home-history-5';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261030-home-history-5';
-import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261030-home-history-5';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261031-seo-espacios-1';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261031-seo-espacios-1';
+import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261031-seo-espacios-1';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
@@ -16,7 +16,7 @@ import {
   writeCached
 } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
 import { fetchPublicCatalogResource, fetchPublicHomeIndex, fetchPublicProductsByIds } from '../firebase/catalogo-publico-api.js?v=tintin-20261030-home-history-5';
-import { chooseHomeIds, sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20261030-home-history-5';
+import { chooseHomeIds, sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20261031-seo-espacios-1';
 
 const ALL_CACHE_KEY = 'products:cards';
 const HOME_CACHE_KEY = 'products:home-selection-v3';

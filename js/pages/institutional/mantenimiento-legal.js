@@ -20,10 +20,10 @@ if (supported.has(page) && !window.TintinLegalMaintenanceBooted) {
 
 
   function setMetadata() {
-    const canonical = new URL(`/${page}`, location.origin);
+    const canonical = new URL(`/${page}`, 'https://tintinaccs.com');
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', canonical.href);
     document.querySelector('meta[property="og:url"]')?.setAttribute('content', canonical.href);
-    const image = new URL('/assets/og-cover.jpg', location.origin).href;
+    const image = new URL('/assets/og-cover.jpg', 'https://tintinaccs.com').href;
     document.querySelector('meta[property="og:image"]')?.setAttribute('content', image);
     document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', image);
   }

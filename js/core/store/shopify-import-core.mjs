@@ -1,4 +1,4 @@
-import { variantInventoryEntries, variantInventoryTotal } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { variantInventoryEntries, variantInventoryTotal } from './inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 const ALLOWED_BODY_TAGS = new Set(['p', 'br', 'strong', 'em', 'ul', 'ol', 'li']);
 const BLOCKED_BODY_TAGS = new Set(['script', 'iframe', 'object', 'embed', 'style', 'link', 'svg', 'math', 'template', 'form']);

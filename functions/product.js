@@ -5,7 +5,7 @@ import {
 } from '../cloudflare/firebase-admin-ligero.js';
 
 import { hasPublicProductFields } from '../js/core/store/publicacion-producto.mjs';
-import { firstAvailableVariant, hasProductStock } from '../js/core/store/inventario-variantes.mjs';
+import { firstAvailableVariant, hasProductStock, variantOffers } from '../js/core/store/inventario-variantes.mjs';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 
 const PUBLIC_ORIGIN = 'https://tintinaccs.com';
@@ -101,7 +101,7 @@ function replaceTitle(html, value) {
     : html.replace('</head>', `  ${tag}\n</head>`);
 }
 
-function productJsonLd({ id, name, description, image, canonical, price, active, stock, sku }) {
+function productJsonLd({ id, name, description, image, canonical, price, active, stock, sku, variants }) {
   const numericPrice = Number(price);
   const payload = {
     '@context': 'https://schema.org',
@@ -124,6 +124,26 @@ function productJsonLd({ id, name, description, image, canonical, price, active,
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock'
     };
+  }
+  // Con variantes, el producto se publica como ProductGroup (subtipo de
+  // Product): conserva la oferta resumen y detalla cada combinación con su
+  // propio precio y disponibilidad.
+  if (Array.isArray(variants) && variants.length > 1) {
+    payload['@type'] = 'ProductGroup';
+    payload.productGroupID = payload.sku;
+    payload.hasVariant = variants.map((variant, index) => ({
+      '@type': 'Product',
+      name: `${name} — ${variant.label}`,
+      sku: variant.sku || `${payload.sku}-${index + 1}`,
+      image: [image],
+      offers: {
+        '@type': 'Offer',
+        priceCurrency: 'PYG',
+        price: String(Math.trunc(Number(variant.price))),
+        url: canonical,
+        availability: variant.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+      }
+    }));
   }
   return JSON.stringify(payload).replace(/</g, '\\u003c');
 }
@@ -173,7 +193,8 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
     price,
     active: data?.active,
     stock: hasProductStock(data) ? (data.variantCommerceVersion === 2 ? productStockTotal(data) : data?.stock === null || data?.stock === '' ? null : data?.stock ?? data?.['Variant Inventory Qty'] ?? null) : 0,
-    sku: firstValue(data, ['handle', 'Handle'])
+    sku: firstValue(data, ['handle', 'Handle']),
+    variants: variantOffers(data)
   });
   // El servidor ya validó la publicación: el texto no debe esperar al SDK.
   const previewText = {

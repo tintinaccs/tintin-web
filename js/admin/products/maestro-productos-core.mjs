@@ -1,4 +1,4 @@
-import { variantInventoryEntries,assertVariantCompatibility } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { variantInventoryEntries,assertVariantCompatibility } from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
 // Contrato de las operaciones del maestro; Firestore y permisos se inyectan desde Admin.
 const FIELDS = ['name','sku','category','collection','price','priceBefore','stock','active','oferta','destacado','badge','description','desc','image','imageUrl','imagesExtra','variantMedia','variants','variantInventory','variantCommerceVersion','tags','material','measurements','colorFinish','care','waterResistance','warranty','sizeFit','packageContents','publicationStatus','productTemplate','seoTitle','seoDescription'];
 export const PRODUCT_BULK_FIELDS = ['price','pricePercent','priceBefore','stock','stockDelta','category','active','oferta','destacado','badge','tags'];

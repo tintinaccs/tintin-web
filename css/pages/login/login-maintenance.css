@@ -430,3 +430,14 @@ body:has(.login-page).tt-login-offline .login-box::before {
     animation: tt-loader-spinner-ring 1.6s infinite linear !important;
   }
 }
+
+/* La tarjeta del acceso recibe superficie y sombra del tema global, pero
+   conservaba padding 0: el botón de Google, los campos y las líneas del
+   separador tocaban sus bordes. Margen interno proporcional al ancho. */
+body:has(.login-page):not(.login-setup-open) .login-box {
+  padding: clamp(22px, 4vw, 40px) clamp(18px, 5vw, 48px) clamp(24px, 4vw, 36px) !important;
+}
+
+body:has(.login-page) .login-divider {
+  gap: 18px;
+}

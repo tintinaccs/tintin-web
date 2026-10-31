@@ -1,4 +1,4 @@
-import { normalizeVariantSelection, variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { normalizeVariantSelection, variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
 
 // Es una comprobación anticipada, nunca una reserva. La transacción del
 // servidor sigue siendo la autoridad al confirmar y ante compras simultáneas.
