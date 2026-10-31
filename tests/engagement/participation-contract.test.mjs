@@ -226,12 +226,12 @@ test('customer notification recovery waits for App Check and reopening retries o
   assert.doesNotMatch(notifications, /setTimeout\(\(\) => subscribe\(currentUser\), 1400\)/);
 });
 
-test('opening notifications marks current unread alerts as seen automatically', async () => {
+test('opening notifications preserves unread alerts until an explicit action', async () => {
   const notifications = await read('js/components/notifications/notificaciones-clientes.js');
   assert.match(notifications, /markVisibleNotificationsRead/);
   assert.match(notifications, /notificationsSeenAll/);
   assert.match(notifications, /data-nav-action="notifications"/);
-  assert.doesNotMatch(notifications, /id="tt-notifications-mark-all"/);
+  assert.match(notifications, /id="tt-notifications-mark-all"/);
 });
 
 test('admin management and profile favorites remain wired with product community hidden', async () => {

@@ -127,7 +127,7 @@ test('la ficha de producto admite Me gusta, respuestas y reseñas públicas con 
   assert.match(productReviews, /raw\.includes\('\*\*\*'\)/);
 });
 
-test('clientas tienen bandeja inicial de 100 ampliable, saneado, autolectura canónica y reintentos', () => {
+test('clientas tienen bandeja inicial de 100 ampliable, saneado, lectura explícita y reintentos', () => {
   assert.match(clientUi, /data-notification-badge/);
   assert.match(clientUi, /users'.*notifications|users.*,.*notifications/s);
   assert.match(clientUi, /notificationSeen/);
@@ -138,14 +138,16 @@ test('clientas tienen bandeja inicial de 100 ampliable, saneado, autolectura can
   assert.match(clientUi, /data-notifications-older/);
   assert.match(clientUi, /safeImageUrl/);
   assert.match(clientUi, /markVisibleNotificationsRead/);
-  assert.match(clientUi, /notificationsSurfaceIsOpen/);
+  assert.doesNotMatch(clientUi, /notificationsSurfaceIsOpen/);
   assert.match(clientUi, /tintin:surface-change/);
   assert.match(clientUi, /surface === 'notifications'/);
   assert.match(clientUi, /state === 'opening' \|\| state === 'open'/);
-  assert.match(clientUi, /if \(notificationsSurfaceIsOpen\(\)\) void markVisibleNotificationsRead\(\)/);
-  assert.match(clientUi, /apiWithRetry\(isSuperAdmin\(targetUser\) \? 'adminNotificationsSeenAll' : 'notificationsSeenAll'\)/);
+  assert.doesNotMatch(clientUi, /if \(notificationsSurfaceIsOpen\(\)\) void markVisibleNotificationsRead\(\)/);
+  assert.match(clientUi, /apiWithRetry\(isSuperAdmin\(targetUser\) \? 'adminNotificationsSeenAll' : 'notificationsSeenAll',/);
   assert.match(clientUi, /apiWithRetry\('profileCreated'/);
-  assert.doesNotMatch(clientUi, /id="tt-notifications-mark-all"/);
+  assert.match(clientUi, /id="tt-notifications-mark-all"/);
+  assert.match(clientUi, /data-notification-read/);
+  assert.doesNotMatch(clientUi, /Al abrir, las novedades quedan vistas/);
 });
 
 test('la campana pública evita Firestore para visitas livianas y se hidrata con sesión o demanda', () => {
@@ -168,7 +170,7 @@ test('la campana pública evita Firestore para visitas livianas y se hidrata con
   }
 });
 
-test('superadmin recupera estados, auto-marca al abrir y resuelve snapshots tardíos', () => {
+test('superadmin recupera estados, marca sólo por acción explícita y resuelve snapshots tardíos', () => {
   assert.match(adminUi, /adminNotifications/);
   assert.match(adminUi, /adminOrderStatusChanged/);
   assert.match(adminUi, /adm-notifications-badge/);
@@ -179,11 +181,13 @@ test('superadmin recupera estados, auto-marca al abrir y resuelve snapshots tard
   assert.match(adminUi, /recoverRecentOrderStatuses/);
   assert.match(adminUi, /safeImageUrl/);
   assert.match(adminUi, /markVisibleNotificationsRead/);
-  assert.match(adminUi, /panelIsOpen/);
+  assert.doesNotMatch(adminUi, /panelIsOpen/);
   assert.match(adminUi, /apiWithRetry\('adminNotificationsSeenAll'/);
-  assert.match(adminUi, /if \(panelIsOpen\(\)\) void markVisibleNotificationsRead\(\)/);
-  assert.match(adminUi, /if \(opening\) window\.setTimeout\(\(\) => \{ void markVisibleNotificationsRead\(\); \}, 0\)/);
-  assert.doesNotMatch(adminUi, /adm-notifications-mark-all|Marcar todo leído/);
+  assert.doesNotMatch(adminUi, /if \(panelIsOpen\(\)\) void markVisibleNotificationsRead\(\)/);
+  assert.doesNotMatch(adminUi, /if \(opening\) window\.setTimeout\(\(\) => \{ void markVisibleNotificationsRead\(\); \}, 0\)/);
+  assert.match(adminUi, /adm-notifications-mark-all/);
+  assert.match(adminUi, /data-adm-notification-read/);
+  assert.doesNotMatch(adminUi, /Al abrir, las novedades quedan vistas/);
 });
 
 test('pedido nuevo registra actividad social en paralelo y con reintentos', () => {

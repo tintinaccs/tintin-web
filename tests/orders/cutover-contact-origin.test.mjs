@@ -12,6 +12,8 @@ test('el generador canónico cambia el seguimiento de WhatsApp en cutover y roll
     for(const directory of ['scripts','config','cloudflare'])await mkdir(join(root,directory));
     await copyFile(resolve('scripts/sincronizar-origen-publico.js'),join(root,'scripts/sincronizar-origen-publico.js'));
     await copyFile(resolve('cloudflare/contactos-pedido.mjs'),join(root,'cloudflare/contactos-pedido.mjs'));
+    await mkdir(join(root,'js','orders'),{recursive:true});
+    await copyFile(resolve('js/orders/ciclo-pedido.mjs'),join(root,'js','orders','ciclo-pedido.mjs'));
     const fixture={userName:'QA',userPhone:'0981123456',shippingMethod:'retiro'};
     // El fixture simula su propia configuración; el origen del monitor no manda aquí.
     const env={...process.env};

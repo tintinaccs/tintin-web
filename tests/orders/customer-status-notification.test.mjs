@@ -34,3 +34,14 @@ test('initial pending order and order without account do not send another status
   await h.notify({}, {uid:'admin-fixture'}, 'id', {status:'enviado',inventoryRevision:3});
   assert.equal(h.notices.size,0);
 });
+
+
+test('cambio confirmado de pago identifica el evento sin simular avance de entrega',()=>{
+ const paid=orderCustomerNotice('pedido',{userId:'client',shortId:'PRUEBA',status:'preparando',inventoryRevision:3,paymentStatus:'pagado'}, {}, {paymentChanged:true});
+ assert.equal(paid.event.iconKey,'payment-confirmed');
+ assert.match(paid.event.title,/Pago confirmado/);
+ assert.equal(paid.event.status,'preparando');
+ const pending=orderCustomerNotice('pedido',{userId:'client',shortId:'PRUEBA',status:'preparando',inventoryRevision:4,paymentStatus:'pendiente'}, {}, {paymentChanged:true});
+ assert.equal(pending.event.iconKey,'payment-pending');
+ assert.doesNotMatch(pending.event.title,/Pago confirmado/);
+});

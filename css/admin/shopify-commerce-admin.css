@@ -1534,7 +1534,7 @@ html.tt-product-editor-open #section-productos.tt-commerce-mounted #prod-form-ca
 #prod-form-card .tt-editor-preview-shell { min-width:0; padding:20px; border:1px solid var(--editor-line); border-radius:14px; background:var(--tt-commerce-surface); }
 #prod-form-card .tt-editor-preview-shell .tt-editor-preview { padding:16px 0 0; margin:0; border:0; border-radius:0; max-height:none; overflow:visible; background:transparent; }
 #prod-form-card .tt-editor-preview-shell .tt-editor-preview-heading { display:none; }
-#prod-form-card #prod-description { min-height:150px; resize:vertical; }
+#prod-form-card #prod-description { min-height:96px; max-height:min(420px,55dvh); height:auto; line-height:1.5; padding:12px 14px; box-sizing:border-box; overflow-wrap:anywhere; white-space:pre-wrap; resize:vertical; align-content:start; }
 #prod-form-card .tt-editor-section-fields > :has(> #prod-description) { grid-column:1/-1; }
 #prod-form-card .tt-editor-sidebar [hidden] { display:none !important; }
 @container product-editor (min-width:1200px) {
@@ -1675,7 +1675,7 @@ html.tt-product-editor-open #prod-form-card .tt-editor-section,
 #section-productos.tt-commerce-mounted #prod-form-card .adm-input { border-radius:10px !important; padding:12px; background:var(--editor-field); min-height:46px; }
 #section-productos.tt-commerce-mounted #prod-form-card .adm-input:focus-visible { background:var(--tt-commerce-surface); outline:2px solid var(--editor-focus) !important; outline-offset:2px; }
 #prod-form-card #prod-name { font-size:18px !important; font-weight:600; letter-spacing:-.02em; }
-#prod-form-card #prod-description { min-height:128px; }
+
 #prod-form-card .tt-editor-section-fields { gap:16px; }
 #prod-form-card .tt-editor-section-fields > div > label { display:block; margin-bottom:6px; }
 #prod-form-card .tt-editor-section-fields label { text-transform:none !important; letter-spacing:0 !important; font-weight:600 !important; }
@@ -2222,3 +2222,7 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-studio .tt-product-ta
  #prod-form-card.tt-editor-studio #prod-editor-actions button{padding-inline:6px;}
 }
 #prod-form-card.tt-editor-studio .tt-option-inline .tt-unified-photo-grid{max-height:none;overflow:visible;}
+
+/* Las seis pestañas se reparten según el ancho real disponible del editor. */
+html.tt-product-editor-open body #prod-form-card.tt-editor-studio .tt-product-quick-actions {grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr));}
+#prod-form-card.tt-editor-studio .tt-product-quick-actions [role=tab] {overflow-wrap:normal;word-break:normal;}

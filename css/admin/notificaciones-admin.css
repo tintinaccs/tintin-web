@@ -70,21 +70,7 @@
   text-transform: uppercase;
 }
 
-.adm-notifications-auto-read {
-  display: inline-flex;
-  align-items: center;
-  min-height: 34px;
-  max-width: 170px;
-  padding: 6px 10px;
-  border: 1px solid #efc8d7;
-  border-radius: 999px;
-  background: #fff;
-  color: #806d76;
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1.25;
-  text-align: center;
-}
+
 
 .adm-notifications-list {
   overflow: auto;
@@ -269,3 +255,19 @@
 @media (prefers-reduced-motion: reduce) {
   .adm-notification-focus { animation: none !important; }
 }
+
+/* Lectura voluntaria, emisor real y acciones accesibles. */
+.adm-notifications-mark-all,.adm-notification-read {min-height:44px;padding:8px 12px;border:1px solid var(--color-brand-primary,#F8AACA);border-radius:14px;background:#fff;color:var(--color-text-primary,#222222);font:inherit;font-size:12px;line-height:1.4;white-space:normal;cursor:pointer;}
+.adm-notifications-mark-all:disabled {opacity:.6;cursor:wait;}
+.adm-notification-read {margin:0 12px 10px 68px;max-width:calc(100% - 80px);}
+.adm-notification-sender,.adm-notification-action {display:block;font-size:11px;line-height:1.5;overflow-wrap:anywhere;}
+.adm-notification-sender {font-weight:600;margin-bottom:3px;}
+.adm-notification-action {margin-top:5px;text-decoration:underline;}
+.adm-notification-customer-avatar,.adm-notification-brand {display:grid;place-items:center;width:52px;height:52px;border-radius:14px;background:var(--color-brand-primary,#F8AACA);font-weight:700;}
+.adm-notification-brand img {width:44px;height:32px;object-fit:contain;filter:brightness(0) invert(1);}
+.adm-notification-customer-avatar {border:1px solid var(--color-text-primary,#222222);border-radius:50%;background:#fff;}
+.adm-notifications-mark-all:focus-visible,.adm-notification-read:focus-visible {outline:2px solid var(--color-text-primary,#222222);outline-offset:2px;}
+.adm-notification-icon[data-icon=preparing],.adm-notification-icon[data-icon=ready],.adm-notification-icon[data-icon=shipping] {background:#fff2f7;color:#222222;}
+.adm-notification-icon[data-icon=delivered],.adm-notification-icon[data-icon=payment-confirmed] {background:#e0f5e6;color:#166534;}
+.adm-notification-icon[data-icon=incident],.adm-notification-icon[data-icon=payment-pending] {background:#fff3e0;color:#803000;}
+.adm-notifications-header {flex-wrap:wrap;}

@@ -297,7 +297,7 @@ export async function markNotificationRead(env, { uid, notificationId, admin = f
   const path = admin ? `adminNotifications/${id}` : `users/${safeId(uid, 'Cuenta')}/notifications/${id}`;
   const existing = await firestoreAdminGet(env, path);
   if (!existing) return false;
-  await firestoreAdminMerge(env, path, encodeFirestoreFields({ read: true, updatedAt: new Date() }));
+  await firestoreAdminMerge(env, path, encodeFirestoreFields({ read: true, updatedAt: new Date() }), { updateTime: existing.updateTime });
   return true;
 }
 
@@ -329,9 +329,9 @@ async function listNotificationPage(env, root, pageToken = '') {
   };
 }
 
-export async function markAllNotificationsRead(env, { uid, admin = false, onUnread = null } = {}) {
+export async function markAllNotificationsRead(env, { uid, admin = false, onUnread = null, pageToken = '' } = {}) {
   const root = admin ? 'adminNotifications' : `users/${safeId(uid, 'Cuenta')}/notifications`;
-  let pageToken = '';
+  pageToken = clean(pageToken, 2000);
   let scanned = 0;
   let changed = 0;
 
@@ -342,30 +342,30 @@ export async function markAllNotificationsRead(env, { uid, admin = false, onUnre
     const unread = documents.filter(document => document?.fields?.read?.booleanValue !== true);
     const timestampValue = new Date().toISOString();
 
-    if (typeof onUnread === 'function' && unread.length) {
-      await Promise.allSettled(unread.map(document => onUnread(document)));
-    }
-
     for (let index = 0; index < unread.length; index += 20) {
       const writes = unread.slice(index, index + 20).map(document => {
         const path = String(document.name || '').split('/documents/').pop();
         return {
           path,
+          mergeFields: ['read', 'updatedAt'],
+          currentDocument: document.updateTime ? { updateTime: document.updateTime } : { exists: true },
           fields: {
-            ...(document.fields || {}),
             read: { booleanValue: true },
             updatedAt: { timestampValue },
           },
         };
       });
-      if (writes.length) await firestoreAdminCommit(env, writes);
+      if (writes.length) {
+        await firestoreAdminCommit(env, writes);
+        if (typeof onUnread === 'function') await Promise.allSettled(unread.slice(index, index + 20).map(document => onUnread(document)));
+      }
     }
 
     changed += unread.length;
-    pageToken = scanned < MAX_MARK_ALL_DOCUMENTS ? page.nextPageToken : '';
-  } while (pageToken);
+    pageToken = page.nextPageToken;
+  } while (pageToken && scanned < MAX_MARK_ALL_DOCUMENTS);
 
-  return changed;
+  return { count: changed, nextPageToken: pageToken };
 }
 
 export const socialNotificationClean = clean;

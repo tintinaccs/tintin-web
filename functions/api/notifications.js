@@ -211,11 +211,11 @@ export async function onRequest(context) {
         return jsonResponse({ ok: true }, 200, origin, request.url);
       }
       if (action === 'adminNotificationsSeenAll') {
-        const count = await markAllNotificationsRead(env, {
-          admin: true,
+        const result = await markAllNotificationsRead(env, {
+          admin: true, pageToken: clean(input.pageToken, 2000),
           onUnread: document => markSourceSeen(env, decodeFirestoreFields(document.fields || {})),
         });
-        return jsonResponse({ ok: true, count }, 200, origin, request.url);
+        return jsonResponse({ ok: true, ...result }, 200, origin, request.url);
       }
       if (action === 'adminOrderStatusChanged') {
         const result = await notifyOrderStatus(env, actor, input.orderId);
@@ -230,8 +230,8 @@ export async function onRequest(context) {
       return jsonResponse({ ok: true }, 200, origin, request.url);
     }
     if (action === 'notificationsSeenAll') {
-      const count = await markAllNotificationsRead(env, { uid: user.uid });
-      return jsonResponse({ ok: true, count }, 200, origin, request.url);
+      const result = await markAllNotificationsRead(env, { uid: user.uid, pageToken: clean(input.pageToken, 2000) });
+      return jsonResponse({ ok: true, ...result }, 200, origin, request.url);
     }
     if (action === 'profileCreated') {
       const result = await registerProfileNotification(env, user);

@@ -1,3 +1,4 @@
+import { notificationIconKey, notificationIconSvg as iconSvg, notificationActionLabel } from '../../components/notifications/presentacion-notificacion.mjs?v=tintin-20261030-notificaciones-explicitas-1';
 import { testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { adminNotificationLink } from '../../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
@@ -10,7 +11,7 @@ import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260925-cache-converge-notifications-auto-read-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
+const ASSET_VERSION = 'tintin-20261030-notificaciones-explicitas-1';
 const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1';
 const ORDER_RECOVERY_WINDOW_MS = 2 * 60 * 60 * 1000;
 const ORDER_NOTIFY_RETRY_DELAYS_MS = [700, 1800];
@@ -55,14 +56,6 @@ function bellSvg() {
   return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
 }
 
-function iconSvg(iconKey) {
-  const common = 'width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
-  if (iconKey === 'heart') return `<svg ${common}><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>`;
-  if (iconKey === 'comment' || iconKey === 'review') return `<svg ${common}><path d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4z"/><path d="M8 9h8M8 13h5"/></svg>`;
-  if (iconKey === 'order') return `<svg ${common}><path d="M6 7V5a6 6 0 0112 0v2"/><path d="M4 7h16l-1 14H5L4 7z"/></svg>`;
-  if (iconKey === 'user') return `<svg ${common}><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>`;
-  return bellSvg();
-}
 
 function safeImageUrl(value) {
   const raw = String(value || '').trim();
@@ -108,7 +101,7 @@ function ensureUi() {
       ${bellSvg()}<span class="tt-notification-badge" id="adm-notifications-badge" hidden>0</span>
     </button>
     <section class="adm-notifications-panel" id="adm-notifications-panel" aria-label="Actividad de Tintin">
-      <div class="adm-notifications-header"><div><span class="adm-notifications-kicker">Actividad en vivo</span><h3>Notificaciones</h3></div><span class="adm-notifications-auto-read">Al abrir, las novedades quedan vistas</span></div>
+      <div class="adm-notifications-header"><div><span class="adm-notifications-kicker">Actividad en vivo</span><h3>Notificaciones</h3></div><button type="button" class="adm-notifications-mark-all" id="adm-notifications-mark-all">Marcar todas como leídas</button></div>
       <div class="adm-notifications-list" id="adm-notifications-list" aria-live="polite"><div class="adm-notifications-empty">Cargando actividad…</div></div>
     </section>`;
   const actions = topbar.querySelector('.adm-topbar-actions') || topbar;
@@ -119,6 +112,8 @@ function ensureUi() {
 
 function updateBadge() {
   const unread = notifications.filter(item => item.read !== true).length;
+  const markAll = document.getElementById('adm-notifications-mark-all');
+  if (markAll) markAll.disabled = markingVisibleRead || !user;
   const badge = document.getElementById('adm-notifications-badge');
   if (badge) {
     badge.hidden = unread === 0;
@@ -127,10 +122,10 @@ function updateBadge() {
 }
 
 function trailingMarkup(notification) {
-  const hasActor = notification.actorType === 'customer' && notification.actorUid;
+  const hasActor = notification.actorType === 'customer';
   if (hasActor) {
     const photo = safeImageUrl(notification.actorPhotoUrl);
-    return `<img class="adm-notification-avatar${photo ? '' : ' adm-notification-avatar-fallback'}" src="${escapeHtml(photo || PROFILE_AVATAR_FALLBACK)}" alt="${escapeHtml(photo ? '' : 'Tintin')}" loading="lazy" decoding="async">`;
+    return photo ? `<img class="adm-notification-avatar" src="${escapeHtml(photo)}" alt="Foto de ${escapeHtml(notification.actorName || 'cliente')}" loading="lazy" decoding="async">` : `<span class="adm-notification-customer-avatar" aria-label="Cliente">${escapeHtml(String(notification.actorName || '?').trim().slice(0,2).toUpperCase())}</span>`;
   }
   const image = safeImageUrl(notification.productImageUrl);
   if (image) return `<img class="adm-notification-thumb" src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async">`;
@@ -188,9 +183,9 @@ function render() {
       : '';
     return `<div class="adm-notification-card${notification.read === true ? '' : ' is-unread'}">
       <button type="button" class="adm-notification-main" data-notification-open="${escapeHtml(notification.id)}">
-        <span class="adm-notification-icon" data-icon="${escapeHtml(notification.iconKey || 'bell')}">${iconSvg(notification.iconKey)}</span>
-        <span><strong>${escapeHtml(notification.title || 'Nueva actividad')}</strong>${notification.body ? `<p>${escapeHtml(notification.body)}</p>` : ''}<span class="adm-notification-time">${escapeHtml(relativeTime(notification.createdAt))}</span></span>${trailing}
-      </button>${profileButton}
+        <span class="adm-notification-icon" data-icon="${escapeHtml(notificationIconKey(notification))}">${iconSvg(notificationIconKey(notification))}</span>
+        <span><span class="adm-notification-sender">${escapeHtml(notification.actorType === 'customer' ? notification.actorName || 'Cliente' : notification.actorType === 'store' ? 'Tintin Accesorios' : 'Sistema Tintin')}</span><strong>${escapeHtml(notification.title || 'Nueva actividad')}</strong>${notification.body ? `<p>${escapeHtml(notification.body)}</p>` : ''}<time class="adm-notification-time" title="${escapeHtml(asDate(notification.createdAt).toLocaleString('es-PY'))}" datetime="${asDate(notification.createdAt).toISOString()}">${escapeHtml(relativeTime(notification.createdAt))}</time><span class="adm-notification-action">${escapeHtml(notificationActionLabel(notification))}</span></span>${trailing}
+      </button>${notification.read === true ? '' : `<button type="button" class="adm-notification-read" data-adm-notification-read="${escapeHtml(notification.id)}">Marcar como leída</button>`}${profileButton}
     </div>`;
   }).join('');
   updateBadge();
@@ -198,7 +193,9 @@ function render() {
 
 async function api(action, payload = {}, forceRefresh = false) {
   if (!user) throw new Error('Sesión no disponible');
-  const token = await user.getIdToken(forceRefresh);
+  const targetUser = user;
+  const token = await targetUser.getIdToken(forceRefresh);
+  if (user?.uid !== targetUser.uid) throw new Error('La sesión cambió');
   const response = await fetch('/api/notifications', {
     method: 'POST', cache: 'no-store', keepalive: true,
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -214,8 +211,10 @@ async function api(action, payload = {}, forceRefresh = false) {
 }
 
 async function apiWithRetry(action, payload = {}, attempts = 3) {
+  const retryUid = user?.uid;
   let lastError = null;
   for (let attempt = 0; attempt < attempts; attempt += 1) {
+    if (user?.uid !== retryUid) throw new Error('La sesión cambió');
     try {
       return await api(action, payload, attempt > 0 && lastError?.status === 401);
     } catch (error) {
@@ -229,22 +228,27 @@ async function apiWithRetry(action, payload = {}, attempts = 3) {
   throw lastError || new Error('No se pudo completar la operación');
 }
 
-function panelIsOpen() {
-  return document.getElementById('adm-notifications-panel')?.classList.contains('open') === true;
-}
-
 async function markVisibleNotificationsRead() {
-  if (!user || markingVisibleRead || !notifications.some(item => item.read !== true)) return;
+  if (!user || markingVisibleRead) return;
+  const targetUser = user;
   markingVisibleRead = true;
-  notifications.forEach(item => { if (item.read !== true) item.read = true; });
   render();
   try {
-    await apiWithRetry('adminNotificationsSeenAll');
+    let pageToken = '';
+    const pages = new Set();
+    do {
+      if (user?.uid !== targetUser.uid) return;
+      const result = await apiWithRetry('adminNotificationsSeenAll', { pageToken });
+      pageToken = result.nextPageToken || '';
+      if (pageToken && pages.has(pageToken)) throw new Error('No se pudo avanzar en el historial');
+      pages.add(pageToken);
+    } while (pageToken);
+    if (user?.uid === targetUser.uid) void subscribeNotifications();
   } catch (error) {
     console.warn('[admin-notifications] No se pudieron confirmar como vistas:', error);
-    subscribeNotifications();
+    if (user?.uid === targetUser.uid) showReadError();
   } finally {
-    markingVisibleRead = false;
+    if (user?.uid === targetUser.uid) { markingVisibleRead = false; updateBadge(); }
   }
 }
 
@@ -350,7 +354,6 @@ async function subscribeNotifications() {
     notificationsRetryAttempt = 0;
     notificationsAuthRecoveryAttempted = false;
     render();
-    if (panelIsOpen()) void markVisibleNotificationsRead();
   }, error => {
     if (generation !== notificationGeneration || user?.uid !== targetUser.uid) return;
     console.warn('[admin-notifications] No se pudo escuchar actividad:', error);
@@ -444,8 +447,29 @@ async function subscribeOrderStatusChanges() {
   });
 }
 
+function showReadError() {
+  const root = document.getElementById('adm-notifications-list');
+  root?.querySelector('[data-read-error]')?.remove();
+  root?.insertAdjacentHTML('afterbegin', '<p role="alert" data-read-error>No pudimos confirmar la lectura. Volvé a intentarlo.</p>');
+}
+async function readNotification(id) {
+  const targetUser = user;
+  if (!targetUser) return;
+  try {
+    const item = notifications.find(row => row.id === id);
+    if (!item) return;
+    const key = notificationGroupKey(item);
+    const ids = key ? notifications.filter(row => notificationGroupKey(row) === key && row.read !== true).map(row => row.id) : [id];
+    for (const notificationId of ids) await apiWithRetry('adminNotificationSeen', { notificationId });
+    if (user?.uid === targetUser.uid) void subscribeNotifications();
+  } catch { if (user?.uid === targetUser.uid) showReadError(); }
+}
+
 function wireEvents() {
   document.addEventListener('click', event => {
+    if (event.target.closest?.('#adm-notifications-mark-all')) { event.preventDefault(); void markVisibleNotificationsRead(); return; }
+    const readButton = event.target.closest?.('[data-adm-notification-read]');
+    if (readButton) { event.preventDefault(); void readNotification(readButton.dataset.admNotificationRead); return; }
     const button = event.target.closest?.('#adm-notifications-button');
     if (button) {
       event.preventDefault();
@@ -453,7 +477,6 @@ function wireEvents() {
       const opening = !panel?.classList.contains('open');
       panel?.classList.toggle('open', opening);
       button.setAttribute('aria-expanded', String(opening));
-      if (opening) window.setTimeout(() => { void markVisibleNotificationsRead(); }, 0);
       return;
     }
 
@@ -472,9 +495,7 @@ function wireEvents() {
       event.preventDefault();
       const notification = notifications.find(item => item.id === card.dataset.notificationOpen);
       if (!notification) return;
-      notification.read = true;
-      render();
-      api('adminNotificationSeen', { notificationId: notification.id }).catch(error => console.warn('[admin-notifications] No se pudo marcar como leída:', error));
+      void readNotification(notification.id);
       closePanel();
       goToNotification(notification);
       return;

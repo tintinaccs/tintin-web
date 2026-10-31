@@ -47,6 +47,7 @@ export function visibleProductEditor() {
 }
 
 export function syncProductSurfaces() {
+  fitProductDescription(document.getElementById('prod-form-card'));
   const editor = visibleProductEditor();
   const drawer = document.querySelector('#tt-commerce-drawer[data-kind="product"].open:not([hidden])');
   document.documentElement.classList.toggle('tt-product-editor-open', Boolean(editor));
@@ -432,10 +433,30 @@ function showSection(card,value,expand=false) {
       const fields=field.querySelector(':scope > .tt-editor-section-fields');if(fields?.hidden)fields.hidden=false;
     }
   }
+  fitProductDescription(card);
   const index=tabs.findIndex(([id])=>id===value);
   const progress=card.querySelector('.tt-editor-step-progress');const text=`Paso ${index+1} de ${tabs.length} · ${tabs[index][1]}`;if(progress && progress.textContent!==text)progress.textContent=text;
   for(const button of card.querySelectorAll('[data-step-direction]'))button.disabled=Number(button.dataset.stepDirection)<0?index===0:index===tabs.length-1;
   if(expand){card.dataset.visitedSteps=[...new Set([...(card.dataset.visitedSteps || '').split(','),value])].filter(Boolean).join(',');window.TintinPageScroll?.reset(card);card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});}
+}
+
+const descriptionSizes = new WeakMap();
+function fitProductDescription(card) {
+  const field = card?.querySelector('#prod-description');
+  if (!field?.getClientRects().length) return;
+  const signature = `${field.value}|${field.clientWidth}|${window.visualViewport?.height || innerHeight}`;
+  if (descriptionSizes.get(field) === signature) return;
+  descriptionSizes.set(field, signature);
+  const container = card.querySelector('.adm-card-body');
+  const scroll = container?.scrollTop;
+  const fieldScroll = field.scrollTop;
+  field.style.height = 'auto';
+  const limit = Math.max(96, Math.min(420, (window.visualViewport?.height || innerHeight) * .55));
+  const height = Math.min(limit, Math.max(96, field.scrollHeight + 2));
+  field.style.height = `${height}px`;
+  field.style.overflowY = field.scrollHeight > height - 2 ? 'auto' : 'hidden';
+  field.scrollTop = fieldScroll;
+  if (container) container.scrollTop = scroll;
 }
 
 export function installProductInterface() {
@@ -446,7 +467,7 @@ export function installProductInterface() {
   const card=document.getElementById('prod-form-card');
   card?.addEventListener('keydown',event=>{if((event.ctrlKey || event.metaKey) && event.key.toLowerCase()==='s'){event.preventDefault();card.querySelector('#prod-save-btn:not(:disabled)')?.click();}});
   card?.addEventListener('click',event=>{if(event.target.closest('#prod-save-btn'))lastError='';},{capture:true});
-  card?.addEventListener('input',event=>{refreshEditorHeading(card);const error=card.querySelector('#prod-form-error');if(error?.dataset.editorField===event.target.id){error.textContent='';error.style.display='none';lastError='';}if(event.target.getAttribute('aria-invalid')==='true'){event.target.removeAttribute('aria-invalid');event.target.removeAttribute('aria-describedby');}});
+  card?.addEventListener('input',event=>{if(event.target.id==='prod-description')fitProductDescription(card);refreshEditorHeading(card);const error=card.querySelector('#prod-form-error');if(error?.dataset.editorField===event.target.id){error.textContent='';error.style.display='none';lastError='';}if(event.target.getAttribute('aria-invalid')==='true'){event.target.removeAttribute('aria-invalid');event.target.removeAttribute('aria-describedby');}});
   card?.addEventListener('change',()=>refreshEditorHeading(card));
   if (card) new MutationObserver(records=>{
     // Texto derivado del formulario no exige volver a montar sus controles.

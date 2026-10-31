@@ -8,7 +8,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
 const port = 4176;
 const baseURL = `http://${host}:${port}`;
-const artifactDir = path.join(root, 'artifacts', 'global-responsive');
+const artifactDir = path.join(root, 'artifacts', process.env.TINTIN_RESPONSIVE_WIDTHS ? 'global-responsive-selected' : 'global-responsive');
 fs.rmSync(artifactDir, { recursive: true, force: true });
 fs.mkdirSync(artifactDir, { recursive: true });
 
@@ -32,7 +32,11 @@ const boundaryViewports = [
   [320, 720], [480, 900], [481, 900], [767, 1024], [769, 1024], [820, 1180],
   [900, 1180], [1023, 800], [1025, 800], [1920, 1080],
 ];
-const viewports = [...officialViewports, ...boundaryViewports];
+const allViewports = [...officialViewports, ...boundaryViewports, [375,812], [1180,820], [1366,768]];
+// La selección permite reproducir un viewport; sin ella se conserva el barrido completo.
+const selectedWidths = (process.env.TINTIN_RESPONSIVE_WIDTHS || '').split(',').filter(Boolean).map(Number);
+if (selectedWidths.some(width => !allViewports.some(viewport => viewport[0] === width))) throw new Error('Viewport responsive desconocido');
+const viewports = selectedWidths.length ? allViewports.filter(([width]) => selectedWidths.includes(width)) : allViewports;
 
 const mime = {
   '.css':'text/css; charset=utf-8','.gif':'image/gif','.html':'text/html; charset=utf-8','.ico':'image/x-icon',

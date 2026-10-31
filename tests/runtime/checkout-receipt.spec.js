@@ -15,7 +15,7 @@ const hardening = read('js/pages/checkout/checkout-hardening.js').replace(/^impo
 const state = read('js/pages/checkout/estado-navegacion-checkout.js');
 const payment = read('js/pages/checkout/checkout-metodos-pago.js');
 const paymentHandlers = payment.slice(payment.indexOf('function paymentDetailsHtml'), payment.indexOf('function boot()'));
-const success = secure.slice(secure.indexOf('  function renderConfirmedOrder('), secure.indexOf("  window.addEventListener('popstate'"));
+const success = secure.slice(secure.indexOf('  function renderConfirmedOrder('), secure.indexOf('  function message('));
 const submit = secure.slice(secure.indexOf('  async function submit('), secure.indexOf("  window.addEventListener('tintin:paypal-payment-completed'"));
 const forceCart = hardening.slice(hardening.indexOf('function forceCart('), hardening.indexOf('\nfunction ', hardening.indexOf('function forceCart(') + 1));
 const cartListeners = hardening.slice(hardening.indexOf("  window.addEventListener('tt_cart_updated'"), hardening.indexOf('\n}', hardening.indexOf("  window.addEventListener('tt_cart_updated'")));
@@ -308,4 +308,16 @@ test('payment is selectable by keyboard and optional fields do not receive unrel
   await page.evaluate(()=>{ const panel=document.getElementById('panel-2');panel.classList.add('active');const error=document.getElementById('error-2');error.textContent='Ingresá un teléfono válido.';error.classList.add('show'); });
   await expect(page.locator('#ck-notes')).not.toHaveAttribute('aria-invalid','true');
   await expect(page.locator('#ck-coupon')).not.toHaveAttribute('aria-invalid','true');
+});
+
+test('retroceso después de confirmar lleva a Inicio sin emitir un segundo pedido', async ({page}) => {
+  await fixture(page);
+  await page.evaluate(()=>{fixtureReview();void fixtureSubmit();});
+  await expect(page.locator('#ck-success-head')).toBeVisible();
+  await page.evaluate(()=>{void fixtureSubmit();void fixtureSubmit();fixtureFinishCleanup();});
+  expect(await page.evaluate(()=>fixtureRequests)).toBe(1);
+  const home = new URL('/', page.url()).href;
+  await page.route(home, route=>route.fulfill({contentType:'text/html',body:'<main>Inicio de prueba</main>'}));
+  await page.goBack({waitUntil:'domcontentloaded'});
+  await expect(page).toHaveURL(home);
 });

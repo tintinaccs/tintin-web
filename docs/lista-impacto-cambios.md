@@ -1,3 +1,16 @@
+## 2026-10-30 — Prompt maestro: integridad del mensaje, lectura voluntaria y superficies
+
+Autoridades existentes: contactos-pedido y ciclo-pedido; políticas de checkout
+sin cambios; interfaz-productos-adaptable/CSS comercial; búsqueda compartida;
+bandejas de notificaciones/API/núcleo social. El helper común de iconos reemplaza
+los renderers duplicados. Lecturas masivas continúan el presupuesto existente por
+cursor y preservan versiones; no cambian roles, Rules ni datos comerciales.
+Consumidores de correo/panel y shell público reciben URLs transitivas renovadas;
+CSP/caché/diagnóstico/plan se derivan desde sus autoridades. La auditoría y tests
+que exigían autolectura se actualizan al nuevo requisito explícito, manteniendo
+sus gates y cobertura. Nuevas regresiones en etapas CI existentes. Evidencia y
+límites: docs/agent/PROMPT-MAESTRO-20261030.md y CURRENT_STATE.
+
 ## 2026-10-30 — Escritor confiable de Auditoría y representación histórica segura
 
 Autoridades: registro-auditoria de servidor, acción appendAudit de la API administrativa existente, escritor compartido del panel/biblioteca y renderAuditLogTable. Identidad y fecha confiables, permiso staff existente, tienda abierta/acceso de mantenimiento y cuotas existentes; validación de cada fila de historial. Rules prohíbe CRUD cliente y conserva lectura exclusiva del propietario. No se altera ninguna colección comercial, escritor transaccional, espejo de Sheets, consulta histórica ni CSP. Consumidores transitivos/versionado, rutas y diagnóstico se regeneran canónicamente. Emulador adversarial, pruebas del endpoint y renderer real se conectan a etapas existentes. Publicar Rules es un paso independiente de Pages, con su workflow y entorno protegido existentes. Evidencia/límites en CURRENT_STATE; ninguna modificación de datos comerciales de producción.

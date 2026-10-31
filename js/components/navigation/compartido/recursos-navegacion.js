@@ -3,11 +3,11 @@ import { versionedSiteAsset } from './configuracion.js?v=tintin-20261010-whatsap
 const HEADER_DESKTOP_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const HEADER_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1-nav-20261028-2';
 const HEADER_RESPONSIVE_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
-const NAVIGATION_SHARED_VERSION = 'tintin-20261023-search-panel-height-1-nav-20261028-2';
+const NAVIGATION_SHARED_VERSION = 'tintin-20261030-busqueda-compacta-1';
 const NAVIGATION_PANEL_VERSION = 'tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1-domain-prepared-20261012-6-palette-20261014-1-nav-20261028-2';
 const NAVIGATION_COHERENCE_VERSION = 'tintin-20261023-header-dropup-4-perf-20261029-1';
 const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3-checkout-20261008-2-palette-20261014-1';
-const NOTIFICATIONS_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
+const NOTIFICATIONS_VERSION = 'tintin-20261030-notificaciones-explicitas-1';
 const NOTIFICATION_SURFACE_VERSION = 'tintin-20260918-header-system-solid-surfaces-1';
 
 const NAVIGATION_STYLES = Object.freeze([
