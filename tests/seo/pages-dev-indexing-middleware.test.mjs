@@ -29,7 +29,7 @@ test('Pages.dev robots stays crawlable for noindex discovery but omits its techn
     'Sitemap: https://tintinaccesorios.pages.dev/sitemap.xml',
     '',
   ].join('\n');
-  const response = await invoke('https://tintinaccesorios.pages.dev/robots.txt', robots, { contentType: 'text/plain' });
+  const response = await invoke('https://pr-123.tintinaccesorios.pages.dev/robots.txt', robots, { contentType: 'text/plain' });
   const body = await response.text();
 
   assert.equal(response.headers.get('x-robots-tag'), 'noindex');
@@ -60,4 +60,24 @@ test('Cloudflare Pages routes robots.txt through middleware so host-specific ind
   const routes = JSON.parse(fs.readFileSync(new URL('../../_routes.json', import.meta.url), 'utf8'));
   assert.ok(routes.include.includes('/robots.txt'));
   assert.deepEqual(routes.exclude, []);
+});
+
+test('El host técnico de producción redirige la tienda a tintinaccs.com sin cortar API ni Auth', async () => {
+  const page = await invoke('https://tintinaccesorios.pages.dev/catalogo?cat=aros', '<html></html>');
+  assert.equal(page.status, 301);
+  assert.equal(page.headers.get('location'), 'https://tintinaccs.com/catalogo?cat=aros');
+  const head = await invoke('https://tintinaccesorios.pages.dev/', null, { method: 'HEAD' });
+  assert.equal(head.status, 301);
+  assert.equal(head.headers.get('location'), 'https://tintinaccs.com/');
+
+  const api = await invoke('https://tintinaccesorios.pages.dev/api/public-catalog?resource=products', '{}', { contentType: 'application/json' });
+  assert.equal(api.status, 200);
+  const webhook = await invoke('https://tintinaccesorios.pages.dev/catalogo', '{}', { method: 'POST', contentType: 'application/json' });
+  assert.notEqual(webhook.status, 301);
+  const auth = await invoke('https://tintinaccesorios.pages.dev/__/auth/handler', '<html></html>');
+  assert.equal(auth.status, 200);
+  const preview = await invoke('https://pr-123.tintinaccesorios.pages.dev/catalogo', '<html><head></head><body></body></html>');
+  assert.equal(preview.status, 200);
+  const canonical = await invoke('https://tintinaccs.com/catalogo', '<html><head></head><body></body></html>');
+  assert.equal(canonical.status, 200);
 });
