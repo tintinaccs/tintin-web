@@ -21,7 +21,7 @@ function pageStyles(page) {
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261030-home-history-5';
+const TIENDA_VERSION = 'tintin-20261031-colores-tarjetas-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
 const LOADER_VERSION = 'tintin-20261031-css-bundles-1';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5';
