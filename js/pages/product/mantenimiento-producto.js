@@ -196,7 +196,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
   }
 
   function normalizeGenericMetadata() {
-    const base = `${location.origin}/`;
+    const base = `https://tintinaccs.com/`;
     const current = new URL('product', base);
     const id = new URLSearchParams(location.search).get('id');
     if (id) current.searchParams.set('id', id);

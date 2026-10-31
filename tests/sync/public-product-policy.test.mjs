@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import { hasPublicProductFields } from '../../js/core/store/publicacion-producto.mjs';
 import { renderProductMetadataHtml } from '../../functions/product.js';
-import { hasProductStock, firstAvailableVariant } from '../../js/core/store/inventario-variantes.mjs';
+import { hasProductStock, firstAvailableVariant, variantOffers } from '../../js/core/store/inventario-variantes.mjs';
 import { productVariantImage } from '../../js/components/images/foto-variante.mjs';
 const read = p => fs.readFileSync(new URL('../../'+p,import.meta.url),'utf8');
 const strip = s => s.replace(/^import[\s\S]*?;\s*$/gm,'').replace(/\bexport\s+/g,'');
@@ -18,7 +18,7 @@ test('unlimited and finite stock produce the correct structured availability', (
 });
 test('GET and HEAD share definitive index policy; transient failures remain retryable', async () => {
  let data={name:'',price:0,category:'',active:true};
- const c={URL,Headers,Response,Request,setTimeout,clearTimeout,console,hasPublicProductFields,hasProductStock,firstAvailableVariant,productVariantImage,firestoreAdminGet:async()=>{if(data instanceof Error)throw data;return data===null?null:{fields:data}},decodeFirestoreFields:x=>x};
+ const c={URL,Headers,Response,Request,setTimeout,clearTimeout,console,hasPublicProductFields,hasProductStock,firstAvailableVariant,variantOffers,productVariantImage,firestoreAdminGet:async()=>{if(data instanceof Error)throw data;return data===null?null:{fields:data}},decodeFirestoreFields:x=>x};
  vm.createContext(c);vm.runInContext(strip(read('functions/product.js')),c);
  for(const scenario of [null,{name:'',category:'',price:0},{name:'Valid',category:'aros',price:70000,stock:null},new Error('transient')]) {
   data=scenario;

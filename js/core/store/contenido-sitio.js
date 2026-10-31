@@ -16,7 +16,7 @@ import {
   normalizeContentValue,
   detectContentPageId,
 } from './esquema-contenido.js?v=tintin-20261021-identidad-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261030-home-history-5';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261031-seo-espacios-2';
 
 const subscriptions = new Map();
 const latestData = new Map();

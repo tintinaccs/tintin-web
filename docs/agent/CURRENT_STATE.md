@@ -24,8 +24,36 @@ Claude Code, rama claude/brave-planck-zvvd0x.
 - Integrado main a83668b (#1289, #1292, #1294): conflictos solo en versiones
   y derivados; regenerados con la cascada. Tras integrar: guest-cart 18/18,
   color webkit-mobile 30x 4 workers 60/60, breadcrumb 4/4, ci:preflight OK.
+- Integrado también main 27df427 (#1290) y b7decd1 (#1291): conflictos solo en
+  versiones y derivados, regenerados con la cascada.
 - NOT_VERIFIED: estabilidad en el runner de CI (2 núcleos) más allá de su
   corrida; ficha en tablet en producción tras el deploy.
+
+## 2026-10-31 — SEO, rendimiento y espacios (base main 27df427)
+Claude Code, rama claude/laughing-albattani-n84ngy.
+- canonical/og:url/og:image de catálogo, colecciones, ficha, contacto, legales
+  y /about fijados a `https://tintinaccs.com` (antes `window.location.origin`).
+  `about-canonical-clean-v1.js` ahora se sirve con `?v=` para invalidar caché.
+- Ficha: JSON-LD `ProductGroup` + `hasVariant` (Offer por variante con
+  InStock/OutOfStock) en `functions/product.js` y `tienda.js` cuando hay más de
+  una variante; `variantOffers()` en `inventario-variantes.mjs`. Producto
+  simple sin cambios.
+- Login/perfil: padding interior de la tarjeta con `clamp()` (botón Google a
+  49–87 px de los bordes a 1280/820) y separador "o" con gap 18 px.
+- Escaneo de espacios (Playwright): 15 páginas públicas y 23 secciones admin
+  a 1280/390 sin bordes a <6 px de texto. Admin medido con el fixture estático:
+  el contenido que pintan los controladores Firebase no se renderiza ahí.
+- CLS local: /catalogo móvil 0,1287→0,0189 (de #1288); /product escritorio
+  0,002→0,0001. /, escritorio: CLS intermitente 0,064 (2/4 y 0/6 corridas),
+  anterior a este cambio; no corregido.
+- PASS_LOCAL: audit:phase11 1190; auditoría /about; public-product-policy 6/6;
+  server-import + tests/seo + product-stock-first 24/24.
+- Entorno: client-navigation-actions.spec.js falla 18/18 también en main
+  (runtime-test-server sin red); no es regresión.
+- `?v=` subido a tintin-20261031-seo-espacios-2 en cascada tras integrar main
+  (#1292, #1294); CSP y plan de flujos regenerados.
+- CI verde en fbd4fcf (run 41224558585 intento 1) antes de integrar main.
+- NOT_VERIFIED: CI y producción tras el merge.
 
 ## 2026-10-31 — Revisión de la ficha de producto (base main 762610d)
 Claude Code, rama claude/sharp-cannon-oxfa8o. Solo diagnóstico: sin cambios de código.
