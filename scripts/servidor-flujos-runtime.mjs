@@ -111,13 +111,15 @@ const emailSource = fs.readFileSync(path.join(root, 'js/email/correo-autenticaci
 // El respaldo REST público apunta al proyecto productivo. Bajo carga, cuando
 // /api/public-catalog tarda más que su límite, la app lo usa legítimamente;
 // en este host debe leer el emulador, igual que el SDK.
-const restFallbackSource = fs.readFileSync(path.join(root, 'js/core/firebase/respaldo-rest-firestore.js'), 'utf8')
+// La URL productiva debe aparecer exactamente una vez y quedar reemplazada.
+const restFallbackParts = fs.readFileSync(path.join(root, 'js/core/firebase/respaldo-rest-firestore.js'), 'utf8')
   .replace("const PROJECT_ID = 'tintin-accesorios';", `const PROJECT_ID = '${project}';`)
   .replace(/const API_KEY = '[^']+';/, "const API_KEY = 'demo-key';")
-  .replace('`https://firestore.googleapis.com/v1/projects/', '`http://127.0.0.1:8080/v1/projects/');
-if (!restFallbackSource.includes('http://127.0.0.1:8080/v1/projects/') || restFallbackSource.includes('firestore.googleapis.com')) {
+  .split('`https://firestore.googleapis.com/v1/projects/');
+if (restFallbackParts.length !== 2) {
   throw new Error('No se pudo redirigir respaldo-rest-firestore.js al emulador');
 }
+const restFallbackSource = restFallbackParts.join('`http://127.0.0.1:8080/v1/projects/');
 const env = { RESEND_API_KEY: 'local-mail-sink', OTP_RATE_SALT: 'emulator-only' };
 const product = { id: 'runtime-watch', name: 'Reloj Runtime', category: 'relojes', price: 150000, stock: 3, active: true, imageUrl: '/assets-tintin/images/general/logo.png' };
 async function reset() {

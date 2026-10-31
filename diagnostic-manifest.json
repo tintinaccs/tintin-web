@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5d2b44d6d3608622e031d526fb5991e99c1f89370702f2822a2464c2d91e02a5",
+  "sourceFingerprint": "114b13590b25714485c6873da85fc33650d135425541b19f53f0d7e8b6051934",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1676,
     "textFiles": 1541,
-    "totalBytes": 44167256,
+    "totalBytes": 44167286,
     "pages": 19,
     "modules": 1107
   },
@@ -42145,8 +42145,8 @@
     },
     {
       "path": "scripts/servidor-flujos-runtime.mjs",
-      "bytes": 14834,
-      "sha256": "ed422a9fb5972ba7c2bde9909926958342b29235a21e8aa2278c76aa8574c394",
+      "bytes": 14864,
+      "sha256": "3a5e7a70524a53bc0094b4f1c2f9c643f46ecbd2ee2121bf3f6e392bb345fec5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42236,15 +42236,15 @@
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/",
-          "line": 117
+          "line": 118
         },
         {
           "url": "http://127.0.0.1:8080/v1/projects/",
-          "line": 117
+          "line": 122
         },
         {
           "url": "http://127.0.0.1:8080/emulator/v1/projects/$%7Bproject%7D/databases/(default",
-          "line": 124
+          "line": 126
         }
       ]
     },
@@ -67185,8 +67185,8 @@
     {
       "path": "scripts/servidor-flujos-runtime.mjs",
       "extension": ".mjs",
-      "bytes": 14834,
-      "sha256": "ed422a9fb5972ba7c2bde9909926958342b29235a21e8aa2278c76aa8574c394"
+      "bytes": 14864,
+      "sha256": "3a5e7a70524a53bc0094b4f1c2f9c643f46ecbd2ee2121bf3f6e392bb345fec5"
     },
     {
       "path": "scripts/servidor-local-pruebas.mjs",
