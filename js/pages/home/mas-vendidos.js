@@ -16,7 +16,9 @@ function selected(products) {
 function render(products) {
   if (!grid || !Array.isArray(products) || typeof window.renderProductsGrid !== 'function') return;
   const productsToShow = selected(products);
-  window.renderProductsGrid(grid.id, productsToShow);
+  // Sin destacados: el estado vacío lo comunica #best-sellers-status; evitar un segundo mensaje genérico en la grilla.
+  if (productsToShow.length) window.renderProductsGrid(grid.id, productsToShow);
+  else grid.replaceChildren();
   grid.setAttribute('aria-busy', 'false');
   if (status) status.textContent = productsToShow.length
     ? `${productsToShow.length} producto${productsToShow.length === 1 ? '' : 's'} seleccionado${productsToShow.length === 1 ? '' : 's'} para vos.`

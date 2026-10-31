@@ -516,7 +516,7 @@ html:root body:not(:has(.adm-main)) :is(a[href*="wa.me"][class]:not(.tt-wa-float
 /* Tarjetas de boutique: fotografía cuadrada, contenido compacto y acciones alineadas. */
 html body:not(:has(.adm-main)) .tt-product-card .tt-product-img { aspect-ratio:1; min-height:0; background:#fff; }
 html body:not(:has(.adm-main)) .tt-product-card .tt-product-info { padding:12px; gap:5px; }
-html body:not(:has(.adm-main)) .tt-product-card .tt-product-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:stretch; gap:6px; margin-top:8px; }
+html body:not(:has(.adm-main)) .tt-product-card .tt-product-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:stretch; gap:6px; margin-top:auto; padding-top:3px; }
 html body:not(:has(.adm-main)) .tt-product-card .tt-product-actions .tt-btn { min-height:44px; padding:8px 6px; font-size:clamp(.65rem,1.6vw,.8rem); }
 html body:not(:has(.adm-main)) .tt-product-card .tt-product-name { overflow-wrap:anywhere; }
 html body:not(:has(.adm-main)) .tt-product-card .tt-card-colors { gap:2px; margin:2px 0; }

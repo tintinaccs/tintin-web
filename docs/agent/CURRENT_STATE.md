@@ -1,3 +1,23 @@
+## 2026-10-31 — Revisión UX de páginas públicas (base main 8c1eaa29e)
+- Barrido Playwright en 16 páginas × 360/768/1440: sin scroll horizontal, sin imágenes rotas y con un solo h1 por página.
+- Corregido:
+  - Los botones de las tarjetas compartidas no quedaban al pie, porque `margin-top:8px` estaba fijo en `tema-unificado-tintin.css`. Medición antes: 13/31/81 px según la tarjeta. Medición después: 13 px en todas, en colecciones y relacionados a 360 y 1440.
+  - Los botones de favorito (tarjeta y carrito) no tenían nombre accesible en el primer render.
+  - "Más vendidos" mostraba dos mensajes de vacío.
+  - La sombra del enlace "saltar al contenido" asomaba arriba en login/perfil.
+- Verificado localmente:
+  - `ci:preflight` terminó con exit 0.
+  - Playwright: 83 tests pasaron en best-sellers, boutique-surfaces, product-shape, small-controls, phase10-a11y y catalog-card-colors.
+  - `auditar-proteccion-flujos`: OK.
+  - `audit:cache-versioning`: OK.
+- Dato de negocio: la API pública no tiene productos con `destacado`, por eso "Más vendidos" queda vacío hasta que se marquen en admin.
+- Pendiente:
+  - CLS 0.168 del catálogo en móvil (`#cat-tabs-mobile`).
+  - Techo de 5000 productos públicos.
+  - La auditoría huérfana `auditar-catalogo-pagina.js`.
+  - Falla preexistente en `collections-page-read.test.mjs`.
+  - El admin solo se revisa con fixture, sin datos reales.
+
 ## 2026-10-31 — Editor de producto, imágenes del catálogo y lista de errores
 
 Claude Code, rama claude/nifty-newton-o7j9wc sobre main 13604502 (#1284).

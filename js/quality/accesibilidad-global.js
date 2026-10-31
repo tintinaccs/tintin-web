@@ -33,7 +33,7 @@ function injectStyles() {
   const link = document.createElement('link');
   link.id = 'tt-phase10-accessibility-css';
   link.rel = 'stylesheet';
-  link.href = new URL('../../css/quality/accesibilidad-global.css?v=tintin-20261013-connectivity-hit-target-1-palette-20261014-1', import.meta.url).href;
+  link.href = new URL('../../css/quality/accesibilidad-global.css?v=tintin-20261031-skip-link-1', import.meta.url).href;
   document.head?.appendChild(link);
 }
 
