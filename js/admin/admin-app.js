@@ -2407,7 +2407,7 @@ function renderUsersTable(users) {
       : `<div class="adm-tbl-avatar">${escapeHtmlAdmin(String(u.name || u.email || '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?')}</div>`;
 
     return `
-      <tr>
+      <tr data-user-uid="${safeUid}">
         <td class="col-select">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${safeUid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
         <td>${avatar}</td>
         <td><strong>${escapeHtmlAdmin(u.name || '—')}</strong></td>

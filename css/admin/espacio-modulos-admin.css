@@ -38,3 +38,17 @@
   .tt-admin-workspace .tt-admin-info-actions { display: grid !important; grid-template-columns: minmax(0, 1fr); }
   .tt-admin-workspace .tt-admin-info-actions > * { min-width: 0 !important; max-width: 100%; white-space: normal !important; }
 }
+
+/* En teléfonos cada registro conserva todos sus campos y acciones. */
+@media (max-width: 760px) {
+  .tt-admin-workspace .adm-table-wrap:has(.tt-admin-records) { overflow: visible; }
+  .tt-admin-workspace table.tt-admin-records { display: block; width: 100%; min-width: 0 !important; }
+  .tt-admin-records > thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .tt-admin-workspace .tt-admin-records > tbody { display: grid; gap: 14px; width: 100%; }
+  .tt-admin-workspace .tt-admin-records > tbody > tr { display: grid; width: 100%; min-width: 0; border: 1px solid var(--adm-border); border-radius: 12px; padding: 12px; box-sizing: border-box; background: var(--adm-card, #fff); }
+  .tt-admin-workspace .tt-admin-records > tbody > tr > td { display: flex; flex-direction: column; align-items: stretch; gap: 6px; position: static; width: auto !important; min-width: 0 !important; max-width: 100% !important; white-space: normal; overflow-wrap: anywhere; padding: 10px 4px; text-align: start; box-sizing: border-box; }
+  .tt-admin-workspace .tt-admin-records td[data-label]::before { content: attr(data-label); display: block; font-size: 11px; font-weight: 700; color: var(--adm-muted); }
+  .tt-admin-records td > * { min-width: 0; max-width: 100%; box-sizing: border-box; }
+  .tt-admin-records td :is(input:not([type=checkbox]),select,textarea) { max-width: 100%; min-height: 44px; }
+  .tt-admin-records td button { min-height: 44px; white-space: normal; }
+}

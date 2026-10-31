@@ -1,3 +1,4 @@
+import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { ordersForView, orderDisplayCode } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 /* =============================================================
    TINTIN — Ficha de usuario (helper de solo lectura)
@@ -93,15 +94,51 @@ if (!window.TintinAdminUserFichaBooted) {
       .slice(0, 10);
   }
 
+  let requestVersion = 0;
+  let returnFocus;
+  let previousOverflow = '';
+  function profilePhoto(user, large = false) {
+    const initials = text(user.name || user.email || '?').trim().split(/\s+/).slice(0, 2).map(part => part[0]).join('').toUpperCase();
+    const avatar = el('span', large ? 'ficha-avatar ficha-avatar-large' : 'ficha-avatar', initials || '?');
+    const url = sanitizeImageUrl(user.photoURL || '');
+    if (url) {
+      const img = el('img');
+      img.alt = `Foto de ${user.name || 'usuario'}`;
+      img.src = url;
+      img.addEventListener('error', () => avatar.replaceChildren(document.createTextNode(initials || '?')), { once: true });
+      avatar.replaceChildren(img);
+    }
+    return avatar;
+  }
+  function openPhoto(user) {
+    const dialog = el('dialog', 'ficha-photo-dialog');
+    dialog.setAttribute('aria-label', `Foto de perfil de ${user.name || 'usuario'}`);
+    const close = el('button', 'adm-btn', '× Cerrar');
+    close.type = 'button';
+    close.addEventListener('click', () => dialog.close());
+    dialog.append(close, profilePhoto(user, true), el('p', '', user.name || user.email || 'Usuario sin foto'));
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => dialog.remove(), { once: true });
+    document.body.append(dialog);
+    dialog.showModal();
+  }
+
   async function openClientFicha(uid) {
     const overlay = document.getElementById('client-ficha-overlay');
     const body = document.getElementById('client-ficha-body');
     if (!overlay || !body) return false;
     if (!auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return false;
     const ownerUid = auth.currentUser.uid;
+    const version = ++requestVersion;
+    if (overlay.style.display === 'none') {
+      returnFocus = document.activeElement;
+      previousOverflow = document.body.style.overflow;
+    }
+    document.body.style.overflow = 'hidden';
 
     body.replaceChildren(el('div', 'adm-loading', 'Cargando ficha…'));
     overlay.style.display = 'block';
+    overlay.querySelector('button')?.focus();
 
     try {
       let user = await loadUser(uid);
@@ -115,8 +152,17 @@ if (!window.TintinAdminUserFichaBooted) {
         user={...user,...calculateOrderStats(accountOrders,{includeTestOrders:snapshot?.includeTestOrders===true})};
       }
       const logs = auditResult.status === 'fulfilled' ? auditResult.value : [];
-      if (auth.currentUser?.uid !== ownerUid) return false;
+      if (auth.currentUser?.uid !== ownerUid || version !== requestVersion) return false;
 
+      const header = el('div', 'ficha-profile');
+      const photo = el('button', 'ficha-photo-button');
+      photo.type = 'button';
+      photo.setAttribute('aria-label', 'Ampliar foto de perfil');
+      photo.append(profilePhoto(user));
+      photo.addEventListener('click', () => openPhoto(user));
+      const summary = el('div');
+      summary.append(el('h2', '', user.name || user.email || 'Usuario'), el('p', '', ROLE_LABELS[canonicalRole(user)] || canonicalRole(user)), el('span', 'adm-badge', user.blocked ? 'Bloqueado' : 'Activo'));
+      header.append(photo, summary);
       const identity = section('Identidad');
       identity.grid.append(
         field('Nombre', user.name),
@@ -200,9 +246,10 @@ if (!window.TintinAdminUserFichaBooted) {
       if (!logs.length) auditList.appendChild(el('div', '', auditResult.status === 'rejected' ? 'Auditoría no disponible' : 'Sin acciones registradas sobre esta cuenta'));
       auditSection.wrapper.appendChild(auditList);
 
-      body.replaceChildren(identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
+      body.replaceChildren(header, identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
       return true;
     } catch (error) {
+      if (version !== requestVersion) return false;
       showError(error?.message || 'No se pudo cargar la ficha de la cuenta.');
       return false;
     }
@@ -210,15 +257,31 @@ if (!window.TintinAdminUserFichaBooted) {
 
   function closeClientFicha() {
     const overlay = document.getElementById('client-ficha-overlay');
+    ++requestVersion;
     if (overlay) overlay.style.display = 'none';
+    document.querySelector('.ficha-photo-dialog')?.close();
+    document.body.style.overflow = previousOverflow;
+    if (returnFocus?.isConnected) returnFocus.focus();
   }
 
   function enhanceRows() {
     const tbody = document.getElementById('users-tbody');
     if (!tbody || !auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return;
     tbody.querySelectorAll('tr').forEach(row => {
-      const uid = row.querySelector('.user-row-check[data-id]')?.dataset.id;
+      const uid = row.dataset.userUid || row.querySelector('.user-row-check[data-id]')?.dataset.id;
       if (!uid) return;
+      if (!row.dataset.fichaReady) {
+        row.dataset.fichaReady = 'true';
+        row.tabIndex = 0;
+        row.setAttribute('aria-label', 'Abrir ficha de usuario');
+        row.style.cursor = 'pointer';
+        row.addEventListener('click', event => {
+          if (!event.target.closest('button,input,select,textarea,a,label')) openClientFicha(uid);
+        });
+        row.addEventListener('keydown', event => {
+          if (event.target === row && ['Enter', ' '].includes(event.key)) { event.preventDefault(); openClientFicha(uid); }
+        });
+      }
       const actionsCell = row.lastElementChild;
       if (!actionsCell || actionsCell.querySelector('[data-user-ficha]')) return;
       const button = el('button', 'adm-btn adm-btn-sm adm-btn-outline', 'Ver ficha');
@@ -236,6 +299,19 @@ if (!window.TintinAdminUserFichaBooted) {
     const style = document.createElement('style');
     style.id = 'user-ficha-styles';
     style.textContent = `
+      #client-ficha-overlay{overscroll-behavior:contain}
+      #client-ficha-overlay > div > div:first-child{position:sticky;top:-24px;background:#fff;z-index:1}
+      #client-ficha-overlay .adm-icon-close{min-width:44px;min-height:44px}
+      .ficha-profile{display:flex;align-items:center;gap:18px;flex-wrap:wrap;overflow-wrap:anywhere}
+      .ficha-profile h2{margin:0;font-size:20px}
+      .ficha-photo-button{border:0;background:none;padding:0;cursor:zoom-in;border-radius:50%}
+      .ficha-avatar{display:flex;align-items:center;justify-content:center;width:96px;height:96px;border-radius:50%;background:#fce8ef;color:#713C53;font-size:32px;font-weight:800;overflow:hidden}
+      .ficha-avatar img{width:100%;height:100%;object-fit:cover}
+      .ficha-photo-dialog{width:min(90vw,720px);max-height:90dvh;box-sizing:border-box;border:0;border-radius:18px;padding:16px;overflow:auto;text-align:center;overflow-wrap:anywhere}
+      .ficha-photo-dialog::backdrop{background:rgba(0,0,0,.75)}
+      .ficha-photo-dialog > button{display:block;margin:0 0 16px auto;min-height:44px}
+      .ficha-avatar-large{width:100%;height:min(60dvh,620px);border-radius:12px;font-size:clamp(64px,20vw,180px)}
+      .ficha-avatar-large img{object-fit:contain}
       .ficha-section-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-primary);margin-bottom:10px}
       .ficha-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
       .ficha-field-label{font-size:11px;color:#888;margin-bottom:2px}
@@ -250,6 +326,20 @@ if (!window.TintinAdminUserFichaBooted) {
   function bootForSuperAdmin(user) {
     if (!user || lower(user.email) !== SUPER_ADMIN) return;
     injectStyles();
+    const overlay = document.getElementById('client-ficha-overlay');
+    if (overlay && !overlay.dataset.dismissReady) {
+      overlay.dataset.dismissReady = 'true';
+      overlay.addEventListener('click', event => { if (event.target === overlay) closeClientFicha(); });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && overlay.style.display !== 'none' && !document.querySelector('.ficha-photo-dialog[open]')) closeClientFicha();
+        if (event.key === 'Tab' && overlay.style.display !== 'none' && !document.querySelector('.ficha-photo-dialog[open]')) {
+          const nodes = [...overlay.querySelectorAll('button,a[href],input,select,textarea,[tabindex="0"]')].filter(node => !node.disabled && node.getClientRects().length);
+          const first = nodes[0], last = nodes.at(-1);
+          if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+          else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+        }
+      });
+    }
     enhanceRows();
     const tbody = document.getElementById('users-tbody');
     if (tbody) new MutationObserver(enhanceRows).observe(tbody, { childList: true, subtree: true });

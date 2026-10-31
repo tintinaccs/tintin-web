@@ -86,6 +86,16 @@ function refresh(root, state) {
   setHidden(state.bar, state.title.hidden && state.label.hidden && state.search.hidden);
 
   for (const table of root.querySelectorAll('.adm-table-wrap')) {
+    for (const grid of table.querySelectorAll('table')) {
+      if (!grid.classList.contains('tt-admin-records')) grid.classList.add('tt-admin-records');
+      const headings = [...grid.querySelectorAll('thead tr:last-child th')].map(node => text(node));
+      for (const row of grid.querySelectorAll('tbody tr')) {
+        [...row.children].forEach((cell, index) => {
+          if (!cell.hasAttribute('data-label') && cell.colSpan === 1 && headings[index]) cell.dataset.label = headings[index];
+        });
+      }
+    }
+
     const overflow = visible(table) && table.scrollWidth > table.clientWidth + 1;
     if (!table.hasAttribute('tabindex')) table.tabIndex = 0;
     if (!table.hasAttribute('role')) table.setAttribute('role', 'region');
