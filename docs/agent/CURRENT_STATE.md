@@ -1,6 +1,6 @@
 ## 2026-10-31 — Admin adaptable y fotos de usuarios (Codex)
 
-Rama codex/admin-mobile-fichas, base origin/main 2db63462.
+Rama codex/admin-mobile-fichas, base origin/main ed03b8c7 (integrado tras PR1292).
 - Implementación: tarjetas de registros hasta1024px, encabezados como etiquetas,
   campos y controles completos; misma tabla en escritorio. Fila y miniatura
   abren la ficha; nombre/rol/estado y foto ampliable con iniciales de respaldo.
@@ -15,10 +15,57 @@ Rama codex/admin-mobile-fichas, base origin/main 2db63462.
   seguridad fase8, preflight de sintaxis/imports e integridad de estilos.
 - PASS_LOCAL: build:pages completo y derivados CSP/caché/diagnóstico; diff
   revisado. Se conserva el plan de mantenimiento protegido generado.
+- PASS_LOCAL tras integrar PR1292: 10 casos ficha/listas pobladas y preflight
+  (1114 archivos/72 imports); build y protección regenerados sobre ed03b8c7.
+  Las70/77/15 regresiones anteriores corresponden al candidato previo, cuyo
+  código de admin se conserva. CI verificará el SHA integrado completo.
 - IN_PROGRESS: CI/merge protegido. Los resultados de GitHub quedan en el
   recibo del PR de esta rama.
 - NOT_VERIFIED: sesión real de Super Admin, Safari/iOS/Android físicos y app
   instalada; las pruebas usan Chromium y datos ficticios aislados.
+
+## 2026-10-31 — Responsive y accesibilidad de la tienda pública (base main 2db63462f)
+Claude Code, rama claude/beautiful-planck-3dz88l (PR nuevo).
+- Recorrido Chromium de inicio, catálogo, colecciones, ficha, carrito,
+  checkout sin pagar, login y perfil a 320/390/768/1024/1440. No hay scroll
+  horizontal. Los diálogos `search-panel`, `cart-drawer`, `collections-sheet` y
+  `tt-tablet-menu` cumplen lo esperado: role=dialog, foco atrapado, Escape
+  cierra, el foco vuelve a su origen y aria-expanded está bien. No hay
+  controles sin nombre ni inputs sin etiqueta. axe no está instalado en el
+  repo y no se agregó.
+- ALTO, regresión de #1274: checkout, login y perfil solo cargaban
+  `cargador-mantenimiento-pagina.js` al abrir el buscador, porque el único
+  import vivía en `estado-productos.js`. Al entrar quedaban sin cargar:
+  hardening y control de cuota del checkout, métodos de pago, pasos
+  navegables y semántica del login.
+  - Corrección: `carga-navegacion.js` lo importa directamente para
+    page=cart/account, con el mismo `?v=` que ya usa `estado-productos.js`, así
+    hay una sola instancia del módulo.
+  - Verificado en Chromium: /checkout carga hardening, mantenimiento, métodos
+    de pago, cuota y navegación de pasos (5 pasos role=button). /login carga
+    mantenimiento-acceso. /catalogo no cambia.
+- Los pasos del checkout no mostraban foco con teclado.
+  `superficies-solidas-interfaz.css` fija `outline:0 !important` en
+  `html body .ck-steps .ck-step`. `checkout.css` agrega una regla
+  `:focus-visible` más específica; el tema global no se tocó.
+- El botón "Seguir comprando" del carrito medía 42 px de alto. Ahora tiene
+  min-height:44px en `tienda.js`.
+- `tests/ui-ux/checkout-cart-keyboard-a11y.spec.js` pasa 6/6 y fallaba antes
+  del cambio.
+  - Otros Playwright: checkout navigation-responsive y galería sticky 49/49;
+    header-responsive y phase10-accessibility pasan.
+  - Node: checkout, auth, navigation, cache, login y profile 544/544.
+  - Audits: public-shell, styles y page-loading OK. build:pages queda estable.
+- LOW sin corregir:
+  - Enlaces del footer y migas de 24 px de alto; cumplen WCAG 2.5.8 AA.
+  - `.cat-filter-option` mide 38 px en escritorio.
+  - `.tt-footer-wa` mide 42 px a 1440.
+- `?v=` subido a tintin-20261031-a11y-checkout-1 en cascada. Plan de
+  protección regenerado contra main 2db63462f.
+- NOT_VERIFIED:
+  - Perfil con sesión real; sin sesión redirige a login.
+  - Producción después del deploy.
+  - Safari/WebKit y lectores de pantalla reales.
 
 ## 2026-10-31 — Galería de la ficha acompaña el scroll (base main 762610d5c)
 Claude Code, rama claude/nifty-newton-o7j9wc (PR nuevo).

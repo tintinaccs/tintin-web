@@ -469,7 +469,7 @@ function renderCart() {
       <a href="/checkout" class="tt-cart-checkout-btn" style="margin-top:12px;">
         Finalizar compra →
       </a>
-      <button type="button" data-cart-action="close" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #ddd;border-radius:50px;font-size:0.78rem;color:#AD3F67;cursor:pointer;font-family:Montserrat">
+      <button type="button" data-cart-action="close" style="width:100%;min-height:44px;margin-top:8px;padding:10px;background:none;border:1px solid #ddd;border-radius:50px;font-size:0.78rem;color:#AD3F67;cursor:pointer;font-family:Montserrat">
         Seguir comprando
       </button>
     `;
