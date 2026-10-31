@@ -604,6 +604,10 @@ body.tt-product-maintenance .tt-product-detail-grid { padding:clamp(12px,2vw,28p
 body.tt-product-maintenance .tt-product-gallery,
 body.tt-product-maintenance .tt-product-info-panel { padding:var(--tt-product-inset) !important; border:1px solid var(--color-card-border, #FDECF2) !important; border-radius:24px !important; box-shadow:0 12px 36px rgba(68,37,49,.035) !important; overflow:visible; }
 body.tt-product-maintenance .tt-product-gallery { display:flex; flex-direction:column; align-items:stretch; position:static !important; }
+/* Dos columnas: la galería acompaña el scroll hasta el borde inferior de la ficha. El tope lo ajusta tienda.js si la galería no entra en pantalla. */
+@media (min-width: 768px) {
+  body.tt-product-maintenance .tt-product-gallery { position:sticky !important; top:var(--tt-product-gallery-sticky-top, calc(var(--header-h, 72px) + 16px)); }
+}
 body.tt-product-maintenance .tt-gallery-main { display:block; width:100%; height:auto !important; min-height:0 !important; aspect-ratio:1; margin:0 !important; padding:0 !important; overflow:hidden; border-radius:12px !important; }
 body.tt-product-maintenance .tt-gallery-main img { width:100% !important; height:100% !important; max-height:none !important; object-fit:contain !important; mix-blend-mode:normal !important; }
 body.tt-product-maintenance .tt-gallery-thumbs { display:flex; justify-content:center; flex-wrap:wrap; gap:12px; margin:20px 0 0; padding:4px; overflow:visible; }
