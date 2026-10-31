@@ -18,6 +18,9 @@ sistema visual,26 superficies reales y decisiones por módulo en
 - PASS_LOCAL ampliado:142 casos de panel/dashboard/workspaces/fichas y
   experiencia móvil; repaso final24/24 tras áreas seguras y acciones masivas
   contextuales. Incluye comparación tablet/escritorio e historial cancelado.
+- PASS_LOCAL adicional final15/15: campos de todas las clases, incluidos los
+  tardíos de Bienvenida con CSS real. Se conservan alturas de áreas extensas.
+  CSS administrativo versión3; los demás recursos nuevos mantienen versión2.
 - PASS_LOCAL:18 contratos PWA/versiones/paginación; preflight1116 archivos,
   72 imports. build:pages completo y versionado inmutable2 para recursos nuevos.
 - PASS_LOCAL: audit:admin-sync79/79 tras actualizar el conteo de filas para

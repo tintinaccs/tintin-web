@@ -10,7 +10,7 @@ for(const [width,height] of [[320,568],[390,844],[540,960],[844,390]])test(`camp
  let fields=0;
  for(const id of ids){
   await page.evaluate(id=>document.querySelectorAll('.adm-section').forEach(node=>node.classList.toggle('active',node.id===id)),id);await settle(page);
-  const failures=await page.locator(`#${id} :is(.adm-input,.adm-select,.adm-textarea)`).evaluateAll(nodes=>nodes.filter(node=>!node.disabled&&node.getClientRects().length&&getComputedStyle(node).visibility!=='hidden').map(node=>{
+  const failures=await page.locator(`#${id} :is(input:not([type=checkbox],[type=radio],[type=range],[type=color],[type=file],[type=hidden]),select,textarea)`).evaluateAll(nodes=>nodes.filter(node=>!node.disabled&&node.getClientRects().length&&getComputedStyle(node).visibility!=='hidden').map(node=>{
    const b=node.getBoundingClientRect(),s=getComputedStyle(node);return {id:node.id,width:b.width,left:b.left,right:b.right,height:b.height,font:parseFloat(s.fontSize)};
   }));
   for(const box of failures){expect(box.left,id+box.id).toBeGreaterThanOrEqual(-1);expect(box.right,id+box.id).toBeLessThanOrEqual(width+1);expect(box.height,id+box.id).toBeGreaterThanOrEqual(44);expect(box.font,id+box.id).toBeGreaterThanOrEqual(16);}
@@ -81,4 +81,23 @@ test('acciones masivas contextuales conservan todas las opciones al seleccionar'
  await expect(toolbar.getByRole('button',{name:'Exportar CSV'})).toBeVisible();
  expect(await toolbar.evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);
  await toolbar.evaluate(node=>node.classList.remove('show'));await expect(toolbar).toBeHidden();
+});
+
+test('campos de módulos tardíos conservan tipografía táctil sin depender de adm-input',async({page})=>{
+ await load(page,390);
+ const source=fs.readFileSync('js/admin/content/control-bienvenida-admin.js','utf8');
+ const css=source.match(/st\.textContent\s*=\s*`([\s\S]*?)`/)[1];
+ await page.addStyleTag({content:css});
+ await page.evaluate(()=>{
+  document.querySelectorAll('.adm-section').forEach(node=>node.classList.remove('active'));
+  const section=document.createElement('section');section.id='section-welcome';section.className='adm-section active';
+  section.innerHTML='<div class="tt-welcome-admin-field"><label for="welcome-title">Título de bienvenida</label><input id="welcome-title" value="Bienvenida a Tintin"></div><div class="tt-welcome-admin-field"><label for="welcome-copy">Mensaje</label><textarea id="welcome-copy">Mensaje de prueba sin escritura</textarea></div>';
+  document.querySelector('.adm-content').append(section);
+ });
+ await expect(page.locator('#section-welcome')).toHaveClass(/tt-admin-workspace/);
+ await expect(page.locator('#welcome-copy')).toHaveCSS('min-height','86px');
+ for(const id of ['welcome-title','welcome-copy']){
+  const field=page.locator('#'+id);await expect(field).toHaveCSS('font-size','16px');
+  expect((await field.boundingBox()).height).toBeGreaterThanOrEqual(44);await expect(field).toBeEditable();
+ }
 });

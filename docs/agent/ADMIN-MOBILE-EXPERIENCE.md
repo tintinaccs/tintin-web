@@ -101,7 +101,8 @@ Pruebas aisladas sobre HTML/CSS/controladores reales, con datos ficticios:
 listas pobladas y largas; campos/pestañas en las23 secciones; tablas tardías;
 modales extensos y viewport reducido; ficha/foto; historial y rechazo por borrador;
 comparación de cascada tablet/escritorio y regresiones de operaciones existentes.
-142 pruebas de panel y repaso final24/24;18 contratos de PWA/versiones y
+142 pruebas de panel, repaso final24/24 y15/15 tras cubrir campos tardíos con
+CSS real sin reducir las áreas de texto extensas;18 contratos de PWA/versiones y
 paginación. Evidencia y estado del SHA: `CURRENT_STATE.md` y recibo del PR1294.
 
 No se crean cuentas, pedidos, envíos, correos ni notificaciones de producción.

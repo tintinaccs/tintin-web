@@ -69,7 +69,9 @@
   .tt-admin-workspace :is(.correos-tabs,.ship-tabs,.user-tabs) { flex-wrap: wrap !important; overflow: visible; }
   .tt-admin-workspace :is(.correos-tab-btn,.ship-tab-btn,.user-tab-btn) { flex: 1 1 120px; min-height: 44px; white-space: normal; }
   .tt-admin-workspace :is(button,.adm-btn) { min-height: 44px; max-width: 100%; white-space: normal; touch-action: manipulation; }
-  .tt-admin-workspace :is(.adm-input,.adm-select,.adm-textarea) { min-width: 0; min-height: 44px !important; max-width: 100%; font-size: 16px !important; scroll-margin-block: 90px; }
+  .tt-admin-workspace :is(input:not([type=checkbox],[type=radio],[type=range],[type=color],[type=file],[type=hidden]),select,textarea) { min-width: 0; max-width: 100%; font-size: 16px !important; scroll-margin-block: 90px; }
+  .tt-admin-workspace :is(input:not([type=checkbox],[type=radio],[type=range],[type=color],[type=file],[type=hidden]),select) { min-height: 44px !important; }
+  :where(.tt-admin-workspace textarea) { min-height: 44px; }
   .tt-admin-workspace label:has(input[type=checkbox]) { min-height: 44px; align-content: center; }
   .adm-user-select { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
   :is(#order-edit-overlay,#client-ficha-overlay,#tpl-edit-overlay,#tpl-preview-overlay,#promo-confirm-overlay) { padding: max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left)) !important; overscroll-behavior: contain; }
