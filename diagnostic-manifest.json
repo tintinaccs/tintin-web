@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "65554196ca87f3e2a1a3745c535e74858d7ca7dfedd6a856c1270f2e5fa44cc1",
+  "sourceFingerprint": "4f330b66b18a11db85f11e4109787f90a95bebc95bcd09344503801eacf6969a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1676,
     "textFiles": 1541,
-    "totalBytes": 44187583,
+    "totalBytes": 44187683,
     "pages": 19,
     "modules": 1107
   },
@@ -37993,14 +37993,19 @@
     },
     {
       "path": "scripts/auditar-catalogo-pagina.js",
-      "bytes": 3726,
-      "sha256": "65bd7c880cfd1837495e660e679b06d77efb259a2f894220fe737f6a2cab61cd",
+      "bytes": 3754,
+      "sha256": "8263b847f8367727449ed977a6e48bd4e7fffcf28f934458373c322d1dc4f3d9",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://tintinaccs.com/",
+          "line": 43
+        }
+      ]
     },
     {
       "path": "scripts/auditar-checkout-entrega.js",
@@ -38093,14 +38098,19 @@
     },
     {
       "path": "scripts/auditar-colecciones-pagina.js",
-      "bytes": 3677,
-      "sha256": "3849310ca5ed67e82794a77249407305113bd87bb65b7706212974db9d1620c7",
+      "bytes": 3705,
+      "sha256": "41c3cfa4e548bc02cb0439661f202c38169eda8386fe618b1ac85852b3dac64f",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://tintinaccs.com/",
+          "line": 37
+        }
+      ]
     },
     {
       "path": "scripts/auditar-comercio-visual-parte-2c.mjs",
@@ -39869,14 +39879,19 @@
     },
     {
       "path": "scripts/auditar-producto-pagina.js",
-      "bytes": 5021,
-      "sha256": "ff4d1295636ba77a41ee17765a5ea66ee7d2d57551f830395dc3d2f64fa14908",
+      "bytes": 5065,
+      "sha256": "278809a106c13bce239fc9516cd392fc7ae866b999b91cbfa9c8374ff34e7f4d",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://tintinaccs.com/",
+          "line": 51
+        }
+      ]
     },
     {
       "path": "scripts/auditar-profunda.js",
@@ -66244,8 +66259,8 @@
     {
       "path": "scripts/auditar-catalogo-pagina.js",
       "extension": ".js",
-      "bytes": 3726,
-      "sha256": "65bd7c880cfd1837495e660e679b06d77efb259a2f894220fe737f6a2cab61cd"
+      "bytes": 3754,
+      "sha256": "8263b847f8367727449ed977a6e48bd4e7fffcf28f934458373c322d1dc4f3d9"
     },
     {
       "path": "scripts/auditar-checkout-entrega.js",
@@ -66274,8 +66289,8 @@
     {
       "path": "scripts/auditar-colecciones-pagina.js",
       "extension": ".js",
-      "bytes": 3677,
-      "sha256": "3849310ca5ed67e82794a77249407305113bd87bb65b7706212974db9d1620c7"
+      "bytes": 3705,
+      "sha256": "41c3cfa4e548bc02cb0439661f202c38169eda8386fe618b1ac85852b3dac64f"
     },
     {
       "path": "scripts/auditar-comercio-visual-parte-2c.mjs",
@@ -66694,8 +66709,8 @@
     {
       "path": "scripts/auditar-producto-pagina.js",
       "extension": ".js",
-      "bytes": 5021,
-      "sha256": "ff4d1295636ba77a41ee17765a5ea66ee7d2d57551f830395dc3d2f64fa14908"
+      "bytes": 5065,
+      "sha256": "278809a106c13bce239fc9516cd392fc7ae866b999b91cbfa9c8374ff34e7f4d"
     },
     {
       "path": "scripts/auditar-profunda.js",
