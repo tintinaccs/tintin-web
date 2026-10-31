@@ -44,7 +44,7 @@ export function orderContactLinks(order, orderId) {
     `Dirección: ${clean(shipping.address || order.address)}`,
     `Productos:\n${items.length ? items.join('\n') : 'Sin detalle registrado'}`,
     `Subtotal: ${money(order.subtotal)}`,
-    `Entrega: ${money(order.shippingCost ?? shipping.cost)}`,
+    `Costo de envío: ${money(order.shippingCost ?? shipping.cost)}`,
     `Total: ${money(order.total)}`,
     `Método de pago: ${cash ? 'Efectivo contra entrega' : clean(order.paymentMethod || order.payment?.method) === 'transferencia' ? 'Transferencia bancaria' : clean(order.paymentMethod || order.payment?.method) || 'No registrado'}`,
     `Estado del pago: ${paymentLabels[paymentState] || paymentState || 'No registrado'}`,

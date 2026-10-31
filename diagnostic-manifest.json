@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c092e6a859d628b80aa3d9a69fb0dcb8b1336229a3410beafa9365cd7cf448ad",
+  "sourceFingerprint": "ec6376bd0ea033ef0f97b614c0cf98a7f36124320ceb220162422b65e613b81e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1655,
     "textFiles": 1520,
-    "totalBytes": 39962924,
+    "totalBytes": 39963036,
     "pages": 19,
     "modules": 1104
   },
@@ -24677,8 +24677,8 @@
     },
     {
       "path": "cloudflare/contactos-pedido.mjs",
-      "bytes": 5121,
-      "sha256": "a33d059fc2475b7c1a869edbd1ae657f27ad6e5c6bb5984a10e0e6c3bd88fcb1",
+      "bytes": 5129,
+      "sha256": "dc0ac4500aab1be95df571780045a41509dbc017800dc20157fb54cb6e103ad2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53073,8 +53073,8 @@
     },
     {
       "path": "tests/orders/order-contact-links.test.mjs",
-      "bytes": 4431,
-      "sha256": "40340f64edb10530c3e5c1fa6851fe8ab48d1992626e688932006187e0c68737",
+      "bytes": 4535,
+      "sha256": "82373aed6dc755efc41fbc36697047e3cfdd84533739957fdee70dca1ee66f89",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60414,8 +60414,8 @@
     {
       "path": "cloudflare/contactos-pedido.mjs",
       "extension": ".mjs",
-      "bytes": 5121,
-      "sha256": "a33d059fc2475b7c1a869edbd1ae657f27ad6e5c6bb5984a10e0e6c3bd88fcb1"
+      "bytes": 5129,
+      "sha256": "dc0ac4500aab1be95df571780045a41509dbc017800dc20157fb54cb6e103ad2"
     },
     {
       "path": "cloudflare/contenido-pagina-seguro.js",
@@ -60709,7 +60709,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 9089,
-      "sha256": "b7851c6da88917f9a3dc28624027200570d65fe214428dd72c5ce494fbb3983d"
+      "sha256": "29d32b667cc2f0027d8e68a2c2ad6b2ccc0b8789cf14023ae7c6854592470002"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -60721,7 +60721,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "3af50817689aa5464b910d0eb3b403c5cb5d5461b266b162bf09c986642fb6b3"
+      "sha256": "9843853167b9c9d5c8c03e0d45bf7baa5b06ffed0afc0792b81a2c680cb96945"
     },
     {
       "path": "config/public-site.json",
@@ -68304,8 +68304,8 @@
     {
       "path": "tests/orders/order-contact-links.test.mjs",
       "extension": ".mjs",
-      "bytes": 4431,
-      "sha256": "40340f64edb10530c3e5c1fa6851fe8ab48d1992626e688932006187e0c68737"
+      "bytes": 4535,
+      "sha256": "82373aed6dc755efc41fbc36697047e3cfdd84533739957fdee70dca1ee66f89"
     },
     {
       "path": "tests/orders/order-trash-controls.test.mjs",

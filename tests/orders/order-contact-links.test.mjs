@@ -26,6 +26,8 @@ test('delivery abre el chat de Fito con datos del pedido confirmado', () => {
     '95.000 Gs','Paga al recibir','Portón verde']) assert.ok(message.includes(field), field);
   assert.ok(message.includes(links.map));
   assert.doesNotMatch(message, /Empaque Verde|fixture-id/);
+  assert.match(message, /Costo de envío: /);
+  assert.equal(message.match(/^Entrega: /gm)?.length, 1);
 });
 test('encomienda y retiro excluyen el botón para Fito en HTML y texto', () => {
   for (const shippingMethod of ['encomienda','retiro']) {
