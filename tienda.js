@@ -452,7 +452,7 @@ function renderCart() {
         </div>
       </div>
       <div class="tt-cart-item-actions">
-        <button type="button" class="tt-cart-favorite-toggle${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" data-favorite-cat="${escapeAttribute(item.cat || '')}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
+        <button type="button" class="tt-cart-favorite-toggle${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" data-favorite-cat="${escapeAttribute(item.cat || '')}" aria-label="${escapeAttribute(isFavorite ? `Quitar ${item.name || 'producto'} de favoritos` : `Guardar ${item.name || 'producto'} en favoritos`)}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
         <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" aria-label="Eliminar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>
     </div>
@@ -810,7 +810,7 @@ function renderProductCardMarkup(p, options = {}) {
 
   return `
     <article class="tt-product-card${inStock ? '' : ' tt-stock-unavailable'}" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
-      <button type="button" class="tt-product-favorite-button${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(p.name)}" data-favorite-price="${escapeAttribute(p.price)}" data-favorite-image="${escapeAttribute(imgUrl)}" data-favorite-cat="${escapeAttribute(p.category || p.cat || '')}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
+      <button type="button" class="tt-product-favorite-button${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(p.name)}" data-favorite-price="${escapeAttribute(p.price)}" data-favorite-image="${escapeAttribute(imgUrl)}" data-favorite-cat="${escapeAttribute(p.category || p.cat || '')}" aria-label="${escapeAttribute(isFavorite ? `Quitar ${p.name || 'producto'} de favoritos` : `Guardar ${p.name || 'producto'} en favoritos`)}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
       <a href="${productHref}" class="tt-product-img tt-product-card-img-link" aria-label="Ver ${escapeAttribute(p.name)}">
         ${badgeHTML}${stockLabel}
         ${imgContent}

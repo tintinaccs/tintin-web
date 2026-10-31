@@ -21,13 +21,13 @@ function pageStyles(page) {
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261031-colores-tarjetas-1';
+const TIENDA_VERSION = 'tintin-20261031-revision-ux-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
-const LOADER_VERSION = 'tintin-20261031-css-bundles-1';
+const LOADER_VERSION = 'tintin-20261031-revision-ux-1';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5';
 const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20261030-maestro-1';
-const NAV_ENTRY_VERSION = 'tintin-20261030-maestro-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261031-revision-ux-1';
+const NAV_ENTRY_VERSION = 'tintin-20261031-revision-ux-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261030-home-history-5';
 const SESSION_PROTECTION_VERSION = 'tintin-20261030-home-history-5';
@@ -35,7 +35,7 @@ const PROFILE_GATE_VERSION = 'tintin-20261030-home-history-5';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1-nav-20261028-2';
-const UNIFIED_THEME_VERSION = 'tintin-20261031-tema-unico-2';
+const UNIFIED_THEME_VERSION = 'tintin-20261031-tema-unico-3';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
@@ -99,7 +99,7 @@ const INITIAL_SHARED_STYLES = [
   [
     "id=\"tt-phase10-accessibility-css\"",
     "css/quality/accesibilidad-global.css",
-    "tintin-20261013-connectivity-hit-target-1-palette-20261014-1"
+    "tintin-20261031-skip-link-1"
   ]
 ];
 const INITIAL_PUBLIC_STYLES = [

@@ -13,7 +13,6 @@
   color:var(--color-text-primary,#222222) !important;
   font: 800 14px/1.2 Montserrat, sans-serif;
   text-decoration: none;
-  box-shadow: 0 10px 34px rgba(58, 20, 35, .22);
   transform: translateY(calc(-100% - 24px));
   transition: transform 160ms ease;
 }
