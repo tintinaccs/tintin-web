@@ -2,14 +2,14 @@
 
 El catálogo actual tiene dos protecciones distintas:
 
-1. las lecturas públicas están **acotadas**; no existen consultas sin límite (`products` tiene techo de 1.000 documentos y `collections` un techo menor),
+1. las lecturas públicas están **acotadas**; no existen consultas sin límite. La lectura edge de `functions/api/public-catalog.js` recorre como máximo 5.000 documentos de `products` (incluidos borradores y no publicados, que nunca se envían al cliente) y 300 de `collections`, y **rechaza** la respuesta si la colección supera ese presupuesto (`failOnTruncation`) en lugar de publicar un catálogo parcial. El techo de productos **publicados** que el cliente puede recibir sigue siendo 1.000,
 2. el DOM se renderiza progresivamente por lotes mediante “Mostrar más productos”, por lo que no se crean cientos de tarjetas de una sola vez.
 
 ## Umbral operativo
 
 Mientras el catálogo publicado permanezca por debajo de 800 productos, el modelo actual conserva filtros combinables, búsqueda local completa y actualización realtime con un costo predecible. Al alcanzar 800 productos publicados, el crecimiento queda bloqueado como deuda operativa: antes de superar el techo de 1.000 se debe migrar el listado a cursor/paginación server-side y mover búsqueda/filtros que requieran el conjunto completo a consultas indexadas o un índice de búsqueda.
 
-El límite de 1.000 **no debe aumentarse** como solución de escalabilidad. Aumentar el número solo posterga el problema y vuelve a cargar todo el catálogo en cliente.
+El límite de 1.000 productos publicados **no debe aumentarse** como solución de escalabilidad. Aumentar el número solo posterga el problema y vuelve a cargar todo el catálogo en cliente.
 
 ## Evidencia de frescura
 

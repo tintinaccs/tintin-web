@@ -22,7 +22,7 @@ const catalogScalePolicy = read('docs/politica-escalado-catalogo.md');
 test('catálogo público permanece acotado y usa la ruta edge/cache actual', () => {
   assert.match(productStore, /\(\?:catalogo\|collections\)[\s\S]{0,180}loadAllProducts\(options\)/);
   assert.match(productStore, /startPublicProductsRealtime[\s\S]{0,420}publicProductsReady = loadAllProducts\(\)/);
-  assert.match(publicCatalogApi, /resource === 'products' \? 1000 : 300/);
+  assert.match(publicCatalogApi, /firestoreAdminListAll\(env,\s*resource,\s*resource === 'products' \? 5000 : 300,\s*\{failOnTruncation:true\}\)/);
   assert.match(productStore, /fetchPublicCatalogResource\('products'\)/);
 });
 
@@ -62,6 +62,7 @@ test('políticas de crecimiento y slugs quedan explícitas sin fingir paginació
   assert.match(collectionsPolicy, /Colecciones vacías/);
   assert.match(collectionsPolicy, /Slugs duplicados/);
   assert.match(catalogScalePolicy, /800 productos/);
+  assert.match(catalogScalePolicy, /5\.000 documentos[\s\S]{0,400}failOnTruncation/);
   assert.match(catalogScalePolicy, /no debe aumentarse/i);
   assert.match(catalogScalePolicy, /cursor\/paginación server-side/i);
 });

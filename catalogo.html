@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="ea57ff668857f52ab9030d736ab57274c6068191d233829aca2219c41977bf23">
+  <meta name="tintin-page-revision" content="e39dd2a9fa0d90c52e21ff6cb7d9b427118cb653451ba02a96921a6a3934beea">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261022-avatar-inicial-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261031-revision-ux-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261031-catalog-cls-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261029-cart-motion-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20261031-revision-ux-1" defer></script>
   <title>Catálogo de Accesorios | TINTIN Accesorios & Relojes</title>
@@ -411,7 +411,19 @@
   <!-- TABS MOBILE -->
   <nav class="cat-tabs-mobile" id="cat-tabs-mobile" aria-label="Categorías del catálogo">
     <button type="button" class="tt-filtro-btn activo" data-cat="todos" aria-pressed="true">Todos</button>
-    <!-- Rest rendered live from Super Admin → Colecciones -->
+    <!-- Respaldo estático (misma lista que el pie): reserva el alto para evitar
+         saltos de diseño; Super Admin → Colecciones lo reemplaza al cargar. -->
+    <button type="button" class="tt-filtro-btn" data-cat="collares" data-tt-fallback aria-pressed="false">Collares</button>
+    <button type="button" class="tt-filtro-btn" data-cat="earcuff" data-tt-fallback aria-pressed="false">Earcuff</button>
+    <button type="button" class="tt-filtro-btn" data-cat="gafas" data-tt-fallback aria-pressed="false">Gafas</button>
+    <button type="button" class="tt-filtro-btn" data-cat="aros" data-tt-fallback aria-pressed="false">Aros</button>
+    <button type="button" class="tt-filtro-btn" data-cat="armcuff" data-tt-fallback aria-pressed="false">Armcuff</button>
+    <button type="button" class="tt-filtro-btn" data-cat="anillos" data-tt-fallback aria-pressed="false">Anillos</button>
+    <button type="button" class="tt-filtro-btn" data-cat="joyeros" data-tt-fallback aria-pressed="false">Joyeros</button>
+    <button type="button" class="tt-filtro-btn" data-cat="pulseras" data-tt-fallback aria-pressed="false">Pulseras</button>
+    <button type="button" class="tt-filtro-btn" data-cat="relojes" data-tt-fallback aria-pressed="false">Relojes</button>
+    <button type="button" class="tt-filtro-btn" data-cat="tobilleras" data-tt-fallback aria-pressed="false">Tobilleras</button>
+    <button type="button" class="tt-filtro-btn" data-cat="bolsos" data-tt-fallback aria-pressed="false">Bags</button>
   </nav>
 
   <!-- LAYOUT -->
