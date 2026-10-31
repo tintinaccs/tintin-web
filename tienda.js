@@ -2004,6 +2004,27 @@ window.addEventListener('tintin:product-live-updated', event => {
   _showProductFeedback('Esta ficha se actualizó con los últimos cambios de precio, stock o fotos.', 'info');
 });
 
+// En dos columnas la galería acompaña el scroll (sticky en CSS). Si es más alta
+// que la pantalla, su tope pasa a ser negativo: primero se desplaza hasta mostrar
+// su borde inferior (miniaturas y colores) y recién ahí queda fija.
+(function _initProductGallerySticky() {
+  const gallery = document.querySelector('#product-detail .tt-product-gallery');
+  if (!gallery) return;
+  const gap = 16;
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 72;
+    const preferred = header + gap;
+    const fit = window.innerHeight - gallery.offsetHeight - gap;
+    gallery.style.setProperty('--tt-product-gallery-sticky-top', `${Math.round(Math.min(preferred, fit))}px`);
+  };
+  const request = () => { if (!frame) frame = requestAnimationFrame(update); };
+  window.addEventListener('resize', request);
+  if (typeof ResizeObserver === 'function') new ResizeObserver(request).observe(gallery);
+  request();
+})();
+
 // Si el módulo del carrito no carga (red caída, SDK bloqueado), el cliente debe
 // ver el fallo en lugar de un botón que vuelve a su estado sin explicación.
 function _showProductCartError(error) {

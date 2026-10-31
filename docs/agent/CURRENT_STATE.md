@@ -22,6 +22,20 @@ Claude Code, rama claude/laughing-albattani-n84ngy.
 - `?v=` subido a tintin-20261031-seo-espacios-1 en cascada; CSP regenerada.
 - NOT_VERIFIED: CI y producción tras el merge.
 
+## 2026-10-31 — Galería de la ficha acompaña el scroll (base main 762610d5c)
+Claude Code, rama claude/nifty-newton-o7j9wc (PR nuevo).
+- Pedido: en dos columnas la ficha derecha es mucho más alta y la galería
+  quedaba arriba. Causa: `product-maintenance.css` forzaba
+  `.tt-product-gallery{position:static !important}`, anulando el sticky previsto.
+- ≥768 px: galería `position:sticky` con tope `--tt-product-gallery-sticky-top`
+  (header + 16 px). `tienda.js` lo baja a negativo si la galería no entra en la
+  pantalla, para que se vean miniaturas y colores. Móvil (1 columna) sin cambios.
+- `product-gallery-sticky.spec.js` (1440x900, 1024x768, 1180x820, 820x1180 y
+  390x844): visible a mitad de la ficha y bordes inferiores alineados (≤1 px)
+  al final; 15/15 en 3 repeticiones. Tests de ficha relacionados 114/114.
+- `?v=` subido a tintin-20261031-galeria-sticky-1 en cascada.
+- NOT_VERIFIED: producción tras el deploy; Safari/WebKit real no probado.
+
 ## 2026-10-31 — Ficha en vivo y dominio único (base main 430fd836e)
 Claude Code, rama claude/nifty-newton-o7j9wc (mismo PR que el catálogo).
 - Ficha: `estado-productos.js` compara una huella estable del documento
