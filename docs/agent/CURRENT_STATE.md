@@ -13,6 +13,12 @@ Claude Code, rama claude/sharp-cannon-oxfa8o. Solo diagnóstico: sin cambios de 
   - Sin id e id inexistente (respuesta real 200 `item:null`) → "no
     encontrado" inmediato. Red caída → error de carga a los 12 s.
 - Resultado: sin bugs con evidencia; no se tocó código.
+- CI run 41220793633 (intento 1, SHA 393ccb7): falló header-responsive
+  "las categorías se desplazan…" (scrollY 0 en vez de 200). Causa: `html`
+  usa `scroll-behavior:smooth`, la prueba hacía `scrollTo(0,200)` sin esperar
+  y en un runner lento el panel bloqueaba el fondo con scrollY=0 (reproducido:
+  `scrollY` vale 0 justo después del `scrollTo`). Arreglo solo en la prueba:
+  scroll instantáneo + esperar 200 antes de abrir el panel.
 - NOT_VERIFIED: comportamiento en producción (no se hicieron compras ni escrituras).
 
 ## 2026-10-31 — Ficha en vivo y dominio único (base main 430fd836e)
