@@ -460,7 +460,10 @@ async function readNotification(id) {
     if (!item) return;
     const key = notificationGroupKey(item);
     const ids = key ? notifications.filter(row => notificationGroupKey(row) === key && row.read !== true).map(row => row.id) : [id];
-    for (const notificationId of ids) await apiWithRetry('adminNotificationSeen', { notificationId });
+    for (const notificationId of ids) {
+      if (user?.uid !== targetUser.uid) return;
+      await apiWithRetry('adminNotificationSeen', { notificationId });
+    }
     if (user?.uid === targetUser.uid) void subscribeNotifications();
   } catch { if (user?.uid === targetUser.uid) showReadError(); }
 }

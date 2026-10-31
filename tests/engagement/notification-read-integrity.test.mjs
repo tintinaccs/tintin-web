@@ -53,3 +53,28 @@ test('iconos distinguen los estados reales sin inventar eventos',()=>{
  assert.equal(notificationIconKey({kind:'payment_status',paymentStatus:'pendiente'}),'payment-pending');
  assert.equal(notificationIconKey({kind:'welcome'}),'sparkle');
 });
+
+test('una lectura agrupada se detiene si cambia la cuenta entre avisos',async()=>{
+ for(const [file,session] of [
+  ['js/components/notifications/notificaciones-clientes.js','currentUser'],
+  ['js/admin/notifications/notificaciones-admin.js','user'],
+ ]) {
+  const source=fs.readFileSync(new URL('../../'+file,import.meta.url),'utf8');
+  const start=source.indexOf('async function readNotification(id)');
+  const handler=source.slice(start,source.indexOf('function wireEvents()',start));
+  const run=new Function(`
+   let ${session}={uid:'primera'};
+   const notifications=[{id:'uno',read:false},{id:'dos',read:false}];
+   const writes=[];
+   const notificationGroupKey=()=> 'mismo-grupo',isSuperAdmin=()=>false;
+   const subscribe=()=>{},subscribeNotifications=()=>{},showReadError=()=>{};
+   const apiWithRetry=async(action,payload)=>{
+    writes.push({uid:${session}.uid,id:payload.notificationId});
+    ${session}={uid:'segunda'};
+   };
+   ${handler}
+   return readNotification('uno').then(()=>writes);
+  `);
+  assert.deepEqual(await run(),[{uid:'primera',id:'uno'}],file);
+ }
+});

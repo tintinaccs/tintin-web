@@ -5087,3 +5087,13 @@ derivados desde la fuente combinada, con política base del main actual.
 PASS_LOCAL:300/300 Node22 (login/cuentas/presentación/carrito/push/social)
 y4/4 Chromium de formato. Sin cambios adicionales al comportamiento del campo.
 El SHA combinado requiere CI y publicación propias.
+
+## 2026-10-31 — Continuación del PR #1283
+
+Codex /root revisó el candidato 288742c6. Reprodujo un cruce de sesión durante
+la lectura agrupada: al cambiar de cuenta entre dos peticiones, la segunda
+intentaba usar la sesión nueva. Ambos consumidores ahora verifican el UID
+original antes de cada aviso. La regresión falla antes y pasa después del cambio.
+Las cinco pruebas de integridad de lectura pasan. CI, merge y publicación del
+candidato final requieren evidencia por su SHA; no se heredan los PASS locales
+de la sesión anterior. No se escribieron datos comerciales reales.
