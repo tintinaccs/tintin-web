@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="e39dd2a9fa0d90c52e21ff6cb7d9b427118cb653451ba02a96921a6a3934beea">
+  <meta name="tintin-page-revision" content="9077b0734fca8de8b64144acd985d8c43aa42822927b08ad5222b9a9b1917c2d">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -284,6 +284,8 @@
     .cat-tabs-mobile .tt-filtro-btn {
       flex: 0 1 auto; max-width: 100%; white-space: normal; overflow-wrap: anywhere;
     }
+    .cat-tabs-shell { display: none; }
+    .cat-tabs-more[hidden] { display: none !important; }
 
     .cat-empty {
       grid-column: 1/-1; text-align: center; padding: 60px 24px; color: var(--text-muted);
@@ -326,16 +328,62 @@
       }
       .cat-filter-toggle { display: block; }
       body.tt-catalog-maintenance .cat-hero { margin-bottom: 0; }
-      body.tt-catalog-maintenance .cat-tabs-mobile {
-        display: flex; position: relative; isolation: isolate; box-sizing: border-box;
-        width: 100vw; max-width: none !important; margin-inline: calc((100% - 100vw) / 2);
-        gap: 10px 8px; padding: 28px 24px; margin-block: 0 12px;
+      /* Primera pantalla compacta: las categorías ocupan una fila deslizable
+         y el botón final las despliega completas (y las vuelve a contraer). */
+      html body.tt-catalog-maintenance .cat-tabs-shell {
+        display: flex; align-items: flex-start; gap: 6px; position: relative; isolation: isolate;
+        box-sizing: border-box; width: 100vw; margin-inline: calc((100% - 100vw) / 2);
+        padding: 6px 16px 6px 10px; margin-block: 0 8px;
       }
-      .cat-tabs-mobile::before {
+      .cat-tabs-shell::before {
         content: ''; position: absolute; z-index: -1; pointer-events: none;
-        inset: 0 0 -12px;
-        background: linear-gradient(to bottom, var(--tt-flow-join), var(--tt-flow-light) 28px, var(--tt-flow-light) calc(100% - 28px), var(--tt-flow-join));
+        inset: 0 0 -8px;
+        background: linear-gradient(to bottom, var(--tt-flow-join), var(--tt-flow-light) 12px, var(--tt-flow-light) calc(100% - 12px), var(--tt-flow-join));
       }
+      html body.tt-catalog-maintenance .cat-tabs-mobile {
+        display: flex; position: relative; flex: 1 1 auto; min-width: 0; max-width: none !important; box-sizing: border-box;
+        flex-wrap: nowrap; gap: 8px; margin: 0; padding: 6px;
+        overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain;
+        scroll-snap-type: x proximity; scroll-padding-inline: 6px; scrollbar-width: none;
+      }
+      html body.tt-catalog-maintenance .cat-tabs-shell.has-overflow:not(.is-expanded) .cat-tabs-mobile {
+        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+        mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+      }
+      .cat-tabs-mobile::-webkit-scrollbar { display: none; }
+      html body.tt-catalog-maintenance .cat-tabs-mobile .tt-filtro-btn {
+        flex: 0 0 auto; max-width: 100%; white-space: normal; overflow-wrap: anywhere; scroll-snap-align: start;
+        /* Solo color/sombra animados: si el tamaño anima, el centrado al contraer mide posiciones intermedias. */
+        transition-property: background-color, border-color, color, box-shadow, transform;
+      }
+      html body.tt-catalog-maintenance .cat-tabs-shell.is-expanded .cat-tabs-mobile { flex-wrap: wrap; overflow: visible; }
+      html body.tt-catalog-maintenance .cat-tabs-shell.is-expanded .cat-tabs-mobile .tt-filtro-btn {
+        flex: 0 1 auto; max-width: 100%; white-space: normal; overflow-wrap: anywhere;
+      }
+      .cat-tabs-more {
+        flex: 0 0 44px; width: 44px; height: 44px; margin-top: 6px; display: inline-grid; place-items: center;
+        border-radius: 50%; border: 1.5px solid var(--color-button-secondary-border, var(--color-brand-primary, #F8AACA));
+        background: var(--color-button-secondary-background, #FFFFFF);
+        color: var(--color-button-secondary-text, var(--color-text-primary, #713C53)); cursor: pointer; padding: 0;
+      }
+      .cat-tabs-more svg { transition: transform .25s ease; }
+      .cat-tabs-shell.is-expanded .cat-tabs-more svg { transform: rotate(180deg); }
+      .cat-tabs-more:focus-visible {
+        outline: 3px solid var(--color-button-primary-focus-ring, rgba(248,170,202,.24)); outline-offset: 2px;
+      }
+      html body.tt-catalog-maintenance .cat-hero { padding: 10px 16px; margin-bottom: 8px; }
+      html body.tt-catalog-maintenance .cat-hero-title { font-size: clamp(22px, 6.4vw, 30px); }
+      html body.tt-catalog-maintenance .cat-hero-sub { margin-top: 4px; }
+      html body.tt-catalog-maintenance .cat-filter-toggle { margin-bottom: 10px; }
+      /* Buscador a todo el ancho; cantidad y orden comparten la fila siguiente. */
+      html body.tt-catalog-maintenance .cat-top {
+        display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "search search" "count sort";
+        align-items: center; padding: 10px 12px; gap: 8px 10px; margin-bottom: 14px;
+      }
+      html body.tt-catalog-maintenance .cat-controls { display: contents; }
+      html body.tt-catalog-maintenance .cat-search { grid-area: search; width: 100%; }
+      html body.tt-catalog-maintenance .cat-count { grid-area: count; width: auto; white-space: nowrap; }
+      html body.tt-catalog-maintenance .cat-sort { grid-area: sort; justify-self: end; width: 100%; max-width: 240px; min-width: 0; padding-inline: 14px 10px; }
       .cat-top { align-items: stretch; }
       .cat-count { width: 100%; }
       .cat-controls { width: 100%; justify-content: stretch; }
@@ -366,7 +414,7 @@
       .tt-card-badge { top: 7px; left: 7px; font-size: 8px; padding: 3px 6px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .tt-card, .tt-card-img-wrap img, .cat-sidebar, .cat-filter-toggle { transition: none !important; }
+      .tt-card, .tt-card-img-wrap img, .cat-sidebar, .cat-filter-toggle, .cat-tabs-more svg { transition: none !important; }
       .tt-skeleton { animation: none; }
     }
   </style>
@@ -409,6 +457,7 @@
   </section>
 
   <!-- TABS MOBILE -->
+  <div class="cat-tabs-shell" id="cat-tabs-shell">
   <nav class="cat-tabs-mobile" id="cat-tabs-mobile" aria-label="Categorías del catálogo">
     <button type="button" class="tt-filtro-btn activo" data-cat="todos" aria-pressed="true">Todos</button>
     <!-- Respaldo estático (misma lista que el pie): reserva el alto para evitar
@@ -425,6 +474,11 @@
     <button type="button" class="tt-filtro-btn" data-cat="tobilleras" data-tt-fallback aria-pressed="false">Tobilleras</button>
     <button type="button" class="tt-filtro-btn" data-cat="bolsos" data-tt-fallback aria-pressed="false">Bags</button>
   </nav>
+  <!-- La fila se desliza; este botón la despliega completa o la vuelve a una línea. -->
+  <button type="button" class="cat-tabs-more" id="cat-tabs-more" aria-controls="cat-tabs-mobile" aria-expanded="false" aria-label="Ver todas las categorías" hidden>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+  </div>
 
   <!-- LAYOUT -->
   <div class="cat-layout">
@@ -975,6 +1029,33 @@ document.getElementById('btn-limpiar-filtros').onclick = () => {
   document.getElementById('cat-sort').value = 'default';
   seleccionarCat('todos');
 };
+
+(() => {
+  const shell = document.getElementById('cat-tabs-shell');
+  const nav = document.getElementById('cat-tabs-mobile');
+  const more = document.getElementById('cat-tabs-more');
+  if (!shell || !nav || !more) return;
+  const sync = () => {
+    const expanded = shell.classList.contains('is-expanded');
+    const overflow = expanded || nav.scrollWidth > nav.clientWidth + 1;
+    shell.classList.toggle('has-overflow', overflow);
+    more.hidden = !overflow;
+    more.setAttribute('aria-expanded', String(expanded));
+    more.setAttribute('aria-label', expanded ? 'Mostrar menos categorías' : 'Ver todas las categorías');
+  };
+  more.addEventListener('click', () => {
+    shell.classList.toggle('is-expanded');
+    sync();
+    if (!shell.classList.contains('is-expanded')) {
+      const active = nav.querySelector('.tt-filtro-btn.activo');
+      // Esperar el relayout de la fila contraída antes de centrar la activa.
+      if (active) requestAnimationFrame(() => active.scrollIntoView({ block: 'nearest', inline: 'center' }));
+    }
+  });
+  new ResizeObserver(sync).observe(nav);
+  new MutationObserver(sync).observe(nav, { childList: true });
+  sync();
+})();
 
 document.getElementById('filter-toggle').onclick = () => {
   const sidebar = document.getElementById('cat-sidebar');
