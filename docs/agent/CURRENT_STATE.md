@@ -1,3 +1,20 @@
+## 2026-10-31 — Revisión de la ficha de producto (base main 762610d)
+Claude Code, rama claude/sharp-cannon-oxfa8o. Solo diagnóstico: sin cambios de código.
+- Base: 110/110 tests de la ficha en chromium (product-live-update,
+  product-color-gallery, product-shape-selection, runtime/product-stock-status,
+  cart/quantity-browser, product-first-paint). product-stock-first 12/12 (corrida previa).
+- Prueba exploratoria temporal (no versionada) con API simulada:
+  - v1 Color×Talle: combinación sin stock → botón deshabilitado, "Esta opción
+    está sin stock", badge AGOTADO, foto de la variante. Con stock → compra
+    habilitada y tope por variante y por stock total (carrito 4 = stock 4,
+    aviso "Ya alcanzaste el stock disponible").
+  - v2: precio por variante (30.000/45.000) en ficha y carrito, variante
+    agotada bloqueada, galería sigue la selección, tope 2.
+  - Sin id e id inexistente (respuesta real 200 `item:null`) → "no
+    encontrado" inmediato. Red caída → error de carga a los 12 s.
+- Resultado: sin bugs con evidencia; no se tocó código.
+- NOT_VERIFIED: comportamiento en producción (no se hicieron compras ni escrituras).
+
 ## 2026-10-31 — Ficha en vivo y dominio único (base main 430fd836e)
 Claude Code, rama claude/nifty-newton-o7j9wc (mismo PR que el catálogo).
 - Ficha: `estado-productos.js` compara una huella estable del documento
