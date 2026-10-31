@@ -654,7 +654,10 @@ test('movimiento reducido abre y cierra sin animación de desplazamiento', async
 test('las categorías se desplazan con el dedo y el fondo conserva su posición', async ({ page }) => {
   await mockGuestNavigation(page);
   await openPublicPage(page,{width:390,height:844},'/envios');
-  await page.evaluate(() => scrollTo(0,200));
+  // html usa scroll-behavior:smooth: sin esperar, el panel podía bloquear el
+  // fondo antes de llegar a 200 y la restauración volvía a la posición previa.
+  await page.evaluate(() => scrollTo({ left: 0, top: 200, behavior: 'instant' }));
+  await expect.poll(() => page.evaluate(() => Math.round(scrollY))).toBe(200);
   await page.locator('#tabbar-tienda').click();
   await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('open');
   const grid = page.locator('#collections-sheet .tt-sheet-grid');
