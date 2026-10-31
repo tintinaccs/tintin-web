@@ -382,7 +382,16 @@ if (!window.TintinCollectionsPhase4Booted) {
     return button;
   }
 
+  // Respaldo estático de catalogo.html: mientras cargan las colecciones se
+  // conservan esos botones para que la grilla no salte cuando llega la lista.
+  let catalogMobileFallback = null;
+
   function renderCatalogMobile(target) {
+    if (!catalogMobileFallback) {
+      catalogMobileFallback = [...target.querySelectorAll('[data-tt-fallback][data-cat]')]
+        .map(button => ({ slug: clean(button.dataset.cat), name: clean(button.textContent) }))
+        .filter(item => item.slug && item.name);
+    }
     const selected = selectedCatalogSlug();
     const all = mark(document.createElement('button'));
     all.type = 'button';
@@ -397,6 +406,10 @@ if (!window.TintinCollectionsPhase4Booted) {
       const error = stateNode('Categorías no disponibles', 'error');
       error.style.padding = '8px 12px';
       nodes.push(error);
+    } else if (!collections && catalogMobileFallback.length) {
+      catalogMobileFallback.forEach(collection =>
+        nodes.push(buildCatalogMobileButton(collection, selected === collection.slug))
+      );
     } else if (!collections) {
       const loading = stateNode('Cargando…');
       loading.style.padding = '8px 12px';

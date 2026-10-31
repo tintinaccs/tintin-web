@@ -1,3 +1,24 @@
+## 2026-10-31 — Pendientes del catálogo (base main 73951ca07)
+Claude Code, rama claude/nifty-newton-o7j9wc.
+- CLS móvil del catálogo: `#cat-tabs-mobile` pasaba de 100 a 316 px cuando
+  llegaban las colecciones (1,3–3,4 s, incluso con caché: el módulo espera el
+  SDK de Firebase). Ahora `catalogo.html` trae la misma lista de respaldo que el
+  pie y `presentacion-colecciones.js` la conserva mientras carga. Medición local
+  (Playwright, API simulada con datos públicos reales): CLS 0,19 → 0,028 a
+  390 px y 0,020 a 320 px; el resto proviene de colecciones de producción que
+  no están en la lista de respaldo (MOCHILAS). 768 px: 0.
+- Techo 5000: #1276 lo subió a propósito con `failOnTruncation` (rechaza en vez
+  de publicar un catálogo parcial; incluye borradores). Se alinean la política
+  (1.000 sigue siendo el techo de productos publicados; hoy 282) y
+  `closeout-contracts`. Sin cambio de código productivo.
+- `collections-page-read.test.mjs`: el test no inyectaba
+  `normalizeCollectionSlug`, que #1276/#1274 pasaron a importar.
+- `auditar-catalogo-pagina.js`: exigía `precio-min/max`, que nunca existieron
+  en `catalogo.html` (nació así en #1219), y no aceptaba el argumento de versión
+  del cargador. Ahora valida el orden por precio real.
+- Las dos pruebas y la auditoría se agregan a la fase commerce de CI.
+- NOT_VERIFIED: CLS en producción tras el deploy.
+
 ## 2026-10-31 — Revisión UX de páginas públicas (base main 8c1eaa29e)
 - Barrido Playwright en 16 páginas × 360/768/1440: sin scroll horizontal, sin imágenes rotas y con un solo h1 por página.
 - Corregido:
@@ -12,11 +33,8 @@
   - `audit:cache-versioning`: OK.
 - Dato de negocio: la API pública no tiene productos con `destacado`, por eso "Más vendidos" queda vacío hasta que se marquen en admin.
 - Pendiente:
-  - CLS 0.168 del catálogo en móvil (`#cat-tabs-mobile`).
-  - Techo de 5000 productos públicos.
-  - La auditoría huérfana `auditar-catalogo-pagina.js`.
-  - Falla preexistente en `collections-page-read.test.mjs`.
   - El admin solo se revisa con fixture, sin datos reales.
+  - (CLS móvil, techo 5000, auditoría huérfana y collections-page-read: ver entrada superior.)
 - Panel admin (fixture, 23 secciones × 390/820/1440):
   - Sin overflow de documento.
   - Se agregó aria-label corto a 25 campos que solo tenían placeholder. `check-all-users` ya tenía nombre por `title`.
