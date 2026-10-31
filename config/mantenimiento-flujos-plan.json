@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "8c1eaa29e720d1f518bc73782abc00badd7e394c",
-  "reason": "Revisión UX: tarjetas con botones alineados, favoritos accesibles, vacío de más vendidos y enlace de salto sin sombra; versiones de caché",
+  "reason": "Revisión UX: alineación de tarjetas, accesibilidad y filtros del panel admin",
   "files": [
     {
       "path": "404.html",
@@ -21,7 +21,7 @@
     {
       "path": "admin.html",
       "oldHash": "ae987061e921601aa37a37fb8e98ba14674973c834e58f8e25798cae2bc33099",
-      "newHash": "34adaafae5f7be76229d444601cc2ab3fa52d4c5fac55478b1aaa6e8ab1550ff"
+      "newHash": "6d99637ce506f703f1c8dbf42c162d5dc6d30754c6411ec92e1e32131be13a86"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -47,6 +47,11 @@
       "path": "contact.html",
       "oldHash": "df148ce1f6921f03145bd0e4bfdd7844282b9bab1a64fcc0441eb802f8bf7fc8",
       "newHash": "a1b21d1ac3bd3ccab8dc0efc93edf4da5c9236f9b816379dec453b099df7fc5f"
+    },
+    {
+      "path": "css/admin/admin.css",
+      "oldHash": "c1288d5d4537cc819e81c149545e6caf32266aaff34ad450388da93c3dcdcf54",
+      "newHash": "38aae02a8b7bb7b1138a7e6480df5e07749aed36623ea068ace0d75021b0c37c"
     },
     {
       "path": "css/core/tema-unificado-tintin.css",
@@ -131,7 +136,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "91e01db615dbc8677adda29750cc685afcbdcc3f5f6eec835dc1914026e39d4d",
-      "newHash": "ec048dc9eed1458df898e8cab2332ad61d3b6a9270b709dc86c1a1cfb174ece7"
+      "newHash": "66d64c725c769d6d23a16b5bbabf0db3a74866cc46ea331766ca2f063806100c"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

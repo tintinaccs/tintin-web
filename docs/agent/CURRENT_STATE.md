@@ -17,6 +17,16 @@
   - La auditoría huérfana `auditar-catalogo-pagina.js`.
   - Falla preexistente en `collections-page-read.test.mjs`.
   - El admin solo se revisa con fixture, sin datos reales.
+- Panel admin (fixture, 23 secciones × 390/820/1440):
+  - Sin overflow de documento.
+  - Se agregó aria-label corto a 25 campos que solo tenían placeholder. `check-all-users` ya tenía nombre por `title`.
+  - En Pedidos, en móvil, el buscador quedaba aplastado a ~120 px, porque el `flex` en línea ganaba sobre la regla de ≤540 px; ahora se apilan.
+  - Productos y Colecciones: el buscador era diminuto y el selector de categoría ocupaba todo el ancho; ahora la fila es proporcionada y de 40 px de alto.
+  - Selects de acciones masivas: una fila por grupo en móvil y ancho automático en escritorio.
+  - Pestañas de correos: el scroll horizontal en móvil es intencional (sin cambio).
+  - `admin.html` queda en 204 687 bytes, bajo el límite de 200 KiB de `audit:diagnostic-findings`.
+  - Playwright admin (all-devices, workspaces, sidebar, control-dashboard): 130 pasaron. `ci:preflight`: exit 0.
+- CI 41197428758 (SHA 77b0ba1c6) falló en "Reject generated artifact drift": `CURRENT_STATE.md` se editó después de `build:diagnostics`. Se corrige corriendo `build:pages` como último paso antes del commit.
 
 ## 2026-10-31 — Editor de producto, imágenes del catálogo y lista de errores
 

@@ -880,6 +880,12 @@
       flex: 1 1 720px;
       justify-content: flex-end;
     }
+    /* Buscador y filtro de catálogo con el mismo alto y proporciones: el buscador
+       ocupa el espacio disponible y el selector de categoría no se estira. */
+    @media (min-width: 641px) {
+      #prod-search, #coll-search { flex: 1 1 200px; width: auto; min-height: 40px; }
+      #prod-filter-cat { flex: 0 1 200px; width: auto; min-height: 40px; }
+    }
 
     /* ======== BADGES — TCG ======== */
     .adm-badge {
@@ -2673,6 +2679,8 @@ body:has(.adm-main) :is(.adm-filter-row > *, .adm-bulk-toolbar > *) {
   min-width: 0;
 }
 
+body:has(.adm-main) .adm-bulk-toolbar .adm-select { width: auto; }
+
 body:has(.adm-main) .adm-table-wrap {
   max-width: 100%;
   overscroll-behavior-inline: contain;
@@ -2702,8 +2710,12 @@ body:has(.adm-main) .adm-table-wrap {
   body:has(.adm-main) .adm-card-head { padding: 14px !important; }
   body:has(.adm-main) .adm-card-body { padding: 12px !important; }
   body:has(.adm-main) :is(.adm-filter-row, .adm-bulk-toolbar) { align-items: stretch; }
-  body:has(.adm-main) :is(.adm-filter-row > *, .adm-bulk-toolbar > *) { flex: 1 1 100%; }
+  /* !important: los filtros traen flex en línea (flex:1/2) que impedía apilarlos y aplastaba el buscador. */
+  body:has(.adm-main) :is(.adm-filter-row > *, .adm-bulk-toolbar > *) { flex: 1 1 100% !important; }
   body:has(.adm-main) .adm-bulk-toolbar .adm-bulk-count { flex: 1 1 100%; }
+  /* Grupos select + botón de acciones masivas: una fila por grupo, el select ocupa el resto. */
+  body:has(.adm-main) .adm-bulk-toolbar > span:not(.adm-bulk-count) { display: flex; gap: 8px; align-items: stretch; }
+  body:has(.adm-main) .adm-bulk-toolbar > span:not(.adm-bulk-count) > select { flex: 1 1 0; min-width: 0; width: auto !important; }
   body:has(.adm-main) .adm-table-pedidos td.col-actions-sticky .adm-btn { width: auto; }
 }
 
