@@ -1,4 +1,4 @@
-## 2026-10-31 — SEO, rendimiento y espacios (base main a83668b)
+## 2026-10-31 — SEO, rendimiento y espacios (base main 27df427)
 Claude Code, rama claude/laughing-albattani-n84ngy.
 - canonical/og:url/og:image de catálogo, colecciones, ficha, contacto, legales
   y /about fijados a `https://tintinaccs.com` (antes `window.location.origin`).
@@ -23,6 +23,29 @@ Claude Code, rama claude/laughing-albattani-n84ngy.
   (#1292, #1294); CSP y plan de flujos regenerados.
 - CI verde en fbd4fcf (run 41224558585 intento 1) antes de integrar main.
 - NOT_VERIFIED: CI y producción tras el merge.
+
+## 2026-10-31 — Revisión de la ficha de producto (base main 762610d)
+Claude Code, rama claude/sharp-cannon-oxfa8o. Solo diagnóstico: sin cambios de código.
+- Base: 110/110 tests de la ficha en chromium (product-live-update,
+  product-color-gallery, product-shape-selection, runtime/product-stock-status,
+  cart/quantity-browser, product-first-paint). product-stock-first 12/12 (corrida previa).
+- Prueba exploratoria temporal (no versionada) con API simulada:
+  - v1 Color×Talle: combinación sin stock → botón deshabilitado, "Esta opción
+    está sin stock", badge AGOTADO, foto de la variante. Con stock → compra
+    habilitada y tope por variante y por stock total (carrito 4 = stock 4,
+    aviso "Ya alcanzaste el stock disponible").
+  - v2: precio por variante (30.000/45.000) en ficha y carrito, variante
+    agotada bloqueada, galería sigue la selección, tope 2.
+  - Sin id e id inexistente (respuesta real 200 `item:null`) → "no
+    encontrado" inmediato. Red caída → error de carga a los 12 s.
+- Resultado: sin bugs con evidencia; no se tocó código.
+- CI run 41220793633 (intento 1, SHA 393ccb7): falló header-responsive
+  "las categorías se desplazan…" (scrollY 0 en vez de 200). Causa: `html`
+  usa `scroll-behavior:smooth`, la prueba hacía `scrollTo(0,200)` sin esperar
+  y en un runner lento el panel bloqueaba el fondo con scrollY=0 (reproducido:
+  `scrollY` vale 0 justo después del `scrollTo`). Arreglo solo en la prueba:
+  scroll instantáneo + esperar 200 antes de abrir el panel.
+- NOT_VERIFIED: comportamiento en producción (no se hicieron compras ni escrituras).
 
 ## 2026-10-31 — Prompt maestro: experiencia móvil del Super Admin (Codex)
 
