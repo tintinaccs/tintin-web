@@ -576,6 +576,31 @@ function safeCatalogImageUrl(value) {
   return sanitizeImageUrl(value);
 }
 
+// Cloudinary entrega la foto completa (~1100px) aunque la tarjeta mida ~150-300px;
+// se pide un ancho limitado para cada densidad sin tocar URLs firmadas ni otros hosts.
+function catalogCloudinaryWidth(href, width) {
+  try {
+    const url = new URL(href);
+    const marker = '/image/upload/';
+    const idx = url.pathname.indexOf(marker);
+    if (url.hostname !== 'res.cloudinary.com' || idx === -1 || /\/s--[^/]+--\//.test(url.pathname)) return '';
+    const before = url.pathname.slice(0, idx + marker.length);
+    const after = url.pathname.slice(idx + marker.length).replace(/^(?:(?:f_auto,q_auto(?::best)?(?:,c_limit,w_\d+(?:,dpr_auto)?)?)\/)+/, '');
+    url.pathname = `${before}f_auto,q_auto:best,c_limit,w_${width}/${after}`;
+    return url.href;
+  } catch {
+    return '';
+  }
+}
+
+function catalogImageAttributes(imageUrl) {
+  const widths = [320, 480, 720];
+  const variants = widths.map(width => [catalogCloudinaryWidth(imageUrl, width), width]);
+  if (variants.some(([href]) => !href)) return `src="${escapeCatalogHtml(imageUrl)}"`;
+  const srcset = variants.map(([href, width]) => `${href} ${width}w`).join(', ');
+  return `src="${escapeCatalogHtml(variants[1][0])}" srcset="${escapeCatalogHtml(srcset)}" sizes="(max-width: 767px) 50vw, (max-width: 1099px) 33vw, 300px"`;
+}
+
 const catalogSearchCache = new WeakMap();
 function cachedSearchText(product) {
   if (!catalogSearchCache.has(product)) catalogSearchCache.set(product, productSearchText(product));
@@ -717,7 +742,7 @@ function renderGrid(lista) {
     const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
     const imageUrl = safeCatalogImageUrl(productVariantImage(p, firstAvailableVariant(p), p.imageUrl));
     const imgHtml = imageUrl
-      ? `<img src="${escapeCatalogHtml(imageUrl)}" alt="${safeAlt}" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`
+      ? `<img ${catalogImageAttributes(imageUrl)} alt="${safeAlt}" width="480" height="480" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`
       : `<div class="cat-card-placeholder" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`;
     const inStock = isInStockCat(p);
     const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));

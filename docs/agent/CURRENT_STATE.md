@@ -1,3 +1,25 @@
+## 2026-10-31 — Editor de producto, imágenes del catálogo y lista de errores
+
+Claude Code, rama claude/nifty-newton-o7j9wc sobre main 13604502 (#1284).
+- Editor: el bucle que asocia etiquetas reasignaba la primera etiqueta del
+  contenedor de Publicación; «Estado del producto» y «Título para Google»
+  quedaban sin nombre accesible. Ahora solo asocia etiquetas huérfanas.
+  Sonda 320–1440: 0 controles sin etiqueta, 0 desbordes.
+- Vista «Vista en Google» sin estilos: bloque propio con tokens existentes.
+  Acordeones «Ayuda para…» y «Sugerencias de colores» de 19px a 44px.
+- Catálogo: tarjetas de ~150–300px descargaban la foto completa (~1145px,
+  80 KB). srcset Cloudinary c_limit 320/480/720 (480 ≈ 15 KB); URLs firmadas
+  y otros hosts sin cambio.
+- Hallazgos sin cambio: CLS 0,168 del catálogo móvil (#cat-tabs-mobile pasa
+  a 316px al cargar productos ~5,5s); techo público de productos 5000 en
+  functions/api/public-catalog.js contra docs/politica-escalado-catalogo.md
+  (prueba closeout-contracts falla en main y no corre en CI); auditoría
+  huérfana auditar-catalogo-pagina.js desactualizada; App Check 403 en
+  navegador automatizado (usuarias reales NOT_VERIFIED).
+Verificación local: 7 specs del editor (239 pruebas) PASS_LOCAL,
+audit:images, test:products-sync (232) y protección de flujos PASS_LOCAL.
+Sin push, merge ni datos reales.
+
 ## 2026-10-31 — Pedidos legibles, editor en tablet, CSS públicos empaquetados
 
 Claude Code, rama claude/nifty-newton-o7j9wc sobre main 71d66d385 (#1283).

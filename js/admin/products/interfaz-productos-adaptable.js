@@ -195,8 +195,9 @@ export function enhanceProductEditor() {
     if (field && !field.dataset.optionInline && target && field.parentElement !== target) target.append(field);
   }
   for (const control of layout.querySelectorAll('input[id],select[id],textarea[id]')) {
-    if (control.type === 'hidden' || control.closest('label')) continue;
-    const label=control.parentElement.querySelector(':scope > label');
+    if (control.type === 'hidden' || control.closest('label') || control.labels?.length) continue;
+    // Solo se asocia una etiqueta huérfana; las que ya apuntan a otro control existente se respetan.
+    const label=[...control.parentElement.querySelectorAll(':scope > label')].find(item => !item.htmlFor || !document.getElementById(item.htmlFor));
     if (label) label.htmlFor=control.id;
   }
   const variantsLabel=card.querySelector('label[for="prod-variants-text"]');if(variantsLabel && variantsLabel.textContent!=='Colores y opciones')variantsLabel.textContent='Colores y opciones';
