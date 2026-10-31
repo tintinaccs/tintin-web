@@ -1,3 +1,29 @@
+## 2026-10-31 — Intermitencia de color-choice-browser y espacio en tablet (base main 762610d)
+Claude Code, rama claude/brave-planck-zvvd0x.
+- Reproducción: `guest-cart-commerce.spec.js --project=webkit-mobile
+  --grep=color --repeat-each=30 --fully-parallel` con emuladores.
+- Causa A (test): el aviso de privacidad fijo aparece a los 1,5 s en la
+  primera visita y tapaba las opciones de color en WebKit móvil lento. Base
+  previa: 11/60 fallas → 60/60 con la cookie `tt_privacy_choice` ya elegida
+  y `expect(#tt-privacy-consent).toHaveCount(0)` (color y cantidad).
+- Causa B (servidor de pruebas): `respaldo-rest-firestore.js` consultaba la
+  base productiva; `servidor-flujos-runtime.mjs` ahora lo apunta al emulador
+  del proyecto demo (sin red productiva).
+- Causa C (test, base 762610d): el listener realtime de la ficha leía
+  `products/qa-color-flow` en el emulador, donde el fixture no existe; si
+  respondía después del render el test veía "Producto no encontrado"
+  (comportamiento correcto de la app ante un documento ausente). El test
+  entrega por realtime el mismo documento que la API simulada.
+  Instrumentado: 0 llamadas a `_showProductNotFound` en 120 corridas.
+- Resultados 762610d: 8 workers en 4 CPU: 54/60 (las 6 fallas son timeouts
+  de 45 s con el test avanzado hasta el final, carga ~20); 4 workers: 60/60.
+- Tablet: `.tt-breadcrumb` sumaba `margin-top: header+24px` sobre el
+  `padding-top` del body (84 px) en 769–1024 px → 88 px vacíos. El margen
+  queda solo en ≥1025 px. `product-breadcrumb-header-gap.spec.js` (768, 820,
+  1024, 1280).
+- NOT_VERIFIED: estabilidad en el runner de CI (2 núcleos) más allá de su
+  corrida; ficha en tablet en producción tras el deploy.
+
 ## 2026-10-31 — Ficha en vivo y dominio único (base main 430fd836e)
 Claude Code, rama claude/nifty-newton-o7j9wc (mismo PR que el catálogo).
 - Ficha: `estado-productos.js` compara una huella estable del documento

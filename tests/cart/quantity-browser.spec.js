@@ -24,7 +24,7 @@ test('admin stock editor labels each option, sums quantities and resets for a ne
   await expect(page.locator('#prod-stock')).not.toHaveAttribute('readonly');
 });
 
-test('product options recalculate quantity and block the exhausted choice', async ({ page }) => {
+test('product options recalculate quantity and block the exhausted choice', async ({ page, baseURL }) => {
   const fixture = { id: 'qa-variant-stock', name: 'QA opciones', category: 'relojes', price: 1000, stock: 2,
     variants: { Talla: ['6', '7'] }, variantInventory: [{ variant: '6', stock: 2 }, { variant: '7', stock: 0 }] };
   await page.route('**/api/public-catalog?**', async route => {
@@ -36,6 +36,8 @@ test('product options recalculate quantity and block the exhausted choice', asyn
       : { ok: true, resource, items: [{ id: fixture.id, data: fixture }] } });
     return route.continue();
   });
+  // Elección de privacidad previa: el aviso fijo diferido no debe tapar las opciones.
+  await page.context().addCookies([{ name: 'tt_privacy_choice', value: 'v2.necessary', url: baseURL }]);
   await page.goto('/product?id=qa-variant-stock', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => typeof window._renderProductDetail === 'function' && window.TintinCatalogPolicy?.variantStockLimit);
   await page.evaluate(fixture => {

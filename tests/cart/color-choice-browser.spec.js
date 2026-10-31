@@ -5,7 +5,7 @@ const render = checkout.slice(checkout.indexOf('let lastCartRenderKey'), checkou
 const hardening = fs.readFileSync('js/pages/checkout/checkout-hardening.js', 'utf8');
 const annotate = hardening.slice(hardening.indexOf('function annotateCartRows()'), hardening.indexOf('\nfunction ', hardening.indexOf('function annotateCartRows()') + 1));
 
-for (const variantV2 of [false,true]) test(`elegir no agrega; colores conservan líneas, precios y fotos hasta checkout v2=${variantV2}`, async ({ page }) => {
+for (const variantV2 of [false,true]) test(`elegir no agrega; colores conservan líneas, precios y fotos hasta checkout v2=${variantV2}`, async ({ page, baseURL }) => {
   const gold = 'https://cdn.example.test/gold.jpg', silver = 'https://cdn.example.test/silver.jpg';
   const fixture = { id: 'qa-color-flow', name: 'Aro QA', category: 'aros', active: true, price: 50000, stock: 6, imageUrl: gold,
     variants: { Color: ['Dorado', 'Plateado'] }, variantMedia: [{ Color: 'Dorado', imageUrls: [gold] }, { Color: 'Plateado', imageUrls: [silver] }] };
@@ -17,6 +17,18 @@ for (const variantV2 of [false,true]) test(`elegir no agrega; colores conservan 
     return route.continue();
   });
   await page.route('https://cdn.example.test/**', route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><circle cx="100" cy="100" r="50" fill="gold"/></svg>' }));
+  // El listener realtime de la ficha lee Firestore (el emulador no tiene este
+  // fixture): si respondía después del render, pintaba "Producto no encontrado".
+  // Entrega el mismo documento que la API simulada, sin red.
+  await page.addInitScript(data => { window.__qaRealtimeFixture = data; }, fixture);
+  await page.route('**/js/core/store/tiempo-real-producto.js?*', route => route.fulfill({ contentType: 'text/javascript', body: `export function loadProductRealtimeDependencies() {
+    return Promise.resolve({ db: {}, appCheckReady: Promise.resolve(true), doc: (_db, _col, id) => ({ id }),
+      getDoc: async () => ({ exists: () => false }),
+      onSnapshot: (ref, next) => { next({ id: ref.id, exists: () => true, data: () => structuredClone(window.__qaRealtimeFixture) }); return () => {}; } });
+  }` }));
+  // La elección de privacidad ya tomada evita que el aviso fijo (aparece a los
+  // 1,5 s en la primera visita) tape las opciones en móviles lentos.
+  await page.context().addCookies([{ name: 'tt_privacy_choice', value: 'v2.necessary', url: baseURL }]);
   await page.goto('/product?id=qa-color-flow');
   await page.waitForFunction(() => window._renderProductDetail && window.TintinCartRuntime?.addToCart && window.TintinCatalogPolicy && window.TintinProductMedia && window.TintinProductColors);
   await page.evaluate(async fixture => {
@@ -24,6 +36,7 @@ for (const variantV2 of [false,true]) test(`elegir no agrega; colores conservan 
     Object.defineProperty(window, 'PRODUCTS', { configurable: true, get: () => [fixture], set: () => {} });
     window._renderProductDetail(fixture);
   }, fixture);
+  await expect(page.locator('#tt-privacy-consent')).toHaveCount(0);
 
   await page.locator('[data-variant-value="Dorado"]').click({timeout:10000});
   expect(await page.evaluate(() => window.TintinCartRuntime.getCartLocal())).toEqual([]);
