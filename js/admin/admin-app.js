@@ -7,20 +7,20 @@ import {readProductEditorResponse} from './products/respuesta-editor-producto.mj
 import {ensureEditorialFields} from './products/editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1-editor-search-20261028-2-guiado-1269-20261029-1';
 import {editorialFields,productEditorialStatus,productTemplate} from '../core/store/estado-editorial-producto.mjs?v=tintin-20261024-editor-v2-6';
 import {productStatistics} from './statistics/estadisticas-producto.mjs?v=tintin-20261024-editor-v2-3';
-import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261031-seo-espacios-1';
-import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261031-seo-espacios-1';
-import { reorderVariantInventory, variantAttributes } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
+import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-20261031-seo-espacios-2';
+import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261031-seo-espacios-2';
+import { reorderVariantInventory, variantAttributes } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261025-mobile-shell-1';
-import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261031-seo-espacios-1';
+import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261031-seo-espacios-2';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261022-avatar-inicial-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261031-seo-espacios-1';
+import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261031-seo-espacios-2';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -49,7 +49,7 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, render
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261030-home-history-5";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
-import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
+import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
 import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261030-audit-integrity-1";
@@ -66,9 +66,9 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261031-seo-espacios-1';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261031-seo-espacios-2';
 import './settings/cupones-admin.js?v=tintin-20261022-avatar-inicial-1';
-import './products/integridad-inventario-admin.js?v=tintin-20261031-seo-espacios-1';
+import './products/integridad-inventario-admin.js?v=tintin-20261031-seo-espacios-2';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 
@@ -709,7 +709,10 @@ function canAccessUnifiedAppearance(role = currentRole) {
   return can(role, 'manageSettings') || role === 'superadmin' || canDo(role, 'contenido', 'ver');
 }
 
-function switchSection(target) {
+let admHistoryIndex = Number(history.state?.ttAdminIndex) || 0;
+const adminPhoneViewport = () => matchMedia('(max-width: 540px), (max-width: 1024px) and (max-height: 500px)').matches;
+
+function switchSection(target, navigation = 'replace') {
   if (target === 'contenido') target = 'apariencia';
   const requiredPerm = SECTION_PERMISSION[target];
   const allowedByPermission = target === 'apariencia'
@@ -772,12 +775,19 @@ function switchSection(target) {
   const targetSection = document.getElementById(`section-${target}`);
   if (targetSection) targetSection.classList.add('active');
   topbarTitle.textContent = SECTION_LABELS[target] || target;
-  // Refleja la sección activa en la URL (#hash) sin crear entradas de historial
-  // ni provocar scroll, para que el estado sea compartible y coherente con la
-  // navegación por hash de abajo.
+  // En teléfonos, una navegación aceptada conserva Atrás/Adelante. Restaurar
+  // rutas e iniciar el panel no crea entradas; escritorio conserva replaceState.
   if (!admSuppressHashSync && location.hash.slice(1) !== target) {
     admSuppressHashSync = true;
-    try { history.replaceState(null, '', `#${target}`); } finally { admSuppressHashSync = false; }
+    try {
+      if (navigation === 'push' && adminPhoneViewport()) {
+        history.replaceState({ ...history.state, ttAdminIndex: admHistoryIndex }, '', location.href);
+        const nextUrl = new URL(location.href);
+        if (nextUrl.searchParams.has('section')) nextUrl.searchParams.set('section', target);
+        nextUrl.hash = target;
+        history.pushState({ ...history.state, ttAdminIndex: ++admHistoryIndex }, '', nextUrl);
+      } else history.replaceState(history.state, '', `#${target}`);
+    } finally { admSuppressHashSync = false; }
   }
   if (target === 'usuarios') loadUsers();
   if (target === 'estadisticas') renderGeneralStatistics();
@@ -798,11 +808,11 @@ function switchSection(target) {
 navItems.forEach(btn => {
   btn.addEventListener('click', () => {
     if (window.AdminUnsaved) {
-      window.AdminUnsaved.requestNavigation(() => switchSection(btn.dataset.section));
+      window.AdminUnsaved.requestNavigation(() => switchSection(btn.dataset.section, 'push'));
     } else if (typeof UnsavedGuard !== 'undefined') {
-      UnsavedGuard.confirmLeave(() => switchSection(btn.dataset.section));
+      UnsavedGuard.confirmLeave(() => switchSection(btn.dataset.section, 'push'));
     } else {
-      switchSection(btn.dataset.section);
+      switchSection(btn.dataset.section, 'push');
     }
   });
 });
@@ -843,15 +853,28 @@ function applyInitialSectionFromUrl() {
     consumeAdminDestination(location.href, adminReturnStorage(window), location.origin);
   }
 }
-window.addEventListener('hashchange', () => {
-  if (admSuppressHashSync) return;
-  const target = sectionFromUrl();
-  if (!target) return;
+let admHistoryRestoring = false;
+async function restoreAdminSection(event) {
+  if (admSuppressHashSync || admHistoryRestoring) return;
+  const target = sectionFromUrl() || 'dashboard';
   const active = document.querySelector('.adm-section.active');
   if (active && active.id === `section-${target}`) return;
-  const go = () => switchSection(target);
-  window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(go) : go();
-});
+  const destinationUrl = event.newURL || location.href;
+  const nextIndex = Number(history.state?.ttAdminIndex) || 0;
+  const previousIndex = admHistoryIndex;
+  const go = () => { admHistoryIndex = nextIndex; switchSection(target); };
+  if (!window.AdminUnsaved) { go(); return; }
+  admHistoryRestoring = true;
+  try {
+    const accepted = await window.AdminUnsaved.requestNavigation(go);
+    if (!accepted && location.href === destinationUrl) {
+      if (history.state?.ttAdminIndex != null && nextIndex !== previousIndex) history.go(previousIndex - nextIndex);
+      else if (event.oldURL) history.replaceState(history.state, '', event.oldURL);
+    }
+  } finally { admHistoryRestoring = false; }
+}
+window.addEventListener('popstate', restoreAdminSection);
+window.addEventListener('hashchange', restoreAdminSection);
 
 // ---- ACCESIBILIDAD DE MODALES OPERATIVOS (compartido) ----
 // El modal de "cambios sin guardar" (#unsaved-modal) ya trae su propio manejo
@@ -2407,8 +2430,8 @@ function renderUsersTable(users) {
       : `<div class="adm-tbl-avatar">${escapeHtmlAdmin(String(u.name || u.email || '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?')}</div>`;
 
     return `
-      <tr>
-        <td class="col-select">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${safeUid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
+      <tr data-user-uid="${safeUid}">
+        <td class="col-select">${!isSuperAdmin ? `<label class="adm-user-select" aria-label="Seleccionar usuario"><input type="checkbox" class="user-row-check" data-id="${safeUid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}></label>` : ''}</td>
         <td>${avatar}</td>
         <td><strong>${escapeHtmlAdmin(u.name || '—')}</strong></td>
         <td style="font-size:12px;color:#713C53">${escapeHtmlAdmin(u.email || '—')}</td>

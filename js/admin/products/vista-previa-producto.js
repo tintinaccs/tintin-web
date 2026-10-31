@@ -1,4 +1,4 @@
-import {productVariantPrice,variantStockLimit,hasProductStock} from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
+import {productVariantPrice,variantStockLimit,hasProductStock} from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 

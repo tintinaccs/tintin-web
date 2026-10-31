@@ -291,7 +291,7 @@ function getStockLimit(productId, variant) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261031-seo-espacios-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261031-seo-espacios-2');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -469,7 +469,7 @@ function renderCart() {
       <a href="/checkout" class="tt-cart-checkout-btn" style="margin-top:12px;">
         Finalizar compra →
       </a>
-      <button type="button" data-cart-action="close" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #ddd;border-radius:50px;font-size:0.78rem;color:#AD3F67;cursor:pointer;font-family:Montserrat">
+      <button type="button" data-cart-action="close" style="width:100%;min-height:44px;margin-top:8px;padding:10px;background:none;border:1px solid #ddd;border-radius:50px;font-size:0.78rem;color:#AD3F67;cursor:pointer;font-family:Montserrat">
         Seguir comprando
       </button>
     `;
@@ -620,7 +620,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261031-seo-espacios-1')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261031-seo-espacios-2')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -990,7 +990,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261031-seo-espacios-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261031-seo-espacios-2');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1982,7 +1982,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261031-seo-espacios-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261031-seo-espacios-2');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

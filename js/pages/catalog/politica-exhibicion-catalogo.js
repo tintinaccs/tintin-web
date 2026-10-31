@@ -9,7 +9,7 @@
    5. Los desempates son estables: orden manual de colección, nombre e ID.
    ============================================================= */
 
-import { hasProductStock, productDefaultPrice } from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
+import { hasProductStock, productDefaultPrice } from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 
 export const NEW_PRODUCT_WINDOW_MS = 5 * 24 * 60 * 60 * 1000;
 

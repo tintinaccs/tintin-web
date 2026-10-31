@@ -1,4 +1,4 @@
-import { resolveProductVariant, variantAttributes } from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
+import { resolveProductVariant, variantAttributes } from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 /* Misma foto por color en producto, carrito, checkout y pedido canónico. */
 const metadata = new Set(['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active', 'colorHex', 'swatch']);
 function safeImage(value) {

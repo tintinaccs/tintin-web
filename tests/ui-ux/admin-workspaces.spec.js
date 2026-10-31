@@ -87,10 +87,8 @@ test('búsqueda existente, etiquetas de campos y tablas accesibles sin cambiar r
   await expect(table).toHaveAttribute('tabindex', '0');
   await expect(table).toHaveAttribute('role', 'region');
   await expect(table).toHaveAccessibleName('Tabla de Usuarios');
-  await expect(page.locator('#section-usuarios .tt-admin-table-hint')).toBeVisible();
-  await table.focus();
-  await page.keyboard.press('ArrowRight');
-  await expect.poll(() => table.evaluate(node => node.scrollLeft)).toBeGreaterThan(0);
+  await expect(page.locator('#section-usuarios .tt-admin-table-hint')).toBeHidden();
+  expect(await table.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
   // Los datos de la tabla real permanecen en su estado inicial, sin inventar éxitos.
   await expect(page.locator('#users-tbody')).toContainText('Cargando');
 });

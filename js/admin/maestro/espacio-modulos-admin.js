@@ -85,6 +85,17 @@ function refresh(root, state) {
   setHidden(state.search, !state.searchTarget);
   setHidden(state.bar, state.title.hidden && state.label.hidden && state.search.hidden);
 
+  // También tablas tardías o internas (Maestro, dispositivos y reportes).
+  for (const grid of root.querySelectorAll('table')) {
+    if (!grid.classList.contains('tt-admin-records')) grid.classList.add('tt-admin-records');
+    const headings = [...grid.querySelectorAll(':scope > thead tr:last-child th')].map(node => text(node));
+    for (const row of grid.querySelectorAll(':scope > tbody > tr')) {
+      [...row.children].forEach((cell, index) => {
+        if (!cell.hasAttribute('data-label') && cell.colSpan === 1 && headings[index]) cell.dataset.label = headings[index];
+      });
+    }
+  }
+
   for (const table of root.querySelectorAll('.adm-table-wrap')) {
     const overflow = visible(table) && table.scrollWidth > table.clientWidth + 1;
     if (!table.hasAttribute('tabindex')) table.tabIndex = 0;

@@ -1,5 +1,5 @@
-import {firstAvailableVariant,productVariantPrice} from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-1';
-import {productVariantImage} from '../../components/images/foto-variante.mjs?v=tintin-20261031-seo-espacios-1';
+import {firstAvailableVariant,productVariantPrice} from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
+import {productVariantImage} from '../../components/images/foto-variante.mjs?v=tintin-20261031-seo-espacios-2';
 // Prepara un borrador. La autoridad de totales/reservas sigue en admin-order-mutation.
 export function mergeSelectedOrderProducts(items,products) {
   const result=(items || []).map(item=>({...item,id:item.id || item.productId || '',qty:Number(item.qty ?? item.quantity ?? 1)}));

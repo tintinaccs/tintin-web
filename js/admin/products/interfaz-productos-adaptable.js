@@ -1,5 +1,5 @@
 import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1-editor-search-20261028-2-guiado-1269-20261029-1';
-import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261031-seo-espacios-1';
+import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261031-seo-espacios-2';
 import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261029-performance-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
 import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261029-performance-1';

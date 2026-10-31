@@ -15,7 +15,7 @@ import {
 import {
   normalizeInventoryItems,
   orderReservesInventory
-} from '../../core/store/modelo-inventario.mjs?v=tintin-20261031-seo-espacios-1';
+} from '../../core/store/modelo-inventario.mjs?v=tintin-20261031-seo-espacios-2';
 
 function actorEmail() {
   return String(auth.currentUser?.email || '').trim().toLowerCase();

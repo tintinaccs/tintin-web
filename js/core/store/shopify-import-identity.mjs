@@ -1,4 +1,4 @@
-import { normalizeImportKey, stableProductDocumentId } from './shopify-import-core.mjs?v=tintin-20261031-seo-espacios-1';
+import { normalizeImportKey, stableProductDocumentId } from './shopify-import-core.mjs?v=tintin-20261031-seo-espacios-2';
 
 function asRecord(record) {
   return record?.product ? record : { product: record, errors: [], warnings: [] };

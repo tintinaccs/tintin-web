@@ -1,5 +1,5 @@
 import {appendPhotoOrderControls as appendOptionPhotoOrder} from './fotos-por-variante.js?v=tintin-20261028-opciones-inline-2';
-import {attachColorPhotos} from './fotos-por-color.js?v=tintin-20261031-seo-espacios-1';
+import {attachColorPhotos} from './fotos-por-color.js?v=tintin-20261031-seo-espacios-2';
 import {sanitizeImageUrl} from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import {attachMultiImageUploadWidget,attachImageUploadWidget} from '../../components/images/carga-imagenes.js?v=tintin-20261030-audit-integrity-1';
 
