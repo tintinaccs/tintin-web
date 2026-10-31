@@ -108,6 +108,18 @@ let firebaseSource = fs.readFileSync(path.join(root, 'js/core/firebase/firebase.
   .replace('// La sesión sobrevive', 'if (!window.__runtimeAuth) { connectAuthEmulator(auth,"http://127.0.0.1:9099",{disableWarnings:true}); window.__runtimeAuth = auth; }\n// La sesión sobrevive');
 const emailSource = fs.readFileSync(path.join(root, 'js/email/correo-autenticacion.js'), 'utf8')
   .replace('const path = localHost ? `${LOCAL_FUNCTIONS_ORIGIN}/api/${name}` : relativePath;', 'const path = relativePath;');
+// El respaldo REST público apunta al proyecto productivo. Bajo carga, cuando
+// /api/public-catalog tarda más que su límite, la app lo usa legítimamente;
+// en este host debe leer el emulador, igual que el SDK.
+// La URL productiva debe aparecer exactamente una vez y quedar reemplazada.
+const restFallbackParts = fs.readFileSync(path.join(root, 'js/core/firebase/respaldo-rest-firestore.js'), 'utf8')
+  .replace("const PROJECT_ID = 'tintin-accesorios';", `const PROJECT_ID = '${project}';`)
+  .replace(/const API_KEY = '[^']+';/, "const API_KEY = 'demo-key';")
+  .split('`https://firestore.googleapis.com/v1/projects/');
+if (restFallbackParts.length !== 2) {
+  throw new Error('No se pudo redirigir respaldo-rest-firestore.js al emulador');
+}
+const restFallbackSource = restFallbackParts.join('`http://127.0.0.1:8080/v1/projects/');
 const env = { RESEND_API_KEY: 'local-mail-sink', OTP_RATE_SALT: 'emulator-only' };
 const product = { id: 'runtime-watch', name: 'Reloj Runtime', category: 'relojes', price: 150000, stock: 3, active: true, imageUrl: '/assets-tintin/images/general/logo.png' };
 async function reset() {
@@ -139,6 +151,9 @@ const server = http.createServer(async (incoming, outgoing) => {
     }
     if (url.pathname === '/js/core/firebase/firebase.js' || url.pathname === '/js/email/correo-autenticacion.js') {
       outgoing.setHeader('content-type','text/javascript'); outgoing.end(url.pathname.includes('/core/') ? firebaseSource : emailSource); return;
+    }
+    if (url.pathname === '/js/core/firebase/respaldo-rest-firestore.js') {
+      outgoing.setHeader('content-type','text/javascript'); outgoing.end(restFallbackSource); return;
     }
     if (url.pathname === '/api/public-catalog') {
       const resource = url.searchParams.get('resource');

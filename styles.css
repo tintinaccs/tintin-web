@@ -3812,10 +3812,11 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 /* .tt-header is position:fixed, so it's out of normal flow and would
    otherwise overlap the breadcrumb (the first thing in the page below it).
-   Only needed where the fixed header is actually visible — it's hidden
-   entirely at <=768px (mobile uses the tabbar instead), so the breadcrumb
-   there keeps its normal flush-top spacing. */
-@media (min-width: 769px) {
+   Only desktop needs this margin: mobile has no fixed top header, and tablet
+   (768–1024px) already reserves the fixed tablet header with the body's
+   84px padding-top (paneles.css). Adding the margin there too left an empty
+   88px band between the header and the breadcrumb. */
+@media (min-width: 1025px) {
   .tt-breadcrumb {
     margin-top: calc(var(--header-h) + 24px);
   }

@@ -18,7 +18,7 @@ function pageStyles(page) {
   const slug = page.replace(/\.html$/, '');
   return { id: `tt-${slug}-css-bundle`, file: `css/generated/${slug}.css`, versionPrefix: `tintin-${slug}` };
 }
-const VERSION = 'tintin-20261010-social-mobile-styles-3';
+const VERSION = 'tintin-20261031-tablet-breadcrumb-1';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
 const TIENDA_VERSION = 'tintin-20261031-seo-espacios-2';
