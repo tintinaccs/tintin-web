@@ -2078,6 +2078,17 @@ html:root.tt-product-editor-open body.tt-admin-control .adm-topbar-actions{displ
  #prod-form-card .tt-product-section-nav > label{display:none;}
 }
 
+/* Tablet: cabecera compacta para que el encabezado fijo no tape las pestañas. */
+@media(min-width:768px) and (max-width:1099px){
+ html.tt-product-editor-open #prod-form-card.tt-editor-workspace > .adm-card-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 12px;}
+ html.tt-product-editor-open #prod-form-card.tt-editor-workspace > .adm-card-head > .tt-studio-breadcrumb{grid-column:1;grid-row:1;}
+ html.tt-product-editor-open #prod-form-card.tt-editor-workspace > .adm-card-head > #prod-editor-actions{grid-column:2;grid-row:1;}
+ html.tt-product-editor-open #prod-form-card.tt-editor-workspace > .adm-card-head > .tt-product-editor-heading{grid-column:1;grid-row:2;}
+ html.tt-product-editor-open #prod-form-card.tt-editor-workspace > .adm-card-head > .tt-editor-step-controls{grid-column:2;grid-row:2;display:flex;flex-wrap:nowrap;justify-content:flex-end;}
+ html.tt-product-editor-open #prod-form-card.tt-editor-workspace > .adm-card-head .tt-editor-step-progress{flex:0 1 auto;white-space:nowrap;}
+ html.tt-product-editor-open #prod-form-card.tt-editor-workspace > .adm-card-head > .tt-work-feedback{grid-column:1/-1;grid-row:3;}
+}
+
 #prod-form-card :is(.tt-field-suggestions,.tt-quantity-picker,.tt-quantity-help,.tt-private-history,.tt-price-advanced) summary{display:list-item;list-style-position:inside;line-height:44px;}
 
 /* El panel comercial ya no comparte la grilla del inventario legado. */

@@ -6928,14 +6928,16 @@ function renderOeItems() {
   const el = document.getElementById('oe-items');
   const fmt = n => 'Gs. ' + Math.round(n).toLocaleString('es-PY');
   el.innerHTML = items.map((it, idx) => `
-    <div style="display:flex;align-items:center;gap:10px;background:var(--adm-bg);border-radius:8px;padding:8px 12px" id="oe-item-${idx}">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;background:var(--adm-bg);border-radius:8px;padding:8px 12px" id="oe-item-${idx}">
       ${sanitizeImageUrl(it.imgUrl||it.imageUrl||'') ? `<img src="${sanitizeImageUrl(it.imgUrl||it.imageUrl||'')}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">` : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
-      <div style="flex:1;font-size:13px;font-weight:600">${escapeHtmlAdmin(it.name||'—')}${it.variant ? `<div style="font-size:11px;font-weight:400;color:var(--adm-muted)">${escapeHtmlAdmin(it.variant)}</div>` : ''}</div>
-      <div style="font-size:12px;color:var(--adm-muted)">${fmt(it.price||0)} c/u</div>
+      <div style="flex:1 1 160px;min-width:0;font-size:13px;font-weight:600;overflow-wrap:break-word;word-break:normal">${escapeHtmlAdmin(it.name||'—')}${it.variant ? `<div style="font-size:11px;font-weight:400;color:var(--adm-muted)">${escapeHtmlAdmin(it.variant)}</div>` : ''}</div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;margin-left:auto">
+      <div style="font-size:12px;color:var(--adm-muted);white-space:nowrap">${fmt(it.price||0)} c/u</div>
       <input type="number" min="1" value="${it.qty||1}" style="width:56px;padding:4px 8px;border:1px solid var(--adm-border);border-radius:6px;font-size:13px;text-align:center"
         ${adminEventAttributes('change','updateOeItemQty',[idx,{control:'value'}])} ${adminEventAttributes('input','updateOeItemQty',[idx,{control:'value'}])}>
-      <div style="font-size:13px;font-weight:700;color:var(--adm-primary);min-width:90px;text-align:right">${fmt((it.price||0)*(it.qty||1))}</div>
-      <button type="button" ${adminEventAttributes('click','removeOeItem',[idx])} style="background:none;border:none;color:#e53935;font-size:18px;cursor:pointer;padding:0 4px" title="Quitar del pedido">×</button>
+      <div style="font-size:13px;font-weight:700;color:var(--adm-primary);text-align:right;white-space:nowrap">${fmt((it.price||0)*(it.qty||1))}</div>
+      <button type="button" ${adminEventAttributes('click','removeOeItem',[idx])} style="background:none;border:none;color:#e53935;font-size:18px;cursor:pointer;min-width:40px;min-height:40px;padding:0" title="Quitar del pedido" aria-label="Quitar ${escapeHtmlAdmin(it.name||'producto')} del pedido">×</button>
+      </div>
     </div>
   `).join('');
   recalcOeTotals();

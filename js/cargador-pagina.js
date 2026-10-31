@@ -12,6 +12,25 @@
     window.TINTIN_ENABLE_PUBLIC_ACTIVITY = false;
   }
 
+  // Si un paquete CSS generado no carga, se reactivan sus hojas originales.
+  // Se escucha en captura porque el error de un <link> no burbujea, y este
+  // script corre antes de que el parser llegue a los paquetes del head.
+  window.addEventListener('error', function (event) {
+    var bundle = event.target;
+    if (!bundle || bundle.tagName !== 'LINK' || !/-css-bundle(?:-\d+)?$/.test(bundle.id || '')) return;
+    function restore() {
+      document.querySelectorAll('link[data-tt-style-bundle]').forEach(function (link) {
+        if (link.dataset.ttStyleBundle !== bundle.id) return;
+        link.disabled = false;
+        link.rel = 'stylesheet';
+        delete link.dataset.ttStyleBundle;
+      });
+    }
+    bundle.dataset.ttBundleError = '1';
+    restore();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', restore, { once: true });
+  }, true);
+
   // Cada entrada de una página comienza arriba. El navegador puede restaurar
   // el scroll anterior incluso en una navegación normal o desde bfcache;
   // forzarlo aquí (en head, antes de pintar contenido) evita que cualquier
@@ -862,7 +881,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261030-home-history-5');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261031-css-bundles-1');
     }
   }
 

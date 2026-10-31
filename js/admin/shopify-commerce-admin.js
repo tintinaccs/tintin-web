@@ -43,7 +43,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261030-home-history-5';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 
-const VERSION = 'tintin-20261030-editor-descripcion-1';
+const VERSION = 'tintin-20261031-editor-tablet-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;

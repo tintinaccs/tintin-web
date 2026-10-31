@@ -1,3 +1,34 @@
+## 2026-10-31 — Pedidos legibles, editor en tablet, CSS públicos empaquetados
+
+Claude Code, rama claude/nifty-newton-o7j9wc sobre main 71d66d385 (#1283).
+- Pedido abierto desde push: los nombres de «Productos del pedido» se partían
+  letra por letra (columna de 66px). renderOeItems agrupa precio/cantidad/
+  subtotal/quitar en un bloque que envuelve; nombre 180–868px en 320–1280 sin
+  desborde horizontal (harness local).
+- Editor de producto 768–1099px: la cabecera fija medía 267px (pasos apilados
+  en tres líneas) y tapaba las pestañas al desplazarse. Rejilla compacta:
+  166px en 820x1180. Navegación de pestañas sigue `static` (contrato #1269).
+- Descripción del editor: texto arriba ya corregido en #1283 (align-content
+  y ajuste de altura); no reproducido en el árbol actual.
+- AMELYS «todo agotado»: datos actuales correctos (Oro rosa 1, Dorado 1,
+  Plateado 0, total 2); todos los escritores de stock mantienen total = suma
+  de variantes; 0 desincronizados en 282 productos públicos. Sin historial
+  privado no se puede probar el estado previo al reabastecimiento: NOT_VERIFIED.
+  Sin cambio de lógica de stock.
+- CSS de páginas públicas empaquetado y acciones de relacionados en móvil.
+Verificación local: auditorías de caché, estilos, contratos, admin-foundation,
+admin-orders, admin-sync, products-media, products-sync y fases PASS_LOCAL.
+Playwright del repo requiere PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH en este
+contenedor (navegador 1243 vs 1248). Sin pedidos, correos, Sheets ni datos
+reales. Sesión real del titular y Safari físico NOT_VERIFIED.
+CI de c81442ca: CI Tintin 41173188284 intento 1 SUCCESS (preflight, comercio,
+reglas, admin, calidad, interfaz/SEO/rendimiento, Repository audit), CodeQL
+41173185624 SUCCESS, Cloudflare Pages SUCCESS. Validación automática
+41174762295 rechazó «Huella candidata incorrecta: 404.html»: 28 archivos
+protegidos cambiaban sin plan. Plan regenerado con el helper canónico contra
+main 71d66d385 (28 archivos, 45 registros); 52 pruebas del mecanismo y
+preflight PASS_LOCAL. Merge y producción: pendientes del CI del SHA final.
+
 ## 2026-10-30 — Prompt maestro de capturas: pedidos, editor, búsqueda y notificaciones
 
 Codex /root, base c1baeb4d, worktree aislado codex/prompt-maestro-20261030.

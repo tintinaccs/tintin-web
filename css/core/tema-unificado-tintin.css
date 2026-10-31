@@ -522,6 +522,8 @@ html body:not(:has(.adm-main)) .tt-product-card .tt-product-name { overflow-wrap
 html body:not(:has(.adm-main)) .tt-product-card .tt-card-colors { gap:2px; margin:2px 0; }
 
 html body:not(:has(.adm-main)) .tt-product-card .tt-product-actions .tt-btn:only-child { grid-column:1 / -1; }
+/* En relacionados móviles la tarjeta es angosta: dos botones por fila cortan el texto contra el borde. */
+@media (max-width:767px){ html body:not(:has(.adm-main)) .tt-related-grid .tt-product-card .tt-product-actions { grid-template-columns:minmax(0,1fr); width:100%; } }
 
 /* Auditoría del cliente: jerarquía compacta, tokens compartidos y lectura clara. */
 html body:not(:has(.adm-main)) :is(.tt-page-hero-title,.tt-section-title,.tt-cart-title,.tt-notifications-title) { color:var(--color-text-title)!important; }

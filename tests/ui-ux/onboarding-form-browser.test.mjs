@@ -5,12 +5,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const browserPackage = 'playwright';
 const { chromium } = await import(browserPackage);
+const { restoreStyleSources } = (await import('../../scripts/lib/estilos-inicio.js')).default;
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const sizes = [[1920,1080],[1440,900],[1280,720],[1024,768],[768,1024],[390,844],[320,568]];
 
 test('Últimos datos mantiene una columna, foco continuo y errores junto al campo en siete tamaños', async () => {
-  let html = await fs.readFile(path.join(root, 'login.html'), 'utf8');
+  // Las hojas empaquetadas se leen desde sus fuentes, en el mismo orden de cascada.
+  let html = restoreStyleSources(await fs.readFile(path.join(root, 'login.html'), 'utf8'), 'tt-login-css-bundle');
   const files = [...html.matchAll(/<link[^>]*rel="stylesheet"[^>]*href="([^"?]+)[^"]*"/g)]
     .map(match => match[1]).filter(file => !file.startsWith('http'));
   assert.equal(files.filter(file => file === 'css/pages/login/login-onboarding-form-layout.css').length, 1, 'Login debe cargar realmente la hoja de últimos datos una sola vez');
