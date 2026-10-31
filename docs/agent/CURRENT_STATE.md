@@ -21,6 +21,90 @@ Claude Code, rama claude/sharp-cannon-oxfa8o. Solo diagnóstico: sin cambios de 
   scroll instantáneo + esperar 200 antes de abrir el panel.
 - NOT_VERIFIED: comportamiento en producción (no se hicieron compras ni escrituras).
 
+## 2026-10-31 — Prompt maestro: experiencia móvil del Super Admin (Codex)
+
+Rama codex/admin-mobile-fichas, PR1294; base main ed03b8c7.
+Solicitud precisada por los dos adjuntos idénticos del usuario. Inventario,
+sistema visual,26 superficies reales y decisiones por módulo en
+`docs/agent/ADMIN-MOBILE-EXPERIENCE.md`.
+
+- Teléfono: tablas completas adaptables, Usuarios con identidad compacta,
+  patrones especializados existentes de Productos/Pedidos preservados; pestañas
+  Correos/Envíos sin carrusel horizontal; campos44px/16px, modales con cierre
+  sticky y áreas seguras. Tablet/escritorio mantienen la cascada anterior.
+- Ficha y visor responsive en todos los formatos: foto contain, iniciales,
+  rol/estado reales y apertura por fila/miniatura. Control de foco canónico;
+  sin escritores ni listeners de datos paralelos.
+- Navegación aceptada en teléfono conserva historial; popstate/hashchange con
+  guardia de borradores y mismas comprobaciones de permiso. Escritorio conserva
+  replaceState. Las dos rutas privadas declaran la PWA existente y viewport-fit.
+- PASS_LOCAL ampliado:142 casos de panel/dashboard/workspaces/fichas y
+  experiencia móvil; repaso final24/24 tras áreas seguras y acciones masivas
+  contextuales. Incluye comparación tablet/escritorio e historial cancelado.
+- PASS_LOCAL adicional final15/15: campos de todas las clases, incluidos los
+  tardíos de Bienvenida con CSS real. Se conservan alturas de áreas extensas.
+  CSS administrativo versión3; los demás recursos nuevos mantienen versión2.
+- PASS_LOCAL:18 contratos PWA/versiones/paginación; preflight1116 archivos,
+  72 imports. build:pages completo y versionado inmutable2 para recursos nuevos.
+- PASS_LOCAL: audit:admin-sync79/79 tras actualizar el conteo de filas para
+  admitir data-user-uid y comprobar el UID de segunda página. Usuarios/Roles y
+  seguridad fase8 correctos; watcher de versiones12 pruebas junto con PWA.
+- Ensayos previos del mismo trabajo:70 panel/fichas,77 comercio/pedidos,15
+  cuentas/paginación/avisos. No certifican automáticamente la ampliación actual.
+- GitHub previo: run41226018330/1, SHA22c5a0c7, C falló por el conteo obsoleto;
+  sustituido/cancelado. run41226643071/1, SHAb070693e, sustituido/cancelado.
+  run41226954481/1, SHAd8444ae7, corresponde al candidato anterior al prompt.
+  Auto-merge suspendido mientras se completa la ampliación solicitada.
+- PASS_LOCAL: diff revisado, derivados CSP/caché/diagnóstico y plan de
+  mantenimiento desde constructores canónicos.
+- IN_PROGRESS: CI y merge protegido del candidato ampliado. Recibos terminales
+  de cada SHA/run/intento en el PR1294.
+- NOT_VERIFIED: sesión real de Super Admin, instalación y teclado físicos de
+  iPhone/Android, Safari real y pinch-zoom físico. Fixtures no escriben producción.
+
+## 2026-10-31 — Responsive y accesibilidad de la tienda pública (base main 2db63462f)
+Claude Code, rama claude/beautiful-planck-3dz88l (PR nuevo).
+- Recorrido Chromium de inicio, catálogo, colecciones, ficha, carrito,
+  checkout sin pagar, login y perfil a 320/390/768/1024/1440. No hay scroll
+  horizontal. Los diálogos `search-panel`, `cart-drawer`, `collections-sheet` y
+  `tt-tablet-menu` cumplen lo esperado: role=dialog, foco atrapado, Escape
+  cierra, el foco vuelve a su origen y aria-expanded está bien. No hay
+  controles sin nombre ni inputs sin etiqueta. axe no está instalado en el
+  repo y no se agregó.
+- ALTO, regresión de #1274: checkout, login y perfil solo cargaban
+  `cargador-mantenimiento-pagina.js` al abrir el buscador, porque el único
+  import vivía en `estado-productos.js`. Al entrar quedaban sin cargar:
+  hardening y control de cuota del checkout, métodos de pago, pasos
+  navegables y semántica del login.
+  - Corrección: `carga-navegacion.js` lo importa directamente para
+    page=cart/account, con el mismo `?v=` que ya usa `estado-productos.js`, así
+    hay una sola instancia del módulo.
+  - Verificado en Chromium: /checkout carga hardening, mantenimiento, métodos
+    de pago, cuota y navegación de pasos (5 pasos role=button). /login carga
+    mantenimiento-acceso. /catalogo no cambia.
+- Los pasos del checkout no mostraban foco con teclado.
+  `superficies-solidas-interfaz.css` fija `outline:0 !important` en
+  `html body .ck-steps .ck-step`. `checkout.css` agrega una regla
+  `:focus-visible` más específica; el tema global no se tocó.
+- El botón "Seguir comprando" del carrito medía 42 px de alto. Ahora tiene
+  min-height:44px en `tienda.js`.
+- `tests/ui-ux/checkout-cart-keyboard-a11y.spec.js` pasa 6/6 y fallaba antes
+  del cambio.
+  - Otros Playwright: checkout navigation-responsive y galería sticky 49/49;
+    header-responsive y phase10-accessibility pasan.
+  - Node: checkout, auth, navigation, cache, login y profile 544/544.
+  - Audits: public-shell, styles y page-loading OK. build:pages queda estable.
+- LOW sin corregir:
+  - Enlaces del footer y migas de 24 px de alto; cumplen WCAG 2.5.8 AA.
+  - `.cat-filter-option` mide 38 px en escritorio.
+  - `.tt-footer-wa` mide 42 px a 1440.
+- `?v=` subido a tintin-20261031-a11y-checkout-1 en cascada. Plan de
+  protección regenerado contra main 2db63462f.
+- NOT_VERIFIED:
+  - Perfil con sesión real; sin sesión redirige a login.
+  - Producción después del deploy.
+  - Safari/WebKit y lectores de pantalla reales.
+
 ## 2026-10-31 — Galería de la ficha acompaña el scroll (base main 762610d5c)
 Claude Code, rama claude/nifty-newton-o7j9wc (PR nuevo).
 - Pedido: en dos columnas la ficha derecha es mucho más alta y la galería
