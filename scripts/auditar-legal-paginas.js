@@ -34,7 +34,7 @@ else {
   ].forEach(token => {
     if (!runtime.includes(token)) errors.push(`runtime legal: falta ${token}`);
   });
-  if (!runtime.includes('new URL(`/${page}`, location.origin)')) errors.push('runtime legal: canonical debe usar ruta limpia');
+  if (!runtime.includes("new URL(`/${page}`, 'https://tintinaccs.com')")) errors.push('runtime legal: canonical debe usar ruta limpia');
 }
 
 if (!fs.existsSync(stylesPath)) errors.push(`falta ${stylesPath}`);
