@@ -9,3 +9,5 @@ Before reading files, inspect AGENTS.md and docs/agent/README.md; search likely 
 
 ## Completion evidence
 Report files touched, targeted verification results, repository commit/PR when applicable, and explicit limits. This Skill never overrides AGENTS.md, DESIGN.md, or production safety rules.
+
+Skill availability is not an instruction to load everything: choose only what a concrete request requires and reuse existing project context.
