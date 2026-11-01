@@ -53,7 +53,7 @@ for prefix in PREFIXES:
     for name in sorted(expected - items.keys()):
         errors.append(f"Missing expected Skill {name} in {prefix}")
     seen[prefix] = items
-    print(f"{prefix}: {len(items)} discoverable skills")
+    print(f"{prefix}: {len(items)} Skills with valid file metadata")
 for name in REQUIRED | CUSTOM:
     if name in seen.get(PREFIXES[0], {}) and name in seen.get(PREFIXES[1], {}):
         a = (ROOT / seen[PREFIXES[0]][name]).read_text(encoding="utf-8")
@@ -75,4 +75,4 @@ if errors:
     for msg in errors:
         print("ERROR:", msg, file=sys.stderr)
     raise SystemExit(1)
-print("PASS: Skills metadata, required paths and Codex/Claude parity")
+print("PASS: file metadata, required paths and selected Codex/Claude parity (native host discovery not tested)")
