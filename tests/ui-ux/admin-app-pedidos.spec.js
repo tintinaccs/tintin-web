@@ -93,7 +93,7 @@ for (const width of [820, 1440]) {
   test(`Pedidos sin cambios de app a ${width}px`, async ({ page }) => {
     await open(page, width);
     await expect(page.locator('html')).not.toHaveClass(/adm-app/);
-    await expect(page.locator('.adm-app-filter-btn')).toBeHidden();
+    expect(await page.locator('.adm-app-filter-btn').evaluateAll(list => list.filter(n => n.getClientRects().length).length)).toBe(0); // también existe el de Colecciones (oculto)
     const visible = await page.locator('#tt-commerce-orders .tt-order-toolbar > label').evaluateAll(list => list.filter(l => l.getClientRects().length).length);
     expect(visible).toBe(4);
   });

@@ -525,6 +525,17 @@
   html.adm-app body.tt-admin-control .eg-drawer :is(.adm-btn, .eg-link-btn) { min-height: 44px; }
   /* Fase 11: el enlace "Ver producto ↗" del detalle medía 13 px de alto. */
   html.adm-app body.tt-admin-control .eg-drawer .eg-detail-product a { display: inline-flex; align-items: center; min-height: 44px; }
+  /* ---- Fase 12 · Colecciones (shopify-commerce-admin.js ya trae tarjetas de una columna) ----
+     Visibilidad y Orden van a la hoja de filtros (app-movil-admin.js); búsqueda de
+     44 px y 16 px; casillas de 44 px. El detalle del catálogo (colección, producto,
+     pedido) ocupa toda la pantalla en modo app y su botón Cerrar mide 44 px. */
+  html.adm-app body.tt-admin-control #tt-commerce-collections .tt-commerce-toolbar:has(> .adm-app-filter-btn) { grid-template-columns: minmax(0, 1fr) auto !important; align-items: center; gap: 8px; }
+  html.adm-app body.tt-admin-control #tt-commerce-collections .tt-commerce-toolbar > .adm-app-filter-field { display: none; }
+  html.adm-app body.tt-admin-control #tt-commerce-collections .tt-commerce-toolbar input { min-height: 44px; font-size: 16px; }
+  html.adm-app body.tt-admin-control #tt-commerce-collections .tt-commerce-product-check { min-width: 44px; box-sizing: border-box; }
+  html.adm-app body.tt-admin-control .tt-commerce-drawer { left: 0; right: 0; width: auto; border-left: 0; }
+  html.adm-app body.tt-admin-control .tt-commerce-drawer-head { padding-top: calc(14px + env(safe-area-inset-top, 0px)); }
+  html.adm-app body.tt-admin-control .tt-commerce-drawer-head [data-action="drawer-close"] { width: 44px; height: 44px; flex: 0 0 44px; }
 }
 @media (max-width: 359px) {
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "41b27f092aa891d16c6644fc7a1922660abfe160e7e7e5a68e37495de93146e1",
+  "sourceFingerprint": "c14654e5c2d1f3f3a20039724e0d36b402e0841b625b77880d63a22dbfba567c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1698,
-    "textFiles": 1563,
-    "totalBytes": 44388695,
+    "files": 1699,
+    "textFiles": 1564,
+    "totalBytes": 44398362,
     "pages": 19,
-    "modules": 1126
+    "modules": 1127
   },
   "viewports": [
     {
@@ -2882,7 +2882,7 @@
         "viewer"
       ],
       "bytes": 191145,
-      "sha256": "e42792c7ab1f6d1658c18338ea32500e0c73c5c085543e2f9e2f29d575aa2f69",
+      "sha256": "4eba0629b4e836c60c2c6b4c443cc819207ec7d94dd7c3909b3ad89497c4a700",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2941,7 +2941,7 @@
           "line": 2090
         },
         {
-          "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-10",
+          "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-12",
           "target": "js/admin/maestro/app-movil-admin.js",
           "line": 2091
         },
@@ -3168,7 +3168,7 @@
           "line": 80
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-11",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-12",
           "target": "css/admin/app-movil-admin.css",
           "line": 81
         },
@@ -3312,7 +3312,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-10",
+          "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-12",
           "target": "js/admin/maestro/app-movil-admin.js",
           "line": 2091,
           "exists": true
@@ -3582,7 +3582,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-11",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-12",
           "target": "css/admin/app-movil-admin.css",
           "line": 81,
           "exists": true
@@ -30081,8 +30081,8 @@
     },
     {
       "path": "js/admin/maestro/app-movil-admin.js",
-      "bytes": 13140,
-      "sha256": "48a23f9efd76061bb6d69e40376df8a400e93e1e0f10640365bd3c199334a095",
+      "bytes": 13799,
+      "sha256": "1ad4cf458846384ede54558508653042689b32f2ac2245d7ae643d7f7169ea78",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57958,6 +57958,22 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/admin-app-colecciones.spec.js",
+      "bytes": 6312,
+      "sha256": "72098ebf97b9dee1bbd9f9ac0954165d4812303685ad04b1f32221937a692dcb",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintin.test/admin-commerce-fixture",
+          "line": 23
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/admin-app-estadisticas.spec.js",
       "bytes": 3556,
       "sha256": "1f78cd839a9b51c37aaf9aff2f101518d716711e74cf51050ed6d63cadf3f990",
@@ -60568,7 +60584,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 191145,
-      "sha256": "e42792c7ab1f6d1658c18338ea32500e0c73c5c085543e2f9e2f29d575aa2f69"
+      "sha256": "4eba0629b4e836c60c2c6b4c443cc819207ec7d94dd7c3909b3ad89497c4a700"
     },
     {
       "path": "apple-touch-icon.png",
@@ -61653,8 +61669,8 @@
     {
       "path": "css/admin/app-movil-admin.css",
       "extension": ".css",
-      "bytes": 36032,
-      "sha256": "b7a75a9ff07de9cb7abc746be95681b1e2194af456f8a434b2f6cc8a5370493a"
+      "bytes": 37342,
+      "sha256": "7d0ba79862acdc171e9237218aa276163370f54a30ef67e4ab23e35066a87aa3"
     },
     {
       "path": "css/admin/comercio-local-admin.css",
@@ -62445,8 +62461,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1120745,
-      "sha256": "3e995b305bba66c937463a1767216ae76d0914dd7dbda187c23b492bb74e1f88"
+      "bytes": 1122131,
+      "sha256": "84992fce1798f5fccf395add153eb2cbe89ede2c7d050059457ee4c4d448cbcc"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -64431,8 +64447,8 @@
     {
       "path": "js/admin/maestro/app-movil-admin.js",
       "extension": ".js",
-      "bytes": 13140,
-      "sha256": "48a23f9efd76061bb6d69e40376df8a400e93e1e0f10640365bd3c199334a095"
+      "bytes": 13799,
+      "sha256": "1ad4cf458846384ede54558508653042689b32f2ac2245d7ae643d7f7169ea78"
     },
     {
       "path": "js/admin/maestro/buscador-modulos-admin.js",
@@ -67300,7 +67316,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 80450,
-      "sha256": "620291356c1062c285b9854b53b2be81104a353dd89a6c7b19a470139a662374"
+      "sha256": "28fc7566e0032ad380a37c98fb6b8a91871f7c7ef672e33a856f83d5707dfa44"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -70037,6 +70053,12 @@
       "extension": ".js",
       "bytes": 9887,
       "sha256": "5556f3a25786a64bef90c8763013bdf6d995933aa250f3fdcddae9116e6ab958"
+    },
+    {
+      "path": "tests/ui-ux/admin-app-colecciones.spec.js",
+      "extension": ".js",
+      "bytes": 6312,
+      "sha256": "72098ebf97b9dee1bbd9f9ac0954165d4812303685ad04b1f32221937a692dcb"
     },
     {
       "path": "tests/ui-ux/admin-app-estadisticas.spec.js",

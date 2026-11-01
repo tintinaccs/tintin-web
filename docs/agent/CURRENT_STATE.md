@@ -1,3 +1,12 @@
+## 2026-11-01 — Admin app móvil, Fase 12: Colecciones
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+- Investigado: `renderCollections` (js/admin/shopify-commerce-admin.js) ya dibuja tarjetas de una columna en ≤768; sin desborde. Faltaban: búsqueda 42 px, casilla de selección 42 px de ancho, botón Cerrar del detalle 32 px y detalle de 440 px (no pantalla completa). La barra se redibuja en cada filtro.
+- Cambio: Visibilidad y Orden pasan a la hoja de filtros (`filterSheet` con re-cableado por MutationObserver, la búsqueda queda visible); búsqueda 44 px/16 px; casilla 44 px; `.tt-commerce-drawer` a pantalla completa con safe-area y Cerrar 44 px (solo `html.adm-app`; el drawer es compartido con Productos/Pedidos y sus specs siguen en verde). Versión CSS/JS `tintin-20261101-app-movil-12`.
+- Error arreglado de paso: ninguno.
+- PASS_LOCAL: `admin-app-colecciones.spec.js` 6/6 (320/390/540/768 app; 820/1440 sin cambios, drawer 440 y Cerrar 32); falla sin el CSS nuevo (selects visibles). Regresión: productos/pedidos/resenas/me-gusta/inicio/usuarios 6/6, shell 13, all-devices 41, workspaces 21, mobile-experience 15, engagement y busquedas-admin OK.
+- Prueba ajustada: `admin-app-pedidos.spec.js` (escritorio) usaba `.adm-app-filter-btn` en modo estricto y el fixture ahora tiene también el botón (oculto) de Colecciones; se cuenta que ninguno sea visible.
+- NOT_VERIFIED: formulario antiguo `#coll-form-card` con datos reales y selector de productos; interruptor `#coll-visible` mide 24 px de alto (pendiente menor, no tocado); escrituras reales (el fixture las rechaza).
+
 ## 2026-11-01 — Admin app móvil, Fase 11: Me gusta
 
 Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).

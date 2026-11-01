@@ -202,6 +202,19 @@ if (ledger) {
   wireLedger();
 }
 
+// Colecciones: Visibilidad y Orden pasan a la hoja; la búsqueda queda visible.
+// shopify-commerce-admin.js vuelve a dibujar la barra en cada filtro.
+const collectionsSection = document.getElementById('section-colecciones');
+if (collectionsSection) {
+  const wireCollections = () => {
+    const current = () => collectionsSection.querySelector('#tt-commerce-collections .tt-commerce-toolbar');
+    const toolbar = current();
+    if (toolbar) filterSheet(toolbar, [...toolbar.querySelectorAll(':scope > select')], current);
+  };
+  new MutationObserver(wireCollections).observe(collectionsSection, { childList: true, subtree: true });
+  wireCollections();
+}
+
 // Reseñas y Me gusta: gestion-participacion-admin-v2.js dibuja las barras una
 // sola vez (al hidratar la sección). Estado/Puntuación/Respuesta/Periodo/Orden
 // pasan a la hoja; la búsqueda queda visible. Solo barras con 2+ selectores.
