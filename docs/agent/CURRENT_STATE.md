@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 1: Inicio
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: markup de `mountDashboard` (buscador-modulos-admin.js) y filas de `renderDashboardData` (admin-app.js); la tabla de últimos pedidos ya pasaba a tarjetas con etiquetas por celda (espacio-modulos-admin.css) y padding de `.adm-table td`.
+- Cambio (solo CSS ≤768 en app-movil-admin.css): portada compacta, "Ver secciones" a todo el ancho, accesos como lista agrupada con chevron (56 px), resumen en 2 columnas (≤96 px de alto), últimos pedidos como filas de lista (cliente + total arriba; ciudad, fecha y estado debajo; sin etiquetas repetidas; encabezados siguen disponibles para lector de pantalla). Texto mínimo 11 px.
+- PASS_LOCAL: admin-app-inicio (nuevo, 6/6: 320/390/540/768 + tabla intacta 820/1440), admin-app-shell 12/12, admin-control-dashboard 59/59, admin-all-devices, admin-workspaces, admin-white-icons, admin-mobile-experience; audit:cache-versioning OK.
+- NOT_VERIFIED: datos reales de producción (solo filas ficticias), teléfono físico.
+
 ## 2026-11-01 — Admin app móvil, Fase 0: base (base main 0f47cf5)
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commits locales, sin push).
 - Alcance: solo ≤768 px (`html.adm-app`); tablet/escritorio sin cambios. Capa de presentación: sin tocar permisos, auth, Firestore, reglas, datos ni controladores.
