@@ -180,11 +180,18 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[820,1180]
    const style=getComputedStyle(node),paint=getComputedStyle(node,'::before');
    return {blur:paint.backdropFilter,background:paint.backgroundImage,mask:paint.maskImage,canvas:style.backgroundColor,border:style.borderBottomWidth,items,overflow:document.documentElement.scrollWidth>innerWidth+1};
   });
-  expect(geometry.blur).toContain('blur(18px)');
-  expect(geometry.background).toContain('linear-gradient');
-  expect(geometry.mask).toContain('linear-gradient');
-  expect(geometry.canvas).toBe('rgba(0, 0, 0, 0)');
-  expect(geometry.border).toBe('0px');
+  if(width<=540||(width<=1024&&height<=500)) {
+   expect(geometry.background).toBe('none');
+   expect(geometry.mask).toBe('none');
+   expect(geometry.blur).toBe('none');
+   expect(geometry.border).toBe('1px');
+  } else {
+   expect(geometry.blur).toContain('blur(18px)');
+   expect(geometry.background).toContain('linear-gradient');
+   expect(geometry.mask).toContain('linear-gradient');
+   expect(geometry.canvas).toBe('rgba(0, 0, 0, 0)');
+   expect(geometry.border).toBe('0px');
+  }
   expect(geometry.overflow).toBe(false);
   for(let i=0;i<geometry.items.length;i++)for(let j=i+1;j<geometry.items.length;j++){
    const a=geometry.items[i],b=geometry.items[j];

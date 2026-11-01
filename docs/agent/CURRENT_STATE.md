@@ -1,3 +1,47 @@
+## Reconciliación visual móvil con main bba2aabc — 2026-11-01
+
+Se integra #1300 sin modificar su corrección de ancho, pruebas ni fixture.
+Se conservan los estilos/URLs de acciones junto a la nueva composición móvil.
+La sincronización anterior no inició CI al existir conflicto; se regenera
+el plan contra bba2aabc. PASS_LOCAL:25 pruebas de presentación, contraste y
+Usuarios (incluido el arranque real /admin y /admin.html); build:pages, caché,
+diagnóstico y protección de flujos. CI/merge del SHA reconciliado pendientes.
+
+## 2026-11-01 — Corrección visual móvil comprobable (Codex)
+
+Base main0f47cf54, rama codex/admin-mobile-visual-review. El usuario confirmó
+que no veía una mejora visual en el navegador del celular.
+- Evidencia: /admin publicado cargaba recursos vigentes; dashboard-control
+  seguía en mobile-shell-1, anterior a los cambios de fichas/listados. Capturas
+  sobre shell/estilos reales mostraron la misma cabecera y composición de Inicio.
+  No se atribuye el problema a caché sin evidencia.
+- Corrección: la presentación móvil usa las superficies y tokens existentes,
+  cabecera compacta opaca, accesos e indicadores más densos y barra de módulo
+  con búsqueda de44px. Se conservan los mismos nodos, acciones y datos.
+- La cascada compartida tenía un :is con IDs que imponía máscara/degradado y
+  desenfoque al header. #adm-topbar permite aplicar la variante móvil con una
+  comprobación de estilo computado; tablet/escritorio conservan el encabezado.
+- El workspace observa la revelación del guard: una tabla inicial ya montada
+  también se mejora al confirmar auth, sin esperar otra navegación ni consultas.
+- PASS_LOCAL:9 pruebas nuevas de presentación, controles (incluida campana
+  tardía y título largo), primer pliegue, comparación tablet/escritorio y guard
+  tardío. Cabecera con campana en320px: segunda fila para el título completo.
+- Evidencia390×844: cabecera110→64px; Inicio424→306px; fin de indicadores
+  y908→689px. Los seis indicadores quedan por encima de la navegación inferior.
+- Capturas y medidas antes/después: artifacts/mobile-visual (datos ficticios,
+  nunca datos comerciales de producción). No se alteran permisos ni escritores.
+- PASS_LOCAL:47 pruebas de presentación/navegación y60 de dispositivos/workspaces;
+  preflight1120 archivos/72 imports, build:pages, caché, diagnóstico, protección
+  de flujos e integridad de estilos. URLs nuevas en ambos consumidores.
+- CI PR1301 / run41304270895 intento1: interfaz detectó una expectativa
+  antigua de rosa sólido en iconos móviles. Se conserva el contraste negro
+  comprobado y se verifica superficie transparente/selección rosa clara en
+  teléfono, manteniendo las expectativas de tablet/escritorio.
+- PASS_LOCAL:9 pruebas de superficies/contraste/loader con servidor local,
+  sin quitar los checks de color negro ni los de tablet/escritorio.
+- IN_PROGRESS: CI del nuevo SHA y merge protegido; publicación pendiente.
+- NOT_VERIFIED: navegador y sesión del teléfono físico del usuario.
+
 ## 2026-11-01 — Comprobación de mejora visual y cascada de acciones
 
 Codex /root, base0f47cf54, rama codex/admin-mobile-visual-cascade.

@@ -1,3 +1,14 @@
+## 2026-11-01 — Presentación móvil visible de la interfaz administrativa
+
+Autoridades: dashboard-control.css y workspace compartido existentes; mismo
+Inicio, navegación, tarjetas, formularios y acciones. Superficies de la paleta
+vigente, cabecera compacta y opaca sólo en teléfono, métricas/accesos más densos
+y búsqueda de módulo compacta. Header usa ID estable para superar la cascada
+compartida con :is de IDs. Auth-ready sólo reevalúa el workspace activo, sin
+lecturas ni cambios de sesión. Misma presentación amplia; contraste con capturas
+y geometría real. Pruebas del header distinguen teléfono de tablet/escritorio;
+derivados y URLs mediante constructores. Sin backend, permisos ni datos nuevos.
+
 ## 2026-11-01 — Cascada del menú de Usuarios
 
 Autoridad: espacio-modulos-admin.css. Una regla anterior de mayor especificidad estiraba el menú contextual; la regla nueva cubre la misma jerarquía de tabla/fila/celda y recupera44px. Tests comprueban geometría y carga automática desde cargador-pagina/UI Quality para /admin y /admin.html, con Firebase/negocio aislados. Sin cambios de datos, roles, backend ni diseño de escritorio; URLs/diagnóstico/protección mediante generadores canónicos.
