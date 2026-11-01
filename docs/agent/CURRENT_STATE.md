@@ -1,3 +1,14 @@
+## 2026-11-01 — Admin app móvil, Fase 8: Pedidos mayoristas
+
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+
+- Investigado: `js/admin/mayoristas-admin.js` (resumen, pestañas Cotizaciones/Usuarios, detalle con tabla de líneas de 960 px de ancho mínimo, decisiones por API `authenticatedFetch`; abrir una cotización envía `decision:'ver'`).
+- Cambio (solo CSS bajo `html.adm-app`, `css/admin/app-movil-admin.css` → `tintin-20261101-app-movil-7`): resumen/pestañas/campos con toques de 44 px y fuente 16 px; lista de cotizaciones como tarjetas; líneas del detalle como tarjetas con etiquetas (Cant., Precio minorista, Precio mayorista c/u, Subtotal); barra fija de decisiones sobre la barra inferior (`overflow: clip` en la tarjeta para que sticky funcione); Aprobar con el token primario.
+- Error arreglado de paso: en el teléfono el campo "Precio mayorista" quedaba fuera de la pantalla (tabla de 960 px en ~250 px, solo alcanzable con scroll lateral) y la barra de decisión no quedaba fija; además Aprobar se veía blanco por un `!important` del tema. Prueba: `tests/ui-ux/admin-app-mayoristas.spec.js`.
+- PASS_LOCAL: admin-app-mayoristas 6/6 (12/12 con --repeat-each=2), profile/account-wholesale-sync 13, admin-app-ventas-locales 6, admin-app-pedidos 6, admin-app-shell 12, admin-all-devices 41, admin-workspaces 21, admin-mobile-experience 15; cache-versioning, build/verify:diagnostics.
+- NOT_VERIFIED: datos reales, teléfono físico, producción. No se envió ninguna decisión (API simulada).
+- Pendiente para revisión (sin tocar, tablet debe quedar idéntica): entre 601 y 900 px la regla existente `#section-mayoristas .adm-table:has([data-wholesale-rows]) thead{display:none}` (operaciones-admin.css) también oculta los encabezados de la tabla de líneas del detalle.
+
 ## 2026-11-01 — Admin app móvil, Fases 5–7: Ventas locales, Clientes que compraron y Espejos de Sheets
 Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
 - Investigado: `js/admin/comercio-local-admin.js` redibuja `#local-ledger` completo en cada cambio de filtro (la barra se recrea), la búsqueda conserva el input y reemplaza hermanos, los filtros escuchan `change` en `document` por `data-local-filter`, el editor es un `<dialog>` nativo con `showModal`. Clientes (`#local-buyers`) y Espejos (`#local-mirror-map`) se pintan desde el mismo módulo.

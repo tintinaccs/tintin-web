@@ -425,6 +425,60 @@
   html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar > .adm-btn { width: 100%; min-height: 44px; margin: 0; }
   html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar > .adm-btn-primary { order: 1; }
   html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar > [data-local-archive] { order: 2; grid-column: 1 / -1; }
+
+  /* ---- Fase 8 · Pedidos mayoristas ---- */
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-summary { gap: 8px; padding: 12px 16px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-summary button { min-height: 44px; padding: 10px 12px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 0 16px 12px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-tabs button { min-height: 44px; padding: 8px 10px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-user-search { padding: 0 16px 12px; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-users] { padding: 0 16px 16px; gap: 10px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-user-card { padding: 14px; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-quotes-panel] > .adm-card-body { padding: 4px 16px 0 !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas .adm-filter-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  html.adm-app body.tt-admin-control #section-mayoristas :is(input, select, textarea) { font-size: 16px; }
+  html.adm-app body.tt-admin-control #section-mayoristas :is(.adm-filter-row, .wholesale-user-search) :is(input, select) { min-height: 44px; }
+  /* Lista: tarjetas sin desplazamiento lateral (el contenedor ya no recorta la barra fija del detalle). */
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-quotes-panel] > .adm-table-wrap { overflow: visible; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-rows] { gap: 10px; padding: 12px 16px 16px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-row > td { padding: 10px 14px !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-row > td:last-child { grid-column: 1 / -1; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-open-quote] { width: 100%; min-height: 44px; }
+  /* Detalle: líneas como tarjetas con el precio mayorista a todo el ancho. */
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] > div { padding: 16px !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] > div > div:has(> .wholesale-detail-identity) { gap: 12px !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .wholesale-detail-identity { align-items: flex-start; min-width: 0; overflow-wrap: anywhere; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] a.adm-btn { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table-wrap { overflow: visible; border: 0; box-shadow: none; background: none; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table { display: block; min-width: 0 !important; width: 100% !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table thead { display: none; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody { display: grid; gap: 10px; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px;
+    padding: 12px 14px; border: 1px solid var(--adm-border); border-radius: 12px; background: var(--adm-card, #fff);
+  }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td { display: block; min-width: 0; padding: 0 !important; border: 0 !important; background: none !important; white-space: normal; overflow-wrap: anywhere; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:is(:first-child, :nth-child(4)) { grid-column: 1 / -1; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:first-child { font-weight: 600; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:not(:first-child)::before { display: block; margin-bottom: 4px; font-size: 10px; font-weight: 600; color: var(--adm-muted); }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:nth-child(2)::before { content: "Cant."; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:nth-child(3)::before { content: "Precio minorista"; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:nth-child(4)::before { content: "Precio mayorista c/u"; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:nth-child(5)::before { content: "Subtotal"; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] [data-price-line] { width: 100%; max-width: none !important; min-height: 44px; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] div:has(> [data-quote-total]) { flex-direction: column; align-items: flex-end; gap: 4px !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] [data-admin-note] { min-height: 88px; }
+  /* Decisión: barra fija encima de la barra inferior mientras se edita la cotización
+     (clip recorta las esquinas igual que hidden, pero no crea contenedor de scroll que anule sticky). */
+  html.adm-app body.tt-admin-control #section-mayoristas > .adm-card { overflow: clip; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] div:has(> [data-decision]) {
+    position: sticky; bottom: calc(var(--tt-admin-nav-clearance, 88px) + 8px); z-index: 5;
+    display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px !important;
+    margin: 14px -16px -16px !important; padding: 10px 16px;
+    border-top: 1px solid var(--adm-border); background: var(--adm-card, #fff); box-shadow: 0 -8px 20px rgba(43, 20, 31, .08);
+  }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-decision] { width: 100%; min-height: 44px; margin: 0; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-decision="aprobar"] { grid-column: 1 / -1; background: var(--admin-color-button-primary-background) !important; border: 1px solid var(--admin-color-button-primary-background); color: var(--admin-color-button-primary-text) !important; }
 }
 @media (max-width: 359px) {
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
