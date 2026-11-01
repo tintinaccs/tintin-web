@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 25: Maestro y Mensaje de bienvenida
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: ambos módulos se crean por JS (panel-maestro.js, control-bienvenida-admin.js) con sesión de Super Admin; no existen en admin.html. Traen su propio CSS con reglas ≤600/≤820 (Maestro: KPIs en una columna, botones a ancho completo; la tabla de capacidades se convierte en tarjetas con el espacio de módulos; Bienvenida: una columna, botones a ancho completo).
+- Resultado: a 320/390/540/768 sin desborde, toques ≥44 px, campos ≥16 px; capturas a 390 revisadas sin defectos. No hizo falta cambiar CSS ni JS. Se añadió solo spec de no regresión admin-app-maestro-bienvenida.spec.js (14 pruebas: 2 módulos × 7 anchos).
+- PASS_LOCAL: 14/14. La prueba inyecta el CSS real extraído del código fuente y HTML equivalente al generado (no el módulo real).
+- NOT_VERIFIED: módulos reales montados con sesión y datos de Firebase (comprobaciones de salud de Maestro, filas reales, pasos reales de Bienvenida, guardado, "Probar como nuevo usuario", "Reactivar para clientas"). No se ejecutó ninguna acción.
+
 ## 2026-11-01 — Admin app móvil, Fase 24: Apariencia y contenido
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: #section-apariencia (pestañas Diseño y Colores; editor visual con Deshacer/Rehacer/Guardar/Publicar, página, bloque nuevo, tamaño de vista previa). Medido a 320/390/540/768: sin desborde, toques ≥44 px, campos ≥16 px. Una captura a 390 mostró un defecto que la medición de tamaños no detecta: "ESCRITORIO" del selector de vista previa (.visual-devices) se partía a media palabra.

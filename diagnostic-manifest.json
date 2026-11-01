@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6b1b1093c8572995b76b992e33f4e375c9ea9b285b547786e7ded865be982ade",
+  "sourceFingerprint": "cae09b79f312ca182356ddd3f614d64f4bc5a2f130bfcca88a9394b9bd3549c7",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1712,
-    "textFiles": 1577,
-    "totalBytes": 44500484,
+    "files": 1713,
+    "textFiles": 1578,
+    "totalBytes": 44512940,
     "pages": 19,
-    "modules": 1140
+    "modules": 1141
   },
   "viewports": [
     {
@@ -58084,6 +58084,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/admin-app-maestro-bienvenida.spec.js",
+      "bytes": 9911,
+      "sha256": "a7ebdb086613a9b0b8242919a5758037e08b7dd6c022dd4bd6128c5f76a6611a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/admin-app-mayoristas.spec.js",
       "bytes": 8894,
       "sha256": "8ce99812fdde522570a6f5498be2ecf590940aa3e526a32e33bba61dabe4c2b9",
@@ -62616,8 +62627,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1142856,
-      "sha256": "7cf41694fbb34c176456f60ad15ab83b76934faa3bdc5f42577d1d4a0e7bacb0"
+      "bytes": 1145401,
+      "sha256": "1b675feb0dcd02cdfc7c84295940f5eb39f6a20d9d0234796dd4a69c7c53879c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -70274,6 +70285,12 @@
       "extension": ".js",
       "bytes": 3944,
       "sha256": "ec8641b25d010bff7dfbebdc490dad7807ec9a2dd17880fbce80b8e68ab9d4ee"
+    },
+    {
+      "path": "tests/ui-ux/admin-app-maestro-bienvenida.spec.js",
+      "extension": ".js",
+      "bytes": 9911,
+      "sha256": "a7ebdb086613a9b0b8242919a5758037e08b7dd6c022dd4bd6128c5f76a6611a"
     },
     {
       "path": "tests/ui-ux/admin-app-mayoristas.spec.js",
