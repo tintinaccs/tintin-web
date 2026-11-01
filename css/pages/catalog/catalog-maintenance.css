@@ -292,3 +292,12 @@ body.tt-catalog-maintenance .tt-card-img-wrap img { max-width: 100%; object-fit:
   body.tt-catalog-maintenance .tt-card-badge { left: 7px; top: 7px; font-size: 9px; padding-inline: 5px; }
   body.tt-catalog-maintenance .tt-card-favorite { right: 6px; top: 6px; width: 36px; height: 36px; }
 }
+
+/* Área táctil mínima de 44 px sin alterar la altura visual de la tarjeta:
+   el padding vertical del enlace del título se compensa con margen negativo. */
+body.tt-catalog-maintenance .tt-card-name a {
+  display: inline-block;
+  padding-block: 15px;
+  margin-block: -15px;
+}
+body.tt-catalog-maintenance .cat-filter-option { min-height: 44px; }
