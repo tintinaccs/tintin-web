@@ -10,7 +10,7 @@ const entryScroll = loader.slice(loader.indexOf("  try { history.scrollRestorati
 async function load(page, width, file = 'admin.html', options = {}) {
   await page.setViewportSize({ width, height: 800 });
   // Markup y estilos reales; ningún controlador de negocio, sesión o red real.
-  const scripts = [runtimePath, ...(options.mobile ? ['/js/admin/maestro/navegacion-movil-admin.js'] : []), '/js/admin/maestro/buscador-modulos-admin.js', ...(options.sidebar ? ['/js/admin/sidebar-expandible-admin.js'] : []), ...(options.guard ? ['/js/admin/proteccion-cambios-pendientes-admin.js'] : [])];
+  const scripts = [runtimePath, ...(options.mobile ? ['/js/admin/maestro/navegacion-movil-admin.js', '/js/admin/maestro/app-movil-admin.js'] : []), '/js/admin/maestro/buscador-modulos-admin.js', ...(options.sidebar ? ['/js/admin/sidebar-expandible-admin.js'] : []), ...(options.guard ? ['/js/admin/proteccion-cambios-pendientes-admin.js'] : [])];
   const entry = options.pathname || '/fixture';
   let shell = fs.readFileSync(path.join(root, file), 'utf8')
     .replace('</head>', `<script nonce="dGludGluLWZpeHR1cmU=">${entryScroll}</script></head>`)

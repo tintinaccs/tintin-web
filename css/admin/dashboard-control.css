@@ -144,7 +144,7 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
 }
 
 /* Cápsula móvil sólida, con la misma separación que la navegación pública. */
-@media (max-width:540px) {
+@media (max-width: 768px) {
   html:root:has(body.tt-admin-control) {
     --tt-admin-nav-bottom: max(12px,env(safe-area-inset-bottom,0px));
     --tt-admin-nav-clearance: calc(76px + var(--tt-admin-nav-bottom));
@@ -196,9 +196,9 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
   @keyframes tt-admin-drop-up { from { opacity: 0; transform: translate(-50%,12px); } to { opacity: 1; transform: translate(-50%,0); } }
 }
 
-@media (max-width:540px) {
-  html:root body.tt-admin-control #adm-mobile-more-grid > .adm-mobile-tab { background: var(--admin-color-background-surface) !important; text-transform: none; font-size: 11px; font-weight: 600; }
-  html:root body.tt-admin-control #adm-mobile-more-grid > .adm-mobile-tab:is(.active,:hover) { background: var(--admin-color-background-sidebar-active) !important; }
+@media (max-width: 768px) {
+  html:root body.tt-admin-control #adm-mobile-more-grid .adm-mobile-tab { background: var(--admin-color-background-surface) !important; text-transform: none; font-size: 11px; font-weight: 600; }
+  html:root body.tt-admin-control #adm-mobile-more-grid .adm-mobile-tab:is(.active,:hover) { background: var(--admin-color-background-sidebar-active) !important; }
 }
 
 /* Composición fluida para escritorio, laptop y ambas orientaciones de tablet. */
@@ -248,7 +248,7 @@ html:root body.tt-admin-control #dash-stats #stat-sales-month { font-size: clamp
   html:root body.tt-admin-control #dash-stats #stat-sales-month { font-size: clamp(13px,4vw,18px); }
   .tt-dashboard-link { min-height: 92px; gap: 8px; }
 }
-@media (max-width:540px) {
+@media (max-width: 768px) {
   html:root body.tt-admin-control { --tt-control-gutter: 14px; }
   html:root body.tt-admin-control .adm-topbar { min-height: 60px; padding-block: 8px; }
   html:root body.tt-admin-control .adm-topbar-title { font-size: 14px; }
@@ -258,7 +258,7 @@ html:root body.tt-admin-control #dash-stats #stat-sales-month { font-size: clamp
   html:root body.tt-admin-control { --tt-control-gutter: 12px; }
   .tt-dashboard-link { min-height: 68px; }
 }
-@media (max-height:500px) and (min-width:541px) {
+@media (max-height:500px) and (min-width: 769px) {
   html:root body.tt-admin-control .adm-topbar { min-height: 56px; padding-block: 6px; }
   .tt-dashboard-hero { padding: 18px; gap: 18px; }
   .tt-dashboard-intro h2 { font-size: 32px; }
@@ -311,7 +311,7 @@ html:root body.tt-admin-control .tt-admin-workspace-bar { padding-bottom: 16px; 
   border: 1px solid var(--tt-control-line); border-radius: 14px; background: var(--admin-color-background-surface);
   color: var(--adm-text); font-size: 13px; line-height: 1.6;
 }
-@media (min-width:541px) {
+@media (min-width: 769px) {
   html.adm-sidebar-is-collapsed .tt-admin-module-launcher { justify-content: center; padding: 10px; margin-inline: 10px; }
   html.adm-sidebar-is-collapsed .tt-admin-module-launcher :is(span,kbd) { display: none; }
   html.adm-sidebar-is-collapsed .tt-admin-brand-symbol { display: none; }
@@ -330,16 +330,15 @@ html:root body.tt-admin-control .tt-admin-workspace-bar { padding-bottom: 16px; 
 .tt-push-lockscreen-note { margin: 0 0 18px; padding: 12px 14px; border: 1px solid var(--tt-control-line); border-radius: 12px; font-size: 12px; line-height: 1.7; }
 html:root body.tt-admin-control .tt-control-heading { display: flex; align-items: center; gap: 8px; }
 html:root body.tt-admin-control .tt-control-heading > span { min-width: 0; overflow-wrap: anywhere; }
-@media (max-width:540px) {
+@media (max-width: 768px) {
   html:root body.tt-admin-control .adm-topbar {
-    display: grid; grid-template-columns: 44px minmax(0,1fr); grid-template-areas: "menu title" "actions actions";
+    display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-areas: "title actions";
     align-items: center; gap: 6px 10px;
   }
-  html:root body.tt-admin-control .adm-hamburger { grid-area: menu; }
   html:root body.tt-admin-control .tt-control-heading { grid-area: title; }
   html:root body.tt-admin-control .adm-topbar-actions { grid-area: actions; justify-content: flex-end; flex-wrap: nowrap; }
 }
-@media (min-width:541px) { html.adm-sidebar-is-collapsed .tt-admin-nav-group { display: none; } }
+@media (min-width: 769px) { html.adm-sidebar-is-collapsed .tt-admin-nav-group { display: none; } }
 
 /* Evolución visual del panel existente en teléfono; escritorio/tablet se conservan. */
 .tt-admin-workspace-search > svg { display: none; }

@@ -53,7 +53,7 @@ for (const width of [390, 768, 1440]) {
       const expected = width <= 540 && surface.compactIcon
         ? surface.selected ? 'rgb(253, 236, 242)' : 'rgba(0, 0, 0, 0)'
         : surface.className === 'adm-mobile-tab active' ? 'rgb(253, 236, 242)'
-        : width <= 540 && surface.className === 'adm-mobile-tab' ? 'rgb(255, 255, 255)'
+        : width <= 768 && surface.className === 'adm-mobile-tab' ? 'rgb(255, 255, 255)'
         : 'rgb(248, 170, 202)';
       expect(surface.color, surface.className).toBe(expected);
     }

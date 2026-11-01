@@ -1,0 +1,585 @@
+/* App móvil del panel (≤768px).
+   Capa de presentación: usa solo los tokens existentes (--adm-*), anima solo
+   transform/opacity y no afecta a tablet (>768px) ni a escritorio. */
+
+.adm-app-back,
+.adm-app-sheet,
+.adm-app-sheet-backdrop,
+.adm-app-filter-btn,
+.adm-app-ptr { display: none; }
+
+@media (max-width: 768px) {
+  /* ── Barra superior: Volver + título + buscar ── */
+  html.adm-app body:has(.adm-main) .adm-topbar {
+    padding-top: calc(8px + env(safe-area-inset-top, 0px));
+    padding-inline: max(12px, env(safe-area-inset-left, 0px)) max(12px, env(safe-area-inset-right, 0px));
+  }
+  html.adm-app .adm-topbar-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+    max-width: none;
+  }
+  html.adm-app #adm-topbar-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  html.adm-app.adm-app-has-back .adm-app-back {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 2px;
+    min-width: 44px;
+    min-height: 44px;
+    margin-left: -6px;
+    padding: 0 8px 0 2px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--adm-text);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.adm-app.adm-app-has-back .adm-app-back:active { opacity: .55; }
+  html.adm-app.adm-app-has-back .adm-app-back:focus-visible { outline: 2px solid var(--adm-text); outline-offset: 2px; }
+  html.adm-app.adm-app-has-back .adm-topbar-title .tt-control-brand { display: none; }
+  /* "+ Nuevo pedido" es la acción del módulo Pedidos, no de todo el panel. */
+  html.adm-app body:not([data-adm-section="pedidos"]) .adm-topbar-actions .adm-topbar-btn[href="/checkout"] { display: none; }
+  html.adm-app .adm-topbar-actions .adm-topbar-btn[href="/checkout"] { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* ── Barra inferior (cápsula existente): 5 accesos ── */
+  html.adm-app #adm-mobile-tabs > .adm-mobile-tab { -webkit-tap-highlight-color: transparent; }
+  html.adm-app #adm-mobile-tabs > .adm-mobile-tab:active { opacity: .6; }
+
+  /* ── Transición al cambiar de pantalla ── */
+  /* `backwards` (no `both`): al terminar no queda ningún transform aplicado; un transform
+     residual convierte la sección en contenedor de los elementos position:fixed
+     (p. ej. la barra de selección de Productos) y los saca de la pantalla. */
+  html.adm-app .adm-section.active { animation: adm-app-screen-in .22s ease-out backwards; }
+
+  /* ── Hoja "Más": lista agrupada estilo iOS ── */
+  html.adm-app body.tt-admin-control #adm-mobile-more-grid { display: block; }
+  html.adm-app .adm-more-group {
+    margin: 0 0 14px;
+    border: 1px solid var(--adm-border);
+    border-radius: 14px;
+    background: var(--adm-card);
+    overflow: hidden;
+  }
+  html.adm-app .adm-more-group:not(:has(> .adm-mobile-tab:not([style*="display: none"]):not([hidden]))) { display: none; }
+  html.adm-app .adm-more-group-title {
+    margin: 0;
+    padding: 10px 14px 4px;
+    color: var(--adm-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  html.adm-app body.tt-admin-control #adm-mobile-more-grid .adm-mobile-tab {
+    position: relative;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    line-height: 1.3;
+    color: var(--adm-text);
+    overflow-wrap: normal;
+    min-height: 48px;
+    padding: 10px 36px 10px 14px;
+    gap: 12px;
+    border: 0;
+    border-top: 1px solid var(--adm-border);
+    border-radius: 0;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.adm-app .adm-more-group > .adm-mobile-tab:first-child,
+  html.adm-app .adm-more-group-title + .adm-mobile-tab { border-top: 0; }
+  html.adm-app .adm-mobile-more-grid .adm-mobile-tab::after {
+    content: "";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid var(--adm-muted);
+    border-right: 2px solid var(--adm-muted);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  html.adm-app .adm-mobile-more-grid #mtab-logout { color: var(--adm-text); }
+
+  /* ── Formularios a 1 columna (dashboard-control fuerza 2 entre 761 y 1100) ── */
+  html.adm-app body.tt-admin-control .tt-admin-field-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  html.adm-app body.tt-admin-control .tt-admin-field-grid > * { grid-column: auto !important; }
+  html.adm-app #oe-body { grid-template-columns: minmax(0, 1fr) !important; padding: 16px !important; }
+
+  /* ── Barra de acciones fija al editar (encima de la barra inferior) ── */
+  html.adm-app .adm-app-actionbar {
+    position: sticky;
+    bottom: calc(var(--tt-admin-nav-clearance, 88px) + 8px);
+    z-index: 60;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px -16px -16px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--adm-border);
+    background: var(--adm-card);
+    box-shadow: 0 -8px 20px rgba(43, 20, 31, .08);
+  }
+  html.adm-app .adm-app-actionbar > :is(button, a, .adm-btn) { flex: 1 1 0; min-height: 44px; }
+
+  /* ── Hoja inferior reutilizable (filtros) ── */
+  html.adm-app .adm-app-sheet-backdrop:not([hidden]) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 440;
+    background: rgba(43, 20, 31, .42);
+    animation: adm-app-fade-in .2s ease-out both;
+  }
+  html.adm-app .adm-app-sheet:not([hidden]) {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 450;
+    max-height: calc(100svh - 48px - env(safe-area-inset-top, 0px));
+    overflow-y: auto;
+    padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    border: 1px solid var(--adm-border);
+    border-bottom: 0;
+    border-radius: 22px 22px 0 0;
+    background: var(--adm-card);
+    box-shadow: 0 -16px 48px rgba(43, 20, 31, .2);
+    overscroll-behavior: contain;
+    animation: adm-app-sheet-in .26s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  html.adm-app .adm-app-sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 12px;
+  }
+  html.adm-app .adm-app-sheet-head h2 { margin: 0; font-size: 18px; }
+  html.adm-app .adm-app-sheet-done {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    color: var(--adm-text);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  html.adm-app .adm-app-sheet-body { display: grid; gap: 12px; }
+  html.adm-app .adm-app-sheet-body > * { width: 100%; max-width: none; flex: none; }
+  html.adm-app .adm-app-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--adm-border);
+    border-radius: 10px;
+    background: var(--adm-card);
+    color: var(--adm-text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  html.adm-app body.adm-app-sheet-open { overflow: hidden; }
+
+  /* ── Deslizar para recargar ── */
+  html.adm-app .adm-app-ptr {
+    display: grid;
+    place-items: center;
+    position: fixed;
+    top: calc(64px + env(safe-area-inset-top, 0px));
+    left: 50%;
+    z-index: 90;
+    width: 36px;
+    height: 36px;
+    margin-left: -18px;
+    border: 1px solid var(--adm-border);
+    border-radius: 50%;
+    background: var(--adm-card);
+    color: var(--adm-text);
+    box-shadow: 0 6px 16px rgba(43, 20, 31, .14);
+    opacity: 0;
+    transform: translateY(-56px);
+    pointer-events: none;
+  }
+  html.adm-app .adm-app-ptr.is-loading svg { animation: adm-app-spin .8s linear infinite; }
+}
+
+@keyframes adm-app-screen-in { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+@keyframes adm-app-sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes adm-app-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes adm-app-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  html.adm-app .adm-section.active,
+  html.adm-app .adm-app-sheet:not([hidden]),
+  html.adm-app .adm-app-sheet-backdrop:not([hidden]),
+  html.adm-app .adm-app-ptr.is-loading svg { animation: none; }
+}
+
+
+/* ── Fase 1 · Inicio ── */
+@media (max-width: 768px) {
+  html.adm-app body.tt-admin-control .tt-dashboard-hero { display: block; padding: 16px; margin-bottom: 14px; border-radius: 16px; }
+  html.adm-app .tt-dashboard-intro h2 { margin: 4px 0 6px; font-size: 24px; }
+  html.adm-app .tt-dashboard-description { max-width: none; margin: 0 0 12px; font-size: 14px; line-height: 1.5; }
+  html.adm-app .tt-dashboard-intro > button { width: 100%; justify-content: space-between; }
+  html.adm-app .tt-dashboard-shortcuts { display: block; margin-top: 14px; border: 1px solid var(--tt-control-line); border-radius: 14px; overflow: hidden; }
+  html.adm-app .tt-dashboard-shortcuts:not(:has(> .tt-dashboard-link:not([hidden]))) { display: none; }
+  html.adm-app .tt-dashboard-link:not([hidden]) {
+    position: relative;
+    display: grid;
+    width: 100%;
+    min-height: 56px;
+    padding: 9px 40px 9px 14px;
+    gap: 1px;
+    border: 0;
+    border-radius: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.adm-app .tt-dashboard-link:not([hidden]) ~ .tt-dashboard-link:not([hidden]) { border-top: 1px solid var(--tt-control-line); }
+  html.adm-app .tt-dashboard-link:active { opacity: .6; }
+  html.adm-app .tt-dashboard-link .tt-control-eyebrow,
+  html.adm-app .tt-dashboard-link > span:last-child svg { display: none; }
+  html.adm-app .tt-dashboard-link strong { font-size: 15px; font-weight: 600; letter-spacing: 0; }
+  html.adm-app .tt-dashboard-link > span:last-child { display: block; font-size: 12px; color: var(--adm-muted); }
+  html.adm-app .tt-dashboard-link::after {
+    content: "";
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid var(--adm-muted);
+    border-right: 2px solid var(--adm-muted);
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  html.adm-app body.tt-admin-control #dash-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+  html.adm-app body.tt-admin-control #dash-stats .adm-stat { display: grid; grid-template-columns: minmax(0, 1fr) auto; min-height: 0; padding: 12px 14px; gap: 6px 8px; border-radius: 14px; }
+  html.adm-app body.tt-admin-control #dash-stats .adm-stat-icon { grid-column: 2; grid-row: 1; width: 28px; height: 28px; }
+  html.adm-app body.tt-admin-control #dash-stats .adm-stat-icon svg { width: 18px; height: 18px; }
+  html.adm-app body.tt-admin-control #dash-stats .adm-stat-label { grid-column: 1; grid-row: 1; align-self: center; font-size: 12px; line-height: 1.3; }
+  html.adm-app body.tt-admin-control #dash-stats .adm-stat-val { grid-column: 1 / -1; grid-row: 2; font-size: 22px; }
+  html.adm-app body.tt-admin-control #dash-stats #stat-sales-month { font-size: clamp(15px, 4.2vw, 20px); }
+
+  /* Últimos pedidos: filas de lista (cliente y total arriba; estado, ciudad y fecha abajo). */
+  html.adm-app body.tt-admin-control .tt-dashboard-orders :is(.adm-table, tbody) { display: block; }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders tbody > tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 4px 12px;
+    padding: 12px 14px;
+    border: 0;
+    border-top: 1px solid var(--adm-border);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders tbody > tr:first-child { border-top: 0; }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders tbody > tr > td { display: block; min-width: 0; padding: 0; border: 0; }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders .tt-admin-records > tbody > tr > td::before { content: none; display: none; }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders tbody > tr > td[colspan] { grid-column: 1 / -1; padding: 12px 0; }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders tbody > tr > td:nth-child(1):not([colspan]) { grid-column: 1; grid-row: 1; overflow-wrap: anywhere; }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders tbody > tr > td:nth-child(2) { grid-column: 2; grid-row: 1; text-align: right; font-size: 15px; }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders tbody > tr > td:nth-child(3) { grid-column: 2; grid-row: 2 / span 2; justify-self: end; align-self: center; }
+  html.adm-app .tt-dashboard-intro .tt-control-eyebrow { font-size: 11px; }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders tbody small { font-size: 12px; }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders .adm-badge { font-size: 11px; }
+  html.adm-app body.tt-admin-control .tt-dashboard-orders tbody > tr > td:nth-child(4),
+  html.adm-app body.tt-admin-control .tt-dashboard-orders tbody > tr > td:nth-child(5) { grid-column: 1; font-size: 12px; color: var(--adm-muted); }
+}
+
+
+/* ── Fase 2 · Estadísticas ── */
+@media (max-width: 768px) {
+  html.adm-app .adm-statistics-hero { padding: 16px; gap: 12px; border-radius: 16px; }
+  html.adm-app .adm-statistics-hero h1 { font-size: 22px; line-height: 1.2; }
+  html.adm-app .adm-statistics-hero p { font-size: 14px; line-height: 1.5; }
+  html.adm-app .adm-statistics-toolbar { grid-template-columns: minmax(0, 1fr); gap: 6px; width: 100%; }
+  html.adm-app .adm-statistics-toolbar .adm-select { width: 100%; min-height: 44px; font-size: 16px; }
+  html.adm-app .adm-statistics-toolbar .adm-live-status { justify-self: start; }
+  html.adm-app :is(.adm-statistics-eyebrow, .adm-statistics-toolbar label) { font-size: 11px; }
+  html.adm-app .adm-statistics-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  html.adm-app .adm-stat-kpi { min-height: 0; padding: 12px 14px; gap: 4px; border-radius: 14px; }
+  html.adm-app .adm-stat-kpi > span { font-size: 11px; letter-spacing: .04em; }
+  html.adm-app .adm-stat-kpi strong { font-size: clamp(18px, 5.4vw, 24px); }
+  html.adm-app .adm-stat-kpi small { font-size: 12px; line-height: 1.35; }
+  html.adm-app .adm-analytics-grid { gap: 12px; }
+  html.adm-app .adm-analytics-card { padding: 16px; border-radius: 16px; }
+  html.adm-app .adm-analytics-head { margin-bottom: 12px; }
+  html.adm-app .adm-analytics-head h2 { font-size: 16px; }
+  html.adm-app .adm-analytics-head p { font-size: 12px; }
+  html.adm-app :is(.adm-bar-list, .adm-rank-list) { min-height: 0; }
+  html.adm-app .adm-bar-row { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; }
+  html.adm-app .adm-bar-label { grid-column: 1; grid-row: 1; }
+  html.adm-app .adm-bar-value { grid-column: 2; grid-row: 1; }
+  html.adm-app .adm-bar-track { grid-column: 1 / -1; grid-row: 2; }
+  html.adm-app :is(.adm-bar-label, .adm-bar-value, .adm-rank-name, .adm-rank-value) { font-size: 13px; }
+  html.adm-app .adm-rank-meta { font-size: 12px; }
+  html.adm-app .adm-trend-chart { min-height: 0; overscroll-behavior-x: contain; }
+  html.adm-app .adm-trend-day strong { font-size: 12px; }
+  html.adm-app .adm-trend-day span { font-size: 11px; }
+  html.adm-app .adm-analytics-empty { min-height: 56px; font-size: 13px; }
+  html.adm-app .adm-statistics-foot { font-size: 12px; text-align: left; }
+
+  /* ---- Fase 3 · Usuarios ----
+     Las tarjetas ya existían (espacio-modulos-admin.css + ficha-usuario-admin.js);
+     aquí solo se pulen: insignia legible, casilla del tamaño de "Seleccionar
+     todos", "⋯" centrado y sin etiqueta repetida sobre los botones. */
+  html.adm-app body.tt-admin-control #users-tbody .adm-badge { font-size: 11px; }
+  html.adm-app body.tt-admin-control #users-tbody .adm-user-select { min-width: 44px; min-height: 44px; }
+  html.adm-app body.tt-admin-control #users-tbody .adm-user-select input { width: 22px; height: 22px; margin: 0; }
+  html.adm-app body.tt-admin-control #users-tbody .tt-admin-user-card .tt-admin-user-menu-toggle { align-items: center; justify-content: center; line-height: 1; }
+  html.adm-app body.tt-admin-control #section-usuarios .tt-admin-records > tbody > tr.tt-admin-user-card > td:last-child::before { content: none; display: none; }
+
+  /* ---- Fase 4 · Pedidos ----
+     Acciones en una fila, contadores en 3 columnas, búsqueda + botón Filtros
+     (Pago/Entrega/Orden en la hoja inferior) y vistas en una fila deslizable. */
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-commerce-pagehead { gap: 10px; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-commerce-actions { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-commerce-actions > .tt-commerce-btn { flex: 1 1 auto; width: auto; min-height: 44px; padding-inline: 12px; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 12px 0; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics > div { padding: 8px 10px; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics strong { font-size: 18px; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics span { font-size: 11px; line-height: 1.3; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-toolbar { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; padding: 12px; margin: 12px 0; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-toolbar > label:first-child { grid-column: auto; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-toolbar input { font-size: 16px; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-toolbar > .adm-app-filter-field { display: none; }
+  html.adm-app body.tt-admin-control .adm-app-sheet-body > .adm-app-filter-field { display: grid; gap: 8px; font-weight: 600; }
+  html.adm-app body.tt-admin-control .adm-app-sheet-body > .adm-app-filter-field select { width: 100%; min-height: 44px; font-size: 16px; font-weight: 400; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-views {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    margin: 12px -12px;
+    padding: 2px 12px 6px;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-views::-webkit-scrollbar { display: none; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-views > .tt-commerce-btn { flex: 0 0 auto; min-height: 44px; white-space: nowrap; }
+  /* Pestañas de etapa: un poco más de aire para que "preparación" no se corte. */
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs button { gap: 5px; padding: 8px; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs button,
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs .tt-order-step-label { overflow-wrap: normal; }
+  /* ---- Fase 5 · Ventas locales, Clientes que compraron y Espejos de Sheets ----
+     Acciones en 2 columnas (la principal arriba), búsqueda + botón Filtros
+     (Mes/Casilla/Estado en la hoja), editor a pantalla completa con barra fija
+     de Cerrar/Guardar y resumen mensual en 2 columnas. */
+  html.adm-app body.tt-admin-control #section-ventas-locales > .adm-card > .local-toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 0; margin: 12px 0; border: 0; background: none; }
+  html.adm-app body.tt-admin-control #section-ventas-locales > .adm-card > .local-toolbar > .adm-btn { width: 100%; min-height: 44px; margin: 0; padding-inline: 8px; overflow-wrap: normal; }
+  html.adm-app body.tt-admin-control #section-ventas-locales > .adm-card > .local-toolbar > .adm-btn-primary { order: -1; grid-column: 1 / -1; }
+  html.adm-app body.tt-admin-control #section-ventas-locales > .adm-card > .local-toolbar > .adm-btn:last-child { grid-column: 1 / -1; }
+  html.adm-app body.tt-admin-control #local-ledger > .local-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; padding: 12px; margin: 12px 0; }
+  html.adm-app body.tt-admin-control #local-ledger > .local-toolbar > .adm-app-filter-field { display: none; }
+  html.adm-app body.tt-admin-control #local-ledger > .local-toolbar input { font-size: 16px; }
+  html.adm-app body.tt-admin-control #local-ledger .local-grid,
+  html.adm-app body.tt-admin-control #local-buyers .local-grid { gap: 10px; margin: 12px 0; }
+  html.adm-app body.tt-admin-control :is(#local-ledger, #local-buyers) .local-record { padding: 14px 16px; }
+  html.adm-app body.tt-admin-control :is(#local-ledger, #local-buyers) .local-record :is(button, a) { width: 100%; justify-content: center; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-record { padding: 12px; line-height: 1.4; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-record p { margin: 4px 0; font-size: 12px; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-table tbody { gap: 8px; padding: 8px; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-table td { gap: 2px; padding: 8px 12px; }
+  /* Editor: pantalla completa; el diálogo es el que desplaza y la barra queda abajo. */
+  html.adm-app body.tt-admin-control dialog.local-dialog {
+    width: 100%; max-width: none; height: 100dvh; max-height: none; margin: 0; inset: 0;
+    border: 0; border-radius: 0; overscroll-behavior: contain;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px 0;
+  }
+  html.adm-app body.tt-admin-control dialog.local-dialog > form > h2 { margin: 0 0 4px; font-size: 20px; }
+  html.adm-app body.tt-admin-control dialog.local-dialog .local-form { gap: 12px; }
+  html.adm-app body.tt-admin-control dialog.local-dialog .local-form :is(input, select, textarea) { font-size: 16px; min-height: 44px; }
+  html.adm-app body.tt-admin-control dialog.local-dialog fieldset.local-form { margin: 0 0 12px; padding: 12px; border: 1px solid var(--adm-border); border-radius: 12px; }
+  html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar {
+    position: sticky; bottom: 0; z-index: 1;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
+    margin: 12px -16px 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    border: 0; border-top: 1px solid var(--adm-border); border-radius: 0; background: var(--adm-card, #fff);
+  }
+  html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar > .adm-btn { width: 100%; min-height: 44px; margin: 0; }
+  html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar > .adm-btn-primary { order: 1; }
+  html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar > [data-local-archive] { order: 2; grid-column: 1 / -1; }
+
+  /* ---- Fase 8 · Pedidos mayoristas ---- */
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-summary { gap: 8px; padding: 12px 16px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-summary button { min-height: 44px; padding: 10px 12px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 0 16px 12px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-tabs button { min-height: 44px; padding: 8px 10px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-user-search { padding: 0 16px 12px; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-users] { padding: 0 16px 16px; gap: 10px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-user-card { padding: 14px; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-quotes-panel] > .adm-card-body { padding: 4px 16px 0 !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas .adm-filter-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  html.adm-app body.tt-admin-control #section-mayoristas :is(input, select, textarea) { font-size: 16px; }
+  html.adm-app body.tt-admin-control #section-mayoristas :is(.adm-filter-row, .wholesale-user-search) :is(input, select) { min-height: 44px; }
+  /* Lista: tarjetas sin desplazamiento lateral (el contenedor ya no recorta la barra fija del detalle). */
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-quotes-panel] > .adm-table-wrap { overflow: visible; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-rows] { gap: 10px; padding: 12px 16px 16px; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-row > td { padding: 10px 14px !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas .wholesale-row > td:last-child { grid-column: 1 / -1; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-open-quote] { width: 100%; min-height: 44px; }
+  /* Detalle: líneas como tarjetas con el precio mayorista a todo el ancho. */
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] > div { padding: 16px !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] > div > div:has(> .wholesale-detail-identity) { gap: 12px !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .wholesale-detail-identity { align-items: flex-start; min-width: 0; overflow-wrap: anywhere; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] a.adm-btn { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table-wrap { overflow: visible; border: 0; box-shadow: none; background: none; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table { display: block; min-width: 0 !important; width: 100% !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table thead { display: none; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody { display: grid; gap: 10px; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px;
+    padding: 12px 14px; border: 1px solid var(--adm-border); border-radius: 12px; background: var(--adm-card, #fff);
+  }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td { display: block; min-width: 0; padding: 0 !important; border: 0 !important; background: none !important; white-space: normal; overflow-wrap: anywhere; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:is(:first-child, :nth-child(4)) { grid-column: 1 / -1; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:first-child { font-weight: 600; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:not(:first-child)::before { display: block; margin-bottom: 4px; font-size: 10px; font-weight: 600; color: var(--adm-muted); }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:nth-child(2)::before { content: "Cant."; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:nth-child(3)::before { content: "Precio minorista"; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:nth-child(4)::before { content: "Precio mayorista c/u"; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] .adm-table tbody > tr > td:nth-child(5)::before { content: "Subtotal"; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] [data-price-line] { width: 100%; max-width: none !important; min-height: 44px; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] div:has(> [data-quote-total]) { flex-direction: column; align-items: flex-end; gap: 4px !important; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] [data-admin-note] { min-height: 88px; }
+  /* Decisión: barra fija encima de la barra inferior mientras se edita la cotización
+     (clip recorta las esquinas igual que hidden, pero no crea contenedor de scroll que anule sticky). */
+  html.adm-app body.tt-admin-control #section-mayoristas > .adm-card { overflow: clip; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-wholesale-detail] div:has(> [data-decision]) {
+    position: sticky; bottom: calc(var(--tt-admin-nav-clearance, 88px) + 8px); z-index: 5;
+    display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px !important;
+    margin: 14px -16px -16px !important; padding: 10px 16px;
+    border-top: 1px solid var(--adm-border); background: var(--adm-card, #fff); box-shadow: 0 -8px 20px rgba(43, 20, 31, .08);
+  }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-decision] { width: 100%; min-height: 44px; margin: 0; }
+  html.adm-app body.tt-admin-control #section-mayoristas [data-decision="aprobar"] { grid-column: 1 / -1; background: var(--admin-color-button-primary-background) !important; border: 1px solid var(--admin-color-button-primary-background); color: var(--admin-color-button-primary-text) !important; }
+
+  /* ---- Fase 9 · Productos ----
+     La capa móvil propia de Productos (mosaico, panel de filtros, barra de selección,
+     ficha a pantalla completa) se conserva; aquí solo se compacta y se agrandan toques. */
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-product-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-product-metrics button { gap: 2px; min-height: 64px; padding: 10px 6px; align-content: center; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-product-metrics strong { font-size: 18px; line-height: 1.2; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-product-metrics span { line-height: 1.3; overflow-wrap: normal; hyphens: none; }
+  /* Visibilidad a todo el ancho: con la fuente de 16 px (anti-zoom) la columna de 96 px cortaba "Activo"/"Inactivo". */
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-card-edit-grid { grid-template-columns: minmax(0, 1fr); }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-card-visibility { justify-content: stretch; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-card-visibility select { width: 100%; min-height: 44px; padding: 9px 32px 9px 12px; border-radius: 10px; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-card-variant-select { min-height: 44px; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-commerce-product-open { min-height: 44px; }
+  /* ---- Fases 10–11 · Reseñas y Me gusta (participacion-admin-v2.css + gestion-participacion-admin-v2.js) ----
+     Los filtros secundarios de la bandeja van a la hoja (app-movil-admin.js); las
+     pestañas no se encogen (antes se encimaban a 320 px); toques de 44 px; el
+     detalle ocupa toda la pantalla y sus campos usan 16 px (sin zoom en iOS). */
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-toolbar:has(> .adm-app-filter-btn) { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-toolbar:has(> .adm-app-filter-btn) > .eg-search { grid-column: auto; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-toolbar > .adm-app-filter-field { display: none; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-segments { width: 100%; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-segments button { flex: 0 0 auto; min-height: 44px; font-size: 13px; scroll-snap-align: start; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-filter-chips button { min-height: 44px; }
+  /* Zona de toque de 44 px alrededor de la casilla (el toque en la zona la marca: app-movil-admin.js). */
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-card { grid-template-columns: 33px minmax(0, 1fr); }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-card-select { display: grid; place-items: center; width: 44px; height: 44px; margin: -11px 0 0 -11px; padding: 0; cursor: pointer; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-card-select input { width: 22px; height: 22px; margin: 0; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-product-strip > a { display: inline-flex; align-items: center; min-height: 44px; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-actions .adm-btn,
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-bulkbar .adm-btn,
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-bulkbar .eg-link-btn,
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-pagination button { min-height: 44px; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-more summary { width: 44px; height: 44px; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-more > div { top: 48px; }
+  html.adm-app body.tt-admin-control :is(#section-resenas, #section-me-gusta) .eg-more button { min-height: 44px; font-size: 14px; }
+  html.adm-app body.tt-admin-control .eg-drawer { left: 0; right: 0; width: auto; border-left: 0; }
+  html.adm-app body.tt-admin-control .eg-drawer-head { padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px; }
+  html.adm-app body.tt-admin-control .eg-drawer .eg-icon-btn { width: 44px; height: 44px; }
+  html.adm-app body.tt-admin-control .eg-drawer :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) { font-size: 16px; }
+  html.adm-app body.tt-admin-control .eg-drawer :is(.adm-btn, .eg-link-btn) { min-height: 44px; }
+  /* Fase 11: el enlace "Ver producto ↗" del detalle medía 13 px de alto. */
+  html.adm-app body.tt-admin-control .eg-drawer .eg-detail-product a { display: inline-flex; align-items: center; min-height: 44px; }
+  /* ---- Fase 12 · Colecciones (shopify-commerce-admin.js ya trae tarjetas de una columna) ----
+     Visibilidad y Orden van a la hoja de filtros (app-movil-admin.js); búsqueda de
+     44 px y 16 px; casillas de 44 px. El detalle del catálogo (colección, producto,
+     pedido) ocupa toda la pantalla en modo app y su botón Cerrar mide 44 px. */
+  html.adm-app body.tt-admin-control #tt-commerce-collections .tt-commerce-toolbar:has(> .adm-app-filter-btn) { grid-template-columns: minmax(0, 1fr) auto !important; align-items: center; gap: 8px; }
+  html.adm-app body.tt-admin-control #tt-commerce-collections .tt-commerce-toolbar > .adm-app-filter-field { display: none; }
+  html.adm-app body.tt-admin-control #tt-commerce-collections .tt-commerce-toolbar input { min-height: 44px; font-size: 16px; }
+  html.adm-app body.tt-admin-control #tt-commerce-collections .tt-commerce-product-check { min-width: 44px; box-sizing: border-box; }
+  html.adm-app body.tt-admin-control .tt-commerce-drawer { left: 0; right: 0; width: auto; border-left: 0; }
+  html.adm-app body.tt-admin-control .tt-commerce-drawer-head { padding-top: calc(14px + env(safe-area-inset-top, 0px)); }
+  html.adm-app body.tt-admin-control .tt-commerce-drawer-head [data-action="drawer-close"] { width: 44px; height: 44px; flex: 0 0 44px; }
+
+  /* ---- Fase 13 · Páginas (paginas-admin.css + paginas-admin.js) ----
+     Las tarjetas ya las da espacio-modulos-admin; aquí: búsqueda a todo el ancho
+     (junto al selector se cortaba el texto) y barra Guardar/Cancelar fija encima
+     de la barra inferior mientras se edita. */
+  html.adm-app body.tt-admin-control #section-paginas .tt-pages-filters { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; gap: 8px; }
+  html.adm-app body.tt-admin-control #section-paginas .tt-pages-toolbar input { width: 100%; min-width: 0; min-height: 44px; }
+  html.adm-app body.tt-admin-control #section-paginas .tt-pages-toolbar select { min-height: 44px; }
+  html.adm-app body.tt-admin-control #section-paginas .tt-pages-editor > .adm-card { overflow: clip; }
+  html.adm-app body.tt-admin-control #section-paginas .tt-pages-editor .adm-card-body > .tt-pages-actions {
+    position: sticky; bottom: calc(var(--tt-admin-nav-clearance, 88px) + 8px); z-index: 5;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: auto;
+    margin: 14px -16px -16px; padding: 10px 16px;
+    border-top: 1px solid var(--adm-border); background: var(--adm-card, #fff); box-shadow: 0 -8px 20px rgba(43, 20, 31, .08);
+  }
+  html.adm-app body.tt-admin-control #section-paginas .tt-pages-editor .adm-card-body > .tt-pages-actions > .adm-btn { width: 100%; min-height: 44px; margin: 0; }
+  /* F16 Mensajes: acceso a WhatsApp como botón principal a todo el ancho. */
+  html.adm-app body.tt-admin-control #section-mensajes #mensajes-wa-link { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; }
+  /* Integración con #1301 (dashboard-control ≤540, html:root): filas de accesos de 56px con
+     espacio para el chevron, para que las 6 métricas queden sobre la barra inferior a 390×844. */
+  html:root.adm-app body.tt-admin-control .tt-dashboard-link:not([hidden]) { min-height: 56px; padding: 8px 40px 8px 14px; gap: 1px; }
+  /* F18 Auditoría: casilla de fila con área táctil de 44px y cuadro visible de 22px (patrón de admin-images). */
+  html.adm-app body.tt-admin-control #audit-tbody .audit-row-check { appearance: none; -webkit-appearance: none; position: relative; width: 44px; height: 44px; margin: 0; cursor: pointer; background: transparent; }
+  html.adm-app body.tt-admin-control #audit-tbody .audit-row-check::before { content: ""; position: absolute; inset: 11px; border: 2px solid var(--adm-accent); border-radius: 6px; background: var(--adm-card, #fff); box-sizing: border-box; }
+  html.adm-app body.tt-admin-control #audit-tbody .audit-row-check:checked::before { background: var(--adm-accent); box-shadow: inset 0 0 0 3px var(--adm-card, #fff); }
+  html.adm-app body.tt-admin-control #audit-tbody .audit-row-check:focus-visible { outline: 2px solid var(--adm-accent); outline-offset: -4px; }
+
+  /* ---- Fase 19 · Diagnóstico ----
+     Filtros (10 selectores + fecha) en la hoja; búsqueda y botón Filtros a lo ancho,
+     Copiar/Exportar en dos columnas; pestañas de vista sin cortar; "Detalle técnico" de 44 px. */
+  html.adm-app body.tt-admin-control #site-diagnostic-toolbar:has(> .adm-app-filter-btn) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  html.adm-app body.tt-admin-control #site-diagnostic-toolbar > .adm-diagnostic-search { grid-column: 1 / -1; order: -2; }
+  html.adm-app body.tt-admin-control #site-diagnostic-toolbar > .adm-app-filter-btn { grid-column: 1 / -1; order: -1; }
+  html.adm-app body.tt-admin-control #site-diagnostic-toolbar > .adm-app-filter-field { display: none; }
+  html.adm-app body.tt-admin-control #site-diagnostic-toolbar > .adm-btn { min-height: 44px; padding-inline: 8px; }
+  html.adm-app body.tt-admin-control .adm-app-sheet-body > input.adm-app-filter-field { min-height: 44px; font-size: 16px; }
+  html.adm-app body.tt-admin-control #site-diagnostic-view-tabs { flex-wrap: wrap; overflow: visible; }
+  html.adm-app body.tt-admin-control #site-diagnostic-view-tabs button { flex: 1 1 auto; min-height: 44px; white-space: normal; }
+  html.adm-app body.tt-admin-control #section-diagnostico .adm-diagnostic-item details summary { min-height: 44px; box-sizing: border-box; padding-block: 12px; }
+}
+@media (max-width: 359px) {
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs button { gap: 4px; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs .tt-order-step-index { flex-basis: 20px; width: 20px; height: 20px; }
+  html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs .tt-order-step-label { font-size: 11px; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-grid { grid-template-columns: minmax(0, 1fr); }
+}

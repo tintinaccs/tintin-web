@@ -35,7 +35,7 @@ for(const width of [320,390,540,768,1440]) test('tarjeta legible conserva correo
     row.querySelector('#qa-original-block').addEventListener('click',()=>window.__originalAction=true);
     document.getElementById('users-tbody').replaceChildren(row);
   });
-  if(width>540) {
+  if(width>768) {
     await expect(page.locator('#qa-original-block')).toBeVisible();
     await expect(page.getByRole('button',{name:'Acciones del usuario',exact:true})).toBeHidden();
     await expect(page.locator('#users-tbody td').nth(4)).toBeVisible();

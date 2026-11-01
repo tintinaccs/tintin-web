@@ -23,7 +23,12 @@ const mobileMoreGrid = document.getElementById('adm-mobile-more-grid');
 function moveSecondaryMobileTab(node) {
   if (!(node instanceof Element) || !node.matches('.adm-mobile-tab')) return;
   if (node.hasAttribute('data-mobile-primary') || node === mobileMoreToggle) return;
-  mobileMoreGrid?.appendChild(node);
+  // Agrupado como la barra lateral; los accesos dinámicos (Maestro,
+  // Bienvenida) caen en su grupo natural.
+  const group = node.dataset.moreGroup || (node.id === 'mtab-maestro' ? 'maestro' : 'tienda');
+  const list = mobileMoreGrid?.querySelector(`[data-more-list="${group}"]`) || mobileMoreGrid;
+  const before = node.id === 'mtab-welcome' ? list?.querySelector('#mtab-config') : null;
+  list?.insertBefore(node, before || null);
 }
 
 if (mobileTabs && mobileMoreGrid) {
@@ -35,7 +40,7 @@ if (mobileTabs && mobileMoreGrid) {
 
 function setMobileMore(open, restoreFocus = false) {
   if (!mobileMoreToggle || !mobileMoreSheet || !mobileMoreBackdrop) return;
-  if (open && (!matchMedia('(max-width: 540px)').matches || !document.documentElement.classList.contains('adm-auth-ready'))) return;
+  if (open && (!matchMedia('(max-width: 768px)').matches || !document.documentElement.classList.contains('adm-auth-ready'))) return;
   mobileMoreSheet.hidden = !open;
   mobileMoreBackdrop.hidden = !open;
   mobileMoreToggle.setAttribute('aria-expanded', String(open));
@@ -95,7 +100,7 @@ window.addEventListener('keydown', event => {
 
 
 // La rotación no debe dejar el escritorio bloqueado por un menú móvil oculto.
-matchMedia('(max-width: 540px)').addEventListener('change', event => {
+matchMedia('(max-width: 768px)').addEventListener('change', event => {
   if (!event.matches) closeMobileMore();
 });
 new MutationObserver(() => {

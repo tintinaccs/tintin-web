@@ -32,7 +32,7 @@ html body:has(.adm-main) #adm-sidebar .adm-nav-item { margin-inline: 0; }
 html body:has(.adm-main) #adm-sidebar .adm-user-info { flex: 0 0 auto; height: auto; min-width: 0; }
 html body:has(.adm-main) #adm-sidebar .adm-user-info > :not(.adm-user-avatar) { min-width: 0; }
 html body:has(.adm-main) #adm-sidebar .adm-user-name { overflow-wrap: anywhere; }
-@media (min-width: 541px) {
+@media (min-width: 769px) {
   body:has(.adm-main) .adm-sidebar { width: 260px; }
   body:has(.adm-main) .adm-main { margin-left: 260px; transition: margin-left 160ms ease; }
   html.adm-sidebar-auto body:has(.adm-main) .adm-main { margin-left: 74px; }
@@ -53,7 +53,7 @@ html body:has(.adm-main) #adm-sidebar .adm-user-name { overflow-wrap: anywhere; 
   html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar-logo-text { font-size: 17px; letter-spacing: .08em; color: var(--admin-color-text-primary); }
   html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar-logo-sub { display: block; }
 }
-@media (max-width: 540px) {
+@media (max-width: 768px) {
   /* La visibilidad cambia antes del focus síncrono al abrir el menú. */
   body:has(.adm-main) .adm-sidebar { transition: transform 160ms ease; }
   /* Restaurar Auth no debe revelar ni enfocar el cajón móvil cerrado. */

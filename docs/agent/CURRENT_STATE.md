@@ -1,3 +1,165 @@
+## 2026-11-01 — Admin app móvil, Fase 19: Diagnóstico
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-diagnostico (admin.html) con la barra fija #site-diagnostic-toolbar (búsqueda, 10 selectores, fecha, Copiar, Exportar) que en teléfono ocupaba varias pantallas; pestañas #site-diagnostic-view-tabs con desplazamiento horizontal; resúmenes de hallazgos de ~30 px.
+- Cambio (solo ≤768): app-movil-admin.js manda los 10 selectores y la fecha a la hoja inferior "Filtros · N" (filterSheet cuenta también campos con valor, p. ej. fecha); CSS en dos columnas, pestañas que se acomodan en filas de 44 px y resúmenes de 44 px. Tags: app-movil-admin.css -16 → -17, app-movil-admin.js -12 → -13. Spec nueva admin-app-diagnostico.spec.js.
+- De paso (CI del PR #1302, run 41334696390, trabajo "C — Administración"): audit:admin-foundation exigía el corte móvil de 540 px que la Fase 0 movió a 768 px a propósito; se actualizó el contrato a 768 manteniendo la misma comprobación (barra lateral oculta, contenido sin margen y barra inferior visible). La spec de Ventas locales en escritorio ahora exige que todos los botones de filtros estén ocultos (antes fallaba por haber dos).
+- PASS_LOCAL: admin-app-diagnostico 14/14; admin-app-ventas-locales 6/6; audit:admin-foundation sin errores (falla sin el ajuste); regresión shell 13, pedidos 6, colecciones 6, reseñas 6, me-gusta 6, control-dashboard 59.
+- NOT_VERIFIED: no se ejecutó un diagnóstico real contra producción (hallazgo ficticio inyectado).
+
+## 2026-11-01 — Admin app móvil, Fase 18: Auditoría
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-auditoria (admin.html) tiene la barra masiva #audit-bulk-toolbar (Exportar CSV / Limpiar) y una tabla que llena loadAuditLog (admin-app.js). En ≤768 la capa espacio-modulos-admin ya la convierte en tarjetas con etiqueta y da 44 px a los botones, pero la casilla de cada fila (input.audit-row-check, sin label) quedaba en ~13 px.
+- Cambio: css/admin/app-movil-admin.css (solo ≤768) da a .audit-row-check área táctil de 44 px con cuadro visible de 22 px (mismo patrón que admin-images). admin.html: tag de app-movil-admin.css -15 → -16. Spec nueva admin-app-auditoria.spec.js.
+- PASS_LOCAL: admin-app-auditoria 14/14 (--repeat-each=2; sin el CSS fallan 320/390/540/768 y pasan 820/1024/1440); regresión admin-app-shell 13, admin-control-dashboard 59, admin-workspaces 21, admin-all-devices 41, admin-app-usuarios 6, admin-app-push 7, engagement + busquedas-admin OK.
+- NOT_VERIFIED: exportar/limpiar con datos reales (no se ejecutan acciones). Pendiente de revisión: "seleccionar todos" vive en el encabezado de la tabla, que en teléfono queda oculto a la vista; no se movió para no cambiar el flujo.
+
+## 2026-11-01 — Admin app móvil, Fase 17: Notificaciones push
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: notificaciones-push-maestro.js mueve #push-card y #push-master-card a #section-notificaciones-push. En ≤768 la capa existente espacio-modulos-admin ya convierte las tablas de dispositivos y eventos en tarjetas con etiqueta (encabezado oculto a la vista, legible por lectores de pantalla), apila la grilla del mensaje (tt-admin-field-grid) y da 44 px/16 px a botones y campos.
+- Cambio: ninguno en CSS/JS (no hacía falta). Se agrega admin-app-push.spec.js como guardia. La primera versión de la spec fallaba por medir antes de que la capa procesara las filas (ahora espera data-label) y por exigir thead display:none en lugar del ocultamiento accesible.
+- PASS_LOCAL: admin-app-push.spec.js 7/7 (filas ficticias; no se registra, revoca ni envía nada).
+- NOT_VERIFIED: registro real de dispositivo, envío de prueba y revocación (efectos reales); Safari iOS real. Visto y no tocado: título de tarjeta repetido en el selector "Ir a una sección".
+
+## 2026-11-01 — Admin app móvil: integración con main (#1301)
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (merge de origin/main).
+- Conflictos resueltos: admin.html, admin-images.html, dashboard-control.css, admin-panel-fixture.cjs, admin-white-icons.spec.js, CURRENT_STATE.md; manifiestos de versión tomados de main y regenerados (audit:cache-versioning y verify:diagnostics OK).
+- Se adoptan el lanzador compacto "Ver secciones" y la cabecera de #1301 (decisión más reciente del dueño). Se ajusta la spec de F1 (admin-app-inicio): el lanzador debe medir ≥44 px de alto y quedar dentro del héroe, ya no a todo el ancho.
+- El bloque ≤540 de #1301 (`html:root …`, más específico) le ganaba a la capa de app: filas de accesos de 66 px que empujaban las métricas debajo de la barra inferior a 390×844. Arreglo en app-movil-admin.css: filas de 56 px (`html:root.adm-app`) y `#stat-sales-month` con clamp(15px, 4.2vw, 20px) para que "25.850.000 Gs." no salte de línea. Última métrica a 390: termina en y=749 (la barra empieza en y=756).
+- admin-mobile-visual.spec.js (de main) adaptado al diseño de la app: "Nuevo pedido" se comprueba dentro de Pedidos y "Más" reemplaza la hamburguesa en ≤540. admin-white-icons: la pestaña móvil es blanca hasta 768.
+- PASS_LOCAL: admin-app-inicio 6, admin-mobile-visual, admin-white-icons (24 en total), admin-app-shell 13, admin-control-dashboard 59, admin-workspaces 21, admin-all-devices 41, admin-mobile-experience 15, admin-push-navigation 38, admin-app-estadisticas 6, admin-app-mensajes 7, engagement y busquedas-admin OK.
+
+## 2026-11-01 — Admin app móvil, Fase 16: Mensajes
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: #section-mensajes (admin.html) es una tarjeta con texto y el enlace #mensajes-wa-link a WhatsApp; sin JS propio. En ≤768 el enlace medía 222×33px.
+- Cambio ≤768 (css/admin/app-movil-admin.css, versión app-movil-14): enlace como botón principal a todo el ancho con 44px de alto. Tablet/escritorio sin cambios.
+- PASS_LOCAL: tests/ui-ux/admin-app-mensajes.spec.js 7/7 (sin el cambio fallan 320/390/540/768 y pasan 820/1024/1440 → escritorio idéntico). Regresión PASS_LOCAL: admin-control-dashboard 59, admin-workspaces 21, admin-all-devices 41, admin-app-shell 13, admin-mobile-experience 15, version-notice 30, engagement/busquedas-admin OK.
+- NOT_VERIFIED: apertura real de WhatsApp en teléfono (no se abre en pruebas); Safari iOS real.
+
+## 2026-11-01 — Admin app móvil, Fase 15: Imágenes (admin-images.html)
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: admin-images.html no carga app-movil-admin.css; tiene estilo propio, barra lateral fija (220px escritorio, 56px 481–768, oculta ≤480) y pestañas inferiores (#adm-mobile-tabs) estilizadas por dashboard-control.css.
+- Error arreglado de paso: la barra lateral tapaba la primera columna de tarjetas en 481px y más (540/768/820/1024/1440). Causa: css/pages/secundarias-minimal.css:89 (`body:has(.adm-main) .adm-main { margin-inline:auto }`, commit 8e92250) gana en especificidad al `margin-left: var(--sidebar-w)` de la página. Arreglo solo en admin-images.html (bloque `#tt-imagenes-app-movil`); secundarias-minimal.css no se tocó porque va en el bundle de las páginas públicas.
+- Cambio ≤768 (mismo bloque): casilla de selección de tarjeta con área de 44px (cuadro visible de 22px), "Reutilizar Desktop…" con 44px, botones Guardar/Quitar/acciones masivas y selects con mínimo 44px, grilla de 1 columna, pestañas inferiores con desplazamiento horizontal y etiquetas completas (antes se encimaban "HEROPRODUCTOS").
+- PASS_LOCAL: tests/ui-ux/admin-app-imagenes.spec.js 7/7 (320/390/540/768/820/1024/1440, con dobles; falla 7/7 sin el cambio). Regresión PASS_LOCAL: admin-control-dashboard 59, admin-workspaces 21, admin-all-devices 41, version-notice 30, site-first-paint 119, admin-app-shell 13, cambios-tienda 34, engagement/busquedas-admin/admin-mobile-pwa/csp-cloudinary-upload OK.
+- PREEXISTENTE (falla igual en main 0f47cf5, sin relación): tests/navigation/mobile-brand.spec.js:108, tests/seo/phase11-seo.spec.js:15 y :110.
+- NOT_VERIFIED: subida real a Cloudinary/Firestore (dobles que lanzan error); Safari iOS real.
+
+## 2026-11-01 — Admin app móvil, Fase 14: Import/Export
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+- Investigado: `js/admin/importacion-admin.js` oculta los importadores legacy (CSV y JSON manual, incluido el textarea de 12 px) y monta la tarjeta "Shopify · migración controlada" con estilos propios ≤560 (botones a todo el ancho). Las tarjetas de exportación son HTML estático. Medido con el módulo real y un CSV ficticio a 320/390/540/768: sin desborde, sin desplazamiento interno, todos los toques ≥44 px, campos 16 px, vista previa en tarjetas por la capa existente.
+- Cambio: ninguno en CSS/JS (no hacía falta). Se agrega `admin-app-importar.spec.js` como guardia de regresión.
+- Error arreglado de paso: ninguno.
+- PASS_LOCAL: `admin-app-importar.spec.js` 6/6 (módulo real; Firebase, sesión y red sustituidos por dobles; el CSV solo se analiza en el navegador). Al no haber cambio, la prueba no puede fallar "sin el CSS"; protege el estado actual.
+- NOT_VERIFIED: aplicar importación, copia operativa, exportaciones y Sheets (escriben o descargan datos reales). Visto y no tocado: el selector "Ir a una sección" corta su texto a 320 px (shell común a todos los módulos) y el título "Import / Export" queda debajo de la tarjeta Shopify en todos los anchos (orden del propio módulo).
+
+## 2026-11-01 — Admin app móvil, Fase 13: Páginas
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+- Investigado: `js/admin/pages/paginas-admin.js`. La tabla ya se ve como tarjetas en ≤768 gracias a la capa existente `espacio-modulos-admin` (no se duplicó). Faltaban: la búsqueda medía 155 px junto al selector (texto cortado) y Guardar/Cancelar del editor quedaban al final del formulario, fuera de vista.
+- Cambio: búsqueda a todo el ancho (44 px); selector 44 px; barra Guardar/Cancelar fija (sticky) encima de la barra inferior mientras se edita (solo `html.adm-app`). Versión CSS `tintin-20261101-app-movil-13`.
+- Error arreglado de paso: ninguno.
+- PASS_LOCAL: `admin-app-paginas.spec.js` 6/6 (render real con páginas ficticias; Guardar llama a savePage una vez, Cancelar vuelve a la lista; 820/1440 sin cambios); falla sin el CSS (barra static, búsqueda 155 px). Regresión: control-dashboard 59, colecciones 6, shell 13, all-devices 41, workspaces 21, mobile-experience 15, engagement y busquedas-admin OK.
+- NOT_VERIFIED: guardar/borrar con Firestore real; diálogo confirm() de Eliminar. Visto y no tocado: el encabezado "Páginas" aparece duplicado en el shell.
+
+## 2026-11-01 — Admin app móvil, Fase 12: Colecciones
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+- Investigado: `renderCollections` (js/admin/shopify-commerce-admin.js) ya dibuja tarjetas de una columna en ≤768; sin desborde. Faltaban: búsqueda 42 px, casilla de selección 42 px de ancho, botón Cerrar del detalle 32 px y detalle de 440 px (no pantalla completa). La barra se redibuja en cada filtro.
+- Cambio: Visibilidad y Orden pasan a la hoja de filtros (`filterSheet` con re-cableado por MutationObserver, la búsqueda queda visible); búsqueda 44 px/16 px; casilla 44 px; `.tt-commerce-drawer` a pantalla completa con safe-area y Cerrar 44 px (solo `html.adm-app`; el drawer es compartido con Productos/Pedidos y sus specs siguen en verde). Versión CSS/JS `tintin-20261101-app-movil-12`.
+- Error arreglado de paso: ninguno.
+- PASS_LOCAL: `admin-app-colecciones.spec.js` 6/6 (320/390/540/768 app; 820/1440 sin cambios, drawer 440 y Cerrar 32); falla sin el CSS nuevo (selects visibles). Regresión: productos/pedidos/resenas/me-gusta/inicio/usuarios 6/6, shell 13, all-devices 41, workspaces 21, mobile-experience 15, engagement y busquedas-admin OK.
+- Prueba ajustada: `admin-app-pedidos.spec.js` (escritorio) usaba `.adm-app-filter-btn` en modo estricto y el fixture ahora tiene también el botón (oculto) de Colecciones; se cuenta que ninguno sea visible.
+- NOT_VERIFIED: formulario antiguo `#coll-form-card` con datos reales y selector de productos; interruptor `#coll-visible` mide 24 px de alto (pendiente menor, no tocado); escrituras reales (el fixture las rechaza).
+
+## 2026-11-01 — Admin app móvil, Fase 11: Me gusta
+
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+
+- Investigado: `gestion-participacion-admin-v2.js` (sección Me gusta: barra `#likes-*`, pestañas, tarjetas `.eg-like-card`, barra masiva `#eg-like-bulk`, detalle `.eg-drawer`). Mismo markup `eg-*` que Reseñas; no se tocó el controlador.
+- Cambio (solo ≤768 px): las reglas de la Fase 10 se extienden a `#section-me-gusta` con `:is(#section-resenas, #section-me-gusta)` (Estado/Periodo/Orden en la hoja, pestañas en una fila, casilla con zona de 44 px, ••• y botones de 44 px). El enlace "Ver producto ↗" del detalle (Me gusta y Reseñas) pasa de 13 px a 44 px de alto. Caché CSS `tintin-20261101-app-movil-11`.
+- Error arreglado de paso: ninguno nuevo (el enlace de 13 px es parte del ajuste de toques).
+- PASS_LOCAL: `tests/ui-ux/admin-app-me-gusta.spec.js` 6/6 (falla sin el CSS); `admin-app-resenas` 6/6 con la nueva comprobación del enlace; regresión admin-app-* (productos, inicio, usuarios, pedidos, shell), admin-all-devices, admin-workspaces, admin-mobile-experience; `tests/engagement/*.test.mjs` y `busquedas-admin` OK. Sin escrituras. 820/1440 sin cambios.
+- NOT_VERIFIED: datos reales, producción, teléfono físico; vistas Productos, Clientas, Analítica y Configuración de Me gusta no medidas una por una.
+
+## 2026-11-01 — Admin app móvil, Fase 10: Reseñas
+
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+
+- Investigado: `js/admin/participacion/gestion-participacion-admin-v2.js` (hydrateSections, barra `.eg-toolbar`, pestañas `.eg-segments`, tarjetas con casilla, menú `details.eg-more`, drawer `.eg-drawer`, API `/api/admin-engagement`). No se tocó el controlador.
+- Cambio (solo ≤768 px): los 5 selectores de Reseñas pasan a la hoja de filtros (`filterSheet`, botón "Filtros · N"); pestañas en una fila desplazable; zona táctil de 44 px para la casilla de selección (el toque marca la casilla real y no abre el drawer); ••• y botones de acción/paginación de 44 px; drawer a pantalla completa con zona segura y campos de 16 px. Caché `tintin-20261101-app-movil-10` (CSS y JS).
+- Error arreglado de paso: a 320 px las pestañas de Reseñas se encogían y encimaban; ahora `flex:0 0 auto` con desplazamiento horizontal.
+- PASS_LOCAL: `tests/ui-ux/admin-app-resenas.spec.js` 6/6 (24/24 con repeat-each=4); regresión admin-app-* (productos, inicio, estadisticas, usuarios, pedidos, ventas-locales, mayoristas, shell), admin-all-devices 41, admin-workspaces 21, admin-mobile-experience 15; `tests/engagement/*.test.mjs`, `busquedas-admin`, `admin-runtime-stability` OK. Sin escrituras en la prueba. 820/1440 sin cambios.
+- NOT_VERIFIED: datos reales, producción, teléfono físico; las vistas Productos, Clientas, Analítica, Denunciadas y Configuración de Reseñas no se midieron una por una.
+
+## 2026-11-01 — Admin app móvil, Fase 9: Productos
+
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+
+- Investigado: Productos ya tiene su propia capa móvil (`shopify-commerce-admin.js` + `interfaz-productos-adaptable.js`: mosaico, barra de selección, editor a pantalla completa que oculta la barra inferior). Se conserva tal cual.
+- Cambio (solo CSS ≤768 px en `css/admin/app-movil-admin.css`): indicadores en 3 columnas sin palabras partidas; selector de visibilidad de la tarjeta a todo el ancho (antes cortaba "Inac"/"Acti"); variante y "Abrir" con toque de 44 px. Caché del CSS a `tintin-20261101-app-movil-9`.
+- Error arreglado de paso (commit 970e0fa): la animación de entrada de la Fase 0 usaba `both` y dejaba un `transform` residual que convertía la sección en contenedor de los `position:fixed`; la barra de selección de Productos quedaba fuera de pantalla. Ahora `backwards`, con prueba en `admin-app-shell.spec.js`.
+- PASS_LOCAL: `admin-app-productos` 6/6 (nuevo), shell 13, inicio/estadísticas/usuarios/pedidos/ventas-locales/mayoristas 6 c/u, products-mosaic 22, products-responsive-phase-one 108, products-master 24, product-card-quick-edit 17, product-small-controls 10, admin-all-devices 41, admin-workspaces 21, admin-mobile-experience 15. Verificación de caché OK.
+- NOT_VERIFIED: datos reales, teléfono físico, producción. El editor de producto dentro de la app real con la barra superior real solo está cubierto por los specs existentes.
+
+## 2026-11-01 — Admin app móvil, Fase 8: Pedidos mayoristas
+
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+
+- Investigado: `js/admin/mayoristas-admin.js` (resumen, pestañas Cotizaciones/Usuarios, detalle con tabla de líneas de 960 px de ancho mínimo, decisiones por API `authenticatedFetch`; abrir una cotización envía `decision:'ver'`).
+- Cambio (solo CSS bajo `html.adm-app`, `css/admin/app-movil-admin.css` → `tintin-20261101-app-movil-7`): resumen/pestañas/campos con toques de 44 px y fuente 16 px; lista de cotizaciones como tarjetas; líneas del detalle como tarjetas con etiquetas (Cant., Precio minorista, Precio mayorista c/u, Subtotal); barra fija de decisiones sobre la barra inferior (`overflow: clip` en la tarjeta para que sticky funcione); Aprobar con el token primario.
+- Error arreglado de paso: en el teléfono el campo "Precio mayorista" quedaba fuera de la pantalla (tabla de 960 px en ~250 px, solo alcanzable con scroll lateral) y la barra de decisión no quedaba fija; además Aprobar se veía blanco por un `!important` del tema. Prueba: `tests/ui-ux/admin-app-mayoristas.spec.js`.
+- PASS_LOCAL: admin-app-mayoristas 6/6 (12/12 con --repeat-each=2), profile/account-wholesale-sync 13, admin-app-ventas-locales 6, admin-app-pedidos 6, admin-app-shell 12, admin-all-devices 41, admin-workspaces 21, admin-mobile-experience 15; cache-versioning, build/verify:diagnostics.
+- NOT_VERIFIED: datos reales, teléfono físico, producción. No se envió ninguna decisión (API simulada).
+- Pendiente para revisión (sin tocar, tablet debe quedar idéntica): entre 601 y 900 px la regla existente `#section-mayoristas .adm-table:has([data-wholesale-rows]) thead{display:none}` (operaciones-admin.css) también oculta los encabezados de la tabla de líneas del detalle.
+
+## 2026-11-01 — Admin app móvil, Fases 5–7: Ventas locales, Clientes que compraron y Espejos de Sheets
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+- Investigado: `js/admin/comercio-local-admin.js` redibuja `#local-ledger` completo en cada cambio de filtro (la barra se recrea), la búsqueda conserva el input y reemplaza hermanos, los filtros escuchan `change` en `document` por `data-local-filter`, el editor es un `<dialog>` nativo con `showModal`. Clientes (`#local-buyers`) y Espejos (`#local-mirror-map`) se pintan desde el mismo módulo.
+- Cambio (solo presentación, ≤768 px): acciones en 2 columnas con la primaria primero; búsqueda + botón "Filtros" (Mes/Casilla/Estado en la hoja inferior) que sobrevive a los redibujados (`filterSheet` acepta `currentToolbar`; `closeSheet` acepta un opener función y solo enfoca nodos conectados); tarjetas compactas en ventas y clientas; resumen mensual del espejo en 2 columnas (1 bajo 360 px); editor a pantalla completa con barra fija Cerrar/Guardar y campos de 16 px/44 px. Lógica de negocio, datos y sincronización sin tocar. Caché `tintin-20261101-app-movil-6`.
+- Error arreglado de paso: el botón "Actualizar" se partía a la mitad ("ACTUALIZA R") a 320 px por `overflow-wrap:anywhere` y 79 px útiles; la barra ahora no tiene borde/padding extra y el botón usa `overflow-wrap:normal` (cubierto por la prueba nueva).
+- PASS_LOCAL: `admin-app-ventas-locales` 6/6 (nuevo), `local-commerce-responsive` 9/9, `operations/ventas-locales-vivo` 3/3, `admin-app-pedidos` 6/6, `admin-app-shell` 12/12, `admin-all-devices` 41/41, `admin-workspaces` 21/21, `admin-mobile-experience` 15/15, `verify:diagnostics` (19 páginas).
+- NOT_VERIFIED: datos reales de Sheets, teléfono físico, botón atrás de Android sobre el `<dialog>` nativo (se espera cierre nativo), producción.
+
+## 2026-11-01 — Admin app móvil, Fase 4: Pedidos
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: `#tt-commerce-orders` se monta dinámicamente en `#section-pedidos` (shopify-commerce-admin.js `mountShells` + tablero-pedidos-vista.mjs `renderOrderBoard`); el filtrado escucha `change`/`input` en `document` por `data-filter`, así que mover los selects no rompe nada.
+- Cambio: botón "Filtros" (con contador "Filtros · N") que abre la hoja inferior con los selects reales Pago/Entrega/Orden (`filterSheet` reutilizable en app-movil-admin.js, se restauran a la barra al cerrar; foco vuelve al botón). En la barra queda solo la búsqueda (16 px). Acciones de 44 px en fila flexible, contadores en 3 columnas (2 bajo 360 px), vistas en una fila deslizable de 44 px. `AdmApp.closeSheet` ya no falla si el marcador fue reemplazado por un re-render.
+- Error arreglado de paso: a 320 px las pestañas de etapa partían palabras ("En preparació n", "Entregado s") por `overflow-wrap:anywhere` de tablero-pedidos.css; en modo app usan `overflow-wrap:normal`, menos padding y, bajo 360 px, etiqueta de 11 px y círculo de 20 px. La spec lo comprueba.
+- PASS_LOCAL: admin-app-pedidos (nuevo, 6/6: 320/390/540/768 + 820/1440 intactos), orders-board 66/66, admin-commerce-shopify 11/11, admin-app-shell 12/12, admin-app-usuarios 6/6, admin-all-devices 41/41, admin-workspaces 21/21, admin-mobile-experience 15/15; verify:diagnostics y audit:cache-versioning OK.
+- NOT_VERIFIED: datos reales de producción (5 pedidos ficticios), teléfono físico.
+
+## 2026-11-01 — Admin app móvil, Fase 3: Usuarios
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: las tarjetas móviles de usuarios ya existían (#1297: espacio-modulos-admin.css + ficha-usuario-admin.js `enhanceRows`, con Ver ficha, menú ⋯ y "Mostrar más datos"). No se rehízo nada de eso.
+- Cambio (solo CSS ≤768 en app-movil-admin.css, prefijo `html.adm-app`): insignia de estado a 11 px, menú ⋯ centrado, etiqueta "Acciones" oculta en la tarjeta.
+- Error arreglado de paso: el área táctil de la casilla por usuario medía 13–22 px de ancho porque `.tt-admin-records td > * {min-width:0}` anulaba el `min-width:44px` de `.adm-user-select`. Ahora la casilla es de 22 px y su zona táctil 44×44 (solo modo app).
+- PASS_LOCAL: admin-app-usuarios (nuevo, 6/6), admin-user-mobile 10/10, admin-user-spaced-cards 5/5, admin-app-shell 12/12, admin-all-devices 41/41, admin-workspaces 21/21, admin-mobile-experience 15/15; verify:diagnostics y audit:cache-versioning OK.
+- NOT_VERIFIED: datos reales de producción (filas ficticias con el HTML de renderUsers), teléfono físico.
+
+## 2026-11-01 — Admin app móvil, Fase 2: Estadísticas
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: `#section-estadisticas` (admin.html) y `renderStatisticsBars`/tendencia (admin-app.js). A 390 px las barras apretaban etiqueta, pista y valor en una fila de ~120 px, filtros en 2 columnas con select de 14 px y textos de 10 px.
+- Cambio (solo CSS ≤768 en app-movil-admin.css): portada compacta, filtros en una columna (select 44 px / 16 px), KPIs en 2 columnas, barras con etiqueta y valor arriba y pista a todo el ancho debajo, textos ≥11 px.
+- Error arreglado de paso (commit propio e22a673): el mensaje "Esperando datos…" de la tendencia ocupaba una sola columna de la cuadrícula; ahora abarca todo el ancho (admin.css, todas las anchuras) + spec admin-statistics-trend-empty.
+- PASS_LOCAL: admin-app-estadisticas (nuevo, 6/6), admin-statistics-trend-empty 3/3, admin-app-inicio 6/6, admin-app-shell 12/12, admin-control-dashboard, admin-all-devices, admin-mobile-experience; verify:diagnostics y audit:cache-versioning OK.
+- NOT_VERIFIED: datos reales de producción (solo filas ficticias), teléfono físico.
+
+## 2026-11-01 — Admin app móvil, Fase 1: Inicio
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: markup de `mountDashboard` (buscador-modulos-admin.js) y filas de `renderDashboardData` (admin-app.js); la tabla de últimos pedidos ya pasaba a tarjetas con etiquetas por celda (espacio-modulos-admin.css) y padding de `.adm-table td`.
+- Cambio (solo CSS ≤768 en app-movil-admin.css): portada compacta, "Ver secciones" a todo el ancho, accesos como lista agrupada con chevron (56 px), resumen en 2 columnas (≤96 px de alto), últimos pedidos como filas de lista (cliente + total arriba; ciudad, fecha y estado debajo; sin etiquetas repetidas; encabezados siguen disponibles para lector de pantalla). Texto mínimo 11 px.
+- PASS_LOCAL: admin-app-inicio (nuevo, 6/6: 320/390/540/768 + tabla intacta 820/1440), admin-app-shell 12/12, admin-control-dashboard 59/59, admin-all-devices, admin-workspaces, admin-white-icons, admin-mobile-experience; audit:cache-versioning OK.
+- NOT_VERIFIED: datos reales de producción (solo filas ficticias), teléfono físico.
+
+## 2026-11-01 — Admin app móvil, Fase 0: base (base main 0f47cf5)
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commits locales, sin push).
+- Alcance: solo ≤768 px (`html.adm-app`); tablet/escritorio sin cambios. Capa de presentación: sin tocar permisos, auth, Firestore, reglas, datos ni controladores.
+- Nuevo: `css/admin/app-movil-admin.css` (barra superior con Volver, "+ Nuevo pedido" solo en Pedidos, transición de pantalla, "Más" agrupado estilo iOS, barra de acciones fija, hoja inferior de filtros, deslizar para recargar, movimiento reducido) y `js/admin/maestro/app-movil-admin.js` (`AdmApp.openSheet/closeSheet/pullToRefresh`, Volver por historial, Atrás del navegador cierra ventanas completas).
+- admin.html: 366 atributos `style=""` estáticos pasan a clases en `css/admin/estilos-estaticos-admin.css` (454 → 88). Se conservan inline los `display:none` que JS alterna, todo `grid-template-columns` (lo leen `espacio-modulos-admin.js` e `interfaz-productos-adaptable.js` y CSS con `[style*=]`) y 16 declaraciones que pierden la cascada.
+- Cortes de admin.css 541/640 → 768/769 para que el teléfono use la barra inferior y la tablet conserve la lateral.
+- Paridad 820/1024/1440: estilos calculados de todas las secciones idénticos antes/después (única diferencia: orden DOM de la barra de espacio en 1440, mismo conjunto de nodos, carrera de montaje en tiempo de ejecución).
+- PWA: ya existía (admin-manifest.json standalone + iconos, viewport-fit=cover, theme-color, SW en notificaciones-push.js). Verificado solo por inspección de archivos.
+- PASS_LOCAL: specs Playwright admin-* 232/232 (incluye admin-app-shell nuevo 12/12), visual-builder-ui 5/5, orders-board 66/66; tests Node que referencian admin (769, 763 OK; 4 pasan con Chromium configurado; commerce-firestore requiere emulador); audit:cache-versioning, verify:csp, test:architecture-gates.
+- NOT_VERIFIED: teléfonos físicos (instalación PWA, teclado, gestos), producción, `audit:mobile-fixes` (script desactualizado, no lanza navegador en este entorno).
+
 ## Reconciliación visual móvil con main bba2aabc — 2026-11-01
 
 Se integra #1300 sin modificar su corrección de ancho, pruebas ni fixture.

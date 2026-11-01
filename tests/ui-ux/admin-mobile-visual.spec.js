@@ -1,7 +1,7 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const {load}=require('./helpers/admin-panel-fixture.cjs');
-const settle=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+const settle=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))).then(()=>Promise.all(document.getAnimations().filter(animation=>Number.isFinite(animation.effect?.getComputedTiming().endTime)).map(animation=>animation.finished.catch(()=>{})))));
 const values={'stat-users':'1.248','stat-orders-today':'24','stat-sales-month':'25.850.000 Gs.','stat-orders-total':'1.482','stat-visits-today':'368','stat-online-now':'12'};
 for(const [width,height] of [[320,568],[390,844],[430,932],[540,960],[844,390]])test(`presentación móvil visible, compacta y sin perder controles ${width}x${height}`,async({page},info)=>{
  await load(page,width,'admin.html',{mobile:true,sidebar:true,guard:true});await page.setViewportSize({width,height});
@@ -11,8 +11,11 @@ for(const [width,height] of [[320,568],[390,844],[430,932],[540,960],[844,390]])
  for(const box of boxes){expect(box.left).toBeGreaterThanOrEqual(-1);expect(box.right).toBeLessThanOrEqual(width+1);}
  for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];expect(Math.min(a.right,b.right)-Math.max(a.left,b.left)>1&&Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>1).toBe(false);}
  expect(await page.locator('.adm-topbar').evaluate(n=>getComputedStyle(n,'::before').backgroundImage)).toBe('none');
+ // App móvil (≤768): «Nuevo pedido» vive en Pedidos y la barra inferior «Más» reemplaza la hamburguesa.
+ if(width<=540)await page.evaluate(()=>{document.body.dataset.admSection='pedidos';});
  await expect(page.getByRole('link',{name:'Nuevo pedido',exact:true})).toHaveAttribute('href','/checkout');
- if(width<=540)await expect(page.getByRole('button',{name:'Abrir menú de módulos'})).toBeVisible();
+ if(width<=540)await page.evaluate(()=>{delete document.body.dataset.admSection;});
+ if(width<=540)await expect(page.locator('#adm-mobile-more-toggle')).toBeVisible();
  else await expect(page.getByRole('button',{name:'Fijar barra lateral abierta'})).toBeVisible();
  await expect(page.locator('.tt-control-search')).toBeVisible();
  await expect(page.locator('.tt-dashboard-link')).toHaveCount(4);await expect(page.locator('#dash-stats .adm-stat')).toHaveCount(6);
