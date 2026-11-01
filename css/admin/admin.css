@@ -638,6 +638,7 @@
     .adm-trend-day strong { color: var(--adm-text); font-size: 10px; }
     .adm-trend-day span { color: var(--adm-muted); font-size: 9px; }
     .adm-analytics-empty { display: grid; min-height: 80px; place-items: center; color: var(--adm-muted); font-size: 11px; text-align: center; }
+    .adm-trend-chart > .adm-analytics-empty { grid-column: 1 / -1; }
     .adm-statistics-foot { margin-top: 14px; color: var(--adm-muted); font-size: 10px; text-align: right; }
     @media (max-width: 1100px) {
       .adm-statistics-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
