@@ -1,3 +1,38 @@
+## 2026-11-01 — public-catalog: ids reservados de Firestore ya no dan 502 (base main 75049e4)
+Claude Code, rama claude/sharp-cannon-oxfa8o.
+- Evidencia en producción (solo lectura): `GET /api/public-catalog?resource=products&id=__x__` → HTTP 502 y la ficha mostraba "No pudimos cargar el producto".
+- Causa: Firestore reserva los ids `.`, `..` y `__.*__`; `firestoreAdminGet` fallaba y el catch devolvía `catalog_unavailable` 502. Otros ids inexistentes ya daban 200 `item:null`.
+- Cambio: `buildPayload` devuelve `item:null` para ids reservados sin consultar Firestore (la ficha ya muestra "Producto no encontrado" con `item:null`). Plan de mantenimiento de flujos para `functions/api/public-catalog.js`.
+- PASS_LOCAL: tests/catalog public-catalog-batch/cache/home-index-api (nuevo caso de ids reservados), auditar-proteccion-flujos.
+- NOT_VERIFIED: producción tras el despliegue; CI del SHA final.
+
+## 2026-11-01 — CLS de inicio y auditoría de colecciones (base main 87321f3)
+Claude Code, rama claude/laughing-albattani-n84ngy.
+- Post-merge #1291 (b7decd1): verificado en producción solo lectura canonical
+  y og:url `https://tintinaccs.com`, CSS de login seo-espacios-2 y JSON-LD
+  ProductGroup/hasVariant con InStock/OutOfStock.
+- CLS inicio: con `html.tt-fast-navigation.tt-store-gate-pending` el body
+  tenía `overflow:auto` (contexto de formato propio); al resolver la puerta
+  pasaba a `overflow-x:clip` (calidad-interfaz.css) y el `margin-top` del hero
+  colapsaba a través de main/body → desplazamiento del body (0,0607 en
+  1440x900, 0,0703 en 820x1180). La regla temporal en
+  `esquema-color-instantaneo.js` usa ahora `overflow-x:clip; overflow-y:visible`
+  (mismo estado final, scroll sigue desbloqueado). Medido local
+  (servidor-local-pruebas 4173): inicio 0 en 1440 y 820 (6/6 corridas en 1440);
+  catálogo, about, contacto, colecciones y ficha sin cambio frente a la base;
+  posición de main y scroll horizontal idénticos.
+- `scripts/auditar-colecciones-pagina.js`: la regex no aceptaba el segundo
+  argumento de versión de `load(...)` en `js/cargador-mantenimiento-pagina.js`.
+  Ahora OK (7 viewports).
+- CLS local de catálogo/colecciones en 820 px (~0,16/0,15): artefacto de
+  datos locales (1 producto de prueba; la cuadrícula de espera de 1062 px
+  pasa a 436 px y el footer sube 626 px). Producción solo lectura
+  2026-11-01 (820x1180, 3 corridas): catálogo 0,0164, colecciones 0,0035
+  (umbral "bueno" < 0,1). Sin cambio de código.
+- Integrado main 8da9243 (#1295) y 87321f3 (#1297): conflictos solo en
+  versiones, CURRENT_STATE y derivados; regenerados con la cascada.
+- NOT_VERIFIED: CLS de inicio en producción hasta el deploy de este cambio.
+
 ## 2026-11-01 — Usuarios móvil: legibilidad y acciones contextuales
 
 Codex /root. Base8da9243f (integra #1295); reconciliación con #1294 ya fusionado. La copia previa de esta sesión se preserva en backup/admin-mobile-session, sin publicarla como una segunda implementación.

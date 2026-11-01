@@ -37,7 +37,7 @@ requireText(runtime, /window\.addEventListener\('offline'/, 'Falta estado sin co
 requireText(runtime, /https:\/\/tintinaccs\.com\//, 'Metadatos no usan el dominio canónico https://tintinaccs.com.');
 requireText(runtime, /getFullYear/, 'Footer no usa año automático.');
 requireText(runtime, /tt-collections-runtime-state/, 'Faltan estados visibles de recuperación.');
-requireText(loader, /collections[\s\S]*load\('pages\/collections\/mantenimiento-colecciones\.js'\)/, 'Runtime no se carga desde el cargador por página.');
+requireText(loader, /collections[\s\S]*load\('pages\/collections\/mantenimiento-colecciones\.js'(?:,\s*'[^']+')?\)/, 'Runtime no se carga desde el cargador por página.');
 requireText(record, /Desktop grande|desktop grande/i, 'Registro no contempla desktop grande.');
 requireText(record, /tablet/i, 'Registro no contempla tablet.');
 requireText(record, /mobile/i, 'Registro no contempla mobile.');
