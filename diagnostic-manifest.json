@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7adb449f26dfc309b8281fd0802f13dd6261885f6f8a0991c73f09b23e8d112e",
+  "sourceFingerprint": "cf2bd238cd6bf70144688b8dbb7e70f9deea33f6f255d1243b2d47b9003ff98b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1710,
-    "textFiles": 1575,
-    "totalBytes": 44490109,
+    "files": 1711,
+    "textFiles": 1576,
+    "totalBytes": 44495301,
     "pages": 19,
-    "modules": 1138
+    "modules": 1139
   },
   "viewports": [
     {
@@ -58150,6 +58150,17 @@
       ]
     },
     {
+      "path": "tests/ui-ux/admin-app-permisos.spec.js",
+      "bytes": 4135,
+      "sha256": "0e3562f0a5fb07fab53158d92dfe3532dbb8e1111f379759a5a929663a8dd8f2",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/admin-app-productos.spec.js",
       "bytes": 5196,
       "sha256": "35bdb03ebb178e99968e283c129799e5d262cb791a794332014bef6fb7591367",
@@ -62594,8 +62605,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1140778,
-      "sha256": "1c95d2f53e462dbf838931371d926a26434fa00819f9563e96647e6eaf84e9dd"
+      "bytes": 1141835,
+      "sha256": "d92e35ed6796a5bf9e46966d201397cdeaf52a1d541cc98ef3913565627912ac"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -70276,6 +70287,12 @@
       "extension": ".js",
       "bytes": 6375,
       "sha256": "74ed0b3c65f9609ad91d4fa1f34d709987d285153f191ccf9f0891a1e0e0a314"
+    },
+    {
+      "path": "tests/ui-ux/admin-app-permisos.spec.js",
+      "extension": ".js",
+      "bytes": 4135,
+      "sha256": "0e3562f0a5fb07fab53158d92dfe3532dbb8e1111f379759a5a929663a8dd8f2"
     },
     {
       "path": "tests/ui-ux/admin-app-productos.spec.js",

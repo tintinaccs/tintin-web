@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 23: Roles y Permisos
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-permisos; la matriz la dibuja renderPermisosMatrix (admin-app.js) como un <details class="perm-module-block"> por módulo con tabla acción × rol (Admin, Agente/Modder, Viewer), interruptores .perm-pill-toggle y píldoras "No disponible". Con HTML ficticio equivalente a 320/390/540/768: tablas ya en tarjetas (espacio-modulos), sin desborde, interruptores, módulos, botones y campos ≥44 px, campos ≥16 px. Captura a 390 revisada.
+- Cambio: ninguno en CSS/JS (ya cumplía por las fases 0–1). Solo spec nueva admin-app-permisos.spec.js (7 pruebas) de no regresión. NO se tocaron permisos, reglas ni su guardado.
+- PASS_LOCAL: admin-app-permisos 7/7; audit:cache-versioning correcto.
+- NOT_VERIFIED: matriz real cargada desde Firestore (todos los módulos y acciones), "Guardar cambios"/"Restaurar" y el aviso de cambios sin guardar. No se guardó ningún permiso.
+
 ## 2026-11-01 — Admin app móvil, Fase 22: Configuración
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: #section-configuracion (estado de la tienda, acceso con tienda cerrada, header por dispositivo, datos generales, envíos con pestañas Delivery/Encomienda, redes, medición, cuentas bancarias, notificaciones). Medido a 320/390/540/768 con ambas pestañas de envíos: 33 controles visibles, sin desborde, ninguno fuera del ancho, botones/selectores/campos/casillas ≥44 px y campos ≥16 px. Captura a 390 revisada.
