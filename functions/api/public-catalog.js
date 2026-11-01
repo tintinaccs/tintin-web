@@ -43,6 +43,12 @@ function normalizeProductId(value) {
   return id;
 }
 
+// Firestore reserva ids '.', '..' y /^__.*__$/: nunca pueden existir y su consulta
+// devuelve error, que se veía como 502 en vez de "producto no encontrado".
+function isReservedFirestoreId(id) {
+  return id === '.' || id === '..' || /^__.*__$/.test(id);
+}
+
 function documentId(document) {
   return String(document?.name || '').split('/').pop() || '';
 }
@@ -76,6 +82,7 @@ async function buildPayload(env, resource, productId = '', productIds = []) {
   }
 
   if (resource === 'products' && productId) {
+    if (isReservedFirestoreId(productId)) return { ok: true, resource, item: null };
     const document = await firestoreAdminGet(env, `products/${productId}`);
     if (!document) return { ok: true, resource, item: null };
     const data = pickKnownFields(decodeFirestoreFields(document?.fields || {}), PRODUCT_FIELDS);

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a17b3e2a05639678fd6e8d5703e86e0fc9f86e105afe512e86e9766e4a535bea",
+  "sourceFingerprint": "c234d8a3bfa092bccd02ce83a52405e6634af4861f45a2c513c79f199533ec92",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1684,
     "textFiles": 1549,
-    "totalBytes": 44252657,
+    "totalBytes": 44249274,
     "pages": 19,
     "modules": 1114
   },
@@ -27844,8 +27844,8 @@
     },
     {
       "path": "functions/api/public-catalog.js",
-      "bytes": 9631,
-      "sha256": "f476fdb2fd96b6da617d674db07d26e3c73f2ae34a68ee2cc5ccebaee5445c37",
+      "bytes": 9976,
+      "sha256": "a884aa303c6fa052bf445121f34742fca57a29358ae65c041f5b440cd43d5bbd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -46865,8 +46865,8 @@
     },
     {
       "path": "tests/catalog/public-catalog-batch.test.mjs",
-      "bytes": 2333,
-      "sha256": "b0bd4a5082c4de76e2d50b36e14a1dd922327b1d4c1ef1fc5e500198c8a24412",
+      "bytes": 2659,
+      "sha256": "5f3ab6f3b64848f61edbc5fb4114ee5d067d0fe8a31f7396f735070feebe90df",
       "syntax": {
         "ok": true,
         "error": ""
@@ -61385,8 +61385,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 5413,
-      "sha256": "6b6d1ce3d6288433892f316bb64e7c0cf93e5a2412fde3d5ee167c657db73edb"
+      "bytes": 451,
+      "sha256": "6a7afbc99e6653e1f90784b38ab6d25d0353154f41e216f73916e4ea3bd11ecd"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -61398,7 +61398,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "197823e880c9851bae5154cfedcba9d8da9cea3e0789db6463796f6cd9d2d1fe"
+      "sha256": "c285ec4e99adf0b318f552aa9df77bfe5ca655135fb89e5ccfc5dc1d38c7bcc3"
     },
     {
       "path": "config/public-site.json",
@@ -62213,8 +62213,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1105935,
-      "sha256": "81755d30d4de6a044842837a27a54b259bed68c7dbcc24ac69c0cd62310e694e"
+      "bytes": 1106843,
+      "sha256": "3630138ede2171d87e2303fa56ab6a812fb87fe8614677a9771fa11326820fec"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -63791,8 +63791,8 @@
     {
       "path": "functions/api/public-catalog.js",
       "extension": ".js",
-      "bytes": 9631,
-      "sha256": "f476fdb2fd96b6da617d674db07d26e3c73f2ae34a68ee2cc5ccebaee5445c37"
+      "bytes": 9976,
+      "sha256": "a884aa303c6fa052bf445121f34742fca57a29358ae65c041f5b440cd43d5bbd"
     },
     {
       "path": "functions/api/push-admin.js",
@@ -68087,8 +68087,8 @@
     {
       "path": "tests/catalog/public-catalog-batch.test.mjs",
       "extension": ".mjs",
-      "bytes": 2333,
-      "sha256": "b0bd4a5082c4de76e2d50b36e14a1dd922327b1d4c1ef1fc5e500198c8a24412"
+      "bytes": 2659,
+      "sha256": "5f3ab6f3b64848f61edbc5fb4114ee5d067d0fe8a31f7396f735070feebe90df"
     },
     {
       "path": "tests/catalog/public-catalog-cache.test.mjs",

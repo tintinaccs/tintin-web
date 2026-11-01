@@ -1,3 +1,11 @@
+## 2026-11-01 — public-catalog: ids reservados de Firestore ya no dan 502 (base main 75049e4)
+Claude Code, rama claude/sharp-cannon-oxfa8o.
+- Evidencia en producción (solo lectura): `GET /api/public-catalog?resource=products&id=__x__` → HTTP 502 y la ficha mostraba "No pudimos cargar el producto".
+- Causa: Firestore reserva los ids `.`, `..` y `__.*__`; `firestoreAdminGet` fallaba y el catch devolvía `catalog_unavailable` 502. Otros ids inexistentes ya daban 200 `item:null`.
+- Cambio: `buildPayload` devuelve `item:null` para ids reservados sin consultar Firestore (la ficha ya muestra "Producto no encontrado" con `item:null`). Plan de mantenimiento de flujos para `functions/api/public-catalog.js`.
+- PASS_LOCAL: tests/catalog public-catalog-batch/cache/home-index-api (nuevo caso de ids reservados), auditar-proteccion-flujos.
+- NOT_VERIFIED: producción tras el despliegue; CI del SHA final.
+
 ## 2026-11-01 — CLS de inicio y auditoría de colecciones (base main 87321f3)
 Claude Code, rama claude/laughing-albattani-n84ngy.
 - Post-merge #1291 (b7decd1): verificado en producción solo lectura canonical
