@@ -5,6 +5,23 @@ Claude Code, rama claude/sharp-cannon-oxfa8o.
 - Cambio: `buildPayload` devuelve `item:null` para ids reservados sin consultar Firestore (la ficha ya muestra "Producto no encontrado" con `item:null`). Plan de mantenimiento de flujos para `functions/api/public-catalog.js`.
 - PASS_LOCAL: tests/catalog public-catalog-batch/cache/home-index-api (nuevo caso de ids reservados), auditar-proteccion-flujos.
 - NOT_VERIFIED: producción tras el despliegue; CI del SHA final.
+## 2026-11-01 — Áreas táctiles de 44 px en Catálogo (base main 75049e4)
+Claude Code, rama claude/beautiful-planck-3dz88l.
+- Medición previa (Chromium, 320/390/768/1024/1440 px): enlace del título de
+  tarjeta 15–16 px de alto; `.cat-filter-option` 38 px en ≥1025 px.
+- Cambio: `catalog-maintenance.css` (alcance `body.tt-catalog-maintenance`):
+  el enlace del título usa `padding-block:15px` con `margin-block:-15px` (área
+  de 45–46 px sin cambiar la altura visual de la tarjeta) y el filtro lateral
+  `min-height:44px`. Bundle `css/generated/catalogo-2.css` regenerado.
+- Cascada de versión de caché (`tintin-20261101-touch-targets-1`) vía
+  cargador-mantenimiento-pagina → carga-navegacion/estado-productos →
+  entrada-navegacion-publica/control-busqueda → tienda.js y páginas.
+- Prueba nueva: `tests/ui-ux/catalog-touch-targets.spec.js` (320/768/1440 y
+  filtro 1440). Chromium local: 10/10 junto a checkout-cart-keyboard-a11y.
+- No cambiado a propósito: enlaces del pie y migas (24 px, cumplen WCAG 2.2
+  AA 2.5.8 y viven en el tema global) y `.tt-footer-wa` (42 px, también tema
+  global); subirlos a 44 px es mejora AAA fuera del alcance acordado.
+- NOT_VERIFIED: WebKit/Safari local (CI lo cubre); producción tras el deploy.
 
 ## 2026-10-31 — Intermitencia de color-choice-browser y espacio en tablet (base main 762610d)
 Claude Code, rama claude/brave-planck-zvvd0x.
