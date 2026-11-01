@@ -202,6 +202,29 @@ if (ledger) {
   wireLedger();
 }
 
+// Reseñas y Me gusta: gestion-participacion-admin-v2.js dibuja las barras una
+// sola vez (al hidratar la sección). Estado/Puntuación/Respuesta/Periodo/Orden
+// pasan a la hoja; la búsqueda queda visible. Solo barras con 2+ selectores.
+for (const id of ['section-resenas', 'section-me-gusta']) {
+  const section = document.getElementById(id);
+  if (!section) continue;
+  const wire = () => section.querySelectorAll('.eg-toolbar').forEach(toolbar => {
+    const fields = [...toolbar.querySelectorAll(':scope > label')].filter(label => label.querySelector('select'));
+    if (fields.length > 1) filterSheet(toolbar, fields);
+  });
+  new MutationObserver(wire).observe(section, { childList: true });
+  wire();
+  // La casilla mide 22 px; en modo app el toque en su zona de 44 px la marca
+  // (mismo clic real sobre la casilla) y no abre el detalle de la tarjeta.
+  section.addEventListener('click', event => {
+    if (!isApp()) return;
+    const zone = event.target.closest?.('.eg-card-select');
+    if (!zone || event.target.matches('input')) return;
+    event.stopPropagation();
+    zone.querySelector('input[type="checkbox"]')?.click();
+  }, true);
+}
+
 // ── Deslizar para recargar ──
 // Solo se conecta donde el módulo ya tiene una recarga real (refresh).
 function pullToRefresh(scope, refresh) {

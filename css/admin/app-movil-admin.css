@@ -496,6 +496,33 @@
   html.adm-app body.tt-admin-control #tt-commerce-products .tt-card-visibility select { width: 100%; min-height: 44px; padding: 9px 32px 9px 12px; border-radius: 10px; }
   html.adm-app body.tt-admin-control #tt-commerce-products .tt-card-variant-select { min-height: 44px; }
   html.adm-app body.tt-admin-control #tt-commerce-products .tt-commerce-product-open { min-height: 44px; }
+  /* ---- Fase 10 · Reseñas (participacion-admin-v2.css + gestion-participacion-admin-v2.js) ----
+     Los filtros secundarios de la bandeja van a la hoja (app-movil-admin.js); las
+     pestañas no se encogen (antes se encimaban a 320 px); toques de 44 px; el
+     detalle ocupa toda la pantalla y sus campos usan 16 px (sin zoom en iOS). */
+  html.adm-app body.tt-admin-control #section-resenas .eg-toolbar:has(> .adm-app-filter-btn) { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-toolbar:has(> .adm-app-filter-btn) > .eg-search { grid-column: auto; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-toolbar > .adm-app-filter-field { display: none; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-segments { width: 100%; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-segments button { flex: 0 0 auto; min-height: 44px; font-size: 13px; scroll-snap-align: start; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-filter-chips button { min-height: 44px; }
+  /* Zona de toque de 44 px alrededor de la casilla (el toque en la zona la marca: app-movil-admin.js). */
+  html.adm-app body.tt-admin-control #section-resenas .eg-card { grid-template-columns: 33px minmax(0, 1fr); }
+  html.adm-app body.tt-admin-control #section-resenas .eg-card-select { display: grid; place-items: center; width: 44px; height: 44px; margin: -11px 0 0 -11px; padding: 0; cursor: pointer; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-card-select input { width: 22px; height: 22px; margin: 0; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-product-strip > a { display: inline-flex; align-items: center; min-height: 44px; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-actions .adm-btn,
+  html.adm-app body.tt-admin-control #section-resenas .eg-bulkbar .adm-btn,
+  html.adm-app body.tt-admin-control #section-resenas .eg-bulkbar .eg-link-btn,
+  html.adm-app body.tt-admin-control #section-resenas .eg-pagination button { min-height: 44px; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-more summary { width: 44px; height: 44px; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-more > div { top: 48px; }
+  html.adm-app body.tt-admin-control #section-resenas .eg-more button { min-height: 44px; font-size: 14px; }
+  html.adm-app body.tt-admin-control .eg-drawer { left: 0; right: 0; width: auto; border-left: 0; }
+  html.adm-app body.tt-admin-control .eg-drawer-head { padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px; }
+  html.adm-app body.tt-admin-control .eg-drawer .eg-icon-btn { width: 44px; height: 44px; }
+  html.adm-app body.tt-admin-control .eg-drawer :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) { font-size: 16px; }
+  html.adm-app body.tt-admin-control .eg-drawer :is(.adm-btn, .eg-link-btn) { min-height: 44px; }
 }
 @media (max-width: 359px) {
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }

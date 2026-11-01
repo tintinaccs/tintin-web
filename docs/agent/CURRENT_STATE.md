@@ -1,3 +1,13 @@
+## 2026-11-01 — Admin app móvil, Fase 10: Reseñas
+
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+
+- Investigado: `js/admin/participacion/gestion-participacion-admin-v2.js` (hydrateSections, barra `.eg-toolbar`, pestañas `.eg-segments`, tarjetas con casilla, menú `details.eg-more`, drawer `.eg-drawer`, API `/api/admin-engagement`). No se tocó el controlador.
+- Cambio (solo ≤768 px): los 5 selectores de Reseñas pasan a la hoja de filtros (`filterSheet`, botón "Filtros · N"); pestañas en una fila desplazable; zona táctil de 44 px para la casilla de selección (el toque marca la casilla real y no abre el drawer); ••• y botones de acción/paginación de 44 px; drawer a pantalla completa con zona segura y campos de 16 px. Caché `tintin-20261101-app-movil-10` (CSS y JS).
+- Error arreglado de paso: a 320 px las pestañas de Reseñas se encogían y encimaban; ahora `flex:0 0 auto` con desplazamiento horizontal.
+- PASS_LOCAL: `tests/ui-ux/admin-app-resenas.spec.js` 6/6 (24/24 con repeat-each=4); regresión admin-app-* (productos, inicio, estadisticas, usuarios, pedidos, ventas-locales, mayoristas, shell), admin-all-devices 41, admin-workspaces 21, admin-mobile-experience 15; `tests/engagement/*.test.mjs`, `busquedas-admin`, `admin-runtime-stability` OK. Sin escrituras en la prueba. 820/1440 sin cambios.
+- NOT_VERIFIED: datos reales, producción, teléfono físico; las vistas Productos, Clientas, Analítica, Denunciadas y Configuración de Reseñas no se midieron una por una.
+
 ## 2026-11-01 — Admin app móvil, Fase 9: Productos
 
 Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
