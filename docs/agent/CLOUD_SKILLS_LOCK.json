@@ -1,0 +1,106 @@
+{
+  "generated": "2026-11-01",
+  "repo": "tintinaccs/tintin-web",
+  "type": "repository-scoped-cloud-agent-skills",
+  "upstream": [
+    {
+      "title": "Taste Skill",
+      "repository": "Leonxlnx/taste-skill",
+      "revision": "12af471f627f866411b4bd785b19646d3672784c",
+      "skillName": "design-taste-frontend",
+      "folder": "taste-frontend"
+    },
+    {
+      "title": "UI UX Pro Max",
+      "repository": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "revision": "3a13158ff1f32156cbe144108de48eda2ecaed9a",
+      "skillName": "ui-ux-pro-max",
+      "folder": "ui-ux-pro-max"
+    },
+    {
+      "title": "Ponytail",
+      "repository": "DietrichGebert/ponytail",
+      "revision": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846",
+      "skillName": "ponytail",
+      "folder": "ponytail"
+    },
+    {
+      "title": "Caveman",
+      "repository": "JuliusBrussee/caveman",
+      "revision": "9b68f7ed12b05e7efaff18e65c5a3fc2849fd0a4",
+      "skillName": "caveman",
+      "folder": "caveman"
+    },
+    {
+      "title": "Matt Pocock code-review",
+      "repository": "mattpocock/skills",
+      "revision": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+      "skillName": "code-review",
+      "folder": "matt-code-review"
+    },
+    {
+      "title": "Matt Pocock handoff",
+      "repository": "mattpocock/skills",
+      "revision": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+      "skillName": "handoff",
+      "folder": "matt-handoff"
+    },
+    {
+      "title": "Superpowers debugging",
+      "repository": "obra/superpowers",
+      "revision": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "skillName": "systematic-debugging",
+      "folder": "systematic-debugging"
+    },
+    {
+      "title": "Superpowers verification",
+      "repository": "obra/superpowers",
+      "revision": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "skillName": "verification-before-completion",
+      "folder": "verification-before-completion"
+    },
+    {
+      "title": "Anthropic frontend-design",
+      "repository": "anthropics/skills",
+      "revision": "ca45fc496a3436251f191354091d557da31c15b5",
+      "skillName": "frontend-design",
+      "folder": "frontend-design"
+    },
+    {
+      "title": "Anthropic webapp-testing",
+      "repository": "anthropics/skills",
+      "revision": "ca45fc496a3436251f191354091d557da31c15b5",
+      "skillName": "webapp-testing",
+      "folder": "webapp-testing"
+    }
+  ],
+  "projectSkills": [
+    "tintin-brand-copy",
+    "tintin-design-quality",
+    "tintin-performance-budgets",
+    "tintin-accessibility",
+    "tintin-ecommerce-flows",
+    "tintin-firebase-integrity",
+    "tintin-security-hardening",
+    "tintin-search-seo",
+    "tintin-integrations",
+    "tintin-cloud-linux",
+    "tintin-tests-evidence",
+    "tintin-agent-efficiency",
+    "tintin-maintainability",
+    "tintin-observability",
+    "tintin-code-index",
+    "tintin-release-operations"
+  ],
+  "legacyPreserved": [
+    "audit-tintin",
+    "fix-bug",
+    "release-check",
+    "security-audit"
+  ],
+  "excludedOrOptional": [
+    "Graphify requires separate tool integration",
+    "Chat Party Skills ambiguous",
+    "entire catalogs not vendor-copied"
+  ]
+}

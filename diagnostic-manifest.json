@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "8a1686f348d13cf20cce7e52ee19749abcbac797436276632e0b4bd26a0aca0f",
+  "sourceFingerprint": "c48a0c2a1a0b8ddf772c11efaa07f7edb31e707a5fc3f6743d945dff5e99e934",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1717,
-    "textFiles": 1582,
-    "totalBytes": 44538862,
+    "files": 1726,
+    "textFiles": 1591,
+    "totalBytes": 44582384,
     "pages": 19,
     "modules": 1145
   },
@@ -40400,8 +40400,8 @@
     },
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
-      "bytes": 21203,
-      "sha256": "f5e36dacf5ef31caf7af4193380ec80400011e01af08a08b101365c99a3ab43e",
+      "bytes": 21214,
+      "sha256": "5c192a030635f7d7c9809b271feebe6490b0248aad7fb1fdfcacf9cd24f591e1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40721,8 +40721,8 @@
     },
     {
       "path": "scripts/auditar-tipografia.js",
-      "bytes": 13949,
-      "sha256": "410a9f27e599aa3179dacc6d52028a52c28d28838094cfdbe75a866ebb8f23c7",
+      "bytes": 14335,
+      "sha256": "dcb06c35e5574f38a4cdb70a29368619fe05d02a185799e13b177976b2606b05",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60677,8 +60677,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 12095,
-      "sha256": "1619395707f1cd8fdd872687939e1b7c63862cc58e2741d1823a1eca29df166e"
+      "bytes": 14298,
+      "sha256": "d7fc1f63fbd8f129cf872e57efb7b71a0ff4e616919f1ff3a3d8be3b55a5543a"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -60749,8 +60749,8 @@
     {
       "path": "AGENTS.md",
       "extension": ".md",
-      "bytes": 7894,
-      "sha256": "af843165479a2bed288004dc4d8ed7619bcd284e315e002be9fb56df509b75e8"
+      "bytes": 9321,
+      "sha256": "cee554d0d53b61c95c4d759da27099df5bb64bf8a727a713c006789093c63ea9"
     },
     {
       "path": "DESIGN.md",
@@ -62649,6 +62649,18 @@
       "sha256": "c71e553879503132eeb0b207ff5d47d5af25048c285ccbbdb04c6f75d2099bee"
     },
     {
+      "path": "docs/agent/CLOUD_SKILLS_CATALOG.md",
+      "extension": ".md",
+      "bytes": 9454,
+      "sha256": "179304fcc71bda8a8e6d0e402d17d0f2ee9c163ed0476fda4f15271f90837a2a"
+    },
+    {
+      "path": "docs/agent/CLOUD_SKILLS_LOCK.json",
+      "extension": ".json",
+      "bytes": 3160,
+      "sha256": "d6e884909d67e0d4e4ec7a251fd7bcff95953d4da372e94316c279f0021b0229"
+    },
+    {
       "path": "docs/agent/CODEQL_TRIAGE_20261013.md",
       "extension": ".md",
       "bytes": 4078,
@@ -62965,6 +62977,48 @@
       "extension": ".json",
       "bytes": 801,
       "sha256": "7d294f939eea0d15e4f81f6ce4e03ff6b2eb421a0decbfd03cdbebb04e451f0a"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/anthropic-frontend-design-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 10174,
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/caveman-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/matt-pocock-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 1068,
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/ponytail-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 1071,
+      "sha256": "fb1bc6909ac3ef82d5c22106e32ef682b0cff66788fa915fb9b53b15c9d2f3ab"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/superpowers-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 1070,
+      "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/taste-skill-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 1065,
+      "sha256": "4575a543ab88dad12ccea7d97e563d0bce5b448b06072e65d3264497dad326df"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/ui-ux-pro-max-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 1075,
+      "sha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014"
     },
     {
       "path": "docs/arquitectura-operativa-canonica.md",
@@ -67421,8 +67475,8 @@
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
       "extension": ".js",
-      "bytes": 21203,
-      "sha256": "f5e36dacf5ef31caf7af4193380ec80400011e01af08a08b101365c99a3ab43e"
+      "bytes": 21214,
+      "sha256": "5c192a030635f7d7c9809b271feebe6490b0248aad7fb1fdfcacf9cd24f591e1"
     },
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
@@ -67487,8 +67541,8 @@
     {
       "path": "scripts/auditar-tipografia.js",
       "extension": ".js",
-      "bytes": 13949,
-      "sha256": "410a9f27e599aa3179dacc6d52028a52c28d28838094cfdbe75a866ebb8f23c7"
+      "bytes": 14335,
+      "sha256": "dcb06c35e5574f38a4cdb70a29368619fe05d02a185799e13b177976b2606b05"
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
