@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 24: Apariencia y contenido
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-apariencia (pestañas Diseño y Colores; editor visual con Deshacer/Rehacer/Guardar/Publicar, página, bloque nuevo, tamaño de vista previa). Medido a 320/390/540/768: sin desborde, toques ≥44 px, campos ≥16 px. Una captura a 390 mostró un defecto que la medición de tamaños no detecta: "ESCRITORIO" del selector de vista previa (.visual-devices) se partía a media palabra.
+- Cambio (solo ≤768, solo CSS): .visual-devices en tres columnas iguales con texto de 11 px; en ≤359 px (contenedor de 226 px) los tres botones se apilan. La spec ahora detecta palabras partidas en botones (ignora el texto oculto de lectores de pantalla). Tag: app-movil-admin.css -18 → -19. Spec nueva admin-app-apariencia.spec.js (11 pruebas). No se tocó el editor visual ni los colores globales.
+- PASS_LOCAL: admin-app-apariencia 11/11 (falló en 320/390 sin el CSS); regresión shell 13, flujo 7, correos 35, configuración 11, permisos 7, engagement/búsquedas OK; audit:cache-versioning correcto.
+- NOT_VERIFIED: contenido dinámico del editor (secciones, propiedades, vista previa real, historial) y panel Colores cargado (categorías, esquemas, contraste); solo se midió el HTML estático. No se guardó ni publicó nada.
+
 ## 2026-11-01 — Admin app móvil, Fase 23: Roles y Permisos
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: #section-permisos; la matriz la dibuja renderPermisosMatrix (admin-app.js) como un <details class="perm-module-block"> por módulo con tabla acción × rol (Admin, Agente/Modder, Viewer), interruptores .perm-pill-toggle y píldoras "No disponible". Con HTML ficticio equivalente a 320/390/540/768: tablas ya en tarjetas (espacio-modulos), sin desborde, interruptores, módulos, botones y campos ≥44 px, campos ≥16 px. Captura a 390 revisada.

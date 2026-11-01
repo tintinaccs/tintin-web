@@ -586,6 +586,11 @@
   html.adm-app body.tt-admin-control #section-flujo-conexiones a.tfc-pill:hover { transform: none; }
   html.adm-app body.tt-admin-control #section-flujo-conexiones a.tfc-edge-row { display: flex; align-items: center; flex-wrap: wrap; min-height: 44px; box-sizing: border-box; padding-block: 10px; }
   html.adm-app body.tt-admin-control #section-flujo-conexiones .tfc-edges { max-height: 60vh; }
+
+  /* ---- Fase 24 · Apariencia y contenido ----
+     Tamaño de vista previa (Celular/Tablet/Escritorio) en tres columnas iguales sin partir palabras. */
+  html.adm-app body.tt-admin-control #section-apariencia .visual-devices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  html.adm-app body.tt-admin-control #section-apariencia .visual-devices .adm-btn { min-width: 0; padding-inline: 2px; letter-spacing: 0; font-size: 11px; }
 }
 @media (max-width: 359px) {
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -593,4 +598,5 @@
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs .tt-order-step-index { flex-basis: 20px; width: 20px; height: 20px; }
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs .tt-order-step-label { font-size: 11px; }
   html.adm-app body.tt-admin-control #local-mirror-map .local-grid { grid-template-columns: minmax(0, 1fr); }
+  html.adm-app body.tt-admin-control #section-apariencia .visual-devices { grid-template-columns: minmax(0, 1fr); }
 }
