@@ -85,6 +85,10 @@ function walk(directory) {
     if (entry.isDirectory() && EXCLUDED_DIRECTORIES.has(entry.name)) continue;
     const absolute = path.join(directory, entry.name);
     const relativePath = path.relative(ROOT, absolute).replace(/\\/g, '/');
+    // Skills versionados de agentes son recursos de desarrollo, no CSS/HTML del sitio.
+    // Pueden documentar tipografías alternativas sin aplicarlas a Tintín.
+    // Excluir solo las carpetas de Skills, no el código productivo.
+    if (entry.isDirectory() && (relativePath === '.agents/skills' || relativePath === '.claude/skills' || relativePath === '.codex/skills')) continue;
     // Monaco es una dependencia generada y versionada; sus fuentes de iconos y
     // editor no forman parte del sistema tipográfico visual de Tintin.
     if (entry.isDirectory() && (relativePath === 'js/vendor/monaco' || relativePath === 'public/js/vendor/monaco')) continue;
