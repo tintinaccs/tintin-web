@@ -1,3 +1,12 @@
+## 2026-11-01 — Admin app móvil, Fase 15: Imágenes (admin-images.html)
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: admin-images.html no carga app-movil-admin.css; tiene estilo propio, barra lateral fija (220px escritorio, 56px 481–768, oculta ≤480) y pestañas inferiores (#adm-mobile-tabs) estilizadas por dashboard-control.css.
+- Error arreglado de paso: la barra lateral tapaba la primera columna de tarjetas en 481px y más (540/768/820/1024/1440). Causa: css/pages/secundarias-minimal.css:89 (`body:has(.adm-main) .adm-main { margin-inline:auto }`, commit 8e92250) gana en especificidad al `margin-left: var(--sidebar-w)` de la página. Arreglo solo en admin-images.html (bloque `#tt-imagenes-app-movil`); secundarias-minimal.css no se tocó porque va en el bundle de las páginas públicas.
+- Cambio ≤768 (mismo bloque): casilla de selección de tarjeta con área de 44px (cuadro visible de 22px), "Reutilizar Desktop…" con 44px, botones Guardar/Quitar/acciones masivas y selects con mínimo 44px, grilla de 1 columna, pestañas inferiores con desplazamiento horizontal y etiquetas completas (antes se encimaban "HEROPRODUCTOS").
+- PASS_LOCAL: tests/ui-ux/admin-app-imagenes.spec.js 7/7 (320/390/540/768/820/1024/1440, con dobles; falla 7/7 sin el cambio). Regresión PASS_LOCAL: admin-control-dashboard 59, admin-workspaces 21, admin-all-devices 41, version-notice 30, site-first-paint 119, admin-app-shell 13, cambios-tienda 34, engagement/busquedas-admin/admin-mobile-pwa/csp-cloudinary-upload OK.
+- PREEXISTENTE (falla igual en main 0f47cf5, sin relación): tests/navigation/mobile-brand.spec.js:108, tests/seo/phase11-seo.spec.js:15 y :110.
+- NOT_VERIFIED: subida real a Cloudinary/Firestore (dobles que lanzan error); Safari iOS real.
+
 ## 2026-11-01 — Admin app móvil, Fase 14: Import/Export
 Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
 - Investigado: `js/admin/importacion-admin.js` oculta los importadores legacy (CSV y JSON manual, incluido el textarea de 12 px) y monta la tarjeta "Shopify · migración controlada" con estilos propios ≤560 (botones a todo el ancho). Las tarjetas de exportación son HTML estático. Medido con el módulo real y un CSV ficticio a 320/390/540/768: sin desborde, sin desplazamiento interno, todos los toques ≥44 px, campos 16 px, vista previa en tarjetas por la capa existente.
