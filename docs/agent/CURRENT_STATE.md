@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 20: Flujo de conexiones
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-flujo-conexiones lo dibuja flujo-conexiones-admin.js (importa Firebase); con HTML ficticio equivalente se midió: nodos (.tfc-pill) de ~25–30 px y filas de conexión (.tfc-edge-row) de ~30 px, por debajo de los 44 px táctiles.
+- Cambio (solo ≤768, solo CSS): nodos y conexiones de 44 px mínimo, búsqueda y selector de estado a todo el ancho con 16 px, sin elevación en hover, lista de conexiones hasta 60vh. Sin cambios de JS ni de datos. Tag: app-movil-admin.css -17 → -18. Spec nueva admin-app-flujo-conexiones.spec.js.
+- PASS_LOCAL: admin-app-flujo-conexiones 7/7 (320/390/540/768 app; 820/1024/1440 sin cambio; falla sin el CSS); regresión shell 13, diagnóstico 7, engagement/busquedas OK; audit:cache-versioning correcto.
+- NOT_VERIFIED: módulo real contra Firebase/producción (HTML ficticio con las mismas clases).
+
 ## 2026-11-01 — Admin app móvil, Fase 19: Diagnóstico
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: #section-diagnostico (admin.html) con la barra fija #site-diagnostic-toolbar (búsqueda, 10 selectores, fecha, Copiar, Exportar) que en teléfono ocupaba varias pantallas; pestañas #site-diagnostic-view-tabs con desplazamiento horizontal; resúmenes de hallazgos de ~30 px.

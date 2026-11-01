@@ -575,6 +575,17 @@
   html.adm-app body.tt-admin-control #site-diagnostic-view-tabs { flex-wrap: wrap; overflow: visible; }
   html.adm-app body.tt-admin-control #site-diagnostic-view-tabs button { flex: 1 1 auto; min-height: 44px; white-space: normal; }
   html.adm-app body.tt-admin-control #section-diagnostico .adm-diagnostic-item details summary { min-height: 44px; box-sizing: border-box; padding-block: 12px; }
+
+  /* ---- Fase 20 · Flujo de conexiones ----
+     Nodos y conexiones como toques de 44 px; búsqueda y estado a todo el ancho con 16 px;
+     sin elevación en hover; la lista de conexiones crece con la pantalla. */
+  html.adm-app body.tt-admin-control #section-flujo-conexiones .tfc-toolbar { flex-direction: column; align-items: stretch; }
+  html.adm-app body.tt-admin-control #section-flujo-conexiones #tfc-search,
+  html.adm-app body.tt-admin-control #section-flujo-conexiones #tfc-filter-state { width: 100%; min-width: 0; min-height: 44px; font-size: 16px; box-sizing: border-box; }
+  html.adm-app body.tt-admin-control #section-flujo-conexiones a.tfc-pill { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; box-sizing: border-box; max-width: 100%; }
+  html.adm-app body.tt-admin-control #section-flujo-conexiones a.tfc-pill:hover { transform: none; }
+  html.adm-app body.tt-admin-control #section-flujo-conexiones a.tfc-edge-row { display: flex; align-items: center; flex-wrap: wrap; min-height: 44px; box-sizing: border-box; padding-block: 10px; }
+  html.adm-app body.tt-admin-control #section-flujo-conexiones .tfc-edges { max-height: 60vh; }
 }
 @media (max-width: 359px) {
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
