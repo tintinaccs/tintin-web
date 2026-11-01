@@ -104,6 +104,13 @@ Do not report Delete, Edit, or another operation as missing when the product des
 A task is complete only when the requested scope is implemented or analyzed, relevant verification has finished, failures introduced by the change are corrected, the final changes are reviewed, and any real unverified limitation is clearly stated.
 
 
+## Auto-selección de Skills en TODAS las tareas del repositorio
+- **Por defecto, sin que el usuario tenga que pedirlo:** antes de cada tarea, clasificar intención y rutas probablemente afectadas, y aplicar el protocolo en `docs/agent/SKILLS_AUTO_ROUTING.md`. Hacer esta evaluación incluso si el prompt no menciona Skills.
+- Elegir el Skill principal pertinente y hasta dos complementarios solo cuando aporten valor diferente. Revisar sus descripciones y leer los `SKILL.md` completos **solo de los elegidos**. No cargar 45 Skills para cada tarea ni activar persistentemente `caveman`/`ponytail` sin solicitud explícita.
+- Para tareas de diseño o textos, conservar la identidad visual y editorial original de Tintín y rechazar resultados tipo plantilla genérica; los Skills son referencia profesional, no estilos impuestos.
+- Si ninguna habilidad es aplicable, seguir las instrucciones generales y no inventar uso. En el cierre, indicar brevemente qué Skills se usaron realmente, o si su invocación/detección no pudo verificarse.
+- La biblioteca es **de este repositorio**, no una instalación global en todos los chats o cuentas. Nunca ejecutar automáticamente scripts de Skills de terceros ni cambiar políticas de seguridad, producción o permisos.
+
 ## Shared cloud Skills (Codex / Claude Code)
 - Codex discovers repository Skills in `.agents/skills/<skill>/SKILL.md`; Claude Code discovers them in `.claude/skills/<skill>/SKILL.md`. The existing `.codex/skills/` and `.claude/skills/` content must be preserved.
 - For frontend/design tasks, inspect `DESIGN.md`, `docs/identidad-visual-tintin.md` and the canonical tokens first; then selectively use `design-taste-frontend`, `ui-ux-pro-max` and `frontend-design` as reference material. Preserve Tintín's identity, existing design decisions, real routes and responsive contracts; do not apply generic aesthetic defaults.
