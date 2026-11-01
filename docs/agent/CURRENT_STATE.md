@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 18: Auditoría
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-auditoria (admin.html) tiene la barra masiva #audit-bulk-toolbar (Exportar CSV / Limpiar) y una tabla que llena loadAuditLog (admin-app.js). En ≤768 la capa espacio-modulos-admin ya la convierte en tarjetas con etiqueta y da 44 px a los botones, pero la casilla de cada fila (input.audit-row-check, sin label) quedaba en ~13 px.
+- Cambio: css/admin/app-movil-admin.css (solo ≤768) da a .audit-row-check área táctil de 44 px con cuadro visible de 22 px (mismo patrón que admin-images). admin.html: tag de app-movil-admin.css -15 → -16. Spec nueva admin-app-auditoria.spec.js.
+- PASS_LOCAL: admin-app-auditoria 14/14 (--repeat-each=2; sin el CSS fallan 320/390/540/768 y pasan 820/1024/1440); regresión admin-app-shell 13, admin-control-dashboard 59, admin-workspaces 21, admin-all-devices 41, admin-app-usuarios 6, admin-app-push 7, engagement + busquedas-admin OK.
+- NOT_VERIFIED: exportar/limpiar con datos reales (no se ejecutan acciones). Pendiente de revisión: "seleccionar todos" vive en el encabezado de la tabla, que en teléfono queda oculto a la vista; no se movió para no cambiar el flujo.
+
 ## 2026-11-01 — Admin app móvil, Fase 17: Notificaciones push
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: notificaciones-push-maestro.js mueve #push-card y #push-master-card a #section-notificaciones-push. En ≤768 la capa existente espacio-modulos-admin ya convierte las tablas de dispositivos y eventos en tarjetas con etiqueta (encabezado oculto a la vista, legible por lectores de pantalla), apila la grilla del mensaje (tt-admin-field-grid) y da 44 px/16 px a botones y campos.

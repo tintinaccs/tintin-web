@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2ff8ab3369d933262eb7c1ba1c8bab90f3e4bce0b0584759a27db539548a805a",
+  "sourceFingerprint": "6d88b2c41ac3ecd442d0684255961570cda1e587ff8a0f29aae70ebd53694685",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1705,
-    "textFiles": 1570,
-    "totalBytes": 44461972,
+    "files": 1706,
+    "textFiles": 1571,
+    "totalBytes": 44467389,
     "pages": 19,
-    "modules": 1133
+    "modules": 1134
   },
   "viewports": [
     {
@@ -2882,7 +2882,7 @@
         "viewer"
       ],
       "bytes": 191211,
-      "sha256": "d22fdaa6ff0890cf15863d8afc2fdbe42762678f81346e3f7b40c64be021cbf7",
+      "sha256": "9299fdd6172ae331f4c6a85153884e66292106aaf95e16241a7561b70d30ec08",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3168,7 +3168,7 @@
           "line": 80
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-15",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-16",
           "target": "css/admin/app-movil-admin.css",
           "line": 81
         },
@@ -3582,7 +3582,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-15",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-16",
           "target": "css/admin/app-movil-admin.css",
           "line": 81,
           "exists": true
@@ -57958,6 +57958,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/admin-app-auditoria.spec.js",
+      "bytes": 3274,
+      "sha256": "b9e59018b5e79ce7d74d00310c43628b0ef1e1856562415c75a83d21d76f51a7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/admin-app-colecciones.spec.js",
       "bytes": 6312,
       "sha256": "72098ebf97b9dee1bbd9f9ac0954165d4812303685ad04b1f32221937a692dcb",
@@ -60662,7 +60673,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 191211,
-      "sha256": "d22fdaa6ff0890cf15863d8afc2fdbe42762678f81346e3f7b40c64be021cbf7"
+      "sha256": "9299fdd6172ae331f4c6a85153884e66292106aaf95e16241a7561b70d30ec08"
     },
     {
       "path": "apple-touch-icon.png",
@@ -61747,8 +61758,8 @@
     {
       "path": "css/admin/app-movil-admin.css",
       "extension": ".css",
-      "bytes": 39332,
-      "sha256": "ef539c48dd3ac89a9f1fa22b5d1b24aef98a9044eebc7c38aa1d6a49abd005e9"
+      "bytes": 40220,
+      "sha256": "222cb7efc78431805a9189c5026cb0ffa577e5b38aab38bc35e595cc6a34485e"
     },
     {
       "path": "css/admin/comercio-local-admin.css",
@@ -62539,8 +62550,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1135961,
-      "sha256": "0ce524978e26b5d5ef80fd6be129882c203f5a2447e95a26eb9e67f0ba08186f"
+      "bytes": 1137216,
+      "sha256": "ecff23b1440360e41f2585e7936508b66a38ce192ac173c4b428d986d57813d4"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -67394,7 +67405,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 80415,
-      "sha256": "9931d570552f80dffcb54836b4ffa20641332ff9d92008ec5ba24a3de0d14da2"
+      "sha256": "a38037f31fef4f9528fb90c8d8c52991c47407bc36d0aa74f61a33d1067d97e4"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -70131,6 +70142,12 @@
       "extension": ".js",
       "bytes": 9887,
       "sha256": "5556f3a25786a64bef90c8763013bdf6d995933aa250f3fdcddae9116e6ab958"
+    },
+    {
+      "path": "tests/ui-ux/admin-app-auditoria.spec.js",
+      "extension": ".js",
+      "bytes": 3274,
+      "sha256": "b9e59018b5e79ce7d74d00310c43628b0ef1e1856562415c75a83d21d76f51a7"
     },
     {
       "path": "tests/ui-ux/admin-app-colecciones.spec.js",
