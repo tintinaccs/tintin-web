@@ -1,14 +1,11 @@
 ---
 name: tintin-agent-efficiency
-description: "Use for efficient cloud agent work in Tintín: reduce token use, context noise, redundant searches and unnecessary test runs without skipping evidence."
+description: Use to reduce coding-agent token use, duplicated investigation, slow workflows, and needless re-analysis in Tintín.
 ---
 
-# Eficiencia real del agente en Tintín
-1. Leer el pedido, AGENTS.md y solo documentación vinculada a los módulos tocados.
-2. Localizar los archivos canónicos con una búsqueda dirigida; no recorrer todo el repo sin necesidad.
-3. No recargar archivos sin cambios; reutilizar resultados y rutas verificadas.
-4. Elegir el cambio completo más pequeño y los tests existentes más cercanos. Ampliar pruebas solo ante riesgos observados.
-5. Comunicar hallazgos y estado de pruebas con evidencia. Nunca llamar PASS a una prueba no ejecutada.
-6. No comprimir/eliminar información necesaria para seguridad, negocio ni trazabilidad.
-7. Coordinar cambios por rama/PR, documentar blockers verificables, evitar subagentes repetidos.
-8. El ahorro de tokens proviene de lectura selectiva y especialización de Skills, no de activar todos a la vez.
+# tintin-agent-efficiency
+
+Before reading files, inspect AGENTS.md and docs/agent/README.md; search likely canonical paths, avoid scanning the entire repo by default. Summarize known facts, reuse existing docs/tests, batch related reads, cache paths and do not re-read unchanged blobs. Select 1-2 pertinent Skills per task, not every installed Skill; their metadata consumes context. Make small coherent diffs, run targeted checks first, and leave concise actionable handoffs with file paths, commit SHA, tests and remaining blockers. NEVER shorten away evidence, approvals, security checks or correctness for token savings.
+
+## Completion evidence
+Report files touched, targeted verification results, repository commit/PR when applicable, and explicit limits. This Skill never overrides AGENTS.md, DESIGN.md, or production safety rules.

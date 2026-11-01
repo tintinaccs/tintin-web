@@ -1,13 +1,11 @@
 ---
 name: tintin-cloud-linux
-description: "Use when preparing cloud-only Linux Codex and Claude Code tasks or checking cloud Skills without installing anything on the user's PC."
+description: Use for GitHub Actions, Codex/Claude cloud Linux setup, safe dependency checks and reproducible agent Skills discovery in Tintín.
 ---
 
-# Skills en Linux nube — sin PC local
-1. En Codex Cloud leer el repositorio por .agents/skills; en Claude Code Cloud por .claude/skills.
-2. Ejecutar opcionalmente bash scripts/check-cloud-skills-linux.sh --check para revisar disponibilidad de carpetas y SKILL.md.
-3. Solo si la sesión Linux requiere Skills a nivel de usuario, usar bash scripts/check-cloud-skills-linux.sh --install-user; crea enlaces simbólicos idempotentes sin sudo y sin sobrescribir Skills ya existentes.
-4. Nunca instalar vía apt, curl|bash, npm global o pip global por defecto. No instalar herramientas del servidor de producción.
-5. Los Skills se versionan en GitHub; el Linux efímero los obtiene por checkout. No confundir esto con instalar Skills en claude.ai o ChatGPT web.
-6. No asumir red, Node, Python, Playwright ni privilegios: comprobarlos antes de pedirlos.
-7. No ejecutar scripts auxiliares externos sin revisar seguridad y dependencias.
+# tintin-cloud-linux
+
+Work only in remote repository or authorized ephemeral cloud Linux runners; do not assume the owner's PC is available. Skills from .agents/skills and .claude/skills are repo-scoped and work after checkout. Use scripts/agent/bootstrap-cloud-linux.sh for optional copying into an ephemeral Linux agent home; execute only when authorized. Pin CI dependencies/actions, use minimal permissions and no secrets, avoid curl-to-shell or long-running daemons. Verify discovery, frontmatter and resources using scripts/agent/check-cloud-skills.py. Distinguish PR checks from an actual Codex/Claude runtime skill activation test.
+
+## Completion evidence
+Report files touched, targeted verification results, repository commit/PR when applicable, and explicit limits. This Skill never overrides AGENTS.md, DESIGN.md, or production safety rules.
