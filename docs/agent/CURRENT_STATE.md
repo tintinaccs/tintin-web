@@ -5754,3 +5754,34 @@ original antes de cada aviso. La regresión falla antes y pasa después del camb
 Las cinco pruebas de integridad de lectura pasan. CI, merge y publicación del
 candidato final requieren evidencia por su SHA; no se heredan los PASS locales
 de la sesión anterior. No se escribieron datos comerciales reales.
+
+
+## 2026-11-01 — Estabilización reproducible de Skills y CI
+
+Codex /root GPT-6, Linux Cloud; base main 7dfe8c9f306168994e324c34135230d8a5da3f71.
+#1305 confirmada MERGED (head e0465aa5), CI41355599089/1 y CodeQL41355595342
+SUCCESS. No se reabre ni se heredan resultados de sus heads fallidos.
+Main post-merge41357878092/1 detecta Protected flows FAIL: huellas antiguas de
+workflow, admin.html, AGENTS.md y cache-version-baseline; reproducción local igual.
+Se conserva el contenido funcional existente y se prepara renovación canónica de
+4archivos/4registros, sin tocar alcances/sellos ni requisitos del controlador.
+Se retira el job de CI con contents:write que hacía commit/pull/push de manifiestos
+en la rama de Skills; build y rechazo de drift siguen obligatorios. El validador
+ahora informa metadatos válidos en disco, sin afirmar descubrimiento del host.
+
+PASS_LOCAL: preflight completa (todos los comandos con salida0), 189/189 pruebas
+de operaciones/protección/diagnóstico, integración12workflows/1PR, 45Skills por
+agente y4de compatibilidad, copia efímera Linux y enlaces locales SKILL.md.
+Variantes históricas de clientes conservadas. Sin cambios de aplicación ni datos.
+BLOCKED: skills.list executor devuelve catálogo vacío; no existe control expuesto
+para registrar/reindexar el repo en este host. Lectura manual no acredita activación
+nativa. Confirmar en sesión nueva observable de Codex/Claude antes de cerrar fase02.
+Seguimiento permanente00–09, SHA/PR/runs y siguiente paso en TINTIN_GLOBAL_PHASES.md.
+CI/merge del candidato siguen PENDING hasta recibo real; #1306 pertenece a otra
+rama activa y se conserva. Endpoint branch-protection clásico403; ruleset18212422
+activo leído, no modificado. No prometer que comentarios despierten un agente.
+
+Validación final local: build:pages PASS; segunda ejecución sin diferencias SHA256
+en diagnostic-manifest.json/site-version.json; protección78registros/544archivos
+PASS; git diff --check limpio. Plan candidato validado por inspectMaintenance
+con base main exacta. Node local24.19.0; CI fija Node22 y debe acreditar ese runtime.
