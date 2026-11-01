@@ -74,3 +74,11 @@ Diseño e identidad, contenido, responsive, accesibilidad, rendimiento, segurida
 
 ## Validación y mantenimiento
 La revisión está fijada en `docs/agent/CLOUD_SKILLS_LOCK.json` y en la tabla anterior. No hay actualizaciones automáticas de terceros. Antes de actualizarlos, revisar diferencias, licencias, instrucciones y posibles riesgos. El workflow Linux comprueba estructura y copia de archivos; el test de activación requiere ejecutar una tarea en los clientes de Codex/Claude de forma explícita.
+
+## Skills adicionales conservados durante la integración
+Se detectaron en la misma rama de trabajo y se preservaron, además de los 26 nuevos y los cuatro existentes:
+`receiving-code-review`, `requesting-code-review`, `test-driven-development`, `writing-for-agents`, `writing-plans`, `tintin-architecture-integrations`, `tintin-commerce-integrity`, `tintin-data-index-sync`, `tintin-design-engineering`, `tintin-observability-recovery`, `tintin-performance-loading`, `tintin-qa-release`, `tintin-responsive-a11y`, `tintin-security-privacy` y `tintin-seo-discoverability`. En total quedan 45 carpetas de Skills por agente en esta rama.
+
+**Presupuesto de contexto:** tener 45 Skills no significa activar los 45. Algunos hosts pueden resumir o truncar metadatos cuando hay muchos; es preferible llamar explícitamente al Skill apropiado y consultar este catálogo. Los Skills de enfoque superpuesto son alternativas, no pasos obligatorios acumulativos. Evitar ejecutar suites de pruebas redundantes.
+
+El script complementario `scripts/check-cloud-skills-linux.sh` fue conservado para el caso opcional de enlazar los Skills a un HOME Linux efímero. El workflow de Linux principal es `.github/workflows/cloud-agent-skills-linux.yml`, que hace una única verificación automática y una copia aislada; no se ejecutan dos workflows redundantes.
