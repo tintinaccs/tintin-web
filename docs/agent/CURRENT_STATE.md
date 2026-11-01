@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 26: Ver tienda y Salir
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: en ≤768 "Ver tienda" (enlace a /) y "Salir" (#mtab-logout) están en el grupo "Cuenta" de la hoja "Más" (ya construido en F0); en escritorio/tablet Salir sigue en el menú lateral (#adm-logout). La lógica de cierre de sesión (admin-app.js) no se tocó.
+- Resultado: a 320/390/540/768 ambos son visibles, ≥44 px de alto, dentro del ancho, sin desborde. Sin cambios de CSS ni JS. Spec nueva admin-app-cuenta.spec.js (7 pruebas).
+- PASS_LOCAL: 7/7.
+- NOT_VERIFIED: pulsar Salir (cerraría la sesión real; no se ejecutó), confirmación por cambios sin guardar al salir (AdminUnsaved.requestNavigation) en navegador real, Ver tienda en producción.
+
 ## 2026-11-01 — Admin app móvil, Fase 25: Maestro y Mensaje de bienvenida
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: ambos módulos se crean por JS (panel-maestro.js, control-bienvenida-admin.js) con sesión de Super Admin; no existen en admin.html. Traen su propio CSS con reglas ≤600/≤820 (Maestro: KPIs en una columna, botones a ancho completo; la tabla de capacidades se convierte en tarjetas con el espacio de módulos; Bienvenida: una columna, botones a ancho completo).
