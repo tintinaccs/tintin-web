@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "37f8750c099e119d91e64dd2d29e84b6ac87de1eac50c2f3f77fea3cb98f72d6",
+  "sourceFingerprint": "503c5e64faab9351c81eb9cee28ac8320e6c42f2c46a2444191e46af73be8a3f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1684,
     "textFiles": 1549,
-    "totalBytes": 44252377,
+    "totalBytes": 44252439,
     "pages": 19,
     "modules": 1114
   },
@@ -45016,8 +45016,8 @@
     },
     {
       "path": "tests/auth/admin-guard-role-destination.test.mjs",
-      "bytes": 5243,
-      "sha256": "f3a5b7514c5af20ae9864fb48283cc3ce4f9891d663291f821638720b963da53",
+      "bytes": 5305,
+      "sha256": "57be847cdb23d7185620762235d8bb50041bc1c100b8f3af3409077379fc578b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -67817,8 +67817,8 @@
     {
       "path": "tests/auth/admin-guard-role-destination.test.mjs",
       "extension": ".mjs",
-      "bytes": 5243,
-      "sha256": "f3a5b7514c5af20ae9864fb48283cc3ce4f9891d663291f821638720b963da53"
+      "bytes": 5305,
+      "sha256": "57be847cdb23d7185620762235d8bb50041bc1c100b8f3af3409077379fc578b"
     },
     {
       "path": "tests/auth/admin-readiness-gate.test.mjs",

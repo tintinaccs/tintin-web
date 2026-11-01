@@ -24,7 +24,7 @@ function guardSegment() {
 }
 
 const runSegment = new Function('deps', `
-  const { user, snapshot, getUserRole, setOperationsViewerRole, SUPER_ADMIN, getDoc, doc, db, window, CustomEvent, recordAuthDiagnostic } = deps;
+  const { user, snapshot, getUserRole, setOperationsViewerRole, SUPER_ADMIN, getDoc, doc, db, window, CustomEvent, recordAuthDiagnostic, loadRolePermissions } = deps;
   let currentRole = null;
   return (async () => {
     ${guardSegment()}
@@ -49,6 +49,7 @@ async function runGuard({ role, email = 'persona@example.com', profile = { block
     },
     CustomEvent: class { constructor(type, init) { this.type = type; this.detail = init?.detail; } },
     recordAuthDiagnostic: (event, detail) => world.diagnostics.push({ event, ...detail }),
+    loadRolePermissions: async () => {},
   });
   return { world, continued: result?.continued === true };
 }
