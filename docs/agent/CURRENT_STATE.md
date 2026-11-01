@@ -1,3 +1,12 @@
+## 2026-11-01 — Admin app móvil, Fase 27: Modo oscuro
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: los colores del panel salen de tokens `--admin-color-*` (publicados en :root) y de una segunda capa `--tt-ui-*`/`--tt-surface` (sistema-superficies-tintin.css); además hay colores fijos y reglas con `!important` en dashboard-control.css. Primer intento solo con tokens dejó fondos claros y texto oscuro sobre oscuro.
+- Cambios: interruptor "Modo oscuro" (role=switch, 56×44 px) al inicio de Configuración, visible solo ≤768 (`#adm-theme-card`); `syncTheme()` en app-movil-admin.js activa `html.adm-dark` solo con `adm-app`, guarda `tt-admin-theme` en localStorage (con try/catch) y cambia `meta theme-color`. CSS: tokens oscuros en `html.adm-app.adm-dark` + overrides acotados (prefijo `html:root.adm-app.adm-dark body.tt-admin-control`; `!important` solo donde la regla de origen lo usa: pestañas de la barra inferior, píldoras sobre rosa). Sin cambios en ≥820 ni en design tokens globales.
+- Defectos reales hallados y corregidos: iconos y etiquetas inactivas de la barra inferior casi invisibles (contraste 1.1), botones/pestañas/píldoras con fondo blanco fijo, texto oscuro sobre fondo oscuro en encabezados de tarjeta, "Cargando…" claro sobre rosa.
+- PASS_LOCAL: admin-app-modo-oscuro.spec.js 9/9 (interruptor 320/390/540/768, persistencia, ≥820 sin efecto aun con preferencia guardada, contraste ≥3 en las 21 secciones y la barra inferior a 390 px, transiciones apagadas). Regresión: shell, configuración, inicio, correos, permisos, apariencia, flujo, maestro-bienvenida, cuenta, estadísticas, usuarios, pedidos en verde + engagement/busquedas.
+- Excluido del contraste (falso positivo): thead recortado por la conversión a tarjetas; vista previa (iframe) del sitio en Apariencia, que muestra el sitio real en claro.
+- NOT_VERIFIED: módulos con datos reales (Firebase), modales/menús que solo existen con sesión, Safari iOS real, destello de tema claro antes de aplicar el oscuro al cargar (el JS es módulo diferido), contraste ≥4.5 (se midió ≥3), módulos montados por JS con sesión (Maestro, Bienvenida, Flujo) en oscuro.
+
 ## 2026-11-01 — Admin app móvil, Fase 26: Ver tienda y Salir
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: en ≤768 "Ver tienda" (enlace a /) y "Salir" (#mtab-logout) están en el grupo "Cuenta" de la hoja "Más" (ya construido en F0); en escritorio/tablet Salir sigue en el menú lateral (#adm-logout). La lógica de cierre de sesión (admin-app.js) no se tocó.

@@ -7,6 +7,7 @@
 .adm-app-sheet-backdrop,
 .adm-app-filter-btn,
 .adm-app-ptr { display: none; }
+.adm-theme-card { display: none; }
 
 @media (max-width: 768px) {
   /* ── Barra superior: Volver + título + buscar ── */
@@ -591,6 +592,82 @@
      Tamaño de vista previa (Celular/Tablet/Escritorio) en tres columnas iguales sin partir palabras. */
   html.adm-app body.tt-admin-control #section-apariencia .visual-devices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
   html.adm-app body.tt-admin-control #section-apariencia .visual-devices .adm-btn { min-width: 0; padding-inline: 2px; letter-spacing: 0; font-size: 11px; }
+  /* ---- Fase 27 · Modo oscuro (solo teléfono; interruptor en Configuración) ---- */
+  html.adm-app .adm-theme-card { display: block; padding: 14px 16px; margin-top: 16px; }
+  html.adm-app .adm-theme-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  html.adm-app .adm-theme-hint { margin: 4px 0 0; font-size: 12px; line-height: 1.5; color: var(--adm-muted); }
+  html.adm-app .adm-theme-switch {
+    position: relative; flex: 0 0 auto; width: 56px; min-width: 44px; height: 44px; padding: 0;
+    border: 0; border-radius: 999px; background: transparent; cursor: pointer;
+  }
+  html.adm-app .adm-theme-switch::before {
+    content: ""; position: absolute; inset: 8px 0; border-radius: 999px; background: var(--adm-border);
+  }
+  html.adm-app .adm-theme-switch[aria-checked="true"]::before { background: var(--adm-accent); }
+  html.adm-app .adm-theme-knob {
+    position: absolute; top: 10px; left: 3px; width: 24px; height: 24px; border-radius: 50%;
+    background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .35); transition: transform .2s ease;
+  }
+  html.adm-app .adm-theme-switch[aria-checked="true"] .adm-theme-knob { transform: translateX(26px); }
+  @media (prefers-reduced-motion: reduce) { html.adm-app .adm-theme-knob { transition: none; } }
+  html.adm-app.adm-dark {
+    color-scheme: dark;
+    --admin-color-brand: #F8AACA;
+    --admin-color-background-page: #161216;
+    --admin-color-background-sidebar: #1f191e;
+    --admin-color-text-sidebar: #f3e9ee;
+    --admin-color-background-sidebar-active: #3a2530;
+    --admin-color-text-sidebar-active: #ffffff;
+    --admin-color-background-header: #1f191e;
+    --admin-color-background-surface: #1f191e;
+    --admin-color-border: #3a2f37;
+    --admin-color-text-primary: #f3e9ee;
+    --admin-color-text-secondary: #cdbcc5;
+    --admin-color-text-tertiary: #b5a3ad;
+    --admin-color-text-title: #f3e9ee;
+    --admin-color-button-outline-text: #f3e9ee;
+    --admin-color-table-header-background: #2a2128;
+    --admin-color-table-row-hover: #2a2128;
+    --admin-color-badge-background: #3a2530;
+    --admin-color-badge-text: #f3e9ee;
+    --admin-color-field-background: #2a2128;
+    --admin-color-field-border: #4a3b44;
+    --admin-color-success-background: #123524;
+    --admin-color-success-text: #86efac;
+    --admin-color-warning-background: #3b2a10;
+    --admin-color-warning-text: #fdba74;
+    --admin-color-error-background: #3f1d1d;
+    --admin-color-error-text: #fca5a5;
+    --admin-color-modal-background: #1f191e;
+    --tt-ui-canvas: #161216;
+    --tt-ui-surface: #1f191e;
+    --tt-ui-surface-soft: #2a2128;
+    --tt-ui-ink: #f3e9ee;
+    --tt-ui-muted: #cdbcc5;
+    --tt-ui-pink-soft: #3a2530;
+    --tt-ui-line: #3a2f37;
+    --tt-page-bg: #161216;
+    --tt-surface: #1f191e;
+    --tt-text: #f3e9ee;
+    --color-badge-background: #3a2530;
+    --color-badge-text: #f3e9ee;
+  }
+  html:root.adm-app.adm-dark body.tt-admin-control { color: var(--adm-text); }
+  html:root.adm-app.adm-dark body.tt-admin-control :is(.adm-card, .adm-card-head, .adm-stat, .adm-section, .adm-content) { color: var(--adm-text); }
+  html:root.adm-app.adm-dark body.tt-admin-control :is(.adm-card-head, .tt-commerce-card-head) { background: transparent; }
+  /* Componentes con colores fijos en sus hojas de origen */
+  html:root.adm-app.adm-dark body.tt-admin-control :is(.adm-btn-outline, .tt-dashboard-link, .tt-control-result-button, .user-tab-btn, .correos-tab-btn, .ship-tab-btn, .visual-editor-sidebar, .visual-editor-properties, .visual-preview-head, .adm-analytics-card, .adm-live-status, .adm-diagnostic-safety, .adm-diagnostic-status, .adm-st-933292, .adm-st-614436, .adm-st-28c6d1, .apar-panel-help, .visual-editor-layout, .visual-editor-status) {
+    background: var(--adm-card); color: var(--adm-text); border-color: var(--adm-border);
+  }
+  html:root.adm-app.adm-dark body.tt-admin-control :is(.user-tab-btn, .correos-tab-btn, .ship-tab-btn).active { background: var(--admin-color-background-sidebar-active); color: var(--adm-text); }
+  html:root.adm-app.adm-dark body.tt-admin-control .tt-access-pill-track { background: var(--adm-border); }
+  html:root.adm-app.adm-dark body.tt-admin-control :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]) { background: var(--admin-color-field-background); color: var(--adm-text); border-color: var(--admin-color-field-border); }
+  html:root.adm-app.adm-dark body.tt-admin-control :is(.adm-toggle-label, .adm-toggle-desc, .adm-st-e77036, .adm-st-58a164, .adm-st-0b130b, .adm-statistics-eyebrow, .adm-statistics-foot, .tt-access-pill-text) { color: var(--adm-muted); }
+  html:root.adm-app.adm-dark body.tt-admin-control :is(.tt-access-pill-locked, td.adm-loading) { color: #161216 !important; }
+  html:root.adm-app.adm-dark body.tt-admin-control :is(.adm-toggle-label) { color: var(--adm-text); }
+  html:root.adm-app.adm-dark body.tt-admin-control #adm-mobile-tabs > .adm-mobile-tab { color: var(--adm-muted) !important; }
+  html:root.adm-app.adm-dark body.tt-admin-control #adm-mobile-tabs > .adm-mobile-tab.active { color: var(--adm-text) !important; }
+  html:root.adm-app.adm-dark body.tt-admin-control #adm-mobile-tabs .adm-nav-icon, html:root.adm-app.adm-dark body.tt-admin-control #adm-mobile-tabs .adm-nav-icon svg { color: inherit !important; }
 }
 @media (max-width: 359px) {
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
