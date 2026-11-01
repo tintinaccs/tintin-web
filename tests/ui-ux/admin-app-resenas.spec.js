@@ -117,11 +117,12 @@ for (const width of [320, 390, 540, 768]) {
       const vw = ref.getBoundingClientRect().width; ref.remove(); // el navegador de pruebas reserva el canal de la barra de desplazamiento
       const r = node.getBoundingClientRect();
       const fields = [...node.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]), select, textarea')].filter(n => n.getClientRects().length);
-      return { w: r.width, h: r.height, vw, close: node.querySelector('.eg-drawer-head .eg-icon-btn').getBoundingClientRect().height, minFont: fields.length ? Math.min(...fields.map(n => parseFloat(getComputedStyle(n).fontSize))) : 16, fields: fields.length };
+      return { w: r.width, h: r.height, vw, close: node.querySelector('.eg-drawer-head .eg-icon-btn').getBoundingClientRect().height, link: node.querySelector('.eg-detail-product a').getBoundingClientRect().height, minFont: fields.length ? Math.min(...fields.map(n => parseFloat(getComputedStyle(n).fontSize))) : 16, fields: fields.length };
     });
     expect(Math.round(d.w)).toBe(Math.round(d.vw));
     expect(Math.round(d.h)).toBe(844);
     expect(d.close).toBeGreaterThanOrEqual(44);
+    expect(Math.round(d.link)).toBeGreaterThanOrEqual(44); // Fase 11
     expect(d.fields).toBeGreaterThan(0);
     expect(d.minFont).toBeGreaterThanOrEqual(16);
     await page.keyboard.press('Escape');

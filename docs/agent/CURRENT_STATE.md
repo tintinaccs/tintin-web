@@ -1,3 +1,13 @@
+## 2026-11-01 — Admin app móvil, Fase 11: Me gusta
+
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+
+- Investigado: `gestion-participacion-admin-v2.js` (sección Me gusta: barra `#likes-*`, pestañas, tarjetas `.eg-like-card`, barra masiva `#eg-like-bulk`, detalle `.eg-drawer`). Mismo markup `eg-*` que Reseñas; no se tocó el controlador.
+- Cambio (solo ≤768 px): las reglas de la Fase 10 se extienden a `#section-me-gusta` con `:is(#section-resenas, #section-me-gusta)` (Estado/Periodo/Orden en la hoja, pestañas en una fila, casilla con zona de 44 px, ••• y botones de 44 px). El enlace "Ver producto ↗" del detalle (Me gusta y Reseñas) pasa de 13 px a 44 px de alto. Caché CSS `tintin-20261101-app-movil-11`.
+- Error arreglado de paso: ninguno nuevo (el enlace de 13 px es parte del ajuste de toques).
+- PASS_LOCAL: `tests/ui-ux/admin-app-me-gusta.spec.js` 6/6 (falla sin el CSS); `admin-app-resenas` 6/6 con la nueva comprobación del enlace; regresión admin-app-* (productos, inicio, usuarios, pedidos, shell), admin-all-devices, admin-workspaces, admin-mobile-experience; `tests/engagement/*.test.mjs` y `busquedas-admin` OK. Sin escrituras. 820/1440 sin cambios.
+- NOT_VERIFIED: datos reales, producción, teléfono físico; vistas Productos, Clientas, Analítica y Configuración de Me gusta no medidas una por una.
+
 ## 2026-11-01 — Admin app móvil, Fase 10: Reseñas
 
 Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
