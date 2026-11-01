@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "31a36a4e8976a7bb6d7851b2bab4cd5bc027b739697942669413676657d4ad21",
+  "sourceFingerprint": "2ff8ab3369d933262eb7c1ba1c8bab90f3e4bce0b0584759a27db539548a805a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1705,
     "textFiles": 1570,
-    "totalBytes": 44461573,
+    "totalBytes": 44461972,
     "pages": 19,
     "modules": 1133
   },
@@ -58030,8 +58030,8 @@
     },
     {
       "path": "tests/ui-ux/admin-app-me-gusta.spec.js",
-      "bytes": 10412,
-      "sha256": "9e5673fbc44ef8f0a8cd1cd6de0ddfd96a1ce0a25aaf12b68bc11d4e99b30542",
+      "bytes": 10545,
+      "sha256": "a37325da53f481a06d61fc9cdee12e50265687f0135d06056ac34f7bc14c2bfb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -58040,7 +58040,7 @@
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/**",
-          "line": 36
+          "line": 37
         }
       ]
     },
@@ -58123,8 +58123,8 @@
     },
     {
       "path": "tests/ui-ux/admin-app-resenas.spec.js",
-      "bytes": 10146,
-      "sha256": "42afa195ad43f758775306ef2da3f4a500b50151cbb60f2f100523019c3347d1",
+      "bytes": 10279,
+      "sha256": "33d2db731fdcf1f974026243f9067507c22c190bfb2cde58b030b4c4a5e94d6e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -58133,7 +58133,7 @@
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/**",
-          "line": 36
+          "line": 37
         }
       ]
     },
@@ -58161,8 +58161,8 @@
     },
     {
       "path": "tests/ui-ux/admin-app-ventas-locales.spec.js",
-      "bytes": 8821,
-      "sha256": "17229ea49a383e301d5d210ff990393c0d8f0e75db70b76a923dbe5e0cde911c",
+      "bytes": 8954,
+      "sha256": "86ffdadaed556e7b15829d02659fb3ce66527fb4d12c4abde40985371b408031",
       "syntax": {
         "ok": true,
         "error": ""
@@ -70171,8 +70171,8 @@
     {
       "path": "tests/ui-ux/admin-app-me-gusta.spec.js",
       "extension": ".js",
-      "bytes": 10412,
-      "sha256": "9e5673fbc44ef8f0a8cd1cd6de0ddfd96a1ce0a25aaf12b68bc11d4e99b30542"
+      "bytes": 10545,
+      "sha256": "a37325da53f481a06d61fc9cdee12e50265687f0135d06056ac34f7bc14c2bfb"
     },
     {
       "path": "tests/ui-ux/admin-app-mensajes.spec.js",
@@ -70207,8 +70207,8 @@
     {
       "path": "tests/ui-ux/admin-app-resenas.spec.js",
       "extension": ".js",
-      "bytes": 10146,
-      "sha256": "42afa195ad43f758775306ef2da3f4a500b50151cbb60f2f100523019c3347d1"
+      "bytes": 10279,
+      "sha256": "33d2db731fdcf1f974026243f9067507c22c190bfb2cde58b030b4c4a5e94d6e"
     },
     {
       "path": "tests/ui-ux/admin-app-shell.spec.js",
@@ -70225,8 +70225,8 @@
     {
       "path": "tests/ui-ux/admin-app-ventas-locales.spec.js",
       "extension": ".js",
-      "bytes": 8821,
-      "sha256": "17229ea49a383e301d5d210ff990393c0d8f0e75db70b76a923dbe5e0cde911c"
+      "bytes": 8954,
+      "sha256": "86ffdadaed556e7b15829d02659fb3ce66527fb4d12c4abde40985371b408031"
     },
     {
       "path": "tests/ui-ux/admin-commerce-shopify.spec.js",
