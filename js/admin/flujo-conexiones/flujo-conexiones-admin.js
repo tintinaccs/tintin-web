@@ -6,8 +6,8 @@ import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261022-
 // Comprueba automáticamente la evidencia actual con las lecturas de producción
 // existentes. Los sellos históricos no deciden colores y no se escriben datos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261010-auto-flow-1';
-import { resolveAutomaticState, isAttentionState, liveMarker, shouldShowFlowEdge, createAutomaticMonitor, CHECK_INTERVAL_MS, EVIDENCE_MAX_AGE_MS } from './estado-flujo.js?v=tintin-20261010-auto-flow-1-connections-20261014-1';
-import { buildLiveChecks, buildLiveEdges, ciEvidenceProblem } from './live-checks.js?v=tintin-20261010-auto-flow-1-connections-20261014-1';
+import { resolveAutomaticState, isAttentionState, liveMarker, shouldShowFlowEdge, createAutomaticMonitor, CHECK_INTERVAL_MS, EVIDENCE_MAX_AGE_MS } from './estado-flujo.js?v=tintin-20261101-flow-preload-1';
+import { buildLiveChecks, buildLiveEdges, ciEvidenceProblem } from './live-checks.js?v=tintin-20261101-flow-preload-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
@@ -655,8 +655,13 @@ export function initConnectionsFlow({ role } = {}) {
 
   const monitor = createAutomaticMonitor({
     check: revalidate,
-    isActive: () => root.isConnected && !root.hidden && root.getClientRects().length > 0 &&
-      document.visibilityState !== 'hidden' && navigator.onLine !== false && Boolean(auth.currentUser),
+    // Precarga: con la pestaña visible el monitor también corre aunque la sección
+    // esté oculta (una vez que el Admin terminó de arrancar), así al entrar el
+    // resultado ya está cargado. Pestaña oculta o sin conexión sigue pausando.
+    isActive: () => root.isConnected && document.visibilityState !== 'hidden' &&
+      navigator.onLine !== false && Boolean(auth.currentUser) && (prefetchAllowed || sectionVisible()),
+    // Oculta se revisa más espaciado, siempre dentro de la vigencia de la evidencia.
+    intervalMs: () => (sectionVisible() ? CHECK_INTERVAL_MS : HIDDEN_CHECK_INTERVAL_MS),
     onError(error) {
       liveState.checkedAt = null;
       liveState.byId = {};
@@ -678,6 +683,9 @@ export function initConnectionsFlow({ role } = {}) {
     },
   });
 
+  const sectionVisible = () => !root.hidden && root.getClientRects().length > 0;
+  let prefetchAllowed = false;
+  const HIDDEN_CHECK_INTERVAL_MS = Math.min(60_000, EVIDENCE_MAX_AGE_MS - 30_000);
   function synchronizeMonitor() {
     if (!root.isConnected) { dispose(); return; }
     monitor.refresh();
@@ -712,4 +720,8 @@ export function initConnectionsFlow({ role } = {}) {
     delete root.dataset.tfcMounted;
   }
   synchronizeMonitor();
+  // El arranque del Admin no compite con las comprobaciones: la precarga
+  // empieza cuando el navegador queda libre (máx. 5 s después de montar).
+  const whenIdle = window.requestIdleCallback ? cb => window.requestIdleCallback(cb, { timeout: 5000 }) : cb => setTimeout(cb, 3000);
+  whenIdle(() => { prefetchAllowed = true; if (root.isConnected) synchronizeMonitor(); });
 }
