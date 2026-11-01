@@ -57,7 +57,7 @@ Estos 16 Skills son instrucciones ligeras de trabajo enfocadas en tareas reales;
 - Verificación de metadatos y archivos sin dependencias externas: `python3 scripts/agent/check-cloud-skills.py`.
 - Instalación opcional en directorio efímero de un agente Linux (no en tu PC):
   `bash scripts/agent/bootstrap-cloud-linux.sh --prefix "$RUNNER_TEMP/tintin-agent-skills"`
-- El workflow `.github/workflows/cloud-agent-skills-linux.yml` valida y copia los Skills en un runner temporal de GitHub Actions con permisos mínimos, sin ejecutar los scripts de terceros.
+- El workflow canónico `.github/workflows/auditar-tintin.yml` valida y copia los Skills en un runner temporal de GitHub Actions, sin ejecutar los scripts de terceros.
 - El runner Linux de Actions desaparece al acabar el trabajo. Para agentes Codex/Claude Cloud el checkout del repositorio ofrece los Skills del proyecto sin instalación global.
 - Sin permisos para configurar los servidores reales del proveedor, no se puede afirmar instalación permanente en toda la infraestructura Linux ni ejecución real del skill desde cada host.
 
@@ -81,4 +81,4 @@ Se detectaron en la misma rama de trabajo y se preservaron, además de los 26 nu
 
 **Presupuesto de contexto:** tener 45 Skills no significa activar los 45. Algunos hosts pueden resumir o truncar metadatos cuando hay muchos; es preferible llamar explícitamente al Skill apropiado y consultar este catálogo. Los Skills de enfoque superpuesto son alternativas, no pasos obligatorios acumulativos. Evitar ejecutar suites de pruebas redundantes.
 
-El script complementario `scripts/check-cloud-skills-linux.sh` fue conservado para el caso opcional de enlazar los Skills a un HOME Linux efímero. El workflow de Linux principal es `.github/workflows/cloud-agent-skills-linux.yml`, que hace una única verificación automática y una copia aislada; no se ejecutan dos workflows redundantes.
+El script complementario `scripts/check-cloud-skills-linux.sh` fue conservado para el caso opcional de enlazar los Skills a un HOME Linux efímero. La validación de Linux está integrada en `.github/workflows/auditar-tintin.yml`, respetando el límite de 12 workflows y el contrato de un único workflow de PR.
