@@ -88,9 +88,17 @@ function refresh(root, state) {
   // También tablas tardías o internas (Maestro, dispositivos y reportes).
   for (const grid of root.querySelectorAll('table')) {
     if (!grid.classList.contains('tt-admin-records')) grid.classList.add('tt-admin-records');
+    for (const checkbox of grid.querySelectorAll('thead input[type=checkbox]')) {
+      if (!checkbox.closest('label')) {
+        const label = create('label', 'adm-user-select');
+        checkbox.before(label); label.append(checkbox);
+      }
+      if (!checkbox.title && !checkbox.hasAttribute('aria-label') && !checkbox.hasAttribute('aria-labelledby')) checkbox.setAttribute('aria-label', 'Seleccionar todos');
+    }
     const headings = [...grid.querySelectorAll(':scope > thead tr:last-child th')].map(node => text(node));
     for (const row of grid.querySelectorAll(':scope > tbody > tr')) {
       [...row.children].forEach((cell, index) => {
+        cell.classList.toggle('tt-admin-record-wide', cell.colSpan > 1 || /detalle|descripci[oó]n|mensaje|casillas|contenido|direcci[oó]n|email|correo|destinatario|qui[eé]n/i.test(headings[index] || cell.dataset.label || ''));
         if (!cell.hasAttribute('data-label') && cell.colSpan === 1 && headings[index]) cell.dataset.label = headings[index];
       });
     }

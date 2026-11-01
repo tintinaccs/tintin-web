@@ -881,7 +881,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261031-seo-espacios-2');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261101-admin-spaced-1');
     }
   }
 

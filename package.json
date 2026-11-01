@@ -79,7 +79,7 @@
     "audit:admin-foundation": "node scripts/auditar-admin-fundamentos.js",
     "audit:products-media": "node scripts/auditar-admin-productos-multimedia.js",
     "audit:admin-orders": "node scripts/auditar-admin-pedidos.js && node --test tests/orders/*.test.mjs",
-    "audit:admin-responsive": "node scripts/auditar-super-admin-responsive.mjs && playwright test tests/ui-ux/products-mosaic.spec.js tests/ui-ux/products-responsive-phase-one.spec.js tests/ui-ux/product-save-responsive.spec.js tests/ui-ux/products-master.spec.js tests/ui-ux/admin-workspaces.spec.js tests/ui-ux/admin-control-dashboard.spec.js tests/ui-ux/admin-all-devices.spec.js tests/ui-ux/admin-user-mobile.spec.js tests/ui-ux/admin-mobile-experience.spec.js --project=chromium --workers=1 --retries=0",
+    "audit:admin-responsive": "node scripts/auditar-super-admin-responsive.mjs && playwright test tests/ui-ux/products-mosaic.spec.js tests/ui-ux/products-responsive-phase-one.spec.js tests/ui-ux/product-save-responsive.spec.js tests/ui-ux/products-master.spec.js tests/ui-ux/admin-workspaces.spec.js tests/ui-ux/admin-control-dashboard.spec.js tests/ui-ux/admin-all-devices.spec.js tests/ui-ux/admin-user-mobile.spec.js tests/ui-ux/admin-mobile-experience.spec.js tests/ui-ux/admin-user-spaced-cards.spec.js --project=chromium --workers=1 --retries=0",
     "audit:users-roles": "node scripts/auditar-admin-usuarios-roles.js",
     "audit:content-appearance": "node scripts/auditar-admin-contenido-apariencia.js",
     "audit:email-messaging": "node scripts/auditar-admin-correo-mensajeria.js",
