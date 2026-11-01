@@ -1,3 +1,11 @@
+## 2026-11-01 — Admin app móvil, Fase 4: Pedidos
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: `#tt-commerce-orders` se monta dinámicamente en `#section-pedidos` (shopify-commerce-admin.js `mountShells` + tablero-pedidos-vista.mjs `renderOrderBoard`); el filtrado escucha `change`/`input` en `document` por `data-filter`, así que mover los selects no rompe nada.
+- Cambio: botón "Filtros" (con contador "Filtros · N") que abre la hoja inferior con los selects reales Pago/Entrega/Orden (`filterSheet` reutilizable en app-movil-admin.js, se restauran a la barra al cerrar; foco vuelve al botón). En la barra queda solo la búsqueda (16 px). Acciones de 44 px en fila flexible, contadores en 3 columnas (2 bajo 360 px), vistas en una fila deslizable de 44 px. `AdmApp.closeSheet` ya no falla si el marcador fue reemplazado por un re-render.
+- Error arreglado de paso: a 320 px las pestañas de etapa partían palabras ("En preparació n", "Entregado s") por `overflow-wrap:anywhere` de tablero-pedidos.css; en modo app usan `overflow-wrap:normal`, menos padding y, bajo 360 px, etiqueta de 11 px y círculo de 20 px. La spec lo comprueba.
+- PASS_LOCAL: admin-app-pedidos (nuevo, 6/6: 320/390/540/768 + 820/1440 intactos), orders-board 66/66, admin-commerce-shopify 11/11, admin-app-shell 12/12, admin-app-usuarios 6/6, admin-all-devices 41/41, admin-workspaces 21/21, admin-mobile-experience 15/15; verify:diagnostics y audit:cache-versioning OK.
+- NOT_VERIFIED: datos reales de producción (5 pedidos ficticios), teléfono físico.
+
 ## 2026-11-01 — Admin app móvil, Fase 3: Usuarios
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
 - Investigado: las tarjetas móviles de usuarios ya existían (#1297: espacio-modulos-admin.css + ficha-usuario-admin.js `enhanceRows`, con Ver ficha, menú ⋯ y "Mostrar más datos"). No se rehízo nada de eso.

@@ -135,12 +135,52 @@ function openSheet({ title: label = 'Filtros', nodes = [], opener = null } = {})
 }
 function closeSheet(restoreFocus = true) {
   if (!sheet) return;
-  for (const { node, marker } of moved) { marker.replaceWith(node); }
+  // Si el módulo se volvió a dibujar mientras la hoja estaba abierta, el
+  // lugar original ya no existe: el nodo viejo se descarta.
+  for (const { node, marker } of moved) { if (marker.isConnected) marker.replaceWith(node); else node.remove(); }
   moved = [];
   sheet.hidden = sheetBackdrop.hidden = true;
   document.body.classList.remove('adm-app-sheet-open');
   if (restoreFocus) sheetOpener?.focus({ preventScroll: true });
   sheetOpener = null;
+}
+
+// ── Botón "Filtros" que abre la hoja con los filtros secundarios ──
+// Los campos siguen siendo los reales (mismos eventos y valores); en modo app
+// solo se ocultan en la barra y se muestran dentro de la hoja.
+const filterSyncs = new WeakMap();
+function filterSheet(toolbar, fields) {
+  if (!toolbar || !fields.length) return;
+  if (filterSyncs.has(toolbar)) { filterSyncs.get(toolbar)(); return; }
+  fields.forEach(field => field.classList.add('adm-app-filter-field'));
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'adm-app-filter-btn';
+  button.setAttribute('aria-haspopup', 'dialog');
+  const sync = () => {
+    const active = fields.filter(field => (field.matches('select') ? field : field.querySelector('select'))?.selectedIndex > 0).length;
+    const label = active ? `Filtros · ${active}` : 'Filtros';
+    if (button.textContent !== label) button.textContent = label;
+    button.setAttribute('aria-label', active ? `Filtros, ${active} activo${active === 1 ? '' : 's'}` : 'Filtros');
+  };
+  button.addEventListener('click', () => openSheet({ title: 'Filtros', nodes: fields, opener: button }));
+  fields.forEach(field => field.addEventListener('change', sync));
+  toolbar.append(button);
+  filterSyncs.set(toolbar, sync);
+  sync();
+}
+
+// Pedidos: Pago, Entrega y Orden pasan a la hoja; la búsqueda queda visible.
+// El tablero se monta después (shopify-commerce-admin.js), por eso se observa
+// la sección. Solo cambia el texto del botón si cambia (evita bucles).
+const ordersSection = document.getElementById('section-pedidos');
+if (ordersSection) {
+  const wireOrders = () => {
+    const toolbar = ordersSection.querySelector('#tt-commerce-orders .tt-order-toolbar');
+    if (toolbar) filterSheet(toolbar, [...toolbar.querySelectorAll(':scope > label')].filter(label => !label.querySelector('input[type="search"]')));
+  };
+  new MutationObserver(wireOrders).observe(ordersSection, { childList: true, subtree: true });
+  wireOrders();
 }
 
 // ── Deslizar para recargar ──
