@@ -14,8 +14,9 @@ async function load(page, width, file = 'admin.html', options = {}) {
   const shell = fs.readFileSync(path.join(root, file), 'utf8')
     .replace('</head>', `<script nonce="dGludGluLWZpeHR1cmU=">${entryScroll}</script></head>`)
     .replace('</body>', scripts.map(src => `<script nonce="dGludGluLWZpeHR1cmU=" type="module" src="${src}"></script>`).join('') + '</body>' );
-  await page.route('**/*', route => {
+  await page.route('**/*', async route => {
     const url = new URL(route.request().url());
+    if (options.respond && await options.respond(route, url)) return;
     if (url.hostname !== 'tintin.test') return route.abort();
     if (url.pathname === '/fixture') return route.fulfill({
       contentType: 'text/html', body: shell,
