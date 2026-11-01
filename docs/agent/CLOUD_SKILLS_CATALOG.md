@@ -49,3 +49,42 @@ Abrir una **nueva** tarea de Codex Cloud / Claude Code Cloud en el commit donde 
 Se incluyen archivos SKILL.md reales y recursos auxiliares pertinentes: biblioteca, referencias y scripts de Taste Skill; datos, referencias y scripts de UI UX Pro Max; recursos de depuración de Superpowers; metadatos opcionales de Matt Pocock y licencias de redistribución. No se incluyen pruebas/evaluaciones del proyecto de origen que no son necesarias para invocar estas habilidades, ni imágenes binarias adicionales.
 
 Además, los cuatro Skills de Codex que ya estaban en `.codex/skills/` se exponen SIN ELIMINARLOS también en la ruta oficialmente detectable `.agents/skills/`, para que nuevas sesiones puedan encontrarlos.
+
+## Ampliación A-Z: especialistas externos y Skills propios de Tintín
+
+### Especialistas externos adicionales
+- `webapp-testing` — `anthropics/skills@ca45fc496a3436251f191354091d557da31c15b5`, con `scripts/with_server.py` y licencia; Playwright es una capacidad del entorno, no una dependencia que se instala sin permiso.
+- `test-driven-development` — `obra/superpowers@2ce8aa15d05bd57213e6f746f953aafb7ded7a8b`; uso selectivo, respetando la estructura de pruebas existente.
+- `writing-plans` — mismo origen; planes para tareas amplias, sin imponerse sobre pedidos de implementación directa.
+- `requesting-code-review` y `receiving-code-review` — mismo origen; revisión y tratamiento técnico del feedback.
+- `writing-for-agents` — `mattpocock/skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`, junto a `SKILL-MECHANICS.md`; mejora instrucciones y transferencia de contexto.
+
+### Skills internos nuevos para todo el ciclo de la web
+| Skill | Área |
+|---|---|
+| `tintin-agent-efficiency` | Tokens, búsquedas dirigidas, cambios mínimos y pruebas selectivas |
+| `tintin-brand-copy` | Textos reales, identidad editorial y eliminación de clichés de IA |
+| `tintin-design-engineering` | Componentes y estilos, tokens, estado visual |
+| `tintin-responsive-a11y` | Responsive y accesibilidad |
+| `tintin-performance-loading` | Rendimiento, loaders, imágenes y Core Web Vitals |
+| `tintin-security-privacy` | Seguridad, autorización, secretos y privacidad |
+| `tintin-commerce-integrity` | Carrito, pedidos, precios, inventario y checkout |
+| `tintin-data-index-sync` | Datos, búsqueda, índices y sincronización |
+| `tintin-seo-discoverability` | SEO, rastreo y metadatos |
+| `tintin-architecture-integrations` | Arquitectura, Firebase/Cloudflare e integraciones |
+| `tintin-cloud-linux` | Linux de nube y descubrimiento de Skills |
+| `tintin-qa-release` | PRs, CI, seguimiento y release |
+| `tintin-observability-recovery` | Errores, diagnósticos e incidentes |
+
+Todos los Skills propios remiten a `AGENTS.md`, `.claude/CLAUDE.md`, `DESIGN.md` y contratos de Tintín, no inventan subsistemas ni prescriben nuevas dependencias.
+
+### Linux de nube
+Script: `scripts/check-cloud-skills-linux.sh`.
+- `bash scripts/check-cloud-skills-linux.sh --check`: verifica estructura de todos los Skills y recursos clave, **sin instalar nada**.
+- `bash scripts/check-cloud-skills-linux.sh --install-user`: realiza la verificación y crea enlaces simbólicos en `$HOME/.agents/skills` y `$HOME/.claude/skills` del **Linux donde se ejecuta**; si ya hay un archivo o Skill de usuario con el mismo nombre, lo conserva. No usa sudo, npm, pip, apt, curl ni descargas.
+- Workflow `.github/workflows/cloud-skills-linux.yml`: comprueba en runner efímero Ubuntu y ejercita el modo de instalación de usuario; esos enlaces se eliminan cuando termina el runner. Un nuevo checkout en Codex Cloud / Claude Code Cloud ve Skills del repositorio sin ese paso adicional.
+- No se han instalado Skills permanentemente en una cuenta claude.ai, ChatGPT web ni en un servidor Linux externo. Esas superficies no comparten automáticamente el filesystem del checkout.
+- Los scripts originales se incluyen como material de Skill, **no se ejecutan automáticamente**; sus dependencias deben verificarse antes de su uso.
+
+### Por qué no instalar literalmente todos los Skills de internet
+Miles de Skills implican más metadatos para examinar, superposición de instrucciones, riesgos de cadenas de suministro y más código innecesario. Se incluyen especialistas por función y se activan bajo demanda. La prioridad de seguridad y negocio prevalece sobre cualquier Skill externo. Nuevas incorporaciones requieren procedencia, necesidad concreta y compatibilidad revisada.
