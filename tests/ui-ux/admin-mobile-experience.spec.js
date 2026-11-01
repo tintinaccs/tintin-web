@@ -4,7 +4,7 @@ const {load}=require('./helpers/admin-panel-fixture.cjs');
 const app=fs.readFileSync('js/admin/admin-app.js','utf8');
 const originalWorkspaceCss=fs.readFileSync('css/admin/espacio-modulos-admin.css','utf8').split('/* Teléfonos:')[0];
 const settle=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-for(const [width,height] of [[320,568],[390,844],[540,960],[844,390]])test(`campos, pestañas y acciones de todos los módulos ${width}x${height}`,async({page})=>{
+for(const [width,height] of [[320,568],[390,844],[540,960],[768,1024],[844,390]])test(`campos, pestañas y acciones de todos los módulos ${width}x${height}`,async({page})=>{
  await load(page,width,'admin.html',{mobile:true,sidebar:true,guard:true});await page.setViewportSize({width,height});
  const ids=await page.locator('.adm-content > .adm-section').evaluateAll(nodes=>nodes.map(node=>node.id));
  let fields=0;
@@ -21,7 +21,7 @@ for(const [width,height] of [[320,568],[390,844],[540,960],[844,390]])test(`camp
  }
  expect(ids.length).toBeGreaterThan(20);expect(fields).toBeGreaterThan(30);
 });
-for(const [width,height] of [[600,960],[768,1024],[1024,768],[1440,900],[2560,1440]])test(`tablet y escritorio conservan su distribución ${width}x${height}`,async({page})=>{
+for(const [width,height] of [[820,1180],[1024,768],[1440,900],[2560,1440]])test(`tablet y escritorio conservan su distribución ${width}x${height}`,async({page})=>{
  await load(page,width);await page.setViewportSize({width,height});
  await page.evaluate(()=>{document.querySelectorAll('.adm-section').forEach(node=>node.classList.toggle('active',node.id==='section-usuarios'));});await settle(page);
  const snapshot=()=>page.locator('#section-usuarios :is(table,thead,tr,td,.adm-input,.adm-select,.adm-btn)').evaluateAll(nodes=>nodes.map(node=>{const s=getComputedStyle(node),b=node.getBoundingClientRect();return {tag:node.tagName,display:s.display,width:b.width,height:b.height,padding:s.padding,font:s.fontSize,radius:s.borderRadius};}));

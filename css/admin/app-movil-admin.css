@@ -1,0 +1,238 @@
+/* App móvil del panel (≤768px).
+   Capa de presentación: usa solo los tokens existentes (--adm-*), anima solo
+   transform/opacity y no afecta a tablet (>768px) ni a escritorio. */
+
+.adm-app-back,
+.adm-app-sheet,
+.adm-app-sheet-backdrop,
+.adm-app-ptr { display: none; }
+
+@media (max-width: 768px) {
+  /* ── Barra superior: Volver + título + buscar ── */
+  html.adm-app body:has(.adm-main) .adm-topbar {
+    padding-top: calc(8px + env(safe-area-inset-top, 0px));
+    padding-inline: max(12px, env(safe-area-inset-left, 0px)) max(12px, env(safe-area-inset-right, 0px));
+  }
+  html.adm-app .adm-topbar-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+    max-width: none;
+  }
+  html.adm-app #adm-topbar-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  html.adm-app.adm-app-has-back .adm-app-back {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 2px;
+    min-width: 44px;
+    min-height: 44px;
+    margin-left: -6px;
+    padding: 0 8px 0 2px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--adm-text);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.adm-app.adm-app-has-back .adm-app-back:active { opacity: .55; }
+  html.adm-app.adm-app-has-back .adm-app-back:focus-visible { outline: 2px solid var(--adm-text); outline-offset: 2px; }
+  html.adm-app.adm-app-has-back .adm-topbar-title .tt-control-brand { display: none; }
+  /* "+ Nuevo pedido" es la acción del módulo Pedidos, no de todo el panel. */
+  html.adm-app body:not([data-adm-section="pedidos"]) .adm-topbar-actions .adm-topbar-btn[href="/checkout"] { display: none; }
+  html.adm-app .adm-topbar-actions .adm-topbar-btn[href="/checkout"] { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* ── Barra inferior (cápsula existente): 5 accesos ── */
+  html.adm-app #adm-mobile-tabs > .adm-mobile-tab { -webkit-tap-highlight-color: transparent; }
+  html.adm-app #adm-mobile-tabs > .adm-mobile-tab:active { opacity: .6; }
+
+  /* ── Transición al cambiar de pantalla ── */
+  html.adm-app .adm-section.active { animation: adm-app-screen-in .22s ease-out both; }
+
+  /* ── Hoja "Más": lista agrupada estilo iOS ── */
+  html.adm-app body.tt-admin-control #adm-mobile-more-grid { display: block; }
+  html.adm-app .adm-more-group {
+    margin: 0 0 14px;
+    border: 1px solid var(--adm-border);
+    border-radius: 14px;
+    background: var(--adm-card);
+    overflow: hidden;
+  }
+  html.adm-app .adm-more-group:not(:has(> .adm-mobile-tab:not([style*="display: none"]):not([hidden]))) { display: none; }
+  html.adm-app .adm-more-group-title {
+    margin: 0;
+    padding: 10px 14px 4px;
+    color: var(--adm-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  html.adm-app body.tt-admin-control #adm-mobile-more-grid .adm-mobile-tab {
+    position: relative;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    line-height: 1.3;
+    color: var(--adm-text);
+    overflow-wrap: normal;
+    min-height: 48px;
+    padding: 10px 36px 10px 14px;
+    gap: 12px;
+    border: 0;
+    border-top: 1px solid var(--adm-border);
+    border-radius: 0;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.adm-app .adm-more-group > .adm-mobile-tab:first-child,
+  html.adm-app .adm-more-group-title + .adm-mobile-tab { border-top: 0; }
+  html.adm-app .adm-mobile-more-grid .adm-mobile-tab::after {
+    content: "";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid var(--adm-muted);
+    border-right: 2px solid var(--adm-muted);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  html.adm-app .adm-mobile-more-grid #mtab-logout { color: var(--adm-text); }
+
+  /* ── Formularios a 1 columna (dashboard-control fuerza 2 entre 761 y 1100) ── */
+  html.adm-app body.tt-admin-control .tt-admin-field-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  html.adm-app body.tt-admin-control .tt-admin-field-grid > * { grid-column: auto !important; }
+  html.adm-app #oe-body { grid-template-columns: minmax(0, 1fr) !important; padding: 16px !important; }
+
+  /* ── Barra de acciones fija al editar (encima de la barra inferior) ── */
+  html.adm-app .adm-app-actionbar {
+    position: sticky;
+    bottom: calc(var(--tt-admin-nav-clearance, 88px) + 8px);
+    z-index: 60;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px -16px -16px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--adm-border);
+    background: var(--adm-card);
+    box-shadow: 0 -8px 20px rgba(43, 20, 31, .08);
+  }
+  html.adm-app .adm-app-actionbar > :is(button, a, .adm-btn) { flex: 1 1 0; min-height: 44px; }
+
+  /* ── Hoja inferior reutilizable (filtros) ── */
+  html.adm-app .adm-app-sheet-backdrop:not([hidden]) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 440;
+    background: rgba(43, 20, 31, .42);
+    animation: adm-app-fade-in .2s ease-out both;
+  }
+  html.adm-app .adm-app-sheet:not([hidden]) {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 450;
+    max-height: calc(100svh - 48px - env(safe-area-inset-top, 0px));
+    overflow-y: auto;
+    padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    border: 1px solid var(--adm-border);
+    border-bottom: 0;
+    border-radius: 22px 22px 0 0;
+    background: var(--adm-card);
+    box-shadow: 0 -16px 48px rgba(43, 20, 31, .2);
+    overscroll-behavior: contain;
+    animation: adm-app-sheet-in .26s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  html.adm-app .adm-app-sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 12px;
+  }
+  html.adm-app .adm-app-sheet-head h2 { margin: 0; font-size: 18px; }
+  html.adm-app .adm-app-sheet-done {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    color: var(--adm-text);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  html.adm-app .adm-app-sheet-body { display: grid; gap: 12px; }
+  html.adm-app .adm-app-sheet-body > * { width: 100%; max-width: none; flex: none; }
+  html.adm-app .adm-app-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--adm-border);
+    border-radius: 10px;
+    background: var(--adm-card);
+    color: var(--adm-text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  html.adm-app body.adm-app-sheet-open { overflow: hidden; }
+
+  /* ── Deslizar para recargar ── */
+  html.adm-app .adm-app-ptr {
+    display: grid;
+    place-items: center;
+    position: fixed;
+    top: calc(64px + env(safe-area-inset-top, 0px));
+    left: 50%;
+    z-index: 90;
+    width: 36px;
+    height: 36px;
+    margin-left: -18px;
+    border: 1px solid var(--adm-border);
+    border-radius: 50%;
+    background: var(--adm-card);
+    color: var(--adm-text);
+    box-shadow: 0 6px 16px rgba(43, 20, 31, .14);
+    opacity: 0;
+    transform: translateY(-56px);
+    pointer-events: none;
+  }
+  html.adm-app .adm-app-ptr.is-loading svg { animation: adm-app-spin .8s linear infinite; }
+}
+
+@keyframes adm-app-screen-in { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+@keyframes adm-app-sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes adm-app-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes adm-app-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  html.adm-app .adm-section.active,
+  html.adm-app .adm-app-sheet:not([hidden]),
+  html.adm-app .adm-app-sheet-backdrop:not([hidden]),
+  html.adm-app .adm-app-ptr.is-loading svg { animation: none; }
+}

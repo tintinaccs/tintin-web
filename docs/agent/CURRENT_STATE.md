@@ -1,3 +1,14 @@
+## 2026-11-01 — Admin app móvil, Fase 0: base (base main 0f47cf5)
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commits locales, sin push).
+- Alcance: solo ≤768 px (`html.adm-app`); tablet/escritorio sin cambios. Capa de presentación: sin tocar permisos, auth, Firestore, reglas, datos ni controladores.
+- Nuevo: `css/admin/app-movil-admin.css` (barra superior con Volver, "+ Nuevo pedido" solo en Pedidos, transición de pantalla, "Más" agrupado estilo iOS, barra de acciones fija, hoja inferior de filtros, deslizar para recargar, movimiento reducido) y `js/admin/maestro/app-movil-admin.js` (`AdmApp.openSheet/closeSheet/pullToRefresh`, Volver por historial, Atrás del navegador cierra ventanas completas).
+- admin.html: 366 atributos `style=""` estáticos pasan a clases en `css/admin/estilos-estaticos-admin.css` (454 → 88). Se conservan inline los `display:none` que JS alterna, todo `grid-template-columns` (lo leen `espacio-modulos-admin.js` e `interfaz-productos-adaptable.js` y CSS con `[style*=]`) y 16 declaraciones que pierden la cascada.
+- Cortes de admin.css 541/640 → 768/769 para que el teléfono use la barra inferior y la tablet conserve la lateral.
+- Paridad 820/1024/1440: estilos calculados de todas las secciones idénticos antes/después (única diferencia: orden DOM de la barra de espacio en 1440, mismo conjunto de nodos, carrera de montaje en tiempo de ejecución).
+- PWA: ya existía (admin-manifest.json standalone + iconos, viewport-fit=cover, theme-color, SW en notificaciones-push.js). Verificado solo por inspección de archivos.
+- PASS_LOCAL: specs Playwright admin-* 232/232 (incluye admin-app-shell nuevo 12/12), visual-builder-ui 5/5, orders-board 66/66; tests Node que referencian admin (769, 763 OK; 4 pasan con Chromium configurado; commerce-firestore requiere emulador); audit:cache-versioning, verify:csp, test:architecture-gates.
+- NOT_VERIFIED: teléfonos físicos (instalación PWA, teclado, gestos), producción, `audit:mobile-fixes` (script desactualizado, no lanza navegador en este entorno).
+
 ## 2026-11-01 — public-catalog: ids reservados de Firestore ya no dan 502 (base main 75049e4)
 Claude Code, rama claude/sharp-cannon-oxfa8o.
 - Evidencia en producción (solo lectura): `GET /api/public-catalog?resource=products&id=__x__` → HTTP 502 y la ficha mostraba "No pudimos cargar el producto".

@@ -191,16 +191,17 @@ require('./admin-push-navigation.spec.js');
 
 
 for(const width of [320,390]) {
-  test(`buscar módulos desde el cajón libera el fondo a ${width}px`,async({page})=>{
+  // App móvil: sin cajón lateral; el buscador se abre desde la lupa superior.
+  test(`buscar módulos desde la barra superior de la app a ${width}px`,async({page})=>{
     await load(page,width,'admin.html',{mobile:true,sidebar:true});
-    await page.locator('#adm-hamburger').click();
-    await page.locator('.tt-admin-module-launcher').click();
+    await expect(page.locator('#adm-hamburger')).toBeHidden();
+    const search=page.locator('.adm-topbar .tt-control-search');
+    await search.click();
     await expect(page.getByRole('dialog',{name:'Buscar módulos'})).toBeVisible();
     await expect(page.getByLabel('Nombre del módulo')).toBeFocused();
     await expect(page.locator('#adm-sidebar')).toBeHidden();
-    expect(await page.locator('.adm-main').evaluate(node=>node.inert)).toBe(false);
     await page.keyboard.press('Escape');
-    await expect(page.locator('#adm-hamburger')).toBeFocused();
+    await expect(search).toBeFocused();
   });
 }
 

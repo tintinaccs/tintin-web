@@ -50,7 +50,7 @@ for (const width of [390, 768, 1440]) {
     for (const surface of colors.backgrounds) {
       // El nuevo panel móvil reserva el rosa para iconos y selección;
       // los botones inactivos usan la superficie sólida de la cápsula.
-      const expected = surface.className === 'adm-mobile-tab active' ? 'rgb(253, 236, 242)' : width <= 540 && surface.className === 'adm-mobile-tab' ? 'rgb(255, 255, 255)' : 'rgb(248, 170, 202)';
+      const expected = surface.className === 'adm-mobile-tab active' ? 'rgb(253, 236, 242)' : width <= 768 && surface.className === 'adm-mobile-tab' ? 'rgb(255, 255, 255)' : 'rgb(248, 170, 202)';
       expect(surface.color, surface.className).toBe(expected);
     }
   });
