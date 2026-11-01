@@ -1,3 +1,11 @@
+## 2026-11-01 — Admin app móvil, Fase 14: Import/Export
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+- Investigado: `js/admin/importacion-admin.js` oculta los importadores legacy (CSV y JSON manual, incluido el textarea de 12 px) y monta la tarjeta "Shopify · migración controlada" con estilos propios ≤560 (botones a todo el ancho). Las tarjetas de exportación son HTML estático. Medido con el módulo real y un CSV ficticio a 320/390/540/768: sin desborde, sin desplazamiento interno, todos los toques ≥44 px, campos 16 px, vista previa en tarjetas por la capa existente.
+- Cambio: ninguno en CSS/JS (no hacía falta). Se agrega `admin-app-importar.spec.js` como guardia de regresión.
+- Error arreglado de paso: ninguno.
+- PASS_LOCAL: `admin-app-importar.spec.js` 6/6 (módulo real; Firebase, sesión y red sustituidos por dobles; el CSV solo se analiza en el navegador). Al no haber cambio, la prueba no puede fallar "sin el CSS"; protege el estado actual.
+- NOT_VERIFIED: aplicar importación, copia operativa, exportaciones y Sheets (escriben o descargan datos reales). Visto y no tocado: el selector "Ir a una sección" corta su texto a 320 px (shell común a todos los módulos) y el título "Import / Export" queda debajo de la tarjeta Shopify en todos los anchos (orden del propio módulo).
+
 ## 2026-11-01 — Admin app móvil, Fase 13: Páginas
 Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
 - Investigado: `js/admin/pages/paginas-admin.js`. La tabla ya se ve como tarjetas en ≤768 gracias a la capa existente `espacio-modulos-admin` (no se duplicó). Faltaban: la búsqueda medía 155 px junto al selector (texto cortado) y Guardar/Cancelar del editor quedaban al final del formulario, fuera de vista.
