@@ -9,3 +9,6 @@ test('lote lee sólo identidades pedidas, excluye borradores y campos privados y
  await api.request('ids='+encodeURIComponent(JSON.stringify(['other'])));assert.equal(api.reads.length,4);
 });
 test('lotes inválidos no consumen lecturas',async()=>{for(const ids of [[],['../secret'],Array.from({length:31},(_,i)=>String(i)),[1],null]){const api=setup();assert.equal((await api.request('ids='+encodeURIComponent(JSON.stringify(ids)))).status,400);assert.equal(api.reads.length,0);}});
+test('ids reservados por Firestore responden item null sin consultar Firestore',async()=>{
+ for(const id of ['__x__','__name__','.','..']){const api=setup();const res=await api.request('id='+encodeURIComponent(id));assert.equal(res.status,200);assert.equal((await res.json()).item,null);assert.equal(api.reads.length,0);}
+});
