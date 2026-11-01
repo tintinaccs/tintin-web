@@ -1,3 +1,11 @@
+## 2026-11-01 — Admin app móvil, Fase 2: Estadísticas
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: `#section-estadisticas` (admin.html) y `renderStatisticsBars`/tendencia (admin-app.js). A 390 px las barras apretaban etiqueta, pista y valor en una fila de ~120 px, filtros en 2 columnas con select de 14 px y textos de 10 px.
+- Cambio (solo CSS ≤768 en app-movil-admin.css): portada compacta, filtros en una columna (select 44 px / 16 px), KPIs en 2 columnas, barras con etiqueta y valor arriba y pista a todo el ancho debajo, textos ≥11 px.
+- Error arreglado de paso (commit propio e22a673): el mensaje "Esperando datos…" de la tendencia ocupaba una sola columna de la cuadrícula; ahora abarca todo el ancho (admin.css, todas las anchuras) + spec admin-statistics-trend-empty.
+- PASS_LOCAL: admin-app-estadisticas (nuevo, 6/6), admin-statistics-trend-empty 3/3, admin-app-inicio 6/6, admin-app-shell 12/12, admin-control-dashboard, admin-all-devices, admin-mobile-experience; verify:diagnostics y audit:cache-versioning OK.
+- NOT_VERIFIED: datos reales de producción (solo filas ficticias), teléfono físico.
+
 ## 2026-11-01 — Admin app móvil, Fase 1: Inicio
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
 - Investigado: markup de `mountDashboard` (buscador-modulos-admin.js) y filas de `renderDashboardData` (admin-app.js); la tabla de últimos pedidos ya pasaba a tarjetas con etiquetas por celda (espacio-modulos-admin.css) y padding de `.adm-table td`.
