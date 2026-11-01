@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5e59f772ff7d9275ef3d2892ccf30787669a45fffa8dc369ae6548ddde42ee35",
+  "sourceFingerprint": "204e062dda637363cb0e9944ba7cb985a2cda62f53462e9806fe5d241ba35c53",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1691,
-    "textFiles": 1556,
-    "totalBytes": 44296053,
+    "files": 1692,
+    "textFiles": 1557,
+    "totalBytes": 44304288,
     "pages": 19,
-    "modules": 1119
+    "modules": 1120
   },
   "viewports": [
     {
@@ -2882,7 +2882,7 @@
         "viewer"
       ],
       "bytes": 191143,
-      "sha256": "1f0f1e0be8f5435cb7e1e35e41dae74c377b0bdcb7777faec45ae9422a99c705",
+      "sha256": "53ba11e010cd01dec5a5df49b17f041b09a717140d7981b479cf3d1cefe4c788",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3168,7 +3168,7 @@
           "line": 80
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-3",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-4",
           "target": "css/admin/app-movil-admin.css",
           "line": 81
         },
@@ -3582,7 +3582,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-3",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-4",
           "target": "css/admin/app-movil-admin.css",
           "line": 81,
           "exists": true
@@ -57991,6 +57991,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/admin-app-usuarios.spec.js",
+      "bytes": 6151,
+      "sha256": "9d98743e42527498d7274acff49bcc605ddf90ba22d792ddc60ec047fa1398f2",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/admin-commerce-shopify.spec.js",
       "bytes": 8476,
       "sha256": "4e2fce2c050b3841a8060a96f65cf5b90b817c82383f7b29598315044627d0c7",
@@ -60471,7 +60482,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 191143,
-      "sha256": "1f0f1e0be8f5435cb7e1e35e41dae74c377b0bdcb7777faec45ae9422a99c705"
+      "sha256": "53ba11e010cd01dec5a5df49b17f041b09a717140d7981b479cf3d1cefe4c788"
     },
     {
       "path": "apple-touch-icon.png",
@@ -61556,8 +61567,8 @@
     {
       "path": "css/admin/app-movil-admin.css",
       "extension": ".css",
-      "bytes": 15402,
-      "sha256": "0ef311bd37a33fc08264f078aecf87738ab637f716b0687ba4dcda35c08b8a54"
+      "bytes": 16305,
+      "sha256": "27fa0b86018fde9e8ed932605a293baee97237b9739f2fde387eddd33639d062"
     },
     {
       "path": "css/admin/comercio-local-admin.css",
@@ -62348,8 +62359,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1110029,
-      "sha256": "27ea929592e41499e307e069a9ce0e46985059c0494bb86e8137978413097cbc"
+      "bytes": 1111210,
+      "sha256": "01f2ab6b99f14412523b572ab761038a5e52bfaa49dcdc3a4f769d74a0df448c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -67203,7 +67214,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 80448,
-      "sha256": "2e3c52514eacbf2179252bed76f1a0f6fe1b26335cd4009517fafbcd18cf5441"
+      "sha256": "f86b239fe62cbdf062c49b90ac5a3af8df52220d257b88b641b9f02c09b827ac"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -69958,6 +69969,12 @@
       "extension": ".js",
       "bytes": 8204,
       "sha256": "106fba0a61aadf339ecae4a0b1936dd6202262641ea24eeb9a1481af38031995"
+    },
+    {
+      "path": "tests/ui-ux/admin-app-usuarios.spec.js",
+      "extension": ".js",
+      "bytes": 6151,
+      "sha256": "9d98743e42527498d7274acff49bcc605ddf90ba22d792ddc60ec047fa1398f2"
     },
     {
       "path": "tests/ui-ux/admin-commerce-shopify.spec.js",

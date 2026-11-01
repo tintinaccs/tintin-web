@@ -1,3 +1,11 @@
+## 2026-11-01 — Admin app móvil, Fase 3: Usuarios
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: las tarjetas móviles de usuarios ya existían (#1297: espacio-modulos-admin.css + ficha-usuario-admin.js `enhanceRows`, con Ver ficha, menú ⋯ y "Mostrar más datos"). No se rehízo nada de eso.
+- Cambio (solo CSS ≤768 en app-movil-admin.css, prefijo `html.adm-app`): insignia de estado a 11 px, menú ⋯ centrado, etiqueta "Acciones" oculta en la tarjeta.
+- Error arreglado de paso: el área táctil de la casilla por usuario medía 13–22 px de ancho porque `.tt-admin-records td > * {min-width:0}` anulaba el `min-width:44px` de `.adm-user-select`. Ahora la casilla es de 22 px y su zona táctil 44×44 (solo modo app).
+- PASS_LOCAL: admin-app-usuarios (nuevo, 6/6), admin-user-mobile 10/10, admin-user-spaced-cards 5/5, admin-app-shell 12/12, admin-all-devices 41/41, admin-workspaces 21/21, admin-mobile-experience 15/15; verify:diagnostics y audit:cache-versioning OK.
+- NOT_VERIFIED: datos reales de producción (filas ficticias con el HTML de renderUsers), teléfono físico.
+
 ## 2026-11-01 — Admin app móvil, Fase 2: Estadísticas
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
 - Investigado: `#section-estadisticas` (admin.html) y `renderStatisticsBars`/tendencia (admin-app.js). A 390 px las barras apretaban etiqueta, pista y valor en una fila de ~120 px, filtros en 2 columnas con select de 14 px y textos de 10 px.

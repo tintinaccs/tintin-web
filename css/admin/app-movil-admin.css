@@ -343,4 +343,14 @@
   html.adm-app .adm-trend-day span { font-size: 11px; }
   html.adm-app .adm-analytics-empty { min-height: 56px; font-size: 13px; }
   html.adm-app .adm-statistics-foot { font-size: 12px; text-align: left; }
+
+  /* ---- Fase 3 · Usuarios ----
+     Las tarjetas ya existían (espacio-modulos-admin.css + ficha-usuario-admin.js);
+     aquí solo se pulen: insignia legible, casilla del tamaño de "Seleccionar
+     todos", "⋯" centrado y sin etiqueta repetida sobre los botones. */
+  html.adm-app body.tt-admin-control #users-tbody .adm-badge { font-size: 11px; }
+  html.adm-app body.tt-admin-control #users-tbody .adm-user-select { min-width: 44px; min-height: 44px; }
+  html.adm-app body.tt-admin-control #users-tbody .adm-user-select input { width: 22px; height: 22px; margin: 0; }
+  html.adm-app body.tt-admin-control #users-tbody .tt-admin-user-card .tt-admin-user-menu-toggle { align-items: center; justify-content: center; line-height: 1; }
+  html.adm-app body.tt-admin-control #section-usuarios .tt-admin-records > tbody > tr.tt-admin-user-card > td:last-child::before { content: none; display: none; }
 }
