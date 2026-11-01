@@ -24,7 +24,13 @@ que no veía una mejora visual en el navegador del celular.
 - PASS_LOCAL:47 pruebas de presentación/navegación y60 de dispositivos/workspaces;
   preflight1120 archivos/72 imports, build:pages, caché, diagnóstico, protección
   de flujos e integridad de estilos. URLs nuevas en ambos consumidores.
-- IN_PROGRESS: PR/CI del SHA final y merge protegido; publicación pendiente.
+- CI PR1301 / run41304270895 intento1: interfaz detectó una expectativa
+  antigua de rosa sólido en iconos móviles. Se conserva el contraste negro
+  comprobado y se verifica superficie transparente/selección rosa clara en
+  teléfono, manteniendo las expectativas de tablet/escritorio.
+- PASS_LOCAL:9 pruebas de superficies/contraste/loader con servidor local,
+  sin quitar los checks de color negro ni los de tablet/escritorio.
+- IN_PROGRESS: CI del nuevo SHA y merge protegido; publicación pendiente.
 - NOT_VERIFIED: navegador y sesión del teléfono físico del usuario.
 
 ## 2026-11-01 — public-catalog: ids reservados de Firestore ya no dan 502 (base main 75049e4)
