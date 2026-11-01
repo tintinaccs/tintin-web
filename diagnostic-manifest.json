@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "354c22b62f8346d0a229214f6fb076330c9fe121da89a824a9e1223aadee7dcf",
+  "sourceFingerprint": "5dc2a9379e7afab4a4e7d257eb7c7d8d6db1a0970038e0d9d22eb38cb0f608da",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1709,
-    "textFiles": 1574,
-    "totalBytes": 44483671,
+    "files": 1719,
+    "textFiles": 1584,
+    "totalBytes": 44527908,
     "pages": 19,
     "modules": 1137
   },
@@ -40707,8 +40707,8 @@
     },
     {
       "path": "scripts/auditar-tipografia.js",
-      "bytes": 13949,
-      "sha256": "410a9f27e599aa3179dacc6d52028a52c28d28838094cfdbe75a866ebb8f23c7",
+      "bytes": 14335,
+      "sha256": "dcb06c35e5574f38a4cdb70a29368619fe05d02a185799e13b177976b2606b05",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60597,6 +60597,12 @@
       "sha256": "95be58b2c9fa36e23a527356ba32475e1271780909005de9ed2530540fa6e75c"
     },
     {
+      "path": ".github/workflows/cloud-agent-skills-linux.yml",
+      "extension": ".yml",
+      "bytes": 2878,
+      "sha256": "77fe2970e4e59a90e1de734ef21e6184a6a42736b065f39500f62262273e574d"
+    },
+    {
       "path": ".github/workflows/desplegar-pages.yml",
       "extension": ".yml",
       "bytes": 1371,
@@ -60647,8 +60653,8 @@
     {
       "path": "AGENTS.md",
       "extension": ".md",
-      "bytes": 7894,
-      "sha256": "af843165479a2bed288004dc4d8ed7619bcd284e315e002be9fb56df509b75e8"
+      "bytes": 9321,
+      "sha256": "cee554d0d53b61c95c4d759da27099df5bb64bf8a727a713c006789093c63ea9"
     },
     {
       "path": "DESIGN.md",
@@ -62547,6 +62553,18 @@
       "sha256": "c71e553879503132eeb0b207ff5d47d5af25048c285ccbbdb04c6f75d2099bee"
     },
     {
+      "path": "docs/agent/CLOUD_SKILLS_CATALOG.md",
+      "extension": ".md",
+      "bytes": 9505,
+      "sha256": "d700124727d847acd49384e12dde2796f3a490a7f0260f4295dcd8ea8f138e70"
+    },
+    {
+      "path": "docs/agent/CLOUD_SKILLS_LOCK.json",
+      "extension": ".json",
+      "bytes": 3160,
+      "sha256": "d6e884909d67e0d4e4ec7a251fd7bcff95953d4da372e94316c279f0021b0229"
+    },
+    {
       "path": "docs/agent/CODEQL_TRIAGE_20261013.md",
       "extension": ".md",
       "bytes": 4078,
@@ -62863,6 +62881,48 @@
       "extension": ".json",
       "bytes": 801,
       "sha256": "7d294f939eea0d15e4f81f6ce4e03ff6b2eb421a0decbfd03cdbebb04e451f0a"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/anthropic-frontend-design-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 10174,
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/caveman-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/matt-pocock-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 1068,
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/ponytail-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 1071,
+      "sha256": "fb1bc6909ac3ef82d5c22106e32ef682b0cff66788fa915fb9b53b15c9d2f3ab"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/superpowers-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 1070,
+      "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/taste-skill-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 1065,
+      "sha256": "4575a543ab88dad12ccea7d97e563d0bce5b448b06072e65d3264497dad326df"
+    },
+    {
+      "path": "docs/agent/vendor-licenses/ui-ux-pro-max-LICENSE.txt",
+      "extension": ".txt",
+      "bytes": 1075,
+      "sha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014"
     },
     {
       "path": "docs/arquitectura-operativa-canonica.md",
@@ -67385,8 +67445,8 @@
     {
       "path": "scripts/auditar-tipografia.js",
       "extension": ".js",
-      "bytes": 13949,
-      "sha256": "410a9f27e599aa3179dacc6d52028a52c28d28838094cfdbe75a866ebb8f23c7"
+      "bytes": 14335,
+      "sha256": "dcb06c35e5574f38a4cdb70a29368619fe05d02a185799e13b177976b2606b05"
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
