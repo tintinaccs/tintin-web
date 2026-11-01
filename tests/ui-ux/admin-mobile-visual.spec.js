@@ -1,7 +1,7 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const {load}=require('./helpers/admin-panel-fixture.cjs');
-const settle=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+const settle=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))).then(()=>Promise.all(document.getAnimations().filter(animation=>Number.isFinite(animation.effect?.getComputedTiming().endTime)).map(animation=>animation.finished.catch(()=>{})))));
 const values={'stat-users':'1.248','stat-orders-today':'24','stat-sales-month':'25.850.000 Gs.','stat-orders-total':'1.482','stat-visits-today':'368','stat-online-now':'12'};
 for(const [width,height] of [[320,568],[390,844],[430,932],[540,960],[844,390]])test(`presentación móvil visible, compacta y sin perder controles ${width}x${height}`,async({page},info)=>{
  await load(page,width,'admin.html',{mobile:true,sidebar:true,guard:true});await page.setViewportSize({width,height});
