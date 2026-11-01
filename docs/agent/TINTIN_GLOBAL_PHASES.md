@@ -22,7 +22,7 @@ el resto se consulta por separado, no se hereda SUCCESS del head.
 | 05 | Artefactos y SHA inmutable | Se retira job que hacía commit/pull/push sobre rama de Skills; CI conserva build y rechazo de drift. Generador único de ambos JSON sin fecha/HEAD variable | Ver CI del candidato |
 | 06 | Baseline protegida | FAIL reproducido en main: workflow, admin.html, AGENTS.md y cache-version-baseline. Renovación con preparar-mantenimiento-flujos.mjs: 4 archivos, 4 registros; 78 registros/544 archivos conservados | Revisión y CI protegidas del candidato |
 | 07 | Validación local | PASS_LOCAL: preflight completa, 189/189 pruebas de operaciones/protección/diagnóstico, integraciones canónicas, validadores y copia Linux | Build final y drift se registran abajo |
-| 08 | Integración protegida | PENDING: rama codex/verify-skills-stability-20261101; candidato sólo CI/documentación/metadatos | PR propia y resultados terminales; #1306 se conserva ajena |
+| 08 | Integración protegida | PR [#1307](https://github.com/tintinaccs/tintin-web/pull/1307), rama codex/verify-skills-stability-20261101; sólo CI/documentación/metadatos | PR propia y resultados terminales; #1306 se conserva ajena |
 | 09 | Cierre y siguiente fase | BLOCKED por descubrimiento nativo no observable (02); no se declara integración plenamente verificada | Terminar 08 y verificar host antes de nuevas modificaciones funcionales |
 
 ## Disponibilidad y recursos
@@ -112,3 +112,13 @@ Validación final local: build:pages PASS; segunda ejecución sin diferencias SH
 en diagnostic-manifest.json/site-version.json; protección78registros/544archivos
 PASS; git diff --check limpio. Plan candidato validado por inspectMaintenance
 con base main exacta. Node local24.19.0; CI fija Node22 y debe acreditar ese runtime.
+
+## Recibo del candidato de estabilización
+
+PR correctiva: [#1307](https://github.com/tintinaccs/tintin-web/pull/1307).
+Primer candidato `fddc4a1b2d90245f6bc247970cd13f2cef232a99`, run
+`41359542982` intento 1. Esta actualización documental agrega el enlace del PR y
+requiere CI del nuevo head: el run anterior no certifica el head posterior.
+Para el resultado terminal y merge de 08, usar el recibo de GitHub de este PR,
+verificando su head y merge_commit_sha. Ningún estado previo se hereda.
+La fase 09 permanece BLOCKED por 02 incluso si 08 obtiene SUCCESS/MERGED.

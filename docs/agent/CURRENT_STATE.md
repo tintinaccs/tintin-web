@@ -5785,3 +5785,8 @@ Validación final local: build:pages PASS; segunda ejecución sin diferencias SH
 en diagnostic-manifest.json/site-version.json; protección78registros/544archivos
 PASS; git diff --check limpio. Plan candidato validado por inspectMaintenance
 con base main exacta. Node local24.19.0; CI fija Node22 y debe acreditar ese runtime.
+
+PR correctiva #1307 creada; primer candidato fddc4a1b2d90245f6bc247970cd13f2cef232a99,
+CI41359542982/1. El enlace se incorpora con este cambio documental; el nuevo head
+requiere CI propia. Recibo terminal/merge consultable en #1307; no se confunde
+con #1305 ni con la activación nativa BLOCKED. No se usarán commits vacíos.
