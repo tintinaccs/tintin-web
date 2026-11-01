@@ -1,3 +1,11 @@
+## 2026-11-01 — Admin app móvil, Fase 13: Páginas
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+- Investigado: `js/admin/pages/paginas-admin.js`. La tabla ya se ve como tarjetas en ≤768 gracias a la capa existente `espacio-modulos-admin` (no se duplicó). Faltaban: la búsqueda medía 155 px junto al selector (texto cortado) y Guardar/Cancelar del editor quedaban al final del formulario, fuera de vista.
+- Cambio: búsqueda a todo el ancho (44 px); selector 44 px; barra Guardar/Cancelar fija (sticky) encima de la barra inferior mientras se edita (solo `html.adm-app`). Versión CSS `tintin-20261101-app-movil-13`.
+- Error arreglado de paso: ninguno.
+- PASS_LOCAL: `admin-app-paginas.spec.js` 6/6 (render real con páginas ficticias; Guardar llama a savePage una vez, Cancelar vuelve a la lista; 820/1440 sin cambios); falla sin el CSS (barra static, búsqueda 155 px). Regresión: control-dashboard 59, colecciones 6, shell 13, all-devices 41, workspaces 21, mobile-experience 15, engagement y busquedas-admin OK.
+- NOT_VERIFIED: guardar/borrar con Firestore real; diálogo confirm() de Eliminar. Visto y no tocado: el encabezado "Páginas" aparece duplicado en el shell.
+
 ## 2026-11-01 — Admin app móvil, Fase 12: Colecciones
 Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
 - Investigado: `renderCollections` (js/admin/shopify-commerce-admin.js) ya dibuja tarjetas de una columna en ≤768; sin desborde. Faltaban: búsqueda 42 px, casilla de selección 42 px de ancho, botón Cerrar del detalle 32 px y detalle de 440 px (no pantalla completa). La barra se redibuja en cada filtro.

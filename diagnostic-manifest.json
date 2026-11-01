@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c14654e5c2d1f3f3a20039724e0d36b402e0841b625b77880d63a22dbfba567c",
+  "sourceFingerprint": "53f4f200223e0d776a6c28339d9bdcb7b5e5225e5e46674e9dcb03e78e07194e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1699,
-    "textFiles": 1564,
-    "totalBytes": 44398362,
+    "files": 1700,
+    "textFiles": 1565,
+    "totalBytes": 44408264,
     "pages": 19,
-    "modules": 1127
+    "modules": 1128
   },
   "viewports": [
     {
@@ -2882,7 +2882,7 @@
         "viewer"
       ],
       "bytes": 191145,
-      "sha256": "4eba0629b4e836c60c2c6b4c443cc819207ec7d94dd7c3909b3ad89497c4a700",
+      "sha256": "7a1ff501f3e6d1af15f8b20f88732f2e07b28117746e2f5003726483df3217d4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3168,7 +3168,7 @@
           "line": 80
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-12",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-13",
           "target": "css/admin/app-movil-admin.css",
           "line": 81
         },
@@ -3582,7 +3582,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-12",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-13",
           "target": "css/admin/app-movil-admin.css",
           "line": 81,
           "exists": true
@@ -58023,9 +58023,32 @@
       ]
     },
     {
+      "path": "tests/ui-ux/admin-app-paginas.spec.js",
+      "bytes": 6744,
+      "sha256": "2c75a2fd5be52449cab80a6413e13ce89b860f38f254a213522943b23b6fa0a9",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "https://tintin.test/js/admin/datos/busqueda-admin.mjs",
+          "target": null,
+          "dynamic": true,
+          "line": 17
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintin.test/js/admin/datos/busqueda-admin.mjs",
+          "line": 17
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/admin-app-pedidos.spec.js",
-      "bytes": 6262,
-      "sha256": "0d3d8b47a240a2752bb448d2048f354203e42552f2b6206af7a4451d6ba86a09",
+      "bytes": 6375,
+      "sha256": "74ed0b3c65f9609ad91d4fa1f34d709987d285153f191ccf9f0891a1e0e0a314",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60584,7 +60607,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 191145,
-      "sha256": "4eba0629b4e836c60c2c6b4c443cc819207ec7d94dd7c3909b3ad89497c4a700"
+      "sha256": "7a1ff501f3e6d1af15f8b20f88732f2e07b28117746e2f5003726483df3217d4"
     },
     {
       "path": "apple-touch-icon.png",
@@ -61669,8 +61692,8 @@
     {
       "path": "css/admin/app-movil-admin.css",
       "extension": ".css",
-      "bytes": 37342,
-      "sha256": "7d0ba79862acdc171e9237218aa276163370f54a30ef67e4ab23e35066a87aa3"
+      "bytes": 38750,
+      "sha256": "f3530c64374e8ff28dd9ad4421dde53ef1e95aa504bffa7582871d37a98a21ed"
     },
     {
       "path": "css/admin/comercio-local-admin.css",
@@ -62461,8 +62484,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1122131,
-      "sha256": "84992fce1798f5fccf395add153eb2cbe89ede2c7d050059457ee4c4d448cbcc"
+      "bytes": 1123768,
+      "sha256": "b16406563d97460bea410cf58c997f7c2aab4a15208db07658e41ec0dd61d94f"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -67316,7 +67339,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 80450,
-      "sha256": "28fc7566e0032ad380a37c98fb6b8a91871f7c7ef672e33a856f83d5707dfa44"
+      "sha256": "25e6a62eaa402ccc9d81c7239e970129e812de5561da91e8ee295eca8d686b55"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -70085,10 +70108,16 @@
       "sha256": "9e5673fbc44ef8f0a8cd1cd6de0ddfd96a1ce0a25aaf12b68bc11d4e99b30542"
     },
     {
+      "path": "tests/ui-ux/admin-app-paginas.spec.js",
+      "extension": ".js",
+      "bytes": 6744,
+      "sha256": "2c75a2fd5be52449cab80a6413e13ce89b860f38f254a213522943b23b6fa0a9"
+    },
+    {
       "path": "tests/ui-ux/admin-app-pedidos.spec.js",
       "extension": ".js",
-      "bytes": 6262,
-      "sha256": "0d3d8b47a240a2752bb448d2048f354203e42552f2b6206af7a4451d6ba86a09"
+      "bytes": 6375,
+      "sha256": "74ed0b3c65f9609ad91d4fa1f34d709987d285153f191ccf9f0891a1e0e0a314"
     },
     {
       "path": "tests/ui-ux/admin-app-productos.spec.js",
