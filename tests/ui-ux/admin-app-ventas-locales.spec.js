@@ -3,6 +3,7 @@
 // también tras redibujar la lista), editor a pantalla completa con barra fija y
 // resumen mensual compacto. Datos ficticios; no se guarda nada (no se toca Guardar).
 const { test, expect } = require('@playwright/test');
+const safeJson = value => JSON.stringify(value).replace(/[<>/\u2028\u2029]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
 const fs = require('node:fs');
 const path = require('node:path');
 const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
@@ -20,7 +21,7 @@ const payload = {
 async function open(page, width) {
   await page.setViewportSize({ width, height: 844 });
   await page.route('**/__local-app', route => route.fulfill({ contentType: 'text/html', body: html }));
-  await page.route('**/js/core/auth/cliente-api-autenticado.js?*', route => route.fulfill({ contentType: 'text/javascript', body: `export async function authenticatedFetch(){return Response.json(${JSON.stringify(payload)});}` }));
+  await page.route('**/js/core/auth/cliente-api-autenticado.js?*', route => route.fulfill({ contentType: 'text/javascript', body: `export async function authenticatedFetch(){return Response.json(${safeJson(payload)});}` }));
   await page.goto('/__local-app');
   await page.evaluate(() => { document.documentElement.classList.add('adm-auth-ready'); document.querySelectorAll('.adm-section').forEach(node => node.classList.toggle('active', node.id === 'section-ventas-locales')); });
   await page.addScriptTag({ type: 'module', url: '/js/admin/maestro/app-movil-admin.js' });

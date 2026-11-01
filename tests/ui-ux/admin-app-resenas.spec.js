@@ -4,6 +4,7 @@
 // pantalla completa con campos de 16 px. Módulo real con datos ficticios: Firebase,
 // sesión y API simulados; no se guarda nada.
 const { test, expect } = require('@playwright/test');
+const safeJson = value => JSON.stringify(value).replace(/[<>/\u2028\u2029]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
 const fs = require('node:fs');
 const path = require('node:path');
 const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
@@ -18,7 +19,7 @@ const reviews = [1, 2, 3].map(i => ({
 }));
 const stubs = {
   'core/store/publicar-cambio-administrativo.js': 'export async function withAdminSiteChange(_, fn){ return fn(); }',
-  'admin/auth/lecturas-admin.js': `const data = ${JSON.stringify({ reviewRecords: reviews })};
+  'admin/auth/lecturas-admin.js': `const data = ${safeJson({ reviewRecords: reviews })};
     export function subscribeAdminSnapshot(ref, next){ const rows = data[ref.col] || [];
       setTimeout(() => next({ docs: rows.map(r => ({ id: r.reviewId, data: () => r })), data: () => null }), 0); return () => {}; }`,
   'core/firebase/firebase.js': 'export const auth = {}; export const db = {};',
