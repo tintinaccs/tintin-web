@@ -16,8 +16,12 @@ Claude Code, rama claude/laughing-albattani-n84ngy.
 - `scripts/auditar-colecciones-pagina.js`: la regex no aceptaba el segundo
   argumento de versión de `load(...)` en `js/cargador-mantenimiento-pagina.js`.
   Ahora OK (7 viewports).
-- Pendiente (preexistente, no tocado): CLS local de catálogo/colecciones en
-  820 px (~0,15) y de product.html sin id; no verificado en producción.
+- CLS local de catálogo/colecciones en 820 px (~0,16/0,15): artefacto de
+  datos locales (1 producto de prueba; la cuadrícula de espera de 1062 px
+  pasa a 436 px y el footer sube 626 px). Producción solo lectura
+  2026-11-01 (820x1180, 3 corridas): catálogo 0,0164, colecciones 0,0035
+  (umbral "bueno" < 0,1). Sin cambio de código.
+- NOT_VERIFIED: CLS de inicio en producción hasta el deploy de este cambio.
 
 ## 2026-10-31 — Intermitencia de color-choice-browser y espacio en tablet (base main 762610d)
 Claude Code, rama claude/brave-planck-zvvd0x.
