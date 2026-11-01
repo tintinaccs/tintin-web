@@ -1,3 +1,7 @@
+## 2026-11-01 — Legibilidad de Usuarios y menú móvil
+
+Workspace y helpers de Usuarios existentes: correo completo a todo el ancho, menú con botones originales y datos adicionales desplegables; selección global accesible y campos cortos agrupados. Se conserva #1294, sus rutas/PWA/visor y lectores/escritores. Ficha mantiene foto/cabecera y reconstruye pestañas al reabrir. Misma tabla en tablet/escritorio, tokens existentes, sin backend/Rules/datos/permisos nuevos. URLs transitivas y derivados por generadores canónicos; pruebas en el gate responsive existente y seguimiento por SHA/PR.
+
 ## 2026-10-31 — Experiencia móvil del Super Admin y ficha de usuarios
 
 Autoridades: renderUsersTable, ficha-usuario-admin, navegación de admin-app y
