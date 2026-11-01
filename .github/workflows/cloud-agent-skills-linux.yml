@@ -30,3 +30,37 @@ jobs:
           cmp .agents/skills/taste-frontend/SKILL.md "$RUNNER_TEMP/tintin-agent-skills/.agents/skills/taste-frontend/SKILL.md"
           cmp .claude/skills/ui-ux-pro-max/SKILL.md "$RUNNER_TEMP/tintin-agent-skills/.claude/skills/ui-ux-pro-max/SKILL.md"
           echo "Cloud Linux installation copy verified"
+
+  sync-generated-metadata:
+    name: Synchronize canonical release manifests (skills-only branch)
+    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'chore/cloud-agent-skills-20261101' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout PR branch with scoped write token
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+      - name: Set up Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Regenerate canonical artifacts using repository scripts
+        run: |
+          npm ci
+          npm run build:pages
+      - name: Commit only generated manifests if changed
+        run: |
+          git add -- diagnostic-manifest.json site-version.json
+          if git diff --cached --quiet; then
+            echo "No generated manifest drift"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore(ci): sync canonical manifests for cloud Skills"
+            git push origin HEAD:refs/heads/chore/cloud-agent-skills-20261101
+          fi
