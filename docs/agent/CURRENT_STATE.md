@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 16: Mensajes
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
+- Investigado: #section-mensajes (admin.html) es una tarjeta con texto y el enlace #mensajes-wa-link a WhatsApp; sin JS propio. En ≤768 el enlace medía 222×33px.
+- Cambio ≤768 (css/admin/app-movil-admin.css, versión app-movil-14): enlace como botón principal a todo el ancho con 44px de alto. Tablet/escritorio sin cambios.
+- PASS_LOCAL: tests/ui-ux/admin-app-mensajes.spec.js 7/7 (sin el cambio fallan 320/390/540/768 y pasan 820/1024/1440 → escritorio idéntico). Regresión PASS_LOCAL: admin-control-dashboard 59, admin-workspaces 21, admin-all-devices 41, admin-app-shell 13, admin-mobile-experience 15, version-notice 30, engagement/busquedas-admin OK.
+- NOT_VERIFIED: apertura real de WhatsApp en teléfono (no se abre en pruebas); Safari iOS real.
+
 ## 2026-11-01 — Admin app móvil, Fase 15: Imágenes (admin-images.html)
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
 - Investigado: admin-images.html no carga app-movil-admin.css; tiene estilo propio, barra lateral fija (220px escritorio, 56px 481–768, oculta ≤480) y pestañas inferiores (#adm-mobile-tabs) estilizadas por dashboard-control.css.

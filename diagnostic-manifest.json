@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "53f4f200223e0d776a6c28339d9bdcb7b5e5225e5e46674e9dcb03e78e07194e",
+  "sourceFingerprint": "bf9bb5f1765cc05fff18793cc38b4404bc04e0974c75ff5f20cfa34e76541bfb",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1700,
-    "textFiles": 1565,
-    "totalBytes": 44408264,
+    "files": 1702,
+    "textFiles": 1567,
+    "totalBytes": 44424289,
     "pages": 19,
-    "modules": 1128
+    "modules": 1130
   },
   "viewports": [
     {
@@ -2246,8 +2246,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 45064,
-      "sha256": "50bd1a3b4d03ce66e24a526496913f511e4a4dbbc24dcaa3be3170e256c71497",
+      "bytes": 47563,
+      "sha256": "c8cd6b1953c1826a1e44dcae86f9b55f793115ea39c38404d90fc98a67491c36",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2256,7 +2256,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          396
+          428
         ]
       },
       "duplicateIds": [],
@@ -2268,13 +2268,13 @@
           "error": ""
         },
         {
-          "line": 414,
+          "line": 446,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 18,
+      "ids": 19,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -2294,22 +2294,22 @@
         {
           "raw": "js/theme/alternancia-secciones.js?v=tintin-20261029-performance-1",
           "target": "js/theme/alternancia-secciones.js",
-          "line": 324
+          "line": 356
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261023-tema-unico-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 810
+          "line": 842
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 811
+          "line": 843
         },
         {
           "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261101-admin-spaced-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
-          "line": 812
+          "line": 844
         }
       ],
       "styles": [
@@ -2386,7 +2386,7 @@
         {
           "raw": "css/quality/accesibilidad-global.css?v=tintin-20261031-skip-link-1",
           "target": "css/quality/accesibilidad-global.css",
-          "line": 325
+          "line": 357
         }
       ],
       "images": [],
@@ -2399,7 +2399,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 334
+          "line": 366
         },
         {
           "raw": "/admin",
@@ -2409,7 +2409,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 350
+          "line": 382
         },
         {
           "raw": "/admin",
@@ -2419,7 +2419,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 389
+          "line": 421
         }
       ],
       "references": [
@@ -2444,25 +2444,25 @@
         {
           "raw": "js/theme/alternancia-secciones.js?v=tintin-20261029-performance-1",
           "target": "js/theme/alternancia-secciones.js",
-          "line": 324,
+          "line": 356,
           "exists": true
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261023-tema-unico-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 810,
+          "line": 842,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 811,
+          "line": 843,
           "exists": true
         },
         {
           "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261101-admin-spaced-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
-          "line": 812,
+          "line": 844,
           "exists": true
         },
         {
@@ -2552,25 +2552,25 @@
         {
           "raw": "css/quality/accesibilidad-global.css?v=tintin-20261031-skip-link-1",
           "target": "css/quality/accesibilidad-global.css",
-          "line": 325,
+          "line": 357,
           "exists": true
         },
         {
           "raw": "/login",
           "target": "login.html",
-          "line": 334,
+          "line": 366,
           "exists": true
         },
         {
           "raw": "/admin",
           "target": "admin.html",
-          "line": 350,
+          "line": 382,
           "exists": true
         },
         {
           "raw": "/admin",
           "target": "admin.html",
-          "line": 389,
+          "line": 421,
           "exists": true
         }
       ],
@@ -2592,7 +2592,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 343
+          "line": 375
         },
         {
           "id": "",
@@ -2609,7 +2609,7 @@
             "data-section": "hero"
           },
           "hasSourceReference": true,
-          "line": 357
+          "line": 389
         },
         {
           "id": "",
@@ -2625,7 +2625,7 @@
             "data-section": "productos"
           },
           "hasSourceReference": "",
-          "line": 360
+          "line": 392
         },
         {
           "id": "",
@@ -2641,7 +2641,7 @@
             "data-section": "editorial"
           },
           "hasSourceReference": "",
-          "line": 363
+          "line": 395
         },
         {
           "id": "",
@@ -2657,7 +2657,7 @@
             "data-section": "iconos"
           },
           "hasSourceReference": "",
-          "line": 366
+          "line": 398
         },
         {
           "id": "",
@@ -2673,7 +2673,7 @@
             "data-section": "nosotros"
           },
           "hasSourceReference": "",
-          "line": 369
+          "line": 401
         },
         {
           "id": "",
@@ -2689,7 +2689,7 @@
             "data-section": "branding"
           },
           "hasSourceReference": "",
-          "line": 372
+          "line": 404
         },
         {
           "id": "",
@@ -2705,7 +2705,7 @@
             "data-section": "biblioteca"
           },
           "hasSourceReference": "",
-          "line": 375
+          "line": 407
         },
         {
           "id": "",
@@ -2722,7 +2722,7 @@
             "data-section": "hero"
           },
           "hasSourceReference": true,
-          "line": 382
+          "line": 414
         },
         {
           "id": "",
@@ -2738,7 +2738,7 @@
             "data-section": "productos"
           },
           "hasSourceReference": true,
-          "line": 383
+          "line": 415
         },
         {
           "id": "",
@@ -2754,7 +2754,7 @@
             "data-section": "editorial"
           },
           "hasSourceReference": true,
-          "line": 384
+          "line": 416
         },
         {
           "id": "",
@@ -2770,7 +2770,7 @@
             "data-section": "iconos"
           },
           "hasSourceReference": true,
-          "line": 385
+          "line": 417
         },
         {
           "id": "",
@@ -2786,7 +2786,7 @@
             "data-section": "nosotros"
           },
           "hasSourceReference": true,
-          "line": 386
+          "line": 418
         },
         {
           "id": "",
@@ -2802,7 +2802,7 @@
             "data-section": "branding"
           },
           "hasSourceReference": true,
-          "line": 387
+          "line": 419
         },
         {
           "id": "",
@@ -2818,7 +2818,7 @@
             "data-section": "biblioteca"
           },
           "hasSourceReference": true,
-          "line": 388
+          "line": 420
         },
         {
           "id": "btn-img-bulk-clear",
@@ -2833,7 +2833,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 401
+          "line": 433
         },
         {
           "id": "btn-img-bulk-export",
@@ -2847,7 +2847,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 402
+          "line": 434
         },
         {
           "id": "btn-img-bulk-clear-sel",
@@ -2861,7 +2861,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 403
+          "line": 435
         }
       ],
       "controls": []
@@ -2882,7 +2882,7 @@
         "viewer"
       ],
       "bytes": 191145,
-      "sha256": "7a1ff501f3e6d1af15f8b20f88732f2e07b28117746e2f5003726483df3217d4",
+      "sha256": "330cf4865d6facca2b3908c80c032a66145f153167bbf7d0cc02c9716b2cbbbc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3168,7 +3168,7 @@
           "line": 80
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-13",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-14",
           "target": "css/admin/app-movil-admin.css",
           "line": 81
         },
@@ -3582,7 +3582,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-13",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-14",
           "target": "css/admin/app-movil-admin.css",
           "line": 81,
           "exists": true
@@ -57985,6 +57985,28 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/admin-app-imagenes.spec.js",
+      "bytes": 3303,
+      "sha256": "4fd69a0b929715b4c983714a946d1462d9fd831f47622165886e4436fd519ea1",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/ui-ux/admin-app-importar.spec.js",
+      "bytes": 5573,
+      "sha256": "8b5370e788ac93e93d69700c84d55e158ffbdda20ea5e1b1afa1374db6833025",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/admin-app-inicio.spec.js",
       "bytes": 3775,
       "sha256": "4016c5985f8d083814f57135109495ca4a9df2c2e6f080a791ba7c827b3b9135",
@@ -60594,8 +60616,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 45064,
-      "sha256": "50bd1a3b4d03ce66e24a526496913f511e4a4dbbc24dcaa3be3170e256c71497"
+      "bytes": 47563,
+      "sha256": "c8cd6b1953c1826a1e44dcae86f9b55f793115ea39c38404d90fc98a67491c36"
     },
     {
       "path": "admin-manifest.json",
@@ -60607,7 +60629,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 191145,
-      "sha256": "7a1ff501f3e6d1af15f8b20f88732f2e07b28117746e2f5003726483df3217d4"
+      "sha256": "330cf4865d6facca2b3908c80c032a66145f153167bbf7d0cc02c9716b2cbbbc"
     },
     {
       "path": "apple-touch-icon.png",
@@ -61692,8 +61714,8 @@
     {
       "path": "css/admin/app-movil-admin.css",
       "extension": ".css",
-      "bytes": 38750,
-      "sha256": "f3530c64374e8ff28dd9ad4421dde53ef1e95aa504bffa7582871d37a98a21ed"
+      "bytes": 38998,
+      "sha256": "84a83af06c56b2ca667ddf6bf81b9ad96417c89e3009bece8d747a2541732bde"
     },
     {
       "path": "css/admin/comercio-local-admin.css",
@@ -62484,8 +62506,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1123768,
-      "sha256": "b16406563d97460bea410cf58c997f7c2aab4a15208db07658e41ec0dd61d94f"
+      "bytes": 1128170,
+      "sha256": "412147d281091200752228abf388351e12fad32aa57b2143ba4f9c9a53b422c6"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -67339,7 +67361,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 80450,
-      "sha256": "25e6a62eaa402ccc9d81c7239e970129e812de5561da91e8ee295eca8d686b55"
+      "sha256": "60ec4d1d62fd615bdb05e93e73c021c39089ce9dffc5d838d6a78aea7d400713"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -70088,6 +70110,18 @@
       "extension": ".js",
       "bytes": 3556,
       "sha256": "1f78cd839a9b51c37aaf9aff2f101518d716711e74cf51050ed6d63cadf3f990"
+    },
+    {
+      "path": "tests/ui-ux/admin-app-imagenes.spec.js",
+      "extension": ".js",
+      "bytes": 3303,
+      "sha256": "4fd69a0b929715b4c983714a946d1462d9fd831f47622165886e4436fd519ea1"
+    },
+    {
+      "path": "tests/ui-ux/admin-app-importar.spec.js",
+      "extension": ".js",
+      "bytes": 5573,
+      "sha256": "8b5370e788ac93e93d69700c84d55e158ffbdda20ea5e1b1afa1374db6833025"
     },
     {
       "path": "tests/ui-ux/admin-app-inicio.spec.js",
@@ -73787,7 +73821,7 @@
         "references": [
           {
             "file": "admin-images.html",
-            "line": 786,
+            "line": 818,
             "operation": "doc"
           },
           {
