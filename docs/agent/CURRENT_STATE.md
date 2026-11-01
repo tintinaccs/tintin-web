@@ -1,3 +1,13 @@
+## 2026-11-01 — Admin app móvil, Fase 9: Productos
+
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+
+- Investigado: Productos ya tiene su propia capa móvil (`shopify-commerce-admin.js` + `interfaz-productos-adaptable.js`: mosaico, barra de selección, editor a pantalla completa que oculta la barra inferior). Se conserva tal cual.
+- Cambio (solo CSS ≤768 px en `css/admin/app-movil-admin.css`): indicadores en 3 columnas sin palabras partidas; selector de visibilidad de la tarjeta a todo el ancho (antes cortaba "Inac"/"Acti"); variante y "Abrir" con toque de 44 px. Caché del CSS a `tintin-20261101-app-movil-9`.
+- Error arreglado de paso (commit 970e0fa): la animación de entrada de la Fase 0 usaba `both` y dejaba un `transform` residual que convertía la sección en contenedor de los `position:fixed`; la barra de selección de Productos quedaba fuera de pantalla. Ahora `backwards`, con prueba en `admin-app-shell.spec.js`.
+- PASS_LOCAL: `admin-app-productos` 6/6 (nuevo), shell 13, inicio/estadísticas/usuarios/pedidos/ventas-locales/mayoristas 6 c/u, products-mosaic 22, products-responsive-phase-one 108, products-master 24, product-card-quick-edit 17, product-small-controls 10, admin-all-devices 41, admin-workspaces 21, admin-mobile-experience 15. Verificación de caché OK.
+- NOT_VERIFIED: datos reales, teléfono físico, producción. El editor de producto dentro de la app real con la barra superior real solo está cubierto por los specs existentes.
+
 ## 2026-11-01 — Admin app móvil, Fase 8: Pedidos mayoristas
 
 Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).

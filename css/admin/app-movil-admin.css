@@ -482,6 +482,20 @@
   }
   html.adm-app body.tt-admin-control #section-mayoristas [data-decision] { width: 100%; min-height: 44px; margin: 0; }
   html.adm-app body.tt-admin-control #section-mayoristas [data-decision="aprobar"] { grid-column: 1 / -1; background: var(--admin-color-button-primary-background) !important; border: 1px solid var(--admin-color-button-primary-background); color: var(--admin-color-button-primary-text) !important; }
+
+  /* ---- Fase 9 · Productos ----
+     La capa móvil propia de Productos (mosaico, panel de filtros, barra de selección,
+     ficha a pantalla completa) se conserva; aquí solo se compacta y se agrandan toques. */
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-product-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-product-metrics button { gap: 2px; min-height: 64px; padding: 10px 6px; align-content: center; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-product-metrics strong { font-size: 18px; line-height: 1.2; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-product-metrics span { line-height: 1.3; overflow-wrap: normal; hyphens: none; }
+  /* Visibilidad a todo el ancho: con la fuente de 16 px (anti-zoom) la columna de 96 px cortaba "Activo"/"Inactivo". */
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-card-edit-grid { grid-template-columns: minmax(0, 1fr); }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-card-visibility { justify-content: stretch; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-card-visibility select { width: 100%; min-height: 44px; padding: 9px 32px 9px 12px; border-radius: 10px; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-card-variant-select { min-height: 44px; }
+  html.adm-app body.tt-admin-control #tt-commerce-products .tt-commerce-product-open { min-height: 44px; }
 }
 @media (max-width: 359px) {
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
