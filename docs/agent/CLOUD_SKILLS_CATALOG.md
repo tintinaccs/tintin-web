@@ -36,3 +36,16 @@ Los Skill originals están almacenados en el repositorio, no invocados por desca
 
 ## Prueba de descubrimiento sugerida
 Abrir una **nueva** tarea de Codex Cloud / Claude Code Cloud en el commit donde estos archivos estén integrados. Pedir: "Enumerá los Skills de diseño disponibles en el repositorio y mostrá sus rutas, sin modificar nada". Deben aparecer, por ejemplo, `design-taste-frontend`, `ui-ux-pro-max`, `frontend-design`. Verificar ejecución real con una tarea de lectura; no asumir que la mera existencia de archivos demuestra activación.
+
+## Snapshot de origen (commit fijado)
+- Taste Skill: `Leonxlnx/taste-skill@12af471f627f866411b4bd785b19646d3672784c`
+- UI UX Pro Max: `nextlevelbuilder/ui-ux-pro-max-skill@3a13158ff1f32156cbe144108de48eda2ecaed9a`
+- Ponytail: `DietrichGebert/ponytail@96608e078b2d5ea607c5c3b8b5a54d1c1fba6846`
+- Caveman: `JuliusBrussee/caveman@9b68f7ed12b05e7efaff18e65c5a3fc2849fd0a4`
+- Matt Pocock: `mattpocock/skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`
+- Superpowers: `obra/superpowers@2ce8aa15d05bd57213e6f746f953aafb7ded7a8b`
+- Anthropic: `anthropics/skills@ca45fc496a3436251f191354091d557da31c15b5`
+
+Se incluyen archivos SKILL.md reales y recursos auxiliares pertinentes: biblioteca, referencias y scripts de Taste Skill; datos, referencias y scripts de UI UX Pro Max; recursos de depuración de Superpowers; metadatos opcionales de Matt Pocock y licencias de redistribución. No se incluyen pruebas/evaluaciones del proyecto de origen que no son necesarias para invocar estas habilidades, ni imágenes binarias adicionales.
+
+Además, los cuatro Skills de Codex que ya estaban en `.codex/skills/` se exponen SIN ELIMINARLOS también en la ruta oficialmente detectable `.agents/skills/`, para que nuevas sesiones puedan encontrarlos.
