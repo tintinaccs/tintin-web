@@ -1,13 +1,62 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "bdffea94ff64115842fdab26b8324c3e043ee86e",
-  "reason": "public-catalog: ids reservados de Firestore devuelven item null en vez de 502",
+  "baseCommit": "9aeee82532a96201dcff8dbae8676260b4b3d5f2",
+  "reason": "Precarga del Flujo de conexiones y lecturas paralelas en la entrada al Admin",
   "files": [
     {
-      "path": "functions/api/public-catalog.js",
-      "oldHash": "f476fdb2fd96b6da617d674db07d26e3c73f2ae34a68ee2cc5ccebaee5445c37",
-      "newHash": "a884aa303c6fa052bf445121f34742fca57a29358ae65c041f5b440cd43d5bbd"
+      "path": "admin.html",
+      "oldHash": "05106cc0fd777d92493447f50b8ea3631cde270e3e95648c5376e317d425ca29",
+      "newHash": "22489551ef27028a201756f4c6c36ff0e62c9dbc61c18dfb865fa9beba3e5006"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "0c464da471a9ccfa266512b0e910d241e8830d0f4c697c22e0ee6db2884b8a84",
+      "newHash": "98be35ce7712f27fdda47f3920091c0023e54f7e73fa47895e85d4cf401fdb08"
+    },
+    {
+      "path": "js/admin/flujo-conexiones/estado-flujo.js",
+      "oldHash": "5b664eebcf42df597e690d9449391e5604c6da9c50d5d94db6b5139af7aceabb",
+      "newHash": "4f3a83dc09612853a71d1566d95e4df4728b7d243ec7bfb200f469f4e3cf7d57"
+    },
+    {
+      "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
+      "oldHash": "3a8b2822d5a9a6b1ba2f1105c8ff231e4945f43b067fa00804ffb4350a4176e0",
+      "newHash": "e3e28f656a045aba2eddd9d72f6f3a562511bb803633336638461e70ebfdc792"
+    },
+    {
+      "path": "js/admin/flujo-conexiones/live-checks.js",
+      "oldHash": "040e6c4dc6c31e64e80fdc1206fe0c7a31e54905cda11f60a637f2acbea5feaf",
+      "newHash": "9b7d40919f88048ff8c3f36b0358aec1462614bd45fd56aaa0527c5aea03b6eb"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "10880a2e3aa7c4a417e95ce678e138795c556b1fd9bd61b9cdf5fbc9f1fad2ca",
+      "newHash": "1205a2334e169e6aa23b2e2e93b3d9e06faf40d5f0f3b07fbd7970f30748950d"
+    },
+    {
+      "path": "tests/auth/admin-guard-role-destination.test.mjs",
+      "oldHash": "f3a5b7514c5af20ae9864fb48283cc3ce4f9891d663291f821638720b963da53",
+      "newHash": "57be847cdb23d7185620762235d8bb50041bc1c100b8f3af3409077379fc578b"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "correos",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

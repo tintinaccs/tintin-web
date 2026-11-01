@@ -28,7 +28,7 @@ for (const width of [390,768,1440]) {
 }
 
 for (const width of [390, 768, 1440]) {
-  test(`iconos negros legibles sobre el rosa aprobado a ${width}px`, async ({ page }) => {
+  test(`iconos negros legibles sobre las superficies aprobadas a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 });
     await page.route('**/admin-white-fixture.html', route => route.fulfill({ contentType: 'text/html', headers: { 'Content-Security-Policy': fixtureCsp }, body: shell }));
     await page.goto('/admin-white-fixture.html', { waitUntil: 'load' });
@@ -40,7 +40,7 @@ for (const width of [390, 768, 1440]) {
         stats: color('.adm-stat-icon svg'),
         mobile: color('.adm-mobile-tab svg'),
         logo: color('.adm-sidebar-logo-text'),
-        backgrounds: [...document.querySelectorAll('.adm-nav-icon,.adm-stat-icon,.adm-sidebar-logo,.adm-mobile-tab')].map(node => ({className:node.className,color:getComputedStyle(node).backgroundColor}))
+        backgrounds: [...document.querySelectorAll('.adm-nav-icon,.adm-stat-icon,.adm-sidebar-logo,.adm-mobile-tab')].map(node => ({className:node.className,color:getComputedStyle(node).backgroundColor,compactIcon:node.matches('#adm-mobile-tabs .adm-nav-icon,#dash-stats .adm-stat-icon'),selected:Boolean(node.closest('.adm-mobile-tab.active'))}))
       };
     });
     for (const key of ['nav', 'stats', 'mobile', 'logo']) {
@@ -48,9 +48,13 @@ for (const width of [390, 768, 1440]) {
       expect(colors[key].every(value => value === 'rgb(34, 34, 34)'), key).toBe(true);
     }
     for (const surface of colors.backgrounds) {
-      // El nuevo panel móvil reserva el rosa para iconos y selección;
-      // los botones inactivos usan la superficie sólida de la cápsula.
-      const expected = surface.className === 'adm-mobile-tab active' ? 'rgb(253, 236, 242)' : width <= 768 && surface.className === 'adm-mobile-tab' ? 'rgb(255, 255, 255)' : 'rgb(248, 170, 202)';
+      // En teléfono el rosa claro señala la selección. Los iconos restantes
+      // dejan ver su tarjeta/cápsula; la presentación amplia conserva el rosa.
+      const expected = width <= 540 && surface.compactIcon
+        ? surface.selected ? 'rgb(253, 236, 242)' : 'rgba(0, 0, 0, 0)'
+        : surface.className === 'adm-mobile-tab active' ? 'rgb(253, 236, 242)'
+        : width <= 768 && surface.className === 'adm-mobile-tab' ? 'rgb(255, 255, 255)'
+        : 'rgb(248, 170, 202)';
       expect(surface.color, surface.className).toBe(expected);
     }
   });

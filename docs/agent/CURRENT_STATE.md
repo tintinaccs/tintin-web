@@ -1,3 +1,11 @@
+## 2026-11-01 — Admin app móvil: integración con main (#1301)
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (merge de origin/main).
+- Conflictos resueltos: admin.html, admin-images.html, dashboard-control.css, admin-panel-fixture.cjs, admin-white-icons.spec.js, CURRENT_STATE.md; manifiestos de versión tomados de main y regenerados (audit:cache-versioning y verify:diagnostics OK).
+- Se adoptan el lanzador compacto "Ver secciones" y la cabecera de #1301 (decisión más reciente del dueño). Se ajusta la spec de F1 (admin-app-inicio): el lanzador debe medir ≥44 px de alto y quedar dentro del héroe, ya no a todo el ancho.
+- El bloque ≤540 de #1301 (`html:root …`, más específico) le ganaba a la capa de app: filas de accesos de 66 px que empujaban las métricas debajo de la barra inferior a 390×844. Arreglo en app-movil-admin.css: filas de 56 px (`html:root.adm-app`) y `#stat-sales-month` con clamp(15px, 4.2vw, 20px) para que "25.850.000 Gs." no salte de línea. Última métrica a 390: termina en y=749 (la barra empieza en y=756).
+- admin-mobile-visual.spec.js (de main) adaptado al diseño de la app: "Nuevo pedido" se comprueba dentro de Pedidos y "Más" reemplaza la hamburguesa en ≤540. admin-white-icons: la pestaña móvil es blanca hasta 768.
+- PASS_LOCAL: admin-app-inicio 6, admin-mobile-visual, admin-white-icons (24 en total), admin-app-shell 13, admin-control-dashboard 59, admin-workspaces 21, admin-all-devices 41, admin-mobile-experience 15, admin-push-navigation 38, admin-app-estadisticas 6, admin-app-mensajes 7, engagement y busquedas-admin OK.
+
 ## 2026-11-01 — Admin app móvil, Fase 16: Mensajes
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
 - Investigado: #section-mensajes (admin.html) es una tarjeta con texto y el enlace #mensajes-wa-link a WhatsApp; sin JS propio. En ≤768 el enlace medía 222×33px.
@@ -129,6 +137,58 @@ Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commits locales, s
 - PWA: ya existía (admin-manifest.json standalone + iconos, viewport-fit=cover, theme-color, SW en notificaciones-push.js). Verificado solo por inspección de archivos.
 - PASS_LOCAL: specs Playwright admin-* 232/232 (incluye admin-app-shell nuevo 12/12), visual-builder-ui 5/5, orders-board 66/66; tests Node que referencian admin (769, 763 OK; 4 pasan con Chromium configurado; commerce-firestore requiere emulador); audit:cache-versioning, verify:csp, test:architecture-gates.
 - NOT_VERIFIED: teléfonos físicos (instalación PWA, teclado, gestos), producción, `audit:mobile-fixes` (script desactualizado, no lanza navegador en este entorno).
+
+## Reconciliación visual móvil con main bba2aabc — 2026-11-01
+
+Se integra #1300 sin modificar su corrección de ancho, pruebas ni fixture.
+Se conservan los estilos/URLs de acciones junto a la nueva composición móvil.
+La sincronización anterior no inició CI al existir conflicto; se regenera
+el plan contra bba2aabc. PASS_LOCAL:25 pruebas de presentación, contraste y
+Usuarios (incluido el arranque real /admin y /admin.html); build:pages, caché,
+diagnóstico y protección de flujos. CI/merge del SHA reconciliado pendientes.
+
+## 2026-11-01 — Corrección visual móvil comprobable (Codex)
+
+Base main0f47cf54, rama codex/admin-mobile-visual-review. El usuario confirmó
+que no veía una mejora visual en el navegador del celular.
+- Evidencia: /admin publicado cargaba recursos vigentes; dashboard-control
+  seguía en mobile-shell-1, anterior a los cambios de fichas/listados. Capturas
+  sobre shell/estilos reales mostraron la misma cabecera y composición de Inicio.
+  No se atribuye el problema a caché sin evidencia.
+- Corrección: la presentación móvil usa las superficies y tokens existentes,
+  cabecera compacta opaca, accesos e indicadores más densos y barra de módulo
+  con búsqueda de44px. Se conservan los mismos nodos, acciones y datos.
+- La cascada compartida tenía un :is con IDs que imponía máscara/degradado y
+  desenfoque al header. #adm-topbar permite aplicar la variante móvil con una
+  comprobación de estilo computado; tablet/escritorio conservan el encabezado.
+- El workspace observa la revelación del guard: una tabla inicial ya montada
+  también se mejora al confirmar auth, sin esperar otra navegación ni consultas.
+- PASS_LOCAL:9 pruebas nuevas de presentación, controles (incluida campana
+  tardía y título largo), primer pliegue, comparación tablet/escritorio y guard
+  tardío. Cabecera con campana en320px: segunda fila para el título completo.
+- Evidencia390×844: cabecera110→64px; Inicio424→306px; fin de indicadores
+  y908→689px. Los seis indicadores quedan por encima de la navegación inferior.
+- Capturas y medidas antes/después: artifacts/mobile-visual (datos ficticios,
+  nunca datos comerciales de producción). No se alteran permisos ni escritores.
+- PASS_LOCAL:47 pruebas de presentación/navegación y60 de dispositivos/workspaces;
+  preflight1120 archivos/72 imports, build:pages, caché, diagnóstico, protección
+  de flujos e integridad de estilos. URLs nuevas en ambos consumidores.
+- CI PR1301 / run41304270895 intento1: interfaz detectó una expectativa
+  antigua de rosa sólido en iconos móviles. Se conserva el contraste negro
+  comprobado y se verifica superficie transparente/selección rosa clara en
+  teléfono, manteniendo las expectativas de tablet/escritorio.
+- PASS_LOCAL:9 pruebas de superficies/contraste/loader con servidor local,
+  sin quitar los checks de color negro ni los de tablet/escritorio.
+- IN_PROGRESS: CI del nuevo SHA y merge protegido; publicación pendiente.
+- NOT_VERIFIED: navegador y sesión del teléfono físico del usuario.
+
+## 2026-11-01 — Comprobación de mejora visual y cascada de acciones
+
+Codex /root, base0f47cf54, rama codex/admin-mobile-visual-cascade.
+- Producción /admin sirve el HTML actual; CSS y ficha de Usuarios descargados con curl tienen los mismos SHA256 que la revisión publicada. El arranque real del cargador activa UI Quality → gestión de Usuarios → ficha/perfil en /admin y /admin.html con servicios aislados; no se forzó la importación del helper en las pruebas nuevas.
+- Defecto reproducido: la regla anterior de acciones con más elementos en su selector ganaba a la nueva; el menú ocupaba media fila en lugar de44px. Se corrige la especificidad de la regla canónica, sin cambiar otros componentes, permisos, datos ni escritorio.
+- PASS_LOCAL:7 casos de tarjeta/menú y arranque automático en320–1440 y ambas rutas. Regresión explícita de ancho44px y correo a todo el ancho.
+- NOT_VERIFIED: la pantalla/sesión concreta en la que la usuaria no percibe la mejora; se solicitó apartado, dispositivo y URL. No se atribuye el reporte a caché ni se afirma que este defecto explique todo el caso sin esa información.
 
 ## 2026-11-01 — public-catalog: ids reservados de Firestore ya no dan 502 (base main 75049e4)
 Claude Code, rama claude/sharp-cannon-oxfa8o.

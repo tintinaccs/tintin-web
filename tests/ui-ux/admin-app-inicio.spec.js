@@ -41,7 +41,9 @@ for (const width of [320, 390, 540, 768]) {
     expect(m.linkLefts).toBe(1);
     expect(m.linkMinH).toBeGreaterThanOrEqual(44);
     expect(m.launcher.height).toBeGreaterThanOrEqual(44);
-    expect(Math.round(m.launcher.width)).toBeGreaterThan(m.hero.width - 40);
+    // Lanzador compacto de #1301: debe quedar entero dentro del héroe.
+    expect(m.launcher.x).toBeGreaterThanOrEqual(m.hero.x);
+    expect(Math.round(m.launcher.x + m.launcher.width)).toBeLessThanOrEqual(Math.round(m.hero.x + m.hero.width));
     // Encabezados solo para lector de pantalla (patrón existente) y sin etiquetas repetidas por celda.
     expect(m.thead.height).toBeLessThanOrEqual(1);
     expect(['none', 'normal']).toContain(m.label);

@@ -118,7 +118,7 @@
   #section-usuarios .tt-admin-records > tbody > tr.tt-admin-user-card > td:last-child { grid-column: 1 / -1; grid-row: 6; }
   #section-usuarios .tt-admin-records > tbody > tr.tt-admin-user-card:not([data-extra='true']) > td:is(:nth-child(5),:nth-child(8),:nth-child(9)) { display: none; }
   #section-usuarios .tt-admin-user-card .tt-admin-user-name { font-size: 14px; line-height: 1.4; }
-  #section-usuarios .tt-admin-user-card td:last-child > div { display: grid !important; grid-template-columns: minmax(0,1fr) 44px; gap: 10px !important; }
+  #section-usuarios .tt-admin-records > tbody > tr.tt-admin-user-card > td:last-child > div { display: grid !important; grid-template-columns: minmax(0,1fr) 44px; gap: 10px !important; }
   #section-usuarios .tt-admin-user-card td:last-child .adm-btn { width: 100%; min-width: 0; justify-content: center; font-size: 12px !important; letter-spacing: 0 !important; text-transform: none !important; white-space: normal; }
   #section-usuarios .tt-admin-user-card .tt-admin-user-open { grid-column: 1; grid-row: 1; }
   #users-tbody .tt-admin-user-card .tt-admin-user-menu-toggle { display: inline-flex !important; grid-column: 2; grid-row: 1; font-size: 22px !important; padding: 0; }
