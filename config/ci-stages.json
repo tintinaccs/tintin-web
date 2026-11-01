@@ -103,7 +103,7 @@
       "npm run audit:canonical-viewports",
       "npm run audit:global-responsive-geometry",
       "npm run test:pages",
-      "npx playwright test tests/runtime/correos-module.spec.js tests/runtime/email-history-safety.spec.js tests/runtime/audit-history-safety.spec.js --project=chromium"
+      "npx playwright test tests/runtime/admin-section-loading.spec.js tests/runtime/correos-module.spec.js tests/runtime/email-history-safety.spec.js tests/runtime/audit-history-safety.spec.js --project=chromium"
     ]
   },
   "rules": {

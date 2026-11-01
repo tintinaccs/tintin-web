@@ -1,3 +1,7 @@
+## 2026-11-01 — Carga del Admin por sección
+
+Entrada principal /admin y /admin.html: diferir Correos, Diagnóstico, Páginas y editor visual hasta abrirlos. El cargador conserva navegación, muestra estado y reintento, comparte descargas y vuelve a comprobar acceso antes de inicializar; sesiones, controles de seguridad y contratos comerciales se conservan. CI incluye la regresión de carga y permisos del cargador junto a las pruebas existentes de Correos.
+
 ## 2026-11-01 — Presentación móvil visible de la interfaz administrativa
 
 Autoridades: dashboard-control.css y workspace compartido existentes; mismo
