@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 21: Correos
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-correos (8 pestañas y sus paneles en admin.html). Se midieron los 8 paneles a 320/390/540/768: sin desborde, sin elementos fuera del ancho, botones/selectores/campos ≥44 px y ≥16 px. Las tablas ya se convierten en tarjetas (espacio-modulos-admin) y su cabecera queda recortada a 1×1 px (solo lectores de pantalla).
+- Cambio: ninguno en CSS/JS (el módulo ya cumplía con las fases 0–1). Solo spec nueva admin-app-correos.spec.js (35 pruebas) como protección contra regresiones. Captura a 390 px revisada: pestañas en dos columnas de 44 px.
+- PASS_LOCAL: admin-app-correos 35/35 (8 paneles × 4 anchos + 820/1024/1440 sin cambio); audit:cache-versioning correcto.
+- NOT_VERIFIED: filas reales de Firestore (envíos, plantillas, clientas, historial) y vista previa/envío de correos; filas ficticias solo en Inicio y Correos de pedidos. No se envió ningún correo.
+
 ## 2026-11-01 — Admin app móvil, Fase 20: Flujo de conexiones
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: #section-flujo-conexiones lo dibuja flujo-conexiones-admin.js (importa Firebase); con HTML ficticio equivalente se midió: nodos (.tfc-pill) de ~25–30 px y filas de conexión (.tfc-edge-row) de ~30 px, por debajo de los 44 px táctiles.

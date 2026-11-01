@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2b93682cb94eace90d995d6f81f3a3b25f6bfc876bef093aa9e807f12e727fa2",
+  "sourceFingerprint": "e13ca5f846b63b735ee06d740b2e7deca6460a510c4cd349ecf1fe0898ddb81c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1708,
-    "textFiles": 1573,
-    "totalBytes": 44481388,
+    "files": 1709,
+    "textFiles": 1574,
+    "totalBytes": 44486039,
     "pages": 19,
-    "modules": 1136
+    "modules": 1137
   },
   "viewports": [
     {
@@ -57985,6 +57985,17 @@
       ]
     },
     {
+      "path": "tests/ui-ux/admin-app-correos.spec.js",
+      "bytes": 3664,
+      "sha256": "50ec2612afac2e288268d49ad215ee835005452bc803ce974ce0d9ef8b06af8f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/admin-app-diagnostico.spec.js",
       "bytes": 4100,
       "sha256": "c62a4226721a8ef26bdfed59ea34ced7f34e4e363e82746d27d84902f87a41c4",
@@ -62572,8 +62583,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1138777,
-      "sha256": "e0fe8aec7a9fead306b41a65df98ed768e9e101f8b6e50cd6e9280d5501879b0"
+      "bytes": 1139764,
+      "sha256": "395a6f478b7995286fe7fa0a5d63baa329d43e25c60d15f9ca6c55f23df4d327"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -70176,6 +70187,12 @@
       "extension": ".js",
       "bytes": 6312,
       "sha256": "72098ebf97b9dee1bbd9f9ac0954165d4812303685ad04b1f32221937a692dcb"
+    },
+    {
+      "path": "tests/ui-ux/admin-app-correos.spec.js",
+      "extension": ".js",
+      "bytes": 3664,
+      "sha256": "50ec2612afac2e288268d49ad215ee835005452bc803ce974ce0d9ef8b06af8f"
     },
     {
       "path": "tests/ui-ux/admin-app-diagnostico.spec.js",
