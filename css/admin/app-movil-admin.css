@@ -58,7 +58,10 @@
   html.adm-app #adm-mobile-tabs > .adm-mobile-tab:active { opacity: .6; }
 
   /* ── Transición al cambiar de pantalla ── */
-  html.adm-app .adm-section.active { animation: adm-app-screen-in .22s ease-out both; }
+  /* `backwards` (no `both`): al terminar no queda ningún transform aplicado; un transform
+     residual convierte la sección en contenedor de los elementos position:fixed
+     (p. ej. la barra de selección de Productos) y los saca de la pantalla. */
+  html.adm-app .adm-section.active { animation: adm-app-screen-in .22s ease-out backwards; }
 
   /* ── Hoja "Más": lista agrupada estilo iOS ── */
   html.adm-app body.tt-admin-control #adm-mobile-more-grid { display: block; }

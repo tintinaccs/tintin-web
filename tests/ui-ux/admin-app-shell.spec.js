@@ -122,6 +122,20 @@ test('movimiento reducido desactiva las transiciones de pantalla', async ({ page
   expect(await page.locator('#section-dashboard').evaluate(n => getComputedStyle(n).animationName)).toBe('none');
 });
 
+test('la transición de pantalla no deja transform: los position:fixed siguen en la ventana', async ({ page }) => {
+  await load(page, 390, 'admin.html', { mobile: true, sidebar: true, guard: true });
+  await show(page, 'productos');
+  const section = page.locator('#section-productos');
+  await expect.poll(() => section.evaluate(n => getComputedStyle(n).animationName)).toBe('adm-app-screen-in');
+  // Un transform residual convierte la sección en contenedor de sus hijos fijos.
+  await expect.poll(() => section.evaluate(n => getComputedStyle(n).transform)).toBe('none');
+  const top = await section.evaluate(n => {
+    const probe = document.createElement('div'); probe.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px';
+    n.append(probe); const y = probe.getBoundingClientRect().top; probe.remove(); return y;
+  });
+  expect(top).toBe(0);
+});
+
 for (const width of [820, 1024, 1440]) {
   test(`tablet y escritorio no entran en modo app a ${width}px`, async ({ page }) => {
     await load(page, width, 'admin.html', { mobile: true, sidebar: true, guard: true });
