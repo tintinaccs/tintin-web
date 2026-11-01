@@ -374,7 +374,7 @@ html:root body.tt-admin-control .tt-control-heading > span { min-width: 0; overf
   html:root body.tt-admin-control #dash-stats .adm-stat-icon { width: 24px; height: 24px; border-radius: 8px; }
   html:root body.tt-admin-control #dash-stats .adm-stat-val { font-size: 23px; }
   html:root body.tt-admin-control #dash-stats .adm-stat-label { font-size: 10px; }
-  html:root body.tt-admin-control .tt-admin-workspace-bar { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 10px; padding-block: 8px 14px; margin-bottom: 0; }
+  html:root body.tt-admin-control .tt-admin-workspace-bar { display: grid; grid-template-columns: minmax(0,1fr) 44px; align-items: center; gap: 10px; padding-block: 8px 14px; margin-bottom: 0; }
   html:root body.tt-admin-control .tt-admin-workspace-title { grid-column: 1; margin: 0; font-size: 21px; line-height: 1.25; letter-spacing: -.025em; }
   html:root body.tt-admin-control .tt-admin-workspace-jump { grid-column: 1 / -1; grid-row: 2; width: 100%; }
   html:root body.tt-admin-control .tt-admin-workspace-bar > .tt-admin-workspace-search { grid-column: 2; grid-row: 1; display: grid; place-items: center; width: 44px; min-width: 44px; min-height: 44px; padding: 0; border-radius: 12px; border-width: 1px; }
