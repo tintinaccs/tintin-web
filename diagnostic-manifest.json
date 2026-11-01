@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c234d8a3bfa092bccd02ce83a52405e6634af4861f45a2c513c79f199533ec92",
+  "sourceFingerprint": "890ae0dd60e35e9f5f071f5402bc15f7bfc3a820866410fc84b5fff60ad94343",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1684,
     "textFiles": 1549,
-    "totalBytes": 44249274,
+    "totalBytes": 44253706,
     "pages": 19,
     "modules": 1114
   },
@@ -2246,8 +2246,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 45070,
-      "sha256": "a5a76be9f7ad81caf29161e377c30a7af3d5a7a2be98eb4612398495b1627584",
+      "bytes": 45077,
+      "sha256": "c722c5b330002dca3a2117b0f84854185aac7dbbd689d70b3d5d4ff2f782dec6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2374,7 +2374,7 @@
           "line": 321
         },
         {
-          "raw": "css/admin/espacio-modulos-admin.css?v=tintin-20261101-admin-spaced-1",
+          "raw": "css/admin/espacio-modulos-admin.css?v=tintin-20261101-admin-actions-width-1",
           "target": "css/admin/espacio-modulos-admin.css",
           "line": 322
         },
@@ -2538,7 +2538,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/espacio-modulos-admin.css?v=tintin-20261101-admin-spaced-1",
+          "raw": "css/admin/espacio-modulos-admin.css?v=tintin-20261101-admin-actions-width-1",
           "target": "css/admin/espacio-modulos-admin.css",
           "line": 322,
           "exists": true
@@ -2881,8 +2881,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204659,
-      "sha256": "e978670e90b108aef5bff84b3937747a2e2aec965743b9c42affa9e904c578d7",
+      "bytes": 204666,
+      "sha256": "eb897cbf45f79e2b6342aa0f904c2c710cb3c7a441de0fc6b1ec60ad67065f46",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3153,7 +3153,7 @@
           "line": 78
         },
         {
-          "raw": "css/admin/espacio-modulos-admin.css?v=tintin-20261101-admin-spaced-1",
+          "raw": "css/admin/espacio-modulos-admin.css?v=tintin-20261101-admin-actions-width-1",
           "target": "css/admin/espacio-modulos-admin.css",
           "line": 79
         },
@@ -3549,7 +3549,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/espacio-modulos-admin.css?v=tintin-20261101-admin-spaced-1",
+          "raw": "css/admin/espacio-modulos-admin.css?v=tintin-20261101-admin-actions-width-1",
           "target": "css/admin/espacio-modulos-admin.css",
           "line": 79,
           "exists": true
@@ -58001,8 +58001,8 @@
     },
     {
       "path": "tests/ui-ux/admin-user-spaced-cards.spec.js",
-      "bytes": 5599,
-      "sha256": "90e0be881c8c2455d74c9c307bafcfa135135e0005ad8807fa1415261a0c9090",
+      "bytes": 7871,
+      "sha256": "64ace291eb86883a6a55d1d98fbbd7aec5a6ec33ebb1a9f21afe4ea883a50eb3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60335,8 +60335,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 45070,
-      "sha256": "a5a76be9f7ad81caf29161e377c30a7af3d5a7a2be98eb4612398495b1627584"
+      "bytes": 45077,
+      "sha256": "c722c5b330002dca3a2117b0f84854185aac7dbbd689d70b3d5d4ff2f782dec6"
     },
     {
       "path": "admin-manifest.json",
@@ -60347,8 +60347,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204659,
-      "sha256": "e978670e90b108aef5bff84b3937747a2e2aec965743b9c42affa9e904c578d7"
+      "bytes": 204666,
+      "sha256": "eb897cbf45f79e2b6342aa0f904c2c710cb3c7a441de0fc6b1ec60ad67065f46"
     },
     {
       "path": "apple-touch-icon.png",
@@ -61385,8 +61385,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 451,
-      "sha256": "6a7afbc99e6653e1f90784b38ab6d25d0353154f41e216f73916e4ea3bd11ecd"
+      "bytes": 921,
+      "sha256": "ac53b5adf13e904ee50326ca9875833d6013940869a22b6ab17712e8d9596def"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -61398,7 +61398,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "c285ec4e99adf0b318f552aa9df77bfe5ca655135fb89e5ccfc5dc1d38c7bcc3"
+      "sha256": "a8ac54a5f0c41b89dcc26b98102980b3999b0cdaec0171682376ad3c3f2153d4"
     },
     {
       "path": "config/public-site.json",
@@ -61457,8 +61457,8 @@
     {
       "path": "css/admin/espacio-modulos-admin.css",
       "extension": ".css",
-      "bytes": 13748,
-      "sha256": "62a8646702293961303c595324d95800fb8c37284fe387214dad371ea7956fb7"
+      "bytes": 13780,
+      "sha256": "3bcfad9fde14b81f85576462541420ba5d4ef753738b23cc60e87ffe713888d7"
     },
     {
       "path": "css/admin/flujo-conexiones.css",
@@ -62213,8 +62213,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1106843,
-      "sha256": "3630138ede2171d87e2303fa56ab6a812fb87fe8614677a9771fa11326820fec"
+      "bytes": 1107978,
+      "sha256": "8fa6a9026e0de3a3251f75e80e870b3863ff8c1e0b4376bd6a00d8e5fee6cc5a"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -62945,8 +62945,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 146769,
-      "sha256": "08a76f5e14c6d184ac925ee5531798dfe86f229312a7f3e6caf6ad36e05e4c6b"
+      "bytes": 147271,
+      "sha256": "d9b300abe72a69d693c65d1e9a6771f9e761df62302e88ad7cf84462e285f3a9"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -67061,8 +67061,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 79973,
-      "sha256": "e2af30ab6382ce831069c666c07f4584049f2c57b38cdc1487a6cb527db96e4f"
+      "bytes": 79980,
+      "sha256": "01a5ae82858af716cbbbb45f8fe6431e17b36148cbecad635740dceaf69244e4"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -69839,8 +69839,8 @@
     {
       "path": "tests/ui-ux/admin-user-spaced-cards.spec.js",
       "extension": ".js",
-      "bytes": 5599,
-      "sha256": "90e0be881c8c2455d74c9c307bafcfa135135e0005ad8807fa1415261a0c9090"
+      "bytes": 7871,
+      "sha256": "64ace291eb86883a6a55d1d98fbbd7aec5a6ec33ebb1a9f21afe4ea883a50eb3"
     },
     {
       "path": "tests/ui-ux/admin-white-icons.spec.js",
