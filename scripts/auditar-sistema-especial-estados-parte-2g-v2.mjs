@@ -243,7 +243,7 @@ async function mountLoader(page, withDots) {
 }
 
 async function mountCatalogState(page, state) {
-  await page.addStyleTag({ url: `${baseUrl}/css/pages/catalog/catalog-maintenance.css?v=tintin-20261029-performance-1` });
+  await page.addStyleTag({ url: `${baseUrl}/css/pages/catalog/catalog-maintenance.css?v=tintin-20261101-touch-targets-1` });
   await page.evaluate(current => {
     document.body.classList.add('tt-catalog-maintenance');
     const grid = document.getElementById('cat-grid');

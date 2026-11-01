@@ -21,13 +21,13 @@ function pageStyles(page) {
 const VERSION = 'tintin-20261031-tablet-breadcrumb-1';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261031-seo-espacios-2';
+const TIENDA_VERSION = 'tintin-20261101-touch-targets-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261101-cls-home-1';
 const LOADER_VERSION = 'tintin-20261031-seo-espacios-2';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5';
 const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20261031-seo-espacios-2';
-const NAV_ENTRY_VERSION = 'tintin-20261031-seo-espacios-2';
+const PUBLIC_SHELL_VERSION = 'tintin-20261101-touch-targets-1';
+const NAV_ENTRY_VERSION = 'tintin-20261101-touch-targets-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261031-seo-espacios-2';
 const SESSION_PROTECTION_VERSION = 'tintin-20261030-home-history-5';
@@ -177,7 +177,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-catalog-maintenance=\"1\"",
       "css/pages/catalog/catalog-maintenance.css",
-      "tintin-20261029-performance-1"
+      "tintin-20261101-touch-targets-1"
     ]
   ],
   "about.html": [
