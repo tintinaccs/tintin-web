@@ -1,3 +1,11 @@
+## 2026-11-01 — Comprobación de mejora visual y cascada de acciones
+
+Codex /root, base0f47cf54, rama codex/admin-mobile-visual-cascade.
+- Producción /admin sirve el HTML actual; CSS y ficha de Usuarios descargados con curl tienen los mismos SHA256 que la revisión publicada. El arranque real del cargador activa UI Quality → gestión de Usuarios → ficha/perfil en /admin y /admin.html con servicios aislados; no se forzó la importación del helper en las pruebas nuevas.
+- Defecto reproducido: la regla anterior de acciones con más elementos en su selector ganaba a la nueva; el menú ocupaba media fila en lugar de44px. Se corrige la especificidad de la regla canónica, sin cambiar otros componentes, permisos, datos ni escritorio.
+- PASS_LOCAL:7 casos de tarjeta/menú y arranque automático en320–1440 y ambas rutas. Regresión explícita de ancho44px y correo a todo el ancho.
+- NOT_VERIFIED: la pantalla/sesión concreta en la que la usuaria no percibe la mejora; se solicitó apartado, dispositivo y URL. No se atribuye el reporte a caché ni se afirma que este defecto explique todo el caso sin esa información.
+
 ## 2026-11-01 — public-catalog: ids reservados de Firestore ya no dan 502 (base main 75049e4)
 Claude Code, rama claude/sharp-cannon-oxfa8o.
 - Evidencia en producción (solo lectura): `GET /api/public-catalog?resource=products&id=__x__` → HTTP 502 y la ficha mostraba "No pudimos cargar el producto".

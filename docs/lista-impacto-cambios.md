@@ -1,3 +1,7 @@
+## 2026-11-01 — Cascada del menú de Usuarios
+
+Autoridad: espacio-modulos-admin.css. Una regla anterior de mayor especificidad estiraba el menú contextual; la regla nueva cubre la misma jerarquía de tabla/fila/celda y recupera44px. Tests comprueban geometría y carga automática desde cargador-pagina/UI Quality para /admin y /admin.html, con Firebase/negocio aislados. Sin cambios de datos, roles, backend ni diseño de escritorio; URLs/diagnóstico/protección mediante generadores canónicos.
+
 ## 2026-11-01 — Legibilidad de Usuarios y menú móvil
 
 Workspace y helpers de Usuarios existentes: correo completo a todo el ancho, menú con botones originales y datos adicionales desplegables; selección global accesible y campos cortos agrupados. Se conserva #1294, sus rutas/PWA/visor y lectores/escritores. Ficha mantiene foto/cabecera y reconstruye pestañas al reabrir. Misma tabla en tablet/escritorio, tokens existentes, sin backend/Rules/datos/permisos nuevos. URLs transitivas y derivados por generadores canónicos; pruebas en el gate responsive existente y seguimiento por SHA/PR.
