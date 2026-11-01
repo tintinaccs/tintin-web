@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "eebb23d57d2433b6019284e2a1a7aa37875b91543e11c32b9b7f1a745fecc71b",
+  "sourceFingerprint": "57b1750bb225ee5ae208f001992ae10d137f7c1d05de970ebbe924a63723568e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1694,
-    "textFiles": 1559,
-    "totalBytes": 44319778,
+    "files": 1696,
+    "textFiles": 1561,
+    "totalBytes": 44338340,
     "pages": 19,
-    "modules": 1122
+    "modules": 1124
   },
   "viewports": [
     {
@@ -2882,7 +2882,7 @@
         "viewer"
       ],
       "bytes": 191143,
-      "sha256": "4d4e628620ae1874e66f8e4bde819585c66268a339f85d2e22f0b1bb2f1e8d35",
+      "sha256": "f7de8acecef2ec0d79b25cb6c29d85c209cdf395ac2d1ffa8644894afa1a900a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2941,7 +2941,7 @@
           "line": 2090
         },
         {
-          "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-5",
+          "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-6",
           "target": "js/admin/maestro/app-movil-admin.js",
           "line": 2091
         },
@@ -3168,7 +3168,7 @@
           "line": 80
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-5",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-6",
           "target": "css/admin/app-movil-admin.css",
           "line": 81
         },
@@ -3312,7 +3312,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-5",
+          "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-6",
           "target": "js/admin/maestro/app-movil-admin.js",
           "line": 2091,
           "exists": true
@@ -3582,7 +3582,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-5",
+          "raw": "css/admin/app-movil-admin.css?v=tintin-20261101-app-movil-6",
           "target": "css/admin/app-movil-admin.css",
           "line": 81,
           "exists": true
@@ -30081,8 +30081,8 @@
     },
     {
       "path": "js/admin/maestro/app-movil-admin.js",
-      "bytes": 10795,
-      "sha256": "c0e506d1f7d4baa1da4691a8fe9d19e2594c002f1ecc6dbe9cc7ac79cedafcd8",
+      "bytes": 11982,
+      "sha256": "159e7b42cc83d3181e07e50a6acf32f19d03680fa1dc2ff2e6323e6a62a547a2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -58018,6 +58018,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/admin-app-ventas-locales.spec.js",
+      "bytes": 8821,
+      "sha256": "17229ea49a383e301d5d210ff990393c0d8f0e75db70b76a923dbe5e0cde911c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/admin-commerce-shopify.spec.js",
       "bytes": 8476,
       "sha256": "4e2fce2c050b3841a8060a96f65cf5b90b817c82383f7b29598315044627d0c7",
@@ -59611,6 +59622,17 @@
       ]
     },
     {
+      "path": "tests/ui-ux/zz-probe-l.spec.js",
+      "bytes": 2821,
+      "sha256": "028719226af077dde2a0f765924ac5a19e765d5a03be31058f79f014197634c9",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/zz-probe-p.spec.js",
       "bytes": 2529,
       "sha256": "a4c418962d6651cde0dfe27271b64b4458308af01f2f710319d949e63c5483c3",
@@ -60514,7 +60536,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 191143,
-      "sha256": "4d4e628620ae1874e66f8e4bde819585c66268a339f85d2e22f0b1bb2f1e8d35"
+      "sha256": "f7de8acecef2ec0d79b25cb6c29d85c209cdf395ac2d1ffa8644894afa1a900a"
     },
     {
       "path": "apple-touch-icon.png",
@@ -61599,8 +61621,8 @@
     {
       "path": "css/admin/app-movil-admin.css",
       "extension": ".css",
-      "bytes": 19661,
-      "sha256": "0be1c32043a3a58f8c04b0e2c2f449524cf3cc5ff091dd23add7cce3cbc9a68b"
+      "bytes": 23798,
+      "sha256": "031deb512e2cba23fedc2e308735f25c732a86b95579410c3deaa8a2a8ec7088"
     },
     {
       "path": "css/admin/comercio-local-admin.css",
@@ -62391,8 +62413,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1112357,
-      "sha256": "1b49bdc274746729421d1cd847487d8ad866da606d0cc5eb48dc024a8d0e4ed4"
+      "bytes": 1113953,
+      "sha256": "72862231ddd4eb9c120b1daed875e629f160e4228a5e1f752f650c32d6a8e238"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -64377,8 +64399,8 @@
     {
       "path": "js/admin/maestro/app-movil-admin.js",
       "extension": ".js",
-      "bytes": 10795,
-      "sha256": "c0e506d1f7d4baa1da4691a8fe9d19e2594c002f1ecc6dbe9cc7ac79cedafcd8"
+      "bytes": 11982,
+      "sha256": "159e7b42cc83d3181e07e50a6acf32f19d03680fa1dc2ff2e6323e6a62a547a2"
     },
     {
       "path": "js/admin/maestro/buscador-modulos-admin.js",
@@ -67246,7 +67268,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 80448,
-      "sha256": "55037c6cc118a65b51b6d58216d586aab487105c242f815629daff072903a93b"
+      "sha256": "3393587a277c1cffc66f59bdada735188ea74b26ee6084bff72bcd236ae975af"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -70015,6 +70037,12 @@
       "sha256": "9d98743e42527498d7274acff49bcc605ddf90ba22d792ddc60ec047fa1398f2"
     },
     {
+      "path": "tests/ui-ux/admin-app-ventas-locales.spec.js",
+      "extension": ".js",
+      "bytes": 8821,
+      "sha256": "17229ea49a383e301d5d210ff990393c0d8f0e75db70b76a923dbe5e0cde911c"
+    },
+    {
       "path": "tests/ui-ux/admin-commerce-shopify.spec.js",
       "extension": ".js",
       "bytes": 8476,
@@ -70403,6 +70431,12 @@
       "extension": ".js",
       "bytes": 2129,
       "sha256": "344c5b269980fa627a0ef5dc968cef48596f22bf5901a10f46244e59ab4918f3"
+    },
+    {
+      "path": "tests/ui-ux/zz-probe-l.spec.js",
+      "extension": ".js",
+      "bytes": 2821,
+      "sha256": "028719226af077dde2a0f765924ac5a19e765d5a03be31058f79f014197634c9"
     },
     {
       "path": "tests/ui-ux/zz-probe-p.spec.js",

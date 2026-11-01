@@ -386,10 +386,50 @@
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs button { gap: 5px; padding: 8px; }
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs button,
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs .tt-order-step-label { overflow-wrap: normal; }
+  /* ---- Fase 5 · Ventas locales, Clientes que compraron y Espejos de Sheets ----
+     Acciones en 2 columnas (la principal arriba), búsqueda + botón Filtros
+     (Mes/Casilla/Estado en la hoja), editor a pantalla completa con barra fija
+     de Cerrar/Guardar y resumen mensual en 2 columnas. */
+  html.adm-app body.tt-admin-control #section-ventas-locales > .adm-card > .local-toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 0; margin: 12px 0; border: 0; background: none; }
+  html.adm-app body.tt-admin-control #section-ventas-locales > .adm-card > .local-toolbar > .adm-btn { width: 100%; min-height: 44px; margin: 0; padding-inline: 8px; overflow-wrap: normal; }
+  html.adm-app body.tt-admin-control #section-ventas-locales > .adm-card > .local-toolbar > .adm-btn-primary { order: -1; grid-column: 1 / -1; }
+  html.adm-app body.tt-admin-control #section-ventas-locales > .adm-card > .local-toolbar > .adm-btn:last-child { grid-column: 1 / -1; }
+  html.adm-app body.tt-admin-control #local-ledger > .local-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; padding: 12px; margin: 12px 0; }
+  html.adm-app body.tt-admin-control #local-ledger > .local-toolbar > .adm-app-filter-field { display: none; }
+  html.adm-app body.tt-admin-control #local-ledger > .local-toolbar input { font-size: 16px; }
+  html.adm-app body.tt-admin-control #local-ledger .local-grid,
+  html.adm-app body.tt-admin-control #local-buyers .local-grid { gap: 10px; margin: 12px 0; }
+  html.adm-app body.tt-admin-control :is(#local-ledger, #local-buyers) .local-record { padding: 14px 16px; }
+  html.adm-app body.tt-admin-control :is(#local-ledger, #local-buyers) .local-record :is(button, a) { width: 100%; justify-content: center; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-record { padding: 12px; line-height: 1.4; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-record p { margin: 4px 0; font-size: 12px; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-table tbody { gap: 8px; padding: 8px; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-table td { gap: 2px; padding: 8px 12px; }
+  /* Editor: pantalla completa; el diálogo es el que desplaza y la barra queda abajo. */
+  html.adm-app body.tt-admin-control dialog.local-dialog {
+    width: 100%; max-width: none; height: 100dvh; max-height: none; margin: 0; inset: 0;
+    border: 0; border-radius: 0; overscroll-behavior: contain;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px 0;
+  }
+  html.adm-app body.tt-admin-control dialog.local-dialog > form > h2 { margin: 0 0 4px; font-size: 20px; }
+  html.adm-app body.tt-admin-control dialog.local-dialog .local-form { gap: 12px; }
+  html.adm-app body.tt-admin-control dialog.local-dialog .local-form :is(input, select, textarea) { font-size: 16px; min-height: 44px; }
+  html.adm-app body.tt-admin-control dialog.local-dialog fieldset.local-form { margin: 0 0 12px; padding: 12px; border: 1px solid var(--adm-border); border-radius: 12px; }
+  html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar {
+    position: sticky; bottom: 0; z-index: 1;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
+    margin: 12px -16px 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    border: 0; border-top: 1px solid var(--adm-border); border-radius: 0; background: var(--adm-card, #fff);
+  }
+  html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar > .adm-btn { width: 100%; min-height: 44px; margin: 0; }
+  html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar > .adm-btn-primary { order: 1; }
+  html.adm-app body.tt-admin-control dialog.local-dialog > form > .local-toolbar > [data-local-archive] { order: 2; grid-column: 1 / -1; }
 }
 @media (max-width: 359px) {
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs button { gap: 4px; }
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs .tt-order-step-index { flex-basis: 20px; width: 20px; height: 20px; }
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-stage-tabs .tt-order-step-label { font-size: 11px; }
+  html.adm-app body.tt-admin-control #local-mirror-map .local-grid { grid-template-columns: minmax(0, 1fr); }
 }

@@ -1,3 +1,11 @@
+## 2026-11-01 — Admin app móvil, Fases 5–7: Ventas locales, Clientes que compraron y Espejos de Sheets
+Claude Code, rama `claude/tintin-admin-mobile-redesign-6nkx6l` (commit local, sin push).
+- Investigado: `js/admin/comercio-local-admin.js` redibuja `#local-ledger` completo en cada cambio de filtro (la barra se recrea), la búsqueda conserva el input y reemplaza hermanos, los filtros escuchan `change` en `document` por `data-local-filter`, el editor es un `<dialog>` nativo con `showModal`. Clientes (`#local-buyers`) y Espejos (`#local-mirror-map`) se pintan desde el mismo módulo.
+- Cambio (solo presentación, ≤768 px): acciones en 2 columnas con la primaria primero; búsqueda + botón "Filtros" (Mes/Casilla/Estado en la hoja inferior) que sobrevive a los redibujados (`filterSheet` acepta `currentToolbar`; `closeSheet` acepta un opener función y solo enfoca nodos conectados); tarjetas compactas en ventas y clientas; resumen mensual del espejo en 2 columnas (1 bajo 360 px); editor a pantalla completa con barra fija Cerrar/Guardar y campos de 16 px/44 px. Lógica de negocio, datos y sincronización sin tocar. Caché `tintin-20261101-app-movil-6`.
+- Error arreglado de paso: el botón "Actualizar" se partía a la mitad ("ACTUALIZA R") a 320 px por `overflow-wrap:anywhere` y 79 px útiles; la barra ahora no tiene borde/padding extra y el botón usa `overflow-wrap:normal` (cubierto por la prueba nueva).
+- PASS_LOCAL: `admin-app-ventas-locales` 6/6 (nuevo), `local-commerce-responsive` 9/9, `operations/ventas-locales-vivo` 3/3, `admin-app-pedidos` 6/6, `admin-app-shell` 12/12, `admin-all-devices` 41/41, `admin-workspaces` 21/21, `admin-mobile-experience` 15/15, `verify:diagnostics` (19 páginas).
+- NOT_VERIFIED: datos reales de Sheets, teléfono físico, botón atrás de Android sobre el `<dialog>` nativo (se espera cierre nativo), producción.
+
 ## 2026-11-01 — Admin app móvil, Fase 4: Pedidos
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (commit local, sin push).
 - Investigado: `#tt-commerce-orders` se monta dinámicamente en `#section-pedidos` (shopify-commerce-admin.js `mountShells` + tablero-pedidos-vista.mjs `renderOrderBoard`); el filtrado escucha `change`/`input` en `document` por `data-filter`, así que mover los selects no rompe nada.

@@ -141,17 +141,22 @@ function closeSheet(restoreFocus = true) {
   moved = [];
   sheet.hidden = sheetBackdrop.hidden = true;
   document.body.classList.remove('adm-app-sheet-open');
-  if (restoreFocus) sheetOpener?.focus({ preventScroll: true });
+  const opener = typeof sheetOpener === 'function' ? sheetOpener() : sheetOpener;
+  if (restoreFocus && opener?.isConnected) opener.focus({ preventScroll: true });
   sheetOpener = null;
 }
 
 // ── Botón "Filtros" que abre la hoja con los filtros secundarios ──
 // Los campos siguen siendo los reales (mismos eventos y valores); en modo app
 // solo se ocultan en la barra y se muestran dentro de la hoja.
-const filterSyncs = new WeakMap();
-function filterSheet(toolbar, fields) {
+// Si el módulo vuelve a dibujar la barra (mismo contenedor, hijos nuevos), se
+// vuelve a enganchar con los campos nuevos.
+const filterWires = new WeakMap();
+function filterSheet(toolbar, fields, currentToolbar = () => toolbar) {
   if (!toolbar || !fields.length) return;
-  if (filterSyncs.has(toolbar)) { filterSyncs.get(toolbar)(); return; }
+  const wired = filterWires.get(toolbar);
+  if (wired && wired.button.parentNode === toolbar && wired.fields.length === fields.length && wired.fields.every((field, i) => field === fields[i])) { wired.sync(); return; }
+  wired?.button.remove();
   fields.forEach(field => field.classList.add('adm-app-filter-field'));
   const button = document.createElement('button');
   button.type = 'button';
@@ -163,10 +168,11 @@ function filterSheet(toolbar, fields) {
     if (button.textContent !== label) button.textContent = label;
     button.setAttribute('aria-label', active ? `Filtros, ${active} activo${active === 1 ? '' : 's'}` : 'Filtros');
   };
-  button.addEventListener('click', () => openSheet({ title: 'Filtros', nodes: fields, opener: button }));
+  // El foco vuelve al botón vigente (la barra puede haberse redibujado entera).
+  button.addEventListener('click', () => openSheet({ title: 'Filtros', nodes: fields, opener: () => filterWires.get(currentToolbar())?.button }));
   fields.forEach(field => field.addEventListener('change', sync));
   toolbar.append(button);
-  filterSyncs.set(toolbar, sync);
+  filterWires.set(toolbar, { button, fields, sync });
   sync();
 }
 
@@ -181,6 +187,19 @@ if (ordersSection) {
   };
   new MutationObserver(wireOrders).observe(ordersSection, { childList: true, subtree: true });
   wireOrders();
+}
+
+// Ventas locales: Mes, Casilla y Estado del registro pasan a la hoja. La lista
+// se vuelve a dibujar en cada filtro/búsqueda (comercio-local-admin.js).
+const ledger = document.getElementById('local-ledger');
+if (ledger) {
+  const wireLedger = () => {
+    const current = () => ledger.querySelector(':scope > .local-toolbar');
+    const toolbar = current();
+    if (toolbar) filterSheet(toolbar, [...toolbar.querySelectorAll(':scope > label')].filter(label => label.querySelector('select')), current);
+  };
+  new MutationObserver(wireLedger).observe(ledger, { childList: true, subtree: true });
+  wireLedger();
 }
 
 // ── Deslizar para recargar ──
