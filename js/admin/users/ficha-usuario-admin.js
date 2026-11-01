@@ -128,6 +128,7 @@ if (!window.TintinAdminUserFichaBooted) {
     if (!auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return false;
     const ownerUid = auth.currentUser.uid;
     const version = ++requestVersion;
+    delete body.dataset.ttEnhanced;
 
     body.replaceChildren(el('div', 'adm-loading', 'Cargando ficha…'));
     overlay.style.display = 'block';
@@ -254,6 +255,8 @@ if (!window.TintinAdminUserFichaBooted) {
     document.querySelector('.ficha-photo-dialog')?.close();
   }
 
+  let rowSequence = 0;
+
   function enhanceRows() {
     const tbody = document.getElementById('users-tbody');
     if (!tbody || !auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return;
@@ -274,15 +277,77 @@ if (!window.TintinAdminUserFichaBooted) {
       }
       const actionsCell = row.lastElementChild;
       if (!actionsCell || actionsCell.querySelector('[data-user-ficha]')) return;
-      const button = el('button', 'adm-btn adm-btn-sm adm-btn-outline', 'Ver ficha');
+      const name = row.cells[2]?.querySelector('strong');
+      if (name) {
+        const link = el('button', 'tt-admin-user-name', name.textContent);
+        link.type = 'button';
+        link.addEventListener('click', () => openClientFicha(uid));
+        name.replaceWith(link);
+      }
+      const button = el('button', 'adm-btn adm-btn-sm adm-btn-outline tt-admin-user-open', 'Ver ficha');
       button.type = 'button';
       button.dataset.userFicha = uid;
       button.addEventListener('click', () => openClientFicha(uid));
-      const actionsWrap = actionsCell.querySelector('div');
-      if (actionsWrap) actionsWrap.prepend(button);
-      else actionsCell.prepend(button);
+      const actionsWrap = actionsCell.querySelector('div') || actionsCell;
+      const originalActions = [...actionsCell.querySelectorAll('button')];
+      actionsWrap.prepend(button);
+      row.classList.add('tt-admin-user-card');
+
+      const menu = el('div', 'tt-admin-user-menu');
+      const toggle = el('button', 'adm-btn adm-btn-sm adm-btn-outline tt-admin-user-menu-toggle', '⋯');
+      toggle.type = 'button';
+      toggle.setAttribute('aria-label', 'Acciones del usuario');
+      toggle.setAttribute('aria-expanded', 'false');
+      const panel = el('div', 'tt-admin-user-menu-panel');
+      panel.id = `tt-user-actions-${++rowSequence}`;
+      panel.setAttribute('role', 'group');
+      panel.setAttribute('aria-label', 'Información y acciones del usuario');
+      toggle.setAttribute('aria-controls', panel.id);
+      function closeMenu(restoreFocus = false) {
+        menu.dataset.open = 'false';
+        toggle.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) toggle.focus({preventScroll:true});
+      }
+      toggle.addEventListener('click', () => {
+        const expanded = toggle.getAttribute('aria-expanded') !== 'true';
+        menu.dataset.open = String(expanded);
+        toggle.setAttribute('aria-expanded', String(expanded));
+      });
+      menu.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && menu.dataset.open === 'true') {
+          event.preventDefault(); event.stopPropagation(); closeMenu(true);
+        }
+      });
+      for (const action of originalActions) {
+        action.classList.add('tt-admin-user-secondary-action');
+        panel.append(action);
+      }
+      const details = el('button', 'adm-btn adm-btn-sm adm-btn-outline tt-admin-user-details', 'Mostrar más datos');
+      details.type = 'button';
+      details.setAttribute('aria-expanded', 'false');
+      const extraCells = [row.cells[4], row.cells[7], row.cells[8]].filter(Boolean);
+      for (const cell of extraCells) cell.id ||= `tt-user-extra-${++rowSequence}`;
+      details.setAttribute('aria-controls', extraCells.map(cell => cell.id).join(' '));
+      details.addEventListener('click', () => {
+        const expanded = details.getAttribute('aria-expanded') !== 'true';
+        details.setAttribute('aria-expanded', String(expanded));
+        details.textContent = expanded ? 'Ocultar datos adicionales' : 'Mostrar más datos';
+        row.dataset.extra = String(expanded);
+        closeMenu(true);
+      });
+      panel.append(details);
+      menu.append(toggle, panel);
+      actionsWrap.append(menu);
     });
   }
+
+  document.addEventListener('click', event => {
+    for (const menu of document.querySelectorAll('.tt-admin-user-menu[data-open="true"]')) {
+      if (menu.contains(event.target)) continue;
+      menu.dataset.open = 'false';
+      menu.querySelector('.tt-admin-user-menu-toggle')?.setAttribute('aria-expanded', 'false');
+    }
+  });
 
   function injectStyles() {
     if (document.getElementById('user-ficha-styles')) return;

@@ -1,3 +1,11 @@
+## 2026-11-01 — Usuarios móvil: legibilidad y acciones contextuales
+
+Codex /root. Base8da9243f (integra #1295); reconciliación con #1294 ya fusionado. La copia previa de esta sesión se preserva en backup/admin-mobile-session, sin publicarla como una segunda implementación.
+- Correo a todo el ancho, tarjeta con espacio y menú con los mismos botones/validaciones. Datos secundarios desplegables sin nueva consulta; tabla/acciones originales en tablet y escritorio. Campos breves agrupados y selección global visible. Ficha conserva cabecera/foto y reconstruye pestañas al reabrir.
+- PASS_LOCAL:49 pruebas de admin-user-spaced-cards, admin-user-mobile, admin-mobile-experience y admin-workspaces; repaso final5/5 en320–1440; auditoría Usuarios25 controles; preflight1118 archivos/72 funciones, build:pages y protección78 registros/544 archivos. Resultados terminales de CI y merge corresponden al SHA final y quedan en el PR, sin heredar los de #1294.
+- CI inicial1297/a8664987, run41259890859 intento1: calidad detectó un tag histórico fijo en auditar-estabilidad-final-v1. Se alinea con cache-version-baseline, conservando carga de ficha y guardas contra listeners/escritores paralelos; PASS_LOCAL: test:architecture-gates38/38 para el candidato corregido.
+- Sin backend, Rules, datos ni permisos modificados. NOT_VERIFIED: instalación/teclado en teléfonos físicos y sesión comercial real. No se realizan escrituras de producción.
+
 ## 2026-11-01 — Áreas táctiles de 44 px en Catálogo (base main 75049e4)
 Claude Code, rama claude/beautiful-planck-3dz88l.
 - Medición previa (Chromium, 320/390/768/1024/1440 px): enlace del título de

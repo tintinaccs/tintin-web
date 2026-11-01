@@ -10,20 +10,20 @@ function ensureStyles() {
   style.id = STYLE_ID;
   style.textContent = `
     #users-tbody td{vertical-align:middle}
-    #users-tbody td:nth-child(3),#users-tbody [data-user-email]{overflow-wrap:anywhere;word-break:break-word;min-width:150px}
+    #users-tbody td:nth-child(3),#users-tbody [data-user-email]{overflow-wrap:anywhere;word-break:break-word}
     #users-tbody td:last-child>div{display:flex!important;flex-wrap:wrap!important;gap:6px!important;align-items:center!important}
-    #client-ficha-overlay>div{width:min(920px,calc(100vw - 24px))!important;max-width:920px!important}
+    #client-ficha-overlay>div{width:min(920px,100%)!important;max-width:920px!important}
     #client-ficha-body{padding:18px!important;gap:14px!important}
-    .tt-admin-user-tabs{display:flex;gap:6px;overflow-x:auto;padding:6px;background:#fff7fa;border:1px solid #edd6df;border-radius:13px;position:sticky;top:0;z-index:2;scrollbar-width:none}
+    .tt-admin-user-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:6px;background:var(--adm-card);border:1px solid var(--adm-border);border-radius:13px;position:sticky;top:0;z-index:2;scrollbar-width:none}
     .tt-admin-user-tabs::-webkit-scrollbar{display:none}
-    .tt-admin-user-tab{border:0;background:transparent;border-radius:9px;padding:9px 12px;white-space:nowrap;font:700 11px/1 Montserrat;color:#705e65;cursor:pointer}
-    .tt-admin-user-tab[aria-selected="true"]{background:#f8dfe8;color:#713C53}
+    .tt-admin-user-tab{border:0;background:transparent;border-radius:9px;padding:9px 12px;min-height:44px;white-space:normal;font:700 12px/1.4 Montserrat;color:var(--adm-text);cursor:pointer}
+    .tt-admin-user-tab[aria-selected="true"]{background:var(--admin-color-background-sidebar-active);color:var(--adm-text)}
     .tt-admin-user-panel[hidden]{display:none!important}
     .tt-admin-user-panel{display:flex;flex-direction:column;gap:14px}
-    .tt-admin-user-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 14px;background:#faf7f8;border:1px solid #eee1e6;border-radius:12px}
-    .tt-admin-user-tools-note{font-size:11px;color:#7b6a71;flex:1;min-width:220px;line-height:1.45}
+    .tt-admin-user-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 14px;background:var(--adm-card);border:1px solid var(--adm-border);border-radius:12px}
+    .tt-admin-user-tools-note{font-size:11px;color:var(--adm-muted);flex:1;min-width:min(220px,100%);line-height:1.45}
     @media(max-width:680px){
-      #client-ficha-overlay{padding:8px!important}
+      #client-ficha-overlay{padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))!important}
       #client-ficha-body{padding:12px!important}
       .ficha-order-row{align-items:flex-start!important}
     }
@@ -45,11 +45,12 @@ function buildProfileTabs() {
   const tools = document.createElement('div');
   tools.className = 'tt-admin-user-tools';
   tools.innerHTML = `
-    <span class="tt-admin-user-tools-note">La ficha usa la misma autoridad <strong>users</strong> que el panel. Los cambios de rol, bloqueo, restauración o eliminación se realizan desde la fila canónica de Usuarios para no duplicar escrituras.</span>
+    <span class="tt-admin-user-tools-note">Administrá el rol y el acceso desde el listado de Usuarios.</span>
     <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-tt-focus-canonical-user>Ir a gestión del usuario</button>`;
 
   const tabs = document.createElement('nav');
   tabs.className = 'tt-admin-user-tabs';
+  tabs.setAttribute('role', 'tablist');
   tabs.setAttribute('aria-label', 'Secciones de la ficha del usuario');
 
   const host = document.createElement('div');
@@ -66,12 +67,19 @@ function buildProfileTabs() {
     button.type = 'button';
     button.className = 'tt-admin-user-tab';
     button.dataset.ttAdminUserTab = group.id;
+    button.id = 'tt-user-tab-' + group.id;
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-controls', 'tt-user-panel-' + group.id);
+    button.tabIndex = index === 0 ? 0 : -1;
     button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
     button.textContent = group.label;
     tabs.appendChild(button);
 
     const panel = document.createElement('section');
     panel.className = 'tt-admin-user-panel';
+    panel.id = 'tt-user-panel-' + group.id;
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', button.id);
     panel.dataset.ttAdminUserPanel = group.id;
     panel.hidden = index !== 0;
     panels.set(group.id, panel);
@@ -84,14 +92,28 @@ function buildProfileTabs() {
     panels.get(group.id)?.appendChild(section);
   });
 
-  body.replaceChildren(tools, tabs, host);
+  const identity = body.querySelector(':scope > .ficha-profile');
+  body.replaceChildren(...(identity ? [identity] : []), tabs, host, tools);
 
   tabs.addEventListener('click', event => {
     const button = event.target.closest?.('[data-tt-admin-user-tab]');
     if (!button) return;
     const id = button.dataset.ttAdminUserTab;
     panels.forEach((panel, key) => { panel.hidden = key !== id; });
-    tabs.querySelectorAll('[data-tt-admin-user-tab]').forEach(tab => tab.setAttribute('aria-selected', tab === button ? 'true' : 'false'));
+    tabs.querySelectorAll('[data-tt-admin-user-tab]').forEach(tab => {
+      tab.setAttribute('aria-selected', tab === button ? 'true' : 'false');
+      tab.tabIndex = tab === button ? 0 : -1;
+    });
+  });
+
+  tabs.addEventListener('keydown', event => {
+    if (!['ArrowRight','ArrowLeft','Home','End'].includes(event.key)) return;
+    const items = [...tabs.querySelectorAll('[role=tab]')];
+    const index = items.indexOf(document.activeElement);
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? items.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + items.length) % items.length;
+    event.preventDefault();
+    items[next].click();
+    items[next].focus();
   });
 
   tools.querySelector('[data-tt-focus-canonical-user]')?.addEventListener('click', () => {
@@ -100,7 +122,7 @@ function buildProfileTabs() {
     window.closeClientFicha?.();
     document.querySelector('[data-section="usuarios"]')?.click();
     window.setTimeout(() => {
-      const row = uid ? document.querySelector(`.user-row-check[data-id="${CSS.escape(uid)}"]`)?.closest('tr') : null;
+      const row = uid ? document.querySelector(`tr[data-user-uid="${CSS.escape(uid)}"]`) : null;
       if (row) {
         row.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
         row.classList.add('adm-notification-focus');
@@ -122,7 +144,7 @@ function boot() {
   const body = document.getElementById('client-ficha-body');
   if (body) {
     new MutationObserver(() => {
-      if (!body.dataset.ttEnhanced) buildProfileTabs();
+      if (!body.querySelector('.tt-admin-user-tabs')) { delete body.dataset.ttEnhanced; buildProfileTabs(); }
       cleanEpochDates(body);
     }).observe(body, { childList: true, subtree: true, characterData: true });
   }
