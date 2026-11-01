@@ -11,14 +11,16 @@ async function load(page, width, file = 'admin.html', options = {}) {
   await page.setViewportSize({ width, height: 800 });
   // Markup y estilos reales; ningún controlador de negocio, sesión o red real.
   const scripts = [runtimePath, ...(options.mobile ? ['/js/admin/maestro/navegacion-movil-admin.js'] : []), '/js/admin/maestro/buscador-modulos-admin.js', ...(options.sidebar ? ['/js/admin/sidebar-expandible-admin.js'] : []), ...(options.guard ? ['/js/admin/proteccion-cambios-pendientes-admin.js'] : [])];
-  const shell = fs.readFileSync(path.join(root, file), 'utf8')
+  const entry = options.pathname || '/fixture';
+  let shell = fs.readFileSync(path.join(root, file), 'utf8')
     .replace('</head>', `<script nonce="dGludGluLWZpeHR1cmU=">${entryScroll}</script></head>`)
     .replace('</body>', scripts.map(src => `<script nonce="dGludGluLWZpeHR1cmU=" type="module" src="${src}"></script>`).join('') + '</body>' );
+  if (options.transform) shell = options.transform(shell);
   await page.route('**/*', async route => {
     const url = new URL(route.request().url());
     if (options.respond && await options.respond(route, url)) return;
     if (url.hostname !== 'tintin.test') return route.abort();
-    if (url.pathname === '/fixture') return route.fulfill({
+    if (url.pathname === entry) return route.fulfill({
       contentType: 'text/html', body: shell,
       headers: { 'Content-Security-Policy': "default-src 'none'; script-src 'nonce-dGludGluLWZpeHR1cmU=' 'strict-dynamic'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none';" },
     });
@@ -27,7 +29,7 @@ async function load(page, width, file = 'admin.html', options = {}) {
     if (!allowed || !filePath.startsWith(root + path.sep) || !fs.existsSync(filePath)) return route.abort();
     return route.fulfill({ path: filePath, contentType: /\.m?js$/.test(filePath) ? 'text/javascript' : undefined });
   });
-  await page.goto('https://tintin.test/fixture');
+  await page.goto('https://tintin.test' + entry);
   await page.evaluate(() => {
     document.documentElement.classList.add('adm-auth-ready');
     // El tablero real revela Pedidos al terminar su montaje autenticado.
