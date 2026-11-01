@@ -1,3 +1,61 @@
+## 2026-11-01 — Admin app móvil, Fase 27: Modo oscuro
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: los colores del panel salen de tokens `--admin-color-*` (publicados en :root) y de una segunda capa `--tt-ui-*`/`--tt-surface` (sistema-superficies-tintin.css); además hay colores fijos y reglas con `!important` en dashboard-control.css. Primer intento solo con tokens dejó fondos claros y texto oscuro sobre oscuro.
+- Cambios: interruptor "Modo oscuro" (role=switch, 56×44 px) al inicio de Configuración, visible solo ≤768 (`#adm-theme-card`); `syncTheme()` en app-movil-admin.js activa `html.adm-dark` solo con `adm-app`, guarda `tt-admin-theme` en localStorage (con try/catch) y cambia `meta theme-color`. CSS: tokens oscuros en `html.adm-app.adm-dark` + overrides acotados (prefijo `html:root.adm-app.adm-dark body.tt-admin-control`; `!important` solo donde la regla de origen lo usa: pestañas de la barra inferior, píldoras sobre rosa). Sin cambios en ≥820 ni en design tokens globales.
+- Defectos reales hallados y corregidos: iconos y etiquetas inactivas de la barra inferior casi invisibles (contraste 1.1), botones/pestañas/píldoras con fondo blanco fijo, texto oscuro sobre fondo oscuro en encabezados de tarjeta, "Cargando…" claro sobre rosa.
+- PASS_LOCAL: admin-app-modo-oscuro.spec.js 9/9 (interruptor 320/390/540/768, persistencia, ≥820 sin efecto aun con preferencia guardada, contraste ≥3 en las 21 secciones y la barra inferior a 390 px, transiciones apagadas). Regresión: shell, configuración, inicio, correos, permisos, apariencia, flujo, maestro-bienvenida, cuenta, estadísticas, usuarios, pedidos en verde + engagement/busquedas.
+- Excluido del contraste (falso positivo): thead recortado por la conversión a tarjetas; vista previa (iframe) del sitio en Apariencia, que muestra el sitio real en claro.
+- NOT_VERIFIED: módulos con datos reales (Firebase), modales/menús que solo existen con sesión, Safari iOS real, destello de tema claro antes de aplicar el oscuro al cargar (el JS es módulo diferido), contraste ≥4.5 (se midió ≥3), módulos montados por JS con sesión (Maestro, Bienvenida, Flujo) en oscuro.
+
+## 2026-11-01 — Admin app móvil, Fase 26: Ver tienda y Salir
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: en ≤768 "Ver tienda" (enlace a /) y "Salir" (#mtab-logout) están en el grupo "Cuenta" de la hoja "Más" (ya construido en F0); en escritorio/tablet Salir sigue en el menú lateral (#adm-logout). La lógica de cierre de sesión (admin-app.js) no se tocó.
+- Resultado: a 320/390/540/768 ambos son visibles, ≥44 px de alto, dentro del ancho, sin desborde. Sin cambios de CSS ni JS. Spec nueva admin-app-cuenta.spec.js (7 pruebas).
+- PASS_LOCAL: 7/7.
+- NOT_VERIFIED: pulsar Salir (cerraría la sesión real; no se ejecutó), confirmación por cambios sin guardar al salir (AdminUnsaved.requestNavigation) en navegador real, Ver tienda en producción.
+
+## 2026-11-01 — Admin app móvil, Fase 25: Maestro y Mensaje de bienvenida
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: ambos módulos se crean por JS (panel-maestro.js, control-bienvenida-admin.js) con sesión de Super Admin; no existen en admin.html. Traen su propio CSS con reglas ≤600/≤820 (Maestro: KPIs en una columna, botones a ancho completo; la tabla de capacidades se convierte en tarjetas con el espacio de módulos; Bienvenida: una columna, botones a ancho completo).
+- Resultado: a 320/390/540/768 sin desborde, toques ≥44 px, campos ≥16 px; capturas a 390 revisadas sin defectos. No hizo falta cambiar CSS ni JS. Se añadió solo spec de no regresión admin-app-maestro-bienvenida.spec.js (14 pruebas: 2 módulos × 7 anchos).
+- PASS_LOCAL: 14/14. La prueba inyecta el CSS real extraído del código fuente y HTML equivalente al generado (no el módulo real).
+- NOT_VERIFIED: módulos reales montados con sesión y datos de Firebase (comprobaciones de salud de Maestro, filas reales, pasos reales de Bienvenida, guardado, "Probar como nuevo usuario", "Reactivar para clientas"). No se ejecutó ninguna acción.
+
+## 2026-11-01 — Admin app móvil, Fase 24: Apariencia y contenido
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-apariencia (pestañas Diseño y Colores; editor visual con Deshacer/Rehacer/Guardar/Publicar, página, bloque nuevo, tamaño de vista previa). Medido a 320/390/540/768: sin desborde, toques ≥44 px, campos ≥16 px. Una captura a 390 mostró un defecto que la medición de tamaños no detecta: "ESCRITORIO" del selector de vista previa (.visual-devices) se partía a media palabra.
+- Cambio (solo ≤768, solo CSS): .visual-devices en tres columnas iguales con texto de 11 px; en ≤359 px (contenedor de 226 px) los tres botones se apilan. La spec ahora detecta palabras partidas en botones (ignora el texto oculto de lectores de pantalla). Tag: app-movil-admin.css -18 → -19. Spec nueva admin-app-apariencia.spec.js (11 pruebas). No se tocó el editor visual ni los colores globales.
+- PASS_LOCAL: admin-app-apariencia 11/11 (falló en 320/390 sin el CSS); regresión shell 13, flujo 7, correos 35, configuración 11, permisos 7, engagement/búsquedas OK; audit:cache-versioning correcto.
+- NOT_VERIFIED: contenido dinámico del editor (secciones, propiedades, vista previa real, historial) y panel Colores cargado (categorías, esquemas, contraste); solo se midió el HTML estático. No se guardó ni publicó nada.
+
+## 2026-11-01 — Admin app móvil, Fase 23: Roles y Permisos
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-permisos; la matriz la dibuja renderPermisosMatrix (admin-app.js) como un <details class="perm-module-block"> por módulo con tabla acción × rol (Admin, Agente/Modder, Viewer), interruptores .perm-pill-toggle y píldoras "No disponible". Con HTML ficticio equivalente a 320/390/540/768: tablas ya en tarjetas (espacio-modulos), sin desborde, interruptores, módulos, botones y campos ≥44 px, campos ≥16 px. Captura a 390 revisada.
+- Cambio: ninguno en CSS/JS (ya cumplía por las fases 0–1). Solo spec nueva admin-app-permisos.spec.js (7 pruebas) de no regresión. NO se tocaron permisos, reglas ni su guardado.
+- PASS_LOCAL: admin-app-permisos 7/7; audit:cache-versioning correcto.
+- NOT_VERIFIED: matriz real cargada desde Firestore (todos los módulos y acciones), "Guardar cambios"/"Restaurar" y el aviso de cambios sin guardar. No se guardó ningún permiso.
+
+## 2026-11-01 — Admin app móvil, Fase 22: Configuración
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-configuracion (estado de la tienda, acceso con tienda cerrada, header por dispositivo, datos generales, envíos con pestañas Delivery/Encomienda, redes, medición, cuentas bancarias, notificaciones). Medido a 320/390/540/768 con ambas pestañas de envíos: 33 controles visibles, sin desborde, ninguno fuera del ancho, botones/selectores/campos/casillas ≥44 px y campos ≥16 px. Captura a 390 revisada.
+- Cambio: ninguno en CSS/JS (ya cumplía por las fases 0–1). Solo spec nueva admin-app-configuracion.spec.js (11 pruebas) de no regresión.
+- PASS_LOCAL: admin-app-configuracion 11/11; audit:cache-versioning correcto.
+- NOT_VERIFIED: contenido cargado desde Firestore (lista de dispositivos y diagnóstico de envíos de notificaciones, zonas de envío reales, bloque Roles y Permisos que se ve en F23); controles ocultos hasta cargar datos (15 de 48) no medidos. No se guardó ninguna configuración.
+
+## 2026-11-01 — Admin app móvil, Fase 21: Correos
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-correos (8 pestañas y sus paneles en admin.html). Se midieron los 8 paneles a 320/390/540/768: sin desborde, sin elementos fuera del ancho, botones/selectores/campos ≥44 px y ≥16 px. Las tablas ya se convierten en tarjetas (espacio-modulos-admin) y su cabecera queda recortada a 1×1 px (solo lectores de pantalla).
+- Cambio: ninguno en CSS/JS (el módulo ya cumplía con las fases 0–1). Solo spec nueva admin-app-correos.spec.js (35 pruebas) como protección contra regresiones. Captura a 390 px revisada: pestañas en dos columnas de 44 px.
+- PASS_LOCAL: admin-app-correos 35/35 (8 paneles × 4 anchos + 820/1024/1440 sin cambio); audit:cache-versioning correcto.
+- NOT_VERIFIED: filas reales de Firestore (envíos, plantillas, clientas, historial) y vista previa/envío de correos; filas ficticias solo en Inicio y Correos de pedidos. No se envió ningún correo.
+
+## 2026-11-01 — Admin app móvil, Fase 20: Flujo de conexiones
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-flujo-conexiones lo dibuja flujo-conexiones-admin.js (importa Firebase); con HTML ficticio equivalente se midió: nodos (.tfc-pill) de ~25–30 px y filas de conexión (.tfc-edge-row) de ~30 px, por debajo de los 44 px táctiles.
+- Cambio (solo ≤768, solo CSS): nodos y conexiones de 44 px mínimo, búsqueda y selector de estado a todo el ancho con 16 px, sin elevación en hover, lista de conexiones hasta 60vh. Sin cambios de JS ni de datos. Tag: app-movil-admin.css -17 → -18. Spec nueva admin-app-flujo-conexiones.spec.js.
+- PASS_LOCAL: admin-app-flujo-conexiones 7/7 (320/390/540/768 app; 820/1024/1440 sin cambio; falla sin el CSS); regresión shell 13, diagnóstico 7, engagement/busquedas OK; audit:cache-versioning correcto.
+- NOT_VERIFIED: módulo real contra Firebase/producción (HTML ficticio con las mismas clases).
+
 ## 2026-11-01 — Entrada del Admin con módulos por sección
 
 Codex /root, base 081c8125, rama codex/admin-entry-on-demand.

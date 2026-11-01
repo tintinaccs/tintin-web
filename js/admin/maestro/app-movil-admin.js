@@ -24,8 +24,29 @@ function syncSection() {
   if (document.body.dataset.admSection !== section) document.body.dataset.admSection = section;
   root.classList.toggle('adm-app-has-back', isApp() && !PRIMARY.has(section));
 }
+// ── Modo oscuro (solo teléfono, interruptor manual en Configuración) ──
+const THEME_KEY = 'tt-admin-theme';
+const DARK_THEME_COLOR = '#161216';
+const themeMeta = document.querySelector('meta[name="theme-color"]');
+const lightThemeColor = themeMeta?.getAttribute('content') || '#F8AACA';
+let darkPref = false;
+try { darkPref = localStorage.getItem(THEME_KEY) === 'dark'; } catch { /* sin almacenamiento: queda en claro */ }
+const readDark = () => darkPref;
+function syncTheme() {
+  const on = isApp() && readDark();
+  root.classList.toggle('adm-dark', on);
+  themeMeta?.setAttribute('content', on ? DARK_THEME_COLOR : lightThemeColor);
+  document.getElementById('adm-theme-switch')?.setAttribute('aria-checked', String(readDark()));
+}
+document.getElementById('adm-theme-switch')?.addEventListener('click', () => {
+  darkPref = !darkPref;
+  try { localStorage.setItem(THEME_KEY, darkPref ? 'dark' : 'light'); } catch { /* sin almacenamiento: dura solo esta visita */ }
+  syncTheme();
+});
+
 function syncMode() {
   root.classList.toggle('adm-app', isApp());
+  syncTheme();
   syncSection();
   if (!isApp()) closeSheet();
 }
