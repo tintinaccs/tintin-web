@@ -422,7 +422,7 @@
       'html.tt-first-paint-bg,html.tt-first-paint-bg body{background:var(--color-background-page,var(--tt-first-paint-bg,#FFFFFF))!important;background-color:var(--color-background-page,var(--tt-first-paint-bg,#FFFFFF))!important;background-image:var(--tt-flow-canvas,none)!important}',
       'html.tt-first-paint-bg,html.tt-first-paint-bg body{transition:none!important}',
       'html.tt-fast-navigation.tt-store-gate-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay){visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
-      'html.tt-fast-navigation.tt-store-gate-pending body{overflow:auto!important;overscroll-behavior:auto!important}',
+      'html.tt-fast-navigation.tt-store-gate-pending body{overflow-x:clip!important;overflow-y:visible!important;overscroll-behavior:auto!important}',
       'html.tt-fast-navigation.tt-store-gate-pending{background:var(--color-background-page,var(--tt-first-paint-bg,#FFFFFF))!important}'
     ].join('');
     document.head.appendChild(style);
