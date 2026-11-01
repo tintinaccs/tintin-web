@@ -1,3 +1,24 @@
+## 2026-11-01 — CLS de inicio y auditoría de colecciones (base main 75049e4)
+Claude Code, rama claude/laughing-albattani-n84ngy.
+- Post-merge #1291 (b7decd1): verificado en producción solo lectura canonical
+  y og:url `https://tintinaccs.com`, CSS de login seo-espacios-2 y JSON-LD
+  ProductGroup/hasVariant con InStock/OutOfStock.
+- CLS inicio: con `html.tt-fast-navigation.tt-store-gate-pending` el body
+  tenía `overflow:auto` (contexto de formato propio); al resolver la puerta
+  pasaba a `overflow-x:clip` (calidad-interfaz.css) y el `margin-top` del hero
+  colapsaba a través de main/body → desplazamiento del body (0,0607 en
+  1440x900, 0,0703 en 820x1180). La regla temporal en
+  `esquema-color-instantaneo.js` usa ahora `overflow-x:clip; overflow-y:visible`
+  (mismo estado final, scroll sigue desbloqueado). Medido local
+  (servidor-local-pruebas 4173): inicio 0 en 1440 y 820 (6/6 corridas en 1440);
+  catálogo, about, contacto, colecciones y ficha sin cambio frente a la base;
+  posición de main y scroll horizontal idénticos.
+- `scripts/auditar-colecciones-pagina.js`: la regex no aceptaba el segundo
+  argumento de versión de `load(...)` en `js/cargador-mantenimiento-pagina.js`.
+  Ahora OK (7 viewports).
+- Pendiente (preexistente, no tocado): CLS local de catálogo/colecciones en
+  820 px (~0,15) y de product.html sin id; no verificado en producción.
+
 ## 2026-10-31 — Intermitencia de color-choice-browser y espacio en tablet (base main 762610d)
 Claude Code, rama claude/brave-planck-zvvd0x.
 - Reproducción: `guest-cart-commerce.spec.js --project=webkit-mobile
