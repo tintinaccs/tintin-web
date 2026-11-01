@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 17: Notificaciones push
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: notificaciones-push-maestro.js mueve #push-card y #push-master-card a #section-notificaciones-push. En ≤768 la capa existente espacio-modulos-admin ya convierte las tablas de dispositivos y eventos en tarjetas con etiqueta (encabezado oculto a la vista, legible por lectores de pantalla), apila la grilla del mensaje (tt-admin-field-grid) y da 44 px/16 px a botones y campos.
+- Cambio: ninguno en CSS/JS (no hacía falta). Se agrega admin-app-push.spec.js como guardia. La primera versión de la spec fallaba por medir antes de que la capa procesara las filas (ahora espera data-label) y por exigir thead display:none en lugar del ocultamiento accesible.
+- PASS_LOCAL: admin-app-push.spec.js 7/7 (filas ficticias; no se registra, revoca ni envía nada).
+- NOT_VERIFIED: registro real de dispositivo, envío de prueba y revocación (efectos reales); Safari iOS real. Visto y no tocado: título de tarjeta repetido en el selector "Ir a una sección".
+
 ## 2026-11-01 — Admin app móvil: integración con main (#1301)
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l (merge de origin/main).
 - Conflictos resueltos: admin.html, admin-images.html, dashboard-control.css, admin-panel-fixture.cjs, admin-white-icons.spec.js, CURRENT_STATE.md; manifiestos de versión tomados de main y regenerados (audit:cache-versioning y verify:diagnostics OK).
