@@ -125,7 +125,8 @@ for (const width of [820, 1440]) {
   test(`Ventas locales sin cambios de app a ${width}px`, async ({ page }) => {
     await open(page, width);
     await expect(page.locator('html')).not.toHaveClass(/adm-app/);
-    await expect(page.locator('.adm-app-filter-btn')).toBeHidden();
+    // Todos los botones de filtros del panel (no solo el primero) deben quedar ocultos.
+    expect(await page.locator('.adm-app-filter-btn').evaluateAll(nodes => nodes.filter(node => node.getClientRects().length).length)).toBe(0);
     expect(await visibleLabels(page)).toBe(4);
     await page.locator('[data-local-new="sale"]').click();
     const w = await page.locator('dialog.local-dialog').evaluate(node => node.getBoundingClientRect().width);

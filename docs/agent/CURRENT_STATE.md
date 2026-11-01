@@ -1,3 +1,11 @@
+## 2026-11-01 — Admin app móvil, Fase 19: Diagnóstico
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-diagnostico (admin.html) con la barra fija #site-diagnostic-toolbar (búsqueda, 10 selectores, fecha, Copiar, Exportar) que en teléfono ocupaba varias pantallas; pestañas #site-diagnostic-view-tabs con desplazamiento horizontal; resúmenes de hallazgos de ~30 px.
+- Cambio (solo ≤768): app-movil-admin.js manda los 10 selectores y la fecha a la hoja inferior "Filtros · N" (filterSheet cuenta también campos con valor, p. ej. fecha); CSS en dos columnas, pestañas que se acomodan en filas de 44 px y resúmenes de 44 px. Tags: app-movil-admin.css -16 → -17, app-movil-admin.js -12 → -13. Spec nueva admin-app-diagnostico.spec.js.
+- De paso (CI del PR #1302, run 41334696390, trabajo "C — Administración"): audit:admin-foundation exigía el corte móvil de 540 px que la Fase 0 movió a 768 px a propósito; se actualizó el contrato a 768 manteniendo la misma comprobación (barra lateral oculta, contenido sin margen y barra inferior visible). La spec de Ventas locales en escritorio ahora exige que todos los botones de filtros estén ocultos (antes fallaba por haber dos).
+- PASS_LOCAL: admin-app-diagnostico 14/14; admin-app-ventas-locales 6/6; audit:admin-foundation sin errores (falla sin el ajuste); regresión shell 13, pedidos 6, colecciones 6, reseñas 6, me-gusta 6, control-dashboard 59.
+- NOT_VERIFIED: no se ejecutó un diagnóstico real contra producción (hallazgo ficticio inyectado).
+
 ## 2026-11-01 — Admin app móvil, Fase 18: Auditoría
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: #section-auditoria (admin.html) tiene la barra masiva #audit-bulk-toolbar (Exportar CSV / Limpiar) y una tabla que llena loadAuditLog (admin-app.js). En ≤768 la capa espacio-modulos-admin ya la convierte en tarjetas con etiqueta y da 44 px a los botones, pero la casilla de cada fila (input.audit-row-check, sin label) quedaba en ~13 px.

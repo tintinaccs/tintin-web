@@ -562,6 +562,19 @@
   html.adm-app body.tt-admin-control #audit-tbody .audit-row-check::before { content: ""; position: absolute; inset: 11px; border: 2px solid var(--adm-accent); border-radius: 6px; background: var(--adm-card, #fff); box-sizing: border-box; }
   html.adm-app body.tt-admin-control #audit-tbody .audit-row-check:checked::before { background: var(--adm-accent); box-shadow: inset 0 0 0 3px var(--adm-card, #fff); }
   html.adm-app body.tt-admin-control #audit-tbody .audit-row-check:focus-visible { outline: 2px solid var(--adm-accent); outline-offset: -4px; }
+
+  /* ---- Fase 19 · Diagnóstico ----
+     Filtros (10 selectores + fecha) en la hoja; búsqueda y botón Filtros a lo ancho,
+     Copiar/Exportar en dos columnas; pestañas de vista sin cortar; "Detalle técnico" de 44 px. */
+  html.adm-app body.tt-admin-control #site-diagnostic-toolbar:has(> .adm-app-filter-btn) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  html.adm-app body.tt-admin-control #site-diagnostic-toolbar > .adm-diagnostic-search { grid-column: 1 / -1; order: -2; }
+  html.adm-app body.tt-admin-control #site-diagnostic-toolbar > .adm-app-filter-btn { grid-column: 1 / -1; order: -1; }
+  html.adm-app body.tt-admin-control #site-diagnostic-toolbar > .adm-app-filter-field { display: none; }
+  html.adm-app body.tt-admin-control #site-diagnostic-toolbar > .adm-btn { min-height: 44px; padding-inline: 8px; }
+  html.adm-app body.tt-admin-control .adm-app-sheet-body > input.adm-app-filter-field { min-height: 44px; font-size: 16px; }
+  html.adm-app body.tt-admin-control #site-diagnostic-view-tabs { flex-wrap: wrap; overflow: visible; }
+  html.adm-app body.tt-admin-control #site-diagnostic-view-tabs button { flex: 1 1 auto; min-height: 44px; white-space: normal; }
+  html.adm-app body.tt-admin-control #section-diagnostico .adm-diagnostic-item details summary { min-height: 44px; box-sizing: border-box; padding-block: 12px; }
 }
 @media (max-width: 359px) {
   html.adm-app body.tt-admin-control #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }

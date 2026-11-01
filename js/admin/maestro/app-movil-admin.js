@@ -163,7 +163,8 @@ function filterSheet(toolbar, fields, currentToolbar = () => toolbar) {
   button.className = 'adm-app-filter-btn';
   button.setAttribute('aria-haspopup', 'dialog');
   const sync = () => {
-    const active = fields.filter(field => (field.matches('select') ? field : field.querySelector('select'))?.selectedIndex > 0).length;
+    // Selector con opción distinta de la primera, o campo (p. ej. fecha) con valor.
+    const active = fields.filter(field => { const control = field.matches('select, input') ? field : field.querySelector('select'); return control?.matches('select') ? control.selectedIndex > 0 : !!control?.value; }).length;
     const label = active ? `Filtros · ${active}` : 'Filtros';
     if (button.textContent !== label) button.textContent = label;
     button.setAttribute('aria-label', active ? `Filtros, ${active} activo${active === 1 ? '' : 's'}` : 'Filtros');
@@ -237,6 +238,12 @@ for (const id of ['section-resenas', 'section-me-gusta']) {
     zone.querySelector('input[type="checkbox"]')?.click();
   }, true);
 }
+
+// Diagnóstico: los 10 selectores y la fecha pasan a la hoja; la búsqueda y
+// Copiar/Exportar quedan visibles. La barra es fija en admin.html
+// (diagnostico-sitio-admin.js solo la muestra u oculta y llena opciones).
+const diagnosticToolbar = document.getElementById('site-diagnostic-toolbar');
+if (diagnosticToolbar) filterSheet(diagnosticToolbar, [...diagnosticToolbar.querySelectorAll(':scope > select, :scope > input[type="date"]')]);
 
 // ── Deslizar para recargar ──
 // Solo se conecta donde el módulo ya tiene una recarga real (refresh).
