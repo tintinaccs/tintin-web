@@ -23,7 +23,7 @@ if (!/\/(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuent
 
 export function loadPageMaintenance() {
   const path = pathName();
-  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261031-seo-espacios-2');
+  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261101-touch-targets-1');
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-20261031-seo-espacios-2');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261031-seo-espacios-2');
   if (/\/checkout(?:\.html)?$/.test(path)) {
