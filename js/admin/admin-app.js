@@ -1,6 +1,6 @@
 import { recordAuditEntry } from './auditoria/registro-auditoria.js?v=tintin-20261030-audit-integrity-1';
 import { normalizeAdminSearch, debounceAdminSearch } from './datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
-import { iniciarCorreos } from './correos/correos-admin.js?v=tintin-20261028-correos-1-editor-search-20261028-2';
+import { createAdminSectionLoader } from './carga-secciones-admin.mjs?v=tintin-20261101-admin-entry-1';
 import {adminEventAttributes,installAdminEvents} from './eventos-dinamicos-admin.mjs?v=tintin-20261027-save-csp-1';
 import {mountProductWorkspace} from './products/espacio-trabajo-producto.js?v=tintin-20261028-product-tabs-3-editor-search-20261028-2-guiado-1269-20261029-1';
 import {readProductEditorResponse} from './products/respuesta-editor-producto.mjs?v=tintin-20261027-editor-ux-1';
@@ -54,10 +54,8 @@ import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=ti
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
 import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261030-audit-integrity-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261030-audit-integrity-1";
-import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1-editor-search-20261028-2";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261030-home-history-5";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261101-flow-preload-1";
-import "./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES,
@@ -795,7 +793,13 @@ function switchSection(target, navigation = 'replace') {
   if (target === 'productos') loadProductos();
   if (target === 'colecciones') loadColecciones();
   if (target === 'auditoria') loadAuditLog();
-  if (target === 'correos') loadCorreos();
+  if (['correos', 'diagnostico', 'paginas', 'apariencia'].includes(target)) {
+    void loadDeferredAdminSection(target).then(loaded => {
+      if (!loaded || !sectionIsActive(target)) return;
+      if (target === 'correos') correosController?.loadCorreos();
+      if (target === 'paginas') window.TintinPagesAdminRefresh?.();
+    });
+  }
   if (target === 'notificaciones-push') window.TintinPushMasterRefresh?.();
   if (target === 'configuracion') loadConfig();
   if (target === 'importar') loadImportar();
@@ -1324,7 +1328,6 @@ async function startAdminAuthGuard() {
       setupUserInfo(user, role);
       setupPermissions(role);
       if (role === 'superadmin' && String(user.email || '').trim().toLowerCase() === SUPER_ADMIN.toLowerCase()) {
-        initSiteDiagnostics({ role });
         initConnectionsFlow({ role });
         initWholesaleAdmin();
       }
@@ -3556,9 +3559,28 @@ function toJsDate_(v) {
   return isNaN(d.getTime()) ? null : d;
 }
 
-const { loadCorreos, refreshCorreosClientasFromRealtime, stopCorreosRealtimeListeners } = iniciarCorreos({
+let correosController = null;
+function initDeferredCorreos({ iniciarCorreos }) {
+  correosController = iniciarCorreos({
   db, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, orderBy, limit, writeBatch, serverTimestamp, onSnapshot, getDocsPaginated, withAdminSiteChange, sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail, EMAIL_WEBHOOK_URL, ORDER_STATUS_LABELS, adminEventAttributes, addAdminBulkSelection, rejectOversizedAdminBulkSelection, batchUpdateChunked, downloadCsv, emailErrorMessage_, escapeHtmlAdmin, formatDate, formatPrice, logAudit, toast, toJsDate_,
   getCurrentUser: () => currentUser, getAllUsers: () => allUsers, getAllOrders: () => allOrders
+});
+}
+const refreshCorreosClientasFromRealtime = () => correosController?.refreshCorreosClientasFromRealtime();
+const stopCorreosRealtimeListeners = () => correosController?.stopCorreosRealtimeListeners();
+
+const loadDeferredAdminSection = createAdminSectionLoader({
+  document,
+  canLoad: () => currentRole === 'superadmin' && String(currentUser?.email || '').toLowerCase() === SUPER_ADMIN.toLowerCase(),
+  sections: {
+    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261028-correos-1-editor-search-20261028-2'), init: initDeferredCorreos },
+    diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1-editor-search-20261028-2'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
+    paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2') },
+    apariencia: { load: async () => {
+      await import('./appearance/editor-visual-admin.js?v=tintin-20261027-global-fluidez-3-editor-search-20261028-2');
+      await import('./appearance/visual-studio-layout-admin.js?v=tintin-20261022-avatar-inicial-1');
+    } }
+  }
 });
 
 // ======== ENVÍOS: ciudades (CRUD real, con lista en tiempo real) ========

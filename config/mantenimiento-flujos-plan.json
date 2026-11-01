@@ -1,42 +1,47 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "9aeee82532a96201dcff8dbae8676260b4b3d5f2",
-  "reason": "Precarga del Flujo de conexiones y lecturas paralelas en la entrada al Admin",
+  "baseCommit": "081c8125532fcd42c87371610557c4adba68ba0c",
+  "reason": "Reducir el arranque del Admin cargando Correos, Diagnóstico, Páginas y editor visual al abrir la sección, con navegación y autorización preservadas.",
   "files": [
     {
+      "path": "admin-images.html",
+      "oldHash": "f832da137a712e2c204794f59a8d52cc631e365b8e85d3330c2c097af4968bc7",
+      "newHash": "47850762aa5eb95eb333843cc29b73725b72b9b5c8dec2e2bd94960eb5004110"
+    },
+    {
       "path": "admin.html",
-      "oldHash": "05106cc0fd777d92493447f50b8ea3631cde270e3e95648c5376e317d425ca29",
-      "newHash": "22489551ef27028a201756f4c6c36ff0e62c9dbc61c18dfb865fa9beba3e5006"
+      "oldHash": "22489551ef27028a201756f4c6c36ff0e62c9dbc61c18dfb865fa9beba3e5006",
+      "newHash": "1d98f7b4df0630c8a4e1e3c9593d63a4861d7c38a523706e4271ccfc08d59695"
+    },
+    {
+      "path": "css/admin/admin.css",
+      "oldHash": "38aae02a8b7bb7b1138a7e6480df5e07749aed36623ea068ace0d75021b0c37c",
+      "newHash": "77bc73190aa571874a1017f3983059981ae8df4cb1cc37c45dd82ad6d07463ec"
+    },
+    {
+      "path": "css/admin/operaciones-admin.css",
+      "oldHash": "3f8f8d62ed6ec5813011effe70d29669f8a61c0d7ba4ed0f0bd1d1f6ce308f3e",
+      "newHash": "2d8f8fb3b02d6573d027a2ee7f97b3bf22ac1c7be431671a4b7078b764119a5d"
+    },
+    {
+      "path": "css/admin/sidebar-interaccion.css",
+      "oldHash": "3f9dfce532c39022c87155d33f7f01e9ffeeb0d429f354b062fea5bedd93258b",
+      "newHash": "0474f90d606dd209fbeea58ee0aa6273522d3408f993122f729bf53f12d961e6"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "0c464da471a9ccfa266512b0e910d241e8830d0f4c697c22e0ee6db2884b8a84",
-      "newHash": "98be35ce7712f27fdda47f3920091c0023e54f7e73fa47895e85d4cf401fdb08"
+      "oldHash": "98be35ce7712f27fdda47f3920091c0023e54f7e73fa47895e85d4cf401fdb08",
+      "newHash": "c71b54a4f63ae1c4d37e3b2c47f9d42c50fc414d41faf358b5bf853f55d000d2"
     },
     {
-      "path": "js/admin/flujo-conexiones/estado-flujo.js",
-      "oldHash": "5b664eebcf42df597e690d9449391e5604c6da9c50d5d94db6b5139af7aceabb",
-      "newHash": "4f3a83dc09612853a71d1566d95e4df4728b7d243ec7bfb200f469f4e3cf7d57"
-    },
-    {
-      "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "oldHash": "3a8b2822d5a9a6b1ba2f1105c8ff231e4945f43b067fa00804ffb4350a4176e0",
-      "newHash": "e3e28f656a045aba2eddd9d72f6f3a562511bb803633336638461e70ebfdc792"
-    },
-    {
-      "path": "js/admin/flujo-conexiones/live-checks.js",
-      "oldHash": "040e6c4dc6c31e64e80fdc1206fe0c7a31e54905cda11f60a637f2acbea5feaf",
-      "newHash": "9b7d40919f88048ff8c3f36b0358aec1462614bd45fd56aaa0527c5aea03b6eb"
+      "path": "js/admin/sidebar-expandible-admin.js",
+      "oldHash": "c86769f26d1b0810fcf129e26c0ac8b4f401e0287a9e5c857a7a7753863ee5a3",
+      "newHash": "97863870685dd81b95af45dc1ce37a4c59842b70d2cc8d2757f381cbf3b40ad1"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "10880a2e3aa7c4a417e95ce678e138795c556b1fd9bd61b9cdf5fbc9f1fad2ca",
-      "newHash": "1205a2334e169e6aa23b2e2e93b3d9e06faf40d5f0f3b07fbd7970f30748950d"
-    },
-    {
-      "path": "tests/auth/admin-guard-role-destination.test.mjs",
-      "oldHash": "f3a5b7514c5af20ae9864fb48283cc3ce4f9891d663291f821638720b963da53",
-      "newHash": "57be847cdb23d7185620762235d8bb50041bc1c100b8f3af3409077379fc578b"
+      "oldHash": "1205a2334e169e6aa23b2e2e93b3d9e06faf40d5f0f3b07fbd7970f30748950d",
+      "newHash": "ef255b2e457061cd074986bf8d366f8dce6c080cdc5196f03d206d19af5f133a"
     }
   ],
   "affectedRecords": [
