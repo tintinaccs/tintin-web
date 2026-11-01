@@ -1,3 +1,14 @@
+## 2026-11-01 — Presentación móvil visible de la interfaz administrativa
+
+Autoridades: dashboard-control.css y workspace compartido existentes; mismo
+Inicio, navegación, tarjetas, formularios y acciones. Superficies de la paleta
+vigente, cabecera compacta y opaca sólo en teléfono, métricas/accesos más densos
+y búsqueda de módulo compacta. Header usa ID estable para superar la cascada
+compartida con :is de IDs. Auth-ready sólo reevalúa el workspace activo, sin
+lecturas ni cambios de sesión. Misma presentación amplia; contraste con capturas
+y geometría real. Pruebas del header distinguen teléfono de tablet/escritorio;
+derivados y URLs mediante constructores. Sin backend, permisos ni datos nuevos.
+
 ## 2026-11-01 — Legibilidad de Usuarios y menú móvil
 
 Workspace y helpers de Usuarios existentes: correo completo a todo el ancho, menú con botones originales y datos adicionales desplegables; selección global accesible y campos cortos agrupados. Se conserva #1294, sus rutas/PWA/visor y lectores/escritores. Ficha mantiene foto/cabecera y reconstruye pestañas al reabrir. Misma tabla en tablet/escritorio, tokens existentes, sin backend/Rules/datos/permisos nuevos. URLs transitivas y derivados por generadores canónicos; pruebas en el gate responsive existente y seguimiento por SHA/PR.

@@ -1,12 +1,27 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "bdffea94ff64115842fdab26b8324c3e043ee86e",
-  "reason": "public-catalog: ids reservados de Firestore devuelven item null en vez de 502",
+  "baseCommit": "0f47cf540c1e4835f2b773940f45ecea62f4b9b2",
+  "reason": "Compactar visualmente el admin móvil conservando las acciones y la cascada amplia",
   "files": [
     {
-      "path": "functions/api/public-catalog.js",
-      "oldHash": "f476fdb2fd96b6da617d674db07d26e3c73f2ae34a68ee2cc5ccebaee5445c37",
-      "newHash": "a884aa303c6fa052bf445121f34742fca57a29358ae65c041f5b440cd43d5bbd"
+      "path": "admin-images.html",
+      "oldHash": "a5a76be9f7ad81caf29161e377c30a7af3d5a7a2be98eb4612398495b1627584",
+      "newHash": "65dbe45a9328efb21caa5ad236659405814c7b6205166cb65356a44dc31ddebb"
+    },
+    {
+      "path": "admin.html",
+      "oldHash": "e978670e90b108aef5bff84b3937747a2e2aec965743b9c42affa9e904c578d7",
+      "newHash": "e2fc74eb1b1ab5e11508c6ed440b0236ce986ad7a0edcbb35afbeb56873276c5"
+    },
+    {
+      "path": "package.json",
+      "oldHash": "de17b6337a994f0ee57193c686ca8898b04f45277e130369c5b2e21b06abcec4",
+      "newHash": "b1a4b533f09f8658f1f6ec2b0bc5e4d366b551e627168314ba4c23692ff33508"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "e2af30ab6382ce831069c666c07f4584049f2c57b38cdc1487a6cb527db96e4f",
+      "newHash": "0f9f7dc7206fd8fed75d05fdbe2c09c032aab865738364db227a61b53f318fa3"
     }
   ],
   "affectedRecords": []
