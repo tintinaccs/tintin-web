@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e13ca5f846b63b735ee06d740b2e7deca6460a510c4cd349ecf1fe0898ddb81c",
+  "sourceFingerprint": "7adb449f26dfc309b8281fd0802f13dd6261885f6f8a0991c73f09b23e8d112e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1709,
-    "textFiles": 1574,
-    "totalBytes": 44486039,
+    "files": 1710,
+    "textFiles": 1575,
+    "totalBytes": 44490109,
     "pages": 19,
-    "modules": 1137
+    "modules": 1138
   },
   "viewports": [
     {
@@ -57985,6 +57985,17 @@
       ]
     },
     {
+      "path": "tests/ui-ux/admin-app-configuracion.spec.js",
+      "bytes": 3056,
+      "sha256": "125478b7129759ab6ccf85cef12d9230ee2109d7f49a958dc65438ebb7b1fd30",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/admin-app-correos.spec.js",
       "bytes": 3664,
       "sha256": "50ec2612afac2e288268d49ad215ee835005452bc803ce974ce0d9ef8b06af8f",
@@ -62583,8 +62594,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1139764,
-      "sha256": "395a6f478b7995286fe7fa0a5d63baa329d43e25c60d15f9ca6c55f23df4d327"
+      "bytes": 1140778,
+      "sha256": "1c95d2f53e462dbf838931371d926a26434fa00819f9563e96647e6eaf84e9dd"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -70187,6 +70198,12 @@
       "extension": ".js",
       "bytes": 6312,
       "sha256": "72098ebf97b9dee1bbd9f9ac0954165d4812303685ad04b1f32221937a692dcb"
+    },
+    {
+      "path": "tests/ui-ux/admin-app-configuracion.spec.js",
+      "extension": ".js",
+      "bytes": 3056,
+      "sha256": "125478b7129759ab6ccf85cef12d9230ee2109d7f49a958dc65438ebb7b1fd30"
     },
     {
       "path": "tests/ui-ux/admin-app-correos.spec.js",

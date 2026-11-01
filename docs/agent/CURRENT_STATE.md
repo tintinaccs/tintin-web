@@ -1,3 +1,10 @@
+## 2026-11-01 — Admin app móvil, Fase 22: Configuración
+Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
+- Investigado: #section-configuracion (estado de la tienda, acceso con tienda cerrada, header por dispositivo, datos generales, envíos con pestañas Delivery/Encomienda, redes, medición, cuentas bancarias, notificaciones). Medido a 320/390/540/768 con ambas pestañas de envíos: 33 controles visibles, sin desborde, ninguno fuera del ancho, botones/selectores/campos/casillas ≥44 px y campos ≥16 px. Captura a 390 revisada.
+- Cambio: ninguno en CSS/JS (ya cumplía por las fases 0–1). Solo spec nueva admin-app-configuracion.spec.js (11 pruebas) de no regresión.
+- PASS_LOCAL: admin-app-configuracion 11/11; audit:cache-versioning correcto.
+- NOT_VERIFIED: contenido cargado desde Firestore (lista de dispositivos y diagnóstico de envíos de notificaciones, zonas de envío reales, bloque Roles y Permisos que se ve en F23); controles ocultos hasta cargar datos (15 de 48) no medidos. No se guardó ninguna configuración.
+
 ## 2026-11-01 — Admin app móvil, Fase 21: Correos
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: #section-correos (8 pestañas y sus paneles en admin.html). Se midieron los 8 paneles a 320/390/540/768: sin desborde, sin elementos fuera del ancho, botones/selectores/campos ≥44 px y ≥16 px. Las tablas ya se convierten en tarjetas (espacio-modulos-admin) y su cabecera queda recortada a 1×1 px (solo lectores de pantalla).
