@@ -12,7 +12,7 @@ var DEFAULT_LOGO=(isHomePage()?HOME_LOADER_IMAGE:INNER_LOADER_IMAGE)+'?v='+TT_CA
 function realLogo(){try{var data=JSON.parse(localStorage.getItem('tt_images')||'{}');var url=data&&data.logo_main;if(url&&!isOldLogo(url))return url}catch(e){}return DEFAULT_LOGO}
 function css(){
  // Mismo ?v= que los <link> literales del HTML: una sola URL por archivo en todo el sitio.
- var files=[['tt-ui-quality-css','quality/calidad-interfaz.css','tintin-20260916-final-production-stability-quality-2-palette-20261014-1'],['tt-unified-theme-css','core/tema-unificado-tintin.css','tintin-20261031-tema-unico-3'],['tt-theme-cleanup-css','core/limpieza-tema-tintin.css','tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1'],['tt-parity-safe-css','theme/paridad-segura-tintin.css','tintin-20261019-footer-spacing-2']];
+ var files=[['tt-ui-quality-css','quality/calidad-interfaz.css','tintin-20260916-final-production-stability-quality-2-palette-20261014-1'],['tt-unified-theme-css','core/tema-unificado-tintin.css','tintin-20261102-public-focus-1'],['tt-theme-cleanup-css','core/limpieza-tema-tintin.css','tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1'],['tt-parity-safe-css','theme/paridad-segura-tintin.css','tintin-20261019-footer-spacing-2']];
  files.forEach(function(f){
   var id=f[0],file=f[1];
   if(document.getElementById(id))return;
@@ -33,6 +33,9 @@ function bootAdminUsersPhase8(){var path=(location.pathname||'').toLowerCase();i
 function bootAdminImportPhase9(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('../admin/importacion-admin.js', 'tintin-20261031-seo-espacios-2')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Import Phase 9:',e)})}
 function parity(){var r=document.documentElement;if(r.classList.contains('tt-parity-guard'))r.classList.remove('tt-parity-guard');if(!r.classList.contains('tt-parity-safe'))r.classList.add('tt-parity-safe')}
 function topOnReload(){
+ // El cargador ya resolvió la entrada. Este módulo puede llegar después de
+ // una selección/edición y no debe volver a escribir su posición de scroll.
+ if(window.TintinPageScroll)return;
  try{history.scrollRestoration='manual'}catch(e){}
  var n=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];
  var r=n?n.type==='reload':(performance.navigation&&performance.navigation.type===1);

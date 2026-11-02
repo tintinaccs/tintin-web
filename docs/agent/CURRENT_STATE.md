@@ -5835,3 +5835,52 @@ PR documental #1308 creada; candidato inicial9533fd07a69eef92428e30f5295277c7d36
 run41367835688/1. Este enlace requiere CI del head final; no se hereda el run
 anterior tras actualizar. Recibo terminal/merge en #1308; la base de los hallazgos
 sigue siendo085953dc. Siguiente fase funcional02, no iniciada por esta auditoría.
+
+## 2026-11-02 UTC — Fase 02 visual pública (Codex /root, GPT-6)
+
+Nueva instrucción de la titular:02 corresponde a reparación visual pública.
+El antiguo alcance de seguridad pasa a03A, antes de comercio03B; los HIGH de01
+siguen abiertos. Se actualizó TINTIN_GLOBAL_PHASES sin presentar UI como una
+reparación de permisos, stock, autenticación o pedidos.
+
+Base consultada:5b694fe4adaa9e356f3c2f8e74d2de5ca0f5adde, #1308 MERGED.
+CI41370328636/1, CodeQL41370329571/1 y salud41370330002/1 SUCCESS del base.
+Rama aislada fix/phase02-public-responsive-20261102. #1306 continúa abierta en
+976601a99772e5390448b8da2edda79d9d6c1429; no se modificó su rama.
+
+Tres defectos MEDIUM corregidos: load/pageshow tardío ignoraba interacción local;
+UI Quality volvía a escribir scroll durante recarga aunque el cargador ya había
+resuelto la entrada; foco rosa/translúcido de bajo contraste en login, checkout y
+producto. Se conservan reinicio explícito, navegación y bfcache. Contornos de
+teclado consumen la tinta semántica existente; botones, marca y estructura se
+conservan. La galería ya era sticky/alineada: no se inventó una reparación allí.
+
+PASS_LOCAL:10 tests Node de scroll;20 casos nuevos de navegador (12 de ficha con
+3100 caracteres y precios largos,4 de foco,4 de load real demorado/orientación);
+49 regresiones de interacción (registro simulado39, historial3, helpers UI/a11y7);
+smoke18rutas con ciclos de paneles y geometría final aislada144/144. Gates de
+estilos, colores, arquitectura, shell, producto, UI/UX y accesibilidad aprobados.
+Build y caché mediante herramientas canónicas; protección se valida sobre el
+plan generado del candidato. Conteos solapados; no equivalen a cobertura única.
+
+Se interrumpieron suites locales amplias simultáneas por exceso de concurrencia
+en dos vCPU; no se cuentan como PASS. La geometría tuvo timeouts de12s y luego
+aprobó aislada, con el mismo plazo y aserciones. Los auditores8/10 exigían el
+comando npm original: se preservó y se registran los nuevos casos una sola vez
+desde phase8-ui-ux.spec.js, sin debilitar controles ni agregar workflows.
+
+Sólo hay cambios semánticos en foco y entrada/scroll; los demás cambios de JS
+de navegación, tienda y estado-productos son URLs inmutables propagadas. Rules,
+backend, lógica comercial, perfiles y autenticación permanecen sin cambios.
+Capturas en artifacts/phase02 y futuros artefactos de Actions. Informe reproducible:
+[PHASE02_PUBLIC_VISUAL_REPAIR.md](PHASE02_PUBLIC_VISUAL_REPAIR.md).
+
+Catálogo nativo executor consultado de nuevo:skills:[]. Los cinco Skills de
+diseño se leyeron como referencia, no se afirma activación nativa. Lectores de
+pantalla, WebKit, teléfonos físicos, CWV y flujos completos de proveedores reales
+siguen NOT_VERIFIED. No se modificaron datos de clientas ni se enviaron pedidos,
+correos o cobros reales.
+
+Recibo por PR/head/run/intento, fusión y verificación posterior:
+[PR de la rama](https://github.com/tintinaccs/tintin-web/pulls?q=is%3Apr+head%3Afix%2Fphase02-public-responsive-20261102).
+No heredar CI del base ni cerrar con ejecuciones pendientes. Siguiente:03A.
