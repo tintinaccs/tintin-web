@@ -2,9 +2,8 @@
  * TINTIN — Cliente público canónico para crear pedidos.
  *
  * El navegador habla únicamente con Cloudflare Pages. Cloudflare valida la
- * sesión antes de reenviar la transacción heredada a Apps Script, de modo que
- * la URL privilegiada de Apps Script no forme parte del contrato público del
- * checkout.
+ * sesión, crea el pedido y reserva stock en el dominio canónico. Apps Script
+ * recibe únicamente su espejo operativo por el flujo server-side existente.
  */
 import { apiUrl } from './core/firebase/origen-funciones.js?v=tintin-20261017-domain-cutover-1';
 import { currentAuthenticatedUser, authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';

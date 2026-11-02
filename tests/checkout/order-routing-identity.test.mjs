@@ -1,3 +1,4 @@
+import vm from 'node:vm';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -69,8 +70,15 @@ test('Apps Script deriva userId desde el token y no desde el payload', () => {
   assert.doesNotMatch(appsScript, /userId:\s*payload\./);
 });
 
-test('el webhook público enruta createOrder a la transacción privilegiada de Fase 4', () => {
-  const router = read('apps-script/ProductosUnificados.gs');
-  assert.match(router, /body\.action === 'createOrder'/);
-  assert.match(router, /phase4CreateOrder_\(body, body\.idToken\)/);
+test('Apps Script rechaza creación pública legacy sin invocar escritores y conserva el espejo', () => {
+  const source=read('apps-script/ProductosUnificados.gs');
+  let created=0,mirrored=0;
+  const context=vm.createContext({phase4CreateOrder_:()=>{created++;return {ok:true};},tintinHandleUnifiedProductsPost_:()=>{mirrored++;return 'mirror-ok';},ContentService:{MimeType:{JSON:'application/json'},createTextOutput:value=>({setMimeType:()=>value})}});
+  vm.runInContext(source.slice(source.indexOf('function doPost(e) {'),source.indexOf('// Enlazar desde el doPost')),context);
+  for(const version of [1,2]){
+    const response=JSON.parse(context.doPost({postData:{contents:JSON.stringify({action:'createOrder',idToken:'fixture-only',variantCommerceVersion:version})}}));
+    assert.equal(response.ok,false);assert.equal(response.error,'canonical_checkout_required');
+  }
+  assert.equal(created,0);assert.equal(mirrored,0);
+  assert.equal(context.doPost({postData:{contents:JSON.stringify({action:'syncProducts'})}}),'mirror-ok');assert.equal(mirrored,1);
 });

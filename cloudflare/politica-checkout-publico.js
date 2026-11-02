@@ -1,8 +1,9 @@
+import { normalizePaymentCatalog } from '../js/orders/nucleo-metodos-pago.js';
 import { resolveProductVariant, productVariantPrice } from '../js/core/store/inventario-variantes.mjs';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 import { isValidCustomerName } from '../js/pages/profile/configuracion-inicial-perfil.mjs';
 import { shippingDepartment } from '../js/components/location/departamento-ciudad.mjs';
-import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../js/components/location/tarifas-delivery.mjs';
+import { canonicalDeliveryCities, normalizeDeliveryCityName, configuredShippingPrice } from '../js/components/location/tarifas-delivery.mjs';
 import { decodeFirestoreFields, firestoreAdminGet } from './firebase-admin-ligero.js';
 import { SUPERADMIN_EMAIL } from './seguridad-cloudinary.js';
 import { isValidRuc, isValidTaxpayerType } from '../js/components/forms/validacion-documentos-py.js';
@@ -118,10 +119,10 @@ function normalizeCities(list, fallback) {
   return (Array.isArray(list) ? list : [])
     .map((item, sourceIndex) => {
       if (typeof item === 'string') {
-        return { name: cleanText(item, 120), price: parseMoney(fallback), departamento: shippingDepartment(item), sourceIndex };
+        return { name: cleanText(item, 120), price: configuredShippingPrice(fallback), departamento: shippingDepartment(item), sourceIndex };
       }
       if (!item?.name) return null;
-      const price = item.price === null ? null : parseMoney(item.price === undefined ? fallback : item.price);
+      const price = configuredShippingPrice(item.price === undefined ? fallback : item.price);
       return {
         name: cleanText(item.name, 120),
         price: Number.isFinite(price) ? price : null,
@@ -261,7 +262,9 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
   }
 
   if (paymentMethod === 'paypal' && settings.paypal?.enabled !== true) throw checkoutError('payment_unavailable', 409);
-  if (paymentMethod !== 'paypal' && settings.paymentMethods?.[paymentMethod] === false) {
+  const configuredPayment = normalizePaymentCatalog(settings).some(method => method.enabled && method.kind === paymentMethod);
+  const legacyPaypal = paymentMethod === 'paypal' && !Object.hasOwn(settings, 'paymentMethodsCatalog') && settings.paypal?.enabled === true;
+  if (!configuredPayment && !legacyPaypal) {
     throw checkoutError('payment_unavailable', 409);
   }
 

@@ -50,7 +50,7 @@ test('Envíos espera App Check, comparte configuración y renderiza tarifas con 
   await page.evaluate(() => window.__shippingNext({deliveryCities:[{name:'San Lorenzo Centro',price:1},{name:'San Lorenzo Alrededores',price:2},{name:'<img src=x onerror=alert(1)>',price:null}],encomiendaCities:[]}));
   await expect(page.locator('#envios-delivery-cities li')).toHaveCount(2);
   await expect(page.locator('#envios-delivery-cities')).toContainText('San Lorenzo');
-  await expect(page.locator('#envios-delivery-cities')).toContainText('25.000');
+  await expect(page.locator('#envios-delivery-cities li').filter({hasText:'San Lorenzo'}).locator('.tt-city-price-val')).toHaveText('Gs. 1');
   await expect(page.locator('#envios-delivery-cities')).toContainText('Consultar precio');
   await expect(page.locator('#envios-delivery-cities img')).toHaveCount(0);
   expect(errors).toEqual([]);
@@ -70,4 +70,14 @@ test('las tarifas ausentes reutilizan el respaldo y el error de lectura queda vi
   await expect(page.locator('#envios-delivery-cities')).toContainText('Luque');
   await page.evaluate(() => window.__shippingError());
   await expect(page.locator('#envios-delivery-cities')).toContainText('Consultanos por WhatsApp');
+});
+
+test('Envíos muestra tarifa cero, ausencia por consultar y respaldo parcial sin inventar importes',async({page})=>{
+ await openShipping(page,true);await page.waitForFunction(()=>typeof window.__shippingNext==='function');
+ await page.evaluate(()=>window.__shippingNext({deliveryCities:['Luque'],deliveryCost:0}));
+ await expect(page.locator('#envios-delivery-cities .tt-city-price-val')).toHaveText('Gs. 0');
+ await page.evaluate(()=>window.__shippingNext({deliveryCities:['Luque']}));
+ await expect(page.locator('#envios-delivery-cities')).toContainText('Consultar precio');
+ await page.evaluate(()=>{window.__shippingNext({encomiendaCities:[]});window.__generalNext({deliveryCities:[{name:'Areguá',price:17000}],encomiendaCities:[]});});
+ await expect(page.locator('#envios-delivery-cities')).toContainText('Areguá');await expect(page.locator('#envios-delivery-cities .tt-city-price-val')).toHaveText('Gs. 17.000');
 });

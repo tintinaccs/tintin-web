@@ -1,3 +1,12 @@
+## 2026-11-02 — Fase05: recorrido comercial completo
+
+Codex /root; rama `codex/phase05-commerce-flow`, base `b1107b3fc7fd711709832620ea738c814d6462a6` (#1311). [Informe05](TINTIN_PHASE05_COMMERCE.md).
+- Reparados catálogo de pagos explícito/empty y callbacks viejos; tarifas reales cero/pendiente sin overrides; retiro y configuración parcial; respuesta de pedido validada; identidad cerrada sin esperar red; limpieza sólo de cantidades compradas con identidad V2 y generación de cuenta; Back/recarga/BFCache seguros; texto de logística fiel. Dispatcher público Apps Script rechaza creador legacy, sin cambiar espejos autenticados.
+- PASS_LOCAL:590 Node de carrito/checkout/pedidos/pagos/sync;541 de catálogo/admin/arquitectura/auth/cuentas/push/social,0FAIL y1SKIP por emulador.97 Chromium (82checkout/entrega/navegación/acceso +15PayPal ficticio), sin reintentos. Pedidos seguros/entrega/carrito pasan auditorías. Conteos de suites diferentes; no certifican proveedores reales.
+- BLOCKED_LOCAL: emulador no descarga JAR oficial por restricción de red. Integración añadida a suite CI existente (configuración canónica, transferencia pendiente, reserva única, rechazo sin escritura); no se acredita antes del job terminal.
+- Caché/shell/CSP/diagnóstico y plan protegido se generan canónicamente. CI/PR/fusión/publicación se siguen por SHA/run/attempt; pendientes del recibo terminal de esta rama.
+- Pendientes externos: actualizar y verificar WebApp Apps Script desplegado; F01-RULES HIGH sigue en03A. No afirmar cierre global ni desplegado de ese WebApp. Sin compras/cobros/transferencias, mensajes, cambios de pedidos o inventario real ni migraciones destructivas.
+
 ## 2026-11-01 America/Buenos_Aires — Fase03: administración y editor de productos
 
 Codex /root; rama `codex/phase03-product-editor`, base integrada344a2936580a8c3ca6c8f1dc112f940334f0b077 (#1309). Base inicial5b694fe4. La continuación de02 quedó fusionada con CI41375418525/1 SUCCESS; sus runs de main y salud se siguen por separado.
