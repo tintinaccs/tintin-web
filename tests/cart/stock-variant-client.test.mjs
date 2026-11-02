@@ -67,3 +67,28 @@ test('legacy identities remain distinct by product and option with the original 
  assert.equal(new Set(rows.map(row=>row.lineId)).size,3);
  for(const row of rows) assert.equal(row.lineId,c.lineIdFor({id:row.id,variant:row.variant}));
 });
+
+test('clave de carrito V2 no cambia al salir de una página que tiene el catálogo cargado',()=>{
+ const product={id:'p',price:100,variantCommerceVersion:2,variants:{Color:['Dorado']},variantInventory:[{variant:'stable-gold',stock:2,attributes:{Color:'Dorado'}}]};
+ const c=vm.createContext({window:{PRODUCTS:[product]},stableVariantSelection});
+ vm.runInContext(slice('  function cleanText(', '  function normalizeItem('),c);
+ const item={id:'p',variant:'Dorado',variantKey:'stable-gold'};const before=c.lineIdFor(item);c.window.PRODUCTS=[];
+ assert.equal(c.lineIdFor(item),before);assert.notEqual(c.lineIdFor({...item,variantKey:'stable-other'}),before);
+});
+
+test('limpiar compra confirmada conserva nuevas líneas y cantidades agregadas durante la solicitud',async()=>{
+ let cart=[{id:'p',lineId:'p-gold',qty:3},{id:'p',lineId:'p-silver',qty:1},{id:'q',lineId:'q',qty:1}];
+ const c=vm.createContext({authGeneration:1,withCartMutation:fn=>fn(),normalizeCart:rows=>rows,currentLocalCart:()=>cart,writeLocal:rows=>(cart=rows),scheduleRemoteSync(){},flushCartSync:async()=>{}});
+ vm.runInContext(slice('  async function clearCart(', '  function getCartLocal('),c);
+ await c.clearCart([{id:'p',lineId:'p-gold',qty:2}]);
+ assert.deepEqual(JSON.parse(JSON.stringify(cart)),[{id:'p',lineId:'p-gold',qty:1},{id:'p',lineId:'p-silver',qty:1},{id:'q',lineId:'q',qty:1}]);
+ await c.clearCart();assert.deepEqual([...cart],[],'Vaciar carrito explícito conserva su comportamiento');
+});
+
+test('una limpieza encolada por la cuenta anterior no modifica el carrito de la nueva sesión',async()=>{
+ let run,writes=0,flushes=0;
+ const c=vm.createContext({authGeneration:1,withCartMutation:fn=>new Promise(resolve=>{run=()=>resolve(fn());}),normalizeCart:rows=>rows,currentLocalCart:()=>[{id:'p',lineId:'p',qty:1}],writeLocal:()=>writes++,scheduleRemoteSync(){},flushCartSync:async()=>flushes++});
+ vm.runInContext(slice('  async function clearCart(', '  function getCartLocal('),c);
+ const pending=c.clearCart([{id:'p',lineId:'p',qty:1}]);c.authGeneration=2;run();await pending;
+ assert.equal(writes,0);assert.equal(flushes,0);
+});

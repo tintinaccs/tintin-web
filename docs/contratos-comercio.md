@@ -11,14 +11,17 @@ Este documento fija las reglas que deben conservar carrito, checkout, pedidos, i
 - El carrito de invitado se combina una sola vez al iniciar sesión.
 - Nombre, imagen y precio guardados en el carrito son únicamente una representación visual. No son autoridad para cobrar.
 - El checkout vuelve a leer producto, precio, disponibilidad y configuración.
+- Confirmar consume sólo las cantidades del snapshot comprado; conserva líneas y aumentos posteriores, con la misma generación de cuenta. Una clave `variantKey` explícita no depende de que el catálogo esté cargado.
 
 ## 2. Identidad de la operación
 
 - Cada intento de checkout utiliza un `requestId` estable durante la sesión.
-- El documento se identifica como `${uid}_${requestId}`.
+- El pedido público se identifica como `public_${uid}_${requestId}`; el guard conserva `${uid}_${requestId}`.
 - Repetir la misma solicitud debe reanudar el mismo pedido, nunca crear otro.
 - `checkoutGuards/{uid}` limita pedidos distintos en una ventana corta, sin impedir reanudar el mismo.
 - Los botones permanecen bloqueados mientras una escritura está en curso.
+- Una respuesta incompleta no confirma ni limpia el carrito. Ante fallos recuperables se conservan carrito e identidad para reintentar. Tras confirmar se cierra la identidad antes de esperar sincronización remota.
+- Volver a una entrada completada por Back, recarga o BFCache dirige a inicio; no reabre el checkout.
 
 ## 3. Cotización autoritativa
 
@@ -167,3 +170,7 @@ Cada cambio comercial revisa:
 - reintento de creación, reserva, eliminación y notificación;
 - las siete resoluciones del proyecto;
 - reglas de Firestore con accesos permitidos y denegados.
+
+## Configuración comercial canónica (Fase05)
+
+Si existe `paymentMethodsCatalog`, incluso vacío o inválido, es la autoridad: no se recuperan métodos desde espejos legacy. El fallback sólo aplica cuando esa propiedad no existe. Transferencia confirmada por cliente conserva pago pendiente. Tarifas explícitas, incluido cero, se respetan; costo ausente permanece a confirmar, sin defaults inventados ni overrides por ciudad. Delivery/encomienda requieren ciudades configuradas; retiro conserva el soporte actual del servidor. Ver [informe05](agent/TINTIN_PHASE05_COMMERCE.md).

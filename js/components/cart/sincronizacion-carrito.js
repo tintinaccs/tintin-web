@@ -143,7 +143,7 @@ function createRuntime() {
       : { id: itemOrId, variant: variantValue };
     const id = cleanText(item?.id, 180);
     const product = (Array.isArray(window.PRODUCTS) ? window.PRODUCTS : []).find(p => String(p.id) === id);
-    const variant = product?.variantCommerceVersion === 2 ? stableVariantSelection(product,item?.variantKey ? item : item?.variant) ?? normalizeVariant(item?.variant) : normalizeVariant(item?.variant);
+    const variant = item?.variantKey ? normalizeVariant(item.variantKey) : product?.variantCommerceVersion === 2 ? stableVariantSelection(product,item?.variant) ?? normalizeVariant(item?.variant) : normalizeVariant(item?.variant);
     const prefix = (id || 'item').replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 60);
     return `ln_${prefix}_${hashLine(`${id}\u241f${variant}`)}`;
   }
@@ -1027,12 +1027,19 @@ function createRuntime() {
     });
   }
 
-  async function clearCart() {
+  async function clearCart(purchasedItems) {
+    const generation = authGeneration;
     await withCartMutation(() => {
-      const normalized = writeLocal([], { notify: true });
+      if (generation !== authGeneration) return;
+      // El checkout consume su snapshot confirmado, no compras nuevas de otra
+      // pestaña ni cantidades añadidas mientras el servidor respondía.
+      const purchased = Array.isArray(purchasedItems)
+        ? new Map(normalizeCart(purchasedItems.map(item => ({...item,qty:item.qty ?? item.quantity}))).map(item => [item.lineId,item.qty])) : null;
+      const remaining = purchased ? currentLocalCart().map(item => ({...item,qty:Math.max(0,item.qty-(purchased.get(item.lineId)||0))})).filter(item => item.qty>0) : [];
+      const normalized = writeLocal(remaining, { notify: true });
       scheduleRemoteSync(normalized);
     });
-    await flushCartSync();
+    if (generation === authGeneration) await flushCartSync();
   }
 
   function getCartLocal() {
@@ -1206,7 +1213,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261031-seo-espacios-2').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261102-commerce-phase05-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

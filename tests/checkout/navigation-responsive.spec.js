@@ -134,7 +134,7 @@ for(const width of [320,768,1440]) test(`encomienda sólo transferencia y limpia
 });
 const runtime=fs.readFileSync('js/pages/checkout/checkout-metodos-pago.js','utf8').replace(/import[\s\S]*?;/g,'');
 for(const width of [320,768,1440]) test(`opciones reales del panel excluyen efectivo y PayPal en encomienda (${width}px)`,async({page})=>{
- const fixture=source.replace(/<script\b[\s\S]*?<\/script>/gi,'').replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
+ const fixture=removeFixtureScripts(source).replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
  window.setShipping=method=>{orderData.shippingMethod=method;refreshPaymentOptions()};
  document.querySelectorAll('.ck-panel').forEach(el=>el.classList.toggle('active',el.id==='panel-3'));document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');</script>
  <script type="module">import {normalizePaymentCatalog,paymentMethodLabel} from '../../js/orders/nucleo-metodos-pago.js';
@@ -194,4 +194,28 @@ test('pasos del checkout conservan sus textos completos con letra ampliada al200
   expect(await label.evaluate(node=>getComputedStyle(node).overflowX)).not.toBe('hidden');
   expect(await label.evaluate(node=>parseFloat(getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(24);
  }
+});
+
+test('configuración sólo transferencia, catálogo vacío y cambios vivos respetan las tres entregas',async({page})=>{
+ const fixture=removeFixtureScripts(source).replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
+ window.setShipping=method=>{orderData.shippingMethod=method;refreshPaymentOptions()};
+ document.querySelectorAll('.ck-panel').forEach(el=>el.classList.toggle('active',el.id==='panel-3'));document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');</script>
+ <script type="module">import {normalizePaymentCatalog,paymentMethodLabel} from '../../js/orders/nucleo-metodos-pago.js';
+ function onPublicSettings(callback){window.fixturePaymentSettings=callback;callback({paymentMethodsCatalog:{bank:{kind:'transferencia',enabled:true,title:'Banco de prueba'}},paymentMethods:{efectivo:true,transferencia:true},paypal:{enabled:true}})}
+ ${runtime}</script></body>`);
+ await page.route('https://**',route=>route.abort());
+ await page.route('**/api/paypal-config',route=>route.fulfill({json:{enabled:true,clientId:'fixture-local'}}));
+ await page.route('**/__payment-config',route=>route.fulfill({contentType:'text/html',body:fixture}));
+ await page.setViewportSize({width:390,height:844});await page.goto('/__payment-config');
+ const methods=page.locator('#ck-payment-methods-runtime input[name="tt-ck-pay"]');await expect(methods).toHaveCount(1);
+ for(const method of ['delivery','retiro','encomienda']){
+  await page.evaluate(method=>window.setShipping(method),method);await expect(methods).toHaveCount(1);await expect(methods).toHaveAttribute('data-payment-method-id','bank');
+ }
+ await page.locator('label[for="pay-runtime-bank"]').click();await expect(page.locator('input[name="ck-pay"]:checked')).toHaveValue('transferencia');
+ await page.evaluate(()=>{document.getElementById('ck-name').value='Clienta Fixture';return window.fixturePaymentSettings({paymentMethodsCatalog:{},paymentMethods:{efectivo:true,transferencia:true},paypal:{enabled:true}});});
+ await expect(methods).toHaveCount(0);await expect(page.locator('#btn-step4-next')).toBeDisabled();await expect(page.locator('input[name="ck-pay"]:checked')).toHaveCount(0);
+ expect(await page.locator('#ck-name').inputValue()).toBe('Clienta Fixture');
+ await page.evaluate(()=>window.fixturePaymentSettings({paymentMethodsCatalog:{cash:{kind:'efectivo',enabled:true,title:'Efectivo'}}}));
+ for(const method of ['retiro','encomienda']){await page.evaluate(method=>window.setShipping(method),method);await expect(methods).toHaveCount(0);}
+ await page.evaluate(()=>window.setShipping('delivery'));await expect(methods).toHaveCount(1);await expect(methods).toHaveAttribute('data-payment-method-id','cash');
 });

@@ -110,12 +110,14 @@ export function normalizePaymentCatalog(settings = {}) {
   } else if (source && typeof source === 'object') {
     entries = Object.entries(source);
   }
+  const hasCatalog = Object.hasOwn(settings, 'paymentMethodsCatalog');
   const normalized = entries
+    .filter(([, method]) => method && typeof method === 'object' && !Array.isArray(method) && ['efectivo','transferencia','paypal'].includes(String(method.kind || method.type || '').toLowerCase()))
     .map(([id, method], index) => normalizePaymentMethod(method, id, index))
     .filter(Boolean);
   const unique = [];
   const seen = new Set();
-  for (const method of normalized.length ? normalized : legacyMethods(settings)) {
+  for (const method of hasCatalog ? normalized : legacyMethods(settings)) {
     if (seen.has(method.id)) continue;
     seen.add(method.id);
     unique.push(method);

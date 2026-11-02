@@ -332,3 +332,24 @@ test('editor limpia aliases con espacios y galería legacy mediante field paths 
  const after=await product(id);
  assert.equal(after.imageUrl,'');assert.equal(after['Image Src'],'');assert.equal(after['Variant Image'],'');assert.deepEqual(after.images,[]);assert.equal(after.untouched,'preservado');assert.equal(after.stock,2);
 });
+
+
+test('catálogo de pagos canónico: transferencia pendiente, rechazo sin reserva e idempotencia',async()=>{
+ const id='phase05_transfer',requestId='phase05_transfer_20261102';
+ await seed('settings/orderSequence',{lastNumber:0,highWaterMark:0,historyReconciledAt:new Date()});
+ await seed('settings/general',{storeOpen:true,paymentMethods:{transferencia:false,efectivo:true},paymentMethodsCatalog:[{id:'bank',kind:'transferencia',enabled:true}]});
+ await seed('products/'+id,{name:'Fixture transferencia',active:true,stock:2,price:45000});
+ await seed(`checkoutGuards/${actor.uid}`,{lastCheckoutOrderId:`${actor.uid}_${requestId}`,lastCheckoutAt:new Date()});
+ const draft=composeCheckoutDraft({requestId,items:[{id,qty:1}],name:'Ana Gómez',phone:'595981123456',contactEmail:'qa@example.invalid',selectedCity:'__retiro__',shipping:{method:'retiro',cost:0,pending:false},paymentMethod:'transferencia',subtotal:45000});
+ const prepared=await preparePublicCheckoutOrder({},draft,actor,deps);
+ const result=await createOrderAdmin({},prepared.input,actor,{...deps,inspect:prepared.inspect});
+ assert.equal(result.order.paymentStatus,'pendiente');assert.equal((await product(id)).stock,1);
+ const replay=await createOrderAdmin({},prepared.input,actor,{...deps,inspect:prepared.inspect});
+ assert.equal(replay.duplicate,true);assert.equal((await product(id)).stock,1);
+ await seed('settings/general',{storeOpen:true,paymentMethods:{transferencia:true},paymentMethodsCatalog:[]});
+ const resumed=await preparePublicCheckoutOrder({},draft,actor,deps);
+ assert.equal((await createOrderAdmin({},resumed.input,actor,{...deps,inspect:resumed.inspect})).duplicate,true);
+ await seed(`checkoutGuards/${actor.uid}`,{lastCheckoutOrderId:`${actor.uid}_phase05_disabled_20261102`,lastCheckoutAt:new Date()});
+ await assert.rejects(preparePublicCheckoutOrder({}, {...draft,requestId:'phase05_disabled_20261102'},actor,deps),error=>error.code==='payment_unavailable');
+ assert.equal((await product(id)).stock,1);assert.equal(await deps.get({},`orders/public_${actor.uid}_phase05_disabled_20261102`),null);
+});
