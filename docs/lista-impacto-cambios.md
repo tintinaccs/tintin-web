@@ -1,3 +1,7 @@
+## 2026-11-01 — Fase03: editor conectado y conservación de edición
+
+Autoridades: interfaz-productos-adaptable, controles-editor-producto, galeria-unificada y CSS comercial. La sección de inventario original acompaña fotos/opciones o Precio y stock según el paso, con la misma matriz y serializer. Visor modal accesible, línea final de descripción visible y explicación antes de quitar opciones con fotos. Anchos derivados del contenedor, costo/permisos y referencias V1/V2 preservados. Consumidores transitorios renuevan URLs; CSP/caché/diagnóstico/protección por constructores. Pruebas en suites CI existentes, sin módulos, dependencias, Rules, modelos ni datos reales nuevos. Evidencia y límites en PHASE03_ADMIN_PRODUCT_EDITOR y CURRENT_STATE.
+
 ## 2026-11-01 — Carga del Admin por sección
 
 Entrada principal /admin y /admin.html: diferir Correos, Diagnóstico, Páginas y editor visual hasta abrirlos. El cargador conserva navegación, muestra estado y reintento, comparte descargas y vuelve a comprobar acceso antes de inicializar; sesiones, controles de seguridad y contratos comerciales se conservan. CI incluye la regresión de carga y permisos del cargador junto a las pruebas existentes de Correos.

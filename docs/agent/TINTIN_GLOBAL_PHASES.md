@@ -1,14 +1,15 @@
 # Tintín — seguimiento global permanente, fases 00 a 09
 
-Actualizado: 2026-11-02 UTC. Responsable: Codex /root, GPT-6.
+Actualizado: 2026-11-01 America/Buenos_Aires. Responsable: Codex /root, GPT-6.
 Este plan global reemplaza la numeración de la tarea particular de Skills/CI;
 aquella evidencia se conserva en [TINTIN_SKILLS_CI_20261101.md](TINTIN_SKILLS_CI_20261101.md).
 La titular solicitó explícitamente que 01 corresponda a auditoría global y arquitectura.
 
 ## Cambio de secuencia solicitado
 
-La titular solicitó explícitamente que la fase 02 sea reparación visual pública.
-El alcance anterior de seguridad se conserva como **03A**, antes del comercio
+La titular solicitó explícitamente que la fase 02 sea reparación visual pública
+y que la fase 03 audite y mejore administración y editor de productos.
+El alcance pendiente de seguridad conserva su identificador **03A**, antes del comercio
 **03B**. No se cierran ni se omiten los HIGH de la auditoría 01. La fase 06
 conserva integración de estado/UI y administración; la 07, medición y validación
 manual de accesibilidad/rendimiento. No son una repetición de la reparación02.
@@ -42,11 +43,12 @@ manual de accesibilidad/rendimiento. No son una repetición de la reparación02.
 | --- | --- | --- | --- | --- |
 | 00 | Baseline y estabilidad Skills/CI | PASS_CI del circuito del repositorio; BLOCKED de activación nativa | 085953dc / #1305 y #1307 | 45 Skills por ruta y4compat válidos; catálogo executor vacío. Nueva sesión con catálogo/invocación observables. Diagnóstico01 autorizado sin cambio funcional |
 | 01 | Auditoría global y arquitectura real | PASS_CI de publicación diagnóstica; siete hallazgos abiertos | Auditoría085953dc; publicación5b694fe4 / #1308 | Informe y reproducciones completos. Siguiente:02 visual por nueva instrucción |
-| 02 | Reparación visual pública, responsive, scroll y foco | PASS_LOCAL; CI/fusión sólo por recibo terminal del head final | Base5b694fe4; rama fix/phase02-public-responsive-20261102 | Publicación y comprobación posterior por recibo de PR. No altera lógica comercial. Luego03A |
-| 03 | 03A Seguridad y autoridades de escritura; 03B integridad comercial | PENDING; HIGH F01-RULES/F04-LEGACY siguen abiertos | Base de hallazgos085953dc; sin PR de reparación | Primero autorización de inventory* y exposición/delegación Apps Script; después V1/V2, precios, stock, carrito, checkout y pagos. Depende01; conciliar02 |
+| 02 | Reparación visual pública, responsive, scroll y foco | PASS_CI; #1309 MERGED | 344a2936 / [#1309](https://github.com/tintinaccs/tintin-web/pull/1309); CI41375418525/1 SUCCESS del head29e8685c | Comprobación de main y producción separada por sus runs. Continúa03 editor por instrucción actual; seguridad03A abierta |
+| 03 | Administración y editor de productos: fotografías, opciones, inventario, UX y compatibilidad | PASS_LOCAL; 130 pruebas navegador,110 de dominio y13 específicas tras conciliar02 (conteos solapados) | Base344a2936; rama codex/phase03-product-editor | [Informe](PHASE03_ADMIN_PRODUCT_EDITOR.md). No acredita cierre de seguridad/comercio |
+| 03A/03B | Seguridad y autoridades de escritura; integridad comercial | PENDING; HIGH F01-RULES/F04-LEGACY siguen abiertos | Base de hallazgos085953dc; sin PR de reparación | Primero autorización de inventory* y exposición/delegación Apps Script; después V1/V2, precios, stock, carrito, checkout y pagos. Depende01; conciliar02 |
 | 04 | Persistencia, índices, consultas, relaciones, sincronización y caché | PENDING; F02-STATS MEDIUM reproducido | Base085953dc; sin PR funcional | Resumen truncado/fuera de orden; frescura e índices reales. Depende03A/03B |
-| 05 | Administración, notificaciones, correos y procesamiento | PENDING; fuentes/colas mapeadas, ciclo de imports documentado como riesgo | Base085953dc; sin PR funcional | Ver permisos, estados, recuperación y side effects sin duplicados. Depende03/04 |
-| 06 | Integración de UI/estado y administración | PENDING; reparación pública visual separada en02 | Base085953dc; sin PR de esta fase | Estados con datos reales por rol, drafts y sincronización tras reparar dominios. Depende03/04 |
+| 05 | Administración, notificaciones, correos y procesamiento | PENDING; fuentes/colas mapeadas, ciclo de imports documentado como riesgo | Base085953dc; sin PR funcional | Ver permisos, estados, recuperación y side effects sin duplicados. Depende03A/03B/04 |
+| 06 | Integración de UI/estado y administración | PENDING; reparación pública visual separada en02 | Base085953dc; sin PR de esta fase | Estados con datos reales por rol, drafts y sincronización tras reparar dominios. Depende03A/03B/04 |
 | 07 | Responsive, accesibilidad, rendimiento y SEO medidos | PENDING; 5tests del helper a11y PASS, cobertura manual/campo pendiente | Base085953dc; sin PR funcional | Matriz real, teclado/lector, hardware, WebKit y CWV de campo. Depende05/06 |
 | 08 | Build, publicación, Actions, dependencias, monitoreo y mantenimiento | PENDING; F03-FALLBACK/F05-DEPS MEDIUM y F06-CONTRACTS/F07-INDEX LOW | Base085953dc; sin PR funcional | Artefacto fallback completo, toolchain, contratos y extractor. Preparación puede avanzar tras01/02; cierre revalida03–07 |
 | 09 | Aceptación global y entrega | BLOCKED por HIGH abiertos y verificaciones externas enumeradas | Sin release de cierre | Requiere02–08 y evidencia aplicable; no declarar terminado con pruebas pendientes |
@@ -88,3 +90,10 @@ manual de accesibilidad/rendimiento. No son una repetición de la reparación02.
 5. Mantener generadores, protección, publicación por PR y seguimiento terminal.
    Esta reparación visual no autoriza Rules deploy, datos, compras, correos/push
    reales ni migraciones/destrucción de datos comerciales.
+
+## Continuación solicitada: administración y editor (03)
+
+La mejora del editor se aplica sobre la fase02 visual fusionada en344a2936.
+Conserva matrices V1/V2, autorización, escritores y datos; no sustituye las
+reparaciones pendientes03A/03B. El informe específico registra el alcance,
+reproducciones, pruebas, límites y estado. No migrar datos de producción.
