@@ -27,7 +27,7 @@ La titular solicitó explícitamente que 01 corresponda a auditoría global y ar
 | Fase | Alcance | Estado / evidencia | SHA / PR | Pendiente y siguiente fase |
 | --- | --- | --- | --- | --- |
 | 00 | Baseline y estabilidad Skills/CI | PASS_CI del circuito del repositorio; BLOCKED de activación nativa | 085953dc / #1305 y #1307 | 45 Skills por ruta y4compat válidos; catálogo executor vacío. Nueva sesión con catálogo/invocación observables. Diagnóstico01 autorizado sin cambio funcional |
-| 01 | Auditoría global y arquitectura real | PASS_LOCAL de entregables diagnósticos; hallazgos de cumplimiento abiertos, no PASS global de la tienda | Base085953dc; PR documental se enlaza en el recibo de esta fase | Informe, inventario y reproducciones completos. Siguiente:02 |
+| 01 | Auditoría global y arquitectura real | PASS_LOCAL de entregables diagnósticos; hallazgos de cumplimiento abiertos, no PASS global de la tienda | Base085953dc; PR [#1308](https://github.com/tintinaccs/tintin-web/pull/1308) | Informe, inventario y reproducciones completos. Siguiente:02 |
 | 02 | Seguridad, permisos y autoridades de escritura | PENDING; F01-RULES y F04-LEGACY HIGH demostrados en código/entorno aislado | Base085953dc; reparación sin PR todavía | Corregir autorización de inventory* y resolver creador Apps Script tras comprobar deployment/callers. Depende01 |
 | 03 | Comercio: catálogo, variantes, precios, stock, carrito, checkout, pedidos y pagos | PENDING; dominio canónico y consumidores mapeados | Base085953dc; sin PR funcional | Regresiones V1/V2, idempotencia, reservas/liberación y todas las entradas. Depende02 |
 | 04 | Persistencia, índices, consultas, relaciones, sincronización y caché | PENDING; F02-STATS MEDIUM reproducido | Base085953dc; sin PR funcional | Eliminar truncamiento de resumen y publicación fuera de orden; comprobar frescura entre ventanas e índices reales. Depende02/03 |
@@ -69,3 +69,9 @@ La titular solicitó explícitamente que 01 corresponda a auditoría global y ar
 El estado terminal de la PR documental y su SHA se registra en el recibo de GitHub
 que acompaña este cambio. La auditoría se refiere a085953dc, no hereda PASS a su
 propia documentación ni al código de las fases siguientes.
+
+PR documental de esta auditoría: [#1308](https://github.com/tintinaccs/tintin-web/pull/1308).
+Primer candidato9533fd07a69eef92428e30f5295277c7d36d79ad, run41367835688/1.
+La incorporación de este enlace exige CI del head final; ese run no acredita un
+head posterior. El recibo de #1308 guarda la conclusión terminal y la fusión real
+sin commits posteriores dedicados sólo a anunciar resultados.

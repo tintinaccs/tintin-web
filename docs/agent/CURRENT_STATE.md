@@ -5830,3 +5830,8 @@ Esta fase completa diagnóstico y handoff, no da PASS global al comercio ni cier
 los HIGH. Sólo se publican documentación, pruebas diagnósticas y derivados canónicos;
 no se alteran Rules, productos, pedidos, permisos, sesiones ni código de la tienda.
 La PR documental registra SHA/run/intento/resultados terminales en su recibo.
+
+PR documental #1308 creada; candidato inicial9533fd07a69eef92428e30f5295277c7d36d79ad,
+run41367835688/1. Este enlace requiere CI del head final; no se hereda el run
+anterior tras actualizar. Recibo terminal/merge en #1308; la base de los hallazgos
+sigue siendo085953dc. Siguiente fase funcional02, no iniciada por esta auditoría.
