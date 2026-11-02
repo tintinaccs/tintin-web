@@ -47,6 +47,34 @@ test('load tardío tras usar navegación conserva scroll y los reinicios explíc
  assert.equal(root.scrollTop,0);assert.equal(body.scrollTop,0);
 });
 
+for (const interaction of ['pointerdown', 'keydown', 'wheel', 'touchstart']) {
+ test(`load tardío conserva la lectura después de ${interaction}, sin abrir paneles`,()=>{
+  const listeners=new Map(),frames=[];
+  const root={style:{scrollBehavior:'smooth'},scrollTop:0},body={scrollTop:0};
+  const context=vm.createContext({history:{},document:{documentElement:root,body,addEventListener:(name,fn)=>listeners.set(name,fn)},window:{scrollTo:(_x,y)=>{root.scrollTop=body.scrollTop=y;},addEventListener:(name,fn)=>listeners.set(name,fn)},requestAnimationFrame:fn=>frames.push(fn),console});
+  vm.runInContext(loader.slice(loader.indexOf("  try { history.scrollRestoration"),loader.indexOf('  // El sitio oficial')),context);
+  while(frames.length)frames.shift()();
+  // Elegir una variante, editar por teclado o empezar a leer no abre un drawer.
+  listeners.get(interaction)?.();
+  root.scrollTop=body.scrollTop=540;
+  listeners.get('load')();listeners.get('pageshow')({persisted:false});
+  while(frames.length)frames.shift()();
+  assert.equal(root.scrollTop,540);assert.equal(body.scrollTop,540);
+  context.window.TintinPageScroll.reset();
+  while(frames.length)frames.shift()();
+  assert.equal(root.scrollTop,0);
+ });
+}
+
+test('UI Quality tardío no duplica el reinicio de la autoridad de entrada en una recarga',()=>{
+ const quality=fs.readFileSync(new URL('../../js/quality/calidad-interfaz.js',import.meta.url),'utf8');
+ const fn=quality.match(/function topOnReload\(\)\{[\s\S]*?\n\}/)[0];
+ const root={style:{scrollBehavior:'smooth'},scrollTop:540},body={scrollTop:540};
+ const context=vm.createContext({history:{},performance:{getEntriesByType:()=>[{type:'reload'}]},document:{documentElement:root,body},window:{TintinPageScroll:{reset(){}},scrollTo:(_x,y)=>{root.scrollTop=body.scrollTop=y;}},requestAnimationFrame:fn=>fn()});
+ vm.runInContext(fn+';topOnReload();',context);
+ assert.equal(root.scrollTop,540);assert.equal(body.scrollTop,540);
+});
+
 test('navegar durante un bloqueo lleva arriba y cerrar un modal normal conserva su posición',()=>{
  const listeners=new Map(),frames=[];
  const style=()=>({overflow:'',overscrollBehavior:'',position:'',top:'',left:'',right:'',width:'',touchAction:'',scrollBehavior:'smooth'});

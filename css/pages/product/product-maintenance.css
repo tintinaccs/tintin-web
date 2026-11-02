@@ -138,7 +138,7 @@ body.tt-product-maintenance .tt-variant-option:focus-visible,
 body.tt-product-maintenance .tt-qty-btn:focus-visible,
 body.tt-product-maintenance button:focus-visible,
 body.tt-product-maintenance a:focus-visible {
-  outline: 3px solid var(--color-button-primary-focus-ring, rgba(248,170,202,.24));
+  outline: 3px solid var(--color-text-primary, #222222);
   outline-offset: 3px;
 }
 
@@ -672,7 +672,7 @@ html body.tt-product-maintenance #product-reviews .tt-review-card,
 html body.tt-product-maintenance #product-reviews .tt-reviews-summary { box-shadow:none !important; border-radius:12px !important; }
 body.tt-product-maintenance .tt-gallery-thumb:focus-visible,
 body.tt-product-maintenance .tt-variant-option:focus-visible,
-body.tt-product-maintenance .tt-qty-btn:focus-visible { outline:2px solid var(--pink-dark) !important; outline-offset:3px; }
+body.tt-product-maintenance .tt-qty-btn:focus-visible { outline:2px solid var(--color-text-primary,#222222) !important; outline-offset:3px; }
 @media(max-width:767px) {
   body.tt-product-maintenance .tt-product-detail-grid { gap:28px; padding:8px 0 24px; }
   body.tt-product-maintenance .tt-gallery-thumb { flex-basis:56px; width:56px !important; height:56px !important; }
@@ -713,7 +713,7 @@ html body.tt-product-maintenance .tt-related-section > .container { width:min(10
   body.tt-product-maintenance #related-trigger .tt-section-sub { font-size:.65rem; line-height:1.4; margin-bottom:4px; }
   body.tt-product-maintenance #related-trigger .tt-section-title { font-size:clamp(1.1rem,5.4vw,1.45rem); line-height:1.25; margin:0; }
 }
-body.tt-product-maintenance .tt-related-refresh:focus-visible { outline:2px solid var(--pink-dark); outline-offset:3px; }
+body.tt-product-maintenance .tt-related-refresh:focus-visible { outline:2px solid var(--color-text-primary,#222222); outline-offset:3px; }
 
 /* Una fila desplazable en móvil conserva tarjetas compactas sin una celda vacía. */
 @media(max-width:599px) {
@@ -763,7 +763,7 @@ body.tt-product-maintenance .tt-product-trust-badges { border-top:1px solid var(
 body.tt-product-maintenance .tt-trust-badge-text { font-size:.72rem; line-height:1.6; }
 body.tt-product-maintenance .tt-product-actions-panel .tt-btn:disabled { cursor:not-allowed; opacity:.5; }
 body.tt-product-maintenance .tt-product-actions-panel .tt-btn:focus-visible,
-body.tt-product-maintenance .tt-product-wa-link:focus-visible { outline:2px solid var(--pink-dark) !important; outline-offset:4px; }
+body.tt-product-maintenance .tt-product-wa-link:focus-visible { outline:2px solid var(--color-text-primary,#222222) !important; outline-offset:4px; }
 @media(hover:hover) {
   body.tt-product-maintenance .tt-gallery-thumb:hover { border-color:var(--pink-dark) !important; }
   body.tt-product-maintenance #product-variants .tt-color-option:not(.active):hover { border-color:var(--color-text-secondary,#666666) !important; }

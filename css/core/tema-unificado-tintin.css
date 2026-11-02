@@ -272,6 +272,12 @@ body:not(:has(.adm-main)) :is(
 }
 body:not(:has(.adm-main)) :is(hr,.divider,.tt-divider){border-color:var(--color-border-secondary)}
 body:not(:has(.adm-main)) :is(input,textarea,select,[tabindex]):focus-visible{border-color:var(--color-border-focus)!important}
+/* El foco necesita contraste sobre las superficies claras, además del acento rosa.
+   La tinta semántica conserva el esquema publicado y no afecta al panel admin. */
+html body:not(:has(.adm-main)) :is(a[href],button,input,textarea,select,summary,[tabindex]):focus-visible {
+  outline:3px solid var(--color-text-primary,#222222) !important;
+  outline-offset:3px !important;
+}
 body:not(:has(.adm-main)) :is(.is-invalid,[aria-invalid="true"],.field-error){border-color:var(--color-border-error)}
 body:not(:has(.adm-main)) :is(.is-valid,.field-success){border-color:var(--color-border-success)}
 body:not(:has(.adm-main)) :is(.field-warning,.is-warning){border-color:var(--color-border-warning)}
