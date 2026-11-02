@@ -371,6 +371,21 @@ try {
     updatedAt: serverTimestamp()
   }));
 
+  await succeeds(updateDoc(doc(admin,'orders','client1_order1'),{paymentStatus:'pagado',updatedAt:serverTimestamp()}));
+  // Fase07: inventory* aislado nunca autoriza una transición de reserva.
+  for (const role of ['admin1', 'agent1', 'viewer1', 'client1']) {
+    for (const patch of [
+      {inventoryState:'released'}, {inventoryRevision:999},
+      {inventoryUpdatedAt:serverTimestamp()}, {inventoryUpdatedBy:claims[role].email},
+      {inventoryState:'released',inventoryRevision:999,updatedAt:serverTimestamp()}
+    ]) await fails(updateDoc(doc(ctx(role),'orders','client1_order1'),patch));
+  }
+  await testEnv.withSecurityRulesDisabled(context=>updateDoc(doc(context.firestore(),'rolePermissions','main'),{
+    'agent.pedidos':{ver:false,cambiarEstado:false,cambiarPago:false,reenviarCorreo:false}
+  }));
+  await fails(getDoc(doc(ctx('agent1'),'orders','client1_order1')));
+  await fails(updateDoc(doc(ctx('agent1'),'orders','client1_order1'),{inventoryState:'released',inventoryRevision:999}));
+
   const viewer = ctx('viewer1');
   await succeeds(getDoc(doc(viewer, 'orders', 'client1_order1')));
   await fails(setDoc(doc(viewer, 'products', 'viewer_product'), {

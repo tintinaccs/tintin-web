@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "deb985606b16e1fa4c393fc88aa4eba7e4150984b81152a4d27cd23977dc938d",
+  "sourceFingerprint": "3bdc876f4dc27b09a00ecea8783714acc5c97c243c0150bc04debab71f5d068c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1758,
-    "textFiles": 1623,
-    "totalBytes": 45022786,
+    "files": 1759,
+    "textFiles": 1624,
+    "totalBytes": 45029281,
     "pages": 19,
     "modules": 1156
   },
@@ -42101,8 +42101,8 @@
     },
     {
       "path": "scripts/probar-firestore-critico.mjs",
-      "bytes": 30624,
-      "sha256": "ceb598f586d6e40bf31befc31241b6bf086dc4124f474db1632647933ab481fc",
+      "bytes": 31629,
+      "sha256": "fd79c29ce7ef5955f15aff0224ba21582946085f12ac3b6c9169c87a315af104",
       "syntax": {
         "ok": true,
         "error": ""
@@ -62304,8 +62304,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 5721,
-      "sha256": "4868315f87bff8c493deac7f9a8f0b845b5befc1a5f6133d7efdd8bd7f1677fb"
+      "bytes": 1318,
+      "sha256": "21ffe85db5b94b10412ca1aa2c9656db2714013e292022992636867d268037d6"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -62317,7 +62317,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "5dcf10ef1231fc172ebf4093bbb2f6226968148dc55f1c81780d4b7c82e1169e"
+      "sha256": "ac58d45f1cf617ef01a2867d9233b1e63aff812315c4e23222b74080aade40a0"
     },
     {
       "path": "config/public-site.json",
@@ -63156,8 +63156,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1166828,
-      "sha256": "5aa4ba7013dc9936c11828b8c45d78999151d7935f697e5c6c2159457f455524"
+      "bytes": 1167660,
+      "sha256": "2b20a5670210bdc2e67b3f25f9b1e95637d5e725d8be399cfbccd27fb4c19f17"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -63402,8 +63402,8 @@
     {
       "path": "docs/agent/TINTIN_GLOBAL_PHASES.md",
       "extension": ".md",
-      "bytes": 9433,
-      "sha256": "b84d84ee91a391c2a0f44d63b5a712930c512ca6db07558c2ae50cc6a042c164"
+      "bytes": 9527,
+      "sha256": "4dcfc0720af0ca10d5d891fd2c5d5a2e48a7f7f245694e41e7bda03ee7c14d91"
     },
     {
       "path": "docs/agent/TINTIN_PHASE04_CATALOG.md",
@@ -63422,6 +63422,12 @@
       "extension": ".md",
       "bytes": 5240,
       "sha256": "426a46c81a0bc105722184911c4ee1ecff71b082156b202c24b5c83fd0246680"
+    },
+    {
+      "path": "docs/agent/TINTIN_PHASE07_BACKEND_SECURITY.md",
+      "extension": ".md",
+      "bytes": 8013,
+      "sha256": "b0518e2a31fb8eb341f68043376b6dd0d4a0e9f7904f916091be502964fb4820"
     },
     {
       "path": "docs/agent/TINTIN_SKILLS_CI_20261101.md",
@@ -64050,8 +64056,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 151335,
-      "sha256": "caf2a1fd7d09ab6bce4ca9a51b06b25b8478ab3fb55b6998e30a9f111bc1a4d0"
+      "bytes": 151895,
+      "sha256": "fdc93e36c525e93bb70f9cdf0d8b234822687f9794ca33e70ef7f90a60b2045b"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -64644,8 +64650,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 69285,
-      "sha256": "02b44680a4d14b5f13fac02556091ce15b26900b9077118fb334dc81cbcd4d47"
+      "bytes": 69679,
+      "sha256": "3e03484f4849170fb5a2ec51a5f58d4e0aa0c105f0a2181fab6ef312c442883a"
     },
     {
       "path": "functions/[page].js",
@@ -68466,8 +68472,8 @@
     {
       "path": "scripts/probar-firestore-critico.mjs",
       "extension": ".mjs",
-      "bytes": 30624,
-      "sha256": "ceb598f586d6e40bf31befc31241b6bf086dc4124f474db1632647933ab481fc"
+      "bytes": 31629,
+      "sha256": "fd79c29ce7ef5955f15aff0224ba21582946085f12ac3b6c9169c87a315af104"
     },
     {
       "path": "scripts/probar-firestore-notificaciones.mjs",
