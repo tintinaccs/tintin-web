@@ -43,10 +43,21 @@ export function validateProductEditorPatch(before, input) {
   const patch={...input,...matrix};
   // Un alias histórico no puede volver a mostrar una portada quitada ni
   // competir con la portada canónica en consumidores antiguos.
-  if(Object.hasOwn(before,'image') && Object.hasOwn(input,'imageUrl'))patch.image=input.imageUrl;
+  if(Object.hasOwn(input,'imageUrl')) {
+    for(const alias of ['image','img','photo','imageSrc','image_src','Image Src','Variant Image','Image','Imagen','Foto']) {
+      if(Object.hasOwn(before,alias))patch[alias]=input.imageUrl;
+    }
+  }
+  if(Object.hasOwn(before,'images') && Object.hasOwn(input,'imagesExtra'))patch.images=input.imagesExtra;
   if(input.publicationStatus!=null){try{Object.assign(patch,editorialFields(input));}catch(error){fail(error.message);}}
   if(JSON.stringify({...before,...patch}).length>700000) fail('El producto supera el tamaño permitido.');
   return patch;
+}
+
+function assertPublicationTransition(before, after) {
+  if(productIsPublished(after) && !productIsPublished(before) && (!after.description?.trim() || !(after.imageUrl || after.image))) {
+    fail('Completá la descripción y la portada antes de publicar.');
+  }
 }
 
 export async function saveProductEditor(env, body, actor, io={get:firestoreAdminGet,commit:firestoreAdminBatchCommit}) {
@@ -77,7 +88,7 @@ export async function saveProductEditor(env, body, actor, io={get:firestoreAdmin
   if(document && body.product?.variantCommerceVersion===2 && before.variantCommerceVersion!==2 && before.variantInventory==null)fail('La conversión del stock agregado requiere revisar las reservas históricas antes de habilitar combinaciones.',409);
   const patch=validateProductEditorPatch(before,body.product);
   const final={...before,...patch};
-  if(productIsPublished(final) && (!document || !productIsPublished(before)) && (!final.description?.trim() || !(final.imageUrl || final.image)))fail('Completá la descripción y la portada antes de publicar.');
+  assertPublicationTransition(document ? before : {active:false},final);
   if(!/^[A-Za-z0-9_-]{1,180}$/.test(patch.category || before.category)) fail('Categoría inválida.');
   const category=await io.get(env,`collections/${patch.category || before.category}`);
   if(!category) fail('Seleccioná una colección existente.');
@@ -87,7 +98,7 @@ export async function saveProductEditor(env, body, actor, io={get:firestoreAdmin
   // sólo envía intención; los timestamps siempre los fija el servidor.
   const timing=document && before.variantCommerceVersion!==2 && body.restockOnly===true?{restockedAt:now}:{merchandisingUpdatedAt:now};
   const data={...patch,lastEditorChangeId:body.changeId,updatedAt:now,...timing,...(!document?{createdAt:now}:{})};
-  const writes=[{path:`products/${id}`,fields:encodeFirestoreFields(data),mergeFields:Object.keys(data),currentDocument:condition(document)}];
+  const writes=[{path:`products/${id}`,fields:encodeFirestoreFields(data),mergeFields:Object.keys(data).map(key=>key.includes(' ')?'`'+key+'`':key),currentDocument:condition(document)}];
   if(body.workspace){
     if(body.workspace.key!==id)fail('El espacio de trabajo no corresponde al producto.',409);
     const path=productWorkPath(actor.uid,id),workDoc=await io.get(env,path),work=decodeFirestoreFields(workDoc?.fields || {});
@@ -116,7 +127,9 @@ export async function saveProductBulk(env,body,actor,io={get:firestoreAdminGet,c
   if(!['admin','superadmin'].includes(actor?.role))fail('No tenés permiso para esta edición masiva.',403);
   if(actor.role!=='superadmin'){
     const permissions=decodeFirestoreFields((await io.get(env,'rolePermissions/main'))?.fields || {}).admin?.productos || {};
-    for(const action of ['accionesMasivas',body.field==='active'?'activarDesactivar':'editar'])if(permissions[action]!==undefined && permissions[action]!==true)fail('Tu rol no tiene permiso para esta edición masiva.',403);
+    if(permissions.ver===false)fail('Tu rol no tiene permiso para acceder a Productos.',403);
+    const singlePublication=body.field==='active' && Array.isArray(body.ids) && body.ids.length===1;
+    for(const action of [...(singlePublication?[]:['accionesMasivas']),body.field==='active'?'activarDesactivar':'editar'])if(permissions[action]!==undefined && permissions[action]!==true)fail('Tu rol no tiene permiso para esta edición masiva.',403);
   }
   let collections=[];
   if(body.field==='category'){
@@ -130,6 +143,17 @@ export async function saveProductBulk(env,body,actor,io={get:firestoreAdminGet,c
     async get(id){const document=await io.get(env,`products/${id}`);documents.set(id,document);return {exists:()=>Boolean(document),data:()=>decodeFirestoreFields(document?.fields || {})};},
     update(id,data){writes.push({path:`products/${id}`,fields:encodeFirestoreFields(data),mergeFields:Object.keys(data),currentDocument:condition(documents.get(id))});}
   },body,collections,id=>id,()=>now);}catch(error){fail(error.message,/cambió|existe/.test(error.message)?409:422);}
+  // El lote usa el mismo límite de publicación que el guardado individual.
+  // Las escrituras anteriores sólo están planificadas: ningún commit ocurre
+  // hasta validar también la última transición y su colección.
+  for(const {before,patch} of changes) {
+    const next={...before,...patch};
+    if(!productIsPublished(before) && productIsPublished(next)) {
+      validateProductEditorPatch(before,{...patch,productTemplate:next.productTemplate ?? 'default',seoTitle:next.seoTitle ?? '',seoDescription:next.seoDescription ?? ''});
+      assertPublicationTransition(before,next);
+      if(typeof next.category!=='string' || !/^[A-Za-z0-9_-]{1,180}$/.test(next.category) || !await io.get(env,`collections/${next.category}`))fail('Seleccioná una colección existente.');
+    }
+  }
   writes.push({path:`auditLog/product_bulk_${crypto.randomUUID().replaceAll('-','')}`,fields:encodeFirestoreFields({action:'editar_producto',targetType:'producto',targetId:'',targetLabel:'',details:`Edición masiva: ${body.field}`,actorId:actor.uid,actorEmail:actor.email || '',actorRole:actor.role,bulk:true,bulkCount:changes.length,createdAt:now,productHistory:changes.map(({id,before,patch})=>({productId:id,priceBefore:before.price??null,priceAfter:patch.price??before.price??null,stockBefore:before.stock??null,stockAfter:patch.stock??before.stock??null}))})});
   await io.commit(env,writes);
   return {changes};

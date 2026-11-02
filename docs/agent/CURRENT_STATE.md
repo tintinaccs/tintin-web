@@ -5894,3 +5894,45 @@ correos o cobros reales.
 Recibo por PR/head/run/intento, fusión y verificación posterior:
 [PR de la rama](https://github.com/tintinaccs/tintin-web/pulls?q=is%3Apr+head%3Afix%2Fphase02-public-responsive-20261102).
 No heredar CI del base ni cerrar con ejecuciones pendientes. Siguiente:03A.
+## 2026-11-02 — Fase 04, catálogo comercial
+
+Codex /root, rama codex/phase04-catalog-commercial, base conciliada e3de73c1
+(#1310). Checkout inicial d7faa302 atrasado; recuperación de la guía de fases y
+actualización de main mediante conector GitHub/git fetch. Se preservan02/03 y
+la app móvil actual. No se hereda PASS de la base anterior; audit:final largo
+se interrumpe deliberadamente para revalidar el candidato conciliado.
+
+Mapa y alcance en TINTIN_PHASE04_CATALOG.md; guía TINTIN_GLOBAL_PHASES actualizada
+por la nueva instrucción de catálogo04. HIGH F01-RULES/F04-LEGACY siguen abiertos
+como dependencias03A/03B. F02-STATS queda pendiente fuera del catálogo actual.
+No se certifica que un deployment Apps Script ajeno al checkout canónico ya
+respete variantes: requiere reparación/validación propia y de callers.
+
+Corregidos: publicación masiva sin controles y alternancia legacy sin estado
+editorial/CAS; aliases que revivían imágenes retiradas; checkout manipulado con
+precio cero/null/decimal. Endpoint/escritor existente, sin sincronizadores ni
+migraciones. Acción individual mantiene su permiso; lote conserva accionesMasivas.
+Dos editores/venta durante guardado se prueban con IO controlada, sin atribuirles
+una ejecución Firestore real. Regresiones RED antes del cambio.
+
+Evidencia previa sobre d7faa302:857 Node PASS,1SKIP por emulador, Chromium31/31;
+se conserva como histórica, no aprueba e3de73c1 más el cambio. Pruebas conciliadas
+y gates finales se registran debajo. Logs locales artifacts/phase04.
+El emulador no descarga JAR de storage.googleapis.com en esta red; proyecto demo
+únicamente, nunca producción. gh CLI no autentica, pero el conector GitHub está
+operativo; no se declara bloqueo de PR/CI sólo por ese error. No hubo escrituras
+comerciales reales, compras, usuarios, correos ni cambios de Rules.
+
+PASS_LOCAL conciliado:859 Node PASS,0FAIL,1SKIP de catálogo/sync/admin/pedidos/
+carrito/checkout/pagos;22/22 pruebas del editor comercial, incluida cita de
+field paths legacy con espacios (RED antes del fix). Se agrega integración
+Firestore real de limpieza de aliases a la suite de CI existente; localmente
+bloqueada por descarga del JAR, no presentada como ejecutada. Browser, build,
+preflight y seguimiento CI del candidato se registran por sus resultados propios.
+
+Candidato conciliado PASS_LOCAL:31/31 Chromium sin reintentos (ficha y editor
+comercial,320–3840px/horizontal), build:pages/caché410/67 y preflight1185módulos/
+72funciones. Plan canónico4archivos/18registros sobre e3de73c1; diff revisado sin
+alterar gates, Rules, datos o cambios de02/03. Las etapas canónicas de CI deben
+acreditar el barrido transversal del SHA propio; no se cuenta el audit:final
+interrumpido de d7faa302. PR, CI, merge y producción se siguen por separado.

@@ -46,7 +46,7 @@ manual de accesibilidad/rendimiento. No son una repetición de la reparación02.
 | 02 | Reparación visual pública, responsive, scroll y foco | PASS_CI; #1309 MERGED | 344a2936 / [#1309](https://github.com/tintinaccs/tintin-web/pull/1309); CI41375418525/1 SUCCESS del head29e8685c | Comprobación de main y producción separada por sus runs. Continúa03 editor por instrucción actual; seguridad03A abierta |
 | 03 | Administración y editor de productos: fotografías, opciones, inventario, UX y compatibilidad | PASS_LOCAL; 130 pruebas navegador,110 de dominio y13 específicas tras conciliar02 (conteos solapados) | Base344a2936; rama codex/phase03-product-editor | [Informe](PHASE03_ADMIN_PRODUCT_EDITOR.md). No acredita cierre de seguridad/comercio |
 | 03A/03B | Seguridad y autoridades de escritura; integridad comercial | PENDING; HIGH F01-RULES/F04-LEGACY siguen abiertos | Base de hallazgos085953dc; sin PR de reparación | Primero autorización de inventory* y exposición/delegación Apps Script; después V1/V2, precios, stock, carrito, checkout y pagos. Depende01; conciliar02 |
-| 04 | Persistencia, índices, consultas, relaciones, sincronización y caché | PENDING; F02-STATS MEDIUM reproducido | Base085953dc; sin PR funcional | Resumen truncado/fuera de orden; frescura e índices reales. Depende03A/03B |
+| 04 | Catálogo comercial integral: publicación, variantes, precios, imágenes, stock, relaciones, consultas y caché (instrucción actual) | IN_PROGRESS; reparaciones y pruebas de catálogo documentadas | Base e3de73c1 (#1310); rama codex/phase04-catalog-commercial | [Informe04](TINTIN_PHASE04_CATALOG.md). F01/F04 HIGH y F02-STATS siguen pendientes; no declarar cierre global |
 | 05 | Administración, notificaciones, correos y procesamiento | PENDING; fuentes/colas mapeadas, ciclo de imports documentado como riesgo | Base085953dc; sin PR funcional | Ver permisos, estados, recuperación y side effects sin duplicados. Depende03A/03B/04 |
 | 06 | Integración de UI/estado y administración | PENDING; reparación pública visual separada en02 | Base085953dc; sin PR de esta fase | Estados con datos reales por rol, drafts y sincronización tras reparar dominios. Depende03A/03B/04 |
 | 07 | Responsive, accesibilidad, rendimiento y SEO medidos | PENDING; 5tests del helper a11y PASS, cobertura manual/campo pendiente | Base085953dc; sin PR funcional | Matriz real, teclado/lector, hardware, WebKit y CWV de campo. Depende05/06 |
@@ -97,3 +97,13 @@ La mejora del editor se aplica sobre la fase02 visual fusionada en344a2936.
 Conserva matrices V1/V2, autorización, escritores y datos; no sustituye las
 reparaciones pendientes03A/03B. El informe específico registra el alcance,
 reproducciones, pruebas, límites y estado. No migrar datos de producción.
+
+## Continuación solicitada: catálogo comercial (04)
+
+La instrucción actual prioriza el catálogo público/administrativo y sus variantes,
+precios, imágenes y stock sobre la base fusionada e3de73c1 (#1310). Se registra
+el resultado por candidato, sin heredar PASS de03. La revisión inicial detectó
+un checkout local atrasado y se concilió antes de entregar. El nuevo alcance no
+cierra por inferencia F01-RULES/F04-LEGACY de03A/03B; F02-STATS (resumen de
+cuentas/pedidos) permanece pendiente fuera de esta reparación de catálogo.
+No se modifican datos productivos ni se autorizan migraciones destructivas.

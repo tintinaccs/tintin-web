@@ -297,3 +297,18 @@ test('crear sin permiso de editar permite reintentar transporte fallido con el m
  assert.equal(requests.length,2);assert.equal(requests[0].productId,requests[1].productId);assert.equal(requests[0].changeId,requests[1].changeId);
  assert.equal(r.writes.filter(path=>path.startsWith('products/new-')).length,1);
 });
+
+test('publicación legacy por tarjeta y lote usa endpoint canónico, conserva expected y no escribe Firestore cliente',async()=>{
+ for(const card of [false,true]){
+  const r=runtime({active:false});const requests=[];
+  r.ctx.roleCanDo=(_module,action)=>action!=='accionesMasivas';
+  r.ctx.authenticatedFetch=async(url,options)=>{
+   requests.push({url,body:JSON.parse(options.body)});
+   return {ok:true,json:async()=>({ok:true,result:{changes:[{id:'source',before:r.original,patch:{active:true}}]}})};
+  };
+  const expected=productFingerprint(r.original);
+  const result=card?await r.ctx.window.TintinProductAdmin.updateCard({id:'source',field:'active',value:true,expected}):await r.ctx.window.TintinProductAdmin.applyBulkChanges({ids:['source'],field:'active',value:true,expected:{source:expected}});
+  assert.equal(card?result.status==='green':result.confirmed,true);
+  assert.deepEqual(r.writes,[]);assert.equal(requests.length,1);assert.equal(requests[0].url,'/api/admin-order-mutation');assert.equal(requests[0].body.action,'bulkProducts');assert.equal(requests[0].body.expected.source,expected);
+ }
+});

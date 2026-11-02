@@ -989,3 +989,15 @@ Validador, API de disponibilidad y reserva reciben dígitos con el normalizador
 existente; no cambian autenticación, unicidad, contratos de otros formularios
 ni Rules. Regresiones nuevas en el spec canónico del registro de Comercio.
 CSP, diagnóstico y protección se regeneran desde constructores existentes.
+
+## 2026-11-02 — Fase 04 catálogo: publicación, imágenes y precio
+
+Autoridades: product-editor-domain, política de checkout público y controlador
+administrativo existentes. Estado de botón/tarjeta/lote V1/V2 converge en API
+comercial con fingerprint/CAS/estado editorial y controles de publicación;
+permisos de acción individual y lote conservados. Patch canónico actualiza
+aliases multimedia existentes para evitar fotos retiradas. Checkout comparte
+validador comercial de precios. Sin nuevas colas, migraciones, Rules ni datos
+reales. Regresiones en suites canónicas admin/checkout, documentación y límites
+en TINTIN_PHASE04_CATALOG y CURRENT_STATE. Caché/CSP/diagnóstico/protección se
+generan con herramientas existentes; CI/merge bloqueados por conexión GitHub.
