@@ -32,6 +32,7 @@ Cobertura: cliente autenticado y acceso requerido conservando carrito, perfil nu
 ## Verificación y límites
 
 - 590 pruebas Node de carrito/checkout/pedidos/pagos/sincronización PASS, sin skips. Incluyen nuevos RED→GREEN de configuración, confirmación, consumo parcial, claves y texto de logística.
+- CodeQL inicial detectó dos alertas de filtrado HTML en la fixture nueva de pagos: se sustituye regex por el parser/helper existente `removeFixtureScripts`, sin desactivar reglas. El SHA corregido se valida nuevamente.
 - Navegador Chromium con fixtures: resultados finales en CURRENT_STATE; no se utilizan pedidos ni proveedores reales. Auditorías de pedidos seguros, entrega y carrito PASS_LOCAL.
 - Integración Firestore real aislada añadida para catálogo canónico, pago pendiente, reserva única y rechazo sin escritura. Se mantiene la suite existente de concurrencia/CAS, cancelación y PayPal simulado. Ejecución local BLOCKED: descarga del JAR oficial desde storage.googleapis.com denegada por la red; debe acreditarse con el job de emulador de CI, nunca sustituyendo producción.
 - Caché, shell, CSP, diagnóstico y protección se actualizan con constructores oficiales; tags propagados no provocan avisos por cambios comerciales ni recargas forzadas.

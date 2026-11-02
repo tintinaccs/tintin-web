@@ -134,7 +134,7 @@ for(const width of [320,768,1440]) test(`encomienda sólo transferencia y limpia
 });
 const runtime=fs.readFileSync('js/pages/checkout/checkout-metodos-pago.js','utf8').replace(/import[\s\S]*?;/g,'');
 for(const width of [320,768,1440]) test(`opciones reales del panel excluyen efectivo y PayPal en encomienda (${width}px)`,async({page})=>{
- const fixture=source.replace(/<script\b[\s\S]*?<\/script>/gi,'').replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
+ const fixture=removeFixtureScripts(source).replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
  window.setShipping=method=>{orderData.shippingMethod=method;refreshPaymentOptions()};
  document.querySelectorAll('.ck-panel').forEach(el=>el.classList.toggle('active',el.id==='panel-3'));document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');</script>
  <script type="module">import {normalizePaymentCatalog,paymentMethodLabel} from '../../js/orders/nucleo-metodos-pago.js';
@@ -197,7 +197,7 @@ test('pasos del checkout conservan sus textos completos con letra ampliada al200
 });
 
 test('configuración sólo transferencia, catálogo vacío y cambios vivos respetan las tres entregas',async({page})=>{
- const fixture=source.replace(/<script\b[\s\S]*?<\/script>/gi,'').replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
+ const fixture=removeFixtureScripts(source).replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
  window.setShipping=method=>{orderData.shippingMethod=method;refreshPaymentOptions()};
  document.querySelectorAll('.ck-panel').forEach(el=>el.classList.toggle('active',el.id==='panel-3'));document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');</script>
  <script type="module">import {normalizePaymentCatalog,paymentMethodLabel} from '../../js/orders/nucleo-metodos-pago.js';
