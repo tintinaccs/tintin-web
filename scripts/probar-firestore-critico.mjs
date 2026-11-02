@@ -372,6 +372,17 @@ try {
   }));
 
   await succeeds(updateDoc(doc(admin,'orders','client1_order1'),{paymentStatus:'pagado',updatedAt:serverTimestamp()}));
+  await testEnv.withSecurityRulesDisabled(async context=>{
+    const db=context.firestore();
+    await setDoc(doc(db,'products','phase07_unlimited'),{name:'Fixture',price:100,stock:null,active:true});
+    for(const [id,extra] of [
+      ['phase07_five',{items:[...Array.from({length:4},()=>({id:'phase07_unlimited',qty:1})),{id:'p1',qty:1}]}],
+      ['phase07_variant',{items:[{id:'phase07_unlimited',qty:1}],variantInventoryItems:[{id:'phase07_unlimited',variant:'Dorado',qty:1}]}]
+    ]) await setDoc(doc(db,'orders',id),{userId:'client1',status:'pendiente',inventoryState:'reserved',inventoryRevision:1,...extra});
+  });
+  for(const id of ['phase07_five','phase07_variant']) await fails(updateDoc(doc(admin,'orders',id),{
+    status:'cancelado',inventoryState:'released',inventoryRevision:2,inventoryUpdatedAt:serverTimestamp(),inventoryUpdatedBy:claims.admin1.email
+  }));
   // Fase07: inventory* aislado nunca autoriza una transición de reserva.
   for (const role of ['admin1', 'agent1', 'viewer1', 'client1']) {
     for (const patch of [

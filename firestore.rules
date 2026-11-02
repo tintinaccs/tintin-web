@@ -927,6 +927,8 @@ service cloud.firestore {
           'inventoryState', 'inventoryRevision', 'inventoryUpdatedAt', 'inventoryUpdatedBy'
         ])) ||
         (statusChanged && currentRolePermAllows('pedidos', 'cambiarEstado') &&
+          beforeOrder.items is list && beforeOrder.items.size() <= 4 &&
+          beforeOrder.get('variantInventoryItems', []).size() == 0 &&
           afterOrder.inventoryState == (
             afterOrder.status == 'cancelado' || afterOrder.status == 'rechazado'
               ? 'released'

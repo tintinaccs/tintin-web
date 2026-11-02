@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
   "baseCommit": "1159edeb2b56fdb5e9e79fe716760b93b2f75736",
-  "reason": "Fase07: cerrar bypass de metadata de reserva y verificar límites de confianza sin producción",
+  "reason": "Fase07: cerrar bypass de reservas y limitar escritor SDK a su modelo legado verificable",
   "files": [
     {
       "path": "firestore.rules",
       "oldHash": "02b44680a4d14b5f13fac02556091ce15b26900b9077118fb334dc81cbcd4d47",
-      "newHash": "3e03484f4849170fb5a2ec51a5f58d4e0aa0c105f0a2181fab6ef312c442883a"
+      "newHash": "db044b86c175c41309dbc752c27b431cb13cda0d843472de342e41e8e0ec8cc2"
     },
     {
       "path": "scripts/probar-firestore-critico.mjs",
       "oldHash": "ceb598f586d6e40bf31befc31241b6bf086dc4124f474db1632647933ab481fc",
-      "newHash": "fd79c29ce7ef5955f15aff0224ba21582946085f12ac3b6c9169c87a315af104"
+      "newHash": "dcd9e4387776417a14342a34d76a24828a5d3fde8468aea903c0e9fc7fb4b954"
     }
   ],
   "affectedRecords": [
