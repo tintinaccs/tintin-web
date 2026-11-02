@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "73577930753b8451046ce7a386498c553bb1503207b430e2ae80cee21eecec5f",
+  "sourceFingerprint": "27a69959ec2eb817c2916fd6d2403cf50a6ad9dd2e79edf81201411845a168bd",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1728,
-    "textFiles": 1593,
-    "totalBytes": 44589750,
+    "files": 1747,
+    "textFiles": 1612,
+    "totalBytes": 44876171,
     "pages": 19,
-    "modules": 1146
+    "modules": 1152
   },
   "viewports": [
     {
@@ -37501,6 +37501,225 @@
       ]
     },
     {
+      "path": "scripts/agent/phase01-audit/browser-runtime.mjs",
+      "bytes": 538,
+      "sha256": "7954a2dcacba576b0f11d7188b7dbf183578a1966ada9463b235a6420ce24e03",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/agent/phase01-audit/fallback-probe.mjs",
+      "bytes": 1728,
+      "sha256": "b1610ff9db5817775c2a208009d5e4e1ce95bec532ee8a3d46387f59e29a840e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "parse5",
+          "target": "scripts/agent/phase01-audit/parse5",
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://fixture.invalid/index.html",
+          "line": 17
+        },
+        {
+          "url": "https://fixture.invalid/",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "path": "scripts/agent/phase01-audit/legacy-order-probe.mjs",
+      "bytes": 4027,
+      "sha256": "8193b5803cf6d524ffdf7c3bfa08a2ce020566e417aafc018174707a7a11733a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../../cloudflare/order-admin-domain.js",
+          "target": "cloudflare/order-admin-domain.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/agent/phase01-audit/rules-probe.mjs",
+      "bytes": 3066,
+      "sha256": "b52f4e6c47bee305569e417cc4382e22ac37364c313c140959020fb00f1b5b1f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "@firebase/rules-unit-testing",
+          "target": "scripts/agent/phase01-audit/@firebase/rules-unit-testing",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "firebase/firestore",
+          "target": "scripts/agent/phase01-audit/firebase/firestore",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/agent/phase01-audit/run-rules-probe.mjs",
+      "bytes": 1170,
+      "sha256": "9c9bc6f69898cc88aa08b15a00cf77ad22d98d9e093cc092b550fde2f16b8f37",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/agent/phase01-audit/stats-probe.mjs",
+      "bytes": 2826,
+      "sha256": "c97aa32483e31e4a91e7134eba944acb9f14b2688295680cda34a3552e44accf",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/auditar-acceso-aislamiento.js",
       "bytes": 8235,
       "sha256": "ca9fefc1a66ccfc831dc10b7a410723e0a1a472defcd3bcb04f6712876aa17e4",
@@ -62723,8 +62942,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1152339,
-      "sha256": "606b7a664d393a6e1aaca547db98105e36b082bea9d0ba9a8e8104720cae6ad7"
+      "bytes": 1155489,
+      "sha256": "ace01553d8e38eda0084c477d4813a4de56d32edec95bad8d86583514d77d1a5"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -62797,6 +63016,12 @@
       "extension": ".md",
       "bytes": 11680,
       "sha256": "d4fc829a4ad70ac61b3c3ee93b83c53853125eed8f49a3ff06dac73433143cb9"
+    },
+    {
+      "path": "docs/agent/PHASE01_GLOBAL_ARCHITECTURE_AUDIT.md",
+      "extension": ".md",
+      "bytes": 33188,
+      "sha256": "37d09e8cfb618f8c8ff6750f422dca843ada845e9fef0822fa09b7ff6fad846c"
     },
     {
       "path": "docs/agent/PRECUTOVER_PEDIDOS_20261013.md",
@@ -62951,8 +63176,14 @@
     {
       "path": "docs/agent/TINTIN_GLOBAL_PHASES.md",
       "extension": ".md",
-      "bytes": 7496,
-      "sha256": "ec7fc90898eb555f5e06e620bbb0d888212195b47f94785b1f1ba7f0f2f38fbf"
+      "bytes": 6833,
+      "sha256": "d6725626240e68a9e6ce9c026325e655fe20b0d678f72e7754f95e5b576e58d8"
+    },
+    {
+      "path": "docs/agent/TINTIN_SKILLS_CI_20261101.md",
+      "extension": ".md",
+      "bytes": 8106,
+      "sha256": "78ddde03466cafc09b0c92d6c73914c2c621ed4517ca7f89afd67e250c8f492e"
     },
     {
       "path": "docs/agent/UI_RESPONSIVE_GLOBAL_20261023.md",
@@ -63001,6 +63232,66 @@
       "extension": ".md",
       "bytes": 1474,
       "sha256": "0a0cc6732d35a44c5986a0bbbb74fc4b19f0bc9050cc3e8bda7526309abf40c5"
+    },
+    {
+      "path": "docs/agent/evidence/phase01-20261101/README.md",
+      "extension": ".md",
+      "bytes": 6112,
+      "sha256": "afef426ac9c2aafa45b2fee649c3f43c11e4fedf5f42f366aab50f09203bcbae"
+    },
+    {
+      "path": "docs/agent/evidence/phase01-20261101/diagnostic-index-result.json",
+      "extension": ".json",
+      "bytes": 610,
+      "sha256": "8f82bcef0a15507cd249cd3bcc2f2d23256a44f61ff87b00a58279ceb1aa9c78"
+    },
+    {
+      "path": "docs/agent/evidence/phase01-20261101/fallback-result.json",
+      "extension": ".json",
+      "bytes": 544,
+      "sha256": "e8cd8f348f1de13922314df46671a16f0e7522a5d2de7da5c5210e1188bed3ea"
+    },
+    {
+      "path": "docs/agent/evidence/phase01-20261101/firebase-rules-assessment.json",
+      "extension": ".json",
+      "bytes": 832,
+      "sha256": "344503149fb1e1366f775a887bfed5b740b9ea02822b8abc71e7b546d87bc3d0"
+    },
+    {
+      "path": "docs/agent/evidence/phase01-20261101/inventory.json",
+      "extension": ".json",
+      "bytes": 214880,
+      "sha256": "0e42a58cf2a8c895d1a1961e6df610862af4ad5452950b304a4ee808ddf76a36"
+    },
+    {
+      "path": "docs/agent/evidence/phase01-20261101/legacy-order-result.json",
+      "extension": ".json",
+      "bytes": 391,
+      "sha256": "cef97f2b65c38a6fbe312c2a4cbf5ca83849cba1f5e77002f5c88067c0a7585f"
+    },
+    {
+      "path": "docs/agent/evidence/phase01-20261101/npm-audit-summary.json",
+      "extension": ".json",
+      "bytes": 1488,
+      "sha256": "9c57e8e75c4fb0007c2fc645d5589b6d25e662728d556ae29ceae8c25e16f8d7"
+    },
+    {
+      "path": "docs/agent/evidence/phase01-20261101/rules-result.json",
+      "extension": ".json",
+      "bytes": 276,
+      "sha256": "55ab14f42eecd626b7f2b0e344eef707d07a768a8ee3fcaf551f4e487e2e624a"
+    },
+    {
+      "path": "docs/agent/evidence/phase01-20261101/stats-result.json",
+      "extension": ".json",
+      "bytes": 351,
+      "sha256": "6f331d86e8f8a9d0711e37839de6ff308eb5f19cf296a3b5e3ca3159f60330dd"
+    },
+    {
+      "path": "docs/agent/evidence/phase01-20261101/validation.json",
+      "extension": ".json",
+      "bytes": 3562,
+      "sha256": "a9d389560d24056acc6f3b0d473fa1fd83ba194b0b389a9c3171bdb0d17ac021"
     },
     {
       "path": "docs/agent/evidence/real-interactions-20261011/playwright-inventory.json",
@@ -66805,6 +67096,48 @@
       "extension": ".txt",
       "bytes": 634,
       "sha256": "3d1a29212f0b055f5f6d89061134ffd64f322b071a15e7cfc0942aa404bff5c5"
+    },
+    {
+      "path": "scripts/agent/phase01-audit/browser-runtime.mjs",
+      "extension": ".mjs",
+      "bytes": 538,
+      "sha256": "7954a2dcacba576b0f11d7188b7dbf183578a1966ada9463b235a6420ce24e03"
+    },
+    {
+      "path": "scripts/agent/phase01-audit/emulator-config.json",
+      "extension": ".json",
+      "bytes": 239,
+      "sha256": "7e986ae1145d2e043a89c2b27fd27817d8b1e1bc684427e91a9b53adaef1c7a5"
+    },
+    {
+      "path": "scripts/agent/phase01-audit/fallback-probe.mjs",
+      "extension": ".mjs",
+      "bytes": 1728,
+      "sha256": "b1610ff9db5817775c2a208009d5e4e1ce95bec532ee8a3d46387f59e29a840e"
+    },
+    {
+      "path": "scripts/agent/phase01-audit/legacy-order-probe.mjs",
+      "extension": ".mjs",
+      "bytes": 4027,
+      "sha256": "8193b5803cf6d524ffdf7c3bfa08a2ce020566e417aafc018174707a7a11733a"
+    },
+    {
+      "path": "scripts/agent/phase01-audit/rules-probe.mjs",
+      "extension": ".mjs",
+      "bytes": 3066,
+      "sha256": "b52f4e6c47bee305569e417cc4382e22ac37364c313c140959020fb00f1b5b1f"
+    },
+    {
+      "path": "scripts/agent/phase01-audit/run-rules-probe.mjs",
+      "extension": ".mjs",
+      "bytes": 1170,
+      "sha256": "9c9bc6f69898cc88aa08b15a00cf77ad22d98d9e093cc092b550fde2f16b8f37"
+    },
+    {
+      "path": "scripts/agent/phase01-audit/stats-probe.mjs",
+      "extension": ".mjs",
+      "bytes": 2826,
+      "sha256": "c97aa32483e31e4a91e7134eba944acb9f14b2688295680cda34a3552e44accf"
     },
     {
       "path": "scripts/auditar-acceso-aislamiento.js",

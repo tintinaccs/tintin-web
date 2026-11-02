@@ -5790,3 +5790,48 @@ PR correctiva #1307 creada; primer candidato fddc4a1b2d90245f6bc247970cd13f2cef2
 CI41359542982/1. El enlace se incorpora con este cambio documental; el nuevo head
 requiere CI propia. Recibo terminal/merge consultable en #1307; no se confunde
 con #1305 ni con la activación nativa BLOCKED. No se usarán commits vacíos.
+
+## 2026-11-01 — Fase 01: auditoría global y arquitectura, diagnóstico
+
+Codex /root GPT-6, Linux Cloud. Base estable auditada085953dc0b700e91f95fc8c84dd8e17f4627a70c;
+árbolb97e4feef9ee05718de9557da9c10f75351fe066. #1307 MERGED, CI de main41361909966/1,
+CodeQL41361910183/1 y producción41361911653/1 SUCCESS consultados por API. El estado
+PENDING del bloque anterior se resuelve con ese recibo; no se hereda otro head.
+#1306 sigue abierta en976601a9, CI41358865966/1 FAILURE por runner sin comunicación,
+logs404 y plan protegido viejo; rama preservada. Skills45/ruta válidos,4compat;
+catálogo executor vacío: activación nativa BLOCKED, no usada como prueba de carga.
+
+La titular define ahora01como auditoría global: el procedimiento anterior de
+Skills/CI se conserva en TINTIN_SKILLS_CI_20261101.md y TINTIN_GLOBAL_PHASES pasa
+al plan global00–09. Informe PHASE01_GLOBAL_ARCHITECTURE_AUDIT.md y evidencia
+versionable en docs/agent/evidence/phase01-20261101/. No hay reparación funcional.
+
+Hallazgos ABIERTOS: HIGH F01-RULES (agent sin permisos de pedidos puede alterar
+inventoryState/revision, reproducido en Firestore Emulator demo) y F04-LEGACY
+(dispatcher Apps Script crea compra de variante agotada; dominio CF la rechaza,
+I/O sintético, deployment Google NO_VERIFICADO). MEDIUM F02-STATS (scan global
+limitado5000 y MERGE atrasado), F03-FALLBACK (public incompleto pese a build0),
+F05-DEPS (2avisos npm moderados/14paquetes de desarrollo). LOW F06-CONTRACTS
+(autoridad documentada obsoleta) y F07-INDEX (2colecciones fantasma del extractor,
+filtradas por consumidor; NO son Rules faltantes). Ningún CRITICAL demostrado;
+no se afirma ausencia global. Próximo:02, cerrar F01 antes de cambios estéticos.
+
+PASS_LOCAL de entregables diagnósticos:8gates seleccionados,38tests de arquitectura,
+642tests de dominios,3operativos,smoke18rutas,geometría144/144 y5tests del helper
+a11y. Conteos solapados; no sumarlos como cobertura única. Build:pages sin deriva
+en worktree limpio del SHA base; fallback luego FALLA integridad de recursos.
+Probes que terminan0 CONFIRMAN anomalías, no aprueban sus invariantes. Primer smoke
+no inició por Chromium cacheado ausente; repetición con Chromium del sistema151,
+sólo adaptador de ruta de lanzamiento, sin cambiar aserciones/plazos. Node local24,
+Java21; CI base Node22. NativeSkills, Rules/índices/triggers/despliegue Apps Script,
+sandbox de pagos/envíos reales y hardware siguen NOT_VERIFIED/BLOCKED según informe.
+
+Esta fase completa diagnóstico y handoff, no da PASS global al comercio ni cierra
+los HIGH. Sólo se publican documentación, pruebas diagnósticas y derivados canónicos;
+no se alteran Rules, productos, pedidos, permisos, sesiones ni código de la tienda.
+La PR documental registra SHA/run/intento/resultados terminales en su recibo.
+
+PR documental #1308 creada; candidato inicial9533fd07a69eef92428e30f5295277c7d36d79ad,
+run41367835688/1. Este enlace requiere CI del head final; no se hereda el run
+anterior tras actualizar. Recibo terminal/merge en #1308; la base de los hallazgos
+sigue siendo085953dc. Siguiente fase funcional02, no iniciada por esta auditoría.

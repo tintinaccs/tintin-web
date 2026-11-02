@@ -1,124 +1,77 @@
-# Tintín — seguimiento permanente de fases 00 a 09
+# Tintín — seguimiento global permanente, fases 00 a 09
 
-Actualizado: 2026-11-01. Agente: Codex /root, GPT-6, Linux Cloud.
-Este seguimiento corresponde a estabilización de Skills/CI. No acredita fases
-funcionales de otros planes ni una auditoría integral del comercio.
+Actualizado: 2026-11-01 America/Asuncion. Responsable: Codex /root, GPT-6.
+Este plan global reemplaza la numeración de la tarea particular de Skills/CI;
+aquella evidencia se conserva en [TINTIN_SKILLS_CI_20261101.md](TINTIN_SKILLS_CI_20261101.md).
+La titular solicitó explícitamente que 01 corresponda a auditoría global y arquitectura.
 
-Base verificada: `7dfe8c9f306168994e324c34135230d8a5da3f71` (main al iniciar).
-PR #1305: MERGED, 2026-11-01 19:35:12 America/Asuncion; head
-`e0465aa57547620c3dfedfe3b21c8f230bf9ee2c`, merge igual a la base.
-Su CI `41355599089`, intento 1, SUCCESS; CodeQL `41355595342`, SUCCESS.
-El cuerpo histórico de la PR todavía menciona fallos anteriores: no representa
-el resultado final. CI post-merge `41357878092`, intento 1: Protected flows FAIL;
-el resto se consulta por separado, no se hereda SUCCESS del head.
+## Base y estados
 
-| Fase | Alcance | Resultado y evidencia | Pendiente / siguiente |
-| --- | --- | --- | --- |
-| 00 | Estado real, políticas y alcance | Base y merge #1305 confirmados por API; documentos normativos leídos | Mantener evidencia por SHA |
-| 01 | Inventario y compatibilidad de Skills | PASS_LOCAL: 45 `.agents`, 45 `.claude`, 4 `.codex`; nombres únicos y metadatos; copia Linux; enlaces Markdown locales de SKILL.md sin destinos ausentes | Activación depende de 02 |
-| 02 | Disponibilidad efectiva en Codex Cloud | BLOCKED: `skills.list` de autoridad executor devuelve `skills: []`; lectura de archivos funciona, pero no prueba descubrimiento nativo | Sesión nueva de Codex/Claude con catálogo e invocación nativa observables; este host no expone control de reindexación |
-| 03 | Primer fallo y causalidad | Primer run #1305 `41350410392`: preflight/audit:typography auditó recursos de Skills (142 observaciones); corrección ya integrada. Suites posteriores omitidas no fueron fallos propios | Logs históricos conservados por GitHub; no reintentos para ocultarlos |
-| 04 | Workflows y protecciones | PASS_LOCAL: Workflows=12; PR=1. Ruleset 18212422 Protect main activo: PR, squash, historial lineal, resolución de conversaciones, sin borrado/force-push | Endpoint clásico de branch protection 403; no se afirma haber leído esa configuración |
-| 05 | Artefactos y SHA inmutable | Se retira job que hacía commit/pull/push sobre rama de Skills; CI conserva build y rechazo de drift. Generador único de ambos JSON sin fecha/HEAD variable | Ver CI del candidato |
-| 06 | Baseline protegida | FAIL reproducido en main: workflow, admin.html, AGENTS.md y cache-version-baseline. Renovación con preparar-mantenimiento-flujos.mjs: 4 archivos, 4 registros; 78 registros/544 archivos conservados | Revisión y CI protegidas del candidato |
-| 07 | Validación local | PASS_LOCAL: preflight completa, 189/189 pruebas de operaciones/protección/diagnóstico, integraciones canónicas, validadores y copia Linux | Build final y drift se registran abajo |
-| 08 | Integración protegida | PR [#1307](https://github.com/tintinaccs/tintin-web/pull/1307), rama codex/verify-skills-stability-20261101; sólo CI/documentación/metadatos | PR propia y resultados terminales; #1306 se conserva ajena |
-| 09 | Cierre y siguiente fase | BLOCKED por descubrimiento nativo no observable (02); no se declara integración plenamente verificada | Terminar 08 y verificar host antes de nuevas modificaciones funcionales |
+- Base estable auditada: **085953dc0b700e91f95fc8c84dd8e17f4627a70c**.
+- #1307 MERGED; head cdb464c04c7bd85d0be7b78bee9b5253f3804d90. CI de main
+  [41361909966/1](https://github.com/tintinaccs/tintin-web/actions/runs/41361909966),
+  CodeQL41361910183/1 y comprobación de producción41361911653/1 SUCCESS.
+- #1305 MERGED en7dfe8c9f, CI final41355599089/1 SUCCESS. El fallo post-merge
+  de protección41357878092/1 fue corregido por #1307; no se borra su historial.
+- #1306 OPEN, head976601a99772e5390448b8da2edda79d9d6c1429, CI41358865966/1
+  FAILURE: pérdida de comunicación del runner125006122914, logsBlobNotFound/404.
+  Además necesita conciliar el main actual y regenerar plan/derivados, preservando
+  la eliminación del job de escritura de #1307. Su rama no se modificó.
+- Los PASS se refieren al criterio y SHA citados. Un informe terminado no prueba
+  que sus hallazgos estén corregidos ni certifica todas las operaciones reales.
+- Esta fase permite diagnóstico no funcional mientras sigue bloqueada la
+  observación nativa de Skills. No se declara resuelto ese bloqueo del host.
 
-## Disponibilidad y recursos
+## Fases y dependencias
 
-El nombre en frontmatter es la identidad del Skill, no siempre su carpeta:
-`design-taste-frontend` → taste-frontend, `code-review` → matt-code-review,
-`handoff` → matt-handoff. El catálogo y CLOUD_SKILLS_LOCK.json fijan procedencia,
-revisiones y licencias. No se ejecutaron scripts de terceros ni instalaron paquetes
-en Windows. Las dependencias opcionales de esos recursos no quedan instaladas
-por copiar archivos. Graphify CLI y Chat Party siguen sin instalación confirmada.
+| Fase | Alcance | Estado / evidencia | SHA / PR | Pendiente y siguiente fase |
+| --- | --- | --- | --- | --- |
+| 00 | Baseline y estabilidad Skills/CI | PASS_CI del circuito del repositorio; BLOCKED de activación nativa | 085953dc / #1305 y #1307 | 45 Skills por ruta y4compat válidos; catálogo executor vacío. Nueva sesión con catálogo/invocación observables. Diagnóstico01 autorizado sin cambio funcional |
+| 01 | Auditoría global y arquitectura real | PASS_LOCAL de entregables diagnósticos; hallazgos de cumplimiento abiertos, no PASS global de la tienda | Base085953dc; PR [#1308](https://github.com/tintinaccs/tintin-web/pull/1308) | Informe, inventario y reproducciones completos. Siguiente:02 |
+| 02 | Seguridad, permisos y autoridades de escritura | PENDING; F01-RULES y F04-LEGACY HIGH demostrados en código/entorno aislado | Base085953dc; reparación sin PR todavía | Corregir autorización de inventory* y resolver creador Apps Script tras comprobar deployment/callers. Depende01 |
+| 03 | Comercio: catálogo, variantes, precios, stock, carrito, checkout, pedidos y pagos | PENDING; dominio canónico y consumidores mapeados | Base085953dc; sin PR funcional | Regresiones V1/V2, idempotencia, reservas/liberación y todas las entradas. Depende02 |
+| 04 | Persistencia, índices, consultas, relaciones, sincronización y caché | PENDING; F02-STATS MEDIUM reproducido | Base085953dc; sin PR funcional | Eliminar truncamiento de resumen y publicación fuera de orden; comprobar frescura entre ventanas e índices reales. Depende02/03 |
+| 05 | Administración, notificaciones, correos y procesamiento | PENDING; fuentes/colas mapeadas, ciclo de imports documentado como riesgo | Base085953dc; sin PR funcional | Ver permisos, estados, recuperación y side effects sin duplicados. Depende03/04 |
+| 06 | UI pública/admin, rutas, JS/CSS, componentes y estado compartido | PENDING; smoke18rutas y geometría144casos aprobados como diagnóstico de base | Base085953dc; sin PR funcional | Validar contenido real por rol/dispositivo y estados; preservar identidad y drafts. Depende03/04 |
+| 07 | Responsive, accesibilidad, rendimiento y SEO medidos | PENDING; 5tests del helper a11y PASS, cobertura manual/campo pendiente | Base085953dc; sin PR funcional | Matriz real, teclado/lector, hardware, WebKit y CWV de campo. Depende05/06 |
+| 08 | Build, publicación, Actions, dependencias, monitoreo y mantenimiento | PENDING; F03-FALLBACK/F05-DEPS MEDIUM y F06-CONTRACTS/F07-INDEX LOW | Base085953dc; sin PR funcional | Artefacto fallback completo, toolchain, contratos y extractor. Preparación puede avanzar tras01/02; cierre revalida03–07 |
+| 09 | Aceptación global y entrega | BLOCKED por HIGH abiertos y verificaciones externas enumeradas | Sin release de cierre | Requiere02–08 y evidencia aplicable; no declarar terminado con pruebas pendientes |
 
-Las variantes originales audit-tintin/fix-bug/release-check/security-audit difieren
-por cliente y se preservan deliberadamente. CLOUD-CHECKS.md de agent-efficiency
-tiene una frase adicional en Codex; no contradice las políticas. No se exige
-paridad byte a byte de variantes históricas ni se confunde con ejecución nativa.
+## Entregables de la Fase 01
 
-Nombres presentes en cada ruta principal:
+- [Informe completo](PHASE01_GLOBAL_ARCHITECTURE_AUDIT.md): inventario de páginas,
+  arquitectura, fuentes de verdad, siete hallazgos, clasificación, evidencia,
+  impacto, solución mínima, riesgos y matriz entre fases.
+- [Inventario y grafo](evidence/phase01-20261101/inventory.json): 19HTML, 58API,
+  446módulos de ejecución y961aristas estáticas/literales. No declarar un archivo
+  muerto sólo por no aparecer como alcanzable en este grafo.
+- [Validación](evidence/phase01-20261101/validation.json): ocho gates seleccionados,
+  642pruebas de dominios, 38de arquitectura, 3operativas, 18rutas smoke,
+  144combinaciones de geometría y5pruebas del helper de accesibilidad. Conteos
+  solapados; no sumarlos como cobertura única.
+- [Reproducciones](evidence/phase01-20261101/README.md): Rules en emulador demo,
+  resumen truncado/carrera, fallback incompleto y creador legado con variante agotada.
+- No se aplicaron reparaciones funcionales. Un probe que termina0 porque confirmó
+  una vulnerabilidad no significa que el criterio de seguridad haya aprobado.
 
-- `audit-tintin`
-- `caveman`
-- `fix-bug`
-- `frontend-design`
-- `code-review`
-- `handoff`
-- `ponytail`
-- `receiving-code-review`
-- `release-check`
-- `requesting-code-review`
-- `security-audit`
-- `systematic-debugging`
-- `design-taste-frontend`
-- `test-driven-development`
-- `tintin-accessibility`
-- `tintin-agent-efficiency`
-- `tintin-architecture-integrations`
-- `tintin-brand-copy`
-- `tintin-cloud-linux`
-- `tintin-code-index`
-- `tintin-commerce-integrity`
-- `tintin-data-index-sync`
-- `tintin-design-engineering`
-- `tintin-design-quality`
-- `tintin-ecommerce-flows`
-- `tintin-firebase-integrity`
-- `tintin-integrations`
-- `tintin-maintainability`
-- `tintin-observability`
-- `tintin-observability-recovery`
-- `tintin-performance-budgets`
-- `tintin-performance-loading`
-- `tintin-qa-release`
-- `tintin-release-operations`
-- `tintin-responsive-a11y`
-- `tintin-search-seo`
-- `tintin-security-hardening`
-- `tintin-security-privacy`
-- `tintin-seo-discoverability`
-- `tintin-tests-evidence`
-- `ui-ux-pro-max`
-- `verification-before-completion`
-- `webapp-testing`
-- `writing-for-agents`
-- `writing-plans`
+## Prioridad de continuación
 
-## Generación reproducible y seguridad
+1. Leer el informe y recertificar la base vigente por SHA antes de empezar02.
+2. Resolver F01-RULES primero: agent sin permiso de pedidos no debe modificar
+   inventoryState/inventoryRevision saltándose el dominio y la auditoría.
+3. Verificar la versión de Apps Script instalada y sus callers; cerrar F04
+   preservando el espejo y probando paridad de stock/variantes.
+4. Atender integridad comercial y de proyecciones (03/04) antes de ajustes visuales.
+5. Mantener generadores canónicos, protección y seguimiento terminal de CI.
+   Esta auditoría no autoriza Rules deploy, compras, emails/push reales ni
+   migraciones/destrucción de datos comerciales.
 
-`scripts/construir-manifiesto-diagnostico.js` es la autoridad de ambos JSON.
-Excluye sus propios derivados, directorios de herramientas y resultados de tests;
-hashea las fuentes ordenadas y fija generatedAt a una fecha constante. site-version
-proyecta revisiones semánticas de documentos/recursos. Documentación versionada
-sí cambia el inventario; debe generarse después del texto y plan definitivos.
-`npm run build:pages` aplica los generadores canónicos y sus verificaciones.
-CI no debe escribir commits para corregir el checkout que está validando.
+El estado terminal de la PR documental y su SHA se registra en el recibo de GitHub
+que acompaña este cambio. La auditoría se refiere a085953dc, no hereda PASS a su
+propia documentación ni al código de las fases siguientes.
 
-El controlador existente exige Repository audit, Analyze (actions), Analyze
-(javascript-typescript) de GitHub app 15368 y Cloudflare Pages: tintinaccesorios
-(app 85455), por SHA/evento/workflow; no se alteran estos requisitos. Su mecanismo
-de mantenimiento autoriza renovar huellas con un plan real, conservando registros
-y metadatos; una huella renovada no certifica producción ni sustituye CI.
-
-PR #1306 abierta al consultar: head `976601a99772e5390448b8da2edda79d9d6c1429`,
-run `41358865966` intento 1 en curso; `41358793234` action_required y `41358735640`
-cancelled pertenecen a heads anteriores. No se modificó ni reintentó esa rama.
-No hay cambios funcionales, datos reales ni dispatch de despliegues en esta tarea.
-
-Validación final local: build:pages PASS; segunda ejecución sin diferencias SHA256
-en diagnostic-manifest.json/site-version.json; protección78registros/544archivos
-PASS; git diff --check limpio. Plan candidato validado por inspectMaintenance
-con base main exacta. Node local24.19.0; CI fija Node22 y debe acreditar ese runtime.
-
-## Recibo del candidato de estabilización
-
-PR correctiva: [#1307](https://github.com/tintinaccs/tintin-web/pull/1307).
-Primer candidato `fddc4a1b2d90245f6bc247970cd13f2cef232a99`, run
-`41359542982` intento 1. Esta actualización documental agrega el enlace del PR y
-requiere CI del nuevo head: el run anterior no certifica el head posterior.
-Para el resultado terminal y merge de 08, usar el recibo de GitHub de este PR,
-verificando su head y merge_commit_sha. Ningún estado previo se hereda.
-La fase 09 permanece BLOCKED por 02 incluso si 08 obtiene SUCCESS/MERGED.
+PR documental de esta auditoría: [#1308](https://github.com/tintinaccs/tintin-web/pull/1308).
+Primer candidato9533fd07a69eef92428e30f5295277c7d36d79ad, run41367835688/1.
+La incorporación de este enlace exige CI del head final; ese run no acredita un
+head posterior. El recibo de #1308 guarda la conclusión terminal y la fusión real
+sin commits posteriores dedicados sólo a anunciar resultados.
