@@ -6,6 +6,17 @@ import {encodeFirestoreFields,decodeFirestoreFields} from '../../cloudflare/fire
 import {productFingerprint,productDuplicateData} from '../../js/admin/products/maestro-productos-core.mjs';
 const source={name:'Anillo',category:'anillos',price:30000,priceBefore:null,active:true,oferta:false,destacado:false,variants:{Color:['Oro','Plata']},variantInventory:[{variant:'Oro',stock:3},{variant:'Plata',stock:0}],stock:3,privateLegacy:'preservado'};
 const product=()=>commercialDraft(source);
+test('mil combinaciones conservan valores al reordenar y rechazan crecimiento sin mutar el borrador',()=>{
+ const variants=Object.fromEntries(['Color','Talle','Material'].map(key=>[key,Array.from({length:10},(_,i)=>`${key}${i}`)]));
+ const draft=commercialDraft({price:30000,variants});
+ assert.equal(draft.variantInventory.length,1000);
+ const row=draft.variantInventory.at(-1);row.price=55000;row.stock=7;
+ const snapshot=structuredClone(draft);
+ const ordered=commercialDraft(draft,Object.fromEntries(Object.entries(variants).reverse().map(([key,values])=>[key,[...values].reverse()])),{});
+ assert.deepEqual(ordered.variantInventory.find(item=>item.variant===row.variant),row);
+ assert.throws(()=>commercialDraft(draft,{...variants,Color:[...variants.Color,'Otro']},{}),/1.000/);
+ assert.deepEqual(draft,snapshot);
+});
 test('portada canónica actualiza o vacía el alias histórico sin revivir fotografías',()=>{
  const before={...product(),image:'https://img.test/old.webp'};
  const next=validateProductEditorPatch(before,{imageUrl:'https://img.test/fourth.webp'});

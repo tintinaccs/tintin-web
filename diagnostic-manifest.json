@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "27a69959ec2eb817c2916fd6d2403cf50a6ad9dd2e79edf81201411845a168bd",
+  "sourceFingerprint": "13dbea77163d456a21cb1a4568779b4bcbb33d5c8fb42ab0392e1c9629ff06c0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1747,
-    "textFiles": 1612,
-    "totalBytes": 44876171,
+    "files": 1773,
+    "textFiles": 1618,
+    "totalBytes": 46293639,
     "pages": 19,
-    "modules": 1152
+    "modules": 1153
   },
   "viewports": [
     {
@@ -2881,8 +2881,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 191523,
-      "sha256": "674d22e34b6fa2c3c1cb9ea6c0873bcf0a122b3dc52155c8645f3bb41aab4336",
+      "bytes": 191528,
+      "sha256": "b693860ce67222905a47bbfae80c0d399e858fb8d389ea0d5e1e983f5fc40904",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2936,7 +2936,7 @@
           "line": 2096
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261101-admin-entry-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261102-phase03-editor-1",
           "target": "js/admin/admin-app.js",
           "line": 2097
         },
@@ -2966,7 +2966,7 @@
           "line": 2102
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261031-seo-espacios-2",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261102-phase03-editor-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2103
         },
@@ -3296,7 +3296,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261101-admin-entry-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261102-phase03-editor-1",
           "target": "js/admin/admin-app.js",
           "line": 2097,
           "exists": true
@@ -3332,7 +3332,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261031-seo-espacios-2",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261102-phase03-editor-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2103,
           "exists": true
@@ -28772,8 +28772,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 441300,
-      "sha256": "c71b54a4f63ae1c4d37e3b2c47f9d42c50fc414d41faf358b5bf853f55d000d2",
+      "bytes": 441304,
+      "sha256": "76497be817cbd13331313f41e4dbcfb671d3dd756cda9b69601ff3b22cbf8e84",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28840,7 +28840,7 @@
           "line": 10
         },
         {
-          "raw": "./products/editor-comercial-interfaz.js?v=tintin-20261031-seo-espacios-2",
+          "raw": "./products/editor-comercial-interfaz.js?v=tintin-20261102-phase03-editor-1",
           "target": "js/admin/products/editor-comercial-interfaz.js",
           "dynamic": false,
           "line": 11
@@ -28912,7 +28912,7 @@
           "line": 22
         },
         {
-          "raw": "./products/galeria-unificada.js?v=tintin-20261031-seo-espacios-2",
+          "raw": "./products/galeria-unificada.js?v=tintin-20261102-phase03-editor-1",
           "target": "js/admin/products/galeria-unificada.js",
           "dynamic": false,
           "line": 23
@@ -30880,8 +30880,8 @@
     },
     {
       "path": "js/admin/products/controles-editor-producto.js",
-      "bytes": 34600,
-      "sha256": "05501fffa28e6ac290f7ac1a87fc159078460a77f92b0b1297cf688518151deb",
+      "bytes": 34873,
+      "sha256": "9d3a7ee92bfaac872177bf02b7b6ad45a4706077b67f805e11f0902af37c2db6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30916,15 +30916,15 @@
     },
     {
       "path": "js/admin/products/editor-comercial-interfaz.js",
-      "bytes": 12782,
-      "sha256": "8d2a1790935b04b5c0e7a571b780558988f55bfc7e38f10ae9e1b53c7d6b3bc3",
+      "bytes": 12785,
+      "sha256": "4f1bdf87655ae2f6c1a4e60178d1a7bf3d56045ded4939616b0406ea8ea76b61",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./controles-editor-producto.js?v=tintin-20261029-performance-1",
+          "raw": "./controles-editor-producto.js?v=tintin-20261102-phase03-editor-1",
           "target": "js/admin/products/controles-editor-producto.js",
           "dynamic": false,
           "line": 1
@@ -31044,8 +31044,8 @@
     },
     {
       "path": "js/admin/products/galeria-unificada.js",
-      "bytes": 24307,
-      "sha256": "002a75b7e79f25d42b3d5d1cfb4765c07cc9f4af2cfa4c2a020bde06faf08fe0",
+      "bytes": 25140,
+      "sha256": "beb1928b619a7beb22ecb35c50fe2cf8356838cae1f7d9a3b7d72d3f813469c0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31162,8 +31162,8 @@
     },
     {
       "path": "js/admin/products/interfaz-productos-adaptable.js",
-      "bytes": 43079,
-      "sha256": "22565e474c977ec058636389cd5741342d82c69c9c5d9fbb572466b84e5309da",
+      "bytes": 44166,
+      "sha256": "4c3115efa6178573e201fadb697676665594046b25c6cb003837c6e49d4a57c3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31182,7 +31182,7 @@
           "line": 2
         },
         {
-          "raw": "./controles-editor-producto.js?v=tintin-20261029-performance-1",
+          "raw": "./controles-editor-producto.js?v=tintin-20261102-phase03-editor-1",
           "target": "js/admin/products/controles-editor-producto.js",
           "dynamic": false,
           "line": 3
@@ -31680,7 +31680,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "bytes": 138570,
-      "sha256": "4bc574b1c374a32e5192bf7ca73dc209dabf633967c61c1508c6731c6abb07da",
+      "sha256": "9568682bd507e80f7d00645ef13dbbb20f08e6c19d7d52b2d713a79bbdbb8c3e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31729,7 +31729,7 @@
           "line": 7
         },
         {
-          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261031-seo-espacios-2",
+          "raw": "./products/interfaz-productos-adaptable.js?v=tintin-20261102-phase03-editor-1",
           "target": "js/admin/products/interfaz-productos-adaptable.js",
           "dynamic": false,
           "line": 8
@@ -43775,8 +43775,8 @@
     },
     {
       "path": "tests/admin/editor-comercial.test.mjs",
-      "bytes": 9906,
-      "sha256": "2986c58c8e222bef07dd525256e781be7594552530e0ecf99ca1f50025155d0b",
+      "bytes": 10729,
+      "sha256": "a51d601236e7fe93cfd0e788b7ae0a8c527f21f8d6163ea4066173cde8f42310",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43822,31 +43822,31 @@
           "raw": "../../cloudflare/product-editor-domain.mjs",
           "target": "cloudflare/product-editor-domain.mjs",
           "dynamic": true,
-          "line": 82
+          "line": 93
         },
         {
           "raw": "../../cloudflare/product-editor-domain.mjs",
           "target": "cloudflare/product-editor-domain.mjs",
           "dynamic": true,
-          "line": 101
+          "line": 112
         }
       ],
       "endpoints": [
         {
           "url": "https://img.test/old.webp",
-          "line": 10
+          "line": 21
         },
         {
           "url": "https://img.test/fourth.webp",
-          "line": 11
+          "line": 22
         },
         {
           "url": "https://example.invalid/gold.png",
-          "line": 19
+          "line": 30
         },
         {
           "url": "https://img.test/oro.png",
-          "line": 60
+          "line": 71
         }
       ]
     },
@@ -59513,8 +59513,8 @@
     },
     {
       "path": "tests/ui-ux/product-editor-tabs.spec.js",
-      "bytes": 13736,
-      "sha256": "db9b6993237808172d94f581e1c51ebed4be5742e48ad6d85c365a3ede9fcd27",
+      "bytes": 22863,
+      "sha256": "3a59550de1eda46b6db48deea45f2b57520e521a699d8ed3d9d67b43dff98648",
       "syntax": {
         "ok": true,
         "error": ""
@@ -59548,6 +59548,10 @@
         {
           "url": "https://img.test/studio-*.webp",
           "line": 92
+        },
+        {
+          "url": "https://img.test/phase03.webp",
+          "line": 113
         }
       ]
     },
@@ -60902,6 +60906,36 @@
           "line": 6
         }
       ]
+    },
+    {
+      "path": "work/phase03/bump-urls.mjs",
+      "bytes": 1418,
+      "sha256": "f55be80551db1697fb95957c35ab7477c243c592ee7f7631715512afb7d22360",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
     }
   ],
   "files": [
@@ -61052,8 +61086,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 191523,
-      "sha256": "674d22e34b6fa2c3c1cb9ea6c0873bcf0a122b3dc52155c8645f3bb41aab4336"
+      "bytes": 191528,
+      "sha256": "b693860ce67222905a47bbfae80c0d399e858fb8d389ea0d5e1e983f5fc40904"
     },
     {
       "path": "apple-touch-icon.png",
@@ -62222,8 +62256,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 162869,
-      "sha256": "a5acf65a06dbd8268f4a1cfdba967f39decd61625dd7a729678b428a860b9972"
+      "bytes": 165284,
+      "sha256": "6aa67e4d802a3436d40996de0b4005b6b36e82a30b94443046f54a809c48db40"
     },
     {
       "path": "css/admin/sidebar-interaccion.css",
@@ -63022,6 +63056,12 @@
       "extension": ".md",
       "bytes": 33188,
       "sha256": "37d09e8cfb618f8c8ff6750f422dca843ada845e9fef0822fa09b7ff6fad846c"
+    },
+    {
+      "path": "docs/agent/PHASE03_ADMIN_PRODUCT_EDITOR.md",
+      "extension": ".md",
+      "bytes": 6139,
+      "sha256": "56220f0660471533c4795085e0d9c6aa17d1b7adbbe41bf6e6b05a4c6dd8f02c"
     },
     {
       "path": "docs/agent/PRECUTOVER_PEDIDOS_20261013.md",
@@ -64874,8 +64914,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 441300,
-      "sha256": "c71b54a4f63ae1c4d37e3b2c47f9d42c50fc414d41faf358b5bf853f55d000d2"
+      "bytes": 441304,
+      "sha256": "76497be817cbd13331313f41e4dbcfb671d3dd756cda9b69601ff3b22cbf8e84"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -65198,8 +65238,8 @@
     {
       "path": "js/admin/products/controles-editor-producto.js",
       "extension": ".js",
-      "bytes": 34600,
-      "sha256": "05501fffa28e6ac290f7ac1a87fc159078460a77f92b0b1297cf688518151deb"
+      "bytes": 34873,
+      "sha256": "9d3a7ee92bfaac872177bf02b7b6ad45a4706077b67f805e11f0902af37c2db6"
     },
     {
       "path": "js/admin/products/editor-comercial-core.mjs",
@@ -65210,8 +65250,8 @@
     {
       "path": "js/admin/products/editor-comercial-interfaz.js",
       "extension": ".js",
-      "bytes": 12782,
-      "sha256": "8d2a1790935b04b5c0e7a571b780558988f55bfc7e38f10ae9e1b53c7d6b3bc3"
+      "bytes": 12785,
+      "sha256": "4f1bdf87655ae2f6c1a4e60178d1a7bf3d56045ded4939616b0406ea8ea76b61"
     },
     {
       "path": "js/admin/products/editor-editorial-interfaz.js",
@@ -65246,8 +65286,8 @@
     {
       "path": "js/admin/products/galeria-unificada.js",
       "extension": ".js",
-      "bytes": 24307,
-      "sha256": "002a75b7e79f25d42b3d5d1cfb4765c07cc9f4af2cfa4c2a020bde06faf08fe0"
+      "bytes": 25140,
+      "sha256": "beb1928b619a7beb22ecb35c50fe2cf8356838cae1f7d9a3b7d72d3f813469c0"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -65270,8 +65310,8 @@
     {
       "path": "js/admin/products/interfaz-productos-adaptable.js",
       "extension": ".js",
-      "bytes": 43079,
-      "sha256": "22565e474c977ec058636389cd5741342d82c69c9c5d9fbb572466b84e5309da"
+      "bytes": 44166,
+      "sha256": "4c3115efa6178573e201fadb697676665594046b25c6cb003837c6e49d4a57c3"
     },
     {
       "path": "js/admin/products/maestro-productos-core.mjs",
@@ -65379,7 +65419,7 @@
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
       "bytes": 138570,
-      "sha256": "4bc574b1c374a32e5192bf7ca73dc209dabf633967c61c1508c6731c6abb07da"
+      "sha256": "9568682bd507e80f7d00645ef13dbbb20f08e6c19d7d52b2d713a79bbdbb8c3e"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -67964,8 +68004,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 80592,
-      "sha256": "3499439fb0d685e7eec9178d065adfff1e065da9309ba8abbc818b089eb629c8"
+      "bytes": 80604,
+      "sha256": "136ab26e3cf2e4e3d68295d738fab9c504d5b7bb215b73844aa639aa890eaad5"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -68516,8 +68556,8 @@
     {
       "path": "tests/admin/editor-comercial.test.mjs",
       "extension": ".mjs",
-      "bytes": 9906,
-      "sha256": "2986c58c8e222bef07dd525256e781be7594552530e0ecf99ca1f50025155d0b"
+      "bytes": 10729,
+      "sha256": "a51d601236e7fe93cfd0e788b7ae0a8c527f21f8d6163ea4066173cde8f42310"
     },
     {
       "path": "tests/admin/editor-editorial.test.mjs",
@@ -71132,8 +71172,8 @@
     {
       "path": "tests/ui-ux/product-editor-tabs.spec.js",
       "extension": ".js",
-      "bytes": 13736,
-      "sha256": "db9b6993237808172d94f581e1c51ebed4be5742e48ad6d85c365a3ede9fcd27"
+      "bytes": 22863,
+      "sha256": "3a59550de1eda46b6db48deea45f2b57520e521a699d8ed3d9d67b43dff98648"
     },
     {
       "path": "tests/ui-ux/product-first-paint.spec.js",
@@ -71386,6 +71426,156 @@
       "extension": ".mjs",
       "bytes": 48273,
       "sha256": "e53392ea5f0e654acf1866c16564b340661ed5d238f692c3c2bd40b940f924a2"
+    },
+    {
+      "path": "work/phase03/REPORT.md",
+      "extension": ".md",
+      "bytes": 6139,
+      "sha256": "56220f0660471533c4795085e0d9c6aa17d1b7adbbe41bf6e6b05a4c6dd8f02c"
+    },
+    {
+      "path": "work/phase03/after-1440.png",
+      "extension": ".png",
+      "bytes": 140961,
+      "sha256": "8446fd5ce598c9103111c8af7d73e0709f22602f7eb956c5fd945b3a0e83d935"
+    },
+    {
+      "path": "work/phase03/after-390.png",
+      "extension": ".png",
+      "bytes": 45741,
+      "sha256": "e834165088551a0f2e18e743603c3ea770f6870e41be9962e1f442a4af3bc727"
+    },
+    {
+      "path": "work/phase03/before-1440.png",
+      "extension": ".png",
+      "bytes": 95762,
+      "sha256": "2b4eb5d0941439060c66688e75a2d53a9bc17b3653547dc29ac0c9e65a015adf"
+    },
+    {
+      "path": "work/phase03/bump-urls.mjs",
+      "extension": ".mjs",
+      "bytes": 1418,
+      "sha256": "f55be80551db1697fb95957c35ab7477c243c592ee7f7631715512afb7d22360"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-Im-448c7-arte-distribución-a-390x844-chromium/imagenes-390.png",
+      "extension": ".png",
+      "bytes": 40397,
+      "sha256": "b7359df09148dfb8a747edd2039fb835205cc18c96d0de68a2a4d82e65f4dc7b"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-Im-55e62-te-distribución-a-1920x1080-chromium/imagenes-1920.png",
+      "extension": ".png",
+      "bytes": 50097,
+      "sha256": "9361dce38ec7976def226d5f52057e1b0036f5341d8beb4c40900db437528f59"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-Im-a52bf-rte-distribución-a-768x1024-chromium/imagenes-768.png",
+      "extension": ".png",
+      "bytes": 54676,
+      "sha256": "bd923abb55c0ee4ef0bf5358533528f9b3337da5deb1fbc95a60cc1d3a4c74a7"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-Im-b458a-rte-distribución-a-1024x768-chromium/imagenes-1024.png",
+      "extension": ".png",
+      "bytes": 50212,
+      "sha256": "05ef87eeb90a229f95d313fca241cf99ed1657a3ab691629fbf62248ae2a7882"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-pa-06e89-leto-móvil-vertical-390x844-chromium/dashboard-390x844.png",
+      "extension": ".png",
+      "bytes": 47405,
+      "sha256": "5ac7bce3e41db4b8ee80d38873be77e126059c3286f77ee087277820bdfb6d73"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-pa-07147--grande-horizontal-1180x820-chromium/dashboard-1180x820.png",
+      "extension": ".png",
+      "bytes": 77451,
+      "sha256": "315ca56ae4fd6fb84ce03c0b549cffe35c2b123e1b8707931c99d134493ea301"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-pa-4700d-et-grande-vertical-820x1180-chromium/dashboard-820x1180.png",
+      "extension": ".png",
+      "bytes": 80100,
+      "sha256": "9955a886a75706becf1518a2a520b3a5115c2e6aed2448364e148ccf8013c5d5"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-pa-7d492-t-compacta-vertical-600x960-chromium/dashboard-600x960.png",
+      "extension": ".png",
+      "bytes": 70577,
+      "sha256": "e4b75fc6999a4b06b89d54b69220d19eafeeca2c456d0fa559822bf9c5e4c29b"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-pa-a1123-to-desktop-amplio-2560x1440-chromium/dashboard-2560x1440.png",
+      "extension": ".png",
+      "bytes": 102425,
+      "sha256": "a1cf92f2307d3b85f9a7f07de945564b72dab5473bee9348b9cefbf4671c7be1"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-pa-a94b1-to-tablet-vertical-768x1024-chromium/dashboard-768x1024.png",
+      "extension": ".png",
+      "bytes": 74503,
+      "sha256": "7563abe1667a7d9b886d828c7a807a75001c4dae54b0d089323d01167fa75a38"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-pa-d4e04-compacta-horizontal-960x600-chromium/dashboard-960x600.png",
+      "extension": ".png",
+      "bytes": 59495,
+      "sha256": "5156e48436106cc8eca031290e73aa9cdd020c1367df029815bc35063e5dab69"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-pa-e11d0--tablet-horizontal-1024x768-chromium/dashboard-1024x768.png",
+      "extension": ".png",
+      "bytes": 71674,
+      "sha256": "4646d663d9bffc3b14ec3ba227f880f54dc68cb8386d002ac7eb9bfb96ffc20a"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-pa-ef490-to-móvil-horizontal-844x390-chromium/dashboard-844x390.png",
+      "extension": ".png",
+      "bytes": 40133,
+      "sha256": "264b601ac7c9873735bac00212ad586aa1fb12188f1530605db788c65dc8479e"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-panel-completo-desktop-1920x1080-chromium/dashboard-1920x1080.png",
+      "extension": ".png",
+      "bytes": 89296,
+      "sha256": "b43da858c2eefad55fa9476b42f314549cf5a39a0ab40394d62c767861009824"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-panel-completo-laptop-1366x768-chromium/dashboard-1366x768.png",
+      "extension": ".png",
+      "bytes": 75627,
+      "sha256": "4f279c7e9607bf37bae3ba965ad7e1f72e8468ae7a6347282bfc8a1f66ba8bc1"
+    },
+    {
+      "path": "work/phase03/final-results/ui-ux-admin-all-devices-panel-completo-móvil-pequeño-320x568-chromium/dashboard-320x568.png",
+      "extension": ".png",
+      "bytes": 31233,
+      "sha256": "90eb553c8f54238553f1a13ecedf98a8c6286119dc72c6634775beb7f57ea748"
+    },
+    {
+      "path": "work/phase03/inspect.json",
+      "extension": ".json",
+      "bytes": 3726,
+      "sha256": "01fcdb8bd34231ee717d5f2f2996ad9321ac15fa3c41b91cb9b71ad326c2b106"
+    },
+    {
+      "path": "work/phase03/inspect.png",
+      "extension": ".png",
+      "bytes": 86595,
+      "sha256": "2106da9399112a18a1c287e731ee69c161073a257fdbb8044753bad313282a6e"
+    },
+    {
+      "path": "work/phase03/partial-results/.last-run.json",
+      "extension": ".json",
+      "bytes": 45,
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+    },
+    {
+      "path": "work/phase03/pr-body.md",
+      "extension": ".md",
+      "bytes": 1059,
+      "sha256": "3d1178f25e85365e5259123a792fb4bf3856feab3224d7c57d00945bc3c7f0ba"
     }
   ],
   "sitemapRoutes": [],

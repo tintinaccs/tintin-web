@@ -1,6 +1,6 @@
 import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1-editor-search-20261028-2-guiado-1269-20261029-1';
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261031-seo-espacios-2';
-import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261029-performance-1';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261102-phase03-editor-1';
 import {mountLocalVision} from './vision-productos-interfaz.js?v=tintin-20261024-editor-intuitivo-1';
 import {mountProductSuggestions} from './sugerencias-producto-interfaz.js?v=tintin-20261029-performance-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
@@ -221,7 +221,11 @@ export function enhanceProductEditor() {
   for(const [id,,groups] of tabs){
     let panel=grid.querySelector('#prod-panel-'+id);
     if(!panel){panel=document.createElement('div');panel.id='prod-panel-'+id;panel.className='tt-product-tabpanel';panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby','prod-tab-'+id);panel.tabIndex=0;grid.append(panel);}
-    for(const section of groups){const group=card.querySelector(`[data-product-section="${section}"]`);if(group && group.parentElement!==panel)panel.append(group);}
+    for(const section of groups){
+      const group=card.querySelector(`[data-product-section="${section}"]`);
+      const target=section==='availability' && card.querySelector('#prod-editor-section').value==='photos'?card.querySelector('#prod-panel-photos'):panel;
+      if(group && group.parentElement!==target)target.append(group);
+    }
   }
   const priceFields=card.querySelector('[data-product-section=prices] .tt-editor-section-fields');
   // El panel pertenece al formulario, fuera de la galería que se destruye al reabrir.
@@ -417,6 +421,11 @@ function showSection(card,value,expand=false) {
   const select=card.querySelector('#prod-editor-section'),layout=card.querySelector('.tt-editor-layout');
   if(!select || !layout)return; // La superficie también puede abrirse antes de montar los campos.
   if(select.value!==value)select.value=value;
+  // Fotos, opciones y cantidades comparten los campos originales. La pestaña
+  // de precios sigue ofreciendo acceso al mismo inventario, sin otro borrador.
+  const availability=card.querySelector('[data-product-section="availability"]');
+  const inventoryTarget=card.querySelector(value==='photos'?'#prod-panel-photos':'#prod-panel-prices');
+  if(availability && inventoryTarget && availability.parentElement!==inventoryTarget)inventoryTarget.append(availability);
   if(layout.dataset.editorSection!==value)layout.dataset.editorSection=value;
   for(const panel of card.querySelectorAll('.tt-product-tabpanel')){
     const hidden=panel.id!=='prod-panel-'+value;if(panel.hidden!==hidden)panel.hidden=hidden;
@@ -429,7 +438,7 @@ function showSection(card,value,expand=false) {
   for(const field of card.querySelectorAll('[data-product-section]')){
     const hidden=field.dataset.permissionHidden==='true';if(field.hidden!==hidden)field.hidden=hidden;
     // Los campos principales están abiertos; los internos conservan su despliegue.
-    if(expand && field.dataset.productSection!=='private' && tabs.find(([id])=>id===value)[2].includes(field.dataset.productSection)){
+    if(expand && field.dataset.productSection!=='private' && (tabs.find(([id])=>id===value)[2].includes(field.dataset.productSection) || value==='photos' && field.dataset.productSection==='availability')){
       field.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
       const fields=field.querySelector(':scope > .tt-editor-section-fields');if(fields?.hidden)fields.hidden=false;
     }
@@ -442,7 +451,7 @@ function showSection(card,value,expand=false) {
 }
 
 const descriptionSizes = new WeakMap();
-function fitProductDescription(card) {
+function fitProductDescription(card, editing=false) {
   const field = card?.querySelector('#prod-description');
   if (!field?.getClientRects().length) return;
   const signature = `${field.value}|${field.clientWidth}|${window.visualViewport?.height || innerHeight}`;
@@ -456,7 +465,10 @@ function fitProductDescription(card) {
   const height = Math.min(limit, Math.max(96, field.scrollHeight + 2));
   field.style.height = `${height}px`;
   field.style.overflowY = field.scrollHeight > height - 2 ? 'auto' : 'hidden';
-  field.scrollTop = fieldScroll;
+  // Al escribir al final, conservar el scroll anterior esconde la línea nueva
+  // después de medir con height:auto. La posición de lectura se conserva al
+  // redimensionar; la escritura mantiene visible el final que se está editando.
+  field.scrollTop = editing && document.activeElement===field && field.selectionEnd===field.value.length ? field.scrollHeight : fieldScroll;
   if (container) container.scrollTop = scroll;
 }
 
@@ -468,7 +480,7 @@ export function installProductInterface() {
   const card=document.getElementById('prod-form-card');
   card?.addEventListener('keydown',event=>{if((event.ctrlKey || event.metaKey) && event.key.toLowerCase()==='s'){event.preventDefault();card.querySelector('#prod-save-btn:not(:disabled)')?.click();}});
   card?.addEventListener('click',event=>{if(event.target.closest('#prod-save-btn'))lastError='';},{capture:true});
-  card?.addEventListener('input',event=>{if(event.target.id==='prod-description')fitProductDescription(card);refreshEditorHeading(card);const error=card.querySelector('#prod-form-error');if(error?.dataset.editorField===event.target.id){error.textContent='';error.style.display='none';lastError='';}if(event.target.getAttribute('aria-invalid')==='true'){event.target.removeAttribute('aria-invalid');event.target.removeAttribute('aria-describedby');}});
+  card?.addEventListener('input',event=>{if(event.target.id==='prod-description')fitProductDescription(card,true);refreshEditorHeading(card);const error=card.querySelector('#prod-form-error');if(error?.dataset.editorField===event.target.id){error.textContent='';error.style.display='none';lastError='';}if(event.target.getAttribute('aria-invalid')==='true'){event.target.removeAttribute('aria-invalid');event.target.removeAttribute('aria-describedby');}});
   card?.addEventListener('change',()=>refreshEditorHeading(card));
   if (card) new MutationObserver(records=>{
     // Texto derivado del formulario no exige volver a montar sus controles.
