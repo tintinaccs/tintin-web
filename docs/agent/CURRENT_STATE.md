@@ -1,3 +1,13 @@
+## 2026-11-01 America/Buenos_Aires — Fase03: administración y editor de productos
+
+Codex /root; rama `codex/phase03-product-editor`, base integrada344a2936580a8c3ca6c8f1dc112f940334f0b077 (#1309). Base inicial5b694fe4. La continuación de02 quedó fusionada con CI41375418525/1 SUCCESS; sus runs de main y salud se siguen por separado.
+- Fotografías, opciones e inventario comparten la superficie Fotos y opciones: tres áreas alineadas en ancho suficiente, dos filas en tablet y apiladas en móvil. Precio y stock accede a los mismos nodos; no se duplican matriz ni escritores. La galería general no reserva un lateral vacío; reemplazar recupera el espacio adecuado.
+- Corregido: ajustar la altura de descripción restauraba el scroll anterior y ocultaba la línea recién escrita al final. El visor de portada ahora es un dialog con teclado, foco contenido y retorno al disparador. Quitar opciones nuevas con fotos asociadas explica el bloqueo y conserva datos.
+- PASS_LOCAL: 110 pruebas Node de dominio/referencias;130 Chromium de editor/admin, con41 de shell;13 específicas tras incorporar02, incluyendo texto largo guardado/reabierto,30combinaciones con búsqueda/paginación, stock independiente y scroll visible estable. Límite1000 y rechazo de1100 sin mutación; compatibilidad V1/V2, CAS, permisos y costo privado. Conteos solapados.
+- Evidencia inicial conservada:99/100 en primera suite; la aserción fallida medía scrollY absoluto al cambiar la altura del aviso. Se comprobó posición visible constante y ausencia de retorno arriba en las repeticiones. Dos casos iniciales reprodujeron los defectos de descripción/explicación. El navegador empaquetado faltaba; se usó Chromium151/Playwright1.64.1. El intento completo audit:admin-responsive no se acredita localmente por ese arranque; sus casos pertinentes y el gate completo de CI se conservan.
+- Gates locales: estilos, medios42, base admin, colores153+36, arquitectura y caché. URLs renovadas por dependencia y derivados con constructores canónicos. Plan protegido contra main344a2936; CI/fusión/publicación se acreditan únicamente por sus recibos terminales.
+- Informe: [PHASE03_ADMIN_PRODUCT_EDITOR.md](PHASE03_ADMIN_PRODUCT_EDITOR.md); evidencia: [validation.json](evidence/phase03-20261102/validation.json). NOT_VERIFIED: sesión externa y persistencia real Firestore/Sheets, upload real, Safari/iOS/hardware/lector. Sin migraciones ni escrituras sobre datos reales. Seguridad03A y comercio03B conservan sus pendientes de01.
+
 ## 2026-11-01 — Admin app móvil, Fase 27: Modo oscuro
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: los colores del panel salen de tokens `--admin-color-*` (publicados en :root) y de una segunda capa `--tt-ui-*`/`--tt-surface` (sistema-superficies-tintin.css); además hay colores fijos y reglas con `!important` en dashboard-control.css. Primer intento solo con tokens dejó fondos claros y texto oscuro sobre oscuro.
@@ -5835,3 +5845,52 @@ PR documental #1308 creada; candidato inicial9533fd07a69eef92428e30f5295277c7d36
 run41367835688/1. Este enlace requiere CI del head final; no se hereda el run
 anterior tras actualizar. Recibo terminal/merge en #1308; la base de los hallazgos
 sigue siendo085953dc. Siguiente fase funcional02, no iniciada por esta auditoría.
+
+## 2026-11-02 UTC — Fase 02 visual pública (Codex /root, GPT-6)
+
+Nueva instrucción de la titular:02 corresponde a reparación visual pública.
+El antiguo alcance de seguridad pasa a03A, antes de comercio03B; los HIGH de01
+siguen abiertos. Se actualizó TINTIN_GLOBAL_PHASES sin presentar UI como una
+reparación de permisos, stock, autenticación o pedidos.
+
+Base consultada:5b694fe4adaa9e356f3c2f8e74d2de5ca0f5adde, #1308 MERGED.
+CI41370328636/1, CodeQL41370329571/1 y salud41370330002/1 SUCCESS del base.
+Rama aislada fix/phase02-public-responsive-20261102. #1306 continúa abierta en
+976601a99772e5390448b8da2edda79d9d6c1429; no se modificó su rama.
+
+Tres defectos MEDIUM corregidos: load/pageshow tardío ignoraba interacción local;
+UI Quality volvía a escribir scroll durante recarga aunque el cargador ya había
+resuelto la entrada; foco rosa/translúcido de bajo contraste en login, checkout y
+producto. Se conservan reinicio explícito, navegación y bfcache. Contornos de
+teclado consumen la tinta semántica existente; botones, marca y estructura se
+conservan. La galería ya era sticky/alineada: no se inventó una reparación allí.
+
+PASS_LOCAL:10 tests Node de scroll;20 casos nuevos de navegador (12 de ficha con
+3100 caracteres y precios largos,4 de foco,4 de load real demorado/orientación);
+49 regresiones de interacción (registro simulado39, historial3, helpers UI/a11y7);
+smoke18rutas con ciclos de paneles y geometría final aislada144/144. Gates de
+estilos, colores, arquitectura, shell, producto, UI/UX y accesibilidad aprobados.
+Build y caché mediante herramientas canónicas; protección se valida sobre el
+plan generado del candidato. Conteos solapados; no equivalen a cobertura única.
+
+Se interrumpieron suites locales amplias simultáneas por exceso de concurrencia
+en dos vCPU; no se cuentan como PASS. La geometría tuvo timeouts de12s y luego
+aprobó aislada, con el mismo plazo y aserciones. Los auditores8/10 exigían el
+comando npm original: se preservó y se registran los nuevos casos una sola vez
+desde phase8-ui-ux.spec.js, sin debilitar controles ni agregar workflows.
+
+Sólo hay cambios semánticos en foco y entrada/scroll; los demás cambios de JS
+de navegación, tienda y estado-productos son URLs inmutables propagadas. Rules,
+backend, lógica comercial, perfiles y autenticación permanecen sin cambios.
+Capturas en artifacts/phase02 y futuros artefactos de Actions. Informe reproducible:
+[PHASE02_PUBLIC_VISUAL_REPAIR.md](PHASE02_PUBLIC_VISUAL_REPAIR.md).
+
+Catálogo nativo executor consultado de nuevo:skills:[]. Los cinco Skills de
+diseño se leyeron como referencia, no se afirma activación nativa. Lectores de
+pantalla, WebKit, teléfonos físicos, CWV y flujos completos de proveedores reales
+siguen NOT_VERIFIED. No se modificaron datos de clientas ni se enviaron pedidos,
+correos o cobros reales.
+
+Recibo por PR/head/run/intento, fusión y verificación posterior:
+[PR de la rama](https://github.com/tintinaccs/tintin-web/pulls?q=is%3Apr+head%3Afix%2Fphase02-public-responsive-20261102).
+No heredar CI del base ni cerrar con ejecuciones pendientes. Siguiente:03A.

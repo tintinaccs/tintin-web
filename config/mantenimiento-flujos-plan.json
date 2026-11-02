@@ -1,33 +1,52 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "7dfe8c9f306168994e324c34135230d8a5da3f71",
-  "reason": "Retirar escritura de CI y conciliar huellas reales pendientes de main sin alterar registros ni controles",
+  "baseCommit": "344a2936580a8c3ca6c8f1dc112f940334f0b077",
+  "reason": "Fase03: editor conectado, descripción completa, visor accesible y conservación de opciones y variantes",
   "files": [
     {
-      "path": ".github/workflows/auditar-tintin.yml",
-      "oldHash": "1619395707f1cd8fdd872687939e1b7c63862cc58e2741d1823a1eca29df166e",
-      "newHash": "5ea563acbd1297d78fc74ccbe38d36a31f984f4211716cb5319711d1a158cfa8"
-    },
-    {
       "path": "admin.html",
-      "oldHash": "1d98f7b4df0630c8a4e1e3c9593d63a4861d7c38a523706e4271ccfc08d59695",
-      "newHash": "674d22e34b6fa2c3c1cb9ea6c0873bcf0a122b3dc52155c8645f3bb41aab4336"
+      "oldHash": "117b06b22e63c10109bf8d1ff3d62f6c0c89201fffeb7971096417606846ae53",
+      "newHash": "f6b8caf47d7486c135ef81f1011cbfe1f12dcf2d3c6ad54322dee810e7705e23"
     },
     {
-      "path": "AGENTS.md",
-      "oldHash": "af843165479a2bed288004dc4d8ed7619bcd284e315e002be9fb56df509b75e8",
-      "newHash": "cee554d0d53b61c95c4d759da27099df5bb64bf8a727a713c006789093c63ea9"
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "a5acf65a06dbd8268f4a1cfdba967f39decd61625dd7a729678b428a860b9972",
+      "newHash": "6aa67e4d802a3436d40996de0b4005b6b36e82a30b94443046f54a809c48db40"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "c71b54a4f63ae1c4d37e3b2c47f9d42c50fc414d41faf358b5bf853f55d000d2",
+      "newHash": "76497be817cbd13331313f41e4dbcfb671d3dd756cda9b69601ff3b22cbf8e84"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "4bc574b1c374a32e5192bf7ca73dc209dabf633967c61c1508c6731c6abb07da",
+      "newHash": "9568682bd507e80f7d00645ef13dbbb20f08e6c19d7d52b2d713a79bbdbb8c3e"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "ef255b2e457061cd074986bf8d366f8dce6c080cdc5196f03d206d19af5f133a",
-      "newHash": "3499439fb0d685e7eec9178d065adfff1e065da9309ba8abbc818b089eb629c8"
+      "oldHash": "8817932a9e174029160a223b705402683a7b3b47e271c707d1f861d6d3deff45",
+      "newHash": "e0134226c0b5943a154febd5f5c095059bdda67881386fde97e0a3708b783874"
     }
   ],
   "affectedRecords": [
-    "github-actions",
-    "github-actions__deployments__30",
-    "github-actions__pruebas-automatizadas__31",
-    "pruebas-automatizadas"
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "correos",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
   ]
 }

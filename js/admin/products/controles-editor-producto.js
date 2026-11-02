@@ -244,9 +244,9 @@ function variantBuilder(input) {
         });apply.disabled=input.readOnly || protectedOption;name.disabled=input.readOnly || protectedOption;rename.append(renameTitle,name,apply);row.append(rename);
         const isRetired=retired(key,option);
         const remove=button(isRetired?'Restaurar':'Quitar',(isRetired?'Restaurar ':'Quitar ')+key+': '+option,()=>{if(input.readOnly)return;
-          if(!protectedOption && mediaRows().some(media=>media[key]===option && window.TintinProductMedia?.rowImages(media).length)){error.textContent='Esta opción tiene fotografías asociadas. Revisá sus asociaciones en Variantes antes de quitarla.';return;}
+          if(!isRetired && !protectedOption && mediaRows().some(media=>media[key]===option && window.TintinProductMedia?.rowImages(media).length)){error.textContent='Esta opción tiene fotografías asociadas. Revisá sus asociaciones en Variantes antes de quitarla.';return;}
           const handled=!input.dispatchEvent(new CustomEvent('tintin:variant-option-availability',{cancelable:true,detail:{attribute:key,value:option,active:isRetired}}));
-          if(handled){refresh();[...chips.querySelectorAll('button')].find(button=>button.getAttribute('aria-label')===(isRetired?'Quitar ':'Restaurar ')+key+': '+option)?.focus({preventScroll:true});return;}
+          if(handled){error.textContent='';refresh();[...chips.querySelectorAll('button')].find(button=>button.getAttribute('aria-label')===(isRetired?'Quitar ':'Restaurar ')+key+': '+option)?.focus({preventScroll:true});return;}
           if(protectedOption || isRetired){error.textContent='Conservá esta identidad histórica y revisá su disponibilidad en la matriz.';return;}
           if(hasDraftData(key,option)){error.textContent='Esta opción tiene cantidades o precios configurados. Revisalos antes de quitarla o dejala sin disponibilidad.';return;}
           const map=groups();map.set(key,values.filter(other=>other!==option));write(map);});

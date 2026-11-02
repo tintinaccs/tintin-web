@@ -1,0 +1,115 @@
+{
+  "auditedBase": "5b694fe4adaa9e356f3c2f8e74d2de5ca0f5adde",
+  "runtimeChangesOnlyVersionTags": [
+    "js/cargador-mantenimiento-pagina.js",
+    "js/components/navigation/compartido/carga-navegacion.js",
+    "js/components/navigation/compartido/control-busqueda.js",
+    "js/components/navigation/entrada-navegacion-publica.js",
+    "js/core/store/estado-productos.js",
+    "js/inicio-navegacion-publica.js",
+    "js/pages/product/mantenimiento-producto.js",
+    "tienda.js"
+  ],
+  "unchangedHighRiskPaths": true,
+  "workflowChanges": [],
+  "agent": "Codex /root, GPT-6",
+  "dateUTC": "2026-11-02",
+  "scope": "public visual repairs; not commercial integrity approval",
+  "local": {
+    "scrollUnit": {
+      "pass": 10,
+      "fail": 0
+    },
+    "newBrowserCases": {
+      "pass": 20,
+      "fail": 0,
+      "longContentWidths": [
+        320,
+        390,
+        600,
+        767,
+        768,
+        820,
+        844,
+        1024,
+        1025,
+        1280,
+        1440,
+        1920
+      ],
+      "descriptionCharacters": 3100
+    },
+    "interactionRegression": {
+      "pass": 49,
+      "fail": 0,
+      "registrationMockedTransport": 39,
+      "profileHistory": 3,
+      "uiHelpers": 2,
+      "accessibilityHelpers": 5
+    },
+    "canonicalGeometry": {
+      "pass": 144,
+      "fail": 0,
+      "mode": "isolated execution, existing deadline unchanged"
+    },
+    "smoke": {
+      "routes": 18,
+      "status": "PASS",
+      "includes": "shared navigation panel cycles"
+    },
+    "preFix": {
+      "scrollFourInputRegressions": "FAIL: actual0 expected540",
+      "lateQualityReload": "FAIL: actual0 expected540",
+      "focus": {
+        "failed": 3,
+        "passed": 13
+      },
+      "baseBrowser": 80,
+      "baseGeometry": 144
+    },
+    "gates": {
+      "styles": "PASS",
+      "colors": "PASS",
+      "architecture": "PASS",
+      "publicShell": "PASS",
+      "product": "PASS",
+      "ui": "PASS",
+      "a11y": "PASS",
+      "buildPages": "PASS",
+      "cacheVersioning": {
+        "files": 410,
+        "dynamicLoads": 67,
+        "status": "PASS"
+      },
+      "protectedFlows": {
+        "status": "PASS",
+        "records": 78,
+        "files": 544,
+        "maintenanceFiles": 32,
+        "affectedRecords": 28
+      }
+    },
+    "infrastructure": {
+      "cpuQuota": "2 vCPU (200000 100000)",
+      "concurrentBroadSuites": "INTERRUPTED, not PASS",
+      "concurrentGeometry": "TIMEOUT12s then INTERRUPTED, not PASS",
+      "isolatedGeometryRetry": "PASS144/144 with original assertions and deadline",
+      "gateCommandIntegration": "npm command preserved; new cases required by existing canonical phase8 spec"
+    }
+  },
+  "nativeSkills": {
+    "executorCatalog": [],
+    "mode": "repository instruction files read as references"
+  },
+  "limitations": [
+    "No WCAG certification",
+    "No physical phones or screen reader verification",
+    "No WebKit/Safari verification",
+    "No field CWV measurement",
+    "No real customer data, orders, payments or email writes",
+    "Full authenticated production journeys NOT_VERIFIED"
+  ],
+  "countsOverlap": true,
+  "githubReceipt": "https://github.com/tintinaccs/tintin-web/pulls?q=is%3Apr+head%3Afix%2Fphase02-public-responsive-20261102",
+  "next": "03A security and writing authorities; Phase01 findings remain open"
+}

@@ -38,9 +38,14 @@
   try { history.scrollRestoration = 'manual'; } catch {}
   var entryScrollBehavior;
   var entryScrollRevision = 0;
-  var navigationSurfaceUsed = false;
+  var entryPositionUsed = false;
+  // Una selección local o empezar a leer también consume la posición inicial.
+  // Imágenes/SDK tardíos no deben devolver arriba a quien ya está usando la página.
+  ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (name) {
+    window.addEventListener(name, function () { entryPositionUsed = true; }, { once: true, passive: true, capture: true });
+  });
   window.addEventListener('tintin:surface-change', function (event) {
-    if (event.detail?.surface && event.detail.surface !== 'none') navigationSurfaceUsed = true;
+    if (event.detail?.surface && event.detail.surface !== 'none') entryPositionUsed = true;
   }, { passive: true });
   function resetEntryScroll(surface) {
     window.TintinScrollLock?.resetPosition?.();
@@ -75,14 +80,16 @@
   }
   window.TintinPageScroll = { reset: resetEntryScroll };
   resetEntryScroll();
-  document.addEventListener('DOMContentLoaded', resetEntryScroll, { once: true });
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!entryPositionUsed) resetEntryScroll();
+  }, { once: true });
   window.addEventListener('load', function () {
     // Recursos tardíos no deben reiniciar una posición que el usuario ya
-    // conservó al abrir/cerrar búsqueda, carrito o cuenta.
-    if (!navigationSurfaceUsed) resetEntryScroll();
+    // conservó al interactuar con el contenido o al abrir/cerrar un panel.
+    if (!entryPositionUsed) resetEntryScroll();
   }, { once: true, passive: true });
   window.addEventListener('pageshow', function (event) {
-    if (event?.persisted || !navigationSurfaceUsed) resetEntryScroll();
+    if (event?.persisted || !entryPositionUsed) resetEntryScroll();
   }, { passive: true });
 
   // El sitio oficial vive en Cloudflare Pages. Conserva ruta, parámetros y hash
@@ -881,7 +888,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261101-admin-spaced-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261102-public-focus-scroll-1');
     }
   }
 

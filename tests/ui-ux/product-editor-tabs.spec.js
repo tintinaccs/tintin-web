@@ -147,6 +147,11 @@ test('fase03: no quitar una opción nueva con fotografías asociadas',async({pag
  await tab(page,'Variantes').click();await page.getByRole('button',{name:'Fotos de Color: Dorado',exact:true}).click();await page.getByLabel('Usar foto 1 en Dorado',{exact:true}).check();
  await tab(page,'Fotos y opciones').click();await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();
  await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado');await expect(page.locator('.tt-editor-control-error')).toContainText('fotografías');
+ await page.getByLabel('Stock: Dorado',{exact:true}).fill('2');
+ const availability=page.getByRole('checkbox',{name:'Habilitada para la venta: Dorado',exact:true});await availability.uncheck();
+ await page.getByRole('button',{name:'Restaurar Color: Dorado',exact:true}).click();
+ await expect(availability).toBeChecked();await expect(page.locator('.tt-editor-control-error')).toBeEmpty();
+ expect(await page.evaluate(()=>window.qaProductController.serializeProductForm().variantMedia.some(row=>row.Color==='Dorado' && row.imageUrls?.length))).toBe(true);
 });
 
 test('fase03: descripción larga completa, edición y crecimiento con scroll interno explícito',async({page})=>{

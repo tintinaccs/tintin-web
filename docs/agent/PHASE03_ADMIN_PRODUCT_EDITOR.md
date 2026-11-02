@@ -2,11 +2,14 @@
 
 Fecha de trabajo: 2026-11-01, America/Buenos_Aires. Codex /root.
 Base inicial: main `5b694fe4adaa9e356f3c2f8e74d2de5ca0f5adde`.
-Rama: `codex/phase03-product-editor`. Estado provisional: IN_PROGRESS.
+Rama: `codex/phase03-product-editor`. Estado: PASS_LOCAL. CI y publicación sólo mediante el recibo terminal del SHA final.
 
 La titular pidió continuar la conversación de la fase visual y aplicar el nuevo
 alcance administrativo. El texto adjunto se leyó completo. La PR #1309 contiene
-la fase 02 visual; su seguimiento y conciliación se registran antes del cierre.
+la fase 02 visual: fusionada en344a2936580a8c3ca6c8f1dc112f940334f0b077
+con CI41375418525/1 SUCCESS (head29e8685c). Esta rama incorpora ese main;
+los conflictos se limitaron a site-version y diagnostic-manifest, regenerados
+desde sus constructores.
 Esta fase no cierra por inferencia los hallazgos de seguridad o comercio de01.
 
 ## Diagnóstico y correcciones
@@ -47,7 +50,7 @@ mediante las pruebas administrativas existentes. No se implementan módulos ajen
 
 ## Validación y límites
 
-Resultados definitivos y comandos: ver `evidence/phase03-20261102/validation.json`.
+Resultados y comandos: ver `evidence/phase03-20261102/validation.json`.
 Las pruebas usan módulos/controladores reales con transporte, identidad y datos
 ficticios; no equivalen a una sesión externa autenticada ni a persistencia real
 en Firestore/Sheets. Las capturas usan imágenes de prueba identificadas como tales.
@@ -57,3 +60,32 @@ proveedores, autenticación, pedidos ni cobros reales. No se certifican hardware
 Safari/iOS, lector de pantalla ni un upload real a Cloudinary desde este entorno.
 GitHub/merge/publicación se acreditan por SHA y sus recibos terminales; iniciar
 un workflow o aprobar un test local no acredita producción.
+
+Validación antes de conciliar02: 100 pruebas Node de editor/comercio,10 de
+borrado/referencias y130 pruebas Chromium de administración/editor aprobadas.
+La primera suite amplia terminó99/100: una aserción comparaba scrollY absoluto
+pese a cambiar la altura del estado; se corrigió para exigir la misma posición
+visible del campo y ausencia de retorno arriba. El caso corregido y la
+paginación de30 combinaciones aprobaron en una ejecución propia y en la suite
+de130. El texto largo se guarda y reabre en el caso final de integración.
+
+Se conserva la evidencia inicial de dos reproducciones fallidas (línea final
+oculta y explicación ausente para fotos asociadas). El primer intento de
+navegador no arrancó porque faltaba el binario empaquetado; se usó Chromium
+151.0.7922.173 del entorno con Playwright1.64.1. El intento de audit:admin-responsive
+también falló por ese ejecutable: no se declara aprobado ese comando completo;
+se ejecutaron sus pruebas pertinentes con el ejecutable disponible. CI conserva
+el gate completo y su navegador bloqueado por package-lock.
+
+Tras conciliar02 aprobaron13/13 casos específicos, incluido guardar y reabrir
+la descripción de90líneas. Shell41casos y recorridos editoriales están incluidos
+en los130de navegador. Los conteos se solapan y no son cobertura única.
+
+Los110casos Node se repitieron sobre la base integrada y aprobaron. El build
+canónico y protección78registros/544archivos también aprobaron. Los intermedios
+se guardan fuera del árbol publicable; no se agregan capturas o scripts de QA al
+manifest de producción.
+
+La revisión final acotó la protección de fotos al retiro de la opción; restaurar
+su disponibilidad sigue permitido y limpia el aviso anterior. La regresión
+específica cubre bloqueo, desactivación, restauración y conservación de fotos.
