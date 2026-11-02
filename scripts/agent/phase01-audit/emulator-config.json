@@ -1,0 +1,15 @@
+{
+  "firestore": {
+    "rules": "__AUDITED_RULES_ABSOLUTE_PATH__"
+  },
+  "emulators": {
+    "firestore": {
+      "host": "127.0.0.1",
+      "port": 18189
+    },
+    "ui": {
+      "enabled": false
+    },
+    "singleProjectMode": true
+  }
+}

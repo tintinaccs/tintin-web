@@ -1,0 +1,20 @@
+{
+  "finding": "F02-STATS",
+  "cap": {
+    "globalOrders": 5001,
+    "ownedOrders": 1,
+    "persistedOrders": 0,
+    "persistedTotal": 0,
+    "failOnTruncationRequested": false
+  },
+  "race": {
+    "writes": [
+      30,
+      10
+    ],
+    "finalTotal": 10,
+    "correctLatestTotal": 30
+  },
+  "productionVolume": "NOT_VERIFIED",
+  "network": false
+}
