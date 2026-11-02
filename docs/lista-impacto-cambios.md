@@ -1,3 +1,7 @@
+## 2026-11-02 — Fase07: autoridad de metadata de reserva
+
+staffOrderInventoryTransitionValid rechaza inventory* aislado y exige permiso cambiarEstado para transición coherente existente. Conserva Super Admin, pagos sin metadata y escritores canónicos. Regresiones reales SDK para roles, permisos deshabilitados y revisión falsa; pruebas de backend/colas/webhooks/backup aisladas. Sin cambio de modelo, caché cliente, credenciales ni datos reales. Rules sólo candidato: deployment explícitamente separado. Informe07 y CURRENT_STATE conservan límites.
+
 ## 2026-11-02 — Fase06: campana y continuidad de cuenta
 
 Autoridad existente notificaciones-clientes: consultas paginadas de100 compatibles con Rules, cursores reactivos y callbacks invalidados; restauración BFCache sin repetir eventos; navegación vinculada al UID original. Sin cambios de permisos ni presentación móvil. Pruebas de cuentas/admin/notificaciones y derivados canónicos. Informe y límites en TINTIN_PHASE06_ACCOUNTS_ADMIN.
