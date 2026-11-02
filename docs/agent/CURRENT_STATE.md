@@ -1,3 +1,20 @@
+## 2026-11-02 — Revisión acordada y F02-STATS, primer bloque
+
+Codex /root. Base `39744311216e525919a1f781a03fb854d92e45fd`; rama `fix/commerce-decisions-20261102`.
+Requisitos completos: [DECISIONES_COMERCIALES_20261102.md](DECISIONES_COMERCIALES_20261102.md).
+Sólo el resumen derivado de cuentas está implementado en este bloque: consultas
+por identidad, paginación con readTime común, deduplicación y commit CAS de la
+cuenta leída antes del cálculo, con hasta tres intentos. No publica datos parciales
+si una consulta falla/supera presupuesto y no recrea cuentas eliminadas.
+PASS_LOCAL: 546 pruebas sync/consultas/pedidos/checkout y 220 de operaciones,
+seguridad y arquitectura, sin fallos/skips; build:pages PASS. Incluyen carrera
+atrasada, paginación, puente histórico normalizado, error/snapshot/cursor inválidos,
+presupuesto y conflicto persistente. Son simulaciones sin credenciales ni datos
+productivos; no acreditan índices remotos, otros escritores legacy de estadísticas
+ni cobros de señas. No hubo envíos reales, compras ni migraciones.
+Las demás reglas están registradas como PENDING, no implementadas por inferencia.
+CI, merge y publicación se siguen con el SHA y recibo terminal de la PR correspondiente.
+
 ## 2026-11-02 — Fase07: backend y seguridad
 
 Codex /root; base1159edeb, rama codex/phase07-backend-security. [Informe07](TINTIN_PHASE07_BACKEND_SECURITY.md). F01-RULES sigue presente en base: metadata inventory* sin status devolvía true. Candidato exige transición autorizada/coherente o metadata intacta; mantiene contrato Super Admin y dominio server-side. Regresiones SDK en test:rules-critical.729Node PASS,0SKIP y auditoría security PASS. Emulador local BLOCKED por descargaJAR; CI debe validar. Backup/restore sólo dry-run con proyecto/bucket/base ficticios; no accesos ni cambios manuales de producción. Publicar Rules, verificar índices/configuración remota, restauración y WebApp requieren autorización separada. No cerrar F01 productivo antes de deployment autorizado. Gates/PR/CI/fusión por recibos propios.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "8b2bff8ced5b2fa589b8f433a1e8f4b53e00ad80c6497cb3c3881f5b3d0bbba1",
+  "sourceFingerprint": "f0c923e1bc7817d78d4e5062e9edb7a66910683160d588e5fc95d3bceefb293c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1759,
-    "textFiles": 1624,
-    "totalBytes": 45030676,
+    "files": 1761,
+    "textFiles": 1626,
+    "totalBytes": 45052458,
     "pages": 19,
-    "modules": 1156
+    "modules": 1157
   },
   "viewports": [
     {
@@ -25246,8 +25246,8 @@
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
-      "bytes": 34851,
-      "sha256": "ce64da6a44a83ea628888f37474edef47b33c188f6ffeb85f920516e2c9c4cb8",
+      "bytes": 37567,
+      "sha256": "fd7971945a4574be5748488f9292cfe114d6cacbd309178550e3ded3810e2339",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26293,8 +26293,8 @@
     },
     {
       "path": "cloudflare/sincronizacion-estadisticas-pedido.js",
-      "bytes": 3981,
-      "sha256": "e399be8e98f3387daf2b85d7720c856cbb4dd12fab60b81a986040b077581f42",
+      "bytes": 6190,
+      "sha256": "894b47a0ca7bfa44b885044cbe38e08467d581a7ad674e9d616d22ff7a8641c0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26305,6 +26305,12 @@
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
           "line": 6
+        },
+        {
+          "raw": "./firestore-admin-batch.js",
+          "target": "cloudflare/firestore-admin-batch.js",
+          "dynamic": false,
+          "line": 7
         }
       ],
       "endpoints": []
@@ -43996,8 +44002,8 @@
     },
     {
       "path": "tests/admin/firestore-list-page.test.mjs",
-      "bytes": 1646,
-      "sha256": "f08c1cbee8877e9d6db75b0b2fc3398a69624bb1b981a06d7cc193a998e4b5e5",
+      "bytes": 3860,
+      "sha256": "f54936e295b267ead0abbb07593ecd3542d81e0a0f232c898b0742bb8da408ff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57764,6 +57770,42 @@
       "endpoints": []
     },
     {
+      "path": "tests/sync/order-owner-stats.test.mjs",
+      "bytes": 5391,
+      "sha256": "da98e1aa2394ab08622b87c7d91de4e81c9e852ee1e4092ccf44f33d6afb41ba",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
+          "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/sync/order-sheets-sync.test.mjs",
       "bytes": 2184,
       "sha256": "1b7b33d9c25308a2f16be116518b0a9a1ac77e3f1a1f816e2eef35776c33ce3a",
@@ -62046,8 +62088,8 @@
     {
       "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
-      "bytes": 34851,
-      "sha256": "ce64da6a44a83ea628888f37474edef47b33c188f6ffeb85f920516e2c9c4cb8"
+      "bytes": 37567,
+      "sha256": "fd7971945a4574be5748488f9292cfe114d6cacbd309178550e3ded3810e2339"
     },
     {
       "path": "cloudflare/firebase-id-token.js",
@@ -62238,8 +62280,8 @@
     {
       "path": "cloudflare/sincronizacion-estadisticas-pedido.js",
       "extension": ".js",
-      "bytes": 3981,
-      "sha256": "e399be8e98f3387daf2b85d7720c856cbb4dd12fab60b81a986040b077581f42"
+      "bytes": 6190,
+      "sha256": "894b47a0ca7bfa44b885044cbe38e08467d581a7ad674e9d616d22ff7a8641c0"
     },
     {
       "path": "cloudflare/sincronizacion-participacion-sheets.js",
@@ -63156,8 +63198,14 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1167660,
-      "sha256": "2b20a5670210bdc2e67b3f25f9b1e95637d5e725d8be399cfbccd27fb4c19f17"
+      "bytes": 1168900,
+      "sha256": "fc3c075a51d50823c9a2711f7eac53bff2435d530a0639c435fca075cf37741e"
+    },
+    {
+      "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
+      "extension": ".md",
+      "bytes": 7326,
+      "sha256": "50d32d91af841e7442e6ec25bf9aab9835cb78a5d4d7aa8ffd4d2f94a09d400b"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -64056,8 +64104,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 151895,
-      "sha256": "fdc93e36c525e93bb70f9cdf0d8b234822687f9794ca33e70ef7f90a60b2045b"
+      "bytes": 152581,
+      "sha256": "1bd326632f56208c5df1bc1851f8e9bbac653e6756cccaf846039d6dc648230e"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -68796,8 +68844,8 @@
     {
       "path": "tests/admin/firestore-list-page.test.mjs",
       "extension": ".mjs",
-      "bytes": 1646,
-      "sha256": "f08c1cbee8877e9d6db75b0b2fc3398a69624bb1b981a06d7cc193a998e4b5e5"
+      "bytes": 3860,
+      "sha256": "f54936e295b267ead0abbb07593ecd3542d81e0a0f232c898b0742bb8da408ff"
     },
     {
       "path": "tests/admin/lecturas-admin.test.mjs",
@@ -70910,6 +70958,12 @@
       "extension": ".mjs",
       "bytes": 4506,
       "sha256": "d480765db3523dc92d7f0df2a3e97d3264f1ec5d17f8d4595d6440d7171c8fc8"
+    },
+    {
+      "path": "tests/sync/order-owner-stats.test.mjs",
+      "extension": ".mjs",
+      "bytes": 5391,
+      "sha256": "da98e1aa2394ab08622b87c7d91de4e81c9e852ee1e4092ccf44f33d6afb41ba"
     },
     {
       "path": "tests/sync/order-sheets-sync.test.mjs",
