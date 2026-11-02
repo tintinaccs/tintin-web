@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "39744311216e525919a1f781a03fb854d92e45fd",
-  "reason": "Corregir F02-STATS con consultas por identidad y publicación CAS; registrar las decisiones comerciales sin declarar implementadas funciones pendientes.",
+  "reason": "Corregir F02-STATS mediante paginación por identidad y publicación CAS, y actualizar la auditoría para exigir ese contrato en lugar del escaneo global defectuoso.",
   "files": [
     {
       "path": "cloudflare/firebase-admin-ligero.js",
