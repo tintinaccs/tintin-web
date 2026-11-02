@@ -426,3 +426,12 @@ test('v2 price changed and exhausted selection reject before any commit, valid s
  p.variantInventory[0].stock=1;
  await checkout(draft({cartLines:[{id:'aro_1',qty:1,variant:'M / Plateado'}],expectedSubtotal:70000,expectedTotal:90000}),fakeStore({'products/aro_1':p}));
 });
+
+test('un carrito manipulado no compra productos sin precio entero positivo aunque el total coincida',async()=>{
+ for(const price of [0,null,'',1.5,'50000',1_000_000_001]){
+  const store=fakeStore({'products/aro_1':{name:'Fixture',price,stock:5,active:true}});
+  const subtotal=Math.min(50000,Math.round(Number(price))*2);
+  await assert.rejects(checkout(draft({expectedSubtotal:subtotal,expectedTotal:subtotal+20000}),store),error=>error.code==='invalid_price');
+  assert.equal(store.commits.length,0,String(price));
+ }
+});

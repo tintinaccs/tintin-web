@@ -1,32 +1,27 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "344a2936580a8c3ca6c8f1dc112f940334f0b077",
-  "reason": "Fase03: editor conectado, descripción completa, visor accesible y conservación de opciones y variantes",
+  "baseCommit": "e3de73c14c8113244f7456db123f10d1730eaaa0",
+  "reason": "Fase 04: publicación comercial coherente, aliases multimedia y precio válido de checkout",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "117b06b22e63c10109bf8d1ff3d62f6c0c89201fffeb7971096417606846ae53",
-      "newHash": "f6b8caf47d7486c135ef81f1011cbfe1f12dcf2d3c6ad54322dee810e7705e23"
+      "oldHash": "f6b8caf47d7486c135ef81f1011cbfe1f12dcf2d3c6ad54322dee810e7705e23",
+      "newHash": "d1cf52bbd5ce05ee6b69a57e8636f74f2b2fd646d77eb9638ccd07fa860139b5"
     },
     {
-      "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "a5acf65a06dbd8268f4a1cfdba967f39decd61625dd7a729678b428a860b9972",
-      "newHash": "6aa67e4d802a3436d40996de0b4005b6b36e82a30b94443046f54a809c48db40"
+      "path": "cloudflare/politica-checkout-publico.js",
+      "oldHash": "b18849844206dc6af753dcc9d6b3d0d099452642c8d163052d26b01e4ce8c496",
+      "newHash": "33ba377008535eed3653fe82bc4d152fbcbf22245ff3bcf590ff7a35a00f72a5"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "c71b54a4f63ae1c4d37e3b2c47f9d42c50fc414d41faf358b5bf853f55d000d2",
-      "newHash": "76497be817cbd13331313f41e4dbcfb671d3dd756cda9b69601ff3b22cbf8e84"
-    },
-    {
-      "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "4bc574b1c374a32e5192bf7ca73dc209dabf633967c61c1508c6731c6abb07da",
-      "newHash": "9568682bd507e80f7d00645ef13dbbb20f08e6c19d7d52b2d713a79bbdbb8c3e"
+      "oldHash": "76497be817cbd13331313f41e4dbcfb671d3dd756cda9b69601ff3b22cbf8e84",
+      "newHash": "81b2ce43467a4a324ce1b9a90c9e144b04816819299f548eba6b6e222c447d46"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "8817932a9e174029160a223b705402683a7b3b47e271c707d1f861d6d3deff45",
-      "newHash": "e0134226c0b5943a154febd5f5c095059bdda67881386fde97e0a3708b783874"
+      "oldHash": "e0134226c0b5943a154febd5f5c095059bdda67881386fde97e0a3708b783874",
+      "newHash": "6153b5f01b589d7b9f76662da0c93a1c572c2291eadb9753ad6f67ee969cb431"
     }
   ],
   "affectedRecords": [

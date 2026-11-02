@@ -1,4 +1,4 @@
-import { resolveProductVariant } from '../js/core/store/inventario-variantes.mjs';
+import { resolveProductVariant, productVariantPrice } from '../js/core/store/inventario-variantes.mjs';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 import { isValidCustomerName } from '../js/pages/profile/configuracion-inicial-perfil.mjs';
 import { shippingDepartment } from '../js/components/location/departamento-ciudad.mjs';
@@ -349,6 +349,10 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
   const inspect = ({ items, documents, subtotal, shippingCost: computedShipping, total }) => {
     for (const item of items) {
       const product = decodeFirestoreFields(documents.get(item.id)?.fields || {});
+      // El catálogo exige precio válido; un carrito construido a mano tampoco
+      // puede convertir null/0/decimales en una venta gratuita o redondeada.
+      try { productVariantPrice(product,item.variantKey ? {variantKey:item.variantKey} : item.variant); }
+      catch { throw checkoutError('invalid_price',422,{productId:item.id}); }
       const canonicalVariant = resolveProductVariant(product, item.variant);
       if (canonicalVariant === null) {
         throw checkoutError(item.variant ? 'invalid_variant' : 'variant_required', 422, { productId: item.id });

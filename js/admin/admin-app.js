@@ -5015,12 +5015,9 @@ window.prodToggleActive = async (docId, currentlyActive) => {
     stages: [{ id: 'write', label: 'Actualizar estado del producto' }, { id: 'sync', label: 'Sincronizar catálogo y actualizar lista' }],
     action: async ctx => {
       ctx.start('write');
-      await withAdminSiteChange(async () => updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() }));
-      if (p) p.active = !currentlyActive;
-      await logAudit('editar_producto', 'producto', docId, p?.name || docId, `Activo: ${currentlyActive} → ${!currentlyActive}`);
+      await window.TintinProductAdmin.applyBulkChanges({ids:[docId],field:'active',value:!currentlyActive,expected:{[docId]:productFingerprint(p)}});
       ctx.ok('write');
       ctx.start('sync');
-      await pushProductsToSheets([docId]);
       renderProductosTable(_allProducts);
       ctx.ok('sync');
       return currentlyActive ? 'Producto desactivado.' : 'Producto activado.';
@@ -5073,6 +5070,18 @@ window.TintinProductAdmin = Object.freeze({
     if (request.field === 'category') productBulkIds([request.value]);
     const ownerUid = auth.currentUser.uid;
     const product = _allProducts.find(item => item._docId === request.id);
+    if(request.field==='active') {
+      return runAdminCrudOperation({
+        title:'Actualizar producto',name:product?.name || request.id,module:'productos',
+        stages:[{id:'save',label:'Confirmar publicación del producto'}],
+        action:async ctx=>{
+          ctx.start('save');
+          await window.TintinProductAdmin.applyBulkChanges({ids:[request.id],field:'active',value:request.value,expected:{[request.id]:request.expected}});
+          ctx.ok('save');
+          return {confirmed:true,fingerprint:productFingerprint(product)};
+        },
+      });
+    }
     productMasterBusy = true;
     try {
       return await runAdminCrudOperation({
@@ -5143,12 +5152,12 @@ window.TintinProductAdmin = Object.freeze({
   async applyBulkChanges(request) {
     if(!auth.currentUser || !currentUser || navigator.onLine===false)throw new Error('La sesión o la conexión no están disponibles.');
     if(productMasterBusy) throw new Error('Ya hay una operación de productos en curso.');
-    if(!can(currentRole,'editProducts') || !roleCanDo('productos','accionesMasivas') || !roleCanDo('productos',request.field==='active'?'activarDesactivar':'editar')) throw new Error('No tenés permiso para esta edición masiva.');
+    if(!can(currentRole,'editProducts') || (!(request.field==='active' && request.ids?.length===1) && !roleCanDo('productos','accionesMasivas')) || !roleCanDo('productos',request.field==='active'?'activarDesactivar':'editar')) throw new Error('No tenés permiso para esta edición masiva.');
     const ids=productBulkIds(request.ids);
     productMasterBusy=true;
     try {
-      const hasCommercial=ids.some(id=>_allProducts.find(product=>product._docId===id)?.variantCommerceVersion===2);
-      const changes=hasCommercial ? await (async()=>{
+      const usesServer=request.field==='active' || ids.some(id=>_allProducts.find(product=>product._docId===id)?.variantCommerceVersion===2);
+      const changes=usesServer ? await (async()=>{
         const response=await authenticatedFetch('/api/admin-order-mutation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...request,action:'bulkProducts'})});
         const payload=await response.json();if(!response.ok || !payload.ok)throw new Error(payload.error || 'No se pudo guardar la edición masiva.');return payload.result.changes;
       })() : await withAdminSiteChange(()=>runTransaction(db,async transaction=>{
@@ -5162,7 +5171,7 @@ window.TintinProductAdmin = Object.freeze({
       }));
       for(const change of changes){const product=_allProducts.find(p=>p._docId===change.id);if(product)Object.assign(product,change.patch);}
       let auditPending=false;
-      try {if(!hasCommercial)await logAudit('editar_producto','producto','','',`Edición masiva: ${request.field}`,{bulk:true,count:ids.length,productHistory:changes.map(({id,before,patch})=>({productId:id,priceBefore:before.price ?? null,priceAfter:patch.price ?? before.price ?? null,stockBefore:before.stock ?? null,stockAfter:Object.hasOwn(patch,'stock')?patch.stock:before.stock ?? null}))});}catch(error){auditPending=true;console.warn('[products] Auditoría pendiente:',error?.message);}
+      try {if(!usesServer)await logAudit('editar_producto','producto','','',`Edición masiva: ${request.field}`,{bulk:true,count:ids.length,productHistory:changes.map(({id,before,patch})=>({productId:id,priceBefore:before.price ?? null,priceAfter:patch.price ?? before.price ?? null,stockBefore:before.stock ?? null,stockAfter:Object.hasOwn(patch,'stock')?patch.stock:before.stock ?? null}))});}catch(error){auditPending=true;console.warn('[products] Auditoría pendiente:',error?.message);}
       // La confirmación de Firestore no se revierte si Sheets está temporalmente fuera de servicio.
       let syncPending=false;
       try {await pushProductsToSheets(ids);}catch(error){syncPending=true;console.warn('[products] Sincronización externa pendiente:',error?.message);}

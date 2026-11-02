@@ -322,3 +322,13 @@ test('fotos privadas: query real paginada entre cuentas bloquea referencias come
 });
 
 test('retiro, reserva previa, cancelación idempotente y restauración conservan identidad, precio y foto',async()=>{await verifyRetiredOptionCheckout({deps,seed,product,actor,admin});});
+
+test('editor limpia aliases con espacios y galería legacy mediante field paths Firestore reales',async()=>{
+ const id='phase04_media_aliases';
+ await seed('collections/phase04_media',{name:'Fixture'});
+ const before={name:'Fixture multimedia',category:'phase04_media',price:100,stock:2,active:true,oferta:false,destacado:false,description:'Fixture',imageUrl:'https://example.invalid/old.png','Image Src':'https://example.invalid/old.png','Variant Image':'https://example.invalid/old.png',images:['https://example.invalid/old.png'],untouched:'preservado'};
+ await seed('products/'+id,before);
+ await saveProductEditor({},{productId:id,expected:productFingerprint(before),changeId:'phase04_media_aliases_save',product:{imageUrl:'',imagesExtra:[]}},admin,deps);
+ const after=await product(id);
+ assert.equal(after.imageUrl,'');assert.equal(after['Image Src'],'');assert.equal(after['Variant Image'],'');assert.deepEqual(after.images,[]);assert.equal(after.untouched,'preservado');assert.equal(after.stock,2);
+});
