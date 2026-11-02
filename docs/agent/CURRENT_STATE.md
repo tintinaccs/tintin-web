@@ -1,3 +1,7 @@
+## 2026-11-02 — Fase06: clientes y administración
+
+Codex /root; base001c4218, rama codex/phase06-accounts-admin. [Informe06](TINTIN_PHASE06_ACCOUNTS_ADMIN.md). Historial de campana200 violaba límite100 de Rules: corregido con páginas reactivas autorizadas y descarte de callbacks anulados. BFCache restaura feed/auth sin duplicar delegación; navegación demorada exige la misma cuenta. Sin CSS, cambios de rol, datos reales, mensajes ni recargas. PASS_LOCAL532 de cuentas/actividad/perfil y277 admin/seguridad/arquitectura;1SKIP emulador. Nueva regresión BFCache adicional PASS;71actividad finales PASS (conteo solapado). Chromium61PASS/1FLAKY en62; historial repetido3/3 sin reintentos. Navegador/gates/PR/CI/fusión se acreditan con recibos terminales propios. NOT_VERIFIED hardware, sesiones productivas y entrega real. Permanecen F01-RULES, deployment Apps Script y F02-STATS.
+
 ## 2026-11-02 — Fase05: recorrido comercial completo
 
 Codex /root; rama `codex/phase05-commerce-flow`, base `b1107b3fc7fd711709832620ea738c814d6462a6` (#1311). [Informe05](TINTIN_PHASE05_COMMERCE.md).

@@ -8,7 +8,7 @@ import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-
 import { createLiveActivityNotices } from './avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1-palette-20261014-1';
 import '../../admin/notifications/notificaciones-push.js?v=tintin-20261022-avatar-inicial-1';
 import {
-  collection, limit, orderBy, query} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+  collection, limit, orderBy, query, startAfter} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const ASSET_VERSION = 'tintin-20261009-whatsapp-responsive-1';
 const API_RETRY_DELAYS_MS = [450, 1200];
@@ -315,28 +315,50 @@ function subscribe(user, { preserve = false } = {}) {
   const adminFeed = isSuperAdmin(user);
   // Rules y API mantienen la autorización: sólo Super Admin lee actividad
   // global. El resto de roles conserva su bandeja privada por UID.
-  const source = query(adminFeed ? collection(db, 'adminNotifications') : collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(historyLimit));
-  unsubscribe = onSnapshot(source, snapshot => {
-    if (generation !== subscriptionGeneration || currentUser?.uid !== user.uid) return;
-    hasOlderNotifications = snapshot.docs.length === historyLimit;
-    notifications = snapshot.docs
-      .map(document => ({ id: document.id, ...document.data() }))
-      .filter(item => testOrderNumber(item) === null)
-      .filter(item => adminFeed || isVisibleCustomerNotification(item));
-    if (adminFeed) liveNotices.update(`admin:${user.uid}`, notifications);
-    else liveNotices.clear();
-    listenerFailed = false;
-    subscribeRetryAttempt = 0;
-    subscribeAuthRecoveryAttempted = false;
-    render();
-  }, error => {
-    if (generation !== subscriptionGeneration || currentUser?.uid !== user.uid) return;
-    console.warn('[notifications] No se pudo escuchar la actividad:', error);
-    const root = document.getElementById('tt-notifications-list');
-    listenerFailed = true;
-    if (root) root.innerHTML = '<div class="tt-notifications-error">No pudimos actualizar las notificaciones. Conservamos la actividad ya cargada y podés volver a abrir este panel para reintentar.</div>';
-    scheduleSubscriptionRecovery(user, error);
-  });
+  const pages = [];
+  const stops = [];
+  const pageTokens = [];
+  unsubscribe = () => stops.splice(0).forEach(stop => stop?.());
+  const listenPage = (index, cursor) => {
+    const token = {};
+    pageTokens[index] = token;
+    const constraints = [orderBy('createdAt', 'desc'), limit(100)];
+    if (cursor) constraints.push(startAfter(cursor));
+    const source = query(adminFeed ? collection(db, 'adminNotifications') : collection(db, 'users', user.uid, 'notifications'), ...constraints);
+    stops[index] = onSnapshot(source, snapshot => {
+      if (generation !== subscriptionGeneration || currentUser?.uid !== user.uid || pageTokens[index] !== token) return;
+      // Al moverse el límite de una página, reconstruir las siguientes desde
+      // su cursor actual: no perder ni duplicar eventos por inserciones vivas.
+      stops.splice(index + 1).forEach(stop => stop?.());
+      pageTokens.splice(index + 1);
+      pages.splice(index);
+      pages[index] = snapshot.docs;
+      const docs = [...new Map(pages.flat().map(doc => [doc.id, doc])).values()];
+      hasOlderNotifications = snapshot.docs.length === 100;
+      notifications = docs.map(document => ({ ...document.data(), id: document.id }))
+        .filter(item => testOrderNumber(item) === null)
+        .filter(item => adminFeed || isVisibleCustomerNotification(item));
+      if (adminFeed && index === 0) liveNotices.update(`admin:${user.uid}`, notifications);
+      else if (!adminFeed) liveNotices.clear();
+      listenerFailed = false;
+      subscribeRetryAttempt = 0;
+      subscribeAuthRecoveryAttempted = false;
+      render();
+      if (snapshot.docs.length === 100 && (index + 1) * 100 < historyLimit) {
+        listenPage(index + 1, snapshot.docs.at(-1));
+      }
+    }, error => {
+      if (generation !== subscriptionGeneration || currentUser?.uid !== user.uid || pageTokens[index] !== token) return;
+      console.warn('[notifications] No se pudo escuchar la actividad:', error);
+      listenerFailed = true;
+      const root = document.getElementById('tt-notifications-list');
+      root?.querySelector('[data-notification-sync-error]')?.remove();
+      root?.insertAdjacentHTML('afterbegin', '<p role="alert" data-notification-sync-error>No pudimos actualizar las notificaciones. Conservamos la actividad cargada; volvé a abrir este panel para reintentar.</p>');
+      scheduleSubscriptionRecovery(user, error);
+    });
+  };
+  listenPage(0);
+
 }
 
 async function markVisibleNotificationsRead() {
@@ -413,9 +435,10 @@ function wireEvents() {
       event.preventDefault();
       const id = card.dataset.notificationId;
       const target = safeTarget(card.dataset.notificationTarget);
+      const targetUid = currentUser?.uid;
       const work = readNotification(id);
       Promise.race([work, new Promise(resolve => setTimeout(resolve, 220))]).finally(() => {
-        window.location.href = target;
+        if (targetUid && currentUser?.uid === targetUid) window.location.href = target;
       });
     }
   }, true);
@@ -426,7 +449,7 @@ export function initClientNotifications() {
   initialized = true;
   ensureStyles();
   ensureDrawer();
-  wireEvents();
+  if (!window.TintinNotificationEventsWired) { wireEvents(); window.TintinNotificationEventsWired = true; }
   setTriggersVisible(false);
   authUnsubscribe = subscribeAuthState(user => {
     if (currentUser?.uid !== user?.uid) { liveNotices.clear(); markingVisibleRead = false; historyLimit = 100; hasOlderNotifications = false; }
@@ -444,5 +467,11 @@ window.addEventListener('pagehide', () => {
   liveNotices.clear();
   unsubscribe?.();
   authUnsubscribe?.();
+  authUnsubscribe = null;
+  initialized = false;
   if (subscribeRetryTimer) window.clearTimeout(subscribeRetryTimer);
-}, { once: true });
+});
+
+window.addEventListener('pageshow', event => {
+  if (event.persisted) initClientNotifications();
+});

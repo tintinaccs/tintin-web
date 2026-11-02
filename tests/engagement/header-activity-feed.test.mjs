@@ -38,7 +38,7 @@ function subscriptionHarness() {
     currentUser: null, db: {}, window: { clearTimeout() {} }, console, testOrderNumber,
     isSuperAdmin: user => user?.email === 'admin@example.invalid',
     collection: (_db, ...path) => path, orderBy: field => field, limit: count => count,
-    query: (...args) => args,
+    startAfter: cursor => cursor, query: (...args) => args,
     onSnapshot: (query, next, error) => { subscriptions.push({ query, next, error }); return () => {}; },
     liveNotices: { update: (...args) => notices.push(args), clear() {} }, render() {},
     notificationsSurfaceIsOpen: () => false, markVisibleNotificationsRead() {}, scheduleSubscriptionRecovery() {},
@@ -59,8 +59,9 @@ test('historial ampliado conserva bienvenida y actividad vista dentro de la cuen
   context.historyLimit=200;
   context.subscribe(context.currentUser,{preserve:true});
   assert.equal(subscriptions[1].query[0].join('/'),'users/client/notifications');
-  assert.equal(subscriptions[1].query[2],200);
-  subscriptions[1].next(snapshot([...recent,notification('welcome',{kind:'welcome',read:true})]));
+  assert.equal(subscriptions[1].query[2],100);
+  subscriptions[1].next(snapshot(recent));
+  subscriptions[2].next(snapshot([notification('welcome',{kind:'welcome',read:true})]));
   assert.equal(context.notifications.length,101);
   assert.equal(context.notifications.at(-1).id,'welcome');
   assert.equal(context.notifications.at(-1).read,true);

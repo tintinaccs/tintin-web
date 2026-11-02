@@ -1,3 +1,7 @@
+## 2026-11-02 — Fase06: campana y continuidad de cuenta
+
+Autoridad existente notificaciones-clientes: consultas paginadas de100 compatibles con Rules, cursores reactivos y callbacks invalidados; restauración BFCache sin repetir eventos; navegación vinculada al UID original. Sin cambios de permisos ni presentación móvil. Pruebas de cuentas/admin/notificaciones y derivados canónicos. Informe y límites en TINTIN_PHASE06_ACCOUNTS_ADMIN.
+
 ## 2026-11-02 — Fase05: integridad del recorrido comercial
 
 Catálogo de pagos explícito autoritativo en cliente/servidor; callbacks de configuración obsoletos descartados. Tarifas reales sin overrides ni defaults inventados, retiro y configuraciones parciales coherentes. Confirmación exige respuesta completa, cierra intento y consume sólo el snapshot comprado en el escritor existente, preservando compras concurrentes/cuenta. Back/BFCache/recarga completada vuelven a inicio. Texto de logística describe productos y costos reales/pendientes. Dispatcher Apps Script rechaza creador público legacy; su WebApp desplegado requiere actualización externa. Sin colecciones, dependencias, sincronización paralela ni datos productivos nuevos. Regresiones en suites CI existentes; derivados/protección canónicos. Evidencia y reservas en TINTIN_PHASE05_COMMERCE y CURRENT_STATE.
