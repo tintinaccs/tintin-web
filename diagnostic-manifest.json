@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "fad562f982086737a7a89738c3093c069d22a26cb7fc7e6b85a22d061829671d",
+  "sourceFingerprint": "2682b51c55de4869ec86cabe585a34eb3fa8bce7eebc56cf18fba61cfdf204ca",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1770,
-    "textFiles": 1635,
-    "totalBytes": 45122826,
+    "files": 1772,
+    "textFiles": 1637,
+    "totalBytes": 45131715,
     "pages": 19,
     "modules": 1161
   },
@@ -61426,8 +61426,8 @@
     {
       "path": "AGENTS.md",
       "extension": ".md",
-      "bytes": 9321,
-      "sha256": "cee554d0d53b61c95c4d759da27099df5bb64bf8a727a713c006789093c63ea9"
+      "bytes": 10603,
+      "sha256": "e636ab1cc3dfad70023b7e0afe394f36918dc36f3218a44537e22b82158e93c7"
     },
     {
       "path": "DESIGN.md",
@@ -62518,8 +62518,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 12862,
-      "sha256": "cd1f05f8e31ede65803979c14d85decf9f2005b417c3622472477e5e3ce96a2e"
+      "bytes": 517,
+      "sha256": "2584e883a98d9a611c00d31b67efd872f8ddfc7d85d23ea7057b1e8d5cbc7868"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -62531,7 +62531,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "1034048cce1959af9a4a0fe2f692a9ad0fd14a4e47a2b45bc73ea54d6c34df2b"
+      "sha256": "7938d1730545beb026e356d646b9cc7f7add401a03ece49df71b21902a3d2956"
     },
     {
       "path": "config/public-site.json",
@@ -63328,8 +63328,8 @@
     {
       "path": "docs/agent/CLOUD_SKILLS_CATALOG.md",
       "extension": ".md",
-      "bytes": 11194,
-      "sha256": "076a08755f60c184e68a13916e6fad365cf1452bbe108abbb0ab94076b5e98b9"
+      "bytes": 12061,
+      "sha256": "4f67afe7741727d568ac7570721d7712bf2ba62456c408a4bb873a6c3bba80ef"
     },
     {
       "path": "docs/agent/CLOUD_SKILLS_LOCK.json",
@@ -63370,8 +63370,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1177454,
-      "sha256": "8ef2e21714d765a09bc7434f94f10766a3d4f3f6cde97aab0dcd1c00941e0390"
+      "bytes": 1180663,
+      "sha256": "b5740fb4a58ea7b93f44556edd0095d637b74963ee73bec1f8d36d13341d4768"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -63406,8 +63406,8 @@
     {
       "path": "docs/agent/GITHUB_RESULTS.md",
       "extension": ".md",
-      "bytes": 3178,
-      "sha256": "c6ea1846e97fb431fc8dc3934ee5e9c78714c32ce4c8ef03a0663e6c8e0170da"
+      "bytes": 3391,
+      "sha256": "bc660fd318f2d69e973a90a0222124b1c73b08038319b179e0d43abdabe608ea"
     },
     {
       "path": "docs/agent/IDENTIDAD_TINTIN_20261021.md",
@@ -63538,8 +63538,8 @@
     {
       "path": "docs/agent/README.md",
       "extension": ".md",
-      "bytes": 2781,
-      "sha256": "7d92880e54cb19623b903afb7aa1bd68305a3ef8a80b3e6f287407713a27fe07"
+      "bytes": 3107,
+      "sha256": "8c69b9b11cd8d20f242066bf1aa10269e2dd9faf55c96fdb78f72e4a76341811"
     },
     {
       "path": "docs/agent/REAL_INTERACTIONS_20261011.md",
@@ -63608,6 +63608,12 @@
       "sha256": "f6296cc05dc2d160e239e39ca52141551c2b2cbcea6bae7666f9dc9a0061429d"
     },
     {
+      "path": "docs/agent/SKILLS_AUTO_ROUTING.md",
+      "extension": ".md",
+      "bytes": 9864,
+      "sha256": "9cc3918c8be049d5223a9fa17699fdc9e9496d3bbe16389bfbefd90ae657aad3"
+    },
+    {
       "path": "docs/agent/SUPERADMIN_REVIEW_20261019.md",
       "extension": ".md",
       "bytes": 5127,
@@ -63622,8 +63628,8 @@
     {
       "path": "docs/agent/TINTIN_GLOBAL_PHASES.md",
       "extension": ".md",
-      "bytes": 10924,
-      "sha256": "264483cd159ad0d729215409df0570bc6ebd4a04b9f58af9caed558146ba65fd"
+      "bytes": 11981,
+      "sha256": "b653e58279816cd341fbfbc1dfd8b4ca23e8f8ff453a8c17ad8728d37268485e"
     },
     {
       "path": "docs/agent/TINTIN_PHASE04_CATALOG.md",
@@ -63658,8 +63664,8 @@
     {
       "path": "docs/agent/TINTIN_PHASE09_ACCEPTANCE.md",
       "extension": ".md",
-      "bytes": 12822,
-      "sha256": "da59f5dae3fa2bb959e2201725b36957e8400cfadcf5bfc7cf8b83f0a7714d02"
+      "bytes": 14170,
+      "sha256": "94e06a4f74a7f02ade67fa5a2a4406538af6110beaa351639efbd54b6724d7d2"
     },
     {
       "path": "docs/agent/TINTIN_SKILLS_CI_20261101.md",
@@ -63792,6 +63798,12 @@
       "extension": ".json",
       "bytes": 1414,
       "sha256": "45bed45b513561164fcdd3ea2de516bd3f8d6b7ea1114e70d9e2820e10cebaf3"
+    },
+    {
+      "path": "docs/agent/evidence/phase09-20261102/github-terminal.json",
+      "extension": ".json",
+      "bytes": 3068,
+      "sha256": "882cf1794e16c7a034d8209d7c6e438b5882b750cf8d6e337801c9e71c4eeac9"
     },
     {
       "path": "docs/agent/evidence/phase09-20261102/history-verification.json",
