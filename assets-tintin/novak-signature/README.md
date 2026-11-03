@@ -13,3 +13,7 @@ Prueba: `npx playwright test tests/navigation/novak-credit.spec.js --project=chr
 La descarga del SVG se difiere mediante el pequeño script local `js/components/novak-credit.js` hasta128px del pie. Se reserva42×40px, la animación sigue siendo CSS y existe alternativa noscript con el mismo SVG. No se recomprime, redibuja ni modifica el símbolo para reducir su peso.
 
 El diseño de la franja final se comparte mediante `renderNovakFooterEnd`: copyright centrado y «Desarrollado por» con el símbolo original. Las columnas del pie público no se sustituyen. Estilos de integración en la hoja propia de Tintín; el kit de animación y el SVG permanecen intactos.
+
+Presentación solicitada: todo el pie se muestra en mayúsculas desde la hoja de integración, también las colecciones dinámicas. No se alteran valores guardados ni URLs. La firma conserva el símbolo original; no se añade un nombre escrito.
+
+Nitidez: el SVG encapsula píxeles originales, no un vector maestro. Se conserva sin redibujar ni ampliar artificialmente. `tests/navigation/footer-image-density.spec.js` comprueba ambas marcas en ocho tamaños, incluidas orientaciones de tablet/móvil y1920×1080, con densidades2×/3×, carga completa, resolución suficiente al tamaño mostrado, opacidad plena y ausencia de blur CSS. Son pruebas de Chromium emulado, no certificación de todos los dispositivos físicos.

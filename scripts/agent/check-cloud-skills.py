@@ -69,7 +69,7 @@ for prefix in PREFIXES:
     root = ROOT / prefix
     for file in root.rglob("*"):
         imported = file.relative_to(root).parts[0]
-        if file.is_file() and (imported == "impeccable" or imported.startswith("emil-")):
+        if file.is_file() and (imported in {"impeccable", "taste-frontend"} or imported.startswith("emil-")):
             mirror = ROOT / PREFIXES[1 if prefix == PREFIXES[0] else 0] / file.relative_to(root)
             if not mirror.is_file() or mirror.read_bytes() != file.read_bytes():
                 errors.append(f"Missing or mismatched mirrored resource: {file.relative_to(ROOT)}")
@@ -77,6 +77,10 @@ lock = json.loads((ROOT / "docs/agent/design-skills-lock.json").read_text())
 taste_file = ROOT / PREFIXES[0] / lock["taste"]["folder"] / "SKILL.md"
 if hashlib.sha256(taste_file.read_bytes()).hexdigest() != lock["taste"]["skillSha256"]:
     errors.append("Taste SKILL.md differs from its recorded upstream version")
+for relative, expected_hash in lock["taste"]["upstreamSha256"].items():
+    file = taste_file.parent / relative
+    if not file.is_file() or hashlib.sha256(file.read_bytes()).hexdigest() != expected_hash:
+        errors.append(f"Taste resource integrity mismatch: {relative}")
 for item in lock["imports"]:
     if len(item["revision"]) != 40:
         errors.append(f"Unpinned design Skill: {item['folder']}")

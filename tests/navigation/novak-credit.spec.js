@@ -6,7 +6,7 @@ const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.
 const loader = fs.readFileSync(path.join(__dirname, '../../js/components/novak-credit.js'), 'utf8');
 
 const documents = ['index', 'about', 'catalogo', 'collections', 'product', 'checkout', 'perfil', 'contact', 'envios', 'cambios-devoluciones', 'preguntas-frecuentes', 'terminos', 'privacidad', '404', 'login', 'admin', 'admin-images'];
-const viewports = [[320, 568], [568, 320], [768, 1024], [1024, 768], [1366, 768], [768, 1366], [1920, 1080], [1080, 1920]];
+const viewports = [[320, 568], [375, 667], [390, 844], [568, 320], [768, 1024], [1024, 768], [1366, 768], [768, 1366], [1920, 1080], [1080, 1920]];
 const lazyFixture = ensureNovakStyles(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><main style="height:1400px">Contenido de prueba</main><footer>${renderNovakCredit()}</footer></body></html>`);
 
 test('descarga el original sólo al acercarse al pie y reserva su espacio', async ({ page }) => {
@@ -62,6 +62,10 @@ for (const [width, height] of viewports) {
       await expect(credit).toHaveAttribute('href', NOVAK_URL);
       await expect(credit, name).toHaveAccessibleName('Desarrollado por NOVAK, visitar su sitio');
       await expect(credit.locator('span')).toHaveText('Desarrollado por');
+      await expect(credit.locator('span')).toHaveCSS('text-transform', 'uppercase');
+      for (const label of await page.locator('footer :is(.tt-footer-col-title, .tt-footer-accordion-toggle, .tt-footer-col a, .tt-footer-tagline, .tt-footer-hours, .tt-footer-wa-text)').all()) {
+        await expect(label, name).toHaveCSS('text-transform', 'uppercase');
+      }
       await expect(page.locator('#tt-footer-ending .tt-footer-bottom')).toHaveText('© 2024-2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS');
       await expect(credit).toHaveCSS('font-family', /Montserrat/);
       await credit.scrollIntoViewIfNeeded();
@@ -85,7 +89,7 @@ for (const [width, height] of viewports) {
         return (Math.max(foreground, background) + .05) / (Math.min(foreground, background) + .05);
       });
       expect(contrast, name).toBeGreaterThanOrEqual(4.5);
-      if (width <= 360) {
+      if (width <= 480) {
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
         const overlap = await credit.evaluate(el => {
           const wa = document.querySelector('.tt-wa-float');

@@ -31,3 +31,13 @@ El logo sigue siendo el original SHA256 `d031d3ee6ef4df3f62f3a5995d858d6a169ee26
 Las pruebas de runtime, CI, merge y producción se registran por SHA/run en CURRENT_STATE.md y la PR. No se heredan de PR1322. Emulación móvil no acredita uso en hardware físico; tampoco se afirma haber aplicado todas las guías de plataformas ajenas al sitio.
 
 - Dos pruebas con scripts reales de Inicio/Nosotros en390/1440px y evento pageshow aprobadas. Auditor responsive existente:33/33 combinaciones en320/360/375px aprobadas, sin relajar sus condiciones.
+
+## Ampliación solicitada: mayúsculas y nitidez
+
+Todo el texto del pie se presenta en mayúsculas mediante estilos compartidos, incluidas colecciones recibidas en vivo, títulos, contacto y firma. No se transforman los nombres almacenados ni los enlaces. Pruebas actualizadas de los17documentos, columnas/colecciones en vivo y runtime:57Chromium aprobadas. Se añaden2pruebas de densidad: ocho viewports por2densidades, ambos logos cargados y con resolución suficiente al tamaño dibujado, sin blur CSS ni opacidad reducida. Total dirigido actual:59pruebas aprobadas.
+
+Lectura pública independiente en390px/DPR3: Tintín usa el PNG original480×600 dibujado104×56; NOVAK usa el SVG original dibujado42×40, sin filtro CSS. No se encontró una URL de miniatura ni se inventó un vector maestro. Se preservan ambos archivos originales. «Full HD» describe el viewport1920×1080 comprobado, no un archivo raster nuevo1920×1080; no se afirma haber recuperado detalle inexistente ni nitidez ilimitada a cualquier ampliación.
+
+Regresión corregida antes de publicar: el texto en mayúsculas aumentó el ancho de la firma y el auditor detectó solapamiento con WhatsApp en375px (24/33). Se amplió la separación existente hasta480px sin mover controles. Revalidación:48pruebas de firma/espaciado (170combinaciones:17documentos×10tamaños), incluidas375/390px y ausencia de solapamiento, PASS; auditor original ampliado:55/55 en320/360/375/390/430px PASS. Con las13pruebas de runtime/colecciones/densidad, cobertura dirigida61casos.
+
+La comparación completa de Taste confirmó igualdad de todos sus recursos existentes; se agregó únicamente el fixture opcional evals/evals.json que faltaba, sin duplicar el Skill. El lock y validador cubren ahora todos sus recursos upstream.
