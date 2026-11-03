@@ -25,7 +25,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: '22'
   MASTER_ARTIFACTS_DIR: artifacts/master
   TINTIN_PUBLIC_ORIGIN: ${{ inputs.production_origin }}
 
@@ -44,7 +43,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: 'package.json'
           cache: npm
 
       - name: Configurar Java para emuladores Firebase
@@ -54,7 +53,7 @@ jobs:
           java-version: '21'
 
       - name: Instalar dependencias
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: Instalar Chromium para auditorías que lo requieran
         run: |
@@ -127,7 +126,7 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: 'package.json'
           cache: npm
 
       - name: Configurar Java para emuladores Firebase
@@ -137,7 +136,7 @@ jobs:
           java-version: '21'
 
       - name: Instalar dependencias
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: Construir artefactos derivados
         run: npm run build:pages
@@ -194,11 +193,11 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: 'package.json'
           cache: npm
 
       - name: Instalar dependencias
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: Construir artefactos derivados
         run: npm run build:pages
@@ -260,11 +259,11 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: 'package.json'
           cache: npm
 
       - name: Instalar dependencias
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: Construir artefactos derivados
         run: npm run build:pages
@@ -326,11 +325,11 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: 'package.json'
           cache: npm
 
       - name: Instalar dependencias
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: Construir artefactos derivados
         run: npm run build:pages
@@ -392,11 +391,11 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: 'package.json'
           cache: npm
 
       - name: Instalar dependencias
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: Construir artefactos derivados
         run: npm run build:pages
@@ -438,7 +437,7 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: 'package.json'
           cache: npm
 
       - name: Configurar Java para emuladores Firebase
@@ -448,7 +447,7 @@ jobs:
           java-version: '21'
 
       - name: Instalar dependencias
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: Ejecutar reglas críticas
         id: suite
@@ -485,11 +484,11 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: 'package.json'
           cache: npm
 
       - name: Instalar dependencias
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: Ejecutar suite contra producción
         id: suite

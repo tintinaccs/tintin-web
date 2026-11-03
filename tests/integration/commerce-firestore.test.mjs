@@ -312,7 +312,7 @@ test('fotos privadas: query real paginada entre cuentas bloquea referencias come
  const source=fs.readFileSync('cloudflare/firebase-admin-ligero.js','utf8');
  const queryCode=source.slice(source.indexOf('export async function firestoreAdminCollectionGroupPage'),source.indexOf('/** Una página del listado canónico')).replace('export ','');
  let calls=0;
- const context=vm.createContext({parseServiceAccount:()=>({}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch:async(url,options)=>{calls++;assert.equal(url,root+':runQuery');return Response.json(await request(':runQuery',JSON.parse(options.body)));}});
+ const context=vm.createContext({parseServiceAccount:()=>({project_id:project}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch:async(url,options)=>{calls++;assert.equal(url,root+':runQuery');return Response.json(await request(':runQuery',JSON.parse(options.body)));}});
  vm.runInContext(queryCode,context);
  const id='tintin_media_privateemulator_full',url=`https://res.cloudinary.com/qa-cloud/image/upload/v1/${id}.webp`;
  await deps.commit({},Array.from({length:105},(_,i)=>({path:`productEditorWorkspaces/aaa-media/items/${String(i).padStart(3,'0')}`,fields:encodeFirestoreFields({closed:true,snapshot:{imageUrl:url}})})));
@@ -352,4 +352,15 @@ test('catálogo de pagos canónico: transferencia pendiente, rechazo sin reserva
  await seed(`checkoutGuards/${actor.uid}`,{lastCheckoutOrderId:`${actor.uid}_phase05_disabled_20261102`,lastCheckoutAt:new Date()});
  await assert.rejects(preparePublicCheckoutOrder({}, {...draft,requestId:'phase05_disabled_20261102'},actor,deps),error=>error.code==='payment_unavailable');
  assert.equal((await product(id)).stock,1);assert.equal(await deps.get({},`orders/public_${actor.uid}_phase05_disabled_20261102`),null);
+});
+
+test('estadísticas reales aisladas: 5001 pedidos ajenos,305 propios,aliases deduplicados y CAS',async()=>{
+ const {syncOrderOwnerStats}=await import('../../cloudflare/sincronizacion-estadisticas-pedido.js');const fs=await import('node:fs');
+ const id='phase09_stats';await seed('users/'+id,{email:'stats@example.invalid',name:'Fixture',untouched:'conservar'});
+ const records=[...Array.from({length:5001},(_,i)=>({path:'orders/phase09_other_'+String(i).padStart(5,'0'),fields:encodeFirestoreFields({userId:'other_stats',total:999})})),...Array.from({length:305},(_,i)=>({path:'orders/phase09_zz_owned_'+i,fields:encodeFirestoreFields({userId:id,userEmail:'stats@example.invalid',total:1,status:'pendiente',createdAt:new Date(1700000000000+i*1000)})}))];
+ for(let i=0;i<records.length;i+=400)await deps.commit({},records.slice(i,i+400));
+ const source=fs.readFileSync('cloudflare/firebase-admin-ligero.js','utf8');const a=source.indexOf('export async function firestoreAdminQueryByFieldPage('),b=source.indexOf('\n/**',a);
+ const query=new Function('deps',`const {parseServiceAccount,getGoogleAccessToken,FIRESTORE_SCOPE,firestoreDatabaseUrl,fetch}=deps;${source.slice(a,b).replace('export ','')};return firestoreAdminQueryByFieldPage;`)({parseServiceAccount:()=>({project_id:project}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch});
+ const result=await syncOrderOwnerStats({}, {userId:id,userEmail:'stats@example.invalid'},{queryPage:query,get:deps.get,commit:deps.commit});
+ assert.equal(result.updated,true);const saved=decodeFirestoreFields((await deps.get({},'users/'+id)).fields);assert.equal(saved.totalOrders,305);assert.equal(saved.totalSpent,305);assert.equal(saved.untouched,'conservar');
 });

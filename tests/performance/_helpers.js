@@ -130,7 +130,7 @@ async function collectVitals(page) {
       interactionMs: window.__ttVitals?.interactionMs ?? null,
       eventTimingMaxMs: window.__ttVitals?.eventTimingMaxMs ?? null, ttfb: null, dcl: null, load: null,
       requests: 0, firstPartyRequests: 0, thirdPartyRequests: 0, transferKB: 0, firstPartyTransferKB: 0, duplicateRequests: 0, duplicateUrls: [],
-      thirdPartyDuplicateUrls: [], firestoreReads: 0,
+      thirdPartyDuplicateUrls: [], telemetryRequests: 0, firestoreReads: 0,
       firestoreSources: {}, shifts: window.__ttVitals?.shifts || []
     };
     try {
@@ -165,6 +165,15 @@ async function collectVitals(page) {
       const appCounts = new Map();
       const thirdPartyCounts = new Map();
       for (const item of resources) {
+        // sendBeacon envía eventos POST distintos, no descarga un recurso
+        // cacheable. Mantener sus bytes/peticiones y reportarlos por separado.
+        try {
+          const endpoint = new URL(item.name, location.href);
+          if (endpoint.origin === location.origin && endpoint.pathname === '/api/telemetry' && item.initiatorType === 'beacon') {
+            out.telemetryRequests += 1;
+            continue;
+          }
+        } catch {}
         let sameOrigin = false;
         try { sameOrigin = new URL(item.name, location.href).origin === location.origin; } catch {}
         const target = sameOrigin ? appCounts : thirdPartyCounts;

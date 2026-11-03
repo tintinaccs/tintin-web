@@ -1,0 +1,71 @@
+{
+  "environment": "Chromium local;200 enlaces;10 refrescos;6 pares con orden alternado;sin red",
+  "samples": [
+    {
+      "before": {
+        "ms": 62.600000001490116,
+        "writes": 2000
+      },
+      "after": {
+        "ms": 15.899999998509884,
+        "writes": 0
+      }
+    },
+    {
+      "after": {
+        "ms": 11.600000001490116,
+        "writes": 0
+      },
+      "before": {
+        "ms": 11.199999995529652,
+        "writes": 2000
+      }
+    },
+    {
+      "before": {
+        "ms": 50.600000001490116,
+        "writes": 2000
+      },
+      "after": {
+        "ms": 26.19999999552965,
+        "writes": 0
+      }
+    },
+    {
+      "after": {
+        "ms": 20.100000001490116,
+        "writes": 0
+      },
+      "before": {
+        "ms": 28.700000002980232,
+        "writes": 2000
+      }
+    },
+    {
+      "before": {
+        "ms": 9.5,
+        "writes": 2000
+      },
+      "after": {
+        "ms": 6.399999998509884,
+        "writes": 0
+      }
+    },
+    {
+      "after": {
+        "ms": 37.399999998509884,
+        "writes": 0
+      },
+      "before": {
+        "ms": 11.600000001490116,
+        "writes": 2000
+      }
+    }
+  ],
+  "base": "39744311216e525919a1f781a03fb854d92e45fd",
+  "medianMs": {
+    "before": 20.150000002235174,
+    "after": 18.0
+  },
+  "interpretation": "Conteo de mutaciones reproducible; tiempos de microbenchmark indicativos, no mejora causal de CWV ni campo"
+}

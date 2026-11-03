@@ -47,7 +47,7 @@ for (const pageName of GENERIC_PERFORMANCE_PAGES) {
       `máximo-evento=${vitals.eventTimingMaxMs}ms respuesta-carrito=${vitals.interactionMs}ms reqs=${vitals.requests} reqs-propios=${firstPartyRequests} reqs-efectivas=${effectiveRequests} ` +
       `duplicadas-first-party=${vitals.duplicateRequests} transfer=${vitals.transferKB}KB ` +
       `transfer-first-party=${vitals.firstPartyTransferKB}KB ` +
-      `firestore=${vitals.firestoreReads}`
+      `firestore=${vitals.firestoreReads} telemetry-beacons=${vitals.telemetryRequests}`
     );
     if (vitals.duplicateUrls?.length) {
       console.log(`[${pageName}] FIRST_PARTY_DUPLICATE_URLS=${JSON.stringify(vitals.duplicateUrls)}`);

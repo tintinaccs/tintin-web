@@ -1,5 +1,7 @@
 const {test,expect}=require('@playwright/test');
 test('Inicio conserva la portada canónica de colección sin hidratar productos ajenos a sus fichas',async({page})=>{
+ // Ningún SDK remoto puede ser requisito para publicar colecciones públicas.
+ await page.route('https://www.gstatic.com/firebasejs/**',route=>route.abort());
  const origin=new URL(test.info().project.use.baseURL).origin;
  const products=[
   {id:'first',data:{name:'Primero',category:'anillos',price:1000,stock:1,active:true,collectionOrder:0,imageUrl:origin+'/__cover-first.svg'}},
@@ -17,9 +19,11 @@ test('Inicio conserva la portada canónica de colección sin hidratar productos 
   else{fullRequests++;items=products;}
   return route.fulfill({json:{ok:true,resource,items}});
  });
+ const started=Date.now();
  await page.goto('/index.html',{waitUntil:'domcontentloaded'});
  await expect(page.locator('#tt-best-sellers-grid .tt-product-card')).toHaveCount(1);
  await expect(page.locator('.tt-collection-card__image').first()).toHaveAttribute('src',origin+'/__cover-first.svg');
+ console.log('COLLECTION_WITHOUT_SDK_MS',Date.now()-started);
  expect(fullRequests).toBe(0);expect(batches).toEqual([['featured']]);
  expect(await page.evaluate(()=>window.PRODUCTS.map(p=>p.id))).toEqual(['featured']);
  await page.evaluate(()=>window.TintinProductsStore.loadAll());

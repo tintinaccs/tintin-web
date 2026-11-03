@@ -37,19 +37,22 @@ test('Cloudflare verifica la sesión y descarta identidad controlada por el nave
 test('un pedido exitoso debe quedar ligado a CUS_<UID> antes de responder éxito', () => {
   const bridge = read('functions/api/apps-script-bridge.js');
 
-  assert.match(bridge, /const customerId = `CUS_\$\{uid\}`/);
-  assert.match(bridge, /clean\(order\.userId, 128\) !== uid/);
-  assert.match(bridge, /existingCustomerId && existingCustomerId !== customerId/);
-  assert.match(bridge, /mergeFields: \['customerId'\]/);
-  assert.match(bridge, /enforceCanonicalOrderIdentity\(env, parsed\.orderId, authenticatedUser\)/);
+  const policy = read('cloudflare/politica-checkout-publico.js');
+  assert.match(policy, /customerId: `CUS_\$\{uid\}`/);
+  assert.match(policy, /userId: uid/);
+  assert.match(bridge, /await preparePublicCheckoutOrder\(env, forwardedPayload, authenticatedUser\)/);
+  assert.match(bridge, /await createOrderAdmin\(/);
+  assert.match(bridge, /order: created\.order/);
+  assert.doesNotMatch(bridge, /enforceCanonicalOrderIdentity/);
+
 });
 
 test('el espejo inmediato a Sheets recibe el pedido ya canonizado', () => {
   const bridge = read('functions/api/apps-script-bridge.js');
 
   assert.match(bridge, /syncOrderToSheetsBestEffort/);
-  assert.match(bridge, /order: identity\.order/);
-  assert.match(bridge, /parsed\.sheetsSync = sheetsSync/);
+  assert.match(bridge, /order: created\.order/);
+  assert.match(bridge, /sheetsSync: \{ ok: true, deferred: true \}/);
 });
 
 test('los fallos internos del bridge no exponen mensajes ni stack al navegador', () => {

@@ -1,3 +1,11 @@
+## 2026-11-02 America/Buenos_Aires — Fase09 integral (estado vigente)
+
+
+Conciliación posterior de #1318: main1c673584b0b8e69e9610c6d4721210d86bd4f55c incorpora efectivo al retirar y textos reales de delivery. Se preservan política server-side, contratos, pruebas y contenido de ese cambio. Las URLs de13módulos realmente alterados se renuevan a tintin-20261103-acceptance-1;22módulos del grafo concurrente conservan sus URLs publicadas. Nuevas regresiones/generadores/CI se validan sobre la conciliación, sin heredar el PASS del anterior75fa91e9. PR1319 es la entrega vigente.
+
+
+Advertencia CI demostrada: Firebase13/@firebase/rules-unit-testing6 exige Node>=24.12.0, pero los workflows usaban22 (EBADENGINE en job125671971836 del run41560504080/1). Se centraliza la selección en engines.node de package.json (>=24.12.0 <25, LTS24) y actions/setup-node node-version-file, soportado oficialmente; sin duplicar archivo de versión ni bajar SDK. Los nueve workflows existentes conservan triggers, permisos, cobertura y protecciones; npm ci --engine-strict convierte una futura incompatibilidad de engines en fallo explícito. No se disparan despliegues manuales. npm install --package-lock-only --ignore-scripts --engine-strict PASS con Node24.19.0 y180contratos de CI/operaciones/arquitectura PASS. CI del nuevo SHA debe repetirse. Configuración Node explícita del panel Cloudflare sigue sin verificarse.
+
 ## 2026-11-02 — Retiro: primer resultado de navegador y corrección del contrato
 
 Codex /root. PR #1318, head inicial `f52c164ee277e8a420128cb952b05c704013cab2`.
@@ -37,6 +45,17 @@ real de cuenta ni índices remotos. El bloque de retiro se reconcilió sobre ese
 Sus pruebas/browser/merge/deploy requieren sus propios recibos; las demás decisiones
 comerciales permanecen PENDING.
 
+
+Actualización2026-11-03: base conciliada por fast-forward con c25421df/#1317. Se conserva su implementación canónica F02-STATS (páginas300/readTime/CAS, presupuesto10000) y sus pruebas, sin duplicar escritores. Regresiones focalizadas15PASS; tramo final audit:final exit0. audit:final global aún BLOCKED en runtime por JAR oficial inaccesible; CI mantiene emulador obligatorio.
+
+Petición CI: gh-fix-ci oficial instalado en ambas rutas con revisión49f948faa925;46Skills/ruta válidos. Automatización externa **Atender fallos de CI de Tintín** creada/habilitada cada hora; no webhook ni primer despertar acreditado. Ver GITHUB_RESULTS. Run41442885247/1, PR1316/ba96c3a1 falló por drift generado de package/lock, no por Firebase/emulador. Reparación equivalente incorporada a09;1316 sólo se cierra como supersedida después de integración real. Código de09 activo: el monitor no debe editar concurrentemente esta rama.
+
+Revalidación final09 tras conciliar1317: **685pruebas de dominios PASS,0FAIL/0SKIP**; **107/107Chromium de rendimiento PASS sin reintentos** (3min, ambos orígenes locales). El primer barrido08 de106/1FLAKY se conserva como histórico; esta ejecución nueva no hereda su resultado. Skills46por agente validados; --help del script oficial PASS. [Evidencia local](evidence/phase09-20261102/local-validation.json). Build/CI del candidato y limitaciones productivas se registran por separado.
+
+
+
+Control previo a PR: ci:preflight completo PASS_LOCAL; preflight de imports repetido tras retirar restos muertos del bridge (1194fuentes/72funciones), routing7/7. Build canónico repetido:7derivados idénticos; protección78registros/544archivos intacta. Recibo CI/fusión actual: [PR por rama](https://github.com/tintinaccs/tintin-web/pulls?q=head%3Acodex%2Fphase09-integral-acceptance). Su descripción registra SHA/run/intento terminal sin commits dedicados sólo a anunciar CI. Las limitaciones productivas siguen abiertas.
+
 ## 2026-11-02 — Revisión acordada y F02-STATS, primer bloque
 
 Codex /root. Base `39744311216e525919a1f781a03fb854d92e45fd`; rama `fix/commerce-decisions-20261102`.
@@ -53,6 +72,16 @@ productivos; no acreditan índices remotos, otros escritores legacy de estadíst
 ni cobros de señas. No hubo envíos reales, compras ni migraciones.
 Las demás reglas están registradas como PENDING, no implementadas por inferencia.
 CI, merge y publicación se siguen con el SHA y recibo terminal de la PR correspondiente.
+
+Responsable Codex /root. Base inicial39744311216e525919a1f781a03fb854d92e45fd; origin/main conciliado c25421dfe78d83f2dff744b7861c41f28f139641; rama codex/phase09-integral-acceptance. No PR08 independiente: cambios locales de08 preservados en09. [Informe09](TINTIN_PHASE09_ACCEPTANCE.md), [Informe08](TINTIN_PHASE08_TRANSVERSAL.md), [revisión GitHub de00–07](evidence/phase09-20261102/history-verification.json).
+
+- PR1305/1307/1308/1309/1310/1311/1313/1314/1315: merged confirmado por API; SHA de merge en cadena de base, checks históricos consultados. No heredar PASS al candidato actual. Fallo Protected flows histórico1305 conservado;1307 lo reparó. Catálogo executor vacío consultado: nativo Skills sigue externo.
+- Correcciones08: SDK diferido de colecciones/imágenes públicas, normalización de enlaces idempotente (2000→0mutaciones), diagnóstico de beacons sin ocultar tráfico ni duplicados reales. Geometría144/144 y UX163 PASS locales de08; suite107rendimiento106PASS/1FLAKY, no se presenta limpia.
+- Correcciones09: estadísticas por identidad/aliases deduplicados, cursor y CAS con recálculo tras conflicto; no recrear perfil ni publicar truncamiento. Fallback manual informativo autónomo sin falso comercio; branch/helper de checkout Apps Script muerto retirado; contratos actualizados; extractor AST sin colecciones fantasma. Regresiones focalizadas en marcha, integración real añadida con5306pedidos sintéticos/305propios.
+- Firebase CLI15.34.2;14avisos npm moderados de herramientas persisten,0HIGH/CRITICAL. Sin audit fix --force ni major overrides incompatibles. acorn dev-only justificado para extractor canónico, no bundle cliente.
+- Emulador local BLOCKED por JAR oficial no descargable. CI debe ejecutar Rules/integración reales. No reemplazar por producción. audit:final y matriz completa deben acreditar resultados del candidato; todavía IN_PROGRESS.
+- BLOCKED/NOT_VERIFIED externos: publicar/verificar Rules y WebApp con autorización; índices/configuración/proveedores desplegados; sesión real por rol/Diagnóstico Maestro; hardware/lector/WCAG completo/CWV de campo; restauración real a base separada. No se ejecutan compras, pagos, transferencias, mensajes ni migraciones reales. No declarar cierre100% con estos pendientes.
+- Retomar: leer informe09, revisar rama/diff y logs artifacts/phase09, repetir sólo gates afectados por cambios o fallos, generar protección/derivados canónicos, seguir PR/SHA/run/attempt hasta fusión y post-merge según AGENTS. Recibos históricos no sustituyen esa aceptación.
 
 ## 2026-11-02 — Fase07: backend y seguridad
 

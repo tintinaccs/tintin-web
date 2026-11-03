@@ -9,7 +9,7 @@ PREFIXES = [".agents/skills", ".claude/skills"]
 REQUIRED = {
     "design-taste-frontend", "ui-ux-pro-max", "ponytail", "caveman",
     "code-review", "handoff", "systematic-debugging",
-    "verification-before-completion", "frontend-design", "webapp-testing",
+    "verification-before-completion", "frontend-design", "webapp-testing", "gh-fix-ci",
 }
 CUSTOM = {
     "tintin-brand-copy", "tintin-design-quality", "tintin-performance-budgets",
@@ -67,6 +67,8 @@ checks = [
     ".claude/skills/ui-ux-pro-max/data/styles.csv",
     ".agents/skills/systematic-debugging/root-cause-tracing.md",
     "docs/agent/CLOUD_SKILLS_CATALOG.md",
+    ".agents/skills/gh-fix-ci/scripts/inspect_pr_checks.py",
+    ".claude/skills/gh-fix-ci/LICENSE.txt",
 ]
 for path in checks:
     if not (ROOT / path).is_file():

@@ -1,18 +1,18 @@
 # Tintín — seguimiento global permanente, fases 00 a 09
 
-Actualizado: 2026-11-01 America/Buenos_Aires. Responsable: Codex /root, GPT-6.
+Actualizado: 2026-11-03 America/Buenos_Aires. Responsable: Codex /root, GPT-6.
 Este plan global reemplaza la numeración de la tarea particular de Skills/CI;
 aquella evidencia se conserva en [TINTIN_SKILLS_CI_20261101.md](TINTIN_SKILLS_CI_20261101.md).
 La titular solicitó explícitamente que 01 corresponda a auditoría global y arquitectura.
 
 ## Cambio de secuencia solicitado
 
-La titular solicitó explícitamente que la fase 02 sea reparación visual pública
-y que la fase 03 audite y mejore administración y editor de productos.
-El alcance pendiente de seguridad conserva su identificador **03A**, antes del comercio
-**03B**. No se cierran ni se omiten los HIGH de la auditoría 01. La fase 06
-conserva integración de estado/UI y administración; la 07, medición y validación
-manual de accesibilidad/rendimiento. No son una repetición de la reparación02.
+La secuencia vigente responde a las instrucciones particulares:02 visual pública,
+03 editor/admin,04 catálogo,05 comercio,06 clientes/backoffice,07 backend,
+08 optimización transversal y09 reparación integral/aceptación. Las dependencias
+productivas de seguridad03A se conservan separadas: integrar una corrección de
+Rules o Apps Script no equivale a desplegarla. Los informes históricos conservan
+sus alcances originales; [el cierre09](TINTIN_PHASE09_ACCEPTANCE.md) los concilia.
 
 ## Base y estados
 
@@ -44,14 +44,14 @@ manual de accesibilidad/rendimiento. No son una repetición de la reparación02.
 | 00 | Baseline y estabilidad Skills/CI | PASS_CI del circuito del repositorio; BLOCKED de activación nativa | 085953dc / #1305 y #1307 | 45 Skills por ruta y4compat válidos; catálogo executor vacío. Nueva sesión con catálogo/invocación observables. Diagnóstico01 autorizado sin cambio funcional |
 | 01 | Auditoría global y arquitectura real | PASS_CI de publicación diagnóstica; siete hallazgos abiertos | Auditoría085953dc; publicación5b694fe4 / #1308 | Informe y reproducciones completos. Siguiente:02 visual por nueva instrucción |
 | 02 | Reparación visual pública, responsive, scroll y foco | PASS_CI; #1309 MERGED | 344a2936 / [#1309](https://github.com/tintinaccs/tintin-web/pull/1309); CI41375418525/1 SUCCESS del head29e8685c | Comprobación de main y producción separada por sus runs. Continúa03 editor por instrucción actual; seguridad03A abierta |
-| 03 | Administración y editor de productos: fotografías, opciones, inventario, UX y compatibilidad | PASS_LOCAL; 130 pruebas navegador,110 de dominio y13 específicas tras conciliar02 (conteos solapados) | Base344a2936; rama codex/phase03-product-editor | [Informe](PHASE03_ADMIN_PRODUCT_EDITOR.md). No acredita cierre de seguridad/comercio |
-| 03A/03B | Seguridad y autoridades de escritura; integridad comercial | PENDING; HIGH F01-RULES/F04-LEGACY siguen abiertos | Base de hallazgos085953dc; sin PR de reparación | Primero autorización de inventory* y exposición/delegación Apps Script; después V1/V2, precios, stock, carrito, checkout y pagos. Depende01; conciliar02 |
-| 04 | Catálogo comercial integral: publicación, variantes, precios, imágenes, stock, relaciones, consultas y caché (instrucción actual) | IN_PROGRESS; reparaciones y pruebas de catálogo documentadas | Base e3de73c1 (#1310); rama codex/phase04-catalog-commercial | [Informe04](TINTIN_PHASE04_CATALOG.md). F01/F04 HIGH y F02-STATS siguen pendientes; no declarar cierre global |
-| 05 | Flujo comercial completo: carrito, checkout, entrega, pagos, pedidos y seguimiento (instrucción actual) | PASS_LOCAL con reservas; CI y publicación pendientes de resultado terminal | Base b1107b3f (#1311); rama codex/phase05-commerce-flow | [Informe05](TINTIN_PHASE05_COMMERCE.md). Ruta legacy retirada en fuente; deployment WebApp y F01-RULES HIGH pendientes |
-| 06 | Clientes, administración, permisos y notificaciones (instrucción actual) | PASS_LOCAL parcial; gates y verificaciones externas por recibo | Base001c4218 (#1313); rama codex/phase06-accounts-admin | [Informe06](TINTIN_PHASE06_ACCOUNTS_ADMIN.md). Paginación autorizada, BFCache y aislamiento al navegar; sin elevar permisos. HIGH03A sigue pendiente |
-| 07 | Backend, datos, APIs y servicios conectados (instrucción actual) | IN_PROGRESS; F01-RULES reparado en candidato, Rules/CI por validar | Base1159edeb (#1314); rama codex/phase07-backend-security | [Informe07](TINTIN_PHASE07_BACKEND_SECURITY.md). Publicación de Rules e inspección de producción requieren autorización separada |
-| 08 | Build, publicación, Actions, dependencias, monitoreo y mantenimiento | PENDING; F03-FALLBACK/F05-DEPS MEDIUM y F06-CONTRACTS/F07-INDEX LOW | Base085953dc; sin PR funcional | Artefacto fallback completo, toolchain, contratos y extractor. Preparación puede avanzar tras01/02; cierre revalida03–07 |
-| 09 | Aceptación global y entrega | BLOCKED por HIGH abiertos y verificaciones externas enumeradas | Sin release de cierre | Requiere02–08 y evidencia aplicable; no declarar terminado con pruebas pendientes |
+| 03 | Administración y editor de productos | Integrado #1310; checks históricos de merge verificados; revalidación09 en curso | e3de73c1 | Fotografías/opciones/stock y móvil incluidos; no heredar PASS del candidato09 |
+| 03A/03B | Autoridades de escritura e integridad comercial | Correcciones de fuente05/07 integradas; cierre productivo BLOCKED | #1313/#1315 | Publicación Rules y WebApp requieren autorización/verificación separada |
+| 04 | Catálogo comercial integral | Integrado #1311; checks históricos verificados; revalidación09 en curso | b1107b3f | [Informe04](TINTIN_PHASE04_CATALOG.md); inventario real no usado para probar |
+| 05 | Flujo comercial completo | Integrado #1313,CI/CodeQL históricos aprobados; revalidación09 en curso | 001c4218 | [Informe05](TINTIN_PHASE05_COMMERCE.md); WebApp sin verificar |
+| 06 | Clientes, administración, permisos y notificaciones | Integrado #1314,checks históricos aprobados; revalidación09 en curso | 1159edeb | [Informe06](TINTIN_PHASE06_ACCOUNTS_ADMIN.md); hardware y entrega real no acreditados |
+| 07 | Backend, datos, APIs y servicios | Integrado #1315; Rules aisladas PASS_CI histórico; deployment BLOCKED | 39744311 | [Informe07](TINTIN_PHASE07_BACKEND_SECURITY.md); no se publicó Firestore Rules |
+| 08 | Optimización transversal de rendimiento, UX, accesibilidad y SEO | Sin PR independiente; cambios conservados y consolidados en09 | Base39744311 | [Informe08](TINTIN_PHASE08_TRANSVERSAL.md); mediciones y límites explícitos |
+| 09 | Reparación integral, aceptación y cierre | IN_PROGRESS del candidato; aceptación productiva global BLOCKED por pendientes enumerados | codex/phase09-integral-acceptance | [Informe09](TINTIN_PHASE09_ACCEPTANCE.md); matriz completa y recibos actuales obligatorios |
 
 ## Entregables de la Fase 01
 
@@ -107,3 +107,15 @@ un checkout local atrasado y se concilió antes de entregar. El nuevo alcance no
 cierra por inferencia F01-RULES/F04-LEGACY de03A/03B; F02-STATS (resumen de
 cuentas/pedidos) permanece pendiente fuera de esta reparación de catálogo.
 No se modifican datos productivos ni se autorizan migraciones destructivas.
+
+## Continuación09 y vigilancia de CI (2026-11-03)
+
+Base conciliada con #1317/c25421df, que resuelve F02-STATS en fuente mediante páginas/snapshot/CAS;09 preserva esa autoridad y añade integración real aislada. Tramos de audit:final ejecutados con fallos inspeccionados: auditorías obsoletas alineadas con contratos reales, runtime/emulador local BLOCKED por descarga oficial, continuación final exit0. Se requieren recibos del candidato para PASS_CI.
+
+Se incorporó gh-fix-ci oficial a Codex/Claude (46Skills por ruta) y se habilitó vigilancia horaria externa para fallos/advertencias accionables, sin receiver de eventos ni primer despertar acreditado. Run41442885247/1 de #1316 falla por artefactos generados desactualizados ante bump Firebase15.34.2;09 incluye ese bump con regeneración canónica. [Operación y límites](GITHUB_RESULTS.md). No se declara instalación global del host ni vigilancia instantánea.
+
+
+Conciliación posterior de #1318: main1c673584b0b8e69e9610c6d4721210d86bd4f55c incorpora efectivo al retirar y textos reales de delivery. Se preservan política server-side, contratos, pruebas y contenido de ese cambio. Las URLs de13módulos realmente alterados se renuevan a tintin-20261103-acceptance-1;22módulos del grafo concurrente conservan sus URLs publicadas. Nuevas regresiones/generadores/CI se validan sobre la conciliación, sin heredar el PASS del anterior75fa91e9. PR1319 es la entrega vigente.
+
+
+Advertencia CI demostrada: Firebase13/@firebase/rules-unit-testing6 exige Node>=24.12.0, pero los workflows usaban22 (EBADENGINE en job125671971836 del run41560504080/1). Se centraliza la selección en engines.node de package.json (>=24.12.0 <25, LTS24) y actions/setup-node node-version-file, soportado oficialmente; sin duplicar archivo de versión ni bajar SDK. Los nueve workflows existentes conservan triggers, permisos, cobertura y protecciones; npm ci --engine-strict convierte una futura incompatibilidad de engines en fallo explícito. No se disparan despliegues manuales. npm install --package-lock-only --ignore-scripts --engine-strict PASS con Node24.19.0 y180contratos de CI/operaciones/arquitectura PASS. CI del nuevo SHA debe repetirse. Configuración Node explícita del panel Cloudflare sigue sin verificarse.

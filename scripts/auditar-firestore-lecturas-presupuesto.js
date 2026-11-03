@@ -73,7 +73,7 @@ check(
 check('Páginas sin catálogo no cargan productos', /(?:index\|catalogo\|collections)/.test(products) && /return Array\.isArray\(window\.PRODUCTS\)/.test(products), 'Perfil, login, contacto, legales y checkout deben quedar sin lectura de productos.');
 check('La búsqueda carga productos solo al abrirse', products.includes("['btn-search', 'tabbar-search']") && products.includes('ensureProductsForSearch') && products.includes("control.addEventListener('click', load, { once: true })"), 'La lupa no debe consultar antes de usarse.');
 check('Colecciones públicas usan edge sin fallback directo', collections.includes("fetchPublicCatalogResource('collections')") && collections.includes('loadCollections') && collections.includes('CACHE_TTL') && !collections.includes("listPublicCollectionRest('collections'"), 'El menú público debe usar edge y caché local; no debe abrir Firestore como respaldo del navegador.');
-check('Colecciones en vivo quedan reservadas al Admin', collections.includes('startAdminListener') && collections.includes('adminSubscribers') && collections.includes('onSnapshot'), 'El CRUD Admin debe conservar tiempo real.');
+check('Colecciones en vivo quedan reservadas al Admin', collections.includes('startAdminListener') && collections.includes('adminSubscribers') && collections.includes('subscribeAdminSnapshot') && collections.includes('createAdminPagedSource') && collections.includes('limit(200)'), 'El CRUD Admin debe conservar tiempo real.');
 check(
   'Menú Tienda carga colecciones por demanda',
   navCollectionsAdapter.includes('components/navigation/compartido/carga-colecciones.js') &&
