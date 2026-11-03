@@ -667,7 +667,7 @@ for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') &&
   }
   html = ensureInitialRuntimeStyles(html, page);
   if (page === '404.html' || page === 'admin.html' || page === 'admin-images.html') {
-    html = ensureNovakStyles(html);
+    html = ensureNovakStyles(html, page === '404.html');
     if (page.startsWith('admin')) html = ensureStandaloneCredit(html, page);
   }
   if (html !== before) {

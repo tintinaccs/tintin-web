@@ -12,13 +12,14 @@ function renderNovakCredit() {
   </div>`;
 }
 
-function ensureNovakStyles(html) {
+function ensureNovakStyles(html, absolute = false) {
   for (const [id, href, version] of [
     ['novak-credit-css', '/assets-tintin/novak-signature/novak-credit.css', 'tintin-novak-20261102-2'],
     ['novak-credit-site-css', '/css/components/novak-credit-site.css', 'tintin-novak-20261102-1'],
   ]) {
     html = html.replace(new RegExp(`\\s*<link\\b[^>]*id="${id}"[^>]*>`, 'g'), '');
-    html = html.replace('</head>', `<link id="${id}" rel="stylesheet" href="${href}?v=${version}">\n</head>`);
+    const resource = absolute ? href : href.replace(/^\//, '');
+    html = html.replace('</head>', `<link id="${id}" rel="stylesheet" href="${resource}?v=${version}">\n</head>`);
   }
   return html;
 }
