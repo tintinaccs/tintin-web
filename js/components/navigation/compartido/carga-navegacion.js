@@ -16,9 +16,9 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1';
 const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261030-home-history-5';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261102-pickup-cash-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-footer-canonical-20261103-1';
 // Mismo ?v= que el import de estado-productos.js: una sola instancia por página.
-const PAGE_MAINTENANCE_URL = '../../../cargador-mantenimiento-pagina.js?v=tintin-20261102-pickup-cash-1';
+const PAGE_MAINTENANCE_URL = '../../../cargador-mantenimiento-pagina.js?v=tintin-footer-canonical-20261103-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -99,7 +99,7 @@ function loadHomeMaintenance() {
     document.head.appendChild(link);
   }
 
-  return import(new URL('/js/pages/home/mantenimiento-inicio.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href);
+  return import(new URL('/js/pages/home/mantenimiento-inicio.js?v=tintin-footer-canonical-20261103-1', location.href).href);
 }
 
 export function loadProductsRuntime({ forSearch = false } = {}) {
@@ -175,7 +175,7 @@ function loadCollectionsRuntime({ withProducts = false } = {}) {
 // consulta escrita mientras termina de cargar el controlador compartido.
 function loadSearchRuntime() {
   if (!searchControllerPromise) {
-    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261102-pickup-cash-1')
+    searchControllerPromise = import('./control-busqueda.js?v=tintin-footer-canonical-20261103-1')
       .then(module => {
         module.initSearchController();
         window.TintinSearchController?.renderCurrentQuery();

@@ -1,5 +1,8 @@
 'use strict';
 
+const { getSectionDefaults } = require('../../js/core/store/definiciones-contenido.js');
+const FOOTER_COPYRIGHT = getSectionDefaults('index', 'footer').copy;
+
 // Único destino editable; sync:public-shell propaga el cambio a los documentos.
 const NOVAK_URL = 'https://novak-web.inf-novakpy.workers.dev/#inicio';
 
@@ -15,7 +18,7 @@ function renderNovakCredit() {
 
 function renderNovakFooterEnd() {
   return `<div id="tt-footer-ending" class="tt-footer-ending">
-    <div class="tt-footer-bottom">© 2026 TINTIN ACCESORIOS</div>
+    <div class="tt-footer-bottom">${FOOTER_COPYRIGHT}</div>
     ${renderNovakCredit()}
   </div>`;
 }
@@ -23,14 +26,14 @@ function renderNovakFooterEnd() {
 function ensureNovakStyles(html, absolute = false) {
   for (const [id, href, version] of [
     ['novak-credit-css', '/assets-tintin/novak-signature/novak-credit.css', 'tintin-novak-20261102-2'],
-    ['novak-credit-site-css', '/css/components/novak-credit-site.css', 'tintin-footer-reference-20261103-2'],
+    ['novak-credit-site-css', '/css/components/novak-credit-site.css', 'tintin-footer-uppercase-20261103-1'],
   ]) {
     html = html.replace(new RegExp(`\\s*<link\\b[^>]*id="${id}"[^>]*>`, 'g'), '');
     const resource = absolute ? href : href.replace(/^\//, '');
     html = html.replace('</head>', `<link id="${id}" rel="stylesheet" href="${resource}?v=${version}">\n</head>`);
   }
   html = html.replace(/\s*<script id="novak-credit-loader"[^>]*><\/script>/g, '');
-  html = html.replace('</head>', `<script id="novak-credit-loader" src="${absolute ? '/' : ''}js/components/novak-credit.js?v=tintin-novak-20261103-1" defer></script>\n</head>`);
+  html = html.replace('</head>', `<script id="novak-credit-loader" src="${absolute ? '/' : ''}js/components/novak-credit.js?v=tintin-novak-20261103-2" defer></script>\n</head>`);
   return html;
 }
 
@@ -43,4 +46,4 @@ function ensureStandaloneCredit(html, page) {
     : html.replace('</body>', `${footer}</body>`);
 }
 
-module.exports = { NOVAK_URL, renderNovakCredit, renderNovakFooterEnd, ensureNovakStyles, ensureStandaloneCredit };
+module.exports = { NOVAK_URL, FOOTER_COPYRIGHT, renderNovakCredit, renderNovakFooterEnd, ensureNovakStyles, ensureStandaloneCredit };

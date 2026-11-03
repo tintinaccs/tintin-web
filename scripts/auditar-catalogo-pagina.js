@@ -41,7 +41,9 @@ requireText(runtime, /history\.replaceState/, 'Los filtros no sincronizan la URL
 requireText(runtime, /MutationObserver/, 'Falta vigilancia de render fuera de orden.');
 requireText(runtime, /tt-catalog-runtime-state/, 'Faltan estados de recuperación.');
 requireText(runtime, /https:\/\/tintinaccs\.com\//, 'Los metadatos no usan el dominio canónico https://tintinaccs.com.');
-requireText(runtime, /new Date\(\)\.getFullYear/, 'El año del footer no es automático.');
+requireText(read('js/components/novak-credit.js'), /new Date\(\)\.getUTCFullYear/, 'El componente compartido no actualiza el año del footer.');
+requireText(html, /id="novak-credit-loader"[^>]*src="[^"]*js\/components\/novak-credit\.js/, 'La página no carga el componente compartido del pie.');
+if (/updateFooterYear|normalizeFooterYear|\.tt-footer-bottom/.test(runtime)) errors.push('La página no debe competir con el año del pie compartido.');
 requireText(loader, /catalogo[\s\S]*load\('pages\/catalog\/mantenimiento-catalogo\.js'(?:,\s*'[^']+')?\)/, 'El runtime del Catálogo no se carga desde el cargador por página.');
 requireText(maintenance, /Desktop grande:|Desktop grande|desktop grande/i, 'El registro no contempla desktop grande.');
 requireText(maintenance, /tablet/i, 'El registro no contempla tablet.');

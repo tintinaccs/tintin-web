@@ -1,7 +1,7 @@
 /* =============================================================
    TINTIN — Ajustes de página de la página principal
    =============================================================
-   Sólo pulido de página: color de tema, año del pie, geometría de imágenes y
+   Sólo pulido de página: color de tema, geometría de imágenes y
    la marca `tt-home-runtime-ready` que habilita las transiciones CSS.
 
    NO pinta ni limpia productos/combinaciones ni libera el loader:
@@ -27,12 +27,6 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
     }
   }
 
-  function updateFooterYear() {
-    const footer = document.querySelector('.tt-footer-bottom');
-    if (!footer) return;
-    const currentYear = String(new Date().getFullYear());
-    footer.textContent = footer.textContent.replace(/©\s*\d{4}(?:-\d{4})?/i, `© 2024-${currentYear}`);
-  }
 
   function ensureImageGeometry() {
     document.querySelectorAll([
@@ -53,7 +47,6 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
 
   function boot() {
     updateThemeColor();
-    updateFooterYear();
     ensureImageGeometry();
     requestAnimationFrame(() => requestAnimationFrame(markReady));
 

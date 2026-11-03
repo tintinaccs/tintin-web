@@ -41,6 +41,23 @@
 #tt-footer-ending .novak-credit:focus-visible { background-color: rgba(255, 255, 255, .55); }
 
 /* En móviles estrechos la firma debe quedar por encima del WhatsApp flotante. */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .tt-footer #tt-footer-ending { padding-bottom: 64px; }
+}
+
+/* El hover del kit se reserva al puntero; el foco de teclado sigue animado. */
+@media (hover: none), (pointer: coarse) {
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) {
+    transform: none;
+    background-color: transparent;
+  }
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) span::after,
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) img { transform: none; }
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) span::after { transform: scaleX(0); }
+}
+
+/* Presentación uniforme, también para colecciones cargadas o editadas en vivo. */
+:is(.tt-footer[data-tt-footer="unified"], [data-novak-footer]),
+:is(.tt-footer[data-tt-footer="unified"], [data-novak-footer]) :is(a, p, li, span, button, .tt-footer-col-title) {
+  text-transform: uppercase !important;
 }

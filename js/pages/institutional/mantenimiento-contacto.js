@@ -207,6 +207,4 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
       error => console.warn('[contact-maintenance] configuración no disponible', error)
     );
   });
-  const footer = document.querySelector('.tt-footer-bottom');
-  if (footer) footer.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
 }
