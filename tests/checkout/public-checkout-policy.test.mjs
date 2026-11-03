@@ -219,6 +219,18 @@ test('el Super Admin puede comprar con la tienda cerrada y sin turno', async () 
   assert.ok(created.orderId);
 });
 
+test('retiro permite efectivo habilitado y conserva el pedido pendiente sin envío', async () => {
+  const pickup = draft({ selectedCity: '__retiro__', shippingMethod: 'retiro', paymentMethod: 'efectivo', mapLocation: null, expectedShippingCost: 0, expectedTotal: 100000 });
+  const result = await checkout(pickup);
+  const order = orderWrite(result.store);
+  assert.equal(order.shippingMethod, 'retiro');
+  assert.equal(order.shippingCost, 0);
+  assert.equal(order.paymentStatus, 'pendiente');
+  assert.equal(order.paymentMethod, 'efectivo');
+  assert.equal(order.inventoryState, 'reserved');
+  await rejectsWith(checkout(pickup, fakeStore({ 'settings/general': { storeOpen: true, paymentMethods: { efectivo: false, transferencia: true } } })), 'payment_unavailable');
+});
+
 test('encomienda exige CI, modo válido y únicamente transferencia', async () => {
   const base = {
     selectedCity: 'Encarnación',

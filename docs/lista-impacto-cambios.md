@@ -1,3 +1,13 @@
+## 2026-11-02 — Efectivo en retiro y copy de reparto
+
+Autoridades: politica-checkout-publico, pedido-checkout-seguro, nucleo-metodos-pago,
+checkout-metodos-pago y fallback de checkout.html. Configuración habilitada sigue
+mandando; encomienda no admite efectivo. Fallbacks de contenido, FAQ y Envíos
+reflejan reparto lunes–sábado y retiro con efectivo. No hay cambio visual ni de
+credenciales. Importadores/URLs transitivas y shell mediante fuentes y generadores;
+regresión de servidor y fixtures existentes de checkout a tres anchos. Las demás
+decisiones comerciales permanecen en su bloque de implementación propio.
+
 ## 2026-11-02 — Resumen de cuentas sin recorte global ni publicación atrasada
 
 Autoridades: sincronizacion-estadisticas-pedido y transporte REST Firebase existente.

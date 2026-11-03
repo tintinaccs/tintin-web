@@ -692,8 +692,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (!['efectivo', 'transferencia', 'paypal'].includes(paymentMethod)) {
       throw appError('payment_required', 'Seleccioná un método de pago disponible.');
     }
-    if ((shipping.method === 'encomienda' && paymentMethod !== 'transferencia') || (paymentMethod === 'efectivo' && shipping.method !== 'delivery')) {
-      throw appError('payment_unavailable', 'El producto por encomienda se paga previamente por transferencia. Efectivo contra entrega sólo para delivery.');
+    if ((shipping.method === 'encomienda' && paymentMethod !== 'transferencia') || (paymentMethod === 'efectivo' && !['delivery', 'retiro'].includes(shipping.method))) {
+      throw appError('payment_unavailable', 'El producto por encomienda se paga previamente por transferencia. Efectivo al recibir por delivery o al retirar.');
     }
     if (shipping.method === 'delivery' && (!shipping.mapLocation || !shipping.mapLocation.name)) {
       throw appError('map_required', 'Marcá y nombrá tu ubicación en el mapa.');
