@@ -361,6 +361,6 @@ test('estadísticas reales aisladas: 5001 pedidos ajenos,305 propios,aliases ded
  for(let i=0;i<records.length;i+=400)await deps.commit({},records.slice(i,i+400));
  const source=fs.readFileSync('cloudflare/firebase-admin-ligero.js','utf8');const a=source.indexOf('export async function firestoreAdminQueryByFieldPage('),b=source.indexOf('\n/**',a);
  const query=new Function('deps',`const {parseServiceAccount,getGoogleAccessToken,FIRESTORE_SCOPE,firestoreDatabaseUrl,fetch}=deps;${source.slice(a,b).replace('export ','')};return firestoreAdminQueryByFieldPage;`)({parseServiceAccount:()=>({project_id:project}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch});
- const result=await syncOrderOwnerStats({}, {userId:id},{queryPage:query,get:deps.get,commit:deps.commit});
+ const result=await syncOrderOwnerStats({}, {userId:id,userEmail:'stats@example.invalid'},{queryPage:query,get:deps.get,commit:deps.commit});
  assert.equal(result.updated,true);const saved=decodeFirestoreFields((await deps.get({},'users/'+id)).fields);assert.equal(saved.totalOrders,305);assert.equal(saved.totalSpent,305);assert.equal(saved.untouched,'conservar');
 });

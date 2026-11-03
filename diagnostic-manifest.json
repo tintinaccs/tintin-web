@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ccf337d9347a3387af0847b2d75ad29086c8e95036329b86a9f21ce5da3a7617",
+  "sourceFingerprint": "fb36e9bec068c63b0422cad90ebace9f8eee84fc4c4049497c285776fb9eaa52",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1770,
     "textFiles": 1635,
-    "totalBytes": 45116761,
+    "totalBytes": 45116795,
     "pages": 19,
     "modules": 1161
   },
@@ -51153,8 +51153,8 @@
     },
     {
       "path": "tests/integration/commerce-firestore.test.mjs",
-      "bytes": 33442,
-      "sha256": "5b5fd4b1a1f2cf1af43be08915899e61204afc451fba5b4ab85f0eccf42ba155",
+      "bytes": 33476,
+      "sha256": "4d4dbe7b715c3beed192de5f07df105cf7a0e134437ceb647442fd04dda42213",
       "syntax": {
         "ok": true,
         "error": ""
@@ -70072,8 +70072,8 @@
     {
       "path": "tests/integration/commerce-firestore.test.mjs",
       "extension": ".mjs",
-      "bytes": 33442,
-      "sha256": "5b5fd4b1a1f2cf1af43be08915899e61204afc451fba5b4ab85f0eccf42ba155"
+      "bytes": 33476,
+      "sha256": "4d4dbe7b715c3beed192de5f07df105cf7a0e134437ceb647442fd04dda42213"
     },
     {
       "path": "tests/integration/helpers/paypal-simulator.mjs",
