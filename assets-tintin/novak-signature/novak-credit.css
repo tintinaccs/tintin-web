@@ -1,0 +1,12 @@
+/* Reusable NOVAK signature. Keep its logo and destination together when copying. */
+.novak-credit-row{flex:0 0 100%;display:flex;justify-content:center;padding-top:18px}
+.novak-credit{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:4px 10px;color:inherit;font:500 13px/1.4 system-ui,sans-serif;text-decoration:none!important;border-radius:8px;transition:transform .25s ease,background-color .25s ease}
+.novak-credit span{position:relative}
+.novak-credit span::after{content:"";position:absolute;inset:auto 0 -4px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
+.novak-credit img{display:block;width:42px;height:40px;object-fit:contain;flex:none;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.novak-credit:hover,.novak-credit:focus-visible{transform:translateY(-2px);background:rgba(255,255,255,.32)}
+.novak-credit:hover span::after,.novak-credit:focus-visible span::after{transform:scaleX(1)}
+.novak-credit:hover img,.novak-credit:focus-visible img{transform:translateX(2px) scale(1.06)}
+.novak-credit:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.water-paused .novak-credit,.water-paused .novak-credit *{transition:none}
+@media(prefers-reduced-motion:reduce){.novak-credit,.novak-credit *{transition:none!important}.novak-credit:hover,.novak-credit:focus-visible,.novak-credit:hover img,.novak-credit:focus-visible img{transform:none}}
