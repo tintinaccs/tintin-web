@@ -51,12 +51,20 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
         cards:[...document.querySelectorAll('.tt-trust-item')].map(box),
         actions:[...document.querySelectorAll('.tt-hero-actions a')].map(a => ({ ...box(a), background:getComputedStyle(a).backgroundColor, border:parseFloat(getComputedStyle(a).borderTopWidth) })),
         copyrightPadding:parseFloat(getComputedStyle(document.querySelector('.tt-footer-bottom')).paddingBottom),
-        footerTail:document.querySelector('.tt-footer').getBoundingClientRect().bottom-document.querySelector('.tt-footer-bottom').getBoundingClientRect().bottom,
+        credit:q('.tt-footer .novak-credit'), creditRow:q('.tt-footer .novak-credit-row'),
+        creditGap:document.querySelector('.tt-footer .novak-credit-row').getBoundingClientRect().top-document.querySelector('.tt-footer-bottom').getBoundingClientRect().bottom,
+        footerTail:document.querySelector('.tt-footer').getBoundingClientRect().bottom-document.querySelector('.tt-footer .novak-credit-row').getBoundingClientRect().bottom,
         afterFooter:document.documentElement.scrollHeight-(document.querySelector('.tt-footer').getBoundingClientRect().bottom+scrollY),
         scrollWidth:document.documentElement.scrollWidth };
     });
     expect(geometry.scrollWidth).toBeLessThanOrEqual(width + 1);
     expect(geometry.copyrightPadding).toBeLessThanOrEqual(18);
+    // La firma solicitada sucede al copyright; ningún espacio vacío adicional
+    // se permite después del nuevo contenido final del pie.
+    expect(Math.abs(geometry.creditGap)).toBeLessThanOrEqual(1);
+    expect(geometry.credit.height).toBeGreaterThanOrEqual(48);
+    expect(geometry.creditRow.height - geometry.credit.height).toBeLessThanOrEqual(42);
+    expect(Math.abs(geometry.credit.center - geometry.creditRow.center)).toBeLessThanOrEqual(1);
     expect(geometry.footerTail).toBeLessThanOrEqual(1);
     expect(geometry.afterFooter).toBeLessThanOrEqual(width <= 767 ? 97 : 1);
     const inside = (a, b) => a.left >= b.left - 1 && a.right <= b.right + 1;
