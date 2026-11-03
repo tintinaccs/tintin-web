@@ -113,8 +113,6 @@ if (supported.has(page) && !window.TintinLegalMaintenanceBooted) {
   refreshLegalLayout();
   [0, 120, 400, 1000, 2500].forEach(delay => setTimeout(refreshLegalLayout, delay));
 
-  const footer = document.querySelector('.tt-footer-bottom');
-  if (footer) footer.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
 
   // Nada de lo de arriba necesita datos remotos (solo reordena HTML ya
   // presente), así que el SDK de Firebase se carga después del contenido.

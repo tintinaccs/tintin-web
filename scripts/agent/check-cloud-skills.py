@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Read-only validation of repo-scoped agent Skills. Python standard library only."""
+import hashlib
+import json
 import os
 import pathlib
 import sys
@@ -55,11 +57,38 @@ for prefix in PREFIXES:
     seen[prefix] = items
     print(f"{prefix}: {len(items)} Skills with valid file metadata")
 for name in REQUIRED | CUSTOM:
+    if name not in seen.get(PREFIXES[0], {}) or name not in seen.get(PREFIXES[1], {}):
+        errors.append(f"Missing mirror Skill: {name}")
     if name in seen.get(PREFIXES[0], {}) and name in seen.get(PREFIXES[1], {}):
         a = (ROOT / seen[PREFIXES[0]][name]).read_text(encoding="utf-8")
         b = (ROOT / seen[PREFIXES[1]][name]).read_text(encoding="utf-8")
         if a != b:
             errors.append(f"Mismatched Codex and Claude Skill: {name}")
+# Validate every auxiliary file, not just selected SKILL.md files.
+for prefix in PREFIXES:
+    root = ROOT / prefix
+    for file in root.rglob("*"):
+        imported = file.relative_to(root).parts[0]
+        if file.is_file() and (imported == "impeccable" or imported.startswith("emil-")):
+            mirror = ROOT / PREFIXES[1 if prefix == PREFIXES[0] else 0] / file.relative_to(root)
+            if not mirror.is_file() or mirror.read_bytes() != file.read_bytes():
+                errors.append(f"Missing or mismatched mirrored resource: {file.relative_to(ROOT)}")
+lock = json.loads((ROOT / "docs/agent/design-skills-lock.json").read_text())
+taste_file = ROOT / PREFIXES[0] / lock["taste"]["folder"] / "SKILL.md"
+if hashlib.sha256(taste_file.read_bytes()).hexdigest() != lock["taste"]["skillSha256"]:
+    errors.append("Taste SKILL.md differs from its recorded upstream version")
+for item in lock["imports"]:
+    if len(item["revision"]) != 40:
+        errors.append(f"Unpinned design Skill: {item['folder']}")
+    for relative, expected_hash in item["installedSha256"].items():
+        file = ROOT / PREFIXES[0] / item["folder"] / relative
+        if not file.is_file() or hashlib.sha256(file.read_bytes()).hexdigest() != expected_hash:
+            errors.append(f"Design Skill integrity mismatch: {item['folder']}/{relative}")
+    for relative, upstream_hash in item["upstreamSha256"].items():
+        if relative != "SKILL.md" and item["installedSha256"].get(relative) != upstream_hash:
+            errors.append(f"Unexpected upstream resource modification: {item['folder']}/{relative}")
+    if "LICENSE.upstream" not in item["installedSha256"]:
+        errors.append(f"Missing upstream license: {item['folder']}")
 checks = [
     ".agents/skills/taste-frontend/scripts/draw.mjs",
     ".claude/skills/taste-frontend/references/copy.md",
@@ -77,4 +106,4 @@ if errors:
     for msg in errors:
         print("ERROR:", msg, file=sys.stderr)
     raise SystemExit(1)
-print("PASS: file metadata, required paths and selected Codex/Claude parity (native host discovery not tested)")
+print("PASS: file metadata, required paths/parity and all newly imported resources, pinned imports and licenses (native host discovery not tested)")

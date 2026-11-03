@@ -44,3 +44,14 @@
 @media (max-width: 360px) {
   .tt-footer #tt-footer-ending { padding-bottom: 64px; }
 }
+
+/* El hover del kit se reserva al puntero; el foco de teclado sigue animado. */
+@media (hover: none), (pointer: coarse) {
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) {
+    transform: none;
+    background-color: transparent;
+  }
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) span::after,
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) img { transform: none; }
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) span::after { transform: scaleX(0); }
+}

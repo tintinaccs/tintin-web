@@ -23,9 +23,9 @@ if (!/\/(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuent
 
 export function loadPageMaintenance() {
   const path = pathName();
-  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261101-touch-targets-1');
-  if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-20261031-seo-espacios-2');
-  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261102-public-focus-scroll-1');
+  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-footer-canonical-20261103-1');
+  if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-footer-canonical-20261103-1');
+  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-footer-canonical-20261103-1');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     const version = 'tintin-20261009-whatsapp-responsive-1-photos-20261008-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
@@ -41,10 +41,10 @@ export function loadPageMaintenance() {
     return load('pages/login/mantenimiento-acceso.js', 'tintin-20261031-seo-espacios-2');
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261026-profile-save-1');
-  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-20261016-story-2bbd366911');
-  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', 'tintin-20261031-seo-espacios-2');
+  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-footer-canonical-20261103-1');
+  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', 'tintin-footer-canonical-20261103-1');
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
-    return load('pages/institutional/mantenimiento-legal.js', 'tintin-20261031-seo-espacios-2');
+    return load('pages/institutional/mantenimiento-legal.js', 'tintin-footer-canonical-20261103-1');
   }
   return Promise.resolve();
 }

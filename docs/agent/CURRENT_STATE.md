@@ -1,3 +1,11 @@
+## 2026-11-03 — Pie canónico y bibliotecas de diseño — Codex /root
+
+Base5d446cc75ebe31c9022f6db540f0a2fc12c75f8d; rama codex/skills-design-libraries. Implementación de copyright completo desde el esquema global existente y eliminación de siete reescrituras por página; columnas y símbolo/animación NOVAK conservados. Touch neutraliza solo hover; foco de teclado permanece. Impeccable y Emil importados con recursos/licencias/hashes, Taste ya presente y verificado;63Skills en cada cliente con selección automática por intención, sin ejecutar lanzadores. Detalle: DESIGN_SKILLS_20261103.md.
+
+PASS_LOCAL:46Chromium firma/espaciado (136combinaciones de17documentos/8tamaños, original/noscript/foco/reduced-motion/touch), validador de Skills y bootstrap--check, tipografía/colores/CSS. PASS_LOCAL adicional:2pruebas de runtime Inicio/Nosotros y33/33combinaciones del auditor responsive existente. Preflight completo, generadores, manifiesto, caché y protección de78registros/544archivos PASS_LOCAL. CI, fusión y publicación IN_PROGRESS; sin heredar PASS de otro SHA. Invocación nativa y hardware físico NOT_VERIFIED.
+
+Antecedente1322 confirmado: merge5d446cc7; CI41641334010/1, producción41641337718/1 y Push on main41641334432/1 SUCCESS. La solicitud actual reemplaza su copyright corto por el completo de la primera captura.
+
 ## Integración final PR1322 — Codex /root
 
 Reconciliada con main210feb5d (#1320), conservando la elección de stock, el footer solicitado y ambos seguimientos. PR1320 integrada: head6e49c54a, merge210feb5d05d57fbd018c9faab7f6aa708dc4bd2c; CI41626576071/1 y CodeQL41626570285/1 SUCCESS. Post-merge independiente: CI41630300041/1, CodeQL41630299889/1 y salud41630299958/1 SUCCESS. El hilo CodeQL del fixture se corrigió y resolvió sin omitir reglas. PASS_LOCAL reconciliado:53Chromium firma/espaciado/cancelación,0reintentos; preflight completo, build/caché y protección78registros/544archivos PASS. PR1322 requiere recibos CI nuevos tras esta conciliación. No se hereda aprobación de otro SHA.

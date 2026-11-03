@@ -67,4 +67,21 @@ Al trabajar sobre interfaz o textos, primero leer `DESIGN.md`, `docs/identidad-v
 
 Solicitar: «Revisá qué Skills corresponden a una tarea de mejorar la ficha de producto de Tintín. Indicá el nombre y ruta de los 1–3 elegidos, sin modificar archivos». Si identifica los archivos de esta rama y los usa, la ruta repo -> agente funciona. Si solo los cita sin poder abrirlos, reportar disponibilidad parcial. No confundir lectura de `SKILL.md` con invocación nativa verificada.
 
-La biblioteca actual incorpora gh-fix-ci oficial y validado, con46carpetas por agente. La automatización externa horaria de vigilancia tiene su operación y límites en GITHUB_RESULTS; seleccionar un Skill y despertar un agente son responsabilidades distintas. No ejecutar una reparación que ya tenga un agente activo ni un cambio productivo sin la autorización correspondiente.
+La biblioteca actual incorpora gh-fix-ci oficial y validado, con 63 carpetas por agente. La automatización externa horaria de vigilancia tiene su operación y límites en GITHUB_RESULTS; seleccionar un Skill y despertar un agente son responsabilidades distintas. No ejecutar una reparación que ya tenga un agente activo ni un cambio productivo sin la autorización correspondiente.
+
+## Bibliotecas de diseño solicitadas
+
+Se incorporan Impeccable, Taste (ya existente, verificado sin duplicarlo) y los 16 Skills de Emil Kowalski. Revisiones fijadas y archivos originales: [design-skills-lock.json](design-skills-lock.json). Ambas raíces contienen las mismas referencias y licencias. Disponibles a cualquier agente que abra este repositorio; no requieren ejecutables globales.
+
+| Necesidad concreta | Selección adicional pertinente |
+| --- | --- |
+| Auditar o pulir una interfaz existente | `impeccable` (playbook audit/polish; conservar identidad) o `taste-frontend`, sin cargar ambos por defecto |
+| Refinar interacción y animación existente | `emil-improve-animations`, `emil-animation-performance` o `emil-review-animations` |
+| Touch, hover, safe areas y responsive móvil | `emil-mobile-native`, aplicar únicamente sus apartados web |
+| Diseñar una animación pedida | `emil-animate`, consultar vocabulario cuando haga falta |
+| Criterios de ingeniería visual | `emil-design-eng` |
+| Reducir movimiento excesivo o buscar oportunidades justificadas | `emil-remove-animations`, `emil-find-animation-opportunities`; preservar animaciones expresamente solicitadas |
+
+Los demás Skills de Emil quedan disponibles por coincidencia semántica. Los de Swift, Expo y Apple solo corresponden a trabajos de esas plataformas; `ask-sonner` requiere una consulta pertinente. `break-ui` solo se usa sobre entornos locales de prueba. Se conservan las marcas upstream `disable-model-invocation` de revisión, prototipado y selección de librerías: no autorizan instalaciones ni cambios por iniciativa propia. Cuando el usuario pide expresamente una revisión de animaciones puede leerse su guía manualmente.
+
+La selección automática significa que cada agente consulta las reglas y lee el Skill relevante; no significa ejecutar sus scripts. Impeccable admite lectura manual de PRODUCT.md, DESIGN.md y componentes cuando su CLI de contexto no se ejecuta. Informar esa limitación. El lanzamiento nativo del cliente y las pruebas en hardware físico se verifican por separado.

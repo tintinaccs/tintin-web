@@ -62,7 +62,7 @@ for (const [width, height] of viewports) {
       await expect(credit).toHaveAttribute('href', NOVAK_URL);
       await expect(credit, name).toHaveAccessibleName('Desarrollado por NOVAK, visitar su sitio');
       await expect(credit.locator('span')).toHaveText('Desarrollado por');
-      await expect(page.locator('#tt-footer-ending .tt-footer-bottom')).toHaveText('© 2026 TINTIN ACCESORIOS');
+      await expect(page.locator('#tt-footer-ending .tt-footer-bottom')).toHaveText('© 2024-2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS');
       await expect(credit).toHaveCSS('font-family', /Montserrat/);
       await credit.scrollIntoViewIfNeeded();
       await expect(credit, name).toBeVisible();
@@ -123,4 +123,38 @@ test('animación original, foco de teclado y movimiento reducido', async ({ page
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.evaluate(() => document.body.classList.add('water-paused'));
   expect(await credit.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration))).toBeLessThanOrEqual(0.00001);
+});
+
+test('las capas de cada página no sobrescriben el copyright compartido', async () => {
+  const { FOOTER_COPYRIGHT } = require('../../scripts/lib/firma-novak.js');
+  const maintenance = [
+    'home/mantenimiento-inicio.js', 'institutional/mantenimiento-nosotros.js',
+    'institutional/mantenimiento-legal.js', 'institutional/mantenimiento-contacto.js',
+    'catalog/mantenimiento-catalogo.js', 'collections/mantenimiento-colecciones.js',
+    'product/mantenimiento-producto.js',
+  ];
+  for (const file of maintenance) {
+    const source = fs.readFileSync(path.join(__dirname, '../../js/pages', file), 'utf8');
+    expect(source, file).not.toContain('.tt-footer-bottom');
+    expect(source, file).not.toMatch(/(?:updateFooterYear|normalizeFooterYear)/);
+  }
+  for (const name of documents) {
+    const html = fs.readFileSync(path.join(__dirname, `../../${name}.html`), 'utf8');
+    expect(html, name).toContain(`<div class="tt-footer-bottom">${FOOTER_COPYRIGHT}</div>`);
+  }
+});
+
+test('en pantalla táctil tocar el enlace no deja un hover animado', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
+  try {
+    const page = await context.newPage();
+    const html = ensureNovakStyles(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><footer>${require('../../scripts/lib/firma-novak.js').renderNovakFooterEnd()}</footer></body></html>`);
+    await page.route('**/__novak-touch', route => route.fulfill({ contentType: 'text/html', body: html }));
+    await page.goto(new URL('/__novak-touch', baseURL).href);
+    await page.locator('.novak-credit').evaluate(el => el.addEventListener('click', event => event.preventDefault()));
+    await page.locator('.novak-credit').tap();
+    expect(await page.evaluate(() => matchMedia('(hover: none)').matches)).toBe(true);
+    await expect.poll(() => page.locator('.novak-credit').evaluate(el => getComputedStyle(el).transform)).toBe('none');
+    await expect.poll(() => page.locator('.novak-credit img').evaluate(el => getComputedStyle(el).transform)).toBe('none');
+  } finally { await context.close(); }
 });

@@ -71,18 +71,12 @@
     });
   }
 
-  function updateFooterYear() {
-    const footer = document.querySelector('.tt-footer-bottom');
-    if (!footer) return;
-    footer.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
-  }
 
   function ready() {
     addStylesheet();
     normalizeMetadata();
     improveStructure();
     improveImage();
-    updateFooterYear();
     window.ttPageReady?.();
   }
 
@@ -91,6 +85,5 @@
 
   window.addEventListener('pageshow', () => {
     normalizeMetadata();
-    updateFooterYear();
   });
 })();
