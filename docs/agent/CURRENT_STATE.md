@@ -1,3 +1,31 @@
+## 2026-11-02 — Retiro con efectivo y condiciones de reparto
+
+Codex /root. Base3974431, rama fix/pickup-cash-20261102. La titular autorizó
+transferencia previa o efectivo al retirar y reparto de lunes a sábado, corte11:00.
+Política cliente/servidor y renderers legacy/configurable admiten efectivo en retiro
+sólo cuando administración lo habilita. Encomienda sigue sólo transferencia previa;
+pago efectivo conserva estado pendiente y reserva de stock. Se actualizan textos
+predeterminados, Configuración, FAQ y Envíos; se preservan descripciones personalizadas.
+URLs transitivas y shell se renuevan desde fuentes/generador; sin CSS nuevo.
+RED: la nueva prueba de retiro falló payment_unavailable antes del cambio.
+PASS_LOCAL:354pruebas checkout/pagos/pedidos, preflight canónico completo y build:pages.
+Spec existente de navegación/entrega añade retiro en legacy y catálogo configurable
+a320/768/1440. BROWSER_LOCAL BLOCKED: descarga oficial de Chromium falló; esos casos
+requieren CI. No se efectuaron compras, cobros, correos ni cambios de datos reales.
+No implementa señas, saldos, cancelación selectiva ni cálculo automático de fechas.
+El resultado terminal de PR/CI/fusión/publicación debe registrarse por el SHA nuevo.
+
+## 2026-11-02 — Recibo del primer bloque y base del retiro
+
+Codex /root. PR #1317 fusionado en `c25421dfe78d83f2dff744b7861c41f28f139641`.
+Head `1ed20dea8270ac2a14e26dbbe9b675787d30eb97`: CI 41546610554/1 SUCCESS,
+integridad/mantenimiento protegidos SUCCESS. Main: CI 41550063208/1 SUCCESS,
+Cloudflare Pages SUCCESS y monitor de producción 41550066223/1 SUCCESS.
+PASS_PRODUCTION acredita el artefacto y la salud no destructiva; no una operación
+real de cuenta ni índices remotos. El bloque de retiro se reconcilió sobre ese main.
+Sus pruebas/browser/merge/deploy requieren sus propios recibos; las demás decisiones
+comerciales permanecen PENDING.
+
 ## 2026-11-02 — Revisión acordada y F02-STATS, primer bloque
 
 Codex /root. Base `39744311216e525919a1f781a03fb854d92e45fd`; rama `fix/commerce-decisions-20261102`.

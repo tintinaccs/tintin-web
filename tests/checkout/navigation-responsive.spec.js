@@ -129,6 +129,8 @@ for(const width of [320,768,1440]) test(`encomienda sólo transferencia y limpia
  await expect(page.locator('#pay-option-efectivo')).toBeHidden();await expect(page.locator('#pay-efectivo')).toBeDisabled();await expect(page.locator('#pay-efectivo')).not.toBeChecked();
  await expect(page.locator('#pay-transferencia')).toBeEnabled();await page.locator('label[for="pay-transferencia"]').click();await expect(page.locator('#pay-transferencia')).toBeChecked();
  await expect(page.locator('.ck-pay-note')).toContainText('sólo transferencia bancaria antes del despacho');
+ await page.evaluate(()=>window.setShipping('retiro'));await expect(page.locator('#pay-efectivo')).toBeEnabled();
+ await page.locator('label[for="pay-efectivo"]').click();await expect(page.locator('#pay-efectivo')).toBeChecked();
  await page.evaluate(()=>window.setShipping('delivery'));await expect(page.locator('#pay-efectivo')).toBeEnabled();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
 });
@@ -153,6 +155,9 @@ for(const width of [320,768,1440]) test(`opciones reales del panel excluyen efec
  await expect(page.locator('input[name="ck-pay"]:checked')).toHaveCount(0);
  await page.locator('label[for="pay-runtime-transferencia"]').click();await expect(page.locator('input[name="ck-pay"]:checked')).toHaveValue('transferencia');
  await expect(page.locator('#ck-encomienda-payment-policy')).toContainText('Sólo el costo del envío se paga a la transportadora al recibir');
+ await page.evaluate(()=>window.setShipping('retiro'));
+ await expect(page.locator('[data-payment-method-id="efectivo"]')).toHaveCount(1);
+ await page.locator('label[for="pay-runtime-efectivo"]').click();await expect(page.locator('input[name="ck-pay"]:checked')).toHaveValue('efectivo');
  await page.screenshot({path:`../encomienda-runtime-${width}.png`,fullPage:true});
 });
 

@@ -54,17 +54,25 @@ verificación remota pendiente. No presentar informes históricos como PASS actu
 
 ## Implementación y evidencia por bloque
 
-1. **Resumen derivado de cuentas (F02-STATS): PASS_LOCAL.** Consulta paginada por
+1. **Resumen derivado de cuentas (F02-STATS): PASS_PRODUCTION del artefacto.** Consulta paginada por
    identidad y puente histórico normalizado; deduplicación documental y readTime
    compartido; publicación CAS sobre revisiones leídas antes del cálculo. Reintento
    de conflicto acotado; error/presupuesto conserva el resumen anterior. No cambia
    el significado histórico de totalSpent por una definición nueva de caja.
+   PR #1317 fusionado en c25421dfe78d83f2dff744b7861c41f28f139641;
+   CI 41546610554/1 del head y 41550063208/1 de main SUCCESS. Publicación
+   Cloudflare SUCCESS y monitor 41550066223/1 SUCCESS. No acredita datos reales
+   de cuentas ni índices remotos con credenciales de clientas.
 2. **Caja, señas, saldos y reembolsos: PENDING.** Existe estado parcial, pero el
    mutador actual no registra importes de seña/saldo. Extender la autoridad existente
    con montos y estados coherentes antes de presentar dinero efectivamente cobrado.
-3. **Retiro efectivo y cancelación con decisión de stock: PENDING.** La política
-   actual bloquea efectivo en retiro y cancela liberando inventario automáticamente.
-   Requiere cliente/servidor/UI y regresiones; no basta cambiar una etiqueta.
+3. **Retiro efectivo: PASS_LOCAL, CI/merge/publicación pendientes del segundo PR.**
+   Backend, cliente y selector real permiten efectivo en retiro si está habilitado;
+   encomienda conserva transferencia previa. Textos y FAQ incluyen reparto de
+   lunes a sábado, corte 11:00 y siguiente día de reparto. 354 pruebas Node y
+   preflight completo PASS; casos de navegador ampliados, pendientes de CI.
+   **Cancelación con decisión de stock: PENDING.** Sigue liberando inventario
+   automáticamente; requiere decisión explícita con regresiones de inventario.
 4. **Plazos, estados bajo pedido, cambios y seguimiento: PENDING.** El Admin puede
    mostrar estimatedDeliveryAt si existe, pero el mutador revisado no permite editarlo
    y el perfil no muestra ese campo. Implementar sobre ciclo/autoridades existentes.
