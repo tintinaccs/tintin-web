@@ -1,6 +1,7 @@
 const {test,expect}=require('@playwright/test');
 async function open(page, status='cancelado') {
- await page.route('**/__cancel-stock',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><meta name="viewport" content="width=device-width,initial-scale=1"><button id="open">Cambiar pedido</button><script type="module">import {chooseCancellationStock} from '../../js/admin/orders/seleccion-stock-cancelacion.mjs';window.choose=()=>chooseCancellationStock({id:'fixture_order',orderNumber:'TINPED99'},${JSON.stringify(status)});document.getElementById('open').onclick=()=>{window.result='waiting';window.choose().then(value=>window.result=value)};</script></html>`}));
+ await page.addInitScript(value => { window.fixtureStatus = value; }, status);
+ await page.route('**/__cancel-stock',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><meta name="viewport" content="width=device-width,initial-scale=1"><button id="open">Cambiar pedido</button><script type="module">import {chooseCancellationStock} from '../../js/admin/orders/seleccion-stock-cancelacion.mjs';window.choose=()=>chooseCancellationStock({id:'fixture_order',orderNumber:'TINPED99'},window.fixtureStatus);document.getElementById('open').onclick=()=>{window.result='waiting';window.choose().then(value=>window.result=value)};</script></html>`}));
  await page.goto('/__cancel-stock');await page.locator('#open').click();await expect(page.getByRole('dialog')).toBeVisible();
 }
 for(const width of [320,768,1440]) for(const decision of ['release','keep']) test(`confirmar stock ${decision} en ${width}px exige selección explícita`,async({page})=>{

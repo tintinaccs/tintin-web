@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "07e4957a02cf56e5e53c571403b82b1b24ae33da5e38b6cdef86e2079ed24a74",
+  "sourceFingerprint": "0d85d02982f24efcd5a90e2c8de12a98a0af545dadecc323d43d7f1ee6aa49c2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1782,
     "textFiles": 1647,
-    "totalBytes": 45858029,
+    "totalBytes": 45858103,
     "pages": 19,
     "modules": 1167
   },
@@ -55021,8 +55021,8 @@
     },
     {
       "path": "tests/orders/cancellation-stock.spec.js",
-      "bytes": 3090,
-      "sha256": "aa9f1bda827d8f4d9ab334f512c851a1d619fac1f2ce5269e36174e86c353d91",
+      "bytes": 3164,
+      "sha256": "161a39491fff0ab0f737c57d47f8fa347b54c4f0ee2b7c84d691144912fe8728",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55032,7 +55032,7 @@
           "raw": "../../js/admin/orders/seleccion-stock-cancelacion.mjs",
           "target": "js/admin/orders/seleccion-stock-cancelacion.mjs",
           "dynamic": false,
-          "line": 3
+          "line": 4
         }
       ],
       "endpoints": []
@@ -71666,8 +71666,8 @@
     {
       "path": "tests/orders/cancellation-stock.spec.js",
       "extension": ".js",
-      "bytes": 3090,
-      "sha256": "aa9f1bda827d8f4d9ab334f512c851a1d619fac1f2ce5269e36174e86c353d91"
+      "bytes": 3164,
+      "sha256": "161a39491fff0ab0f737c57d47f8fa347b54c4f0ee2b7c84d691144912fe8728"
     },
     {
       "path": "tests/orders/correo-estado-pedido.test.mjs",
