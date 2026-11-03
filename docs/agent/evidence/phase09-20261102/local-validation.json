@@ -77,5 +77,17 @@
     "protectedRecords": 78,
     "protectedFiles": 544
   },
-  "baseAfterConcurrentMerge": "1c673584b0b8e69e9610c6d4721210d86bd4f55c"
+  "baseAfterConcurrentMerge": "1c673584b0b8e69e9610c6d4721210d86bd4f55c",
+  "nodeEngineRepair": {
+    "evidenceJob": 125671971836,
+    "evidenceRun": 41560504080,
+    "unsupportedNode": "22.23.4",
+    "firebaseRequired": ">=24.12.0",
+    "canonicalEngine": ">=24.12.0 <25",
+    "localNode": "24.19.0",
+    "lockOnlyEngineStrict": "PASS_LOCAL",
+    "contractsPass": 180,
+    "newShaCi": "PENDING",
+    "cloudflareExplicitNodeConfig": "NOT_VERIFIED"
+  }
 }

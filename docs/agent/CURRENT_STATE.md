@@ -3,6 +3,9 @@
 
 Conciliación posterior de #1318: main1c673584b0b8e69e9610c6d4721210d86bd4f55c incorpora efectivo al retirar y textos reales de delivery. Se preservan política server-side, contratos, pruebas y contenido de ese cambio. Las URLs de13módulos realmente alterados se renuevan a tintin-20261103-acceptance-1;22módulos del grafo concurrente conservan sus URLs publicadas. Nuevas regresiones/generadores/CI se validan sobre la conciliación, sin heredar el PASS del anterior75fa91e9. PR1319 es la entrega vigente.
 
+
+Advertencia CI demostrada: Firebase13/@firebase/rules-unit-testing6 exige Node>=24.12.0, pero los workflows usaban22 (EBADENGINE en job125671971836 del run41560504080/1). Se centraliza la selección en engines.node de package.json (>=24.12.0 <25, LTS24) y actions/setup-node node-version-file, soportado oficialmente; sin duplicar archivo de versión ni bajar SDK. Los nueve workflows existentes conservan triggers, permisos, cobertura y protecciones; npm ci --engine-strict convierte una futura incompatibilidad de engines en fallo explícito. No se disparan despliegues manuales. npm install --package-lock-only --ignore-scripts --engine-strict PASS con Node24.19.0 y180contratos de CI/operaciones/arquitectura PASS. CI del nuevo SHA debe repetirse. Configuración Node explícita del panel Cloudflare sigue sin verificarse.
+
 ## 2026-11-02 — Retiro: primer resultado de navegador y corrección del contrato
 
 Codex /root. PR #1318, head inicial `f52c164ee277e8a420128cb952b05c704013cab2`.

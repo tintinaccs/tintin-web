@@ -9,6 +9,51 @@
       "newHash": "a83a9b9135666b84db71bfdb0510d24326ef76c0100d17c84000a161e7bb3d08"
     },
     {
+      "path": ".github/workflows/auditar-limpiar-ramas.yml",
+      "oldHash": "e5033c1c29b3b963c144c6f184da0211d6e886155f0640759048a3aa5bd7b602",
+      "newHash": "2196b5458b0738e3ebed1b3361d0aea66960eb0cb319b268da43eabb0c3e0a25"
+    },
+    {
+      "path": ".github/workflows/auditar-tintin.yml",
+      "oldHash": "5ea563acbd1297d78fc74ccbe38d36a31f984f4211716cb5319711d1a158cfa8",
+      "newHash": "2361bc3261b54404ede4a9977fcac6dac0beef3b15be8ecf1b25e6798ac16177"
+    },
+    {
+      "path": ".github/workflows/auditoria-dependencias.yml",
+      "oldHash": "e25b08a695c924cc59c3331cdb74a0134f27ae0be4a8de53fc67f1aa2d0e04d1",
+      "newHash": "419cf27c20540e14b27b29015c35ff65ae0c6301cc575ec48b9cca16c739ea58"
+    },
+    {
+      "path": ".github/workflows/auditoria-visual.yml",
+      "oldHash": "35f6097b104a83b47b2d4cb5b0b1328a7b5592d564c06ab65a57022b597f4e85",
+      "newHash": "5f3e644dc4d48deae16d15dc205cdb927b6186366d7443541179db4d467522cc"
+    },
+    {
+      "path": ".github/workflows/desplegar-pages.yml",
+      "oldHash": "f21e9ca7086f4ef8b943e9dd511e8740ed5f975a14ed35e7ba636222a1c0b4ce",
+      "newHash": "344da6d10ea1ae8ae6dfbcf4b918b7ef096ce18ca777145307898278d0357bfa"
+    },
+    {
+      "path": ".github/workflows/desplegar-reglas-firestore.yml",
+      "oldHash": "4faf5fd74f5d5140c933e7826cf01555e17a38a863d1c471e38441402b3e189b",
+      "newHash": "ad0857c998d49d6942db2485c4d5f9204a8fa499bee0d38cedcabf87dd015d9c"
+    },
+    {
+      "path": ".github/workflows/diagnostico-maestro.yml",
+      "oldHash": "b2b5f09066c579152daf4f057fdb873a1be2f5eabeb8da2e2ce880a13310014a",
+      "newHash": "49d0d5280724817375697f19902fc33b2ddc9f8a51454f24af42ab7e92240d2e"
+    },
+    {
+      "path": ".github/workflows/monitor-produccion.yml",
+      "oldHash": "765435aadf86d71c4daeb3f32eeb29a3f7d87e7bfc5cf4703fd69b36c20ebe58",
+      "newHash": "21cee60e078295e35d08ed7cea59e6ec8aec24087a68f556c516eee6c037de29"
+    },
+    {
+      "path": ".github/workflows/respaldo-repositorio.yml",
+      "oldHash": "e66f255304a7ad4e705fe8cce9cb7516e7369ab41dbe1c056ee532479a84faf8",
+      "newHash": "9e5000425b61bd61e6d8e3251fca71f0309027757e7225deb64310cfbab99ed0"
+    },
+    {
       "path": "404.html",
       "oldHash": "461aec927b00291892165ae9a7617301155bc431d4051001987157189c46ec2c",
       "newHash": "5f29ca6f9238f5f09ddece6859865b6e63a7523fabe5cd16e6d7bf1cb464318c"
@@ -156,12 +201,12 @@
     {
       "path": "package-lock.json",
       "oldHash": "d7054ae4cee441822b2c908747de5fcc4dc946b9b732991416525f2a0b1dbfa0",
-      "newHash": "265a9e3876d2b60f42a85670a6f40b50ba4a73b09672d98f3e760640e6ca3302"
+      "newHash": "cde90725c0000f1ca27d6ace347020a42ca274e92b447ecdc7c400367c9723d1"
     },
     {
       "path": "package.json",
       "oldHash": "b1a4b533f09f8658f1f6ec2b0bc5e4d366b551e627168314ba4c23692ff33508",
-      "newHash": "5802247c5af0378cab13dd35e80e1eb70955fa37c01e1b850932375045d22f95"
+      "newHash": "493b52c4f1a357c489819be8ab496f855547585f1c02940ea1650e36154d0d68"
     },
     {
       "path": "perfil.html",
@@ -222,6 +267,9 @@
     "entrada-login__login-codigo__2",
     "firebase-auth__redirect-result__5",
     "firestore__users-uid__8",
+    "github-actions",
+    "github-actions__deployments__30",
+    "github-actions__pruebas-automatizadas__31",
     "google-btn",
     "google-btn__firebase-auth__3",
     "login-codigo",
@@ -233,6 +281,7 @@
     "perfil",
     "perfil__ultimos-datos__11",
     "productos",
+    "pruebas-automatizadas",
     "redirect-result",
     "redirect-result__sesion-estado__6",
     "roles__pagina-perfil__18",

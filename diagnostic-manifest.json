@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "fb36e9bec068c63b0422cad90ebace9f8eee84fc4c4049497c285776fb9eaa52",
+  "sourceFingerprint": "fad562f982086737a7a89738c3093c069d22a26cb7fc7e6b85a22d061829671d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1770,
     "textFiles": 1635,
-    "totalBytes": 45116795,
+    "totalBytes": 45122826,
     "pages": 19,
     "modules": 1161
   },
@@ -61348,26 +61348,26 @@
     {
       "path": ".github/workflows/auditar-limpiar-ramas.yml",
       "extension": ".yml",
-      "bytes": 2452,
-      "sha256": "e5033c1c29b3b963c144c6f184da0211d6e886155f0640759048a3aa5bd7b602"
+      "bytes": 2486,
+      "sha256": "2196b5458b0738e3ebed1b3361d0aea66960eb0cb319b268da43eabb0c3e0a25"
     },
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 12311,
-      "sha256": "5ea563acbd1297d78fc74ccbe38d36a31f984f4211716cb5319711d1a158cfa8"
+      "bytes": 12543,
+      "sha256": "2361bc3261b54404ede4a9977fcac6dac0beef3b15be8ecf1b25e6798ac16177"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
       "extension": ".yml",
-      "bytes": 4708,
-      "sha256": "e25b08a695c924cc59c3331cdb74a0134f27ae0be4a8de53fc67f1aa2d0e04d1"
+      "bytes": 4775,
+      "sha256": "419cf27c20540e14b27b29015c35ff65ae0c6301cc575ec48b9cca16c739ea58"
     },
     {
       "path": ".github/workflows/auditoria-visual.yml",
       "extension": ".yml",
-      "bytes": 1265,
-      "sha256": "35f6097b104a83b47b2d4cb5b0b1328a7b5592d564c06ab65a57022b597f4e85"
+      "bytes": 1298,
+      "sha256": "5f3e644dc4d48deae16d15dc205cdb927b6186366d7443541179db4d467522cc"
     },
     {
       "path": ".github/workflows/backup-firestore.yml",
@@ -61378,20 +61378,20 @@
     {
       "path": ".github/workflows/desplegar-pages.yml",
       "extension": ".yml",
-      "bytes": 1371,
-      "sha256": "f21e9ca7086f4ef8b943e9dd511e8740ed5f975a14ed35e7ba636222a1c0b4ce"
+      "bytes": 1402,
+      "sha256": "344da6d10ea1ae8ae6dfbcf4b918b7ef096ce18ca777145307898278d0357bfa"
     },
     {
       "path": ".github/workflows/desplegar-reglas-firestore.yml",
       "extension": ".yml",
-      "bytes": 3567,
-      "sha256": "4faf5fd74f5d5140c933e7826cf01555e17a38a863d1c471e38441402b3e189b"
+      "bytes": 3629,
+      "sha256": "ad0857c998d49d6942db2485c4d5f9204a8fa499bee0d38cedcabf87dd015d9c"
     },
     {
       "path": ".github/workflows/diagnostico-maestro.yml",
       "extension": ".yml",
-      "bytes": 17454,
-      "sha256": "b2b5f09066c579152daf4f057fdb873a1be2f5eabeb8da2e2ce880a13310014a"
+      "bytes": 17529,
+      "sha256": "49d0d5280724817375697f19902fc33b2ddc9f8a51454f24af42ab7e92240d2e"
     },
     {
       "path": ".github/workflows/drenar-cola-correo-pedidos.yml",
@@ -61408,14 +61408,14 @@
     {
       "path": ".github/workflows/monitor-produccion.yml",
       "extension": ".yml",
-      "bytes": 5691,
-      "sha256": "765435aadf86d71c4daeb3f32eeb29a3f7d87e7bfc5cf4703fd69b36c20ebe58"
+      "bytes": 5724,
+      "sha256": "21cee60e078295e35d08ed7cea59e6ec8aec24087a68f556c516eee6c037de29"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
       "extension": ".yml",
-      "bytes": 1171,
-      "sha256": "e66f255304a7ad4e705fe8cce9cb7516e7369ab41dbe1c056ee532479a84faf8"
+      "bytes": 1188,
+      "sha256": "9e5000425b61bd61e6d8e3251fca71f0309027757e7225deb64310cfbab99ed0"
     },
     {
       "path": "404.html",
@@ -62518,8 +62518,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 10554,
-      "sha256": "d17f046d1acb3e4e41d533a0732e076fc75df42f0078894cac6a996e7b1a6ef3"
+      "bytes": 12862,
+      "sha256": "cd1f05f8e31ede65803979c14d85decf9f2005b417c3622472477e5e3ce96a2e"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -62531,7 +62531,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "2c3474f9bfb9c3f2198789d23d81a1d1f6835871c1efc5bcaee8a1541f0d9485"
+      "sha256": "1034048cce1959af9a4a0fe2f692a9ad0fd14a4e47a2b45bc73ea54d6c34df2b"
     },
     {
       "path": "config/public-site.json",
@@ -63370,8 +63370,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1176625,
-      "sha256": "3bedf93ef9aca95f4b4a9bd8b1d31883b3e03bc9418787b4210a1c40e466c422"
+      "bytes": 1177454,
+      "sha256": "8ef2e21714d765a09bc7434f94f10766a3d4f3f6cde97aab0dcd1c00941e0390"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -63622,8 +63622,8 @@
     {
       "path": "docs/agent/TINTIN_GLOBAL_PHASES.md",
       "extension": ".md",
-      "bytes": 10095,
-      "sha256": "9913276293858083e10956450a31bc16a5f433ec8c38a753d018ffd6fce9210d"
+      "bytes": 10924,
+      "sha256": "264483cd159ad0d729215409df0570bc6ebd4a04b9f58af9caed558146ba65fd"
     },
     {
       "path": "docs/agent/TINTIN_PHASE04_CATALOG.md",
@@ -63658,8 +63658,8 @@
     {
       "path": "docs/agent/TINTIN_PHASE09_ACCEPTANCE.md",
       "extension": ".md",
-      "bytes": 11738,
-      "sha256": "b5f621279e034d6ffb5ffd14d1fb637dfcdf412cf2ad286be35d690ef7189cd5"
+      "bytes": 12822,
+      "sha256": "da59f5dae3fa2bb959e2201725b36957e8400cfadcf5bfc7cf8b83f0a7714d02"
     },
     {
       "path": "docs/agent/TINTIN_SKILLS_CI_20261101.md",
@@ -63802,8 +63802,8 @@
     {
       "path": "docs/agent/evidence/phase09-20261102/local-validation.json",
       "extension": ".json",
-      "bytes": 2953,
-      "sha256": "eb20442066c2ebd1f338b5640484ae9425c1ebb525f184027ecace02732d9598"
+      "bytes": 3332,
+      "sha256": "44c42aba420cc017285695df0e9449552576e313ee5edd9bf804cd9e8b46ba24"
     },
     {
       "path": "docs/agent/evidence/real-interactions-20261011/playwright-inventory.json",
@@ -67546,14 +67546,14 @@
     {
       "path": "package-lock.json",
       "extension": ".json",
-      "bytes": 322294,
-      "sha256": "265a9e3876d2b60f42a85670a6f40b50ba4a73b09672d98f3e760640e6ca3302"
+      "bytes": 322303,
+      "sha256": "cde90725c0000f1ca27d6ace347020a42ca274e92b447ecdc7c400367c9723d1"
     },
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 19177,
-      "sha256": "5802247c5af0378cab13dd35e80e1eb70955fa37c01e1b850932375045d22f95"
+      "bytes": 19186,
+      "sha256": "493b52c4f1a357c489819be8ab496f855547585f1c02940ea1650e36154d0d68"
     },
     {
       "path": "perfil.html",
