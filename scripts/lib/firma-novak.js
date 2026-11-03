@@ -7,7 +7,7 @@ function renderNovakCredit() {
   return `<div class="novak-credit-row">
     <a class="novak-credit" href="${NOVAK_URL}" target="_blank" rel="noopener" aria-label="Hecho por NOVAK, visitar su sitio">
       <span>Hecho por</span>
-      <img data-novak-src="/assets-tintin/novak-signature/novak-mark.svg" data-dynamic-src="true" alt="NOVAK" width="42" height="40" decoding="async">
+      <img id="novak-credit-mark" data-novak-src="/assets-tintin/novak-signature/novak-mark.svg" data-dynamic-src="true" alt="NOVAK" width="42" height="40" decoding="async">
       <noscript><img src="/assets-tintin/novak-signature/novak-mark.svg" alt="NOVAK" width="42" height="40" loading="lazy" decoding="async"></noscript>
     </a>
   </div>`;
