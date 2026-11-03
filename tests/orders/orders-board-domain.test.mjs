@@ -20,7 +20,7 @@ function store(order) {
 }
 const order=(extra={})=>({status:'pendiente',paymentStatus:'pendiente',shippingMethod:'delivery',lastChangeId:'',inventoryState:'unreserved',items:[{id:'product_1',name:'Pulsera',qty:1,price:35000}],subtotal:35000,total:35000,...extra});
 const actor={uid:'super_fixture',email:'admin@example.test',role:'superadmin',origin:'superadmin'};
-async function mutate(s,status,id,extra={}) { return applyOrderAdminMutation({}, {orderId:'order_fixture_1',status,baseChangeId:s.order().lastChangeId || '',changeId:id,...extra},actor,s); }
+async function mutate(s,status,id,extra={}) { return applyOrderAdminMutation({}, {orderId:'order_fixture_1',status,...(['cancelado','rechazado'].includes(status)?{inventoryCancellationDecision:'release'}:{}),baseChangeId:s.order().lastChangeId || '',changeId:id,...extra},actor,s); }
 
 for(const method of ['delivery','encomienda','retiro'])test(`ciclo completo ${method}: pago separado, reserva única e historial atómico`,async()=>{
   const s=store(order({shippingMethod:method}));

@@ -27,7 +27,8 @@ export function statusReservesInventory(status) {
 }
 
 // El checkout nuevo aparta la unidad al registrar la solicitud. Pedidos
-// anteriores/manuales mantienen confirmación/pago. Cancelados nunca reservan.
+// anteriores/manuales mantienen confirmación/pago. La cancelación puede conservar
+// el descuento existente cuando la titular lo elige explícitamente.
 export function orderConfirmsInventory({ status, paymentStatus, inventoryPolicy } = {}) {
   if (!statusReservesInventory(status)) return false;
   return inventoryPolicy === 'reserve-on-checkout' || String(paymentStatus || '') === 'pagado' || String(status || 'pendiente') !== 'pendiente';
@@ -39,6 +40,10 @@ export function orderReservesInventory(order) {
   if (state === 'released') return false;
   if (state === 'unreserved') return false;
   return statusReservesInventory(order?.status);
+}
+
+export function orderNeedsCancellationStockChoice(order, status) {
+  return TERMINAL_STATUSES.has(status) && String(order?.status || 'pendiente') !== status;
 }
 
 export function computeInventoryDeltas(beforeOrder, patch = {}, maxDistinct = 4) {
@@ -56,8 +61,11 @@ export function computeInventoryDeltas(beforeOrder, patch = {}, maxDistinct = 4)
     : beforeOrder?.paymentStatus || beforeOrder?.payment?.status;
   // Lo ya descontado se conserva (pedidos anteriores a este modelo incluidos)
   // hasta que el pedido termine; una reapertura respeta la política registrada.
-  const afterReserved = statusReservesInventory(afterStatus) &&
-    (beforeReserved || orderConfirmsInventory({ status: afterStatus, paymentStatus: afterPaymentStatus, inventoryPolicy: beforeOrder?.inventoryPolicy }));
+  const cancellationDecision = Object.prototype.hasOwnProperty.call(patch, 'inventoryCancellationDecision')
+    ? patch.inventoryCancellationDecision : beforeOrder?.inventoryCancellationDecision;
+  const afterReserved = statusReservesInventory(afterStatus)
+    ? (beforeReserved || orderConfirmsInventory({ status: afterStatus, paymentStatus: afterPaymentStatus, inventoryPolicy: beforeOrder?.inventoryPolicy }))
+    : beforeReserved && cancellationDecision === 'keep';
   const ids = new Set([...beforeItems.keys(), ...afterItems.keys()]);
   const deltas = new Map();
 
@@ -75,7 +83,7 @@ export function computeInventoryDeltas(beforeOrder, patch = {}, maxDistinct = 4)
   };
 }
 
-export function inventoryStateForStatus(status, reserved = true) {
-  if (!statusReservesInventory(status)) return 'released';
+export function inventoryStateForStatus(status, reserved = true, cancellationDecision = 'release') {
+  if (!statusReservesInventory(status) && !(reserved && cancellationDecision === 'keep')) return 'released';
   return reserved ? 'reserved' : 'unreserved';
 }

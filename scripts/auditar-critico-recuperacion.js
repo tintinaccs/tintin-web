@@ -118,14 +118,14 @@ check(
   'El modelo debe distinguir reserved de released.'
 );
 check(
-  'Eliminar un pedido activo libera stock antes de hacerlo desaparecer',
-  inventory.includes("lastInventoryAction: 'release'") &&
-    !inventory.includes("lastInventoryAction: 'delete-release'") &&
-    inventory.includes('const releaseResult = await withAdminSiteChange(async () => runTransaction(db, async transaction => {') &&
-    inventory.includes("inventoryState: 'released'") &&
-    inventory.includes('if (orderReservesInventory(orderSnapshot.data() || {}))') &&
+  'Eliminar un pedido usa la devolución elegida y la papelera atómica canónica',
+  inventory.includes('return window.TintinOrderAdmin.trashOrder(orderId)') &&
+    orderCrud.includes('chooseOrderTrash([before])') &&
+    trashControl.includes('selectedReturns(order, input.returnItems)') &&
+    trashControl.includes('currentDocument: condition(source)') &&
+    trashControl.includes('await commit(env, writes)') &&
     !rules.includes('(isSuperAdmin() && !orderExistsAfter)'),
-  'La devolución debe confirmarse primero para que un fallo o reintento no duplique stock y no requiera reglas nuevas.'
+  'La decisión, inventario, papelera y auditoría usan el dominio existente con CAS; no quedan borrados paralelos.'
 );
 check(
   'La papelera masiva no recalcula toda la base ni oculta fallos parciales',

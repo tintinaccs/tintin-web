@@ -183,3 +183,16 @@ el cliente no puede acreditarlo. Encomienda mantiene productos pagados previamen
 por transferencia y envío a la transportadora al recibir. El reparto habitual opera
 de lunes a sábado, corte11:00; después corresponde el siguiente día de reparto.
 Esta regla no acredita por sí sola un calculador de fecha estimada.
+
+## Cancelación y stock — decisión de la titular (2 noviembre 2026)
+
+Una nueva cancelación o rechazo requiere `inventoryCancellationDecision` explícito:
+`release` devuelve lo descontado y deja released; `keep` conserva el descuento
+existente y deja reserved si lo había. No crea una reserva inexistente. Editar notas
+no cambia la elección; reabrir después de keep no vuelve a descontar, y después de
+release valida/reserva como siempre. Una segunda cancelación exige elegir otra vez.
+El cliente central pide elección con Confirmar/devolver, Confirmar/sin devolver y
+Volver. Escape/Volver no envían escritura y conservan el borrador. El backend
+rechaza sin mutaciones si falta elección, incluso desde Sheets/cliente anterior.
+La elección se audita con actor y fecha. No implica reembolso de dinero. El borrado
+de compatibilidad usa la papelera existente; su selección por línea sigue vigente.

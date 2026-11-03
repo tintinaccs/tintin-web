@@ -64,9 +64,9 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261031-seo-espacios-2';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261102-cancel-stock-1';
 import './settings/cupones-admin.js?v=tintin-20261022-avatar-inicial-1';
-import './products/integridad-inventario-admin.js?v=tintin-20261031-seo-espacios-2';
+import './products/integridad-inventario-admin.js?v=tintin-20261102-cancel-stock-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 
@@ -2937,6 +2937,7 @@ window.updateOrderStatus = async (orderId, status, context = {}) => {
     action: async ctx => {
       ctx.start('write');
       const result = await window.TintinInventoryIntegrity.transitionStatus(orderId, status, { baseChangeId: o?.lastChangeId || '', ...context });
+      if (result.cancelled) ctx.cancel('Volviste sin cancelar el pedido.');
       if (o && result.order) Object.assign(o, result.order);
       ctx.ok('write');
       ctx.start('refresh');
@@ -7106,7 +7107,8 @@ window.saveOrderEdit = async function() {
         } catch (_) { /* fail-open: no bloquear por un error de lectura */ }
         ctx.ok('concurrency');
         ctx.start('save');
-        await window.TintinInventoryIntegrity.updateEditedOrder(orderId, { ...updateData, baseChangeId: _orderEditBaseChangeId });
+        const result = await window.TintinInventoryIntegrity.updateEditedOrder(orderId, { ...updateData, baseChangeId: _orderEditBaseChangeId });
+        if (result.cancelled) ctx.cancel('Volviste sin modificar el pedido.');
         ctx.ok('save');
         ctx.start('refresh');
         const idx = allOrders.findIndex(x => x.id === orderId);
