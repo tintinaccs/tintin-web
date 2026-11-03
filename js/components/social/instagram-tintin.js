@@ -32,17 +32,36 @@ document.addEventListener('click',event=>{
 });
 if(feed) {
   const feedSurface=feed.closest('section') || feed;
-  let started=false, loading=false, lastUpdated=0;
+  const refreshInterval=60000;
+  let nearViewport=false, pageActive=true, loading=false, lastAttempt=0, timer=0, activeRequest=null, renderedFeed='';
+  const canRefresh=()=>nearViewport && pageActive && !document.hidden;
+  const surfaceIsNear=()=>{const rect=feedSurface.getBoundingClientRect();return rect.top<innerHeight+200 && rect.bottom>-200;};
+  function pause() {
+    window.clearTimeout(timer);timer=0;
+    activeRequest?.abort();
+  }
+  function schedule() {
+    window.clearTimeout(timer);timer=0;
+    if(!canRefresh() || loading) return;
+    timer=window.setTimeout(()=>{timer=0;void refresh();},Math.max(0,refreshInterval-(Date.now()-lastAttempt)));
+  }
   async function refresh() {
-    if(loading || document.hidden || dialog?.open || Date.now()-lastUpdated<60000) return;
+    if(loading || !canRefresh()) return;
+    // An observer delivery can lag a scroll or a restored page by a frame.
+    if(!surfaceIsNear()) {nearViewport=false;pause();return;}
+    if(dialog?.open) {lastAttempt=Date.now();schedule();return;}
     loading=true;
+    lastAttempt=Date.now();
     const controller=new AbortController();
+    activeRequest=controller;
     const timeout=window.setTimeout(()=>controller.abort(),10000);
     try {
       const response=await fetch('/api/instagram-feed',{cache:'no-cache',signal:controller.signal});
       if(!response.ok) return;
       const data=await response.json();
-      if(!data.available || !Array.isArray(data.videos)) return;
+      if(controller.signal.aborted || !canRefresh() || !data.available || !Array.isArray(data.videos)) return;
+      const fingerprint=JSON.stringify(data.videos.map(item=>[item.url,item.caption,item.thumbnail]));
+      if(fingerprint===renderedFeed) return;
       const cards=[];
       for(const item of data.videos) {
         const url=instagramPost(item.url); if(!url) continue;
@@ -56,11 +75,20 @@ if(feed) {
         card.append(play,caption);cards.push(card);
       }
       // Avoid replacing a focused card during background refresh.
-      if(!feed.contains(document.activeElement))feed.replaceChildren(...cards);
-      lastUpdated=Date.now();
-    } catch {} finally {window.clearTimeout(timeout);loading=false;}
+      if(!feed.contains(document.activeElement)) {feed.replaceChildren(...cards);renderedFeed=fingerprint;}
+    } catch {} finally {window.clearTimeout(timeout);loading=false;activeRequest=null;schedule();}
   }
-  const start=()=>{if(started)return;started=true;void refresh();window.setInterval(()=>{if(feedSurface.getBoundingClientRect().top<innerHeight && feedSurface.getBoundingClientRect().bottom>0)void refresh();},60000);};
-  if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();start();}},{rootMargin:'200px'});observer.observe(feedSurface);}else start();
-  document.addEventListener('visibilitychange',()=>{if(started && !document.hidden)void refresh();});
+  function reconcile() {if(canRefresh())schedule();else pause();}
+  if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{nearViewport=entries.some(entry=>entry.isIntersecting);reconcile();},{rootMargin:'200px'});observer.observe(feedSurface);}else {
+    let frame=0;
+    const check=()=>{frame=0;nearViewport=surfaceIsNear();reconcile();};
+    const onScroll=()=>{if(!frame)frame=requestAnimationFrame(check);};
+    window.addEventListener('scroll',onScroll,{passive:true});
+    window.addEventListener('resize',onScroll,{passive:true});
+    check();
+  }
+  document.addEventListener('visibilitychange',reconcile);
+  window.addEventListener('pagehide',()=>{pageActive=false;pause();});
+  window.addEventListener('pageshow',()=>{pageActive=true;reconcile();});
+  reconcile();
 }
