@@ -1097,14 +1097,13 @@ function doPost(e) {
   var body = {};
   try { body = JSON.parse(e && e.postData && e.postData.contents || '{}'); }
   catch (error) { return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'JSON inválido' })).setMimeType(ContentService.MimeType.JSON); }
-  // La creación pública de pedidos usa la transacción privilegiada de Fase 4.
-  // Esta ruta debe resolverse antes del router de Sheets: ambos usan `createOrder`
-  // como nombre de acción, pero sólo Fase 4 recibe el draft del checkout y el
-  // idToken para validar la sesión y reservar stock atómicamente.
-  if (body.action === 'createOrder' && typeof phase4CreateOrder_ === 'function') {
-    return ContentService.createTextOutput(JSON.stringify(
-      phase4CreateOrder_(body, body.idToken)
-    )).setMimeType(ContentService.MimeType.JSON);
+  // El checkout público crea y reserva exclusivamente en Cloudflare.
+  // No ejecutar el escritor histórico: no valida inventario V1/V2 ni el
+  // catálogo actual de pagos. El espejo autenticado de Sheets sigue debajo.
+  if (body.action === 'createOrder') {
+    return ContentService.createTextOutput(JSON.stringify({
+      ok: false, error: 'canonical_checkout_required'
+    })).setMimeType(ContentService.MimeType.JSON);
   }
   // Apps Script convierte excepciones sin capturar en HTML con HTTP 200.
   // Mantener ok:false permite a Cloudflare conservar la cola y mostrar la causa.

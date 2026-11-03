@@ -1,3 +1,43 @@
+## 2026-11-02 — Fase09: aceptación integral y pendientes consolidados
+
+## 2026-11-02 — Efectivo en retiro y copy de reparto
+
+Autoridades: politica-checkout-publico, pedido-checkout-seguro, nucleo-metodos-pago,
+checkout-metodos-pago y fallback de checkout.html. Configuración habilitada sigue
+mandando; encomienda no admite efectivo. Fallbacks de contenido, FAQ y Envíos
+reflejan reparto lunes–sábado y retiro con efectivo. No hay cambio visual ni de
+credenciales. Importadores/URLs transitivas y shell mediante fuentes y generadores;
+regresión de servidor y fixtures existentes de checkout a tres anchos. Las demás
+decisiones comerciales permanecen en su bloque de implementación propio.
+
+## 2026-11-02 — Resumen de cuentas sin recorte global ni publicación atrasada
+
+Autoridades: sincronizacion-estadisticas-pedido y transporte REST Firebase existente.
+Consultas de igualdad paginadas por identidad con readTime compartido y deduplicación;
+publicación mediante batch canónico con precondición de la cuenta anterior al cálculo.
+Consumidores: creación/cambios de pedido, controles comerciales y webhook Sheets.
+Preserva campos y significado del resumen, fuentes orders/users, roles y side effects.
+Pruebas en sync/admin existentes, sin colecciones, Rules ni nuevas dependencias.
+Las decisiones comerciales de la titular se registran separadas de su implementación.
+
+Preserva y valida08. Estadísticas usan query por identidad, cursor con guardia de truncamiento y CAS de perfil; cambios concurrentes se recalculan. Fallback manual es informativo, autónomo y no ofrece comercio sin Functions. Se retira branch/helper muerto del bridge, alineando contratos; extractor canónico AST excluye texto de auditorías/strings/comentarios. Firebase CLI actualizado en rango;14moderadas siguen abiertas. Acorn sólo desarrollo para diagnóstico. Sin datos reales, migraciones ni deployment de Rules/WebApp/fallback. Matriz, evidencias, límites y relevo en TINTIN_PHASE09_ACCEPTANCE y CURRENT_STATE. Rutas/CSP/caché/diagnóstico/protección derivados por autoridades existentes.
+
+## 2026-11-02 — Fase07: autoridad de metadata de reserva
+
+staffOrderInventoryTransitionValid rechaza inventory* aislado y exige permiso cambiarEstado para transición coherente existente. Conserva Super Admin, pagos sin metadata y escritores canónicos. Regresiones reales SDK para roles, permisos deshabilitados y revisión falsa; pruebas de backend/colas/webhooks/backup aisladas. Sin cambio de modelo, caché cliente, credenciales ni datos reales. Rules sólo candidato: deployment explícitamente separado. Informe07 y CURRENT_STATE conservan límites.
+
+## 2026-11-02 — Fase06: campana y continuidad de cuenta
+
+Autoridad existente notificaciones-clientes: consultas paginadas de100 compatibles con Rules, cursores reactivos y callbacks invalidados; restauración BFCache sin repetir eventos; navegación vinculada al UID original. Sin cambios de permisos ni presentación móvil. Pruebas de cuentas/admin/notificaciones y derivados canónicos. Informe y límites en TINTIN_PHASE06_ACCOUNTS_ADMIN.
+
+## 2026-11-02 — Fase05: integridad del recorrido comercial
+
+Catálogo de pagos explícito autoritativo en cliente/servidor; callbacks de configuración obsoletos descartados. Tarifas reales sin overrides ni defaults inventados, retiro y configuraciones parciales coherentes. Confirmación exige respuesta completa, cierra intento y consume sólo el snapshot comprado en el escritor existente, preservando compras concurrentes/cuenta. Back/BFCache/recarga completada vuelven a inicio. Texto de logística describe productos y costos reales/pendientes. Dispatcher Apps Script rechaza creador público legacy; su WebApp desplegado requiere actualización externa. Sin colecciones, dependencias, sincronización paralela ni datos productivos nuevos. Regresiones en suites CI existentes; derivados/protección canónicos. Evidencia y reservas en TINTIN_PHASE05_COMMERCE y CURRENT_STATE.
+
+## 2026-11-01 — Fase03: editor conectado y conservación de edición
+
+Autoridades: interfaz-productos-adaptable, controles-editor-producto, galeria-unificada y CSS comercial. La sección de inventario original acompaña fotos/opciones o Precio y stock según el paso, con la misma matriz y serializer. Visor modal accesible, línea final de descripción visible y explicación antes de quitar opciones con fotos. Anchos derivados del contenedor, costo/permisos y referencias V1/V2 preservados. Consumidores transitorios renuevan URLs; CSP/caché/diagnóstico/protección por constructores. Pruebas en suites CI existentes, sin módulos, dependencias, Rules, modelos ni datos reales nuevos. Evidencia y límites en PHASE03_ADMIN_PRODUCT_EDITOR y CURRENT_STATE.
+
 ## 2026-11-01 — Carga del Admin por sección
 
 Entrada principal /admin y /admin.html: diferir Correos, Diagnóstico, Páginas y editor visual hasta abrirlos. El cargador conserva navegación, muestra estado y reintento, comparte descargas y vuelve a comprobar acceso antes de inicializar; sesiones, controles de seguridad y contratos comerciales se conservan. CI incluye la regresión de carga y permisos del cargador junto a las pruebas existentes de Correos.
@@ -985,3 +1025,15 @@ Validador, API de disponibilidad y reserva reciben dígitos con el normalizador
 existente; no cambian autenticación, unicidad, contratos de otros formularios
 ni Rules. Regresiones nuevas en el spec canónico del registro de Comercio.
 CSP, diagnóstico y protección se regeneran desde constructores existentes.
+
+## 2026-11-02 — Fase 04 catálogo: publicación, imágenes y precio
+
+Autoridades: product-editor-domain, política de checkout público y controlador
+administrativo existentes. Estado de botón/tarjeta/lote V1/V2 converge en API
+comercial con fingerprint/CAS/estado editorial y controles de publicación;
+permisos de acción individual y lote conservados. Patch canónico actualiza
+aliases multimedia existentes para evitar fotos retiradas. Checkout comparte
+validador comercial de precios. Sin nuevas colas, migraciones, Rules ni datos
+reales. Regresiones en suites canónicas admin/checkout, documentación y límites
+en TINTIN_PHASE04_CATALOG y CURRENT_STATE. Caché/CSP/diagnóstico/protección se
+generan con herramientas existentes; CI/merge bloqueados por conexión GitHub.

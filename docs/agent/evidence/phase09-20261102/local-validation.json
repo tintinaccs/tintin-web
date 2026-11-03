@@ -1,0 +1,93 @@
+{
+  "agent": "Codex /root",
+  "date": "2026-11-03",
+  "branch": "codex/phase09-integral-acceptance",
+  "base": "c25421dfe78d83f2dff744b7861c41f28f139641",
+  "tests": [
+    {
+      "command": "node --test tests/orders/*.test.mjs tests/checkout/*.test.mjs tests/sync/*.test.mjs tests/operations/*.test.mjs tests/diagnostics/*.test.mjs",
+      "pass": 685,
+      "fail": 0,
+      "skip": 0,
+      "log": "artifacts/phase09/domain-reconciled-final.log"
+    },
+    {
+      "command": "PERF_BASE_URL=http://127.0.0.1:4173 PLAYWRIGHT_BASE_URL=http://127.0.0.1:4173 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:performance -- --project=chromium",
+      "pass": 107,
+      "fail": 0,
+      "skip": 0,
+      "seconds": 180,
+      "log": "artifacts/phase09/performance-final.log"
+    },
+    {
+      "command": "python3 scripts/agent/check-cloud-skills.py",
+      "state": "PASS_LOCAL",
+      "countPerAgent": 46,
+      "nativeHostDiscovery": "NOT_VERIFIED"
+    },
+    {
+      "command": "python3 .agents/skills/gh-fix-ci/scripts/inspect_pr_checks.py --help",
+      "state": "PASS_LOCAL",
+      "liveGhExecution": "BLOCKED: invalid GH_TOKEN; connector used without changing credentials"
+    },
+    {
+      "command": "npm run ci:preflight",
+      "state": "PASS_LOCAL",
+      "gates": 39,
+      "log": "artifacts/phase09/ci-preflight-final.log"
+    },
+    {
+      "command": "node --test tests/checkout/order-routing-identity.test.mjs",
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "after": "remove remaining unreachable helper/constant",
+      "log": "artifacts/phase09/bridge-final.log"
+    },
+    {
+      "command": "node --test checkout policy, Ueno name, paginated collections, performance domain and routing suites",
+      "pass": 63,
+      "fail": 0,
+      "skip": 0,
+      "log": "artifacts/phase09/merge-regressions.log",
+      "base": "1c673584"
+    },
+    {
+      "command": "playwright checkout/navigation-responsive, home-collection-cover and link-refresh; Chromium workers1 retries0",
+      "pass": 47,
+      "fail": 0,
+      "log": "artifacts/phase09/merge-browser.log",
+      "base": "1c673584"
+    }
+  ],
+  "auditFinal": "BLOCKED_LOCAL at test:critical-runtime: official Firestore emulator JAR unavailable; canonical prefix/tail run separately, not claimed full PASS",
+  "ci": "PENDING current candidate checks",
+  "production": "NOT_VERIFIED for candidate; no production data operations, manual deploys or real messages/purchases",
+  "automation": {
+    "title": "Atender fallos de CI de Tintín",
+    "enabledAtCreation": true,
+    "cadence": "HOURLY",
+    "mode": "condition_watch polling; no webhook receiver exposed",
+    "firstRun": "NOT_VERIFIED"
+  },
+  "build": {
+    "command": "npm run build:pages twice",
+    "state": "PASS_LOCAL",
+    "generatedArtifactsCompared": 7,
+    "protectedRecords": 78,
+    "protectedFiles": 544
+  },
+  "baseAfterConcurrentMerge": "1c673584b0b8e69e9610c6d4721210d86bd4f55c",
+  "nodeEngineRepair": {
+    "evidenceJob": 125671971836,
+    "evidenceRun": 41560504080,
+    "unsupportedNode": "22.23.4",
+    "firebaseRequired": ">=24.12.0",
+    "canonicalEngine": ">=24.12.0 <25",
+    "localNode": "24.19.0",
+    "lockOnlyEngineStrict": "PASS_LOCAL",
+    "contractsPass": 180,
+    "newShaCi": "PENDING",
+    "cloudflareExplicitNodeConfig": "NOT_VERIFIED"
+  }
+}

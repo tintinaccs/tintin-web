@@ -12,10 +12,23 @@ function check(name, condition, problem) {
 }
 
 const frontend = read('js/orders/pedido-checkout-seguro.js');
-const serverClient = read('js/create-order-client.js');
+const serverClient = read('js/create-order-public-client.js');
 const cart = read('js/components/cart/sincronizacion-carrito.js');
 const rules = read('firestore.rules');
-const phase4 = read('apps-script/CrearPedido.gs');
+const phase4 = read('apps-script/CrearPedido.gs'); // Referencia histórica, no ruta pública.
+const bridge = read('functions/api/apps-script-bridge.js');
+const domain = read('cloudflare/order-admin-domain.js');
+const policy = read('cloudflare/politica-checkout-publico.js');
+const router = read('apps-script/ProductosUnificados.gs');
+check('La creación pública usa Cloudflare y la entrada legacy no escribe pedidos',
+  bridge.includes('preparePublicCheckoutOrder(env, forwardedPayload, authenticatedUser)') && bridge.includes('await createOrderAdmin(') && router.includes("error: 'canonical_checkout_required'") && !router.includes('phase4CreateOrder_(body, body.idToken)'),
+  'Sólo el dominio canónico puede crear el pedido público.');
+check('El dominio canónico relee productos y reserva con CAS e idempotencia',
+  domain.includes('await readProductDocuments(') && domain.includes('currentDocument: precondition(document)') && domain.includes('duplicate: true') && domain.includes('await commit(env, writes)'),
+  'Lectura autoritativa, reserva e identificación deben ser atómicas.');
+check('El checkout canónico valida configuración y nunca acredita transferencia al confirmar',
+  policy.includes('normalizePaymentCatalog(settings)') && policy.includes("paymentStatus: 'pendiente'") && policy.includes("'quote_changed'"),
+  'Pago y cotización requieren validación de servidor.');
 
 check(
   'No depende de Cloud Functions',
@@ -38,7 +51,7 @@ check(
   'El servidor debe poder verificar quién hace el pedido.'
 );
 check(
-  'El servidor (Apps Script) vuelve a leer productos y precios reales',
+  'La referencia histórica de Apps Script conserva lectura de productos y precios',
   phase4.includes("docs['products/' + productId]") &&
     phase4.includes('phase4ParseMoney_(product.price)') &&
     phase4.includes('phase4ParseStock_(product.stock)'),
@@ -112,4 +125,4 @@ if (failed.length) {
   process.exit(1);
 }
 
-console.log('\nAuditoría de pedidos gratuitos completada correctamente.');
+console.log('\nAuditoría del checkout canónico y compatibilidad histórica completada correctamente.');

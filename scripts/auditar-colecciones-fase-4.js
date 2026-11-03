@@ -32,7 +32,7 @@ function check(label, condition, detail) {
 check(
   'Firestore sigue siendo la fuente de verdad',
   files.store.includes("collection(db, 'collections')") &&
-    files.store.includes('onSnapshot') &&
+    files.store.includes('subscribeAdminSnapshot') && files.store.includes('createAdminPagedSource') && files.store.includes('limit(200)') && files.store.includes("fetchPublicCatalogResource('collections')") &&
     files.store.includes('visible !== false'),
   'collections-store debe escuchar la colección real y filtrar solo las visibles en público'
 );

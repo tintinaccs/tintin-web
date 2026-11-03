@@ -219,6 +219,18 @@ test('el Super Admin puede comprar con la tienda cerrada y sin turno', async () 
   assert.ok(created.orderId);
 });
 
+test('retiro permite efectivo habilitado y conserva el pedido pendiente sin envío', async () => {
+  const pickup = draft({ selectedCity: '__retiro__', shippingMethod: 'retiro', paymentMethod: 'efectivo', mapLocation: null, expectedShippingCost: 0, expectedTotal: 100000 });
+  const result = await checkout(pickup);
+  const order = orderWrite(result.store);
+  assert.equal(order.shippingMethod, 'retiro');
+  assert.equal(order.shippingCost, 0);
+  assert.equal(order.paymentStatus, 'pendiente');
+  assert.equal(order.paymentMethod, 'efectivo');
+  assert.equal(order.inventoryState, 'reserved');
+  await rejectsWith(checkout(pickup, fakeStore({ 'settings/general': { storeOpen: true, paymentMethods: { efectivo: false, transferencia: true } } })), 'payment_unavailable');
+});
+
 test('encomienda exige CI, modo válido y únicamente transferencia', async () => {
   const base = {
     selectedCity: 'Encarnación',
@@ -379,11 +391,12 @@ test('reintento del mismo requestId devuelve el pedido existente sin escribir', 
   assert.equal(store.commits.length, 0);
 });
 
-test('cotización canónica aplica 25.000 a ambas ciudades aunque settings conserve las zonas antiguas', async () => {
+test('cotización canónica respeta tarifas administradas y deduplica aliases antiguos sin alterar el costo', async () => {
  for (const selectedCity of ['San Lorenzo','San Lorenzo Centro','San Lorenzo Alrededores','Fernando de la Mora']) {
   const store=fakeStore({'settings/shippingRates':{deliveryCities:[{name:'San Lorenzo Centro',price:15000},{name:'San Lorenzo Alrededores',price:20000},{name:'Fernando de la Mora',price:20000}]}});
-  await checkout(draft({selectedCity,expectedShippingCost:25000,expectedTotal:125000}),store);
-  assert.equal(orderWrite(store).shippingCost,25000);assert.equal(orderWrite(store).total,125000);
+  const cost=selectedCity==='Fernando de la Mora'?20000:15000;
+  await checkout(draft({selectedCity,expectedShippingCost:cost,expectedTotal:100000+cost}),store);
+  assert.equal(orderWrite(store).shippingCost,cost);assert.equal(orderWrite(store).total,100000+cost);
  }
 });
 
@@ -425,4 +438,54 @@ test('v2 price changed and exhausted selection reject before any commit, valid s
  assert.equal(exhausted.commits.length,0);
  p.variantInventory[0].stock=1;
  await checkout(draft({cartLines:[{id:'aro_1',qty:1,variant:'M / Plateado'}],expectedSubtotal:70000,expectedTotal:90000}),fakeStore({'products/aro_1':p}));
+});
+
+test('un carrito manipulado no compra productos sin precio entero positivo aunque el total coincida',async()=>{
+ for(const price of [0,null,'',1.5,'50000',1_000_000_001]){
+  const store=fakeStore({'products/aro_1':{name:'Fixture',price,stock:5,active:true}});
+  const subtotal=Math.min(50000,Math.round(Number(price))*2);
+  await assert.rejects(checkout(draft({expectedSubtotal:subtotal,expectedTotal:subtotal+20000}),store),error=>error.code==='invalid_price');
+  assert.equal(store.commits.length,0,String(price));
+ }
+});
+
+test('catálogo canónico de pagos prevalece sobre mirrors legacy atrasados y exige habilitación',async()=>{
+ const onlyTransfer={bank:{id:'bank',kind:'transferencia',enabled:true,title:'Transferencia'}};
+ for(const paymentMethodsCatalog of [onlyTransfer,{},[],null]){
+  const store=fakeStore({'settings/general':{storeOpen:true,paymentMethods:{efectivo:true,transferencia:true},paymentMethodsCatalog}});
+  await assert.rejects(checkout(draft({paymentMethod:'efectivo'}),store),error=>error.code==='payment_unavailable');
+  assert.equal(store.commits.length,0);
+ }
+ const store=fakeStore({'settings/general':{storeOpen:true,paymentMethods:{transferencia:false},paymentMethodsCatalog:onlyTransfer}});
+ const {created}=await checkout(draft(),store);
+ assert.equal(created.order.paymentStatus,'pendiente');
+});
+
+test('PayPal legacy conserva compatibilidad pero no resucita un catálogo explícitamente vacío',async()=>{
+ const base={storeOpen:true,paypal:{enabled:true},paymentMethods:{transferencia:true}};
+ for(const paymentMethodsCatalog of [{},[],{paypal:{kind:'paypal',enabled:false}}]){
+  const store=fakeStore({'settings/general':{...base,paymentMethodsCatalog}});
+  await assert.rejects(checkout(draft({paymentMethod:'paypal'}),store),error=>error.code==='payment_unavailable');assert.equal(store.commits.length,0);
+ }
+ const {created}=await checkout(draft({paymentMethod:'paypal'}),fakeStore({'settings/general':base}));
+ assert.equal(created.order.paymentStatus,'pendiente');
+});
+
+test('matriz de entrega usa sólo ciudades configuradas; Retiro existente no depende de transportes',async()=>{
+ for(const method of ['delivery','encomienda']){
+  const rates={deliveryCities:[],encomiendaCities:[]};const store=fakeStore({'settings/shippingRates':rates});
+  await assert.rejects(checkout(draft({shippingMethod:method,selectedCity:'Asunción'}),store),error=>error.code==='shipping_invalid');assert.equal(store.commits.length,0);
+ }
+ const {created}=await checkout(draft({shippingMethod:'retiro',selectedCity:'__retiro__',expectedShippingCost:0,expectedTotal:100000}),fakeStore({'settings/shippingRates':{deliveryCities:[],encomiendaCities:[]}}));
+ assert.equal(created.order.shipping.method,'retiro');assert.equal(created.order.shippingCost,0);assert.equal(created.order.paymentStatus,'pendiente');
+});
+
+test('tarifa ausente permanece por confirmar y cero explícito sigue siendo envío gratis',async()=>{
+ for(const deliveryCost of [undefined,null,'']){
+  const store=fakeStore({'settings/shippingRates':{deliveryCities:['Luque'],deliveryCost}});
+  const {created}=await checkout(draft({selectedCity:'Luque',expectedShippingCost:0,expectedShippingPending:true,expectedTotal:100000}),store);
+  assert.equal(created.order.shippingPending,true);assert.equal(created.order.shippingCost,0);
+ }
+ const {created}=await checkout(draft({selectedCity:'Luque',expectedShippingCost:0,expectedTotal:100000}),fakeStore({'settings/shippingRates':{deliveryCities:['Luque'],deliveryCost:0}}));
+ assert.equal(created.order.shippingPending,false);assert.equal(created.order.shippingCost,0);
 });

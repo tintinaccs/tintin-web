@@ -2,7 +2,7 @@ import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=
 import { inspectCheckoutAvailability, showCheckoutAvailabilityDialog } from '../pages/checkout/disponibilidad-checkout.js?v=tintin-20261031-seo-espacios-2';
 import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
-import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../components/location/tarifas-delivery.mjs?v=tintin-20261007-master-audit-1';
+import { canonicalDeliveryCities, normalizeDeliveryCityName, configuredShippingPrice } from '../components/location/tarifas-delivery.mjs?v=tintin-20261102-commerce-phase05-1';
 import { hasForwardValidation, replayValidatedForward } from '../pages/checkout/validacion-avance.js?v=tintin-20261007-checkout-guards-1';
 import { db } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
@@ -43,8 +43,8 @@ import {
   isValidRazonSocial,
   isValidTaxpayerType
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1';
-import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20261022-avatar-inicial-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20261023-variant-engine-v2-2';
+import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20261102-commerce-phase05-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20261102-commerce-phase05-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -448,9 +448,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       if (saved.paymentPending === true) {
         // El proveedor pudo completar el pago antes de recargar, sin que se
         // ejecutara el evento local de captura. Finalizar ese mismo pedido.
-        try { await clearCart(); } catch (error) { console.warn('[checkout] No se pudo limpiar el carrito recuperado:', error); }
         try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
         inMemoryRequestId = null;
+        try { await clearCart(result.items); } catch (error) { console.warn('[checkout] No se pudo limpiar el carrito recuperado:', error); }
       }
     } catch (error) { recoveredReceiptUid = ''; console.warn('[checkout] No se pudo recuperar el ticket:', error?.message); }
     finally { recoveringReceipt = false; window.TintinCheckoutReceiptRestoring = false; }
@@ -528,15 +528,13 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         if (typeof item === 'string') {
           return {
             name: text(item),
-            price: parseMoney(fallback),
+            price: configuredShippingPrice(fallback),
             departamento: shippingDepartment(item),
             sourceIndex
           };
         }
         if (!item?.name) return null;
-        const price = item.price === null
-          ? null
-          : parseMoney(item.price === undefined ? fallback : item.price);
+        const price = configuredShippingPrice(item.price === undefined ? fallback : item.price);
         return {
           name: text(item.name),
           price: Number.isFinite(price) ? price : null,
@@ -694,8 +692,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (!['efectivo', 'transferencia', 'paypal'].includes(paymentMethod)) {
       throw appError('payment_required', 'Seleccioná un método de pago disponible.');
     }
-    if ((shipping.method === 'encomienda' && paymentMethod !== 'transferencia') || (paymentMethod === 'efectivo' && shipping.method !== 'delivery')) {
-      throw appError('payment_unavailable', 'El producto por encomienda se paga previamente por transferencia. Efectivo contra entrega sólo para delivery.');
+    if ((shipping.method === 'encomienda' && paymentMethod !== 'transferencia') || (paymentMethod === 'efectivo' && !['delivery', 'retiro'].includes(shipping.method))) {
+      throw appError('payment_unavailable', 'El producto por encomienda se paga previamente por transferencia. Efectivo al recibir por delivery o al retirar.');
     }
     if (shipping.method === 'delivery' && (!shipping.mapLocation || !shipping.mapLocation.name)) {
       throw appError('map_required', 'Marcá y nombrá tu ubicación en el mapa.');
@@ -839,7 +837,18 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         requested: response.requested
       });
     }
-    return { ...(response.order || {}), orderId: response.orderId };
+    const order = response.order;
+    const shortId = order?.shortId || order?.orderNumber || response.shortId || response.orderNumber;
+    if (typeof response.orderId !== 'string' || !/^[A-Za-z0-9_-]{1,260}$/.test(response.orderId)
+      || !order || typeof order !== 'object' || Array.isArray(order)
+      || typeof shortId !== 'string' || !shortId.trim()
+      || typeof order.userId !== 'string' || !order.userId
+      || !Array.isArray(order.items) || !order.items.length
+      || order.items.some(item => !item || typeof item.id !== 'string' || !item.id.trim() || !Number.isInteger(item.qty ?? item.quantity) || (item.qty ?? item.quantity) < 1 || (item.qty ?? item.quantity) > 99 || !Number.isInteger(item.price) || item.price < 0)
+      || !Number.isInteger(order.total) || order.total < 0) {
+      throw appError('invalid_response', 'La tienda no devolvió un pedido confirmado válido.');
+    }
+    return { ...order, shortId, orderId: response.orderId };
   }
 
   const SHIPPING_LABELS = {
@@ -1193,9 +1202,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   window.addEventListener('popstate', () => {
-    if (!window.TintinCheckoutOrderCompleted) return;
+    if (!window.TintinCheckoutOrderCompleted && !window.history?.state?.tintinOrderCompleted) return;
     window.location.replace('/');
   });
+  // BFCache y recarga conservan history.state, aunque el módulo arranque otra vez.
+  window.addEventListener('pageshow', event => {
+    if (event.persisted && (window.TintinCheckoutOrderCompleted || window.history?.state?.tintinOrderCompleted)) window.location.replace('/');
+  });
+  if (window.history?.state?.tintinOrderCompleted) window.location.replace('/');
 
   function message(error) {
     const code = error?.details?.code || error?.code || error?.message;
@@ -1266,7 +1280,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   async function submit(button) {
-    if (submitting || orderCompleted || availabilityBlocked) return;
+    if (submitting || orderCompleted || window.TintinCheckoutOrderCompleted || window.history?.state?.tintinOrderCompleted || availabilityBlocked) return;
     submitting = true;
     window.TintinCheckoutOrderInFlight = true;
     hideError();
@@ -1292,13 +1306,13 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
       orderCompleted = true;
       success(result, draft);
+      try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
+      inMemoryRequestId = null;
       try {
-        await clearCart();
+        await clearCart(result.items);
       } catch (clearError) {
         console.warn('[secure-checkout-order] El pedido se creó, pero no se pudo limpiar el carrito local:', clearError);
       }
-      try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
-      inMemoryRequestId = null;
     } catch (error) {
       console.error('[spark-checkout]', error);
       const code = error?.details?.code || error?.code;
@@ -1355,9 +1369,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     pendingPaypal = null;
     window.TintinCheckoutOrderInFlight = false;
     success(result, draft);
-    try { await clearCart(); } catch (error) { console.warn('[secure-checkout-order] No se pudo limpiar el carrito tras PayPal:', error); }
     try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
     inMemoryRequestId = null;
+    try { await clearCart(result.items); } catch (error) { console.warn('[secure-checkout-order] No se pudo limpiar el carrito tras PayPal:', error); }
     document.getElementById('tt-paypal-checkout')?.style.setProperty('display', 'none');
   });
 

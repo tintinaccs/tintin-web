@@ -1,3 +1,129 @@
+## Seguimiento vigente — Fase09 integrada y recuperación de PR1306
+
+Codex /root. Base de esta recuperación: `9b1b88f8abee27d395d6690f4b68843cb1374d3f`.
+
+- #1319 MERGED, head `df692c4b48ccf0fa120d2f4ebe1bf82d834180e8`. CI41562231283/1 y CodeQL41562227482/1 SUCCESS; mantenimiento/integridad protegidos aprobados. Carrusel API pública/SDK diferido y resolvedor de imágenes incluidos y probados con Firebase remoto bloqueado. Sin fuente paralela de catálogo.
+- Evidencia del head:107rendimiento,144viewports canónicos y220geometría global PASS al primer intento;528runtime aislado PASS;258controles Rules/18integraciones reales PASS, incluyendo305pedidos propios frente a5001ajenos y deduplicación UID/email. Node24.22.1 con instalación estricta y0EBADENGINE. Conteos de suites separados, no sumarlos como casos únicos.
+- Main9b1b88f8: monitor41565292553/1 SUCCESS; artefacto publicado corresponde a este commit,17respuestas limpias/CSP y headers correctos. Job FX PayPal omitido deliberadamente. CodeQL41565289803/1 por recibo propio. Auditoría completa posterior41565290324/1 sigue en ejecución al escribir esta nota; no heredar el PASS de la PR ni afirmar que ya terminó. Consultar ese run antes de cerrar.
+- #1316 CLOSED sin merge por Dependabot: Firebase15.34.2 está incorporado por1319 con sus derivados canónicos. Run41442885247/1 conserva FAILURE histórico por drift de package/lock; no es fallo actual del código integrado.
+- Vigilancia horaria **Atender fallos de CI de Tintín** habilitada; primer disparo registrado2026-11-03T02:24:49Z y prompt recibido en este hilo. Ya se acreditó despertar/continuación; no se acredita por inferencia invocación nativa de Skills en otros hosts ni recepción instantánea de webhooks.
+- #1306 era la única PR abierta, inactiva desde2026-11-01T23:46:38Z, head976601a99772e5390448b8da2edda79d9d6c1429. CI41358865966/1 falló en125006122914 y agregador; informe previo indica pérdida de comunicación del runner. Su log antiguo devuelve404/BlobNotFound; la anotación exacta no se puede recuperar con el conector disponible ni HTTP público. No inventar un bug funcional ni heredar PASS del resto. Se concilia por merge normal con9b1b88f8, sin force-push, preservando la retirada del job de escritura de1307. Se actualiza el enrutamiento a46Skills y gh-fix-ci; sólo documentación/instrucciones y derivados.
+- Rama de recuperación local `codex/resume-skills-1306`, destino remoto `chore/cloud-agent-skills-20261101`; worktree separado `/workspace/tintin-skills-1306`. [PR1306](https://github.com/tintinaccs/tintin-web/pull/1306) registra HEAD y runs actuales en su descripción. Seguirlos hasta terminal/merge y comprobar post-merge por separado. No modificar un candidato activo de otro agente.
+- La aceptación global de producción sigue BLOCKED/NOT_VERIFIED: publicar/verificar Rules y WebApp con autorización, sesión/proveedores reales, hardware/lector, recuperación real y reglas comerciales nuevas de DECISIONES_COMERCIALES_20261102.md. Persisten14moderadas de herramientas y aviso LOW de actions/cache@v4/Node20 forzado a24. No se ocultan avisos ni se prueban operaciones comerciales reales.
+
+## 2026-11-02 America/Buenos_Aires — Fase09 integral (estado vigente)
+
+
+Conciliación posterior de #1318: main1c673584b0b8e69e9610c6d4721210d86bd4f55c incorpora efectivo al retirar y textos reales de delivery. Se preservan política server-side, contratos, pruebas y contenido de ese cambio. Las URLs de13módulos realmente alterados se renuevan a tintin-20261103-acceptance-1;22módulos del grafo concurrente conservan sus URLs publicadas. Nuevas regresiones/generadores/CI se validan sobre la conciliación, sin heredar el PASS del anterior75fa91e9. PR1319 es la entrega vigente.
+
+
+Advertencia CI demostrada: Firebase13/@firebase/rules-unit-testing6 exige Node>=24.12.0, pero los workflows usaban22 (EBADENGINE en job125671971836 del run41560504080/1). Se centraliza la selección en engines.node de package.json (>=24.12.0 <25, LTS24) y actions/setup-node node-version-file, soportado oficialmente; sin duplicar archivo de versión ni bajar SDK. Los nueve workflows existentes conservan triggers, permisos, cobertura y protecciones; npm ci --engine-strict convierte una futura incompatibilidad de engines en fallo explícito. No se disparan despliegues manuales. npm install --package-lock-only --ignore-scripts --engine-strict PASS con Node24.19.0 y180contratos de CI/operaciones/arquitectura PASS. CI del nuevo SHA debe repetirse. Configuración Node explícita del panel Cloudflare sigue sin verificarse.
+
+## 2026-11-02 — Retiro: primer resultado de navegador y corrección del contrato
+
+Codex /root. PR #1318, head inicial `f52c164ee277e8a420128cb952b05c704013cab2`.
+CI 41554720269/1 FAIL en comercio: 152 casos Chromium PASS y cuatro FAIL.
+Tres contaban contenedor + input de efectivo como dos opciones; el otro mantenía
+la expectativa anterior de rechazar efectivo en retiro. Se apunta al input real,
+se exige selección de efectivo en delivery/retiro y se conserva rechazo por
+encomienda. Se refuerza el catálogo deshabilitado en las tres entregas, sin
+reintentos/exclusiones nuevos. No se modifica runtime para silenciar el test.
+El head corregido requiere sus propios resultados CI/merge/deploy; no hereda PASS.
+
+## 2026-11-02 — Retiro con efectivo y condiciones de reparto
+
+Codex /root. Base3974431, rama fix/pickup-cash-20261102. La titular autorizó
+transferencia previa o efectivo al retirar y reparto de lunes a sábado, corte11:00.
+Política cliente/servidor y renderers legacy/configurable admiten efectivo en retiro
+sólo cuando administración lo habilita. Encomienda sigue sólo transferencia previa;
+pago efectivo conserva estado pendiente y reserva de stock. Se actualizan textos
+predeterminados, Configuración, FAQ y Envíos; se preservan descripciones personalizadas.
+URLs transitivas y shell se renuevan desde fuentes/generador; sin CSS nuevo.
+RED: la nueva prueba de retiro falló payment_unavailable antes del cambio.
+PASS_LOCAL:354pruebas checkout/pagos/pedidos, preflight canónico completo y build:pages.
+Spec existente de navegación/entrega añade retiro en legacy y catálogo configurable
+a320/768/1440. BROWSER_LOCAL BLOCKED: descarga oficial de Chromium falló; esos casos
+requieren CI. No se efectuaron compras, cobros, correos ni cambios de datos reales.
+No implementa señas, saldos, cancelación selectiva ni cálculo automático de fechas.
+El resultado terminal de PR/CI/fusión/publicación debe registrarse por el SHA nuevo.
+
+## 2026-11-02 — Recibo del primer bloque y base del retiro
+
+Codex /root. PR #1317 fusionado en `c25421dfe78d83f2dff744b7861c41f28f139641`.
+Head `1ed20dea8270ac2a14e26dbbe9b675787d30eb97`: CI 41546610554/1 SUCCESS,
+integridad/mantenimiento protegidos SUCCESS. Main: CI 41550063208/1 SUCCESS,
+Cloudflare Pages SUCCESS y monitor de producción 41550066223/1 SUCCESS.
+PASS_PRODUCTION acredita el artefacto y la salud no destructiva; no una operación
+real de cuenta ni índices remotos. El bloque de retiro se reconcilió sobre ese main.
+Sus pruebas/browser/merge/deploy requieren sus propios recibos; las demás decisiones
+comerciales permanecen PENDING.
+
+
+Actualización2026-11-03: base conciliada por fast-forward con c25421df/#1317. Se conserva su implementación canónica F02-STATS (páginas300/readTime/CAS, presupuesto10000) y sus pruebas, sin duplicar escritores. Regresiones focalizadas15PASS; tramo final audit:final exit0. audit:final global aún BLOCKED en runtime por JAR oficial inaccesible; CI mantiene emulador obligatorio.
+
+Petición CI: gh-fix-ci oficial instalado en ambas rutas con revisión49f948faa925;46Skills/ruta válidos. Automatización externa **Atender fallos de CI de Tintín** creada/habilitada cada hora; no webhook ni primer despertar acreditado. Ver GITHUB_RESULTS. Run41442885247/1, PR1316/ba96c3a1 falló por drift generado de package/lock, no por Firebase/emulador. Reparación equivalente incorporada a09;1316 sólo se cierra como supersedida después de integración real. Código de09 activo: el monitor no debe editar concurrentemente esta rama.
+
+Revalidación final09 tras conciliar1317: **685pruebas de dominios PASS,0FAIL/0SKIP**; **107/107Chromium de rendimiento PASS sin reintentos** (3min, ambos orígenes locales). El primer barrido08 de106/1FLAKY se conserva como histórico; esta ejecución nueva no hereda su resultado. Skills46por agente validados; --help del script oficial PASS. [Evidencia local](evidence/phase09-20261102/local-validation.json). Build/CI del candidato y limitaciones productivas se registran por separado.
+
+
+
+Control previo a PR: ci:preflight completo PASS_LOCAL; preflight de imports repetido tras retirar restos muertos del bridge (1194fuentes/72funciones), routing7/7. Build canónico repetido:7derivados idénticos; protección78registros/544archivos intacta. Recibo CI/fusión actual: [PR por rama](https://github.com/tintinaccs/tintin-web/pulls?q=head%3Acodex%2Fphase09-integral-acceptance). Su descripción registra SHA/run/intento terminal sin commits dedicados sólo a anunciar CI. Las limitaciones productivas siguen abiertas.
+
+## 2026-11-02 — Revisión acordada y F02-STATS, primer bloque
+
+Codex /root. Base `39744311216e525919a1f781a03fb854d92e45fd`; rama `fix/commerce-decisions-20261102`.
+Requisitos completos: [DECISIONES_COMERCIALES_20261102.md](DECISIONES_COMERCIALES_20261102.md).
+Sólo el resumen derivado de cuentas está implementado en este bloque: consultas
+por identidad, paginación con readTime común, deduplicación y commit CAS de la
+cuenta leída antes del cálculo, con hasta tres intentos. No publica datos parciales
+si una consulta falla/supera presupuesto y no recrea cuentas eliminadas.
+PASS_LOCAL: 546 pruebas sync/consultas/pedidos/checkout y 220 de operaciones,
+seguridad y arquitectura, sin fallos/skips; build:pages PASS. Incluyen carrera
+atrasada, paginación, puente histórico normalizado, error/snapshot/cursor inválidos,
+presupuesto y conflicto persistente. Son simulaciones sin credenciales ni datos
+productivos; no acreditan índices remotos, otros escritores legacy de estadísticas
+ni cobros de señas. No hubo envíos reales, compras ni migraciones.
+Las demás reglas están registradas como PENDING, no implementadas por inferencia.
+CI, merge y publicación se siguen con el SHA y recibo terminal de la PR correspondiente.
+
+Responsable Codex /root. Base inicial39744311216e525919a1f781a03fb854d92e45fd; origin/main conciliado c25421dfe78d83f2dff744b7861c41f28f139641; rama codex/phase09-integral-acceptance. No PR08 independiente: cambios locales de08 preservados en09. [Informe09](TINTIN_PHASE09_ACCEPTANCE.md), [Informe08](TINTIN_PHASE08_TRANSVERSAL.md), [revisión GitHub de00–07](evidence/phase09-20261102/history-verification.json).
+
+- PR1305/1307/1308/1309/1310/1311/1313/1314/1315: merged confirmado por API; SHA de merge en cadena de base, checks históricos consultados. No heredar PASS al candidato actual. Fallo Protected flows histórico1305 conservado;1307 lo reparó. Catálogo executor vacío consultado: nativo Skills sigue externo.
+- Correcciones08: SDK diferido de colecciones/imágenes públicas, normalización de enlaces idempotente (2000→0mutaciones), diagnóstico de beacons sin ocultar tráfico ni duplicados reales. Geometría144/144 y UX163 PASS locales de08; suite107rendimiento106PASS/1FLAKY, no se presenta limpia.
+- Correcciones09: estadísticas por identidad/aliases deduplicados, cursor y CAS con recálculo tras conflicto; no recrear perfil ni publicar truncamiento. Fallback manual informativo autónomo sin falso comercio; branch/helper de checkout Apps Script muerto retirado; contratos actualizados; extractor AST sin colecciones fantasma. Regresiones focalizadas en marcha, integración real añadida con5306pedidos sintéticos/305propios.
+- Firebase CLI15.34.2;14avisos npm moderados de herramientas persisten,0HIGH/CRITICAL. Sin audit fix --force ni major overrides incompatibles. acorn dev-only justificado para extractor canónico, no bundle cliente.
+- Emulador local BLOCKED por JAR oficial no descargable. CI debe ejecutar Rules/integración reales. No reemplazar por producción. audit:final y matriz completa deben acreditar resultados del candidato; todavía IN_PROGRESS.
+- BLOCKED/NOT_VERIFIED externos: publicar/verificar Rules y WebApp con autorización; índices/configuración/proveedores desplegados; sesión real por rol/Diagnóstico Maestro; hardware/lector/WCAG completo/CWV de campo; restauración real a base separada. No se ejecutan compras, pagos, transferencias, mensajes ni migraciones reales. No declarar cierre100% con estos pendientes.
+- Retomar: leer informe09, revisar rama/diff y logs artifacts/phase09, repetir sólo gates afectados por cambios o fallos, generar protección/derivados canónicos, seguir PR/SHA/run/attempt hasta fusión y post-merge según AGENTS. Recibos históricos no sustituyen esa aceptación.
+
+## 2026-11-02 — Fase07: backend y seguridad
+
+Codex /root; base1159edeb, rama codex/phase07-backend-security. [Informe07](TINTIN_PHASE07_BACKEND_SECURITY.md). F01-RULES sigue presente en base: metadata inventory* sin status devolvía true. Candidato exige transición autorizada/coherente o metadata intacta; mantiene contrato Super Admin y dominio server-side. Regresiones SDK en test:rules-critical.729Node PASS,0SKIP y auditoría security PASS. Emulador local BLOCKED por descargaJAR; CI debe validar. Backup/restore sólo dry-run con proyecto/bucket/base ficticios; no accesos ni cambios manuales de producción. Publicar Rules, verificar índices/configuración remota, restauración y WebApp requieren autorización separada. No cerrar F01 productivo antes de deployment autorizado. Gates/PR/CI/fusión por recibos propios.
+
+## 2026-11-02 — Fase06: clientes y administración
+
+Codex /root; base001c4218, rama codex/phase06-accounts-admin. [Informe06](TINTIN_PHASE06_ACCOUNTS_ADMIN.md). Historial de campana200 violaba límite100 de Rules: corregido con páginas reactivas autorizadas y descarte de callbacks anulados. BFCache restaura feed/auth sin duplicar delegación; navegación demorada exige la misma cuenta. Sin CSS, cambios de rol, datos reales, mensajes ni recargas. PASS_LOCAL532 de cuentas/actividad/perfil y277 admin/seguridad/arquitectura;1SKIP emulador. Nueva regresión BFCache adicional PASS;71actividad finales PASS (conteo solapado). Chromium61PASS/1FLAKY en62; historial repetido3/3 sin reintentos. Navegador/gates/PR/CI/fusión se acreditan con recibos terminales propios. NOT_VERIFIED hardware, sesiones productivas y entrega real. Permanecen F01-RULES, deployment Apps Script y F02-STATS.
+
+## 2026-11-02 — Fase05: recorrido comercial completo
+
+Codex /root; rama `codex/phase05-commerce-flow`, base `b1107b3fc7fd711709832620ea738c814d6462a6` (#1311). [Informe05](TINTIN_PHASE05_COMMERCE.md).
+- Reparados catálogo de pagos explícito/empty y callbacks viejos; tarifas reales cero/pendiente sin overrides; retiro y configuración parcial; respuesta de pedido validada; identidad cerrada sin esperar red; limpieza sólo de cantidades compradas con identidad V2 y generación de cuenta; Back/recarga/BFCache seguros; texto de logística fiel. Dispatcher público Apps Script rechaza creador legacy, sin cambiar espejos autenticados.
+- PASS_LOCAL:590 Node de carrito/checkout/pedidos/pagos/sync;541 de catálogo/admin/arquitectura/auth/cuentas/push/social,0FAIL y1SKIP por emulador.97 Chromium (82checkout/entrega/navegación/acceso +15PayPal ficticio), sin reintentos. Pedidos seguros/entrega/carrito pasan auditorías. Conteos de suites diferentes; no certifican proveedores reales.
+- BLOCKED_LOCAL: emulador no descarga JAR oficial por restricción de red. Integración añadida a suite CI existente (configuración canónica, transferencia pendiente, reserva única, rechazo sin escritura); no se acredita antes del job terminal.
+- CI inicial2538ce88: comercio y Rules/identidad PASS (17integraciones Firestore, incluida transferencia canónica); CodeQL alertó dos filtros HTML inseguros en la nueva fixture. Se reemplaza la regex por removeFixtureScripts existente, sin exclusiones ni supresiones. El nuevo SHA requiere checks propios.
+- Caché/shell/CSP/diagnóstico y plan protegido se generan canónicamente. CI/PR/fusión/publicación se siguen por SHA/run/attempt; pendientes del recibo terminal de esta rama.
+- Pendientes externos: actualizar y verificar WebApp Apps Script desplegado; F01-RULES HIGH sigue en03A. No afirmar cierre global ni desplegado de ese WebApp. Sin compras/cobros/transferencias, mensajes, cambios de pedidos o inventario real ni migraciones destructivas.
+
+## 2026-11-01 America/Buenos_Aires — Fase03: administración y editor de productos
+
+Codex /root; rama `codex/phase03-product-editor`, base integrada344a2936580a8c3ca6c8f1dc112f940334f0b077 (#1309). Base inicial5b694fe4. La continuación de02 quedó fusionada con CI41375418525/1 SUCCESS; sus runs de main y salud se siguen por separado.
+- Fotografías, opciones e inventario comparten la superficie Fotos y opciones: tres áreas alineadas en ancho suficiente, dos filas en tablet y apiladas en móvil. Precio y stock accede a los mismos nodos; no se duplican matriz ni escritores. La galería general no reserva un lateral vacío; reemplazar recupera el espacio adecuado.
+- Corregido: ajustar la altura de descripción restauraba el scroll anterior y ocultaba la línea recién escrita al final. El visor de portada ahora es un dialog con teclado, foco contenido y retorno al disparador. Quitar opciones nuevas con fotos asociadas explica el bloqueo y conserva datos.
+- PASS_LOCAL: 110 pruebas Node de dominio/referencias;130 Chromium de editor/admin, con41 de shell;13 específicas tras incorporar02, incluyendo texto largo guardado/reabierto,30combinaciones con búsqueda/paginación, stock independiente y scroll visible estable. Límite1000 y rechazo de1100 sin mutación; compatibilidad V1/V2, CAS, permisos y costo privado. Conteos solapados.
+- Evidencia inicial conservada:99/100 en primera suite; la aserción fallida medía scrollY absoluto al cambiar la altura del aviso. Se comprobó posición visible constante y ausencia de retorno arriba en las repeticiones. Dos casos iniciales reprodujeron los defectos de descripción/explicación. El navegador empaquetado faltaba; se usó Chromium151/Playwright1.64.1. El intento completo audit:admin-responsive no se acredita localmente por ese arranque; sus casos pertinentes y el gate completo de CI se conservan.
+- Gates locales: estilos, medios42, base admin, colores153+36, arquitectura y caché. URLs renovadas por dependencia y derivados con constructores canónicos. Plan protegido contra main344a2936; CI/fusión/publicación se acreditan únicamente por sus recibos terminales.
+- Informe: [PHASE03_ADMIN_PRODUCT_EDITOR.md](PHASE03_ADMIN_PRODUCT_EDITOR.md); evidencia: [validation.json](evidence/phase03-20261102/validation.json). NOT_VERIFIED: sesión externa y persistencia real Firestore/Sheets, upload real, Safari/iOS/hardware/lector. Sin migraciones ni escrituras sobre datos reales. Seguridad03A y comercio03B conservan sus pendientes de01.
+
 ## 2026-11-01 — Admin app móvil, Fase 27: Modo oscuro
 Claude Code, rama claude/tintin-admin-mobile-redesign-6nkx6l.
 - Investigado: los colores del panel salen de tokens `--admin-color-*` (publicados en :root) y de una segunda capa `--tt-ui-*`/`--tt-surface` (sistema-superficies-tintin.css); además hay colores fijos y reglas con `!important` en dashboard-control.css. Primer intento solo con tokens dejó fondos claros y texto oscuro sobre oscuro.
@@ -5754,3 +5880,175 @@ original antes de cada aviso. La regresión falla antes y pasa después del camb
 Las cinco pruebas de integridad de lectura pasan. CI, merge y publicación del
 candidato final requieren evidencia por su SHA; no se heredan los PASS locales
 de la sesión anterior. No se escribieron datos comerciales reales.
+
+
+## 2026-11-01 — Estabilización reproducible de Skills y CI
+
+Codex /root GPT-6, Linux Cloud; base main 7dfe8c9f306168994e324c34135230d8a5da3f71.
+#1305 confirmada MERGED (head e0465aa5), CI41355599089/1 y CodeQL41355595342
+SUCCESS. No se reabre ni se heredan resultados de sus heads fallidos.
+Main post-merge41357878092/1 detecta Protected flows FAIL: huellas antiguas de
+workflow, admin.html, AGENTS.md y cache-version-baseline; reproducción local igual.
+Se conserva el contenido funcional existente y se prepara renovación canónica de
+4archivos/4registros, sin tocar alcances/sellos ni requisitos del controlador.
+Se retira el job de CI con contents:write que hacía commit/pull/push de manifiestos
+en la rama de Skills; build y rechazo de drift siguen obligatorios. El validador
+ahora informa metadatos válidos en disco, sin afirmar descubrimiento del host.
+
+PASS_LOCAL: preflight completa (todos los comandos con salida0), 189/189 pruebas
+de operaciones/protección/diagnóstico, integración12workflows/1PR, 45Skills por
+agente y4de compatibilidad, copia efímera Linux y enlaces locales SKILL.md.
+Variantes históricas de clientes conservadas. Sin cambios de aplicación ni datos.
+BLOCKED: skills.list executor devuelve catálogo vacío; no existe control expuesto
+para registrar/reindexar el repo en este host. Lectura manual no acredita activación
+nativa. Confirmar en sesión nueva observable de Codex/Claude antes de cerrar fase02.
+Seguimiento permanente00–09, SHA/PR/runs y siguiente paso en TINTIN_GLOBAL_PHASES.md.
+CI/merge del candidato siguen PENDING hasta recibo real; #1306 pertenece a otra
+rama activa y se conserva. Endpoint branch-protection clásico403; ruleset18212422
+activo leído, no modificado. No prometer que comentarios despierten un agente.
+
+Validación final local: build:pages PASS; segunda ejecución sin diferencias SHA256
+en diagnostic-manifest.json/site-version.json; protección78registros/544archivos
+PASS; git diff --check limpio. Plan candidato validado por inspectMaintenance
+con base main exacta. Node local24.19.0; CI fija Node22 y debe acreditar ese runtime.
+
+PR correctiva #1307 creada; primer candidato fddc4a1b2d90245f6bc247970cd13f2cef232a99,
+CI41359542982/1. El enlace se incorpora con este cambio documental; el nuevo head
+requiere CI propia. Recibo terminal/merge consultable en #1307; no se confunde
+con #1305 ni con la activación nativa BLOCKED. No se usarán commits vacíos.
+
+## 2026-11-01 — Fase 01: auditoría global y arquitectura, diagnóstico
+
+Codex /root GPT-6, Linux Cloud. Base estable auditada085953dc0b700e91f95fc8c84dd8e17f4627a70c;
+árbolb97e4feef9ee05718de9557da9c10f75351fe066. #1307 MERGED, CI de main41361909966/1,
+CodeQL41361910183/1 y producción41361911653/1 SUCCESS consultados por API. El estado
+PENDING del bloque anterior se resuelve con ese recibo; no se hereda otro head.
+#1306 sigue abierta en976601a9, CI41358865966/1 FAILURE por runner sin comunicación,
+logs404 y plan protegido viejo; rama preservada. Skills45/ruta válidos,4compat;
+catálogo executor vacío: activación nativa BLOCKED, no usada como prueba de carga.
+
+La titular define ahora01como auditoría global: el procedimiento anterior de
+Skills/CI se conserva en TINTIN_SKILLS_CI_20261101.md y TINTIN_GLOBAL_PHASES pasa
+al plan global00–09. Informe PHASE01_GLOBAL_ARCHITECTURE_AUDIT.md y evidencia
+versionable en docs/agent/evidence/phase01-20261101/. No hay reparación funcional.
+
+Hallazgos ABIERTOS: HIGH F01-RULES (agent sin permisos de pedidos puede alterar
+inventoryState/revision, reproducido en Firestore Emulator demo) y F04-LEGACY
+(dispatcher Apps Script crea compra de variante agotada; dominio CF la rechaza,
+I/O sintético, deployment Google NO_VERIFICADO). MEDIUM F02-STATS (scan global
+limitado5000 y MERGE atrasado), F03-FALLBACK (public incompleto pese a build0),
+F05-DEPS (2avisos npm moderados/14paquetes de desarrollo). LOW F06-CONTRACTS
+(autoridad documentada obsoleta) y F07-INDEX (2colecciones fantasma del extractor,
+filtradas por consumidor; NO son Rules faltantes). Ningún CRITICAL demostrado;
+no se afirma ausencia global. Próximo:02, cerrar F01 antes de cambios estéticos.
+
+PASS_LOCAL de entregables diagnósticos:8gates seleccionados,38tests de arquitectura,
+642tests de dominios,3operativos,smoke18rutas,geometría144/144 y5tests del helper
+a11y. Conteos solapados; no sumarlos como cobertura única. Build:pages sin deriva
+en worktree limpio del SHA base; fallback luego FALLA integridad de recursos.
+Probes que terminan0 CONFIRMAN anomalías, no aprueban sus invariantes. Primer smoke
+no inició por Chromium cacheado ausente; repetición con Chromium del sistema151,
+sólo adaptador de ruta de lanzamiento, sin cambiar aserciones/plazos. Node local24,
+Java21; CI base Node22. NativeSkills, Rules/índices/triggers/despliegue Apps Script,
+sandbox de pagos/envíos reales y hardware siguen NOT_VERIFIED/BLOCKED según informe.
+
+Esta fase completa diagnóstico y handoff, no da PASS global al comercio ni cierra
+los HIGH. Sólo se publican documentación, pruebas diagnósticas y derivados canónicos;
+no se alteran Rules, productos, pedidos, permisos, sesiones ni código de la tienda.
+La PR documental registra SHA/run/intento/resultados terminales en su recibo.
+
+PR documental #1308 creada; candidato inicial9533fd07a69eef92428e30f5295277c7d36d79ad,
+run41367835688/1. Este enlace requiere CI del head final; no se hereda el run
+anterior tras actualizar. Recibo terminal/merge en #1308; la base de los hallazgos
+sigue siendo085953dc. Siguiente fase funcional02, no iniciada por esta auditoría.
+
+## 2026-11-02 UTC — Fase 02 visual pública (Codex /root, GPT-6)
+
+Nueva instrucción de la titular:02 corresponde a reparación visual pública.
+El antiguo alcance de seguridad pasa a03A, antes de comercio03B; los HIGH de01
+siguen abiertos. Se actualizó TINTIN_GLOBAL_PHASES sin presentar UI como una
+reparación de permisos, stock, autenticación o pedidos.
+
+Base consultada:5b694fe4adaa9e356f3c2f8e74d2de5ca0f5adde, #1308 MERGED.
+CI41370328636/1, CodeQL41370329571/1 y salud41370330002/1 SUCCESS del base.
+Rama aislada fix/phase02-public-responsive-20261102. #1306 continúa abierta en
+976601a99772e5390448b8da2edda79d9d6c1429; no se modificó su rama.
+
+Tres defectos MEDIUM corregidos: load/pageshow tardío ignoraba interacción local;
+UI Quality volvía a escribir scroll durante recarga aunque el cargador ya había
+resuelto la entrada; foco rosa/translúcido de bajo contraste en login, checkout y
+producto. Se conservan reinicio explícito, navegación y bfcache. Contornos de
+teclado consumen la tinta semántica existente; botones, marca y estructura se
+conservan. La galería ya era sticky/alineada: no se inventó una reparación allí.
+
+PASS_LOCAL:10 tests Node de scroll;20 casos nuevos de navegador (12 de ficha con
+3100 caracteres y precios largos,4 de foco,4 de load real demorado/orientación);
+49 regresiones de interacción (registro simulado39, historial3, helpers UI/a11y7);
+smoke18rutas con ciclos de paneles y geometría final aislada144/144. Gates de
+estilos, colores, arquitectura, shell, producto, UI/UX y accesibilidad aprobados.
+Build y caché mediante herramientas canónicas; protección se valida sobre el
+plan generado del candidato. Conteos solapados; no equivalen a cobertura única.
+
+Se interrumpieron suites locales amplias simultáneas por exceso de concurrencia
+en dos vCPU; no se cuentan como PASS. La geometría tuvo timeouts de12s y luego
+aprobó aislada, con el mismo plazo y aserciones. Los auditores8/10 exigían el
+comando npm original: se preservó y se registran los nuevos casos una sola vez
+desde phase8-ui-ux.spec.js, sin debilitar controles ni agregar workflows.
+
+Sólo hay cambios semánticos en foco y entrada/scroll; los demás cambios de JS
+de navegación, tienda y estado-productos son URLs inmutables propagadas. Rules,
+backend, lógica comercial, perfiles y autenticación permanecen sin cambios.
+Capturas en artifacts/phase02 y futuros artefactos de Actions. Informe reproducible:
+[PHASE02_PUBLIC_VISUAL_REPAIR.md](PHASE02_PUBLIC_VISUAL_REPAIR.md).
+
+Catálogo nativo executor consultado de nuevo:skills:[]. Los cinco Skills de
+diseño se leyeron como referencia, no se afirma activación nativa. Lectores de
+pantalla, WebKit, teléfonos físicos, CWV y flujos completos de proveedores reales
+siguen NOT_VERIFIED. No se modificaron datos de clientas ni se enviaron pedidos,
+correos o cobros reales.
+
+Recibo por PR/head/run/intento, fusión y verificación posterior:
+[PR de la rama](https://github.com/tintinaccs/tintin-web/pulls?q=is%3Apr+head%3Afix%2Fphase02-public-responsive-20261102).
+No heredar CI del base ni cerrar con ejecuciones pendientes. Siguiente:03A.
+## 2026-11-02 — Fase 04, catálogo comercial
+
+Codex /root, rama codex/phase04-catalog-commercial, base conciliada e3de73c1
+(#1310). Checkout inicial d7faa302 atrasado; recuperación de la guía de fases y
+actualización de main mediante conector GitHub/git fetch. Se preservan02/03 y
+la app móvil actual. No se hereda PASS de la base anterior; audit:final largo
+se interrumpe deliberadamente para revalidar el candidato conciliado.
+
+Mapa y alcance en TINTIN_PHASE04_CATALOG.md; guía TINTIN_GLOBAL_PHASES actualizada
+por la nueva instrucción de catálogo04. HIGH F01-RULES/F04-LEGACY siguen abiertos
+como dependencias03A/03B. F02-STATS queda pendiente fuera del catálogo actual.
+No se certifica que un deployment Apps Script ajeno al checkout canónico ya
+respete variantes: requiere reparación/validación propia y de callers.
+
+Corregidos: publicación masiva sin controles y alternancia legacy sin estado
+editorial/CAS; aliases que revivían imágenes retiradas; checkout manipulado con
+precio cero/null/decimal. Endpoint/escritor existente, sin sincronizadores ni
+migraciones. Acción individual mantiene su permiso; lote conserva accionesMasivas.
+Dos editores/venta durante guardado se prueban con IO controlada, sin atribuirles
+una ejecución Firestore real. Regresiones RED antes del cambio.
+
+Evidencia previa sobre d7faa302:857 Node PASS,1SKIP por emulador, Chromium31/31;
+se conserva como histórica, no aprueba e3de73c1 más el cambio. Pruebas conciliadas
+y gates finales se registran debajo. Logs locales artifacts/phase04.
+El emulador no descarga JAR de storage.googleapis.com en esta red; proyecto demo
+únicamente, nunca producción. gh CLI no autentica, pero el conector GitHub está
+operativo; no se declara bloqueo de PR/CI sólo por ese error. No hubo escrituras
+comerciales reales, compras, usuarios, correos ni cambios de Rules.
+
+PASS_LOCAL conciliado:859 Node PASS,0FAIL,1SKIP de catálogo/sync/admin/pedidos/
+carrito/checkout/pagos;22/22 pruebas del editor comercial, incluida cita de
+field paths legacy con espacios (RED antes del fix). Se agrega integración
+Firestore real de limpieza de aliases a la suite de CI existente; localmente
+bloqueada por descarga del JAR, no presentada como ejecutada. Browser, build,
+preflight y seguimiento CI del candidato se registran por sus resultados propios.
+
+Candidato conciliado PASS_LOCAL:31/31 Chromium sin reintentos (ficha y editor
+comercial,320–3840px/horizontal), build:pages/caché410/67 y preflight1185módulos/
+72funciones. Plan canónico4archivos/18registros sobre e3de73c1; diff revisado sin
+alterar gates, Rules, datos o cambios de02/03. Las etapas canónicas de CI deben
+acreditar el barrido transversal del SHA propio; no se cuenta el audit:final
+interrumpido de d7faa302. PR, CI, merge y producción se siguen por separado.

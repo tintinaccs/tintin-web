@@ -26,3 +26,12 @@ test('imports integrados de Node en bibliotecas universales no son archivos loca
  assert.ok(worker.imports.some(dependency=>dependency.target==='js/admin/products/vision-productos-core.mjs'));
  assert.ok(!manifest.missingReferences.some(reference=>/vision-productos|onnxruntime/.test(reference.page)));
 });
+
+
+test('el extractor de colecciones distingue llamadas de strings, comentarios y regex',async()=>{
+ const {createRequire}=await import('node:module');const {extractCollections}=createRequire(import.meta.url)('../../scripts/lib/firestore-collection-extractor.cjs');
+ const source=`// collection(db, 'comment')
+const text="doc(db, 'string')";const pattern=/collection\\(db/;collection(db,'products');doc(db,'users','uid');`;
+ assert.deepEqual(extractCollections(source).map(row=>row.name),['products','users']);
+ assert.deepEqual(extractCollections('<script type="application/ld+json">{"text":"collection(db,invalid)"}</script><script>doc(db,"orders","id")</script>',{html:true}).map(row=>row.name),['orders']);
+});

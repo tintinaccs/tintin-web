@@ -921,8 +921,14 @@ service cloud.firestore {
       let beforeOrder = resource.data;
       let afterOrder = request.resource.data;
       let statusChanged = afterOrder.status != beforeOrder.status;
-      return !statusChanged ||
-        (
+      // Metadata de reserva sólo acompaña una transición autorizada de estado.
+      // Un update aislado no puede liberar stock lógico ni saltar revisiones.
+      return (!statusChanged && !afterOrder.diff(beforeOrder).affectedKeys().hasAny([
+          'inventoryState', 'inventoryRevision', 'inventoryUpdatedAt', 'inventoryUpdatedBy'
+        ])) ||
+        (statusChanged && currentRolePermAllows('pedidos', 'cambiarEstado') &&
+          beforeOrder.items is list && beforeOrder.items.size() <= 4 &&
+          beforeOrder.get('variantInventoryItems', []).size() == 0 &&
           afterOrder.inventoryState == (
             afterOrder.status == 'cancelado' || afterOrder.status == 'rechazado'
               ? 'released'

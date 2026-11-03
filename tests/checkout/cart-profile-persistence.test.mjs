@@ -37,6 +37,6 @@ test('CI and invoice defaults are persisted and prefilled from the user profile'
 test('a successful server order is not turned into an error by cart cleanup', () => {
   assert.match(source, /const result = await createOrderOnServer\(draft\)/);
   assert.match(source, /orderCompleted = true/);
-  assert.match(source, /await clearCart\(\)/);
+  assert.match(source, /await clearCart\(result\.items\)/);
   assert.match(source, /El pedido se creó, pero no se pudo limpiar el carrito local/);
 });

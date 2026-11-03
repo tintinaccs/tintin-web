@@ -45,7 +45,7 @@ El Super Admin se reconoce por la cuenta oficial. Los demás roles operativos se
   `Productos` usan el valor capturado por el evento `onEdit`, no una lectura
   posterior de la celda, para que un refresco concurrente no restaure el stock
   anterior.
-- `functions/` contiene adaptadores y documentación para funciones privadas opcionales.
+- `functions/` contiene el backend operativo de Cloudflare Pages: valida identidad y permisos e invoca los dominios canónicos. Apps Script conserva espejos e integraciones heredadas, sin crear pedidos públicos.
 - Las pasarelas de pago deben validar webhooks en infraestructura privada; GitHub Pages no puede custodiar secretos.
 
 ## Fuentes únicas de verdad

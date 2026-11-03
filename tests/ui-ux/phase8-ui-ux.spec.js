@@ -154,3 +154,6 @@ test('el auditor excluye sólo el logotipo decorativo y conserva la detección d
   failures=await page.evaluate(code=>new Function(code)(),scanner);
   expect(failures.some(row=>row.sel.includes('#brand-glyph'))).toBe(true);
 });
+
+// Regresiones de contenido largo, foco y scroll compartido; misma suite canónica.
+require('./public-content-reflow.cases.js');

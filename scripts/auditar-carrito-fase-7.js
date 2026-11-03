@@ -117,7 +117,7 @@ check(
 
 check(
   'El checkout limpia también el carrito remoto',
-  cart.includes('async function clearCart()') &&
+  cart.includes('async function clearCart(purchasedItems)') && cart.includes('currentLocalCart().map') &&
     cart.includes('await flushCartSync()') &&
     checkout.includes('clearCart'),
   'Después de un pedido exitoso no debe reaparecer el carrito en otro dispositivo'

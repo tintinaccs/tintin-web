@@ -22,7 +22,7 @@ async function mount(page,{stock=0,offline=false,delay=0,deferReads=false}={}){
  window.TintinCheckoutEmailBridgeLoading=true;window.TintinCheckoutState={clear(){window.stateCleared=true}};
  let cart=[{id:'p',name:'Anillo corazón',qty:1},{id:'q',name:'Otro producto',qty:1}];
  window.TintinCartRuntime={getCartLocal:()=>cart.map(i=>({...i})),setCartLocal:items=>{cart=items;window.cart=cart},awaitCartReady:async()=>{},formatPrice:n=>'Gs. '+n};window.cart=cart;
- ${runtime.replace('  function beginPaypalPayment(', '  window.fixtureBeginPaypal = beginPaypalPayment;\n  function beginPaypalPayment(')}
+ ${runtime.replace('  function success(', '  window.fixtureSuccess = success;\n  function success(').replace('  function beginPaypalPayment(', '  window.fixtureBeginPaypal = beginPaypalPayment;\n  function beginPaypalPayment(')}
  document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');document.body.style.visibility='visible';
  document.getElementById('btn-step1-next').addEventListener('click',()=>window.advances=(window.advances||0)+1);
  window.fixtureReady=true;
@@ -104,4 +104,15 @@ test('la reserva propia conserva el resumen y PayPal recupera un pedido antes de
  await page.evaluate(()=>import('../../js/pages/checkout/paypal-checkout.js?fixture=late'));
  await expect(page.locator('#tt-paypal-status')).toHaveText('PayPal no está disponible todavía.');
  await expect(page.locator('.ck-panel').nth(4)).toHaveClass(/active/);
+});
+
+for(const mode of ['back','reload','bfcache'])test(`checkout terminado sale a inicio al regresar: ${mode}`,async({page})=>{
+ await page.route(url=>url.pathname==='/',r=>r.fulfill({contentType:'text/html',body:'<h1>Inicio seguro</h1>'}));
+ await mount(page,{stock:2});
+ await page.evaluate(()=>window.fixtureSuccess({orderId:'fixture_order_done',shortId:'TINPED100',userId:'fixture',userName:'Clienta Fixture',userPhone:'595981123456',paymentMethod:'transferencia',paymentStatus:'pendiente',subtotal:100,shippingCost:0,total:100,shippingMethod:'retiro',shipping:{method:'retiro'},items:[{id:'p',name:'Anillo de prueba',qty:1,price:100}]},{shippingMethod:'retiro',paymentMethod:'transferencia'}));
+ await expect(page.locator('#ck-confirm-btn')).not.toBeVisible();
+ if(mode==='back')await page.goBack();
+ if(mode==='reload')await page.reload({waitUntil:'domcontentloaded'});
+ if(mode==='bfcache')await page.evaluate(()=>window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true})));
+ await expect(page).toHaveURL(/\/$/);await expect(page.getByRole('heading',{name:'Inicio seguro'})).toBeVisible();
 });

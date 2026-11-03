@@ -3,7 +3,7 @@ const DEFAULT_METHODS = [
     id: 'efectivo',
     kind: 'efectivo',
     title: 'Efectivo',
-    description: 'Efectivo contra entrega únicamente para delivery',
+    description: 'Efectivo al recibir por delivery o al retirar',
     icon: '💵',
     enabled: true,
     instructions: '',
@@ -71,11 +71,13 @@ export function normalizePaymentMethod(raw, fallbackId = '', fallbackOrder = 0) 
   const id = paymentMethodId(raw?.id || fallbackId);
   if (!id) return null;
   const kind = paymentMethodKind(raw?.kind || raw?.type);
+  const description = cleanPaymentText(raw?.description || '', 240);
   return {
     id,
     kind,
     title: cleanPaymentText(raw?.title || raw?.name || id, 100),
-    description: cleanPaymentText(raw?.description || '', 240),
+    description: kind === 'efectivo' && description === 'Efectivo contra entrega únicamente para delivery'
+      ? DEFAULT_METHODS[0].description : description,
     icon: cleanPaymentText(raw?.icon || (kind === 'transferencia' ? '🏦' : kind === 'paypal' ? '🅿️' : '💵'), 12),
     enabled: raw?.enabled !== false,
     instructions: cleanPaymentMultiline(raw?.instructions || '', 1200),
@@ -110,12 +112,14 @@ export function normalizePaymentCatalog(settings = {}) {
   } else if (source && typeof source === 'object') {
     entries = Object.entries(source);
   }
+  const hasCatalog = Object.hasOwn(settings, 'paymentMethodsCatalog');
   const normalized = entries
+    .filter(([, method]) => method && typeof method === 'object' && !Array.isArray(method) && ['efectivo','transferencia','paypal'].includes(String(method.kind || method.type || '').toLowerCase()))
     .map(([id, method], index) => normalizePaymentMethod(method, id, index))
     .filter(Boolean);
   const unique = [];
   const seen = new Set();
-  for (const method of normalized.length ? normalized : legacyMethods(settings)) {
+  for (const method of hasCatalog ? normalized : legacyMethods(settings)) {
     if (seen.has(method.id)) continue;
     seen.add(method.id);
     unique.push(method);

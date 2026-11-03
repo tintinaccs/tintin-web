@@ -1,0 +1,20 @@
+{
+  "finding": "F03-FALLBACK",
+  "artifactSource": "scripts/preparar-hosting.js",
+  "consumer": ".github/workflows/desplegar-pages.yml",
+  "indexMissingLocalAssets": [
+    "/favicon-16x16.png",
+    "/favicon-32x32.png",
+    "/styles.min.css",
+    "/tienda.js"
+  ],
+  "keyFiles": {
+    "tienda.js": false,
+    "styles.min.css": false,
+    "styles.css": false,
+    "site-version.json": false,
+    "firebase-messaging-sw.js": false,
+    "vendor/onnxruntime-web-1.22.0/ort.wasm.bundle.min.mjs": false
+  },
+  "productionCloudflareAffected": false
+}

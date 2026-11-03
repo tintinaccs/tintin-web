@@ -15,3 +15,25 @@ test('paginador REST codifica cursor opaco, limita página y conserva el contrat
  c.fetch=async()=>new Response('offline',{status:503});await assert.rejects(c.firestoreAdminListPage({},'private/items'),/503/);
  c.fetch=async()=>Response.json({documents:{}});await assert.rejects(c.firestoreAdminListPage({},'private/items'),/inválida/);
 });
+
+test('query de identidad pagina con snapshot, cursor exclusivo y detección de página siguiente',async()=>{
+ const start=source.indexOf('export async function firestoreAdminQueryByFieldPage');
+ const end=source.indexOf('/**',start);
+ const queryCode=source.slice(start,end).replaceAll('export ','');
+ let request,reply;
+ const prefix='projects/demo/databases/(default)/documents/orders/';
+ const time='2026-11-02T12:00:00.123456Z';
+ const c=vm.createContext({parseServiceAccount:()=>({project_id:'demo'}),FIRESTORE_SCOPE:'test',getGoogleAccessToken:async()=> 'test',firestoreDatabaseUrl:()=> 'https://test.invalid',fetch:async(_,options)=>{request=JSON.parse(options.body);return reply;}});
+ vm.runInContext(queryCode,c);
+ reply=Response.json([1,2,3].map(i=>({document:{name:prefix+i,fields:{}},readTime:time})));
+ const first=await c.firestoreAdminQueryByFieldPage({},'orders','userId','customer',{pageSize:2});
+ assert.equal(first.documents.length,2);assert.equal(first.after,prefix+'2');assert.equal(first.readTime,time);assert.equal(request.structuredQuery.limit,3);
+ reply=Response.json([{document:{name:prefix+'3',fields:{}},readTime:time}]);
+ const second=await c.firestoreAdminQueryByFieldPage({},'orders','userId','customer',{pageSize:2,after:first.after,readTime:first.readTime});
+ assert.equal(second.after,'');assert.equal(request.readTime,time);assert.equal(request.structuredQuery.startAt.before,false);assert.equal(request.structuredQuery.startAt.values[0].referenceValue,prefix+'2');
+ reply=Response.json([{readTime:time}]);assert.equal((await c.firestoreAdminQueryByFieldPage({},'orders','userId','none')).documents.length,0);
+ reply=Response.json({});await assert.rejects(c.firestoreAdminQueryByFieldPage({},'orders','userId','customer'),/inválida/);
+ reply=Response.json([{document:{name:prefix+'1',fields:{}}}]);await assert.rejects(c.firestoreAdminQueryByFieldPage({},'orders','userId','customer'),/snapshot/);
+ reply=new Response('',{status:503});await assert.rejects(c.firestoreAdminQueryByFieldPage({},'orders','userId','customer'),/503/);
+ await assert.rejects(c.firestoreAdminQueryByFieldPage({},'orders','userId','customer',{after:'projects/other/documents/orders/x'}),/Cursor/);
+});

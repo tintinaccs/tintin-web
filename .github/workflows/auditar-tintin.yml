@@ -19,45 +19,7 @@ concurrency:
   group: repository-audit-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
-  sync-cloud-skills-artifacts:
-    name: Sincronizar manifiestos de Skills (rama autorizada)
-    runs-on: ubuntu-24.04
-    timeout-minutes: 12
-    permissions:
-      contents: write
-    steps:
-      - if: ${{ github.event_name == 'pull_request' && github.head_ref == 'chore/cloud-agent-skills-20261101' && github.event.pull_request.head.repo.full_name == github.repository }}
-        name: Checkout authorized branch
-        uses: actions/checkout@v5
-        with:
-          ref: ${{ github.head_ref }}
-          persist-credentials: true
-      - if: ${{ github.event_name == 'pull_request' && github.head_ref == 'chore/cloud-agent-skills-20261101' && github.event.pull_request.head.repo.full_name == github.repository }}
-        name: Setup Node 22
-        uses: actions/setup-node@v5
-        with:
-          node-version: '22'
-          cache: npm
-      - if: ${{ github.event_name == 'pull_request' && github.head_ref == 'chore/cloud-agent-skills-20261101' && github.event.pull_request.head.repo.full_name == github.repository }}
-        name: Build repository canonical artifacts
-        run: |
-          npm ci
-          npm run build:pages
-      - if: ${{ github.event_name == 'pull_request' && github.head_ref == 'chore/cloud-agent-skills-20261101' && github.event.pull_request.head.repo.full_name == github.repository }}
-        name: Update generated metadata only
-        run: |
-          git add -- diagnostic-manifest.json site-version.json
-          if git diff --cached --quiet; then
-            echo "Canonical manifests are already synchronized."
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "chore(ci): synchronize canonical metadata for Skills"
-            git pull --rebase origin "${{ github.head_ref }}"
-            git push origin "HEAD:refs/heads/${{ github.head_ref }}"
-          fi
   preflight:
-    needs: sync-cloud-skills-artifacts
     name: VALIDACIÓN RÁPIDA — PREFLIGHT
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -70,14 +32,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Verify cloud agent Skills on Linux
         run: |
           python3 scripts/agent/check-cloud-skills.py
           bash scripts/agent/bootstrap-cloud-linux.sh --prefix "$RUNNER_TEMP/tintin-agent-skills"
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: VALIDACIÓN RÁPIDA — PREFLIGHT
         run: npm run ci:preflight
       - name: Build exact public artifact
@@ -121,10 +83,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: Cache Playwright Chromium
         uses: actions/cache@v4
         with:
@@ -180,10 +142,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: Cache Playwright Chromium
         uses: actions/cache@v4
         with:
@@ -236,7 +198,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Setup Java for runtime emulators
         uses: actions/setup-java@v5
@@ -244,7 +206,7 @@ jobs:
           distribution: temurin
           java-version: '21'
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: Cache Playwright Chromium
         uses: actions/cache@v4
         with:
@@ -297,10 +259,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: Cache Playwright Chromium
         uses: actions/cache@v4
         with:
@@ -353,7 +315,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Setup Java for Firestore emulator
         uses: actions/setup-java@v5
@@ -361,7 +323,7 @@ jobs:
           distribution: temurin
           java-version: '21'
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: B — Reglas e identidad aisladas
         run: npm run ci:rules
       - name: Save timings and failure evidence
@@ -399,7 +361,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: E — Validación final obligatoria
         env:
@@ -418,6 +380,6 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
       - name: Verify main baseline
         run: node scripts/auditar-proteccion-flujos.mjs

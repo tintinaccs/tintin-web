@@ -1,0 +1,11 @@
+{
+  "finding": "F01-RULES",
+  "vulnerabilityConfirmed": true,
+  "actor": "agent with all order permissions false",
+  "readOrder": "denied",
+  "writeInventoryState": "accepted",
+  "inventoryRevision": 999,
+  "stock": 0,
+  "auditWrites": 0,
+  "project": "demo-tintin-phase01"
+}

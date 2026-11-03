@@ -9,7 +9,7 @@ PREFIXES = [".agents/skills", ".claude/skills"]
 REQUIRED = {
     "design-taste-frontend", "ui-ux-pro-max", "ponytail", "caveman",
     "code-review", "handoff", "systematic-debugging",
-    "verification-before-completion", "frontend-design", "webapp-testing",
+    "verification-before-completion", "frontend-design", "webapp-testing", "gh-fix-ci",
 }
 CUSTOM = {
     "tintin-brand-copy", "tintin-design-quality", "tintin-performance-budgets",
@@ -53,7 +53,7 @@ for prefix in PREFIXES:
     for name in sorted(expected - items.keys()):
         errors.append(f"Missing expected Skill {name} in {prefix}")
     seen[prefix] = items
-    print(f"{prefix}: {len(items)} discoverable skills")
+    print(f"{prefix}: {len(items)} Skills with valid file metadata")
 for name in REQUIRED | CUSTOM:
     if name in seen.get(PREFIXES[0], {}) and name in seen.get(PREFIXES[1], {}):
         a = (ROOT / seen[PREFIXES[0]][name]).read_text(encoding="utf-8")
@@ -67,6 +67,8 @@ checks = [
     ".claude/skills/ui-ux-pro-max/data/styles.csv",
     ".agents/skills/systematic-debugging/root-cause-tracing.md",
     "docs/agent/CLOUD_SKILLS_CATALOG.md",
+    ".agents/skills/gh-fix-ci/scripts/inspect_pr_checks.py",
+    ".claude/skills/gh-fix-ci/LICENSE.txt",
 ]
 for path in checks:
     if not (ROOT / path).is_file():
@@ -75,4 +77,4 @@ if errors:
     for msg in errors:
         print("ERROR:", msg, file=sys.stderr)
     raise SystemExit(1)
-print("PASS: Skills metadata, required paths and Codex/Claude parity")
+print("PASS: file metadata, required paths and selected Codex/Claude parity (native host discovery not tested)")

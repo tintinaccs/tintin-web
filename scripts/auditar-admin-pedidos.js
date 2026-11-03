@@ -254,8 +254,11 @@ check(
 );
 check(
   'El resumen de cuenta se recalcula desde la fuente canónica de pedidos',
-  /firestoreAdminListAll\(env, 'orders'/.test(statsSync) &&
-    /totalSpent/.test(statsSync) && /orderStats/.test(statsSync),
+  /readMatches\('orders', pairs\)/.test(statsSync) &&
+    /firestoreAdminQueryByFieldPage/.test(statsSync) &&
+    /totalSpent/.test(statsSync) && /orderStats/.test(statsSync) &&
+    /currentDocument: \{ updateTime: users\[index\]\.updateTime \}/.test(statsSync) &&
+    !/firestoreAdminListAll\(env, 'orders'/.test(statsSync),
   'Los importes del perfil no deben depender de un contador escrito a mano.'
 );
 check(

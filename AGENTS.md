@@ -100,7 +100,7 @@ For comprehensive audits classify findings as CRITICAL, HIGH, MEDIUM, LOW, CORRE
 
 ## Auto-selección de Skills en TODAS las tareas del repositorio
 - **Por defecto, sin que el usuario tenga que pedirlo:** antes de cada tarea, clasificar intención y rutas probablemente afectadas, y aplicar el protocolo en `docs/agent/SKILLS_AUTO_ROUTING.md`. Hacer esta evaluación incluso si el prompt no menciona Skills.
-- Elegir el Skill principal pertinente y hasta dos complementarios solo cuando aporten valor diferente. Revisar sus descripciones y leer los `SKILL.md` completos **solo de los elegidos**. No cargar 45 Skills para cada tarea ni activar persistentemente `caveman`/`ponytail` sin solicitud explícita.
+- Elegir el Skill principal pertinente y hasta dos complementarios solo cuando aporten valor diferente. Revisar sus descripciones y leer los `SKILL.md` completos **solo de los elegidos**. No cargar toda la biblioteca de Skills para cada tarea ni activar persistentemente `caveman`/`ponytail` sin solicitud explícita.
 - Para tareas de diseño o textos, conservar la identidad visual y editorial original de Tintín y rechazar resultados tipo plantilla genérica; los Skills son referencia profesional, no estilos impuestos.
 - Si ninguna habilidad es aplicable, seguir las instrucciones generales y no inventar uso. En el cierre, indicar brevemente qué Skills se usaron realmente, o si su invocación/detección no pudo verificarse.
 - La biblioteca es **de este repositorio**, no una instalación global en todos los chats o cuentas. Nunca ejecutar automáticamente scripts de Skills de terceros ni cambiar políticas de seguridad, producción o permisos.

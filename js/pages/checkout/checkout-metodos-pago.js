@@ -2,7 +2,7 @@ import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=ti
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,
-} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261004-final-integration-1-encomienda-20261008-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261102-pickup-cash-1';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?$/i;
 const VIEWPORTS = [1920, 1440, 1280, 1024, 768, 390, 320];
@@ -101,6 +101,7 @@ function boot() {
   anchor.parentElement.insertBefore(bridge, anchor);
 
   let catalog = [];
+  let settingsRevision = 0;
   let shippingMethod = '';
   const selectedCity = document.getElementById('ck-city');
   const readShippingMethod = () => selectedCity?.value === '__retiro__' ? 'retiro' : selectedCity?.selectedOptions?.[0]?.parentElement?.id === 'ck-city-encomienda-group' ? 'encomienda' : selectedCity?.value ? 'delivery' : '';
@@ -137,7 +138,7 @@ function boot() {
 
   function render(nextMethods) {
     catalog = nextMethods;
-    methods = catalog.filter(method => method.enabled && (shippingMethod === 'encomienda' ? method.kind === 'transferencia' : method.kind !== 'efectivo' || shippingMethod === 'delivery'));
+    methods = catalog.filter(method => method.enabled && (shippingMethod === 'encomienda' ? method.kind === 'transferencia' : method.kind !== 'efectivo' || ['delivery', 'retiro'].includes(shippingMethod)));
     const policyNote = document.getElementById('ck-encomienda-payment-policy') || root.insertAdjacentElement('beforebegin', Object.assign(document.createElement('p'), { id: 'ck-encomienda-payment-policy', className: 'ck-pay-note' }));
     policyNote.hidden = shippingMethod !== 'encomienda';
     policyNote.textContent = 'El producto se paga previamente por transferencia. Sólo el costo del envío se paga a la transportadora al recibir. No hay contra entrega en encomienda.';
@@ -226,11 +227,13 @@ function boot() {
   };
 
   onPublicSettings(async settings => {
+    const revision = ++settingsRevision;
     const configured = normalizePaymentCatalog(settings || {});
     const paypal = await paypalAvailability();
+    if (revision !== settingsRevision) return;
     const hasPaypal = configured.some(method => method.kind === 'paypal');
     const paypalEnabledByStore = settings?.paypal?.enabled === true;
-    if (paypal && paypalEnabledByStore && !hasPaypal) {
+    if (paypal && paypalEnabledByStore && !hasPaypal && !Object.hasOwn(settings || {}, 'paymentMethodsCatalog')) {
       configured.push({
         id: 'paypal', kind: 'paypal', title: 'PayPal',
         description: 'Pagá de forma segura con tu cuenta PayPal', icon: '🅿️',

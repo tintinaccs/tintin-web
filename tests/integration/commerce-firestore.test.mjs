@@ -312,7 +312,7 @@ test('fotos privadas: query real paginada entre cuentas bloquea referencias come
  const source=fs.readFileSync('cloudflare/firebase-admin-ligero.js','utf8');
  const queryCode=source.slice(source.indexOf('export async function firestoreAdminCollectionGroupPage'),source.indexOf('/** Una página del listado canónico')).replace('export ','');
  let calls=0;
- const context=vm.createContext({parseServiceAccount:()=>({}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch:async(url,options)=>{calls++;assert.equal(url,root+':runQuery');return Response.json(await request(':runQuery',JSON.parse(options.body)));}});
+ const context=vm.createContext({parseServiceAccount:()=>({project_id:project}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch:async(url,options)=>{calls++;assert.equal(url,root+':runQuery');return Response.json(await request(':runQuery',JSON.parse(options.body)));}});
  vm.runInContext(queryCode,context);
  const id='tintin_media_privateemulator_full',url=`https://res.cloudinary.com/qa-cloud/image/upload/v1/${id}.webp`;
  await deps.commit({},Array.from({length:105},(_,i)=>({path:`productEditorWorkspaces/aaa-media/items/${String(i).padStart(3,'0')}`,fields:encodeFirestoreFields({closed:true,snapshot:{imageUrl:url}})})));
@@ -322,3 +322,45 @@ test('fotos privadas: query real paginada entre cuentas bloquea referencias come
 });
 
 test('retiro, reserva previa, cancelación idempotente y restauración conservan identidad, precio y foto',async()=>{await verifyRetiredOptionCheckout({deps,seed,product,actor,admin});});
+
+test('editor limpia aliases con espacios y galería legacy mediante field paths Firestore reales',async()=>{
+ const id='phase04_media_aliases';
+ await seed('collections/phase04_media',{name:'Fixture'});
+ const before={name:'Fixture multimedia',category:'phase04_media',price:100,stock:2,active:true,oferta:false,destacado:false,description:'Fixture',imageUrl:'https://example.invalid/old.png','Image Src':'https://example.invalid/old.png','Variant Image':'https://example.invalid/old.png',images:['https://example.invalid/old.png'],untouched:'preservado'};
+ await seed('products/'+id,before);
+ await saveProductEditor({},{productId:id,expected:productFingerprint(before),changeId:'phase04_media_aliases_save',product:{imageUrl:'',imagesExtra:[]}},admin,deps);
+ const after=await product(id);
+ assert.equal(after.imageUrl,'');assert.equal(after['Image Src'],'');assert.equal(after['Variant Image'],'');assert.deepEqual(after.images,[]);assert.equal(after.untouched,'preservado');assert.equal(after.stock,2);
+});
+
+
+test('catálogo de pagos canónico: transferencia pendiente, rechazo sin reserva e idempotencia',async()=>{
+ const id='phase05_transfer',requestId='phase05_transfer_20261102';
+ await seed('settings/orderSequence',{lastNumber:0,highWaterMark:0,historyReconciledAt:new Date()});
+ await seed('settings/general',{storeOpen:true,paymentMethods:{transferencia:false,efectivo:true},paymentMethodsCatalog:[{id:'bank',kind:'transferencia',enabled:true}]});
+ await seed('products/'+id,{name:'Fixture transferencia',active:true,stock:2,price:45000});
+ await seed(`checkoutGuards/${actor.uid}`,{lastCheckoutOrderId:`${actor.uid}_${requestId}`,lastCheckoutAt:new Date()});
+ const draft=composeCheckoutDraft({requestId,items:[{id,qty:1}],name:'Ana Gómez',phone:'595981123456',contactEmail:'qa@example.invalid',selectedCity:'__retiro__',shipping:{method:'retiro',cost:0,pending:false},paymentMethod:'transferencia',subtotal:45000});
+ const prepared=await preparePublicCheckoutOrder({},draft,actor,deps);
+ const result=await createOrderAdmin({},prepared.input,actor,{...deps,inspect:prepared.inspect});
+ assert.equal(result.order.paymentStatus,'pendiente');assert.equal((await product(id)).stock,1);
+ const replay=await createOrderAdmin({},prepared.input,actor,{...deps,inspect:prepared.inspect});
+ assert.equal(replay.duplicate,true);assert.equal((await product(id)).stock,1);
+ await seed('settings/general',{storeOpen:true,paymentMethods:{transferencia:true},paymentMethodsCatalog:[]});
+ const resumed=await preparePublicCheckoutOrder({},draft,actor,deps);
+ assert.equal((await createOrderAdmin({},resumed.input,actor,{...deps,inspect:resumed.inspect})).duplicate,true);
+ await seed(`checkoutGuards/${actor.uid}`,{lastCheckoutOrderId:`${actor.uid}_phase05_disabled_20261102`,lastCheckoutAt:new Date()});
+ await assert.rejects(preparePublicCheckoutOrder({}, {...draft,requestId:'phase05_disabled_20261102'},actor,deps),error=>error.code==='payment_unavailable');
+ assert.equal((await product(id)).stock,1);assert.equal(await deps.get({},`orders/public_${actor.uid}_phase05_disabled_20261102`),null);
+});
+
+test('estadísticas reales aisladas: 5001 pedidos ajenos,305 propios,aliases deduplicados y CAS',async()=>{
+ const {syncOrderOwnerStats}=await import('../../cloudflare/sincronizacion-estadisticas-pedido.js');const fs=await import('node:fs');
+ const id='phase09_stats';await seed('users/'+id,{email:'stats@example.invalid',name:'Fixture',untouched:'conservar'});
+ const records=[...Array.from({length:5001},(_,i)=>({path:'orders/phase09_other_'+String(i).padStart(5,'0'),fields:encodeFirestoreFields({userId:'other_stats',total:999})})),...Array.from({length:305},(_,i)=>({path:'orders/phase09_zz_owned_'+i,fields:encodeFirestoreFields({userId:id,userEmail:'stats@example.invalid',total:1,status:'pendiente',createdAt:new Date(1700000000000+i*1000)})}))];
+ for(let i=0;i<records.length;i+=400)await deps.commit({},records.slice(i,i+400));
+ const source=fs.readFileSync('cloudflare/firebase-admin-ligero.js','utf8');const a=source.indexOf('export async function firestoreAdminQueryByFieldPage('),b=source.indexOf('\n/**',a);
+ const query=new Function('deps',`const {parseServiceAccount,getGoogleAccessToken,FIRESTORE_SCOPE,firestoreDatabaseUrl,fetch}=deps;${source.slice(a,b).replace('export ','')};return firestoreAdminQueryByFieldPage;`)({parseServiceAccount:()=>({project_id:project}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch});
+ const result=await syncOrderOwnerStats({}, {userId:id,userEmail:'stats@example.invalid'},{queryPage:query,get:deps.get,commit:deps.commit});
+ assert.equal(result.updated,true);const saved=decodeFirestoreFields((await deps.get({},'users/'+id)).fields);assert.equal(saved.totalOrders,305);assert.equal(saved.totalSpent,305);assert.equal(saved.untouched,'conservar');
+});

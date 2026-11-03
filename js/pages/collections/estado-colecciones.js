@@ -1,16 +1,6 @@
 import { CACHE_KEY, loadCollections as loadCollectionMetadata, normalizeCollectionDoc, normalizeCollectionSlug, canonicalPublicCollections, sortCols } from './datos-publicos-colecciones.js?v=tintin-20261030-home-history-5';
 export { normalizeCollectionDoc, normalizeCollectionSlug, canonicalPublicCollections };
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import {
-  collection,
-  getDocs,
-  limit,
-  onSnapshot,
-  query,
-  orderBy,
-  startAfter
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20261030-home-history-5';
+import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20261103-acceptance-1';
 import {
   recordFirestoreRead,
   writeCached
@@ -19,7 +9,7 @@ import {
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
     import('../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260925-cache-converge-1'),
-    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261022-avatar-inicial-1')
+    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261102-pickup-cash-1')
   ]);
 }
 
@@ -78,8 +68,11 @@ export function onCollectionsUpdate(cb, onError) {
 
 async function startAdminListener() {
   if (adminUnsubscribe) return;
+  // La tienda pública usa datos-publicos-colecciones/API, sin esperar al SDK.
+  const { auth, db } = await import('../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1');
   const uid = auth.currentUser?.uid;
-  const [{ subscribeAdminSnapshot }, { createAdminPagedSource }, { isSuperAdmin }] = await Promise.all([
+  const [{ collection, query, orderBy, startAfter, limit }, { subscribeAdminSnapshot }, { createAdminPagedSource }, { isSuperAdmin }] = await Promise.all([
+    import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
     import('../../admin/auth/lecturas-admin.js?v=tintin-20261022-avatar-inicial-1'),
     import('../../admin/datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1'),
     import('../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2'),
@@ -107,7 +100,7 @@ async function startAdminListener() {
 
 export function onAllCollectionsUpdate(cb) {
   adminSubscribers.add(cb);
-  startAdminListener();
+  startAdminListener().catch(error => adminSubscribers.forEach(listener => listener([], error)));
   return () => {
     adminSubscribers.delete(cb);
     if (!adminSubscribers.size && adminUnsubscribe) {
