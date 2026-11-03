@@ -11,10 +11,16 @@ export function initMobileNavigationIndicator() {
     }
     const navRect = nav.getBoundingClientRect();
     const iconRect = item.getBoundingClientRect();
-    nav.style.setProperty('--tt-mobile-w', `${iconRect.width}px`);
-    nav.style.setProperty('--tt-mobile-h', `${iconRect.height}px`);
-    nav.style.setProperty('--tt-mobile-x', `${iconRect.left + iconRect.width / 2 - navRect.left - nav.clientLeft - halo.offsetWidth / 2}px`);
-    nav.style.setProperty('--tt-mobile-y', `${iconRect.top + iconRect.height / 2 - navRect.top - nav.clientTop - halo.offsetHeight / 2}px`);
+    // Finish geometry reads before any style write can invalidate layout.
+    const values = {
+      '--tt-mobile-w': `${iconRect.width}px`,
+      '--tt-mobile-h': `${iconRect.height}px`,
+      '--tt-mobile-x': `${iconRect.left + iconRect.width / 2 - navRect.left - nav.clientLeft - halo.offsetWidth / 2}px`,
+      '--tt-mobile-y': `${iconRect.top + iconRect.height / 2 - navRect.top - nav.clientTop - halo.offsetHeight / 2}px`,
+    };
+    for (const [property, value] of Object.entries(values)) {
+      if (nav.style.getPropertyValue(property) !== value) nav.style.setProperty(property, value);
+    }
     if (!nav.classList.contains('tt-mobile-nav-ready')) nav.classList.add('tt-mobile-nav-ready');
   };
   if (nav.dataset.ttMobileReady === '1') {
@@ -36,7 +42,11 @@ export function initMobileNavigationIndicator() {
     items.find(item => !item.hidden && item.getAttribute('aria-current') === 'page') ||
     items.find(item => !item.hidden && item.classList.contains('active')) ||
     null;
-  const sync = () => requestAnimationFrame(() => locate(current()));
+  let frame = 0;
+  const sync = () => {
+    if (frame) return;
+    frame = requestAnimationFrame(() => { frame = 0; locate(current()); });
+  };
   const observer = new MutationObserver(sync);
   items.forEach(item => observer.observe(item, {
     attributes: true,
@@ -47,7 +57,7 @@ export function initMobileNavigationIndicator() {
   resizeObserver.observe(nav);
   observer.observe(nav, { attributes: true, attributeFilter: ['class'] });
   addEventListener('orientationchange', sync, { passive: true });
-  requestAnimationFrame(sync);
+  sync();
 }
 
 initMobileNavigationIndicator();

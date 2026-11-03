@@ -3,7 +3,9 @@
    rosa intermedia esperando una confirmación remota del hero. */
 html.tt-initializing body.tt-home-premium{background:#FFFFFF!important}
 
-.tt-home-premium{overflow-x:clip;background:#FFFFFF!important;min-height:100svh}
+/* Contain the hero's header clearance: its margin must not move the body
+   itself when the shared shell mounts. The hero retains the same position. */
+.tt-home-premium{display:flow-root;overflow-x:clip;background:#FFFFFF!important;min-height:100svh}
 .tt-home-premium .container{width:min(100%,1280px)}
 
 /* El header de desktop/tablet es fixed y, por eso, queda fuera del flujo:
