@@ -23,7 +23,7 @@ function renderNovakFooterEnd() {
 function ensureNovakStyles(html, absolute = false) {
   for (const [id, href, version] of [
     ['novak-credit-css', '/assets-tintin/novak-signature/novak-credit.css', 'tintin-novak-20261102-2'],
-    ['novak-credit-site-css', '/css/components/novak-credit-site.css', 'tintin-footer-reference-20261103-1'],
+    ['novak-credit-site-css', '/css/components/novak-credit-site.css', 'tintin-footer-reference-20261103-2'],
   ]) {
     html = html.replace(new RegExp(`\\s*<link\\b[^>]*id="${id}"[^>]*>`, 'g'), '');
     const resource = absolute ? href : href.replace(/^\//, '');

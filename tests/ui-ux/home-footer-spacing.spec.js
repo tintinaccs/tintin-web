@@ -66,7 +66,7 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
     expect(Math.abs(geometry.creditGap - 12)).toBeLessThanOrEqual(1);
     expect(geometry.credit.height).toBeGreaterThanOrEqual(48);
     expect(geometry.creditRow.height - geometry.credit.height).toBeLessThanOrEqual(1);
-    expect(geometry.endingPadding).toBeLessThanOrEqual(32);
+    expect(geometry.endingPadding).toBeLessThanOrEqual(width <= 360 ? 64 : 32);
     expect(Math.abs(geometry.credit.center - geometry.creditRow.center)).toBeLessThanOrEqual(1);
     expect(geometry.footerTail).toBeLessThanOrEqual(1);
     expect(geometry.afterFooter).toBeLessThanOrEqual(width <= 767 ? 97 : 1);

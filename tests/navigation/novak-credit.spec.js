@@ -50,6 +50,7 @@ for (const [width, height] of viewports) {
       // Fixture de geometría: simula únicamente el estado visual autorizado;
       // no ejecuta auth, APIs ni escrituras de producción.
       await page.evaluate(() => {
+        if (document.querySelector('.tt-footer')) document.body.classList.add('tt-public-shell-mounted');
         document.documentElement.classList.add('adm-auth-ready');
         const layout = document.getElementById('adm-layout');
         if (layout) layout.style.display = 'flex';
@@ -84,6 +85,16 @@ for (const [width, height] of viewports) {
         return (Math.max(foreground, background) + .05) / (Math.min(foreground, background) + .05);
       });
       expect(contrast, name).toBeGreaterThanOrEqual(4.5);
+      if (width <= 360) {
+        await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+        const overlap = await credit.evaluate(el => {
+          const wa = document.querySelector('.tt-wa-float');
+          if (!wa || getComputedStyle(wa).display === 'none' || getComputedStyle(wa).visibility === 'hidden') return false;
+          const a = wa.getBoundingClientRect(), b = el.getBoundingClientRect();
+          return a.width > 0 && a.height > 0 && a.left < b.right - 2 && a.right > b.left + 2 && a.top < b.bottom - 2 && a.bottom > b.top + 2;
+        });
+        expect(overlap, `${name}: WhatsApp no debe cubrir la firma`).toBe(false);
+      }
       await page.unroute('**/__novak-fixture');
     }
   });

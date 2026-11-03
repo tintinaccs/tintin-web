@@ -39,3 +39,8 @@
 }
 #tt-footer-ending .novak-credit:hover,
 #tt-footer-ending .novak-credit:focus-visible { background-color: rgba(255, 255, 255, .55); }
+
+/* En móviles estrechos la firma debe quedar por encima del WhatsApp flotante. */
+@media (max-width: 360px) {
+  .tt-footer #tt-footer-ending { padding-bottom: 64px; }
+}
