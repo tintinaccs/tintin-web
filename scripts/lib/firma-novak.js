@@ -5,18 +5,25 @@ const NOVAK_URL = 'https://novak-web.inf-novakpy.workers.dev/#inicio';
 
 function renderNovakCredit() {
   return `<div class="novak-credit-row">
-    <a class="novak-credit" href="${NOVAK_URL}" target="_blank" rel="noopener" aria-label="Hecho por NOVAK, visitar su sitio">
-      <span>Hecho por</span>
+    <a class="novak-credit" href="${NOVAK_URL}" target="_blank" rel="noopener" aria-label="Desarrollado por NOVAK, visitar su sitio">
+      <span>Desarrollado por</span>
       <img id="novak-credit-mark" data-novak-src="/assets-tintin/novak-signature/novak-mark.svg" data-dynamic-src="true" alt="NOVAK" width="42" height="40" decoding="async">
       <noscript><img src="/assets-tintin/novak-signature/novak-mark.svg" alt="NOVAK" width="42" height="40" loading="lazy" decoding="async"></noscript>
     </a>
   </div>`;
 }
 
+function renderNovakFooterEnd() {
+  return `<div id="tt-footer-ending" class="tt-footer-ending">
+    <div class="tt-footer-bottom">© 2026 TINTIN ACCESORIOS</div>
+    ${renderNovakCredit()}
+  </div>`;
+}
+
 function ensureNovakStyles(html, absolute = false) {
   for (const [id, href, version] of [
     ['novak-credit-css', '/assets-tintin/novak-signature/novak-credit.css', 'tintin-novak-20261102-2'],
-    ['novak-credit-site-css', '/css/components/novak-credit-site.css', 'tintin-novak-20261103-1'],
+    ['novak-credit-site-css', '/css/components/novak-credit-site.css', 'tintin-footer-reference-20261103-2'],
   ]) {
     html = html.replace(new RegExp(`\\s*<link\\b[^>]*id="${id}"[^>]*>`, 'g'), '');
     const resource = absolute ? href : href.replace(/^\//, '');
@@ -29,11 +36,11 @@ function ensureNovakStyles(html, absolute = false) {
 
 function ensureStandaloneCredit(html, page) {
   html = html.replace(/\s*<footer data-novak-footer>[\s\S]*?<\/footer>/g, '');
-  const footer = `\n<footer data-novak-footer>${renderNovakCredit()}</footer>\n`;
+  const footer = `\n<footer data-novak-footer>${renderNovakFooterEnd()}</footer>\n`;
   // El panel desplaza su main; la firma debe formar parte de ese contenido.
   return page.startsWith('admin')
     ? html.replace(/\s*<\/main>/, `${footer}</main>`)
     : html.replace('</body>', `${footer}</body>`);
 }
 
-module.exports = { NOVAK_URL, renderNovakCredit, ensureNovakStyles, ensureStandaloneCredit };
+module.exports = { NOVAK_URL, renderNovakCredit, renderNovakFooterEnd, ensureNovakStyles, ensureStandaloneCredit };

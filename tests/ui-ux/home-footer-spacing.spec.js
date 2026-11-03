@@ -54,7 +54,8 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
         copyrightPadding:parseFloat(getComputedStyle(document.querySelector('.tt-footer-bottom')).paddingBottom),
         credit:q('.tt-footer .novak-credit'), creditRow:q('.tt-footer .novak-credit-row'),
         creditGap:document.querySelector('.tt-footer .novak-credit-row').getBoundingClientRect().top-document.querySelector('.tt-footer-bottom').getBoundingClientRect().bottom,
-        footerTail:document.querySelector('.tt-footer').getBoundingClientRect().bottom-document.querySelector('.tt-footer .novak-credit-row').getBoundingClientRect().bottom,
+        endingPadding:parseFloat(getComputedStyle(document.querySelector('.tt-footer-ending')).paddingBottom),
+        footerTail:document.querySelector('.tt-footer').getBoundingClientRect().bottom-document.querySelector('.tt-footer-ending').getBoundingClientRect().bottom,
         afterFooter:document.documentElement.scrollHeight-(document.querySelector('.tt-footer').getBoundingClientRect().bottom+scrollY),
         scrollWidth:document.documentElement.scrollWidth };
     });
@@ -62,9 +63,10 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
     expect(geometry.copyrightPadding).toBeLessThanOrEqual(18);
     // La firma solicitada sucede al copyright; ningún espacio vacío adicional
     // se permite después del nuevo contenido final del pie.
-    expect(Math.abs(geometry.creditGap)).toBeLessThanOrEqual(1);
+    expect(Math.abs(geometry.creditGap - 12)).toBeLessThanOrEqual(1);
     expect(geometry.credit.height).toBeGreaterThanOrEqual(48);
-    expect(geometry.creditRow.height - geometry.credit.height).toBeLessThanOrEqual(42);
+    expect(geometry.creditRow.height - geometry.credit.height).toBeLessThanOrEqual(1);
+    expect(geometry.endingPadding).toBeLessThanOrEqual(width <= 360 ? 64 : 32);
     expect(Math.abs(geometry.credit.center - geometry.creditRow.center)).toBeLessThanOrEqual(1);
     expect(geometry.footerTail).toBeLessThanOrEqual(1);
     expect(geometry.afterFooter).toBeLessThanOrEqual(width <= 767 ? 97 : 1);
