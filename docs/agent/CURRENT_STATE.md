@@ -1,3 +1,7 @@
+## PR1323 — Migración del año automático — Codex /root
+
+Head629e046daad504da60f696c1daa6eee4769322a5: CI41663251829/1 FAILURE en auditor de Catálogo que exigía el año dentro del script por página; CodeQL41663243323/1 y preview Cloudflare SUCCESS para ese SHA, sin heredar resultados a la corrección. Se mantiene el año automático en el componente compartido, con pageshow y eventos reales del contenido/editor, conservando el texto. Auditores de Inicio/Catálogo actualizados al dueño común; Inicio valida Más vendidos en lugar del look-grid retirado ya en main. Ambos PASS_LOCAL. Reloj2032/2033, restore y texto editable PASS_LOCAL. Revalidación comercial completa ci:commerce y preflight PASS_LOCAL, sin reintentos ni omitir controles; CI del nuevo SHA requiere recibos propios en la PR.
+
 ## 2026-11-03 — Pie canónico y bibliotecas de diseño — Codex /root
 
 Base5d446cc75ebe31c9022f6db540f0a2fc12c75f8d; rama codex/skills-design-libraries. Implementación de copyright completo desde el esquema global existente y eliminación de siete reescrituras por página; columnas y símbolo/animación NOVAK conservados. Touch neutraliza solo hover; foco de teclado permanece. Impeccable y Emil importados con recursos/licencias/hashes, Taste ya presente y verificado;63Skills en cada cliente con selección automática por intención, sin ejecutar lanzadores. Detalle: DESIGN_SKILLS_20261103.md.

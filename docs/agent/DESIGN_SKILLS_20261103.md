@@ -41,3 +41,11 @@ Lectura pública independiente en390px/DPR3: Tintín usa el PNG original480×600
 Regresión corregida antes de publicar: el texto en mayúsculas aumentó el ancho de la firma y el auditor detectó solapamiento con WhatsApp en375px (24/33). Se amplió la separación existente hasta480px sin mover controles. Revalidación:48pruebas de firma/espaciado (170combinaciones:17documentos×10tamaños), incluidas375/390px y ausencia de solapamiento, PASS; auditor original ampliado:55/55 en320/360/375/390/430px PASS. Con las13pruebas de runtime/colecciones/densidad, cobertura dirigida61casos.
 
 La comparación completa de Taste confirmó igualdad de todos sus recursos existentes; se agregó únicamente el fixture opcional evals/evals.json que faltaba, sin duplicar el Skill. El lock y validador cubren ahora todos sus recursos upstream.
+
+## CI: preservación del año automático en el componente común
+
+PR1323, head629e046daad504da60f696c1daa6eee4769322a5, CI41663251829/1 terminó FAILURE: el auditor de Catálogo aún exigía `new Date().getFullYear()` dentro de su script por página. Las pruebas comerciales anteriores a ese punto pasaron; no se omite el requisito. El año automático se conserva en `js/components/novak-credit.js`, cargado una sola vez en los17documentos. Solo reemplaza el intervalo inicial2024–año, usa UTC y se vuelve a aplicar en pageshow y tras los eventos reales del contenido/editor. El resto del texto editable permanece intacto; textos propios sin ese intervalo no se reescriben.
+
+Se actualizan ambos auditores para exigir el componente común y prohibir escritores de año por página. El auditor antiguo de Inicio aún exigía look-grid, ausente también en la base5d446cc7; se alinea con la sección canónica existente Más vendidos, conservando una comprobación obligatoria de sección. Inicio y Catálogo pasan completos. Prueba del reloj2032/2033, restauración y contenido editado:PASS. El fixture declara UTF-8 para probar los caracteres reales. Cobertura específica ampliada a62casos. CI del nuevo SHA requiere ejecución propia; no se heredan checks de629e046d.
+
+Revalidación completa de la fase fallida: `npm run ci:commerce` PASS_LOCAL con servidor local4184 y Chromium configurado; incluye carrito, catálogo/búsqueda, checkout, recuperación de cuenta y decisión de stock al cancelar/rechazar. Preflight completo PASS_LOCAL. No se modificó la lógica comercial.

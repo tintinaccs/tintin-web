@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { FOOTER_COPYRIGHT } = require('../../scripts/lib/firma-novak.js');
+const FOOTER_COPYRIGHT = `© 2024-${new Date().getUTCFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
 
 for (const width of [390, 1440]) {
   test(`Inicio y Nosotros conservan el mismo pie después de arrancar y volver a la página · ${width}px`, async ({ page }) => {

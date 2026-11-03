@@ -17,3 +17,5 @@ El diseño de la franja final se comparte mediante `renderNovakFooterEnd`: copyr
 Presentación solicitada: todo el pie se muestra en mayúsculas desde la hoja de integración, también las colecciones dinámicas. No se alteran valores guardados ni URLs. La firma conserva el símbolo original; no se añade un nombre escrito.
 
 Nitidez: el SVG encapsula píxeles originales, no un vector maestro. Se conserva sin redibujar ni ampliar artificialmente. `tests/navigation/footer-image-density.spec.js` comprueba ambas marcas en ocho tamaños, incluidas orientaciones de tablet/móvil y1920×1080, con densidades2×/3×, carga completa, resolución suficiente al tamaño mostrado, opacidad plena y ausencia de blur CSS. Son pruebas de Chromium emulado, no certificación de todos los dispositivos físicos.
+
+El mismo script común mantiene el año automático del copyright (UTC), en la carga, al restaurar la página y tras actualizar el contenido/editor. Solo actualiza el intervalo inicial2024-año y conserva el resto del texto editable. Los scripts de cada página no escriben el copyright. La prueba «año automático» cubre2032/2033 y contenido personalizado.

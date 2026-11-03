@@ -5,6 +5,8 @@ const { NOVAK_URL, renderNovakCredit, ensureNovakStyles } = require('../../scrip
 const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
 const loader = fs.readFileSync(path.join(__dirname, '../../js/components/novak-credit.js'), 'utf8');
 
+const currentCopyright = `© 2024-${new Date().getUTCFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
+
 const documents = ['index', 'about', 'catalogo', 'collections', 'product', 'checkout', 'perfil', 'contact', 'envios', 'cambios-devoluciones', 'preguntas-frecuentes', 'terminos', 'privacidad', '404', 'login', 'admin', 'admin-images'];
 const viewports = [[320, 568], [375, 667], [390, 844], [568, 320], [768, 1024], [1024, 768], [1366, 768], [768, 1366], [1920, 1080], [1080, 1920]];
 const lazyFixture = ensureNovakStyles(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><main style="height:1400px">Contenido de prueba</main><footer>${renderNovakCredit()}</footer></body></html>`);
@@ -66,7 +68,7 @@ for (const [width, height] of viewports) {
       for (const label of await page.locator('footer :is(.tt-footer-col-title, .tt-footer-accordion-toggle, .tt-footer-col a, .tt-footer-tagline, .tt-footer-hours, .tt-footer-wa-text)').all()) {
         await expect(label, name).toHaveCSS('text-transform', 'uppercase');
       }
-      await expect(page.locator('#tt-footer-ending .tt-footer-bottom')).toHaveText('© 2024-2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS');
+      await expect(page.locator('#tt-footer-ending .tt-footer-bottom')).toHaveText(currentCopyright);
       await expect(credit).toHaveCSS('font-family', /Montserrat/);
       await credit.scrollIntoViewIfNeeded();
       await expect(credit, name).toBeVisible();
@@ -161,4 +163,28 @@ test('en pantalla táctil tocar el enlace no deja un hover animado', async ({ br
     await expect.poll(() => page.locator('.novak-credit').evaluate(el => getComputedStyle(el).transform)).toBe('none');
     await expect.poll(() => page.locator('.novak-credit img').evaluate(el => getComputedStyle(el).transform)).toBe('none');
   } finally { await context.close(); }
+});
+
+test('un solo componente mantiene el año automático, también al restaurar y editar contenido', async ({ page }) => {
+  await page.addInitScript(() => {
+    const NativeDate = Date;
+    window.__footerTestYear = 2032;
+    window.Date = class extends NativeDate { getUTCFullYear() { return window.__footerTestYear; } };
+  });
+  const html = ensureNovakStyles(`<!doctype html><html><head><meta charset="utf-8"></head><body><footer>${require('../../scripts/lib/firma-novak.js').renderNovakFooterEnd()}</footer></body></html>`);
+  await page.route('**/__novak-year', route => route.fulfill({ contentType: 'text/html', body: html }));
+  await page.goto('/__novak-year');
+  const copyright = page.locator('#tt-footer-ending .tt-footer-bottom');
+  await expect(copyright).toHaveText('© 2024-2032 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS');
+  await page.evaluate(() => {
+    window.__footerTestYear = 2033;
+    window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+  });
+  await expect(copyright).toHaveText('© 2024-2033 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS');
+  await copyright.evaluate(el => { el.textContent = '© 2024-2026 TINTIN ACCESORIOS — Texto editado por la tienda'; });
+  await page.evaluate(() => window.dispatchEvent(new CustomEvent('tintin:content-phase6-ready')));
+  await expect(copyright).toHaveText('© 2024-2033 TINTIN ACCESORIOS — Texto editado por la tienda');
+  await copyright.evaluate(el => { el.textContent = 'Texto propio sin intervalo automático'; });
+  await page.evaluate(() => window.dispatchEvent(new CustomEvent('tintin:visual-builder-ready')));
+  await expect(copyright).toHaveText('Texto propio sin intervalo automático');
 });

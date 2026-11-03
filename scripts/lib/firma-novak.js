@@ -33,7 +33,7 @@ function ensureNovakStyles(html, absolute = false) {
     html = html.replace('</head>', `<link id="${id}" rel="stylesheet" href="${resource}?v=${version}">\n</head>`);
   }
   html = html.replace(/\s*<script id="novak-credit-loader"[^>]*><\/script>/g, '');
-  html = html.replace('</head>', `<script id="novak-credit-loader" src="${absolute ? '/' : ''}js/components/novak-credit.js?v=tintin-novak-20261103-1" defer></script>\n</head>`);
+  html = html.replace('</head>', `<script id="novak-credit-loader" src="${absolute ? '/' : ''}js/components/novak-credit.js?v=tintin-novak-20261103-2" defer></script>\n</head>`);
   return html;
 }
 
