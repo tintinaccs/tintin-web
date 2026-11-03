@@ -1,3 +1,7 @@
+## Recuperación PR1320 — Codex /root
+
+Conciliada con main b854d835 sin modificar el dominio comercial ya implementado. Conflictos limitados a seguimiento y derivados; se regeneran desde fuentes canónicas. PASS_LOCAL:579pruebas pedidos/sync/checkout/pagos,0fallos/skips; preflight1197fuentes/72funciones, build y protección78registros/544archivos aprobados. Nuevo CI y merge pendientes; recibos por HEAD en PR1320.
+
 ## 2026-11-02 — Decisión explícita de stock al cancelar/rechazar
 
 Codex /root; base inicial `1c673584b0b8e69e9610c6d4721210d86bd4f55c`, rama
@@ -26,6 +30,19 @@ requieren recibos CI propios. Build/derivados, caché y plan protegido final
 PASS_LOCAL; preflight final completo PASS. CI, merge y producción PENDING.
 No acredita nuevas señas/saldos ni plazos; tampoco operaciones comerciales reales
 ni una versión nueva del WebApp Apps Script, que requiere evidencia aparte.
+
+## Seguimiento vigente — Fase09 integrada y recuperación de PR1306
+
+Codex /root. Base de esta recuperación: `9b1b88f8abee27d395d6690f4b68843cb1374d3f`.
+
+- #1319 MERGED, head `df692c4b48ccf0fa120d2f4ebe1bf82d834180e8`. CI41562231283/1 y CodeQL41562227482/1 SUCCESS; mantenimiento/integridad protegidos aprobados. Carrusel API pública/SDK diferido y resolvedor de imágenes incluidos y probados con Firebase remoto bloqueado. Sin fuente paralela de catálogo.
+- Evidencia del head:107rendimiento,144viewports canónicos y220geometría global PASS al primer intento;528runtime aislado PASS;258controles Rules/18integraciones reales PASS, incluyendo305pedidos propios frente a5001ajenos y deduplicación UID/email. Node24.22.1 con instalación estricta y0EBADENGINE. Conteos de suites separados, no sumarlos como casos únicos.
+- Main9b1b88f8: monitor41565292553/1 SUCCESS; artefacto publicado corresponde a este commit,17respuestas limpias/CSP y headers correctos. Job FX PayPal omitido deliberadamente. CodeQL41565289803/1 SUCCESS. Auditoría completa posterior41565290324/1 terminó SUCCESS, verificado2026-11-03T02:49:16Z. [Recibo permanente](evidence/phase09-20261102/github-terminal.json). El PASS corresponde a9b1b88f8 y no se hereda al candidato1306.
+- #1316 CLOSED sin merge por Dependabot: Firebase15.34.2 está incorporado por1319 con sus derivados canónicos. Run41442885247/1 conserva FAILURE histórico por drift de package/lock; no es fallo actual del código integrado.
+- Vigilancia horaria **Atender fallos de CI de Tintín** habilitada; primer disparo registrado2026-11-03T02:24:49Z y prompt recibido en este hilo. Ya se acreditó despertar/continuación; no se acredita por inferencia invocación nativa de Skills en otros hosts ni recepción instantánea de webhooks.
+- #1306 era la única PR abierta, inactiva desde2026-11-01T23:46:38Z, head976601a99772e5390448b8da2edda79d9d6c1429. CI41358865966/1 falló en125006122914 y agregador; informe previo indica pérdida de comunicación del runner. Su log antiguo devuelve404/BlobNotFound; la anotación exacta no se puede recuperar con el conector disponible ni HTTP público. No inventar un bug funcional ni heredar PASS del resto. Se concilia por merge normal con9b1b88f8, sin force-push, preservando la retirada del job de escritura de1307. Se actualiza el enrutamiento a46Skills y gh-fix-ci; sólo documentación/instrucciones y derivados.
+- Rama de recuperación local `codex/resume-skills-1306`, destino remoto `chore/cloud-agent-skills-20261101`; worktree separado `/workspace/tintin-skills-1306`. [PR1306](https://github.com/tintinaccs/tintin-web/pull/1306) registra HEAD y runs actuales en su descripción. Seguirlos hasta terminal/merge y comprobar post-merge por separado. No modificar un candidato activo de otro agente.
+- La aceptación global de producción sigue BLOCKED/NOT_VERIFIED: publicar/verificar Rules y WebApp con autorización, sesión/proveedores reales, hardware/lector, recuperación real y reglas comerciales nuevas de DECISIONES_COMERCIALES_20261102.md. Persisten14moderadas de herramientas y aviso LOW de actions/cache@v4/Node20 forzado a24. No se ocultan avisos ni se prueban operaciones comerciales reales.
 
 ## 2026-11-02 America/Buenos_Aires — Fase09 integral (estado vigente)
 

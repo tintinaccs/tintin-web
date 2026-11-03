@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "9b1b88f8abee27d395d6690f4b68843cb1374d3f",
-  "reason": "Exigir decision explicita de stock al cancelar y conservar integridad en reaperturas",
+  "baseCommit": "b854d8356268002924566eab3da15e30c765bcc0",
+  "reason": "Conciliar PR1320 con main vigente, preservar decisión explícita de stock y regenerar protección y derivados canónicos sin modificar permisos.",
   "files": [
     {
       "path": "404.html",
