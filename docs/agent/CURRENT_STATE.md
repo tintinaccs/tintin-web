@@ -1,3 +1,14 @@
+## 2026-11-02 — Retiro: primer resultado de navegador y corrección del contrato
+
+Codex /root. PR #1318, head inicial `f52c164ee277e8a420128cb952b05c704013cab2`.
+CI 41554720269/1 FAIL en comercio: 152 casos Chromium PASS y cuatro FAIL.
+Tres contaban contenedor + input de efectivo como dos opciones; el otro mantenía
+la expectativa anterior de rechazar efectivo en retiro. Se apunta al input real,
+se exige selección de efectivo en delivery/retiro y se conserva rechazo por
+encomienda. Se refuerza el catálogo deshabilitado en las tres entregas, sin
+reintentos/exclusiones nuevos. No se modifica runtime para silenciar el test.
+El head corregido requiere sus propios resultados CI/merge/deploy; no hereda PASS.
+
 ## 2026-11-02 — Retiro con efectivo y condiciones de reparto
 
 Codex /root. Base3974431, rama fix/pickup-cash-20261102. La titular autorizó
