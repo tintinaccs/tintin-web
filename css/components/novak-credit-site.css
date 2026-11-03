@@ -1,0 +1,9 @@
+/* Integración del kit original: superficie clara incluso con un pie oscuro. */
+.novak-credit-row { box-sizing: border-box; width: 100%; padding: 18px 12px 24px; }
+.novak-credit-row .novak-credit { color: #222222; background-color: #fff; max-width: 100%; box-sizing: border-box; }
+.novak-credit-row .novak-credit:hover,
+.novak-credit-row .novak-credit:focus-visible { color: #222222; background-color: #f5f5f5; }
+.novak-credit-row .novak-credit img { filter: none; opacity: 1; }
+.novak-credit-row .novak-credit img[data-novak-src] { visibility: hidden; }
+.novak-credit:has(noscript img) > img[data-novak-src] { display: none; }
+[data-novak-footer] { width: 100%; flex: 0 0 auto; }
