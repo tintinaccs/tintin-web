@@ -27,10 +27,7 @@ sus alcances originales; [el cierre09](TINTIN_PHASE09_ACCEPTANCE.md) los concili
   CodeQL41361910183/1 y comprobación de producción41361911653/1 SUCCESS.
 - #1305 MERGED en7dfe8c9f, CI final41355599089/1 SUCCESS. El fallo post-merge
   de protección41357878092/1 fue corregido por #1307; no se borra su historial.
-- #1306 OPEN, head976601a99772e5390448b8da2edda79d9d6c1429, CI41358865966/1
-  FAILURE: pérdida de comunicación del runner125006122914, logsBlobNotFound/404.
-  Además necesita conciliar el main actual y regenerar plan/derivados, preservando
-  la eliminación del job de escritura de #1307. Su rama no se modificó.
+- #1306: recuperación en curso desde976601a9, con merge normal de main9b1b88f8 y derivados canónicos; se preserva la retirada del job de escritura de1307. CI41358865966/1 es FAILURE histórico de runner, con log no recuperable; no se hereda como fallo del nuevo candidato ni se inventa su causa funcional. Recibos actuales en PR1306.
 - Los PASS se refieren al criterio y SHA citados. Un informe terminado no prueba
   que sus hallazgos estén corregidos ni certifica todas las operaciones reales.
 - La observación nativa de Skills sigue BLOCKED; catálogo executor vacío
@@ -41,7 +38,7 @@ sus alcances originales; [el cierre09](TINTIN_PHASE09_ACCEPTANCE.md) los concili
 
 | Fase | Alcance | Estado / evidencia | SHA / PR | Pendiente y siguiente fase |
 | --- | --- | --- | --- | --- |
-| 00 | Baseline y estabilidad Skills/CI | PASS_CI del circuito del repositorio; BLOCKED de activación nativa | 085953dc / #1305 y #1307 | 45 Skills por ruta y4compat válidos; catálogo executor vacío. Nueva sesión con catálogo/invocación observables. Diagnóstico01 autorizado sin cambio funcional |
+| 00 | Baseline y estabilidad Skills/CI | PASS_CI del circuito del repositorio; BLOCKED de activación nativa | 085953dc / #1305 y #1307 | 46 Skills por ruta y4compat válidos; enrutamiento1306 en verificación; catálogo executor vacío. Nueva sesión con catálogo/invocación observables. Diagnóstico01 autorizado sin cambio funcional |
 | 01 | Auditoría global y arquitectura real | PASS_CI de publicación diagnóstica; siete hallazgos abiertos | Auditoría085953dc; publicación5b694fe4 / #1308 | Informe y reproducciones completos. Siguiente:02 visual por nueva instrucción |
 | 02 | Reparación visual pública, responsive, scroll y foco | PASS_CI; #1309 MERGED | 344a2936 / [#1309](https://github.com/tintinaccs/tintin-web/pull/1309); CI41375418525/1 SUCCESS del head29e8685c | Comprobación de main y producción separada por sus runs. Continúa03 editor por instrucción actual; seguridad03A abierta |
 | 03 | Administración y editor de productos | Integrado #1310; checks históricos de merge verificados; revalidación09 en curso | e3de73c1 | Fotografías/opciones/stock y móvil incluidos; no heredar PASS del candidato09 |
@@ -50,8 +47,8 @@ sus alcances originales; [el cierre09](TINTIN_PHASE09_ACCEPTANCE.md) los concili
 | 05 | Flujo comercial completo | Integrado #1313,CI/CodeQL históricos aprobados; revalidación09 en curso | 001c4218 | [Informe05](TINTIN_PHASE05_COMMERCE.md); WebApp sin verificar |
 | 06 | Clientes, administración, permisos y notificaciones | Integrado #1314,checks históricos aprobados; revalidación09 en curso | 1159edeb | [Informe06](TINTIN_PHASE06_ACCOUNTS_ADMIN.md); hardware y entrega real no acreditados |
 | 07 | Backend, datos, APIs y servicios | Integrado #1315; Rules aisladas PASS_CI histórico; deployment BLOCKED | 39744311 | [Informe07](TINTIN_PHASE07_BACKEND_SECURITY.md); no se publicó Firestore Rules |
-| 08 | Optimización transversal de rendimiento, UX, accesibilidad y SEO | Sin PR independiente; cambios conservados y consolidados en09 | Base39744311 | [Informe08](TINTIN_PHASE08_TRANSVERSAL.md); mediciones y límites explícitos |
-| 09 | Reparación integral, aceptación y cierre | IN_PROGRESS del candidato; aceptación productiva global BLOCKED por pendientes enumerados | codex/phase09-integral-acceptance | [Informe09](TINTIN_PHASE09_ACCEPTANCE.md); matriz completa y recibos actuales obligatorios |
+| 08 | Optimización transversal de rendimiento, UX, accesibilidad y SEO | Integrada y PASS_CI en1319; producción de artefacto/salud aprobada | 9b1b88f8 / #1319 | [Informe08](TINTIN_PHASE08_TRANSVERSAL.md); mediciones y límites explícitos |
+| 09 | Reparación integral, aceptación y cierre | Código integrado, CI de PR/main SUCCESS y artefacto/salud productivos PASS; aceptación integral BLOCKED | 9b1b88f8 / #1319 | [Informe09](TINTIN_PHASE09_ACCEPTANCE.md); matriz completa y recibos actuales obligatorios |
 
 ## Entregables de la Fase 01
 
@@ -119,3 +116,9 @@ Conciliación posterior de #1318: main1c673584b0b8e69e9610c6d4721210d86bd4f55c i
 
 
 Advertencia CI demostrada: Firebase13/@firebase/rules-unit-testing6 exige Node>=24.12.0, pero los workflows usaban22 (EBADENGINE en job125671971836 del run41560504080/1). Se centraliza la selección en engines.node de package.json (>=24.12.0 <25, LTS24) y actions/setup-node node-version-file, soportado oficialmente; sin duplicar archivo de versión ni bajar SDK. Los nueve workflows existentes conservan triggers, permisos, cobertura y protecciones; npm ci --engine-strict convierte una futura incompatibilidad de engines en fallo explícito. No se disparan despliegues manuales. npm install --package-lock-only --ignore-scripts --engine-strict PASS con Node24.19.0 y180contratos de CI/operaciones/arquitectura PASS. CI del nuevo SHA debe repetirse. Configuración Node explícita del panel Cloudflare sigue sin verificarse.
+
+## Recibo de integración09 y primer despertar
+
+PR1319 MERGED en9b1b88f8, head df692c4b. CI41562231283/1, CodeQL41562227482/1 e integridad/mantenimiento protegidos SUCCESS. Monitor41565292553/1 SUCCESS del artefacto publicado; auditoría posterior41565290324/1 SUCCESS confirmado2026-11-03T02:49:16Z. No equivale a Rules publicadas ni a pruebas monetarias/autenticadas reales. Primer disparo de vigilancia horaria registrado2026-11-03T02:24:49Z, con prompt recibido y seguimiento retomado. PR1306 se recupera preservando esta base y configura selección de Skills, sin modificar comercio ni controles.
+
+[Recibo terminal de Fase09](evidence/phase09-20261102/github-terminal.json): el código1319 está integrado y sus verificaciones de PR/main son SUCCESS. Esto cierra la reparación de fuente y aceptación automatizada de ese SHA; los límites productivos enumerados no se convierten en PASS por ese resultado. La recuperación1306 tiene su propio candidato/CI/merge, sin heredar esos checks.
