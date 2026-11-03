@@ -59,8 +59,9 @@ for (const [width, height] of viewports) {
       const credit = page.locator('footer .novak-credit');
       await expect(credit, name).toHaveCount(1);
       await expect(credit).toHaveAttribute('href', NOVAK_URL);
-      await expect(credit, name).toHaveAccessibleName('Hecho por NOVAK, visitar su sitio');
-      await expect(credit.locator('span')).toHaveText('Hecho por');
+      await expect(credit, name).toHaveAccessibleName('Desarrollado por NOVAK, visitar su sitio');
+      await expect(credit.locator('span')).toHaveText('Desarrollado por');
+      await expect(page.locator('#tt-footer-ending .tt-footer-bottom')).toHaveText('© 2026 TINTIN ACCESORIOS');
       await expect(credit).toHaveCSS('font-family', /Montserrat/);
       await credit.scrollIntoViewIfNeeded();
       await expect(credit, name).toBeVisible();
@@ -71,7 +72,18 @@ for (const [width, height] of viewports) {
       expect(box.x + box.width, name).toBeLessThanOrEqual(width + 1);
       const row = await credit.locator('..').boundingBox();
       expect(Math.abs(box.x + box.width / 2 - row.x - row.width / 2), name).toBeLessThanOrEqual(1);
-      expect(await credit.evaluate(el => getComputedStyle(el).color), name).toBe('rgb(34, 34, 34)');
+      const contrast = await credit.evaluate(el => {
+        const luminance = color => {
+          const values = color.match(/[\d.]+/g).slice(0, 3).map(Number).map(v => {
+            const n = v / 255; return n <= .04045 ? n / 12.92 : ((n + .055) / 1.055) ** 2.4;
+          });
+          return .2126 * values[0] + .7152 * values[1] + .0722 * values[2];
+        };
+        const foreground = luminance(getComputedStyle(el).color);
+        const background = luminance(getComputedStyle(el.closest('.tt-footer-ending')).backgroundColor);
+        return (Math.max(foreground, background) + .05) / (Math.min(foreground, background) + .05);
+      });
+      expect(contrast, name).toBeGreaterThanOrEqual(4.5);
       await page.unroute('**/__novak-fixture');
     }
   });

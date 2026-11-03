@@ -8,7 +8,7 @@ const { renderMobileBrandHeader } = require('../js/components/navigation/movil/m
 const { LOGO_VERSION } = require('../js/components/navigation/compartido/configuracion.js');
 const { CATEGORIES } = require('../js/components/navigation/compartido/iconos.js');
 const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.js');
-const { renderNovakCredit, ensureNovakStyles, ensureStandaloneCredit } = require('./lib/firma-novak.js');
+const { renderNovakFooterEnd, ensureNovakStyles, ensureStandaloneCredit } = require('./lib/firma-novak.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.css', versionPrefix: 'tintin-about-e9f78c18973f8f56' };
@@ -421,8 +421,7 @@ ${CATEGORIES.map(({ slug, label }) => `          <li><a href="/catalogo?cat=${en
       </nav>
     </div>
   </div>
-  <div class="tt-footer-bottom">© 2024-2026 TINTIN ACCESORIOS · TODOS LOS DERECHOS RESERVADOS</div>
-  ${renderNovakCredit()}
+  ${renderNovakFooterEnd()}
 </footer>`;
 }
 

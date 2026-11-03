@@ -7,3 +7,35 @@
 .novak-credit-row .novak-credit img[data-novak-src] { visibility: hidden; }
 .novak-credit:has(noscript img) > img[data-novak-src] { display: none; }
 [data-novak-footer] { width: 100%; flex: 0 0 auto; }
+
+/* Franja final según la referencia; las columnas del pie conservan su diseño. */
+#tt-footer-ending {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px 32px;
+  border-radius: 18px 18px 0 0;
+  background: var(--color-background-surface-soft, #FDECF2);
+  text-align: center;
+}
+#tt-footer-ending .tt-footer-bottom {
+  margin: 0;
+  padding: 0 !important;
+  color: #555 !important;
+  font-size: clamp(15px, 1.7vw, 18px) !important;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0 !important;
+}
+#tt-footer-ending .novak-credit-row { padding: 0; }
+#tt-footer-ending .novak-credit {
+  color: #555 !important;
+  background-color: transparent;
+  font-size: clamp(15px, 1.7vw, 18px);
+  font-weight: 400;
+}
+#tt-footer-ending .novak-credit:hover,
+#tt-footer-ending .novak-credit:focus-visible { background-color: rgba(255, 255, 255, .55); }

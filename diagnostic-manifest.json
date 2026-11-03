@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "dba89f706c96fa3b240585bf11f3e8e58930fd6c5a0f3050e0c50f33047f3238",
+  "sourceFingerprint": "8a4a6a40347101b4e428a19967fb69450f7865d6f288dd9984e32c25d2749897",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1779,
     "textFiles": 1644,
-    "totalBytes": 45832979,
+    "totalBytes": 45848310,
     "pages": 19,
     "modules": 1164
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18996,
-      "sha256": "076b5f1b07d60401355fcecc7db4165161958fba3cfe0d22ead91cf01a64a1b3",
+      "bytes": 19051,
+      "sha256": "45241cc617568f34df900c12275f41b2ad94724d54e56b2ac511e87fb136517f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -96,7 +96,7 @@
       },
       "duplicateIds": [],
       "inlineScripts": [],
-      "ids": 24,
+      "ids": 25,
       "scripts": [
         {
           "raw": "/js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -341,7 +341,7 @@
           "line": 154
         },
         {
-          "raw": "/css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "/css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 155
         }
@@ -369,7 +369,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 265
+          "line": 266
         }
       ],
       "links": [
@@ -716,12 +716,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 262
+          "line": 263
         }
       ],
       "references": [
@@ -1014,7 +1014,7 @@
           "exists": true
         },
         {
-          "raw": "/css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "/css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 155,
           "exists": true
@@ -1034,7 +1034,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 265,
+          "line": 266,
           "exists": true
         },
         {
@@ -1215,8 +1215,8 @@
         "guest",
         "client"
       ],
-      "bytes": 31665,
-      "sha256": "b024b529d350a85b8c1986b56449216b0e5ae13395b5c61e5b411b1310d23a8f",
+      "bytes": 31720,
+      "sha256": "9aa30007b5007f5fb898188fd1025e81893b2822f31ea64ba90518d4875f4f08",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1231,19 +1231,19 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 291,
+          "line": 293,
           "module": true,
           "ok": true,
           "error": ""
         },
         {
-          "line": 295,
+          "line": 297,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 32,
+      "ids": 33,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -1283,47 +1283,47 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 287
+          "line": 289
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 288
+          "line": 290
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 289
+          "line": 291
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 290
+          "line": 292
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 342
+          "line": 344
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 343
+          "line": 345
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 344
+          "line": 346
         },
         {
           "raw": "js/components/social/instagram-tintin.js?v=tintin-20261020-domain-cutover-consolidated-1",
           "target": "js/components/social/instagram-tintin.js",
-          "line": 345
+          "line": 347
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-f52501320e328b68",
+          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-95535670da2e1a32",
           "target": "css/generated/nosotros.css",
           "line": 35
         },
@@ -1518,7 +1518,7 @@
           "line": 76
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 77
         }
@@ -1570,7 +1570,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 279
+          "line": 280
         }
       ],
       "links": [
@@ -1837,12 +1837,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 276
+          "line": 277
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -1852,7 +1852,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 284
+          "line": 286
         }
       ],
       "references": [
@@ -1901,53 +1901,53 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 287,
+          "line": 289,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 288,
+          "line": 290,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 289,
+          "line": 291,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 290,
+          "line": 292,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 342,
+          "line": 344,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 343,
+          "line": 345,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 344,
+          "line": 346,
           "exists": true
         },
         {
           "raw": "js/components/social/instagram-tintin.js?v=tintin-20261020-domain-cutover-consolidated-1",
           "target": "js/components/social/instagram-tintin.js",
-          "line": 345,
+          "line": 347,
           "exists": true
         },
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-f52501320e328b68",
+          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-95535670da2e1a32",
           "target": "css/generated/nosotros.css",
           "line": 35,
           "exists": true
@@ -2181,7 +2181,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 77,
           "exists": true
@@ -2219,7 +2219,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 279,
+          "line": 280,
           "exists": true
         },
         {
@@ -2360,8 +2360,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 48520,
-      "sha256": "556e0436918e9393f615d00b0706d2d15f1d1c3ab66e4d83abae9cd117505a90",
+      "bytes": 48677,
+      "sha256": "c5713eb48cdb3470cf56c6fc2cff55e6780a998e6842095cc6a0df45e162d5a4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2382,13 +2382,13 @@
           "error": ""
         },
         {
-          "line": 456,
+          "line": 459,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 22,
+      "ids": 23,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -2418,17 +2418,17 @@
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261023-tema-unico-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 852
+          "line": 855
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 853
+          "line": 856
         },
         {
           "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261101-admin-visual-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
-          "line": 854
+          "line": 857
         }
       ],
       "styles": [
@@ -2513,7 +2513,7 @@
           "line": 358
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 359
         }
@@ -2525,7 +2525,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 447
+          "line": 449
         }
       ],
       "links": [
@@ -2562,12 +2562,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 444
+          "line": 446
         }
       ],
       "references": [
@@ -2604,19 +2604,19 @@
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261023-tema-unico-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 852,
+          "line": 855,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 853,
+          "line": 856,
           "exists": true
         },
         {
           "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261101-admin-visual-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
-          "line": 854,
+          "line": 857,
           "exists": true
         },
         {
@@ -2716,7 +2716,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 359,
           "exists": true
@@ -2724,7 +2724,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 447,
+          "line": 449,
           "exists": true
         },
         {
@@ -3053,8 +3053,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 192481,
-      "sha256": "640b3b32d29405900620b71ff0b23f7da897cacf630573d3690efd5f4c4413e3",
+      "bytes": 192638,
+      "sha256": "d9093a58ea0348d0b65ff98622ce6a3d34c2460e11d9040a2f31087ef4d5aeeb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3075,7 +3075,7 @@
           "error": ""
         }
       ],
-      "ids": 574,
+      "ids": 575,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -3105,97 +3105,97 @@
         {
           "raw": "js/admin/operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2",
           "target": "js/admin/operaciones/sistema-operaciones-admin.js",
-          "line": 2105
+          "line": 2108
         },
         {
           "raw": "js/admin/content/control-bienvenida-admin.js?v=tintin-20261030-home-history-5",
           "target": "js/admin/content/control-bienvenida-admin.js",
-          "line": 2106
+          "line": 2109
         },
         {
           "raw": "js/admin/admin-app.js?v=tintin-20261103-acceptance-1",
           "target": "js/admin/admin-app.js",
-          "line": 2107
+          "line": 2110
         },
         {
           "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-14",
           "target": "js/admin/maestro/app-movil-admin.js",
-          "line": 2108
+          "line": 2111
         },
         {
           "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20261101-app-movil-1",
           "target": "js/admin/sidebar-expandible-admin.js",
-          "line": 2109
+          "line": 2112
         },
         {
           "raw": "js/admin/importacion-admin.js?v=tintin-20261031-seo-espacios-2",
           "target": "js/admin/importacion-admin.js",
-          "line": 2110
+          "line": 2113
         },
         {
           "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
-          "line": 2111
+          "line": 2114
         },
         {
           "raw": "js/admin/comercio-local-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
           "target": "js/admin/comercio-local-admin.js",
-          "line": 2112
+          "line": 2115
         },
         {
           "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261103-acceptance-1",
           "target": "js/admin/shopify-commerce-admin.js",
-          "line": 2113
+          "line": 2116
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261023-tema-unico-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2323
+          "line": 2326
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2324
+          "line": 2327
         },
         {
           "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20261030-notificaciones-explicitas-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
-          "line": 2325
+          "line": 2328
         },
         {
           "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/admin/notifications/notificaciones-push.js",
-          "line": 2326
+          "line": 2329
         },
         {
           "raw": "js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20261030-push-recovery-1",
           "target": "js/admin/notifications/notificaciones-push-maestro.js",
-          "line": 2327
+          "line": 2330
         },
         {
           "raw": "js/admin/notifications/enlace-pedido-push.js?v=tintin-20261020-push-return-1",
           "target": "js/admin/notifications/enlace-pedido-push.js",
-          "line": 2328
+          "line": 2331
         },
         {
           "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
-          "line": 2329
+          "line": 2332
         },
         {
           "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-3",
           "target": "js/admin/maestro/panel-maestro.js",
-          "line": 2330
+          "line": 2333
         },
         {
           "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261101-admin-visual-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
-          "line": 2331
+          "line": 2334
         },
         {
           "raw": "js/admin/maestro/buscador-modulos-admin.js?v=tintin-20261021-identidad-1-editor-search-20261028-2",
           "target": "js/admin/maestro/buscador-modulos-admin.js",
-          "line": 2332
+          "line": 2335
         }
       ],
       "styles": [
@@ -3360,7 +3360,7 @@
           "line": 86
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 87
         }
@@ -3388,7 +3388,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 2098
+          "line": 2100
         }
       ],
       "links": [
@@ -3455,12 +3455,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 2095
+          "line": 2097
         }
       ],
       "references": [
@@ -3497,115 +3497,115 @@
         {
           "raw": "js/admin/operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2",
           "target": "js/admin/operaciones/sistema-operaciones-admin.js",
-          "line": 2105,
+          "line": 2108,
           "exists": true
         },
         {
           "raw": "js/admin/content/control-bienvenida-admin.js?v=tintin-20261030-home-history-5",
           "target": "js/admin/content/control-bienvenida-admin.js",
-          "line": 2106,
+          "line": 2109,
           "exists": true
         },
         {
           "raw": "js/admin/admin-app.js?v=tintin-20261103-acceptance-1",
           "target": "js/admin/admin-app.js",
-          "line": 2107,
+          "line": 2110,
           "exists": true
         },
         {
           "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-14",
           "target": "js/admin/maestro/app-movil-admin.js",
-          "line": 2108,
+          "line": 2111,
           "exists": true
         },
         {
           "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20261101-app-movil-1",
           "target": "js/admin/sidebar-expandible-admin.js",
-          "line": 2109,
+          "line": 2112,
           "exists": true
         },
         {
           "raw": "js/admin/importacion-admin.js?v=tintin-20261031-seo-espacios-2",
           "target": "js/admin/importacion-admin.js",
-          "line": 2110,
+          "line": 2113,
           "exists": true
         },
         {
           "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
-          "line": 2111,
+          "line": 2114,
           "exists": true
         },
         {
           "raw": "js/admin/comercio-local-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
           "target": "js/admin/comercio-local-admin.js",
-          "line": 2112,
+          "line": 2115,
           "exists": true
         },
         {
           "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261103-acceptance-1",
           "target": "js/admin/shopify-commerce-admin.js",
-          "line": 2113,
+          "line": 2116,
           "exists": true
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261023-tema-unico-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2323,
+          "line": 2326,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2324,
+          "line": 2327,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20261030-notificaciones-explicitas-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
-          "line": 2325,
+          "line": 2328,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/admin/notifications/notificaciones-push.js",
-          "line": 2326,
+          "line": 2329,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20261030-push-recovery-1",
           "target": "js/admin/notifications/notificaciones-push-maestro.js",
-          "line": 2327,
+          "line": 2330,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/enlace-pedido-push.js?v=tintin-20261020-push-return-1",
           "target": "js/admin/notifications/enlace-pedido-push.js",
-          "line": 2328,
+          "line": 2331,
           "exists": true
         },
         {
           "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
-          "line": 2329,
+          "line": 2332,
           "exists": true
         },
         {
           "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-3",
           "target": "js/admin/maestro/panel-maestro.js",
-          "line": 2330,
+          "line": 2333,
           "exists": true
         },
         {
           "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261101-admin-visual-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
-          "line": 2331,
+          "line": 2334,
           "exists": true
         },
         {
           "raw": "js/admin/maestro/buscador-modulos-admin.js?v=tintin-20261021-identidad-1-editor-search-20261028-2",
           "target": "js/admin/maestro/buscador-modulos-admin.js",
-          "line": 2332,
+          "line": 2335,
           "exists": true
         },
         {
@@ -3801,7 +3801,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 87,
           "exists": true
@@ -3821,7 +3821,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 2098,
+          "line": 2100,
           "exists": true
         },
         {
@@ -3922,37 +3922,37 @@
           "id": "unsaved-modal",
           "role": "dialog",
           "classes": "",
-          "line": 2119
+          "line": 2122
         },
         {
           "id": "order-edit-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2135
+          "line": 2138
         },
         {
           "id": "client-ficha-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2237
+          "line": 2240
         },
         {
           "id": "tpl-edit-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2250
+          "line": 2253
         },
         {
           "id": "tpl-preview-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2296
+          "line": 2299
         },
         {
           "id": "promo-confirm-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2309
+          "line": 2312
         }
       ],
       "tabs": [
@@ -7291,7 +7291,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2125
+          "line": 2128
         },
         {
           "id": "unsaved-modal-discard",
@@ -7306,7 +7306,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2126
+          "line": 2129
         },
         {
           "id": "unsaved-modal-stay",
@@ -7321,7 +7321,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2127
+          "line": 2130
         },
         {
           "id": "",
@@ -7335,7 +7335,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2139
+          "line": 2142
         },
         {
           "id": "",
@@ -7349,7 +7349,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2228
+          "line": 2231
         },
         {
           "id": "oe-save-btn",
@@ -7364,7 +7364,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2229
+          "line": 2232
         },
         {
           "id": "",
@@ -7378,7 +7378,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2241
+          "line": 2244
         },
         {
           "id": "",
@@ -7392,7 +7392,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2254
+          "line": 2257
         },
         {
           "id": "tpl-edit-restore-btn",
@@ -7408,7 +7408,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2285
+          "line": 2288
         },
         {
           "id": "tpl-edit-preview-btn",
@@ -7424,7 +7424,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2286
+          "line": 2289
         },
         {
           "id": "",
@@ -7438,7 +7438,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2289
+          "line": 2292
         },
         {
           "id": "tpl-edit-save-btn",
@@ -7453,7 +7453,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2290
+          "line": 2293
         },
         {
           "id": "",
@@ -7467,7 +7467,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2300
+          "line": 2303
         },
         {
           "id": "",
@@ -7481,7 +7481,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2317
+          "line": 2320
         },
         {
           "id": "promo-confirm-send-btn",
@@ -7496,7 +7496,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2318
+          "line": 2321
         }
       ],
       "controls": [
@@ -9009,7 +9009,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 2142,
+          "line": 2145,
           "labeled": true
         },
         {
@@ -9018,7 +9018,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2146,
+          "line": 2149,
           "labeled": true
         },
         {
@@ -9027,7 +9027,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2150,
+          "line": 2153,
           "labeled": true
         },
         {
@@ -9036,7 +9036,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 2154,
+          "line": 2157,
           "labeled": true
         },
         {
@@ -9045,7 +9045,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2159,
+          "line": 2162,
           "labeled": true
         },
         {
@@ -9054,7 +9054,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2163,
+          "line": 2166,
           "labeled": true
         },
         {
@@ -9063,7 +9063,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2171,
+          "line": 2174,
           "labeled": true
         },
         {
@@ -9072,7 +9072,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2175,
+          "line": 2178,
           "labeled": true
         },
         {
@@ -9081,7 +9081,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2184,
+          "line": 2187,
           "labeled": true
         },
         {
@@ -9090,7 +9090,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2191,
+          "line": 2194,
           "labeled": true
         },
         {
@@ -9099,7 +9099,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2201,
+          "line": 2204,
           "labeled": true
         },
         {
@@ -9108,7 +9108,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2214,
+          "line": 2217,
           "labeled": true
         },
         {
@@ -9117,7 +9117,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 2257,
+          "line": 2260,
           "labeled": true
         },
         {
@@ -9126,7 +9126,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2260,
+          "line": 2263,
           "labeled": true
         },
         {
@@ -9135,7 +9135,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2262,
+          "line": 2265,
           "labeled": true
         },
         {
@@ -9144,7 +9144,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2263,
+          "line": 2266,
           "labeled": true
         },
         {
@@ -9153,7 +9153,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2264,
+          "line": 2267,
           "labeled": true
         },
         {
@@ -9162,7 +9162,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2265,
+          "line": 2268,
           "labeled": true
         },
         {
@@ -9171,7 +9171,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2266,
+          "line": 2269,
           "labeled": true
         },
         {
@@ -9180,7 +9180,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2267,
+          "line": 2270,
           "labeled": true
         },
         {
@@ -9189,7 +9189,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2269,
+          "line": 2272,
           "labeled": true
         },
         {
@@ -9198,7 +9198,7 @@
           "name": "",
           "type": "url",
           "ariaLabel": "",
-          "line": 2270,
+          "line": 2273,
           "labeled": true
         },
         {
@@ -9207,7 +9207,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2272,
+          "line": 2275,
           "labeled": true
         },
         {
@@ -9216,7 +9216,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2273,
+          "line": 2276,
           "labeled": true
         },
         {
@@ -9225,7 +9225,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 2275,
+          "line": 2278,
           "labeled": true
         },
         {
@@ -9234,7 +9234,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2315,
+          "line": 2318,
           "labeled": true
         }
       ]
@@ -9252,8 +9252,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23441,
-      "sha256": "b2b016b6111e05dcb63d652e7250485ca51e1fda5847948cc3cdb51c63ea0c0f",
+      "bytes": 23496,
+      "sha256": "d0db7b3c4c25e74cec6c5d5ebd64ed0ed24f704ef8a197e957d79e16c293c2fe",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9268,13 +9268,13 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 219,
+          "line": 221,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 26,
+      "ids": 27,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -9314,42 +9314,42 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 215
+          "line": 217
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 216
+          "line": 218
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 217
+          "line": 219
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 218
+          "line": 220
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 223
+          "line": 225
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 224
+          "line": 226
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 225
+          "line": 227
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-c7e6c5b6ec796262",
+          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-a80a0bb40fbe96b2",
           "target": "css/generated/cambios-devoluciones.css",
           "line": 35
         },
@@ -9529,7 +9529,7 @@
           "line": 73
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 74
         }
@@ -9557,7 +9557,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 207
+          "line": 208
         }
       ],
       "links": [
@@ -9824,12 +9824,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 204
+          "line": 205
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -9839,7 +9839,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 212
+          "line": 214
         }
       ],
       "references": [
@@ -9888,47 +9888,47 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 215,
+          "line": 217,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 216,
+          "line": 218,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 217,
+          "line": 219,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 218,
+          "line": 220,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 223,
+          "line": 225,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 224,
+          "line": 226,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 225,
+          "line": 227,
           "exists": true
         },
         {
-          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-c7e6c5b6ec796262",
+          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-a80a0bb40fbe96b2",
           "target": "css/generated/cambios-devoluciones.css",
           "line": 35,
           "exists": true
@@ -10144,7 +10144,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 74,
           "exists": true
@@ -10164,7 +10164,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 207,
+          "line": 208,
           "exists": true
         },
         {
@@ -10303,8 +10303,8 @@
         "guest",
         "client"
       ],
-      "bytes": 70985,
-      "sha256": "26d112bd078b02a1a43b28a484b6e71bfc87a444b33c33c8888182c15fa25e79",
+      "bytes": 71040,
+      "sha256": "4ff55dcc5dcba32ca60e1d0c6124e77a0605222e395b89240b553ce5b178857d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10325,19 +10325,19 @@
           "error": ""
         },
         {
-          "line": 619,
+          "line": 621,
           "module": true,
           "ok": true,
           "error": ""
         },
         {
-          "line": 624,
+          "line": 626,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 41,
+      "ids": 42,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -10377,47 +10377,47 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 617
+          "line": 619
         },
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 618
+          "line": 620
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 623
+          "line": 625
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 1118
+          "line": 1120
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 1119
+          "line": 1121
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 1120
+          "line": 1122
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1121
+          "line": 1123
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1122
+          "line": 1124
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 1123
+          "line": 1125
         }
       ],
       "styles": [
@@ -10502,7 +10502,7 @@
           "line": 61
         },
         {
-          "raw": "css/generated/catalogo-2.css?v=tintin-catalogo-6eeb6f5bd9b324a9",
+          "raw": "css/generated/catalogo-2.css?v=tintin-catalogo-2ffceebce565624f",
           "target": "css/generated/catalogo-2.css",
           "line": 423
         },
@@ -10607,7 +10607,7 @@
           "line": 443
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 444
         }
@@ -10635,7 +10635,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 609
+          "line": 610
         }
       ],
       "links": [
@@ -10892,12 +10892,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 606
+          "line": 607
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -10907,7 +10907,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 614
+          "line": 616
         }
       ],
       "references": [
@@ -10956,55 +10956,55 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 617,
+          "line": 619,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 618,
+          "line": 620,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 623,
+          "line": 625,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 1118,
+          "line": 1120,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 1119,
+          "line": 1121,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 1120,
+          "line": 1122,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1121,
+          "line": 1123,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1122,
+          "line": 1124,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 1123,
+          "line": 1125,
           "exists": true
         },
         {
@@ -11104,7 +11104,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/catalogo-2.css?v=tintin-catalogo-6eeb6f5bd9b324a9",
+          "raw": "css/generated/catalogo-2.css?v=tintin-catalogo-2ffceebce565624f",
           "target": "css/generated/catalogo-2.css",
           "line": 423,
           "exists": true
@@ -11230,7 +11230,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 444,
           "exists": true
@@ -11250,7 +11250,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 609,
+          "line": 610,
           "exists": true
         },
         {
@@ -11673,8 +11673,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 138170,
-      "sha256": "370ebdcb7c15b3bf7e2af12fb6f4643f8a00f83c68fb19b0532fd14f630b0645",
+      "bytes": 138225,
+      "sha256": "a6dfc86525a4c034f371115871557428efe056d32dc6d07ba13fa916b73befa7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11701,7 +11701,7 @@
           "error": ""
         }
       ],
-      "ids": 132,
+      "ids": 133,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -11791,7 +11791,7 @@
           "line": 33
         },
         {
-          "raw": "css/generated/checkout-2.css?v=tintin-checkout-72cd9f35ee0e868f",
+          "raw": "css/generated/checkout-2.css?v=tintin-checkout-9ecee753cc15d49c",
           "target": "css/generated/checkout-2.css",
           "line": 34
         },
@@ -11986,7 +11986,7 @@
           "line": 74
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 75
         }
@@ -12006,7 +12006,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 2143
+          "line": 2144
         }
       ],
       "links": [
@@ -12293,12 +12293,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 2140
+          "line": 2141
         }
       ],
       "references": [
@@ -12405,7 +12405,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/checkout-2.css?v=tintin-checkout-72cd9f35ee0e868f",
+          "raw": "css/generated/checkout-2.css?v=tintin-checkout-9ecee753cc15d49c",
           "target": "css/generated/checkout-2.css",
           "line": 34,
           "exists": true
@@ -12639,7 +12639,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 75,
           "exists": true
@@ -12653,7 +12653,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 2143,
+          "line": 2144,
           "exists": true
         },
         {
@@ -13272,8 +13272,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24857,
-      "sha256": "6ba28338247787c3dc78052a9cde076c9d1e2614666de6b2109a88f9371091f0",
+      "bytes": 24912,
+      "sha256": "dd96283540ce95d9aa3d2bbbad57e9810989fcd350859b5c1e444fdc2f922024",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13294,13 +13294,13 @@
           "error": ""
         },
         {
-          "line": 241,
+          "line": 243,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 33,
+      "ids": 34,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -13340,52 +13340,52 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 235
+          "line": 237
         },
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 236
+          "line": 238
         },
         {
           "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/pages/collections/pagina-colecciones.js",
-          "line": 237
+          "line": 239
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 238
+          "line": 240
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 239
+          "line": 241
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 240
+          "line": 242
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 245
+          "line": 247
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 246
+          "line": 248
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 247
+          "line": 249
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/collections.css?v=tintin-collections-129116732f3fd429",
+          "raw": "css/generated/collections.css?v=tintin-collections-43ff62fa717c8f6e",
           "target": "css/generated/collections.css",
           "line": 42
         },
@@ -13565,7 +13565,7 @@
           "line": 78
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 79
         }
@@ -13593,7 +13593,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 227
+          "line": 228
         }
       ],
       "links": [
@@ -13870,12 +13870,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 224
+          "line": 225
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -13885,7 +13885,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 232
+          "line": 234
         }
       ],
       "references": [
@@ -13934,59 +13934,59 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 235,
+          "line": 237,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 236,
+          "line": 238,
           "exists": true
         },
         {
           "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/pages/collections/pagina-colecciones.js",
-          "line": 237,
+          "line": 239,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 238,
+          "line": 240,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 239,
+          "line": 241,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 240,
+          "line": 242,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 245,
+          "line": 247,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 246,
+          "line": 248,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 247,
+          "line": 249,
           "exists": true
         },
         {
-          "raw": "css/generated/collections.css?v=tintin-collections-129116732f3fd429",
+          "raw": "css/generated/collections.css?v=tintin-collections-43ff62fa717c8f6e",
           "target": "css/generated/collections.css",
           "line": 42,
           "exists": true
@@ -14202,7 +14202,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 79,
           "exists": true
@@ -14222,7 +14222,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 227,
+          "line": 228,
           "exists": true
         },
         {
@@ -14367,8 +14367,8 @@
         "guest",
         "client"
       ],
-      "bytes": 29688,
-      "sha256": "85a49fc3ede6a6473b3195d4e29bfca7feeaeab2df3d4ae714a5f25f5d2d196e",
+      "bytes": 29743,
+      "sha256": "b525d3fd26309d8f44d50276e365400658afea1a5c21738d4865c5d7071a3c3c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14383,19 +14383,19 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 257,
+          "line": 259,
           "module": false,
           "ok": true,
           "error": ""
         },
         {
-          "line": 301,
+          "line": 303,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 33,
+      "ids": 34,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -14435,42 +14435,42 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 257
+          "line": 259
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 298
+          "line": 300
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 299
+          "line": 301
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 300
+          "line": 302
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 305
+          "line": 307
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 306
+          "line": 308
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 307
+          "line": 309
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/contact.css?v=tintin-contact-64fda351910cd1f2",
+          "raw": "css/generated/contact.css?v=tintin-contact-fcb336c3252b1e9b",
           "target": "css/generated/contact.css",
           "line": 35
         },
@@ -14655,7 +14655,7 @@
           "line": 74
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 75
         }
@@ -14683,7 +14683,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 249
+          "line": 250
         }
       ],
       "links": [
@@ -14990,12 +14990,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 246
+          "line": 247
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -15005,7 +15005,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 254
+          "line": 256
         }
       ],
       "references": [
@@ -15054,47 +15054,47 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 257,
+          "line": 259,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 298,
+          "line": 300,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 299,
+          "line": 301,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 300,
+          "line": 302,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 305,
+          "line": 307,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 306,
+          "line": 308,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 307,
+          "line": 309,
           "exists": true
         },
         {
-          "raw": "css/generated/contact.css?v=tintin-contact-64fda351910cd1f2",
+          "raw": "css/generated/contact.css?v=tintin-contact-fcb336c3252b1e9b",
           "target": "css/generated/contact.css",
           "line": 35,
           "exists": true
@@ -15316,7 +15316,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 75,
           "exists": true
@@ -15336,7 +15336,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 249,
+          "line": 250,
           "exists": true
         },
         {
@@ -15536,8 +15536,8 @@
         "guest",
         "client"
       ],
-      "bytes": 27110,
-      "sha256": "6c6debc970f23d88ff244cbcbdd14fbdbb7d1925af82c6b6613fc5be03a2ce4a",
+      "bytes": 27165,
+      "sha256": "3fce4d45ccc2cafbfa77e8d972b447376b06a72b5e147474a8073fb3cc1d0626",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15552,19 +15552,19 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 219,
+          "line": 221,
           "module": true,
           "ok": true,
           "error": ""
         },
         {
-          "line": 224,
+          "line": 226,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 28,
+      "ids": 29,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -15604,37 +15604,37 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 215
+          "line": 217
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 216
+          "line": 218
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 217
+          "line": 219
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 218
+          "line": 220
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 223
+          "line": 225
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 293
+          "line": 295
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 294
+          "line": 296
         }
       ],
       "styles": [
@@ -15714,7 +15714,7 @@
           "line": 48
         },
         {
-          "raw": "css/generated/envios-2.css?v=tintin-envios-682524bfd845e3ba",
+          "raw": "css/generated/envios-2.css?v=tintin-envios-ec22284472ebe7cd",
           "target": "css/generated/envios-2.css",
           "line": 55
         },
@@ -15824,7 +15824,7 @@
           "line": 80
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 81
         }
@@ -15852,7 +15852,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 207
+          "line": 208
         }
       ],
       "links": [
@@ -16119,12 +16119,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 204
+          "line": 205
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -16134,7 +16134,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 212
+          "line": 214
         }
       ],
       "references": [
@@ -16183,43 +16183,43 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 215,
+          "line": 217,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 216,
+          "line": 218,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 217,
+          "line": 219,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 218,
+          "line": 220,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 223,
+          "line": 225,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 293,
+          "line": 295,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 294,
+          "line": 296,
           "exists": true
         },
         {
@@ -16313,7 +16313,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/envios-2.css?v=tintin-envios-682524bfd845e3ba",
+          "raw": "css/generated/envios-2.css?v=tintin-envios-ec22284472ebe7cd",
           "target": "css/generated/envios-2.css",
           "line": 55,
           "exists": true
@@ -16445,7 +16445,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 81,
           "exists": true
@@ -16465,7 +16465,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 207,
+          "line": 208,
           "exists": true
         },
         {
@@ -16644,8 +16644,8 @@
         "guest",
         "client"
       ],
-      "bytes": 48535,
-      "sha256": "24f8a6affc9d73a22b5404ece3e03fc81ce8d30da95d0b3c56f77f36805e6f3b",
+      "bytes": 48590,
+      "sha256": "e36a7e1e6a3ecfc7d60a4a32738958abacd965cd95dc18a8e499a78d63d7b2e6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16666,19 +16666,19 @@
           "error": ""
         },
         {
-          "line": 425,
+          "line": 427,
           "module": false,
           "ok": true,
           "error": ""
         },
         {
-          "line": 468,
+          "line": 470,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 44,
+      "ids": 45,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -16718,77 +16718,77 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 459
+          "line": 461
         },
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 460
+          "line": 462
         },
         {
           "raw": "js/pages/home/mas-vendidos.js?v=tintin-20261031-revision-ux-1",
           "target": "js/pages/home/mas-vendidos.js",
-          "line": 461
+          "line": 463
         },
         {
           "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261103-acceptance-1",
           "target": "js/pages/home/carrusel-colecciones.js",
-          "line": 462
+          "line": 464
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 463
+          "line": 465
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 464
+          "line": 466
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 465
+          "line": 467
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 466
+          "line": 468
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261103-acceptance-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 467
+          "line": 469
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 472
+          "line": 474
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 508
+          "line": 510
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 509
+          "line": 511
         },
         {
           "raw": "js/pages/home/resenas-clientas.js?v=tintin-20261026-editor-closure-1",
           "target": "js/pages/home/resenas-clientas.js",
-          "line": 539
+          "line": 541
         },
         {
           "raw": "js/components/social/instagram-tintin.js?v=tintin-20261020-domain-cutover-consolidated-1",
           "target": "js/components/social/instagram-tintin.js",
-          "line": 540
+          "line": 542
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-26ae3a04336440a1",
+          "raw": "css/generated/inicio.css?v=tintin-home-4862d9f28ad7d678",
           "target": "css/generated/inicio.css",
           "line": 63
         },
@@ -17003,7 +17003,7 @@
           "line": 123
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 124
         }
@@ -17151,7 +17151,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 401
+          "line": 402
         },
         {
           "tag": "img",
@@ -17159,7 +17159,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6205.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 5",
           "hasAlt": true,
-          "line": 515
+          "line": 517
         },
         {
           "tag": "img",
@@ -17167,7 +17167,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6207.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 6",
           "hasAlt": true,
-          "line": 516
+          "line": 518
         },
         {
           "tag": "img",
@@ -17175,7 +17175,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6208.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 7",
           "hasAlt": true,
-          "line": 517
+          "line": 519
         },
         {
           "tag": "img",
@@ -17183,7 +17183,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6209.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 8",
           "hasAlt": true,
-          "line": 518
+          "line": 520
         },
         {
           "tag": "img",
@@ -17191,7 +17191,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6210.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 9",
           "hasAlt": true,
-          "line": 519
+          "line": 521
         },
         {
           "tag": "img",
@@ -17199,7 +17199,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6211.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 10",
           "hasAlt": true,
-          "line": 520
+          "line": 522
         },
         {
           "tag": "img",
@@ -17207,7 +17207,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6212.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 11",
           "hasAlt": true,
-          "line": 521
+          "line": 523
         },
         {
           "tag": "img",
@@ -17215,7 +17215,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6213.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 12",
           "hasAlt": true,
-          "line": 522
+          "line": 524
         },
         {
           "tag": "img",
@@ -17223,7 +17223,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6214.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 13",
           "hasAlt": true,
-          "line": 523
+          "line": 525
         },
         {
           "tag": "img",
@@ -17231,7 +17231,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6215.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 14",
           "hasAlt": true,
-          "line": 524
+          "line": 526
         },
         {
           "tag": "img",
@@ -17239,7 +17239,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6216.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 15",
           "hasAlt": true,
-          "line": 525
+          "line": 527
         },
         {
           "tag": "img",
@@ -17247,7 +17247,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6218.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 16",
           "hasAlt": true,
-          "line": 526
+          "line": 528
         },
         {
           "tag": "img",
@@ -17255,7 +17255,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6219.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 17",
           "hasAlt": true,
-          "line": 527
+          "line": 529
         },
         {
           "tag": "img",
@@ -17263,7 +17263,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6220.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 18",
           "hasAlt": true,
-          "line": 528
+          "line": 530
         },
         {
           "tag": "img",
@@ -17271,7 +17271,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6221.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 19",
           "hasAlt": true,
-          "line": 529
+          "line": 531
         },
         {
           "tag": "img",
@@ -17279,7 +17279,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6222.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 20",
           "hasAlt": true,
-          "line": 530
+          "line": 532
         },
         {
           "tag": "img",
@@ -17287,7 +17287,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6223.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 21",
           "hasAlt": true,
-          "line": 531
+          "line": 533
         },
         {
           "tag": "img",
@@ -17295,7 +17295,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6224.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 22",
           "hasAlt": true,
-          "line": 532
+          "line": 534
         },
         {
           "tag": "img",
@@ -17303,7 +17303,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6225.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 23",
           "hasAlt": true,
-          "line": 533
+          "line": 535
         },
         {
           "tag": "img",
@@ -17311,7 +17311,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6227.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 24",
           "hasAlt": true,
-          "line": 534
+          "line": 536
         },
         {
           "tag": "img",
@@ -17319,7 +17319,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_9617.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 25",
           "hasAlt": true,
-          "line": 535
+          "line": 537
         },
         {
           "tag": "img",
@@ -17327,7 +17327,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_9619.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 26",
           "hasAlt": true,
-          "line": 536
+          "line": 538
         },
         {
           "tag": "img",
@@ -17335,7 +17335,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_9620.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 27",
           "hasAlt": true,
-          "line": 537
+          "line": 539
         }
       ],
       "links": [
@@ -17652,12 +17652,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 398
+          "line": 399
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -17667,7 +17667,7 @@
           "ariaLabel": "WhatsApp",
           "title": "Escribirnos por WhatsApp",
           "imageAlt": "",
-          "line": 409
+          "line": 411
         }
       ],
       "references": [
@@ -17716,89 +17716,89 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 459,
+          "line": 461,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 460,
+          "line": 462,
           "exists": true
         },
         {
           "raw": "js/pages/home/mas-vendidos.js?v=tintin-20261031-revision-ux-1",
           "target": "js/pages/home/mas-vendidos.js",
-          "line": 461,
+          "line": 463,
           "exists": true
         },
         {
           "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261103-acceptance-1",
           "target": "js/pages/home/carrusel-colecciones.js",
-          "line": 462,
+          "line": 464,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 463,
+          "line": 465,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 464,
+          "line": 466,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 465,
+          "line": 467,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 466,
+          "line": 468,
           "exists": true
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261103-acceptance-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 467,
+          "line": 469,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 472,
+          "line": 474,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 508,
+          "line": 510,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 509,
+          "line": 511,
           "exists": true
         },
         {
           "raw": "js/pages/home/resenas-clientas.js?v=tintin-20261026-editor-closure-1",
           "target": "js/pages/home/resenas-clientas.js",
-          "line": 539,
+          "line": 541,
           "exists": true
         },
         {
           "raw": "js/components/social/instagram-tintin.js?v=tintin-20261020-domain-cutover-consolidated-1",
           "target": "js/components/social/instagram-tintin.js",
-          "line": 540,
+          "line": 542,
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-26ae3a04336440a1",
+          "raw": "css/generated/inicio.css?v=tintin-home-4862d9f28ad7d678",
           "target": "css/generated/inicio.css",
           "line": 63,
           "exists": true
@@ -18056,7 +18056,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 124,
           "exists": true
@@ -18166,145 +18166,145 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 401,
+          "line": 402,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6205.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6205.jpg",
-          "line": 515,
+          "line": 517,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6207.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6207.jpg",
-          "line": 516,
+          "line": 518,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6208.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6208.jpg",
-          "line": 517,
+          "line": 519,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6209.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6209.jpg",
-          "line": 518,
+          "line": 520,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6210.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6210.jpg",
-          "line": 519,
+          "line": 521,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6211.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6211.jpg",
-          "line": 520,
+          "line": 522,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6212.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6212.jpg",
-          "line": 521,
+          "line": 523,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6213.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6213.jpg",
-          "line": 522,
+          "line": 524,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6214.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6214.jpg",
-          "line": 523,
+          "line": 525,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6215.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6215.jpg",
-          "line": 524,
+          "line": 526,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6216.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6216.jpg",
-          "line": 525,
+          "line": 527,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6218.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6218.jpg",
-          "line": 526,
+          "line": 528,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6219.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6219.jpg",
-          "line": 527,
+          "line": 529,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6220.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6220.jpg",
-          "line": 528,
+          "line": 530,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6221.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6221.jpg",
-          "line": 529,
+          "line": 531,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6222.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6222.jpg",
-          "line": 530,
+          "line": 532,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6223.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6223.jpg",
-          "line": 531,
+          "line": 533,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6224.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6224.jpg",
-          "line": 532,
+          "line": 534,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6225.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6225.jpg",
-          "line": 533,
+          "line": 535,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6227.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6227.jpg",
-          "line": 534,
+          "line": 536,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_9617.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_9617.jpg",
-          "line": 535,
+          "line": 537,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_9619.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_9619.jpg",
-          "line": 536,
+          "line": 538,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_9620.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_9620.jpg",
-          "line": 537,
+          "line": 539,
           "exists": true
         },
         {
@@ -18453,19 +18453,19 @@
           "id": "tt-reviews-dialog",
           "role": "",
           "classes": "tt-reviews-dialog",
-          "line": 510
+          "line": 512
         },
         {
           "id": "",
           "role": "",
           "classes": "tt-reviews-dialog__header",
-          "line": 511
+          "line": 513
         },
         {
           "id": "",
           "role": "",
           "classes": "tt-reviews-dialog__content",
-          "line": 512
+          "line": 514
         }
       ],
       "tabs": [],
@@ -18526,7 +18526,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 511
+          "line": 513
         }
       ],
       "controls": []
@@ -18548,8 +18548,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 79164,
-      "sha256": "ea5b1b93eebe796002a4da0f92fa44797552c04ca4d03d2f2e3b7d4cca4847d1",
+      "bytes": 79321,
+      "sha256": "419fe26bd6c7b3430f58a76a14df7efb242e52dc43329e050d0d658380adc443",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18582,7 +18582,7 @@
           "error": ""
         }
       ],
-      "ids": 68,
+      "ids": 69,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -18747,7 +18747,7 @@
           "line": 52
         },
         {
-          "raw": "css/generated/login-3.css?v=tintin-login-c69b4a1376964494",
+          "raw": "css/generated/login-3.css?v=tintin-login-3d1504b067d5e399",
           "target": "css/generated/login-3.css",
           "line": 57
         },
@@ -18867,7 +18867,7 @@
           "line": 80
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 81
         }
@@ -18887,7 +18887,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 1362
+          "line": 1364
         }
       ],
       "links": [
@@ -18914,12 +18914,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 1359
+          "line": 1361
         }
       ],
       "references": [
@@ -19116,7 +19116,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/login-3.css?v=tintin-login-c69b4a1376964494",
+          "raw": "css/generated/login-3.css?v=tintin-login-3d1504b067d5e399",
           "target": "css/generated/login-3.css",
           "line": 57,
           "exists": true
@@ -19260,7 +19260,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 81,
           "exists": true
@@ -19274,7 +19274,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 1362,
+          "line": 1364,
           "exists": true
         }
       ],
@@ -19610,8 +19610,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 61999,
-      "sha256": "fc9df028199010577c1aaa6b05ce7f7534a3ccdbf4d121249cf3c67845e31c52",
+      "bytes": 62054,
+      "sha256": "b9628f76047712f50df03d0acab7b232ab31e13c532108efde28b32fde7c6e9a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19644,7 +19644,7 @@
           "error": ""
         }
       ],
-      "ids": 78,
+      "ids": 79,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -19734,7 +19734,7 @@
         {
           "raw": "js/components/welcome/tutorial-bienvenida.js?v=tintin-20261030-home-history-5",
           "target": "js/components/welcome/tutorial-bienvenida.js",
-          "line": 893
+          "line": 895
         }
       ],
       "styles": [
@@ -19819,7 +19819,7 @@
           "line": 43
         },
         {
-          "raw": "css/generated/perfil-2.css?v=tintin-perfil-50717ac23a0473b4",
+          "raw": "css/generated/perfil-2.css?v=tintin-perfil-5eaa986385ea127d",
           "target": "css/generated/perfil-2.css",
           "line": 44
         },
@@ -19934,7 +19934,7 @@
           "line": 70
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 71
         }
@@ -19962,7 +19962,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 889
+          "line": 890
         }
       ],
       "links": [
@@ -20279,12 +20279,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 886
+          "line": 887
         }
       ],
       "references": [
@@ -20393,7 +20393,7 @@
         {
           "raw": "js/components/welcome/tutorial-bienvenida.js?v=tintin-20261030-home-history-5",
           "target": "js/components/welcome/tutorial-bienvenida.js",
-          "line": 893,
+          "line": 895,
           "exists": true
         },
         {
@@ -20493,7 +20493,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/perfil-2.css?v=tintin-perfil-50717ac23a0473b4",
+          "raw": "css/generated/perfil-2.css?v=tintin-perfil-5eaa986385ea127d",
           "target": "css/generated/perfil-2.css",
           "line": 44,
           "exists": true
@@ -20631,7 +20631,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 71,
           "exists": true
@@ -20651,7 +20651,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 889,
+          "line": 890,
           "exists": true
         },
         {
@@ -21158,8 +21158,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25058,
-      "sha256": "60ee80fcc75d7b9fb4f0e3d802944cf16c9f573a3a0c0d5a11045e278150d8c8",
+      "bytes": 25113,
+      "sha256": "a237cf1c6ee42d7dc88b953d2850894dfee8583285cfb0f6ec3fb198cd93389b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -21174,13 +21174,13 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 244,
+          "line": 246,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 26,
+      "ids": 27,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -21220,42 +21220,42 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 240
+          "line": 242
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 241
+          "line": 243
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 242
+          "line": 244
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 243
+          "line": 245
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 248
+          "line": 250
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 249
+          "line": 251
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 250
+          "line": 252
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-c7e6c5b6ec796262",
+          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-a80a0bb40fbe96b2",
           "target": "css/generated/preguntas-frecuentes.css",
           "line": 35
         },
@@ -21435,7 +21435,7 @@
           "line": 73
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 74
         }
@@ -21463,7 +21463,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 232
+          "line": 233
         }
       ],
       "links": [
@@ -21730,12 +21730,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 229
+          "line": 230
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -21745,7 +21745,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 237
+          "line": 239
         }
       ],
       "references": [
@@ -21794,47 +21794,47 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 240,
+          "line": 242,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 241,
+          "line": 243,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 242,
+          "line": 244,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 243,
+          "line": 245,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 248,
+          "line": 250,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 249,
+          "line": 251,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 250,
+          "line": 252,
           "exists": true
         },
         {
-          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-c7e6c5b6ec796262",
+          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-a80a0bb40fbe96b2",
           "target": "css/generated/preguntas-frecuentes.css",
           "line": 35,
           "exists": true
@@ -22050,7 +22050,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 74,
           "exists": true
@@ -22070,7 +22070,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 232,
+          "line": 233,
           "exists": true
         },
         {
@@ -22209,8 +22209,8 @@
         "guest",
         "client"
       ],
-      "bytes": 28688,
-      "sha256": "8a18f2ce14dc3c69d69bd4147998698b6e46ac26800eed4f3f448a0ce5fce1cb",
+      "bytes": 28743,
+      "sha256": "70cd9b00961ec5e99f5f48971093bcba1dd7fc399b3eab2064c7f17527b704e3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -22225,13 +22225,13 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 260,
+          "line": 262,
           "module": false,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 47,
+      "ids": 48,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -22271,37 +22271,37 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 256
+          "line": 258
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 257
+          "line": 259
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 258
+          "line": 260
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 259
+          "line": 261
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 269
+          "line": 271
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 270
+          "line": 272
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/privacidad.css?v=tintin-privacidad-dcf665560aba12ce",
+          "raw": "css/generated/privacidad.css?v=tintin-privacidad-c282d4fffb5a0b8d",
           "target": "css/generated/privacidad.css",
           "line": 35
         },
@@ -22486,7 +22486,7 @@
           "line": 74
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 75
         }
@@ -22514,7 +22514,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 248
+          "line": 249
         }
       ],
       "links": [
@@ -22901,12 +22901,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 245
+          "line": 246
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -22916,7 +22916,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 253
+          "line": 255
         }
       ],
       "references": [
@@ -22965,41 +22965,41 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 256,
+          "line": 258,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 257,
+          "line": 259,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 258,
+          "line": 260,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 259,
+          "line": 261,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 269,
+          "line": 271,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 270,
+          "line": 272,
           "exists": true
         },
         {
-          "raw": "css/generated/privacidad.css?v=tintin-privacidad-dcf665560aba12ce",
+          "raw": "css/generated/privacidad.css?v=tintin-privacidad-c282d4fffb5a0b8d",
           "target": "css/generated/privacidad.css",
           "line": 35,
           "exists": true
@@ -23221,7 +23221,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 75,
           "exists": true
@@ -23241,7 +23241,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 248,
+          "line": 249,
           "exists": true
         },
         {
@@ -23397,8 +23397,8 @@
         "guest",
         "client"
       ],
-      "bytes": 30591,
-      "sha256": "ca6678dcb15fe21d3519061ba72e4705c8dcc23e9d938e8b985eabe93a20b332",
+      "bytes": 30646,
+      "sha256": "6314246bb355e35da1b4ce0860951f3f8860a6214e6786ecbb897c3363a6ec11",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -23419,7 +23419,7 @@
           "error": ""
         }
       ],
-      "ids": 77,
+      "ids": 78,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -23469,57 +23469,57 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 340
+          "line": 342
         },
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 341
+          "line": 343
         },
         {
           "raw": "js/pages/product/seleccion-producto.js?v=tintin-20261005-public-flows-1",
           "target": "js/pages/product/seleccion-producto.js",
-          "line": 342
+          "line": 344
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261103-acceptance-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 343
+          "line": 345
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 344
+          "line": 346
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 345
+          "line": 347
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 346
+          "line": 348
         },
         {
           "raw": "js/pages/product/productos-relacionados.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/pages/product/productos-relacionados.js",
-          "line": 347
+          "line": 349
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 348
+          "line": 350
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 349
+          "line": 351
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/product.css?v=tintin-product-87b44d7054da0988",
+          "raw": "css/generated/product.css?v=tintin-product-ecca421b59ebdde6",
           "target": "css/generated/product.css",
           "line": 42
         },
@@ -23729,7 +23729,7 @@
           "line": 86
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 87
         }
@@ -23757,7 +23757,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 332
+          "line": 333
         }
       ],
       "links": [
@@ -24044,12 +24044,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 329
+          "line": 330
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -24059,7 +24059,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 337
+          "line": 339
         }
       ],
       "references": [
@@ -24120,65 +24120,65 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 340,
+          "line": 342,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 341,
+          "line": 343,
           "exists": true
         },
         {
           "raw": "js/pages/product/seleccion-producto.js?v=tintin-20261005-public-flows-1",
           "target": "js/pages/product/seleccion-producto.js",
-          "line": 342,
+          "line": 344,
           "exists": true
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261103-acceptance-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 343,
+          "line": 345,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 344,
+          "line": 346,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 345,
+          "line": 347,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 346,
+          "line": 348,
           "exists": true
         },
         {
           "raw": "js/pages/product/productos-relacionados.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/pages/product/productos-relacionados.js",
-          "line": 347,
+          "line": 349,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 348,
+          "line": 350,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 349,
+          "line": 351,
           "exists": true
         },
         {
-          "raw": "css/generated/product.css?v=tintin-product-87b44d7054da0988",
+          "raw": "css/generated/product.css?v=tintin-product-ecca421b59ebdde6",
           "target": "css/generated/product.css",
           "line": 42,
           "exists": true
@@ -24430,7 +24430,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 87,
           "exists": true
@@ -24450,7 +24450,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 332,
+          "line": 333,
           "exists": true
         },
         {
@@ -24762,8 +24762,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26592,
-      "sha256": "7e80ca5a477fe5fb6e56fed52649f0a210ac62d64f782b98c9486cd8ebfe7c4b",
+      "bytes": 26647,
+      "sha256": "3246df157c081d32eab78972591a4a7416beaeec6228217f5f2fc583a6c3f72d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -24777,7 +24777,7 @@
       },
       "duplicateIds": [],
       "inlineScripts": [],
-      "ids": 48,
+      "ids": 49,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -24817,37 +24817,37 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 237
+          "line": 239
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 238
+          "line": 240
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 239
+          "line": 241
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 240
+          "line": 242
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 241
+          "line": 243
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 242
+          "line": 244
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/terminos.css?v=tintin-terminos-dcf665560aba12ce",
+          "raw": "css/generated/terminos.css?v=tintin-terminos-c282d4fffb5a0b8d",
           "target": "css/generated/terminos.css",
           "line": 35
         },
@@ -25032,7 +25032,7 @@
           "line": 74
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 75
         }
@@ -25060,7 +25060,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 229
+          "line": 230
         }
       ],
       "links": [
@@ -25467,12 +25467,12 @@
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
-          "text": "Hecho por",
+          "text": "Desarrollado por",
           "id": "",
-          "ariaLabel": "Hecho por NOVAK, visitar su sitio",
+          "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 226
+          "line": 227
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -25482,7 +25482,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 234
+          "line": 236
         }
       ],
       "references": [
@@ -25531,41 +25531,41 @@
         {
           "raw": "tienda.js?v=tintin-20261102-pickup-cash-1",
           "target": "tienda.js",
-          "line": 237,
+          "line": 239,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 238,
+          "line": 240,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 239,
+          "line": 241,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 240,
+          "line": 242,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 241,
+          "line": 243,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261102-pickup-cash-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 242,
+          "line": 244,
           "exists": true
         },
         {
-          "raw": "css/generated/terminos.css?v=tintin-terminos-dcf665560aba12ce",
+          "raw": "css/generated/terminos.css?v=tintin-terminos-c282d4fffb5a0b8d",
           "target": "css/generated/terminos.css",
           "line": 35,
           "exists": true
@@ -25787,7 +25787,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/novak-credit-site.css?v=tintin-novak-20261103-1",
+          "raw": "css/components/novak-credit-site.css?v=tintin-footer-reference-20261103-1",
           "target": "css/components/novak-credit-site.css",
           "line": 75,
           "exists": true
@@ -25807,7 +25807,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 229,
+          "line": 230,
           "exists": true
         },
         {
@@ -39048,8 +39048,8 @@
     },
     {
       "path": "scripts/auditar-ayuda-paginas.js",
-      "bytes": 9081,
-      "sha256": "e3ec2792ead1d20ac006fa2503efa2e78ba22ac6d8e9cfd04fbbaf566eed93f4",
+      "bytes": 9076,
+      "sha256": "9d7cd41b8a782789beb8dce684cf3466cfc833295eb5c65040ccf72f27c7c5f5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42794,8 +42794,8 @@
     },
     {
       "path": "scripts/lib/firma-novak.js",
-      "bytes": 2113,
-      "sha256": "6da6b2754ebafbeace7c7d8315f036845752345acadf7daa607154cbf6049761",
+      "bytes": 2367,
+      "sha256": "e77da502303971ea2ded0495c3e5a464ccb24d412a20400e9e9bb0f86fc1c739",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43725,8 +43725,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 30805,
-      "sha256": "8c257c393b41901d7c2174bc5e407e270867419ef9bac4df009f9f85b1c4f450",
+      "bytes": 30709,
+      "sha256": "10b9e2a31399e63946acc9d1c4990d153fdddc7cbad0102c995020bc4315d664",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53603,8 +53603,8 @@
     },
     {
       "path": "tests/navigation/novak-credit.spec.js",
-      "bytes": 6524,
-      "sha256": "7afdffb58ecb82ce65e8fb27537545d1d75817593d08c7c1a9a65430bebaf4a7",
+      "bytes": 7256,
+      "sha256": "5c2be7965c86ec32e084ea4f5a52a6f7d7ba913dd788b9b6a23870a9b6a47abc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60353,8 +60353,8 @@
     },
     {
       "path": "tests/ui-ux/home-footer-spacing.spec.js",
-      "bytes": 10893,
-      "sha256": "2fa01a7b2b6d148196cc0a14be3b1d0d6da466210485aa581523762537831ee0",
+      "bytes": 11057,
+      "sha256": "1a6f9dacf8e27661ea918bf18befbfdae65ff7b51609af314b51a451830ca03c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -62433,8 +62433,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 18996,
-      "sha256": "076b5f1b07d60401355fcecc7db4165161958fba3cfe0d22ead91cf01a64a1b3"
+      "bytes": 19051,
+      "sha256": "45241cc617568f34df900c12275f41b2ad94724d54e56b2ac511e87fb136517f"
     },
     {
       "path": "AGENTS.md",
@@ -62475,14 +62475,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 31665,
-      "sha256": "b024b529d350a85b8c1986b56449216b0e5ae13395b5c61e5b411b1310d23a8f"
+      "bytes": 31720,
+      "sha256": "9aa30007b5007f5fb898188fd1025e81893b2822f31ea64ba90518d4875f4f08"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 48520,
-      "sha256": "556e0436918e9393f615d00b0706d2d15f1d1c3ab66e4d83abae9cd117505a90"
+      "bytes": 48677,
+      "sha256": "c5713eb48cdb3470cf56c6fc2cff55e6780a998e6842095cc6a0df45e162d5a4"
     },
     {
       "path": "admin-manifest.json",
@@ -62493,8 +62493,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 192481,
-      "sha256": "640b3b32d29405900620b71ff0b23f7da897cacf630573d3690efd5f4c4413e3"
+      "bytes": 192638,
+      "sha256": "d9093a58ea0348d0b65ff98622ce6a3d34c2460e11d9040a2f31087ef4d5aeeb"
     },
     {
       "path": "apple-touch-icon.png",
@@ -63093,8 +63093,8 @@
     {
       "path": "assets-tintin/novak-signature/README.md",
       "extension": ".md",
-      "bytes": 1725,
-      "sha256": "c5188ff89644d7634b6407bedf2586d1777602a4b0fbe3c51e97772e1d4ddc43"
+      "bytes": 2022,
+      "sha256": "4e7caf3ad79c30fc7c833093fb5fa4ecb0372c8788cf742e212be022a0f11d85"
     },
     {
       "path": "assets-tintin/novak-signature/novak-credit.css",
@@ -63195,20 +63195,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 23441,
-      "sha256": "b2b016b6111e05dcb63d652e7250485ca51e1fda5847948cc3cdb51c63ea0c0f"
+      "bytes": 23496,
+      "sha256": "d0db7b3c4c25e74cec6c5d5ebd64ed0ed24f704ef8a197e957d79e16c293c2fe"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 70985,
-      "sha256": "26d112bd078b02a1a43b28a484b6e71bfc87a444b33c33c8888182c15fa25e79"
+      "bytes": 71040,
+      "sha256": "4ff55dcc5dcba32ca60e1d0c6124e77a0605222e395b89240b553ce5b178857d"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 138170,
-      "sha256": "370ebdcb7c15b3bf7e2af12fb6f4643f8a00f83c68fb19b0532fd14f630b0645"
+      "bytes": 138225,
+      "sha256": "a6dfc86525a4c034f371115871557428efe056d32dc6d07ba13fa916b73befa7"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -63519,8 +63519,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 24857,
-      "sha256": "6ba28338247787c3dc78052a9cde076c9d1e2614666de6b2109a88f9371091f0"
+      "bytes": 24912,
+      "sha256": "dd96283540ce95d9aa3d2bbbad57e9810989fcd350859b5c1e444fdc2f922024"
     },
     {
       "path": "config/account-contract.json",
@@ -63550,7 +63550,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 5214,
-      "sha256": "be518502b27a91eae535c048b90d63290636b59ba92cd810aa8ad662c5d66043"
+      "sha256": "eca7c1d97ccbfb64b3adf66c07c94a102e84d984ac6206c4b97727a98d4911aa"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -63562,7 +63562,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "cbb0a87e9bbb3d78159019d02ae3975dd16e8331da8daefaa16e0842008151b3"
+      "sha256": "b630d2100d173b208d791f6a7685b19b1cecf6b55640576e44cd52b2e4f23dd3"
     },
     {
       "path": "config/public-site.json",
@@ -63579,8 +63579,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 29688,
-      "sha256": "85a49fc3ede6a6473b3195d4e29bfca7feeaeab2df3d4ae714a5f25f5d2d196e"
+      "bytes": 29743,
+      "sha256": "b525d3fd26309d8f44d50276e365400658afea1a5c21738d4865c5d7071a3c3c"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -63837,8 +63837,8 @@
     {
       "path": "css/components/novak-credit-site.css",
       "extension": ".css",
-      "bytes": 682,
-      "sha256": "2fa14d3ccd071ff01da6764efc90e82985e2fe8f3fead2612d0b876e7da8893a"
+      "bytes": 1616,
+      "sha256": "27f68a64ae82586c2d3a84c8a30100d87928152e0b469f42ce701cc0605b2923"
     },
     {
       "path": "css/components/payments/payment-methods.css",
@@ -63891,14 +63891,14 @@
     {
       "path": "css/generated/cambios-devoluciones.css",
       "extension": ".css",
-      "bytes": 328938,
-      "sha256": "c7e6c5b6ec7962622282013079d08bc4623d6645c3e143c709ff0be95cbc63cb"
+      "bytes": 329647,
+      "sha256": "a80a0bb40fbe96b206715370acbd7f01ff274b860f39834843cef51c5a534435"
     },
     {
       "path": "css/generated/catalogo-2.css",
       "extension": ".css",
-      "bytes": 133678,
-      "sha256": "6eeb6f5bd9b324a9d9e7014dbe7fa5946c40f9f9ab2d024d6dd9588993fbe7de"
+      "bytes": 134387,
+      "sha256": "2ffceebce565624f95886760315b0a19a367b25e9908f13cd9476d607e9a6c5a"
     },
     {
       "path": "css/generated/catalogo.css",
@@ -63909,8 +63909,8 @@
     {
       "path": "css/generated/checkout-2.css",
       "extension": ".css",
-      "bytes": 366197,
-      "sha256": "72cd9f35ee0e868f6a12151defa94a72900ebedd292e390908ac04c70aa43a51"
+      "bytes": 366906,
+      "sha256": "9ecee753cc15d49c1a9d6860904917d62b4a762003aa6288ac8f8786e2249465"
     },
     {
       "path": "css/generated/checkout.css",
@@ -63921,20 +63921,20 @@
     {
       "path": "css/generated/collections.css",
       "extension": ".css",
-      "bytes": 334475,
-      "sha256": "129116732f3fd42952916be4ece7648d925f004c0600494a63ea9efdb8ddf758"
+      "bytes": 335184,
+      "sha256": "43ff62fa717c8f6e9f7914d6378ecc942a8502604b0eeda5275522da24670c07"
     },
     {
       "path": "css/generated/contact.css",
       "extension": ".css",
-      "bytes": 331574,
-      "sha256": "64fda351910cd1f2822ef0e17a123eac395a0dfc9cf20ea4bd072ab2812603e8"
+      "bytes": 332283,
+      "sha256": "fcb336c3252b1e9b00e4f825b710ecf23877d41b44c275ca8014f9f9770cd444"
     },
     {
       "path": "css/generated/envios-2.css",
       "extension": ".css",
-      "bytes": 150010,
-      "sha256": "682524bfd845e3ba27e7590f9c3872e6abf4548b0239519f201f476ab677a25a"
+      "bytes": 150719,
+      "sha256": "ec22284472ebe7cda6450226ddba1d0f93fe6c5616302726f3605d3bc2e9197c"
     },
     {
       "path": "css/generated/envios.css",
@@ -63945,8 +63945,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 399030,
-      "sha256": "26ae3a04336440a1907daa261b888b3b8b3b27bb4792d19c5b3fde1993ef5a0d"
+      "bytes": 399739,
+      "sha256": "4862d9f28ad7d6780aa202ef4fec6cba9e4b8888f23d51a4efa4c92c4df425e7"
     },
     {
       "path": "css/generated/login-2.css",
@@ -63957,8 +63957,8 @@
     {
       "path": "css/generated/login-3.css",
       "extension": ".css",
-      "bytes": 161092,
-      "sha256": "c69b4a1376964494ebd1f65e54279f5b97442981cfec52eb4d9e0d919b07405e"
+      "bytes": 161801,
+      "sha256": "3d1504b067d5e3993217ef11bdcb43ec31728302944dbc28942fc6659e504fa4"
     },
     {
       "path": "css/generated/login.css",
@@ -63969,14 +63969,14 @@
     {
       "path": "css/generated/nosotros.css",
       "extension": ".css",
-      "bytes": 339529,
-      "sha256": "f52501320e328b6856c39abefe9d981b2ceca3cd8d99bf55ca7956727da4b38a"
+      "bytes": 340238,
+      "sha256": "95535670da2e1a325c58187df808e9ce878f490a545372e411a684f183f0cea1"
     },
     {
       "path": "css/generated/perfil-2.css",
       "extension": ".css",
-      "bytes": 164934,
-      "sha256": "50717ac23a0473b4eeeaab2b36591cccf1df227bc304d7890af956bcb88eae3b"
+      "bytes": 165643,
+      "sha256": "5eaa986385ea127d45f523bbdbd2dd6f03f5652672960b1aef7226126f5d2960"
     },
     {
       "path": "css/generated/perfil.css",
@@ -63987,26 +63987,26 @@
     {
       "path": "css/generated/preguntas-frecuentes.css",
       "extension": ".css",
-      "bytes": 328938,
-      "sha256": "c7e6c5b6ec7962622282013079d08bc4623d6645c3e143c709ff0be95cbc63cb"
+      "bytes": 329647,
+      "sha256": "a80a0bb40fbe96b206715370acbd7f01ff274b860f39834843cef51c5a534435"
     },
     {
       "path": "css/generated/privacidad.css",
       "extension": ".css",
-      "bytes": 331167,
-      "sha256": "dcf665560aba12ce684552214a8ad723d5e42f8a799f0610e6b703b28c091357"
+      "bytes": 331876,
+      "sha256": "c282d4fffb5a0b8dadb2a85e54f1dba044d6c68375a19f51e94b63d3f43bafdc"
     },
     {
       "path": "css/generated/product.css",
       "extension": ".css",
-      "bytes": 395279,
-      "sha256": "87b44d7054da0988f35af0351db1272a25883facd076800d71a98511b3b4ef7b"
+      "bytes": 395988,
+      "sha256": "ecca421b59ebdde65b9d99b47f93cc5aad4477e3eba6d3c882cfef8ac75cc352"
     },
     {
       "path": "css/generated/terminos.css",
       "extension": ".css",
-      "bytes": 331167,
-      "sha256": "dcf665560aba12ce684552214a8ad723d5e42f8a799f0610e6b703b28c091357"
+      "bytes": 331876,
+      "sha256": "c282d4fffb5a0b8dadb2a85e54f1dba044d6c68375a19f51e94b63d3f43bafdc"
     },
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
@@ -64407,8 +64407,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1184038,
-      "sha256": "ee0d3741e924e6be2e68888f1f074497f92e8e7cd6d056ba77952ccfa5c8cf85"
+      "bytes": 1185911,
+      "sha256": "8842c15a50466c09e6852586e657930416814edc1757cb2f5065dc7d53189423"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -65889,8 +65889,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 27110,
-      "sha256": "6c6debc970f23d88ff244cbcbdd14fbdbb7d1925af82c6b6613fc5be03a2ce4a"
+      "bytes": 27165,
+      "sha256": "3fce4d45ccc2cafbfa77e8d972b447376b06a72b5e147474a8073fb3cc1d0626"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -66429,8 +66429,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 48535,
-      "sha256": "24f8a6affc9d73a22b5404ece3e03fc81ce8d30da95d0b3c56f77f36805e6f3b"
+      "bytes": 48590,
+      "sha256": "e36a7e1e6a3ecfc7d60a4a32738958abacd965cd95dc18a8e499a78d63d7b2e6"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -68409,8 +68409,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 79164,
-      "sha256": "ea5b1b93eebe796002a4da0f92fa44797552c04ca4d03d2f2e3b7d4cca4847d1"
+      "bytes": 79321,
+      "sha256": "419fe26bd6c7b3430f58a76a14df7efb242e52dc43329e050d0d658380adc443"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -68613,8 +68613,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 61999,
-      "sha256": "fc9df028199010577c1aaa6b05ce7f7534a3ccdbf4d121249cf3c67845e31c52"
+      "bytes": 62054,
+      "sha256": "b9628f76047712f50df03d0acab7b232ab31e13c532108efde28b32fde7c6e9a"
     },
     {
       "path": "playwright.config.js",
@@ -68637,14 +68637,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 25058,
-      "sha256": "60ee80fcc75d7b9fb4f0e3d802944cf16c9f573a3a0c0d5a11045e278150d8c8"
+      "bytes": 25113,
+      "sha256": "a237cf1c6ee42d7dc88b953d2850894dfee8583285cfb0f6ec3fb198cd93389b"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 28688,
-      "sha256": "8a18f2ce14dc3c69d69bd4147998698b6e46ac26800eed4f3f448a0ce5fce1cb"
+      "bytes": 28743,
+      "sha256": "70cd9b00961ec5e99f5f48971093bcba1dd7fc399b3eab2064c7f17527b704e3"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -68655,8 +68655,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 30591,
-      "sha256": "ca6678dcb15fe21d3519061ba72e4705c8dcc23e9d938e8b985eabe93a20b332"
+      "bytes": 30646,
+      "sha256": "6314246bb355e35da1b4ce0860951f3f8860a6214e6786ecbb897c3363a6ec11"
     },
     {
       "path": "robots.txt",
@@ -68817,8 +68817,8 @@
     {
       "path": "scripts/auditar-ayuda-paginas.js",
       "extension": ".js",
-      "bytes": 9081,
-      "sha256": "e3ec2792ead1d20ac006fa2503efa2e78ba22ac6d8e9cfd04fbbaf566eed93f4"
+      "bytes": 9076,
+      "sha256": "9d7cd41b8a782789beb8dce684cf3466cfc833295eb5c65040ccf72f27c7c5f5"
     },
     {
       "path": "scripts/auditar-borrado-global-catalogo-responsive.mjs",
@@ -69531,8 +69531,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 81021,
-      "sha256": "5f17cf1eed7e2b869a3ef4c30fc17a8726059f5d5eb8398bf3c74ee7c6d7a141"
+      "bytes": 81032,
+      "sha256": "78e5af0718e472bcfe7edd1f7fc62415ea74d38359d859b5dfc5998708eba99f"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -69699,8 +69699,8 @@
     {
       "path": "scripts/lib/firma-novak.js",
       "extension": ".js",
-      "bytes": 2113,
-      "sha256": "6da6b2754ebafbeace7c7d8315f036845752345acadf7daa607154cbf6049761"
+      "bytes": 2367,
+      "sha256": "e77da502303971ea2ded0495c3e5a464ccb24d412a20400e9e9bb0f86fc1c739"
     },
     {
       "path": "scripts/lib/html-layout-fixture.js",
@@ -69879,8 +69879,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 30805,
-      "sha256": "8c257c393b41901d7c2174bc5e407e270867419ef9bac4df009f9f85b1c4f450"
+      "bytes": 30709,
+      "sha256": "10b9e2a31399e63946acc9d1c4990d153fdddc7cbad0102c995020bc4315d664"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -69963,8 +69963,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 26592,
-      "sha256": "7e80ca5a477fe5fb6e56fed52649f0a210ac62d64f782b98c9486cd8ebfe7c4b"
+      "bytes": 26647,
+      "sha256": "3246df157c081d32eab78972591a4a7416beaeec6228217f5f2fc583a6c3f72d"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -71385,8 +71385,8 @@
     {
       "path": "tests/navigation/novak-credit.spec.js",
       "extension": ".js",
-      "bytes": 6524,
-      "sha256": "7afdffb58ecb82ce65e8fb27537545d1d75817593d08c7c1a9a65430bebaf4a7"
+      "bytes": 7256,
+      "sha256": "5c2be7965c86ec32e084ea4f5a52a6f7d7ba913dd788b9b6a23870a9b6a47abc"
     },
     {
       "path": "tests/navigation/page-entry-scroll.test.mjs",
@@ -72621,8 +72621,8 @@
     {
       "path": "tests/ui-ux/home-footer-spacing.spec.js",
       "extension": ".js",
-      "bytes": 10893,
-      "sha256": "2fa01a7b2b6d148196cc0a14be3b1d0d6da466210485aa581523762537831ee0"
+      "bytes": 11057,
+      "sha256": "1a6f9dacf8e27661ea918bf18befbfdae65ff7b51609af314b51a451830ca03c"
     },
     {
       "path": "tests/ui-ux/home-layout-browser.test.mjs",
@@ -73026,7 +73026,7 @@
   "routeReferences": [
     {
       "file": "catalogo.html",
-      "line": 823,
+      "line": 825,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
@@ -74676,7 +74676,7 @@
       "references": [
         {
           "file": "index.html",
-          "line": 486
+          "line": 488
         }
       ]
     },
@@ -74716,7 +74716,7 @@
       "references": [
         {
           "file": "catalogo.html",
-          "line": 823
+          "line": 825
         }
       ]
     }
@@ -75633,7 +75633,7 @@
           },
           {
             "file": "envios.html",
-            "line": 283,
+            "line": 285,
             "operation": "doc"
           },
           {
@@ -75938,7 +75938,7 @@
         "references": [
           {
             "file": "admin-images.html",
-            "line": 828,
+            "line": 831,
             "operation": "doc"
           },
           {

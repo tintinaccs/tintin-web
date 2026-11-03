@@ -11,3 +11,5 @@ Cobertura: 17 documentos con interfaz, incluidos acceso, administración y error
 Prueba: `npx playwright test tests/navigation/novak-credit.spec.js --project=chromium --retries=0`. Usa documentos/estilos reales con ejecución de aplicación desactivada; simula sólo la visibilidad autenticada del panel, sin certificar autenticación ni tocar datos.
 
 La descarga del SVG se difiere mediante el pequeño script local `js/components/novak-credit.js` hasta128px del pie. Se reserva42×40px, la animación sigue siendo CSS y existe alternativa noscript con el mismo SVG. No se recomprime, redibuja ni modifica el símbolo para reducir su peso.
+
+El diseño de la franja final se comparte mediante `renderNovakFooterEnd`: copyright centrado y «Desarrollado por» con el símbolo original. Las columnas del pie público no se sustituyen. Estilos de integración en la hoja propia de Tintín; el kit de animación y el SVG permanecen intactos.
