@@ -60,7 +60,7 @@ function baseOrder(overrides = {}) {
 test('cancelar desde Sheets libera stock y audita en el mismo lote', async () => {
   const h = harness({ order: baseOrder(), products: { prod_A: { stock: 5 } } });
   const result = await applyOrderAdminMutation({}, {
-    orderId: 'order_123456', status: 'cancelado', changeId: 'change_new_123', baseChangeId: 'change_old_123',
+    orderId: 'order_123456', status: 'cancelado', inventoryCancellationDecision: 'release', changeId: 'change_new_123', baseChangeId: 'change_old_123',
   }, actor, h.deps);
 
   assert.equal(result.status, 'cancelado');
@@ -118,7 +118,7 @@ test('baseChangeId viejo bloquea una edición de Sheets', async () => {
 test('changeId repetido es idempotente y no vuelve a escribir', async () => {
   const h = harness({ order: baseOrder({ lastChangeId: 'same_change_123' }) });
   const result = await applyOrderAdminMutation({}, {
-    orderId: 'order_123456', status: 'cancelado', changeId: 'same_change_123', baseChangeId: 'same_change_123',
+    orderId: 'order_123456', status: 'cancelado', inventoryCancellationDecision: 'release', changeId: 'same_change_123', baseChangeId: 'same_change_123',
   }, actor, h.deps);
   assert.equal(result.duplicate, true);
   assert.equal(h.commits.length, 0);
@@ -131,7 +131,7 @@ test('un pedido histórico con 20 productos cabe en el lote administrativo segur
   const products = Object.fromEntries(items.map(item => [item.id, { stock: 2 }]));
   const h = harness({ order: baseOrder({ items, subtotal: 20000, total: 45000 }), products });
   await applyOrderAdminMutation({}, {
-    orderId: 'order_historico_20', status: 'cancelado', changeId: 'change_big_123', baseChangeId: 'change_old_123',
+    orderId: 'order_historico_20', status: 'cancelado', inventoryCancellationDecision: 'release', changeId: 'change_big_123', baseChangeId: 'change_old_123',
   }, actor, h.deps);
   assert.equal(h.commits[0].length, 22);
   assert.ok(h.commits[0].length <= MAX_ADMIN_BATCH_WRITES);

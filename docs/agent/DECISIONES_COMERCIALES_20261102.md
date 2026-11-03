@@ -66,13 +66,18 @@ verificación remota pendiente. No presentar informes históricos como PASS actu
 2. **Caja, señas, saldos y reembolsos: PENDING.** Existe estado parcial, pero el
    mutador actual no registra importes de seña/saldo. Extender la autoridad existente
    con montos y estados coherentes antes de presentar dinero efectivamente cobrado.
-3. **Retiro efectivo: PASS_LOCAL, CI/merge/publicación pendientes del segundo PR.**
-   Backend, cliente y selector real permiten efectivo en retiro si está habilitado;
-   encomienda conserva transferencia previa. Textos y FAQ incluyen reparto de
-   lunes a sábado, corte 11:00 y siguiente día de reparto. 354 pruebas Node y
-   preflight completo PASS; casos de navegador ampliados, pendientes de CI.
-   **Cancelación con decisión de stock: PENDING.** Sigue liberando inventario
-   automáticamente; requiere decisión explícita con regresiones de inventario.
+3. **Retiro efectivo: PASS_PRODUCTION del artefacto.** PR #1318 fusionado en
+   1c673584b0b8e69e9610c6d4721210d86bd4f55c; head c4407139, CI 41555612454/1
+   SUCCESS; CI de main 41558763401/1 y monitor 41558765146/1 SUCCESS.
+   **Cancelación con decisión de stock: PASS_LOCAL del bloque actual.**
+   Una nueva cancelación o rechazo exige elegir devolver todas las unidades
+   descontadas o conservarlas descontadas; cerrar/volver no envía la mutación.
+   La elección se registra con actor/fecha y auditoría. El backend no asume una
+   opción para clientes viejos/Sheets: sin decisión explícita rechaza sin escribir.
+   Conservar usa reserved como descuento existente, incluso en un pedido cancelado;
+   notas/reintentos no lo liberan y reabrir no lo descuenta otra vez. Reabrir tras
+   devolver vuelve a validar y reservar. La papelera conserva selección por línea.
+   Falta CI/navegador/emulador, merge y publicación propios de este nuevo bloque.
 4. **Plazos, estados bajo pedido, cambios y seguimiento: PENDING.** El Admin puede
    mostrar estimatedDeliveryAt si existe, pero el mutador revisado no permite editarlo
    y el perfil no muestra ese campo. Implementar sobre ciclo/autoridades existentes.

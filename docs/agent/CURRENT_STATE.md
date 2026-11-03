@@ -1,3 +1,7 @@
+## Integración final PR1322 — Codex /root
+
+Reconciliada con main210feb5d (#1320), conservando la elección de stock, el footer solicitado y ambos seguimientos. PR1320 integrada: head6e49c54a, merge210feb5d05d57fbd018c9faab7f6aa708dc4bd2c; CI41626576071/1 y CodeQL41626570285/1 SUCCESS. Post-merge independiente: CI41630300041/1, CodeQL41630299889/1 y salud41630299958/1 SUCCESS. El hilo CodeQL del fixture se corrigió y resolvió sin omitir reglas. PASS_LOCAL reconciliado:53Chromium firma/espaciado/cancelación,0reintentos; preflight completo, build/caché y protección78registros/544archivos PASS. PR1322 requiere recibos CI nuevos tras esta conciliación. No se hereda aprobación de otro SHA.
+
 ## 2026-11-03 — Franja final según referencia de la persona usuaria
 
 Codex /root; base `ce462a66`, rama `codex/footer-reference-layout`. La persona confirmó conservar las columnas Tienda/Más información/Contacto y cambiar sólo la franja final. Copyright centrado «© 2026 TINTIN ACCESORIOS», debajo «Desarrollado por» con el símbolo original NOVAK, sin nombre dibujado ni cambios de logo/animación/destino. El mismo render de dos líneas cubre los17documentos, incluidos acceso/administración. Tipografía Montserrat, superficie rosa suave del sitio, contraste mínimo4.5:1, altura táctil48px, reducción de movimiento y carga diferida/noscript conservados.
@@ -7,6 +11,38 @@ Corrección del intento41624334103/1, head7b96f9ea: administración/calidad y de
 PASS_LOCAL:44Chromium de firma/espaciado,136combinaciones página/tamaño, teclado/reduced-motion/noscript y contraste. Revisadas capturas1086px y390px frente a referencia. No se cambian columnas, navegación ni datos. Skills leídos/aplicados: tintin-design-quality, tintin-responsive-a11y y guías QA/verificación ya consultadas. Invocación nativa no verificada. Derivados desde generadores, URL CSS nueva y plan protegido de la base real. CI/fusión/publicación de este ajuste requieren recibos propios; no se heredan de1321.
 
 Entrega anterior1321: merge `ce462a66ec3fcce4c870351034f2032da94ec725`, head56405807 con CI41617221206/1 y CodeQL41617215908/1 SUCCESS; mantenimiento41620744849/1 SUCCESS. Producción/monitor41620807276/1 SUCCESS. Lectura pública de17documentos con firma/destino correctos; SVG SHA256d031d3ee6ef4df3f62f3a5995d858d6a169ee2681f69de9cf8251720f1ff05f1 coincide con original; logo visible/interactuable en390px. Auditoría post-merge41620804927/1 todavía IN_PROGRESS al iniciar este ajuste, bajo seguimiento. La X histórica41442885247/1 corresponde a1316cerrada por derivados de Dependabot, versión15.34.2 ya incorporada en1319; no es fallo vigente por inferencia.
+## Recuperación PR1320 — Codex /root
+
+Conciliada con main b854d835 sin modificar el dominio comercial ya implementado. Conflictos limitados a seguimiento y derivados; se regeneran desde fuentes canónicas. PASS_LOCAL:579pruebas pedidos/sync/checkout/pagos,0fallos/skips; preflight1197fuentes/72funciones, build y protección78registros/544archivos aprobados. Nuevo CI y merge pendientes; recibos por HEAD en PR1320.
+
+## 2026-11-02 — Decisión explícita de stock al cancelar/rechazar
+
+Codex /root; base inicial `1c673584b0b8e69e9610c6d4721210d86bd4f55c`, rama
+`fix/cancellation-stock-choice-20261102`. Reconciliado sobre
+`9b1b88f8abee27d395d6690f4b68843cb1374d3f` (#1319), conservando Fases08/09,
+Node24, dependencias y la skill nueva de CI. Las verificaciones previas no se
+heredan: se repiten las regresiones pertinentes sobre la base reconciliada. Se reprodujo la ausencia de elección
+con seis pruebas nuevas que fallaban antes del cambio. Modelo y dominio canónicos
+conservan o devuelven el descuento según elección explícita; cancelar sin elegir
+falla antes de escribir. Estado reserved en cancelado significa descuento
+conservado, no venta ni cobro. Reintento, notas, reapertura, V1/V2/nullable,
+producto eliminado al conservar y carrera CAS tienen regresiones. Elección,
+actor/fecha y auditoría se confirman junto con el pedido.
+El cliente central cubre cambio rápido y ambos editores. Volver/Escape no envían
+POST ni cierran el borrador con éxito falso; versiones viejas/cambio de cuenta
+bloquean antes de enviar. Borrado de compatibilidad migra a papelera existente;
+se retira su escritor paralelo y se actualizan los auditores al contrato vigente.
+PASS_LOCAL reconciliado: 579 pruebas pedidos/sync/checkout/pagos; 221 operaciones/arquitectura/
+seguridad, sin fallos/skips. Preflight completo PASS en su segunda ejecución:
+la primera detectó un import absoluto de fixture que el diagnóstico resolvía
+como relativo al test; se corrigió el fixture, sin relajar el auditor.
+Se añaden nueve casos Chromium (320/768/1440, elección, Escape/volver,
+concurrencia de diálogos y modo oscuro) al stage commerce y una integración
+Firestore demo a Rules/identidad. Navegador y emulador locales no disponibles;
+requieren recibos CI propios. Build/derivados, caché y plan protegido final
+PASS_LOCAL; preflight final completo PASS. CI, merge y producción PENDING.
+No acredita nuevas señas/saldos ni plazos; tampoco operaciones comerciales reales
+ni una versión nueva del WebApp Apps Script, que requiere evidencia aparte.
 
 ## 2026-11-02 — Firma original NOVAK en el pie compartido
 

@@ -428,8 +428,8 @@
     "sha256": "de5f789d28a5d132bcaeda507df5371112be6ff20c8e8f6e367ef17e327c2fdc"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20261103-acceptance-1",
-    "sha256": "e6bcb56989f9f94991c7ce4bbbc2c917828937feeffccfc1f70f36e502e67a9a"
+    "version": "tintin-20261102-cancel-stock-1",
+    "sha256": "25278db2a1be5ad864dd558f4da8aedb3fe2503876d2438fb1dee0bcee7bd9a1"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20261021-commerce-review-1",
@@ -540,8 +540,8 @@
     "sha256": "e964e3be93d299498587df64c89fc59663c1425848db37764c6b0bf43f02e1ad"
   },
   "js/admin/importacion-admin.js": {
-    "version": "tintin-20261031-seo-espacios-2",
-    "sha256": "d19a5b4cfa96d788761c6eaa6fc71bb88d0dd63245688c2d3fa1cf19f2c1ce67"
+    "version": "tintin-20261102-cancel-stock-1",
+    "sha256": "f33befac5c911cc4e4893f9d5e86899f70a08d7790d2f86c42ad247aeeb51d50"
   },
   "js/admin/maestro/app-movil-admin.js": {
     "version": "tintin-20261101-app-movil-14",
@@ -604,8 +604,8 @@
     "sha256": "11250496d061c8fa796fde03cb7bc6786def8112c907382aa200406f0e1381f4"
   },
   "js/admin/orders/pedidos-superadmin-crud.js": {
-    "version": "tintin-20261031-seo-espacios-2",
-    "sha256": "19ef120311acd96b1bd2e91eb03b16fb4026d4cb306e916fd42517b92948bf09"
+    "version": "tintin-20261102-cancel-stock-1",
+    "sha256": "c9719bd0384bd0e382d7ac2a18e3290ab699cf34daffa25d2e92c0840553b110"
   },
   "js/admin/orders/seleccion-devolucion.mjs": {
     "version": "tintin-20261017-stat-controls-1",
@@ -614,6 +614,10 @@
   "js/admin/orders/seleccion-productos-pedido.mjs": {
     "version": "tintin-20261031-seo-espacios-2",
     "sha256": "e6700cbd5687832db2594748925f1617e2b42ed8166cfffb99f547ede91a141b"
+  },
+  "js/admin/orders/seleccion-stock-cancelacion.mjs": {
+    "version": "tintin-20261102-cancel-stock-1",
+    "sha256": "516257d292296e7993b94f6315a56a9875216963d2d722f956fbd46d49f87804"
   },
   "js/admin/orders/tablero-pedidos-vista.mjs": {
     "version": "tintin-20261027-global-fluidez-3",
@@ -684,8 +688,8 @@
     "sha256": "08aae706d9e3d556171ad46e7950db35e767e50c36c401a65ec34345cbed4ddb"
   },
   "js/admin/products/integridad-inventario-admin.js": {
-    "version": "tintin-20261031-seo-espacios-2",
-    "sha256": "0ab96a553d95a8c47b8806e53aa1efb08c2215fdfe1f70e13709a165a028f491"
+    "version": "tintin-20261102-cancel-stock-1",
+    "sha256": "72d90e54daef2edb64b0a6bd3fd8b515d5afecb89e6496f180c8b3af63c8c444"
   },
   "js/admin/products/interfaz-productos-adaptable.js": {
     "version": "tintin-20261102-phase03-editor-1",
@@ -816,8 +820,8 @@
     "sha256": "24ccef8f2db8957b65be7afe06bf6501c58d4c8075e21ae4f3825a681d34b507"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20261103-acceptance-1",
-    "sha256": "b1a3e9d3fd80a9cf9c51b7dfe402fe7c4df2c6765a4813d8de2b4dced7ad2aed"
+    "version": "tintin-20261102-cancel-stock-1",
+    "sha256": "932393810fd40fd80397b111a144be6dac214acb88bb12f207059340e48d36ea"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -1296,8 +1300,8 @@
     "sha256": "2d0633f43ba8d344836576e4b4696c704953c0fa1880a35ea31b6d85aabd77bb"
   },
   "js/core/store/modelo-inventario.mjs": {
-    "version": "tintin-20261031-seo-espacios-2",
-    "sha256": "6e5f59a2facf4beedb36dbafa5c5c478f2afce25ee61c172561a7b0b7b7de27d"
+    "version": "tintin-20261102-cancel-stock-1",
+    "sha256": "16edb261eb51301dae473e3329c1a27f48bbc17f328c18be044a71a0515d9389"
   },
   "js/core/store/normalizacion-importacion.mjs": {
     "version": "tintin-20261005-import-format-message-1",
@@ -1316,8 +1320,8 @@
     "sha256": "3ab368b7f9c5f64516dbf7ee9d4114cbdec95417a6e99e93f1ebdbc52740cb21"
   },
   "js/core/store/revision-reservas-inventario.mjs": {
-    "version": "tintin-20261031-seo-espacios-2",
-    "sha256": "7880425a5a0fd6648f1ab07f2eaf1b21a843163811f0fcafece9ed980a35957a"
+    "version": "tintin-20261102-cancel-stock-1",
+    "sha256": "a4191f19e8655a4450ad68f81597beda0f54545b98425d69d61d9756ef248bf3"
   },
   "js/core/store/shopify-import-core.mjs": {
     "version": "tintin-20261031-seo-espacios-2",
@@ -1596,8 +1600,8 @@
     "sha256": "281e9026a9f34804b00e1397a7441ecba7f6630bf1c3dcfa0d3e6bbebf3e49d7"
   },
   "js/quality/calidad-interfaz.js": {
-    "version": "tintin-20261103-acceptance-1",
-    "sha256": "bbdc5430b1aec30bb169af0cbb1e2fc64f9d2f4750f7646a579365ba0a61bee4"
+    "version": "tintin-20261102-cancel-stock-1",
+    "sha256": "67e4b7662611b3dfd29d3df42366580019ccc4aceafe393c30c130db7e4edec5"
   },
   "js/quality/cambios-tienda.js": {
     "version": "tintin-20261029-performance-1",

@@ -27,7 +27,9 @@ sus alcances originales; [el cierre09](TINTIN_PHASE09_ACCEPTANCE.md) los concili
   CodeQL41361910183/1 y comprobación de producción41361911653/1 SUCCESS.
 - #1305 MERGED en7dfe8c9f, CI final41355599089/1 SUCCESS. El fallo post-merge
   de protección41357878092/1 fue corregido por #1307; no se borra su historial.
-- #1306: recuperación en curso desde976601a9, con merge normal de main9b1b88f8 y derivados canónicos; se preserva la retirada del job de escritura de1307. CI41358865966/1 es FAILURE histórico de runner, con log no recuperable; no se hereda como fallo del nuevo candidato ni se inventa su causa funcional. Recibos actuales en PR1306.
+- #1306 MERGED en `b854d8356268002924566eab3da15e30c765bcc0`; CI41568615665/1 y post-merge41571256687/1 SUCCESS. La X41358865966/1 conserva su carácter histórico, sin logs recuperables.
+- #1321 MERGED en `ce462a66ec3fcce4c870351034f2032da94ec725`: firma NOVAK original conservada. #1320 MERGED en `210feb5d05d57fbd018c9faab7f6aa708dc4bd2c`: elección explícita de stock al cancelar/rechazar; CI41626576071/1 y post-merge41630300041/1 SUCCESS, con CodeQL y salud separados SUCCESS.
+- #1322 concilia el ajuste de la franja final con main210feb5d. Derivados regenerados, sin heredar PASS del HEAD anterior; nuevos recibos en CURRENT_STATE y PR. Esto no cierra los pendientes productivos de Rules/Apps Script ni acredita operaciones comerciales reales.
 - Los PASS se refieren al criterio y SHA citados. Un informe terminado no prueba
   que sus hallazgos estén corregidos ni certifica todas las operaciones reales.
 - La observación nativa de Skills sigue BLOCKED; catálogo executor vacío

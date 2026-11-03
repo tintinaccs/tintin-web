@@ -507,6 +507,7 @@ test('cancelar pedido histórico de 20 productos libera todo en un único lote a
   const result = await applyOrderAdminMutation({}, {
     orderId: 'pedido_historico_20',
     status: 'cancelado',
+    inventoryCancellationDecision: 'release',
     baseChangeId: 'base_change_20',
     changeId: 'sheet_cancel_20',
   }, {
@@ -577,11 +578,11 @@ test('variant inventory reserves atomically, switches options and releases once 
   assert.equal(product().stock, 3, 'switching options keeps aggregate stock');
   assert.equal(changed.changedProducts, 1);
   assert.deepEqual(product().variantInventory, [{ variant: '6', stock: 2 }, { variant: '7', stock: 1 }]);
-  await applyOrderAdminMutation({}, { orderId: created.orderId, status: 'cancelado', changeId: 'cancel_variant_123' }, ACTOR, store);
+  await applyOrderAdminMutation({}, { orderId: created.orderId, status: 'cancelado', inventoryCancellationDecision: 'release', changeId: 'cancel_variant_123' }, ACTOR, store);
   assert.equal(product().stock, 5);
   assert.deepEqual(product().variantInventory, [{ variant: '6', stock: 2 }, { variant: '7', stock: 3 }]);
   const count = store.commits.length;
-  await applyOrderAdminMutation({}, { orderId: created.orderId, status: 'cancelado', changeId: 'cancel_variant_123' }, ACTOR, store);
+  await applyOrderAdminMutation({}, { orderId: created.orderId, status: 'cancelado', inventoryCancellationDecision: 'release', changeId: 'cancel_variant_123' }, ACTOR, store);
   assert.equal(store.commits.length, count);
 });
 
@@ -606,7 +607,7 @@ test('legacy reserved order releases aggregate stock without inventing option in
   store.map.set('orders/legacy_ring', document('orders/legacy_ring', { status: 'confirmado', inventoryState: 'reserved', items: [{ id: 'ring', qty: 1, variant: '6' }] }));
   await assert.rejects(applyOrderAdminMutation({}, { orderId: 'legacy_ring', items: [{ id: 'ring', name: 'Anillo', price: 100, qty: 1, variant: '7' }], changeId: 'legacy_switch_123' }, ACTOR, store), /requiere revisar/);
   assert.equal(store.commits.length, 0);
-  await applyOrderAdminMutation({}, { orderId: 'legacy_ring', status: 'cancelado', changeId: 'legacy_cancel_123' }, ACTOR, store);
+  await applyOrderAdminMutation({}, { orderId: 'legacy_ring', status: 'cancelado', inventoryCancellationDecision: 'release', changeId: 'legacy_cancel_123' }, ACTOR, store);
   const product = decodeFirestoreFields(store.map.get('products/ring').fields);
   assert.equal(product.stock, 6);
   assert.deepEqual(product.variantInventory, [{ variant: '6', stock: 2 }, { variant: '7', stock: 3 }]);
@@ -681,7 +682,7 @@ test('avanzar el estado descuenta; cancelar un pedido sin descuento no devuelve 
   assert.equal(decodeFirestoreFields(stockWrites(avanza)[0].fields).stock, 3);
 
   const cancela = fakeStore({ 'orders/pedido_prueba_1': pedido(), 'products/prod_001': aro(5) });
-  const result = await applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', status: 'cancelado' }, ACTOR, cancela);
+  const result = await applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', status: 'cancelado', inventoryCancellationDecision: 'release' }, ACTOR, cancela);
   assert.equal(result.inventoryState, 'released');
   assert.equal(stockWrites(cancela).length, 0);
 });
@@ -801,7 +802,7 @@ for (const action of ['cancelar', 'confirmar', 'reconciliar pago PayPal']) {
     });
     const store = fakeStore(entries, { transactional: true });
     const input = { orderId: 'order_sixty_123', changeId: 'mutation_sixty_123',
-      ...(cancelling ? { status: 'cancelado' } : action === 'confirmar' ? { status: 'confirmado' } : { reconcileInventory: true }) };
+      ...(cancelling ? { status: 'cancelado', inventoryCancellationDecision: 'release' } : action === 'confirmar' ? { status: 'confirmado' } : { reconcileInventory: true }) };
     const result = await applyOrderAdminMutation({}, input, ACTOR, store);
     assert.equal(result.changedProducts, 60);
     assert.equal(result.inventoryState, cancelling ? 'released' : 'reserved');
@@ -826,7 +827,7 @@ test('mutación con batch fallido o producto faltante no modifica pedido ni inve
   for (const mode of ['missing', 'unavailable']) {
     const store = fakeStore({ 'orders/pedido_prueba_1': pedido({ inventoryState: 'reserved' }), 'products/prod_001': aro(5) });
     store.batchGet = mode === 'missing' ? async () => [] : async () => { throw new Error('batch unavailable'); };
-    await assert.rejects(applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', status: 'cancelado' }, ACTOR, store), mode === 'missing' ? /No se puede reconciliar el stock.*prod_001/ : /batch unavailable/);
+    await assert.rejects(applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', status: 'cancelado', inventoryCancellationDecision: 'release' }, ACTOR, store), mode === 'missing' ? /No se puede reconciliar el stock.*prod_001/ : /batch unavailable/);
     assert.equal(store.commits.length, 0);
     assert.equal(store.reads.filter(path => path.startsWith('products/')).length, 0);
   }
@@ -900,8 +901,8 @@ test('reintento, pago y confirmación no duplican la reserva; cancelación y rea
  assert.equal(stock().stock,4);assert.equal(stock().variantInventory[0].stock,1);
  const retry=await createOrderAdmin({},input,checkoutActor('first'),store);assert.equal(retry.duplicate,true);assert.equal(stock().stock,4);
  await applyOrderAdminMutation({}, {orderId:first.orderId,paymentStatus:'pagado',status:'confirmado',changeId:'public_checkout_paid'},ACTOR,store);assert.equal(stock().stock,4);
- await applyOrderAdminMutation({}, {orderId:first.orderId,status:'cancelado',changeId:'public_checkout_cancel'},ACTOR,store);assert.equal(stock().stock,5);assert.equal(stock().variantInventory[0].stock,2);
- await applyOrderAdminMutation({}, {orderId:first.orderId,status:'cancelado',changeId:'public_checkout_cancel'},ACTOR,store);assert.equal(stock().stock,5);
+ await applyOrderAdminMutation({}, {orderId:first.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'public_checkout_cancel'},ACTOR,store);assert.equal(stock().stock,5);assert.equal(stock().variantInventory[0].stock,2);
+ await applyOrderAdminMutation({}, {orderId:first.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'public_checkout_cancel'},ACTOR,store);assert.equal(stock().stock,5);
  await applyOrderAdminMutation({}, {orderId:first.orderId,status:'pendiente',paymentStatus:'pendiente',changeId:'public_checkout_reopen'},ACTOR,store);assert.equal(stock().stock,4);assert.equal(stock().variantInventory[0].stock,1);
 });
 test('campo de política aportado por navegador no modifica la creación manual',async()=>{
@@ -912,7 +913,7 @@ for(const status of ['cancelado','rechazado']) test(`pedido público sin pago li
  const store=variantStore();const created=await createOrderAdmin({}, {orderId:`public_unpaid_${status}`,userName:'Clienta Test',shippingMethod:'retiro',paymentStatus:'pendiente',items:[{id:'ring',qty:1,variant:'6'}]},checkoutActor('first'),store);
  const stock=()=>decodeFirestoreFields(store.map.get('products/ring').fields);
  assert.equal(stock().stock,4);
- const change={orderId:created.orderId,status,changeId:`public_release_${status}`};
+ const change={orderId:created.orderId,status,inventoryCancellationDecision:'release',changeId:`public_release_${status}`};
  await applyOrderAdminMutation({},change,ACTOR,store);await applyOrderAdminMutation({},change,ACTOR,store);
  assert.equal(stock().stock,5);assert.equal(stock().variantInventory[0].stock,2);
  const order=decodeFirestoreFields(store.map.get('orders/'+created.orderId).fields);assert.equal(order.inventoryState,'released');assert.equal(order.paymentStatus,'pendiente');
@@ -940,7 +941,7 @@ test('v2 cancel, replay, reopen and quantity edits retain historical unit price 
  store.map.set('products/ring',document('products/ring',p,'2099-01-01T00:00:00Z'));
  const edited=await applyOrderAdminMutation({}, {orderId:created.orderId,changeId:'v2_edit_123',items:[{id:'ring',qty:1,variant:'Plateado',price:1},{id:'ring',qty:3,variant:'Dorado',price:999}]},ACTOR,store);
  assert.equal(edited.order.items[0].price,250);assert.equal(edited.order.items[1].price,100);assert.equal(edited.order.total,550);
- const cancel={orderId:created.orderId,status:'cancelado',changeId:'v2_cancel_123'};
+ const cancel={orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'v2_cancel_123'};
  await applyOrderAdminMutation({},cancel,ACTOR,store);await applyOrderAdminMutation({},cancel,ACTOR,store);
  let now=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(now.variantInventory[0].stock,1);assert.equal(now.variantInventory[1].stock,null);
  await applyOrderAdminMutation({}, {orderId:created.orderId,status:'pendiente',paymentStatus:'pendiente',changeId:'v2_reopen_123'},ACTOR,store);
@@ -954,7 +955,7 @@ test('v2 cancellation after overlapping attribute reorder releases the saved ref
  const created=await createOrderAdmin({}, {orderId:'v2_overlap',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',variant:'S / L',qty:1}]},checkoutActor('overlap'),store);
  assert.equal(created.order.items[0].price,250);assert.equal(created.order.variantInventoryItems[0].variantKey,'S / L');
  const p=decodeFirestoreFields(store.map.get('products/ring').fields);p.variants={Talle:['S','L'],Color:['S','L']};store.map.set('products/ring',document('products/ring',p,'2099-01-01T00:00:00Z'));
- await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',changeId:'overlap_cancel'},ACTOR,store);
+ await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'overlap_cancel'},ACTOR,store);
  const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.variantInventory[0].stock,1);assert.equal(after.variantInventory[1].stock,1);
 });
 
@@ -969,7 +970,7 @@ test('edit and cancel legacy reservation after explicit v2 fixture upgrade retai
  assert.equal(edited.order.items[0].variantKey,'S / L');
  assert.equal(edited.order.items[0].variant,'L / S');
  assert.equal(edited.order.variantInventoryItems[0].variantKey,'S / L');
- await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',changeId:'legacy_v2_cancel'},ACTOR,store);
+ await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'legacy_v2_cancel'},ACTOR,store);
  const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.variantInventory[0].stock,1);assert.equal(after.variantInventory[1].stock,1);
 });
 
@@ -978,7 +979,57 @@ test('multiple combinations may exceed 99 units in aggregate and still cancel wi
  const store=fakeStore({'products/ring':document('products/ring',p)}, {transactional:true});
  const created=await createOrderAdmin({}, {orderId:'v2_multi_quantity',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',variant:'Plateado',qty:60},{id:'ring',variant:'Dorado',qty:60}]},checkoutActor('multi_quantity'),store);
  assert.equal(created.order.total,18000);assert.equal(decodeFirestoreFields(store.map.get('products/ring').fields).stock,0);
- const cancel={orderId:created.orderId,status:'cancelado',changeId:'v2_multi_cancel'};
+ const cancel={orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'v2_multi_cancel'};
  await applyOrderAdminMutation({},cancel,ACTOR,store);await applyOrderAdminMutation({},cancel,ACTOR,store);
  const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.stock,120);assert.equal(after.variantInventory[0].stock,60);assert.equal(after.variantInventory[1].stock,60);
+});
+
+for (const decision of [undefined, '', 'yes', true]) test(`cancelación exige una decisión explícita válida de stock: ${decision}`, async () => {
+ const store=variantStore();
+ const created=await createOrderAdmin({}, {userName:'Clienta',status:'confirmado',items:[{id:'ring',qty:1,variant:'6'}]},ACTOR,store);
+ const count=store.commits.length;
+ await assert.rejects(applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:decision},ACTOR,store), error=>error.code==='cancellation_stock_required');
+ assert.equal(store.commits.length,count);
+});
+
+for (const decision of ['keep','release']) test(`cancelar y reabrir respeta stock ${decision} sin repetir movimientos`, async () => {
+ const store=variantStore();
+ const created=await createOrderAdmin({}, {userName:'Clienta',status:'confirmado',items:[{id:'ring',qty:1,variant:'6'}]},ACTOR,store);
+ const stock=()=>decodeFirestoreFields(store.map.get('products/ring').fields).stock;
+ const reserved=stock();
+ const input={orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:decision,baseChangeId:created.order.lastChangeId,changeId:'cancel_stock_test'};
+ const result=await applyOrderAdminMutation({},input,ACTOR,store);
+ assert.equal(stock(),reserved+(decision==='release'?1:0));
+ assert.equal(result.order.inventoryCancellationDecision,decision);
+ assert.equal(result.changedProducts,decision==='keep'?0:1);
+ assert.equal(result.order.inventoryCancellation.by,ACTOR.email);
+ assert.equal(result.order.inventoryState,decision==='keep'?'reserved':'released');
+ const again=await applyOrderAdminMutation({},input,ACTOR,store);assert.equal(again.duplicate,true);
+ const noted=await applyOrderAdminMutation({}, {orderId:created.orderId,notes:'Cancelación revisada'},ACTOR,store);
+ assert.equal(stock(),reserved+(decision==='release'?1:0));
+ await applyOrderAdminMutation({}, {orderId:created.orderId,status:'confirmado',baseChangeId:noted.order.lastChangeId},ACTOR,store);
+ assert.equal(stock(),reserved);
+ await assert.rejects(applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado'},ACTOR,store),error=>error.code==='cancellation_stock_required');
+});
+
+test('conservar el descuento no necesita recrear ni validar un producto eliminado',async()=>{
+ const store=variantStore();const created=await createOrderAdmin({}, {userName:'Clienta',status:'confirmado',items:[{id:'ring',qty:1,variant:'6'}]},ACTOR,store);
+ store.map.delete('products/ring');
+ const result=await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'keep'},ACTOR,store);
+ assert.equal(result.changedProducts,0);assert.deepEqual(result.order.variantInventoryItems,created.order.variantInventoryItems);assert.equal(store.map.has('products/ring'),false);
+});
+test('una carrera al conservar stock rechaza el lote completo por versión',async()=>{
+ const store=variantStore();const created=await createOrderAdmin({}, {userName:'Clienta',status:'confirmado',items:[{id:'ring',qty:1,variant:'6'}]},ACTOR,store);
+ const count=store.commits.length,stock=decodeFirestoreFields(store.map.get('products/ring').fields);
+ const deps={...store,commit:async(env,writes)=>{const path='orders/'+created.orderId;store.map.set(path,{...store.map.get(path),updateTime:'2030-01-01T00:00:00Z'});return store.commit(env,writes);}};
+ await assert.rejects(applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'keep'},ACTOR,deps),/Conflicto de versión/);
+ assert.equal(store.commits.length,count);assert.deepEqual(decodeFirestoreFields(store.map.get('products/ring').fields),stock);assert.equal(decodeFirestoreFields(store.map.get('orders/'+created.orderId).fields).status,'confirmado');
+});
+test('v2 conserva referencia, inventario nullable y precios al cancelar sin devolver y reabrir',async()=>{
+ const store=commercialStore();const created=await createOrderAdmin({}, {orderId:'v2_keep_history',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',qty:1,variant:'Plateado'},{id:'ring',qty:2,variant:'Dorado'}]},checkoutActor('keep'),store);
+ const before=decodeFirestoreFields(store.map.get('products/ring').fields);
+ const result=await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'keep'},ACTOR,store);
+ assert.deepEqual(decodeFirestoreFields(store.map.get('products/ring').fields),before);assert.deepEqual(result.order.variantInventoryItems,created.order.variantInventoryItems);
+ const reopened=await applyOrderAdminMutation({}, {orderId:created.orderId,status:'pendiente',paymentStatus:'pendiente'},ACTOR,store);
+ assert.deepEqual(decodeFirestoreFields(store.map.get('products/ring').fields),before);assert.deepEqual(reopened.order.items,created.order.items);
 });

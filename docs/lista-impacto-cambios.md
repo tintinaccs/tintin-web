@@ -1,3 +1,18 @@
+## 2026-11-02 — Cancelación/rechazo con elección explícita de stock
+
+Autoridades: modelo-inventario y order-admin-domain; cliente de integridad
+compartido por transiciones y los dos editores. Selector nativo pide devolver o
+conservar unidades ya descontadas; volver no muta. Auditoría y actor/fecha con
+CAS, sin cobro/reembolso implícito. Reaperturas y ediciones posteriores preservan
+el descuento elegido; rechazo comparte la guarda para no saltar la decisión.
+El borrado de compatibilidad delega en la papelera canónica, conservando allí la
+selección por línea. Se retiran escritor duplicado y guardas estáticas obsoletas.
+Importaciones/revisión de reservas usan la misma lectura de reserved, incluso
+cancelado. URLs, loader y derivados con fuentes/generadores existentes. Clientes
+viejos y edición de estado desde Sheets sin elección fallan sin escribir; no se
+inventa una opción silenciosa. Regresiones cliente/dominio/V1/V2/CAS, browser a
+tres anchos y tokens oscuros, integración Firestore demo en gates existentes.
+
 ## 2026-11-02 — Fase09: aceptación integral y pendientes consolidados
 
 ## 2026-11-02 — Efectivo en retiro y copy de reparto

@@ -33,8 +33,8 @@ export async function verifyRetiredOptionCheckout({deps,seed,product,actor,admin
  const other=await prepare('other',silverKey,'Plateado / M',35000);
  const silver=await createOrderAdmin({},other.prepared.input,other.buyer,{...deps,inspect:other.prepared.inspect});
  assert.equal(silver.order.total,35000);assert.equal(silver.order.items[0].variantKey,silverKey);assert.equal(silver.order.items[0].imageUrl,'https://example.invalid/silver.png');
- await applyOrderAdminMutation({},{orderId:pending.orderId,status:'cancelado',changeId:'retire_fixture_cancel'},admin,deps);
- await applyOrderAdminMutation({},{orderId:pending.orderId,status:'cancelado',changeId:'retire_fixture_cancel'},admin,deps);
+ await applyOrderAdminMutation({},{orderId:pending.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'retire_fixture_cancel'},admin,deps);
+ await applyOrderAdminMutation({},{orderId:pending.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'retire_fixture_cancel'},admin,deps);
  const returned=await product(id);assert.equal(returned.variantInventory[0].stock,2);assert.equal(returned.variantInventory[0].active,false);assert.equal(returned.variantInventory[0].variant,goldKey);
  assert.deepEqual(returned.variantMedia,original.variantMedia);
  await assert.rejects(async()=>{const blocked=await prepare('still_retired',goldKey,'Dorado / M',45000);await createOrderAdmin({},blocked.prepared.input,blocked.buyer,{...deps,inspect:blocked.prepared.inspect});});
