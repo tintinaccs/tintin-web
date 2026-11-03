@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6034eeadf06ebc87844eda2e176af23877c56f7de8d4bf9e07ae9a22afe890fe",
+  "sourceFingerprint": "2682b51c55de4869ec86cabe585a34eb3fa8bce7eebc56cf18fba61cfdf204ca",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1771,
-    "textFiles": 1636,
-    "totalBytes": 45128113,
+    "files": 1772,
+    "textFiles": 1637,
+    "totalBytes": 45131715,
     "pages": 19,
     "modules": 1161
   },
@@ -63370,8 +63370,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1180625,
-      "sha256": "0c11bab82c60b5aa243e7549cf7daf38cbea15635672c2cadc84459d53374a45"
+      "bytes": 1180663,
+      "sha256": "b5740fb4a58ea7b93f44556edd0095d637b74963ee73bec1f8d36d13341d4768"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -63628,8 +63628,8 @@
     {
       "path": "docs/agent/TINTIN_GLOBAL_PHASES.md",
       "extension": ".md",
-      "bytes": 11567,
-      "sha256": "742704ebc59e1abde869751b3774e091a723af04ea50cc20051df5d4cd5cb9c9"
+      "bytes": 11981,
+      "sha256": "b653e58279816cd341fbfbc1dfd8b4ca23e8f8ff453a8c17ad8728d37268485e"
     },
     {
       "path": "docs/agent/TINTIN_PHASE04_CATALOG.md",
@@ -63664,8 +63664,8 @@
     {
       "path": "docs/agent/TINTIN_PHASE09_ACCEPTANCE.md",
       "extension": ".md",
-      "bytes": 14088,
-      "sha256": "205acb957320703773502d6a40bcba6f5c9f092b1c186e3c7aa50aa4ea06c2f0"
+      "bytes": 14170,
+      "sha256": "94e06a4f74a7f02ade67fa5a2a4406538af6110beaa351639efbd54b6724d7d2"
     },
     {
       "path": "docs/agent/TINTIN_SKILLS_CI_20261101.md",
@@ -63798,6 +63798,12 @@
       "extension": ".json",
       "bytes": 1414,
       "sha256": "45bed45b513561164fcdd3ea2de516bd3f8d6b7ea1114e70d9e2820e10cebaf3"
+    },
+    {
+      "path": "docs/agent/evidence/phase09-20261102/github-terminal.json",
+      "extension": ".json",
+      "bytes": 3068,
+      "sha256": "882cf1794e16c7a034d8209d7c6e438b5882b750cf8d6e337801c9e71c4eeac9"
     },
     {
       "path": "docs/agent/evidence/phase09-20261102/history-verification.json",

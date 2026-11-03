@@ -48,7 +48,7 @@ sus alcances originales; [el cierre09](TINTIN_PHASE09_ACCEPTANCE.md) los concili
 | 06 | Clientes, administración, permisos y notificaciones | Integrado #1314,checks históricos aprobados; revalidación09 en curso | 1159edeb | [Informe06](TINTIN_PHASE06_ACCOUNTS_ADMIN.md); hardware y entrega real no acreditados |
 | 07 | Backend, datos, APIs y servicios | Integrado #1315; Rules aisladas PASS_CI histórico; deployment BLOCKED | 39744311 | [Informe07](TINTIN_PHASE07_BACKEND_SECURITY.md); no se publicó Firestore Rules |
 | 08 | Optimización transversal de rendimiento, UX, accesibilidad y SEO | Integrada y PASS_CI en1319; producción de artefacto/salud aprobada | 9b1b88f8 / #1319 | [Informe08](TINTIN_PHASE08_TRANSVERSAL.md); mediciones y límites explícitos |
-| 09 | Reparación integral, aceptación y cierre | Código integrado con PASS_CI; CI de main en curso; aceptación productiva integral BLOCKED | 9b1b88f8 / #1319 | [Informe09](TINTIN_PHASE09_ACCEPTANCE.md); matriz completa y recibos actuales obligatorios |
+| 09 | Reparación integral, aceptación y cierre | Código integrado, CI de PR/main SUCCESS y artefacto/salud productivos PASS; aceptación integral BLOCKED | 9b1b88f8 / #1319 | [Informe09](TINTIN_PHASE09_ACCEPTANCE.md); matriz completa y recibos actuales obligatorios |
 
 ## Entregables de la Fase 01
 
@@ -119,4 +119,6 @@ Advertencia CI demostrada: Firebase13/@firebase/rules-unit-testing6 exige Node>=
 
 ## Recibo de integración09 y primer despertar
 
-PR1319 MERGED en9b1b88f8, head df692c4b. CI41562231283/1, CodeQL41562227482/1 e integridad/mantenimiento protegidos SUCCESS. Monitor41565292553/1 SUCCESS del artefacto publicado; auditoría posterior41565290324/1 todavía en curso al registrar. No equivale a Rules publicadas ni a pruebas monetarias/autenticadas reales. Primer disparo de vigilancia horaria registrado2026-11-03T02:24:49Z, con prompt recibido y seguimiento retomado. PR1306 se recupera preservando esta base y configura selección de Skills, sin modificar comercio ni controles.
+PR1319 MERGED en9b1b88f8, head df692c4b. CI41562231283/1, CodeQL41562227482/1 e integridad/mantenimiento protegidos SUCCESS. Monitor41565292553/1 SUCCESS del artefacto publicado; auditoría posterior41565290324/1 SUCCESS confirmado2026-11-03T02:49:16Z. No equivale a Rules publicadas ni a pruebas monetarias/autenticadas reales. Primer disparo de vigilancia horaria registrado2026-11-03T02:24:49Z, con prompt recibido y seguimiento retomado. PR1306 se recupera preservando esta base y configura selección de Skills, sin modificar comercio ni controles.
+
+[Recibo terminal de Fase09](evidence/phase09-20261102/github-terminal.json): el código1319 está integrado y sus verificaciones de PR/main son SUCCESS. Esto cierra la reparación de fuente y aceptación automatizada de ese SHA; los límites productivos enumerados no se convierten en PASS por ese resultado. La recuperación1306 tiene su propio candidato/CI/merge, sin heredar esos checks.
