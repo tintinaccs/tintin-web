@@ -43,6 +43,21 @@
       "skip": 0,
       "after": "remove remaining unreachable helper/constant",
       "log": "artifacts/phase09/bridge-final.log"
+    },
+    {
+      "command": "node --test checkout policy, Ueno name, paginated collections, performance domain and routing suites",
+      "pass": 63,
+      "fail": 0,
+      "skip": 0,
+      "log": "artifacts/phase09/merge-regressions.log",
+      "base": "1c673584"
+    },
+    {
+      "command": "playwright checkout/navigation-responsive, home-collection-cover and link-refresh; Chromium workers1 retries0",
+      "pass": 47,
+      "fail": 0,
+      "log": "artifacts/phase09/merge-browser.log",
+      "base": "1c673584"
     }
   ],
   "auditFinal": "BLOCKED_LOCAL at test:critical-runtime: official Firestore emulator JAR unavailable; canonical prefix/tail run separately, not claimed full PASS",
@@ -61,5 +76,6 @@
     "generatedArtifactsCompared": 7,
     "protectedRecords": 78,
     "protectedFiles": 544
-  }
+  },
+  "baseAfterConcurrentMerge": "1c673584b0b8e69e9610c6d4721210d86bd4f55c"
 }

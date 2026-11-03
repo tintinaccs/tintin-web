@@ -174,3 +174,12 @@ Cada cambio comercial revisa:
 ## Configuración comercial canónica (Fase05)
 
 Si existe `paymentMethodsCatalog`, incluso vacío o inválido, es la autoridad: no se recuperan métodos desde espejos legacy. El fallback sólo aplica cuando esa propiedad no existe. Transferencia confirmada por cliente conserva pago pendiente. Tarifas explícitas, incluido cero, se respetan; costo ausente permanece a confirmar, sin defaults inventados ni overrides por ciudad. Delivery/encomienda requieren ciudades configuradas; retiro conserva el soporte actual del servidor. Ver [informe05](agent/TINTIN_PHASE05_COMMERCE.md).
+
+## Retiro y reparto — decisión 2026-11-02
+
+El retiro coordinado admite transferencia previa o efectivo al retirar si el método
+está habilitado en administración. El pedido en efectivo conserva pago pendiente;
+el cliente no puede acreditarlo. Encomienda mantiene productos pagados previamente
+por transferencia y envío a la transportadora al recibir. El reparto habitual opera
+de lunes a sábado, corte11:00; después corresponde el siguiente día de reparto.
+Esta regla no acredita por sí sola un calculador de fecha estimada.

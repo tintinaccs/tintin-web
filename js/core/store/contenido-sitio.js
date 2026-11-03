@@ -15,8 +15,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20261021-identidad-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261031-seo-espacios-2';
+} from './esquema-contenido.js?v=tintin-20261102-pickup-cash-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261102-pickup-cash-1';
 
 const subscriptions = new Map();
 const latestData = new Map();

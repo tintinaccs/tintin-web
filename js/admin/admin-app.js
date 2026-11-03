@@ -46,7 +46,7 @@ import {
 } from "../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261030-home-history-5";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261102-transversal-phase08-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261103-acceptance-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
@@ -3577,7 +3577,7 @@ const loadDeferredAdminSection = createAdminSectionLoader({
     diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1-editor-search-20261028-2'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
     paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2') },
     apariencia: { load: async () => {
-      await import('./appearance/editor-visual-admin.js?v=tintin-20261027-global-fluidez-3-editor-search-20261028-2');
+      await import('./appearance/editor-visual-admin.js?v=tintin-20261102-pickup-cash-1');
       await import('./appearance/visual-studio-layout-admin.js?v=tintin-20261022-avatar-inicial-1');
     } }
   }

@@ -1,6 +1,6 @@
 import { CACHE_KEY, loadCollections as loadCollectionMetadata, normalizeCollectionDoc, normalizeCollectionSlug, canonicalPublicCollections, sortCols } from './datos-publicos-colecciones.js?v=tintin-20261030-home-history-5';
 export { normalizeCollectionDoc, normalizeCollectionSlug, canonicalPublicCollections };
-import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20261102-transversal-phase08-1';
+import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20261103-acceptance-1';
 import {
   recordFirestoreRead,
   writeCached
@@ -9,7 +9,7 @@ import {
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
     import('../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260925-cache-converge-1'),
-    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261102-commerce-phase05-1')
+    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261102-pickup-cash-1')
   ]);
 }
 

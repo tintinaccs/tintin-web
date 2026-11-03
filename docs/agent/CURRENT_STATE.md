@@ -1,6 +1,48 @@
 ## 2026-11-02 America/Buenos_Aires — Fase09 integral (estado vigente)
 
 
+Conciliación posterior de #1318: main1c673584b0b8e69e9610c6d4721210d86bd4f55c incorpora efectivo al retirar y textos reales de delivery. Se preservan política server-side, contratos, pruebas y contenido de ese cambio. Las URLs de13módulos realmente alterados se renuevan a tintin-20261103-acceptance-1;22módulos del grafo concurrente conservan sus URLs publicadas. Nuevas regresiones/generadores/CI se validan sobre la conciliación, sin heredar el PASS del anterior75fa91e9. PR1319 es la entrega vigente.
+
+## 2026-11-02 — Retiro: primer resultado de navegador y corrección del contrato
+
+Codex /root. PR #1318, head inicial `f52c164ee277e8a420128cb952b05c704013cab2`.
+CI 41554720269/1 FAIL en comercio: 152 casos Chromium PASS y cuatro FAIL.
+Tres contaban contenedor + input de efectivo como dos opciones; el otro mantenía
+la expectativa anterior de rechazar efectivo en retiro. Se apunta al input real,
+se exige selección de efectivo en delivery/retiro y se conserva rechazo por
+encomienda. Se refuerza el catálogo deshabilitado en las tres entregas, sin
+reintentos/exclusiones nuevos. No se modifica runtime para silenciar el test.
+El head corregido requiere sus propios resultados CI/merge/deploy; no hereda PASS.
+
+## 2026-11-02 — Retiro con efectivo y condiciones de reparto
+
+Codex /root. Base3974431, rama fix/pickup-cash-20261102. La titular autorizó
+transferencia previa o efectivo al retirar y reparto de lunes a sábado, corte11:00.
+Política cliente/servidor y renderers legacy/configurable admiten efectivo en retiro
+sólo cuando administración lo habilita. Encomienda sigue sólo transferencia previa;
+pago efectivo conserva estado pendiente y reserva de stock. Se actualizan textos
+predeterminados, Configuración, FAQ y Envíos; se preservan descripciones personalizadas.
+URLs transitivas y shell se renuevan desde fuentes/generador; sin CSS nuevo.
+RED: la nueva prueba de retiro falló payment_unavailable antes del cambio.
+PASS_LOCAL:354pruebas checkout/pagos/pedidos, preflight canónico completo y build:pages.
+Spec existente de navegación/entrega añade retiro en legacy y catálogo configurable
+a320/768/1440. BROWSER_LOCAL BLOCKED: descarga oficial de Chromium falló; esos casos
+requieren CI. No se efectuaron compras, cobros, correos ni cambios de datos reales.
+No implementa señas, saldos, cancelación selectiva ni cálculo automático de fechas.
+El resultado terminal de PR/CI/fusión/publicación debe registrarse por el SHA nuevo.
+
+## 2026-11-02 — Recibo del primer bloque y base del retiro
+
+Codex /root. PR #1317 fusionado en `c25421dfe78d83f2dff744b7861c41f28f139641`.
+Head `1ed20dea8270ac2a14e26dbbe9b675787d30eb97`: CI 41546610554/1 SUCCESS,
+integridad/mantenimiento protegidos SUCCESS. Main: CI 41550063208/1 SUCCESS,
+Cloudflare Pages SUCCESS y monitor de producción 41550066223/1 SUCCESS.
+PASS_PRODUCTION acredita el artefacto y la salud no destructiva; no una operación
+real de cuenta ni índices remotos. El bloque de retiro se reconcilió sobre ese main.
+Sus pruebas/browser/merge/deploy requieren sus propios recibos; las demás decisiones
+comerciales permanecen PENDING.
+
+
 Actualización2026-11-03: base conciliada por fast-forward con c25421df/#1317. Se conserva su implementación canónica F02-STATS (páginas300/readTime/CAS, presupuesto10000) y sus pruebas, sin duplicar escritores. Regresiones focalizadas15PASS; tramo final audit:final exit0. audit:final global aún BLOCKED en runtime por JAR oficial inaccesible; CI mantiene emulador obligatorio.
 
 Petición CI: gh-fix-ci oficial instalado en ambas rutas con revisión49f948faa925;46Skills/ruta válidos. Automatización externa **Atender fallos de CI de Tintín** creada/habilitada cada hora; no webhook ni primer despertar acreditado. Ver GITHUB_RESULTS. Run41442885247/1, PR1316/ba96c3a1 falló por drift generado de package/lock, no por Firebase/emulador. Reparación equivalente incorporada a09;1316 sólo se cierra como supersedida después de integración real. Código de09 activo: el monitor no debe editar concurrentemente esta rama.

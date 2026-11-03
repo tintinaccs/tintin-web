@@ -73,3 +73,6 @@ Revalidación final09 tras conciliar1317: **685pruebas de dominios PASS,0FAIL/0S
 
 
 Control previo a PR: ci:preflight completo PASS_LOCAL; preflight de imports repetido tras retirar restos muertos del bridge (1194fuentes/72funciones), routing7/7. Build canónico repetido:7derivados idénticos; protección78registros/544archivos intacta. Recibo CI/fusión actual: [PR por rama](https://github.com/tintinaccs/tintin-web/pulls?q=head%3Acodex%2Fphase09-integral-acceptance). Su descripción registra SHA/run/intento terminal sin commits dedicados sólo a anunciar CI. Las limitaciones productivas siguen abiertas.
+
+
+Conciliación posterior de #1318: main1c673584b0b8e69e9610c6d4721210d86bd4f55c incorpora efectivo al retirar y textos reales de delivery. Se preservan política server-side, contratos, pruebas y contenido de ese cambio. Las URLs de13módulos realmente alterados se renuevan a tintin-20261103-acceptance-1;22módulos del grafo concurrente conservan sus URLs publicadas. Nuevas regresiones/generadores/CI se validan sobre la conciliación, sin heredar el PASS del anterior75fa91e9. PR1319 es la entrega vigente.

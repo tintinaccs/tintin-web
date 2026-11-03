@@ -2,7 +2,7 @@ import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=ti
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,
-} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261102-commerce-phase05-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261102-pickup-cash-1';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?$/i;
 const VIEWPORTS = [1920, 1440, 1280, 1024, 768, 390, 320];
@@ -138,7 +138,7 @@ function boot() {
 
   function render(nextMethods) {
     catalog = nextMethods;
-    methods = catalog.filter(method => method.enabled && (shippingMethod === 'encomienda' ? method.kind === 'transferencia' : method.kind !== 'efectivo' || shippingMethod === 'delivery'));
+    methods = catalog.filter(method => method.enabled && (shippingMethod === 'encomienda' ? method.kind === 'transferencia' : method.kind !== 'efectivo' || ['delivery', 'retiro'].includes(shippingMethod)));
     const policyNote = document.getElementById('ck-encomienda-payment-policy') || root.insertAdjacentElement('beforebegin', Object.assign(document.createElement('p'), { id: 'ck-encomienda-payment-policy', className: 'ck-pay-note' }));
     policyNote.hidden = shippingMethod !== 'encomienda';
     policyNote.textContent = 'El producto se paga previamente por transferencia. Sólo el costo del envío se paga a la transportadora al recibir. No hay contra entrega en encomienda.';
