@@ -23,7 +23,8 @@
       "npx playwright test tests/checkout/paypal-fictitious-browser.spec.js tests/checkout/login-required-browser.spec.js tests/checkout/availability-browser.spec.js tests/catalog/search-responsive.spec.js tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium",
       "npx playwright test tests/profile/wholesale-session-recovery.spec.js --project=chromium",
       "npx playwright test tests/cart/color-choice-browser.spec.js --project=chromium --retries=0",
-      "node --test tests/catalog/public-catalog-batch.test.mjs tests/checkout/request-correlation-event.test.mjs"
+      "node --test tests/catalog/public-catalog-batch.test.mjs tests/checkout/request-correlation-event.test.mjs",
+      "npx playwright test tests/orders/cancellation-stock.spec.js --project=chromium --retries=0"
     ]
   },
   "admin": {

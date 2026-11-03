@@ -1,3 +1,32 @@
+## 2026-11-02 — Decisión explícita de stock al cancelar/rechazar
+
+Codex /root; base inicial `1c673584b0b8e69e9610c6d4721210d86bd4f55c`, rama
+`fix/cancellation-stock-choice-20261102`. Reconciliado sobre
+`9b1b88f8abee27d395d6690f4b68843cb1374d3f` (#1319), conservando Fases08/09,
+Node24, dependencias y la skill nueva de CI. Las verificaciones previas no se
+heredan: se repiten las regresiones pertinentes sobre la base reconciliada. Se reprodujo la ausencia de elección
+con seis pruebas nuevas que fallaban antes del cambio. Modelo y dominio canónicos
+conservan o devuelven el descuento según elección explícita; cancelar sin elegir
+falla antes de escribir. Estado reserved en cancelado significa descuento
+conservado, no venta ni cobro. Reintento, notas, reapertura, V1/V2/nullable,
+producto eliminado al conservar y carrera CAS tienen regresiones. Elección,
+actor/fecha y auditoría se confirman junto con el pedido.
+El cliente central cubre cambio rápido y ambos editores. Volver/Escape no envían
+POST ni cierran el borrador con éxito falso; versiones viejas/cambio de cuenta
+bloquean antes de enviar. Borrado de compatibilidad migra a papelera existente;
+se retira su escritor paralelo y se actualizan los auditores al contrato vigente.
+PASS_LOCAL reconciliado: 579 pruebas pedidos/sync/checkout/pagos; 221 operaciones/arquitectura/
+seguridad, sin fallos/skips. Preflight completo PASS en su segunda ejecución:
+la primera detectó un import absoluto de fixture que el diagnóstico resolvía
+como relativo al test; se corrigió el fixture, sin relajar el auditor.
+Se añaden nueve casos Chromium (320/768/1440, elección, Escape/volver,
+concurrencia de diálogos y modo oscuro) al stage commerce y una integración
+Firestore demo a Rules/identidad. Navegador y emulador locales no disponibles;
+requieren recibos CI propios. Build/derivados, caché y plan protegido final
+PASS_LOCAL; preflight final completo PASS. CI, merge y producción PENDING.
+No acredita nuevas señas/saldos ni plazos; tampoco operaciones comerciales reales
+ni una versión nueva del WebApp Apps Script, que requiere evidencia aparte.
+
 ## 2026-11-02 America/Buenos_Aires — Fase09 integral (estado vigente)
 
 
