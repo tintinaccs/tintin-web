@@ -1,6 +1,6 @@
 # Firma NOVAK
 
-`novak-credit.css` y `novak-mark.svg` son los archivos originales adjuntos por el titular, copiados sin modificar. Procedencia indicada: NOVAKPY/novak-web, tools/novak-signature, implementación inicial Quinta del Vergel PR10.
+`novak-credit.css` y `novak-mark.svg` proceden de los archivos adjuntos por el titular. El SVG se conserva sin modificar; en el CSS sólo se adapta la familia fuente genérica del sistema a Montserrat para cumplir la identidad y el gate tipográfico de Tintín. Procedencia indicada: NOVAKPY/novak-web, tools/novak-signature, implementación inicial Quinta del Vergel PR10.
 
 La fuente compartida del marcado y del destino es `scripts/lib/firma-novak.js`. Para cambiar el dominio, editar únicamente `NOVAK_URL` y ejecutar `npm run sync:public-shell`, seguido de los generadores y verificaciones habituales. No editar las copias HTML generadas.
 

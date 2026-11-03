@@ -29,6 +29,7 @@ for (const [width, height] of viewports) {
       await expect(credit).toHaveAttribute('href', NOVAK_URL);
       await expect(credit, name).toHaveAccessibleName('Hecho por NOVAK, visitar su sitio');
       await expect(credit.locator('span')).toHaveText('Hecho por');
+      await expect(credit).toHaveCSS('font-family', /Montserrat/);
       await credit.scrollIntoViewIfNeeded();
       await expect(credit, name).toBeVisible();
       await expect.poll(() => credit.locator('img').evaluate(img => img.complete && img.naturalWidth > 0), { message: name }).toBe(true);
