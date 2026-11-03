@@ -8,6 +8,7 @@ const { renderMobileBrandHeader } = require('../js/components/navigation/movil/m
 const { LOGO_VERSION } = require('../js/components/navigation/compartido/configuracion.js');
 const { CATEGORIES } = require('../js/components/navigation/compartido/iconos.js');
 const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.js');
+const { renderNovakCredit, ensureNovakStyles, ensureStandaloneCredit } = require('./lib/firma-novak.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.css', versionPrefix: 'tintin-about-e9f78c18973f8f56' };
@@ -421,6 +422,7 @@ ${CATEGORIES.map(({ slug, label }) => `          <li><a href="/catalogo?cat=${en
     </div>
   </div>
   <div class="tt-footer-bottom">© 2024-2026 TINTIN ACCESORIOS · TODOS LOS DERECHOS RESERVADOS</div>
+  ${renderNovakCredit()}
 </footer>`;
 }
 
@@ -636,6 +638,8 @@ for (const page of PUBLIC_PAGES) {
   html = ensurePublicStructuralStyles(html, false, page);
   html = ensureInitialRuntimeStyles(html, page);
   html = normalizeWhitespace(html);
+  html = ensureNovakStyles(html);
+  if (page === 'login.html') html = ensureStandaloneCredit(html, page);
   html = writeHomeStyles(html, ROOT, styles);
 
   if (html !== before) {
@@ -662,6 +666,10 @@ for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') &&
     html = html.replace(/(<script\b[^>]*src=["']\/tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${TIENDA_VERSION}$2`);
   }
   html = ensureInitialRuntimeStyles(html, page);
+  if (page === '404.html' || page === 'admin.html' || page === 'admin-images.html') {
+    html = ensureNovakStyles(html, page === '404.html');
+    if (page.startsWith('admin')) html = ensureStandaloneCredit(html, page);
+  }
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');
     changed += 1;

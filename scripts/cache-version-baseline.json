@@ -1,4 +1,8 @@
 {
+  "assets-tintin/novak-signature/novak-credit.css": {
+    "version": "tintin-novak-20261102-2",
+    "sha256": "ab80bce9edb6aa0f5056833c697ac3d9588979ae23ed706ed5db898dd78481a6"
+  },
   "css/admin/admin-color-tokens.css": {
     "version": "tintin-20261023-tema-unico-1",
     "sha256": "f72b118f92a3f3eec36fefcd0777a09ba8d9fa4e82ceba1671751c818462cd55"
@@ -139,6 +143,10 @@
     "version": "tintin-20261030-notificaciones-explicitas-1",
     "sha256": "e7ada773450ac8688ca792b9f3fdbccdd2af8eefcddf63da46e618463177f97b"
   },
+  "css/components/novak-credit-site.css": {
+    "version": "tintin-novak-20261103-1",
+    "sha256": "2fa14d3ccd071ff01da6764efc90e82985e2fe8f3fead2612d0b876e7da8893a"
+  },
   "css/components/payments/payment-methods.css": {
     "version": "tintin-20261012-checkout-ready-3-payment-methods-css-palette-20261014-1",
     "sha256": "1ee064fafe1a87ecca2373c34853d2b59d0b3d1db3aa236ae10092561e1b890d"
@@ -172,84 +180,84 @@
     "sha256": "715aa9eb030929cb7aa712e3d5ae79ca14777441bd3f0c222ddd7568cec90e60"
   },
   "css/generated/cambios-devoluciones.css": {
-    "version": "tintin-cambios-devoluciones-4fd9354c261b86e7",
-    "sha256": "4fd9354c261b86e76f29597cf4a7cae363191480b03cf6dad5f5574d83a3ae77"
+    "version": "tintin-cambios-devoluciones-c7e6c5b6ec796262",
+    "sha256": "c7e6c5b6ec7962622282013079d08bc4623d6645c3e143c709ff0be95cbc63cb"
   },
   "css/generated/catalogo-2.css": {
-    "version": "tintin-catalogo-09cd51e910c79003",
-    "sha256": "09cd51e910c7900382fa01100ee225152045bc58dc40804d2039f25ffd55313e"
+    "version": "tintin-catalogo-6eeb6f5bd9b324a9",
+    "sha256": "6eeb6f5bd9b324a9d9e7014dbe7fa5946c40f9f9ab2d024d6dd9588993fbe7de"
   },
   "css/generated/catalogo.css": {
     "version": "tintin-catalogo-7f277564cc6d3631",
     "sha256": "7f277564cc6d36311b99063a1fcece5e8f534f2c688375657045737b7781fca6"
   },
   "css/generated/checkout-2.css": {
-    "version": "tintin-checkout-cfb8100ef4eb22d2",
-    "sha256": "cfb8100ef4eb22d2cce02f13d055e87fd43b177aa75b7708d8d1473e50e6bfd3"
+    "version": "tintin-checkout-72cd9f35ee0e868f",
+    "sha256": "72cd9f35ee0e868f6a12151defa94a72900ebedd292e390908ac04c70aa43a51"
   },
   "css/generated/checkout.css": {
     "version": "tintin-checkout-5782f1330e2ce6e5",
     "sha256": "5782f1330e2ce6e52d2e09040db6a1b4a4f9dcf2ac2bda61841f5341afa8d682"
   },
   "css/generated/collections.css": {
-    "version": "tintin-collections-37af718ec75661f3",
-    "sha256": "37af718ec75661f3bc606f79615734a9e6c430a6c3ec9f8726bb8941b0f5d418"
+    "version": "tintin-collections-129116732f3fd429",
+    "sha256": "129116732f3fd42952916be4ece7648d925f004c0600494a63ea9efdb8ddf758"
   },
   "css/generated/contact.css": {
-    "version": "tintin-contact-66dd9422d26a9a6c",
-    "sha256": "66dd9422d26a9a6c71874d503cf8b56735e7fc4516a54557040e7b04c4e57367"
+    "version": "tintin-contact-64fda351910cd1f2",
+    "sha256": "64fda351910cd1f2822ef0e17a123eac395a0dfc9cf20ea4bd072ab2812603e8"
   },
   "css/generated/envios-2.css": {
-    "version": "tintin-envios-b9d9064b8fe6ed2a",
-    "sha256": "b9d9064b8fe6ed2aad98a8a0f51fd9bef0ba1e44700f9359904aa36d8c7a5de5"
+    "version": "tintin-envios-682524bfd845e3ba",
+    "sha256": "682524bfd845e3ba27e7590f9c3872e6abf4548b0239519f201f476ab677a25a"
   },
   "css/generated/envios.css": {
     "version": "tintin-envios-c44154b83b6fcc93",
     "sha256": "c44154b83b6fcc9326746e4017b8165f3eb5eddbe3aefec187309c799a250bd4"
   },
   "css/generated/inicio.css": {
-    "version": "tintin-home-f208d10bd456fa49",
-    "sha256": "f208d10bd456fa49cac89c6b50b7311f936db2875d95d5566eb3acd40a34b5f0"
+    "version": "tintin-home-26ae3a04336440a1",
+    "sha256": "26ae3a04336440a1907daa261b888b3b8b3b27bb4792d19c5b3fde1993ef5a0d"
   },
   "css/generated/login-2.css": {
     "version": "tintin-login-df43919978824062",
     "sha256": "df4391997882406256e16f31ac12f6879783fc20d070311a322ead9a5057860d"
   },
   "css/generated/login-3.css": {
-    "version": "tintin-login-cf3d4444503f776b",
-    "sha256": "cf3d4444503f776b83b044299f1f2533ebb02f4da61164c02b2e857236fd461d"
+    "version": "tintin-login-c69b4a1376964494",
+    "sha256": "c69b4a1376964494ebd1f65e54279f5b97442981cfec52eb4d9e0d919b07405e"
   },
   "css/generated/login.css": {
     "version": "tintin-login-e4017b4311bed289",
     "sha256": "e4017b4311bed2893851dee4400ff8380d81c6377da79937c6290ce64c9db803"
   },
   "css/generated/nosotros.css": {
-    "version": "tintin-about-e9f78c18973f8f56-f745d262e3accbe1",
-    "sha256": "f745d262e3accbe1c6ac9a579c4dbade89cf999a30f29584f96a0f3403be0701"
+    "version": "tintin-about-e9f78c18973f8f56-f52501320e328b68",
+    "sha256": "f52501320e328b6856c39abefe9d981b2ceca3cd8d99bf55ca7956727da4b38a"
   },
   "css/generated/perfil-2.css": {
-    "version": "tintin-perfil-f75cf06cd0e60142",
-    "sha256": "f75cf06cd0e601426166c07cda09a24b0c233e4417282d9c20de3ebaedf9d14a"
+    "version": "tintin-perfil-50717ac23a0473b4",
+    "sha256": "50717ac23a0473b4eeeaab2b36591cccf1df227bc304d7890af956bcb88eae3b"
   },
   "css/generated/perfil.css": {
     "version": "tintin-perfil-037ffaf0ddbdff9c",
     "sha256": "037ffaf0ddbdff9c63b1ca4cd6c4c2bcf59f85f22343fe2a8316261b1efd247c"
   },
   "css/generated/preguntas-frecuentes.css": {
-    "version": "tintin-preguntas-frecuentes-4fd9354c261b86e7",
-    "sha256": "4fd9354c261b86e76f29597cf4a7cae363191480b03cf6dad5f5574d83a3ae77"
+    "version": "tintin-preguntas-frecuentes-c7e6c5b6ec796262",
+    "sha256": "c7e6c5b6ec7962622282013079d08bc4623d6645c3e143c709ff0be95cbc63cb"
   },
   "css/generated/privacidad.css": {
-    "version": "tintin-privacidad-34acaa0079fb8d93",
-    "sha256": "34acaa0079fb8d93ac5d4d527ab09b44bf6800b85d669ae6b0aae05eb56fde96"
+    "version": "tintin-privacidad-dcf665560aba12ce",
+    "sha256": "dcf665560aba12ce684552214a8ad723d5e42f8a799f0610e6b703b28c091357"
   },
   "css/generated/product.css": {
-    "version": "tintin-product-bae1f2d73f2aba13",
-    "sha256": "bae1f2d73f2aba13c1487a0f70fc7ffee3e179753a4db0e32420f99dc12cf38a"
+    "version": "tintin-product-87b44d7054da0988",
+    "sha256": "87b44d7054da0988f35af0351db1272a25883facd076800d71a98511b3b4ef7b"
   },
   "css/generated/terminos.css": {
-    "version": "tintin-terminos-34acaa0079fb8d93",
-    "sha256": "34acaa0079fb8d93ac5d4d527ab09b44bf6800b85d669ae6b0aae05eb56fde96"
+    "version": "tintin-terminos-dcf665560aba12ce",
+    "sha256": "dcf665560aba12ce684552214a8ad723d5e42f8a799f0610e6b703b28c091357"
   },
   "css/pages/catalog/catalog-maintenance.css": {
     "version": "tintin-20261101-touch-targets-1",
@@ -1102,6 +1110,10 @@
   "js/components/notifications/presentacion-notificacion.mjs": {
     "version": "tintin-20261030-notificaciones-explicitas-1",
     "sha256": "3eaee0bb284d5348cc880ce0dfb75e63c098f51a9137755a7590541554c4b7a8"
+  },
+  "js/components/novak-credit.js": {
+    "version": "tintin-novak-20261103-1",
+    "sha256": "34656abf4808f5bac645ffa4b43ff2ce5c155a172e8fd310c60ea00c5967fa5e"
   },
   "js/components/reviews/valoraciones-catalogo.js": {
     "version": "tintin-20261017-domain-cutover-1",

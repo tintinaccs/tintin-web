@@ -1,42 +1,42 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b854d8356268002924566eab3da15e30c765bcc0",
-  "reason": "Conciliar PR1320 con main vigente, preservar decisión explícita de stock y regenerar protección y derivados canónicos sin modificar permisos.",
+  "baseCommit": "ce462a66ec3fcce4c870351034f2032da94ec725",
+  "reason": "Conciliar cancelación con decisión de stock y firma NOVAK integrada, preservar ambos cambios y regenerar protección canónica con regresiones de dominio.",
   "files": [
     {
       "path": "404.html",
-      "oldHash": "5f29ca6f9238f5f09ddece6859865b6e63a7523fabe5cd16e6d7bf1cb464318c",
-      "newHash": "f7fcb330de1fbf0b47b745348dde3fecdfc1f3fc17cb914e75079ff571f9c4cf"
+      "oldHash": "076b5f1b07d60401355fcecc7db4165161958fba3cfe0d22ead91cf01a64a1b3",
+      "newHash": "20495190744395b35a2474edb972701b79236c074716141d0197995bbc5550d7"
     },
     {
       "path": "about.html",
-      "oldHash": "a76a3f1ddc8cf423190cd3f2059699cf7112292c69178baffa577f3f3bee919c",
-      "newHash": "ec53ff687bbafece4cfca3bc23ffe73f4319acff8930ddaade90925518474535"
+      "oldHash": "b024b529d350a85b8c1986b56449216b0e5ae13395b5c61e5b411b1310d23a8f",
+      "newHash": "83d03eb9eee0e1e98eefb617cb2704826cd5f25e66027f96a7141da85853a261"
     },
     {
       "path": "admin-images.html",
-      "oldHash": "71cea0b0b375c2903186ab8428cc6bb3e33f2a03fac042c591df24c5eeafcf39",
-      "newHash": "c60c74f4d3611148a56f1f28e11236963f073230745377f8617bd515ec830305"
+      "oldHash": "556e0436918e9393f615d00b0706d2d15f1d1c3ab66e4d83abae9cd117505a90",
+      "newHash": "c990419e416a329ce94fe61e57966e48de0c34fd1d4da3a2df7475c992856c12"
     },
     {
       "path": "admin.html",
-      "oldHash": "db7dfe72555bd378949d7cf9d0dfc47ef3a59f0fdcb0253093fd06680bb1a8ea",
-      "newHash": "7944dd5a2a0294d7699e2939095bd98981b4b2a158b6e29583d3938495d4455a"
+      "oldHash": "640b3b32d29405900620b71ff0b23f7da897cacf630573d3690efd5f4c4413e3",
+      "newHash": "39f043b36f06df98ae00b8a04468ef0aa40da4c35ce9bac8ad28e2a4c35d5ba3"
     },
     {
       "path": "cambios-devoluciones.html",
-      "oldHash": "b5576f8e63677871ee4f31bbf5f730f7344310a31c27e7ccc5525e3b02200393",
-      "newHash": "1e294116633fc2cdee96356830bd330a9fa4989b495623ea0ce180be4b2bf15f"
+      "oldHash": "b2b016b6111e05dcb63d652e7250485ca51e1fda5847948cc3cdb51c63ea0c0f",
+      "newHash": "1f5a2d26473f9cfca778ad307c1ab711f9999b0554e6f476420616d56f36534c"
     },
     {
       "path": "catalogo.html",
-      "oldHash": "7d2ab2dacae20e6bc291200c04368f567dfcca9def3c9ef148ac53c75602df38",
-      "newHash": "8584b0abe4e3034fd253dd0062853e8732133901b589157e73bef8b64e50e031"
+      "oldHash": "26d112bd078b02a1a43b28a484b6e71bfc87a444b33c33c8888182c15fa25e79",
+      "newHash": "ba9deaea1d3b61816cfe26b1e357a68bd80a5453f3d485da5b5bea4435fb5c97"
     },
     {
       "path": "checkout.html",
-      "oldHash": "551ff061ae75c9dbcdc3ee07d776a08100d2909ceaac045102a68226ab18bacf",
-      "newHash": "824b725e66e757dd84624c3f685d9e4497eab0623840d300d9c3986d960f380f"
+      "oldHash": "370ebdcb7c15b3bf7e2af12fb6f4643f8a00f83c68fb19b0532fd14f630b0645",
+      "newHash": "d9f3d5f08b4c7c55227e9c928126a4bf7d5442b0c7e47e58ac1a90cd631a7163"
     },
     {
       "path": "cloudflare/order-admin-domain.js",
@@ -45,18 +45,18 @@
     },
     {
       "path": "collections.html",
-      "oldHash": "7c808c4c1dac72e87631433f4d625db85f8876c6bcd379a20c3706293cb10d0a",
-      "newHash": "247d583b436c0e92708bbfe5a2d596ea6759bf75eb6e3576c2d15082c04929c7"
+      "oldHash": "6ba28338247787c3dc78052a9cde076c9d1e2614666de6b2109a88f9371091f0",
+      "newHash": "b8d6b8386ea3c440abe6865f096a4f95b10d73ef941085241d2626341cbb6e98"
     },
     {
       "path": "contact.html",
-      "oldHash": "087fef2a41f7d7aac3652ef68d0f495686c4813921d561763fc41920d0e58e64",
-      "newHash": "3aed6af644eb1acb6e8c9a4f3f0364b6b363c83ccdabd6281551908e844504d2"
+      "oldHash": "85a49fc3ede6a6473b3195d4e29bfca7feeaeab2df3d4ae714a5f25f5d2d196e",
+      "newHash": "a25e3532b93cf99f8c1459e52a2754c156e0f1509527b8a7c61a54c4dd4fe8eb"
     },
     {
       "path": "envios.html",
-      "oldHash": "c76b92fc7e700346099d202a57ef47b1d3167bfe290e88a96df086ad6f3f1008",
-      "newHash": "69f5c9c04fee08ba9a097b76cc3e9bf82a152e3b8906baaf762fe50aadb18b39"
+      "oldHash": "6c6debc970f23d88ff244cbcbdd14fbdbb7d1925af82c6b6613fc5be03a2ce4a",
+      "newHash": "be14579bc8a136806e514f771bd4ef1044ff231eb5fd48ae5a9809c1b264e7ce"
     },
     {
       "path": "functions/api/admin-order-mutation.js",
@@ -65,8 +65,8 @@
     },
     {
       "path": "index.html",
-      "oldHash": "0d80731a9148491fd98f62bb571df616d5fc7695dc05565d5d677135bc8b7325",
-      "newHash": "f1009fe7818e2d31859210d9bfa85f8650b777f6a6a210ecee03145c4e059441"
+      "oldHash": "24f8a6affc9d73a22b5404ece3e03fc81ce8d30da95d0b3c56f77f36805e6f3b",
+      "newHash": "c7c108e6ba557a41e289debef123d69956f38a69e0590163706c5064e0320c27"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -110,8 +110,8 @@
     },
     {
       "path": "login.html",
-      "oldHash": "6aca285c6d9992594aa5058d5ddb83c1935bb551f2121cb81f17aeffed7579d7",
-      "newHash": "9f8c9a211958377c73917ef90c08634c6e64aeaa2b1217f4a9bea29174f4086a"
+      "oldHash": "ea5b1b93eebe796002a4da0f92fa44797552c04ca4d03d2f2e3b7d4cca4847d1",
+      "newHash": "ad33e650731db47f444fbe82f434ad279e63a7eb193ea8eca9d024cb6d25fed5"
     },
     {
       "path": "nosotros.html",
@@ -120,38 +120,38 @@
     },
     {
       "path": "perfil.html",
-      "oldHash": "2d6c6c5139590022ebb666e320fa0fb446e33cd7095fe8ada06cae5206fed300",
-      "newHash": "2c2feefa8741e4bd7e8f69e037a4668fc6bbb01a1e2dc9b835fd32956ca03cba"
+      "oldHash": "fc9df028199010577c1aaa6b05ce7f7534a3ccdbf4d121249cf3c67845e31c52",
+      "newHash": "300e2dff1353ef8fd922279740264bda476d3d3acc6d152da7dd6173e0a20cd2"
     },
     {
       "path": "preguntas-frecuentes.html",
-      "oldHash": "4c08d8116e3f1d7fded0f95c4abb7bfbd28521a5ef79e40f8c8c99eb373e64b5",
-      "newHash": "ce93013843d6b1d674f86779eeef19fb0d8024ded629e571a9d961564953403b"
+      "oldHash": "60ee80fcc75d7b9fb4f0e3d802944cf16c9f573a3a0c0d5a11045e278150d8c8",
+      "newHash": "f1ffec65b0c703d4f2b4ef67d7287d5e997b50afef1d50fddaf4ee18ff45c97d"
     },
     {
       "path": "privacidad.html",
-      "oldHash": "4cdb6353130df388cbd52922d9d7ab2f2894c5bc6ab63b1ba9323090dcde3984",
-      "newHash": "eb17af94810a47199ddc7248f1fe37153c517c5bdea53a6a43b246aa57fd516e"
+      "oldHash": "8a18f2ce14dc3c69d69bd4147998698b6e46ac26800eed4f3f448a0ce5fce1cb",
+      "newHash": "0eeaa086d98328bac83949b6821f5018f3db48b815378da7d08cbe0a6d8d3651"
     },
     {
       "path": "product.html",
-      "oldHash": "a9484b6e1d965c3807bf9fe6f1342f0f6a4a1c5377ee4f606aa8464298bea501",
-      "newHash": "d53c874c323ad3a521e54d21cbbb4b9142733f93bced70c4c43d7be55d6d099b"
+      "oldHash": "ca6678dcb15fe21d3519061ba72e4705c8dcc23e9d938e8b985eabe93a20b332",
+      "newHash": "24a5fec09b0352bbbfd45e146aeb368d3c150313968eec58e327d4b8728d60c6"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "7ae85de1ef9a7bf956834d35ce5bfdaccc2d5ebba23add93be94e6dea85f511b",
-      "newHash": "f6cc197794f641a01ab05818549c0b2e99d80cbcde0b3efc8502a9e56f35fb62"
+      "oldHash": "5f17cf1eed7e2b869a3ef4c30fc17a8726059f5d5eb8398bf3c74ee7c6d7a141",
+      "newHash": "fcf6419cc787551bbc03afeefc9d31ab9cf2b7f4de3a9c8c9c0ba261e6801d2b"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "oldHash": "7dd2425c28072a573cb8808dafeee57e281a418913df3b7402cdf97037b8cb96",
-      "newHash": "2af2fcd0e154e283df92df8f8ecbbb34143e3c49481016db64ab75d00fd2d9c6"
+      "oldHash": "8c257c393b41901d7c2174bc5e407e270867419ef9bac4df009f9f85b1c4f450",
+      "newHash": "02ecfe69f303fec04e60a298464f8d5ef39d5338cba2aa5fc0d49f988435ff7f"
     },
     {
       "path": "terminos.html",
-      "oldHash": "d4c465cc704364ff65fb064207564e073d1e927fd79aa08c169dda7335438e64",
-      "newHash": "c27acd28885b10bcb17f03b69ac9921ecc2177e143cc7961a5cb2e7070893042"
+      "oldHash": "7e80ca5a477fe5fb6e56fed52649f0a210ac62d64f782b98c9486cd8ebfe7c4b",
+      "newHash": "519cfde504d56c22ea519548688bf4c5055678fdfc59c66d127a281de36c26e2"
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
