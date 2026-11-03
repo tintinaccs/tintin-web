@@ -17,7 +17,7 @@ import {
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261030-home-history-5';
-import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261030-home-history-5';
+import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261102-transversal-phase08-1';
 
 // Este cargador conserva el arranque de Inicio. En las demás páginas, el
 // guardia de perfil carga la guía sólo si la cuenta tiene bienvenida pendiente.

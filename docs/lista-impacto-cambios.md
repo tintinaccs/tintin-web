@@ -1,3 +1,5 @@
+## 2026-11-02 — Fase09: aceptación integral y pendientes consolidados
+
 ## 2026-11-02 — Resumen de cuentas sin recorte global ni publicación atrasada
 
 Autoridades: sincronizacion-estadisticas-pedido y transporte REST Firebase existente.
@@ -7,6 +9,8 @@ Consumidores: creación/cambios de pedido, controles comerciales y webhook Sheet
 Preserva campos y significado del resumen, fuentes orders/users, roles y side effects.
 Pruebas en sync/admin existentes, sin colecciones, Rules ni nuevas dependencias.
 Las decisiones comerciales de la titular se registran separadas de su implementación.
+
+Preserva y valida08. Estadísticas usan query por identidad, cursor con guardia de truncamiento y CAS de perfil; cambios concurrentes se recalculan. Fallback manual es informativo, autónomo y no ofrece comercio sin Functions. Se retira branch/helper muerto del bridge, alineando contratos; extractor canónico AST excluye texto de auditorías/strings/comentarios. Firebase CLI actualizado en rango;14moderadas siguen abiertas. Acorn sólo desarrollo para diagnóstico. Sin datos reales, migraciones ni deployment de Rules/WebApp/fallback. Matriz, evidencias, límites y relevo en TINTIN_PHASE09_ACCEPTANCE y CURRENT_STATE. Rutas/CSP/caché/diagnóstico/protección derivados por autoridades existentes.
 
 ## 2026-11-02 — Fase07: autoridad de metadata de reserva
 

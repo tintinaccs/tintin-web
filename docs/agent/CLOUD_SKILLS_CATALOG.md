@@ -9,6 +9,7 @@ Los Skills del proyecto viven en `.agents/skills/<folder>/SKILL.md` para Codex y
 ## Skills externos incorporados (copia versionada y procedencia)
 | Colección / Skill | Origen, revisión fijada | Nombre en SKILL.md | Carpeta local |
 |---|---|---|---|
+| OpenAI GitHub Fix CI | [openai/skills](https://github.com/openai/skills/tree/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/gh-fix-ci) · `49f948faa925` | `gh-fix-ci` | `gh-fix-ci` |
 | Taste Skill | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill/tree/12af471f627f866411b4bd785b19646d3672784c) · `12af471f627f` | `design-taste-frontend` | `taste-frontend` |
 | UI UX Pro Max | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/3a13158ff1f32156cbe144108de48eda2ecaed9a) · `3a13158ff1f3` | `ui-ux-pro-max` | `ui-ux-pro-max` |
 | Ponytail | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail/tree/96608e078b2d5ea607c5c3b8b5a54d1c1fba6846) · `96608e078b2d` | `ponytail` | `ponytail` |
@@ -82,3 +83,9 @@ Se detectaron en la misma rama de trabajo y se preservaron, además de los 26 nu
 **Presupuesto de contexto:** tener 45 Skills no significa activar los 45. Algunos hosts pueden resumir o truncar metadatos cuando hay muchos; es preferible llamar explícitamente al Skill apropiado y consultar este catálogo. Los Skills de enfoque superpuesto son alternativas, no pasos obligatorios acumulativos. Evitar ejecutar suites de pruebas redundantes.
 
 El script complementario `scripts/check-cloud-skills-linux.sh` fue conservado para el caso opcional de enlazar los Skills a un HOME Linux efímero. La validación de Linux está integrada en `.github/workflows/auditar-tintin.yml`, respetando el límite de 12 workflows y el contrato de un único workflow de PR.
+
+## gh-fix-ci y vigilancia de CI (2026-11-03)
+
+Instalación solicitada por la titular en `.agents/skills/gh-fix-ci` y `.claude/skills/gh-fix-ci`: SKILL.md, script oficial de inspección y licencia Apache-2.0, fijados a la revisión del lock. El script fue leído antes de ejecutarlo; se validaron metadatos, paridad y `--help`. Requiere Python estándar y `gh` autenticado para consultar checks/logs; no se instalaron dependencias ni credenciales. En esta sesión `gh auth status` rechaza GH_TOKEN, por lo que la investigación usa el conector GitHub autorizado, sin cambiar secretos. No se acredita ejecución end-to-end del script con gh. Las autorizaciones vigentes del titular y AGENTS prevalecen sobre el paso genérico de aprobación del skill.
+
+La skill ayuda al agente activo; no instala un daemon, webhook ni workflow. Se creó la tarea externa **Atender fallos de CI de Tintín**, habilitada con frecuencia horaria. El producto expone programación recurrente, pero no un receptor webhook de GitHub en esta sesión. Es sondeo horario: no hay garantía de aviso inmediato, tiempo de ejecución ni reparación universal. La creación fue confirmada por la API; su primer despertar y acceso a un checkout no se acreditan hasta tener un recibo de ejecución. Opera sobre main/PR vigentes, logs y SHA/intento, distingue skips esperados/dependencias bloqueadas, evita duplicar reparaciones activas y avisa sólo novedades accionables o bloqueos. Preserva permisos, datos y todas las protecciones. Ver [GITHUB_RESULTS.md](GITHUB_RESULTS.md).

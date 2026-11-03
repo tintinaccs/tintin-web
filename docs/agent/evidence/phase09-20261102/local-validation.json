@@ -1,0 +1,65 @@
+{
+  "agent": "Codex /root",
+  "date": "2026-11-03",
+  "branch": "codex/phase09-integral-acceptance",
+  "base": "c25421dfe78d83f2dff744b7861c41f28f139641",
+  "tests": [
+    {
+      "command": "node --test tests/orders/*.test.mjs tests/checkout/*.test.mjs tests/sync/*.test.mjs tests/operations/*.test.mjs tests/diagnostics/*.test.mjs",
+      "pass": 685,
+      "fail": 0,
+      "skip": 0,
+      "log": "artifacts/phase09/domain-reconciled-final.log"
+    },
+    {
+      "command": "PERF_BASE_URL=http://127.0.0.1:4173 PLAYWRIGHT_BASE_URL=http://127.0.0.1:4173 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:performance -- --project=chromium",
+      "pass": 107,
+      "fail": 0,
+      "skip": 0,
+      "seconds": 180,
+      "log": "artifacts/phase09/performance-final.log"
+    },
+    {
+      "command": "python3 scripts/agent/check-cloud-skills.py",
+      "state": "PASS_LOCAL",
+      "countPerAgent": 46,
+      "nativeHostDiscovery": "NOT_VERIFIED"
+    },
+    {
+      "command": "python3 .agents/skills/gh-fix-ci/scripts/inspect_pr_checks.py --help",
+      "state": "PASS_LOCAL",
+      "liveGhExecution": "BLOCKED: invalid GH_TOKEN; connector used without changing credentials"
+    },
+    {
+      "command": "npm run ci:preflight",
+      "state": "PASS_LOCAL",
+      "gates": 39,
+      "log": "artifacts/phase09/ci-preflight-final.log"
+    },
+    {
+      "command": "node --test tests/checkout/order-routing-identity.test.mjs",
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "after": "remove remaining unreachable helper/constant",
+      "log": "artifacts/phase09/bridge-final.log"
+    }
+  ],
+  "auditFinal": "BLOCKED_LOCAL at test:critical-runtime: official Firestore emulator JAR unavailable; canonical prefix/tail run separately, not claimed full PASS",
+  "ci": "PENDING current candidate checks",
+  "production": "NOT_VERIFIED for candidate; no production data operations, manual deploys or real messages/purchases",
+  "automation": {
+    "title": "Atender fallos de CI de Tintín",
+    "enabledAtCreation": true,
+    "cadence": "HOURLY",
+    "mode": "condition_watch polling; no webhook receiver exposed",
+    "firstRun": "NOT_VERIFIED"
+  },
+  "build": {
+    "command": "npm run build:pages twice",
+    "state": "PASS_LOCAL",
+    "generatedArtifactsCompared": 7,
+    "protectedRecords": 78,
+    "protectedFiles": 544
+  }
+}

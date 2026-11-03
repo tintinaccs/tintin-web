@@ -8,7 +8,7 @@
    ============================================================= */
 
 import { collectionImageUrl } from '../../components/navigation/compartido/iconos.js?v=tintin-20261029-performance-1';
-import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20261102-commerce-phase05-1';
+import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20261102-transversal-phase08-1';
 
 if (!window.TintinCollectionsPhase4Booted) {
   window.TintinCollectionsPhase4Booted = true;

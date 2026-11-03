@@ -25,3 +25,9 @@ exponen dicho receptor, declarar ese bloqueo concreto; no inventar una URL de
 callback, no prometer notificaciones en Codex ni sustituir eventos por sondeo
 sin explicarlo. GitHub conserva los recibos para la próxima sesión de cualquier
 agente y el estado real sigue estando en los checks/runs.
+
+## Vigilancia configurada el 2026-11-03
+
+Por pedido explícito de la titular se habilitó **Atender fallos de CI de Tintín**, una automatización externa horaria para main y PR abiertas de este repositorio. Investiga X/failure, errores, timeouts, action_required y advertencias accionables; clasifica skipped por `if`/`needs`, sin convertir un skip previsto en fallo ni reintentar controles indiscriminadamente. Deduplica por SHA/run/intento y conserva las reparaciones activas de otros agentes. Sigue reparaciones y merge sólo dentro de las autorizaciones vigentes; no autoriza operaciones comerciales reales, despliegues manuales, secretos ni bypass.
+
+La API confirmó creación/habilitación, sin recibo de primera ejecución todavía. Esta sesión no expone `discover_webhook_schema` ni parámetros de triggers; por ello se informó expresamente que es sondeo horario, no recepción instantánea de eventos. La tarea depende de disponibilidad y acceso del producto; los recibos de GitHub siguen siendo autoridad. Un agente futuro debe verificar que continúe habilitada y leer su última ejecución antes de afirmar vigilancia efectiva. No agregar un workflow paralelo ni prometer que un comentario despierte Codex.
