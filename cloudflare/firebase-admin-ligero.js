@@ -542,6 +542,39 @@ export async function firestoreAdminQueryByField(env, collectionId, fieldPath, v
   return (Array.isArray(rows) ? rows : []).map(row => row?.document).filter(Boolean);
 }
 
+/** Igualdad paginada por nombre documental, con snapshot compartido entre páginas. */
+export async function firestoreAdminQueryByFieldPage(env, collectionId, fieldPath, value, { after = '', readTime = '', pageSize = 300 } = {}) {
+  if (!/^[A-Za-z0-9_-]{1,120}$/.test(collectionId || '') || !/^[A-Za-z0-9_.]{1,120}$/.test(fieldPath || '')) throw new Error('Consulta paginada inválida.');
+  if (typeof value !== 'string' || !value) throw new Error('Identidad de consulta inválida.');
+  const sa = parseServiceAccount(env);
+  const prefix = `projects/${sa.project_id}/databases/(default)/documents/${collectionId}/`;
+  if (after && (typeof after !== 'string' || !after.startsWith(prefix) || !after.slice(prefix.length) || after.slice(prefix.length).includes('/'))) throw new Error('Cursor de consulta inválido.');
+  if (readTime && (typeof readTime !== 'string' || !/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,9})?Z$/.test(readTime))) throw new Error('Snapshot de consulta inválido.');
+  const size = Math.max(1, Math.min(300, Math.floor(Number(pageSize) || 300)));
+  const structuredQuery = {
+    from: [{ collectionId }],
+    where: { fieldFilter: { field: { fieldPath }, op: 'EQUAL', value: { stringValue: value } } },
+    orderBy: [{ field: { fieldPath: '__name__' }, direction: 'ASCENDING' }],
+    limit: size + 1,
+    ...(after ? { startAt: { values: [{ referenceValue: after }], before: false } } : {}),
+  };
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const response = await fetch(`${firestoreDatabaseUrl(sa)}/documents:runQuery`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ structuredQuery, ...(readTime ? { readTime } : {}) }),
+  });
+  if (!response.ok) throw new Error(`Firestore QUERY PAGE falló (${response.status}).`);
+  const rows = await response.json();
+  if (!Array.isArray(rows) || !rows.length || rows.some(row => !row || typeof row !== 'object' || row.error)) throw new Error('Página Firestore inválida.');
+  const snapshot = readTime || rows.findLast(row => typeof row.readTime === 'string')?.readTime;
+  if (!snapshot || !Number.isFinite(Date.parse(snapshot))) throw new Error('Página Firestore sin snapshot.');
+  const documents = rows.filter(row => row.document).map(row => row.document);
+  if (documents.some(document => typeof document.name !== 'string' || !document.name.startsWith(prefix) || !document.fields || typeof document.fields !== 'object')) throw new Error('Documento de página inválido.');
+  const page = documents.slice(0, size);
+  return { documents: page, readTime: snapshot, after: documents.length > size ? page.at(-1).name : '' };
+}
+
 /**
  * Resuelve el email de la cuenta dueña de un username, a partir de la
  * reserva en `usernameReservations/{key}` (ver js/components/forms/reserva-username.js).

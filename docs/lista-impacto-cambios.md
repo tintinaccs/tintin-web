@@ -1,3 +1,13 @@
+## 2026-11-02 — Resumen de cuentas sin recorte global ni publicación atrasada
+
+Autoridades: sincronizacion-estadisticas-pedido y transporte REST Firebase existente.
+Consultas de igualdad paginadas por identidad con readTime compartido y deduplicación;
+publicación mediante batch canónico con precondición de la cuenta anterior al cálculo.
+Consumidores: creación/cambios de pedido, controles comerciales y webhook Sheets.
+Preserva campos y significado del resumen, fuentes orders/users, roles y side effects.
+Pruebas en sync/admin existentes, sin colecciones, Rules ni nuevas dependencias.
+Las decisiones comerciales de la titular se registran separadas de su implementación.
+
 ## 2026-11-02 — Fase07: autoridad de metadata de reserva
 
 staffOrderInventoryTransitionValid rechaza inventory* aislado y exige permiso cambiarEstado para transición coherente existente. Conserva Super Admin, pagos sin metadata y escritores canónicos. Regresiones reales SDK para roles, permisos deshabilitados y revisión falsa; pruebas de backend/colas/webhooks/backup aisladas. Sin cambio de modelo, caché cliente, credenciales ni datos reales. Rules sólo candidato: deployment explícitamente separado. Informe07 y CURRENT_STATE conservan límites.

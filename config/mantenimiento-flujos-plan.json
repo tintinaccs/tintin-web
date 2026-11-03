@@ -1,39 +1,50 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "1159edeb2b56fdb5e9e79fe716760b93b2f75736",
-  "reason": "Fase07: cerrar bypass de reservas y limitar escritor SDK a su modelo legado verificable",
+  "baseCommit": "39744311216e525919a1f781a03fb854d92e45fd",
+  "reason": "Corregir F02-STATS mediante paginación por identidad y publicación CAS, y actualizar la auditoría para exigir ese contrato en lugar del escaneo global defectuoso.",
   "files": [
     {
-      "path": "firestore.rules",
-      "oldHash": "02b44680a4d14b5f13fac02556091ce15b26900b9077118fb334dc81cbcd4d47",
-      "newHash": "db044b86c175c41309dbc752c27b431cb13cda0d843472de342e41e8e0ec8cc2"
+      "path": "cloudflare/firebase-admin-ligero.js",
+      "oldHash": "ce64da6a44a83ea628888f37474edef47b33c188f6ffeb85f920516e2c9c4cb8",
+      "newHash": "fd7971945a4574be5748488f9292cfe114d6cacbd309178550e3ded3810e2339"
     },
     {
-      "path": "scripts/probar-firestore-critico.mjs",
-      "oldHash": "ceb598f586d6e40bf31befc31241b6bf086dc4124f474db1632647933ab481fc",
-      "newHash": "dcd9e4387776417a14342a34d76a24828a5d3fde8468aea903c0e9fc7fb4b954"
+      "path": "cloudflare/sincronizacion-estadisticas-pedido.js",
+      "oldHash": "e399be8e98f3387daf2b85d7720c856cbb4dd12fab60b81a986040b077581f42",
+      "newHash": "894b47a0ca7bfa44b885044cbe38e08467d581a7ad674e9d616d22ff7a8641c0"
     }
   ],
   "affectedRecords": [
     "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas",
+    "apis-internas__apps-script__22",
     "apis-internas__comentarios__39",
+    "apis-internas__correos__41",
     "apis-internas__favoritos__37",
     "apis-internas__firestore__21",
+    "apis-internas__likes__38",
     "apis-internas__notificaciones__40",
-    "carrito",
-    "cf-functions__reglas-firestore__28",
+    "apis-internas__pedidos__32",
+    "apps-script",
+    "apps-script__google-sheets__24",
+    "apps-script__sheets-products-webhook__26",
+    "cf-functions__apis-internas__20",
     "comentarios",
+    "cuenta-bloqueada",
+    "entrada-login__login-codigo__2",
     "favoritos",
-    "firestore",
     "firestore-fuente-verdad",
     "firestore__apps-script__23",
-    "firestore__carrito__36",
-    "firestore__users-uid__8",
-    "notificaciones",
-    "reglas-firestore",
-    "sesion-estado__firestore__7",
+    "google-sheets",
+    "google-sheets__apps-script__25",
+    "likes",
+    "login-codigo",
+    "login-codigo__firebase-auth__4",
+    "pedidos",
+    "pedidos__inventario__33",
+    "sheets-products-webhook",
     "sheets-products-webhook__firestore__27",
     "super-panel__pedidos__35",
-    "super-panel__productos__34"
+    "users-uid__cuenta-bloqueada__12"
   ]
 }
