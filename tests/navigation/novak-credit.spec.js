@@ -151,7 +151,7 @@ test('las capas de cada página no sobrescriben el copyright compartido', async 
 });
 
 test('en pantalla táctil tocar el enlace no deja un hover animado', async ({ browser, baseURL }) => {
-  const context = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
+  const context = await browser.newContext({ hasTouch: true, isMobile: true, deviceScaleFactor: 3, viewport: { width: 390, height: 844 } });
   try {
     const page = await context.newPage();
     const html = ensureNovakStyles(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><footer>${require('../../scripts/lib/firma-novak.js').renderNovakFooterEnd()}</footer></body></html>`);

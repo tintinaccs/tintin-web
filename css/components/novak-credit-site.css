@@ -61,3 +61,27 @@
 :is(.tt-footer[data-tt-footer="unified"], [data-novak-footer]) :is(a, p, li, span, button, .tt-footer-col-title) {
   text-transform: uppercase !important;
 }
+
+/* Evita que WebKit amplíe una textura SVG filtrada de tamaño CSS. Un lienzo
+   acorde a la densidad evita ampliar esa textura; el espacio visible sigue
+   siendo 42×40 y el SVG original permanece intacto. */
+.novak-credit { --novak-mark-density: 1; }
+@media (min-resolution: 1.01dppx) { .novak-credit { --novak-mark-density: 2; } }
+@media (min-resolution: 2.01dppx) { .novak-credit { --novak-mark-density: 3; } }
+@media (min-resolution: 3.01dppx) { .novak-credit { --novak-mark-density: 4; } }
+@supports (zoom: calc(1 / 2)) {
+  .novak-credit img {
+    max-width: none;
+    width: calc(42px * var(--novak-mark-density));
+    height: calc(40px * var(--novak-mark-density));
+    zoom: calc(1 / var(--novak-mark-density));
+  }
+  /* Compensa la escala interna: conserva los 2px y el 1.06 del kit.
+     Con movimiento reducido conserva la regla original sin transformaciones. */
+  @media (prefers-reduced-motion: no-preference) {
+    .novak-credit:hover img,
+    .novak-credit:focus-visible img {
+      transform: translateX(calc(2px * var(--novak-mark-density))) scale(1.06);
+    }
+  }
+}
