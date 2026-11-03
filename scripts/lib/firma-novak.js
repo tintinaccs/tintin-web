@@ -28,7 +28,7 @@ function ensureStandaloneCredit(html, page) {
   const footer = `\n<footer data-novak-footer>${renderNovakCredit()}</footer>\n`;
   // El panel desplaza su main; la firma debe formar parte de ese contenido.
   return page.startsWith('admin')
-    ? html.replace('</main>', `${footer}</main>`)
+    ? html.replace(/\s*<\/main>/, `${footer}</main>`)
     : html.replace('</body>', `${footer}</body>`);
 }
 

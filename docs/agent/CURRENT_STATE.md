@@ -1,3 +1,9 @@
+## 2026-11-02 — Firma original NOVAK en el pie compartido
+
+Codex /root; base `9b1b88f8`, rama `codex/novak-footer`. Alcance exclusivo: firma NOVAK solicitada; el pedido anterior de Quinta del Vergel fue sustituido explícitamente. Kit CSS/SVG adjunto conservado byte por byte. Destino único en scripts/lib/firma-novak.js; generador público reutilizado, pie mínimo compartido en acceso y dentro del main desplazable de administración.17 documentos de interfaz; redirección Nosotros y verificación Google excluidas. Sin auth, datos comerciales, logo Tintín ni condiciones cambiadas.
+
+PASS_LOCAL:136 combinaciones documento/tamaño Chromium (320×568,568×320,768×1024,1024×768,1366×768,768×1366,1920×1080,1080×1920), carga SVG, destino, nombre accesible,48px,centrado y límites. Revisión visual móvil del pie. Hover/foco de teclado y movimiento reducido comprobados por separado; la regla global reduce transiciones a0.00001s y elimina transformaciones. Fuentes originales comparadas con cmp. Auditoría shell y3Node, rutas,CSP,caché PASS. Prueba incorporada a etapa browser existente. Manifiestos/protección regenerados mediante autoridades habituales. CI,merge y publicación requieren evidencia propia del SHA final y no se infieren de lo local. Sin sesiones productivas ni certificación de dispositivos físicos.
+
 ## 2026-11-02 America/Buenos_Aires — Fase09 integral (estado vigente)
 
 

@@ -20,12 +20,14 @@ for (const [width, height] of viewports) {
       // no ejecuta auth, APIs ni escrituras de producción.
       await page.evaluate(() => {
         document.documentElement.classList.add('adm-auth-ready');
+        const layout = document.getElementById('adm-layout');
+        if (layout) layout.style.display = 'flex';
         document.querySelectorAll('#page-loader, .page-loader, #admin-auth-gate').forEach(el => el.remove());
       });
       const credit = page.locator('footer .novak-credit');
       await expect(credit, name).toHaveCount(1);
       await expect(credit).toHaveAttribute('href', NOVAK_URL);
-      await expect(credit).toHaveAccessibleName('Hecho por NOVAK, visitar su sitio');
+      await expect(credit, name).toHaveAccessibleName('Hecho por NOVAK, visitar su sitio');
       await expect(credit.locator('span')).toHaveText('Hecho por');
       await credit.scrollIntoViewIfNeeded();
       await expect(credit, name).toBeVisible();
@@ -60,8 +62,8 @@ test('animación original, foco de teclado y movimiento reducido', async ({ page
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(credit).toHaveCSS('transform', 'none');
   await expect(credit.locator('img')).toHaveCSS('transform', 'none');
-  await expect(credit).toHaveCSS('transition-duration', '0s');
+  expect(await credit.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration))).toBeLessThanOrEqual(0.00001);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.evaluate(() => document.body.classList.add('water-paused'));
-  await expect(credit).toHaveCSS('transition-duration', '0s');
+  expect(await credit.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration))).toBeLessThanOrEqual(0.00001);
 });
