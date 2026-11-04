@@ -6,6 +6,9 @@ Causas: fixture de precarga aún buscaba backdrop.webp en hero-editorial; prueba
 
 PASS_LOCAL:14/14 inventario y11/11 Chromium sin reintentos:4 precargas PNG y14rutas×7tamaños320–1920 con geometría inicial/final, superficies, overflow y navegación. Build:pages y ci:preflight completos PASS_LOCAL. CI del nuevo SHA, merge y publicación requieren sus propios recibos. Skills leídas: gh-fix-ci, verification-before-completion y tintin-responsive-a11y; se aplican dentro de la autorización vigente. Sin bypass ni cambios de permisos, datos reales o dependencias.
 
+
+Seguimiento adicional: se reprodujo FAIL local en image-fidelity (todavía esperaba backdrop.webp). Se concilia con backdrop.svg y PNG del maletín, verificando variante exacta, descarga única y geometría a DPR2 en6tamaños. Archivo completo13/13 Chromium PASS_LOCAL sin reintentos;23/23 contratos Node de rendimiento PASS_LOCAL. HEAD19dc0f9d ya enviado con CI41863169840/1 y CodeQL41863164717/1 en cola; esta corrección adicional requiere nuevos SHA/runs vigentes.
+
 ## Pie compacto — 2026-11-04 — Codex /root
 
 Base c5f6946e3531e8a4c7b0ce97c9d9e0da9239ce7c; rama codex/compact-footer-20261104. Pedido: reducir la franja final mostrada. Autoridad css/components/novak-credit-site.css: copyright12px, firma11px, logo26.25×25, gap2px y padding12/16px. Conserva fondo/token, SVG y destino originales, foco/hover/movimiento reducido, objetivo táctil48px y reserva móvil de WhatsApp. Canvas Retina usa medidas configurables, con fallback42×40 para el kit independiente. Propagación por firma-novak y generadores canónicos; no se editan derivados manualmente.
