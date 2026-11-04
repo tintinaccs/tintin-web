@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "440651f5a18b0d5aacba308ad035c08b10ca20abfe3e3a26a07ccee68924f220",
+  "sourceFingerprint": "ee44490ee388c4d1388220161c6013ce196daebd4323d55f4d52a49802fca5ac",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1804,
-    "textFiles": 1656,
-    "totalBytes": 57119476,
+    "files": 1805,
+    "textFiles": 1657,
+    "totalBytes": 57120506,
     "pages": 19,
     "modules": 1167
   },
@@ -63226,8 +63226,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 10837,
-      "sha256": "710e97ecb370aa5e61727cf3cc8aa1c614b250ada0bb7b43286686e9375399ed"
+      "bytes": 6579,
+      "sha256": "a1a89837816ef8bb45cacb7c239955e5e65d9e14b62ae15e31ae2b5ba3382110"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -63239,7 +63239,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "a8f1ad91a8cf093c4cc06408471c826c475cb53e153b7e5789541c1a0ee6f7d8"
+      "sha256": "31b646fada36917f1329c6bc40b7b75ecbd8d8fb2dd716c190eac6f53a7bd50e"
     },
     {
       "path": "config/public-site.json",
@@ -64078,8 +64078,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1216302,
-      "sha256": "0163384bc6426588366f7fb749b9a23a72827a2475bd17e5c0f6b01a7dbce9cf"
+      "bytes": 1217595,
+      "sha256": "9207d0e02bdc0b85c51f25dfae038d6f6439820e77360b3d1b3eceacc3ab74d3"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -64120,8 +64120,8 @@
     {
       "path": "docs/agent/GITHUB_RESULTS.md",
       "extension": ".md",
-      "bytes": 3391,
-      "sha256": "bc660fd318f2d69e973a90a0222124b1c73b08038319b179e0d43abdabe608ea"
+      "bytes": 4440,
+      "sha256": "b7cb749e959e63c1ff7ba6c6f4391222928c158bbc24b1ac6f41494ccd23b924"
     },
     {
       "path": "docs/agent/IDENTIDAD_TINTIN_20261021.md",
@@ -64278,6 +64278,12 @@
       "extension": ".md",
       "bytes": 11498,
       "sha256": "a0e0f0ca80e8effd3bab1e5d6a51708344671302b4b265e6f9d8f1d96dddee7b"
+    },
+    {
+      "path": "docs/agent/REQUIRED_CHECKS_20261104.md",
+      "extension": ".md",
+      "bytes": 2946,
+      "sha256": "65f1094ad8c9b4217c56b9d5fe429251352076531c10246a1384bef60dd25031"
     },
     {
       "path": "docs/agent/REVISION-RESPONSIVE-GLOBAL-2026-10-25.md",

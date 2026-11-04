@@ -1,3 +1,9 @@
+## Recuperación de protección tras1331/1332 — Codex /root
+
+Base0c95089318bce91871ab48adbf7f67c32a2049de. Protected flows41917190470/1 falló25huellas tras el retiro autorizado de marca móvil; previamente41901338196/1 falló3 tras tipografía del hero. Todos los grupos funcionales y Repository audit aprobaron. Se preservan exactamente las fuentes de1331/1332 y sus cambios de diseño/navegación, sin restaurar módulos retirados ni alterar pruebas. El helper oficial renueva únicamente las huellas reales contra main vigente; mantiene78registros/544entradas y alcances.
+
+Causa de repetición: la protección clásica exige cuatro checks, pero falta exigir los dos del mantenedor confiable antes del merge. Propuesta exacta y estado NO APLICADO en REQUIRED_CHECKS_20261104.md; preserva cuatro y agrega Protected flow maintenance/integrity de GitHubActions15368. El acceso administrativo da403 y no hay herramientas de navegador; no se tocaron credenciales. GITHUB_RESULTS explicita esperar ambos controles del HEAD actual también al integrar manualmente. PASS_LOCAL sobre0c:50regresiones,0fallos/skips, build/caché415recursos/67cargas, preflight completo y protección78registros/544entradas. Plan25archivos/28registros. CI/merge/postmerge requieren los recibos del candidato final.
+
 ## Prueba de humo del rosa de Inicio — 2026-11-04 — Codex /root
 
 HEADa7d5238e0a59f2ef2cbc32c1a05f01a35a0af12e, CI41873193824/1: logs terminales de browser126728762728 indican FAILURE en test:pages por2 valores esperados del degradado del header (1025/1440px). Agregado126741403897 confirma sólo browser=failure y otros5grupos success; CodeQL41873184399/1 SUCCESS. La API de estados aún mostraba pending/in_progress después del cierre de logs; no tratar esa lectura como ejecución activa ni sustituir conclusiones por inferencia.
