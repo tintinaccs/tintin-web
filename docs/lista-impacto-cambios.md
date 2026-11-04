@@ -1,3 +1,7 @@
+## 2026-11-04 — Control de animación del hero
+
+Autoridades: hero-bienvenida-inicio.css, inicio-premium.js e index.html. Control sin recuadro ni bezel nativo, icono18px con objetivo44×44 y foco; pausa/reanudar actualiza icono y nombre. Mismo comportamiento de movimiento reducido y parada fuera de vista. Prueba la apariencia y accesibilidad en16composiciones, incluidos teléfono horizontal y escritorio2560px; clic con barra móvil/WhatsApp activos. Derivados, caché y protección mediante generadores vigentes. Sin cambios de negocio, assets de marca ni dependencias del sitio.
+
 ## 2026-11-03 — Marca editorial de Inicio y movimiento compartido
 
 Autoridades: index.html, hero-bienvenida-inicio.css, inicio-premium.js, imágenes/definiciones de contenido y revelado-desplazamiento-global. Se sustituyen composiciones anteriores por una sola, con texto/enlaces HTML y recortes independientes. El fondo mantiene su editor por dispositivo; versión4 no borra configuraciones guardadas. Índice de colecciones comparte publicación con carrusel; no consulta adicional. Revelado por bloques y cancelación de movimiento reducido alcanzan las páginas públicas; rutas transaccionales mantienen lectura estática. Pie NOVAK y navegación existentes conservados. Pruebas de geometría, decodificación, personalización, fallback, pausa, teclado/formularios, producto y responsive público; derivados/caché/CSP/protección por generadores vigentes. Sin negocio, permisos, Rules, datos reales ni dependencias nuevos.

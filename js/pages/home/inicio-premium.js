@@ -9,6 +9,7 @@
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
     const pieces = [...hero.querySelectorAll('.tt-hero-piece')];
     const pause = hero.querySelector('.tt-hero-pause');
+    const motionIcon = pause.querySelector('svg path');
     const angles = [-15, 9, 10, -9];
     let paused = false, visible = true, frame = 0, entered = false, assetsReady = false;
     const animations = new Set();
@@ -45,6 +46,11 @@
       pause.setAttribute('aria-pressed', String(paused));
       pause.setAttribute('aria-label', paused ? 'Reanudar movimiento del banner' : 'Pausar movimiento del banner');
       pause.querySelector('span').textContent = paused ? 'Reanudar' : 'Pausar';
+      pause.title = paused ? 'Reanudar animación' : 'Pausar animación';
+      if (motionIcon) {
+        motionIcon.setAttribute('d', paused ? 'M9 5l10 7-10 7z' : 'M8 5v14M16 5v14');
+        motionIcon.setAttribute('fill', paused ? 'currentColor' : 'none');
+      }
       finishMotion(); schedule();
     });
     preference.addEventListener('change', () => { pause.hidden = preference.matches; finishMotion(); schedule(); });

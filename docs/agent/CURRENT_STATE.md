@@ -1,3 +1,9 @@
+## Control de animación discreto — 2026-11-04 — Codex /root
+
+Base0495671a7f2a8b390b137d2b786e306059992863; rama codex/hero-motion-control-20261104. Corrección solicitada a partir de captura: quitar el recuadro del control de pausa y uniformar su presentación en escritorio, laptop, tablet y teléfono. Icono vectorial18px sobre área táctil44×44, superficie transparente sin borde/sombra/bezel nativo, posición superior y foco visible. Estado pausado muestra reproducir y cambia título/nombre accesible. Control sigue oculto al preferir movimiento reducido.
+
+PASS_LOCAL:17/17 Chromium y17/17 WebKit (320–2560px, ambas orientaciones); comprobación adicional de pausa/reanudación mediante Espacio/Enter y foco visible1/1 en cada motor. Captura integrada390px revisada. IN_PROGRESS: build, preflight y CI del candidato. Se conserva PR1326 ya mergeada; su post-merge CI41815518220/1 continúa vigilado, CodeQL41815518129/1 y salud41815520787/1 SUCCESS. La nueva corrección requiere su propio PR/checks/publicación. Sin cambios de logo, datos, catálogo, fondo o firma NOVAK.
+
 ## Hero e identidad del sitio — 2026-11-03 — Codex /root
 
 Base d546ab3436e8311dc59e82c4ac8564cdaa87d560; rama codex/tintin-brand-polish-20261104. Autorización explícita para integrar, mergear y seguir checks terminales; criterio de identidad aplicado a todo el sitio mediante las autoridades compartidas, sin rediseñar formularios o lógica comercial.
