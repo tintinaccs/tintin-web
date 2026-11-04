@@ -350,7 +350,7 @@ async function inspectPrivacy(page, width) {
 }
 
 await listen();
-const browser = await chromium.launch({ headless:true });
+const browser = await chromium.launch({ headless:true, ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH } : {}) });
 const report = [], failures = [];
 try {
   for (const [width,height] of viewports) {

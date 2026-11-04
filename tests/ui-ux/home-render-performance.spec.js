@@ -7,12 +7,12 @@ for (const [width, height, device] of [[390,844,'mobile'],[820,1180,'tablet-vert
   test(`precarga sólo el banner elegido por picture en ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     const requests = [];
-    await page.route('**/hero-nuevo/*', async route => {
-      const url = new URL(route.request().url()); if (/\/hero-nuevo-[^/]+\.(webp|png)$/.test(url.pathname)) requests.push(url.pathname);
+    await page.route('**/hero-editorial/*', async route => {
+      const url = new URL(route.request().url()); if (/\/backdrop\.(webp|png)$/.test(url.pathname)) requests.push(url.pathname);
       await route.fulfill({ body: fs.readFileSync('.' + url.pathname), contentType: url.pathname.endsWith('.webp') ? 'image/webp' : 'image/png' });
     });
     await page.setContent(`<base href="http://tintin.test/">${preload}${hero}`);
     await expect.poll(() => page.locator('#tt-hero-img').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
-    expect(requests).toEqual([`/assets-tintin/images/home/hero-nuevo/hero-nuevo-${device}-lossless.webp`]);
+    expect(requests).toEqual(['/assets-tintin/images/home/hero-editorial/backdrop.webp']);
   });
 }

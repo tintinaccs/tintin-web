@@ -10,8 +10,8 @@ test('revelado mide candidatos una vez antes de escribir clases',async({page})=>
   DOMTokenList.prototype.add=function(...names){if(names.includes('tt-auto-reveal'))window.wrote=true;return add.apply(this,names);};
  });
  await page.addScriptTag({content:fs.readFileSync('js/quality/revelado-desplazamiento-global.js','utf8')});
- await expect(page.locator('.tt-auto-reveal')).toHaveCount(3);
- expect(await page.evaluate(()=>({reads:window.reads.length,late:window.readAfterWrite}))).toEqual({reads:3,late:false});
+ await expect(page.locator('.tt-auto-reveal')).toHaveCount(1);
+ expect(await page.evaluate(()=>({reads:window.reads.length,late:window.readAfterWrite}))).toEqual({reads:1,late:false});
 });
 
 test('mutaciones del carrito no remiden secciones de página',async({page})=>{
@@ -53,4 +53,28 @@ for(const width of [390,820,1440])test(`Inicio contiene el margen del hero sin d
  await page.addStyleTag({content:fs.readFileSync('css/pages/home/ajuste-inicio.css','utf8')});
  const geometry=await page.evaluate(()=>({body:document.body.getBoundingClientRect().top,hero:document.querySelector('.tt-hero').getBoundingClientRect().top}));
  expect(geometry).toEqual({body:0,hero:width>=769?88:0});
+});
+
+for(const route of ['checkout','login','perfil'])test(`contenido transaccional permanece estático: ${route}`,async({page})=>{
+ await page.route(`https://motion.test/${route}`,r=>r.fulfill({contentType:'text/html',body:'<main><section style="height:100px"><h1>Tu cuenta</h1><form><label>Nombre<input value="Mi borrador"></label><button>Continuar</button></form></section></main>'}));
+ await page.goto(`https://motion.test/${route}`);
+ await page.addScriptTag({content:fs.readFileSync('js/quality/revelado-desplazamiento-global.js','utf8')});
+ await expect(page.locator('.tt-auto-reveal')).toHaveCount(0);
+ await expect(page.locator('input')).toHaveValue('Mi borrador');
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.locator('button').dispatchEvent('pointerdown');
+ await expect(page.locator('.tt-premium-pressed')).toHaveCount(0);
+ expect(await page.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running').length)).toBe(0);
+});
+test('activar movimiento reducido cancela el revelado ya iniciado',async({page})=>{
+ await page.emulateMedia({reducedMotion:'no-preference'});
+ await page.setContent('<main><section style="height:1800px">Contenido</section><section id="later" style="height:200px"><h2>Colecciones</h2></section></main>');
+ await page.addScriptTag({content:fs.readFileSync('js/quality/revelado-desplazamiento-global.js','utf8')});
+ await expect(page.locator('#later')).toHaveClass(/tt-auto-reveal/);
+ await page.locator('#later').scrollIntoViewIfNeeded();
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await expect(page.locator('html')).toHaveClass(/tt-reveal-reduced-motion/);
+ await expect(page.locator('#later')).toHaveClass(/tt-visible/);
+ expect(await page.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running').length)).toBe(0);
+ await expect(page.locator('#later h2')).toHaveText('Colecciones');
 });

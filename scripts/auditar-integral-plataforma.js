@@ -45,7 +45,7 @@ check(
     !files.homeFit.includes('170svh') &&
     !files.homeFit.includes('128svh') &&
     files.homeFit.includes('@media(max-width:380px)') &&
-    files.homeFit.includes('(orientation:landscape)'),
+    read('css/pages/home/hero-bienvenida-inicio.css').includes('(orientation:landscape)'),
   'mobile y pantallas bajas no deben reservar grandes espacios vacíos'
 );
 
