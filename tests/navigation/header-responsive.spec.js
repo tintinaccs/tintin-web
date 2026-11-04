@@ -667,7 +667,15 @@ test('las categorías se desplazan con el dedo y el fondo conserva su posición'
   const grid = page.locator('#collections-sheet .tt-sheet-grid');
   const box = await grid.boundingBox();
   const session = await page.context().newCDPSession(page);
-  const x = box.x + box.width / 2, y = box.y + box.height - 30;
+  const x = box.x + box.width / 2;
+  // El aviso de privacidad flota por encima de las hojas (z-index 2200) y puede
+  // cubrir el pie de la lista: se toca el punto más bajo que sí es de la lista.
+  const y = await grid.evaluate((el, [px, top, bottom]) => {
+    for (let py = bottom - 30; py > top; py -= 10) {
+      if (el.contains(document.elementFromPoint(px, py))) return py;
+    }
+    return top + 30;
+  }, [x, box.y, box.y + box.height]);
   await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
   for (let step=1;step<=8;step++) {
     await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y-step*30}]});
