@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "d546ab3436e8311dc59e82c4ac8564cdaa87d560",
-  "reason": "Integrar hero de marca Tintin y pulir movimiento compartido conservando datos, firma NOVAK, controles y contratos de comercio",
+  "reason": "Integrar hero de marca Tintin y pulir movimiento compartido conservando datos, firma NOVAK, controles y contratos de comercio; asegurar regresiones en CI existente",
   "files": [
     {
       "path": "_headers",
@@ -182,6 +182,11 @@
       "path": "nosotros.html",
       "oldHash": "f24d46329e60265110b6a76de5178c9f84ec0a9906658aa9b75d8eff76310707",
       "newHash": "540c13351be16123378296b66994930cc8cf30f7b3c27fd1d990af6102420bec"
+    },
+    {
+      "path": "package.json",
+      "oldHash": "493b52c4f1a357c489819be8ab496f855547585f1c02940ea1650e36154d0d68",
+      "newHash": "45fae1bb6ff1150b74b56e53e4612b4772a42714cb8ebfe11b1ad7beaaba2112"
     },
     {
       "path": "perfil.html",
