@@ -1,3 +1,11 @@
+## Cierre del control tipográfico de PR1330 — 2026-11-04 — Codex /root
+
+HEAD1d9e11bac27d98f7f554508bebe955c454d8042f: CI41863610250/1 terminó FAILURE sólo en browser126695322001 por3 expectativas Montserrat600 del H1 manuscrito (390/1024/1440px). CodeQL41863603300/1, preflight, comercio, reglas, administración y calidad técnica SUCCESS. El agregado falló por browser; no es otro incidente. GitHub recuperó ejecuciones después de la degradación reportada; se sigue el resultado vigente.
+
+Causa y autoridad: la referencia aprobada y docs/identidad-visual-tintin.md permiten TintinScript400 exclusivamente para #hero .tt-hero-title. La prueba DOM de identidad no conocía esa excepción, que ya validan el auditor y diagnóstico canónicos. Se verifica selector exacto de H1, banner de referencia e Inicio, una sola excepción, fuente local realmente cargada y peso400. Todos los demás H1–H3 conservan Montserrat600 en las18páginas. Sin cambios de CSS, logo, PNG, funciones o protecciones.
+
+PASS_LOCAL:85/85 Chromium de section-flow-full-width sin reintentos, incluyendo tipografía de18páginas×3anchos, superficies, headers, perfil y espaciado320–2560px. Diagnóstico/preflight y CI del nuevo SHA requieren sus recibos; no se hereda verde de1d9e11ba. Continúa autorización para merge protegido y comprobación posterior. Skills aplicadas: gh-fix-ci y verification-before-completion.
+
 ## Seguimiento y reparación de PR1330 — 2026-11-04 — Codex /root
 
 Autorización: terminar implementación y merge protegido. HEAD inicial f4865034536dea3dd04282853fbb5f3252dccd62; CI41851133731/intento1 FAILURE: Interfaz126650389163 (11 fallos,268 PASS) y Calidad126650389459 (inventory-regressions exige H1 anterior). Comercio, reglas, administración y preflight SUCCESS; CodeQL41851125941/1 SUCCESS. No se heredan esos resultados a esta corrección.
