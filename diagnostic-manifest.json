@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e1ff7f622d3a23e64b4957d6a687af05e04c4c4643f7d7d56f4edda8a8e69928",
+  "sourceFingerprint": "3d4e90dccb78883cb8ed7af292df647176b9bef7486bfbd93f1cd2de64769a5c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1800,
-    "textFiles": 1656,
-    "totalBytes": 51030359,
+    "files": 1802,
+    "textFiles": 1657,
+    "totalBytes": 51300332,
     "pages": 19,
-    "modules": 1169
+    "modules": 1170
   },
   "viewports": [
     {
@@ -16644,8 +16644,8 @@
         "guest",
         "client"
       ],
-      "bytes": 51191,
-      "sha256": "c2461e09121fae3e0c5ff8e73d82143329ed8b13f58b1101fa9ebeb2524c1b54",
+      "bytes": 51188,
+      "sha256": "f1bbddd3dd562b1706d00831c2df7ba5d2e8d5e66dffa578b4990fe2ab65e903",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16793,7 +16793,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-d471e4de19be0f5e",
+          "raw": "css/generated/inicio.css?v=tintin-home-345f929e14dba3b8",
           "target": "css/generated/inicio.css",
           "line": 61
         },
@@ -16858,7 +16858,7 @@
           "line": 79
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-control-20261104-1",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-control-20261104-2",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 89
         },
@@ -17080,9 +17080,9 @@
         },
         {
           "tag": "img",
-          "raw": "assets-tintin/images/home/hero-editorial/necklace.webp?v=editorial-1",
+          "raw": "assets-tintin/images/home/hero-editorial/necklace.webp?v=olyra-20261104-1",
           "target": "assets-tintin/images/home/hero-editorial/necklace.webp",
-          "alt": "COLLAR YSÉLA",
+          "alt": "COLLAR OLYRA",
           "hasAlt": true,
           "line": 147
         },
@@ -17096,8 +17096,8 @@
         },
         {
           "tag": "img",
-          "raw": "assets-tintin/images/home/hero-editorial/tintin-white.webp?v=editorial-1",
-          "target": "assets-tintin/images/home/hero-editorial/tintin-white.webp",
+          "raw": "assets-tintin/images/home/hero-editorial/tintin-contrast.png?v=contrast-20261104-1",
+          "target": "assets-tintin/images/home/hero-editorial/tintin-contrast.png",
           "alt": "",
           "hasAlt": true,
           "line": 151
@@ -17383,13 +17383,13 @@
           "line": 146
         },
         {
-          "raw": "/product?id=018a2d4f-94d0-4e52-89a4-28a37323c2a5",
+          "raw": "/product?id=imp_0a5e06ced9fa8ada",
           "target": "product.html",
           "text": "",
           "id": "",
-          "ariaLabel": "Ver COLLAR YSÉLA",
+          "ariaLabel": "Ver COLLAR OLYRA",
           "title": "",
-          "imageAlt": "COLLAR YSÉLA",
+          "imageAlt": "COLLAR OLYRA",
           "line": 147
         },
         {
@@ -17987,7 +17987,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-d471e4de19be0f5e",
+          "raw": "css/generated/inicio.css?v=tintin-home-345f929e14dba3b8",
           "target": "css/generated/inicio.css",
           "line": 61,
           "exists": true
@@ -18065,7 +18065,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-control-20261104-1",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-control-20261104-2",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 89,
           "exists": true
@@ -18299,7 +18299,7 @@
           "exists": true
         },
         {
-          "raw": "assets-tintin/images/home/hero-editorial/necklace.webp?v=editorial-1",
+          "raw": "assets-tintin/images/home/hero-editorial/necklace.webp?v=olyra-20261104-1",
           "target": "assets-tintin/images/home/hero-editorial/necklace.webp",
           "line": 147,
           "exists": true
@@ -18311,8 +18311,8 @@
           "exists": true
         },
         {
-          "raw": "assets-tintin/images/home/hero-editorial/tintin-white.webp?v=editorial-1",
-          "target": "assets-tintin/images/home/hero-editorial/tintin-white.webp",
+          "raw": "assets-tintin/images/home/hero-editorial/tintin-contrast.png?v=contrast-20261104-1",
+          "target": "assets-tintin/images/home/hero-editorial/tintin-contrast.png",
           "line": 151,
           "exists": true
         },
@@ -18515,7 +18515,7 @@
           "exists": true
         },
         {
-          "raw": "/product?id=018a2d4f-94d0-4e52-89a4-28a37323c2a5",
+          "raw": "/product?id=imp_0a5e06ced9fa8ada",
           "target": "product.html",
           "line": 147,
           "exists": true
@@ -41396,8 +41396,8 @@
     },
     {
       "path": "scripts/auditar-performance-premium.mjs",
-      "bytes": 2106,
-      "sha256": "6fca68200182fca449ba8ea637b87702f705848cef9c4ef1a50459cd336c62bb",
+      "bytes": 2128,
+      "sha256": "6433799c23954872161432db16622c7dbd0895c077531d8bb343a511a6ae9e78",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42972,6 +42972,48 @@
           "target": "scripts/playwright",
           "dynamic": false,
           "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/generar-marca-hero.mjs",
+      "bytes": 2915,
+      "sha256": "d4299ba3eb31a2b9caee06a01f3451c4a5099f2108dd4b4ef6c0b874d38ea291",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "playwright",
+          "target": "scripts/playwright",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:zlib",
+          "target": null,
+          "dynamic": false,
+          "line": 6
         }
       ],
       "endpoints": []
@@ -60695,8 +60737,8 @@
     },
     {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
-      "bytes": 8084,
-      "sha256": "659d681814ef9695cbfafed3d57f1829e3af5fb2b771fa14d46a0f7145a08850",
+      "bytes": 9258,
+      "sha256": "6f785c46db2904851a6a4aa0661ac2969886466378eabcee02b6fb2d5a71b7c9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60709,11 +60751,11 @@
         },
         {
           "url": "https://motion.test/",
-          "line": 83
+          "line": 90
         },
         {
           "url": "https://motion.test/js/pages/home/inicio-premium.js",
-          "line": 85
+          "line": 92
         }
       ]
     },
@@ -63200,8 +63242,8 @@
     {
       "path": "assets-tintin/images/home/hero-editorial/README.md",
       "extension": ".md",
-      "bytes": 1197,
-      "sha256": "6b759916599ce2a52b038883ae9d5a5574a0eb658ecbfb731890091dfc85fce8"
+      "bytes": 2598,
+      "sha256": "17abde5436d06dedcbafa06b2cbc67b791c8171ee5ec9acf4d147cbd578b0e5c"
     },
     {
       "path": "assets-tintin/images/home/hero-editorial/backdrop.png",
@@ -63230,8 +63272,14 @@
     {
       "path": "assets-tintin/images/home/hero-editorial/necklace.webp",
       "extension": ".webp",
-      "bytes": 128264,
-      "sha256": "7de071b73f1bf0f9a3383d26e6348f658b36f664f45803302c6df1063e74ee62"
+      "bytes": 283908,
+      "sha256": "97211792747f83715f61ec5020a48b7344628b84de6bb4d4b552b3571be874c6"
+    },
+    {
+      "path": "assets-tintin/images/home/hero-editorial/tintin-contrast.png",
+      "extension": ".png",
+      "bytes": 106496,
+      "sha256": "7a9828424ee1f120f2218d1dd834dfac75ea9f36880377c10f9e26ef5594c14d"
     },
     {
       "path": "assets-tintin/images/home/hero-editorial/tintin-white.webp",
@@ -64028,8 +64076,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 5604,
-      "sha256": "2a8985ee2599e30c03bdfa0c0fa97a67811bd90bc7f82cb5e69eba85c4b85a48"
+      "bytes": 5615,
+      "sha256": "9ba5c574d49334526a46c417ddeae2aac3aa581c4ebfcff5f57d58521d941df6"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64041,7 +64089,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "f856a919ecd4426302be8ffea0a5dfa89b8b3b748847dc1f78631c12639938ba"
+      "sha256": "a64db2e2285ff0c9bf9ab5d0d78a02ca3afebccffcc05393cd5e332064e94d90"
     },
     {
       "path": "config/public-site.json",
@@ -64424,8 +64472,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 376571,
-      "sha256": "d471e4de19be0f5ef36febff369e3497296bf71a5bef0d144457df5116e3136c"
+      "bytes": 376895,
+      "sha256": "345f929e14dba3b8d28ddea7ae4c87a5f57424e312193a629b201b15a32a629e"
     },
     {
       "path": "css/generated/login-2.css",
@@ -64544,8 +64592,8 @@
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
       "extension": ".css",
-      "bytes": 11711,
-      "sha256": "bb86c153d2dcfe25a366c6bc94ff1760979bbf3f23756815179c6d6620fed536"
+      "bytes": 12122,
+      "sha256": "f09805271aa7d7dd09b78295e6ef9be8a5c563f30c19d57594f8c036be8239a9"
     },
     {
       "path": "css/pages/home/mantenimiento-inicio.css",
@@ -64886,8 +64934,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1198833,
-      "sha256": "550ac9b5bb67127d57b09259086318255465bc627a65399143438184df96e2d6"
+      "bytes": 1199803,
+      "sha256": "b2b163c95ef8a4a53ad3aa3b441a60ce8fc4815f35a7cb30f68d708f29fa7cb6"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -65876,8 +65924,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 157026,
-      "sha256": "eefc326ac58214322776cb824194969fd3292ba4bfaa635a82145bc86a34fd85"
+      "bytes": 157634,
+      "sha256": "fe7a330136f182de778679e049f223b7df58d068bee89cc3038b3f7d30928247"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -66950,8 +66998,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 51191,
-      "sha256": "c2461e09121fae3e0c5ff8e73d82143329ed8b13f58b1101fa9ebeb2524c1b54"
+      "bytes": 51188,
+      "sha256": "f1bbddd3dd562b1706d00831c2df7ba5d2e8d5e66dffa578b4990fe2ab65e903"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -69812,8 +69860,8 @@
     {
       "path": "scripts/auditar-performance-premium.mjs",
       "extension": ".mjs",
-      "bytes": 2106,
-      "sha256": "6fca68200182fca449ba8ea637b87702f705848cef9c4ef1a50459cd336c62bb"
+      "bytes": 2128,
+      "sha256": "6433799c23954872161432db16622c7dbd0895c077531d8bb343a511a6ae9e78"
     },
     {
       "path": "scripts/auditar-posterior-fases-seguridad.js",
@@ -70059,7 +70107,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 81327,
-      "sha256": "4668dadd2a8e1a65d39e23d4d19ff0673865ace4e49175f98923a4a1d221fb2e"
+      "sha256": "8bcd0c241be4be98f8e7884faf248cacb884c160fc2a9eab908bd5acd6b2b578"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -70168,6 +70216,12 @@
       "extension": ".mjs",
       "bytes": 4916,
       "sha256": "2866cbdf7bd1c13fab08cef65054e8e89e60cdc7aea1f1301d1e0f2ae7a43cf3"
+    },
+    {
+      "path": "scripts/generar-marca-hero.mjs",
+      "extension": ".mjs",
+      "bytes": 2915,
+      "sha256": "d4299ba3eb31a2b9caee06a01f3451c4a5099f2108dd4b4ef6c0b874d38ea291"
     },
     {
       "path": "scripts/inventariar-acciones-cliente.mjs",
@@ -73160,8 +73214,8 @@
     {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
       "extension": ".js",
-      "bytes": 8084,
-      "sha256": "659d681814ef9695cbfafed3d57f1829e3af5fb2b771fa14d46a0f7145a08850"
+      "bytes": 9258,
+      "sha256": "6f785c46db2904851a6a4aa0661ac2969886466378eabcee02b6fb2d5a71b7c9"
     },
     {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",

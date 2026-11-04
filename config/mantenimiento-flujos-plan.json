@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "0495671a7f2a8b390b137d2b786e306059992863",
-  "reason": "Corregir control responsive del hero y favicon original plano sobre circulo blanco solicitado por titular",
+  "reason": "Corregir hero responsive con bordes suaves, cadena completa, marca original con contraste y favicon plano solicitado",
   "files": [
     {
       "path": "404.html",
@@ -51,7 +51,7 @@
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
       "oldHash": "ed20d569923a63daf83e825003286b7b0576ca953d455a28eec712ec14fe1e96",
-      "newHash": "bb86c153d2dcfe25a366c6bc94ff1760979bbf3f23756815179c6d6620fed536"
+      "newHash": "f09805271aa7d7dd09b78295e6ef9be8a5c563f30c19d57594f8c036be8239a9"
     },
     {
       "path": "envios.html",
@@ -61,7 +61,7 @@
     {
       "path": "index.html",
       "oldHash": "ba0f26759fc1895f75d4b52bfb5f01395b230607060a590ed707aa11b00c658a",
-      "newHash": "c2461e09121fae3e0c5ff8e73d82143329ed8b13f58b1101fa9ebeb2524c1b54"
+      "newHash": "f1bbddd3dd562b1706d00831c2df7ba5d2e8d5e66dffa578b4990fe2ab65e903"
     },
     {
       "path": "js/pages/home/inicio-premium.js",
@@ -101,7 +101,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "e58ce395e703b9744685cde5b0aec71e29d5d52457b589e78d8f49ac50dba9ca",
-      "newHash": "4668dadd2a8e1a65d39e23d4d19ff0673865ace4e49175f98923a4a1d221fb2e"
+      "newHash": "8bcd0c241be4be98f8e7884faf248cacb884c160fc2a9eab908bd5acd6b2b578"
     },
     {
       "path": "terminos.html",

@@ -34,7 +34,7 @@ for (const [width,height] of [[320,568],[390,844],[430,932],[568,320],[667,375],
     const result=await page.evaluate(()=>{
       const image=document.querySelector('#tt-hero-img'), media=image.closest('.tt-hero-media'), hero=document.querySelector('#hero');
       const box=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
-      return {image:box(image),media:box(media),hero:box(hero),brand:box(hero.querySelector('.tt-hero-brand')),control:(()=>{const e=hero.querySelector('.tt-hero-pause'),s=getComputedStyle(e);return {...box(e),border:parseFloat(s.borderTopWidth),background:s.backgroundColor,shadow:s.boxShadow,reachable:e.contains(document.elementFromPoint(e.getBoundingClientRect().x+e.getBoundingClientRect().width/2,e.getBoundingClientRect().y+e.getBoundingClientRect().height/2)),icon:box(e.querySelector('svg'))}})(),ratio:hero.querySelector('.tt-hero-brand').naturalWidth/hero.querySelector('.tt-hero-brand').naturalHeight,pieces:[...hero.querySelectorAll('.tt-hero-piece img')].map(img=>({fit:getComputedStyle(img).objectFit,loaded:img.complete&&img.naturalWidth>0})),scrollWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),whatsapp:box(document.querySelector('.tt-wa-float')),actions:[...hero.querySelectorAll('.tt-hero-actions a')].map(a=>({...box(a),clipped:a.scrollWidth>a.clientWidth+1}))};
+      return {image:box(image),media:box(media),hero:box(hero),brand:box(hero.querySelector('.tt-hero-brand')),necklace:box(hero.querySelector('.tt-hero-piece--necklace')),brandFilter:getComputedStyle(hero.querySelector('.tt-hero-brand')).filter,brandSrc:hero.querySelector('.tt-hero-brand').getAttribute('src'),fade:{background:getComputedStyle(hero,'::after').backgroundImage,pointer:getComputedStyle(hero,'::after').pointerEvents,z:getComputedStyle(hero,'::after').zIndex},control:(()=>{const e=hero.querySelector('.tt-hero-pause'),s=getComputedStyle(e);return {...box(e),border:parseFloat(s.borderTopWidth),background:s.backgroundColor,shadow:s.boxShadow,reachable:e.contains(document.elementFromPoint(e.getBoundingClientRect().x+e.getBoundingClientRect().width/2,e.getBoundingClientRect().y+e.getBoundingClientRect().height/2)),icon:box(e.querySelector('svg'))}})(),ratio:hero.querySelector('.tt-hero-brand').naturalWidth/hero.querySelector('.tt-hero-brand').naturalHeight,pieces:[...hero.querySelectorAll('.tt-hero-piece img')].map(img=>({fit:getComputedStyle(img).objectFit,loaded:img.complete&&img.naturalWidth>0})),scrollWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),whatsapp:box(document.querySelector('.tt-wa-float')),actions:[...hero.querySelectorAll('.tt-hero-actions a')].map(a=>({...box(a),clipped:a.scrollWidth>a.clientWidth+1}))};
     });
     const geometryPath = testInfo.outputPath('geometria-banner.json');
     fs.writeFileSync(geometryPath, JSON.stringify(result, null, 2));
@@ -50,6 +50,13 @@ for (const [width,height] of [[320,568],[390,844],[430,932],[568,320],[667,375],
     expect(result.control.reachable).toBe(true);
     expect(result.control.top).toBeGreaterThanOrEqual(result.hero.top);
     expect(result.control.right).toBeLessThanOrEqual(result.hero.right);
+    expect(result.brandFilter).toBe('none');
+    expect(result.brandSrc).toContain('tintin-contrast.png');
+    expect((result.fade.background.match(/linear-gradient/g)||[])).toHaveLength(2);
+    expect(result.fade.pointer).toBe('none');
+    expect(result.fade.z).toBe('0');
+    for(const edge of ['left','top'])expect(result.necklace[edge]-result.hero[edge],`necklace ${edge}`).toBeGreaterThanOrEqual(0);
+    for(const edge of ['right','bottom'])expect(result.hero[edge]-result.necklace[edge],`necklace ${edge}`).toBeGreaterThanOrEqual(0);
     expect(result.pieces).toHaveLength(4);
     expect(result.pieces.every(piece=>piece.fit==='contain'&&piece.loaded)).toBe(true);
     for(const edge of ['left','right','top','bottom']) expect(Math.abs(result.hero[edge]-result.media[edge])).toBeLessThanOrEqual(1);
@@ -94,6 +101,8 @@ test('el banner pausa, respeta movimiento reducido y conserva enlaces al desplaz
  const before=await page.locator('.tt-hero-piece').first().evaluate(e=>getComputedStyle(e).transform);
  await page.evaluate(()=>scrollTo(0,120));await page.waitForTimeout(50);
  expect(await page.locator('.tt-hero-piece').first().evaluate(e=>getComputedStyle(e).transform)).toBe(before);
+ const chainInside=await page.locator('.tt-hero-piece--necklace').evaluate(e=>{const r=e.getBoundingClientRect(),h=e.closest('#hero').getBoundingClientRect();return r.top>=h.top&&r.left>=h.left&&r.right<=h.right&&r.bottom<=h.bottom;});
+ expect(chainInside).toBe(true);
  await pause.click();await expect(hero).toHaveAttribute('data-hero-moving','true');
  await expect(pause.locator('path')).toHaveAttribute('d','M8 5v14M16 5v14');
  await pause.focus();

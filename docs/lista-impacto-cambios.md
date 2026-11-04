@@ -1,3 +1,7 @@
+## Hero: continuidad, cadena y contraste — 2026-11-04
+
+Autoridad CSS única hero-bienvenida-inicio.css, marcado index.html y recorte necklace.webp. Gradientes de borde en pseudo-elemento no interactivo bajo accesorios/marca; colores de superficie compartidos con índice contiguo. Producto real Olyra sustituye Yséla, enlace/alt/procedencia juntos. Marca mantiene fuente y alfa con tinta rosa profunda para contraste. Verificar ambos bordes, contraste, recorte de producto incluso al desplazar, foco y geometría en16tamaños/2motores. Nuevas URLs CSS/imagen y derivados generados, sin cambios de datos.
+
 ## Favicon original circular — 2026-11-04
 
 Autoridad: scripts/generar-iconos-admin.mjs y PNG original assets-tintin/images/general/logo.png, intacto. Cambia solo la rama de exportación favicon (círculo blanco, rosa plano vigente, una pasada), cinco archivos favicon y URLs de18documentos. Apple/apps/push permanecen iguales. Verificar alfa exterior, círculo blanco, silueta/cuerpo, PNG16/32 e ICO multientrada y rutas/versiones; regenerar shells/diagnóstico/protección.
