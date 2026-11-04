@@ -239,6 +239,17 @@ for (const file of walk(ROOT)) {
         check(/GreatVibes-Latin\.woff/.test(body) && /font-display:swap/.test(body), `${name}: script local con swap obligatorio`);
         return rule.replaceAll('TintinScript', 'Montserrat');
       }
+      // Las líneas internas del título (las crea el contenido guardado) heredan
+      // por completo la tipografía aprobada del H1; no definen una familia propia.
+      const titleLines = [
+        'html:root body.tt-home-premium #hero .tt-hero-title .tt-hero-title-line',
+        'html:root body.tt-home-premium #hero .tt-hero-title .tt-hero-title-line+.tt-hero-title-line::before',
+        'html:root body.tt-home-premium #hero .tt-hero-title .tt-hero-title-line+.tt-hero-title-line:before'
+      ].includes(approvedSelector);
+      if (titleLines) {
+        check(!/font-family\s*:\s*(?!inherit\b)/i.test(body) && !/font\s*:\s*(?!inherit\b)/i.test(body), `${name}: las líneas del título deben heredar la tipografía`);
+        return '';
+      }
       const title = approvedSelector === 'html:root body.tt-home-premium #hero .tt-hero-title';
       const bodyText = ['html body.tt-home-premium #hero .tt-hero-subtitle', 'html body.tt-home-premium #hero .tt-hero-actions a'].includes(approvedSelector);
       if (title) return rule.replaceAll('TintinScript', 'Montserrat');
