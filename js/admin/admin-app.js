@@ -3575,10 +3575,10 @@ const loadDeferredAdminSection = createAdminSectionLoader({
   canLoad: () => currentRole === 'superadmin' && String(currentUser?.email || '').toLowerCase() === SUPER_ADMIN.toLowerCase(),
   sections: {
     correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261028-correos-1-editor-search-20261028-2'), init: initDeferredCorreos },
-    diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1-editor-search-20261028-2'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
+    diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-suitcase-20261104-1'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
     paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2') },
     apariencia: { load: async () => {
-      await import('./appearance/editor-visual-admin.js?v=tintin-brand-polish-20261104-1');
+      await import('./appearance/editor-visual-admin.js?v=tintin-suitcase-20261104-1');
       await import('./appearance/visual-studio-layout-admin.js?v=tintin-20261022-avatar-inicial-1');
     } }
   }

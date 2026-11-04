@@ -93,9 +93,18 @@ for (const width of [390, 1024, 1440]) {
       await page.evaluate(() => document.fonts.ready);
       const headings = await page.locator('h1,h2,h3').evaluateAll(nodes => nodes.map(node => {
         const style = getComputedStyle(node);
-        return { text: node.textContent.trim(), weight: style.fontWeight, font: style.fontFamily };
+        const referenceTitle = node.matches('body.tt-home-premium #hero[data-tt-banner="suitcase-20261104"] h1#tt-hero-heading.tt-hero-title');
+        return { text: node.textContent.trim(), weight: style.fontWeight, font: style.fontFamily, referenceTitle,
+          scriptLoaded: referenceTitle && [...document.fonts].some(face => face.family === 'TintinScript' && face.status === 'loaded') };
       }));
+      expect(headings.filter(heading => heading.referenceTitle), file).toHaveLength(file === 'index.html' ? 1 : 0);
       for (const heading of headings) {
+        if (file === 'index.html' && heading.referenceTitle) {
+          expect(heading.font, `${file}: título manuscrito aprobado`).toBe('TintinScript, cursive');
+          expect(heading.weight, file).toBe('400');
+          expect(heading.scriptLoaded, file).toBe(true);
+          continue;
+        }
         expect(heading.font, `${file}: ${heading.text}`).toContain('Montserrat');
         expect(heading.weight, `${file}: ${heading.text}`).toBe('600');
       }

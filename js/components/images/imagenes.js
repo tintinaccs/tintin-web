@@ -49,12 +49,12 @@ export const HERO_POSITION_VALUES = Object.freeze([
 // Artes de marca que se muestran por defecto y que también se previsualizan
 // en Super Admin. Firestore puede reemplazar cada variante sin editar código.
 export const HERO_IMAGE_FALLBACKS = Object.freeze({
-  desktop: 'assets-tintin/images/home/hero-editorial/backdrop.png',
-  tablet: 'assets-tintin/images/home/hero-editorial/backdrop.png',
-  tabletLandscape: 'assets-tintin/images/home/hero-editorial/backdrop.png',
-  mobile: 'assets-tintin/images/home/hero-editorial/backdrop.png',
+  desktop: 'assets-tintin/images/home/hero-reference/backdrop.svg',
+  tablet: 'assets-tintin/images/home/hero-reference/backdrop.svg',
+  tabletLandscape: 'assets-tintin/images/home/hero-reference/backdrop.svg',
+  mobile: 'assets-tintin/images/home/hero-reference/backdrop.svg',
 });
-export const HERO_IMAGE_CONFIG_VERSION = 4;
+export const HERO_IMAGE_CONFIG_VERSION = 5;
 
 // Solo aparecen slots que tienen un destino visual real. Las fotos de producto
 // se editan en Productos y las portadas de colección en Colecciones.

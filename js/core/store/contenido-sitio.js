@@ -15,8 +15,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-brand-polish-20261104-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-brand-polish-20261104-1';
+} from './esquema-contenido.js?v=tintin-suitcase-20261104-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-suitcase-20261104-1';
 
 const subscriptions = new Map();
 const latestData = new Map();
@@ -83,11 +83,11 @@ function applyText(element, value, item) {
   // No debe borrar el contenido publicado de respaldo: el hero es la primera
   // impresión de la página y un subtítulo vacío rompe toda la composición.
   if (!safe && element.classList.contains('tt-hero-subtitle')) {
-    safe = item.default || 'Joyitas únicas, como vos.';
+    safe = item.default || 'Piezas elegidas para acompañarte en cada momento.';
   }
   if (element.classList.contains('tt-hero-title')) {
     const lines = String(safe).split('\n').filter(Boolean);
-    element.replaceChildren(...(lines.length ? lines : ['Bienvenida', 'tintina']).map((line, index) => {
+    element.replaceChildren(...(lines.length ? lines : [item.default || 'El encanto está en los detalles']).map((line, index) => {
       const span = document.createElement('span');
       span.className = `tt-hero-title-line${index ? ' tt-hero-title-line--accent' : ''}`;
       span.textContent = line;

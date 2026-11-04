@@ -409,7 +409,8 @@ try {
       await page.waitForTimeout(350);
       const surfaces = await page.evaluate(() => {
         const brandProbe = document.createElement('div');
-        brandProbe.style.setProperty('background-image', 'linear-gradient(180deg, color-mix(in srgb, #F8AACA 94%, transparent) 0%, color-mix(in srgb, #FDECF2 90%, transparent) 52%, transparent 100%)', 'important');
+        // Inicio hereda el rosa claro #FFCEE5 de la referencia aprobada del hero.
+        brandProbe.style.setProperty('background-image', 'linear-gradient(180deg, color-mix(in srgb, #F8AACA 94%, transparent) 0%, color-mix(in srgb, #FFCEE5 90%, transparent) 52%, transparent 100%)', 'important');
         document.body.appendChild(brandProbe);
         const expectedHeaderGradient = getComputedStyle(brandProbe).backgroundImage;
         brandProbe.remove();

@@ -758,7 +758,11 @@ function collectVisualObservations(page, viewport, doc, win) {
       .split(',')[0]
       .replace(/^['"]|['"]$/g, '')
       .trim();
-    if (primaryFamily !== 'Montserrat') {
+    const approvedHeroFont = element.closest('#hero[data-tt-banner="suitcase-20261104"]') && (
+      (primaryFamily === 'TintinScript' && element.matches('.tt-hero-title,.tt-hero-title *')) ||
+      (primaryFamily === 'Arial' && element.matches('.tt-hero-subtitle,.tt-hero-actions a,.tt-hero-actions a *'))
+    );
+    if (primaryFamily !== 'Montserrat' && !approvedHeroFont) {
       observations.push({
         key: `typography:${selectorFor(element)}`,
         title: 'Tipografía distinta de Montserrat',

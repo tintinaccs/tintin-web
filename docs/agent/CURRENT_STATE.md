@@ -1,3 +1,30 @@
+## Prueba de humo del rosa de Inicio — 2026-11-04 — Codex /root
+
+HEADa7d5238e0a59f2ef2cbc32c1a05f01a35a0af12e, CI41873193824/1: logs terminales de browser126728762728 indican FAILURE en test:pages por2 valores esperados del degradado del header (1025/1440px). Agregado126741403897 confirma sólo browser=failure y otros5grupos success; CodeQL41873184399/1 SUCCESS. La API de estados aún mostraba pending/in_progress después del cierre de logs; no tratar esa lectura como ejecución activa ni sustituir conclusiones por inferencia.
+
+Causa: smoke-todas-paginas.mjs fijaba el segundo rosa #FDECF2 anterior. La autoridad sistema-superficies-tintin.css pinta el header con --tt-flow-light; Inicio lo define #FFCEE5 en el hero aprobado. Se actualiza sólo ese valor esperado, preservando comparación exacta, colores/opacidades94/90, paradas0/52/100, blur18px, máscara y resto de superficies. No era una diferencia de serialización rgba/color(srgb). No se modifica diseño, CSS, imagen, permisos ni checks.
+
+PASS_LOCAL: reproducción FAIL con Chrome Headless Shell156.0.8078.4 (Playwright1248), luego test:pages OK en18rutas y headers móvil/tablet/desktop, más10/10 runtime finales sin reintentos. Etapas previas de browser local también PASS:115rendimiento,144/144viewports canónicos,220/220geometrías, accesibilidad, navegación y controles administrativos.85/85fuentes/superficies del ajuste anterior seguían aprobados. Build/diagnóstico/preflight y CI del siguiente SHA requieren sus propios recibos. Guías aplicadas: gh-fix-ci y verification-before-completion.
+
+## Cierre del control tipográfico de PR1330 — 2026-11-04 — Codex /root
+
+HEAD1d9e11bac27d98f7f554508bebe955c454d8042f: CI41863610250/1 terminó FAILURE sólo en browser126695322001 por3 expectativas Montserrat600 del H1 manuscrito (390/1024/1440px). CodeQL41863603300/1, preflight, comercio, reglas, administración y calidad técnica SUCCESS. El agregado falló por browser; no es otro incidente. GitHub recuperó ejecuciones después de la degradación reportada; se sigue el resultado vigente.
+
+Causa y autoridad: la referencia aprobada y docs/identidad-visual-tintin.md permiten TintinScript400 exclusivamente para #hero .tt-hero-title. La prueba DOM de identidad no conocía esa excepción, que ya validan el auditor y diagnóstico canónicos. Se verifica selector exacto de H1, banner de referencia e Inicio, una sola excepción, fuente local realmente cargada y peso400. Todos los demás H1–H3 conservan Montserrat600 en las18páginas. Sin cambios de CSS, logo, PNG, funciones o protecciones.
+
+PASS_LOCAL:85/85 Chromium de section-flow-full-width sin reintentos, incluyendo tipografía de18páginas×3anchos, superficies, headers, perfil y espaciado320–2560px. Diagnóstico/preflight y CI del nuevo SHA requieren sus recibos; no se hereda verde de1d9e11ba. Continúa autorización para merge protegido y comprobación posterior. Skills aplicadas: gh-fix-ci y verification-before-completion.
+
+## Seguimiento y reparación de PR1330 — 2026-11-04 — Codex /root
+
+Autorización: terminar implementación y merge protegido. HEAD inicial f4865034536dea3dd04282853fbb5f3252dccd62; CI41851133731/intento1 FAILURE: Interfaz126650389163 (11 fallos,268 PASS) y Calidad126650389459 (inventory-regressions exige H1 anterior). Comercio, reglas, administración y preflight SUCCESS; CodeQL41851125941/1 SUCCESS. No se heredan esos resultados a esta corrección.
+
+Causas: fixture de precarga aún buscaba backdrop.webp en hero-editorial; prueba de superficies medía una capa oculta deliberadamente por el nuevo degradado; inventario exigía título anterior. Se verifican PNG responsive real y descarga única, título igual al esquema y superficie pintada del hero sin relajar tolerancias. La inspección de cajas y captura confirmó que los10px corresponden al scrollbar-gutter estable del documento. El test compara el fondo propio con el área pintable del documento; las capas extendidas conservan su medición original. No se cambia CSS ni composición aprobada. PNG/logo originales y comportamiento comercial conservados.
+
+PASS_LOCAL:14/14 inventario y11/11 Chromium sin reintentos:4 precargas PNG y14rutas×7tamaños320–1920 con geometría inicial/final, superficies, overflow y navegación. Build:pages y ci:preflight completos PASS_LOCAL. CI del nuevo SHA, merge y publicación requieren sus propios recibos. Skills leídas: gh-fix-ci, verification-before-completion y tintin-responsive-a11y; se aplican dentro de la autorización vigente. Sin bypass ni cambios de permisos, datos reales o dependencias.
+
+
+Seguimiento adicional: se reprodujo FAIL local en image-fidelity (todavía esperaba backdrop.webp). Se concilia con backdrop.svg y PNG del maletín, verificando variante exacta, descarga única y geometría a DPR2 en6tamaños. Archivo completo13/13 Chromium PASS_LOCAL sin reintentos;23/23 contratos Node de rendimiento PASS_LOCAL. HEAD19dc0f9d ya enviado con CI41863169840/1 y CodeQL41863164717/1 en cola; esta corrección adicional requiere nuevos SHA/runs vigentes.
+
 ## Pie compacto — 2026-11-04 — Codex /root
 
 Base c5f6946e3531e8a4c7b0ce97c9d9e0da9239ce7c; rama codex/compact-footer-20261104. Pedido: reducir la franja final mostrada. Autoridad css/components/novak-credit-site.css: copyright12px, firma11px, logo26.25×25, gap2px y padding12/16px. Conserva fondo/token, SVG y destino originales, foco/hover/movimiento reducido, objetivo táctil48px y reserva móvil de WhatsApp. Canvas Retina usa medidas configurables, con fallback42×40 para el kit independiente. Propagación por firma-novak y generadores canónicos; no se editan derivados manualmente.
@@ -6191,3 +6218,91 @@ completó correctamente. CSS combinado y baseline regenerados por sus autoridade
 La reconstrucción amplia del hero descrita en el adjunto no se implementó en
 este retiro puntual. Sin merge ni publicación, según instrucción del adjunto;
 producción y CI NOT_VERIFIED. Cambios locales listos para revisión.
+
+## 2026-11-04 — Hero de referencia, implementación local pendiente del original
+
+Autor: Codex. La titular pide ambos cambios y exige logo plano, nunca 3D.
+Checkout de trabajo: rama codex/hero-reference, worktree /workspace/work/tintin-hero,
+sobre b3165fe0 de PR1329. No se publica esta rama: falta el archivo original del
+maletín visible en las referencias del chat; no está en attachments ni en el repo.
+Se solicitó PNG/WebP o una referencia adjunta como archivo. No se generaron
+productos, no se puso una foto sustituta y no se crean archivos ficticios.
+
+Implementado localmente: composición grid por orientación, logo/wordmark en
+nodos separados usando recursos existentes, título/descripcion/acciones HTML,
+rutas /catalogo y /about, logo blanco plano sin sombras ni transformaciones3D,
+entrada única escalonada con WAAPI y espera del loader, cancelación por reduced
+motion/visibilidad; se conserva el reveal compartido de los bloques inferiores.
+Paleta local de Inicio y gradiente integrado con alternancia-secciones existente.
+Editor: versión5 del fondo sin borrar Firestore; migraciones de copy sólo para
+las frases históricas exactas, respetando personalizaciones. URLs de recursos
+transitivos y bundle regenerados según caché existente. Great Vibes Latin local
+72,952bytes con OFL; aproximación, no fuente maestra confirmada de la referencia.
+
+PASS_LOCAL parcial:14 pruebas Chromium de estructura/teclado/movimiento/fallback
+sin JS en320–1920px;1prueba adicional del fondo con runtime compartido;2pruebas
+de snapshot de imágenes/no descargas redundantes y relacionadas;17pruebas de
+public-shell;7comprobaciones del auditor hero;versionado415recursos/67cargas,
+sintaxis y diff--check. La prueba de migración de copy usa la fachada real.
+No confundir estructura con comparación visual: no se validó maletín ausente.
+
+BLOCKED: la prueba estricta «recurso original del maletín disponible y
+ decodificable antes de publicar» falla por suitcase.webp inexistente. Faltan
+original, máscara/transparencia revisada, variantes640/960, dimensiones reales,
+comparación de capturas con referencias y build/manifiestos finales. La marca
+raster existente no es un maestro vectorial y requiere comparación/limpieza con
+el original; ver hero-reference/README.md. No hacer PR/merge/deploy de esta rama
+mientras falle el gate de recurso. La eliminación de Colecciones sigue en
+PR1329; head b3165fe0b83c40647f5a72d2c2c4d9242421d857, CI41844654513/intento1
+y CodeQL41844647597/intento1, monitoreados en el hilo dueño.
+Skills leídos manualmente: tintin-design-quality, tintin-responsive-a11y,
+emil-animate (incluida receta scroll reveal); QA release para PR1329.
+
+Seguimiento2026-11-04T14:27Z: PR1329 sigue abierto con auto-merge habilitado;
+head b3165fe0, CI41844654513/intento1: preflight, comercio y reglas PASS;
+Administración, Calidad técnica e Interfaz/SEO/rendimiento siguen in_progress.
+CodeQL41844647597/intento1 y Cloudflare preview PASS. Primer run41843937936
+falló por drift de manifiestos; logs revisados y corregido mediante build:pages.
+La autorización explícita para merge consta en el chat y en el PR. No bypass.
+La vigilancia duradera existente «Atender fallos de CI de Tintín», ID
+6ae935b5ead481918c1c059366347088, se verificó habilitada mediante automations.peek;
+monitoriza main y PR abiertas por sondeo horario. Última ejecución declarada
+2026-11-04T13:24Z, next_run_time=null: no se garantiza hora ni despertar inmediato.
+No hay receptor webhook expuesto que entregue eventos a este agente dormido.
+Para retomar: leer HEAD/estado de1329; si merged, verificar SHA/main y runs
+post-merge separadamente; si falla, leer logs del job exacto sin asumir PASS.
+El nuevo hero ec5a369f está sólo en rama local y NO debe ser publicado por la
+vigilancia mientras falte el maletín original. Mantenerlo separado de1329.
+
+## 2026-11-04 — Recurso recibido; bloqueo del maletín cerrado
+
+La titular adjuntó RAR file_000000000f20820ead7de1530a7fe027. Se extrajo con
+libarchive sin ejecutar contenido: PNG1448×1086RGBA real con transparencia.
+Se guarda suitcase-original.png intacto; WebP principal1050×1086 recorta sólo
+el margen200,0,1250,1086. Igualdad RGBA exacta del recorte comprobada, sin IA
+ni retoque de accesorios. Variantes640/960 con Lanczos/WebP sin pérdida extra.
+El bloqueo anterior queda RESUELTO por recepción del archivo, no por omitir
+la prueba. Se agrega regresión de igualdad de píxeles en navegador.
+PR1329 ya merged en main2259eebcb44f12aa8c9aa3db4994dcf7e74bb90a; rama del hero
+rebasada sobre ese main, sin volver a incluir su eliminación como cambio propio.
+16/16 pruebas hero previas a la última mejora de botón;5/5 Node de CMS/fotos
+sin descargas duplicadas y layout. Capturas reales desktop1920 y portrait768
+inspeccionadas: producto completo, logo blanco plano, composición fiel al
+recurso aportado. Great Vibes sigue siendo una aproximación de fuente explícita.
+Build/preflight y CI del candidato final se registran con su propio resultado.
+
+Cierre local del recurso: se publica PNG en lugar de WebP para evitar pequeñas
+diferencias de redondeo de alpha en Chromium. Fuente original intacta y PNG
+principal recortado se comparan en canvas SHA256: identidad exacta. Variantes
+PNG640/960 optimizadas; no IA. README y gate requieren los archivos PNG reales.
+PASS_LOCAL candidato final:17/17 Chromium (13 tamaños, PNG idéntico, entrada
+única, reduced motion, sin JS, flujo de fondo);5/5 Node;ci:preflight completo,
+build:pages y versionado415/67. Auditoría tipográfica conserva las restricciones
+globales y sólo acepta los selectores exactos del hero solicitados; diagnóstico
+alineado. Los guardas de recursos apuntan al arte real, sin retirar verificaciones.
+Post-merge1329: Cloudflare y monitor Producción real PASS; CI41849333792/intento1
+marca Protected flows FAIL por cuatro sellos que no se actualizaron en1329.
+Logs126641096723 revisados. Se concilia en este candidato mediante el helper
+canónico, sin modificar reglas/protecciones: plan41archivos/45registros contra
+main2259eebc, protección local78registros/544archivos PASS. No se presenta el
+CI post-merge anterior como verde; requiere validar el nuevo candidato en CI.

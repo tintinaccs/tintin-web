@@ -132,7 +132,7 @@ check(
     files.runtime.includes('STATIC.hero_bg_mobile') &&
     files.runtime.includes('STATIC.hero_bg_tablet_landscape') &&
     files.images.includes('HERO_IMAGE_FALLBACKS') &&
-    files.images.includes('hero-editorial/backdrop.png') &&
+    files.images.includes('hero-reference/backdrop.svg') &&
     files.runtime.includes("resolveSlotImage(heroSettings, 'hero_bg', 'desktop')") &&
     files.runtime.includes("resolveSlotImage(heroSettings, 'hero_bg', 'tablet')") &&
     files.runtime.includes("resolveSlotImage(heroSettings, 'hero_bg', 'mobile')") &&
@@ -151,7 +151,7 @@ check(
 check(
   'El Hero pinta la portada estática desde el primer render, sin capa rosa intermedia',
   !/<div[^>]*class=["'][^"']*tt-hero-pending/.test(files.indexHtml) &&
-    /src="assets-tintin\/images\/home\/hero-editorial\/backdrop\.png(?:\?[^\"]*)?"/.test(read('index.html')) &&
+    /src="assets-tintin\/images\/home\/hero-reference\/suitcase\.png(?:\?[^\"]*)?"/.test(read('index.html')) &&
     read('css/pages/home/hero-bienvenida-inicio.css').includes('.tt-hero-media{') &&
     read('css/pages/home/hero-bienvenida-inicio.css').includes('visibility:visible!important') &&
     read('css/pages/home/hero-bienvenida-inicio.css').includes('opacity:1!important'),

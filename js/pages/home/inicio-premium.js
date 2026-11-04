@@ -1,74 +1,52 @@
+/* One entrance per document, after the shared loader. HTML is visible by
+   default; cancelling or failing motion always restores the final frame. */
 (function () {
   'use strict';
   if (window.TintinHomePremiumBooted) return;
   window.TintinHomePremiumBooted = true;
   function boot() {
-    const hero = document.querySelector('#hero[data-tt-banner="editorial-20261104"]');
+    const hero = document.querySelector('#hero[data-tt-banner="suitcase-20261104"]');
     if (!hero) return;
     document.body.classList.add('tt-home-premium');
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
-    const pieces = [...hero.querySelectorAll('.tt-hero-piece')];
-    const pause = hero.querySelector('.tt-hero-pause');
-    const motionIcon = pause.querySelector('svg path');
-    const angles = [-15, 9, 10, -9];
-    let paused = false, visible = true, frame = 0, entered = false, assetsReady = false;
     const animations = new Set();
-    const stopped = () => paused || preference.matches;
-    function update() {
-      frame = 0;
-      hero.dataset.heroMoving = String(visible && !document.hidden && !stopped());
-      hero.dataset.heroPaused = String(stopped());
-      if (!visible || document.hidden) return;
-      // One layout read, then transform writes only. No permanent scroll loop.
-      const box = hero.getBoundingClientRect();
-      const progress = stopped() ? 0 : Math.max(0, Math.min(1, -box.top / box.height));
-      const distance = innerWidth < 768 ? 8 : 24;
-      pieces.forEach((piece, index) => {
-        piece.style.transform = `translateY(${-progress * distance * (index % 2 ? .65 : 1)}px) rotate(${angles[index] + progress * (index % 2 ? 1 : -1)}deg)`;
-      });
-    }
-    function schedule() { if (!frame) frame = requestAnimationFrame(update); }
-    function finishMotion() { animations.forEach(animation => animation.cancel()); animations.clear(); }
+    let entered = false, ready = false, visible = true;
+    const finish = () => { animations.forEach(animation => animation.cancel()); animations.clear(); };
+    const items = [
+      ['.tt-hero-symbol', 650, 0, 12, .97],
+      ['.tt-hero-wordmark', 650, 90, 14, 1],
+      ['.tt-hero-title', 750, 180, 16, 1],
+      ['.tt-hero-subtitle', 600, 270, 12, 1],
+      ['.tt-hero-cta', 550, 350, 10, 1],
+      ['.tt-hero-link', 550, 420, 10, 1],
+      ['.tt-hero-suitcase', 1000, 100, 20, .96],
+    ];
     function enter() {
-      if (!assetsReady || entered || stopped() || document.hidden || !visible) return;
+      if (entered || !ready || !visible || document.hidden) return;
       entered = true;
-      const curve = getComputedStyle(hero).getPropertyValue('--mo-enter').trim() || 'cubic-bezier(.23,1,.32,1)';
-      [...pieces.map(piece => piece.querySelector('img')), hero.querySelector('.tt-hero-brand')].filter(Boolean).forEach((element, index) => {
-        if (typeof element.animate !== 'function') return;
-        const animation = element.animate([{ opacity: 0, transform: 'translateY(12px) scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 600, delay: index * 45, easing: curve, fill: 'backwards' });
+      if (preference.matches) return;
+      items.forEach(([selector, duration, delay, offset, scale]) => {
+        const element = hero.querySelector(selector);
+        if (!element || typeof element.animate !== 'function') return;
+        const animation = element.animate([
+          { opacity: 0, transform: `translateY(${offset}px) scale(${scale})` },
+          { opacity: 1, transform: 'translateY(0) scale(1)' }
+        ], { duration, delay, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' });
         animations.add(animation);
-        animation.finished.then(() => { animation.cancel(); animations.delete(animation); }).catch(() => {});
+        animation.finished.then(() => { animation.cancel(); animations.delete(animation); }).catch(() => animations.delete(animation));
       });
     }
-    pause.hidden = preference.matches;
-    pause.addEventListener('click', () => {
-      paused = !paused;
-      pause.setAttribute('aria-pressed', String(paused));
-      pause.setAttribute('aria-label', paused ? 'Reanudar movimiento del banner' : 'Pausar movimiento del banner');
-      pause.querySelector('span').textContent = paused ? 'Reanudar' : 'Pausar';
-      pause.title = paused ? 'Reanudar animación' : 'Pausar animación';
-      if (motionIcon) {
-        motionIcon.setAttribute('d', paused ? 'M9 5l10 7-10 7z' : 'M8 5v14M16 5v14');
-        motionIcon.setAttribute('fill', paused ? 'currentColor' : 'none');
-      }
-      finishMotion(); schedule();
-    });
-    preference.addEventListener('change', () => { pause.hidden = preference.matches; finishMotion(); schedule(); });
-    addEventListener('scroll', () => { if (visible && !document.hidden) schedule(); }, { passive: true });
-    addEventListener('resize', schedule, { passive: true });
-    document.addEventListener('visibilitychange', () => { if (document.hidden) finishMotion(); schedule(); });
+    preference.addEventListener('change', () => { if (preference.matches) finish(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) finish(); else enter(); });
+    addEventListener('pagehide', finish);
     if ('IntersectionObserver' in window) new IntersectionObserver(entries => {
       visible = entries[0].isIntersecting;
-      if (!visible) finishMotion();
-      else enter();
-      schedule();
+      if (!visible) finish(); else enter();
     }).observe(hero);
-    // The HTML remains fully visible if a cutout fails or JavaScript is absent.
-    const images = [...hero.querySelectorAll('.tt-hero-piece img,.tt-hero-brand')];
-    const ready = Promise.all(images.map(image => typeof image.decode === 'function' ? image.decode().catch(() => {}) : Promise.resolve()));
-    const loaderReady = import('../../quality/espera-cargador.js?v=tintin-20260716-cloudinary-fix-1').then(module => module.waitForLoaderHidden()).catch(() => {});
-    Promise.all([loaderReady, Promise.race([ready, new Promise(resolve => setTimeout(resolve, 1500))])]).then(() => { assetsReady = true; enter(); });
-    schedule();
+    const art = hero.querySelector('.tt-hero-suitcase img');
+    const decoded = art?.decode?.().catch(() => {});
+    const loader = import('../../quality/espera-cargador.js?v=tintin-20260716-cloudinary-fix-1').then(module => module.waitForLoaderHidden()).catch(() => {});
+    Promise.all([loader, Promise.race([decoded, new Promise(resolve => setTimeout(resolve, 1500))])]).then(() => { ready = true; enter(); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();

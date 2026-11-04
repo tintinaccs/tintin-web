@@ -66,11 +66,11 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         root: '.tt-hero',
         allowVisibility: true,
         fields: [
-          field('title', 'Título', '.tt-hero-title', 'Tintin Accesorios & Relojes', { type: 'multiline', rows: 3, maxLength: 220 }),
-          field('subtitle', 'Subtítulo', '.tt-hero-subtitle', 'Joyitas únicas, como vos.', { type: 'multiline', rows: 3, maxLength: 500 }),
-          field('primaryText', 'Botón principal', '.tt-hero-actions a', 'Encontrá tu favorito', { index: 0, maxLength: 80 }),
+          field('title', 'Título', '.tt-hero-title', 'El encanto está en los detalles', { type: 'multiline', rows: 3, maxLength: 220 }),
+          field('subtitle', 'Subtítulo', '.tt-hero-subtitle', 'Piezas elegidas para acompañarte en cada momento.', { type: 'multiline', rows: 3, maxLength: 500 }),
+          field('primaryText', 'Botón principal', '.tt-hero-actions a', 'COMPRAR AHORA', { index: 0, maxLength: 80 }),
           field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', '/catalogo', { index: 0, type: 'href', maxLength: 500 }),
-          field('btnText', 'Botón secundario', '.tt-hero-actions a', 'Sobre Tintín', { index: 1, maxLength: 80 }),
+          field('btnText', 'Botón secundario', '.tt-hero-actions a', '¿Quienes somos?', { index: 1, maxLength: 80 }),
           field('btnHref', 'Enlace del botón secundario', '.tt-hero-actions a', '/about', { index: 1, type: 'href', maxLength: 500 }),
         ],
       },
@@ -434,7 +434,11 @@ export function normalizeContentValue(pageId, sectionId, key, value) {
   const text = String(value == null ? '' : value);
   if (pageId === 'index' && sectionId === 'hero' && key === 'title') {
     const corrected = text.replace(/\bTÚ ESTILO\b/g, 'TU ESTILO');
-    return /^\s*(?:DETALLES QUE ELEVAN\s+TU ESTILO|UN DETALLE\s+MUY VOS)\s*$/i.test(corrected) ? 'Tintin Accesorios & Relojes' : corrected;
+    return /^\s*(?:DETALLES QUE ELEVAN\s+TU ESTILO|UN DETALLE\s+MUY VOS|Tintin Accesorios & Relojes)\s*$/i.test(corrected) ? 'El encanto está en los detalles' : corrected;
+  }
+  if (pageId === 'index' && sectionId === 'hero') {
+    const legacy = {subtitle: ['Joyitas únicas, como vos.', 'Piezas elegidas para acompañarte en cada momento.'], primaryText: ['Encontrá tu favorito', 'COMPRAR AHORA'], btnText: ['Sobre Tintín', '¿Quienes somos?']};
+    if (legacy[key] && text.trim() === legacy[key][0]) return legacy[key][1];
   }
   if (pageId === 'index' && sectionId === 'editorial_relojes' && key === 'title' && /^\s*EL RELOJ DEL QUE\s+TODAS SE ENAMORAN\s*$/i.test(text)) return 'RELOJES TINTIN';
   if (pageId === 'index' && sectionId === 'reviews' && key === 'eyebrow' && /^\s*Ellas ya eligieron brillar\s*$/i.test(text)) return 'Lo que cuentan nuestras tintinas';
