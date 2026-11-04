@@ -22,9 +22,8 @@ async function openCheckoutLayout(page,viewport) {
   await page.addScriptTag({type:'module',content:`
     import {renderDesktopHeader} from '../../js/components/navigation/escritorio/encabezado-escritorio.js';
     import {renderTabletHeader} from '../../js/components/navigation/tableta/encabezado-tableta.js';
-    import {renderMobileBrandHeader} from '../../js/components/navigation/movil/marca-movil.js';
     import {renderMobileTabbar} from '../../js/components/navigation/movil/encabezado-movil.js';
-    document.body.insertAdjacentHTML('afterbegin',renderDesktopHeader()+renderTabletHeader()+renderMobileBrandHeader('/checkout','/assets-tintin/images/general/logo.png'));
+    document.body.insertAdjacentHTML('afterbegin',renderDesktopHeader()+renderTabletHeader());
     document.body.insertAdjacentHTML('beforeend',renderMobileTabbar());
   `});
   await expect(page.locator('#tt-header-tablet')).toHaveCount(1);

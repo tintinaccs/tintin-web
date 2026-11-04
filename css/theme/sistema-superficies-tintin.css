@@ -651,7 +651,7 @@ html:root body .tt-stock-label { color:#4B5563 !important; background:#E5E7EB !i
 :where(.ck-header, .login-brand, .adm-header) { position: relative; }
 html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header.scrolled,
 html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header,
-html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand,
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet,
   .ck-header, .login-brand, .adm-topbar, .adm-header) {
   isolation: isolate;
   background: transparent !important;
@@ -661,7 +661,7 @@ html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-bran
   backdrop-filter: none !important;
 }
 
-html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand,
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet,
   .ck-header, .login-brand, .adm-topbar, .adm-header)::before {
   content: "";
   position: absolute;
@@ -679,11 +679,11 @@ html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-bran
 }
 
 /* El tinte global rosa no debe fundir la marca con el encabezado rosa. */
-html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand) {
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet) {
   --tt-header-fade-depth: clamp(32px, 4vw, 56px);
   overflow: visible !important;
 }
-html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand)::before {
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet)::before {
   bottom: calc(-1 * var(--tt-header-fade-depth));
 }
 
