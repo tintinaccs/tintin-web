@@ -1,3 +1,7 @@
+## Favicon original circular — 2026-11-04
+
+Autoridad: scripts/generar-iconos-admin.mjs y PNG original assets-tintin/images/general/logo.png, intacto. Cambia solo la rama de exportación favicon (círculo blanco, rosa plano vigente, una pasada), cinco archivos favicon y URLs de18documentos. Apple/apps/push permanecen iguales. Verificar alfa exterior, círculo blanco, silueta/cuerpo, PNG16/32 e ICO multientrada y rutas/versiones; regenerar shells/diagnóstico/protección.
+
 ## 2026-11-04 — Control de animación del hero
 
 Autoridades: hero-bienvenida-inicio.css, inicio-premium.js e index.html. Control sin recuadro ni bezel nativo, icono18px con objetivo44×44 y foco; pausa/reanudar actualiza icono y nombre. Mismo comportamiento de movimiento reducido y parada fuera de vista. Prueba la apariencia y accesibilidad en16composiciones, incluidos teléfono horizontal y escritorio2560px; clic con barra móvil/WhatsApp activos. Derivados, caché y protección mediante generadores vigentes. Sin cambios de negocio, assets de marca ni dependencias del sitio.

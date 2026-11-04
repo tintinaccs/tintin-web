@@ -1,3 +1,7 @@
+## Favicon original sobre blanco — 2026-11-04 — Codex /root
+
+Solicitud adicional mientras PR1327 verifica el control: conservar silueta/proporciones originales y rosa plano vigente #CF367B (aclaración del titular «sin3d»; el PNG fuente lleva brillo), círculo blanco con exterior transparente, PNG16/32/192/512 e ICO16/24/32/48/64. Se adapta el generador canónico sin cambiar variantes Apple, apps o notificaciones. Referencias versionadas de todas las páginas. PASS_LOCAL: decodificación y forma en Chromium/WebKit1/1 cada uno; entradas ICO16/24/32/48/64 y sus píxeles16/32 idénticos a los PNG; hash de fuente intacto. IN_PROGRESS: preflight final, CI del nuevo SHA y publicación; no se heredan PASS del SHA anterior.
+
 ## Control de animación discreto — 2026-11-04 — Codex /root
 
 Base0495671a7f2a8b390b137d2b786e306059992863; rama codex/hero-motion-control-20261104. Corrección solicitada a partir de captura: quitar el recuadro del control de pausa y uniformar su presentación en escritorio, laptop, tablet y teléfono. Icono vectorial18px sobre área táctil44×44, superficie transparente sin borde/sombra/bezel nativo, posición superior y foco visible. Estado pausado muestra reproducir y cambia título/nombre accesible. Control sigue oculto al preferir movimiento reducido.
