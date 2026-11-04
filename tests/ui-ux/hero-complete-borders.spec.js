@@ -51,8 +51,9 @@ for (const [width,height] of [[320,568],[390,844],[430,932],[568,320],[667,375],
     expect(result.control.top).toBeGreaterThanOrEqual(result.hero.top);
     expect(result.control.right).toBeLessThanOrEqual(result.hero.right);
     expect(result.brandFilter).toBe('none');
-    expect(result.brandSrc).toContain('tintin-contrast.png');
+    expect(result.brandSrc).toContain('tintin-white.webp');
     expect((result.fade.background.match(/linear-gradient/g)||[])).toHaveLength(2);
+    expect(result.fade.background).toContain('radial-gradient');
     expect(result.fade.pointer).toBe('none');
     expect(result.fade.z).toBe('0');
     for(const edge of ['left','top'])expect(result.necklace[edge]-result.hero[edge],`necklace ${edge}`).toBeGreaterThanOrEqual(0);

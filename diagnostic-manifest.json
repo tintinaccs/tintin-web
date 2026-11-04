@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "3d4e90dccb78883cb8ed7af292df647176b9bef7486bfbd93f1cd2de64769a5c",
+  "sourceFingerprint": "fc813522a5c5b758d76a83bd6c31aaddf20a5a8f132b8450fee11a15ced3ea9b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1802,
-    "textFiles": 1657,
-    "totalBytes": 51300332,
+    "files": 1800,
+    "textFiles": 1656,
+    "totalBytes": 51192321,
     "pages": 19,
-    "modules": 1170
+    "modules": 1169
   },
   "viewports": [
     {
@@ -16644,8 +16644,8 @@
         "guest",
         "client"
       ],
-      "bytes": 51188,
-      "sha256": "f1bbddd3dd562b1706d00831c2df7ba5d2e8d5e66dffa578b4990fe2ab65e903",
+      "bytes": 51178,
+      "sha256": "954b2dcaddb782bffbe9d4481ffd35667761d3c252f219f11ec0cd182bd718ad",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16793,7 +16793,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-345f929e14dba3b8",
+          "raw": "css/generated/inicio.css?v=tintin-home-2d285284e44323b4",
           "target": "css/generated/inicio.css",
           "line": 61
         },
@@ -16858,7 +16858,7 @@
           "line": 79
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-control-20261104-2",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-control-20261104-3",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 89
         },
@@ -17096,8 +17096,8 @@
         },
         {
           "tag": "img",
-          "raw": "assets-tintin/images/home/hero-editorial/tintin-contrast.png?v=contrast-20261104-1",
-          "target": "assets-tintin/images/home/hero-editorial/tintin-contrast.png",
+          "raw": "assets-tintin/images/home/hero-editorial/tintin-white.webp?v=editorial-1",
+          "target": "assets-tintin/images/home/hero-editorial/tintin-white.webp",
           "alt": "",
           "hasAlt": true,
           "line": 151
@@ -17987,7 +17987,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-345f929e14dba3b8",
+          "raw": "css/generated/inicio.css?v=tintin-home-2d285284e44323b4",
           "target": "css/generated/inicio.css",
           "line": 61,
           "exists": true
@@ -18065,7 +18065,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-control-20261104-2",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-control-20261104-3",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 89,
           "exists": true
@@ -18311,8 +18311,8 @@
           "exists": true
         },
         {
-          "raw": "assets-tintin/images/home/hero-editorial/tintin-contrast.png?v=contrast-20261104-1",
-          "target": "assets-tintin/images/home/hero-editorial/tintin-contrast.png",
+          "raw": "assets-tintin/images/home/hero-editorial/tintin-white.webp?v=editorial-1",
+          "target": "assets-tintin/images/home/hero-editorial/tintin-white.webp",
           "line": 151,
           "exists": true
         },
@@ -41396,8 +41396,8 @@
     },
     {
       "path": "scripts/auditar-performance-premium.mjs",
-      "bytes": 2128,
-      "sha256": "6433799c23954872161432db16622c7dbd0895c077531d8bb343a511a6ae9e78",
+      "bytes": 2106,
+      "sha256": "6fca68200182fca449ba8ea637b87702f705848cef9c4ef1a50459cd336c62bb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42972,48 +42972,6 @@
           "target": "scripts/playwright",
           "dynamic": false,
           "line": 5
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "scripts/generar-marca-hero.mjs",
-      "bytes": 2915,
-      "sha256": "d4299ba3eb31a2b9caee06a01f3451c4a5099f2108dd4b4ef6c0b874d38ea291",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs/promises",
-          "target": null,
-          "dynamic": false,
-          "line": 2
-        },
-        {
-          "raw": "node:path",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "node:url",
-          "target": null,
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "playwright",
-          "target": "scripts/playwright",
-          "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "node:zlib",
-          "target": null,
-          "dynamic": false,
-          "line": 6
         }
       ],
       "endpoints": []
@@ -60737,8 +60695,8 @@
     },
     {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
-      "bytes": 9258,
-      "sha256": "6f785c46db2904851a6a4aa0661ac2969886466378eabcee02b6fb2d5a71b7c9",
+      "bytes": 9321,
+      "sha256": "8bdc320e4817cd379c7892acb006da4bd417358fcc79816d9e24fbdb752610a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60751,11 +60709,11 @@
         },
         {
           "url": "https://motion.test/",
-          "line": 90
+          "line": 91
         },
         {
           "url": "https://motion.test/js/pages/home/inicio-premium.js",
-          "line": 92
+          "line": 93
         }
       ]
     },
@@ -63242,8 +63200,8 @@
     {
       "path": "assets-tintin/images/home/hero-editorial/README.md",
       "extension": ".md",
-      "bytes": 2598,
-      "sha256": "17abde5436d06dedcbafa06b2cbc67b791c8171ee5ec9acf4d147cbd578b0e5c"
+      "bytes": 2209,
+      "sha256": "84ebee0936e963690e54dcacabb3e8114244baae23bfe757ae22132844b343dc"
     },
     {
       "path": "assets-tintin/images/home/hero-editorial/backdrop.png",
@@ -63274,12 +63232,6 @@
       "extension": ".webp",
       "bytes": 283908,
       "sha256": "97211792747f83715f61ec5020a48b7344628b84de6bb4d4b552b3571be874c6"
-    },
-    {
-      "path": "assets-tintin/images/home/hero-editorial/tintin-contrast.png",
-      "extension": ".png",
-      "bytes": 106496,
-      "sha256": "7a9828424ee1f120f2218d1dd834dfac75ea9f36880377c10f9e26ef5594c14d"
     },
     {
       "path": "assets-tintin/images/home/hero-editorial/tintin-white.webp",
@@ -64076,8 +64028,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 5615,
-      "sha256": "9ba5c574d49334526a46c417ddeae2aac3aa581c4ebfcff5f57d58521d941df6"
+      "bytes": 5607,
+      "sha256": "8c06f58e9e415d0c75f6efc3d3c59d5c34ec6a19691a0f8ce1e73a0ac7f28029"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64089,7 +64041,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "a64db2e2285ff0c9bf9ab5d0d78a02ca3afebccffcc05393cd5e332064e94d90"
+      "sha256": "b0dcd610cbd341e899689eccb9f61365e2db437ff869614963b797550360ffce"
     },
     {
       "path": "config/public-site.json",
@@ -64472,8 +64424,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 376895,
-      "sha256": "345f929e14dba3b8d28ddea7ae4c87a5f57424e312193a629b201b15a32a629e"
+      "bytes": 377056,
+      "sha256": "2d285284e44323b447ccb5ffda8a98103601230fcd1a3f6ec128b6a4a129e540"
     },
     {
       "path": "css/generated/login-2.css",
@@ -64592,8 +64544,8 @@
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
       "extension": ".css",
-      "bytes": 12122,
-      "sha256": "f09805271aa7d7dd09b78295e6ef9be8a5c563f30c19d57594f8c036be8239a9"
+      "bytes": 12295,
+      "sha256": "a102f7342c74afdbb74904f755d1360b932cd9900110babbd7f50d77d4058ae6"
     },
     {
       "path": "css/pages/home/mantenimiento-inicio.css",
@@ -64934,8 +64886,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1199803,
-      "sha256": "b2b163c95ef8a4a53ad3aa3b441a60ce8fc4815f35a7cb30f68d708f29fa7cb6"
+      "bytes": 1200828,
+      "sha256": "096cd7399453652c738e633ac36426aef932dc2ef5a10d4a8ddeb2bfb8a49354"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -65924,8 +65876,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 157634,
-      "sha256": "fe7a330136f182de778679e049f223b7df58d068bee89cc3038b3f7d30928247"
+      "bytes": 158041,
+      "sha256": "19ed28882c8c7b8de47e52445de8f46f0fc435b4a8a3c047bd557a14eece4c16"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -66998,8 +66950,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 51188,
-      "sha256": "f1bbddd3dd562b1706d00831c2df7ba5d2e8d5e66dffa578b4990fe2ab65e903"
+      "bytes": 51178,
+      "sha256": "954b2dcaddb782bffbe9d4481ffd35667761d3c252f219f11ec0cd182bd718ad"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -69860,8 +69812,8 @@
     {
       "path": "scripts/auditar-performance-premium.mjs",
       "extension": ".mjs",
-      "bytes": 2128,
-      "sha256": "6433799c23954872161432db16622c7dbd0895c077531d8bb343a511a6ae9e78"
+      "bytes": 2106,
+      "sha256": "6fca68200182fca449ba8ea637b87702f705848cef9c4ef1a50459cd336c62bb"
     },
     {
       "path": "scripts/auditar-posterior-fases-seguridad.js",
@@ -70107,7 +70059,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 81327,
-      "sha256": "8bcd0c241be4be98f8e7884faf248cacb884c160fc2a9eab908bd5acd6b2b578"
+      "sha256": "01ab01ea4fa25c9e48d76587cfad3c0e9d2e05086caf135a3745b255c1e53063"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -70216,12 +70168,6 @@
       "extension": ".mjs",
       "bytes": 4916,
       "sha256": "2866cbdf7bd1c13fab08cef65054e8e89e60cdc7aea1f1301d1e0f2ae7a43cf3"
-    },
-    {
-      "path": "scripts/generar-marca-hero.mjs",
-      "extension": ".mjs",
-      "bytes": 2915,
-      "sha256": "d4299ba3eb31a2b9caee06a01f3451c4a5099f2108dd4b4ef6c0b874d38ea291"
     },
     {
       "path": "scripts/inventariar-acciones-cliente.mjs",
@@ -73214,8 +73160,8 @@
     {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
       "extension": ".js",
-      "bytes": 9258,
-      "sha256": "6f785c46db2904851a6a4aa0661ac2969886466378eabcee02b6fb2d5a71b7c9"
+      "bytes": 9321,
+      "sha256": "8bdc320e4817cd379c7892acb006da4bd417358fcc79816d9e24fbdb752610a4"
     },
     {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",

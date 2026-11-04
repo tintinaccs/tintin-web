@@ -1,3 +1,7 @@
+## Marca blanca y halo rosa — 2026-11-04
+
+Aclaración final: misma marca blanca original y un halo rosa CSS estático como tercera capa del fondo; bordes top/bottom conservados. Texto secundario oscuro con contraste sobre el halo. Quitar PNG rosa/exportador rechazados; nuevas URLs CSS y todos los derivados. Verificar16tamaños, lectura, movimiento reducido, original/bundle/fallback y cadena completa.
+
 ## Hero: continuidad, cadena y contraste — 2026-11-04
 
 Autoridad CSS única hero-bienvenida-inicio.css, marcado index.html y recorte necklace.webp. Gradientes de borde en pseudo-elemento no interactivo bajo accesorios/marca; colores de superficie compartidos con índice contiguo. Producto real Olyra sustituye Yséla, enlace/alt/procedencia juntos. Marca mantiene fuente y alfa con tinta rosa profunda para contraste. Verificar ambos bordes, contraste, recorte de producto incluso al desplazar, foco y geometría en16tamaños/2motores. Nuevas URLs CSS/imagen y derivados generados, sin cambios de datos.
