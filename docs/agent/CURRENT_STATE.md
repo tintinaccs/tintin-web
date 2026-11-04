@@ -6230,3 +6230,19 @@ PR1329; head b3165fe0b83c40647f5a72d2c2c4d9242421d857, CI41844654513/intento1
 y CodeQL41844647597/intento1, monitoreados en el hilo dueño.
 Skills leídos manualmente: tintin-design-quality, tintin-responsive-a11y,
 emil-animate (incluida receta scroll reveal); QA release para PR1329.
+
+Seguimiento2026-11-04T14:27Z: PR1329 sigue abierto con auto-merge habilitado;
+head b3165fe0, CI41844654513/intento1: preflight, comercio y reglas PASS;
+Administración, Calidad técnica e Interfaz/SEO/rendimiento siguen in_progress.
+CodeQL41844647597/intento1 y Cloudflare preview PASS. Primer run41843937936
+falló por drift de manifiestos; logs revisados y corregido mediante build:pages.
+La autorización explícita para merge consta en el chat y en el PR. No bypass.
+La vigilancia duradera existente «Atender fallos de CI de Tintín», ID
+6ae935b5ead481918c1c059366347088, se verificó habilitada mediante automations.peek;
+monitoriza main y PR abiertas por sondeo horario. Última ejecución declarada
+2026-11-04T13:24Z, next_run_time=null: no se garantiza hora ni despertar inmediato.
+No hay receptor webhook expuesto que entregue eventos a este agente dormido.
+Para retomar: leer HEAD/estado de1329; si merged, verificar SHA/main y runs
+post-merge separadamente; si falla, leer logs del job exacto sin asumir PASS.
+El nuevo hero ec5a369f está sólo en rama local y NO debe ser publicado por la
+vigilancia mientras falte el maletín original. Mantenerlo separado de1329.
