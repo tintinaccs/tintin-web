@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "414135e061cf1fe25b18ad8bbb2096b9cc0cd77f3b1ed9975178ff6003767d72",
+  "sourceFingerprint": "4f51179320c7d4351fd02c36381bbf38a436ba3fcaf22c59b269ec8b72c1f03c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1807,
     "textFiles": 1659,
-    "totalBytes": 57158073,
+    "totalBytes": 57161418,
     "pages": 19,
     "modules": 1169
   },
@@ -53678,8 +53678,8 @@
     },
     {
       "path": "tests/navigation/public-initial-layout.spec.js",
-      "bytes": 14793,
-      "sha256": "f381b61035a32ea6260d3db1e6aed80cf56621e177134509ddbfe6523c8c3895",
+      "bytes": 15575,
+      "sha256": "fbff8694e4c4767d084b57a6e5b99da1e822261efeb2a2007d8b81f76d083502",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53688,19 +53688,19 @@
       "endpoints": [
         {
           "url": "https://entry.test/$%7Bfile%7D",
-          "line": 214
+          "line": 223
         },
         {
           "url": "https://entry.test/about",
-          "line": 215
+          "line": 224
         },
         {
           "url": "https://entry.test/contact.html",
-          "line": 230
+          "line": 239
         },
         {
           "url": "https://entry.test/envios.html",
-          "line": 232
+          "line": 241
         }
       ]
     },
@@ -60516,8 +60516,8 @@
     },
     {
       "path": "tests/ui-ux/home-render-performance.spec.js",
-      "bytes": 1250,
-      "sha256": "c46a97a682d0636e0aa37567967eb62d0154cb6aef418c5d7a3100733172e591",
+      "bytes": 1605,
+      "sha256": "c328c6c6f0127f978aae4bedc3b8a1ec0bc492591958f9d28eb709a23843f26e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60526,7 +60526,7 @@
       "endpoints": [
         {
           "url": "http://tintin.test/",
-          "line": 14
+          "line": 17
         }
       ]
     },
@@ -60600,8 +60600,8 @@
     },
     {
       "path": "tests/ui-ux/inventory-regressions.test.mjs",
-      "bytes": 12818,
-      "sha256": "ad0c87ff43940826bfaec16c6f1d3a537f2ef3730d9465f97bd5e0c5306451dd",
+      "bytes": 12893,
+      "sha256": "ff39232668eecd6c0abb07f7e1c8e95a0657834cf8b34d1372b62e583d8d355b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -64601,8 +64601,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1211234,
-      "sha256": "09fbd5750e353e4b988d869f688c7195fe2d552c4f67cae22219e3935bb67385"
+      "bytes": 1212847,
+      "sha256": "d152a00194fcee102eeb3ff649068ae127b613085c0093048b4ebe931704dec0"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -65591,8 +65591,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 158538,
-      "sha256": "1674774e1d938edaf7385a0f7f7e2e0efd2e197f1513d1768821ed39debd7f70"
+      "bytes": 159058,
+      "sha256": "b39d40c151eed18af6e44be2b8244b477f1c12549ce5fa0a066d9e95360ed7ef"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -71651,8 +71651,8 @@
     {
       "path": "tests/navigation/public-initial-layout.spec.js",
       "extension": ".js",
-      "bytes": 14793,
-      "sha256": "f381b61035a32ea6260d3db1e6aed80cf56621e177134509ddbfe6523c8c3895"
+      "bytes": 15575,
+      "sha256": "fbff8694e4c4767d084b57a6e5b99da1e822261efeb2a2007d8b81f76d083502"
     },
     {
       "path": "tests/navigation/section-flow-generator.test.mjs",
@@ -72899,8 +72899,8 @@
     {
       "path": "tests/ui-ux/home-render-performance.spec.js",
       "extension": ".js",
-      "bytes": 1250,
-      "sha256": "c46a97a682d0636e0aa37567967eb62d0154cb6aef418c5d7a3100733172e591"
+      "bytes": 1605,
+      "sha256": "c328c6c6f0127f978aae4bedc3b8a1ec0bc492591958f9d28eb709a23843f26e"
     },
     {
       "path": "tests/ui-ux/home-styles-bundle.spec.js",
@@ -72923,8 +72923,8 @@
     {
       "path": "tests/ui-ux/inventory-regressions.test.mjs",
       "extension": ".mjs",
-      "bytes": 12818,
-      "sha256": "ad0c87ff43940826bfaec16c6f1d3a537f2ef3730d9465f97bd5e0c5306451dd"
+      "bytes": 12893,
+      "sha256": "ff39232668eecd6c0abb07f7e1c8e95a0657834cf8b34d1372b62e583d8d355b"
     },
     {
       "path": "tests/ui-ux/inventory-reservation-review.spec.js",

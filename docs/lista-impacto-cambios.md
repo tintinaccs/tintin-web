@@ -1,3 +1,7 @@
+## 2026-11-04 — Seguimiento de los controles del hero original
+
+Autoridades index.html y definiciones-contenido.js conservadas. Pruebas de precarga PNG responsive, superficie pintable descontando gutter reservado y fallback editorial se concilian con el hero solicitado; conservan tolerancias, descarga única y concordancia con esquema. Imagen original, marca plana, navegación y comercio conservados. Diagnóstico/caché/protección mediante generadores existentes; CI y publicación exigen recibos del SHA final.
+
 ## Paridad CSS con carga estable — 2026-11-04
 
 Solo fixture tests/ui-ux/home-styles-bundle.spec.js: conserva defer/versionado canónico de logotipo-marca.js, entrega fotos después de estilos completos, espera fuentes después de liberar fotos (WebKit) y verifica logo realmente pintado y estable. Sin cambios de diseño o posiciones, sin tolerancia ampliada, conserva ruta real de recuperación. Verificar seis tamaños Chromium156/WebKit y regresión1920px; generadores/preflight sin deriva.

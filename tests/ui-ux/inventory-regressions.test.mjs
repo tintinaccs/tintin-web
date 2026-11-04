@@ -185,10 +185,10 @@ test('home alinea fallback con el título publicado y sanea el typo de pago segu
     read('index.html'),
     read('js/core/store/definiciones-contenido.js'),
   ]);
-  assert.match(home, /Tintin Accesorios &amp; Relojes<\/h1>/);
+  assert.match(home, /id="tt-hero-heading">El encanto está en los detalles<\/h1>/);
   assert.match(home, /class="tt-hero-brand"/);
   assert.doesNotMatch(home, /Un detalle[\s\S]*?cambia todo/);
-  assert.match(definitions, /Tintin Accesorios & Relojes/);
+  assert.match(definitions, /field\('title', 'Título', '\.tt-hero-title', 'El encanto está en los detalles'/);
   assert.match(definitions, /PAGO SEGUROOXSD/);
   assert.match(definitions, /'Pago seguro'/);
 });

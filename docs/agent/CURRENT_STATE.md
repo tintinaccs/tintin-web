@@ -1,3 +1,11 @@
+## Seguimiento y reparación de PR1330 — 2026-11-04 — Codex /root
+
+Autorización: terminar implementación y merge protegido. HEAD inicial f4865034536dea3dd04282853fbb5f3252dccd62; CI41851133731/intento1 FAILURE: Interfaz126650389163 (11 fallos,268 PASS) y Calidad126650389459 (inventory-regressions exige H1 anterior). Comercio, reglas, administración y preflight SUCCESS; CodeQL41851125941/1 SUCCESS. No se heredan esos resultados a esta corrección.
+
+Causas: fixture de precarga aún buscaba backdrop.webp en hero-editorial; prueba de superficies medía una capa oculta deliberadamente por el nuevo degradado; inventario exigía título anterior. Se verifican PNG responsive real y descarga única, título igual al esquema y superficie pintada del hero sin relajar tolerancias. La inspección de cajas y captura confirmó que los10px corresponden al scrollbar-gutter estable del documento. El test compara el fondo propio con el área pintable del documento; las capas extendidas conservan su medición original. No se cambia CSS ni composición aprobada. PNG/logo originales y comportamiento comercial conservados.
+
+PASS_LOCAL:14/14 inventario y11/11 Chromium sin reintentos:4 precargas PNG y14rutas×7tamaños320–1920 con geometría inicial/final, superficies, overflow y navegación. Build:pages y ci:preflight completos PASS_LOCAL. CI del nuevo SHA, merge y publicación requieren sus propios recibos. Skills leídas: gh-fix-ci, verification-before-completion y tintin-responsive-a11y; se aplican dentro de la autorización vigente. Sin bypass ni cambios de permisos, datos reales o dependencias.
+
 ## Pie compacto — 2026-11-04 — Codex /root
 
 Base c5f6946e3531e8a4c7b0ce97c9d9e0da9239ce7c; rama codex/compact-footer-20261104. Pedido: reducir la franja final mostrada. Autoridad css/components/novak-credit-site.css: copyright12px, firma11px, logo26.25×25, gap2px y padding12/16px. Conserva fondo/token, SVG y destino originales, foco/hover/movimiento reducido, objetivo táctil48px y reserva móvil de WhatsApp. Canvas Retina usa medidas configurables, con fallback42×40 para el kit independiente. Propagación por firma-novak y generadores canónicos; no se editan derivados manualmente.
