@@ -66,10 +66,12 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
     expect(Math.abs(geometry.creditGap - 2)).toBeLessThanOrEqual(1);
     expect(geometry.credit.height).toBeGreaterThanOrEqual(48);
     expect(geometry.creditRow.height - geometry.credit.height).toBeLessThanOrEqual(1);
-    expect(geometry.endingPadding).toBeLessThanOrEqual(width <= 480 ? 64 : 32);
+    // En móvil el pie reserva dentro de sí el espacio de la barra flotante (ya no
+    // lo reserva el body); en tablet y escritorio no hay barra y el cierre es compacto.
+    expect(geometry.endingPadding).toBeLessThanOrEqual(width <= 767 ? 140 : 32);
     expect(Math.abs(geometry.credit.center - geometry.creditRow.center)).toBeLessThanOrEqual(1);
     expect(geometry.footerTail).toBeLessThanOrEqual(1);
-    expect(geometry.afterFooter).toBeLessThanOrEqual(width <= 767 ? 97 : 1);
+    expect(geometry.afterFooter).toBeLessThanOrEqual(1);
     const inside = (a, b) => a.left >= b.left - 1 && a.right <= b.right + 1;
     expect(inside(geometry.brand, geometry.shell)).toBe(true);
     if (width <= 1024) {

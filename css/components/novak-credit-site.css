@@ -16,9 +16,13 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding: 12px 16px 16px;
-  border-radius: 18px 18px 0 0;
-  background: var(--color-background-surface-soft, #FDECF2);
+  padding: 36px 16px 20px;
+  /* Difuminado superior: el rosa del pie se aclara hacia una base blanca que
+     contrasta con el resto y llega hasta el borde inferior de la página. */
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, .72) 28px,
+    rgba(255, 255, 255, .92) 100%);
   text-align: center;
 }
 #tt-footer-ending .tt-footer-bottom {
@@ -48,9 +52,16 @@
   height: var(--novak-mark-height);
 }
 
-/* En móviles estrechos la firma debe quedar por encima del WhatsApp flotante. */
-@media (max-width: 480px) {
-  .tt-footer #tt-footer-ending { padding-bottom: 64px; }
+/* Móvil: el pie cubre hasta el borde inferior de la página (ya no queda una
+   franja de otro color bajo él) y reserva dentro de sí el espacio de la barra
+   flotante, de modo que la firma queda por encima del menú sin que éste la tape. */
+@media (max-width: 767px) {
+  html:root body:not(:has(.adm-main)):has(.tt-footer[data-tt-footer="unified"]) {
+    padding-bottom: 0 !important;
+  }
+  html:root body .tt-footer #tt-footer-ending {
+    padding-bottom: calc(var(--tt-mobile-nav-clearance, 104px) + env(safe-area-inset-bottom, 0px) + 16px);
+  }
 }
 
 /* El hover del kit se reserva al puntero; el foco de teclado sigue animado. */
