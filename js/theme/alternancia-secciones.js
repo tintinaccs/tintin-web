@@ -54,7 +54,8 @@
       const after = gaps[index]?.after || 0;
       const customFooter = node.matches('.tt-footer') && document.documentElement.hasAttribute('data-tt-footer-bg-custom');
       const customVisual = node.style.getPropertyValue('--tt-visual-bg');
-      const customBackground = customFooter ? 'var(--tt-global-footer-bg)' : customVisual ? 'var(--tt-visual-bg)' : '';
+      const referenceHero = node.matches('#hero[data-tt-banner="suitcase-20261104"]');
+      const customBackground = referenceHero ? 'var(--tt-hero-background)' : customFooter ? 'var(--tt-global-footer-bg)' : customVisual ? 'var(--tt-visual-bg)' : '';
       set(node, '--tt-section-background', customBackground || (index % 2 ? 'var(--tt-flow-pink)' : 'var(--tt-flow-light)'));
       set(node, '--tt-section-start', index ? 'var(--tt-flow-join)' : 'var(--tt-section-background)');
       set(node, '--tt-section-end', index < list.length - 1 ? 'var(--tt-flow-join)' : 'var(--tt-section-background)');

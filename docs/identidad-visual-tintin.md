@@ -5,3 +5,9 @@ Indicación de la titular, 26 de octubre de 2026 (hora de Buenos Aires): la imag
 La aplicación de esta referencia para compartir está en [assets/og-cover.jpg](../assets/og-cover.jpg), 1200 × 630 px. Inicio y Catálogo entregan los metadatos Open Graph y Twitter desde el HTML, con URL de imagen versionada. Los títulos y descripciones que WhatsApp dibuja fuera de la imagen conservan el formato que decide WhatsApp.
 
 Esta preferencia no autoriza sustituir la paleta global de la tienda ni modificar los demás logos. La ruta Windows del adjunto no está disponible como archivo en este entorno; no se afirma haber archivado sus bytes originales ni extraído un hexadecimal exacto del adjunto.
+
+## 2026-11-04 — Restricción explícita del logo
+
+El logo debe ser siempre plano: nunca 3D, relieve, bisel, volumen, perspectiva
+ni sombras. En el hero de referencia se utiliza blanco plano sobre rosa;
+se conserva su silueta original, con aparición suave sin deformación.

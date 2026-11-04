@@ -6191,3 +6191,42 @@ completó correctamente. CSS combinado y baseline regenerados por sus autoridade
 La reconstrucción amplia del hero descrita en el adjunto no se implementó en
 este retiro puntual. Sin merge ni publicación, según instrucción del adjunto;
 producción y CI NOT_VERIFIED. Cambios locales listos para revisión.
+
+## 2026-11-04 — Hero de referencia, implementación local pendiente del original
+
+Autor: Codex. La titular pide ambos cambios y exige logo plano, nunca 3D.
+Checkout de trabajo: rama codex/hero-reference, worktree /workspace/work/tintin-hero,
+sobre b3165fe0 de PR1329. No se publica esta rama: falta el archivo original del
+maletín visible en las referencias del chat; no está en attachments ni en el repo.
+Se solicitó PNG/WebP o una referencia adjunta como archivo. No se generaron
+productos, no se puso una foto sustituta y no se crean archivos ficticios.
+
+Implementado localmente: composición grid por orientación, logo/wordmark en
+nodos separados usando recursos existentes, título/descripcion/acciones HTML,
+rutas /catalogo y /about, logo blanco plano sin sombras ni transformaciones3D,
+entrada única escalonada con WAAPI y espera del loader, cancelación por reduced
+motion/visibilidad; se conserva el reveal compartido de los bloques inferiores.
+Paleta local de Inicio y gradiente integrado con alternancia-secciones existente.
+Editor: versión5 del fondo sin borrar Firestore; migraciones de copy sólo para
+las frases históricas exactas, respetando personalizaciones. URLs de recursos
+transitivos y bundle regenerados según caché existente. Great Vibes Latin local
+72,952bytes con OFL; aproximación, no fuente maestra confirmada de la referencia.
+
+PASS_LOCAL parcial:14 pruebas Chromium de estructura/teclado/movimiento/fallback
+sin JS en320–1920px;1prueba adicional del fondo con runtime compartido;2pruebas
+de snapshot de imágenes/no descargas redundantes y relacionadas;17pruebas de
+public-shell;7comprobaciones del auditor hero;versionado415recursos/67cargas,
+sintaxis y diff--check. La prueba de migración de copy usa la fachada real.
+No confundir estructura con comparación visual: no se validó maletín ausente.
+
+BLOCKED: la prueba estricta «recurso original del maletín disponible y
+ decodificable antes de publicar» falla por suitcase.webp inexistente. Faltan
+original, máscara/transparencia revisada, variantes640/960, dimensiones reales,
+comparación de capturas con referencias y build/manifiestos finales. La marca
+raster existente no es un maestro vectorial y requiere comparación/limpieza con
+el original; ver hero-reference/README.md. No hacer PR/merge/deploy de esta rama
+mientras falle el gate de recurso. La eliminación de Colecciones sigue en
+PR1329; head b3165fe0b83c40647f5a72d2c2c4d9242421d857, CI41844654513/intento1
+y CodeQL41844647597/intento1, monitoreados en el hilo dueño.
+Skills leídos manualmente: tintin-design-quality, tintin-responsive-a11y,
+emil-animate (incluida receta scroll reveal); QA release para PR1329.

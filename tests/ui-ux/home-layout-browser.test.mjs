@@ -13,8 +13,12 @@ test('la fachada usa las definiciones actuales y conserva copys personalizados',
   const facade = await fs.readFile(path.join(root, 'js/core/store/esquema-contenido.js'), 'utf8');
   const dependency = './definiciones-contenido.js' + '?v=';
   assert.ok(facade.includes(dependency), 'Las definiciones deben tener una versión de caché');
-  assert.equal(normalizeContentValue('index', 'hero', 'title', 'DETALLES QUE ELEVAN TU ESTILO'), 'Tintin Accesorios & Relojes');
+  assert.equal(normalizeContentValue('index', 'hero', 'title', 'DETALLES QUE ELEVAN TU ESTILO'), 'El encanto está en los detalles');
   assert.equal(normalizeContentValue('index', 'hero', 'title', 'Mi texto propio'), 'Mi texto propio');
+  for (const [key, previous, expected] of [['subtitle','Joyitas únicas, como vos.','Piezas elegidas para acompañarte en cada momento.'],['primaryText','Encontrá tu favorito','COMPRAR AHORA'],['btnText','Sobre Tintín','¿Quienes somos?']]) {
+    assert.equal(normalizeContentValue('index', 'hero', key, previous), expected);
+    assert.equal(normalizeContentValue('index', 'hero', key, 'Mi texto propio'), 'Mi texto propio');
+  }
   assert.equal(normalizeContentValue('index', 'editorial_relojes', 'title', 'EL RELOJ DEL QUE\nTODAS SE ENAMORAN'), 'RELOJES TINTIN');
   assert.equal(normalizeContentValue('index', 'editorial_relojes', 'title', 'Mis relojes favoritos'), 'Mis relojes favoritos');
   assert.equal(normalizeContentValue('index', 'trust', 'items.2.label', 'Pago segurooxsd'), 'Pago seguro');
@@ -32,7 +36,7 @@ test('el hero conserva marca, productos y enlaces reales sin recortes ni desbord
       const url = new URL(route.request().url());
       const file = path.resolve(root, '.' + decodeURIComponent(url.pathname));
       if (url.hostname !== 'tintin.test' || !file.startsWith(path.resolve(root) + path.sep)) return route.abort();
-      try { await route.fulfill({ body: await fs.readFile(file), contentType: file.endsWith('.webp') ? 'image/webp' : file.endsWith('.png') ? 'image/png' : 'application/octet-stream' }); } catch { await route.abort(); }
+      try { await route.fulfill({ body: await fs.readFile(file), contentType: file.endsWith('.webp') ? 'image/webp' : file.endsWith('.png') ? 'image/png' : file.endsWith('.svg') ? 'image/svg+xml' : 'application/octet-stream' }); } catch { await route.abort(); }
     });
     await page.setContent(`<base href="https://tintin.test/"><style>body{margin:0}${css}</style><body class="tt-home-premium">${hero}<div id="next-section"></div></body>`);
     for (const [width,height] of [[320,568],[390,844],[667,375],[844,390],[768,1024],[1024,768],[1366,768],[1440,900],[1920,1080]]) {
@@ -41,11 +45,11 @@ test('el hero conserva marca, productos y enlaces reales sin recortes ni desbord
       const g = await page.evaluate(()=>{
         const box=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
         const hero=document.querySelector('#hero');
-        return {hero:box(hero),brand:box(hero.querySelector('.tt-hero-brand')),next:box(document.querySelector('#next-section')),overflow:document.documentElement.scrollWidth-innerWidth,targets:[...hero.querySelectorAll('.tt-hero-actions a')].map(box),pieces:hero.querySelectorAll('.tt-hero-piece img').length};
+        return {hero:box(hero),brand:box(hero.querySelector('.tt-hero-brand')),next:box(document.querySelector('#next-section')),overflow:document.documentElement.scrollWidth-innerWidth,targets:[...hero.querySelectorAll('.tt-hero-actions a')].map(box),pieces:hero.querySelectorAll('.tt-hero-suitcase img').length};
       });
       assert.ok(g.overflow<=1,JSON.stringify(g));
-      assert.equal(g.pieces,4);
-      assert.ok(Math.abs(g.brand.left+g.brand.width/2-(g.hero.left+g.hero.width/2))<=1);
+      assert.equal(g.pieces,1);
+      if(width<768||(height>width&&width<=1120)) assert.ok(Math.abs(g.brand.left+g.brand.width/2-(g.hero.left+g.hero.width/2))<=1);
       assert.ok(g.brand.top>=g.hero.top&&g.brand.bottom<=g.hero.bottom);
       assert.ok(Math.abs(g.next.top-g.hero.bottom)<=1);
       assert.ok(g.targets.every(t=>t.height>=44&&t.left>=0&&t.right<=width&&t.bottom<=g.hero.bottom));
