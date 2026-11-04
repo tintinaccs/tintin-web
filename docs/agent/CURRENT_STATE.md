@@ -1,3 +1,11 @@
+## Prueba de humo del rosa de Inicio — 2026-11-04 — Codex /root
+
+HEADa7d5238e0a59f2ef2cbc32c1a05f01a35a0af12e, CI41873193824/1: logs terminales de browser126728762728 indican FAILURE en test:pages por2 valores esperados del degradado del header (1025/1440px). Agregado126741403897 confirma sólo browser=failure y otros5grupos success; CodeQL41873184399/1 SUCCESS. La API de estados aún mostraba pending/in_progress después del cierre de logs; no tratar esa lectura como ejecución activa ni sustituir conclusiones por inferencia.
+
+Causa: smoke-todas-paginas.mjs fijaba el segundo rosa #FDECF2 anterior. La autoridad sistema-superficies-tintin.css pinta el header con --tt-flow-light; Inicio lo define #FFCEE5 en el hero aprobado. Se actualiza sólo ese valor esperado, preservando comparación exacta, colores/opacidades94/90, paradas0/52/100, blur18px, máscara y resto de superficies. No era una diferencia de serialización rgba/color(srgb). No se modifica diseño, CSS, imagen, permisos ni checks.
+
+PASS_LOCAL: reproducción FAIL con Chrome Headless Shell156.0.8078.4 (Playwright1248), luego test:pages OK en18rutas y headers móvil/tablet/desktop, más10/10 runtime finales sin reintentos. Etapas previas de browser local también PASS:115rendimiento,144/144viewports canónicos,220/220geometrías, accesibilidad, navegación y controles administrativos.85/85fuentes/superficies del ajuste anterior seguían aprobados. Build/diagnóstico/preflight y CI del siguiente SHA requieren sus propios recibos. Guías aplicadas: gh-fix-ci y verification-before-completion.
+
 ## Cierre del control tipográfico de PR1330 — 2026-11-04 — Codex /root
 
 HEAD1d9e11bac27d98f7f554508bebe955c454d8042f: CI41863610250/1 terminó FAILURE sólo en browser126695322001 por3 expectativas Montserrat600 del H1 manuscrito (390/1024/1440px). CodeQL41863603300/1, preflight, comercio, reglas, administración y calidad técnica SUCCESS. El agregado falló por browser; no es otro incidente. GitHub recuperó ejecuciones después de la degradación reportada; se sigue el resultado vigente.
