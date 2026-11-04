@@ -6246,3 +6246,36 @@ Para retomar: leer HEAD/estado de1329; si merged, verificar SHA/main y runs
 post-merge separadamente; si falla, leer logs del job exacto sin asumir PASS.
 El nuevo hero ec5a369f está sólo en rama local y NO debe ser publicado por la
 vigilancia mientras falte el maletín original. Mantenerlo separado de1329.
+
+## 2026-11-04 — Recurso recibido; bloqueo del maletín cerrado
+
+La titular adjuntó RAR file_000000000f20820ead7de1530a7fe027. Se extrajo con
+libarchive sin ejecutar contenido: PNG1448×1086RGBA real con transparencia.
+Se guarda suitcase-original.png intacto; WebP principal1050×1086 recorta sólo
+el margen200,0,1250,1086. Igualdad RGBA exacta del recorte comprobada, sin IA
+ni retoque de accesorios. Variantes640/960 con Lanczos/WebP sin pérdida extra.
+El bloqueo anterior queda RESUELTO por recepción del archivo, no por omitir
+la prueba. Se agrega regresión de igualdad de píxeles en navegador.
+PR1329 ya merged en main2259eebcb44f12aa8c9aa3db4994dcf7e74bb90a; rama del hero
+rebasada sobre ese main, sin volver a incluir su eliminación como cambio propio.
+16/16 pruebas hero previas a la última mejora de botón;5/5 Node de CMS/fotos
+sin descargas duplicadas y layout. Capturas reales desktop1920 y portrait768
+inspeccionadas: producto completo, logo blanco plano, composición fiel al
+recurso aportado. Great Vibes sigue siendo una aproximación de fuente explícita.
+Build/preflight y CI del candidato final se registran con su propio resultado.
+
+Cierre local del recurso: se publica PNG en lugar de WebP para evitar pequeñas
+diferencias de redondeo de alpha en Chromium. Fuente original intacta y PNG
+principal recortado se comparan en canvas SHA256: identidad exacta. Variantes
+PNG640/960 optimizadas; no IA. README y gate requieren los archivos PNG reales.
+PASS_LOCAL candidato final:17/17 Chromium (13 tamaños, PNG idéntico, entrada
+única, reduced motion, sin JS, flujo de fondo);5/5 Node;ci:preflight completo,
+build:pages y versionado415/67. Auditoría tipográfica conserva las restricciones
+globales y sólo acepta los selectores exactos del hero solicitados; diagnóstico
+alineado. Los guardas de recursos apuntan al arte real, sin retirar verificaciones.
+Post-merge1329: Cloudflare y monitor Producción real PASS; CI41849333792/intento1
+marca Protected flows FAIL por cuatro sellos que no se actualizaron en1329.
+Logs126641096723 revisados. Se concilia en este candidato mediante el helper
+canónico, sin modificar reglas/protecciones: plan41archivos/45registros contra
+main2259eebc, protección local78registros/544archivos PASS. No se presenta el
+CI post-merge anterior como verde; requiere validar el nuevo candidato en CI.

@@ -21,9 +21,10 @@ async function open(page) {
   await page.evaluate(()=>document.body.classList.add('tt-public-shell-mounted','tt-home-runtime-ready'));
   await page.evaluate(()=>document.fonts.ready);
 }
-for(const [width,height] of [[320,568],[375,812],[390,844],[430,932],[568,320],[768,1024],[820,1180],[1024,768],[1120,840],[1280,720],[1440,900],[1920,1080]]) {
-  test(`estructura sin recortes, marca plana y sin Colecciones · ${width}x${height}`,async({page})=>{
+for(const [width,height] of [[320,568],[375,812],[390,844],[430,932],[568,320],[768,1024],[820,1180],[1024,768],[1024,1366],[1120,840],[1280,720],[1440,900],[1920,1080]]) {
+  test(`estructura sin recortes, marca plana y sin Colecciones · ${width}x${height}`,async({page},testInfo)=>{
     await page.setViewportSize({width,height});await open(page);
+    await expect.poll(()=>page.locator('.tt-hero-suitcase img').evaluate(e=>e.complete&&e.naturalWidth>0)).toBe(true);
     const g=await page.evaluate(()=>{
       const hero=document.querySelector('#hero'),rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
       return {hero:rect(hero),brand:rect(hero.querySelector('.tt-hero-brand')),art:rect(hero.querySelector('.tt-hero-suitcase')),title:rect(hero.querySelector('h1')),actions:[...hero.querySelectorAll('.tt-hero-actions a')].map(rect),overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth,logoShadow:getComputedStyle(hero.querySelector('.tt-hero-symbol')).boxShadow,logoFilter:getComputedStyle(hero.querySelector('.tt-hero-symbol')).filter,removed:!document.querySelector('.tt-hero-index,.tt-hero-collections'),gap:document.querySelector('.tt-trust-bar').getBoundingClientRect().top-hero.getBoundingClientRect().bottom,fit:getComputedStyle(hero.querySelector('.tt-hero-suitcase img')).objectFit};
@@ -34,11 +35,21 @@ for(const [width,height] of [[320,568],[375,812],[390,844],[430,932],[568,320],[
     if(width<768||(height>width&&width<=1120)){expect(g.brand.bottom).toBeLessThanOrEqual(g.art.top+1);expect(g.art.bottom).toBeLessThanOrEqual(g.title.top+1);}else{expect(g.art.right).toBeLessThanOrEqual(g.brand.left+1);}
     await expect(page.locator('.tt-hero-cta')).toHaveText('COMPRAR AHORA');await expect(page.locator('.tt-hero-cta')).toHaveAttribute('href','/catalogo');await expect(page.locator('.tt-hero-link')).toHaveAttribute('href','/about');
     await page.locator('.tt-hero-cta').focus();expect(await page.locator('.tt-hero-cta').evaluate(e=>getComputedStyle(e).outlineStyle)).not.toBe('none');
+    await page.locator('.tt-hero-cta').blur();
+    await page.locator('#hero').screenshot({path:testInfo.outputPath('hero.png')});
   });
 }
 test('recurso original del maletín disponible y decodificable antes de publicar',async({page})=>{
-  for(const name of ['suitcase.webp','suitcase-960.webp','suitcase-640.webp']) expect(fs.existsSync(path.join(root,'assets-tintin/images/home/hero-reference',name)),`Falta el archivo original: ${name}`).toBe(true);
+  for(const name of ['suitcase.png','suitcase-960.png','suitcase-640.png']) expect(fs.existsSync(path.join(root,'assets-tintin/images/home/hero-reference',name)),`Falta el archivo original: ${name}`).toBe(true);
   await open(page);await expect.poll(()=>page.locator('.tt-hero-suitcase img').evaluate(e=>e.complete&&e.naturalWidth>0)).toBe(true);
+  const equality=await page.evaluate(async()=>{
+    const original=new Image();original.src='/assets-tintin/images/home/hero-reference/suitcase-original.png';await original.decode();
+    const optimized=new Image();optimized.src='/assets-tintin/images/home/hero-reference/suitcase.png?v=suitcase-1';await optimized.decode();
+    const digest=async(image,source)=>{const canvas=document.createElement('canvas');canvas.width=1050;canvas.height=1086;const ctx=canvas.getContext('2d');if(source)ctx.drawImage(image,200,0,1050,1086,0,0,1050,1086);else ctx.drawImage(image,0,0);return [...new Uint8Array(await crypto.subtle.digest('SHA-256',ctx.getImageData(0,0,1050,1086).data))].join(',')};
+    return {source:await digest(original,true),webp:await digest(optimized,false)};
+  });
+  expect(equality.webp).toBe(equality.source);
+
 });
 test('movimiento de entrada una vez, sin parallax y cancelable por preferencia',async({page})=>{
   await open(page);await page.evaluate(()=>{const native=Element.prototype.animate;window.heroEntrances=0;Element.prototype.animate=function(...args){if(this.closest('#hero'))window.heroEntrances++;return native.apply(this,args)}});

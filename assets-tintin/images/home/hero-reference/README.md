@@ -1,30 +1,20 @@
-# Hero de referencia — pendiente del recurso original
+# Hero de referencia aprobado en el chat
 
-Composición solicitada en el chat: maletín de accesorios original a la izquierda
-(desktop y paisaje); marca, título, descripción y acciones a la derecha. En
-portrait/móvil: marca, maletín, título, descripción y acciones, en ese orden.
+Original recibido en RAR: 2d401c17-d060-4cd1-a5ac-8c4051e5cbba.png,
+1448×1086 RGBA. SHA256 del original se conserva mediante suitcase-original.png.
+No se regeneraron ni retocaron productos. Se recorta únicamente el margen
+exterior del lienzo (200,0,1250,1086), conservando los píxeles de la composición.
+El PNG principal1050×1086 se compara RGBA contra ese recorte: igualdad exacta.
+Versiones640/960 reducidas con Lanczos y codificadas PNG sin pérdida adicional. Se sirve PNG porque Chromium introduce diferencias de redondeo de transparencia al mostrar WebP; la prueba de igualdad visual de píxeles del PNG principal pasa.
+El recorte y las transparencias interiores son los entregados por la titular.
 
-Logo siempre plano y blanco: sin volumen, bisel, relieve, sombra ni perspectiva.
-El SVG de presentación recorta la silueta original sin redibujar sus trazos;
-el filtro CSS solamente convierte su color a blanco. El nombre se presenta en
-un nodo independiente y conserva el raster de marca existente. Ese raster no
-es un maestro vectorial: su limpieza/fidelidad debe comprobarse contra el
-original que entregue la titular.
+Logo siempre blanco plano, sin 3D, relieve, bisel, perspectiva ni sombras.
+Símbolo y nombre independientes usan los recursos originales del repositorio;
+los filtros sólo convierten su color a blanco. Textos y botones son HTML.
+Great Vibes Latin se sirve localmente con licencia OFL adjunta, aproximación
+a la referencia manuscrita, sin afirmar disponer de su fuente maestra.
 
-Bloqueo real: el archivo del maletín de las referencias no está en el checkout
-ni en attachments; únicamente está disponible la previsualización del chat.
-No se generó ni sustituyó por productos distintos. No publicar esta rama hasta
-recibir el archivo original, preparar la máscara y completar la comparación
-visual. El markup reserva 1440×1560 como proporción de trabajo: al recibir el
-archivo se deben medir y actualizar sus dimensiones reales, el aspect-ratio y
-el srcset, sin deformarlo.
-
-Archivos requeridos: suitcase.webp, suitcase-960.webp y suitcase-640.webp;
-todos deben proceder del mismo original, con transparencia y sin texto/logo.
-No se incluyeron archivos ficticios ni imágenes de reemplazo.
-
-Great Vibes se sirve localmente para aproximar el título manuscrito de la
-referencia; licencia OFL en assets-tintin/fonts/GreatVibes-OFL.txt. No se afirma
-que sea la fuente maestra del arte original. Fondo CSS independiente y SVG
-transparente para conservar el contrato del editor de fondos por dispositivo;
-versión 5 invalida configuraciones anteriores sin escribir ni borrar Firestore.
+Fondo CSS independiente y SVG transparente para conservar el contrato del
+editor por dispositivo; versión5 deja fuera configuraciones antiguas sin
+escribir ni borrar Firestore. Animación de entrada única, cancelable y
+compatible con prefers-reduced-motion. El reveal inferior sigue compartido.

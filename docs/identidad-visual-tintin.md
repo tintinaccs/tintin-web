@@ -11,3 +11,10 @@ Esta preferencia no autoriza sustituir la paleta global de la tienda ni modifica
 El logo debe ser siempre plano: nunca 3D, relieve, bisel, volumen, perspectiva
 ni sombras. En el hero de referencia se utiliza blanco plano sobre rosa;
 se conserva su silueta original, con aparición suave sin deformación.
+
+Hero de referencia2026-11-04: por fidelidad solicitada a la composición adjunta,
+única excepción tipográfica: título manuscrito TintinScript (Great Vibes Latin
+local/OFL), descripción y acciones con la sans de la referencia, acotadas a
+#hero. Montserrat continúa siendo la familia del resto del sitio. El auditor
+y diagnóstico validan esos selectores exactos; no se habilitan fuentes externas
+ni cambios de familia en otros módulos.
