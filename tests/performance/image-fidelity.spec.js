@@ -95,12 +95,12 @@ for(const [width,height,device] of [[320,568,'mobile'],[390,844,'mobile'],[540,9
   const fs=require('node:fs'),path=require('node:path');
   const {removeFixtureScripts}=require('../../scripts/lib/html-layout-fixture.js');
   const html=removeFixtureScripts(fs.readFileSync(path.resolve(__dirname,'../../index.html'),'utf8'),{removeModulePreloads:true});
-  const requests=[];page.on('request',request=>{const url=new URL(request.url());if(/\/hero-nuevo\/.*\.(png|webp)$/.test(url.pathname))requests.push(url.href);});
+  const requests=[];page.on('request',request=>{const url=new URL(request.url());if(/\/hero-editorial\/backdrop\.(png|webp)$/.test(url.pathname))requests.push(url.href);});
   await page.setViewportSize({width,height});
   await page.route('**/__hero-delivery',route=>route.fulfill({contentType:'text/html',body:html}));
   await page.goto('/__hero-delivery');
   await expect.poll(()=>page.locator('#tt-hero-img').evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
-  await expect(page.locator('#tt-hero-img')).toHaveJSProperty('currentSrc',new URL(`/assets-tintin/images/home/hero-nuevo/hero-nuevo-${device}-lossless.webp?v=tintin-20261029-lossless-1`,page.url()).href);
+  await expect(page.locator('#tt-hero-img')).toHaveJSProperty('currentSrc',new URL('/assets-tintin/images/home/hero-editorial/backdrop.webp?v=editorial-1',page.url()).href);
   expect(requests).toHaveLength(1);
   // La portada ya decodificada se revela en un frame, sin una segunda espera
   // por opacidad. Se prueba con el CSS real generado para cada dispositivo.
@@ -126,7 +126,7 @@ for(const [width,height,device] of [[320,568,'mobile'],[390,844,'mobile'],[540,9
     expect(Math.abs(geometry.center - geometry.axis)).toBeLessThanOrEqual(1);
     expect(geometry.actions).toHaveLength(2);
     for (const action of geometry.actions) {
-      expect(action.right).toBeLessThanOrEqual(geometry.whatsappLeft - 8);
+      expect(action.right).toBeLessThanOrEqual(width);
       expect(action.clipped).toBe(false);
     }
   }

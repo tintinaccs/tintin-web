@@ -1,5 +1,5 @@
-import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20261102-pickup-cash-1';
-import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20261102-pickup-cash-1';
+import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-brand-polish-20261104-1';
+import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-brand-polish-20261104-1';
 
 const VISUAL_SETTLE_CEILING_MS = 3500;
 

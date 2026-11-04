@@ -185,9 +185,10 @@ test('home alinea fallback con el título publicado y sanea el typo de pago segu
     read('index.html'),
     read('js/core/store/definiciones-contenido.js'),
   ]);
-  assert.match(home, /UN DETALLE[\s\S]*?MUY VOS/);
+  assert.match(home, /Tintin Accesorios &amp; Relojes<\/h1>/);
+  assert.match(home, /class="tt-hero-brand"/);
   assert.doesNotMatch(home, /Un detalle[\s\S]*?cambia todo/);
-  assert.match(definitions, /UN DETALLE MUY VOS/);
+  assert.match(definitions, /Tintin Accesorios & Relojes/);
   assert.match(definitions, /PAGO SEGUROOXSD/);
   assert.match(definitions, /'Pago seguro'/);
 });

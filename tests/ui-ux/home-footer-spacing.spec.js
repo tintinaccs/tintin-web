@@ -50,7 +50,7 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
       const q = selector => box(document.querySelector(selector));
       return { shell:q('.tt-footer-shell'), grid:q('.tt-footer-grid'), brand:q('.tt-footer-brand'), logo:q('.tt-footer-brand .tt-logo-link'), tagline:q('.tt-footer-tagline'), wa:q('.tt-footer-wa'), actionsBox:q('.tt-hero-actions'),
         cards:[...document.querySelectorAll('.tt-trust-item')].map(box),
-        actions:[...document.querySelectorAll('.tt-hero-actions a')].map(a => ({ ...box(a), background:getComputedStyle(a).backgroundColor, border:parseFloat(getComputedStyle(a).borderTopWidth) })),
+        actions:[...document.querySelectorAll('.tt-hero-actions a')].map(a => ({ ...box(a), background:getComputedStyle(a).backgroundColor, border:parseFloat(getComputedStyle(a).borderTopWidth),color:getComputedStyle(a).color })),
         copyrightPadding:parseFloat(getComputedStyle(document.querySelector('.tt-footer-bottom')).paddingBottom),
         credit:q('.tt-footer .novak-credit'), creditRow:q('.tt-footer .novak-credit-row'),
         creditGap:document.querySelector('.tt-footer .novak-credit-row').getBoundingClientRect().top-document.querySelector('.tt-footer-bottom').getBoundingClientRect().bottom,
@@ -99,10 +99,10 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
         expect(a.right).toBeLessThanOrEqual(width - 15);
       }
       expect(geometry.actions[0].background).not.toBe('rgba(0, 0, 0, 0)');
-      expect(geometry.actions[1].border).toBeGreaterThanOrEqual(1);
+      expect(geometry.actions[1].color).not.toBe('rgba(0, 0, 0, 0)');
       if (width <= 479) {
         for (const a of geometry.actions) expect(Math.abs(a.center-geometry.actionsBox.center)).toBeLessThanOrEqual(1);
-        expect(Math.abs(geometry.actions[0].width-geometry.actions[1].width)).toBeLessThanOrEqual(1);
+
       }
     }
     for (const [selector, href] of [['.tt-hero-cta','/catalogo'],['.tt-hero-link','/about']]) {

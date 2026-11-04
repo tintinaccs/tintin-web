@@ -888,7 +888,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261102-cancel-stock-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-brand-polish-20261104-1');
     }
   }
 
@@ -966,7 +966,7 @@
 
   function bootScrollReveal() {
     if (!window.TintinGlobalScrollRevealBooted) {
-      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2', 'Scroll Reveal', undefined, 'tintin-20261029-performance-1');
+      importSibling('quality/revelado-desplazamiento-global.js', 'Scroll Reveal', undefined, 'tintin-brand-polish-20261104-1');
     }
   }
 
@@ -978,13 +978,13 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261103-acceptance-1');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-brand-polish-20261104-1');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261103-acceptance-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-brand-polish-20261104-1');
     }
   }
 

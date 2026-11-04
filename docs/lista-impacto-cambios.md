@@ -1,3 +1,7 @@
+## 2026-11-03 — Marca editorial de Inicio y movimiento compartido
+
+Autoridades: index.html, hero-bienvenida-inicio.css, inicio-premium.js, imágenes/definiciones de contenido y revelado-desplazamiento-global. Se sustituyen composiciones anteriores por una sola, con texto/enlaces HTML y recortes independientes. El fondo mantiene su editor por dispositivo; versión4 no borra configuraciones guardadas. Índice de colecciones comparte publicación con carrusel; no consulta adicional. Revelado por bloques y cancelación de movimiento reducido alcanzan las páginas públicas; rutas transaccionales mantienen lectura estática. Pie NOVAK y navegación existentes conservados. Pruebas de geometría, decodificación, personalización, fallback, pausa, teclado/formularios, producto y responsive público; derivados/caché/CSP/protección por generadores vigentes. Sin negocio, permisos, Rules, datos reales ni dependencias nuevos.
+
 ## 2026-11-02 — Cancelación/rechazo con elección explícita de stock
 
 Autoridades: modelo-inventario y order-admin-domain; cliente de integridad

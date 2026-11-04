@@ -229,6 +229,28 @@ class InfiniteCollectionCarousel {
 
   setCollections(collections) {
     this.collections = Array.isArray(collections) ? collections.filter(item => clean(item?.slug)) : [];
+    const index = document.querySelector('.tt-hero-index-links');
+    if (index) {
+      const links = this.collections.map(collection => {
+        const link = document.createElement('a');
+        link.href = collectionHref(collection.slug);
+        const label = document.createElement('span');
+        label.textContent = clean(collection.name) || clean(collection.slug);
+        const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        arrow.setAttribute('viewBox', '0 0 24 24');
+        arrow.setAttribute('fill', 'none');
+        arrow.setAttribute('stroke', 'currentColor');
+        arrow.setAttribute('stroke-width', '1.6');
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M5 19 19 5M5 5h14v14');
+        arrow.append(path);
+        arrow.setAttribute('aria-hidden', 'true');
+        link.append(label, arrow);
+        return link;
+      });
+      index.replaceChildren(...links);
+      index.closest('.tt-hero-index').hidden = !links.length;
+    }
     this.render();
   }
 

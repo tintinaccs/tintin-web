@@ -24,7 +24,6 @@ import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261103-a
 const imagePage = (window.location.pathname || '').toLowerCase();
 if (imagePage === '/' || imagePage.endsWith('/index.html') || imagePage === '') {
   Promise.all([
-    import('../../pages/home/inicio-premium.js'),
     import('../welcome/tutorial-bienvenida.js?v=tintin-20261030-home-history-5'),
   ]).catch(error => console.warn('[images] No se pudo iniciar la bienvenida:', error));
 }
@@ -50,19 +49,19 @@ export const HERO_POSITION_VALUES = Object.freeze([
 // Artes de marca que se muestran por defecto y que también se previsualizan
 // en Super Admin. Firestore puede reemplazar cada variante sin editar código.
 export const HERO_IMAGE_FALLBACKS = Object.freeze({
-  desktop: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png',
-  tablet: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png',
-  tabletLandscape: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png',
-  mobile: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png',
+  desktop: 'assets-tintin/images/home/hero-editorial/backdrop.png',
+  tablet: 'assets-tintin/images/home/hero-editorial/backdrop.png',
+  tabletLandscape: 'assets-tintin/images/home/hero-editorial/backdrop.png',
+  mobile: 'assets-tintin/images/home/hero-editorial/backdrop.png',
 });
-export const HERO_IMAGE_CONFIG_VERSION = 3;
+export const HERO_IMAGE_CONFIG_VERSION = 4;
 
 // Solo aparecen slots que tienen un destino visual real. Las fotos de producto
 // se editan en Productos y las portadas de colección en Colecciones.
 export const IMAGE_SLOTS = Object.freeze([
-  { id: 'hero_bg_desktop', label: 'Hero — Desktop / Laptop (≥1121px)', section: 'hero', emoji: null, desc: 'Arte Tintin inicial; podés reemplazarlo desde este panel.', defaultUrl: HERO_IMAGE_FALLBACKS.desktop },
-  { id: 'hero_bg_tablet',  label: 'Hero — Tablet (768–1120px)', section: 'hero', emoji: null, desc: 'Arte Tintin inicial para tablet; podés reemplazarlo desde este panel.', defaultUrl: HERO_IMAGE_FALLBACKS.tablet },
-  { id: 'hero_bg_mobile',  label: 'Hero — Mobile (≤767px)', section: 'hero', emoji: null, desc: 'Arte Tintin inicial para celulares; podés reemplazarlo desde este panel.', defaultUrl: HERO_IMAGE_FALLBACKS.mobile },
+  { id: 'hero_bg_desktop', label: 'Hero — Desktop / Laptop (≥1121px)', section: 'hero', emoji: null, desc: 'Fondo del banner Tintin; la marca y los accesorios se conservan. Arte inicial; podés reemplazarlo desde este panel.', defaultUrl: HERO_IMAGE_FALLBACKS.desktop },
+  { id: 'hero_bg_tablet',  label: 'Hero — Tablet (768–1120px)', section: 'hero', emoji: null, desc: 'Fondo del banner Tintin; la marca y los accesorios se conservan. Arte inicial para tablet; podés reemplazarlo desde este panel.', defaultUrl: HERO_IMAGE_FALLBACKS.tablet },
+  { id: 'hero_bg_mobile',  label: 'Hero — Mobile (≤767px)', section: 'hero', emoji: null, desc: 'Fondo del banner Tintin; la marca y los accesorios se conservan. Arte inicial para celulares; podés reemplazarlo desde este panel.', defaultUrl: HERO_IMAGE_FALLBACKS.mobile },
   { id: 'edit_bolsos',     label: 'Editorial — Bolsos/Bags', section: 'editorial', emoji: '👜', desc: 'Imagen de la sección editorial Bags en la portada' },
   { id: 'edit_relojes',    label: 'Editorial — Relojes', section: 'editorial', emoji: '⌚', desc: 'Imagen de la sección editorial Relojes en la portada' },
   { id: 'about_foto',      label: 'Nosotros — Foto principal', section: 'nosotros', emoji: '🌸', desc: 'Foto principal de la página Nosotros' },

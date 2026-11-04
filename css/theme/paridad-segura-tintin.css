@@ -48,7 +48,7 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
   /* El CTA inferior del hero terminaba exactamente en la franja donde vive el
      botón flotante de WhatsApp. Esta reserva conserva 16px visibles entre
      ambos sin cambiar textos, imágenes, acciones ni la altura del banner. */
-  body.tt-home-premium.tt-public-shell-mounted .tt-hero-content{
+  body.tt-home-premium.tt-public-shell-mounted .tt-hero:not([data-tt-banner="editorial-20261104"]) .tt-hero-content{
     padding-bottom:calc(var(--tt-mobile-nav-clearance) + 64px)!important;
   }
   /* Los paneles modales conservan su propia capa; el flotante no cambia
