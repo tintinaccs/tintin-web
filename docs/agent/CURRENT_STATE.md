@@ -6171,3 +6171,23 @@ comercial,320–3840px/horizontal), build:pages/caché410/67 y preflight1185mód
 alterar gates, Rules, datos o cambios de02/03. Las etapas canónicas de CI deben
 acreditar el barrido transversal del SHA propio; no se cuenta el audit:final
 interrumpido de d7faa302. PR, CI, merge y producción se siguen por separado.
+
+## 2026-11-04 — Retiro puntual del índice blanco de Colecciones
+
+Solicitud visible: quitar el bloque blanco en todos los tamaños. Alcance aplicado:
+HTML de Inicio, estilos exclusivos y actualización del índice en el carrusel;
+se conservan el carrusel, catálogo, productos y navegación global. Se retiró
+el enlace del hero al bloque eliminado para no dejar un destino inexistente.
+Skill leído/aplicado: tintin-design-quality (lectura manual); Sites y runtime
+consultados para identificar entorno, sin usar hosting Sites.
+
+PASS_LOCAL — Codex: audit:public-shell (17 pruebas), sintaxis del módulo,
+audit:cache-versioning (415 archivos/67 cargas dinámicas), git diff --check.
+Chromium /usr/bin/chromium: hero-complete-borders 15/15; comprobación directa
+375/390/430/768/1024/1280/1440/1920px: índice/enlace ausentes, siguiente bloque
+trust adyacente, gap 0px y carrusel conservado. Primer intento Playwright no
+arrancó por ejecutable predeterminado ausente; repetición con Chromium instalado
+completó correctamente. CSS combinado y baseline regenerados por sus autoridades.
+La reconstrucción amplia del hero descrita en el adjunto no se implementó en
+este retiro puntual. Sin merge ni publicación, según instrucción del adjunto;
+producción y CI NOT_VERIFIED. Cambios locales listos para revisión.
