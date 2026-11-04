@@ -1,3 +1,29 @@
+## Corrección CI de captura estable — 2026-11-04 — Codex /root
+
+Run41824735089/1, headeefafaca, browserjob126558764597:278pruebas PASS, paridad original/respaldo1920px FAIL; los demás jobs (preflight, comercio, reglas, calidad técnica, administración) SUCCESS. Reproducido con Chromium156.0.8078.4 revision1248 de Playwright1.64.1; Chromium151 del sistema no reproducía. La prueba permitía decodificar WebP con geometría intermedia antes de completar CSS y eliminaba el script defer que define el tinte SVG del logo del footer. La captura podía comparar un logo aún sin pintar.
+
+Se conserva el script defer/versionado real de marca en el fixture, se entregan imágenes tras completar estilos y se exige tinta visible y pintura estable del footer antes de comparar. fonts.ready se espera después de liberar imágenes para evitar dependencia circular en WebKit. No se cambian tolerancias ni se omiten recursos/comprobaciones; comparación estricta conserva límite previo16píxeles con diferencia máxima1por canal. Se retiraron los cambios de posición de diagnóstico: diseño, CSS y versiones públicas aprobadas permanecen iguales a eefafaca. Backups completos del diagnóstico fuera del repo.
+
+PASS_LOCAL final:6/6 paridad Chromium156 y6/6 WebKit (320/390/768/1024/1440/1920px, normal/bundle/fallo CSS y footer); caso1920 verificado además3/3 independientes. Sin cambios de diseño. IN_PROGRESS: build/preflight y CI del nuevo SHA. Skill gh-fix-ci aplicado dentro de la autorización existente para corregir checks y mergear.
+
+## Aclaración final: marca blanca con halo rosa — 2026-11-04 — Codex /root
+
+El titular descarta la tinta rosa y pide símbolo/nombre blancos con difuminado rosa medio oscuro, sin negro ni cercano. Se restaura tintin-white.webp original, halo CSS rosa #D8658D/#DC7B9E suave detrás, debajo de accesorios y contenido. Se retira la variante contrast.png y su exportador descartados. Se mantienen favicon plano circular blanco, cadena Olyra completa y bordes suaves. PASS_LOCAL:23/23 Chromium y23/23 WebKit con la marca blanca/halo rosa final,16tamaños e interacción, comparación estricta original/bundle/fallback; build y preflight PASS. El fallo41823475152 fue deriva del diagnóstico al cambiar51bytes de README de assets después de generarlo; se regenera al final y se verifica estabilidad respecto al índice Git antes del commit. IN_PROGRESS: CI del nuevo SHA y publicación. PR1327 reabierta con autorización explícita del titular; CI41823475152/1 corresponde al SHA48ce9e83 previo y no certifica este ajuste.
+
+## Bordes suaves, cadena completa y contraste — 2026-11-04 — Codex /root
+
+Solicitudes adicionales: difuminar bordes superior/inferior del fondo hacia la superficie de la sección contigua, sin aplicar blur al contenido; sustituir foto recortada por COLLAR OLYRA del catálogo (imp_0a5e06ced9fa8ada), ambos extremos y cinco tréboles visibles, fondo retirado con image_gen; márgenes internos responsive. Aclaración de contraste: marca original recoloreada en plano rosa profundo mediante exportación técnica de su alfa, conservando archivo/formas, sin sombra/3D. PASS_LOCAL:23/23 Chromium y23/23 WebKit (16tamaños, interacción y6comparaciones original/bundle/fallback). PNG plano nativo1505×1045 indexado106496bytes, alfa idéntico a la fuente comprobado; decodificación/comparación adicional390/1024px2/2 Chromium y2/2 WebKit. Favicon conserva1/1 por motor y equivalencia PNG/ICO. Build generado. IN_PROGRESS: plan/preflight y nuevos checks del SHA final.
+
+## Favicon original sobre blanco — 2026-11-04 — Codex /root
+
+Solicitud adicional mientras PR1327 verifica el control: conservar silueta/proporciones originales y rosa plano vigente #CF367B (aclaración del titular «sin3d»; el PNG fuente lleva brillo), círculo blanco con exterior transparente, PNG16/32/192/512 e ICO16/24/32/48/64. Se adapta el generador canónico sin cambiar variantes Apple, apps o notificaciones. Referencias versionadas de todas las páginas. PASS_LOCAL: decodificación y forma en Chromium/WebKit1/1 cada uno; entradas ICO16/24/32/48/64 y sus píxeles16/32 idénticos a los PNG; hash de fuente intacto. IN_PROGRESS: preflight final, CI del nuevo SHA y publicación; no se heredan PASS del SHA anterior.
+
+## Control de animación discreto — 2026-11-04 — Codex /root
+
+Base0495671a7f2a8b390b137d2b786e306059992863; rama codex/hero-motion-control-20261104. Corrección solicitada a partir de captura: quitar el recuadro del control de pausa y uniformar su presentación en escritorio, laptop, tablet y teléfono. Icono vectorial18px sobre área táctil44×44, superficie transparente sin borde/sombra/bezel nativo, posición superior y foco visible. Estado pausado muestra reproducir y cambia título/nombre accesible. Control sigue oculto al preferir movimiento reducido.
+
+PASS_LOCAL:17/17 Chromium y17/17 WebKit (320–2560px, ambas orientaciones); comprobación adicional de pausa/reanudación mediante Espacio/Enter y foco visible1/1 en cada motor. Captura integrada390px revisada. IN_PROGRESS: build, preflight y CI del candidato. Se conserva PR1326 ya mergeada; su post-merge CI41815518220/1 continúa vigilado, CodeQL41815518129/1 y salud41815520787/1 SUCCESS. La nueva corrección requiere su propio PR/checks/publicación. Sin cambios de logo, datos, catálogo, fondo o firma NOVAK.
+
 ## Hero e identidad del sitio — 2026-11-03 — Codex /root
 
 Base d546ab3436e8311dc59e82c4ac8564cdaa87d560; rama codex/tintin-brand-polish-20261104. Autorización explícita para integrar, mergear y seguir checks terminales; criterio de identidad aplicado a todo el sitio mediante las autoridades compartidas, sin rediseñar formularios o lógica comercial.

@@ -1,3 +1,23 @@
+## Paridad CSS con carga estable — 2026-11-04
+
+Solo fixture tests/ui-ux/home-styles-bundle.spec.js: conserva defer/versionado canónico de logotipo-marca.js, entrega fotos después de estilos completos, espera fuentes después de liberar fotos (WebKit) y verifica logo realmente pintado y estable. Sin cambios de diseño o posiciones, sin tolerancia ampliada, conserva ruta real de recuperación. Verificar seis tamaños Chromium156/WebKit y regresión1920px; generadores/preflight sin deriva.
+
+## Marca blanca y halo rosa — 2026-11-04
+
+Aclaración final: misma marca blanca original y un halo rosa CSS estático como tercera capa del fondo; bordes top/bottom conservados. Texto secundario oscuro con contraste sobre el halo. Quitar PNG rosa/exportador rechazados; nuevas URLs CSS y todos los derivados. Verificar16tamaños, lectura, movimiento reducido, original/bundle/fallback y cadena completa.
+
+## Hero: continuidad, cadena y contraste — 2026-11-04
+
+Autoridad CSS única hero-bienvenida-inicio.css, marcado index.html y recorte necklace.webp. Gradientes de borde en pseudo-elemento no interactivo bajo accesorios/marca; colores de superficie compartidos con índice contiguo. Producto real Olyra sustituye Yséla, enlace/alt/procedencia juntos. Marca mantiene fuente y alfa con tinta rosa profunda para contraste. Verificar ambos bordes, contraste, recorte de producto incluso al desplazar, foco y geometría en16tamaños/2motores. Nuevas URLs CSS/imagen y derivados generados, sin cambios de datos.
+
+## Favicon original circular — 2026-11-04
+
+Autoridad: scripts/generar-iconos-admin.mjs y PNG original assets-tintin/images/general/logo.png, intacto. Cambia solo la rama de exportación favicon (círculo blanco, rosa plano vigente, una pasada), cinco archivos favicon y URLs de18documentos. Apple/apps/push permanecen iguales. Verificar alfa exterior, círculo blanco, silueta/cuerpo, PNG16/32 e ICO multientrada y rutas/versiones; regenerar shells/diagnóstico/protección.
+
+## 2026-11-04 — Control de animación del hero
+
+Autoridades: hero-bienvenida-inicio.css, inicio-premium.js e index.html. Control sin recuadro ni bezel nativo, icono18px con objetivo44×44 y foco; pausa/reanudar actualiza icono y nombre. Mismo comportamiento de movimiento reducido y parada fuera de vista. Prueba la apariencia y accesibilidad en16composiciones, incluidos teléfono horizontal y escritorio2560px; clic con barra móvil/WhatsApp activos. Derivados, caché y protección mediante generadores vigentes. Sin cambios de negocio, assets de marca ni dependencias del sitio.
+
 ## 2026-11-03 — Marca editorial de Inicio y movimiento compartido
 
 Autoridades: index.html, hero-bienvenida-inicio.css, inicio-premium.js, imágenes/definiciones de contenido y revelado-desplazamiento-global. Se sustituyen composiciones anteriores por una sola, con texto/enlaces HTML y recortes independientes. El fondo mantiene su editor por dispositivo; versión4 no borra configuraciones guardadas. Índice de colecciones comparte publicación con carrusel; no consulta adicional. Revelado por bloques y cancelación de movimiento reducido alcanzan las páginas públicas; rutas transaccionales mantienen lectura estática. Pie NOVAK y navegación existentes conservados. Pruebas de geometría, decodificación, personalización, fallback, pausa, teclado/formularios, producto y responsive público; derivados/caché/CSP/protección por generadores vigentes. Sin negocio, permisos, Rules, datos reales ni dependencias nuevos.
