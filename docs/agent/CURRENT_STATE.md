@@ -1,3 +1,13 @@
+## Instagram: fotos, carruseles y videos — 2026-11-04 — Claude Code
+
+Base main (sin commit previo de esta tarea). Alcance: endpoint, cliente, CSS, estado vacío, pruebas y documentación de renovación del token.
+
+Causa/hallazgos: el feed sólo aceptaba VIDEO y no pedía media_url; además, en main el texto de las tarjetas de video ya se pintaba #222 sobre el degradado oscuro por reglas !important del tema (tema-unificado-tintin.css), y su regla [class*="-badge"] pintaba de rosa el indicador de carrusel (por eso se llama tt-instagram-stack).
+
+PASS_LOCAL: node --test tests/social/instagram-feed.test.mjs 7/7; Playwright tests/ui-ux/instagram-tintin.spec.js 25/25 Chromium sin reintentos (390/820/1366 con 2/3/4 columnas, cuadradas, sin salto de layout ni scroll horizontal, texto blanco, estados vacíos, pestaña nueva con opener nulo, reproductor, foco protegido); controles negativos detectaron columnas y proporción erróneas; section-flow-full-width + about-personal-story 105/105; test:web-push 67/67; pages-routes 5/5; build:pages y auditoría de caché OK. Capturas con /api/instagram-feed simulado.
+
+NOT_VERIFIED: feed real con credenciales de Meta (INSTAGRAM_USER_ID/INSTAGRAM_ACCESS_TOKEN los carga el titular; no se llamó a Instagram); producción; npm run test:pages (el entorno local no tiene chrome-headless-shell-1248; falla igual en main limpio); WebKit/Firefox; CI del PR (ver GITHUB_RESULTS al abrirlo).
+
 ## Recuperación de protección tras1331/1332 — Codex /root
 
 Base0c95089318bce91871ab48adbf7f67c32a2049de. Protected flows41917190470/1 falló25huellas tras el retiro autorizado de marca móvil; previamente41901338196/1 falló3 tras tipografía del hero. Todos los grupos funcionales y Repository audit aprobaron. Se preservan exactamente las fuentes de1331/1332 y sus cambios de diseño/navegación, sin restaurar módulos retirados ni alterar pruebas. El helper oficial renueva únicamente las huellas reales contra main vigente; mantiene78registros/544entradas y alcances.

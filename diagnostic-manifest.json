@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c20d2d84a6b2d9dba195609cea3b1d6c572a021e01b57cab782d49685b2313a0",
+  "sourceFingerprint": "6e5a011e7f9658549d55a71bdd06769a89e33af6f930d671fe2ad3ce6e07bced",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1805,
     "textFiles": 1657,
-    "totalBytes": 57116647,
+    "totalBytes": 57147718,
     "pages": 19,
     "modules": 1167
   },
@@ -1180,8 +1180,8 @@
         "guest",
         "client"
       ],
-      "bytes": 30786,
-      "sha256": "13e4d3446c72146e064a4e71a87cd942d28a23a6daaba0b201222ce8c7fd50c8",
+      "bytes": 30769,
+      "sha256": "a5d057fc7585a8b58e87e1dd33646072b3d60f56ab145ca104f1009885ef1c3f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1281,14 +1281,14 @@
           "line": 340
         },
         {
-          "raw": "js/components/social/instagram-tintin.js?v=tintin-performance-polish-20261103-1",
+          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261104-instagram-feed-1",
           "target": "js/components/social/instagram-tintin.js",
           "line": 341
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-ad0ecfe0d11749ff",
+          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-48a7d4d280fbe2fd",
           "target": "css/generated/nosotros.css",
           "line": 35
         },
@@ -1378,7 +1378,7 @@
           "line": 51
         },
         {
-          "raw": "css/components/social/instagram-tintin.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/social/instagram-tintin.css?v=tintin-20261104-instagram-feed-1",
           "target": "css/components/social/instagram-tintin.css",
           "line": 52
         },
@@ -1883,13 +1883,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/social/instagram-tintin.js?v=tintin-performance-polish-20261103-1",
+          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261104-instagram-feed-1",
           "target": "js/components/social/instagram-tintin.js",
           "line": 341,
           "exists": true
         },
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-ad0ecfe0d11749ff",
+          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-48a7d4d280fbe2fd",
           "target": "css/generated/nosotros.css",
           "line": 35,
           "exists": true
@@ -1997,7 +1997,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/social/instagram-tintin.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/social/instagram-tintin.css?v=tintin-20261104-instagram-feed-1",
           "target": "css/components/social/instagram-tintin.css",
           "line": 52,
           "exists": true
@@ -16388,8 +16388,8 @@
         "guest",
         "client"
       ],
-      "bytes": 47072,
-      "sha256": "fe5716ea79f3fe6cd32629f54a4261fa5dd7db91c30d1563f5fe1d30c3645085",
+      "bytes": 47197,
+      "sha256": "641287c11af7d33788797c6e2e22681cd2dd6afeeec5596cf7a4d9f564a63049",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16410,13 +16410,13 @@
           "error": ""
         },
         {
-          "line": 396,
+          "line": 397,
           "module": false,
           "ok": true,
           "error": ""
         },
         {
-          "line": 439,
+          "line": 440,
           "module": true,
           "ok": true,
           "error": ""
@@ -16467,77 +16467,77 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 430
+          "line": 431
         },
         {
           "raw": "tienda.js?v=tintin-footer-canonical-20261103-1",
           "target": "tienda.js",
-          "line": 431
+          "line": 432
         },
         {
           "raw": "js/pages/home/mas-vendidos.js?v=tintin-20261031-revision-ux-1",
           "target": "js/pages/home/mas-vendidos.js",
-          "line": 432
+          "line": 433
         },
         {
           "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-remove-collection-index-20261104-1",
           "target": "js/pages/home/carrusel-colecciones.js",
-          "line": 433
+          "line": 434
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 434
+          "line": 435
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 435
+          "line": 436
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 436
+          "line": 437
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 437
+          "line": 438
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-suitcase-20261104-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 438
+          "line": 439
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 443
+          "line": 444
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 479
+          "line": 480
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 480
+          "line": 481
         },
         {
           "raw": "js/pages/home/resenas-clientas.js?v=tintin-20261026-editor-closure-1",
           "target": "js/pages/home/resenas-clientas.js",
-          "line": 510
+          "line": 511
         },
         {
-          "raw": "js/components/social/instagram-tintin.js?v=tintin-performance-polish-20261103-1",
+          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261104-instagram-feed-1",
           "target": "js/components/social/instagram-tintin.js",
-          "line": 511
+          "line": 512
         }
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-7de2310b884f6c09",
+          "raw": "css/generated/inicio.css?v=tintin-home-8721daec9432e7a5",
           "target": "css/generated/inicio.css",
           "line": 61
         },
@@ -16647,7 +16647,7 @@
           "line": 98
         },
         {
-          "raw": "css/components/social/instagram-tintin.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/social/instagram-tintin.css?v=tintin-20261104-instagram-feed-1",
           "target": "css/components/social/instagram-tintin.css",
           "line": 99
         },
@@ -16863,7 +16863,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 314
+          "line": 315
         },
         {
           "tag": "img",
@@ -16871,7 +16871,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 371
+          "line": 372
         },
         {
           "tag": "img",
@@ -16879,7 +16879,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6205.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 5",
           "hasAlt": true,
-          "line": 486
+          "line": 487
         },
         {
           "tag": "img",
@@ -16887,7 +16887,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6207.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 6",
           "hasAlt": true,
-          "line": 487
+          "line": 488
         },
         {
           "tag": "img",
@@ -16895,7 +16895,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6208.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 7",
           "hasAlt": true,
-          "line": 488
+          "line": 489
         },
         {
           "tag": "img",
@@ -16903,7 +16903,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6209.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 8",
           "hasAlt": true,
-          "line": 489
+          "line": 490
         },
         {
           "tag": "img",
@@ -16911,7 +16911,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6210.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 9",
           "hasAlt": true,
-          "line": 490
+          "line": 491
         },
         {
           "tag": "img",
@@ -16919,7 +16919,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6211.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 10",
           "hasAlt": true,
-          "line": 491
+          "line": 492
         },
         {
           "tag": "img",
@@ -16927,7 +16927,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6212.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 11",
           "hasAlt": true,
-          "line": 492
+          "line": 493
         },
         {
           "tag": "img",
@@ -16935,7 +16935,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6213.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 12",
           "hasAlt": true,
-          "line": 493
+          "line": 494
         },
         {
           "tag": "img",
@@ -16943,7 +16943,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6214.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 13",
           "hasAlt": true,
-          "line": 494
+          "line": 495
         },
         {
           "tag": "img",
@@ -16951,7 +16951,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6215.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 14",
           "hasAlt": true,
-          "line": 495
+          "line": 496
         },
         {
           "tag": "img",
@@ -16959,7 +16959,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6216.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 15",
           "hasAlt": true,
-          "line": 496
+          "line": 497
         },
         {
           "tag": "img",
@@ -16967,7 +16967,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6218.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 16",
           "hasAlt": true,
-          "line": 497
+          "line": 498
         },
         {
           "tag": "img",
@@ -16975,7 +16975,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6219.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 17",
           "hasAlt": true,
-          "line": 498
+          "line": 499
         },
         {
           "tag": "img",
@@ -16983,7 +16983,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6220.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 18",
           "hasAlt": true,
-          "line": 499
+          "line": 500
         },
         {
           "tag": "img",
@@ -16991,7 +16991,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6221.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 19",
           "hasAlt": true,
-          "line": 500
+          "line": 501
         },
         {
           "tag": "img",
@@ -16999,7 +16999,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6222.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 20",
           "hasAlt": true,
-          "line": 501
+          "line": 502
         },
         {
           "tag": "img",
@@ -17007,7 +17007,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6223.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 21",
           "hasAlt": true,
-          "line": 502
+          "line": 503
         },
         {
           "tag": "img",
@@ -17015,7 +17015,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6224.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 22",
           "hasAlt": true,
-          "line": 503
+          "line": 504
         },
         {
           "tag": "img",
@@ -17023,7 +17023,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6225.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 23",
           "hasAlt": true,
-          "line": 504
+          "line": 505
         },
         {
           "tag": "img",
@@ -17031,7 +17031,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_6227.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 24",
           "hasAlt": true,
-          "line": 505
+          "line": 506
         },
         {
           "tag": "img",
@@ -17039,7 +17039,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_9617.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 25",
           "hasAlt": true,
-          "line": 506
+          "line": 507
         },
         {
           "tag": "img",
@@ -17047,7 +17047,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_9619.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 26",
           "hasAlt": true,
-          "line": 507
+          "line": 508
         },
         {
           "tag": "img",
@@ -17055,7 +17055,7 @@
           "target": "assets-tintin/images/home/resenas-clientas/img_9620.jpg",
           "alt": "Reseña de una clienta de Tintin, captura 27",
           "hasAlt": true,
-          "line": 508
+          "line": 509
         }
       ],
       "links": [
@@ -17117,7 +17117,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 300
+          "line": 301
         },
         {
           "raw": "/",
@@ -17127,7 +17127,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 313
+          "line": 314
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -17137,7 +17137,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 318
+          "line": 319
         },
         {
           "raw": "/catalogo",
@@ -17147,7 +17147,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 326
+          "line": 327
         },
         {
           "raw": "/catalogo?cat=collares",
@@ -17157,7 +17157,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 327
+          "line": 328
         },
         {
           "raw": "/catalogo?cat=earcuff",
@@ -17167,7 +17167,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 328
+          "line": 329
         },
         {
           "raw": "/catalogo?cat=gafas",
@@ -17177,7 +17177,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 329
+          "line": 330
         },
         {
           "raw": "/catalogo?cat=aros",
@@ -17187,7 +17187,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 330
+          "line": 331
         },
         {
           "raw": "/catalogo?cat=armcuff",
@@ -17197,7 +17197,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 331
+          "line": 332
         },
         {
           "raw": "/catalogo?cat=anillos",
@@ -17207,7 +17207,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 332
+          "line": 333
         },
         {
           "raw": "/catalogo?cat=joyeros",
@@ -17217,7 +17217,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 333
+          "line": 334
         },
         {
           "raw": "/catalogo?cat=pulseras",
@@ -17227,7 +17227,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 334
+          "line": 335
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -17237,7 +17237,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 335
+          "line": 336
         },
         {
           "raw": "/catalogo?cat=tobilleras",
@@ -17247,7 +17247,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 336
+          "line": 337
         },
         {
           "raw": "/catalogo?cat=bolsos",
@@ -17257,7 +17257,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 337
+          "line": 338
         },
         {
           "raw": "/about",
@@ -17267,7 +17267,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 344
+          "line": 345
         },
         {
           "raw": "/envios",
@@ -17277,7 +17277,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 345
+          "line": 346
         },
         {
           "raw": "/cambios-devoluciones",
@@ -17287,7 +17287,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 346
+          "line": 347
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -17297,7 +17297,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 347
+          "line": 348
         },
         {
           "raw": "/terminos",
@@ -17307,7 +17307,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 348
+          "line": 349
         },
         {
           "raw": "/privacidad",
@@ -17317,7 +17317,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 349
+          "line": 350
         },
         {
           "raw": "/contact",
@@ -17327,7 +17327,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 356
+          "line": 357
         },
         {
           "raw": "tel:+595981299331",
@@ -17337,7 +17337,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 357
+          "line": 358
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -17347,7 +17347,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 358
+          "line": 359
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -17357,7 +17357,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 359
+          "line": 360
         },
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
@@ -17367,7 +17367,7 @@
           "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 368
+          "line": 369
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -17377,7 +17377,7 @@
           "ariaLabel": "WhatsApp",
           "title": "Escribirnos por WhatsApp",
           "imageAlt": "",
-          "line": 380
+          "line": 381
         }
       ],
       "references": [
@@ -17432,89 +17432,89 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 430,
+          "line": 431,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-footer-canonical-20261103-1",
           "target": "tienda.js",
-          "line": 431,
+          "line": 432,
           "exists": true
         },
         {
           "raw": "js/pages/home/mas-vendidos.js?v=tintin-20261031-revision-ux-1",
           "target": "js/pages/home/mas-vendidos.js",
-          "line": 432,
+          "line": 433,
           "exists": true
         },
         {
           "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-remove-collection-index-20261104-1",
           "target": "js/pages/home/carrusel-colecciones.js",
-          "line": 433,
+          "line": 434,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 434,
+          "line": 435,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 435,
+          "line": 436,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 436,
+          "line": 437,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 437,
+          "line": 438,
           "exists": true
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-suitcase-20261104-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 438,
+          "line": 439,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 443,
+          "line": 444,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 479,
+          "line": 480,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 480,
+          "line": 481,
           "exists": true
         },
         {
           "raw": "js/pages/home/resenas-clientas.js?v=tintin-20261026-editor-closure-1",
           "target": "js/pages/home/resenas-clientas.js",
-          "line": 510,
-          "exists": true
-        },
-        {
-          "raw": "js/components/social/instagram-tintin.js?v=tintin-performance-polish-20261103-1",
-          "target": "js/components/social/instagram-tintin.js",
           "line": 511,
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-7de2310b884f6c09",
+          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261104-instagram-feed-1",
+          "target": "js/components/social/instagram-tintin.js",
+          "line": 512,
+          "exists": true
+        },
+        {
+          "raw": "css/generated/inicio.css?v=tintin-home-8721daec9432e7a5",
           "target": "css/generated/inicio.css",
           "line": 61,
           "exists": true
@@ -17646,7 +17646,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/social/instagram-tintin.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/social/instagram-tintin.css?v=tintin-20261104-instagram-feed-1",
           "target": "css/components/social/instagram-tintin.css",
           "line": 99,
           "exists": true
@@ -17852,151 +17852,151 @@
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 314,
+          "line": 315,
           "exists": true
         },
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 371,
+          "line": 372,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6205.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6205.jpg",
-          "line": 486,
+          "line": 487,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6207.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6207.jpg",
-          "line": 487,
+          "line": 488,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6208.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6208.jpg",
-          "line": 488,
+          "line": 489,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6209.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6209.jpg",
-          "line": 489,
+          "line": 490,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6210.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6210.jpg",
-          "line": 490,
+          "line": 491,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6211.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6211.jpg",
-          "line": 491,
+          "line": 492,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6212.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6212.jpg",
-          "line": 492,
+          "line": 493,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6213.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6213.jpg",
-          "line": 493,
+          "line": 494,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6214.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6214.jpg",
-          "line": 494,
+          "line": 495,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6215.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6215.jpg",
-          "line": 495,
+          "line": 496,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6216.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6216.jpg",
-          "line": 496,
+          "line": 497,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6218.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6218.jpg",
-          "line": 497,
+          "line": 498,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6219.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6219.jpg",
-          "line": 498,
+          "line": 499,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6220.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6220.jpg",
-          "line": 499,
+          "line": 500,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6221.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6221.jpg",
-          "line": 500,
+          "line": 501,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6222.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6222.jpg",
-          "line": 501,
+          "line": 502,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6223.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6223.jpg",
-          "line": 502,
+          "line": 503,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6224.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6224.jpg",
-          "line": 503,
+          "line": 504,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6225.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6225.jpg",
-          "line": 504,
+          "line": 505,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_6227.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_6227.jpg",
-          "line": 505,
+          "line": 506,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_9617.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_9617.jpg",
-          "line": 506,
+          "line": 507,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_9619.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_9619.jpg",
-          "line": 507,
+          "line": 508,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/resenas-clientas/img_9620.jpg",
           "target": "assets-tintin/images/home/resenas-clientas/img_9620.jpg",
-          "line": 508,
+          "line": 509,
           "exists": true
         },
         {
@@ -18026,115 +18026,115 @@
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 326,
+          "line": 327,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
           "target": "catalogo.html",
-          "line": 327,
+          "line": 328,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=earcuff",
           "target": "catalogo.html",
-          "line": 328,
+          "line": 329,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=gafas",
           "target": "catalogo.html",
-          "line": 329,
+          "line": 330,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
           "target": "catalogo.html",
-          "line": 330,
+          "line": 331,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=armcuff",
           "target": "catalogo.html",
-          "line": 331,
+          "line": 332,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
           "target": "catalogo.html",
-          "line": 332,
+          "line": 333,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=joyeros",
           "target": "catalogo.html",
-          "line": 333,
+          "line": 334,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
           "target": "catalogo.html",
-          "line": 334,
+          "line": 335,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 335,
+          "line": 336,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=tobilleras",
           "target": "catalogo.html",
-          "line": 336,
+          "line": 337,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 337,
+          "line": 338,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 344,
+          "line": 345,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 345,
+          "line": 346,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 346,
+          "line": 347,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 347,
+          "line": 348,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 348,
+          "line": 349,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 349,
+          "line": 350,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 356,
+          "line": 357,
           "exists": true
         }
       ],
@@ -18145,19 +18145,19 @@
           "id": "tt-reviews-dialog",
           "role": "",
           "classes": "tt-reviews-dialog",
-          "line": 481
-        },
-        {
-          "id": "",
-          "role": "",
-          "classes": "tt-reviews-dialog__header",
           "line": 482
         },
         {
           "id": "",
           "role": "",
-          "classes": "tt-reviews-dialog__content",
+          "classes": "tt-reviews-dialog__header",
           "line": 483
+        },
+        {
+          "id": "",
+          "role": "",
+          "classes": "tt-reviews-dialog__content",
+          "line": 484
         }
       ],
       "tabs": [],
@@ -18218,7 +18218,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 482
+          "line": 483
         }
       ],
       "controls": []
@@ -27932,8 +27932,8 @@
     },
     {
       "path": "functions/api/instagram-feed.js",
-      "bytes": 2838,
-      "sha256": "eeb53b1ff0ee75cedb3304c0a76602bbd3b3b945ed71ab2a9aa8f1c0b98fdac3",
+      "bytes": 3714,
+      "sha256": "4d81e93f12d02790b6d8b063cfdd62cb0239361240521446b0cbccbb785ce964",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27946,11 +27946,11 @@
         },
         {
           "url": "https://www.instagram.com/",
-          "line": 6
+          "line": 9
         },
         {
           "url": "https://graph.instagram.com/$%7Bversion%7D/$%7Buid%7D/media",
-          "line": 29
+          "line": 36
         }
       ]
     },
@@ -34341,8 +34341,8 @@
     },
     {
       "path": "js/components/social/instagram-tintin.js",
-      "bytes": 6110,
-      "sha256": "83b1f9f40fb2e654b2761e2ab3e21992be1129e300a8ccf0b95f72b17dae6c19",
+      "bytes": 7728,
+      "sha256": "78ff56c8550da5b1626696c627ebc69f82e1d8097dc9b5988fe39b2826177d53",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57865,8 +57865,8 @@
     },
     {
       "path": "tests/social/instagram-feed.test.mjs",
-      "bytes": 3505,
-      "sha256": "fea6e2446b7a6e9f05e2eaa05cabfb3147710532765db6285034c00b09589f54",
+      "bytes": 8483,
+      "sha256": "78837f3ed4b8af1a0b529646286e80a798c186439cbd43ff97bb5678fe149977",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57893,40 +57893,92 @@
       ],
       "endpoints": [
         {
+          "url": "https://scontent-gru1-1.cdninstagram.com/v/t51.2885-15/",
+          "line": 4
+        },
+        {
           "url": "https://www.instagram.com/reel/old/",
-          "line": 6
+          "line": 7
         },
         {
           "url": "https://cdninstagram.com/old.jpg",
-          "line": 6
-        },
-        {
-          "url": "https://www.instagram.com/reel/new/",
           "line": 7
         },
         {
-          "url": "https://evil.example/token.jpg",
-          "line": 7
-        },
-        {
-          "url": "https://www.instagram.com/p/image/",
+          "url": "https://www.instagram.com/p/photo/",
           "line": 8
         },
         {
-          "url": "https://evil.example/reel/steal/",
+          "url": "https://www.instagram.com/p/carousel/",
           "line": 9
         },
         {
-          "url": "https://www.instagram.com/reel/$%7Bnewest%7D/",
-          "line": 20
+          "url": "https://www.instagram.com/reel/new/",
+          "line": 10
+        },
+        {
+          "url": "https://evil.example/token.jpg",
+          "line": 10
+        },
+        {
+          "url": "https://evil.example/reel/steal/",
+          "line": 11
+        },
+        {
+          "url": "https://www.instagram.com/p/unknown/",
+          "line": 12
+        },
+        {
+          "url": "https://www.instagram.com/p/a/",
+          "line": 25
+        },
+        {
+          "url": "https://www.instagram.com/p/b/",
+          "line": 26
+        },
+        {
+          "url": "https://www.instagram.com/reel/c/",
+          "line": 27
+        },
+        {
+          "url": "https://www.instagram.com/p/x/",
+          "line": 32
+        },
+        {
+          "url": "https://scontent.fbcdn.net/ok.jpg",
+          "line": 34
+        },
+        {
+          "url": "http://scontent.cdninstagram.com/insecure.jpg",
+          "line": 35
+        },
+        {
+          "url": "https://evil.example/cdninstagram.com/x.jpg",
+          "line": 36
+        },
+        {
+          "url": "https://cdninstagram.com.evil.example/x.jpg",
+          "line": 37
+        },
+        {
+          "url": "https://www.instagram.com/p/nodate/",
+          "line": 44
+        },
+        {
+          "url": "https://www.instagram.com/p/p$%7Bindex%7D/",
+          "line": 45
+        },
+        {
+          "url": "https://www.instagram.com/p/$%7Bnewest%7D/",
+          "line": 62
         },
         {
           "url": "https://www.instagram.com/reel/fixture/",
-          "line": 33
+          "line": 80
         },
         {
           "url": "https://tintin.test/api/instagram-feed",
-          "line": 35
+          "line": 82
         }
       ]
     },
@@ -60047,8 +60099,8 @@
     },
     {
       "path": "tests/ui-ux/instagram-tintin.spec.js",
-      "bytes": 7285,
-      "sha256": "915b5e6200ec1fccc52ac06a4c99930adc1efa7fa9a253d50ef66562878e2ec7",
+      "bytes": 22013,
+      "sha256": "81e21c9b3e1adf107815a4cc44805640d6e089682b0e596934332db43f8c4413",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60078,6 +60130,58 @@
         {
           "url": "https://www.instagram.com/reel/lifecycle/",
           "line": 72
+        },
+        {
+          "url": "https://scontent-gru1-1.cdninstagram.com/v/t51.2885-15/",
+          "line": 87
+        },
+        {
+          "url": "http://www.w3.org/2000/svg",
+          "line": 89
+        },
+        {
+          "url": "https://www.instagram.com/p/photo1/",
+          "line": 91
+        },
+        {
+          "url": "https://www.instagram.com/p/carousel1/",
+          "line": 92
+        },
+        {
+          "url": "https://www.instagram.com/reel/video1/",
+          "line": 93
+        },
+        {
+          "url": "https://www.instagram.com/p/photo2/",
+          "line": 94
+        },
+        {
+          "url": "https://www.instagram.com/reel/video2/",
+          "line": 95
+        },
+        {
+          "url": "https://www.instagram.com/p/carousel2/",
+          "line": 96
+        },
+        {
+          "url": "https://www.instagram.com/p/photo3/",
+          "line": 97
+        },
+        {
+          "url": "https://www.instagram.com/reel/video3/",
+          "line": 98
+        },
+        {
+          "url": "https://evil.example/p/x/",
+          "line": 173
+        },
+        {
+          "url": "https://www.instagram.com/tintinaccs/",
+          "line": 185
+        },
+        {
+          "url": "https://www.instagram.com/reel/video1/embed/",
+          "line": 223
         }
       ]
     },
@@ -62062,8 +62166,8 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 30786,
-      "sha256": "13e4d3446c72146e064a4e71a87cd942d28a23a6daaba0b201222ce8c7fd50c8"
+      "bytes": 30769,
+      "sha256": "a5d057fc7585a8b58e87e1dd33646072b3d60f56ab145ca104f1009885ef1c3f"
     },
     {
       "path": "admin-images.html",
@@ -63520,8 +63624,8 @@
     {
       "path": "css/components/social/instagram-tintin.css",
       "extension": ".css",
-      "bytes": 3864,
-      "sha256": "1f4315b47cb39c93a8a29ae144b515b43af04e4c0275a1c176ca11550644cfac"
+      "bytes": 5070,
+      "sha256": "11f39793910649660bbc4615e1ca8e0523b9448236f7a853515a803623cd41c9"
     },
     {
       "path": "css/components/visual-studio-global-runtime.css",
@@ -63616,8 +63720,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 373566,
-      "sha256": "7de2310b884f6c09e70ce9f289aed2c83c6c2e50c575a504de88fbcf504cb341"
+      "bytes": 374568,
+      "sha256": "8721daec9432e7a54a85811a8f08f6c271ced202c37a959f1ec13d3d92edeabe"
     },
     {
       "path": "css/generated/login-2.css",
@@ -63640,8 +63744,8 @@
     {
       "path": "css/generated/nosotros.css",
       "extension": ".css",
-      "bytes": 340017,
-      "sha256": "ad0ecfe0d11749ff54a0d7c911e8096972e33bb6a2cc6426155a8f8940b9d067"
+      "bytes": 341019,
+      "sha256": "48a7d4d280fbe2fd05fc81aee8a798cf8fd09f6991ad8244ff0a50ae4ecfee33"
     },
     {
       "path": "css/generated/perfil-2.css",
@@ -64078,8 +64182,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1217595,
-      "sha256": "9207d0e02bdc0b85c51f25dfae038d6f6439820e77360b3d1b3eceacc3ab74d3"
+      "bytes": 1219031,
+      "sha256": "67c898675275516bd2b483f746aa82b743b91d43ef58df3b4a8d96261c92e9d4"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -64684,8 +64788,8 @@
     {
       "path": "docs/configuracion-instagram.md",
       "extension": ".md",
-      "bytes": 2096,
-      "sha256": "72a3f107ff10ae201ba7e5be8481a207598430b0060e4734591c2f8639d3c373"
+      "bytes": 5136,
+      "sha256": "1b61db1320a9c838b7f1227295ec42f8752b4cb25a3fa8c80865172d2a70e3c6"
     },
     {
       "path": "docs/configuracion-paypal.md",
@@ -65074,8 +65178,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 159058,
-      "sha256": "b39d40c151eed18af6e44be2b8244b477f1c12549ce5fa0a066d9e95360ed7ef"
+      "bytes": 160152,
+      "sha256": "8bb1fec91729db2ecee683c9f93c55d5454d5342196b87582dcbc3c17357b0b7"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -65830,8 +65934,8 @@
     {
       "path": "functions/api/instagram-feed.js",
       "extension": ".js",
-      "bytes": 2838,
-      "sha256": "eeb53b1ff0ee75cedb3304c0a76602bbd3b3b945ed71ab2a9aa8f1c0b98fdac3"
+      "bytes": 3714,
+      "sha256": "4d81e93f12d02790b6d8b063cfdd62cb0239361240521446b0cbccbb785ce964"
     },
     {
       "path": "functions/api/local-commerce-webhook.js",
@@ -66148,8 +66252,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 47072,
-      "sha256": "fe5716ea79f3fe6cd32629f54a4261fa5dd7db91c30d1563f5fe1d30c3645085"
+      "bytes": 47197,
+      "sha256": "641287c11af7d33788797c6e2e22681cd2dd6afeeec5596cf7a4d9f564a63049"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -67216,8 +67320,8 @@
     {
       "path": "js/components/social/instagram-tintin.js",
       "extension": ".js",
-      "bytes": 6110,
-      "sha256": "83b1f9f40fb2e654b2761e2ab3e21992be1129e300a8ccf0b95f72b17dae6c19"
+      "bytes": 7728,
+      "sha256": "78ff56c8550da5b1626696c627ebc69f82e1d8097dc9b5988fe39b2826177d53"
     },
     {
       "path": "js/components/welcome/configuracion-bienvenida.js",
@@ -69250,8 +69354,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 81243,
-      "sha256": "65cc07375d1144f4a627cb613a2c648af8581f3112b70a349a139e9dc00ccc73"
+      "bytes": 81226,
+      "sha256": "40d2e93ce8c0ebfacd63aca5a1730acf313b3da0b87ed006d772baeeaa302e73"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -71908,8 +72012,8 @@
     {
       "path": "tests/social/instagram-feed.test.mjs",
       "extension": ".mjs",
-      "bytes": 3505,
-      "sha256": "fea6e2446b7a6e9f05e2eaa05cabfb3147710532765db6285034c00b09589f54"
+      "bytes": 8483,
+      "sha256": "78837f3ed4b8af1a0b529646286e80a798c186439cbd43ff97bb5678fe149977"
     },
     {
       "path": "tests/sync/admin-catalog-delete-preflight.test.mjs",
@@ -72388,8 +72492,8 @@
     {
       "path": "tests/ui-ux/instagram-tintin.spec.js",
       "extension": ".js",
-      "bytes": 7285,
-      "sha256": "915b5e6200ec1fccc52ac06a4c99930adc1efa7fa9a253d50ef66562878e2ec7"
+      "bytes": 22013,
+      "sha256": "81e21c9b3e1adf107815a4cc44805640d6e089682b0e596934332db43f8c4413"
     },
     {
       "path": "tests/ui-ux/inventory-regressions.test.mjs",
@@ -74406,7 +74510,7 @@
       "references": [
         {
           "file": "index.html",
-          "line": 457
+          "line": 458
         }
       ]
     },
@@ -74526,7 +74630,7 @@
     },
     {
       "file": "js/components/social/instagram-tintin.js",
-      "line": 59,
+      "line": 105,
       "target": "/api/instagram-feed",
       "method": "GET"
     },
