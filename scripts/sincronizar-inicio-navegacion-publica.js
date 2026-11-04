@@ -4,7 +4,6 @@
 const fs = require('fs');
 const path = require('path');
 const { parse } = require('parse5');
-const { renderMobileBrandHeader } = require('../js/components/navigation/movil/marca-movil.js');
 const { LOGO_VERSION } = require('../js/components/navigation/compartido/configuracion.js');
 const { CATEGORIES } = require('../js/components/navigation/compartido/iconos.js');
 const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.js');
@@ -27,8 +26,8 @@ const COLOR_FIRST_PAINT_VERSION = 'tintin-20261101-cls-home-1';
 const LOADER_VERSION = 'tintin-suitcase-20261104-1';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5';
 const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-2';
-const PUBLIC_SHELL_VERSION = 'tintin-performance-polish-20261103-1';
-const NAV_ENTRY_VERSION = 'tintin-performance-polish-20261103-1';
+const PUBLIC_SHELL_VERSION = 'tintin-performance-polish-20261104-1';
+const NAV_ENTRY_VERSION = 'tintin-performance-polish-20261104-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-suitcase-20261104-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261030-home-history-5';
@@ -104,7 +103,6 @@ const INITIAL_SHARED_STYLES = [
   ]
 ];
 const INITIAL_PUBLIC_STYLES = [
-  ['id="tt-mobile-brand-css"', 'css/components/navigation/movil/marca-movil.css', 'tintin-20261023-global-layout-1'],
   [
     "id=\"tt-global-studio-runtime-css\"",
     "css/components/visual-studio-global-runtime.css",
@@ -358,19 +356,9 @@ function removeLegacyComments(html) {
   });
 }
 
-function ensureMobileBrandHeader(html, page) {
-  html = removeElementById(html, 'tt-mobile-brand');
-  if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(html)) return html;
-  const brand = renderMobileBrandHeader(page, `/assets-tintin/images/general/logo.png?v=${LOGO_VERSION}`);
-  if (!brand) return html;
-  let bodyEnd = null;
-  const visit = node => {
-    if (node.tagName === 'body') bodyEnd = node.sourceCodeLocation?.startTag?.endOffset;
-    node.childNodes?.forEach(visit);
-  };
-  visit(parse(html, { sourceCodeLocationInfo: true }));
-  if (bodyEnd == null) throw new Error(`No se encontró el body real de ${page}`);
-  return html.slice(0, bodyEnd) + `\n${brand}` + html.slice(bodyEnd).replace(/^\s*/, '\n');
+function removeMobileBrandHeader(html) {
+  return removeElementById(html, 'tt-mobile-brand')
+    .replace(/[ \t]*<link\b[^>]*\bid=["']tt-mobile-brand-css["'][^>]*>\n?/gi, '');
 }
 
 function sharedFooter(absoluteAssets = false) {
@@ -620,7 +608,7 @@ for (const page of PUBLIC_PAGES) {
   html = removeLegacyComments(html);
   // Login es una pantalla de acceso aislada: no comparte el pie público.
   html = page === 'login.html' ? removeSharedFooter(html) : replaceSharedFooter(html);
-  html = ensureMobileBrandHeader(html, page);
+  html = removeMobileBrandHeader(html);
   html = ensureStyles(html);
   html = ensureNavigationPreloads(html);
   html = ensureShellScript(html);
@@ -656,7 +644,7 @@ for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') &&
   html = ensureSectionFlow(html, page === '404.html');
   if (page === '404.html') {
     html = replaceSharedFooter(html, true);
-    html = ensureMobileBrandHeader(html, page);
+    html = removeMobileBrandHeader(html);
     html = html.replace(/(\/?js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${PANEL_COMPAT_VERSION}`);
     html = html.replace(/(\/?js\/inicio-navegacion-publica\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${PUBLIC_SHELL_VERSION}`);
     html = html.replace(/(\/?js\/components\/navigation\/entrada-navegacion-publica\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${NAV_ENTRY_VERSION}`);

@@ -1,5 +1,3 @@
-import { renderMobileBrandHeader, initMobileBrandHeader } from './movil/marca-movil.js?v=tintin-20261019-mobile-brand-2';
-import { logoUrl } from './compartido/configuracion.js?v=tintin-20261010-whatsapp-release-5';
 import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20261029-performance-1';
 import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20261029-performance-1';
 import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20261029-performance-1';
@@ -72,7 +70,6 @@ function removeLegacyShell(root = document) {
 
 function renderTopShell() {
   return [
-    renderMobileBrandHeader(window.location.pathname, logoUrl()),
     renderDesktopHeader(),
     renderTabletHeader(),
     renderSearchPanel(),
@@ -253,7 +250,6 @@ function mountPublicShell() {
     document.body.classList.add('tt-public-shell-mounted');
     document.body.classList.toggle('tt-public-shell-home', currentPage() === 'home');
 
-    initMobileBrandHeader();
     applyActiveState();
     enhanceMobileFooter();
     await registerNavigationSurfaces();

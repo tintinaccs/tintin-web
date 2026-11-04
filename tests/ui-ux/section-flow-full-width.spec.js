@@ -44,7 +44,8 @@ for (const [width,height] of viewports) {
     await page.goto('/__header-surfaces');
     await page.addScriptTag({type:'module',content:`import {renderDesktopHeader} from '../../js/components/navigation/escritorio/encabezado-escritorio.js';import {renderTabletHeader} from '../../js/components/navigation/tableta/encabezado-tableta.js';document.body.insertAdjacentHTML('afterbegin',renderDesktopHeader()+renderTabletHeader());`});
     await page.addScriptTag({url:'/js/components/color/logotipo-marca.js'});
-    const header=page.locator(width<768?'#tt-mobile-brand':width<1025?'#tt-header-tablet':'#tt-header-desktop-tablet');
+    if(width<768){await expect(page.locator('#tt-mobile-brand')).toHaveCount(0);return;}
+    const header=page.locator(width<1025?'#tt-header-tablet':'#tt-header-desktop-tablet');
     await expect(header).toBeVisible();
     const style=await header.evaluate(n=>{const s=getComputedStyle(n),paint=getComputedStyle(n,'::before');return {background:paint.backgroundImage,blur:paint.backdropFilter,mask:paint.maskImage,border:s.borderBottomWidth,canvas:s.backgroundColor,filter:s.filter};});
     expect(style.background).toContain('linear-gradient');expect(style.background).not.toContain('184, 76, 114');
@@ -53,8 +54,7 @@ for (const [width,height] of viewports) {
     const extension=await header.evaluate(n=>{const s=getComputedStyle(n,'::before');return {depth:-parseFloat(s.bottom),height:parseFloat(s.height),header:n.clientHeight,pointer:s.pointerEvents};});
     expect(extension.depth).toBeGreaterThanOrEqual(32);expect(extension.depth).toBeLessThanOrEqual(56);
     expect(extension.height).toBeGreaterThanOrEqual(extension.header+extension.depth-1);expect(extension.pointer).toBe('none');
-    if(width<768)await expect(page.locator('.tt-mobile-brand-ink')).toHaveCSS('flood-color','rgb(255, 255, 255)');
-    else {
+    {
       const logo=header.locator('.tt-logo-img,.tt-tablet-logo-img');
       await expect(logo).toHaveAttribute('src',/\/images\/general\/logo\.png\?v=/);
       await expect(logo).toHaveCSS('filter','brightness(0) invert(1)');
@@ -258,7 +258,7 @@ const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const styles=fs.readFileSync('css/theme/sistema-superficies-tintin.css','utf8');
 const sizes=[[320,568],[390,844],[768,1024],[1024,768],[1180,820],[1181,820],[1366,768],[1440,900],[1920,1080],[844,390]];
-const surfaces=['id="tt-header-desktop-tablet" class="tt-header"','id="tt-header-tablet"','id="tt-mobile-brand"','class="ck-header"','class="login-brand"','class="adm-topbar"','class="adm-header"'];
+const surfaces=['id="tt-header-desktop-tablet" class="tt-header"','id="tt-header-tablet"','class="ck-header"','class="login-brand"','class="adm-topbar"','class="adm-header"'];
 async function pixelsAt(page,clip){const strip=await page.screenshot({clip});return page.evaluate(async b64=>{const img=new Image();img.src='data:image/png;base64,'+b64;await img.decode();const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);return Array.from(ctx.getImageData(0,0,c.width,c.height).data);},strip.toString('base64'));}
 for(const[width,height]of sizes)test(`borde transparente sobre fondos cambiantes y al reaparecer · ${width}x${height}`,async({page})=>{
  await page.setViewportSize({width,height});
