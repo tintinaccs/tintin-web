@@ -63,7 +63,7 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
     expect(geometry.copyrightPadding).toBeLessThanOrEqual(18);
     // La firma solicitada sucede al copyright; ningún espacio vacío adicional
     // se permite después del nuevo contenido final del pie.
-    expect(Math.abs(geometry.creditGap - 12)).toBeLessThanOrEqual(1);
+    expect(Math.abs(geometry.creditGap - 2)).toBeLessThanOrEqual(1);
     expect(geometry.credit.height).toBeGreaterThanOrEqual(48);
     expect(geometry.creditRow.height - geometry.credit.height).toBeLessThanOrEqual(1);
     expect(geometry.endingPadding).toBeLessThanOrEqual(width <= 480 ? 64 : 32);
