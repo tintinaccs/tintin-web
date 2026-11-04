@@ -1,3 +1,7 @@
+## Paridad CSS con carga estable — 2026-11-04
+
+Solo fixture tests/ui-ux/home-styles-bundle.spec.js: conserva defer/versionado canónico de logotipo-marca.js, entrega fotos después de estilos completos, espera fuentes después de liberar fotos (WebKit) y verifica logo realmente pintado y estable. Sin cambios de diseño o posiciones, sin tolerancia ampliada, conserva ruta real de recuperación. Verificar seis tamaños Chromium156/WebKit y regresión1920px; generadores/preflight sin deriva.
+
 ## Marca blanca y halo rosa — 2026-11-04
 
 Aclaración final: misma marca blanca original y un halo rosa CSS estático como tercera capa del fondo; bordes top/bottom conservados. Texto secundario oscuro con contraste sobre el halo. Quitar PNG rosa/exportador rechazados; nuevas URLs CSS y todos los derivados. Verificar16tamaños, lectura, movimiento reducido, original/bundle/fallback y cadena completa.

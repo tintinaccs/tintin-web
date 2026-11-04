@@ -9,9 +9,14 @@ const loaderSource = fs.readFileSync(path.join(root, 'js/cargador-pagina.js'), '
 const loaderAst = require('acorn').parse(loaderSource, { ecmaVersion: 'latest' });
 const recovery = loaderAst.body[0].expression.callee.body.body.find(node => node.type === 'ExpressionStatement' && node.expression.callee?.property?.name === 'addEventListener' && node.expression.arguments[0]?.value === 'error');
 if (!recovery) throw new Error('Canonical CSS recovery listener missing');
-const bundled = removeFixtureScripts(fs.readFileSync(path.join(root, 'index.html'), 'utf8'), { removeModulePreloads: true });
+const homeSource = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const brandScript = homeSource.match(/<script\b[^>]*\bsrc="[^"]*js\/components\/color\/logotipo-marca\.js[^\"]*"[^>]*><\/script>/)?.[0];
+if (!brandScript) throw new Error('Canonical brand script missing');
+// Keep the real deferred definition of the SVG filters, without Firebase or
+// overlays. A DOMContentLoaded substitute runs later than the published script.
+const bundled = removeFixtureScripts(homeSource, { removeModulePreloads: true }).replace('</head>', `${brandScript}</head>`);
 const original = restoreStyleSources(bundled);
-const types = { '.css': 'text/css', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png', '.woff2': 'font/woff2' };
+const types = { '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png', '.woff2': 'font/woff2' };
 
 for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1440,900],[1920,1080]]) {
   test(`una petición CSS conserva la primera pantalla completa en ${width}px`, async ({ page }, testInfo) => {
@@ -20,6 +25,7 @@ for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1440,9
     await page.emulateMedia({ reducedMotion: 'reduce' });
     let html = original;
     let failBundle = false;
+    let imageGate = Promise.resolve();
     const requests = [];
     await page.route('**/*', async route => {
       const url = new URL(route.request().url());
@@ -27,16 +33,25 @@ for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1440,9
       if (url.pathname === '/') return route.fulfill({ contentType: 'text/html', body: html });
       if (url.pathname.endsWith('.css')) requests.push(url.pathname);
       if (failBundle && url.pathname === '/css/generated/inicio.css') return route.abort();
+      if (route.request().resourceType() === 'image') await imageGate;
       const file = path.resolve(root, '.' + url.pathname);
       if (!file.startsWith(root + path.sep)) return route.abort();
       try { return route.fulfill({ contentType: types[path.extname(file)] || 'application/octet-stream', body: fs.readFileSync(file) }); }
       catch { return route.abort(); }
     });
     async function capture() {
-      await page.goto('https://styles.test/');
-      if (failBundle) await expect(page.locator('link[data-tt-style-bundle]')).toHaveCount(0);
-      await page.waitForFunction(() => [...document.querySelectorAll('link[rel~="stylesheet"]')].every(link => link.sheet || link.dataset.ttBundleError === '1'));
+      // Compare CSS at identical decode geometry. Otherwise Chromium can cache
+      // different downsampled WebP rasters when recovery styles arrive late.
+      let releaseImages;
+      imageGate = new Promise(resolve => { releaseImages = resolve; });
+      try {
+        await page.goto('https://styles.test/', { waitUntil:'domcontentloaded' });
+        if (failBundle) await expect(page.locator('link[data-tt-style-bundle]')).toHaveCount(0);
+        await page.waitForFunction(() => [...document.querySelectorAll('link[rel~="stylesheet"]')].every(link => link.sheet || link.dataset.ttBundleError === '1'));
+      } finally { releaseImages(); }
+      // WebKit may keep fonts.ready pending until image loads complete.
       await page.evaluate(() => document.fonts.ready);
+      await expect(page.locator('#tt-brand-logo-tint-defs')).toHaveCount(1);
       await page.waitForFunction(() => [...document.querySelectorAll('#hero img')].every(img => img.complete && img.naturalWidth > 0));
       await page.locator('#hero img').evaluateAll(images => Promise.all(images.map(img => img.decode())));
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -58,13 +73,37 @@ for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1440,9
       await expect.poll(() => logo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
       await logo.evaluate(img => img.decode());
       await page.evaluate(() => document.fonts.ready);
+      // decode() covers the bitmap, not the first paint of its SVG tint filter.
+      // The default fixture has a uniform footer surface: require visible ink
+      // before comparing, so an empty/unpainted logo can never be a baseline.
+      await expect.poll(async () => {
+        const png = await logo.screenshot({ animations:'disabled' });
+        return page.evaluate(async source => {
+          const image = new Image(); image.src = 'data:image/png;base64,' + source; await image.decode();
+          const canvas = document.createElement('canvas'); canvas.width=image.width; canvas.height=image.height;
+          const context = canvas.getContext('2d'); context.drawImage(image,0,0);
+          const data=context.getImageData(0,0,image.width,image.height).data;
+          let ink=0;
+          for(let index=0;index<data.length;index+=4)if(Math.abs(data[index]-data[0])+Math.abs(data[index+1]-data[1])+Math.abs(data[index+2]-data[2])>8)ink++;
+          return ink;
+        }, png.toString('base64'));
+      }, { message:'El logo del footer debe estar realmente pintado' }).toBeGreaterThan(100);
       const viewport = page.viewportSize();
       const { height } = await footer.boundingBox();
       // Un pie más alto que el viewport puede colocar el WhatsApp fijo en
       // distintas posiciones de la captura al recargar. Capturar el pie
       // completo en un viewport suficiente conserva también ese control.
       if (height > viewport.height) await page.setViewportSize({ width:viewport.width, height:Math.ceil(height)+1 });
-      try { return await footer.screenshot({ animations: 'disabled' }); }
+      try {
+        let previous;
+        for(let frame=0;frame<6;frame++){
+          const current=await footer.screenshot({animations:'disabled'});
+          if(previous?.equals(current))return current;
+          previous=current;
+          await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));
+        }
+        throw new Error('Footer did not reach a stable paint');
+      }
       finally { await page.setViewportSize(viewport); }
     }
     const baseline = await capture();
