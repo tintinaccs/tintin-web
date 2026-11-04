@@ -1,3 +1,9 @@
+## Pie compacto — 2026-11-04 — Codex /root
+
+Base c5f6946e3531e8a4c7b0ce97c9d9e0da9239ce7c; rama codex/compact-footer-20261104. Pedido: reducir la franja final mostrada. Autoridad css/components/novak-credit-site.css: copyright12px, firma11px, logo26.25×25, gap2px y padding12/16px. Conserva fondo/token, SVG y destino originales, foco/hover/movimiento reducido, objetivo táctil48px y reserva móvil de WhatsApp. Canvas Retina usa medidas configurables, con fallback42×40 para el kit independiente. Propagación por firma-novak y generadores canónicos; no se editan derivados manualmente.
+
+PASS_LOCAL: build:pages/cache;33 pruebas de espaciado en Chromium,320–2560px y rutas compartidas;4casos Retina1–4×. Comparación visual en1440px:143→96px de alto; firma/copyright legibles. El contrato anterior exigía gap12px y falló al reducirlo; actualizado al gap2px solicitado,33/33 PASS sin reintentos. PASS_LOCAL adicional:20pruebas de firma/nitidez (17documentos×10tamaños, foco, touch, año automático y movimiento reducido) y preflight completo1212fuentes/72funciones. Integración protegida/CI/publicación requieren sus propios recibos; no se heredan de1327. Skill consultada: tintin-design-quality; invocación nativa/hardware físico NOT_VERIFIED. Sin cambios comerciales, permisos ni datos reales.
+
 ## Corrección CI de captura estable — 2026-11-04 — Codex /root
 
 Run41824735089/1, headeefafaca, browserjob126558764597:278pruebas PASS, paridad original/respaldo1920px FAIL; los demás jobs (preflight, comercio, reglas, calidad técnica, administración) SUCCESS. Reproducido con Chromium156.0.8078.4 revision1248 de Playwright1.64.1; Chromium151 del sistema no reproducía. La prueba permitía decodificar WebP con geometría intermedia antes de completar CSS y eliminaba el script defer que define el tinte SVG del logo del footer. La captura podía comparar un logo aún sin pintar.

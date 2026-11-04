@@ -15,8 +15,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 24px 16px 32px;
+  gap: 2px;
+  padding: 12px 16px 16px;
   border-radius: 18px 18px 0 0;
   background: var(--color-background-surface-soft, #FDECF2);
   text-align: center;
@@ -25,7 +25,7 @@
   margin: 0;
   padding: 0 !important;
   color: #555 !important;
-  font-size: clamp(15px, 1.7vw, 18px) !important;
+  font-size: 12px !important;
   font-weight: 500;
   line-height: 1.5;
   letter-spacing: 0 !important;
@@ -34,11 +34,19 @@
 #tt-footer-ending .novak-credit {
   color: #555 !important;
   background-color: transparent;
-  font-size: clamp(15px, 1.7vw, 18px);
+  font-size: 11px;
+  gap: 8px;
+  --novak-mark-width: 26.25px;
+  --novak-mark-height: 25px;
   font-weight: 400;
 }
 #tt-footer-ending .novak-credit:hover,
 #tt-footer-ending .novak-credit:focus-visible { background-color: rgba(255, 255, 255, .55); }
+
+#tt-footer-ending .novak-credit img {
+  width: var(--novak-mark-width);
+  height: var(--novak-mark-height);
+}
 
 /* En móviles estrechos la firma debe quedar por encima del WhatsApp flotante. */
 @media (max-width: 480px) {
@@ -64,16 +72,17 @@
 
 /* Evita que WebKit amplíe una textura SVG filtrada de tamaño CSS. Un lienzo
    acorde a la densidad evita ampliar esa textura; el espacio visible sigue
-   siendo 42×40 y el SVG original permanece intacto. */
+   siendo el definido por la firma y el SVG original permanece intacto. */
 .novak-credit { --novak-mark-density: 1; }
 @media (min-resolution: 1.01dppx) { .novak-credit { --novak-mark-density: 2; } }
 @media (min-resolution: 2.01dppx) { .novak-credit { --novak-mark-density: 3; } }
 @media (min-resolution: 3.01dppx) { .novak-credit { --novak-mark-density: 4; } }
 @supports (zoom: calc(1 / 2)) {
-  .novak-credit img {
+  .novak-credit-row .novak-credit img,
+  #tt-footer-ending .novak-credit img {
     max-width: none;
-    width: calc(42px * var(--novak-mark-density));
-    height: calc(40px * var(--novak-mark-density));
+    width: calc(var(--novak-mark-width, 42px) * var(--novak-mark-density));
+    height: calc(var(--novak-mark-height, 40px) * var(--novak-mark-density));
     zoom: calc(1 / var(--novak-mark-density));
   }
   /* Compensa la escala interna: conserva los 2px y el 1.06 del kit.
