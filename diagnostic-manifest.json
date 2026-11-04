@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "bba18133d8f3b318b2c15d1b8b4934d41c4904d17ccc84d6d609898eee654097",
+  "sourceFingerprint": "48164bb8961c1149363f5516cf1a32eabbdd54775cb8ac85380f73e031d54cce",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1807,
     "textFiles": 1659,
-    "totalBytes": 57166035,
+    "totalBytes": 57167951,
     "pages": 19,
     "modules": 1169
   },
@@ -16644,8 +16644,8 @@
         "guest",
         "client"
       ],
-      "bytes": 48023,
-      "sha256": "3c664d73da16e609c6218799069d3c45fbceca55a8566f821a92758363482895",
+      "bytes": 48025,
+      "sha256": "875ea09e5609216c630a70eeee919ae45b2cee404b3201e587501f42f53055c0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16793,7 +16793,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-38e1e551fc482482",
+          "raw": "css/generated/inicio.css?v=tintin-home-35751ec3336e6464",
           "target": "css/generated/inicio.css",
           "line": 61
         },
@@ -16858,7 +16858,7 @@
           "line": 79
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-suitcase-20261104-1",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-title-20261104-3",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 89
         },
@@ -17793,7 +17793,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-38e1e551fc482482",
+          "raw": "css/generated/inicio.css?v=tintin-home-35751ec3336e6464",
           "target": "css/generated/inicio.css",
           "line": 61,
           "exists": true
@@ -17871,7 +17871,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-suitcase-20261104-1",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-title-20261104-3",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 89,
           "exists": true
@@ -41928,8 +41928,8 @@
     },
     {
       "path": "scripts/auditar-tipografia.js",
-      "bytes": 16016,
-      "sha256": "83cdee89f1af3064db95272027415670d745f15587e0378ba1369c3cc3747282",
+      "bytes": 16772,
+      "sha256": "2aba89d8d6264d88452ec3730fe71ec69f4751556206254975b0a9c4cdda265f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -64139,8 +64139,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 374727,
-      "sha256": "38e1e551fc482482f828379da88f82cb5c2d095d3c56cfb625a1df3962928246"
+      "bytes": 375304,
+      "sha256": "35751ec3336e646431d7746a77811146a4a5cfe8209943aa28b28ad5e97dfcb8"
     },
     {
       "path": "css/generated/login-2.css",
@@ -64259,8 +64259,8 @@
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
       "extension": ".css",
-      "bytes": 9663,
-      "sha256": "be47287685adb85d37908c444e42348649407630b92d97ec69402a2a9307f319"
+      "bytes": 10242,
+      "sha256": "ddf675338118e075d5b9d7119ee1fc7a1a5bc9a384eb9f20375d31e7af567436"
     },
     {
       "path": "css/pages/home/mantenimiento-inicio.css",
@@ -66665,8 +66665,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 48023,
-      "sha256": "3c664d73da16e609c6218799069d3c45fbceca55a8566f821a92758363482895"
+      "bytes": 48025,
+      "sha256": "875ea09e5609216c630a70eeee919ae45b2cee404b3201e587501f42f53055c0"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -69719,8 +69719,8 @@
     {
       "path": "scripts/auditar-tipografia.js",
       "extension": ".js",
-      "bytes": 16016,
-      "sha256": "83cdee89f1af3064db95272027415670d745f15587e0378ba1369c3cc3747282"
+      "bytes": 16772,
+      "sha256": "2aba89d8d6264d88452ec3730fe71ec69f4751556206254975b0a9c4cdda265f"
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
@@ -69773,8 +69773,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 81241,
-      "sha256": "2dc096cf6ae0b9b7c239dec272ecfc6a4c1207bf54e5e6b78e635f40a503ac14"
+      "bytes": 81243,
+      "sha256": "9289b8fad02a611d2f2fa2ac695338a7757f90ca7010f06a53f77fa02e00f1ad"
     },
     {
       "path": "scripts/ci-commands.js",
