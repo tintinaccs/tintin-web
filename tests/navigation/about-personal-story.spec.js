@@ -83,7 +83,13 @@ for (const [width, height] of [[320, 568], [390, 844], [844, 390], [768, 1024], 
     const check = async () => {
       const image = feature.locator('img');
       await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
-      await expect(image).toHaveCSS('object-fit', 'cover');
+      // La titular pidió mostrar la fotografía completa, sin recortar productos.
+      await expect(image).toHaveCSS('object-fit', 'contain');
+      const ratio = await image.evaluate(img => {
+        const rect = img.getBoundingClientRect();
+        return { box: rect.width / rect.height, original: img.naturalWidth / img.naturalHeight };
+      });
+      expect(ratio.box).toBeCloseTo(ratio.original, 2);
       await expect(feature).toHaveCSS('border-top-width', '0px');
       await expect(feature).toHaveCSS('border-bottom-width', '0px');
       await expect(feature).toHaveCSS('box-shadow', 'none');
