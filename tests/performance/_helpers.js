@@ -239,7 +239,9 @@ const BUDGETS = {
   // ~1.77-1.83 MB (medido en CI: 1815 KB en contact/envios/cambios-devoluciones/
   // preguntas-frecuentes, 1877 KB en about.html). Este presupuesto refleja ese
   // piso legítimo con margen, sin relajar el presupuesto general de 6.5 MB.
-  lightweightTransferKB: 2000,
+  // El cargador editorial (#1342) reutiliza tintin-white.webp del hero (177 KB,
+  // medido) en todas las páginas: Nosotros pasó de ~1877 KB a 2077 KB en CI.
+  lightweightTransferKB: 2150,
   homeFirestoreReads: 30,
   loaderMaxMs: 11000
 };
