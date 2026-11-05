@@ -68,11 +68,11 @@ function rootHtml() {
         <div class="tt-payment-admin-grid">
           <div class="adm-field">
             <label class="adm-label" for="tt-payment-title">Nombre visible</label>
-            <input type="text" class="adm-input" id="tt-payment-title" maxlength="100" placeholder="Ej: Transferencia Ueno" />
+            <input type="text" class="adm-input" id="tt-payment-title" maxlength="100" placeholder="Ej: Transferencia Banco Familiar" />
           </div>
           <div class="adm-field">
             <label class="adm-label" for="tt-payment-id">Identificador</label>
-            <input type="text" class="adm-input" id="tt-payment-id" maxlength="40" placeholder="transferencia-ueno" />
+            <input type="text" class="adm-input" id="tt-payment-id" maxlength="40" placeholder="transferencia-banco-familiar" />
           </div>
           <div class="adm-field">
             <label class="adm-label" for="tt-payment-kind">Tipo seguro del pedido</label>
