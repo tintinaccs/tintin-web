@@ -1,3 +1,4 @@
+<!-- Reparación puntual2026-11-05: #1337 del scroll se integró en7bd052cc; su post-merge41967856655/1 falló por una carrera del fixture OTP de WebKit (observador después de fill). Corrección sólo de fixtures: control original4FAIL/corregido4PASS y40 regresiones del dominio aprobadas. Se mantienen los tres navegadores y todos los límites; falta CI/merge/post-merge del candidato nuevo. Sin aceptación100% ni cambios productivos. -->
 <!-- Reparación puntual CI2026-11-05: en basee2e699a8 se corrige carrera del fixture táctil header-responsive con el frame real de resetEntryScroll. Control negativo reproduce200→0;20/20 sin retries con barrera de frames. 20/20 sin retries y build/preflight/protección PASS_LOCAL; suite relacionada99PASS/8FAIL por SDK remoto bloqueado/1SKIP Functions preview, sin falsear PASS. Falta CI/merge/postmerge del candidato; sin cierre100% de fases ni cambios productivos. -->
 # Tintín — seguimiento global permanente, fases 00 a 09
 

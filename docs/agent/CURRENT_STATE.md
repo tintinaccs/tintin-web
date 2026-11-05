@@ -1,3 +1,15 @@
+## OTP: observar la respuesta antes del autocompletado — Codex /root
+
+Base `7bd052cc6af6ee74d6d8dc4bc91a67dc98e47d21`. El post-merge de #1337, CI41967856655/1, falló sólo en calidad127050287852: WebKit móvil agotó45000ms en critical-flows150 al esperar email-otp-verify dentro del helper otp52. Otros527 casos runtime aprobaron. Interfaz127050287967, administración, reglas, comercio, preflight y protección aprobaron; el agregado127056603628 falló por calidad. La corrección anterior del scroll sí aprobó, pero no se hereda el verde de su PR a main.
+
+Causa demostrada: login.html y entrada-codigo-otp verifican automáticamente al llenar seis dígitos. El helper instalaba waitForResponse después de fill; perdía respuestas rápidas y Enter no garantizaba otra solicitud. Se corrigen sólo fixtures: observar antes de fill tanto400 como200, evitar un clic redundante después de la autoverificación inválida y separar autocompletado de Enter. El primer recorrido conserva Enter con un valor escrito sin evento input, como un gestor de códigos; los demás usan el autocompletado real. Se cuentan exactamente una verificación válida o dos si hubo rechazo previo.
+
+La nueva regresión Node ejecuta el helper real con transporte inmediato. Control negativo sobre el helper original:4 fallos por respuesta anterior al observador; corregido:4 aprobados. Las regresiones de OTP, límites de200 intentos concurrentes, errores, red y sesión aprobaron40/40. Build/caché415 recursos y67 cargas, preflight y protección78 registros/544 archivos aprobaron localmente; los generadores se verifican otra vez sobre el staging final.
+
+NOT_VERIFIED_LOCAL: WebKit no está instalado y no hay JAR de emuladores. Se conservan los tres proyectos, retries0 y timeout45000; la CI canónica deberá validar el recorrido completo. La descarga del trace a este entorno está bloqueada por red; se inspeccionaron los logs exactos y se reprodujo la pérdida de la respuesta, sin afirmar haber visto el trace.
+
+No se modifican login, seguridad, permisos ni datos de producción. El entorno runtime sigue aislado y no envía compras ni mensajes reales. Guías aplicadas: gh-fix-ci, systematic-debugging y verification-before-completion. CI, merge y post-merge del nuevo candidato siguen pendientes; no declarar aceptación100%.
+
 ## Regresión del scroll táctil: completar el frame de entrada — Codex /root
 
 Base e2e699a8be0ec6f6061a931e16e6f2ec78aebde1. CI41949523617/1 aprobó con1flaky en browser126991766451: header-responsive.spec.js665 esperaba scrollY200 y recibió0 hasta timeout15000ms; retry aprobó. El fixture espera load/fonts pero el cargador canónico resetEntryScroll aún puede ejecutar el segundo reset en requestAnimationFrame. La posición programática no consume la entrada como lo hace una interacción humana.
