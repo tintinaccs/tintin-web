@@ -48,11 +48,13 @@ html body #tt-loader-spin-wrap::before {
   flex: 0 0 auto;
   width: var(--tt-loader-brand-width);
   max-width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 400 / 260;
   background-image: url("../../assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 120% auto;
+  /* Mismo encuadre del símbolo que en el hero (viewBox 40 170 400 260). */
+  background-position: 50% 50%;
   filter: brightness(0) invert(1);
   opacity: 0;
   transform: scale(1.09);
@@ -203,3 +205,27 @@ html body #tt-loader::before {
 /* Cubrir el viewport sin alterar el gutter de la página: cambiarlo mientras
    carga desplazaba el contenido al retirar el loader. */
 html body #tt-loader { width: 100vw !important; width: 100dvw !important; }
+
+/* Recorte del mismo archivo y viewBox del hero: letras y corazones originales. */
+html body #tt-loader-wordmark {
+  display: block;
+  width: var(--tt-loader-brand-width);
+  max-width: 100%;
+  height: auto;
+  margin-top: clamp(16px, 3vh, 28px);
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html body #tt-loader-spin-wrap.tt-ready::before {
+    animation: tt-logo-fade-scale-in .6s ease both, tt-loader-float 4s .6s ease-in-out infinite;
+  }
+  @keyframes tt-loader-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+}
+@media (max-height: 480px) {
+  html body #tt-loader-spin-wrap { --tt-loader-brand-width: 112px; }
+  html body #tt-loader-wordmark { margin-top: 8px; }
+  html body #tt-loader .tt-loader-spinner { margin-top: 12px; }
+}
