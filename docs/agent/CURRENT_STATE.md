@@ -1,3 +1,9 @@
+## 2026-11-05 — Pendientes de GitHub excepto PayPal (Codex)
+
+IN_PROGRESS: autorización de la titular para resolver PR1345, Perfil735, Push373 y recuperación312; PayPal372 excluido. PR1345 a254ad92 conserva sus cambios de Banco Familiar/Copiar/loader; fallo de mantenimiento42059042607/1, job127355270057: «Huella candidata incorrecta: _headers». Causa reproducida: _headers real no coincide con política y no figura en el plan heredado32061efe. Se regenera desde main187e16f3 sin cambiar protecciones ni incorporar otro diseño. PASS_LOCAL48/48pruebas de mantenimiento/protección y validación real de las43huellas contra la base; build:pages sin errores. CI funcional de a254 en42061496412 aún en curso al comenzar. No duplicar reparación con cambios de otras ramas.
+
+Infraestructura: último Backup Firestore42033175720 SUCCESS; no equivale a restauración nueva. El entorno carece de identidad de infraestructura/gcloud; la API de GitHub devuelve403 al leer protección, variables y nombres de secretos. El navegador local de la extensión no expone herramienta de conexión. TinyFish tiene perfil «Tintin Super Admin» sin sesión registrada: se solicitó acceso para aceptación real de Perfil/Push y destino de la copia cifrada mientras se continúa el trabajo técnico. Sin cobros, pedidos ni mensajes a clientes. Skills leídos: gh-fix-ci y tintin-observability-recovery; autorización vigente de la titular permite corregir e integrar sin reconfirmación rutinaria.
+
 ## Cierre de loader y hero (#1341, #1342, #1343) — 2026-11-05 — Claude Code
 
 Evidencia de CI por PR, commit, run e intento (todos terminales y en éxito):
@@ -6416,3 +6422,16 @@ CI post-merge anterior como verde; requiere validar el nuevo candidato en CI.
 ## PR #1342 — presupuesto de Nosotros tras el cargador editorial — 2026-11-05 — Claude Code
 
 Causa del rojo en CI 42017447387/1 (SHA 7cfbcc9, job D — Interfaz, SEO y rendimiento): about.html transfirió 2077 KB first-party (límite 2000) porque el cargador reutiliza tintin-white.webp (177 KB) del hero en todas las páginas; el piso previo de Nosotros era ~1877 KB. Cambio: lightweightTransferKB 2000→2150 en tests/performance/_helpers.js, documentado. Rama actualizada con main 15605ff (Instagram #1335) y derivados regenerados (cache-versioning, diagnóstico, plan de mantenimiento). PASS_LOCAL: ci:preflight, audit:cache-versioning, protección de flujos, perf de about.html. Pendiente: CI del SHA final.
+
+## PR #1345 — Banco Familiar en checkout — 2026-11-05 — Claude Code
+
+- Cambio: la etiqueta "ueno bank" pasa a "Banco Familiar" en `checkout.html`, `js/orders/nucleo-metodos-pago.js` (incluye normalización de métodos guardados con etiqueta ueno), `admin.html` y `js/admin/settings/metodos-pago-admin.js`. El alias/titular (`Alias 0971300923 — Bárbara Ruiz`) vive en Firestore (Admin → Configuración → Métodos de pago) y NO está en el repo: debe cargarse a mano. `0981299331` es el WhatsApp de la tienda y no se tocó.
+- Cascada requerida: hash CSP (`build:csp`), etiqueta de caché `tintin-20261105-banco-familiar-1` (+ constantes del generador `sync:public-shell`), `cache-versioning:write`, `build:diagnostics`.
+- Probado localmente: `ci:preflight` exit 0, `tests/payments/*.test.mjs` 19/19. Sin probar: producción, flujo real de pago, CI en el SHA final (pendiente de verificar tras el push).
+
+## PR #1345 — Loader limpio + botón Copiar en pago — 2026-11-05 — Claude Code
+- Loader: (1) el puntito sobre "tintin" era la punta de la cola de la libélula incluida en el recorte del PNG (columna x 748-757, filas 715-733); se recorta solo esa columna con `clip-path: polygon(...)` en `css/theme/fondo-solido-cargador.css` (los corazones no se tocan). (2) La "raya vertical" era la barra de scroll de la página (10 px, track #FDECF2) visible sobre el loader en pantallas con barra clásica; mientras `#tt-loader` está activo la barra se pinta del rosa del loader (mismo ancho, sin mover el layout).
+- Verificado local (Playwright, barra clásica activada, loader forzado visible): 1280x720, 1920x1080, 1024x768, 768x1024, 390x844, 360x640, 320x640, 844x390 → 0 columnas distintas al rosa en los 12 px del borde derecho y sin píxeles sobre las letras. No verificado en producción ni en dispositivos reales.
+- Checkout: botón "Copiar" junto a cada dato del método de pago (`js/pages/checkout/checkout-metodos-pago.js`, `copiar-dato-pago.js`, `payment-methods.css`). Copia solo el alias si el dato trae "Alias ...: valor" (aplica "Sin Guión" quitando guiones); si no, copia el texto completo. Fallback `execCommand`. Estado "¡Copiado!" + región `role=status`.
+- Verificado local con el módulo real y catálogo simulado (sin tocar Firestore): portapapeles = `0971300923`, botón dentro de la tarjeta y sin scroll horizontal de 320 a 1920 y 844x390. Pruebas unitarias `tests/payments/copiar-dato-pago.test.mjs` (5) OK.
+- No verificado: Firestore real (el alias cargado hoy tiene guiones y dice "Sin Guión"), producción, portapapeles en iOS/Safari real.
