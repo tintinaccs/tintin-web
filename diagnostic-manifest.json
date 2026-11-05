@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "fc6852635ff36ab998c18ffc51945e2552b8a22447ee2e1d6fd3f9f2cd665aee",
+  "sourceFingerprint": "a20548d11f105b407b8ff7e1c16cc99e1b273443e7eb782c1692e16728a02b0f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1811,
     "textFiles": 1663,
-    "totalBytes": 57161843,
+    "totalBytes": 57161829,
     "pages": 19,
     "modules": 1173
   },
@@ -2983,8 +2983,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 194218,
-      "sha256": "90f4c4b5c151eba532d723f034217fb5108b50c1081f254911e686804104e0ab",
+      "bytes": 194215,
+      "sha256": "d626a04e9934b3ad34704fdb25d49a9f6349b5e6c56d35d64efa82fee9e7bbd6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3413,8 +3413,8 @@
           "line": 1879
         },
         {
-          "raw": "/nosotros?ttEdit=1",
-          "target": "nosotros",
+          "raw": "/about?ttEdit=1",
+          "target": "about.html",
           "text": "Nosotros",
           "id": "",
           "ariaLabel": "",
@@ -3885,10 +3885,10 @@
           "exists": true
         },
         {
-          "raw": "/nosotros?ttEdit=1",
-          "target": "nosotros",
+          "raw": "/about?ttEdit=1",
+          "target": "about.html",
           "line": 1880,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact?ttEdit=1",
@@ -62460,8 +62460,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 194218,
-      "sha256": "90f4c4b5c151eba532d723f034217fb5108b50c1081f254911e686804104e0ab"
+      "bytes": 194215,
+      "sha256": "d626a04e9934b3ad34704fdb25d49a9f6349b5e6c56d35d64efa82fee9e7bbd6"
     },
     {
       "path": "apple-touch-icon.png",
@@ -63606,8 +63606,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 423,
-      "sha256": "15a8ff3025f2328c452fcd25f9e6af9bc19bc8d722a6a9ba6b77aec3fd78bed6"
+      "bytes": 412,
+      "sha256": "2cbe8f24a6f0698b3b66429bcc8cf8b603b32e35ee6dfa4280a3848d06b4d08d"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -63619,7 +63619,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "311401de33db9061f2c5fc48a424f282ee539a87425a23e4b8b4d862a6e33521"
+      "sha256": "d387f8498d2b7103ad598ee61cc9f89e60f21dd1e47e9958cf984fcba3a92713"
     },
     {
       "path": "config/public-site.json",
@@ -73175,14 +73175,7 @@
     }
   ],
   "sitemapRoutes": [],
-  "missingReferences": [
-    {
-      "page": "admin.html",
-      "target": "nosotros",
-      "raw": "/nosotros?ttEdit=1",
-      "line": 1880
-    }
-  ],
+  "missingReferences": [],
   "routeReferences": [
     {
       "file": "catalogo.html",
