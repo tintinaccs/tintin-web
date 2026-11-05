@@ -1,3 +1,4 @@
+<!-- Reparación puntual CI2026-11-05: en basee2e699a8 se corrige carrera del fixture táctil header-responsive con el frame real de resetEntryScroll. Control negativo reproduce200→0;20/20 sin retries con barrera de frames. 20/20 sin retries y build/preflight/protección PASS_LOCAL; suite relacionada99PASS/8FAIL por SDK remoto bloqueado/1SKIP Functions preview, sin falsear PASS. Falta CI/merge/postmerge del candidato; sin cierre100% de fases ni cambios productivos. -->
 # Tintín — seguimiento global permanente, fases 00 a 09
 
 Actualizado: 2026-11-03 America/Buenos_Aires. Responsable: Codex /root, GPT-6.
