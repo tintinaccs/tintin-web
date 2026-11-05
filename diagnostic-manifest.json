@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6e5a011e7f9658549d55a71bdd06769a89e33af6f930d671fe2ad3ce6e07bced",
+  "sourceFingerprint": "925b723cee84af6cc83bf918b47afa8f918662fdb2df2127bd41f203996525ab",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1805,
     "textFiles": 1657,
-    "totalBytes": 57147718,
+    "totalBytes": 57148095,
     "pages": 19,
     "modules": 1167
   },
@@ -27932,8 +27932,8 @@
     },
     {
       "path": "functions/api/instagram-feed.js",
-      "bytes": 3714,
-      "sha256": "4d81e93f12d02790b6d8b063cfdd62cb0239361240521446b0cbccbb785ce964",
+      "bytes": 3829,
+      "sha256": "92ff587fdd653f0e0763bb2d4d141ddd91c61064ba3c8db66725b051c175fbb7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27942,15 +27942,15 @@
       "endpoints": [
         {
           "url": "https://www.instagram.com/tintinaccs/",
-          "line": 2
+          "line": 3
         },
         {
           "url": "https://www.instagram.com/",
-          "line": 9
+          "line": 10
         },
         {
-          "url": "https://graph.instagram.com/$%7Bversion%7D/$%7Buid%7D/media",
-          "line": 36
+          "url": "https://graph.facebook.com/$%7Bversion%7D/$%7Buid%7D/media",
+          "line": 37
         }
       ]
     },
@@ -57865,8 +57865,8 @@
     },
     {
       "path": "tests/social/instagram-feed.test.mjs",
-      "bytes": 8483,
-      "sha256": "78837f3ed4b8af1a0b529646286e80a798c186439cbd43ff97bb5678fe149977",
+      "bytes": 8542,
+      "sha256": "0e20afc0813dff1af0b6f6a633e100dcaf3d9eccdf8006ffc113bfe2f4ed50c9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -64182,8 +64182,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1219031,
-      "sha256": "67c898675275516bd2b483f746aa82b743b91d43ef58df3b4a8d96261c92e9d4"
+      "bytes": 1219422,
+      "sha256": "de7ca3a030f8181743582784004f3a3a01b56bec01a7b892abc9dce3b9411a1c"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -64788,8 +64788,8 @@
     {
       "path": "docs/configuracion-instagram.md",
       "extension": ".md",
-      "bytes": 5136,
-      "sha256": "1b61db1320a9c838b7f1227295ec42f8752b4cb25a3fa8c80865172d2a70e3c6"
+      "bytes": 4773,
+      "sha256": "cbd39e3972bae991438afcc5d41392b6160563eafc165596e970bbf7a18307f5"
     },
     {
       "path": "docs/configuracion-paypal.md",
@@ -65178,8 +65178,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 160152,
-      "sha256": "8bb1fec91729db2ecee683c9f93c55d5454d5342196b87582dcbc3c17357b0b7"
+      "bytes": 160327,
+      "sha256": "9cf8afcf2e0b2ce7df190050882bfd74d7c955eba6c8b56be5f01abcf4085c73"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -65934,8 +65934,8 @@
     {
       "path": "functions/api/instagram-feed.js",
       "extension": ".js",
-      "bytes": 3714,
-      "sha256": "4d81e93f12d02790b6d8b063cfdd62cb0239361240521446b0cbccbb785ce964"
+      "bytes": 3829,
+      "sha256": "92ff587fdd653f0e0763bb2d4d141ddd91c61064ba3c8db66725b051c175fbb7"
     },
     {
       "path": "functions/api/local-commerce-webhook.js",
@@ -72012,8 +72012,8 @@
     {
       "path": "tests/social/instagram-feed.test.mjs",
       "extension": ".mjs",
-      "bytes": 8483,
-      "sha256": "78837f3ed4b8af1a0b529646286e80a798c186439cbd43ff97bb5678fe149977"
+      "bytes": 8542,
+      "sha256": "0e20afc0813dff1af0b6f6a633e100dcaf3d9eccdf8006ffc113bfe2f4ed50c9"
     },
     {
       "path": "tests/sync/admin-catalog-delete-preflight.test.mjs",

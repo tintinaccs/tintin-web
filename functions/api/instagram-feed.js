@@ -1,4 +1,5 @@
-// Latest posts (photos, carousels and videos) from the connected professional account. Credentials stay on the server.
+// Latest posts (photos, carousels and videos) from the connected professional account, read through the Instagram API with unified login
+// (graph.facebook.com + business integration system user token). Credentials stay on the server.
 const PROFILE = 'https://www.instagram.com/tintinaccs/';
 const LIMIT = 12;
 const TYPES = {IMAGE:'image',CAROUSEL_ALBUM:'carousel',VIDEO:'video'};
@@ -29,11 +30,11 @@ export async function onRequestGet({env,request,waitUntil}) {
   const uid=String(env.INSTAGRAM_USER_ID || '');
   const token=env.INSTAGRAM_ACCESS_TOKEN;
   if (!/^\d{5,40}$/.test(uid) || !token) return respond({available:false,posts:[]});
-  const version=/^v\d{2}\.0$/.test(env.INSTAGRAM_GRAPH_VERSION || '') ? env.INSTAGRAM_GRAPH_VERSION : 'v24.0';
+  const version=/^v\d{2}\.0$/.test(env.INSTAGRAM_GRAPH_VERSION || '') ? env.INSTAGRAM_GRAPH_VERSION : 'v27.0';
   const cache=globalThis.caches?.default;
   const cacheKey=cache && request ? new Request(new URL(`/__instagram-feed-cache/v2/${uid}/${version}`,request.url).href) : null;
   if(cacheKey) {try {const cached=await cache.match(cacheKey);if(cached)return cached;} catch {}}
-  const url=new URL(`https://graph.instagram.com/${version}/${uid}/media`);
+  const url=new URL(`https://graph.facebook.com/${version}/${uid}/media`);
   url.searchParams.set('fields','id,caption,media_type,media_url,thumbnail_url,permalink,timestamp');
   // Headroom over LIMIT: items with an unknown type or an invalid permalink are dropped.
   url.searchParams.set('limit',String(LIMIT * 2));

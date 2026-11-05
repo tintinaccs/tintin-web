@@ -57,7 +57,7 @@ test('sin conectar cuenta no presenta una copia fija como feed actualizado',asyn
 test('la consulta usa el secreto sólo en servidor, pide fotos, carruseles y videos, y recupera nuevas publicaciones sin cambiar el sitio',async()=>{
  const original=globalThis.fetch,originalWarn=console.warn;let newest='one';let calls=0;const logs=[];
  console.warn=(...args)=>{logs.push(args.map(String).join(' '));};
- globalThis.fetch=async(url,options)=>{calls++;assert.equal(url.host,'graph.instagram.com');assert.equal(url.searchParams.has('access_token'),false);assert.equal(options.headers.Authorization,'Bearer fixture-secret');
+ globalThis.fetch=async(url,options)=>{calls++;assert.equal(url.host,'graph.facebook.com');assert.ok(url.pathname.startsWith('/v27.0/12345678/media'));assert.equal(url.searchParams.has('access_token'),false);assert.equal(options.headers.Authorization,'Bearer fixture-secret');
   assert.deepEqual(url.searchParams.get('fields').split(','),['id','caption','media_type','media_url','thumbnail_url','permalink','timestamp']);assert.equal(url.searchParams.get('limit'),'24');
   return Response.json({data:[{id:newest,media_type:'IMAGE',permalink:`https://www.instagram.com/p/${newest}/`,timestamp:'2026-10-20T10:00:00Z',media_url:CDN+newest+'.jpg'}]});};
  try{
