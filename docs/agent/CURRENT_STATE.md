@@ -6348,3 +6348,9 @@ CI post-merge anterior como verde; requiere validar el nuevo candidato en CI.
 - `product` y `404` son solo estructurales (sin campos de texto en el esquema), por eso no llevan la insignia.
 - Probado localmente: `tests/visual-builder/modo-edicion-sitio.spec.js` 12/12 (abre el modo en 9 páginas con API simulada), `ci:preflight`, protección de flujos y versionado de caché. Sin probar: guardado real en producción.
 - Pendiente: Fase 3 (retirar el gestor antiguo), fotos fijas del HTML, campos de enlace.
+
+## Modo edición — Fase 3 (lanzador Super Admin)
+- Implementado: tarjeta "Editar en la página real" en `admin.html` (Apariencia > Diseño) con enlaces `?ttEdit=1` a las páginas públicas editables.
+- Probado localmente: audit:content-appearance, audit:appearance-unified, audit:phase6, audit:cache-versioning, protección de flujos, admin-readiness-gate (8/8), modo-edicion-sitio.spec.js (12/12).
+- No eliminado: el gestor de contenido sigue activo para roles delegados (`contenido`); 6 auditorías y 1 test dependen de él. Eliminarlo requiere decisión de producto.
+- Pendiente: guardado/subida real en producción sin verificar; campos href no editables inline; fotos fijas del HTML no reemplazables.
