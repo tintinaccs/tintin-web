@@ -65,7 +65,7 @@ html.tt-edit-on [data-tt-edit-text]{outline:1px dashed rgba(184,76,114,.55);outl
 html.tt-edit-on [data-tt-edit-text]:focus{outline:2px solid #b84c72;background:rgba(252,228,236,.35)}
 html.tt-edit-on [data-tt-edit-img]{outline:2px dashed rgba(184,76,114,.65);outline-offset:-2px;cursor:pointer}
 html.tt-edit-on .tt-edit-cell{position:relative;box-shadow:inset 0 0 0 1px rgba(184,76,114,.28)}
-.tt-edit-tools{position:absolute;top:8px;left:8px;z-index:1240;display:flex;gap:2px;align-items:center;padding:3px;background:#fff;border:1px solid #f0b9cf;border-radius:999px;box-shadow:0 4px 14px rgba(184,76,114,.22);font:12px/1 system-ui,sans-serif;color:#7a2d4d}
+.tt-edit-tools{position:absolute;top:8px;left:8px;z-index:1240;display:flex;gap:2px;align-items:center;padding:3px;background:#fff;border:1px solid #f0b9cf;border-radius:999px;box-shadow:0 4px 14px rgba(184,76,114,.22);font:12px/1 Montserrat,sans-serif;color:#7a2d4d}
 .tt-edit-tools span{padding:0 8px;font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tt-edit-tools button{all:unset;box-sizing:border-box;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;cursor:pointer;font-size:14px}
 .tt-edit-tools button:hover:not(:disabled){background:#fce4ec}
@@ -73,7 +73,7 @@ html.tt-edit-on .tt-edit-cell{position:relative;box-shadow:inset 0 0 0 1px rgba(
 .tt-edit-tools button:focus-visible,.tt-edit-bar button:focus-visible{outline:2px solid #b84c72;outline-offset:1px}
 html.tt-edit-preview .tt-edit-tools{display:none}
 html.tt-edit-preview [data-tt-edit-text],html.tt-edit-preview [data-tt-edit-img],html.tt-edit-preview .tt-edit-cell{outline:none;box-shadow:none;cursor:auto}
-.tt-edit-bar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:1300;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:calc(100vw - 24px);padding:8px 10px;background:#fff;border:1px solid #f0b9cf;border-radius:999px;box-shadow:0 10px 30px rgba(60,20,40,.22);font:13px/1.2 system-ui,sans-serif;color:#4a1f33}
+.tt-edit-bar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:1300;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:calc(100vw - 24px);padding:8px 10px;background:#fff;border:1px solid #f0b9cf;border-radius:999px;box-shadow:0 10px 30px rgba(60,20,40,.22);font:13px/1.2 Montserrat,sans-serif;color:#4a1f33}
 .tt-edit-bar .tt-edit-msg{padding:0 8px;max-width:46ch}
 .tt-edit-bar .tt-edit-msg[data-kind=error]{color:#b3261e}
 .tt-edit-bar button{all:unset;box-sizing:border-box;min-height:36px;padding:0 14px;display:inline-flex;align-items:center;border-radius:999px;border:1px solid #f0b9cf;cursor:pointer;font-weight:600}
