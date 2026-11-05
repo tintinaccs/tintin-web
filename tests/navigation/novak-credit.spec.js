@@ -79,17 +79,24 @@ for (const [width, height] of viewports) {
       expect(box.x + box.width, name).toBeLessThanOrEqual(width + 1);
       const row = await credit.locator('..').boundingBox();
       expect(Math.abs(box.x + box.width / 2 - row.x - row.width / 2), name).toBeLessThanOrEqual(1);
-      const contrast = await credit.evaluate(el => {
-        const luminance = color => {
-          const values = color.match(/[\d.]+/g).slice(0, 3).map(Number).map(v => {
-            const n = v / 255; return n <= .04045 ? n / 12.92 : ((n + .055) / 1.055) ** 2.4;
-          });
-          return .2126 * values[0] + .7152 * values[1] + .0722 * values[2];
-        };
-        const foreground = luminance(getComputedStyle(el).color);
-        const background = luminance(getComputedStyle(el.closest('.tt-footer-ending')).backgroundColor);
-        return (Math.max(foreground, background) + .05) / (Math.min(foreground, background) + .05);
-      });
+      // El pie ahora tiene un degradado: el fondo real se mide en el píxel
+      // renderizado junto a la firma, no en background-color (transparente).
+      const foregroundColor = await credit.evaluate(el => getComputedStyle(el).color);
+      const sample = await page.screenshot({ clip: { x: Math.max(0, box.x - 8), y: box.y + box.height / 2, width: 2, height: 2 } });
+      const background = await page.evaluate(async b64 => {
+        const bitmap = await createImageBitmap(await (await fetch('data:image/png;base64,' + b64)).blob());
+        const canvas = document.createElement('canvas'); canvas.width = bitmap.width; canvas.height = bitmap.height;
+        const ctx = canvas.getContext('2d'); ctx.drawImage(bitmap, 0, 0);
+        const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data; return `rgb(${r}, ${g}, ${b})`;
+      }, sample.toString('base64'));
+      const luminance = color => {
+        const values = color.match(/[\d.]+/g).slice(0, 3).map(Number).map(v => {
+          const n = v / 255; return n <= .04045 ? n / 12.92 : ((n + .055) / 1.055) ** 2.4;
+        });
+        return .2126 * values[0] + .7152 * values[1] + .0722 * values[2];
+      };
+      const fg = luminance(foregroundColor), bg = luminance(background);
+      const contrast = (Math.max(fg, bg) + .05) / (Math.min(fg, bg) + .05);
       expect(contrast, name).toBeGreaterThanOrEqual(4.5);
       if (width <= 480) {
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
