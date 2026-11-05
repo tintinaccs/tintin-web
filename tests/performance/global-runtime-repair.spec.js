@@ -49,10 +49,11 @@ test('navegación móvil agrupa ráfagas y mide antes de escribir el halo',async
 
 for(const width of [390,820,1440])test(`Inicio contiene el margen del hero sin desplazar body a ${width}px`,async({page})=>{
  await page.setViewportSize({width,height:900});
- await page.setContent('<style>:root{--header-h:88px}body{margin:0}.tt-hero{height:400px}</style><body class="tt-home-premium"><main><section class="tt-hero">Portada original</section></main></body>');
+ await page.setContent('<style>:root{--header-h:88px}body{margin:0}.tt-hero{height:400px}</style><body class="tt-home-premium"><main><section id="hero" class="tt-hero">Portada original</section></main></body>');
  await page.addStyleTag({content:fs.readFileSync('css/pages/home/ajuste-inicio.css','utf8')});
+ await page.addStyleTag({content:fs.readFileSync('css/pages/home/hero-bienvenida-inicio.css','utf8')});
  const geometry=await page.evaluate(()=>({body:document.body.getBoundingClientRect().top,hero:document.querySelector('.tt-hero').getBoundingClientRect().top}));
- expect(geometry).toEqual({body:0,hero:width>=769?88:0});
+ expect(geometry).toEqual({body:0,hero:width>=1025?88:width>=768?84:0});
 });
 
 for(const route of ['checkout','login','perfil'])test(`contenido transaccional permanece estático: ${route}`,async({page})=>{
