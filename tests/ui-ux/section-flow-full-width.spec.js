@@ -32,7 +32,7 @@ for (const [width,height] of viewports) {
     }));
     for(let i=0;i<rows.length;i++) {
       expect(Math.abs(rows[i].left)).toBeLessThan(1);expect(rows[i].width).toBe(width);
-      expect(rows[i].gradient).toContain('50%');
+      expect((rows[i].gradient.match(/linear-gradient/g)||[]).length).toBeGreaterThanOrEqual(2);
       if(i)expect(rows[i-1].end).toBe(rows[i].start);
     }
     expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
@@ -107,6 +107,12 @@ for (const width of [390, 1024, 1440]) {
         }
         expect(heading.font, `${file}: ${heading.text}`).toContain('Montserrat');
         expect(heading.weight, `${file}: ${heading.text}`).toBe('600');
+      }
+      if(!['admin.html','admin-images.html'].includes(file)){
+        await page.addScriptTag({content:runtime});
+        await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+        const surfaces=await page.locator('[data-tt-flow-background]').evaluateAll(nodes=>nodes.filter(n=>getComputedStyle(n).display!=='none').map(n=>getComputedStyle(n).backgroundImage));
+        for(const background of surfaces)expect((background.match(/linear-gradient/g)||[]).length,`${file}: ambos bordes del fondo`).toBeGreaterThanOrEqual(2);
       }
       inventory.push({ file, headings });
       await page.unroute('**/__identity-page');
@@ -358,4 +364,88 @@ for(const [width,height]of spacingViewports)test(`espaciado completo de páginas
   expect(inventory).toHaveLength(18);
   expect(inventory.find(row=>row.name==='admin.html').adminSections).toBeGreaterThanOrEqual(23);
   await info.attach('espaciado-todas-las-paginas',{body:JSON.stringify(inventory),contentType:'application/json'});
+});
+
+
+test.describe('Difuminado de fondos públicos',()=>{
+const fs=require('node:fs'),path=require('node:path');
+const {restoreStyleSources}=require('../../scripts/lib/estilos-inicio');
+const {removeFixtureScripts}=require('../../scripts/lib/html-layout-fixture');
+const root=path.resolve(__dirname,'../..');
+const shared=fs.readFileSync('css/theme/sistema-superficies-tintin.css','utf8');
+const runtime=fs.readFileSync('js/theme/alternancia-secciones.js','utf8');
+const credit=fs.readFileSync('css/components/novak-credit-site.css','utf8');
+const home=restoreStyleSources(removeFixtureScripts(fs.readFileSync('index.html','utf8'),{removeModulePreloads:true}));
+const delta=(a,b)=>Math.max(...a.map((v,i)=>Math.abs(v-b[i])));
+async function mount(page,html,run=true){
+ await page.route('**/*',route=>{
+  const u=new URL(route.request().url());if(u.pathname==='/__fades')return route.fulfill({contentType:'text/html',body:html});
+  const file=path.resolve(root,'.'+u.pathname);if(!file.startsWith(root+path.sep)||!fs.existsSync(file))return route.abort();
+  const type={'.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.woff':'font/woff','.woff2':'font/woff2'}[path.extname(file)];
+  return route.fulfill({path:file,contentType:type});
+ });
+ await page.goto('/__fades');await page.evaluate(()=>document.fonts.ready);
+ if(run){await page.addScriptTag({content:runtime});await expect.poll(()=>page.locator('[data-tt-flow-background]').count()).toBeGreaterThan(0);}
+ await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+}
+async function edges(page,selector,colored=true){
+ const bodyStyle=await page.locator('body').evaluate(e=>({color:getComputedStyle(e).backgroundColor,image:getComputedStyle(e).backgroundImage}));
+ expect(bodyStyle.image,'el lienzo visible coincide con el color de unión').toContain(bodyStyle.color);
+ const buffer=await page.locator(selector).screenshot({animations:'disabled'});
+
+ const bounds=await page.locator(selector).evaluate(e=>({join:e.querySelector('#tt-footer-ending')?Math.round(e.querySelector('#tt-footer-ending').getBoundingClientRect().top-e.getBoundingClientRect().top):null}));
+ const sample=await page.evaluate(async ({base64,bounds})=>{
+  const image=new Image();image.src='data:image/png;base64,'+base64;await image.decode();
+  const canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;
+  const context=canvas.getContext('2d');context.drawImage(image,0,0);
+  const pixel=(x,y)=>[...context.getImageData(x,y,1,1).data].slice(0,3);
+  return {width:canvas.width,height:canvas.height,canvas:getComputedStyle(document.body).backgroundColor.match(/[\d.]+/g).slice(0,3).map(Number),
+   // Un píxel interior evita incluir el lienzo externo al redondear un rectángulo fraccionario.
+   edges:[1,canvas.width-2].flatMap(x=>[1,canvas.height-2].map(y=>pixel(x,y))),
+   joins:bounds.join?[1,canvas.width-2].map(x=>[pixel(x,bounds.join-1),pixel(x,bounds.join)]):[],
+   inside:[.25,.5,.75].map(t=>pixel(1,Math.floor(canvas.height*t)))};
+ },{base64:buffer.toString('base64'),bounds});
+ for(const pair of sample.joins)expect(delta(pair[0],pair[1]),'unión difuminada de la franja final').toBeLessThanOrEqual(3);
+ for(const edge of sample.edges)expect(delta(edge,sample.canvas),`${selector}: borde unido al lienzo ${JSON.stringify(sample)}`).toBeLessThanOrEqual(3);
+ if(colored)expect(Math.max(...sample.inside.map(p=>delta(p,sample.canvas))),'conserva el color interior del fondo').toBeGreaterThan(8);
+ return buffer;
+}
+
+for(const [width,height]of [[390,844],[844,390],[1306,630],[1920,1080]])test(`hero difuminado arriba y abajo sin alterar contenido ${width}x${height}`,async({page},info)=>{
+ await page.setViewportSize({width,height});await mount(page,home);
+ await page.locator('.tt-hero-suitcase img').evaluate(i=>i.decode());
+ const image=await edges(page,'#hero');await info.attach('hero-difuminado',{body:image,contentType:'image/png'});
+ await expect(page.locator('.tt-hero-title')).toHaveCSS('filter','none');
+ await expect(page.locator('.tt-hero-suitcase img')).toHaveCSS('object-fit','contain');
+ const g=await page.locator('#hero').boundingBox();expect(g.y+g.height).toBeLessThanOrEqual(height+1);
+ await edges(page,'.tt-footer',false);
+});
+for(const width of [390,1440])test(`fondos sólidos y degradados publicados tienen ambos bordes suaves ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});
+ await mount(page,`<style>${shared}body{margin:0}section,footer{height:220px;position:relative;margin:0}button{margin:90px 100px}</style><main><section>Inicio</section><section id="pink"><button>Acción</button></section><section id="custom" style="--tt-visual-bg:linear-gradient(90deg,#F8AACA,#FDECF2)"><button>Otra acción</button></section></main><footer class="tt-footer">Pie</footer>`);
+ await edges(page,'#pink');await edges(page,'#custom');
+ const layer=page.locator('#custom > [data-tt-flow-background]');
+ await expect(layer).toHaveCSS('pointer-events','none');
+ expect(await layer.evaluate(e=>getComputedStyle(e).backgroundImage)).toContain('90deg');
+ await expect(page.locator('#custom')).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
+ await page.locator('#custom button').click();await expect(page.locator('#custom button')).toBeFocused();
+});
+for(const width of [390,1440])test(`fondos difuminados desde el primer render sin JavaScript ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});
+ const editorial=fs.readFileSync('css/pages/home/edicion-editorial-inicio.css','utf8');
+ const adjustment=fs.readFileSync('css/pages/home/ajuste-inicio.css','utf8');
+ await mount(page,`<style>${shared}${editorial}${adjustment}body{margin:0}section{height:220px;position:relative}</style><body class="tt-home-premium"><main><section>Inicio</section><section id="look-section">Contenido</section></main></body>`,false);
+ await expect(page.locator('[data-tt-flow-background]')).toHaveCount(0);
+ const background=await page.locator('#look-section').evaluate(e=>getComputedStyle(e).backgroundImage);
+ expect((background.match(/linear-gradient/g)||[]).length).toBe(2);
+ await edges(page,'#look-section');
+});
+test('el tratamiento nuevo se limita al cliente y conserva el fondo administrativo',async({page})=>{
+ await mount(page,`<style>${shared}${credit}.adm-section{height:220px}</style><main class="adm-main"><div class="adm-content"><section class="adm-section">Panel</section></div></main><footer><div id="tt-footer-ending">Firma</div></footer>`);
+ const style=await page.locator('[data-tt-flow-background]').evaluate(e=>getComputedStyle(e).backgroundImage);
+ expect((style.match(/linear-gradient/g)||[]).length).toBe(1);expect(style).toContain('50%');
+ await expect(page.locator('#tt-footer-ending')).toHaveCSS('background-image',/0\.92\) 100%/);
+ expect(await page.locator('#tt-footer-ending').evaluate(e=>getComputedStyle(e).getPropertyValue('--tt-footer-ending-fill'))).toBe('');
+});
+
 });

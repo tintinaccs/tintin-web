@@ -84,7 +84,7 @@ body.tt-home-premium .tt-collection-carousel__description { margin-top: 12px; }
 
 body.tt-home-premium #look-section {
   padding-block: clamp(64px, 8vw, 112px);
-  background: var(--tt-section-gradient, none) var(--tt-section-background, #FDECF2) !important;
+  background: var(--tt-section-gradient, var(--tt-section-background, #FDECF2)) !important;
 }
 
 body.tt-home-premium .tt-look-header { margin-bottom: clamp(30px, 4vw, 48px); }
