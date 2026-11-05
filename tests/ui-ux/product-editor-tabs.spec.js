@@ -202,3 +202,23 @@ test('fase03: reemplazar portada tiene ancho completo en su columna y permite ca
  await page.getByRole('button',{name:'Cancelar reemplazo',exact:true}).click();await expect(side).toBeHidden();
  await expect(page.locator('#prod-imageUrl')).toHaveValue(phase03Product.imageUrl);await expect(page.getByLabel('Stock: Dorado',{exact:true})).toHaveValue('4');
 });
+
+test('fase03: recorta, gira y aplica una foto antes de reemplazarla',async({page})=>{
+ await phase03Open(page,390,844);await tab(page,'Fotos y opciones').click();
+ await page.getByRole('button',{name:'Reemplazar imagen seleccionada',exact:true}).click();
+ const side=page.locator('.tt-studio-photo-side');
+ const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=160;canvas.height=100;const context=canvas.getContext('2d');context.fillStyle='#f8aaca';context.fillRect(0,0,80,100);context.fillStyle='#713c53';context.fillRect(80,0,80,100);return canvas.toDataURL('image/png').split(',')[1];});
+ await side.locator('input[type=file]').setInputFiles({name:'producto-original.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});
+ await side.getByRole('button',{name:'Recortar o editar',exact:true}).click();
+ const editor=page.getByRole('dialog',{name:'Recortar o editar foto',exact:true});await expect(editor).toBeVisible();
+ await editor.getByRole('button',{name:'Cuadrada 1:1',exact:true}).click();
+ await editor.getByRole('button',{name:'Girar derecha',exact:true}).click();
+ await editor.getByLabel('Zoom', {exact:true}).fill('1.35');
+ const geometry=await editor.evaluate(el=>({width:el.clientWidth,scroll:el.scrollWidth,height:el.clientHeight,scrollHeight:el.scrollHeight}));
+ expect(geometry.scroll).toBeLessThanOrEqual(geometry.width+1);expect(geometry.scrollHeight).toBeLessThanOrEqual(geometry.height+1);
+ await editor.getByRole('button',{name:'Aplicar edición',exact:true}).click();await expect(editor).toHaveCount(0);
+ await expect(side.locator('.tt-iuw-status')).toContainText('Edición aplicada');
+ await side.getByRole('button',{name:'Confirmar y subir',exact:true}).click();
+ await expect(page.locator('#prod-imageUrl')).toHaveValue(/producto-original-editada\.(webp|png)$/);
+ await expect(page.getByLabel('Stock: Dorado',{exact:true})).toHaveValue('4');
+});

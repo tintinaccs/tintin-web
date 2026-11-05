@@ -8,6 +8,7 @@
    ============================================================= */
 
 import { validateImageFile } from './procesamiento-imagenes.js?v=tintin-20261016-images-fidelity-1';
+import { openImageEditor } from './editor-imagen.js?v=tintin-20261105-image-editor-1';
 import {
   deleteMediaByUrlIfUnused,
   deleteMediaItem,
@@ -199,6 +200,7 @@ export function attachImageUploadWidget(container, options = {}) {
     actions.append(confirmButton);
 
     if (pendingFile) {
+      actions.append(createButton('Recortar o editar', 'tt-iuw-btn', editPendingFile));
       actions.append(createButton('Cancelar', 'tt-iuw-btn', cancelPendingFile));
       return;
     }
@@ -300,6 +302,24 @@ export function attachImageUploadWidget(container, options = {}) {
     renderPreview();
     renderActions();
     setStatus('Vista previa lista. Podés subirla ahora o al guardar el formulario.');
+  }
+
+  async function editPendingFile() {
+    if (busy || !pendingFile) return;
+    try {
+      const edited = await openImageEditor(pendingFile);
+      if (!edited || destroyed) return;
+      const result = await validateImageFile(edited);
+      if (!result.ok) throw new Error(result.error);
+      if (pendingPreviewUrl) URL.revokeObjectURL(pendingPreviewUrl);
+      pendingFile = edited;
+      pendingPreviewUrl = URL.createObjectURL(edited);
+      renderPreview();
+      renderActions();
+      setStatus('Edición aplicada. Confirmá para subir la foto.');
+    } catch (error) {
+      setStatus(error?.message || 'No se pudo editar la foto.', 'error');
+    }
   }
 
   async function commitPendingFile() {
@@ -428,9 +448,11 @@ export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary
       const tile=document.createElement('div');tile.className='tt-editor-upload-item';
       const image=document.createElement('img');image.src=item.preview;image.alt=item.file.name;
       const progress=document.createElement('span');progress.setAttribute('role','status');progress.textContent=item.stage || 'Pendiente';
+      const edit=document.createElement('button');edit.type='button';edit.className='tt-iuw-btn';edit.textContent='Editar';edit.setAttribute('aria-label',`Recortar o editar ${item.file.name}`);edit.disabled=busy();
+      edit.addEventListener('click',async()=>{if(busy())return;try{const edited=await openImageEditor(item.file);if(!edited || destroyed)return;const verdict=await validateImageFile(edited);if(!verdict.ok)throw new Error(verdict.error);URL.revokeObjectURL(item.preview);item.file=edited;item.preview=URL.createObjectURL(edited);item.stage='Edición aplicada';render();}catch(error){status.textContent=error?.message || 'No se pudo editar la foto.';}});
       const remove=document.createElement('button');remove.type='button';remove.className='tt-iuw-btn';remove.textContent='Quitar';remove.setAttribute('aria-label',`Quitar pendiente ${item.file.name}`);remove.disabled=busy();
       remove.addEventListener('click',()=>{queue=queue.filter(other=>other!==item);URL.revokeObjectURL(item.preview);render();});
-      tile.append(image,progress,remove);grid.append(tile);
+      tile.append(image,progress,edit,remove);grid.append(tile);
     }
     confirm.hidden=!queue.length && !busy();confirm.disabled=!queue.length || busy();drop.disabled=library.disabled=busy();input.disabled=busy();
     root.setAttribute('aria-busy',String(busy()));

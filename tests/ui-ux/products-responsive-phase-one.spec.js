@@ -689,11 +689,15 @@ test('carga múltiple espera archivos, conserva fallidos y reintenta sin duplica
  const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=40;canvas.height=40;return canvas.toDataURL('image/png').split(',')[1];});
  await page.locator('#master-multiple input[type=file]').setInputFiles(['uno.png','dos.png'].map(name=>({name,mimeType:'image/png',buffer:Buffer.from(png,'base64')})));
  await expect(page.locator('#master-multiple .tt-editor-upload-item')).toHaveCount(2);
+ await page.getByRole('button',{name:'Recortar o editar uno.png',exact:true}).click();
+ const editor=page.getByRole('dialog',{name:'Recortar o editar foto',exact:true});await editor.getByRole('button',{name:'Vertical 4:5',exact:true}).click();await editor.getByRole('button',{name:'Aplicar edición',exact:true}).click();await expect(editor).toHaveCount(0);
+ await expect(page.locator('#master-multiple .tt-editor-upload-item').first().getByRole('status')).toHaveText('Edición aplicada');
  expect(await page.evaluate(()=>window.__bulk.pendingSignature().length)).toBeGreaterThan(1);
  const message=await page.evaluate(()=>window.__bulk.flush().then(()=>'',error=>error.message));expect(message).toBe('Red interrumpida');
- expect(await page.evaluate(()=>window.__masterUploaded)).toEqual(['https://img.test/uno.png']);await expect(page.locator('#master-multiple .tt-editor-upload-item')).toHaveCount(1);
+ expect(await page.evaluate(()=>window.__masterUploaded)).toEqual([expect.stringMatching(/^https:\/\/img\.test\/uno-editada\.(webp|png)$/)]);await expect(page.locator('#master-multiple .tt-editor-upload-item')).toHaveCount(1);
  await page.evaluate(async()=>{window.__retryMaster=true;await window.__bulk.flush();});
- expect(await page.evaluate(()=>window.__masterUploaded)).toEqual(['https://img.test/uno.png','https://img.test/dos.png']);expect(await page.evaluate(()=>window.__masterAttempts)).toEqual({'uno.png':1,'dos.png':2});
+ expect(await page.evaluate(()=>window.__masterUploaded)).toEqual([expect.stringMatching(/^https:\/\/img\.test\/uno-editada\.(webp|png)$/),'https://img.test/dos.png']);
+ const attempts=await page.evaluate(()=>window.__masterAttempts);expect(attempts['dos.png']).toBe(2);expect(Object.entries(attempts).filter(([name])=>/^uno-editada\.(webp|png)$/.test(name))).toHaveLength(1);
  expect(await page.evaluate(()=>window.__bulk.hasPending())).toBe(false);await expect(page.locator('#master-multiple .tt-editor-upload-item')).toHaveCount(0);
 });
 
