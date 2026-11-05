@@ -8,12 +8,12 @@ test('el texto predeterminado legacy de efectivo admite retiro sin cambiar descr
   assert.equal(normalizePaymentMethod({id:'bank',kind:'transferencia',description:'Efectivo contra entrega únicamente para delivery'}).description,'Efectivo contra entrega únicamente para delivery');
 });
 
-test('datos de transferencia antiguos corrigen ueno sin alterar cuentas ni otros bancos', () => {
+test('datos de transferencia antiguos unifican la etiqueta de ueno a Banco Familiar sin alterar cuentas ni otros bancos', () => {
   const method = normalizePaymentMethod({ id: 'transferencia', kind: 'transferencia', details: [
     { id: 'ueno', label: 'Ueno (Banco GNB)', value: '123456789' },
     { id: 'gnb', label: 'Banco GNB', value: '987654321' }
   ] });
-  assert.equal(method.details[0].label, 'ueno bank');
+  assert.equal(method.details[0].label, 'Banco Familiar');
   assert.equal(method.details[0].value, '123456789');
   assert.equal(method.details[1].label, 'Banco GNB');
   assert.equal(method.details[1].value, '987654321');

@@ -46,7 +46,7 @@ import {
 } from "../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261030-home-history-5";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261103-acceptance-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261105-copiar-pago-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';

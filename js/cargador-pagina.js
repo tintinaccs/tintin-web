@@ -888,7 +888,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-hero-fit-20261105-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261105-copiar-pago-1');
     }
   }
 
@@ -984,7 +984,7 @@
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-brand-polish-20261104-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261105-copiar-pago-1');
     }
   }
 
