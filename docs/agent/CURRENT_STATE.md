@@ -1,3 +1,9 @@
+## 2026-11-05 — Pendientes de GitHub excepto PayPal (Codex)
+
+IN_PROGRESS: autorización de la titular para resolver PR1345, Perfil735, Push373 y recuperación312; PayPal372 excluido. PR1345 a254ad92 conserva sus cambios de Banco Familiar/Copiar/loader; fallo de mantenimiento42059042607/1, job127355270057: «Huella candidata incorrecta: _headers». Causa reproducida: _headers real no coincide con política y no figura en el plan heredado32061efe. Se regenera desde main187e16f3 sin cambiar protecciones ni incorporar otro diseño. PASS_LOCAL48/48pruebas de mantenimiento/protección y validación real de las43huellas contra la base; build:pages sin errores. CI funcional de a254 en42061496412 aún en curso al comenzar. No duplicar reparación con cambios de otras ramas.
+
+Infraestructura: último Backup Firestore42033175720 SUCCESS; no equivale a restauración nueva. El entorno carece de identidad de infraestructura/gcloud; la API de GitHub devuelve403 al leer protección, variables y nombres de secretos. El navegador local de la extensión no expone herramienta de conexión. TinyFish tiene perfil «Tintin Super Admin» sin sesión registrada: se solicitó acceso para aceptación real de Perfil/Push y destino de la copia cifrada mientras se continúa el trabajo técnico. Sin cobros, pedidos ni mensajes a clientes. Skills leídos: gh-fix-ci y tintin-observability-recovery; autorización vigente de la titular permite corregir e integrar sin reconfirmación rutinaria.
+
 ## Cierre de loader y hero (#1341, #1342, #1343) — 2026-11-05 — Claude Code
 
 Evidencia de CI por PR, commit, run e intento (todos terminales y en éxito):
