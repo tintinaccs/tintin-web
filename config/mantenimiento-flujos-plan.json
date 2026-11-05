@@ -1,22 +1,12 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "707ebc782b92c71f2fa57d11e681570d7b167274",
-  "reason": "Fase 2 modo edicion: cargar contenido editable e insignia en terminos y privacidad",
+  "baseCommit": "684e5ac6fb995f31342aed41a40536b915198102",
+  "reason": "Fase 3 modo edicion: revision de pagina admin tras lanzador",
   "files": [
     {
-      "path": "privacidad.html",
-      "oldHash": "66e86d0093cd4caf177a55ff50d5dbb8be2afe50d261384cd5aa729a4663ec92",
-      "newHash": "9277a7eb394c976c6f260ac9d1dc0b6a22e4d60771400506ddf976b4660e60e1"
-    },
-    {
-      "path": "scripts/cache-version-baseline.json",
-      "oldHash": "8cb581c4bb24dd268f52579f5d11f517ee2a84ee1c2938fa455f642e620fa2c7",
-      "newHash": "12fc115a91878ea693f1fb9f4dc6a9b74cc5b4576cec68a2557643c9c9c051d7"
-    },
-    {
-      "path": "terminos.html",
-      "oldHash": "bb08714b3983a0e43201468a7c2af65f52766d4c37247ef99d736e4b25229164",
-      "newHash": "a1a20741877a6586c24f2991c5f4ee552dd9fc88ec595b13593f611d30062f2e"
+      "path": "admin.html",
+      "oldHash": "06fed3cb75041a83f918ac09886afbbb0734a99820a53f84d2f37cccf2f1760b",
+      "newHash": "d626a04e9934b3ad34704fdb25d49a9f6349b5e6c56d35d64efa82fee9e7bbd6"
     }
   ],
   "affectedRecords": []
