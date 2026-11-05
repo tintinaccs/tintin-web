@@ -1,3 +1,9 @@
+## CI1341: estabilizar la medida después de redimensionar — 2026-11-05 — Codex /root
+
+CI42013156064/1 de499c381b falló en browser127199156293: home-layout-browser medía brand fuera del hero. Otros jobs administrativos/calidad se cancelaron al ser reemplazados por nuevo SHA; CodeQL42013150194/1 SUCCESS. Logs leídos, sin atribuir éxito global. Nueva ejecución d210a861: CI42014015181/1 y CodeQL42014012374/1 (este último SUCCESS) no incluyen aún la corrección del harness.
+
+Reproducción exacta: tras viewport844×390→768×1024, innerHeight=1024 pero el hero aún medía306px (=390−84), brand.top=-48.5; fuentes ya loaded.11/12 reproducciones fallaron sin sincronización. Esperar dos requestAnimationFrame después del resize eliminó el estado intermedio en12/12, sin cambiar CSS, tolerancias ni aserciones. Se conserva la aserción estricta y se agrega geometría/tamaño al mensaje de fallo. El diseño, PNG y fuentes no cambian. Nuevo SHA requiere sus propios recibos CI/merge/producción.
+
 ## Ampliación de geometría de PR1341 — 2026-11-05 — Codex /root
 
 HEAD inicial499c381b, CI42013156064/1 en curso y preview4f65af6e SUCCESS; no acreditar merge. Tras30/30 pruebas finales y84/84 casos de navegación, se midió además844×320: enlace201–249px y WhatsApp236–292px se superponían. Se reserva un carril de96px a la derecha en horizontal bajo y se agrega ese tamaño junto con una aserción de intersección para todas las acciones/WhatsApp. No cambia el PNG, fuente ni controles. Nueva URL CSS por bytes nuevos; nuevo SHA y sus gates requieren recibos propios. Plan mantiene base main1b1b2acf. PASS_LOCAL de la ampliación: build:pages, preflight completo exit0 y31/31 Chromium finales, incluida intersección WhatsApp/acciones y844×320. CI del nuevo SHA y producción PENDING; no heredar el CodeQL42013150194/1 SUCCESS de499c381b.
