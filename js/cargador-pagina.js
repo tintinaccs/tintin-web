@@ -888,7 +888,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-suitcase-20261104-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-hero-fit-20261104-1');
     }
   }
 

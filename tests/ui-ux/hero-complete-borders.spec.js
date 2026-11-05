@@ -5,7 +5,7 @@ const { restoreStyleSources } = require('../../scripts/lib/estilos-inicio.js');
 const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
 const root = path.resolve(__dirname, '../..');
 const html = restoreStyleSources(removeFixtureScripts(fs.readFileSync(path.join(root, 'index.html'), 'utf8'), { removeModulePreloads: true }));
-const types = { '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2', '.ttf': 'font/ttf' };
+const types = { '.js': 'text/javascript', '.mjs':'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2', '.ttf': 'font/ttf' };
 async function open(page) {
   await page.route('**/*', async route => {
     const url = new URL(route.request().url());
@@ -21,7 +21,7 @@ async function open(page) {
   await page.evaluate(()=>document.body.classList.add('tt-public-shell-mounted','tt-home-runtime-ready'));
   await page.evaluate(()=>document.fonts.ready);
 }
-for(const [width,height] of [[320,568],[375,812],[390,844],[430,932],[568,320],[768,1024],[820,1180],[1024,768],[1024,1366],[1120,840],[1280,720],[1440,900],[1920,1080]]) {
+for(const [width,height] of [[844,390],[1306,630],[320,568],[375,812],[390,844],[430,932],[568,320],[768,1024],[820,1180],[1024,768],[1024,1366],[1120,840],[1280,720],[1440,900],[1920,1080]]) {
   test(`estructura sin recortes, marca plana y sin Colecciones · ${width}x${height}`,async({page},testInfo)=>{
     await page.setViewportSize({width,height});await open(page);
     await expect.poll(()=>page.locator('.tt-hero-suitcase img').evaluate(e=>e.complete&&e.naturalWidth>0)).toBe(true);
@@ -29,10 +29,10 @@ for(const [width,height] of [[320,568],[375,812],[390,844],[430,932],[568,320],[
       const hero=document.querySelector('#hero'),rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
       return {hero:rect(hero),brand:rect(hero.querySelector('.tt-hero-brand')),art:rect(hero.querySelector('.tt-hero-suitcase')),title:rect(hero.querySelector('h1')),actions:[...hero.querySelectorAll('.tt-hero-actions a')].map(rect),overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth,logoShadow:getComputedStyle(hero.querySelector('.tt-hero-symbol')).boxShadow,logoFilter:getComputedStyle(hero.querySelector('.tt-hero-symbol')).filter,removed:!document.querySelector('.tt-hero-index,.tt-hero-collections'),gap:document.querySelector('.tt-trust-bar').getBoundingClientRect().top-hero.getBoundingClientRect().bottom,fit:getComputedStyle(hero.querySelector('.tt-hero-suitcase img')).objectFit};
     });
-    expect(g.removed).toBe(true);expect(g.gap).toBeCloseTo(0);expect(g.overflow).toBeLessThanOrEqual(1);expect(g.fit).toBe('contain');expect(g.logoShadow).toBe('none');expect(g.logoFilter).not.toContain('drop-shadow');
+    expect(g.hero.bottom).toBeLessThanOrEqual(height+1);expect(g.removed).toBe(true);expect(g.gap).toBeCloseTo(0);expect(g.overflow).toBeLessThanOrEqual(1);expect(g.fit).toBe('contain');expect(g.logoShadow).toBe('none');expect(g.logoFilter).not.toContain('drop-shadow');
     for(const box of [g.brand,g.art,g.title,...g.actions]){expect(box.left).toBeGreaterThanOrEqual(-1);expect(box.right).toBeLessThanOrEqual(width+1);expect(box.top).toBeGreaterThanOrEqual(g.hero.top-1);expect(box.bottom).toBeLessThanOrEqual(g.hero.bottom+1);}
     for(const action of g.actions) expect(action.height).toBeGreaterThanOrEqual(44);
-    if(width<768||(height>width&&width<=1120)){expect(g.brand.bottom).toBeLessThanOrEqual(g.art.top+1);expect(g.art.bottom).toBeLessThanOrEqual(g.title.top+1);}else{expect(g.art.right).toBeLessThanOrEqual(g.brand.left+1);}
+    if(height>width&&width<=1120){expect(g.brand.bottom).toBeLessThanOrEqual(g.art.top+1);expect(g.art.bottom).toBeLessThanOrEqual(g.title.top+1);}else{expect(g.art.right).toBeLessThanOrEqual(g.brand.left+1);}
     await expect(page.locator('.tt-hero-cta')).toHaveText('COMPRAR AHORA');await expect(page.locator('.tt-hero-cta')).toHaveAttribute('href','/catalogo');await expect(page.locator('.tt-hero-link')).toHaveAttribute('href','/about');
     await page.locator('.tt-hero-cta').focus();expect(await page.locator('.tt-hero-cta').evaluate(e=>getComputedStyle(e).outlineStyle)).not.toBe('none');
     await page.locator('.tt-hero-cta').blur();
@@ -71,4 +71,20 @@ test('transición mantiene el rosa del hero al activar el flujo compartido',asyn
   await expect(page.locator('.tt-trust-bar')).toHaveAttribute('data-tt-flow-block','pink');
   const flow=await page.evaluate(()=>{const h=document.querySelector('#hero'),s=getComputedStyle(h),after=getComputedStyle(h,'::after');return {background:s.backgroundImage,fade:after.backgroundImage,pointer:after.pointerEvents,hiddenLayer:getComputedStyle(h.querySelector('[data-tt-flow-background]')).display}});
   expect(flow.background).toContain('linear-gradient');expect(flow.background).toContain('255, 181, 215');expect(flow.fade).toContain('linear-gradient');expect(flow.pointer).toBe('none');expect(flow.hiddenLayer).toBe('none');
+});
+
+test('el título conserva la misma fuente y color cuando el editor actualiza sus líneas',async({page})=>{
+ await open(page);
+ const before=await page.locator('.tt-hero-title').evaluate(e=>getComputedStyle(e).fontFamily);
+ await page.evaluate(async()=>{
+  const {applyVisualContentPreview}=await import(new URL('../../js/core/store/editor-visual-runtime.js',location.href).href);
+  applyVisualContentPreview('index',{hero:{title:'El encanto está\nen los detalles',primaryText:'Comprar ahora'}});
+ });
+ await expect(page.locator('.tt-hero-title')).toHaveCount(1);
+ for(const line of await page.locator('.tt-hero-title-line').all()){
+  await expect(line).toHaveCSS('font-family',before);
+  await expect(line).toHaveCSS('font-size',await page.locator('.tt-hero-title').evaluate(e=>getComputedStyle(e).fontSize));
+  await expect(line).toHaveCSS('color','rgb(255, 100, 176)');
+ }
+ await expect(page.locator('.tt-hero-cta')).toHaveCSS('text-transform','uppercase');
 });

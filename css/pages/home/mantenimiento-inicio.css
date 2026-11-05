@@ -18,54 +18,6 @@ body.tt-home-premium:not(.tt-home-runtime-ready) *::after {
   animation-delay: 0s !important;
 }
 
-body.tt-home-premium .tt-hero,
-body.tt-home-premium .tt-hero-media {
-  background-color: var(--color-brand-secondary, #F8AACA);
-}
-
-body.tt-home-premium .tt-hero {
-  isolation: isolate;
-  overflow: hidden;
-}
-
-body.tt-home-premium .tt-hero-media {
-  position: relative;
-  inset: auto;
-  z-index: 0;
-  background-image: none !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-}
-
-body.tt-home-premium .tt-hero-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  background: var(--color-brand-secondary, #F8AACA);
-}
-
-/* home-fit aporta un color sólido detrás de imágenes transparentes, pero el
-   <picture> cubría también la imagen local del contenedor mientras el hero
-   administrado cargaba. El fondo sigue en el <img>; la capa intermedia queda
-   transparente para que el fallback responsive siempre sea visible. */
-body.tt-home-premium .tt-hero-media picture {
-  background: transparent !important;
-}
-
-body.tt-home-premium .tt-hero-content,
-body.tt-home-premium .tt-hero-title,
-body.tt-home-premium .tt-hero-subtitle {
-  color: var(--color-text-inverse, #FFFFFF) !important;
-  text-shadow: 0 2px 18px color-mix(in srgb, var(--color-brand-primary-hover, var(--color-brand-primary, #F8AACA)) 54%, transparent);
-}
-
-body.tt-home-premium .tt-hero-content {
-  position: relative;
-  z-index: 2;
-}
-
 body.tt-home-premium .tt-trust-bar,
 body.tt-home-premium .tt-collections-section,
 body.tt-home-premium .tt-look-section,

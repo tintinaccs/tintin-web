@@ -49,7 +49,7 @@ test('el hero conserva marca, productos y enlaces reales sin recortes ni desbord
       });
       assert.ok(g.overflow<=1,JSON.stringify(g));
       assert.equal(g.pieces,1);
-      if(width<768||(height>width&&width<=1120)) assert.ok(Math.abs(g.brand.left+g.brand.width/2-(g.hero.left+g.hero.width/2))<=1);
+      if(height>width&&width<=1120) assert.ok(Math.abs(g.brand.left+g.brand.width/2-(g.hero.left+g.hero.width/2))<=1);
       assert.ok(g.brand.top>=g.hero.top&&g.brand.bottom<=g.hero.bottom);
       assert.ok(Math.abs(g.next.top-g.hero.bottom)<=1);
       assert.ok(g.targets.every(t=>t.height>=44&&t.left>=0&&t.right<=width&&t.bottom<=g.hero.bottom));

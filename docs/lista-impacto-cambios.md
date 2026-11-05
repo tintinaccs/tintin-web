@@ -1,3 +1,7 @@
+## Hero completo en el primer viewport — 2026-11-05
+
+Autoridad hero-bienvenida-inicio.css y marcado index.html. Logo proporcional menor, alto útil descontando navegación, adaptación vertical/horizontal y escalas por ancho/alto. Preserva fuente rosa/CTA corregidos en1331 y barra móvil retirada en1332. Retira CSS anterior del hero en styles.css, ajuste, mantenimiento y paridad; pie/mode edición actuales intactos. Verificar imagen original contain por píxeles, primer viewport320×568/568×320/844×390/1306×630 y hasta1920×1080, foco44px, editor/lineas heredadas, PNG único por request, tipografía, navegación global y generadores canónicos. Sin datos comerciales, permisos, dependencias ni cambios de comprobaciones protegidas.
+
 ## 2026-11-04 — Seguimiento de los controles del hero original
 
 Autoridades index.html y definiciones-contenido.js conservadas. Pruebas de precarga PNG responsive, superficie pintable descontando gutter reservado y fallback editorial se concilian con el hero solicitado; conservan tolerancias, descarga única y concordancia con esquema. Imagen original, marca plana, navegación y comercio conservados. Diagnóstico/caché/protección mediante generadores existentes; CI y publicación exigen recibos del SHA final.

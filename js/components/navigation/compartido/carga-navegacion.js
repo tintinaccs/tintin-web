@@ -95,7 +95,7 @@ function loadHomeMaintenance() {
     const link = document.createElement('link');
     link.id = 'tt-home-maintenance-css';
     link.rel = 'stylesheet';
-    link.href = new URL('/css/pages/home/mantenimiento-inicio.css?v=tintin-20261019-footer-spacing-1', location.href).href;
+    link.href = new URL('/css/pages/home/mantenimiento-inicio.css?v=tintin-hero-fit-20261104-1', location.href).href;
     document.head.appendChild(link);
   }
 

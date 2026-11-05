@@ -18,16 +18,16 @@ function pageStyles(page) {
   const slug = page.replace(/\.html$/, '');
   return { id: `tt-${slug}-css-bundle`, file: `css/generated/${slug}.css`, versionPrefix: `tintin-${slug}` };
 }
-const VERSION = 'tintin-20261031-tablet-breadcrumb-1';
+const VERSION = 'tintin-hero-fit-20261104-1';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
 const TIENDA_VERSION = 'tintin-footer-canonical-20261103-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261101-cls-home-1';
-const LOADER_VERSION = 'tintin-suitcase-20261104-1';
+const LOADER_VERSION = 'tintin-hero-fit-20261104-1';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5';
 const PANEL_COMPAT_VERSION = 'tintin-20261029-cart-motion-2';
-const PUBLIC_SHELL_VERSION = 'tintin-performance-polish-20261104-1';
-const NAV_ENTRY_VERSION = 'tintin-performance-polish-20261104-1';
+const PUBLIC_SHELL_VERSION = 'tintin-hero-fit-20261104-1';
+const NAV_ENTRY_VERSION = 'tintin-hero-fit-20261104-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-suitcase-20261104-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261030-home-history-5';
@@ -169,7 +169,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "id=\"tt-home-maintenance-css\"",
       "css/pages/home/mantenimiento-inicio.css",
-      "tintin-20261019-footer-spacing-1"
+      "tintin-hero-fit-20261104-1"
     ]
   ],
   "catalogo.html": [
