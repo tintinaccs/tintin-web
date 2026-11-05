@@ -209,10 +209,11 @@ html body #tt-loader { width: 100vw !important; width: 100dvw !important; }
 /* Recorte del mismo archivo y viewBox del hero: letras y corazones originales. */
 html body #tt-loader-wordmark {
   display: block;
-  width: var(--tt-loader-brand-width);
+  /* Proporción original de la marca: el texto mide ~71% de la libélula. */
+  width: calc(var(--tt-loader-brand-width) * .76);
   max-width: 100%;
   height: auto;
-  margin-top: clamp(16px, 3vh, 28px);
+  margin-top: calc(var(--tt-loader-brand-width) * .09);
   overflow: hidden;
 }
 @media (prefers-reduced-motion: no-preference) {
