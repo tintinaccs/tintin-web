@@ -216,8 +216,8 @@
     "sha256": "744bed6b05f55e5d3365df1b682925a6615d474d4466cf54b82b275ec8aec72b"
   },
   "css/generated/inicio.css": {
-    "version": "tintin-home-1bc1b32f2f9e71fc",
-    "sha256": "1bc1b32f2f9e71fc3bff6b4095838e22ccdf2b1e0513de615d50c512ebc6632e"
+    "version": "tintin-home-d9be3326b046f5a8",
+    "sha256": "d9be3326b046f5a82faf0d710f0044a3a55ab8cb77c30087c521b7a0691fcbe9"
   },
   "css/generated/login-2.css": {
     "version": "tintin-login-a2ffe8b45e6cfd39",
@@ -284,8 +284,8 @@
     "sha256": "50c47639f428093ef78f5504514bd4483495e3c0e98fac659fcdf9309add4137"
   },
   "css/pages/home/ajuste-inicio.css": {
-    "version": "tintin-brand-polish-20261104-1",
-    "sha256": "b005fc5a859f7eae66a67512a04e9d4bf77e7e2dc99ce58f2b3492368651aceb"
+    "version": "tintin-home-tablet-logo-20261105-1",
+    "sha256": "ac246a65a21dbfec2bc587851f0d0d52e123703a6ef407ea2bd9cbe75df77067"
   },
   "css/pages/home/carrusel-colecciones.css": {
     "version": "tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
@@ -1168,8 +1168,8 @@
     "sha256": "a9d4ec64c57496259d68d83b6f43813c81601e1a5711283f1d3eff39bfc3e736"
   },
   "js/core/auth/insignia-edicion.js": {
-    "version": "tintin-20261022-avatar-inicial-1",
-    "sha256": "f97bc30023cc0e1efb38eb23b9efad96479d539575365333dac10015756206ae"
+    "version": "tintin-20261105-modo-edicion-1",
+    "sha256": "f47119e1503fd2cd403c29d7fabe318407135a30189d39a98ee435d5b9585009"
   },
   "js/core/auth/navegacion-autenticacion.js": {
     "version": "tintin-20261030-home-history-5",
@@ -1303,9 +1303,17 @@
     "version": "tintin-20261102-cancel-stock-1",
     "sha256": "16edb261eb51301dae473e3329c1a27f48bbc17f328c18be044a71a0515d9389"
   },
+  "js/core/store/modo-edicion-sitio.js": {
+    "version": "tintin-suitcase-20261104-1",
+    "sha256": "b11d3de503f424e602948a887347ed55a03c5b1e7fea243ad30515834798364a"
+  },
   "js/core/store/normalizacion-importacion.mjs": {
     "version": "tintin-20261005-import-format-message-1",
     "sha256": "c9aaa9743e6428e163839ffc61f77965de1ea9124ed58f74237f6c15a35c2e3e"
+  },
+  "js/core/store/orden-casillas.js": {
+    "version": "tintin-suitcase-20261104-1",
+    "sha256": "d86eb857f72283961414f579b1c6f96e787c0803013ac0a5f3609c680931e480"
   },
   "js/core/store/perfil-usuario.js": {
     "version": "tintin-20261017-domain-cutover-1",
