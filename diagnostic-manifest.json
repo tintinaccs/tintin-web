@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "93a3486d996d16105255017944b559c34ba0640c3dc9600b66157deb29eceed1",
+  "sourceFingerprint": "c40e9923bd01d55d20e2bb27fb3e5daf11f0b64e37c03527888dd5bc78ddc61f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1817,
     "textFiles": 1667,
-    "totalBytes": 60983303,
+    "totalBytes": 60985501,
     "pages": 19,
     "modules": 1176
   },
@@ -16543,7 +16543,7 @@
         "client"
       ],
       "bytes": 47258,
-      "sha256": "057950fc21099251cde41489bd9b45bc904ef0599b1e2e11e6767fbdfce18da9",
+      "sha256": "8e5aaf2d9ffe6ae8a121817297a44ff0abe9b3c88c360400bd801cd393e79344",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16691,7 +16691,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-0bc23cbf86aed7d8",
+          "raw": "css/generated/inicio.css?v=tintin-home-df406e25673282d9",
           "target": "css/generated/inicio.css",
           "line": 62
         },
@@ -16761,7 +16761,7 @@
           "line": 90
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-hero-fit-20261104-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-client-fades-20261105-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 91
         },
@@ -16771,7 +16771,7 @@
           "line": 92
         },
         {
-          "raw": "css/pages/home/edicion-editorial-inicio.css?v=tintin-editorial-loader-20261105-1",
+          "raw": "css/pages/home/edicion-editorial-inicio.css?v=tintin-client-fades-20261105-1",
           "target": "css/pages/home/edicion-editorial-inicio.css",
           "line": 93
         },
@@ -17668,7 +17668,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-0bc23cbf86aed7d8",
+          "raw": "css/generated/inicio.css?v=tintin-home-df406e25673282d9",
           "target": "css/generated/inicio.css",
           "line": 62,
           "exists": true
@@ -17752,7 +17752,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-hero-fit-20261104-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-client-fades-20261105-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 91,
           "exists": true
@@ -17764,7 +17764,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/edicion-editorial-inicio.css?v=tintin-editorial-loader-20261105-1",
+          "raw": "css/pages/home/edicion-editorial-inicio.css?v=tintin-client-fades-20261105-1",
           "target": "css/pages/home/edicion-editorial-inicio.css",
           "line": 93,
           "exists": true
@@ -61545,8 +61545,8 @@
     },
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
-      "bytes": 34421,
-      "sha256": "53dd44d47dae4f78c7e0f36cb5a1a968214fb270670c047b6cd5389d5554f5a4",
+      "bytes": 35311,
+      "sha256": "b010116fb6419b439604bbe01408159fbce7ac0df97be822db164f1a4bee603c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -63786,8 +63786,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 5853,
-      "sha256": "f0ff9815b326ebdfd63b120abe077f17b5fe5709fd7beea15898efc4ec3f67d6"
+      "bytes": 6328,
+      "sha256": "bc939d6a04f5da53d1c920a41c6bb393da7375c528e94dd5dea655d2e935fcfc"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -63799,7 +63799,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "10a831a603603e3be3c9eb84c9cd63fe555db11e10c94b48093621993c69b37f"
+      "sha256": "2ea0c1cb9fabe46b22eada35fb42adeef756d4b043116421f5d2f4f693df3501"
     },
     {
       "path": "config/public-site.json",
@@ -64176,8 +64176,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 371588,
-      "sha256": "0bc23cbf86aed7d8047ff1b44c0bfcb78d789bf1c68c972a33df21344a0d6a52"
+      "bytes": 371578,
+      "sha256": "df406e25673282d9315364084752be6de8ebee6053748c4b9dcee1a0b6672dba"
     },
     {
       "path": "css/generated/login-2.css",
@@ -64278,8 +64278,8 @@
     {
       "path": "css/pages/home/ajuste-inicio.css",
       "extension": ".css",
-      "bytes": 12611,
-      "sha256": "b516c214b32172e4cb96e6caeb920f2a531d3b86e4011b4eaadbd235f9f26ba5"
+      "bytes": 12606,
+      "sha256": "3b7ae1013afd7ef043835ebcbfa3c0e6f035ac35540882520111dcb6a8173b3b"
     },
     {
       "path": "css/pages/home/carrusel-colecciones.css",
@@ -64290,8 +64290,8 @@
     {
       "path": "css/pages/home/edicion-editorial-inicio.css",
       "extension": ".css",
-      "bytes": 9846,
-      "sha256": "1330c4d49e6765a030df9f2b440e863501b4dadca8422785ad268431180f2241"
+      "bytes": 9841,
+      "sha256": "5fa2ccf27ef43e4b590d985e3202fee4bb43f3da5e3b89a56b7f8c1fae0bd6e0"
     },
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
@@ -64638,8 +64638,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1243153,
-      "sha256": "5ba8e3d1bc23c0f04ccfbd0a6abcde613cd06252e697e35a587294568a22ad89"
+      "bytes": 1243923,
+      "sha256": "761017e6c1756625cee7074d924913824dd46943b262dad25b05641e8664eb0d"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -65634,8 +65634,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 161708,
-      "sha256": "a7ead4679970fbf32cff5ac9522085f167a5bca64917efd47c6c0c20be5118c2"
+      "bytes": 161791,
+      "sha256": "99bfe058fa7aefa4236226dfecf422ee81f18bd39a8fb4abe8c8d8490eec2dee"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -66709,7 +66709,7 @@
       "path": "index.html",
       "extension": ".html",
       "bytes": 47258,
-      "sha256": "057950fc21099251cde41489bd9b45bc904ef0599b1e2e11e6767fbdfce18da9"
+      "sha256": "8e5aaf2d9ffe6ae8a121817297a44ff0abe9b3c88c360400bd801cd393e79344"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -69835,7 +69835,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 81825,
-      "sha256": "0440db75234ce940a5de6cb408c1a5bb90fbd0605ddae2e3e867eb5c423b5d0b"
+      "sha256": "9d72262d6a5f4dcbda67ccad32a95a36ac505f7a2f072c93bf6d1549b688b657"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -73206,8 +73206,8 @@
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
       "extension": ".js",
-      "bytes": 34421,
-      "sha256": "53dd44d47dae4f78c7e0f36cb5a1a968214fb270670c047b6cd5389d5554f5a4"
+      "bytes": 35311,
+      "sha256": "b010116fb6419b439604bbe01408159fbce7ac0df97be822db164f1a4bee603c"
     },
     {
       "path": "tests/ui-ux/site-first-paint.spec.js",

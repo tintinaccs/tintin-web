@@ -1,6 +1,6 @@
 ## Fondos públicos con ambos bordes difuminados — 2026-11-05
 
-Autoridades: sistema-superficies-tintin.css, alternancia-secciones.js, hero-bienvenida-inicio.css y novak-credit-site.css. Secciones del cliente, hero y pie vuelven al mismo lienzo en sus dos extremos; colores y degradados publicados se conservan en una única capa de fondo. Textos, productos, acciones, tamaños y panel administrativo intactos. Verificar primer render/runtime, fondos personalizados, ancho pintable, uniones del pie y primer viewport; PNG original sin cambios. Derivados y URLs por generadores canónicos, sin dependencias ni cambios de protección.
+Autoridades: sistema-superficies-tintin.css, alternancia-secciones.js, hero-bienvenida-inicio.css y novak-credit-site.css; consumidores de primer render en ajuste-inicio.css y edicion-editorial-inicio.css. Secciones del cliente, hero y pie vuelven al mismo lienzo en sus dos extremos; colores y degradados publicados se conservan en una única capa de fondo. Textos, productos, acciones, tamaños y panel administrativo intactos. Verificar primer render/runtime, fondos personalizados, ancho pintable, uniones del pie y primer viewport; PNG original sin cambios. Derivados y URLs por generadores canónicos, sin dependencias ni cambios de protección.
 
 ## Hero completo en el primer viewport — 2026-11-05
 

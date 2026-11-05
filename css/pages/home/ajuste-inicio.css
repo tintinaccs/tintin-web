@@ -192,7 +192,7 @@ body.tt-home-premium .tt-collection-carousel {
 
 body.tt-home-premium #look-section {
   padding-block: clamp(54px, 7vw, 92px);
-  background: var(--tt-section-gradient, none) var(--tt-section-background, #FDECF2) !important;
+  background: var(--tt-section-gradient, var(--tt-section-background, #FDECF2)) !important;
   border-block: 1px solid color-mix(in srgb, var(--color-card-border, #FDECF2) 70%, transparent);
 }
 

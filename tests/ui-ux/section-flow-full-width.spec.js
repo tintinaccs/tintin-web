@@ -377,15 +377,15 @@ const runtime=fs.readFileSync('js/theme/alternancia-secciones.js','utf8');
 const credit=fs.readFileSync('css/components/novak-credit-site.css','utf8');
 const home=restoreStyleSources(removeFixtureScripts(fs.readFileSync('index.html','utf8'),{removeModulePreloads:true}));
 const delta=(a,b)=>Math.max(...a.map((v,i)=>Math.abs(v-b[i])));
-async function mount(page,html){
+async function mount(page,html,run=true){
  await page.route('**/*',route=>{
   const u=new URL(route.request().url());if(u.pathname==='/__fades')return route.fulfill({contentType:'text/html',body:html});
   const file=path.resolve(root,'.'+u.pathname);if(!file.startsWith(root+path.sep)||!fs.existsSync(file))return route.abort();
   const type={'.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.woff':'font/woff','.woff2':'font/woff2'}[path.extname(file)];
   return route.fulfill({path:file,contentType:type});
  });
- await page.goto('/__fades');await page.evaluate(()=>document.fonts.ready);await page.addScriptTag({content:runtime});
- await expect.poll(()=>page.locator('[data-tt-flow-background]').count()).toBeGreaterThan(0);
+ await page.goto('/__fades');await page.evaluate(()=>document.fonts.ready);
+ if(run){await page.addScriptTag({content:runtime});await expect.poll(()=>page.locator('[data-tt-flow-background]').count()).toBeGreaterThan(0);}
  await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
 }
 async function edges(page,selector,colored=true){
@@ -429,6 +429,16 @@ for(const width of [390,1440])test(`fondos sólidos y degradados publicados tien
  expect(await layer.evaluate(e=>getComputedStyle(e).backgroundImage)).toContain('90deg');
  await expect(page.locator('#custom')).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
  await page.locator('#custom button').click();await expect(page.locator('#custom button')).toBeFocused();
+});
+for(const width of [390,1440])test(`fondos difuminados desde el primer render sin JavaScript ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});
+ const editorial=fs.readFileSync('css/pages/home/edicion-editorial-inicio.css','utf8');
+ const adjustment=fs.readFileSync('css/pages/home/ajuste-inicio.css','utf8');
+ await mount(page,`<style>${shared}${editorial}${adjustment}body{margin:0}section{height:220px;position:relative}</style><body class="tt-home-premium"><main><section>Inicio</section><section id="look-section">Contenido</section></main></body>`,false);
+ await expect(page.locator('[data-tt-flow-background]')).toHaveCount(0);
+ const background=await page.locator('#look-section').evaluate(e=>getComputedStyle(e).backgroundImage);
+ expect((background.match(/linear-gradient/g)||[]).length).toBe(2);
+ await edges(page,'#look-section');
 });
 test('el tratamiento nuevo se limita al cliente y conserva el fondo administrativo',async({page})=>{
  await mount(page,`<style>${shared}${credit}.adm-section{height:220px}</style><main class="adm-main"><div class="adm-content"><section class="adm-section">Panel</section></div></main><footer><div id="tt-footer-ending">Firma</div></footer>`);
