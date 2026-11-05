@@ -264,8 +264,15 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   await expect(page.locator('#btn-close-sheet')).toBeFocused();
 });
 
-test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async ({ page }) => {
+test('tablet oculta el logo del header solo en el inicio (el hero ya lo muestra)', async ({ page }) => {
   await openPublicPage(page, { width: 768, height: 1024 });
+  await expect(page.locator('#tt-header-tablet .tt-tablet-logo-link')).toHaveCSS('visibility', 'hidden');
+  await expect(page.locator('#btn-menu-tablet')).toBeVisible();
+  await expect(page.locator('.tt-tablet-actions')).toBeVisible();
+});
+
+test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async ({ page }) => {
+  await openPublicPage(page, { width: 768, height: 1024 }, '/about');
 
   await expect(page.locator('#tt-header-tablet')).toBeVisible();
   await expect(page.locator('#tt-header-desktop-tablet')).toBeHidden();

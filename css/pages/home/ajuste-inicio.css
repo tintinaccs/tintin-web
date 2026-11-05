@@ -297,3 +297,8 @@ body.tt-home-premium .tt-reviews-section {
   body.tt-home-premium .tt-home-random-products-grid { grid-auto-columns: minmax(230px, 78vw); gap: 14px; }
   body.tt-home-premium .tt-home-random-products-actions { margin-top: 18px; }
 }
+
+/* Tablet: el hero ya muestra la libélula, así que el logo centrado del header
+   se oculta solo en el inicio. visibility conserva la rejilla de 3 columnas y
+   deja menú y acciones en su sitio; en las demás páginas el logo se mantiene. */
+.tt-home-premium .tt-tablet-logo-link{visibility:hidden}

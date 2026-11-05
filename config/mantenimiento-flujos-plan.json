@@ -1,61 +1,23 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "253921577209afe5606968a984d6601dd0768b1e",
-  "reason": "Modo edición en la página real para el Super Admin: insignia de edición, nuevo tag de caché y baseline de versionado.",
+  "baseCommit": "b3f7a11bbf6e6cad025e5d08eea40fff51e111de",
+  "reason": "Ocultar logo centrado del header tablet solo en inicio (redundante con el hero)",
   "files": [
     {
-      "path": "about.html",
-      "oldHash": "b512f6b1d5c5a180a767b7bc447a7d2cbe8fecd4ab60e91d51cbc615113b0614",
-      "newHash": "73e2abf915ee17f893ca47b1ab94abeb03ff39d9e24f78247e3721607e7d0fd1"
-    },
-    {
-      "path": "cambios-devoluciones.html",
-      "oldHash": "e881205ff9873a1f2d57dd4040111ada071b5f472ea76609e6e2921ea6dbf88a",
-      "newHash": "4f351f85c92f71ab9d406dfdddaabe1ae39c7e498cb692810a91df4dfdac2884"
-    },
-    {
-      "path": "catalogo.html",
-      "oldHash": "e2008588287ffeb90090b1be65c032e8be456c1e16ccfc257a7f88b3af896a4d",
-      "newHash": "f5c05bba25530bc75b3d497d11a6940a56e23a43f3cd554de41ae618193701b9"
-    },
-    {
-      "path": "collections.html",
-      "oldHash": "4687fabab13f1ce15356ea48e0c42f0c041cd2c687bbd8d455be89810d84aae5",
-      "newHash": "f6de7b65f7902ce0d006051e35a0e41fe8cae43c6a074479cf5a25317677f9ef"
-    },
-    {
-      "path": "contact.html",
-      "oldHash": "235c4ad7ba0352928ab6b2f370ea538c118a5e2a96622c3bc39b0ac975b3c02e",
-      "newHash": "e689e6dc86032dab9c425da7502da59b07ca672bdc1a814f9f5ae3ad467ce962"
-    },
-    {
-      "path": "envios.html",
-      "oldHash": "7a9d1ea1313dbdf8e7347e66c15c63086baea059dc0981fd925aab722924aa0f",
-      "newHash": "b355e1bdd5d3ce4bedbaecd2a8697624c3cbc67be34e64c5007da2659c462828"
+      "path": "css/pages/home/ajuste-inicio.css",
+      "oldHash": "b005fc5a859f7eae66a67512a04e9d4bf77e7e2dc99ce58f2b3492368651aceb",
+      "newHash": "ac246a65a21dbfec2bc587851f0d0d52e123703a6ef407ea2bd9cbe75df77067"
     },
     {
       "path": "index.html",
-      "oldHash": "566e39b4852ba96a8bea619813c698006e51dfb52c84f20fbc1ccc28de094a21",
-      "newHash": "f7f7a92f40f6d661e77d1f75bb4f71bb7d54580d138c310b9ae0ab1ba8885337"
-    },
-    {
-      "path": "js/core/auth/insignia-edicion.js",
-      "oldHash": "f97bc30023cc0e1efb38eb23b9efad96479d539575365333dac10015756206ae",
-      "newHash": "f47119e1503fd2cd403c29d7fabe318407135a30189d39a98ee435d5b9585009"
-    },
-    {
-      "path": "preguntas-frecuentes.html",
-      "oldHash": "efcfc3d74fae9325b3f44cda709dc0f8d3bd8c835d37ab3e01c2f6d72212bff5",
-      "newHash": "720f0fcaf250235684684d80cd4b7d8dbdd8db84445ba7916de75aaa665d2981"
+      "oldHash": "f7f7a92f40f6d661e77d1f75bb4f71bb7d54580d138c310b9ae0ab1ba8885337",
+      "newHash": "297bc410bc307637a8d51ec2c977bc6b0c3e1f9a940ad0015750d9ae65076e73"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "b9a598db0171779e21d4ac7ab2634f4b533eca44e065f42f7f33293e4549d6dc",
-      "newHash": "80b8aad00a2256fb9513d79d49645a053ee31ecb02a0fe540f9cfb94a69321f9"
+      "oldHash": "80b8aad00a2256fb9513d79d49645a053ee31ecb02a0fe540f9cfb94a69321f9",
+      "newHash": "8cb581c4bb24dd268f52579f5d11f517ee2a84ee1c2938fa455f642e620fa2c7"
     }
   ],
-  "affectedRecords": [
-    "productos",
-    "super-panel__productos__34"
-  ]
+  "affectedRecords": []
 }
