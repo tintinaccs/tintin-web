@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2097d8bced913ddaba0e4034eb642f299151748de8f2e4a4c70b70649d487c47",
+  "sourceFingerprint": "45f3adeb058cb0fa1b01f749076f2c03d8cc43560a0fba4a36b0519e59017abd",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1805,
     "textFiles": 1657,
-    "totalBytes": 57118856,
+    "totalBytes": 57122865,
     "pages": 19,
     "modules": 1167
   },
@@ -16388,8 +16388,8 @@
         "guest",
         "client"
       ],
-      "bytes": 47069,
-      "sha256": "566e39b4852ba96a8bea619813c698006e51dfb52c84f20fbc1ccc28de094a21",
+      "bytes": 47074,
+      "sha256": "bd44319059c177d61acc40c8a5fc549e4d246b46f5f7f33bd0a919e54bd9e3c4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16537,7 +16537,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-1bc1b32f2f9e71fc",
+          "raw": "css/generated/inicio.css?v=tintin-home-13e8b9fe9321fbd3",
           "target": "css/generated/inicio.css",
           "line": 61
         },
@@ -16602,7 +16602,7 @@
           "line": 79
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-title-20261104-3",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-responsive-20261105-1",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 89
         },
@@ -17514,7 +17514,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-1bc1b32f2f9e71fc",
+          "raw": "css/generated/inicio.css?v=tintin-home-13e8b9fe9321fbd3",
           "target": "css/generated/inicio.css",
           "line": 61,
           "exists": true
@@ -17592,7 +17592,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-title-20261104-3",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-responsive-20261105-1",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 89,
           "exists": true
@@ -59851,8 +59851,8 @@
     },
     {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
-      "bytes": 8192,
-      "sha256": "452fddf2037780381f850c5b9a37897507aa73ccbe3e495fca989d302f532cd8",
+      "bytes": 8232,
+      "sha256": "fd6f3ecde8332c8e5c10720a22533c722d58040ca05bb3dca81a7d3f0a6e20de",
       "syntax": {
         "ok": true,
         "error": ""
@@ -63616,8 +63616,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 373745,
-      "sha256": "1bc1b32f2f9e71fc3bff6b4095838e22ccdf2b1e0513de615d50c512ebc6632e"
+      "bytes": 375696,
+      "sha256": "13e8b9fe9321fbd386d977d996d910979a72c703f2d4f5e76aab89c5f5348652"
     },
     {
       "path": "css/generated/login-2.css",
@@ -63736,8 +63736,8 @@
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
       "extension": ".css",
-      "bytes": 10242,
-      "sha256": "ddf675338118e075d5b9d7119ee1fc7a1a5bc9a384eb9f20375d31e7af567436"
+      "bytes": 12250,
+      "sha256": "76de82362a035aab8afa60c35e0d5565a9bd2d5e5a869c9c881896a1d09b50a5"
     },
     {
       "path": "css/pages/home/mantenimiento-inicio.css",
@@ -66148,8 +66148,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 47069,
-      "sha256": "566e39b4852ba96a8bea619813c698006e51dfb52c84f20fbc1ccc28de094a21"
+      "bytes": 47074,
+      "sha256": "bd44319059c177d61acc40c8a5fc549e4d246b46f5f7f33bd0a919e54bd9e3c4"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -69250,8 +69250,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 81240,
-      "sha256": "b9a598db0171779e21d4ac7ab2634f4b533eca44e065f42f7f33293e4549d6dc"
+      "bytes": 81245,
+      "sha256": "66a28a89dcf528d0e653a79a489715c97946b2972d3247ec37145e8c0b584640"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -72346,8 +72346,8 @@
     {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
       "extension": ".js",
-      "bytes": 8192,
-      "sha256": "452fddf2037780381f850c5b9a37897507aa73ccbe3e495fca989d302f532cd8"
+      "bytes": 8232,
+      "sha256": "fd6f3ecde8332c8e5c10720a22533c722d58040ca05bb3dca81a7d3f0a6e20de"
     },
     {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
