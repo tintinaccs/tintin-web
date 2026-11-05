@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c38cb78da8a6af345ca7d58688296e26c120247ae1d24522d1b0a535df94c62f",
+  "sourceFingerprint": "a9afb9c568479ceb95ab3b190c1815d263fed327c7b7b1b9223666e5471e951e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1811,
     "textFiles": 1663,
-    "totalBytes": 57080882,
+    "totalBytes": 57083785,
     "pages": 19,
     "modules": 1173
   },
@@ -2983,8 +2983,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 192647,
-      "sha256": "78313ce5a277d735303ee14d694231bafc45b606a1c73bc5b812e5fbd8ee85a7",
+      "bytes": 194211,
+      "sha256": "8dfabdb505ba9fdc9936c19153e0bff75d8c37bb6095d8998e9f34dd7c695f1a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3005,7 +3005,7 @@
           "error": ""
         }
       ],
-      "ids": 575,
+      "ids": 576,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1",
@@ -3035,97 +3035,97 @@
         {
           "raw": "js/admin/operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2",
           "target": "js/admin/operaciones/sistema-operaciones-admin.js",
-          "line": 2108
+          "line": 2126
         },
         {
           "raw": "js/admin/content/control-bienvenida-admin.js?v=tintin-20261030-home-history-5",
           "target": "js/admin/content/control-bienvenida-admin.js",
-          "line": 2109
+          "line": 2127
         },
         {
           "raw": "js/admin/admin-app.js?v=tintin-suitcase-20261104-1",
           "target": "js/admin/admin-app.js",
-          "line": 2110
+          "line": 2128
         },
         {
           "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-14",
           "target": "js/admin/maestro/app-movil-admin.js",
-          "line": 2111
+          "line": 2129
         },
         {
           "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20261101-app-movil-1",
           "target": "js/admin/sidebar-expandible-admin.js",
-          "line": 2112
+          "line": 2130
         },
         {
           "raw": "js/admin/importacion-admin.js?v=tintin-20261102-cancel-stock-1",
           "target": "js/admin/importacion-admin.js",
-          "line": 2113
+          "line": 2131
         },
         {
           "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
-          "line": 2114
+          "line": 2132
         },
         {
           "raw": "js/admin/comercio-local-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
           "target": "js/admin/comercio-local-admin.js",
-          "line": 2115
+          "line": 2133
         },
         {
           "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261103-acceptance-1",
           "target": "js/admin/shopify-commerce-admin.js",
-          "line": 2116
+          "line": 2134
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261023-tema-unico-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2326
+          "line": 2344
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2327
+          "line": 2345
         },
         {
           "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20261030-notificaciones-explicitas-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
-          "line": 2328
+          "line": 2346
         },
         {
           "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/admin/notifications/notificaciones-push.js",
-          "line": 2329
+          "line": 2347
         },
         {
           "raw": "js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20261030-push-recovery-1",
           "target": "js/admin/notifications/notificaciones-push-maestro.js",
-          "line": 2330
+          "line": 2348
         },
         {
           "raw": "js/admin/notifications/enlace-pedido-push.js?v=tintin-20261020-push-return-1",
           "target": "js/admin/notifications/enlace-pedido-push.js",
-          "line": 2331
+          "line": 2349
         },
         {
           "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
-          "line": 2332
+          "line": 2350
         },
         {
           "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-3",
           "target": "js/admin/maestro/panel-maestro.js",
-          "line": 2333
+          "line": 2351
         },
         {
           "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261101-admin-visual-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
-          "line": 2334
+          "line": 2352
         },
         {
           "raw": "js/admin/maestro/buscador-modulos-admin.js?v=tintin-20261021-identidad-1-editor-search-20261028-2",
           "target": "js/admin/maestro/buscador-modulos-admin.js",
-          "line": 2335
+          "line": 2353
         }
       ],
       "styles": [
@@ -3318,7 +3318,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 2100
+          "line": 2118
         }
       ],
       "links": [
@@ -3383,6 +3383,106 @@
           "line": 931
         },
         {
+          "raw": "/?ttEdit=1",
+          "target": null,
+          "text": "Inicio",
+          "id": "",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 1877
+        },
+        {
+          "raw": "/catalogo?ttEdit=1",
+          "target": "catalogo.html",
+          "text": "Catálogo",
+          "id": "",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 1878
+        },
+        {
+          "raw": "/collections?ttEdit=1",
+          "target": "collections.html",
+          "text": "Colecciones",
+          "id": "",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 1879
+        },
+        {
+          "raw": "/about?ttEdit=1",
+          "target": "about.html",
+          "text": "Nosotros",
+          "id": "",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 1880
+        },
+        {
+          "raw": "/contact?ttEdit=1",
+          "target": "contact.html",
+          "text": "Contacto",
+          "id": "",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 1881
+        },
+        {
+          "raw": "/envios?ttEdit=1",
+          "target": "envios.html",
+          "text": "Envíos",
+          "id": "",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 1882
+        },
+        {
+          "raw": "/preguntas-frecuentes?ttEdit=1",
+          "target": "preguntas-frecuentes.html",
+          "text": "Preguntas frecuentes",
+          "id": "",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 1883
+        },
+        {
+          "raw": "/cambios-devoluciones?ttEdit=1",
+          "target": "cambios-devoluciones.html",
+          "text": "Cambios y devoluciones",
+          "id": "",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 1884
+        },
+        {
+          "raw": "/terminos?ttEdit=1",
+          "target": "terminos.html",
+          "text": "Términos",
+          "id": "",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 1885
+        },
+        {
+          "raw": "/privacidad?ttEdit=1",
+          "target": "privacidad.html",
+          "text": "Privacidad",
+          "id": "",
+          "ariaLabel": "",
+          "title": "",
+          "imageAlt": "",
+          "line": 1886
+        },
+        {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
           "target": null,
           "text": "Desarrollado por",
@@ -3390,7 +3490,7 @@
           "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 2097
+          "line": 2115
         }
       ],
       "references": [
@@ -3427,115 +3527,115 @@
         {
           "raw": "js/admin/operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2",
           "target": "js/admin/operaciones/sistema-operaciones-admin.js",
-          "line": 2108,
+          "line": 2126,
           "exists": true
         },
         {
           "raw": "js/admin/content/control-bienvenida-admin.js?v=tintin-20261030-home-history-5",
           "target": "js/admin/content/control-bienvenida-admin.js",
-          "line": 2109,
+          "line": 2127,
           "exists": true
         },
         {
           "raw": "js/admin/admin-app.js?v=tintin-suitcase-20261104-1",
           "target": "js/admin/admin-app.js",
-          "line": 2110,
+          "line": 2128,
           "exists": true
         },
         {
           "raw": "js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-14",
           "target": "js/admin/maestro/app-movil-admin.js",
-          "line": 2111,
+          "line": 2129,
           "exists": true
         },
         {
           "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20261101-app-movil-1",
           "target": "js/admin/sidebar-expandible-admin.js",
-          "line": 2112,
+          "line": 2130,
           "exists": true
         },
         {
           "raw": "js/admin/importacion-admin.js?v=tintin-20261102-cancel-stock-1",
           "target": "js/admin/importacion-admin.js",
-          "line": 2113,
+          "line": 2131,
           "exists": true
         },
         {
           "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
-          "line": 2114,
+          "line": 2132,
           "exists": true
         },
         {
           "raw": "js/admin/comercio-local-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2",
           "target": "js/admin/comercio-local-admin.js",
-          "line": 2115,
+          "line": 2133,
           "exists": true
         },
         {
           "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261103-acceptance-1",
           "target": "js/admin/shopify-commerce-admin.js",
-          "line": 2116,
+          "line": 2134,
           "exists": true
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261023-tema-unico-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2326,
+          "line": 2344,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2327,
+          "line": 2345,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20261030-notificaciones-explicitas-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
-          "line": 2328,
+          "line": 2346,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/admin/notifications/notificaciones-push.js",
-          "line": 2329,
+          "line": 2347,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20261030-push-recovery-1",
           "target": "js/admin/notifications/notificaciones-push-maestro.js",
-          "line": 2330,
+          "line": 2348,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/enlace-pedido-push.js?v=tintin-20261020-push-return-1",
           "target": "js/admin/notifications/enlace-pedido-push.js",
-          "line": 2331,
+          "line": 2349,
           "exists": true
         },
         {
           "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
-          "line": 2332,
+          "line": 2350,
           "exists": true
         },
         {
           "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-3",
           "target": "js/admin/maestro/panel-maestro.js",
-          "line": 2333,
+          "line": 2351,
           "exists": true
         },
         {
           "raw": "js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261101-admin-visual-1",
           "target": "js/admin/maestro/espacio-modulos-admin.js",
-          "line": 2334,
+          "line": 2352,
           "exists": true
         },
         {
           "raw": "js/admin/maestro/buscador-modulos-admin.js?v=tintin-20261021-identidad-1-editor-search-20261028-2",
           "target": "js/admin/maestro/buscador-modulos-admin.js",
-          "line": 2335,
+          "line": 2353,
           "exists": true
         },
         {
@@ -3751,7 +3851,7 @@
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 2100,
+          "line": 2118,
           "exists": true
         },
         {
@@ -3770,6 +3870,60 @@
           "raw": "/checkout",
           "target": "checkout.html",
           "line": 260,
+          "exists": true
+        },
+        {
+          "raw": "/catalogo?ttEdit=1",
+          "target": "catalogo.html",
+          "line": 1878,
+          "exists": true
+        },
+        {
+          "raw": "/collections?ttEdit=1",
+          "target": "collections.html",
+          "line": 1879,
+          "exists": true
+        },
+        {
+          "raw": "/about?ttEdit=1",
+          "target": "about.html",
+          "line": 1880,
+          "exists": true
+        },
+        {
+          "raw": "/contact?ttEdit=1",
+          "target": "contact.html",
+          "line": 1881,
+          "exists": true
+        },
+        {
+          "raw": "/envios?ttEdit=1",
+          "target": "envios.html",
+          "line": 1882,
+          "exists": true
+        },
+        {
+          "raw": "/preguntas-frecuentes?ttEdit=1",
+          "target": "preguntas-frecuentes.html",
+          "line": 1883,
+          "exists": true
+        },
+        {
+          "raw": "/cambios-devoluciones?ttEdit=1",
+          "target": "cambios-devoluciones.html",
+          "line": 1884,
+          "exists": true
+        },
+        {
+          "raw": "/terminos?ttEdit=1",
+          "target": "terminos.html",
+          "line": 1885,
+          "exists": true
+        },
+        {
+          "raw": "/privacidad?ttEdit=1",
+          "target": "privacidad.html",
+          "line": 1886,
           "exists": true
         }
       ],
@@ -3838,7 +3992,7 @@
         {
           "id": "csv-preview-table",
           "classes": "adm-table",
-          "line": 2028
+          "line": 2046
         }
       ],
       "modals": [
@@ -3852,37 +4006,37 @@
           "id": "unsaved-modal",
           "role": "dialog",
           "classes": "",
-          "line": 2122
+          "line": 2140
         },
         {
           "id": "order-edit-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2138
+          "line": 2156
         },
         {
           "id": "client-ficha-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2240
+          "line": 2258
         },
         {
           "id": "tpl-edit-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2253
+          "line": 2271
         },
         {
           "id": "tpl-preview-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2299
+          "line": 2317
         },
         {
           "id": "promo-confirm-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2312
+          "line": 2330
         }
       ],
       "tabs": [
@@ -4116,22 +4270,22 @@
         {
           "id": "apar-panel-colores",
           "classes": "correos-panel",
-          "line": 1924
+          "line": 1942
         },
         {
           "id": "section-importar",
           "classes": "adm-section",
-          "line": 1969
+          "line": 1987
         },
         {
           "id": "section-resenas",
           "classes": "adm-section",
-          "line": 2074
+          "line": 2092
         },
         {
           "id": "section-me-gusta",
           "classes": "adm-section",
-          "line": 2086
+          "line": 2104
         }
       ],
       "buttons": [
@@ -6936,7 +7090,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1881
+          "line": 1899
         },
         {
           "id": "visual-redo",
@@ -6952,7 +7106,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1882
+          "line": 1900
         },
         {
           "id": "visual-save",
@@ -6968,7 +7122,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1883
+          "line": 1901
         },
         {
           "id": "visual-cancel",
@@ -6984,7 +7138,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1884
+          "line": 1902
         },
         {
           "id": "visual-publish",
@@ -7000,7 +7154,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1885
+          "line": 1903
         },
         {
           "id": "visual-add",
@@ -7016,7 +7170,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1895
+          "line": 1913
         },
         {
           "id": "",
@@ -7034,7 +7188,7 @@
             "data-visual-device": "mobile"
           },
           "hasSourceReference": true,
-          "line": 1907
+          "line": 1925
         },
         {
           "id": "",
@@ -7052,7 +7206,7 @@
             "data-visual-device": "tablet"
           },
           "hasSourceReference": true,
-          "line": 1908
+          "line": 1926
         },
         {
           "id": "",
@@ -7070,7 +7224,7 @@
             "data-visual-device": "desktop"
           },
           "hasSourceReference": true,
-          "line": 1909
+          "line": 1927
         },
         {
           "id": "btn-exportar",
@@ -7085,7 +7239,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1976
+          "line": 1994
         },
         {
           "id": "btn-exportar-pedidos",
@@ -7100,7 +7254,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1987
+          "line": 2005
         },
         {
           "id": "btn-exportar-usuarios",
@@ -7115,7 +7269,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1998
+          "line": 2016
         },
         {
           "id": "btn-csv-limpiar",
@@ -7131,7 +7285,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2022
+          "line": 2040
         },
         {
           "id": "btn-csv-importar-seleccionados",
@@ -7146,7 +7300,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2023
+          "line": 2041
         },
         {
           "id": "btn-csv-importar",
@@ -7161,7 +7315,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2024
+          "line": 2042
         },
         {
           "id": "btn-importar",
@@ -7176,7 +7330,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2066
+          "line": 2084
         },
         {
           "id": "btn-importar-sample",
@@ -7191,7 +7345,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2067
+          "line": 2085
         },
         {
           "id": "save-review-quick-replies",
@@ -7206,7 +7360,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2082
+          "line": 2100
         },
         {
           "id": "unsaved-modal-save",
@@ -7221,7 +7375,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2128
+          "line": 2146
         },
         {
           "id": "unsaved-modal-discard",
@@ -7236,7 +7390,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2129
+          "line": 2147
         },
         {
           "id": "unsaved-modal-stay",
@@ -7251,7 +7405,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2130
+          "line": 2148
         },
         {
           "id": "",
@@ -7265,7 +7419,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2142
+          "line": 2160
         },
         {
           "id": "",
@@ -7279,7 +7433,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2231
+          "line": 2249
         },
         {
           "id": "oe-save-btn",
@@ -7294,7 +7448,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2232
+          "line": 2250
         },
         {
           "id": "",
@@ -7308,7 +7462,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2244
+          "line": 2262
         },
         {
           "id": "",
@@ -7322,7 +7476,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2257
+          "line": 2275
         },
         {
           "id": "tpl-edit-restore-btn",
@@ -7338,7 +7492,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2288
+          "line": 2306
         },
         {
           "id": "tpl-edit-preview-btn",
@@ -7354,7 +7508,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2289
+          "line": 2307
         },
         {
           "id": "",
@@ -7368,7 +7522,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2292
+          "line": 2310
         },
         {
           "id": "tpl-edit-save-btn",
@@ -7383,7 +7537,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2293
+          "line": 2311
         },
         {
           "id": "",
@@ -7397,7 +7551,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2303
+          "line": 2321
         },
         {
           "id": "",
@@ -7411,7 +7565,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2320
+          "line": 2338
         },
         {
           "id": "promo-confirm-send-btn",
@@ -7426,7 +7580,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2321
+          "line": 2339
         }
       ],
       "controls": [
@@ -8849,7 +9003,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1892,
+          "line": 1910,
           "labeled": true
         },
         {
@@ -8858,7 +9012,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Tipo de bloque nuevo",
-          "line": 1894,
+          "line": 1912,
           "labeled": true
         },
         {
@@ -8867,7 +9021,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1939,
+          "line": 1957,
           "labeled": true
         },
         {
@@ -8876,7 +9030,7 @@
           "name": "",
           "type": "file",
           "ariaLabel": "",
-          "line": 2015,
+          "line": 2033,
           "labeled": true
         },
         {
@@ -8885,7 +9039,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 2031,
+          "line": 2049,
           "labeled": true
         },
         {
@@ -8894,7 +9048,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "JSON a importar",
-          "line": 2064,
+          "line": 2082,
           "labeled": true
         },
         {
@@ -8903,7 +9057,7 @@
           "name": "",
           "type": "search",
           "ariaLabel": "Buscar reseñas",
-          "line": 2076,
+          "line": 2094,
           "labeled": true
         },
         {
@@ -8912,7 +9066,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Filtrar reseñas",
-          "line": 2077,
+          "line": 2095,
           "labeled": true
         },
         {
@@ -8921,7 +9075,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Respuestas rápidas",
-          "line": 2082,
+          "line": 2100,
           "labeled": true
         },
         {
@@ -8930,7 +9084,7 @@
           "name": "",
           "type": "search",
           "ariaLabel": "Buscar favoritos",
-          "line": 2087,
+          "line": 2105,
           "labeled": true
         },
         {
@@ -8939,7 +9093,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 2145,
+          "line": 2163,
           "labeled": true
         },
         {
@@ -8948,7 +9102,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2149,
+          "line": 2167,
           "labeled": true
         },
         {
@@ -8957,7 +9111,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2153,
+          "line": 2171,
           "labeled": true
         },
         {
@@ -8966,7 +9120,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 2157,
+          "line": 2175,
           "labeled": true
         },
         {
@@ -8975,7 +9129,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2162,
+          "line": 2180,
           "labeled": true
         },
         {
@@ -8984,7 +9138,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2166,
+          "line": 2184,
           "labeled": true
         },
         {
@@ -8993,7 +9147,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2174,
+          "line": 2192,
           "labeled": true
         },
         {
@@ -9002,7 +9156,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2178,
+          "line": 2196,
           "labeled": true
         },
         {
@@ -9011,7 +9165,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2187,
+          "line": 2205,
           "labeled": true
         },
         {
@@ -9020,7 +9174,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2194,
+          "line": 2212,
           "labeled": true
         },
         {
@@ -9029,7 +9183,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2204,
+          "line": 2222,
           "labeled": true
         },
         {
@@ -9038,7 +9192,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2217,
+          "line": 2235,
           "labeled": true
         },
         {
@@ -9047,7 +9201,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 2260,
+          "line": 2278,
           "labeled": true
         },
         {
@@ -9056,7 +9210,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2263,
+          "line": 2281,
           "labeled": true
         },
         {
@@ -9065,7 +9219,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2265,
+          "line": 2283,
           "labeled": true
         },
         {
@@ -9074,7 +9228,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2266,
+          "line": 2284,
           "labeled": true
         },
         {
@@ -9083,7 +9237,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2267,
+          "line": 2285,
           "labeled": true
         },
         {
@@ -9092,7 +9246,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2268,
+          "line": 2286,
           "labeled": true
         },
         {
@@ -9101,7 +9255,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2269,
+          "line": 2287,
           "labeled": true
         },
         {
@@ -9110,7 +9264,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2270,
+          "line": 2288,
           "labeled": true
         },
         {
@@ -9119,7 +9273,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2272,
+          "line": 2290,
           "labeled": true
         },
         {
@@ -9128,7 +9282,7 @@
           "name": "",
           "type": "url",
           "ariaLabel": "",
-          "line": 2273,
+          "line": 2291,
           "labeled": true
         },
         {
@@ -9137,7 +9291,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2275,
+          "line": 2293,
           "labeled": true
         },
         {
@@ -9146,7 +9300,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2276,
+          "line": 2294,
           "labeled": true
         },
         {
@@ -9155,7 +9309,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 2278,
+          "line": 2296,
           "labeled": true
         },
         {
@@ -9164,7 +9318,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2318,
+          "line": 2336,
           "labeled": true
         }
       ]
@@ -62306,8 +62460,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 192647,
-      "sha256": "78313ce5a277d735303ee14d694231bafc45b606a1c73bc5b812e5fbd8ee85a7"
+      "bytes": 194211,
+      "sha256": "8dfabdb505ba9fdc9936c19153e0bff75d8c37bb6095d8998e9f34dd7c695f1a"
     },
     {
       "path": "apple-touch-icon.png",
@@ -63453,7 +63607,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 7930,
-      "sha256": "07066580bf170339cf91115ef00d5320e4c4d7fd43d33ef23b117be53de23680"
+      "sha256": "e039febdf8ec19fad2bfc83553549c8088624c2b915cdbbc962e333faa790ef2"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -63465,7 +63619,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "12925a2782cad7d421d0c0a6348909b26719e4894ca6e7f48927bf546217e289"
+      "sha256": "4c78d4a4321d6750d625144d334bfc4a4febc55204b881bd0730a363619c5741"
     },
     {
       "path": "config/public-site.json",
@@ -64304,8 +64458,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1228148,
-      "sha256": "286063039f4a02424958d6b6d9bb7a34db8acac5231b4b178bf017c3443202c1"
+      "bytes": 1229487,
+      "sha256": "3657d13ef7cd036962c26795a6f16ce78bab5b509a43c4ac75e6f7b6db9b9d2b"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",

@@ -1,3 +1,7 @@
+## Reconciliación con Fase3 del editor — 2026-11-05 — Codex /root
+
+PR1340 se fusionó como201b15b8 mientras CI1341 de06a0497f seguía pendiente. Se incorpora main mediante merge normal; admin.html mantiene íntegro su lanzador nuevo. Conflictos solo en política/plan y manifiestos generados: se parte de sus fuentes canónicas de main, se recalculan huellas y derivados; no se retira protección ni se fuerza el historial. Plan toma201b15b8 como base. La suite local completa, sin fallos hasta navegación, se interrumpe al cambiar la base; no se acredita PASS global. Revalidación/CI nuevo SHA/merge/producción PENDING.
+
 ## CI1341: estabilizar la medida después de redimensionar — 2026-11-05 — Codex /root
 
 CI42013156064/1 de499c381b falló en browser127199156293: home-layout-browser medía brand fuera del hero. Otros jobs administrativos/calidad se cancelaron al ser reemplazados por nuevo SHA; CodeQL42013150194/1 SUCCESS. Logs leídos, sin atribuir éxito global. Nueva ejecución d210a861: CI42014015181/1 y CodeQL42014012374/1 (este último SUCCESS) no incluyen aún la corrección del harness.
@@ -6362,3 +6366,9 @@ CI post-merge anterior como verde; requiere validar el nuevo candidato en CI.
 - `product` y `404` son solo estructurales (sin campos de texto en el esquema), por eso no llevan la insignia.
 - Probado localmente: `tests/visual-builder/modo-edicion-sitio.spec.js` 12/12 (abre el modo en 9 páginas con API simulada), `ci:preflight`, protección de flujos y versionado de caché. Sin probar: guardado real en producción.
 - Pendiente: Fase 3 (retirar el gestor antiguo), fotos fijas del HTML, campos de enlace.
+
+## Modo edición — Fase 3 (lanzador Super Admin)
+- Implementado: tarjeta "Editar en la página real" en `admin.html` (Apariencia > Diseño) con enlaces `?ttEdit=1` a las páginas públicas editables.
+- Probado localmente: audit:content-appearance, audit:appearance-unified, audit:phase6, audit:cache-versioning, protección de flujos, admin-readiness-gate (8/8), modo-edicion-sitio.spec.js (12/12).
+- No eliminado: el gestor de contenido sigue activo para roles delegados (`contenido`); 6 auditorías y 1 test dependen de él. Eliminarlo requiere decisión de producto.
+- Pendiente: guardado/subida real en producción sin verificar; campos href no editables inline; fotos fijas del HTML no reemplazables.
