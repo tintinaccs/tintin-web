@@ -6416,3 +6416,9 @@ CI post-merge anterior como verde; requiere validar el nuevo candidato en CI.
 ## PR #1342 — presupuesto de Nosotros tras el cargador editorial — 2026-11-05 — Claude Code
 
 Causa del rojo en CI 42017447387/1 (SHA 7cfbcc9, job D — Interfaz, SEO y rendimiento): about.html transfirió 2077 KB first-party (límite 2000) porque el cargador reutiliza tintin-white.webp (177 KB) del hero en todas las páginas; el piso previo de Nosotros era ~1877 KB. Cambio: lightweightTransferKB 2000→2150 en tests/performance/_helpers.js, documentado. Rama actualizada con main 15605ff (Instagram #1335) y derivados regenerados (cache-versioning, diagnóstico, plan de mantenimiento). PASS_LOCAL: ci:preflight, audit:cache-versioning, protección de flujos, perf de about.html. Pendiente: CI del SHA final.
+
+## PR #1345 — Banco Familiar en checkout — 2026-11-05 — Claude Code
+
+- Cambio: la etiqueta "ueno bank" pasa a "Banco Familiar" en `checkout.html`, `js/orders/nucleo-metodos-pago.js` (incluye normalización de métodos guardados con etiqueta ueno), `admin.html` y `js/admin/settings/metodos-pago-admin.js`. El alias/titular (`Alias 0971300923 — Bárbara Ruiz`) vive en Firestore (Admin → Configuración → Métodos de pago) y NO está en el repo: debe cargarse a mano. `0981299331` es el WhatsApp de la tienda y no se tocó.
+- Cascada requerida: hash CSP (`build:csp`), etiqueta de caché `tintin-20261105-banco-familiar-1` (+ constantes del generador `sync:public-shell`), `cache-versioning:write`, `build:diagnostics`.
+- Probado localmente: `ci:preflight` exit 0, `tests/payments/*.test.mjs` 19/19. Sin probar: producción, flujo real de pago, CI en el SHA final (pendiente de verificar tras el push).

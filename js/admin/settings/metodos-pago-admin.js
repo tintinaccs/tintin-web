@@ -17,7 +17,7 @@ import {
   normalizePaymentMethod,
   paymentCatalogMap,
   paymentMethodId,
-} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261102-pickup-cash-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261105-banco-familiar-1';
 
 const ADMIN_PATH = /(^|\/)admin(?:\.html)?$/i;
 const SETTINGS_REF = doc(db, 'settings', 'general');
