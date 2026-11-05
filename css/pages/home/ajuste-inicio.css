@@ -8,24 +8,6 @@ html.tt-initializing body.tt-home-premium{background:#FFFFFF!important}
 .tt-home-premium{display:flow-root;overflow-x:clip;background:#FFFFFF!important;min-height:100svh}
 .tt-home-premium .container{width:min(100%,1280px)}
 
-/* El header de desktop/tablet es fixed y, por eso, queda fuera del flujo:
-   sin este margen, el hero arranca en y=0 y el header queda superpuesto
-   sobre su parte superior. margin-top reserva ese espacio empujando TODO
-   el hero hacia abajo (imagen, picture, media, contenido, botones) sin
-   tocar su height/min-height — el hero conserva el alto completo que ya
-   tenía (100svh/min-height de arriba) y el total pasa a ser altura del
-   header + altura completa del hero, nunca menos.
-   769px porque ahí es donde .tt-header deja de tener display:none (ver
-   styles.css) — es el mismo corte que usan .tt-breadcrumb y .login-page
-   para el mismo problema. --header-h es la única fuente de verdad (se
-   define y redefine únicamente en styles.css); mobile no recibe ningún
-   margen porque no usa este header. */
-@media (min-width: 769px) {
-  body.tt-home-premium .tt-hero {
-    margin-top: var(--header-h);
-  }
-}
-
 /* En tableta el header fijo ya queda reservado por el margen del hero.
    No sumar también el padding global del body: dejaba una franja vacía
    entre el header y el banner. */

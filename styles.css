@@ -1089,281 +1089,6 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 
 /* ═══════════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════════ */
-/* ════════════════════════════════════════════════
-   HERO BANNER — img-based, Shopify-style
-   Image loads instantly from local WebP, no JS
-   ════════════════════════════════════════════════ */
-.tt-hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  height: 100vh;
-  height: 100svh;
-  min-height: 680px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: left;
-  background: #1a0610;
-  /* El primer gesto real puede empezar sobre el fondo del hero — nunca debe
-     competir con el scroll vertical nativo. */
-  touch-action: pan-y;
-}
-
-/* ── Media container: fills hero, sits behind everything ── */
-/* Decorativo, nunca interactivo: pointer-events:none saca esta capa por
-   completo del hit-testing, así el primer toque siempre llega directo al
-   scroll nativo del documento en vez de competir con el gesto nativo de
-   "arrastrar imagen" / callout de iOS. */
-.tt-hero-media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  background: #1a0610;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-/* Oculta el <img> del hero hasta que gestion-imagenes.js confirme la URL real
-   de Cloudinary Y esa foto haya terminado de descargarse — así la sección
-   nunca queda revelada con el fondo oscuro a la vista mientras la imagen
-   todavía carga. Queda el fondo oscuro de .tt-hero-media como transición,
-   nunca un hueco en blanco. Un script de seguridad en el HTML quita esta
-   clase igual si JS/Firestore tarda demasiado. */
-.tt-hero-media.tt-hero-pending .tt-hero-img {
-  visibility: hidden;
-}
-
-.tt-hero-media picture {
-  display: block;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.tt-hero-img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  /* No transition on first paint — avoids flash */
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-touch-callout: none;
-}
-
-
-/* ── Text content sits above overlay ── */
-.tt-hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 860px;
-  padding: 0 32px;
-  margin-top: 0;
-}
-
-@media (min-width: 1025px) {
-  .tt-hero-content {
-    max-width: 50%;
-  }
-}
-
-.tt-hero-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family:Montserrat;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--text);
-  margin-bottom: 14px;
-}
-
-.tt-hero-eyebrow::before {
-  content: '';
-  display: block;
-  width: 28px;
-  height: 1.5px;
-  background: currentColor;
-  flex-shrink: 0;
-  opacity: 0.7;
-}
-
-.tt-hero-title {
-  font-family:Montserrat;
-  font-size: clamp(2.2rem, 4vw, 3.5rem);
-  font-weight: 700;
-  color: var(--text-title);
-  line-height: 0.95;
-  letter-spacing: 0.05em;
-  margin-bottom: 16px;
-}
-
-.tt-hero-line {
-  width: 48px;
-  height: 2px;
-  margin: 0 0 18px;
-  background: var(--pink-dark);
-  opacity: 0.85;
-}
-
-/* Vacío por defecto (Super Admin → Contenido → Hero → Subtítulo) — :empty
-   lo saca del flujo por completo así no deja un hueco cuando nadie lo usa. */
-.tt-hero-subtitle {
-  font-family:Montserrat;
-  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
-  font-weight: 400;
-  color: var(--text-sec);
-  margin: -6px 0 16px;
-  max-width: 480px;
-}
-.tt-hero-subtitle:empty { display: none; margin: 0; }
-
-.tt-hero-tagline {
-  font-family:Montserrat;
-  font-size: clamp(0.78rem, 1.4vw, 0.92rem);
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.9);
-  margin-bottom: 6px;
-}
-
-.tt-hero-sub {
-  font-family:Montserrat;
-  font-size: clamp(0.72rem, 1.2vw, 0.82rem);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 34px;
-  font-style: italic;
-}
-
-.tt-hero-pills {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 32px;
-}
-
-.tt-hero-pill {
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: rgba(255,255,255,0.92);
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  padding: 7px 16px;
-  border-radius: 20px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.tt-hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-}
-
-/* Primary hero button: pink fill + breathing */
-.tt-hero-actions .tt-btn:not(.tt-btn-outline) {
-  background: var(--pink-dark);
-  color: #fff;
-  border-color: var(--pink-dark);
-  font-weight: 700;
-  animation: tt-btn-breathe 3s ease-in-out 1.2s infinite;
-}
-.tt-hero-actions .tt-btn:not(.tt-btn-outline):hover {
-  background: var(--rose);
-  border-color: var(--rose);
-  animation-play-state: paused;
-  transform: translateY(-2px) scale(1.03);
-  letter-spacing: 0.14em;
-}
-
-@keyframes tt-btn-breathe {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(184,76,114,0); }
-  50%       { box-shadow: 0 0 0 8px rgba(184,76,114,0.22); }
-}
-
-/* Primary hero CTA: flecha que se desliza al pasar el mouse */
-.tt-hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.tt-hero-cta-arrow {
-  display: inline-block;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.tt-hero-cta:hover .tt-hero-cta-arrow {
-  transform: translateX(6px);
-}
-
-/* Link secundario del hero: texto subrayado, sin competir con el CTA principal */
-.tt-hero-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 10px 2px;
-  color: var(--text);
-  font-weight: 600;
-  font-size: 0.86rem;
-  letter-spacing: 0.04em;
-  text-decoration: underline;
-  text-decoration-color: currentColor;
-  text-underline-offset: 3px;
-  opacity: 0.85;
-  transition: opacity 0.25s ease, color 0.25s ease;
-}
-.tt-hero-link:hover {
-  opacity: 1;
-  color: var(--pink-dark);
-}
-
-/* Indicador de scroll: invita a bajar, se oculta apenas el usuario scrollea */
-.tt-hero-scroll-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 26px;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: #fff;
-  cursor: pointer;
-  opacity: 1;
-  transition: opacity 0.35s ease;
-  animation: tt-scroll-hint-bounce 1.8s ease-in-out infinite;
-}
-.tt-hero-scroll-hint.tt-hero-scroll-hint-hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-@keyframes tt-scroll-hint-bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%       { transform: translateX(-50%) translateY(8px); }
-}
-
-/* ═══════════════════════════════════════════════
    TRUST BAR
 ═══════════════════════════════════════════════ */
 .tt-trust-bar {
@@ -3940,24 +3665,6 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
     min-height: 44px;
   }
 
-  .tt-hero {
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    min-height: 640px;
-  }
-  .tt-hero-content {
-    grid-row: 2;
-    align-self: start;
-    justify-self: center;
-    max-width: 620px;
-    width: 100%;
-    padding: 40px 32px 56px;
-    text-align: center;
-  }
-  .tt-hero-eyebrow { justify-content: center; }
-  .tt-hero-pills { justify-content: center; }
-  .tt-hero-actions { justify-content: center; }
-  .tt-hero-img { object-position: center; }
 }
 
 /* ═══════════════════════════════════════════════
@@ -4041,36 +3748,6 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
     letter-spacing: 0.02em;
   }
 
-  /* Mobile hero — bloque de contenido centrado horizontalmente y apoyado
-     hacia abajo (no en el medio vertical del banner), con un margen
-     inferior chico y parejo. min-height se mantiene igual que antes; sólo
-     cambia el alineado. */
-  .tt-hero {
-    min-height: 620px;
-    align-items: flex-end;
-    justify-content: center;
-    text-align: center;
-  }
-  .tt-hero-content {
-    width: 100%;
-    max-width: 620px;
-    margin: 0 auto;
-    /* 100px: la tabbar en esta franja (481-768px) muestra las etiquetas de
-       texto bajo cada ícono y mide ~68.8px + 16px de separación del borde
-       = ~84.8px de altura real desde el borde inferior. 100px conserva un
-       margen táctil visible de unos 15px sin superponer los botones. */
-    padding: 0 clamp(18px, 5vw, 32px) 100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .tt-hero-eyebrow { justify-content: center; }
-  .tt-hero-title,
-  .tt-hero-subtitle { width: 100%; text-align: center; }
-  .tt-hero-actions { justify-content: center; }
-  .tt-hero-img { object-position: center top; }
-  .tt-hero-title { font-size: clamp(3rem, 10vw, 5rem); }
 }
 
 /* ═══════════════════════════════════════════════
@@ -4083,20 +3760,6 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-trust-bar { padding: 20px 0; }
   .tt-related-section { padding: 30px 0; }
   .tt-page-hero { padding: calc(var(--header-h) + 32px) 0 30px; }
-
-  /* Mobile hero pequeño — mismo centrado horizontal y apoyo hacia abajo
-     que el bloque de 768px de arriba, sólo ajusta min-height/padding/
-     tamaño de título para pantallas chicas y apila los botones (siguen
-     centrados, nunca align-items:flex-start). */
-  .tt-hero { min-height: 560px; align-items: flex-end; justify-content: center; }
-  /* 92px: acá la tabbar esconde las etiquetas de texto (span{display:none}
-     más abajo) y mide ~56px + 16px de separación = ~72px reales desde el
-     borde inferior. 92px deja cerca de 16px entre la navegación y el CTA. */
-  .tt-hero-content { padding: 0 20px 92px; }
-  .tt-hero-img { object-position: center top; }
-  .tt-hero-title { font-size: clamp(2.2rem, 8vw, 3rem); }
-  .tt-hero-actions { flex-direction: column; justify-content: center; align-items: center; gap: 10px; }
-  .tt-hero-actions .tt-btn { width: 100%; max-width: 280px; justify-content: center; }
 
   .tt-collections-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -4548,9 +4211,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
    .tt-visible), cargado global vía js/cargador-pagina.js — este bloque quedó
    retirado porque duplicaba esa misma animación con su propio sistema
    (.tt-reveal / .tt-visible) sobre los mismos elementos. */
-@media (prefers-reduced-motion: reduce) {
-  .tt-hero-actions .tt-btn:not(.tt-btn-outline) { animation: none; }
-}
+
 
 /* Mini mobile: el ancho se resuelve en el propio componente, sin ocultar
    desbordes del documento. */
@@ -4596,11 +4257,7 @@ html.tt-staff-session :where(
 }
 
 @media (max-width: 360px) {
-  .tt-hero-actions {
-    width: 100%;
-    align-items: stretch;
-  }
-  .tt-hero-actions .tt-btn,
+
   .tt-btn-lg {
     width: 100%;
     max-width: 100%;
