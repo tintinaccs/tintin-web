@@ -1,3 +1,21 @@
+## Cierre de loader y hero (#1341, #1342, #1343) — 2026-11-05 — Claude Code
+
+Evidencia de CI por PR, commit, run e intento (todos terminales y en éxito):
+
+- #1342 → main `19bff66`. CI de PR: run 42023093620 intento 1, éxito. CI de main: run 42026739413, éxito.
+- #1343 → main `32061efe7b6db3ed2eaddad46f3bfdaafc30ed42`. CI de PR: run 42028589777 intento 1, head `25c3b5f`, éxito. CI de main: run 42032582784 intento 1, éxito, incluido Protected flows.
+- #1341 → main `4bc1c20e509a7762eddc7cb51101e9cc3b2984cf`. CI de PR: run 42032975268 intento 1, head `dae005df22782f19d0e56c7821f2bb027607b7db`, éxito (cabeza anterior `26d34cc`: run 42028670644, éxito). CI de main: run 42036584991 intento 1, completado en éxito (PREFLIGHT, Protected flows, B Comercio crítico, B Reglas e identidad, C Administración, D Interfaz SEO y rendimiento, D Calidad técnica y Repository audit, todos success).
+
+Incidente resuelto: un enlace simbólico local `node_modules` se incluyó por error con `git add -A` en la rama de #1341 y rompió "Reject generated artifact drift"; se retiró en la propia rama antes del merge (commit de #1341 en main no lo contiene). Regla práctica: tras `git add -A`, ejecutar `git rm --cached node_modules` y comprobar `git ls-files -s node_modules | wc -l` = 0.
+
+Verificación en producción (solo lectura, 2026-11-05 ~14:00Z): tintinaccs.com sirve el HTML con `tintin-loader-proporcion-20261105-1` y `tintin-hero-fit-20261105-1`; el loader medido a 795×582 y en 9 tamaños más queda completo dentro del viewport (spinner dentro del alto). Una captura de la persona usuaria con el logo ~385 px y el spinner cortado no coincide con el código servido; causa sin confirmar (posible caché del dispositivo o tamaño/zoom distinto), pendiente de dispositivo, navegador y tamaño de ventana.
+
+No verificado: guardado real y subida de fotos del modo edición (requiere sesión Super Admin y Cloudinary); loader y hero en tablet horizontal y laptop solo por medición, no por captura real.
+
+Pendientes que requieren decisión de la persona usuaria: rama `codex/hero-responsive-viewport-20261105` (sin PR ni CI, atrasada respecto a main, mezcla recorte de fotos de producto sobre archivos protegidos); si los roles delegados `contenido` deben editar en la página real o seguir con el gestor anterior.
+
+Skills usados realmente: verification-before-completion.
+
 ## CI1341: conservar objetivos táctiles48×140 — 2026-11-05 — Codex /root
 
 HEAD15fab2eb, CI42015695482/1: browser127208811572 FAILURE solo en home-footer-spacing320×568/375×667/568×320: CTA44/46.6875/44px frente al mínimo48.272pruebas de navegación aprobadas,1skip previsto. Node12 ya aprobado en CI, regla de resize corregida. CodeQL42015689753/1, preflight, comercio y reglas SUCCESS; administración/calidad aún deben seguirse a terminal. No heredar verde al cambio siguiente.
