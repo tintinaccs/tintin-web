@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a9afb9c568479ceb95ab3b190c1815d263fed327c7b7b1b9223666e5471e951e",
+  "sourceFingerprint": "1c005a9fed7e7c9f825b997ee987afe640e459caeda4ea8050aa2ecdcf8ad8ff",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1811,
     "textFiles": 1663,
-    "totalBytes": 57083785,
+    "totalBytes": 57085142,
     "pages": 19,
     "modules": 1173
   },
@@ -16543,7 +16543,7 @@
         "client"
       ],
       "bytes": 47133,
-      "sha256": "15ef1110ebac9591bd533302f69ce886662473cc2e6a28691c97ee54cc4d20bd",
+      "sha256": "d6ec1273ff4a647589737bfdb22efc8c63f8205250b06e26bb385eb1819c482d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16691,7 +16691,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-80cbcfc159a7ac2c",
+          "raw": "css/generated/inicio.css?v=tintin-home-253b7079bbeb48fb",
           "target": "css/generated/inicio.css",
           "line": 62
         },
@@ -16756,7 +16756,7 @@
           "line": 80
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-fit-20261105-2",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-fit-20261105-3",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 90
         },
@@ -17668,7 +17668,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-80cbcfc159a7ac2c",
+          "raw": "css/generated/inicio.css?v=tintin-home-253b7079bbeb48fb",
           "target": "css/generated/inicio.css",
           "line": 62,
           "exists": true
@@ -17746,7 +17746,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-fit-20261105-2",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-fit-20261105-3",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 90,
           "exists": true
@@ -63607,7 +63607,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 7930,
-      "sha256": "e039febdf8ec19fad2bfc83553549c8088624c2b915cdbbc962e333faa790ef2"
+      "sha256": "0edd244133832a870cf9b5546019ddaa60d96fafbd069c76a23219adc8f823f0"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -63619,7 +63619,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "4c78d4a4321d6750d625144d334bfc4a4febc55204b881bd0730a363619c5741"
+      "sha256": "10e3913cf4eba825e4f41a98d3802a82841b3cd047d5ab52fc27fab8f4c1a85f"
     },
     {
       "path": "config/public-site.json",
@@ -63996,8 +63996,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 367712,
-      "sha256": "80cbcfc159a7ac2c6ecffe17d206110186c2b583729a961fcf0b36d7fabb9e47"
+      "bytes": 367770,
+      "sha256": "253b7079bbeb48fbca456effb75325bfa592bd0faf0dfda790a82b0f952aed25"
     },
     {
       "path": "css/generated/login-2.css",
@@ -64116,8 +64116,8 @@
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
       "extension": ".css",
-      "bytes": 10413,
-      "sha256": "7ac5ea1511b4547d8b8230f6c38200dbf81ae0a685384f524d607483adef34e5"
+      "bytes": 10471,
+      "sha256": "c59db3dfb07cb76957465f393d02af8ed9c1cdeb391e35ca2fa7b56e0728df9c"
     },
     {
       "path": "css/pages/home/mantenimiento-inicio.css",
@@ -64458,8 +64458,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1229487,
-      "sha256": "3657d13ef7cd036962c26795a6f16ce78bab5b509a43c4ac75e6f7b6db9b9d2b"
+      "bytes": 1230728,
+      "sha256": "49924aa3884b8744b42dd918f3d4f6ebf75ae6c4bc9043972edbaa860569fe45"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -66529,7 +66529,7 @@
       "path": "index.html",
       "extension": ".html",
       "bytes": 47133,
-      "sha256": "15ef1110ebac9591bd533302f69ce886662473cc2e6a28691c97ee54cc4d20bd"
+      "sha256": "d6ec1273ff4a647589737bfdb22efc8c63f8205250b06e26bb385eb1819c482d"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -69649,7 +69649,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 81710,
-      "sha256": "3f05ac51e2efb447d5c2b0d26a827d2d5159708d1855f25a3238162380b27dbc"
+      "sha256": "97f1fb8c3a4bf22baa30befb50969ab7b50ffd600fa45ba07256ea633a5d8a7a"
     },
     {
       "path": "scripts/ci-commands.js",

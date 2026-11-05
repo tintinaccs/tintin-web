@@ -1,3 +1,9 @@
+## CI1341: conservar objetivos táctiles48×140 — 2026-11-05 — Codex /root
+
+HEAD15fab2eb, CI42015695482/1: browser127208811572 FAILURE solo en home-footer-spacing320×568/375×667/568×320: CTA44/46.6875/44px frente al mínimo48.272pruebas de navegación aprobadas,1skip previsto. Node12 ya aprobado en CI, regla de resize corregida. CodeQL42015689753/1, preflight, comercio y reglas SUCCESS; administración/calidad aún deben seguirse a terminal. No heredar verde al cambio siguiente.
+
+Se conserva la prueba sin reducir ningún límite: CTA mínimo48px; en horizontal bajo ambas acciones conservan140px de ancho y la columna de contenido mínimo284px (dos objetivos140 más gap4). Sigue el carril de WhatsApp96px y el alto del primer viewport. PNG/fuentes intactos, nueva URL CSS3. PASS_LOCAL:64/64 Chromium hero+pie, incluidos los tres casos que fallaban, botones48×140, primer viewport, PNG original y WhatsApp sin intersección; build:pages y preflight completo exit0. Publicación del nuevo SHA y sus controles PENDING. El transporte git del executor respondió503 y el token efímero de gh expiró; conexión GitHub existente sigue operativa y permite publicación normal de objetos/ref con lease, sin permisos nuevos ni force.
+
 ## Reconciliación con Fase3 del editor — 2026-11-05 — Codex /root
 
 PR1340 se fusionó como201b15b8 mientras CI1341 de06a0497f seguía pendiente. Se incorpora main mediante merge normal; admin.html mantiene íntegro su lanzador nuevo. Conflictos solo en política/plan y manifiestos generados: se parte de sus fuentes canónicas de main, se recalculan huellas y derivados; no se retira protección ni se fuerza el historial. Plan toma201b15b8 como base. La suite local completa, sin fallos hasta navegación, se interrumpe al cambiar la base; no se acredita PASS global. Revalidación/CI nuevo SHA/merge/producción PENDING.
