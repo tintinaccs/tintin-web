@@ -6338,3 +6338,9 @@ CI post-merge anterior como verde; requiere validar el nuevo candidato en CI.
 - Probado localmente: `tests/visual-builder/orden-casillas.test.mjs` y `modo-edicion-sitio.spec.js` (API simulada), `editor-permission-loading`, auditorías de caché y de protección de flujos.
 - No verificado: guardado real en producción y subida real de foto (requieren sesión de Super Admin y Cloudinary).
 - Pendiente: fotos nativas del HTML (sin campo en el esquema), otras páginas públicas (Fase 2), retirar el gestor antiguo (Fase 3).
+
+## Modo edición en la página real (Fase 2: páginas públicas)
+- `terminos.html` y `privacidad.html` ahora cargan el contenido editable (`js/core/store/iniciar-contenido-sitio.js`, externo por la CSP) y la insignia de edición. El resto de páginas con esquema (nosotros, catálogo, colecciones, contacto, envíos, FAQ, cambios) ya la tenían desde la Fase 1.
+- `product` y `404` son solo estructurales (sin campos de texto en el esquema), por eso no llevan la insignia.
+- Probado localmente: `tests/visual-builder/modo-edicion-sitio.spec.js` 12/12 (abre el modo en 9 páginas con API simulada), `ci:preflight`, protección de flujos y versionado de caché. Sin probar: guardado real en producción.
+- Pendiente: Fase 3 (retirar el gestor antiguo), fotos fijas del HTML, campos de enlace.

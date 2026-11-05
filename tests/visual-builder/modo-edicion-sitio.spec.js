@@ -114,3 +114,25 @@ test('Cancelar descarta los cambios y no publica', async ({ page }) => {
   await expect(page).not.toHaveURL(/ttEdit=1/);
   expect(posts).toHaveLength(0);
 });
+
+// Fase 2: el modo edición debe abrir en cada página pública con contenido editable.
+const PUBLIC_EDITABLE_PAGES = [
+  ['about.html', 'nosotros'], ['catalogo.html', 'catalogo'], ['collections.html', 'collections'],
+  ['contact.html', 'contact'], ['envios.html', 'envios'], ['preguntas-frecuentes.html', 'faq'],
+  ['cambios-devoluciones.html', 'cambios'], ['terminos.html', 'terminos'], ['privacidad.html', 'privacidad'],
+];
+for (const [file, pageId] of PUBLIC_EDITABLE_PAGES) {
+  test(`modo edición abre en ${file}`, async ({ page }) => {
+    await stubSession(page);
+    await page.route('**/api/visual-builder-public*', route => route.fulfill({ status: 404, body: '{}' }));
+    await page.route(url => new URL(url).pathname === '/api/visual-builder', route => {
+      if (route.request().method() === 'GET') {
+        return route.fulfill({ json: { ok: true, state: { version: 1, config: { pageId, sections: {}, sectionOrder: [], customBlocks: [] } }, draft: null, content: {}, contentRevision: 'r', history: [] } });
+      }
+      return route.fulfill({ json: { ok: true, version: 2 } });
+    });
+    await page.goto(`${baseUrl}/${file}?ttEdit=1`);
+    await expect(page.locator('.tt-edit-bar')).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('[contenteditable]:not([contenteditable="false"])').first()).toBeAttached();
+  });
+}
