@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "4bf360aea3a387aa9a82dc19a9b7709deabe19ba9d48656ed560af900c510a2f",
+  "sourceFingerprint": "5c407745b6698bf2a632cbd88105cf6ce2514207d2ab25daf4d71d91a39fc12b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1815,
-    "textFiles": 1665,
-    "totalBytes": 60943229,
+    "files": 1817,
+    "textFiles": 1667,
+    "totalBytes": 60955161,
     "pages": 19,
-    "modules": 1174
+    "modules": 1176
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18121,
-      "sha256": "9ca2c68e5d87d2301f108b0533531118518111f49922c9cb58c79f19c4527a22",
+      "bytes": 18105,
+      "sha256": "17ce3328232fc6762bf4d145050014fa8d9da70636371f1fd30ae309be61aabf",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -109,7 +109,7 @@
           "line": 8
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -119,7 +119,7 @@
           "line": 10
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -149,7 +149,7 @@
           "line": 193
         },
         {
-          "raw": "/tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "/tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 194
         },
@@ -181,7 +181,7 @@
           "line": 31
         },
         {
-          "raw": "/css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "/css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 32
         },
@@ -715,7 +715,7 @@
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -727,7 +727,7 @@
           "exists": true
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -763,7 +763,7 @@
           "exists": true
         },
         {
-          "raw": "/tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "/tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 194,
           "exists": true
@@ -799,7 +799,7 @@
           "exists": true
         },
         {
-          "raw": "/css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "/css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 32,
           "exists": true
@@ -1180,8 +1180,8 @@
         "guest",
         "client"
       ],
-      "bytes": 30695,
-      "sha256": "b647a58cef743c8f398dba2def3feb7524095cc706bb5e7cfc05bf7a9c24acf5",
+      "bytes": 30679,
+      "sha256": "9ebdb17391d0ce2a1f776ad5179eabab43603606707257a60108b65f20038285",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1221,7 +1221,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -1231,7 +1231,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -1246,7 +1246,7 @@
           "line": 77
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 283
         },
@@ -1288,7 +1288,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-9f452f5919d8b203",
+          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-69fc3a742dafa765",
           "target": "css/generated/nosotros.css",
           "line": 35
         },
@@ -1308,7 +1308,7 @@
           "line": 37
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38
         },
@@ -1811,7 +1811,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -1823,7 +1823,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -1841,7 +1841,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 283,
           "exists": true
@@ -1889,7 +1889,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-9f452f5919d8b203",
+          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-69fc3a742dafa765",
           "target": "css/generated/nosotros.css",
           "line": 35,
           "exists": true
@@ -1913,7 +1913,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38,
           "exists": true
@@ -2290,8 +2290,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 48646,
-      "sha256": "f3ed97dd08ac5a24b8e8ff540f0d6ff3da23ce4ef371bc613023db015779ca49",
+      "bytes": 48639,
+      "sha256": "539ede190c259db8238626c84e7e8f4b2931d93c100c4d5f6def96514ca29114",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2326,7 +2326,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -2378,7 +2378,7 @@
           "line": 33
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 34
         },
@@ -2508,7 +2508,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -2568,7 +2568,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 34,
           "exists": true
@@ -2983,8 +2983,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 194194,
-      "sha256": "8062a67cc710ad2d03879f4d2caa0b8d37402a87229654bd782ad12e3a2d96f4",
+      "bytes": 194181,
+      "sha256": "77895307d6be7dfddcbbc05e6b5b915fed1d07c034554968910b11e95c374b7a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3013,7 +3013,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -3043,7 +3043,7 @@
           "line": 2127
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/admin/admin-app.js",
           "line": 2128
         },
@@ -3073,7 +3073,7 @@
           "line": 2133
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2134
         },
@@ -3145,7 +3145,7 @@
           "line": 31
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 32
         },
@@ -3501,7 +3501,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -3537,7 +3537,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/admin/admin-app.js",
           "line": 2128,
           "exists": true
@@ -3573,7 +3573,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2134,
           "exists": true
@@ -3657,7 +3657,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 32,
           "exists": true
@@ -9336,8 +9336,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22484,
-      "sha256": "65ad946dbabc8e40e220caf9d64abcb0e9a566278f0fb062cc176c80ee3bf15b",
+      "bytes": 22468,
+      "sha256": "58530d7ea7ed5265e4aa9de9df2ca1c99cb264caeab7719ebe858814be92b3fc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9371,7 +9371,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -9381,7 +9381,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -9396,7 +9396,7 @@
           "line": 74
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 211
         },
@@ -9433,7 +9433,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-4e716c82d1f85663",
+          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-3f5ff2a6ec9c37e1",
           "target": "css/generated/cambios-devoluciones.css",
           "line": 35
         },
@@ -9453,7 +9453,7 @@
           "line": 37
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38
         },
@@ -9917,7 +9917,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -9929,7 +9929,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -9947,7 +9947,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 211,
           "exists": true
@@ -9989,7 +9989,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-4e716c82d1f85663",
+          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-3f5ff2a6ec9c37e1",
           "target": "css/generated/cambios-devoluciones.css",
           "line": 35,
           "exists": true
@@ -10013,7 +10013,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38,
           "exists": true
@@ -10352,8 +10352,8 @@
         "guest",
         "client"
       ],
-      "bytes": 70042,
-      "sha256": "cad7ecc63e606e41620504a4631c022d692086182fb3dd224acc9b44cad948d5",
+      "bytes": 70023,
+      "sha256": "16ebe9628ef30f759ba494bb2c7504778b5ba1d58e825b71f9e850926b05a4e9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10399,7 +10399,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -10409,7 +10409,7 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -10429,7 +10429,7 @@
           "line": 613
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 614
         },
@@ -10471,7 +10471,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/catalogo.css?v=tintin-catalogo-ee8ba661e3934668",
+          "raw": "css/generated/catalogo.css?v=tintin-catalogo-546705675997442a",
           "target": "css/generated/catalogo.css",
           "line": 47
         },
@@ -10491,7 +10491,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 50
         },
@@ -10950,7 +10950,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -10962,7 +10962,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -10986,7 +10986,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 614,
           "exists": true
@@ -11034,7 +11034,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/catalogo.css?v=tintin-catalogo-ee8ba661e3934668",
+          "raw": "css/generated/catalogo.css?v=tintin-catalogo-546705675997442a",
           "target": "css/generated/catalogo.css",
           "line": 47,
           "exists": true
@@ -11058,7 +11058,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 50,
           "exists": true
@@ -11687,8 +11687,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 137987,
-      "sha256": "9a588f4d7234bf095597ad28faf54a7716eff3ca5be9b05d771b61033c1c9b94",
+      "bytes": 137970,
+      "sha256": "265ca2f255e97fff5932876cc64651acc519f5f7ef5382705e38396b3761f276",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11728,7 +11728,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -11738,7 +11738,7 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -11773,7 +11773,7 @@
           "line": 2077
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 2078
         },
@@ -11805,7 +11805,7 @@
           "line": 33
         },
         {
-          "raw": "css/generated/checkout-2.css?v=tintin-checkout-1b392e609e2b7e2d",
+          "raw": "css/generated/checkout-2.css?v=tintin-checkout-a2d79b7b16415f8a",
           "target": "css/generated/checkout-2.css",
           "line": 34
         },
@@ -11825,7 +11825,7 @@
           "line": 37
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38
         },
@@ -11985,7 +11985,7 @@
           "line": 71
         },
         {
-          "raw": "css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-palette-20261014-1",
+          "raw": "css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-copiar-20261105-1",
           "target": "css/components/payments/payment-methods.css",
           "line": 72
         },
@@ -12324,7 +12324,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -12336,7 +12336,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -12378,7 +12378,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 2078,
           "exists": true
@@ -12414,7 +12414,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/checkout-2.css?v=tintin-checkout-1b392e609e2b7e2d",
+          "raw": "css/generated/checkout-2.css?v=tintin-checkout-a2d79b7b16415f8a",
           "target": "css/generated/checkout-2.css",
           "line": 34,
           "exists": true
@@ -12438,7 +12438,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38,
           "exists": true
@@ -12630,7 +12630,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-palette-20261014-1",
+          "raw": "css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-copiar-20261105-1",
           "target": "css/components/payments/payment-methods.css",
           "line": 72,
           "exists": true
@@ -13275,8 +13275,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23909,
-      "sha256": "b05d5cc415990ae27a8a15ba0ede8ca0985cb7e40302643b21201367647cb4e8",
+      "bytes": 23893,
+      "sha256": "1afe879c130b54d0a64f103c9183e0f92ce72e6fb3058c734e1046282e02f1e8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13316,7 +13316,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -13326,7 +13326,7 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -13346,7 +13346,7 @@
           "line": 231
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 232
         },
@@ -13388,7 +13388,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/collections.css?v=tintin-collections-879f64195378d5e8",
+          "raw": "css/generated/collections.css?v=tintin-collections-ac616b37c64477ae",
           "target": "css/generated/collections.css",
           "line": 42
         },
@@ -13408,7 +13408,7 @@
           "line": 44
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 45
         },
@@ -13882,7 +13882,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -13894,7 +13894,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -13918,7 +13918,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 232,
           "exists": true
@@ -13966,7 +13966,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/collections.css?v=tintin-collections-879f64195378d5e8",
+          "raw": "css/generated/collections.css?v=tintin-collections-ac616b37c64477ae",
           "target": "css/generated/collections.css",
           "line": 42,
           "exists": true
@@ -13990,7 +13990,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 45,
           "exists": true
@@ -14335,8 +14335,8 @@
         "guest",
         "client"
       ],
-      "bytes": 28744,
-      "sha256": "79a0138cded8b33a039c6e5937fa6f35f403daa7d56942dcd807867ea060102f",
+      "bytes": 28728,
+      "sha256": "57fd5d24fd8b23ea7d2c8778eb190dbd935819dffd20cb0c526f08202bacd107",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14376,7 +14376,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -14386,7 +14386,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -14401,7 +14401,7 @@
           "line": 75
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 253
         },
@@ -14438,7 +14438,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/contact.css?v=tintin-contact-5f21a88d5297292f",
+          "raw": "css/generated/contact.css?v=tintin-contact-7d94f9d7dba6070f",
           "target": "css/generated/contact.css",
           "line": 35
         },
@@ -14458,7 +14458,7 @@
           "line": 37
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38
         },
@@ -14967,7 +14967,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -14979,7 +14979,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -14997,7 +14997,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 253,
           "exists": true
@@ -15039,7 +15039,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/contact.css?v=tintin-contact-5f21a88d5297292f",
+          "raw": "css/generated/contact.css?v=tintin-contact-7d94f9d7dba6070f",
           "target": "css/generated/contact.css",
           "line": 35,
           "exists": true
@@ -15063,7 +15063,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38,
           "exists": true
@@ -15469,8 +15469,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26165,
-      "sha256": "cc21659cf94812bdadc6b17d73976533f69bca7b7bdc72c4f64b244a7a356528",
+      "bytes": 26149,
+      "sha256": "0b07a7add2b3ecdd3da5a90c318f8a15adce587521ac6fbc8ad5148d6d78384d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15510,7 +15510,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -15520,7 +15520,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -15535,7 +15535,7 @@
           "line": 81
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 211
         },
@@ -15572,7 +15572,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/envios.css?v=tintin-envios-d8b3bf81a3fd9c27",
+          "raw": "css/generated/envios.css?v=tintin-envios-abae71be291707b5",
           "target": "css/generated/envios.css",
           "line": 35
         },
@@ -15592,7 +15592,7 @@
           "line": 37
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38
         },
@@ -16061,7 +16061,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -16073,7 +16073,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -16091,7 +16091,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 211,
           "exists": true
@@ -16133,7 +16133,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/envios.css?v=tintin-envios-d8b3bf81a3fd9c27",
+          "raw": "css/generated/envios.css?v=tintin-envios-abae71be291707b5",
           "target": "css/generated/envios.css",
           "line": 35,
           "exists": true
@@ -16157,7 +16157,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38,
           "exists": true
@@ -16542,8 +16542,8 @@
         "guest",
         "client"
       ],
-      "bytes": 47266,
-      "sha256": "926cc9d66dc2c2f37e1f8ee08ff226bea86b96d396c566d6db36306a9bfef205",
+      "bytes": 47247,
+      "sha256": "c1a7cdbb0d6e3078923f8d53b9a6a86e5d8663cc02643eefc977c2437bc2bd0b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16594,7 +16594,7 @@
           "line": 11
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 12
         },
@@ -16604,7 +16604,7 @@
           "line": 13
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 14
         },
@@ -16624,7 +16624,7 @@
           "line": 432
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 433
         },
@@ -16634,7 +16634,7 @@
           "line": 434
         },
         {
-          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/pages/home/carrusel-colecciones.js",
           "line": 435
         },
@@ -16691,7 +16691,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-4d45cdd4f7eda63c",
+          "raw": "css/generated/inicio.css?v=tintin-home-693dbed8e117f535",
           "target": "css/generated/inicio.css",
           "line": 62
         },
@@ -16711,7 +16711,7 @@
           "line": 71
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 72
         },
@@ -17554,7 +17554,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 12,
           "exists": true
@@ -17566,7 +17566,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 14,
           "exists": true
@@ -17590,7 +17590,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 433,
           "exists": true
@@ -17602,7 +17602,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/pages/home/carrusel-colecciones.js",
           "line": 435,
           "exists": true
@@ -17668,7 +17668,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-4d45cdd4f7eda63c",
+          "raw": "css/generated/inicio.css?v=tintin-home-693dbed8e117f535",
           "target": "css/generated/inicio.css",
           "line": 62,
           "exists": true
@@ -17692,7 +17692,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 72,
           "exists": true
@@ -18394,8 +18394,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 79081,
-      "sha256": "0b7e5ad2601cf2f2b329c5e57955f63edfbc98d3d9f635162bdc20d22214b6d2",
+      "bytes": 79065,
+      "sha256": "ca7bf49a10083c6b4b107ff973893f12fe1e552437bd3e38c4fd30b79607bb07",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18441,7 +18441,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -18451,7 +18451,7 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -18476,7 +18476,7 @@
           "line": 1353
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 1354
         },
@@ -18488,7 +18488,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/login.css?v=tintin-login-77e95d22ea206bb2",
+          "raw": "css/generated/login.css?v=tintin-login-65acf0364d586e2b",
           "target": "css/generated/login.css",
           "line": 30
         },
@@ -18513,7 +18513,7 @@
           "line": 36
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 37
         },
@@ -18777,7 +18777,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -18789,7 +18789,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -18819,7 +18819,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 1354,
           "exists": true
@@ -18831,7 +18831,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/login.css?v=tintin-login-77e95d22ea206bb2",
+          "raw": "css/generated/login.css?v=tintin-login-65acf0364d586e2b",
           "target": "css/generated/login.css",
           "line": 30,
           "exists": true
@@ -18861,7 +18861,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 37,
           "exists": true
@@ -19314,8 +19314,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1961,
-      "sha256": "cfb1084611acebdfca855dedc9be5f60014779f5a21f0473f0c8e624510c64bb",
+      "bytes": 1958,
+      "sha256": "ad0b39cd0ed69f0ccc5cb12f44553126ee911c36c76214de1e48ab5218f20157",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19332,7 +19332,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 2
         }
@@ -19379,7 +19379,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 2,
           "exists": true
@@ -19445,8 +19445,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 61062,
-      "sha256": "73202cb641bd65f1887b183ae4ac43425a22ec5d26e4fd2740b017a4fd424f80",
+      "bytes": 61046,
+      "sha256": "d95842c1717b0dd3a359ad93aa5969eebfc22f2c99ad7e75c0b4801801c06078",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19492,7 +19492,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -19502,7 +19502,7 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -19527,7 +19527,7 @@
           "line": 265
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 266
         },
@@ -19574,7 +19574,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/perfil.css?v=tintin-perfil-0be8d9179607242a",
+          "raw": "css/generated/perfil.css?v=tintin-perfil-da750f4b762f7488",
           "target": "css/generated/perfil.css",
           "line": 26
         },
@@ -19594,7 +19594,7 @@
           "line": 31
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 32
         },
@@ -20113,7 +20113,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -20125,7 +20125,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -20155,7 +20155,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 266,
           "exists": true
@@ -20209,7 +20209,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/perfil.css?v=tintin-perfil-0be8d9179607242a",
+          "raw": "css/generated/perfil.css?v=tintin-perfil-da750f4b762f7488",
           "target": "css/generated/perfil.css",
           "line": 26,
           "exists": true
@@ -20233,7 +20233,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 32,
           "exists": true
@@ -20958,8 +20958,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24101,
-      "sha256": "08523750068d3a82bcc61e1cb9318407f40779166d0d351841b30ba4ee921a31",
+      "bytes": 24085,
+      "sha256": "99ff793911b56905d458d7288136506ebbc0312413f6a4d0a185fbfb93dfbd09",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -20993,7 +20993,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -21003,7 +21003,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -21018,7 +21018,7 @@
           "line": 74
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 236
         },
@@ -21055,7 +21055,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-4e716c82d1f85663",
+          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-3f5ff2a6ec9c37e1",
           "target": "css/generated/preguntas-frecuentes.css",
           "line": 35
         },
@@ -21075,7 +21075,7 @@
           "line": 37
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38
         },
@@ -21539,7 +21539,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -21551,7 +21551,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -21569,7 +21569,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 236,
           "exists": true
@@ -21611,7 +21611,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-4e716c82d1f85663",
+          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-3f5ff2a6ec9c37e1",
           "target": "css/generated/preguntas-frecuentes.css",
           "line": 35,
           "exists": true
@@ -21635,7 +21635,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38,
           "exists": true
@@ -21974,8 +21974,8 @@
         "guest",
         "client"
       ],
-      "bytes": 27962,
-      "sha256": "8f61bf0ea487b6b517b24ecf71123305982e7ef8c2d923368bcba9ea8de792eb",
+      "bytes": 27946,
+      "sha256": "4e01d99a0735353c7c929a47fb32a1eb3c1d5f420410bbf751cae842fd464591",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -22009,7 +22009,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -22019,7 +22019,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -22034,7 +22034,7 @@
           "line": 75
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 252
         },
@@ -22076,7 +22076,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/privacidad.css?v=tintin-privacidad-172d1d7717ac0ff2",
+          "raw": "css/generated/privacidad.css?v=tintin-privacidad-b12c938ab6a56361",
           "target": "css/generated/privacidad.css",
           "line": 35
         },
@@ -22096,7 +22096,7 @@
           "line": 37
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38
         },
@@ -22685,7 +22685,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -22697,7 +22697,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -22715,7 +22715,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 252,
           "exists": true
@@ -22763,7 +22763,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/privacidad.css?v=tintin-privacidad-172d1d7717ac0ff2",
+          "raw": "css/generated/privacidad.css?v=tintin-privacidad-b12c938ab6a56361",
           "target": "css/generated/privacidad.css",
           "line": 35,
           "exists": true
@@ -22787,7 +22787,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38,
           "exists": true
@@ -23149,8 +23149,8 @@
         "guest",
         "client"
       ],
-      "bytes": 29653,
-      "sha256": "f66921ee3ac13d926f62ffd50ce04ad39ea2d2266d261aaa892e8a71227f36b8",
+      "bytes": 29634,
+      "sha256": "54edbdbe087ddba8641f278b2eccddcad4bdfb54d9bc34a6107ec3e68bdb33b9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -23184,7 +23184,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -23194,7 +23194,7 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -23204,7 +23204,7 @@
           "line": 64
         },
         {
-          "raw": "js/core/store/estado-productos.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/core/store/estado-productos.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/core/store/estado-productos.js",
           "line": 65
         },
@@ -23224,7 +23224,7 @@
           "line": 336
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 337
         },
@@ -23271,7 +23271,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/product.css?v=tintin-product-54e56b44ff836444",
+          "raw": "css/generated/product.css?v=tintin-product-26d174afe49b3fef",
           "target": "css/generated/product.css",
           "line": 42
         },
@@ -23291,7 +23291,7 @@
           "line": 44
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 45
         },
@@ -23805,7 +23805,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -23817,7 +23817,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -23829,7 +23829,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/store/estado-productos.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/core/store/estado-productos.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/core/store/estado-productos.js",
           "line": 65,
           "exists": true
@@ -23853,7 +23853,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 337,
           "exists": true
@@ -23907,7 +23907,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/product.css?v=tintin-product-54e56b44ff836444",
+          "raw": "css/generated/product.css?v=tintin-product-26d174afe49b3fef",
           "target": "css/generated/product.css",
           "line": 42,
           "exists": true
@@ -23931,7 +23931,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 45,
           "exists": true
@@ -24479,8 +24479,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25868,
-      "sha256": "f58c7fdc1473ffebcab730e22b342fce71887273d46d7c6a655d0f44780345ca",
+      "bytes": 25852,
+      "sha256": "007a1503f479010d4c67a61cd67ad788ebf0e1e054eda0c900e022b3a0132f57",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -24507,7 +24507,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -24517,7 +24517,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -24532,7 +24532,7 @@
           "line": 75
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 233
         },
@@ -24574,7 +24574,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/terminos.css?v=tintin-terminos-172d1d7717ac0ff2",
+          "raw": "css/generated/terminos.css?v=tintin-terminos-b12c938ab6a56361",
           "target": "css/generated/terminos.css",
           "line": 35
         },
@@ -24594,7 +24594,7 @@
           "line": 37
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38
         },
@@ -25203,7 +25203,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -25215,7 +25215,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -25233,7 +25233,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "tienda.js?v=tintin-20261105-copiar-pago-1",
           "target": "tienda.js",
           "line": 233,
           "exists": true
@@ -25281,7 +25281,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/terminos.css?v=tintin-terminos-172d1d7717ac0ff2",
+          "raw": "css/generated/terminos.css?v=tintin-terminos-b12c938ab6a56361",
           "target": "css/generated/terminos.css",
           "line": 35,
           "exists": true
@@ -25305,7 +25305,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-proporcion-20261105-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-loader-limpio-20261105-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38,
           "exists": true
@@ -27178,7 +27178,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 260701,
-      "sha256": "a931e2963e86fdbf0ee933112cc83bcb4e2e2497ec3f026908a285d3340a85bc",
+      "sha256": "691d09dcb9f5fc3a02f1b17016ba17d9475ee017c28d1c28f1f0b30018d64ee2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29452,8 +29452,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 441858,
-      "sha256": "3261cef8d1bc0daf8d17e37229947b26b08416119d7d251094591c728f297147",
+      "bytes": 441855,
+      "sha256": "d7dbaf8783270551cfe2cc504b633c279facae7fd2df719483c6d8061f4218e4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29688,7 +29688,7 @@
           "line": 48
         },
         {
-          "raw": "../pages/collections/estado-colecciones.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "../pages/collections/estado-colecciones.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 49
@@ -30167,8 +30167,8 @@
     },
     {
       "path": "js/admin/collections/gestion-colecciones-admin.js",
-      "bytes": 9116,
-      "sha256": "0e3c517d49f738d40d5ce2076bb1769e80d1f4361b28e6709e1a865d63dfd2bf",
+      "bytes": 9113,
+      "sha256": "e784d088db4551bfab356e9d83bfd75b3a18ec8986d828d98405970525cd406d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30193,7 +30193,7 @@
           "line": 12
         },
         {
-          "raw": "../../pages/collections/estado-colecciones.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "../../pages/collections/estado-colecciones.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 13
@@ -32252,8 +32252,8 @@
     },
     {
       "path": "js/admin/settings/metodos-pago-admin.js",
-      "bytes": 21623,
-      "sha256": "357351e89d644e8dde53b6b28cde8c3f0c0de2c74128e39232832a379bfaafe4",
+      "bytes": 21622,
+      "sha256": "812377a469c4be48f32309198ce0258e648dd2941bf7c05eed357030f563983c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32376,8 +32376,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 138572,
-      "sha256": "52fe1c1f342a8f1139342c8f53f2f9bd4251fd002f64d80ef7f1d8b9f3d25c2b",
+      "bytes": 138569,
+      "sha256": "2cfed5dfee119419cb9249cacb6a7ca20c031878ed9036aa01b9388097689579",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32510,7 +32510,7 @@
           "line": 42
         },
         {
-          "raw": "../pages/collections/estado-colecciones.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "../pages/collections/estado-colecciones.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 43
@@ -32839,8 +32839,8 @@
     },
     {
       "path": "js/cargador-mantenimiento-pagina.js",
-      "bytes": 3397,
-      "sha256": "ae717fe2bc571424aed132ed7fd688d4e27fa2b591f8efbcc24471369db46323",
+      "bytes": 3394,
+      "sha256": "09f8102be3c7672d0c2d3149fca9f4850a6f314f2fde19a811bdbe5e840d433a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32850,8 +32850,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 51640,
-      "sha256": "7d4fe0a3dca9d5d1e219316642305a71d6fb084c080e02884f75617e57d95353",
+      "bytes": 51634,
+      "sha256": "1aed162f03b4ea4707db988a90007dccd9ea4cba6ab8b6c50190372123e4fcaa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33788,8 +33788,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 15877,
-      "sha256": "1d85b494f3a4a24c7b91d5ac85b7b177caabd885f07c60c64aeb503478711e8a",
+      "bytes": 15868,
+      "sha256": "17f8797463982ae08a252d6654ba1d9e1283412abafb488b31176390f08ec7aa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33826,7 +33826,7 @@
           "line": 147
         },
         {
-          "raw": "./control-busqueda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "./control-busqueda.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/components/navigation/compartido/control-busqueda.js",
           "dynamic": true,
           "line": 178
@@ -33864,8 +33864,8 @@
     },
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
-      "bytes": 13358,
-      "sha256": "0db43dfc56b03e815ecf80f05011352797512f00d831e52284e5cc9fbac76fd3",
+      "bytes": 13355,
+      "sha256": "bd21b88270b7c10177a92bcb8c9c294a9db51c91d0d0bd4fa705606a698d870b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34170,8 +34170,8 @@
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "bytes": 11840,
-      "sha256": "c743e312300ea20d109ac0641708cccdff219ebfd653478b039d066bee0e0341",
+      "bytes": 11837,
+      "sha256": "6e5f602398429afd20a5b6774d1ad0d7be40cf6be74a41e0d61cb2c15eba560d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34238,7 +34238,7 @@
           "line": 10
         },
         {
-          "raw": "./compartido/carga-navegacion.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "./compartido/carga-navegacion.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/components/navigation/compartido/carga-navegacion.js",
           "dynamic": false,
           "line": 11
@@ -35617,8 +35617,8 @@
     },
     {
       "path": "js/core/store/estado-productos.js",
-      "bytes": 33373,
-      "sha256": "ab0f93a6b34e35a0b45a38adede5e8d76655f44bf2173874dcd9d06b8357d240",
+      "bytes": 33370,
+      "sha256": "4f14a13c9aea34c19caaef2d090fdeeed5664ba940e0ae2c85adb009b8523b30",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35685,7 +35685,7 @@
           "line": 19
         },
         {
-          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/cargador-mantenimiento-pagina.js",
           "dynamic": false,
           "line": 4
@@ -36409,8 +36409,8 @@
     },
     {
       "path": "js/inicio-navegacion-publica.js",
-      "bytes": 1884,
-      "sha256": "1e53b44c4219b54c02eb37c5c98d9a27ed912f6e01b070fa8a683cdbba63b49b",
+      "bytes": 1881,
+      "sha256": "502caf129c4e84e1864a297640f77f4bcc2f48b72645f69e091e6ec2ec628d70",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36765,8 +36765,8 @@
     },
     {
       "path": "js/pages/checkout/checkout-metodos-pago.js",
-      "bytes": 10574,
-      "sha256": "9e9ad2ca2a5f590c6328109b612caddcb72952a53d7ca323af1b1f645530a1f2",
+      "bytes": 11971,
+      "sha256": "acdbb3903393f45eff067eb477265cc60bf4a294b6f7b6fe789e3d6aa3282c14",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36783,6 +36783,12 @@
           "target": "js/orders/nucleo-metodos-pago.js",
           "dynamic": false,
           "line": 5
+        },
+        {
+          "raw": "./copiar-dato-pago.js?v=tintin-20261105-copiar-pago-1",
+          "target": "js/pages/checkout/copiar-dato-pago.js",
+          "dynamic": false,
+          "line": 7
         }
       ],
       "endpoints": []
@@ -36861,6 +36867,17 @@
       "path": "js/pages/checkout/checkout-ubicacion-guardada.js",
       "bytes": 3369,
       "sha256": "d9d09246573c5adbe9bd0c1dcefefd229ef2dcfe836c684032295fffe9cda077",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/pages/checkout/copiar-dato-pago.js",
+      "bytes": 1675,
+      "sha256": "375d2ae595b4f33e5dda585103603d8c0eaed1c88dd0a25685ad977a604bc299",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37022,8 +37039,8 @@
     },
     {
       "path": "js/pages/collections/estado-colecciones.js",
-      "bytes": 5091,
-      "sha256": "e3b44c76e8e6c00db6c7cc523256f9115e35db6bb14b4c86c5509ba437fb1567",
+      "bytes": 5088,
+      "sha256": "6cb5bcb6e570d5c2055b5c39911b3fc654062f2ff7e57659230b2fbe6a71521e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37054,7 +37071,7 @@
           "line": 11
         },
         {
-          "raw": "../../admin/settings/metodos-pago-admin.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "../../admin/settings/metodos-pago-admin.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/admin/settings/metodos-pago-admin.js",
           "dynamic": true,
           "line": 12
@@ -37133,8 +37150,8 @@
     },
     {
       "path": "js/pages/collections/presentacion-colecciones.js",
-      "bytes": 19718,
-      "sha256": "da086021316ee89c2d25c38a81eef966753c9402063462c5c198f152c52566d2",
+      "bytes": 19715,
+      "sha256": "9e36f4a410cc4f3955444ebce87a6ac548d5d14a30418061cb72b649f29f2320",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37147,7 +37164,7 @@
           "line": 10
         },
         {
-          "raw": "./estado-colecciones.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "./estado-colecciones.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 11
@@ -37157,15 +37174,15 @@
     },
     {
       "path": "js/pages/home/carrusel-colecciones.js",
-      "bytes": 18775,
-      "sha256": "ed7bf09a283ffcc292aea47ee343781812e93142f475f8361ac550e0296429b5",
+      "bytes": 18772,
+      "sha256": "8663d3a25f3894a17fbde68b84e6219863d47657e62884538e04b8bcaa6761be",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../collections/estado-colecciones.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "../collections/estado-colecciones.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 1
@@ -37908,8 +37925,8 @@
     },
     {
       "path": "js/quality/calidad-interfaz.js",
-      "bytes": 10382,
-      "sha256": "214e30942c383b23699415f568e3a5f849540f773ea7c5e643c0d6611f149172",
+      "bytes": 10376,
+      "sha256": "808dd91aa8accf8131bddb60ffec9bc68e0e091e6afca372776bb71b07465fc0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43519,8 +43536,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 29933,
-      "sha256": "9dadc034946e4391e77bc394c0714f0201730012685f3d16af5a9a7f5eefeedc",
+      "bytes": 29920,
+      "sha256": "d93a9848046201fcfd932599514ff0a69bc646b5807c7f7b9c2f3b2bb0095235",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55454,6 +55471,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/payments/copiar-dato-pago.test.mjs",
+      "bytes": 1608,
+      "sha256": "1acaac5df463e7f58e4cc6986ef360021e215eaa6ff35fa876d61b3e04229263",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/pages/checkout/copiar-dato-pago.js",
+          "target": "js/pages/checkout/copiar-dato-pago.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/payments/paypal-refund-reconciliation.test.mjs",
       "bytes": 4632,
       "sha256": "b650204d4bc84ea8325a327545bd1ce8baa5ef6b6ddbacc0e3ef013b26cc9e38",
@@ -62309,8 +62356,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 132043,
-      "sha256": "30a80caba09f564dd89ef2666940cc22918d7b8c942436a1910c608d4a296944",
+      "bytes": 132040,
+      "sha256": "9789cf41d8883fac2777f996737d742488607ae14677ebaefb77ecb4436f7447",
       "syntax": {
         "ok": true,
         "error": ""
@@ -62323,7 +62370,7 @@
           "line": 294
         },
         {
-          "raw": "./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261105-banco-familiar-1",
+          "raw": "./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261105-copiar-pago-1",
           "target": "js/components/navigation/compartido/control-busqueda.js",
           "dynamic": true,
           "line": 623
@@ -62509,8 +62556,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 18121,
-      "sha256": "9ca2c68e5d87d2301f108b0533531118518111f49922c9cb58c79f19c4527a22"
+      "bytes": 18105,
+      "sha256": "17ce3328232fc6762bf4d145050014fa8d9da70636371f1fd30ae309be61aabf"
     },
     {
       "path": "AGENTS.md",
@@ -62540,7 +62587,7 @@
       "path": "_headers",
       "extension": "",
       "bytes": 4589,
-      "sha256": "12236c69d62a8d3aca2b84095074b57490d44ecf3448d05e29197c02fae11f05"
+      "sha256": "51044c074fc4acc02f8a899bcdc32f2c90bb077104468f5949e041906416c37b"
     },
     {
       "path": "_redirects",
@@ -62557,14 +62604,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 30695,
-      "sha256": "b647a58cef743c8f398dba2def3feb7524095cc706bb5e7cfc05bf7a9c24acf5"
+      "bytes": 30679,
+      "sha256": "9ebdb17391d0ce2a1f776ad5179eabab43603606707257a60108b65f20038285"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 48646,
-      "sha256": "f3ed97dd08ac5a24b8e8ff540f0d6ff3da23ce4ef371bc613023db015779ca49"
+      "bytes": 48639,
+      "sha256": "539ede190c259db8238626c84e7e8f4b2931d93c100c4d5f6def96514ca29114"
     },
     {
       "path": "admin-manifest.json",
@@ -62575,8 +62622,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 194194,
-      "sha256": "8062a67cc710ad2d03879f4d2caa0b8d37402a87229654bd782ad12e3a2d96f4"
+      "bytes": 194181,
+      "sha256": "77895307d6be7dfddcbbc05e6b5b915fed1d07c034554968910b11e95c374b7a"
     },
     {
       "path": "apple-touch-icon.png",
@@ -63385,20 +63432,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 22484,
-      "sha256": "65ad946dbabc8e40e220caf9d64abcb0e9a566278f0fb062cc176c80ee3bf15b"
+      "bytes": 22468,
+      "sha256": "58530d7ea7ed5265e4aa9de9df2ca1c99cb264caeab7719ebe858814be92b3fc"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 70042,
-      "sha256": "cad7ecc63e606e41620504a4631c022d692086182fb3dd224acc9b44cad948d5"
+      "bytes": 70023,
+      "sha256": "16ebe9628ef30f759ba494bb2c7504778b5ba1d58e825b71f9e850926b05a4e9"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 137987,
-      "sha256": "9a588f4d7234bf095597ad28faf54a7716eff3ca5be9b05d771b61033c1c9b94"
+      "bytes": 137970,
+      "sha256": "265ca2f255e97fff5932876cc64651acc519f5f7ef5382705e38396b3761f276"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -63709,8 +63756,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 23909,
-      "sha256": "b05d5cc415990ae27a8a15ba0ede8ca0985cb7e40302643b21201367647cb4e8"
+      "bytes": 23893,
+      "sha256": "1afe879c130b54d0a64f103c9183e0f92ce72e6fb3058c734e1046282e02f1e8"
     },
     {
       "path": "config/account-contract.json",
@@ -63728,13 +63775,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 260701,
-      "sha256": "a931e2963e86fdbf0ee933112cc83bcb4e2e2497ec3f026908a285d3340a85bc"
+      "sha256": "691d09dcb9f5fc3a02f1b17016ba17d9475ee017c28d1c28f1f0b30018d64ee2"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 260616,
-      "sha256": "ab912cfe8d46fb6e98eace134408d4ab071913b166fcb4cd9d65e42b2ff25aa4"
+      "sha256": "de3e64ad7d356f3460286f5da6e447788023457ff7ea1847bce8d38500d768f0"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
@@ -63769,8 +63816,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 28744,
-      "sha256": "79a0138cded8b33a039c6e5937fa6f35f403daa7d56942dcd807867ea060102f"
+      "bytes": 28728,
+      "sha256": "57fd5d24fd8b23ea7d2c8778eb190dbd935819dffd20cb0c526f08202bacd107"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -64027,8 +64074,8 @@
     {
       "path": "css/components/payments/payment-methods.css",
       "extension": ".css",
-      "bytes": 7397,
-      "sha256": "1ee064fafe1a87ecca2373c34853d2b59d0b3d1db3aa236ae10092561e1b890d"
+      "bytes": 8369,
+      "sha256": "df424c56a827a8bf068f40e02584cace2a329306d5181ad6469d6c5014718ce2"
     },
     {
       "path": "css/components/social/instagram-tintin.css",
@@ -64075,8 +64122,8 @@
     {
       "path": "css/generated/cambios-devoluciones.css",
       "extension": ".css",
-      "bytes": 325045,
-      "sha256": "4e716c82d1f856639e2b2788c661d6928a224392dca0b356b77701400d1be279"
+      "bytes": 325275,
+      "sha256": "3f5ff2a6ec9c37e17b93f7814f7d05e5f25cd70aac67ebc6efc93a62fd4f21c4"
     },
     {
       "path": "css/generated/catalogo-2.css",
@@ -64087,14 +64134,14 @@
     {
       "path": "css/generated/catalogo.css",
       "extension": ".css",
-      "bytes": 197771,
-      "sha256": "ee8ba661e39346688e6409e315d0f4aa9964969897de1d00ce43455c0c0571f2"
+      "bytes": 198001,
+      "sha256": "546705675997442aafb352217360e9a2f751f14bdadf1d57e06f83c2582bcf48"
     },
     {
       "path": "css/generated/checkout-2.css",
       "extension": ".css",
-      "bytes": 362362,
-      "sha256": "1b392e609e2b7e2dbe377741bab9a3ecdc15adc5488ae837763b247d670406ac"
+      "bytes": 363397,
+      "sha256": "a2d79b7b16415f8aae1d393899ad92a95d67f5fb8b9b14f67c8a0994a015b546"
     },
     {
       "path": "css/generated/checkout.css",
@@ -64105,14 +64152,14 @@
     {
       "path": "css/generated/collections.css",
       "extension": ".css",
-      "bytes": 330582,
-      "sha256": "879f64195378d5e8ea16575853b12d23397f22b3ecc3ca0c1f0030b866705e90"
+      "bytes": 330812,
+      "sha256": "ac616b37c64477ae405627d40eb31e17e16257420d5c0bf4f41494b784ba2573"
     },
     {
       "path": "css/generated/contact.css",
       "extension": ".css",
-      "bytes": 327681,
-      "sha256": "5f21a88d5297292f6f4c378378cfb4dcbcbdaa0bd72df29fd10451f92cd0a72f"
+      "bytes": 327911,
+      "sha256": "7d94f9d7dba6070fb404156ccc55afaa106631d164346e2a88c5c875144a9dd3"
     },
     {
       "path": "css/generated/envios-2.css",
@@ -64123,14 +64170,14 @@
     {
       "path": "css/generated/envios.css",
       "extension": ".css",
-      "bytes": 174498,
-      "sha256": "d8b3bf81a3fd9c273d89c25a7113946fbd9a59c1bcd27ce7aa477409fae0b9d0"
+      "bytes": 174728,
+      "sha256": "abae71be291707b58bb6b4a793e1ef8bf4a681ffb5f5d16b48fc12acddaf9d70"
     },
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 369995,
-      "sha256": "4d45cdd4f7eda63cbd66bd4a414bf0b0b182eb040f0311ce183739a1f19cc272"
+      "bytes": 370225,
+      "sha256": "693dbed8e117f5356d893cbd08308ed5ce243dd905210b286df828196d3496e0"
     },
     {
       "path": "css/generated/login-2.css",
@@ -64147,14 +64194,14 @@
     {
       "path": "css/generated/login.css",
       "extension": ".css",
-      "bytes": 183506,
-      "sha256": "77e95d22ea206bb25eb2202cc9ec6e0c85683912249eae7dcc4ce6edd840a02d"
+      "bytes": 183736,
+      "sha256": "65acf0364d586e2b28e89f65ba48f6e57fcc2d13d5fd8869708b160a96b019dd"
     },
     {
       "path": "css/generated/nosotros.css",
       "extension": ".css",
-      "bytes": 336638,
-      "sha256": "9f452f5919d8b203c55d47a5d20b2c368da3ede9b4f7258ebe400eb2df6331b0"
+      "bytes": 336868,
+      "sha256": "69fc3a742dafa765e9bef667793e86d9ac405f4fd3a07b6498a46567799fd45d"
     },
     {
       "path": "css/generated/perfil-2.css",
@@ -64165,32 +64212,32 @@
     {
       "path": "css/generated/perfil.css",
       "extension": ".css",
-      "bytes": 178525,
-      "sha256": "0be8d9179607242a6ced0795c0e928179eddb95b0a7b83fc89e0c1d8cb3dd714"
+      "bytes": 178755,
+      "sha256": "da750f4b762f7488d31423b5f073112b1ae87544fe5b3ee8bdded661692b6a01"
     },
     {
       "path": "css/generated/preguntas-frecuentes.css",
       "extension": ".css",
-      "bytes": 325045,
-      "sha256": "4e716c82d1f856639e2b2788c661d6928a224392dca0b356b77701400d1be279"
+      "bytes": 325275,
+      "sha256": "3f5ff2a6ec9c37e17b93f7814f7d05e5f25cd70aac67ebc6efc93a62fd4f21c4"
     },
     {
       "path": "css/generated/privacidad.css",
       "extension": ".css",
-      "bytes": 327274,
-      "sha256": "172d1d7717ac0ff241aaf1860d30d0ddf6f047b964eaadf66811823131142ce6"
+      "bytes": 327504,
+      "sha256": "b12c938ab6a56361d45a5b5668d5e42c0bf4b6e1ea9a4263dd9010d774dc4b1a"
     },
     {
       "path": "css/generated/product.css",
       "extension": ".css",
-      "bytes": 391386,
-      "sha256": "54e56b44ff8364443281de249cfe09bc29c9dd394a6585c420030dfb292f3d00"
+      "bytes": 391616,
+      "sha256": "26d174afe49b3fef55e0346259c111262285195b871d307ebaa56fd69a8c3851"
     },
     {
       "path": "css/generated/terminos.css",
       "extension": ".css",
-      "bytes": 327274,
-      "sha256": "172d1d7717ac0ff241aaf1860d30d0ddf6f047b964eaadf66811823131142ce6"
+      "bytes": 327504,
+      "sha256": "b12c938ab6a56361d45a5b5668d5e42c0bf4b6e1ea9a4263dd9010d774dc4b1a"
     },
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
@@ -64405,8 +64452,8 @@
     {
       "path": "css/theme/fondo-solido-cargador.css",
       "extension": ".css",
-      "bytes": 7936,
-      "sha256": "b3c47297715f9dd5f39fd0158f5b18d4953b6e4e89da12eb59266d442f0a5d25"
+      "bytes": 8741,
+      "sha256": "60c46490f5b6ccf0ddd687ecf2c1c7f32b9d6dc969ebf0d06525f744f2c5485a"
     },
     {
       "path": "css/theme/paridad-segura-tintin.css",
@@ -64591,8 +64638,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1238383,
-      "sha256": "a0f0d36e903e9881349e0c8b3f7583544b43ad5bf915147d136b48c5527433c7"
+      "bytes": 1240054,
+      "sha256": "51b0653f75f2a2dbdd6b3f80927c945f790855687b40fe784ea312b3884e29b9"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -66121,8 +66168,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 26165,
-      "sha256": "cc21659cf94812bdadc6b17d73976533f69bca7b7bdc72c4f64b244a7a356528"
+      "bytes": 26149,
+      "sha256": "0b07a7add2b3ecdd3da5a90c318f8a15adce587521ac6fbc8ad5148d6d78384d"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -66661,14 +66708,14 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 47266,
-      "sha256": "926cc9d66dc2c2f37e1f8ee08ff226bea86b96d396c566d6db36306a9bfef205"
+      "bytes": 47247,
+      "sha256": "c1a7cdbb0d6e3078923f8d53b9a6a86e5d8663cc02643eefc977c2437bc2bd0b"
     },
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 441858,
-      "sha256": "3261cef8d1bc0daf8d17e37229947b26b08416119d7d251094591c728f297147"
+      "bytes": 441855,
+      "sha256": "d7dbaf8783270551cfe2cc504b633c279facae7fd2df719483c6d8061f4218e4"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -66739,8 +66786,8 @@
     {
       "path": "js/admin/collections/gestion-colecciones-admin.js",
       "extension": ".js",
-      "bytes": 9116,
-      "sha256": "0e3c517d49f738d40d5ce2076bb1769e80d1f4361b28e6709e1a865d63dfd2bf"
+      "bytes": 9113,
+      "sha256": "e784d088db4551bfab356e9d83bfd75b3a18ec8986d828d98405970525cd406d"
     },
     {
       "path": "js/admin/comercio-local-admin.js",
@@ -67165,8 +67212,8 @@
     {
       "path": "js/admin/settings/metodos-pago-admin.js",
       "extension": ".js",
-      "bytes": 21623,
-      "sha256": "357351e89d644e8dde53b6b28cde8c3f0c0de2c74128e39232832a379bfaafe4"
+      "bytes": 21622,
+      "sha256": "812377a469c4be48f32309198ce0258e648dd2941bf7c05eed357030f563983c"
     },
     {
       "path": "js/admin/settings/sincronizacion-correo-admin.js",
@@ -67177,8 +67224,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 138572,
-      "sha256": "52fe1c1f342a8f1139342c8f53f2f9bd4251fd002f64d80ef7f1d8b9f3d25c2b"
+      "bytes": 138569,
+      "sha256": "2cfed5dfee119419cb9249cacb6a7ca20c031878ed9036aa01b9388097689579"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -67255,14 +67302,14 @@
     {
       "path": "js/cargador-mantenimiento-pagina.js",
       "extension": ".js",
-      "bytes": 3397,
-      "sha256": "ae717fe2bc571424aed132ed7fd688d4e27fa2b591f8efbcc24471369db46323"
+      "bytes": 3394,
+      "sha256": "09f8102be3c7672d0c2d3149fca9f4850a6f314f2fde19a811bdbe5e840d433a"
     },
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 51640,
-      "sha256": "7d4fe0a3dca9d5d1e219316642305a71d6fb084c080e02884f75617e57d95353"
+      "bytes": 51634,
+      "sha256": "1aed162f03b4ea4707db988a90007dccd9ea4cba6ab8b6c50190372123e4fcaa"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -67519,8 +67566,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 15877,
-      "sha256": "1d85b494f3a4a24c7b91d5ac85b7b177caabd885f07c60c64aeb503478711e8a"
+      "bytes": 15868,
+      "sha256": "17f8797463982ae08a252d6654ba1d9e1283412abafb488b31176390f08ec7aa"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -67537,8 +67584,8 @@
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
       "extension": ".js",
-      "bytes": 13358,
-      "sha256": "0db43dfc56b03e815ecf80f05011352797512f00d831e52284e5cc9fbac76fd3"
+      "bytes": 13355,
+      "sha256": "bd21b88270b7c10177a92bcb8c9c294a9db51c91d0d0bd4fa705606a698d870b"
     },
     {
       "path": "js/components/navigation/compartido/control-paneles.js",
@@ -67651,8 +67698,8 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 11840,
-      "sha256": "c743e312300ea20d109ac0641708cccdff219ebfd653478b039d066bee0e0341"
+      "bytes": 11837,
+      "sha256": "6e5f602398429afd20a5b6774d1ad0d7be40cf6be74a41e0d61cb2c15eba560d"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -67987,8 +68034,8 @@
     {
       "path": "js/core/store/estado-productos.js",
       "extension": ".js",
-      "bytes": 33373,
-      "sha256": "ab0f93a6b34e35a0b45a38adede5e8d76655f44bf2173874dcd9d06b8357d240"
+      "bytes": 33370,
+      "sha256": "4f14a13c9aea34c19caaef2d090fdeeed5664ba940e0ae2c85adb009b8523b30"
     },
     {
       "path": "js/core/store/iniciar-contenido-sitio.js",
@@ -68167,8 +68214,8 @@
     {
       "path": "js/inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 1884,
-      "sha256": "1e53b44c4219b54c02eb37c5c98d9a27ed912f6e01b070fa8a683cdbba63b49b"
+      "bytes": 1881,
+      "sha256": "502caf129c4e84e1864a297640f77f4bcc2f48b72645f69e091e6ec2ec628d70"
     },
     {
       "path": "js/orders/ciclo-pedido.mjs",
@@ -68257,8 +68304,8 @@
     {
       "path": "js/pages/checkout/checkout-metodos-pago.js",
       "extension": ".js",
-      "bytes": 10574,
-      "sha256": "9e9ad2ca2a5f590c6328109b612caddcb72952a53d7ca323af1b1f645530a1f2"
+      "bytes": 11971,
+      "sha256": "acdbb3903393f45eff067eb477265cc60bf4a294b6f7b6fe789e3d6aa3282c14"
     },
     {
       "path": "js/pages/checkout/checkout-puente-correo.js",
@@ -68283,6 +68330,12 @@
       "extension": ".js",
       "bytes": 3369,
       "sha256": "d9d09246573c5adbe9bd0c1dcefefd229ef2dcfe836c684032295fffe9cda077"
+    },
+    {
+      "path": "js/pages/checkout/copiar-dato-pago.js",
+      "extension": ".js",
+      "bytes": 1675,
+      "sha256": "375d2ae595b4f33e5dda585103603d8c0eaed1c88dd0a25685ad977a604bc299"
     },
     {
       "path": "js/pages/checkout/disponibilidad-checkout.js",
@@ -68323,8 +68376,8 @@
     {
       "path": "js/pages/collections/estado-colecciones.js",
       "extension": ".js",
-      "bytes": 5091,
-      "sha256": "e3b44c76e8e6c00db6c7cc523256f9115e35db6bb14b4c86c5509ba437fb1567"
+      "bytes": 5088,
+      "sha256": "6cb5bcb6e570d5c2055b5c39911b3fc654062f2ff7e57659230b2fbe6a71521e"
     },
     {
       "path": "js/pages/collections/mantenimiento-colecciones.js",
@@ -68341,14 +68394,14 @@
     {
       "path": "js/pages/collections/presentacion-colecciones.js",
       "extension": ".js",
-      "bytes": 19718,
-      "sha256": "da086021316ee89c2d25c38a81eef966753c9402063462c5c198f152c52566d2"
+      "bytes": 19715,
+      "sha256": "9e36f4a410cc4f3955444ebce87a6ac548d5d14a30418061cb72b649f29f2320"
     },
     {
       "path": "js/pages/home/carrusel-colecciones.js",
       "extension": ".js",
-      "bytes": 18775,
-      "sha256": "ed7bf09a283ffcc292aea47ee343781812e93142f475f8361ac550e0296429b5"
+      "bytes": 18772,
+      "sha256": "8663d3a25f3894a17fbde68b84e6219863d47657e62884538e04b8bcaa6761be"
     },
     {
       "path": "js/pages/home/inicio-premium.js",
@@ -68515,8 +68568,8 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "extension": ".js",
-      "bytes": 10382,
-      "sha256": "214e30942c383b23699415f568e3a5f849540f773ea7c5e643c0d6611f149172"
+      "bytes": 10376,
+      "sha256": "808dd91aa8accf8131bddb60ffec9bc68e0e091e6afca372776bb71b07465fc0"
     },
     {
       "path": "js/quality/cambios-tienda.js",
@@ -68659,8 +68712,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 79081,
-      "sha256": "0b7e5ad2601cf2f2b329c5e57955f63edfbc98d3d9f635162bdc20d22214b6d2"
+      "bytes": 79065,
+      "sha256": "ca7bf49a10083c6b4b107ff973893f12fe1e552437bd3e38c4fd30b79607bb07"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -68845,8 +68898,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1961,
-      "sha256": "cfb1084611acebdfca855dedc9be5f60014779f5a21f0473f0c8e624510c64bb"
+      "bytes": 1958,
+      "sha256": "ad0b39cd0ed69f0ccc5cb12f44553126ee911c36c76214de1e48ab5218f20157"
     },
     {
       "path": "package-lock.json",
@@ -68863,8 +68916,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 61062,
-      "sha256": "73202cb641bd65f1887b183ae4ac43425a22ec5d26e4fd2740b017a4fd424f80"
+      "bytes": 61046,
+      "sha256": "d95842c1717b0dd3a359ad93aa5969eebfc22f2c99ad7e75c0b4801801c06078"
     },
     {
       "path": "playwright.config.js",
@@ -68887,14 +68940,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 24101,
-      "sha256": "08523750068d3a82bcc61e1cb9318407f40779166d0d351841b30ba4ee921a31"
+      "bytes": 24085,
+      "sha256": "99ff793911b56905d458d7288136506ebbc0312413f6a4d0a185fbfb93dfbd09"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 27962,
-      "sha256": "8f61bf0ea487b6b517b24ecf71123305982e7ef8c2d923368bcba9ea8de792eb"
+      "bytes": 27946,
+      "sha256": "4e01d99a0735353c7c929a47fb32a1eb3c1d5f420410bbf751cae842fd464591"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -68905,8 +68958,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 29653,
-      "sha256": "f66921ee3ac13d926f62ffd50ce04ad39ea2d2266d261aaa892e8a71227f36b8"
+      "bytes": 29634,
+      "sha256": "54edbdbe087ddba8641f278b2eccddcad4bdfb54d9bc34a6107ec3e68bdb33b9"
     },
     {
       "path": "robots.txt",
@@ -69781,8 +69834,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 81691,
-      "sha256": "15b8476d63a94c02d33762d3de9efb4c25b67f77bc19096e1c11d0f9bf60d3bb"
+      "bytes": 81814,
+      "sha256": "7e6dac20b73ed143d4dca4c2be92b7cbed6fac8db21ad21e2aba4386f3626c99"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -70129,8 +70182,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 29933,
-      "sha256": "9dadc034946e4391e77bc394c0714f0201730012685f3d16af5a9a7f5eefeedc"
+      "bytes": 29920,
+      "sha256": "d93a9848046201fcfd932599514ff0a69bc646b5807c7f7b9c2f3b2bb0095235"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -70213,8 +70266,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 25868,
-      "sha256": "f58c7fdc1473ffebcab730e22b342fce71887273d46d7c6a655d0f44780345ca"
+      "bytes": 25852,
+      "sha256": "007a1503f479010d4c67a61cd67ad788ebf0e1e054eda0c900e022b3a0132f57"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -71927,6 +71980,12 @@
       "sha256": "5be67553d323dab8485f63c184eb6f3577d5529d80eaaf56b8de14dc8d46050d"
     },
     {
+      "path": "tests/payments/copiar-dato-pago.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1608,
+      "sha256": "1acaac5df463e7f58e4cc6986ef360021e215eaa6ff35fa876d61b3e04229263"
+    },
+    {
       "path": "tests/payments/paypal-refund-reconciliation.test.mjs",
       "extension": ".mjs",
       "bytes": 4632,
@@ -73291,8 +73350,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 132043,
-      "sha256": "30a80caba09f564dd89ef2666940cc22918d7b8c942436a1910c608d4a296944"
+      "bytes": 132040,
+      "sha256": "9789cf41d8883fac2777f996737d742488607ae14677ebaefb77ecb4436f7447"
     },
     {
       "path": "vendor/onnxruntime-web-1.22.0/PROCEDENCIA.json",
@@ -75099,7 +75158,7 @@
     },
     {
       "file": "js/pages/checkout/checkout-metodos-pago.js",
-      "line": 12,
+      "line": 14,
       "target": "/api/paypal-config",
       "method": "GET"
     },

@@ -4,6 +4,8 @@ import {
   paymentMethodLabel,
 } from '../../orders/nucleo-metodos-pago.js?v=tintin-20261105-banco-familiar-1';
 
+import { extraerDatoParaCopiar, copiarTexto } from './copiar-dato-pago.js?v=tintin-20261105-copiar-pago-1';
+
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?$/i;
 const VIEWPORTS = [1920, 1440, 1280, 1024, 768, 390, 320];
 
@@ -32,7 +34,7 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-palette-20261014-1';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-copiar-20261105-1';
   document.head.appendChild(link);
 }
 
@@ -40,10 +42,14 @@ function paymentDetailsHtml(method) {
   const instructions = method.instructions
     ? `<p class="ck-payment-runtime-instructions">${escapeHtml(method.instructions)}</p>`
     : '';
-  const details = method.details.map(detail => `
+  const details = method.details.map((detail, index) => `
     <div class="ck-payment-runtime-detail">
       <strong>${escapeHtml(detail.label || 'Dato')}</strong>
-      <span>${escapeHtml(detail.value)}</span>
+      <div class="ck-payment-runtime-value">
+        <span>${escapeHtml(detail.value)}</span>
+        <button type="button" class="ck-payment-copy" data-copy-detail="${index}" aria-label="Copiar ${escapeHtml(detail.label || 'dato')}">Copiar</button>
+        <span class="tt-sr-only" role="status" data-copy-status></span>
+      </div>
     </div>
   `).join('');
   if (!instructions && !details) return '';
@@ -190,6 +196,26 @@ function boot() {
     const error = document.getElementById('error-3');
     if (error) error.classList.remove('show');
   });
+
+  const copyTimers = new WeakMap();
+  root.addEventListener('click', async event => {
+    const button = event.target.closest('.ck-payment-copy');
+    if (!button) return;
+    event.stopPropagation();
+    const method = methods.find(entry => entry.id === button.closest('.ck-payment-runtime-item')?.dataset.paymentMethodId);
+    const detail = method?.details[Number(button.dataset.copyDetail)];
+    if (!detail) return;
+    const copied = await copiarTexto(extraerDatoParaCopiar(detail.value));
+    button.textContent = copied ? '¡Copiado!' : 'No se pudo';
+    button.classList.toggle('is-copied', copied);
+    const status = button.parentElement.querySelector('[data-copy-status]');
+    if (status) status.textContent = copied ? 'Copiado al portapapeles' : 'No se pudo copiar';
+    window.clearTimeout(copyTimers.get(button));
+    copyTimers.set(button, window.setTimeout(() => {
+      button.textContent = 'Copiar';
+      button.classList.remove('is-copied');
+    }, 1800));
+  }, true);
 
   root.addEventListener('click', event => {
     const item = event.target.closest('.ck-payment-runtime-item');

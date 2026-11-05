@@ -22,6 +22,15 @@ html body #tt-loader:not(.tt-out) {
   visibility: visible !important;
 }
 
+/* La barra de scroll de la página (escritorio con barra clásica) queda sobre
+   el loader como una franja clara en el borde derecho. Se pinta del mismo
+   rosa mientras el loader está activo: conserva el ancho y no mueve el layout. */
+html:has(body #tt-loader:not(.tt-out)) {
+  --color-scrollbar-thumb: #F8AACA;
+  --color-scrollbar-track: #F8AACA;
+  scrollbar-color: #F8AACA #F8AACA;
+}
+
 html body #tt-loader::before {
   content: "";
   position: absolute;
@@ -215,6 +224,11 @@ html body #tt-loader-wordmark {
   height: auto;
   margin-top: calc(var(--tt-loader-brand-width) * .09);
   overflow: hidden;
+  /* El recorte del hero incluye la punta de la cola de la libélula (columna
+     x 748-757, filas 715-733 del archivo) y se veía como un puntito sobre
+     "tintin". Se quita solo esa columna: los corazones empiezan en la fila 723
+     en otras columnas y no deben recortarse. Porcentajes de 870x260. */
+  clip-path: polygon(0 0, 47.5% 0, 47.5% 9.6%, 49.7% 9.6%, 49.7% 0, 100% 0, 100% 100%, 0 100%) !important;
 }
 @media (prefers-reduced-motion: no-preference) {
   html body #tt-loader-spin-wrap.tt-ready::before {
