@@ -1,127 +1,23 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "1733898e7b0964b55ca6b11ef2b9f0e4cac1fb8a",
-  "reason": "Etiqueta de caché footer-fade del footer con fondo de contraste y reserva de tabbar; pruebas footer y novak-credit",
+  "baseCommit": "b3f7a11bbf6e6cad025e5d08eea40fff51e111de",
+  "reason": "Ocultar logo centrado del header tablet solo en inicio (redundante con el hero)",
   "files": [
     {
-      "path": "404.html",
-      "oldHash": "d0435ea22d46639ac05e7a785802dabf0ee8844540a8717d8966a7ba94189430",
-      "newHash": "dd2ba53a243444ac9093883c5cc9d6fbccfae311562a1d78dec624ec925ac09a"
-    },
-    {
-      "path": "about.html",
-      "oldHash": "13e4d3446c72146e064a4e71a87cd942d28a23a6daaba0b201222ce8c7fd50c8",
-      "newHash": "b512f6b1d5c5a180a767b7bc447a7d2cbe8fecd4ab60e91d51cbc615113b0614"
-    },
-    {
-      "path": "admin-images.html",
-      "oldHash": "eaddefaa0d0c9da4c81308c16fe4be89a797c81c4f7551f62ab078c7901f65fd",
-      "newHash": "aabd4560cffaec577a69357a3ce5981972f8a9601f34639813ca246020ad46c5"
-    },
-    {
-      "path": "admin.html",
-      "oldHash": "dda11acd587fbf50b471e12b8025243e33b3a50eeeeaaeb8aecb365b3e5be7dd",
-      "newHash": "01a27e090ec61d2158d44ac78728f05a701bf3e4130d007bb2cdd1da44e4830d"
-    },
-    {
-      "path": "cambios-devoluciones.html",
-      "oldHash": "2e43de387f9fe2ddd366264a8b13b9ebd9cac0553854e2ff4978443fa95c793b",
-      "newHash": "e881205ff9873a1f2d57dd4040111ada071b5f472ea76609e6e2921ea6dbf88a"
-    },
-    {
-      "path": "catalogo.html",
-      "oldHash": "2480097357619e3265ed8c2182e68064bf7a118025d70b1d59c5bedd1b0bff49",
-      "newHash": "e2008588287ffeb90090b1be65c032e8be456c1e16ccfc257a7f88b3af896a4d"
-    },
-    {
-      "path": "checkout.html",
-      "oldHash": "682d722253ce104f42e656a96817b31acda53c43dfd06d747c6206d3c8af0229",
-      "newHash": "cdbc375c51c69648ce9915e43b202732d5ece0709c7882ca8e0d6d21bfab5683"
-    },
-    {
-      "path": "collections.html",
-      "oldHash": "160b077fcdd3a732ad1571adf42a34578d1b3be21fb7421edf778daa7186fe31",
-      "newHash": "4687fabab13f1ce15356ea48e0c42f0c041cd2c687bbd8d455be89810d84aae5"
-    },
-    {
-      "path": "contact.html",
-      "oldHash": "663fac3e7b34c6c232452379cf8215c1259cfd2f77ba2b07cd1979e1a9a6e678",
-      "newHash": "235c4ad7ba0352928ab6b2f370ea538c118a5e2a96622c3bc39b0ac975b3c02e"
-    },
-    {
-      "path": "envios.html",
-      "oldHash": "f9509cab23ccc7282d71fc2d9918137f0af00f44b5c747717af2c9d411ac15ec",
-      "newHash": "7a9d1ea1313dbdf8e7347e66c15c63086baea059dc0981fd925aab722924aa0f"
+      "path": "css/pages/home/ajuste-inicio.css",
+      "oldHash": "b005fc5a859f7eae66a67512a04e9d4bf77e7e2dc99ce58f2b3492368651aceb",
+      "newHash": "ac246a65a21dbfec2bc587851f0d0d52e123703a6ef407ea2bd9cbe75df77067"
     },
     {
       "path": "index.html",
-      "oldHash": "fe5716ea79f3fe6cd32629f54a4261fa5dd7db91c30d1563f5fe1d30c3645085",
-      "newHash": "566e39b4852ba96a8bea619813c698006e51dfb52c84f20fbc1ccc28de094a21"
-    },
-    {
-      "path": "login.html",
-      "oldHash": "b2d54045fae0d8952c0c6cb213ffe13689f39198871bc908f75891375dfcae84",
-      "newHash": "4ba92b7cedd2ffed727e54bc6dbc3a9c883728ce36c472e29ef0ee0f1ad04ee0"
-    },
-    {
-      "path": "perfil.html",
-      "oldHash": "60abd31ea130948eefc0dbf05f581113eef29ecb7f1e0ba2c0a862ab22ba2d13",
-      "newHash": "7eeba2975c1a95f14dbe523ea21bdef301d6b69022987d03d26f8f6c916aa558"
-    },
-    {
-      "path": "preguntas-frecuentes.html",
-      "oldHash": "d48a5993558d4bbce5ad5f26456be04f9bd13b81636b99bfd72831f90a036ee5",
-      "newHash": "efcfc3d74fae9325b3f44cda709dc0f8d3bd8c835d37ab3e01c2f6d72212bff5"
-    },
-    {
-      "path": "privacidad.html",
-      "oldHash": "8d0347b40f5d1bffce1684e1d1e8cab9c90a79e6dfd9a3a5cd6dab75a629177f",
-      "newHash": "66e86d0093cd4caf177a55ff50d5dbb8be2afe50d261384cd5aa729a4663ec92"
-    },
-    {
-      "path": "product.html",
-      "oldHash": "0677e4cf0aa9a5a32fa4cda5945b145a7c3190060bb15accde2f811424ebbf33",
-      "newHash": "830cffa7671491ddc00bfd0cde1f76b215d3d9ca0eeecb5fd8837e7b8904c2ad"
+      "oldHash": "f7f7a92f40f6d661e77d1f75bb4f71bb7d54580d138c310b9ae0ab1ba8885337",
+      "newHash": "297bc410bc307637a8d51ec2c977bc6b0c3e1f9a940ad0015750d9ae65076e73"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "65cc07375d1144f4a627cb613a2c648af8581f3112b70a349a139e9dc00ccc73",
-      "newHash": "b9a598db0171779e21d4ac7ab2634f4b533eca44e065f42f7f33293e4549d6dc"
-    },
-    {
-      "path": "terminos.html",
-      "oldHash": "d72d53600d106f3526abef89cbcace972a2790ed13bd9af581b500152b066c8b",
-      "newHash": "bb08714b3983a0e43201468a7c2af65f52766d4c37247ef99d736e4b25229164"
+      "oldHash": "80b8aad00a2256fb9513d79d49645a053ee31ecb02a0fe540f9cfb94a69321f9",
+      "newHash": "8cb581c4bb24dd268f52579f5d11f517ee2a84ee1c2938fa455f642e620fa2c7"
     }
   ],
-  "affectedRecords": [
-    "cuenta-bloqueada",
-    "entrada-login",
-    "entrada-login__google-btn__1",
-    "entrada-login__login-codigo__2",
-    "firebase-auth__redirect-result__5",
-    "firestore__users-uid__8",
-    "google-btn",
-    "google-btn__firebase-auth__3",
-    "login-codigo",
-    "login-codigo__firebase-auth__4",
-    "pagina-principal",
-    "perfil",
-    "perfil__ultimos-datos__11",
-    "productos",
-    "redirect-result",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-principal__17",
-    "roles__perfil__10",
-    "roles__super-panel__14",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
-    "super-panel__productos__34",
-    "ultimos-datos",
-    "ultimos-datos__perfil__13",
-    "users-uid",
-    "users-uid__cuenta-bloqueada__12",
-    "users-uid__roles__9"
-  ]
+  "affectedRecords": []
 }
