@@ -21,17 +21,17 @@ async function open(page) {
   await page.evaluate(()=>document.body.classList.add('tt-public-shell-mounted','tt-home-runtime-ready'));
   await page.evaluate(()=>document.fonts.ready);
 }
-for(const [width,height] of [[844,390],[1306,630],[320,568],[375,812],[390,844],[430,932],[568,320],[768,1024],[820,1180],[1024,768],[1024,1366],[1120,840],[1280,720],[1440,900],[1920,1080]]) {
+for(const [width,height] of [[844,320],[844,390],[1306,630],[320,568],[375,812],[390,844],[430,932],[568,320],[768,1024],[820,1180],[1024,768],[1024,1366],[1120,840],[1280,720],[1440,900],[1920,1080]]) {
   test(`estructura sin recortes, marca plana y sin Colecciones · ${width}x${height}`,async({page},testInfo)=>{
     await page.setViewportSize({width,height});await open(page);
     await expect.poll(()=>page.locator('.tt-hero-suitcase img').evaluate(e=>e.complete&&e.naturalWidth>0)).toBe(true);
     const g=await page.evaluate(()=>{
       const hero=document.querySelector('#hero'),rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
-      return {hero:rect(hero),brand:rect(hero.querySelector('.tt-hero-brand')),art:rect(hero.querySelector('.tt-hero-suitcase')),title:rect(hero.querySelector('h1')),actions:[...hero.querySelectorAll('.tt-hero-actions a')].map(rect),overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth,logoShadow:getComputedStyle(hero.querySelector('.tt-hero-symbol')).boxShadow,logoFilter:getComputedStyle(hero.querySelector('.tt-hero-symbol')).filter,removed:!document.querySelector('.tt-hero-index,.tt-hero-collections'),gap:document.querySelector('.tt-trust-bar').getBoundingClientRect().top-hero.getBoundingClientRect().bottom,fit:getComputedStyle(hero.querySelector('.tt-hero-suitcase img')).objectFit};
+      return {wa:rect(document.querySelector('.tt-wa-float')),hero:rect(hero),brand:rect(hero.querySelector('.tt-hero-brand')),art:rect(hero.querySelector('.tt-hero-suitcase')),title:rect(hero.querySelector('h1')),actions:[...hero.querySelectorAll('.tt-hero-actions a')].map(rect),overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth,logoShadow:getComputedStyle(hero.querySelector('.tt-hero-symbol')).boxShadow,logoFilter:getComputedStyle(hero.querySelector('.tt-hero-symbol')).filter,removed:!document.querySelector('.tt-hero-index,.tt-hero-collections'),gap:document.querySelector('.tt-trust-bar').getBoundingClientRect().top-hero.getBoundingClientRect().bottom,fit:getComputedStyle(hero.querySelector('.tt-hero-suitcase img')).objectFit};
     });
     expect(g.hero.bottom).toBeLessThanOrEqual(height+1);expect(g.removed).toBe(true);expect(g.gap).toBeCloseTo(0);expect(g.overflow).toBeLessThanOrEqual(1);expect(g.fit).toBe('contain');expect(g.logoShadow).toBe('none');expect(g.logoFilter).not.toContain('drop-shadow');
     for(const box of [g.brand,g.art,g.title,...g.actions]){expect(box.left).toBeGreaterThanOrEqual(-1);expect(box.right).toBeLessThanOrEqual(width+1);expect(box.top).toBeGreaterThanOrEqual(g.hero.top-1);expect(box.bottom).toBeLessThanOrEqual(g.hero.bottom+1);}
-    for(const action of g.actions) expect(action.height).toBeGreaterThanOrEqual(44);
+    for(const action of g.actions){expect(action.height).toBeGreaterThanOrEqual(44);expect(action.left<g.wa.right&&action.right>g.wa.left&&action.top<g.wa.bottom&&action.bottom>g.wa.top,'WhatsApp no debe cubrir acciones del hero').toBe(false);}
     if(height>width&&width<=1120){expect(g.brand.bottom).toBeLessThanOrEqual(g.art.top+1);expect(g.art.bottom).toBeLessThanOrEqual(g.title.top+1);}else{expect(g.art.right).toBeLessThanOrEqual(g.brand.left+1);}
     await expect(page.locator('.tt-hero-cta')).toHaveText('COMPRAR AHORA');await expect(page.locator('.tt-hero-cta')).toHaveAttribute('href','/catalogo');await expect(page.locator('.tt-hero-link')).toHaveAttribute('href','/about');
     await page.locator('.tt-hero-cta').focus();expect(await page.locator('.tt-hero-cta').evaluate(e=>getComputedStyle(e).outlineStyle)).not.toBe('none');

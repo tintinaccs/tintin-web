@@ -1,3 +1,7 @@
+## Ampliación de geometría de PR1341 — 2026-11-05 — Codex /root
+
+HEAD inicial499c381b, CI42013156064/1 en curso y preview4f65af6e SUCCESS; no acreditar merge. Tras30/30 pruebas finales y84/84 casos de navegación, se midió además844×320: enlace201–249px y WhatsApp236–292px se superponían. Se reserva un carril de96px a la derecha en horizontal bajo y se agrega ese tamaño junto con una aserción de intersección para todas las acciones/WhatsApp. No cambia el PNG, fuente ni controles. Nueva URL CSS por bytes nuevos; nuevo SHA y sus gates requieren recibos propios. Plan mantiene base main1b1b2acf. PASS_LOCAL de la ampliación: build:pages, preflight completo exit0 y31/31 Chromium finales, incluida intersección WhatsApp/acciones y844×320. CI del nuevo SHA y producción PENDING; no heredar el CodeQL42013150194/1 SUCCESS de499c381b.
+
 ## Hero proporcional al primer viewport — 2026-11-05 — Codex /root
 
 Base1b1b2acf (main, PR1339). Se reconcilió el trabajo local anterior, conservado en stash, con PR1331 (fuente/CTA),1332/1333 (retiro de barra móvil),1334 (pie) y1336/1339 (modo de edición). No se reintroducen renderizadores ni se sustituyen sus correcciones. PR1330 ya fusionado7c555c19: CI41883112664/1, CodeQL41882996570/1, salud41883112647/1 y Cloudflare126760397845 SUCCESS; recibos en descripción, automatización específica desactivada.
