@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5a92dc81310cc51ecb80dec16d5334649e547cc700f45196893371fe453a0680",
+  "sourceFingerprint": "8ff44e4a80d35d0a94ea8aa89163cb065c1792df3c055d74e251a433523c6c55",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1810,
-    "textFiles": 1662,
-    "totalBytes": 57157070,
+    "files": 1811,
+    "textFiles": 1663,
+    "totalBytes": 57160032,
     "pages": 19,
-    "modules": 1172
+    "modules": 1173
   },
   "viewports": [
     {
@@ -21820,8 +21820,8 @@
         "guest",
         "client"
       ],
-      "bytes": 27815,
-      "sha256": "66e86d0093cd4caf177a55ff50d5dbb8be2afe50d261384cd5aa729a4663ec92",
+      "bytes": 28031,
+      "sha256": "9277a7eb394c976c6f260ac9d1dc0b6a22e4d60771400506ddf976b4660e60e1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -21905,9 +21905,19 @@
           "line": 265
         },
         {
+          "raw": "js/core/store/iniciar-contenido-sitio.js?v=tintin-20261105-modo-edicion-1",
+          "target": "js/core/store/iniciar-contenido-sitio.js",
+          "line": 266
+        },
+        {
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261105-modo-edicion-1",
+          "target": "js/core/auth/insignia-edicion.js",
+          "line": 267
+        },
+        {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 266
+          "line": 268
         }
       ],
       "styles": [
@@ -22581,9 +22591,21 @@
           "exists": true
         },
         {
+          "raw": "js/core/store/iniciar-contenido-sitio.js?v=tintin-20261105-modo-edicion-1",
+          "target": "js/core/store/iniciar-contenido-sitio.js",
+          "line": 266,
+          "exists": true
+        },
+        {
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261105-modo-edicion-1",
+          "target": "js/core/auth/insignia-edicion.js",
+          "line": 267,
+          "exists": true
+        },
+        {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 266,
+          "line": 268,
           "exists": true
         },
         {
@@ -24303,8 +24325,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25721,
-      "sha256": "bb08714b3983a0e43201468a7c2af65f52766d4c37247ef99d736e4b25229164",
+      "bytes": 25937,
+      "sha256": "a1a20741877a6586c24f2991c5f4ee552dd9fc88ec595b13593f611d30062f2e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -24381,9 +24403,19 @@
           "line": 237
         },
         {
+          "raw": "js/core/store/iniciar-contenido-sitio.js?v=tintin-20261105-modo-edicion-1",
+          "target": "js/core/store/iniciar-contenido-sitio.js",
+          "line": 238
+        },
+        {
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261105-modo-edicion-1",
+          "target": "js/core/auth/insignia-edicion.js",
+          "line": 239
+        },
+        {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 238
+          "line": 240
         }
       ],
       "styles": [
@@ -25077,9 +25109,21 @@
           "exists": true
         },
         {
+          "raw": "js/core/store/iniciar-contenido-sitio.js?v=tintin-20261105-modo-edicion-1",
+          "target": "js/core/store/iniciar-contenido-sitio.js",
+          "line": 238,
+          "exists": true
+        },
+        {
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261105-modo-edicion-1",
+          "target": "js/core/auth/insignia-edicion.js",
+          "line": 239,
+          "exists": true
+        },
+        {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 238,
+          "line": 240,
           "exists": true
         },
         {
@@ -35497,6 +35541,24 @@
           "target": "js/pages/catalog/prioridad-stock-catalogo.js",
           "dynamic": false,
           "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "js/core/store/iniciar-contenido-sitio.js",
+      "bytes": 214,
+      "sha256": "8cf52bff27b10bd04d978cda173a249a6b92ff536722debda9b303adb6384b75",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./contenido-sitio.js?v=tintin-suitcase-20261104-1",
+          "target": "js/core/store/contenido-sitio.js",
+          "dynamic": false,
+          "line": 2
         }
       ],
       "endpoints": []
@@ -61379,8 +61441,8 @@
     },
     {
       "path": "tests/visual-builder/modo-edicion-sitio.spec.js",
-      "bytes": 7326,
-      "sha256": "a929a2a2fed0ecf9be062af5781f79481f088d18cafe601d3df42f49f60ccf69",
+      "bytes": 8678,
+      "sha256": "4ab7851f5970320d98202a9348445db15e0edbabd9c74f2b54a35aae012463d6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -63390,8 +63452,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 899,
-      "sha256": "3b743f42a553a552ba59d983fa294639ae997878ef71125da3af6e3c67f59e5f"
+      "bytes": 888,
+      "sha256": "836acd9a6ac05747605609fd6cc3729d5ae77f56490ca8cec86e7b265f85d0df"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -63403,7 +63465,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "cb4ee1440228861919c861a446fa96605dcf9f193bc297da8b5d2cea729d031b"
+      "sha256": "43fbb3b865fedce58b246d808ce6f0f9e277633fd7d11646e6949a556733d9d4"
     },
     {
       "path": "config/public-site.json",
@@ -64242,8 +64304,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1223169,
-      "sha256": "ac65a729eb19a688180b03f839a06fc2c7b4fd74d1ec51337b8101f968ed0c16"
+      "bytes": 1223961,
+      "sha256": "8215deb84e514d0a72c44d32f35fe9958f20ef2bc10ff09dabf8223f9fe44051"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -67642,6 +67704,12 @@
       "sha256": "97e1984b6325981b3a5cbdf9c80402f64e49ff99a2b9b17ebdf58764ccb74ce3"
     },
     {
+      "path": "js/core/store/iniciar-contenido-sitio.js",
+      "extension": ".js",
+      "bytes": 214,
+      "sha256": "8cf52bff27b10bd04d978cda173a249a6b92ff536722debda9b303adb6384b75"
+    },
+    {
       "path": "js/core/store/inventario-variantes.mjs",
       "extension": ".mjs",
       "bytes": 18075,
@@ -68538,8 +68606,8 @@
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 27815,
-      "sha256": "66e86d0093cd4caf177a55ff50d5dbb8be2afe50d261384cd5aa729a4663ec92"
+      "bytes": 28031,
+      "sha256": "9277a7eb394c976c6f260ac9d1dc0b6a22e4d60771400506ddf976b4660e60e1"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -69426,8 +69494,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 81586,
-      "sha256": "8cb581c4bb24dd268f52579f5d11f517ee2a84ee1c2938fa455f642e620fa2c7"
+      "bytes": 81769,
+      "sha256": "12fc115a91878ea693f1fb9f4dc6a9b74cc5b4576cec68a2557643c9c9c051d7"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -69858,8 +69926,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 25721,
-      "sha256": "bb08714b3983a0e43201468a7c2af65f52766d4c37247ef99d736e4b25229164"
+      "bytes": 25937,
+      "sha256": "a1a20741877a6586c24f2991c5f4ee552dd9fc88ec595b13593f611d30062f2e"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -72834,8 +72902,8 @@
     {
       "path": "tests/visual-builder/modo-edicion-sitio.spec.js",
       "extension": ".js",
-      "bytes": 7326,
-      "sha256": "a929a2a2fed0ecf9be062af5781f79481f088d18cafe601d3df42f49f60ccf69"
+      "bytes": 8678,
+      "sha256": "4ab7851f5970320d98202a9348445db15e0edbabd9c74f2b54a35aae012463d6"
     },
     {
       "path": "tests/visual-builder/orden-casillas.test.mjs",
