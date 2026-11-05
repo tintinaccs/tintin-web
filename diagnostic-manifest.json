@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ab89e3b0bec65ae001b8e200d5ff8cf6c7029300496c63434eeb21953f3d6eaf",
+  "sourceFingerprint": "5a92dc81310cc51ecb80dec16d5334649e547cc700f45196893371fe453a0680",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1809,
-    "textFiles": 1661,
-    "totalBytes": 57150311,
+    "files": 1810,
+    "textFiles": 1662,
+    "totalBytes": 57157070,
     "pages": 19,
-    "modules": 1171
+    "modules": 1172
   },
   "viewports": [
     {
@@ -49628,6 +49628,47 @@
       "endpoints": []
     },
     {
+      "path": "tests/ci/otp-observer-lifecycle.test.mjs",
+      "bytes": 3488,
+      "sha256": "0c29de5634947f7c49c539a37e8bc2a2cf1972e6e7d85db870072649b0be1e0c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "http://fixture${path}/",
+          "line": 19
+        }
+      ]
+    },
+    {
       "path": "tests/ci/server-import.spec.js",
       "bytes": 3143,
       "sha256": "52a543bb155da7639e2d54d4147b060346d06c98b1acf88aecf12711485720b0",
@@ -57078,8 +57119,8 @@
     },
     {
       "path": "tests/runtime/critical-flows.spec.js",
-      "bytes": 19717,
-      "sha256": "cf3bac7e44daa6d17fa31eb6e176d430137b358307aefeb3b0bb052a9d909c61",
+      "bytes": 20226,
+      "sha256": "48bad353f538edf9aa9c93c87a4ef19a633fc263a6bd63bbfc2fa0fbc1e16448",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57089,19 +57130,19 @@
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 110
+          "line": 119
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 186
+          "line": 195
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 232
+          "line": 241
         }
       ],
       "endpoints": [
@@ -57119,7 +57160,7 @@
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 110
+          "line": 119
         }
       ]
     },
@@ -64201,8 +64242,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1220849,
-      "sha256": "f9a110ebeb01d142fdd69fab45073b5fb5423dd7edc34df250431280d7bb4220"
+      "bytes": 1223169,
+      "sha256": "ac65a729eb19a688180b03f839a06fc2c7b4fd74d1ec51337b8101f968ed0c16"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -64477,8 +64518,8 @@
     {
       "path": "docs/agent/TINTIN_GLOBAL_PHASES.md",
       "extension": ".md",
-      "bytes": 12873,
-      "sha256": "926aad72d8d51c9cb7eafb219b160f9971bfd362efb41b6cb79b7702b6a45e26"
+      "bytes": 13315,
+      "sha256": "8d4e734d2b0d9da1f577e7d1df46e66f851862ad449971a83831f22897616ffb"
     },
     {
       "path": "docs/agent/TINTIN_PHASE04_CATALOG.md",
@@ -70703,6 +70744,12 @@
       "sha256": "758fd6505fe60119193e84f4796614a839d91fba8d23fb7ce3fab24a13873bd7"
     },
     {
+      "path": "tests/ci/otp-observer-lifecycle.test.mjs",
+      "extension": ".mjs",
+      "bytes": 3488,
+      "sha256": "0c29de5634947f7c49c539a37e8bc2a2cf1972e6e7d85db870072649b0be1e0c"
+    },
+    {
       "path": "tests/ci/server-import.spec.js",
       "extension": ".js",
       "bytes": 3143,
@@ -71911,8 +71958,8 @@
     {
       "path": "tests/runtime/critical-flows.spec.js",
       "extension": ".js",
-      "bytes": 19717,
-      "sha256": "cf3bac7e44daa6d17fa31eb6e176d430137b358307aefeb3b0bb052a9d909c61"
+      "bytes": 20226,
+      "sha256": "48bad353f538edf9aa9c93c87a4ef19a633fc263a6bd63bbfc2fa0fbc1e16448"
     },
     {
       "path": "tests/runtime/email-history-safety.spec.js",
