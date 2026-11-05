@@ -9,6 +9,7 @@ let authorized = false;
 let domObserver = null;
 let syncScheduled = false;
 let globalListenersBound = false;
+let editsInPage = false;
 
 function injectStyles() {
   if (document.getElementById('tt-edit-badge-style')) return;
@@ -59,8 +60,12 @@ function createBadge(element) {
   if (!page) return null;
   const badge = document.createElement('a');
   badge.className = 'tt-edit-badge';
-  badge.href = `admin.html?tab=contenido&page=${encodeURIComponent(page)}&section=${encodeURIComponent(section)}`;
-  badge.title = 'Editar esta sección en Super Admin';
+  // Super Admin edita sobre la página real (modo edición); el resto de roles
+  // conserva el acceso previo al panel.
+  badge.href = editsInPage
+    ? `${location.pathname}?ttEdit=1&ttSection=${encodeURIComponent(section)}`
+    : `admin.html?tab=contenido&page=${encodeURIComponent(page)}&section=${encodeURIComponent(section)}`;
+  badge.title = editsInPage ? 'Editar esta sección en la página' : 'Editar esta sección en Super Admin';
   badge.setAttribute('aria-label', 'Editar esta sección');
   badge.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>';
   badge.addEventListener('click', event => event.stopPropagation());
@@ -134,6 +139,7 @@ let permissionEpoch = 0;
 subscribeAuthState(async user => {
   const epoch = ++permissionEpoch;
   authorized = false;
+  editsInPage = Boolean(user && !user.isAnonymous && user.email === SUPER_ADMIN);
   removeBadges();
   if (!user || user.isAnonymous) return;
   try {
@@ -142,3 +148,10 @@ subscribeAuthState(async user => {
     console.warn('[edit-badge] no se pudo comprobar el permiso:', error);
   }
 });
+
+// Con ?ttEdit=1 el Super Admin entra al modo edición sobre la página real.
+if (typeof location !== 'undefined' && new URLSearchParams(location.search).get('ttEdit') === '1') {
+  import('../store/modo-edicion-sitio.js?v=tintin-suitcase-20261104-1').catch(error => {
+    console.warn('[edit-mode] no se pudo cargar el modo edición:', error);
+  });
+}

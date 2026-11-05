@@ -264,8 +264,15 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   await expect(page.locator('#btn-close-sheet')).toBeFocused();
 });
 
-test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async ({ page }) => {
+test('tablet oculta el logo del header solo en el inicio (el hero ya lo muestra)', async ({ page }) => {
   await openPublicPage(page, { width: 768, height: 1024 });
+  await expect(page.locator('#tt-header-tablet .tt-tablet-logo-link')).toHaveCSS('visibility', 'hidden');
+  await expect(page.locator('#btn-menu-tablet')).toBeVisible();
+  await expect(page.locator('.tt-tablet-actions')).toBeVisible();
+});
+
+test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async ({ page }) => {
+  await openPublicPage(page, { width: 768, height: 1024 }, '/about');
 
   await expect(page.locator('#tt-header-tablet')).toBeVisible();
   await expect(page.locator('#tt-header-desktop-tablet')).toBeHidden();
@@ -658,9 +665,15 @@ test('movimiento reducido abre y cierra sin animación de desplazamiento', async
 test('las categorías se desplazan con el dedo y el fondo conserva su posición', async ({ page }) => {
   await mockGuestNavigation(page);
   await openPublicPage(page,{width:390,height:844},'/envios');
-  // html usa scroll-behavior:smooth: sin esperar, el panel podía bloquear el
-  // fondo antes de llegar a 200 y la restauración volvía a la posición previa.
-  await page.evaluate(() => scrollTo({ left: 0, top: 200, behavior: 'instant' }));
+  // El reset de entrada escribe arriba otra vez en el siguiente frame.
+  // Reproducimos esa tarea real pendiente y la completamos antes de preparar
+  // la posición: esperar load/fonts no vacía requestAnimationFrame.
+  await page.evaluate(async () => {
+    window.TintinPageScroll.reset();
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    scrollTo({ left: 0, top: 200, behavior: 'instant' });
+    await new Promise(resolve => requestAnimationFrame(resolve));
+  });
   await expect.poll(() => page.evaluate(() => Math.round(scrollY))).toBe(200);
   await page.locator('#tabbar-tienda').click();
   await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('open');

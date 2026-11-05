@@ -10,6 +10,26 @@ PASS_LOCAL: node --test tests/social/instagram-feed.test.mjs 7/7; Playwright tes
 
 NOT_VERIFIED: feed real con credenciales de Meta, incluido que graph.facebook.com acepte el token en el encabezado Authorization y su caducidad real (INSTAGRAM_USER_ID/INSTAGRAM_ACCESS_TOKEN los carga el titular; no se llamó a Instagram); producción; npm run test:pages (el entorno local no tiene chrome-headless-shell-1248; falla igual en main limpio); WebKit/Firefox; CI del PR (ver GITHUB_RESULTS al abrirlo).
 
+## OTP: observar la respuesta antes del autocompletado — Codex /root
+
+Base `7bd052cc6af6ee74d6d8dc4bc91a67dc98e47d21`. El post-merge de #1337, CI41967856655/1, falló sólo en calidad127050287852: WebKit móvil agotó45000ms en critical-flows150 al esperar email-otp-verify dentro del helper otp52. Otros527 casos runtime aprobaron. Interfaz127050287967, administración, reglas, comercio, preflight y protección aprobaron; el agregado127056603628 falló por calidad. La corrección anterior del scroll sí aprobó, pero no se hereda el verde de su PR a main.
+
+Causa demostrada: login.html y entrada-codigo-otp verifican automáticamente al llenar seis dígitos. El helper instalaba waitForResponse después de fill; perdía respuestas rápidas y Enter no garantizaba otra solicitud. Se corrigen sólo fixtures: observar antes de fill tanto400 como200, evitar un clic redundante después de la autoverificación inválida y separar autocompletado de Enter. El primer recorrido conserva Enter con un valor escrito sin evento input, como un gestor de códigos; los demás usan el autocompletado real. Se cuentan exactamente una verificación válida o dos si hubo rechazo previo.
+
+La nueva regresión Node ejecuta el helper real con transporte inmediato. Control negativo sobre el helper original:4 fallos por respuesta anterior al observador; corregido:4 aprobados. Las regresiones de OTP, límites de200 intentos concurrentes, errores, red y sesión aprobaron40/40. Build/caché415 recursos y67 cargas, preflight y protección78 registros/544 archivos aprobaron localmente; los generadores se verifican otra vez sobre el staging final.
+
+NOT_VERIFIED_LOCAL: WebKit no está instalado y no hay JAR de emuladores. Se conservan los tres proyectos, retries0 y timeout45000; la CI canónica deberá validar el recorrido completo. La descarga del trace a este entorno está bloqueada por red; se inspeccionaron los logs exactos y se reprodujo la pérdida de la respuesta, sin afirmar haber visto el trace.
+
+No se modifican login, seguridad, permisos ni datos de producción. El entorno runtime sigue aislado y no envía compras ni mensajes reales. Guías aplicadas: gh-fix-ci, systematic-debugging y verification-before-completion. CI, merge y post-merge del nuevo candidato siguen pendientes; no declarar aceptación100%.
+
+## Regresión del scroll táctil: completar el frame de entrada — Codex /root
+
+Base e2e699a8be0ec6f6061a931e16e6f2ec78aebde1. CI41949523617/1 aprobó con1flaky en browser126991766451: header-responsive.spec.js665 esperaba scrollY200 y recibió0 hasta timeout15000ms; retry aprobó. El fixture espera load/fonts pero el cargador canónico resetEntryScroll aún puede ejecutar el segundo reset en requestAnimationFrame. La posición programática no consume la entrada como lo hace una interacción humana.
+
+Reproducción: baseline natural12/12 PASS (no se presenta como reproducción espontánea); control negativo invocó la API real TintinPageScroll.reset antes de posicionar200, dejando su frame pendiente. Falló la restauración200→0; al observar el frame antes del poll falló también la precondición200→0 como en CI. No se cambió producción para simularlo. Corrección puntual del fixture: ejercitar ese reset pendiente, completarlo antes de fijar200 y comprobar la posición tras otro frame. Mantiene ambas igualdades exactas200, gesto táctil CDP real, desplazamiento positivo de categorías y Escape/idle. Sin sleeps nuevos, tolerancias, timeout ampliado, skips ni cambios de retries.
+
+PASS_LOCAL:20/20 repeticiones del control corregido con retries0 y2workers. Suite relacionada header/loader/layout sin retries:99PASS,8FAIL,1SKIP. Los8fallos están en public-initial-layout sin cambios:7 de login (formulario no se inicializa) y1 de fase5 del logo404. El entorno bloquea www.gstatic.com/firebasejs/10.14.1/* con net::ERR_TUNNEL_CONNECTION_FAILED; no se debilitan esos tests. Header/loader, incluido swipe con frame pendiente y los19recorridos de entrada/recarga, aprobaron; skip de Functions preview exige TT_PAGES_FUNCTIONS_PREVIEW y es condicional preexistente. El resultado amplio local NO se declara PASS; requiere CI canónica del nuevo SHA, que mantiene todas las pruebas. Build:pages/caché415recursos/67cargas, preflight completo (incluidos6 server-import), protección78registros/544archivos PASS_LOCAL. No se modifica política ni plan porque no cambian fuentes protegidas; el mantenedor debe validar ese hecho y el SHA exacto antes de integrar. CI/merge/post-merge pendientes del candidato que se publicará, sin heredar el verde de e2e699a8. Fuente de producción, UI, sesiones, formularios y carrito intactos. Sigue protocolo gh-fix-ci, systematic-debugging y verification-before-completion. Sin cambios en PR1335 de Instagram, que mantiene su integración pendiente y3huellas inválidas en HEAD56f13312.
+
 ## Recuperación de protección tras1331/1332 — Codex /root
 
 Base0c95089318bce91871ab48adbf7f67c32a2049de. Protected flows41917190470/1 falló25huellas tras el retiro autorizado de marca móvil; previamente41901338196/1 falló3 tras tipografía del hero. Todos los grupos funcionales y Repository audit aprobaron. Se preservan exactamente las fuentes de1331/1332 y sus cambios de diseño/navegación, sin restaurar módulos retirados ni alterar pruebas. El helper oficial renueva únicamente las huellas reales contra main vigente; mantiene78registros/544entradas y alcances.
@@ -6324,3 +6344,15 @@ Logs126641096723 revisados. Se concilia en este candidato mediante el helper
 canónico, sin modificar reglas/protecciones: plan41archivos/45registros contra
 main2259eebc, protección local78registros/544archivos PASS. No se presenta el
 CI post-merge anterior como verde; requiere validar el nuevo candidato en CI.
+
+## Modo edición en la página real (Fase 1: Inicio)
+- Implementado: `js/core/store/modo-edicion-sitio.js` (texto en línea, cambio de foto en bloques propios, mover casillas, vista previa, Guardar = publicar, Cancelar). La insignia del Super Admin abre `?ttEdit=1`.
+- Probado localmente: `tests/visual-builder/orden-casillas.test.mjs` y `modo-edicion-sitio.spec.js` (API simulada), `editor-permission-loading`, auditorías de caché y de protección de flujos.
+- No verificado: guardado real en producción y subida real de foto (requieren sesión de Super Admin y Cloudinary).
+- Pendiente: fotos nativas del HTML (sin campo en el esquema), otras páginas públicas (Fase 2), retirar el gestor antiguo (Fase 3).
+
+## Modo edición en la página real (Fase 2: páginas públicas)
+- `terminos.html` y `privacidad.html` ahora cargan el contenido editable (`js/core/store/iniciar-contenido-sitio.js`, externo por la CSP) y la insignia de edición. El resto de páginas con esquema (nosotros, catálogo, colecciones, contacto, envíos, FAQ, cambios) ya la tenían desde la Fase 1.
+- `product` y `404` son solo estructurales (sin campos de texto en el esquema), por eso no llevan la insignia.
+- Probado localmente: `tests/visual-builder/modo-edicion-sitio.spec.js` 12/12 (abre el modo en 9 páginas con API simulada), `ci:preflight`, protección de flujos y versionado de caché. Sin probar: guardado real en producción.
+- Pendiente: Fase 3 (retirar el gestor antiguo), fotos fijas del HTML, campos de enlace.

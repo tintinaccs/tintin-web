@@ -33,7 +33,7 @@ test.afterEach(async({page,context},testInfo)=>{
   expect(productionRequests,'el entorno de prueba nunca debe escribir en producción').toEqual([]);
 });
 async function state(request,email){const response=await request.get('/__test/state?email='+encodeURIComponent(email));expect(response.ok()).toBe(true);return response.json();}
-async function otp(page,request,email,{invalid=false}={}){
+async function otp(page,request,email,{invalid=false,submit='auto'}={}){
   await page.goto('/login',{waitUntil:'domcontentloaded'});
   await expect(page.locator('#btn-send-otp')).toBeVisible();
   await page.locator('#login-email-input').fill(email);
@@ -42,17 +42,26 @@ async function otp(page,request,email,{invalid=false}={}){
   await expect(page.locator('#login-otp-block')).toBeVisible();
   const mail=await state(request,email);expect(mail.code).toMatch(/^\d{6}$/);
   if(invalid){
-    await page.locator('#login-otp-input').fill(mail.code==='000000'?'111111':'000000');
     const rejected=page.waitForResponse(r=>r.url().endsWith('/api/email-otp-verify'));
-    await page.locator('#btn-verify-otp').click();expect((await rejected).status()).toBe(400);
+    await page.locator('#login-otp-input').fill(mail.code==='000000'?'111111':'000000');
+    expect((await rejected).status()).toBe(400);
     await expect(page.locator('#login-error')).toContainText('Código incorrecto');
     await expect(page.locator('#btn-verify-otp')).toBeEnabled();
   }
-  await page.locator('#login-otp-input').fill(mail.code);
+  // Completar seis dígitos ya envía el OTP: observar antes de fill, no sólo
+  // antes de Enter. Una respuesta rápida no se repite al instalar el listener.
   const verified=page.waitForResponse(r=>r.url().endsWith('/api/email-otp-verify'));
-  await page.locator('#login-otp-input').press('Enter');expect((await verified).status()).toBe(200);
+  const input=page.locator('#login-otp-input');
+  if(submit==='enter'){
+    // Ejercitar Enter sin competir con el envío automático del evento input,
+    // como un gestor que escribe el valor sin emitir ese evento.
+    await input.evaluate((node,value)=>{node.value=value;},mail.code);
+    await input.press('Enter');
+  }else await input.fill(mail.code);
+  expect((await verified).status()).toBe(200);
   await expect(page.locator('#btn-save-profile')).toBeVisible();
   await expect(page.locator('#btn-save-profile')).toBeEnabled();
+  expect((await state(request,email)).requests.filter(r=>r.path==='/api/email-otp-verify')).toHaveLength(invalid?2:1);
 }
 async function fillProfile(page){await page.locator('#login-profile-first-name').fill('María González');await page.locator('#login-profile-phone').fill('0981123456');}
 async function continueProfile(page){const b=page.locator('#btn-save-profile');if(test.info().project.use.hasTouch)await b.tap();else await b.click();}
@@ -66,7 +75,7 @@ async function closeFirstWelcome(page,request,email){
 
 test('correo → OTP real → Continuar → perfil persistido → sesión conservada',async({page,request},testInfo)=>{
   if(testInfo.project.name.includes('mobile'))await page.setViewportSize({width:320,height:568});
-  const email='success@example.test';await otp(page,request,email,{invalid:true});await fillProfile(page);
+  const email='success@example.test';await otp(page,request,email,{invalid:true,submit:'enter'});await fillProfile(page);
   const availability=page.waitForResponse(r=>r.url().endsWith('/api/phone-availability'));
   await expect(page.locator('#tt-privacy-consent')).toHaveCount(0);
   expect(await page.evaluate(()=>window.TintinActivityPrivacy.preferences.statistics)).toBe(false);
