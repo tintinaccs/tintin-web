@@ -1,3 +1,7 @@
+## 2026-11-05 — Editorial relojes y loader con marca original (Codex)
+
+PASS_LOCAL: imagen IMG_1265.PNG del RAR de la titular conservada byte a byte; WebP lossless con igualdad RGBA, fuente HTML y fallback runtime unificados. Foto completa contain, dos columnas encogibles y una columna móvil; verificación Chromium320/390/844 horizontal/768/1024/1440/1920 sin desbordar ni deformar. Loader usa mismo archivo y viewBox del wordmark del hero: corazones originales, sin regenerar; símbolo con encuadre equivalente, flotación leve y reduced-motion, anillo fino. 28/28 Chromium (loader-palette y editorial-relojes-responsive), seis Node loader-wait/initial-logo-reveal, auditorías pagina-carga/cargador-solid y sintaxis PASS_LOCAL. CSS derivados con generador canónico, URLs inmutables renovadas. Build reproducible, ci:preflight, audit:page-loading y audit:styles PASS_LOCAL. CI, merge y producción pendientes del SHA final. Skills consultados: tintin-design-quality y tintin-performance-loading.
+
 ## OTP: observar la respuesta antes del autocompletado — Codex /root
 
 Base `7bd052cc6af6ee74d6d8dc4bc91a67dc98e47d21`. El post-merge de #1337, CI41967856655/1, falló sólo en calidad127050287852: WebKit móvil agotó45000ms en critical-flows150 al esperar email-otp-verify dentro del helper otp52. Otros527 casos runtime aprobaron. Interfaz127050287967, administración, reglas, comercio, preflight y protección aprobaron; el agregado127056603628 falló por calidad. La corrección anterior del scroll sí aprobó, pero no se hereda el verde de su PR a main.

@@ -15,6 +15,10 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
     await page.evaluate(()=>{const dialog=document.createElement('dialog');dialog.textContent='Diálogo abierto';document.body.append(dialog);dialog.showModal();});
     await page.addScriptTag({content:loader});
     await page.evaluate(()=>{window.TintinLoader.beginWait();window.TintinLoader.show();window.TintinLoader.setText('Restaurando tu sesión…','El panel se abrirá cuando termine la restauración.');});
+    // El loader conserva el arte y encuadre originales del hero, incluidos los corazones.
+    const wordmark=page.locator('#tt-loader-wordmark');
+    await expect(wordmark).toHaveAttribute('viewBox','330 715 870 260');
+    await expect(wordmark.locator('image')).toHaveAttribute('href',/assets-tintin\/images\/home\/hero-editorial\/tintin-white\.webp\?v=editorial-1$/);
     const actual=await page.locator('#tt-loader').evaluate(element=>({background:getComputedStyle(element).backgroundColor,colors:[...element.querySelectorAll('#tt-loader-wordmark,#tt-loader-wordmark span,#tt-loader-brand-subtitle,#tt-loader-title,#tt-loader-subtitle')].map(e=>getComputedStyle(e).color)}));
     const topLayer=await page.locator('#tt-loader').evaluate(el=>({open:el.matches(':popover-open'),width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height}));
     expect(topLayer.open).toBe(true);expect(topLayer.width).toBeGreaterThanOrEqual(width-1);expect(topLayer.height).toBeGreaterThanOrEqual(height);

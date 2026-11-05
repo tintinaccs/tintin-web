@@ -32,10 +32,10 @@ if (!window.TintinImagesPhase5Booted) {
       alt: 'Colección Bags Tintin',
     },
     edit_relojes: {
-      desktop: 'assets-tintin/images/home/editorial-relojes/relojes-original.jpg',
-      tablet: 'assets-tintin/images/home/editorial-relojes/relojes-original.jpg',
-      mobile: 'assets-tintin/images/home/editorial-relojes/relojes-original.jpg',
-      alt: 'Nueva colección de relojes Tintin',
+      desktop: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261105-1',
+      tablet: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261105-1',
+      mobile: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261105-1',
+      alt: 'Reloj, pulseras y anillos de la nueva colección Tintin',
     },
     about_foto: {
       desktop: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-original.jpeg',
