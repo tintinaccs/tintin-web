@@ -6312,3 +6312,9 @@ Logs126641096723 revisados. Se concilia en este candidato mediante el helper
 canónico, sin modificar reglas/protecciones: plan41archivos/45registros contra
 main2259eebc, protección local78registros/544archivos PASS. No se presenta el
 CI post-merge anterior como verde; requiere validar el nuevo candidato en CI.
+
+## Modo edición en la página real (Fase 1: Inicio)
+- Implementado: `js/core/store/modo-edicion-sitio.js` (texto en línea, cambio de foto en bloques propios, mover casillas, vista previa, Guardar = publicar, Cancelar). La insignia del Super Admin abre `?ttEdit=1`.
+- Probado localmente: `tests/visual-builder/orden-casillas.test.mjs` y `modo-edicion-sitio.spec.js` (API simulada), `editor-permission-loading`, auditorías de caché y de protección de flujos.
+- No verificado: guardado real en producción y subida real de foto (requieren sesión de Super Admin y Cloudinary).
+- Pendiente: fotos nativas del HTML (sin campo en el esquema), otras páginas públicas (Fase 2), retirar el gestor antiguo (Fase 3).

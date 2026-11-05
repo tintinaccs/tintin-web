@@ -1168,8 +1168,8 @@
     "sha256": "a9d4ec64c57496259d68d83b6f43813c81601e1a5711283f1d3eff39bfc3e736"
   },
   "js/core/auth/insignia-edicion.js": {
-    "version": "tintin-20261022-avatar-inicial-1",
-    "sha256": "f97bc30023cc0e1efb38eb23b9efad96479d539575365333dac10015756206ae"
+    "version": "tintin-20261105-modo-edicion-1",
+    "sha256": "f47119e1503fd2cd403c29d7fabe318407135a30189d39a98ee435d5b9585009"
   },
   "js/core/auth/navegacion-autenticacion.js": {
     "version": "tintin-20261030-home-history-5",
@@ -1303,9 +1303,17 @@
     "version": "tintin-20261102-cancel-stock-1",
     "sha256": "16edb261eb51301dae473e3329c1a27f48bbc17f328c18be044a71a0515d9389"
   },
+  "js/core/store/modo-edicion-sitio.js": {
+    "version": "tintin-suitcase-20261104-1",
+    "sha256": "68450761b15d70f0d07f446d32436d68951a323fdc0a5bf2cf4bac80610fad6f"
+  },
   "js/core/store/normalizacion-importacion.mjs": {
     "version": "tintin-20261005-import-format-message-1",
     "sha256": "c9aaa9743e6428e163839ffc61f77965de1ea9124ed58f74237f6c15a35c2e3e"
+  },
+  "js/core/store/orden-casillas.js": {
+    "version": "tintin-suitcase-20261104-1",
+    "sha256": "d86eb857f72283961414f579b1c6f96e787c0803013ac0a5f3609c680931e480"
   },
   "js/core/store/perfil-usuario.js": {
     "version": "tintin-20261017-domain-cutover-1",
