@@ -1,3 +1,7 @@
+## Fondos públicos con ambos bordes difuminados — 2026-11-05
+
+Autoridades: sistema-superficies-tintin.css, alternancia-secciones.js, hero-bienvenida-inicio.css y novak-credit-site.css. Secciones del cliente, hero y pie vuelven al mismo lienzo en sus dos extremos; colores y degradados publicados se conservan en una única capa de fondo. Textos, productos, acciones, tamaños y panel administrativo intactos. Verificar primer render/runtime, fondos personalizados, ancho pintable, uniones del pie y primer viewport; PNG original sin cambios. Derivados y URLs por generadores canónicos, sin dependencias ni cambios de protección.
+
 ## Hero completo en el primer viewport — 2026-11-05
 
 Autoridad hero-bienvenida-inicio.css y marcado index.html. Logo proporcional menor, alto útil descontando navegación, adaptación vertical/horizontal y escalas por ancho/alto. Preserva fuente rosa/CTA corregidos en1331 y barra móvil retirada en1332. Retira CSS anterior del hero en styles.css, ajuste, mantenimiento y paridad; pie/mode edición actuales intactos. Verificar imagen original contain por píxeles, primer viewport320×568/568×320/844×390/1306×630 y hasta1920×1080, foco44px, editor/lineas heredadas, PNG único por request, tipografía, navegación global y generadores canónicos. Sin datos comerciales, permisos, dependencias ni cambios de comprobaciones protegidas.

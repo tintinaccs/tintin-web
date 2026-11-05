@@ -549,7 +549,7 @@ html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dia
     var(--tt-section-start) 0%,
     var(--tt-section-background) 50%,
     var(--tt-section-end) 100%);
-  background: var(--tt-section-gradient) var(--tt-section-background) !important;
+  background: var(--tt-section-gradient) !important;
   color: var(--color-text-primary, #222222) !important;
   border-block-color: transparent !important;
   border-block-width: 0 !important;
@@ -598,6 +598,31 @@ html:root body [data-tt-flow-block] > [data-tt-flow-background] {
     var(--tt-section-start) 0%,
     var(--tt-section-background) 50%,
     var(--tt-section-end) 100%) !important;
+}
+
+/* Resolver el lienzo en body permite heredar la paleta local del hero. */
+html:root body:not(:has(.adm-main)) {
+  --tt-flow-canvas: linear-gradient(180deg, var(--tt-flow-light), var(--tt-flow-light));
+}
+
+/* La misma superficie en el primer render y en la capa de ancho completo.
+   Los dos extremos vuelven al lienzo común, incluso si hay texto o navegación
+   entre secciones. La base admite tanto colores como degradados publicados. */
+html:root body:not(:has(.adm-main)) > :is(section:not([role="dialog"]), .tt-footer),
+html:root body:not(:has(.adm-main)) :is(main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer),
+html:root body:not(:has(.adm-main)) [data-tt-flow-block] {
+  --tt-section-start: var(--tt-flow-light) !important;
+  --tt-section-end: var(--tt-flow-light) !important;
+  --tt-section-gradient:
+    linear-gradient(180deg, var(--tt-flow-light), transparent) top / 100% min(50%, var(--tt-flow-fade)) no-repeat,
+    linear-gradient(0deg, var(--tt-flow-light), transparent) bottom / 100% min(50%, var(--tt-flow-fade)) no-repeat,
+    var(--tt-section-background, var(--tt-flow-light)) !important;
+}
+html[data-tt-footer-bg-custom] body:not(:has(.adm-main)) .tt-footer {
+  --tt-section-background: var(--tt-global-footer-bg) !important;
+}
+html:root body:not(:has(.adm-main)) [data-tt-flow-block] > [data-tt-flow-background] {
+  background: var(--tt-section-gradient) !important;
 }
 html:root body #hero .tt-hero-media { background: transparent !important; }
 html:root body { overflow-x: clip; }

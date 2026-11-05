@@ -17,13 +17,20 @@
   align-items: center;
   gap: 2px;
   padding: 36px 16px 20px;
-  /* Difuminado superior: el rosa del pie se aclara hacia una base blanca que
-     contrasta con el resto y llega hasta el borde inferior de la página. */
-  background: linear-gradient(180deg,
+  /* La franja conserva su centro claro y se une al fondo del pie en ambos
+     extremos, sin un corte blanco al llegar al borde de la página. */
+  background: var(--tt-footer-ending-fill, linear-gradient(180deg,
     rgba(255, 255, 255, 0) 0,
     rgba(255, 255, 255, .72) 28px,
-    rgba(255, 255, 255, .92) 100%);
+    rgba(255, 255, 255, .92) 100%));
   text-align: center;
+}
+html:root body:not(:has(.adm-main)) #tt-footer-ending {
+  --tt-footer-ending-fill: linear-gradient(180deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, .72) min(28px, 25%),
+    rgba(255, 255, 255, .92) 50%,
+    rgba(255, 255, 255, 0) 100%);
 }
 #tt-footer-ending .tt-footer-bottom {
   margin: 0;
