@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="9b950f6edece7cee53e4ae9584c4dfc4e8481c8be86e08a10a9c4a32af30bba9">
+  <meta name="tintin-page-revision" content="00aa38c7e6ec356e9db666b376e193b7540835e6da149603542a807358c3e2b1">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -638,7 +638,7 @@ import { sanitizeImageUrl } from './js/components/images/utilidades-imagenes.js?
 import { hasProductStock, firstAvailableVariant, productDefaultPrice } from './js/core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { productVariantImage } from './js/components/images/foto-variante.mjs?v=tintin-20261031-seo-espacios-2';
 import { productSearchScore, productSearchText, normalizeProductSearch as normalizeSearch } from './js/core/store/busqueda-productos.mjs?v=tintin-20261021-commerce-review-1';
-import { catalogFilterRecord, catalogFilterOptions, matchesCatalogFilters, pruneCatalogFilters } from './js/pages/catalog/filtros-variantes.mjs?v=tintin-20261106-filtros-1';
+import { catalogFilterRecord, catalogFilterOptions, matchesCatalogFilters, pruneCatalogFilters, catalogFilterPreview } from './js/pages/catalog/filtros-variantes.mjs?v=tintin-20261106-filtros-2';
 import { heartIconMarkup } from './js/components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
 
 // Import dinámico (no estático): si falla la red/CDN al traer
@@ -853,12 +853,22 @@ function renderGrid(lista) {
   }
 
   const visibleProducts = lista.slice(0, visibleProductLimit);
+  // Con filtros de variantes elegidos, cada tarjeta muestra la combinación que
+  // los cumple (foto, muestra de color y destino), no la primera disponible.
+  const recordByProduct = new Map(filterRecords.map(record => [record.product, record]));
+  const onlyStockNow = Boolean(document.getElementById('filtro-stock')?.checked);
+  const filterPreviews = new Map();
   grid.innerHTML = visibleProducts.map(p => {
     const money = productDefaultPrice(p);
     const safeAlt = escapeCatalogHtml(p.name || '');
     const safeId = escapeCatalogHtml(p.id);
-    const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
-    const imageUrl = safeCatalogImageUrl(productVariantImage(p, firstAvailableVariant(p), p.imageUrl));
+    const record = recordByProduct.get(p);
+    const filterPreview = selectedVariants.size && record ? catalogFilterPreview(record, selectedVariants, { onlyStock: onlyStockNow }) : null;
+    if (filterPreview) filterPreviews.set(String(p.id), filterPreview);
+    const previewColorName = filterPreview ? Object.keys(filterPreview.attrs).find(name => window.TintinProductMedia?.isColorKey?.(name)) : '';
+    const previewColor = previewColorName ? filterPreview.attrs[previewColorName] : '';
+    const productHref = `product.html?id=${encodeURIComponent(String(p.id))}${previewColor ? `&color=${encodeURIComponent(previewColor)}` : ''}`;
+    const imageUrl = safeCatalogImageUrl(productVariantImage(p, filterPreview ? filterPreview.selection : firstAvailableVariant(p), p.imageUrl));
     const imgHtml = imageUrl
       ? `<img src="${catalogImageSrc(imageUrl)}"${catalogImageSrcset(imageUrl)} alt="${safeAlt}" width="480" height="480" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`
       : `<div class="cat-card-placeholder" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`;
@@ -903,6 +913,17 @@ function renderGrid(lista) {
     <div class="cat-load-more">
       <button type="button" class="tt-filtro-btn" id="cat-load-more">Mostrar más productos (${lista.length - visibleProducts.length})</button>
     </div>` : '');
+
+  // La muestra marcada es la del color que cumple el filtro (sin distinguir
+  // mayúsculas ni acentos), igual que la foto que muestra la tarjeta.
+  if (filterPreviews.size) grid.querySelectorAll('.tt-card[data-product-id]').forEach(card => {
+    const preview = filterPreviews.get(card.dataset.productId);
+    const colorName = preview ? Object.keys(preview.attrs).find(name => window.TintinProductMedia?.isColorKey?.(name)) : '';
+    if (!colorName) return;
+    const buttons = [...card.querySelectorAll('[data-card-color]')];
+    const match = buttons.find(button => button.dataset.cardColor.localeCompare(preview.attrs[colorName], 'es', { sensitivity: 'base' }) === 0);
+    if (match) buttons.forEach(button => button.setAttribute('aria-pressed', String(button === match)));
+  });
 
   grid.querySelectorAll('.tt-card-img-wrap img').forEach(img => {
     img.addEventListener('error', () => {

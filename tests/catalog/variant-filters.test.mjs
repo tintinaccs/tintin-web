@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { catalogFilterRecord as record, catalogFilterOptions as options, matchesCatalogFilters as matches, pruneCatalogFilters as prune } from '../../js/pages/catalog/filtros-variantes.mjs';
+import { catalogFilterRecord as record, catalogFilterOptions as options, matchesCatalogFilters as matches, pruneCatalogFilters as prune, catalogFilterPreview as preview } from '../../js/pages/catalog/filtros-variantes.mjs';
 const selection = entries => new Map(entries.map(([key, values]) => [key, new Set(values)]));
 const bag = { id: 'bag', price: 100, stock: 3, variants: { Color: ['Marrón', 'Violeta'], Tamaño: ['S', 'L'] }, variantInventory: [{ variant: 'Marrón / S', stock: 0 }, { variant: 'Violeta / L', stock: 3 }] };
 
@@ -69,4 +69,48 @@ test('búsqueda o categoría sin resultados no oculta opciones elegidas; sólo u
   assert.equal(selected.get('color').has('violeta'),true);
   prune(selected,[]);
   assert.equal(selected.size,0);
+});
+
+const shoe = { id: 'shoe', price: 100, stock: 9, variants: { Color: ['Negro', 'Beige', 'Rosa'], Diseño: ['Liso', 'Cruz'] }, variantInventory: [
+  { variant: 'Negro / Liso', stock: 4 }, { variant: 'Beige / Liso', stock: 0 }, { variant: 'Beige / Cruz', stock: 3 }, { variant: 'Rosa / Cruz', stock: 2 }] };
+
+test('vista previa: la tarjeta muestra la combinación del color elegido, no la primera disponible', () => {
+  const result = preview(record(shoe), selection([['color', ['beige']]]));
+  assert.equal(result.selection, 'Beige / Cruz');
+  assert.deepEqual(result.attrs, { Color: 'Beige', Diseño: 'Cruz' });
+  assert.equal(preview(record(shoe), selection([['color', ['rosa']]])).selection, 'Rosa / Cruz');
+});
+
+test('vista previa: funciona con cualquier atributo y con varios a la vez', () => {
+  assert.equal(preview(record(shoe), selection([['diseño', ['cruz']]])).selection, 'Beige / Cruz');
+  assert.equal(preview(record(shoe), selection([['diseño', ['liso']]])).selection, 'Negro / Liso');
+  assert.equal(preview(record(shoe), selection([['color', ['beige']], ['diseño', ['liso']]])).selection, 'Beige / Liso');
+  assert.equal(preview(record(shoe), selection([['color', ['negro', 'rosa']]])).selection, 'Negro / Liso');
+});
+
+test('vista previa: prefiere la combinación con stock y respeta Solo con stock', () => {
+  const soldOutBeige = { ...shoe, variantInventory: shoe.variantInventory.map(row => row.variant.startsWith('Beige') ? { ...row, stock: 0 } : row) };
+  assert.equal(preview(record(soldOutBeige), selection([['color', ['beige']]])).selection, 'Beige / Liso');
+  assert.equal(preview(record(soldOutBeige), selection([['color', ['beige']]]), { onlyStock: true }), null);
+});
+
+test('vista previa: sin filtros o sin coincidencia no cambia la tarjeta', () => {
+  assert.equal(preview(record(shoe), new Map()), null);
+  assert.equal(preview(record(shoe), selection([['color', ['verde']]])), null);
+  assert.equal(preview(record({ id: 'plain', price: 1, stock: 1 }), selection([['color', ['beige']]])), null);
+});
+
+test('vista previa: sin matriz de inventario arma la combinación desde las opciones', () => {
+  const noMatrix = { id: 'nm', price: 1, stock: 5, variants: { Color: ['Negro', 'Beige'], Talla: ['S', 'M'] } };
+  const result = preview(record(noMatrix), selection([['talla', ['m']]]));
+  assert.equal(result.selection, 'Negro / M');
+  assert.equal(preview(record(noMatrix), selection([['color', ['beige']]])).selection, 'Beige / S');
+});
+
+test('vista previa: combinación comercial v2 devuelve la etiqueta de la variante', () => {
+  const v2 = { id: 'v2', price: 100, variantCommerceVersion: 2, variants: { Color: ['Oro', 'Beige'], Tamaño: ['S', 'L'] }, variantInventory: [
+    { variant: 'k1', attributes: { Color: 'Oro', Tamaño: 'S' }, stock: 2 }, { variant: 'k2', attributes: { Color: 'Beige', Tamaño: 'L' }, stock: null } ] };
+  const result = preview(record(v2), selection([['color', ['beige']]]));
+  assert.equal(result.selection, 'Beige / L');
+  assert.deepEqual(result.attrs, { Color: 'Beige', Tamaño: 'L' });
 });
