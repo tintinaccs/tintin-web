@@ -1,3 +1,11 @@
+## Filtros de variantes cambian foto y muestra de la tarjeta — 2026-11-06 — Claude Code
+
+Pedido de la titular: al elegir cualquier variante en los filtros del catálogo (ejemplo: color Beige) cada tarjeta debe mostrar la foto y la muestra seleccionada de esa variante, para cualquier atributo, producto y dispositivo. Antes la tarjeta mostraba siempre la primera combinación con stock (catalogo.html usaba firstAvailableVariant) aunque hubiera filtros.
+
+Cambio: catalogFilterPreview en js/pages/catalog/filtros-variantes.mjs elige por producto la combinación que cumple todos los filtros (primero con stock; con Solo con stock exige stock; sin coincidencia o sin filtros no cambia nada). catalogo.html usa esa combinación para la foto (productVariantImage), marca la muestra de color correspondiente (aria-pressed) y agrega &color= al destino de la tarjeta. No se modificó tienda.js. Los precios, stock, carrito y checkout no cambian.
+
+PASS_LOCAL: node --test tests/catalog/variant-filters.test.mjs (13/13, 6 nuevas); Playwright tests/catalog/variant-filter-photos.spec.js en 320, 390, 768, 1280 y 1920 (5/5), con control negativo: sin el cambio la tarjeta se queda en la foto blanca; build:pages, auditar-proteccion-flujos, audit:cache-versioning. Plan de mantenimiento con 5 archivos protegidos (catalogo.html, _headers, CSP y baseline de caché). No probado: WebKit/iPhone real ni datos reales de producción; si una variante no tiene foto propia la tarjeta conserva la foto general del producto.
+
 ## Unificación de colores y mantenimiento de flujos protegidos — 2026-11-06 — Claude Code
 
 Pedido de la titular: unificar los colores del sitio a la paleta Tintín (#F8AACA, #FDECF2, #222222, blanco) en páginas públicas, checkout, login y perfil. PR 1351 mergeado en main como 4ae187d8 (base ab9127a); producción sirvió styles.min.css con sufijo -p1106 y se midió en tintinaccs.com: 0 errores de JavaScript y 0 desborde horizontal en 7 páginas por escritorio y celular.
