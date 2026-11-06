@@ -10,7 +10,7 @@
     height: 88px;
     background: #fff !important;
     border-bottom: 1px solid rgba(248,170,202,.13) !important;
-    box-shadow: 0 10px 32px rgba(126,30,65,.045) !important;
+    box-shadow: 0 10px 32px rgba(34,34,34,0.045) !important;
     backdrop-filter: none;
   }
 
@@ -109,7 +109,7 @@
   .tt-header-desktop .tt-header-actions > button:hover,
   .tt-header-desktop .tt-header-actions > .tt-nav-dropdown > button:hover {
     color:var(--color-text-primary,#222222) !important;
-    background: #fff4f8 !important;
+    background: #FDECF2 !important;
     border-color: rgba(248,170,202,.22) !important;
     transform: translateY(-1px) !important;
     box-shadow: 0 6px 16px rgba(248,170,202,.09) !important;

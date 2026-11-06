@@ -7,14 +7,14 @@
 :root {
   --tt-brand-pink: var(--color-brand-primary, #F8AACA);
   --tt-brand-pink-deep: var(--color-brand-primary, #F8AACA);
-  --tt-brand-pink-soft: #fff0f7;
+  --tt-brand-pink-soft: #FFFFFF;
   --tt-brand-copy: var(--color-text-primary, #222222);
   --tt-brand-muted: var(--color-text-primary, #222222);
-  --tt-brand-border: #efbdd2;
+  --tt-brand-border: #F8AACA;
   --tt-brand-white: #ffffff;
   --tt-fit-gutter: clamp(16px, 4vw, 72px);
   --tt-fit-radius: clamp(18px, 2.2vw, 30px);
-  --tt-fit-shadow: 0 24px 68px rgba(122, 0, 61, .16);
+  --tt-fit-shadow: 0 24px 68px rgba(34,34,34,0.16);
 }
 
 /* Nunca usar negro puro en las superficies de interacción de la tienda. */
@@ -60,7 +60,7 @@
   background:
     radial-gradient(circle at 15% 0%, rgba(255,255,255,.18), transparent 38%),
     linear-gradient(135deg, var(--color-brand-primary, #F8AACA) 0%, var(--color-brand-primary, #F8AACA) 52%, var(--color-brand-primary, #F8AACA) 100%) !important;
-  box-shadow: 0 14px 34px rgba(111, 0, 55, .22);
+  box-shadow: 0 14px 34px rgba(34,34,34,0.22);
 }
 
 .tt-account-drawer-header::before {
@@ -87,7 +87,7 @@
   font-weight: 800;
   line-height: 1;
   letter-spacing: .16em !important;
-  text-shadow: 0 3px 12px rgba(67,0,33,.24);
+  text-shadow: 0 3px 12px rgba(34,34,34,0.24);
 }
 
 .tt-account-drawer-header h2::before {
@@ -134,7 +134,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   background:
-    radial-gradient(circle at 100% 0%, rgba(202,1,105,.07), transparent 35%),
+    radial-gradient(circle at 100% 0%, rgba(248,170,202,0.07), transparent 35%),
     var(--tt-brand-pink-soft) !important;
 }
 
@@ -149,7 +149,7 @@
   border-radius: 20px;
   background: linear-gradient(135deg, var(--color-brand-primary, #F8AACA), var(--color-brand-primary, #F8AACA)) !important;
   color:#222222 !important;
-  box-shadow: 0 12px 28px rgba(151,0,79,.18);
+  box-shadow: 0 12px 28px rgba(34,34,34,0.18);
 }
 
 .tt-account-drawer .tt-account-header span {
@@ -177,7 +177,7 @@
   color: var(--tt-brand-copy) !important;
   font-weight: 720;
   line-height: 1.35;
-  box-shadow: 0 6px 18px rgba(126,0,63,.055);
+  box-shadow: 0 6px 18px rgba(34,34,34,0.055);
   transition: transform .2s ease, background-color .2s ease, border-color .2s ease;
 }
 
@@ -197,7 +197,7 @@
 .tt-account-drawer .tt-account-divider {
   height: 1px;
   margin: 4px 2px;
-  background: rgba(202,1,105,.16);
+  background: rgba(248,170,202,0.16);
 }
 
 .tt-account-drawer .tt-account-guest-copy {
@@ -279,7 +279,7 @@ html:has(.ck-body) body {
   border-color: var(--tt-brand-border) !important;
   background: #fff !important;
   color: var(--tt-brand-copy) !important;
-  box-shadow: 0 10px 30px rgba(126,0,63,.075);
+  box-shadow: 0 10px 30px rgba(34,34,34,0.075);
 }
 
 :is(.ck-panel, .ck-summary-card, .tt-map-block) :is(h1, h2, h3, h4, label, strong) {
@@ -304,7 +304,7 @@ html:has(.ck-body) body {
 :is(.ck-btn-primary, .tt-map-locate, #btn-save-profile) {
   background: linear-gradient(135deg, var(--color-brand-primary, #F8AACA), var(--color-brand-primary, #F8AACA)) !important;
   color:#222222 !important;
-  box-shadow: 0 12px 28px rgba(151,0,79,.22);
+  box-shadow: 0 12px 28px rgba(34,34,34,0.22);
 }
 
 /* =============================================================

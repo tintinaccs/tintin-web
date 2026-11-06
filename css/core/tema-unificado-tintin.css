@@ -484,7 +484,7 @@ html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-lin
 }
 .tt-card-colors { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; margin:6px 0; }
 .tt-card-color { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border:1px solid transparent; border-radius:50%; padding:7px; background:transparent; cursor:pointer; }
-.tt-card-color .tt-color-swatch { display:block; flex:0 0 auto; width:24px; height:24px; max-width:none; border-radius:50%; border:2px solid #fff; outline:1px solid #777; }
+.tt-card-color .tt-color-swatch { display:block; flex:0 0 auto; width:24px; height:24px; max-width:none; border-radius:50%; border:2px solid #fff; outline:1px solid #222222; }
 .tt-card-color[aria-pressed="true"] { border-color:var(--color-text-primary,#222222); }
 .tt-card-color:focus-visible { outline:2px solid #222222; outline-offset:2px; }
 .tt-card-color.tt-stock-unavailable .tt-color-swatch { position:relative; overflow:hidden; }
@@ -554,7 +554,7 @@ html body:not(:has(.adm-main)) .tt-footer :is(p,.tt-footer-desc,.tt-footer-hours
 html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body { min-height:160px!important; padding:16px!important; gap:8px; }
 html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body > .tt-btn { margin-top:12px!important; }
 html body:not(:has(.adm-main)) .tt-lightbox :is(button,button svg) { color:#fff!important; }
-html body:not(:has(.adm-main)) .tt-lightbox button { background:#713c53!important; border-color:#fff!important; min-width:44px; min-height:44px; }
+html body:not(:has(.adm-main)) .tt-lightbox button { background:#222222!important; border-color:#fff!important; min-width:44px; min-height:44px; }
 html body:not(:has(.adm-main)) .ck-sug-add { display:inline-flex; justify-content:center; align-items:center; min-height:44px; text-decoration:none; }
 html body:not(:has(.adm-main)) [data-profile-summary-location] { white-space:normal; overflow-wrap:anywhere; }
 html body:not(:has(.adm-main)) .tt-about-text strong { color:var(--color-text-primary)!important; }
@@ -581,10 +581,10 @@ html body .tt-stock-label {
   padding: 12px 18px;
   max-width: calc(100% - 16px);
   box-sizing: border-box;
-  border: 1px solid #9CA3AF;
+  border: 1px solid #F8AACA;
   border-radius: 8px;
-  background: #E5E7EB;
-  color: #4B5563;
+  background: #FDECF2;
+  color: #222222;
   font-size: clamp(14px, 2vw, 20px);
   font-weight: 700;
   line-height: 1;

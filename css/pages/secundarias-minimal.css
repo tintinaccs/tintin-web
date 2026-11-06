@@ -45,7 +45,7 @@
 :where(body:not(:has(.login-page)):not(:has(.adm-main))) .tt-info-block {
   margin-inline: auto;
   border-radius: 20px;
-  box-shadow: 0 10px 28px rgba(87, 42, 59, .055);
+  box-shadow: 0 10px 28px rgba(34,34,34,0.055);
 }
 
 :where(body:not(:has(.login-page)):not(:has(.adm-main))) .tt-info-title {

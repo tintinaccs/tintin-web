@@ -1,12 +1,12 @@
 :root {
   --tintin-primary: var(--color-brand-primary, #F8AACA);
   --tintin-primary-dark: var(--color-brand-primary, #F8AACA);
-  --tintin-primary-soft: var(--primary-soft, #fde8f0);
+  --tintin-primary-soft: var(--primary-soft, #FDECF2);
   --tintin-surface: #fff;
-  --tintin-text: var(--text, #171217);
-  --tintin-muted: var(--text-muted, #746b70);
+  --tintin-text: var(--text, #222222);
+  --tintin-muted: var(--text-muted, #222222);
   --tintin-border: rgba(248,170,202, .2);
-  --tintin-shadow: 0 24px 70px rgba(58, 13, 31, .18);
+  --tintin-shadow: 0 24px 70px rgba(34,34,34,0.18);
   --motion-fast: 160ms;
   --motion-normal: 280ms;
   --motion-slow: 420ms;
@@ -20,7 +20,7 @@
   z-index: var(--tt-z-dropdown, 1450);
   display: block;
   border: 0;
-  background: rgba(38, 12, 23, .34);
+  background: rgba(34,34,34,0.34);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   opacity: 0;
@@ -94,7 +94,7 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 12px;
-  background: var(--tintin-soft, #fff3f7);
+  background: var(--tintin-soft, #FDECF2);
 }
 
 .tt-sheet-item-img img {
@@ -208,7 +208,7 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   border-bottom: 1px solid rgba(255,255,255,.32);
   background: var(--color-brand-primary, #F8AACA) !important;
   color:#222222 !important;
-  box-shadow: 0 10px 24px rgba(95,22,51,.16);
+  box-shadow: 0 10px 24px rgba(34,34,34,0.16);
 }
 
 .tt-account-drawer-header h2 {
@@ -216,7 +216,7 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   color: #fff !important;
   font-size: 1rem;
   letter-spacing: .08em;
-  text-shadow: 0 1px 1px rgba(0,0,0,.12);
+  text-shadow: 0 1px 1px rgba(34,34,34,0.12);
 }
 
 .tt-account-drawer-header button,

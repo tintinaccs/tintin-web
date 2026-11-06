@@ -6,10 +6,10 @@
   /* Rosa Tintin estable: evita heredar violetas de temas legacy. */
   --tt-drawer-accent: var(--color-brand-primary, #F8AACA);
   --tt-drawer-accent-strong: var(--color-brand-primary, #F8AACA);
-  --tt-drawer-soft: #fff0f5;
-  --tt-drawer-border: #edbfd0;
-  --tt-drawer-text: #2b1b23;
-  --tt-drawer-muted: #6e5962;
+  --tt-drawer-soft: #FDECF2;
+  --tt-drawer-border: #F8AACA;
+  --tt-drawer-text: #222222;
+  --tt-drawer-muted: #222222;
 }
 
 /* El hero se mantiene reservado en layout, pero la imagen no se revela por
@@ -43,7 +43,7 @@ body.tt-home-premium .tt-hero-media {
   background: var(--tt-drawer-accent) !important;
   background-image: none !important;
   color:#222222 !important;
-  box-shadow: 0 8px 24px rgba(92, 24, 50, .12) !important;
+  box-shadow: 0 8px 24px rgba(34,34,34,0.12) !important;
 }
 
 .tt-cart-title,
@@ -261,8 +261,8 @@ html body #account-drawer .tt-account-drawer-header #btn-account-close {
   outline: 0 !important;
 }
 .tt-account-drawer .tt-account-internal {
-  border-color: #efd0dc !important;
-  background: #fff7fa !important;
+  border-color: #F8AACA !important;
+  background: #FDECF2 !important;
   color: var(--tt-drawer-accent-strong) !important;
 }
 .tt-account-drawer .tt-account-logout {
@@ -436,7 +436,7 @@ html body :is(.tt-dropdown-label,.tt-tablet-cat-card > span,.tt-mobile-cat-card 
   overflow-wrap: anywhere;
 }
 
-html body :is(.tt-dropdown-card,.tt-sheet-item,.tt-tablet-cat-card,.tt-mobile-cat-card) { border-radius:12px; border:1px solid #ecd8e0; }
+html body :is(.tt-dropdown-card,.tt-sheet-item,.tt-tablet-cat-card,.tt-mobile-cat-card) { border-radius:12px; border:1px solid #F8AACA; }
 
 html body :is(#account-drawer,#cart-drawer,#notifications-drawer,#collections-sheet) :is(.tt-account-drawer-header,.tt-cart-header,.tt-notifications-head,.tt-sheet-header) {
   position:relative; display:flex !important; align-items:center !important; justify-content:center !important;
@@ -526,7 +526,7 @@ html body :is(#cart-drawer,#account-drawer,#notifications-drawer) :is(.tt-cart-b
 }
 html body :is(#cart-drawer,#collections-sheet) :is(.tt-cart-footer,.tt-sheet-footer) { flex-shrink:0; }
 html body :is(.tt-header-actions,.tt-tablet-actions) button[aria-expanded="true"] {
-  background:#fde9f0 !important;
+  background:#FDECF2 !important;
   border-color:var(--color-brand-primary,#F8AACA) !important;
   box-shadow:0 0 0 2px rgba(248,170,202,.18);
 }
@@ -561,7 +561,7 @@ html body :is(#tt-header-desktop-tablet,#tt-header-tablet,#tt-tabbar,[data-tt-su
     border-radius:24px !important;
     padding:0 !important;
     overflow:hidden !important;
-    box-shadow:0 -8px 40px rgba(58,13,31,.16);
+    box-shadow:0 -8px 40px rgba(34,34,34,0.16);
     transition:none !important;
   }
   html body #search-panel.tt-search-panel {

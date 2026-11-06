@@ -7,7 +7,7 @@
 .modal:has(> .ck-modal-content),
 .adm-modal:has(> .adm-modal-content) {
   border: 0 !important;
-  background: rgba(47, 10, 29, .42) !important;
+  background: rgba(34,34,34,0.42) !important;
   color: inherit !important;
   box-shadow: none !important;
   -webkit-backdrop-filter: blur(5px);
@@ -15,11 +15,11 @@
 }
 
 :is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content) {
-  border: 1px solid var(--tt-brand-border, #efbdd2) !important;
+  border: 1px solid var(--tt-brand-border, #F8AACA) !important;
   border-radius: clamp(20px, 2.5vw, 30px) !important;
   background: #fff !important;
   color:var(--color-text-primary,#222222) !important;
-  box-shadow: 0 24px 68px rgba(122, 0, 61, .2) !important;
+  box-shadow: 0 24px 68px rgba(34,34,34,0.2) !important;
 }
 
 :is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content)

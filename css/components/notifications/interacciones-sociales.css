@@ -15,7 +15,7 @@
   cursor: pointer;
   list-style: none;
   padding: .2rem .45rem;
-  color: var(--tt-color-muted, #6f6a64);
+  color: var(--tt-color-muted, #222222);
 }
 
 .tt-comment-menu summary::-webkit-details-marker { display: none; }
@@ -29,10 +29,10 @@
   margin-left: .25rem;
   min-width: 8rem;
   padding: .55rem .7rem;
-  border: 1px solid var(--tt-color-border, #ddd5ce);
+  border: 1px solid var(--tt-color-border, #F8AACA);
   border-radius: .55rem;
   background: var(--tt-color-surface, #fff);
-  color: var(--tt-color-text, #2b2927);
+  color: var(--tt-color-text, #222222);
   box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
   text-align: left;
 }
@@ -50,7 +50,7 @@
 
 .tt-review-like-button {
   padding: 7px 12px;
-  border: 1px solid #efc8d7;
+  border: 1px solid #F8AACA;
   background: #fff;
   color:var(--color-text-primary,#222222);
   cursor: pointer;
@@ -59,8 +59,8 @@
 
 .tt-review-like-button:hover,
 .tt-review-like-button:focus-visible {
-  background: #fff2f7;
-  border-color: #d99bb2;
+  background: #FDECF2;
+  border-color: #F8AACA;
   outline: none;
 }
 
@@ -69,7 +69,7 @@
 }
 
 .tt-review-like-button.is-liked {
-  background: #fff0f5;
+  background: #FDECF2;
   border-color: var(--color-brand-primary, #F8AACA);
   color:var(--color-text-primary,#222222);
 }
@@ -86,7 +86,7 @@
 
 .tt-review-like-count {
   padding: 7px 4px;
-  color: #876b77;
+  color: #222222;
 }
 
 .tt-review-thread-toggle {

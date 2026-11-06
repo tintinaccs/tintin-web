@@ -9,7 +9,7 @@
 .tinben{
   --acc: var(--tt-accent, var(--color-brand-primary, #F8AACA));
   --bg: #FDECF2;
-  --fg: #2d2d2d;
+  --fg: #222222;
   --card-bg: #ffffff;
   --r: 16px;
   background: var(--bg);
@@ -34,7 +34,7 @@
 }
 .tinben-subtitle{
   font-size: 13px;
-  color: rgba(45,45,45,.7);
+  color: rgba(34,34,34,0.7);
 }
 .tinben-grid{
   display: grid;
@@ -43,7 +43,7 @@
 }
 .tinben-card{
   background: var(--card-bg);
-  border: 1px solid rgba(212,120,154,.12);
+  border: 1px solid rgba(248,170,202,0.12);
   border-radius: calc(var(--r) * 1.5);
   padding: clamp(18px,2vw,28px) clamp(16px,1.8vw,24px);
   display: flex;
@@ -60,14 +60,14 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--acc), rgba(212,120,154,.3), var(--acc));
+  background: linear-gradient(90deg, var(--acc), rgba(248,170,202,0.3), var(--acc));
   opacity: 0;
   transition: opacity .22s ease;
 }
 .tinben-card:hover{
   transform: translateY(-4px);
-  box-shadow: 0 14px 40px rgba(212,120,154,.12);
-  border-color: rgba(212,120,154,.28);
+  box-shadow: 0 14px 40px rgba(34,34,34,0.12);
+  border-color: rgba(248,170,202,0.28);
 }
 .tinben-card:hover::before{ opacity: 1; }
 
@@ -75,7 +75,7 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: rgba(212,120,154,.1);
+  background: rgba(248,170,202,0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,7 +97,7 @@
 }
 .tinben-card-text{
   font-size: 13px;
-  color: rgba(45,45,45,.7);
+  color: rgba(34,34,34,0.7);
   margin: 0;
   line-height: 1.6;
 }
@@ -125,7 +125,7 @@
 .tinsel{
   --acc: var(--tt-accent, var(--color-brand-primary, #F8AACA));
   --bg: #FDECF2;
-  --fg: #2d2d2d;
+  --fg: #222222;
   --pbtn: var(--tt-accent, var(--color-brand-primary, #F8AACA));
   --pbtnT: #ffffff;
   --r: 16px;
@@ -140,7 +140,7 @@
 }
 .tinsel-box{
   background:#fff;
-  border:1px solid rgba(212,120,154,.15);
+  border:1px solid rgba(248,170,202,0.15);
   border-radius:calc(var(--r)*2);
   padding:clamp(18px,2vw,28px);
   position:relative;
@@ -153,7 +153,7 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
 .tinsel-box::before{
   content:'';
   position:absolute; top:0; left:0; right:0; height:3px;
-  background:linear-gradient(90deg,var(--acc),rgba(212,120,154,.4),var(--acc));
+  background:linear-gradient(90deg,var(--acc),rgba(248,170,202,0.4),var(--acc));
 }
 .tinsel-head{
   display:flex; align-items:center; justify-content:space-between;
@@ -176,7 +176,7 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
   display:flex; align-items:baseline; gap:8px;
 }
 .tinsel-total-label{
-  font-size:11px; color:rgba(45,45,45,.7);
+  font-size:11px; color:rgba(34,34,34,0.7);
   text-transform:uppercase; letter-spacing:.08em;
 }
 .tinsel-total{
@@ -187,7 +187,7 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
 .tinsel-items{ display:flex; flex-direction:column; gap:10px; }
 .tinsel-empty{
   text-align:center; padding:28px 0;
-  color:rgba(45,45,45,.7); font-size:14px;
+  color:rgba(34,34,34,0.7); font-size:14px;
 }
 .tinsel-empty-icon{ font-size:32px; margin-bottom:8px; }
 .tinsel-item{
@@ -197,21 +197,21 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
   align-items:center;
   padding:clamp(8px,1.5vw,12px);
   border-radius:calc(var(--r)*1.2);
-  background:rgba(253,240,245,.6);
-  border:1px solid rgba(212,120,154,.1);
+  background:rgba(248,170,202,0.6);
+  border:1px solid rgba(248,170,202,0.1);
   transition:background .2s;
   width:100%;
   box-sizing:border-box;
 }
-.tinsel-item:hover{ background:rgba(253,240,245,.9); }
+.tinsel-item:hover{ background:rgba(248,170,202,0.9); }
 .tinsel-item-img{
   display:block;
   width:100%;
   aspect-ratio:1/1;
   border-radius:calc(var(--r)*1);
   overflow:hidden; flex-shrink:0;
-  background:rgba(212,120,154,.08);
-  border:1px solid rgba(212,120,154,.1);
+  background:rgba(248,170,202,0.08);
+  border:1px solid rgba(248,170,202,0.1);
   text-decoration:none;
 }
 .tinsel-item-img img{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -228,15 +228,15 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
   color:var(--color-text-primary,#222222);
 }
 .tinsel-item-variant{
-  font-size:11px; color:rgba(45,45,45,.7); margin:0 0 4px;
+  font-size:11px; color:rgba(34,34,34,0.7); margin:0 0 4px;
 }
 .tinsel-item-price{
   font-size:14px; font-weight:700; color:var(--color-text-primary,#222222); margin:0;
 }
 .tinsel-qty{
   display:flex; align-items:center; gap:clamp(3px,1vw,6px);
-  background:rgba(212,120,154,.07);
-  border:1px solid rgba(212,120,154,.1);
+  background:rgba(248,170,202,0.07);
+  border:1px solid rgba(248,170,202,0.1);
   padding:clamp(3px,1vw,5px) clamp(6px,2vw,10px);
   border-radius:30px;
   flex-shrink:0;
@@ -257,7 +257,7 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
 .tinsel-del{
   background:none; border:none; padding:8px;
   min-width:44px; min-height:44px;
-  color:rgba(45,45,45,.6); cursor:pointer;
+  color:rgba(34,34,34,0.6); cursor:pointer;
   border-radius:50%;
   transition:color .18s, background .18s;
   flex-shrink:0;
@@ -267,21 +267,21 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
 .tinsel-favorite{
   width:44px; height:44px; padding:0;
   border:0; border-radius:50%;
-  background:rgba(212,120,154,.08); color:var(--color-text-primary,#222222);
+  background:rgba(248,170,202,0.08); color:var(--color-text-primary,#222222);
   font-size:20px; cursor:pointer;
   display:grid; place-items:center; line-height:0;
 }
 .tinsel-favorite [data-favorite-icon]{display:grid;place-items:center;line-height:0;}
 .tinsel-favorite svg{display:block;}
-.tinsel-favorite.is-favorite{ background:rgba(212,120,154,.18); }
+.tinsel-favorite.is-favorite{ background:rgba(248,170,202,0.18); }
 .tinsel-footer{
   margin-top:18px; padding-top:18px;
-  border-top:1px solid rgba(212,120,154,.12);
+  border-top:1px solid rgba(248,170,202,0.12);
   display:flex; align-items:center; justify-content:space-between;
   flex-wrap:wrap; gap:12px;
 }
 .tinsel-footer-total{ display:flex; flex-direction:column; gap:2px; }
-.tinsel-footer-label{ font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:rgba(45,45,45,.7); }
+.tinsel-footer-label{ font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:rgba(34,34,34,0.7); }
 .tinsel-footer-amount{
   font-size:clamp(20px,1.8vw,26px);
   font-weight:700; color:var(--color-text-primary,#222222); letter-spacing:-.02em;
@@ -296,18 +296,18 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
 }
 .tinsel-btn-primary{
   background:var(--pbtn); color:var(--pbtnT);
-  box-shadow:0 8px 22px rgba(212,120,154,.3);
+  box-shadow:0 8px 22px rgba(34,34,34,0.3);
 }
 #tinsel-checkout-btn{
   background:var(--color-brand-primary, #F8AACA) !important;
   color:#222222 !important;
 }
-.tinsel-btn-primary:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(212,120,154,.42); }
+.tinsel-btn-primary:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(34,34,34,0.42); }
 .tinsel-btn-secondary{
   background:#fff; color:var(--color-text-primary,#222222);
-  border:1.5px solid rgba(212,120,154,.28);
+  border:1.5px solid rgba(248,170,202,0.28);
 }
-.tinsel-btn-secondary:hover{ background:rgba(212,120,154,.06); }
+.tinsel-btn-secondary:hover{ background:rgba(248,170,202,0.06); }
 
 .tinsel-toast{
   position:fixed;
@@ -315,8 +315,8 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
   transform:translateX(-50%) translateY(14px);
   opacity:0;
   background:#fff; color:var(--color-text-primary,#222222);
-  border:1px solid rgba(212,120,154,.2);
-  box-shadow:0 12px 40px rgba(0,0,0,.12);
+  border:1px solid rgba(248,170,202,0.2);
+  box-shadow:0 12px 40px rgba(34,34,34,0.12);
   padding:11px 22px; border-radius:50px;
   font-size:13px; font-weight:700;
   z-index:10001; white-space:nowrap;
@@ -335,7 +335,7 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
 }
 .tinsel-skel-item{
   height:100px; border-radius:calc(var(--r)*1.2);
-  background:linear-gradient(110deg,rgba(212,120,154,.06) 30%,rgba(212,120,154,.1) 50%,rgba(212,120,154,.06) 70%);
+  background:linear-gradient(110deg,rgba(248,170,202,0.06) 30%,rgba(248,170,202,0.1) 50%,rgba(248,170,202,0.06) 70%);
   background-size:200% 100%;
   animation:tinsel-sk 1.4s ease-in-out infinite;
 }
@@ -372,8 +372,8 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
   html body.tt-product-maintenance #tinsel-root .tinsel-qty{grid-column:1 / 3;grid-row:2;justify-self:start;max-width:100%}
   html body.tt-product-maintenance #tinsel-root .tinsel-item-actions{grid-column:3;grid-row:1 / 3;flex-direction:column;align-self:start}
 }
-.tt-product-specifications{margin:18px 0 0;border-top:1px solid var(--border,#eadde2)}
+.tt-product-specifications{margin:18px 0 0;border-top:1px solid var(--border,#F8AACA)}
 .tt-product-specifications[hidden]{display:none}
-.tt-product-specifications>div{display:grid;grid-template-columns:minmax(90px,130px) 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--border,#eadde2)}
-.tt-product-specifications dt{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--text-muted,#725f66)}
-.tt-product-specifications dd{margin:0;font-size:13px;line-height:1.5;color:var(--text,#30272a)}
+.tt-product-specifications>div{display:grid;grid-template-columns:minmax(90px,130px) 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--border,#F8AACA)}
+.tt-product-specifications dt{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--text-muted,#222222)}
+.tt-product-specifications dd{margin:0;font-size:13px;line-height:1.5;color:var(--text,#222222)}

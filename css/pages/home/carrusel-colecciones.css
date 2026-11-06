@@ -2,7 +2,7 @@
 .tt-collection-carousel {
   --tt-carousel-gutter: clamp(56px, 4.5vw, 76px);
   --tt-carousel-gap: clamp(10px, 0.85vw, 14px);
-  background: #fff2f6;
+  background: #FDECF2;
   box-sizing: border-box;
   color:#222222;
   max-width: 100%;
@@ -10,7 +10,7 @@
   padding: clamp(36px, 3.4vw, 52px) 0 clamp(36px, 3.7vw, 56px);
 }
 
-body.tt-home-premium .tt-collection-carousel { background: #fff2f6 !important; }
+body.tt-home-premium .tt-collection-carousel { background: #FDECF2 !important; }
 
 .tt-collection-carousel__heading {
   align-items: center;
@@ -97,7 +97,7 @@ body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__descriptio
 .tt-collection-carousel__button:focus-visible,
 .tt-collection-carousel__viewport:focus-visible,
 .tt-collection-card:focus-visible {
-  outline: 3px solid rgba(222, 88, 139, 0.5);
+  outline: 3px solid rgba(248,170,202,0.5);
   outline-offset: 3px;
 }
 
@@ -139,9 +139,9 @@ body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__descriptio
 
 .tt-collection-card {
   background: #fff;
-  border: 1px solid rgba(215, 133, 164, 0.08);
+  border: 1px solid rgba(248,170,202,0.08);
   border-radius: 8px;
-  box-shadow: 0 7px 18px rgba(122, 64, 87, 0.045);
+  box-shadow: 0 7px 18px rgba(34,34,34,0.045);
   color:var(--color-text-primary,#222222);
   display: flex;
   flex: 0 0 calc((100vw - (var(--tt-carousel-gutter) * 2) - (var(--tt-carousel-gap) * 4)) / 5);
@@ -204,10 +204,10 @@ html body:not(:has(.adm-main)) .tt-collection-card * { color:var(--color-text-pr
 .tt-collection-carousel__state {
   align-items: center;
   background: rgba(255, 255, 255, 0.78);
-  border: 1px solid rgba(215, 133, 164, 0.15);
+  border: 1px solid rgba(248,170,202,0.15);
   border-radius: 8px;
   box-sizing: border-box;
-  color: #986176;
+  color: #222222;
   display: flex;
   justify-content: center;
   min-height: clamp(330px, 26.5vw, 410px);
@@ -241,7 +241,7 @@ html body:not(:has(.adm-main)) .tt-collection-card * { color:var(--color-text-pr
 }
 
 .tt-collection-carousel__dot {
-  background: #f7bfd3;
+  background: #F8AACA;
   border-radius: 999px;
   height: 6px;
   transition: background-color 180ms ease, width 180ms ease;
