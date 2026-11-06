@@ -360,7 +360,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
 }
 
-.login-email-input::placeholder { color: #222222; }
+.login-email-input::placeholder { color: rgba(34,34,34,.8); }
 .login-email-input:focus {
   border-color: rgba(248,170,202,.72);
   background: #fff !important;

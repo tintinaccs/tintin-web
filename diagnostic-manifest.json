@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "b629bda9177639d00a936aec434dbdf1c701b196c1537d0b2ef5f3d0239abb7e",
+  "sourceFingerprint": "262148e627f46d636d1f905f34ef417ef74e4d7b89dc30691164c74ed79df822",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1820,
     "textFiles": 1670,
-    "totalBytes": 61008959,
+    "totalBytes": 61008981,
     "pages": 19,
     "modules": 1179
   },
@@ -18395,7 +18395,7 @@
         "viewer"
       ],
       "bytes": 79282,
-      "sha256": "bd804988c2d62e0d0bce54c4e21d54788e49507c02b5410b6990b039f05011fb",
+      "sha256": "6e9633177ba83c67d1315cf3177364df3e0dcc85a0dc28957b1a35238443d4b1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18488,7 +18488,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/login.css?v=tintin-login-4636ae218fd91df7",
+          "raw": "css/generated/login.css?v=tintin-login-585af398b098f6d7",
           "target": "css/generated/login.css",
           "line": 30
         },
@@ -18593,7 +18593,7 @@
           "line": 52
         },
         {
-          "raw": "css/generated/login-3.css?v=tintin-login-bf965bf23a940446",
+          "raw": "css/generated/login-3.css?v=tintin-login-ab513e1a41234be0",
           "target": "css/generated/login-3.css",
           "line": 57
         },
@@ -18831,7 +18831,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/login.css?v=tintin-login-4636ae218fd91df7",
+          "raw": "css/generated/login.css?v=tintin-login-585af398b098f6d7",
           "target": "css/generated/login.css",
           "line": 30,
           "exists": true
@@ -18957,7 +18957,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/login-3.css?v=tintin-login-bf965bf23a940446",
+          "raw": "css/generated/login-3.css?v=tintin-login-ab513e1a41234be0",
           "target": "css/generated/login-3.css",
           "line": 57,
           "exists": true
@@ -64574,14 +64574,14 @@
     {
       "path": "css/generated/login-3.css",
       "extension": ".css",
-      "bytes": 161801,
-      "sha256": "bf965bf23a9404468b4c483fdb2caf8cf934aad4fb26596b06865a43bc7bd96c"
+      "bytes": 161802,
+      "sha256": "ab513e1a41234be0c8339a1e3da0afbe0c90bb722f8054c3193c3af3ce35159c"
     },
     {
       "path": "css/generated/login.css",
       "extension": ".css",
-      "bytes": 183638,
-      "sha256": "4636ae218fd91df7a8545561acf8eb1c35ce0bb869dc0d7ce0c79bfd75556796"
+      "bytes": 183639,
+      "sha256": "585af398b098f6d7577beb6704556dd17a77dd7e4b01c169d8a52d64f1080538"
     },
     {
       "path": "css/generated/nosotros.css",
@@ -64730,8 +64730,8 @@
     {
       "path": "css/pages/login/login-maintenance.css",
       "extension": ".css",
-      "bytes": 13985,
-      "sha256": "eff791c94c7756941087ebd1ed1fdf2c1a6ef7658e252ebac717ecd9abb3c453"
+      "bytes": 13995,
+      "sha256": "3bc111d5458d8207918557d338e82b6942d067f6e005e494394b131a8b75f302"
     },
     {
       "path": "css/pages/login/login-onboarding-flow.css",
@@ -64748,8 +64748,8 @@
     {
       "path": "css/pages/login/login.css",
       "extension": ".css",
-      "bytes": 17319,
-      "sha256": "45e4afcabd9d5a276e0296d7a03abe70f0ada3ba5747ef2aa6e22856e54bb084"
+      "bytes": 17329,
+      "sha256": "fc754d74405aee0b955da8fb515bb4c77e58e8e156a7f94133371de683172053"
     },
     {
       "path": "css/pages/perfil.css",
@@ -69099,7 +69099,7 @@
       "path": "login.html",
       "extension": ".html",
       "bytes": 79282,
-      "sha256": "bd804988c2d62e0d0bce54c4e21d54788e49507c02b5410b6990b039f05011fb"
+      "sha256": "6e9633177ba83c67d1315cf3177364df3e0dcc85a0dc28957b1a35238443d4b1"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -70221,7 +70221,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 82365,
-      "sha256": "27e0ee8eb59d45c503516699c537cdbe8417ab52b68f6e2336bf0875b28a0ca7"
+      "sha256": "caa377c964b4093aad982ce71c4b9098149aeb78678f196b7d57b23cf082f734"
     },
     {
       "path": "scripts/ci-commands.js",

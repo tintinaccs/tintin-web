@@ -189,7 +189,7 @@ body:has(.login-page) :is(
 }
 
 body:has(.login-page) .login-email-input::placeholder {
-  color: #222222 !important;
+  color: rgba(34,34,34,.8) !important;
   opacity: .85;
 }
 
