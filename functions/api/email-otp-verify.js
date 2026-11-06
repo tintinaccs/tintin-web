@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import {
   jsonResponse,
   originIsAllowed,
@@ -108,7 +109,7 @@ export async function handleEmailOtpVerify(context, deps = defaultDeps) {
   }
 
   try {
-    const rawBody = await request.text();
+    const rawBody = await readLimitedText(request, 2000);
     if (rawBody.length > 2000) throw new Error('request_too_large');
     const body = JSON.parse(rawBody || '{}');
     const code = clean(body.code, 12);
@@ -274,7 +275,7 @@ export async function handleEmailOtpVerify(context, deps = defaultDeps) {
     const badRequest = error?.message === 'request_too_large' || error instanceof SyntaxError;
     return jsonResponse(
       { success: false, error: badRequest ? 'invalid_request' : 'server_error' },
-      badRequest ? 400 : 500,
+      error?.status === 413 ? 413 : badRequest ? 400 : 500,
       origin,
       requestUrl
     );

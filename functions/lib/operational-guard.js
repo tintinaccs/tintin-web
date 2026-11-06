@@ -2,10 +2,10 @@ const buckets = new Map();
 
 // Content-Length es sólo una pista: puede faltar o ser menor que el cuerpo.
 // Acota los bytes leídos antes de decodificar y parsear JSON.
-export async function readLimitedJson(request, maxBytes) {
+export async function readLimitedText(request, maxBytes) {
   if (!Number.isSafeInteger(maxBytes) || maxBytes <= 0) throw new TypeError('Invalid body limit');
   const reader = request.body?.getReader();
-  if (!reader) return JSON.parse('');
+  if (!reader) return '';
   const chunks = [];
   let size = 0;
   try {
@@ -14,8 +14,8 @@ export async function readLimitedJson(request, maxBytes) {
       if (done) break;
       size += value.byteLength;
       if (size > maxBytes) {
-        await reader.cancel();
-        throw Object.assign(new Error('payload_too_large'), { status: 413 });
+        await reader.cancel().catch(() => {});
+        throw Object.assign(new Error('payload_too_large'), { status: 413, code: 'payload_too_large' });
       }
       chunks.push(value);
     }
@@ -25,7 +25,10 @@ export async function readLimitedJson(request, maxBytes) {
   const bytes = new Uint8Array(size);
   let offset = 0;
   for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
-  return JSON.parse(new TextDecoder().decode(bytes));
+  return new TextDecoder().decode(bytes);
+}
+export async function readLimitedJson(request, maxBytes) {
+  return JSON.parse(await readLimitedText(request, maxBytes));
 }
 const MAX_BUCKETS = 5_000;
 let overflowBucket = null;

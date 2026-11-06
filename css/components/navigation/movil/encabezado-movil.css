@@ -22,7 +22,7 @@
     border:1px solid rgba(248,170,202,.2);
     border-radius:999px;
     background:#fff !important;
-    box-shadow:0 14px 38px rgba(56,21,34,.18),0 0 0 1px rgba(255,255,255,.72) inset;
+    box-shadow:0 14px 38px rgba(34,34,34,0.18),0 0 0 1px rgba(255,255,255,.72) inset;
     overflow:visible;
     isolation:isolate;
     transition:width .34s cubic-bezier(.2,.85,.2,1),min-height .34s cubic-bezier(.2,.85,.2,1),padding .34s cubic-bezier(.2,.85,.2,1),border-radius .34s cubic-bezier(.2,.85,.2,1),box-shadow .34s ease;
@@ -78,7 +78,7 @@
     min-height:58px;
     padding:5px 8px;
     border-radius:25px;
-    box-shadow:0 10px 28px rgba(56,21,34,.16),0 0 0 1px rgba(255,255,255,.8) inset;
+    box-shadow:0 10px 28px rgba(34,34,34,0.16),0 0 0 1px rgba(255,255,255,.8) inset;
   }
 
   #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn {
@@ -149,7 +149,7 @@
     height:54px;
     border-radius:50%;
     background:#FDECF2;
-    border:1px solid #f4c6d7;
+    border:1px solid #F8AACA;
     box-shadow:0 8px 18px rgba(248,170,202,.13);
   }
 
@@ -195,10 +195,10 @@
   /* Menú legado y menú hamburguesa comparten la misma superficie limpia. */
   .tt-mobile-menu { padding:max(16px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom)); }
   .tt-mobile-menu-header { min-height:52px; margin-bottom:24px; }
-  .tt-mobile-close { width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; border:1px solid #efcbd8; border-radius:50%; background:#fff; }
+  .tt-mobile-close { width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; border:1px solid #F8AACA; border-radius:50%; background:#fff; }
   .tt-mobile-nav { width:min(100%,560px); margin:0 auto; }
   .tt-mobile-nav a, .tt-mobile-nav button { min-height:58px; padding:16px 18px; border-radius:14px; }
-  .tt-mobile-nav a.active, .tt-mobile-nav button.active { margin:4px 0; padding-inline:18px; background:#fde9f0; box-shadow:none; }
+  .tt-mobile-nav a.active, .tt-mobile-nav button.active { margin:4px 0; padding-inline:18px; background:#FDECF2; box-shadow:none; }
 }
 
 @media (max-width: 350px) {

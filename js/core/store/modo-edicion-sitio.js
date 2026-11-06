@@ -20,7 +20,7 @@ import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue, sanitizeContentText, setNested,
 } from './esquema-contenido.js?v=tintin-suitcase-20261104-1';
 import { moveBlock, moveSection } from './orden-casillas.js?v=tintin-suitcase-20261104-1';
-import { applyVisualBuilderConfig, initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-suitcase-20261104-1';
+import { applyVisualBuilderConfig, initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-suitcase-20261104-1-p1106';
 
 const IMAGE_BLOCK_TYPES = new Set(['banner', 'section', 'columns', 'testimonial']);
 const clone = value => JSON.parse(JSON.stringify(value));

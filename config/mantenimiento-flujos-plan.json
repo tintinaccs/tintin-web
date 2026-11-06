@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "af7c141be16a5f6e98e36bc094437af4382fc92e",
+  "baseCommit": "804a74d91531c84382cfe491340e46239ef3afa5",
   "reason": "Actualizar glob moderno vulnerable en herramientas Firebase, conservar matchers heredados y documentar recuperación comprobada sin modificar PayPal.",
   "files": [
     {
       "path": "package-lock.json",
-      "oldHash": "cde90725c0000f1ca27d6ace347020a42ca274e92b447ecdc7c400367c9723d1",
-      "newHash": "ffc40fcd4d318c0b29c64f4458837b9d74aab8c70a0226c126fe0388d4c966f9"
+      "oldHash": "97dda5d06ba8ed5e26493dd041c99b4f64cee5593acb7ccee4be0c64f378f77d",
+      "newHash": "d93f6d6c2ecfc1e320d025ea3d4c0f00c1d2e4cf3b565f5fa8c1844fb0df964f"
     },
     {
       "path": "package.json",
-      "oldHash": "3ab5bfc4ec114330c8cbcc716c6c4d90e12bea81fb549b33cbe5a8674d13a811",
-      "newHash": "7b474ad02b42c5bbe3132fa430507d4d3f190311f1913e591ea2ed3c3652e760"
+      "oldHash": "9f7e04288ba6ca0ce89e0e92b909db956debc63c82c571a99da0ad8f0da9fabd",
+      "newHash": "1765d7f6e9c7fdd6d669cfd1878aaec898fa82f69b5c835246f45e1963d793e0"
     }
   ],
   "affectedRecords": []

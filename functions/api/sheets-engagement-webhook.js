@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { jsonResponse } from '../../cloudflare/seguridad-cloudinary.js';
 import { adminReviewAction } from '../../cloudflare/participacion-admin.js';
 
@@ -15,7 +16,7 @@ export async function onRequestPost({ request, env }) {
     return jsonResponse({ ok: false, error: 'No autorizado' }, 401, '', request.url);
   }
   try {
-    const raw = await request.text();
+    const raw = await readLimitedText(request, 8 * 1024);
     if (!raw || new TextEncoder().encode(raw).byteLength > 8 * 1024) throw new Error('Solicitud invalida');
     const input = JSON.parse(raw);
     const record = await adminReviewAction(env, { uid: 'google-sheets', email: 'tintinaccs@gmail.com' }, input);

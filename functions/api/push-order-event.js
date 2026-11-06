@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 // =============================================================
 // TINTIN — Webhook interno de eventos de pedido (firmado)
 // =============================================================
@@ -34,7 +35,12 @@ export async function onRequest(context) {
     return jsonResponse({ success: false, error: 'Webhook no configurado' }, 503, origin, requestUrl);
   }
 
-  const rawBody = await request.text();
+  let rawBody;
+  try { rawBody = await readLimitedText(request, WEBHOOK_MAX_BODY_BYTES); }
+  catch (error) {
+    if (error?.status !== 413) throw error;
+    return jsonResponse({ success: false, error: 'Solicitud demasiado grande' }, 413, origin, requestUrl);
+  }
   if (rawBody.length > WEBHOOK_MAX_BODY_BYTES) {
     return jsonResponse({ success: false, error: 'Solicitud demasiado grande' }, 413, origin, requestUrl);
   }

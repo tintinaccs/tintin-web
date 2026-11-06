@@ -15,7 +15,7 @@
   font-weight: 600;
   text-align: center;
   overflow-wrap: anywhere;
-  box-shadow: 0 4px 20px rgba(184,76,114,.2);
+  box-shadow: 0 4px 20px rgba(34,34,34,0.2);
   z-index: 99999;
   pointer-events: none;
 }
@@ -26,11 +26,11 @@
 body:has(.ck-body) {
   --ck-surface: var(--tt-surface, #fff);
   --ck-page: var(--tt-page-bg, #FDECF2);
-  --ck-text: var(--tt-text, #352b2f);
-  --ck-muted: var(--tt-text-muted, #75666c);
+  --ck-text: var(--tt-text, #222222);
+  --ck-muted: var(--tt-text-muted, #222222);
   --ck-accent: var(--tt-accent, var(--color-brand-primary, #F8AACA));
-  --ck-accent-soft: var(--tt-accent-soft, #f9e8ef);
-  --ck-border: var(--tt-border, #edcbd7);
+  --ck-accent-soft: var(--tt-accent-soft, #FDECF2);
+  --ck-border: var(--tt-border, #F8AACA);
   background: var(--ck-page) !important;
   color: var(--ck-text) !important;
 }
@@ -139,8 +139,8 @@ body:has(.ck-body) :is(button, a, input, select, textarea):focus-visible {
 body:has(.ck-body) .ck-error.show,
 body:has(.ck-body) .ck-map-coords-missing {
   color:var(--color-text-primary,#222222) !important;
-  background: #fff0f3 !important;
-  border-color: #e9a8b6 !important;
+  background: #FDECF2 !important;
+  border-color: #F8AACA !important;
 }
 
 body:has(.ck-body).tt-checkout-offline .ck-btn:not(.ck-btn-back),
@@ -273,7 +273,7 @@ html body:has(.ck-body) .ck-steps { display:grid !important; grid-template-colum
 html body:has(.ck-body) .ck-step { min-width:0; }
 html body:has(.ck-body) .ck-step-label {
   display:block;
-  color:#74636b !important;
+  color:#222222 !important;
   background:transparent !important;
   border-radius:0;
   padding:0;

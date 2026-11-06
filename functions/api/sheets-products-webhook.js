@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { corsHeaders } from '../../cloudflare/seguridad-cloudinary.js';
 import { sheetsInboundSecret } from '../../cloudflare/secretos-sheets.js';
 import {
@@ -163,7 +164,7 @@ export async function onRequestPost(context, recordEvidence = recordSheetsEviden
   let operation = null;
 
   try {
-    const raw = await request.text();
+    const raw = await readLimitedText(request, MAX_BODY_BYTES);
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud invalida.');
     const input = JSON.parse(raw);
 

@@ -370,3 +370,57 @@ test('favoritos conservan nombre accesible después de buscar y ordenar',async({
  await page.locator('#cat-sort').selectOption('precio-desc');
  await expect(page.locator('#cat-grid [data-favorite-id="ring"]')).toHaveAccessibleName('Guardar Anillo corazón en favoritos');
 });
+
+for (const [width,height] of [[320,568],[768,1024],[1440,900]]) test(`filtros reales de variantes, agotados y reposición ${width}×${height}`,async({page})=>{
+ const fixtures=[
+  {id:'brown',name:'Bolso Marrón',category:'bolsos',price:100,stock:1,active:true,material:'Cuero',variants:{Color:['Marrón'],Tamaño:['Grande']}},
+  {id:'violet',name:'Bolso Violeta',category:'bolsos',price:100,stock:0,active:true,variants:{Color:['Violeta'],Tamaño:['Pequeño']}},
+  {id:'matrix',name:'Combinaciones reales',category:'bolsos',price:100,stock:2,active:true,variants:{Color:['Marrón','Violeta'],Tamaño:['Grande','Pequeño']},variantInventory:[{variant:'Marrón / Grande',stock:0},{variant:'Violeta / Pequeño',stock:2}]}
+ ];
+ await page.setViewportSize({width,height});
+ await page.route('**/api/public-catalog?**',route=>{
+  const resource=new URL(route.request().url()).searchParams.get('resource');
+  if(!['products','collections'].includes(resource))return route.continue();
+  return route.fulfill({json:{ok:true,resource,items:(resource==='products'?fixtures:[{id:'bolsos',name:'Bags',slug:'bolsos',visible:true}]).map(({id,...data})=>({id,data}))}});
+ });
+ await page.goto('/catalogo',{waitUntil:'domcontentloaded'});
+ const cards=page.locator('#cat-grid [data-product-id]');
+ await expect(cards).toHaveCount(3);
+ if(width<=768)await page.locator('#filter-toggle').click();
+ const brown=page.locator('[data-filter-key="color"][data-filter-value="marrón"]');
+ const violet=page.locator('[data-filter-key="color"][data-filter-value="violeta"]');
+ await expect(brown).toBeVisible();
+ await expect(page.locator('[data-filter-value="rojo"]')).toHaveCount(0);
+ await brown.click();await expect(cards).toHaveCount(2);
+ await page.locator('#filtro-stock').check();await expect(cards).toHaveCount(1);await expect(cards).toHaveAttribute('data-product-id','brown');
+ await page.locator('#filtro-stock').uncheck();
+ await page.locator('[data-filter-key="tamaño"][data-filter-value="pequeño"]').click();
+ await expect(cards).toHaveCount(0); // no brown/small row exists in the matrix
+ await page.locator('#btn-limpiar-filtros').click();await expect(cards).toHaveCount(3);
+ if(width<=768)await page.locator('#filter-toggle').click();
+ await page.evaluate(()=>{
+  window.PRODUCTS=window.PRODUCTS.map(product=>product.id==='matrix'?{...product,stock:0,variantInventory:product.variantInventory.map(row=>({...row,stock:0}))}:product);
+  window.dispatchEvent(new CustomEvent('tintin:products-loaded',{detail:{products:window.PRODUCTS}}));
+ });
+ await expect(violet).toHaveClass(/is-unavailable/);
+ await expect(violet).toHaveCSS('color','rgb(75, 85, 99)');
+ await expect(violet.locator('.cat-variant-check')).toHaveCSS('background-color','rgb(229, 231, 235)');
+ await expect(page.locator('[data-filter-key="color"]').last()).toHaveAttribute('data-filter-value','violeta');
+ expect(await violet.locator('.cat-variant-label').evaluate(el=>getComputedStyle(el).textDecorationLine)).toBe('line-through');
+ await page.screenshot({path:`artifacts/commerce/variant-filters-sold-out-${width}.png`,fullPage:true});
+ await violet.click();await expect(cards).toHaveCount(2);
+ await page.locator('#filtro-stock').check();await expect(cards).toHaveCount(0);
+ await page.evaluate(()=>{
+  window.PRODUCTS=window.PRODUCTS.map(product=>product.id==='violet'?{...product,stock:1}:product);
+  window.dispatchEvent(new CustomEvent('tintin:products-loaded',{detail:{products:window.PRODUCTS}}));
+ });
+ await expect(violet).not.toHaveClass(/is-unavailable/);
+ await expect(cards).toHaveCount(1);await expect(cards).toHaveAttribute('data-product-id','violet');
+ await page.evaluate(()=>{
+  window.PRODUCTS=window.PRODUCTS.filter(product=>product.id==='brown');
+  window.dispatchEvent(new CustomEvent('tintin:products-loaded',{detail:{products:window.PRODUCTS}}));
+ });
+ await expect(violet).toHaveCount(0);await expect(cards).toHaveCount(1);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await page.screenshot({path:`artifacts/commerce/variant-filters-${width}.png`,fullPage:true});
+});

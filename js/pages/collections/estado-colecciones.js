@@ -9,7 +9,7 @@ import {
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
     import('../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260925-cache-converge-1'),
-    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261105-copiar-pago-1')
+    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261105-copiar-pago-1-p1106')
   ]);
 }
 

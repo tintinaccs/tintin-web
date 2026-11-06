@@ -1,3 +1,4 @@
+import { readLimitedJson } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
@@ -29,7 +30,7 @@ export async function onRequest(context) {
 
   try {
     const user = await requireFirebaseUser(request, env);
-    const body = await request.json().catch(() => ({}));
+    const body = await readLimitedJson(request, 16 * 1024).catch(error => { if (error?.status === 413) throw error; return {}; });
     const raw = clean(body?.username);
     const key = usernameKey(raw);
     if (!key || isReservedUsername(raw)) {

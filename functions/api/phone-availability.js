@@ -1,3 +1,4 @@
+import { readLimitedJson } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
@@ -32,7 +33,7 @@ export async function handlePhoneAvailability(context, { requireUser = requireFi
 
   try {
     const user = await requireUser(request, env);
-    const body = await request.json().catch(() => ({}));
+    const body = await readLimitedJson(request, 16 * 1024).catch(error => { if (error?.status === 413) throw error; return {}; });
     const country = findCountryByCode(clean(body?.country, 4));
     const rawPhone = clean(body?.phone);
     if (!rawPhone || !isValidPhone(rawPhone, country)) {

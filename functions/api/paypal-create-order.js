@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse, jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, statusFromError } from '../../cloudflare/seguridad-cloudinary.js';
 import { createPaypalOrder } from '../../cloudflare/paypal-seguro.js';
 
@@ -8,7 +9,7 @@ export async function onRequest({ request, env }) {
   if (request.method !== 'POST') return jsonResponse({ success: false, error: 'Método no permitido' }, 405, origin, request.url);
   try {
     const user = await requireFirebaseUser(request, env);
-    const raw = await request.text();
+    const raw = await readLimitedText(request, 3000);
     if (raw.length > 3000) throw new Error('Solicitud demasiado grande');
     const result = await createPaypalOrder(env, { orderId: JSON.parse(raw || '{}').orderId, uid: user.uid });
     return jsonResponse({ success: true, ...result }, 200, origin, request.url);

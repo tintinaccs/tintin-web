@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import {
   jsonResponse,
   originIsAllowed,
@@ -522,7 +523,7 @@ export async function onRequest(context) {
     const appCheckToken = request.headers.get('X-Firebase-AppCheck') || '';
     const user = await verifyFirebaseUser(idToken);
     await enforceAuthenticatedRateLimit(request, env, user);
-    const rawBody = await request.text();
+    const rawBody = await readLimitedText(request, 12000);
     if (rawBody.length > 12000) throw new Error('Solicitud demasiado grande.');
     const body = JSON.parse(rawBody || '{}');
 

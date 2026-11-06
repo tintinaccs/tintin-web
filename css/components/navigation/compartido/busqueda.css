@@ -103,8 +103,8 @@
 .tt-search-result-item:focus-visible,
 .tt-search-result-item.is-active {
   border-color: rgba(248,170,202, .48);
-  background: #fff7fa;
-  box-shadow: 0 9px 24px rgba(94, 25, 51, .09);
+  background: #FDECF2;
+  box-shadow: 0 9px 24px rgba(34,34,34,0.09);
   transform: translateY(-1px);
   outline: none;
 }
@@ -114,13 +114,13 @@
   width: 56px;
   height: 52px;
   border-radius: 12px;
-  background: #f8eef2;
+  background: #FDECF2;
   object-fit: contain;
   overflow: hidden;
 }
 
 .tt-search-result-image--empty {
-  background: linear-gradient(135deg, #f8e9ef, #f1cfdb);
+  background: linear-gradient(135deg, #FDECF2, #F8AACA);
 }
 
 .tt-search-result-copy {
@@ -139,7 +139,7 @@
 
 .tt-search-result-copy > span {
   overflow: hidden;
-  color: #7b6971;
+  color: #222222;
   font-size: .78rem;
   line-height: 1.35;
   white-space: normal;
@@ -173,7 +173,7 @@
 
 #search-panel .tt-search-clear {
   grid-column:3; grid-row:1; min-width:44px; min-height:44px;
-  border:0; border-radius:12px; background:#fff3f7; color:#222; cursor:pointer;
+  border:0; border-radius:12px; background:#FDECF2; color:#222; cursor:pointer;
 }
 #search-panel .tt-search-input { font-size:16px !important; }
 @media (max-width:767px) {

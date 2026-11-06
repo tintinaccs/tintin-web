@@ -79,7 +79,7 @@ body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-prof
 .login-username-status[data-state="available"] { color:#1f7a50; }
 .login-username-status[data-state="available"]::before { content:"✓"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#e7f7ee; font-size:12px; }
 .login-username-status[data-state="taken"],.login-username-status[data-state="invalid"] { color:var(--color-text-primary,#222222); }
-.login-username-status[data-state="taken"]::before,.login-username-status[data-state="invalid"]::before { content:"×"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#fff0f3; font-size:15px; }
+.login-username-status[data-state="taken"]::before,.login-username-status[data-state="invalid"]::before { content:"×"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#FDECF2; font-size:15px; }
 .login-username-status[data-state="checking"] { color:var(--color-text-primary,#222222); }
 
 /* Los conflictos pertenecen al campo exacto: el contenedor crece de forma
@@ -112,7 +112,7 @@ body:has(.login-page) .login-username-status.show {
 /* Cierre visual minimalista del alta: rosa sereno, logo oficial adaptable y
    una jerarquía limpia sin elementos que invadan las ayudas del formulario. */
 body:has(.login-page) .login-page {
-  background: #ffd4e2 !important;
+  background: #FDECF2 !important;
   overflow: auto;
 }
 body:has(.login-page) .login-page::before,
@@ -161,12 +161,12 @@ body:has(.login-page).login-setup-open .login-box {
 body:has(.login-page) .login-mobile-logo-text,
 body:has(.login-page) .login-mobile-logo-sub { display:none !important; }
 body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-profile-phone-field,#login-profile-address-field) {
-  border-color: rgba(160, 104, 128, .16); border-radius:16px;
+  border-color: rgba(248,170,202,0.16); border-radius:16px;
   background:#fff; padding:clamp(16px,2vw,22px);
 }
 body:has(.login-page) .login-email-btn {
   background:var(--color-brand-primary, #F8AACA) !important; color:#222222 !important; border:0 !important;
-  box-shadow:0 8px 18px rgba(216,79,134,.22) !important;
+  box-shadow:0 8px 18px rgba(34,34,34,0.22) !important;
 }
 body:has(.login-page) .login-email-btn:hover,
 body:has(.login-page) .login-email-btn:focus-visible { background:var(--color-brand-primary, #F8AACA) !important; }
@@ -184,7 +184,7 @@ body:has(.login-page) .login-username-status {
 }
 body:has(.login-page) .login-username-status[data-state="idle"] { display:none; }
 body:has(.login-page) .login-phone-country {
-  flex-basis:88px !important; color:#222222 !important; background:#f9edf1 !important;
+  flex-basis:88px !important; color:#222222 !important; background:#FDECF2 !important;
   opacity:1; cursor:default;
 }
 @media (max-width:599px) {
@@ -318,7 +318,7 @@ body:has(.login-page) .login-page {
   padding: clamp(18px, 3vw, 42px) !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  background: #fff7fb !important;
+  background: #FDECF2 !important;
 }
 
 body:has(.login-page) .login-shell,

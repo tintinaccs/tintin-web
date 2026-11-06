@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import {handleProductEditor} from '../../cloudflare/product-editor-handler.mjs';
 import {handleAuditRequest} from '../../cloudflare/registro-auditoria.mjs';
 import { rateLimitErrorResponse,
@@ -50,7 +51,7 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, requestUrl);
 
   try {
-    const raw = await request.text();
+    const raw = await readLimitedText(request, 750000);
     if (!raw || new TextEncoder().encode(raw).byteLength > 750000) throw new Error('Solicitud inválida.');
     const body = JSON.parse(raw);
     if (body.action === 'appendAudit') return handleAuditRequest(context, { input: body.entry });

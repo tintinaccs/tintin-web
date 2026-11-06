@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
@@ -35,7 +36,12 @@ export async function onRequest(context) {
     return jsonResponse({ ok: false, error: error?.message || 'Solo el Super Admin puede realizar esta acción.' }, error?.status || 401, origin, requestUrl);
   }
 
-  const raw = await request.text();
+  let raw;
+  try { raw = await readLimitedText(request, MAX_BODY_BYTES); }
+  catch (error) {
+    if (error?.status !== 413) throw error;
+    return jsonResponse({ ok: false, error: 'Solicitud vacía o demasiado grande.' }, 413, origin, requestUrl);
+  }
   if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) {
     return jsonResponse({ ok: false, error: 'Solicitud vacía o demasiado grande.' }, 400, origin, requestUrl);
   }

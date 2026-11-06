@@ -43,7 +43,7 @@ html body.tt-home-premium #tt-privacy-consent.tt-privacy-consent{
   -webkit-backdrop-filter:none!important;
   isolation:isolate!important;
   border:1px solid rgba(248,170,202,.12)!important;
-  box-shadow:0 24px 64px rgba(38,24,30,.14),0 2px 8px rgba(38,24,30,.05)!important;
+  box-shadow:0 24px 64px rgba(34,34,34,0.14),0 2px 8px rgba(34,34,34,0.05)!important;
 }
 html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-primary{
   background:var(--tt-accent,var(--color-brand-primary, #F8AACA))!important;
@@ -192,7 +192,7 @@ body.tt-home-premium .tt-collection-carousel {
 
 body.tt-home-premium #look-section {
   padding-block: clamp(54px, 7vw, 92px);
-  background: var(--tt-section-gradient, none) var(--tt-section-background, #FDECF2) !important;
+  background: var(--tt-section-gradient, var(--tt-section-background, #FDECF2)) !important;
   border-block: 1px solid color-mix(in srgb, var(--color-card-border, #FDECF2) 70%, transparent);
 }
 
@@ -209,11 +209,11 @@ body.tt-home-premium .tt-watch-feature {
   border: 1px solid var(--color-card-border, #FDECF2);
   border-radius: clamp(18px, 2vw, 28px);
   overflow: hidden;
-  box-shadow: 0 16px 42px rgba(92, 37, 57, .07);
+  box-shadow: 0 16px 42px rgba(34,34,34,0.07);
 }
 
 body.tt-home-premium .tt-home-random-products {
-  background: linear-gradient(180deg, rgba(252,240,245,.72), rgba(255,255,255,.96));
+  background: linear-gradient(180deg, rgba(248,170,202,0.72), rgba(255,255,255,.96));
   border-block: 1px solid color-mix(in srgb, var(--color-card-border, #FDECF2) 70%, transparent);
 }
 

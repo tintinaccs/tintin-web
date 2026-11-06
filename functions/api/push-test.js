@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 // =============================================================
 // TINTIN — Notificación de prueba (sólo Super Admin)
 // =============================================================
@@ -61,7 +62,7 @@ export async function onRequest(context) {
   lastTestByUid.set(user.uid, now);
 
   try {
-    const rawBody = await request.text();
+    const rawBody = await readLimitedText(request, MAX_BODY_BYTES);
     if (rawBody.length > MAX_BODY_BYTES) throw new Error('Solicitud demasiado grande.');
     const body = rawBody ? JSON.parse(rawBody) : {};
     if (!body || typeof body !== 'object' || Array.isArray(body)) throw new Error('Solicitud inválida.');
