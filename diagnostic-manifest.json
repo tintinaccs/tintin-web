@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "55fc61927e0fb21ae5c1a8bdad1ba7b1c383c541f50c60729ea12fa8617f910d",
+  "sourceFingerprint": "4ee449e07186938250ecf9167b13a032b18bc44f65b863f708910a6aca135463",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1820,
     "textFiles": 1670,
-    "totalBytes": 61005183,
+    "totalBytes": 61006745,
     "pages": 19,
     "modules": 1179
   },
@@ -45323,8 +45323,8 @@
     },
     {
       "path": "tests/admin/private-work-media-guard.test.mjs",
-      "bytes": 2819,
-      "sha256": "6d9037ed3d3b8c4f32d310cd6b8ea704c540cfcd5cc9fc1f457d7ebc35031800",
+      "bytes": 2910,
+      "sha256": "62e127048bd79375203748d918a717e9c40389aafae18166b6129702866bbd20",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45359,16 +45359,22 @@
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 5
+        },
+        {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 6
         }
       ],
       "endpoints": [
         {
           "url": "https://fixture.test/",
-          "line": 10
+          "line": 11
         },
         {
           "url": "https://fixture.test/api/cloudinary-delete",
-          "line": 22
+          "line": 23
         }
       ]
     },
@@ -49263,8 +49269,8 @@
     },
     {
       "path": "tests/checkout/order-email-app-check.test.mjs",
-      "bytes": 5819,
-      "sha256": "e936b5c703f4a1f94e32c37c45ae4464425ec901610384f3f9393f0c4aa956ab",
+      "bytes": 5912,
+      "sha256": "751f7a4f0053dbe49e2c5ad9e4909f90b2dd04c65ea56c5c92bf0d7b1ff17122",
       "syntax": {
         "ok": true,
         "error": ""
@@ -49293,16 +49299,22 @@
           "target": null,
           "dynamic": false,
           "line": 4
+        },
+        {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 5
         }
       ],
       "endpoints": [
         {
           "url": "https://shop.example.test/api/order-email",
-          "line": 38
+          "line": 39
         },
         {
           "url": "https://shop.example.test/",
-          "line": 39
+          "line": 40
         }
       ]
     },
@@ -55434,8 +55446,8 @@
     },
     {
       "path": "tests/orders/orders-board-domain.test.mjs",
-      "bytes": 11022,
-      "sha256": "49b3458f6d3ca48361fa95fb70402f46ed7b226b639fd740f1bb90df81a33aeb",
+      "bytes": 11114,
+      "sha256": "19f68b761145ce0e75660624fcb400c15df1fe8a25606cc073a4d9a7c11f3535",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55488,16 +55500,22 @@
           "target": "cloudflare/contactos-pedido.mjs",
           "dynamic": false,
           "line": 8
+        },
+        {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 9
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/api/admin-order-mutation",
-          "line": 66
+          "line": 67
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 69
+          "line": 70
         }
       ]
     },
@@ -65006,8 +65024,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1250355,
-      "sha256": "487d89fd525d787e6623e6173bea46f5c7fe83852a63cc1c695de47af02327db"
+      "bytes": 1251641,
+      "sha256": "d29381a4a6a40b2addd804c3b75d8f1c2c37c9f4989e396e4ec9dab67a011500"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -70814,8 +70832,8 @@
     {
       "path": "tests/admin/private-work-media-guard.test.mjs",
       "extension": ".mjs",
-      "bytes": 2819,
-      "sha256": "6d9037ed3d3b8c4f32d310cd6b8ea704c540cfcd5cc9fc1f457d7ebc35031800"
+      "bytes": 2910,
+      "sha256": "62e127048bd79375203748d918a717e9c40389aafae18166b6129702866bbd20"
     },
     {
       "path": "tests/admin/private-work-pagination-session.test.mjs",
@@ -71396,8 +71414,8 @@
     {
       "path": "tests/checkout/order-email-app-check.test.mjs",
       "extension": ".mjs",
-      "bytes": 5819,
-      "sha256": "e936b5c703f4a1f94e32c37c45ae4464425ec901610384f3f9393f0c4aa956ab"
+      "bytes": 5912,
+      "sha256": "751f7a4f0053dbe49e2c5ad9e4909f90b2dd04c65ea56c5c92bf0d7b1ff17122"
     },
     {
       "path": "tests/checkout/order-routing-identity.test.mjs",
@@ -72326,8 +72344,8 @@
     {
       "path": "tests/orders/orders-board-domain.test.mjs",
       "extension": ".mjs",
-      "bytes": 11022,
-      "sha256": "49b3458f6d3ca48361fa95fb70402f46ed7b226b639fd740f1bb90df81a33aeb"
+      "bytes": 11114,
+      "sha256": "19f68b761145ce0e75660624fcb400c15df1fe8a25606cc073a4d9a7c11f3535"
     },
     {
       "path": "tests/orders/statistics-reset-render.test.mjs",

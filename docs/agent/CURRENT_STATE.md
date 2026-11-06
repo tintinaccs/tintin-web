@@ -1,3 +1,9 @@
+## PR1348: fixtures de lectores acotados — 2026-11-06 — Codex /root
+
+SHA828d5fc:CodeQL42206486051/1SUCCESS y preflight42206492413/1SUCCESS; comercio de ese run falló en el fixture VM de order-email por no inyectar readLimitedText. Se inyecta la función real conservando todas las aserciones de identidad, propiedad y permisos. La regresión ampliada encontró lo mismo en el fixture de contactos de pedidos; se corrige igual. El fixture de borrado de medios privados usa ahora un Request real e inyecta readLimitedJson, conservando los bloqueos frente a uso privado/inspección caída. No hay cambios de lógica comercial o de autorización.
+
+PASS_LOCAL: audit:secure-orders (contrato de checkout y24PayPal) y19pruebas específicas de los fixtures corregidos. Regresión ampliada:936pruebas;931PASS,4fallaron únicamente por faltar el ejecutable Playwright y1SKIP de borrador Firestore sin emulador (existente). Se instala el Chromium oficial fijado por el lockfile y se reejecutan los dos archivos afectados; el resultado nuevo quedará en el PR/log externo. Sin retirar tests ni tolerancias. Actualizaciones de esta evidencia preceden la regeneración canónica de manifiestos para preservar build repetible. Nueva CI y mantenimiento protegido siguen pendientes del SHA final.
+
 ## PR1348: corrección del inventario generado — 2026-11-06 — Codex /root
 
 PR1348 abierto por NOVAKPY, rama subida y permisos de escritura comprobados. Primer SHA736f4ff:CodeQL42206010438/1SUCCESS y previewCloudflareSUCCESS. CI42206013287/1falló en Reject generated artifact drift: CURRENT_STATE recibió actualizaciones después del generador; sus hashes/tamaño en diagnostic-manifest.json y site-version.json quedaron atrás. Se regenera desde la fuente canónica después de esta entrada y se verifica repetibilidad, sin tocar aserciones ni gates. No es un fallo de las correcciones de API/catálogo.
