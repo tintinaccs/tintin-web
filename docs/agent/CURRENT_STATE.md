@@ -1,3 +1,11 @@
+## Unificación de colores y mantenimiento de flujos protegidos — 2026-11-06 — Claude Code
+
+Pedido de la titular: unificar los colores del sitio a la paleta Tintín (#F8AACA, #FDECF2, #222222, blanco) en páginas públicas, checkout, login y perfil. PR 1351 mergeado en main como 4ae187d8 (base ab9127a); producción sirvió styles.min.css con sufijo -p1106 y se midió en tintinaccs.com: 0 errores de JavaScript y 0 desborde horizontal en 7 páginas por escritorio y celular.
+
+Causa del check Protected flows en rojo sobre main 4ae187d8: el PR 1351 modificó 102 archivos protegidos (HTML, CSS, JS, CSP) sin plan de mantenimiento; en el PR el job figuraba omitido y no lo detectó. Corrección: plan exacto con scripts/preparar-mantenimiento-flujos.mjs (base 4ae187d8, 102 archivos, 45 registros afectados) y huellas nuevas en config/proteccion-flujos.json. Los cambios de JS del PR 1351 fueron solo cadenas de versión ?v= (0 líneas de lógica); el resto fueron literales de color en CSS y dos expectativas de color en pruebas de interfaz.
+
+PASS_LOCAL: build:pages, auditar-proteccion-flujos (78 registros, 544 archivos intactos), 52 pruebas de flow-connections, audit:styles, audit:colors, audit:cache-versioning. No probado: iPhone real. Colores aún fuera de paleta, pendientes de un PR aparte: literales dentro de 26 archivos JS (por ejemplo #713C53 y #C52F68 en estilos en línea) y #4B5563/#E5E7EB en CSS en línea de catalogo.html; se conservan a propósito colores de estado, WhatsApp, botón de Google, muestras de producto y el degradado del hero aprobado.
+
 ## Filtros reales del catálogo — 2026-11-06 — Codex /root
 
 Base818ceeac, rama feat/catalog-live-variant-filters. Pedido: todos los atributos realmente definidos, sin opciones inventadas; agotados al final grises/tachados, con stock desde1 normales y eliminación de último producto retira opción. Se conserva Solo con stock. Skill leído: tintin-ecommerce-flows. Motor de lectura consume inventario canónico; incluye material cargado y cruza opciones de una misma combinación. Los eventos de productos existentes actualizan opciones/selecciones. Filtros elegidos siguen visibles aunque búsqueda/categoría no tenga coincidencias.
