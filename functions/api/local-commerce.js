@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse, jsonResponse,originIsAllowed,preflightResponse,requireSuperAdmin } from '../../cloudflare/seguridad-cloudinary.js';
 import { localCommerceSnapshot,upsertLocalEntries } from '../../cloudflare/comercio-local.js';
 export async function onRequest({request,env}) {
@@ -9,7 +10,7 @@ export async function onRequest({request,env}) {
     const actor=await requireSuperAdmin(request, env);
     if(request.method==='GET')return jsonResponse({ok:true,...await localCommerceSnapshot(env,{revisionOnly:new URL(url).searchParams.get('view')==='revision',includeTestOrders:new URL(url).searchParams.get('includeTestOrders')==='1'})},200,origin,url);
     if(!origin)return jsonResponse({ok:false,error:'Origen obligatorio.'},403,origin,url);
-    const raw=await request.text();if(new TextEncoder().encode(raw).length>256*1024)throw Object.assign(new Error('Solicitud demasiado grande.'),{status:413});
+    const raw=await readLimitedText(request, 256 * 1024);if(new TextEncoder().encode(raw).length>256*1024)throw Object.assign(new Error('Solicitud demasiado grande.'),{status:413});
     return jsonResponse(await upsertLocalEntries(env,JSON.parse(raw),{...actor,origin:'superadmin:local-commerce'}),200,origin,url);
   }catch(error){const limited=rateLimitErrorResponse(error,origin,url);if(limited)return limited;return jsonResponse({ok:false,error:String(error.message||'No se pudo sincronizar.').slice(0,300)},error instanceof SyntaxError?400:error.status||500,origin,url);}
 }

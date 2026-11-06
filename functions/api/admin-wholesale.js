@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 // Respuesta del Super Admin a una cotización mayorista: guardar precios,
 // aprobar (la cuenta queda mayorista aprobada) o rechazar.
 import { rateLimitErrorResponse,
@@ -27,7 +28,7 @@ export async function onRequest(context) {
 
   try {
     const actor = await requireSuperAdmin(request, env);
-    const raw = await request.text();
+    const raw = await readLimitedText(request, 32 * 1024);
     if (!raw || new TextEncoder().encode(raw).byteLength > 32 * 1024) {
       return jsonResponse({ ok: false, error: 'invalid_request' }, 400, origin, requestUrl);
     }

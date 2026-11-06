@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin, statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
@@ -24,7 +25,7 @@ export async function onRequest(context) {
       return jsonResponse({ ok: true, reports }, 200, origin, request.url);
     }
     if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido' }, 405, origin, request.url);
-    const raw = await request.text();
+    const raw = await readLimitedText(request, 16 * 1024);
     if (!raw || new TextEncoder().encode(raw).byteLength > 16 * 1024) throw new Error('Solicitud vacía o demasiado grande');
     const input = JSON.parse(raw);
 

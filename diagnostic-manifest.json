@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c40e9923bd01d55d20e2bb27fb3e5daf11f0b64e37c03527888dd5bc78ddc61f",
+  "sourceFingerprint": "4ee449e07186938250ecf9167b13a032b18bc44f65b863f708910a6aca135463",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1817,
-    "textFiles": 1667,
-    "totalBytes": 60985501,
+    "files": 1820,
+    "textFiles": 1670,
+    "totalBytes": 61006745,
     "pages": 19,
-    "modules": 1176
+    "modules": 1179
   },
   "viewports": [
     {
@@ -10352,8 +10352,8 @@
         "guest",
         "client"
       ],
-      "bytes": 70030,
-      "sha256": "f1840d66a0a0132d9f1bdf11e8f88782fa5257a2da20f3e2f6dcd7cfa5fea596",
+      "bytes": 70265,
+      "sha256": "3b88a306e213d073269f2372881cceae0083efdd4b2de325893142f7dbf9939a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10441,32 +10441,32 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 1114
+          "line": 1120
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 1115
+          "line": 1121
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 1116
+          "line": 1122
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1117
+          "line": 1123
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1118
+          "line": 1124
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 1119
+          "line": 1125
         }
       ],
       "styles": [
@@ -11000,37 +11000,37 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 1114,
+          "line": 1120,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 1115,
+          "line": 1121,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1",
           "target": "js/analytics/analitica.js",
-          "line": 1116,
+          "line": 1122,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1117,
+          "line": 1123,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1118,
+          "line": 1124,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 1119,
+          "line": 1125,
           "exists": true
         },
         {
@@ -27178,7 +27178,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 260701,
-      "sha256": "691d09dcb9f5fc3a02f1b17016ba17d9475ee017c28d1c28f1f0b30018d64ee2",
+      "sha256": "29066c342d881fc371ebb5fd1024284f49260032140af77bfdf34e14f5a17b47",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27386,85 +27386,187 @@
     },
     {
       "path": "functions/api/admin-backfill-canonical-identity.js",
-      "bytes": 9126,
-      "sha256": "a756e7812c5252f9828e1f968a93ffdc4583fd7e383402728177bd9773f7aa77",
+      "bytes": 9209,
+      "sha256": "ece651f23b3b189b6f928e7a74fe1f69f52bae9d864f93cc73c34a9347db59c0",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "../../cloudflare/firestore-admin-batch.js",
           "target": "cloudflare/firestore-admin-batch.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         }
       ],
       "endpoints": [
         {
           "url": "https://www.googleapis.com/auth/datastore",
-          "line": 15
+          "line": 16
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7Bsa.project_id%7D/databases/(default",
-          "line": 55
+          "line": 56
         }
       ]
     },
     {
       "path": "functions/api/admin-catalog-delete.js",
-      "bytes": 7282,
-      "sha256": "ff467091993181d5758979e1aa2c430ae9cac8f865582f90d13cbcfcb19d38d9",
+      "bytes": 7371,
+      "sha256": "975775f53e195ac2b70632d05c4bd31af3b73fa9f9227bc5127411ffc9b5bfeb",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../../cloudflare/borrado-global-catalogo.js",
           "target": "cloudflare/borrado-global-catalogo.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
           "target": "cloudflare/resiliencia-sync-catalogo.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         }
       ],
       "endpoints": []
     },
     {
       "path": "functions/api/admin-commerce-controls.js",
-      "bytes": 2603,
-      "sha256": "90ae3e98f6bc4c0a200c905ae8913b6a59a0064e828443e369f3b03cb4dce15c",
+      "bytes": 2687,
+      "sha256": "cefd1404b5370e0faed830b5a83cfc4f7a56ec4b4bc366312eee0a16c174d9d3",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/order-trash-controls.js",
+          "target": "cloudflare/order-trash-controls.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../cloudflare/statistics-controls.js",
+          "target": "cloudflare/statistics-controls.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
+          "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/admin-engagement.js",
+      "bytes": 3762,
+      "sha256": "df221680ffd8ee570eb9036bfe8325b9bc9da79a92e61e8d5c4f3b455002fdcf",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../cloudflare/participacion-admin.js",
+          "target": "cloudflare/participacion-admin.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../cloudflare/sincronizacion-participacion-sheets.js",
+          "target": "cloudflare/sincronizacion-participacion-sheets.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../cloudflare/comentarios-sociales.js",
+          "target": "cloudflare/comentarios-sociales.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/admin-import-job.js",
+      "bytes": 8410,
+      "sha256": "a12bc0b166f965b29457178b7fb898fb9fab359fba0ae43d9a2f9ccd4c340976",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
           "dynamic": false,
           "line": 1
         },
@@ -27472,91 +27574,19 @@
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 2
-        },
-        {
-          "raw": "../../cloudflare/order-trash-controls.js",
-          "target": "cloudflare/order-trash-controls.js",
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "../../cloudflare/statistics-controls.js",
-          "target": "cloudflare/statistics-controls.js",
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
-          "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
-          "dynamic": false,
-          "line": 5
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "functions/api/admin-engagement.js",
-      "bytes": 3678,
-      "sha256": "766dd2345d4fb787e225dbe375994cdc820e6a2af9f4293d9de685fcc2b072a7",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "../../cloudflare/participacion-admin.js",
-          "target": "cloudflare/participacion-admin.js",
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "../../cloudflare/sincronizacion-participacion-sheets.js",
-          "target": "cloudflare/sincronizacion-participacion-sheets.js",
-          "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "../../cloudflare/comentarios-sociales.js",
-          "target": "cloudflare/comentarios-sociales.js",
-          "dynamic": false,
           "line": 6
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "functions/api/admin-import-job.js",
-      "bytes": 8321,
-      "sha256": "6f263c4914e68ac758b1e2f7a86d096ddeb4a3060f883339ab7cc6c1641cc4b2",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/firebase-admin-ligero.js",
-          "target": "cloudflare/firebase-admin-ligero.js",
-          "dynamic": false,
-          "line": 5
         },
         {
           "raw": "../../cloudflare/firestore-admin-batch.js",
           "target": "cloudflare/firestore-admin-batch.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         }
       ],
       "endpoints": []
@@ -27592,72 +27622,78 @@
     },
     {
       "path": "functions/api/admin-order-mutation.js",
-      "bytes": 8190,
-      "sha256": "eb8ec3d6438a2664ba010a2ca2e45d58a34889d00e91e78d38f1ae7330e38ff8",
+      "bytes": 8271,
+      "sha256": "05fa29c5a223c40b0c7a7c8fbc42e400994f548d5f2fdb5897985b9b85adf0d0",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/product-editor-handler.mjs",
           "target": "cloudflare/product-editor-handler.mjs",
           "dynamic": false,
-          "line": 1
+          "line": 2
         },
         {
           "raw": "../../cloudflare/registro-auditoria.mjs",
           "target": "cloudflare/registro-auditoria.mjs",
           "dynamic": false,
-          "line": 2
+          "line": 3
         },
         {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "../../cloudflare/order-admin-domain.js",
           "target": "cloudflare/order-admin-domain.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "../../cloudflare/order-sheets-sync.js",
           "target": "cloudflare/order-sheets-sync.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "../../cloudflare/correo-estado-pedido.js",
           "target": "cloudflare/correo-estado-pedido.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         },
         {
           "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
           "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
           "dynamic": false,
-          "line": 15
+          "line": 16
         },
         {
           "raw": "./notifications.js",
           "target": "functions/api/notifications.js",
           "dynamic": false,
-          "line": 16
+          "line": 17
         },
         {
           "raw": "../../cloudflare/contactos-pedido.mjs",
           "target": "cloudflare/contactos-pedido.mjs",
           "dynamic": false,
-          "line": 17
+          "line": 18
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 18
+          "line": 19
         }
       ],
       "endpoints": []
@@ -27688,46 +27724,16 @@
     },
     {
       "path": "functions/api/admin-wholesale.js",
-      "bytes": 2509,
-      "sha256": "5f0ef87d3c519dc104176bb26b89f55d0a19aa508be57e3da02aa31da3126215",
+      "bytes": 2593,
+      "sha256": "c3c9585a4eb65f479dc3630f81cedbfa91d757c4dd6d108e9dc87dad91b2769e",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
-          "dynamic": false,
-          "line": 9
-        },
-        {
-          "raw": "../../cloudflare/mayoristas.js",
-          "target": "cloudflare/mayoristas.js",
-          "dynamic": false,
-          "line": 10
-        },
-        {
-          "raw": "../../cloudflare/mayoristas-avisos.js",
-          "target": "cloudflare/mayoristas-avisos.js",
-          "dynamic": false,
-          "line": 11
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "functions/api/apps-script-bridge.js",
-      "bytes": 12773,
-      "sha256": "f81927b388d9d796ec771215b7f62a8b31a6940fd3a0b9f2a821c74fcfda7a9f",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../js/pages/profile/configuracion-inicial-perfil.mjs",
-          "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
           "dynamic": false,
           "line": 1
         },
@@ -27735,79 +27741,121 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 8
+          "line": 10
+        },
+        {
+          "raw": "../../cloudflare/mayoristas.js",
+          "target": "cloudflare/mayoristas.js",
+          "dynamic": false,
+          "line": 11
+        },
+        {
+          "raw": "../../cloudflare/mayoristas-avisos.js",
+          "target": "cloudflare/mayoristas-avisos.js",
+          "dynamic": false,
+          "line": 12
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/apps-script-bridge.js",
+      "bytes": 12862,
+      "sha256": "5d6884f493567f0ddf0217edf9aca70c65900f500585e598071717ba86e26e0b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../js/pages/profile/configuracion-inicial-perfil.mjs",
+          "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 9
         },
         {
           "raw": "../../cloudflare/firebase-id-token.js",
           "target": "cloudflare/firebase-id-token.js",
           "dynamic": false,
-          "line": 9
+          "line": 10
         },
         {
           "raw": "../../cloudflare/rate-limit-compartido.js",
           "target": "cloudflare/rate-limit-compartido.js",
           "dynamic": false,
-          "line": 10
+          "line": 11
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         },
         {
           "raw": "../../cloudflare/apps-script-fetch.js",
           "target": "cloudflare/apps-script-fetch.js",
           "dynamic": false,
-          "line": 15
+          "line": 16
         },
         {
           "raw": "../../cloudflare/order-sheets-sync.js",
           "target": "cloudflare/order-sheets-sync.js",
           "dynamic": false,
-          "line": 16
+          "line": 17
         },
         {
           "raw": "../../cloudflare/order-admin-domain.js",
           "target": "cloudflare/order-admin-domain.js",
           "dynamic": false,
-          "line": 17
+          "line": 18
         },
         {
           "raw": "../../cloudflare/politica-checkout-publico.js",
           "target": "cloudflare/politica-checkout-publico.js",
           "dynamic": false,
-          "line": 18
+          "line": 19
         },
         {
           "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
           "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
           "dynamic": false,
-          "line": 19
+          "line": 20
         },
         {
           "raw": "../../cloudflare/servicio-push.js",
           "target": "cloudflare/servicio-push.js",
           "dynamic": false,
-          "line": 20
+          "line": 21
         },
         {
           "raw": "./order-email.js",
           "target": "functions/api/order-email.js",
           "dynamic": false,
-          "line": 21
+          "line": 22
         },
         {
           "raw": "../../cloudflare/resiliencia-correo-pedido.js",
           "target": "cloudflare/resiliencia-correo-pedido.js",
           "dynamic": false,
-          "line": 22
+          "line": 23
         }
       ],
       "endpoints": [
         {
           "url": "https://script.google.com/macros/s/AKfycbyh9I5aPp9d3lMSnYRNfrHcSCCobCoDOif9CqtXmMe4FgwSjzlKf4kjQZqvKDRmEY6S/exec",
-          "line": 28
+          "line": 29
         }
       ]
     },
@@ -27873,16 +27921,80 @@
     },
     {
       "path": "functions/api/cloudinary-delete.js",
-      "bytes": 3497,
-      "sha256": "b28fb5324331e2113c12b6853d699da139d3e4c115bf441f85a5d2af091131dd",
+      "bytes": 3634,
+      "sha256": "8787ebbbda19dfaef1cf99058efa2222657ca6a465b5f3889d9c64ef3d6dabd9",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/product-editor-workspaces.mjs",
           "target": "cloudflare/product-editor-workspaces.mjs",
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 12
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.cloudinary.com/v1_1/$%7BencodeURIComponent(config.cloudName",
+          "line": 33
+        }
+      ]
+    },
+    {
+      "path": "functions/api/cloudinary-sign-audio-upload.js",
+      "bytes": 2267,
+      "sha256": "f0008faad2c723040fbd32b3f67b03ebea1d88b203b56e778bf8f65d4a21d659",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 10
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.cloudinary.com/v1_1/$%7BencodeURIComponent(config.cloudName",
+          "line": 37
+        }
+      ]
+    },
+    {
+      "path": "functions/api/cloudinary-sign-upload.js",
+      "bytes": 2198,
+      "sha256": "3211f3674794cd22061f76f456d30c18b0bcf74a50fd809e1afe9d7db0e90808",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
           "dynamic": false,
           "line": 1
         },
@@ -27895,66 +28007,62 @@
       ],
       "endpoints": [
         {
-          "url": "https://api.cloudinary.com/v1_1/$%7BencodeURIComponent(config.cloudName",
-          "line": 32
-        }
-      ]
-    },
-    {
-      "path": "functions/api/cloudinary-sign-audio-upload.js",
-      "bytes": 2130,
-      "sha256": "d9cf955b4575cfd133f81d37ba9e321f4a0e79ab13eee5bff496cd4205875530",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
-          "dynamic": false,
-          "line": 9
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://api.cloudinary.com/v1_1/$%7BencodeURIComponent(config.cloudName",
-          "line": 36
-        }
-      ]
-    },
-    {
-      "path": "functions/api/cloudinary-sign-upload.js",
-      "bytes": 2114,
-      "sha256": "a7a1cc41bb0dc8b257f794f96e69c3c297f568d9306880c4225362da114dc878",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
-          "dynamic": false,
-          "line": 10
-        }
-      ],
-      "endpoints": [
-        {
           "url": "https://api.cloudinary.com/v1_1/$%7BencodeURIComponent(cloudName",
-          "line": 52
+          "line": 53
         }
       ]
     },
     {
       "path": "functions/api/coupon-validate.js",
-      "bytes": 2695,
-      "sha256": "c69875ca05110ed37646fe69e082cf24304133a3267cc9b4373ab577547d2247",
+      "bytes": 2832,
+      "sha256": "97620eb447911bb2831d6c7c39ae45dfeecb119fdc829ad7aea39edce6b3bd4f",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 8
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 9
+        },
+        {
+          "raw": "../../cloudflare/cupones.js",
+          "target": "cloudflare/cupones.js",
+          "dynamic": false,
+          "line": 16
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/email-otp-send.js",
+      "bytes": 13470,
+      "sha256": "3854eac23467e25a1a031853bcd6abcfc9cc2321b3bfbad34b53e25f5d8d424f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
         {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
@@ -27965,116 +28073,98 @@
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 8
-        },
-        {
-          "raw": "../../cloudflare/cupones.js",
-          "target": "cloudflare/cupones.js",
-          "dynamic": false,
-          "line": 15
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "functions/api/email-otp-send.js",
-      "bytes": 13361,
-      "sha256": "a6f74968359c05cb5336d43480ca6a9e6da36bc1843ffd43880c00d4d8dac8cf",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
-          "dynamic": false,
-          "line": 6
-        },
-        {
-          "raw": "../../cloudflare/firebase-admin-ligero.js",
-          "target": "cloudflare/firebase-admin-ligero.js",
-          "dynamic": false,
-          "line": 15
+          "line": 16
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccs.com/assets-tintin/images/general/logo.png",
-          "line": 18
+          "line": 19
         },
         {
           "url": "https://api.resend.com/emails/$%7BencodeURIComponent(safeId",
-          "line": 114
+          "line": 115
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 156
+          "line": 157
         }
       ]
     },
     {
       "path": "functions/api/email-otp-verify.js",
-      "bytes": 11780,
-      "sha256": "88bc6e23fe08220bdd3c1a9bfc7039bf793f613028cd97213996288b35e46062",
+      "bytes": 11889,
+      "sha256": "d0e860ec8e9d0885cf4fe459dcd0d5206beb673a38d1bf157b57c197042b1f32",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 20
+          "line": 21
         }
       ],
       "endpoints": []
     },
     {
       "path": "functions/api/engagement.js",
-      "bytes": 10359,
-      "sha256": "36350eeb6735228b4670bd53a09770448815f3d018d74642442c647f539a9f1e",
+      "bytes": 10448,
+      "sha256": "5ceea34eea69eb9bd8d87823fdb22456dd6977e72872b6042ff768616d91821f",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "../../cloudflare/participacion-clientes.js",
           "target": "cloudflare/participacion-clientes.js",
           "dynamic": false,
-          "line": 20
+          "line": 21
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 23
+          "line": 24
         },
         {
           "raw": "../../cloudflare/sincronizacion-participacion-sheets.js",
           "target": "cloudflare/sincronizacion-participacion-sheets.js",
           "dynamic": false,
-          "line": 24
+          "line": 25
         },
         {
           "raw": "../../cloudflare/comentarios-sociales.js",
           "target": "cloudflare/comentarios-sociales.js",
           "dynamic": false,
-          "line": 25
+          "line": 26
         }
       ],
       "endpoints": []
@@ -28154,22 +28244,58 @@
     },
     {
       "path": "functions/api/local-commerce-webhook.js",
-      "bytes": 1450,
-      "sha256": "f76229fac7e9a8a0e8842cc87e8e831fb2b53a8bcf8108da89972be6e2daabc5",
+      "bytes": 1535,
+      "sha256": "38c6d68e49370d20298699f2382a173c59a24f9fd1b89acb3b21738f9810085d",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
           "dynamic": false,
           "line": 1
         },
         {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "../../cloudflare/secretos-sheets.js",
           "target": "cloudflare/secretos-sheets.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/comercio-local.js",
+          "target": "cloudflare/comercio-local.js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/local-commerce.js",
+      "bytes": 1744,
+      "sha256": "815fead920a4629e88598c27b2b894bc8bdbdd7e8a69ed94b0ed366d160fb44a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 2
         },
@@ -28178,30 +28304,6 @@
           "target": "cloudflare/comercio-local.js",
           "dynamic": false,
           "line": 3
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "functions/api/local-commerce.js",
-      "bytes": 1659,
-      "sha256": "4a706714c12047a1d05b81e43568e23ac2a68f77975062f51fc0009068666b01",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "../../cloudflare/comercio-local.js",
-          "target": "cloudflare/comercio-local.js",
-          "dynamic": false,
-          "line": 2
         }
       ],
       "endpoints": []
@@ -28226,63 +28328,75 @@
     },
     {
       "path": "functions/api/master-diagnostics.js",
-      "bytes": 14520,
-      "sha256": "5d1b8c267b78e19fce6d7bf95c95444bb1959906a947c06cbce4587b3e9e662f",
+      "bytes": 14599,
+      "sha256": "81f278a76cc2c9eae9fe670ef6c526ef4ca89cfa109d7a6077effb52410f760b",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccs.com/",
-          "line": 12
+          "line": 13
         },
         {
           "url": "https://api.github.com/",
-          "line": 13
+          "line": 14
         }
       ]
     },
     {
       "path": "functions/api/notifications.js",
-      "bytes": 13172,
-      "sha256": "1d2c0d0b3333e8e4fdff25d54c36070cf93495ef2e40f938166ec8fa01e65b13",
+      "bytes": 13261,
+      "sha256": "77efc6b448094ad22d57db6e810fcb601471a1c62a5a2586705b05c778d83054",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "../../cloudflare/notificaciones-pedido.mjs",
           "target": "cloudflare/notificaciones-pedido.mjs",
           "dynamic": false,
-          "line": 4
+          "line": 5
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../../cloudflare/notificaciones-sociales.js",
           "target": "cloudflare/notificaciones-sociales.js",
           "dynamic": false,
-          "line": 15
+          "line": 16
         }
       ],
       "endpoints": []
@@ -28319,105 +28433,117 @@
     },
     {
       "path": "functions/api/order-email.js",
-      "bytes": 29306,
-      "sha256": "4c04e8a770b18aa9cd0d690e78ca69eb7c27934d1a88993507eeadf7ef2cc04b",
+      "bytes": 29386,
+      "sha256": "4f5cdd4713c9ebf85451f67b4e64ce8b5f4663f8ddba1ecbaeafb2573bf5f3ce",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../../cloudflare/rate-limit-compartido.js",
           "target": "cloudflare/rate-limit-compartido.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         },
         {
           "raw": "../../cloudflare/servicio-push.js",
           "target": "cloudflare/servicio-push.js",
           "dynamic": false,
-          "line": 9
+          "line": 10
         },
         {
           "raw": "../../cloudflare/resiliencia-correo-pedido.js",
           "target": "cloudflare/resiliencia-correo-pedido.js",
           "dynamic": false,
-          "line": 10
+          "line": 11
         },
         {
           "raw": "../../js/orders/nucleo-metodos-pago.js",
           "target": "js/orders/nucleo-metodos-pago.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "../../cloudflare/recibo-correo-pedido.js",
           "target": "cloudflare/recibo-correo-pedido.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "../../cloudflare/contactos-pedido.mjs",
           "target": "cloudflare/contactos-pedido.mjs",
           "dynamic": false,
-          "line": 14
+          "line": 15
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccs.com/assets-tintin/images/general/logo.png",
-          "line": 20
+          "line": 21
         },
         {
           "url": "https://tintinaccs.com/admin",
-          "line": 22
+          "line": 23
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-          "line": 50
+          "line": 51
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BFIREBASE_PROJECT_ID%7D/databases/(default",
-          "line": 108
+          "line": 109
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 389
+          "line": 390
         }
       ]
     },
     {
       "path": "functions/api/paypal-capture-order.js",
-      "bytes": 1396,
-      "sha256": "b61d91fdaa43910b53fcbf7c49984784799b9f1686fa7274ab9ccce10dd0da0b",
+      "bytes": 1475,
+      "sha256": "8ac5dc020a107c06d6d878b8a4b8a4fae1a2cb3be2b252e2bd224c929fa2bf05",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 1
+          "line": 2
         },
         {
           "raw": "../../cloudflare/paypal-seguro.js",
           "target": "cloudflare/paypal-seguro.js",
           "dynamic": false,
-          "line": 2
+          "line": 3
         }
       ],
       "endpoints": []
@@ -28448,24 +28574,30 @@
     },
     {
       "path": "functions/api/paypal-create-order.js",
-      "bytes": 1424,
-      "sha256": "854a8be794a756f949c1ba87668d97409bbde50b08c6d119bd022a5213050871",
+      "bytes": 1503,
+      "sha256": "a7a6a849494a4651727934a6bd0360f787dc88812215dee124da7fca2bb4dffc",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 1
+          "line": 2
         },
         {
           "raw": "../../cloudflare/paypal-seguro.js",
           "target": "cloudflare/paypal-seguro.js",
           "dynamic": false,
-          "line": 2
+          "line": 3
         }
       ],
       "endpoints": []
@@ -28507,54 +28639,66 @@
     },
     {
       "path": "functions/api/paypal-webhook.js",
-      "bytes": 610,
-      "sha256": "2381503d8c451f1467e4da8af3b2d7fac96a61065cd2f0e465ca25624542c38b",
+      "bytes": 729,
+      "sha256": "bb09927f6ea7f2c88469ba3f2b86006d6bcc3f19c86b58a9e1ccd7297ed0e4b6",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 1
+          "line": 2
         },
         {
           "raw": "../../cloudflare/paypal-seguro.js",
           "target": "cloudflare/paypal-seguro.js",
           "dynamic": false,
-          "line": 2
+          "line": 3
         }
       ],
       "endpoints": []
     },
     {
       "path": "functions/api/phone-availability.js",
-      "bytes": 2463,
-      "sha256": "3177b0e1cfdea7c840896d8e4401745e44f10e881abed54b776542684ce9fa88",
+      "bytes": 2600,
+      "sha256": "fe4b088fa4ab89a2ace7b2460e415ba32b599824c64a4739caedaf8bedfee649",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         },
         {
           "raw": "../../js/components/forms/utilidades-telefono.js",
           "target": "js/components/forms/utilidades-telefono.js",
           "dynamic": false,
-          "line": 9
+          "line": 10
         }
       ],
       "endpoints": []
@@ -28626,30 +28770,36 @@
     },
     {
       "path": "functions/api/push-admin.js",
-      "bytes": 5023,
-      "sha256": "b9003e5ff9610799c3ffd83880c91bf0f0caadb329be88ba3a67663308726d9c",
+      "bytes": 5112,
+      "sha256": "b5129191ee6d492d2bc0d491d4590b91eba2bfe8afbe295bccb7d3ea1bbd9651",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "../../cloudflare/nucleo-push.js",
           "target": "cloudflare/nucleo-push.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         },
         {
           "raw": "../../cloudflare/servicio-push.js",
           "target": "cloudflare/servicio-push.js",
           "dynamic": false,
-          "line": 24
+          "line": 25
         }
       ],
       "endpoints": []
@@ -28686,54 +28836,30 @@
     },
     {
       "path": "functions/api/push-order-event.js",
-      "bytes": 3496,
-      "sha256": "c0b75f0478d1b55c9ce829677ee6d5fbcca7561d75fe165b247b9ac5e84ca350",
+      "bytes": 3783,
+      "sha256": "b589dc10e28c79c2fbf33a456301bfd0a9cd5f82eef0997aa5a6314d1f88f1f1",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "../../cloudflare/nucleo-push.js",
           "target": "cloudflare/nucleo-push.js",
-          "dynamic": false,
-          "line": 19
-        },
-        {
-          "raw": "../../cloudflare/servicio-push.js",
-          "target": "cloudflare/servicio-push.js",
           "dynamic": false,
           "line": 20
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "functions/api/push-subscription.js",
-      "bytes": 4636,
-      "sha256": "9f84aa1be5a0c9d50ccb4614959732fd2b1737e60203097cfd983dce2582091d",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
-          "dynamic": false,
-          "line": 14
-        },
-        {
-          "raw": "../../cloudflare/nucleo-push.js",
-          "target": "cloudflare/nucleo-push.js",
-          "dynamic": false,
-          "line": 15
         },
         {
           "raw": "../../cloudflare/servicio-push.js",
@@ -28745,173 +28871,191 @@
       "endpoints": []
     },
     {
-      "path": "functions/api/push-test.js",
-      "bytes": 4123,
-      "sha256": "89faf85f473af9cda3d11e619845e7bca739469de979ae37946294c44dcca124",
+      "path": "functions/api/push-subscription.js",
+      "bytes": 4725,
+      "sha256": "9cc283af4488730b6ac54e09e7a11708eb49f488f5d6cb15f648e873d946b2ea",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 13
+          "line": 15
         },
         {
           "raw": "../../cloudflare/nucleo-push.js",
           "target": "cloudflare/nucleo-push.js",
           "dynamic": false,
-          "line": 14
+          "line": 16
         },
         {
           "raw": "../../cloudflare/servicio-push.js",
           "target": "cloudflare/servicio-push.js",
           "dynamic": false,
+          "line": 22
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/push-test.js",
+      "bytes": 4212,
+      "sha256": "6e59fb6e0c0b5f6a7eeb9113fad5e91059a9a918ef508ded98b4933a4cab92eb",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 14
+        },
+        {
+          "raw": "../../cloudflare/nucleo-push.js",
+          "target": "cloudflare/nucleo-push.js",
+          "dynamic": false,
           "line": 15
+        },
+        {
+          "raw": "../../cloudflare/servicio-push.js",
+          "target": "cloudflare/servicio-push.js",
+          "dynamic": false,
+          "line": 16
         }
       ],
       "endpoints": []
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
-      "bytes": 9212,
-      "sha256": "a47b06c3e74e5a131f6ae984ac0011bb78fc4e54eb7f545e96139d00fb137f2a",
+      "bytes": 9301,
+      "sha256": "e649d1d0e971980a062486c9157739ce4c430f213dd663604033796c3af611f7",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         },
         {
           "raw": "../../cloudflare/order-admin-domain.js",
           "target": "cloudflare/order-admin-domain.js",
           "dynamic": false,
-          "line": 9
+          "line": 10
         },
         {
           "raw": "../../cloudflare/correo-estado-pedido.js",
           "target": "cloudflare/correo-estado-pedido.js",
           "dynamic": false,
-          "line": 10
+          "line": 11
         },
         {
           "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
           "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "../../cloudflare/sincronizacion-participacion-sheets.js",
           "target": "cloudflare/sincronizacion-participacion-sheets.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "../../cloudflare/secretos-sheets.js",
           "target": "cloudflare/secretos-sheets.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         }
       ],
       "endpoints": []
     },
     {
       "path": "functions/api/sheets-engagement-webhook.js",
-      "bytes": 1296,
-      "sha256": "1a54881ed4db95c272b1fa5142bdd4ba25f2d599f9485ccb96710cd4b0e0c9c7",
+      "bytes": 1379,
+      "sha256": "9d5a771d8cf4158fd89dd5a0b7ffcc2c908fde7824e7656e430ab2d96b6eaf0a",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 1
+          "line": 2
         },
         {
           "raw": "../../cloudflare/participacion-admin.js",
           "target": "cloudflare/participacion-admin.js",
           "dynamic": false,
-          "line": 2
+          "line": 3
         }
       ],
       "endpoints": []
     },
     {
       "path": "functions/api/sheets-product-sync.js",
-      "bytes": 3446,
-      "sha256": "002abab4a21aa465f953b55765f6c92384d114219ab32677c4984d4354889833",
+      "bytes": 3726,
+      "sha256": "9ffd7db9a5f272e4344de97be321dc363e21c47cf43b7a12f8c2b7780c303141",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
-          "dynamic": false,
-          "line": 6
-        },
-        {
-          "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
-          "target": "cloudflare/resiliencia-sync-catalogo.js",
-          "dynamic": false,
-          "line": 10
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "functions/api/sheets-products-webhook.js",
-      "bytes": 14901,
-      "sha256": "617110546822c81a1cb801d879c4bb6ba70210426740f236ddf37c6cdeffe1df",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
           "dynamic": false,
           "line": 1
         },
         {
-          "raw": "../../cloudflare/secretos-sheets.js",
-          "target": "cloudflare/secretos-sheets.js",
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 2
+          "line": 7
         },
         {
-          "raw": "../../cloudflare/firebase-admin-ligero.js",
-          "target": "cloudflare/firebase-admin-ligero.js",
-          "dynamic": false,
-          "line": 8
-        },
-        {
-          "raw": "../../cloudflare/evidencia-sync-sheets.js",
-          "target": "cloudflare/evidencia-sync-sheets.js",
-          "dynamic": false,
-          "line": 9
-        },
-        {
-          "raw": "../../js/core/store/inventario-variantes.mjs",
-          "target": "js/core/store/inventario-variantes.mjs",
+          "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
+          "target": "cloudflare/resiliencia-sync-catalogo.js",
           "dynamic": false,
           "line": 11
         }
@@ -28919,31 +29063,85 @@
       "endpoints": []
     },
     {
-      "path": "functions/api/sheets-sync-snapshot.js",
-      "bytes": 9208,
-      "sha256": "90873d0ff613df9041ab2c0075557355dcb76c81e91f88c065e663d6af255a7f",
+      "path": "functions/api/sheets-products-webhook.js",
+      "bytes": 14990,
+      "sha256": "3f1389e011d334bb4de1601134be3968b5bb854a68aa2222f67a0bc4b9fc6c4d",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/firebase-admin-ligero.js",
-          "target": "cloudflare/firebase-admin-ligero.js",
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
           "dynamic": false,
-          "line": 4
+          "line": 1
         },
         {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 5
+          "line": 2
         },
         {
           "raw": "../../cloudflare/secretos-sheets.js",
           "target": "cloudflare/secretos-sheets.js",
           "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 9
+        },
+        {
+          "raw": "../../cloudflare/evidencia-sync-sheets.js",
+          "target": "cloudflare/evidencia-sync-sheets.js",
+          "dynamic": false,
+          "line": 10
+        },
+        {
+          "raw": "../../js/core/store/inventario-variantes.mjs",
+          "target": "js/core/store/inventario-variantes.mjs",
+          "dynamic": false,
+          "line": 12
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/sheets-sync-snapshot.js",
+      "bytes": 9297,
+      "sha256": "e2db705e528fd0a07f346944fcad8e8dc5e01c1c860407d75b2d1bf9ba5aa8d8",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
           "line": 6
+        },
+        {
+          "raw": "../../cloudflare/secretos-sheets.js",
+          "target": "cloudflare/secretos-sheets.js",
+          "dynamic": false,
+          "line": 7
         }
       ],
       "endpoints": []
@@ -29022,53 +29220,65 @@
     },
     {
       "path": "functions/api/test-email.js",
-      "bytes": 5502,
-      "sha256": "718b0c92e43ed65c1c08d77b021073b49662011e79157eeae1bd109c97de58ff",
+      "bytes": 5581,
+      "sha256": "55fda515aa38c9c25aa8e0faf4263b5d35e3c4e55c00d50106dff7169a638673",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         }
       ],
       "endpoints": [
         {
           "url": "https://api.resend.com/emails",
-          "line": 66
+          "line": 67
         }
       ]
     },
     {
       "path": "functions/api/username-availability.js",
-      "bytes": 2290,
-      "sha256": "b685495e9d53239ac6d3a49079a47f7cdd960a9f333a7284471193fee66f24e0",
+      "bytes": 2427,
+      "sha256": "9c61e1f046d05232df30441c33e9a18278550f12d6e09b61776ddeac5dc9be60",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         },
         {
           "raw": "../../js/components/forms/utilidades-username.js",
           "target": "js/components/forms/utilidades-username.js",
           "dynamic": false,
-          "line": 9
+          "line": 10
         }
       ],
       "endpoints": []
@@ -29117,30 +29327,36 @@
     },
     {
       "path": "functions/api/visual-builder.js",
-      "bytes": 14357,
-      "sha256": "1d660d70328d016d1ebc9e3b539da508e346da417f1f8367b9776a794e608781",
+      "bytes": 14463,
+      "sha256": "99760516d6c1558c51df554b15c87f667a150fed14f4fbc022961c249c1c0d7a",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 1
+          "line": 2
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "../../cloudflare/visual-builder-core.js",
           "target": "cloudflare/visual-builder-core.js",
           "dynamic": false,
-          "line": 21
+          "line": 22
         }
       ],
       "endpoints": []
@@ -29177,60 +29393,72 @@
     },
     {
       "path": "functions/api/visual-studio-global.js",
-      "bytes": 12614,
-      "sha256": "0bd2d1668f7444ceea71aa47bd60870368c31c6d495b516b02325a278b957b84",
+      "bytes": 12719,
+      "sha256": "4a518d10fe6d3cb43b0339ebd66d20f4f4ec5ea533ca464bcc3057fb040247d6",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 1
+          "line": 2
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 5
+          "line": 6
         },
         {
           "raw": "../../cloudflare/visual-studio-global-core.js",
           "target": "cloudflare/visual-studio-global-core.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         }
       ],
       "endpoints": []
     },
     {
       "path": "functions/api/wholesale-quote.js",
-      "bytes": 2809,
-      "sha256": "7ea88c806450d62931ade6967316289cddfcdce370dfd9770e37bdc96e4f3a0d",
+      "bytes": 2893,
+      "sha256": "d27176d7a29295e155d5907bb1a76cbda620ca8b7321327b2197377dfd6ed82a",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 10
+          "line": 11
         },
         {
           "raw": "../../cloudflare/mayoristas.js",
           "target": "cloudflare/mayoristas.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "../../cloudflare/mayoristas-avisos.js",
           "target": "cloudflare/mayoristas-avisos.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         }
       ],
       "endpoints": []
@@ -29264,8 +29492,8 @@
     },
     {
       "path": "functions/lib/operational-guard.js",
-      "bytes": 4008,
-      "sha256": "927aafd8da37d42630884ce029d7da1955481f3bfd6b967cbcd732e276d7f2e9",
+      "bytes": 4151,
+      "sha256": "5c4ab9b58832d3116a987c3c15b5ace30281fd2e0b1524cf3b3c553f712f165a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29274,7 +29502,7 @@
       "endpoints": [
         {
           "url": "https://tintin.invalid/",
-          "line": 98
+          "line": 101
         }
       ]
     },
@@ -45095,8 +45323,8 @@
     },
     {
       "path": "tests/admin/private-work-media-guard.test.mjs",
-      "bytes": 2819,
-      "sha256": "6d9037ed3d3b8c4f32d310cd6b8ea704c540cfcd5cc9fc1f457d7ebc35031800",
+      "bytes": 2910,
+      "sha256": "62e127048bd79375203748d918a717e9c40389aafae18166b6129702866bbd20",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45131,16 +45359,22 @@
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 5
+        },
+        {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 6
         }
       ],
       "endpoints": [
         {
           "url": "https://fixture.test/",
-          "line": 10
+          "line": 11
         },
         {
           "url": "https://fixture.test/api/cloudinary-delete",
-          "line": 22
+          "line": 23
         }
       ]
     },
@@ -47388,6 +47622,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/catalog/collection-scroll.spec.js",
+      "bytes": 3507,
+      "sha256": "8cc0efb146dee34af6bfefc3ce3aa804450b82f022edd41e23b55985aa38e98b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/catalog/collections-page-read.test.mjs",
       "bytes": 1719,
       "sha256": "5502d810d9a9800cdda3f0766525e7d2ad0230871b4d0c37a1dba0dff0309fc0",
@@ -49024,8 +49269,8 @@
     },
     {
       "path": "tests/checkout/order-email-app-check.test.mjs",
-      "bytes": 5819,
-      "sha256": "e936b5c703f4a1f94e32c37c45ae4464425ec901610384f3f9393f0c4aa956ab",
+      "bytes": 5912,
+      "sha256": "751f7a4f0053dbe49e2c5ad9e4909f90b2dd04c65ea56c5c92bf0d7b1ff17122",
       "syntax": {
         "ok": true,
         "error": ""
@@ -49054,16 +49299,22 @@
           "target": null,
           "dynamic": false,
           "line": 4
+        },
+        {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 5
         }
       ],
       "endpoints": [
         {
           "url": "https://shop.example.test/api/order-email",
-          "line": 38
+          "line": 39
         },
         {
           "url": "https://shop.example.test/",
-          "line": 39
+          "line": 40
         }
       ]
     },
@@ -50384,8 +50635,8 @@
     },
     {
       "path": "tests/engagement/notification-read-integrity.test.mjs",
-      "bytes": 5443,
-      "sha256": "1ecc95839d474f333e3767b2f1441054d2a6054176fb524854ece62f3bf5f12b",
+      "bytes": 5535,
+      "sha256": "4e99d33fe5c59461dfad511ad0a9765417b753df57d23be06655f0b07a10620f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -50410,16 +50661,22 @@
           "line": 3
         },
         {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
           "raw": "../../js/components/notifications/presentacion-notificacion.mjs",
           "target": "js/components/notifications/presentacion-notificacion.mjs",
           "dynamic": false,
-          "line": 4
+          "line": 5
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccs.com/api/notifications",
-          "line": 41
+          "line": 42
         }
       ]
     },
@@ -55189,8 +55446,8 @@
     },
     {
       "path": "tests/orders/orders-board-domain.test.mjs",
-      "bytes": 11022,
-      "sha256": "49b3458f6d3ca48361fa95fb70402f46ed7b226b639fd740f1bb90df81a33aeb",
+      "bytes": 11114,
+      "sha256": "19f68b761145ce0e75660624fcb400c15df1fe8a25606cc073a4d9a7c11f3535",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55243,16 +55500,22 @@
           "target": "cloudflare/contactos-pedido.mjs",
           "dynamic": false,
           "line": 8
+        },
+        {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 9
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/api/admin-order-mutation",
-          "line": 66
+          "line": 67
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 69
+          "line": 70
         }
       ]
     },
@@ -57867,6 +58130,75 @@
       "endpoints": []
     },
     {
+      "path": "tests/security/request-body-limits.test.mjs",
+      "bytes": 4253,
+      "sha256": "5949cf1d378f189dad78084e1924175d2d9edd7be61ee23959d3e244763fd3f5",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../functions/api/paypal-webhook.js",
+          "target": "functions/api/paypal-webhook.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../functions/api/admin-order-mutation.js",
+          "target": "functions/api/admin-order-mutation.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../functions/api/email-otp-send.js",
+          "target": "functions/api/email-otp-send.js",
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "../../functions/api/email-otp-verify.js",
+          "target": "functions/api/email-otp-verify.js",
+          "dynamic": false,
+          "line": 8
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintin.test/",
+          "line": 16
+        },
+        {
+          "url": "https://tintin.test/api/",
+          "line": 19
+        }
+      ]
+    },
+    {
       "path": "tests/security/secretos-sheets.test.mjs",
       "bytes": 1665,
       "sha256": "a28bedb6490f650dc9cb99cfcded8b21899e4610313dbd80b47bdbd51453fa3b",
@@ -58024,6 +58356,54 @@
           "line": 10
         }
       ]
+    },
+    {
+      "path": "tests/security/tooling-glob-compatibility.test.mjs",
+      "bytes": 999,
+      "sha256": "48a99ec18826b6effe4d249ab3812f59ecb7cbc361106e44a73095e49f4ea34a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",
@@ -59387,8 +59767,8 @@
     },
     {
       "path": "tests/sync/sheets-integrity-regressions.test.mjs",
-      "bytes": 14886,
-      "sha256": "f2b8a2518ce85e79bf76fcb1ba65de930bd9fb1f6ef48d0c86410e708bb30549",
+      "bytes": 14979,
+      "sha256": "a2aab429a64dc6f7f297e86ba8e1e297ea172aae6dfaa9b0324f65657caa3e55",
       "syntax": {
         "ok": true,
         "error": ""
@@ -59419,28 +59799,34 @@
           "line": 4
         },
         {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
           "raw": "../../js/core/store/inventario-variantes.mjs",
           "target": "js/core/store/inventario-variantes.mjs",
           "dynamic": false,
-          "line": 5
+          "line": 6
         }
       ],
       "endpoints": [
         {
           "url": "https://fixture.invalid/api/sheets-product-sync",
-          "line": 35
-        },
-        {
-          "url": "https://fixture.invalid/",
           "line": 36
         },
         {
+          "url": "https://fixture.invalid/",
+          "line": 37
+        },
+        {
           "url": "https://fixture.invalid/webhook",
-          "line": 58
+          "line": 59
         },
         {
           "url": "https://example.invalid/gold.png",
-          "line": 213
+          "line": 214
         }
       ]
     },
@@ -62587,7 +62973,7 @@
       "path": "_headers",
       "extension": "",
       "bytes": 4589,
-      "sha256": "51044c074fc4acc02f8a899bcdc32f2c90bb077104468f5949e041906416c37b"
+      "sha256": "b2e08aebe279d4d339cf4a1b7bd0c4e3bfb8863d5c9e0aaa9627f3510f92abbe"
     },
     {
       "path": "_redirects",
@@ -63438,8 +63824,8 @@
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 70030,
-      "sha256": "f1840d66a0a0132d9f1bdf11e8f88782fa5257a2da20f3e2f6dcd7cfa5fea596"
+      "bytes": 70265,
+      "sha256": "3b88a306e213d073269f2372881cceae0083efdd4b2de325893142f7dbf9939a"
     },
     {
       "path": "checkout.html",
@@ -63768,26 +64154,26 @@
     {
       "path": "config/ci-stages.json",
       "extension": ".json",
-      "bytes": 7930,
-      "sha256": "2daaa734ebb5f7154e366eae128330452c22eeb840314e9d8f18e2daa06238c2"
+      "bytes": 8086,
+      "sha256": "151c89410d739cf1ab093d5ae1d27f23ffa27601ad51b8960ec8cca545d2a530"
     },
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 260701,
-      "sha256": "691d09dcb9f5fc3a02f1b17016ba17d9475ee017c28d1c28f1f0b30018d64ee2"
+      "sha256": "29066c342d881fc371ebb5fd1024284f49260032140af77bfdf34e14f5a17b47"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 260616,
-      "sha256": "de3e64ad7d356f3460286f5da6e447788023457ff7ea1847bce8d38500d768f0"
+      "sha256": "c7fe8a2400bc1caaaf1d3dbb43e074a7d134899e872599aaec43ec7ec289bc5a"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 6328,
-      "sha256": "bc939d6a04f5da53d1c920a41c6bb393da7375c528e94dd5dea655d2e935fcfc"
+      "bytes": 11069,
+      "sha256": "f29b5b87312eddadf88f6853d8c1d1cca8489623090fc93bc63be639292a5119"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -63799,7 +64185,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "2ea0c1cb9fabe46b22eada35fb42adeef756d4b043116421f5d2f4f693df3501"
+      "sha256": "a666ca626fd849b3e87d290681fbecc7cf8e9827988d8ecc71274ab5222c59a0"
     },
     {
       "path": "config/public-site.json",
@@ -64638,8 +65024,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1243923,
-      "sha256": "761017e6c1756625cee7074d924913824dd46943b262dad25b05641e8664eb0d"
+      "bytes": 1251641,
+      "sha256": "d29381a4a6a40b2addd804c3b75d8f1c2c37c9f4989e396e4ec9dab67a011500"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -65634,8 +66020,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 161791,
-      "sha256": "99bfe058fa7aefa4236226dfecf422ee81f18bd39a8fb4abe8c8d8490eec2dee"
+      "bytes": 163580,
+      "sha256": "0792e4aa0b6dfedf7f54eeeac918493bc927b1968f1e201d5d6394471e4c4675"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -66264,32 +66650,32 @@
     {
       "path": "functions/api/admin-backfill-canonical-identity.js",
       "extension": ".js",
-      "bytes": 9126,
-      "sha256": "a756e7812c5252f9828e1f968a93ffdc4583fd7e383402728177bd9773f7aa77"
+      "bytes": 9209,
+      "sha256": "ece651f23b3b189b6f928e7a74fe1f69f52bae9d864f93cc73c34a9347db59c0"
     },
     {
       "path": "functions/api/admin-catalog-delete.js",
       "extension": ".js",
-      "bytes": 7282,
-      "sha256": "ff467091993181d5758979e1aa2c430ae9cac8f865582f90d13cbcfcb19d38d9"
+      "bytes": 7371,
+      "sha256": "975775f53e195ac2b70632d05c4bd31af3b73fa9f9227bc5127411ffc9b5bfeb"
     },
     {
       "path": "functions/api/admin-commerce-controls.js",
       "extension": ".js",
-      "bytes": 2603,
-      "sha256": "90ae3e98f6bc4c0a200c905ae8913b6a59a0064e828443e369f3b03cb4dce15c"
+      "bytes": 2687,
+      "sha256": "cefd1404b5370e0faed830b5a83cfc4f7a56ec4b4bc366312eee0a16c174d9d3"
     },
     {
       "path": "functions/api/admin-engagement.js",
       "extension": ".js",
-      "bytes": 3678,
-      "sha256": "766dd2345d4fb787e225dbe375994cdc820e6a2af9f4293d9de685fcc2b072a7"
+      "bytes": 3762,
+      "sha256": "df221680ffd8ee570eb9036bfe8325b9bc9da79a92e61e8d5c4f3b455002fdcf"
     },
     {
       "path": "functions/api/admin-import-job.js",
       "extension": ".js",
-      "bytes": 8321,
-      "sha256": "6f263c4914e68ac758b1e2f7a86d096ddeb4a3060f883339ab7cc6c1641cc4b2"
+      "bytes": 8410,
+      "sha256": "a12bc0b166f965b29457178b7fb898fb9fab359fba0ae43d9a2f9ccd4c340976"
     },
     {
       "path": "functions/api/admin-import-media.js",
@@ -66300,8 +66686,8 @@
     {
       "path": "functions/api/admin-order-mutation.js",
       "extension": ".js",
-      "bytes": 8190,
-      "sha256": "eb8ec3d6438a2664ba010a2ca2e45d58a34889d00e91e78d38f1ae7330e38ff8"
+      "bytes": 8271,
+      "sha256": "05fa29c5a223c40b0c7a7c8fbc42e400994f548d5f2fdb5897985b9b85adf0d0"
     },
     {
       "path": "functions/api/admin-runtime-health.js",
@@ -66312,14 +66698,14 @@
     {
       "path": "functions/api/admin-wholesale.js",
       "extension": ".js",
-      "bytes": 2509,
-      "sha256": "5f0ef87d3c519dc104176bb26b89f55d0a19aa508be57e3da02aa31da3126215"
+      "bytes": 2593,
+      "sha256": "c3c9585a4eb65f479dc3630f81cedbfa91d757c4dd6d108e9dc87dad91b2769e"
     },
     {
       "path": "functions/api/apps-script-bridge.js",
       "extension": ".js",
-      "bytes": 12773,
-      "sha256": "f81927b388d9d796ec771215b7f62a8b31a6940fd3a0b9f2a821c74fcfda7a9f"
+      "bytes": 12862,
+      "sha256": "5d6884f493567f0ddf0217edf9aca70c65900f500585e598071717ba86e26e0b"
     },
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
@@ -66336,44 +66722,44 @@
     {
       "path": "functions/api/cloudinary-delete.js",
       "extension": ".js",
-      "bytes": 3497,
-      "sha256": "b28fb5324331e2113c12b6853d699da139d3e4c115bf441f85a5d2af091131dd"
+      "bytes": 3634,
+      "sha256": "8787ebbbda19dfaef1cf99058efa2222657ca6a465b5f3889d9c64ef3d6dabd9"
     },
     {
       "path": "functions/api/cloudinary-sign-audio-upload.js",
       "extension": ".js",
-      "bytes": 2130,
-      "sha256": "d9cf955b4575cfd133f81d37ba9e321f4a0e79ab13eee5bff496cd4205875530"
+      "bytes": 2267,
+      "sha256": "f0008faad2c723040fbd32b3f67b03ebea1d88b203b56e778bf8f65d4a21d659"
     },
     {
       "path": "functions/api/cloudinary-sign-upload.js",
       "extension": ".js",
-      "bytes": 2114,
-      "sha256": "a7a1cc41bb0dc8b257f794f96e69c3c297f568d9306880c4225362da114dc878"
+      "bytes": 2198,
+      "sha256": "3211f3674794cd22061f76f456d30c18b0bcf74a50fd809e1afe9d7db0e90808"
     },
     {
       "path": "functions/api/coupon-validate.js",
       "extension": ".js",
-      "bytes": 2695,
-      "sha256": "c69875ca05110ed37646fe69e082cf24304133a3267cc9b4373ab577547d2247"
+      "bytes": 2832,
+      "sha256": "97620eb447911bb2831d6c7c39ae45dfeecb119fdc829ad7aea39edce6b3bd4f"
     },
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 13361,
-      "sha256": "a6f74968359c05cb5336d43480ca6a9e6da36bc1843ffd43880c00d4d8dac8cf"
+      "bytes": 13470,
+      "sha256": "3854eac23467e25a1a031853bcd6abcfc9cc2321b3bfbad34b53e25f5d8d424f"
     },
     {
       "path": "functions/api/email-otp-verify.js",
       "extension": ".js",
-      "bytes": 11780,
-      "sha256": "88bc6e23fe08220bdd3c1a9bfc7039bf793f613028cd97213996288b35e46062"
+      "bytes": 11889,
+      "sha256": "d0e860ec8e9d0885cf4fe459dcd0d5206beb673a38d1bf157b57c197042b1f32"
     },
     {
       "path": "functions/api/engagement.js",
       "extension": ".js",
-      "bytes": 10359,
-      "sha256": "36350eeb6735228b4670bd53a09770448815f3d018d74642442c647f539a9f1e"
+      "bytes": 10448,
+      "sha256": "5ceea34eea69eb9bd8d87823fdb22456dd6977e72872b6042ff768616d91821f"
     },
     {
       "path": "functions/api/geo-search.js",
@@ -66396,14 +66782,14 @@
     {
       "path": "functions/api/local-commerce-webhook.js",
       "extension": ".js",
-      "bytes": 1450,
-      "sha256": "f76229fac7e9a8a0e8842cc87e8e831fb2b53a8bcf8108da89972be6e2daabc5"
+      "bytes": 1535,
+      "sha256": "38c6d68e49370d20298699f2382a173c59a24f9fd1b89acb3b21738f9810085d"
     },
     {
       "path": "functions/api/local-commerce.js",
       "extension": ".js",
-      "bytes": 1659,
-      "sha256": "4a706714c12047a1d05b81e43568e23ac2a68f77975062f51fc0009068666b01"
+      "bytes": 1744,
+      "sha256": "815fead920a4629e88598c27b2b894bc8bdbdd7e8a69ed94b0ed366d160fb44a"
     },
     {
       "path": "functions/api/location-search.js",
@@ -66414,14 +66800,14 @@
     {
       "path": "functions/api/master-diagnostics.js",
       "extension": ".js",
-      "bytes": 14520,
-      "sha256": "5d1b8c267b78e19fce6d7bf95c95444bb1959906a947c06cbce4587b3e9e662f"
+      "bytes": 14599,
+      "sha256": "81f278a76cc2c9eae9fe670ef6c526ef4ca89cfa109d7a6077effb52410f760b"
     },
     {
       "path": "functions/api/notifications.js",
       "extension": ".js",
-      "bytes": 13172,
-      "sha256": "1d2c0d0b3333e8e4fdff25d54c36070cf93495ef2e40f938166ec8fa01e65b13"
+      "bytes": 13261,
+      "sha256": "77efc6b448094ad22d57db6e810fcb601471a1c62a5a2586705b05c778d83054"
     },
     {
       "path": "functions/api/order-email-drain.js",
@@ -66432,14 +66818,14 @@
     {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 29306,
-      "sha256": "4c04e8a770b18aa9cd0d690e78ca69eb7c27934d1a88993507eeadf7ef2cc04b"
+      "bytes": 29386,
+      "sha256": "4f5cdd4713c9ebf85451f67b4e64ce8b5f4663f8ddba1ecbaeafb2573bf5f3ce"
     },
     {
       "path": "functions/api/paypal-capture-order.js",
       "extension": ".js",
-      "bytes": 1396,
-      "sha256": "b61d91fdaa43910b53fcbf7c49984784799b9f1686fa7274ab9ccce10dd0da0b"
+      "bytes": 1475,
+      "sha256": "8ac5dc020a107c06d6d878b8a4b8a4fae1a2cb3be2b252e2bd224c929fa2bf05"
     },
     {
       "path": "functions/api/paypal-config.js",
@@ -66450,8 +66836,8 @@
     {
       "path": "functions/api/paypal-create-order.js",
       "extension": ".js",
-      "bytes": 1424,
-      "sha256": "854a8be794a756f949c1ba87668d97409bbde50b08c6d119bd022a5213050871"
+      "bytes": 1503,
+      "sha256": "a7a6a849494a4651727934a6bd0360f787dc88812215dee124da7fca2bb4dffc"
     },
     {
       "path": "functions/api/paypal-rate-refresh.js",
@@ -66462,14 +66848,14 @@
     {
       "path": "functions/api/paypal-webhook.js",
       "extension": ".js",
-      "bytes": 610,
-      "sha256": "2381503d8c451f1467e4da8af3b2d7fac96a61065cd2f0e465ca25624542c38b"
+      "bytes": 729,
+      "sha256": "bb09927f6ea7f2c88469ba3f2b86006d6bcc3f19c86b58a9e1ccd7297ed0e4b6"
     },
     {
       "path": "functions/api/phone-availability.js",
       "extension": ".js",
-      "bytes": 2463,
-      "sha256": "3177b0e1cfdea7c840896d8e4401745e44f10e881abed54b776542684ce9fa88"
+      "bytes": 2600,
+      "sha256": "fe4b088fa4ab89a2ace7b2460e415ba32b599824c64a4739caedaf8bedfee649"
     },
     {
       "path": "functions/api/profile-avatar-upload.js",
@@ -66486,8 +66872,8 @@
     {
       "path": "functions/api/push-admin.js",
       "extension": ".js",
-      "bytes": 5023,
-      "sha256": "b9003e5ff9610799c3ffd83880c91bf0f0caadb329be88ba3a67663308726d9c"
+      "bytes": 5112,
+      "sha256": "b5129191ee6d492d2bc0d491d4590b91eba2bfe8afbe295bccb7d3ea1bbd9651"
     },
     {
       "path": "functions/api/push-config.js",
@@ -66498,50 +66884,50 @@
     {
       "path": "functions/api/push-order-event.js",
       "extension": ".js",
-      "bytes": 3496,
-      "sha256": "c0b75f0478d1b55c9ce829677ee6d5fbcca7561d75fe165b247b9ac5e84ca350"
+      "bytes": 3783,
+      "sha256": "b589dc10e28c79c2fbf33a456301bfd0a9cd5f82eef0997aa5a6314d1f88f1f1"
     },
     {
       "path": "functions/api/push-subscription.js",
       "extension": ".js",
-      "bytes": 4636,
-      "sha256": "9f84aa1be5a0c9d50ccb4614959732fd2b1737e60203097cfd983dce2582091d"
+      "bytes": 4725,
+      "sha256": "9cc283af4488730b6ac54e09e7a11708eb49f488f5d6cb15f648e873d946b2ea"
     },
     {
       "path": "functions/api/push-test.js",
       "extension": ".js",
-      "bytes": 4123,
-      "sha256": "89faf85f473af9cda3d11e619845e7bca739469de979ae37946294c44dcca124"
+      "bytes": 4212,
+      "sha256": "6e59fb6e0c0b5f6a7eeb9113fad5e91059a9a918ef508ded98b4933a4cab92eb"
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
       "extension": ".js",
-      "bytes": 9212,
-      "sha256": "a47b06c3e74e5a131f6ae984ac0011bb78fc4e54eb7f545e96139d00fb137f2a"
+      "bytes": 9301,
+      "sha256": "e649d1d0e971980a062486c9157739ce4c430f213dd663604033796c3af611f7"
     },
     {
       "path": "functions/api/sheets-engagement-webhook.js",
       "extension": ".js",
-      "bytes": 1296,
-      "sha256": "1a54881ed4db95c272b1fa5142bdd4ba25f2d599f9485ccb96710cd4b0e0c9c7"
+      "bytes": 1379,
+      "sha256": "9d5a771d8cf4158fd89dd5a0b7ffcc2c908fde7824e7656e430ab2d96b6eaf0a"
     },
     {
       "path": "functions/api/sheets-product-sync.js",
       "extension": ".js",
-      "bytes": 3446,
-      "sha256": "002abab4a21aa465f953b55765f6c92384d114219ab32677c4984d4354889833"
+      "bytes": 3726,
+      "sha256": "9ffd7db9a5f272e4344de97be321dc363e21c47cf43b7a12f8c2b7780c303141"
     },
     {
       "path": "functions/api/sheets-products-webhook.js",
       "extension": ".js",
-      "bytes": 14901,
-      "sha256": "617110546822c81a1cb801d879c4bb6ba70210426740f236ddf37c6cdeffe1df"
+      "bytes": 14990,
+      "sha256": "3f1389e011d334bb4de1601134be3968b5bb854a68aa2222f67a0bc4b9fc6c4d"
     },
     {
       "path": "functions/api/sheets-sync-snapshot.js",
       "extension": ".js",
-      "bytes": 9208,
-      "sha256": "90873d0ff613df9041ab2c0075557355dcb76c81e91f88c065e663d6af255a7f"
+      "bytes": 9297,
+      "sha256": "e2db705e528fd0a07f346944fcad8e8dc5e01c1c860407d75b2d1bf9ba5aa8d8"
     },
     {
       "path": "functions/api/site-activity.js",
@@ -66564,14 +66950,14 @@
     {
       "path": "functions/api/test-email.js",
       "extension": ".js",
-      "bytes": 5502,
-      "sha256": "718b0c92e43ed65c1c08d77b021073b49662011e79157eeae1bd109c97de58ff"
+      "bytes": 5581,
+      "sha256": "55fda515aa38c9c25aa8e0faf4263b5d35e3c4e55c00d50106dff7169a638673"
     },
     {
       "path": "functions/api/username-availability.js",
       "extension": ".js",
-      "bytes": 2290,
-      "sha256": "b685495e9d53239ac6d3a49079a47f7cdd960a9f333a7284471193fee66f24e0"
+      "bytes": 2427,
+      "sha256": "9c61e1f046d05232df30441c33e9a18278550f12d6e09b61776ddeac5dc9be60"
     },
     {
       "path": "functions/api/visitor-geo.js",
@@ -66588,8 +66974,8 @@
     {
       "path": "functions/api/visual-builder.js",
       "extension": ".js",
-      "bytes": 14357,
-      "sha256": "1d660d70328d016d1ebc9e3b539da508e346da417f1f8367b9776a794e608781"
+      "bytes": 14463,
+      "sha256": "99760516d6c1558c51df554b15c87f667a150fed14f4fbc022961c249c1c0d7a"
     },
     {
       "path": "functions/api/visual-studio-global-public.js",
@@ -66600,14 +66986,14 @@
     {
       "path": "functions/api/visual-studio-global.js",
       "extension": ".js",
-      "bytes": 12614,
-      "sha256": "0bd2d1668f7444ceea71aa47bd60870368c31c6d495b516b02325a278b957b84"
+      "bytes": 12719,
+      "sha256": "4a518d10fe6d3cb43b0339ebd66d20f4f4ec5ea533ca464bcc3057fb040247d6"
     },
     {
       "path": "functions/api/wholesale-quote.js",
       "extension": ".js",
-      "bytes": 2809,
-      "sha256": "7ea88c806450d62931ade6967316289cddfcdce370dfd9770e37bdc96e4f3a0d"
+      "bytes": 2893,
+      "sha256": "d27176d7a29295e155d5907bb1a76cbda620ca8b7321327b2197377dfd6ed82a"
     },
     {
       "path": "functions/collections/[handle].js",
@@ -66660,8 +67046,8 @@
     {
       "path": "functions/lib/operational-guard.js",
       "extension": ".js",
-      "bytes": 4008,
-      "sha256": "927aafd8da37d42630884ce029d7da1955481f3bfd6b967cbcd732e276d7f2e9"
+      "bytes": 4151,
+      "sha256": "5c4ab9b58832d3116a987c3c15b5ace30281fd2e0b1524cf3b3c553f712f165a"
     },
     {
       "path": "functions/pages/[slug].js",
@@ -68904,14 +69290,14 @@
     {
       "path": "package-lock.json",
       "extension": ".json",
-      "bytes": 322303,
-      "sha256": "cde90725c0000f1ca27d6ace347020a42ca274e92b447ecdc7c400367c9723d1"
+      "bytes": 315510,
+      "sha256": "97dda5d06ba8ed5e26493dd041c99b4f64cee5593acb7ccee4be0c64f378f77d"
     },
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 19332,
-      "sha256": "3ab5bfc4ec114330c8cbcc716c6c4d90e12bea81fb549b33cbe5a8674d13a811"
+      "bytes": 19355,
+      "sha256": "6c8b2f47b47bdf99af600ede9def0dc5fc7b9ad5b99193b651dec2bef743347f"
     },
     {
       "path": "perfil.html",
@@ -70446,8 +70832,8 @@
     {
       "path": "tests/admin/private-work-media-guard.test.mjs",
       "extension": ".mjs",
-      "bytes": 2819,
-      "sha256": "6d9037ed3d3b8c4f32d310cd6b8ea704c540cfcd5cc9fc1f457d7ebc35031800"
+      "bytes": 2910,
+      "sha256": "62e127048bd79375203748d918a717e9c40389aafae18166b6129702866bbd20"
     },
     {
       "path": "tests/admin/private-work-pagination-session.test.mjs",
@@ -70780,6 +71166,12 @@
       "sha256": "88a801c464e33f20ff026ab623207d53728336d8426994ba7d132453d68fa297"
     },
     {
+      "path": "tests/catalog/collection-scroll.spec.js",
+      "extension": ".js",
+      "bytes": 3507,
+      "sha256": "8cc0efb146dee34af6bfefc3ce3aa804450b82f022edd41e23b55985aa38e98b"
+    },
+    {
       "path": "tests/catalog/collections-page-read.test.mjs",
       "extension": ".mjs",
       "bytes": 1719,
@@ -71022,8 +71414,8 @@
     {
       "path": "tests/checkout/order-email-app-check.test.mjs",
       "extension": ".mjs",
-      "bytes": 5819,
-      "sha256": "e936b5c703f4a1f94e32c37c45ae4464425ec901610384f3f9393f0c4aa956ab"
+      "bytes": 5912,
+      "sha256": "751f7a4f0053dbe49e2c5ad9e4909f90b2dd04c65ea56c5c92bf0d7b1ff17122"
     },
     {
       "path": "tests/checkout/order-routing-identity.test.mjs",
@@ -71232,8 +71624,8 @@
     {
       "path": "tests/engagement/notification-read-integrity.test.mjs",
       "extension": ".mjs",
-      "bytes": 5443,
-      "sha256": "1ecc95839d474f333e3767b2f1441054d2a6054176fb524854ece62f3bf5f12b"
+      "bytes": 5535,
+      "sha256": "4e99d33fe5c59461dfad511ad0a9765417b753df57d23be06655f0b07a10620f"
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
@@ -71952,8 +72344,8 @@
     {
       "path": "tests/orders/orders-board-domain.test.mjs",
       "extension": ".mjs",
-      "bytes": 11022,
-      "sha256": "49b3458f6d3ca48361fa95fb70402f46ed7b226b639fd740f1bb90df81a33aeb"
+      "bytes": 11114,
+      "sha256": "19f68b761145ce0e75660624fcb400c15df1fe8a25606cc073a4d9a7c11f3535"
     },
     {
       "path": "tests/orders/statistics-reset-render.test.mjs",
@@ -72460,6 +72852,12 @@
       "sha256": "d408edb9aa5f73c8aeb28a09c054d098c494a5cabd6464b8fa56ae69a7413e2c"
     },
     {
+      "path": "tests/security/request-body-limits.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4253,
+      "sha256": "5949cf1d378f189dad78084e1924175d2d9edd7be61ee23959d3e244763fd3f5"
+    },
+    {
       "path": "tests/security/secretos-sheets.test.mjs",
       "extension": ".mjs",
       "bytes": 1665,
@@ -72476,6 +72874,12 @@
       "extension": ".mjs",
       "bytes": 2022,
       "sha256": "9a6b027787ea161210caeabbacb2eca2461716095c9c064054edc4a87a02871b"
+    },
+    {
+      "path": "tests/security/tooling-glob-compatibility.test.mjs",
+      "extension": ".mjs",
+      "bytes": 999,
+      "sha256": "48a99ec18826b6effe4d249ab3812f59ecb7cbc361106e44a73095e49f4ea34a"
     },
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",
@@ -72636,8 +73040,8 @@
     {
       "path": "tests/sync/sheets-integrity-regressions.test.mjs",
       "extension": ".mjs",
-      "bytes": 14886,
-      "sha256": "f2b8a2518ce85e79bf76fcb1ba65de930bd9fb1f6ef48d0c86410e708bb30549"
+      "bytes": 14979,
+      "sha256": "a2aab429a64dc6f7f297e86ba8e1e297ea172aae6dfaa9b0324f65657caa3e55"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",

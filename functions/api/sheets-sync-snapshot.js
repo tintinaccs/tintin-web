@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import {
   decodeFirestoreFields,
   firestoreAdminListAll,
@@ -134,7 +135,7 @@ export async function onRequestPost({ request, env }) {
     return jsonResponse({ ok: false, error: 'No autorizado' }, 401, '', request.url);
   }
   try {
-    const raw = await request.text();
+    const raw = await readLimitedText(request, MAX_BODY_BYTES);
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud inválida');
     const input = JSON.parse(raw);
     const entity = String(input.entity || '');

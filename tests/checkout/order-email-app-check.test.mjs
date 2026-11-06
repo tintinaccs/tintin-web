@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readLimitedText } from '../../functions/lib/operational-guard.js';
 
 const backend = fs.readFileSync(new URL('../../functions/api/order-email.js', import.meta.url), 'utf8');
 const frontend = fs.readFileSync(new URL('../../js/email/notificacion-pedido-resend.js', import.meta.url), 'utf8');
@@ -12,7 +13,7 @@ test('App Check no permite saltarse identidad, propiedad ni el permiso de reenvÃ
   let order = { userId: 'owner', userEmail: 'owner@example.test' };
   let sends = 0;
   const context = vm.createContext({
-    clean, FIREBASE_PROJECT_ID: 'test-project', ADMIN_EMAIL: 'admin@example.test',
+    clean, readLimitedText, FIREBASE_PROJECT_ID: 'test-project', ADMIN_EMAIL: 'admin@example.test',
     decodeFirestoreFields: fields => fields,
     originIsAllowed: () => true,
     getBearerToken: request => request.headers.get('authorization').slice(7),

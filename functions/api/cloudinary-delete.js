@@ -1,3 +1,4 @@
+import { readLimitedJson } from '../lib/operational-guard.js';
 import {findProductWorkMediaUsage} from '../../cloudflare/product-editor-workspaces.mjs';
 import { rateLimitErrorResponse,
   cleanPublicId,
@@ -36,7 +37,7 @@ async function destroyAsset(publicId, config) {
       body: form
     }
   );
-  const data = await response.json().catch(() => ({}));
+  const data = await response.json().catch(error => { if (error?.status === 413) throw error; return {}; });
   if (!response.ok) {
     throw new Error(data?.error?.message || `Cloudinary respondió HTTP ${response.status}`);
   }
@@ -63,7 +64,7 @@ export async function onRequest(context) {
 
   try {
     await requireSuperAdmin(request, env);
-    const body = await request.json();
+    const body = await readLimitedJson(request, 16 * 1024);
     const values = Array.isArray(body?.publicIds) ? body.publicIds : [body?.publicId];
     const publicIds = [...new Set(values.filter(Boolean).map(cleanPublicId))];
     if (!publicIds.length || publicIds.length > 4) {

@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse, jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   decodeFirestoreFields,
@@ -60,7 +61,7 @@ function decodeHistory(doc) {
 async function parseBody(request) {
   const length = Number(request.headers.get('content-length') || 0);
   if (length > VISUAL_BUILDER_LIMITS.bodyBytes) throw Object.assign(new Error('Solicitud demasiado grande.'), { status: 413 });
-  const raw = await request.text();
+  const raw = await readLimitedText(request, VISUAL_BUILDER_LIMITS.bodyBytes);
   if (new TextEncoder().encode(raw).byteLength > VISUAL_BUILDER_LIMITS.bodyBytes) throw Object.assign(new Error('Solicitud demasiado grande.'), { status: 413 });
   try { return JSON.parse(raw || '{}'); } catch { throw new Error('Solicitud inválida.'); }
 }

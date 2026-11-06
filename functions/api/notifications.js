@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, requireSuperAdmin, statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
@@ -193,7 +194,7 @@ export async function onRequest(context) {
       await firestoreAdminGet(env, `users/${safeId(user.uid, 'Cuenta')}/notifications/tfc-health-probe`);
       return jsonResponse({ ok: true, mode: 'read_only' }, 200, origin, request.url);
     }
-    const raw = await request.text();
+    const raw = await readLimitedText(request, MAX_BODY_BYTES);
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud vacía o demasiado grande');
     const input = JSON.parse(raw);
     const action = clean(input.action, 80);

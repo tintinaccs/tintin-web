@@ -6,6 +6,7 @@ import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/orde
 import { encodeFirestoreFields, decodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
 import { allowedOrderStatuses, assertOrderTransition, orderStage, orderTimeline, customerOrderMessage } from '../../js/orders/ciclo-pedido.mjs';
 import { orderContactLinks } from '../../cloudflare/contactos-pedido.mjs';
+import { readLimitedText } from '../../functions/lib/operational-guard.js';
 
 function store(order) {
   let revision=0;
@@ -61,7 +62,7 @@ test('incidencia conserva la etapa para recuperar el flujo sin entrega falsa',as
 test('consultar contactos exige Super Admin antes de leer y no ejecuta mutaciones',async()=>{
   const source=readFileSync(new URL('../../functions/api/admin-order-mutation.js',import.meta.url),'utf8').replace(/import\s+[\s\S]*?\s+from\s+['"][^'"]+['"];\s*/g,'').replaceAll('export async function','async function');
   let reads=0,auth=true;
-  const deps={rateLimitErrorResponse:()=>null,requireSuperAdmin:async()=>{if(!auth)throw Object.assign(new Error('denied'),{status:403});},originIsAllowed:()=>true,jsonResponse:(data,status)=>new Response(JSON.stringify(data),{status}),statusFromError:(e,f)=>e.status || f,firestoreAdminGet:async()=>{reads++;return {fields:encodeFirestoreFields(order({userName:'QA',userPhone:'0981123456',shipping:{mapLocation:{lat:-25.3,lng:-57.5}}}))};},decodeFirestoreFields,orderContactLinks};
+  const deps={readLimitedText,rateLimitErrorResponse:()=>null,requireSuperAdmin:async()=>{if(!auth)throw Object.assign(new Error('denied'),{status:403});},originIsAllowed:()=>true,jsonResponse:(data,status)=>new Response(JSON.stringify(data),{status}),statusFromError:(e,f)=>e.status || f,firestoreAdminGet:async()=>{reads++;return {fields:encodeFirestoreFields(order({userName:'QA',userPhone:'0981123456',shipping:{mapLocation:{lat:-25.3,lng:-57.5}}}))};},decodeFirestoreFields,orderContactLinks};
   const handler=new Function('deps',`const {${Object.keys(deps).join(',')}}=deps;${source};return onRequest;`)(deps);
   const request=new Request('https://tintinaccesorios.pages.dev/api/admin-order-mutation?orderId=order_fixture_1');
   auth=false;assert.equal((await handler({request,env:{}})).status,403);assert.equal(reads,0);

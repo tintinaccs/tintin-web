@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 // Cotizaciones mayoristas: la clienta autenticada envía productos y
 // cantidades. El servidor arma la cotización con datos del catálogo; el
 // navegador nunca fija precios ni el estado mayorista de la cuenta.
@@ -29,7 +30,7 @@ export async function onRequest(context) {
 
   try {
     const user = await requireFirebaseUser(request, env);
-    const raw = await request.text();
+    const raw = await readLimitedText(request, 32 * 1024);
     if (!raw || new TextEncoder().encode(raw).byteLength > 32 * 1024) {
       return jsonResponse({ ok: false, error: 'invalid_request' }, 400, origin, requestUrl);
     }
