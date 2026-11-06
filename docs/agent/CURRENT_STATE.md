@@ -1,3 +1,9 @@
+## Corrección del build de Cloudflare en PR 1346 — 2026-11-06 — Claude Code
+
+Causa del Cloudflare Pages build fallido en b098d9f3 (reproducida localmente, no se pudo leer el log de Cloudflare): el package-lock.json estaba sincronizado solo con npm 11; con npm 10 npm ci falla con EUSAGE (Missing: glob@10.5.0 y otros). Se regeneró el lock con npm 10 (npm install --package-lock-only --ignore-scripts) conservando el override condicional de glob; npm ci --dry-run pasa con npm 10 (692 paquetes) y con npm 11 (663 paquetes), y npm ci real instala 683 paquetes. Se fusionó main 804a74d9 y se regeneró el plan de mantenimiento con scripts/preparar-mantenimiento-flujos.mjs (base 804a74d9, 2 archivos, 0 registros afectados).
+
+PASS_LOCAL: build:pages, auditar-proteccion-flujos (78 registros, 544 archivos intactos), 52 pruebas de flow-connections, audit:cache-versioning. No verificado hasta que corra el build real de Cloudflare sobre el commit final.
+
 ## Unificación de colores y mantenimiento de flujos protegidos — 2026-11-06 — Claude Code
 
 Pedido de la titular: unificar los colores del sitio a la paleta Tintín (#F8AACA, #FDECF2, #222222, blanco) en páginas públicas, checkout, login y perfil. PR 1351 mergeado en main como 4ae187d8 (base ab9127a); producción sirvió styles.min.css con sufijo -p1106 y se midió en tintinaccs.com: 0 errores de JavaScript y 0 desborde horizontal en 7 páginas por escritorio y celular.
@@ -54,6 +60,17 @@ PASS_LOCAL inicial:7/7 casos Chromium por píxeles (hero390×844/844×390/1306×
 
 Actualización antes de integrar1347: dos consumidores de --tt-section-gradient en ajuste/editorial añadían otra vez el color base e invalidaban background en el primer render. Se concilian con el único fondo completo, sin cambiar geometría ni PNG. Reproducción:alternating-section-colors2/4FAIL; tras corregir4/4PASS. Regresión actual13/13 (paquete CSS y bordes) y2/2 píxeles sin JavaScriptPASS; los nuevos casos se incorporan al spec que CI ya ejecuta. Cifras99/71 anteriores a este último ajuste; CI/merge/producción pendientes del nuevo SHA, sin heredar recibos. Integridad SHA256 de los4PNG contra merge4bc1c20e:2/2 NodePASS. Mantenimiento:24renovaciones/28registros preservados. PR1347; nunca habilitar auto-merge nativo antes del mantenedor protegido.
 
+## 2026-11-05 — Dependencias y recuperación, excluyendo PayPal (Codex)
+
+PASS_LOCAL: `npm audit` detectó 12 paquetes afectados por dos avisos moderados: glob/AbortSignal y minimatch/globparts. Se limita el override a `glob@>=9.0.0 <14.0.2` → `14.0.3`, conservando Firebase CLI 15.34.2 y los minimatch antiguos 3/5/6. Aprobaron `npm ci --engine-strict`, auditoría con cero vulnerabilidades, CLI de Firebase, descubrimiento de archivos y ZIP real mediante archiver. Después de incorporar `main` af7c141b aprobaron 69 pruebas dirigidas de CI, mantenimiento y recuperación, el build reproducible y `ci:preflight` completo. CI del nuevo SHA pendiente. PayPal queda fuera de alcance.
+
+PR #1345 resuelta: head `7dcbee3b`, CI `42065735586/1` y mantenimiento `42070726490/1` en éxito, incluidos ambos checks de protección. Merge `af7c141b`. Postmerge `42070826711` en curso al registrar este bloque; no se hereda éxito de producción. La corrección del plan verificó 43 huellas y pasó 48 pruebas de mantenimiento; 238 pruebas de cuentas, Perfil, Push y respaldo aprobaron también en esa rama.
+
+Recuperación real: Google Cloud confirmó PITR de 7 días, respaldo diario de 30 días, semanal de 84 días y protección contra borrado habilitada en `(default)`. El respaldo `a5fdb9a3-33f3-45d4-997e-4cf1d9512688`, del 4 de noviembre, se restauró en la base nueva `restore-check-20261105-7dcbee`, en us-east1. El run `2b284c70-1bed-4431-98f7-5360943c2826` verificó Disponible/Listo y ausencia del aviso de restauración; las dos bases anteriores siguieron disponibles. No se leyeron valores personales ni se midieron conteos por colección.
+
+Limpieza pendiente: el run `3bda8ad0-716a-4be5-9fd7-dbc2304a21e3` no logró abrir Cloud Shell. Verificó la identidad del recurso temporal y reportó su protección contra borrado inhabilitada. El siguiente intento por UI no inició por saldo insuficiente de TinyFish; se informó a la titular y se pidió elegir recarga o limpieza manual. El único objetivo permitido es `restore-check-20261105-7dcbee`; no actuar sobre `(default)`, `restauracion-prueba`, buckets ni respaldos.
+
+Código: bundle completo de 14 referencias, SHA-256 `71466b563909b4c1d86b9ee171836d79663bc5ab0371b737c79dc9035e80dee3`; clon aislado, `git fsck` y checkout de main `187e16f3` correctos en 15,25 s. Se conserva en una carpeta privada de trabajo y no equivale a copia externa cifrada. Siguen pendientes las respuestas sobre sesión real de Perfil/Push, dispositivo, destino de copia independiente y certificado público generado en el dispositivo de la titular. No cerrar #735, #373 ni #312 con pruebas simuladas. Sin envíos a clientas, cobros, pedidos ni compras de créditos. Skills usados: gh-fix-ci, tintin-observability-recovery y tintin-security-hardening.
 
 ## 2026-11-05 — Pendientes de GitHub excepto PayPal (Codex)
 
