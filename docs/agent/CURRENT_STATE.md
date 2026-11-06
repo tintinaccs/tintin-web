@@ -1,3 +1,7 @@
+## Acceso de integración habilitado — 2026-11-06 — Codex /root
+
+La nueva política del entorno permite GitHub REST. La API confirmó push:true para NOVAKPY en tintinaccs/tintin-web. El bloqueo de acceso anterior quedó resuelto. Se conserva el commit probado40cbffa1376ef5b83979f1511c5812bbb685d2ee sobre main5c039e8d45c1a9df88025b2c8224e7d8a53e4e0c, sin cambios de implementación posteriores. PR/CI/merge IN_PROGRESS; sus números, SHA, intentos y conclusiones se registrarán en el PR y en /workspace/tintin-security-report/handoff.json. No se acreditará merge sin verificar los controles protegidos del SHA vigente. Sin deploy manual ni operaciones comerciales en producción.
+
 ## Cierre local de seguridad y scroll de catálogo — 2026-11-06 — Codex /root
 
 PASS_LOCAL del estado final de codex/security-catalog-scroll: build:pages, ci:preflight completo (incluidas7pruebas nuevas,104Node de test:fast y6Chromium),860regresiones de servidor/comercio y35Chromium de catálogo/búsqueda/móvil/movimiento reducido. npm audit y npm audit --omit=dev:0vulnerabilidades. Plan de42archivos protegidos/35registros regenerado desde main5c039e8d con el mecanismo canónico. Se revisó el diff; no hay cambios de roles, Firestore, datos comerciales, identidad visual ni controles relajados.
