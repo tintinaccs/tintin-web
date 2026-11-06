@@ -42,8 +42,8 @@ for(const width of [320,390,768,1024,1280,1440,1920]) test(`tarjeta cambia foto 
   const label=page.locator('.tt-stock-label');
   await expect(label).toBeVisible();
   await expect(label).toHaveCSS('writing-mode','horizontal-tb');
-  await expect(label).toHaveCSS('background-color','rgb(229, 231, 235)');
-  await expect(label).toHaveCSS('color','rgb(75, 85, 99)');
+  await expect(label).toHaveCSS('background-color','rgb(253, 236, 242)');
+  await expect(label).toHaveCSS('color','rgb(34, 34, 34)');
   await expect(image).toHaveCSS('opacity','0.55');
   const geometry=await label.evaluate(label=>{const a=label.getBoundingClientRect(),b=label.parentElement.getBoundingClientRect();return {x:Math.abs(a.x+a.width/2-b.x-b.width/2),y:Math.abs(a.y+a.height/2-b.y-b.height/2),font:parseFloat(getComputedStyle(label).fontSize)};});
   expect(geometry.x).toBeLessThanOrEqual(1);expect(geometry.y).toBeLessThanOrEqual(1);expect(geometry.font).toBeGreaterThanOrEqual(14);

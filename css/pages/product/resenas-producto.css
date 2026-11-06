@@ -1,13 +1,13 @@
 .tt-reviews-product {
   --tt-review-pink: var(--color-brand-primary, var(--color-brand-primary, #F8AACA));
   --tt-review-pink-deep: var(--color-brand-primary-hover, var(--color-brand-primary, #F8AACA));
-  --tt-review-pink-soft: #FDECF2;
-  --tt-review-pink-pale: #FDECF2;
-  --tt-review-pink-border: #EFC9D7;
-  --tt-review-pink-border-strong: #E2AFC2;
+  --tt-review-pink-soft: #FFFFFF;
+  --tt-review-pink-pale: #FFFFFF;
+  --tt-review-pink-border: #F8AACA;
+  --tt-review-pink-border-strong: #F8AACA;
   --tt-review-gold: var(--color-rating-star, #8A6D1F);
   --tt-review-gold-soft: #C9A44B;
-  --tt-review-ink: #633D4C;
+  --tt-review-ink: #222222;
   --tt-review-muted: #8D707C;
   --tt-review-white: #FFFFFF;
   color: var(--tt-review-ink);
@@ -53,7 +53,7 @@
   padding: clamp(18px, 2.4vw, 25px);
   border: 1px solid var(--tt-review-pink-border);
   border-radius: 22px;
-  background: linear-gradient(180deg, #FFFDFE 0%, var(--tt-review-pink-pale) 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, var(--tt-review-pink-pale) 100%);
 }
 
 .tt-section-sub {
@@ -133,7 +133,7 @@
 .tt-review-stats-track {
   height: 8px;
   overflow: hidden;
-  border: 1px solid rgba(226, 175, 194, .72);
+  border: 1px solid rgba(248,170,202,0.72);
   border-radius: 999px;
   background: #FFF;
 }
@@ -256,7 +256,7 @@
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #E4C3CF;
+  color: #F8AACA;
   font: inherit;
   font-size: 1.72rem;
   line-height: 1;
@@ -469,7 +469,7 @@
   gap: 9px;
   margin: 14px 0 0 28px;
   padding: 12px 0 0 13px;
-  border-top: 1px solid rgba(239,201,215,.75);
+  border-top: 1px solid rgba(248,170,202,0.75);
   border-left: 2px solid var(--tt-review-pink-pale);
 }
 
@@ -478,14 +478,14 @@
   grid-template-columns: 34px minmax(0,1fr);
   gap: 9px;
   padding: 10px 12px;
-  border: 1px solid rgba(239,201,215,.78);
+  border: 1px solid rgba(248,170,202,0.78);
   border-radius: 15px;
-  background: #FFFDFE;
+  background: #FFFFFF;
 }
 
 .tt-review-thread-message.is-store {
   border-color: rgba(214,180,85,.35);
-  background: linear-gradient(100deg, rgba(248,237,207,.52), #FFFDFE 42%);
+  background: linear-gradient(100deg, rgba(248,237,207,.52), #FFFFFF 42%);
 }
 
 .tt-review-thread-meta {

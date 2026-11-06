@@ -888,7 +888,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261105-copiar-pago-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261105-copiar-pago-1-p1106');
     }
   }
 
@@ -909,7 +909,7 @@
   // segundo sistema de menús.
   function bootHeaderAccountFix() {
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20261029-cart-reveal-1');
+      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20261029-cart-reveal-1-p1106');
     }
   }
 
@@ -919,13 +919,13 @@
     window.TintinSiteActivityScheduled = true;
     // El aviso ya necesita este módulo. Reutilizarlo evita cargar actividad,
     // latidos y endpoint antes de que la persona acepte estadísticas.
-    importSibling('analytics/consentimiento-privacidad.js', 'Privacy Consent', undefined, 'tintin-20261029-mobile-review-1').then(privacy => {
+    importSibling('analytics/consentimiento-privacidad.js', 'Privacy Consent', undefined, 'tintin-20261029-mobile-review-1-p1106').then(privacy => {
       if (!privacy) { window.TintinSiteActivityScheduled = false; return; }
       const start = () => {
         if (!privacy.hasStatisticsConsent()) return;
         if (!window.TintinSiteActivityBooted) {
           window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261029-mobile-review-1');
+          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261029-mobile-review-1-p1106');
         }
       };
       privacy.onPrivacyConsentChange(start);
@@ -984,7 +984,7 @@
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261105-copiar-pago-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261105-copiar-pago-1-p1106');
     }
   }
 
@@ -1019,11 +1019,11 @@
       const link = document.createElement('link');
       link.id = 'tt-phase8-ui-ux-css';
       link.rel = 'stylesheet';
-      link.href = new URL('/css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1', location.href).href;
+      link.href = new URL('/css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1-p1106', location.href).href;
       document.head.appendChild(link);
     }
     if (!window.TintinUX?.booted) {
-      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX', undefined, 'tintin-20261031-revision-ux-1');
+      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX', undefined, 'tintin-20261031-revision-ux-1-p1106');
     }
   }
 

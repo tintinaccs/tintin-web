@@ -36,7 +36,7 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-copiar-20261105-1';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-copiar-20261105-1-p1106';
   document.head.appendChild(link);
 }
 

@@ -3,10 +3,10 @@
    una lectura de joyería contemporánea en desktop, tablet y mobile. */
 
 body.tt-home-premium {
-  --tt-home-ink: #34282d;
-  --tt-home-muted: #806b73;
-  --tt-home-line: rgba(137, 77, 101, .16);
-  --tt-home-rose: #fff3f7;
+  --tt-home-ink: #222222;
+  --tt-home-muted: #222222;
+  --tt-home-line: rgba(34,34,34,0.16);
+  --tt-home-rose: #FDECF2;
 }
 
 body.tt-home-premium :is(.tt-collection-carousel, .tt-look-section, .tt-home-random-products, .tt-reviews-section) {
@@ -100,11 +100,11 @@ body.tt-home-premium .tt-home-random-products-grid { padding-block: 8px 18px; }
 body.tt-home-premium .tt-product-card {
   border: 0 !important;
   border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(78, 40, 52, .07) !important;
+  box-shadow: 0 12px 30px rgba(34,34,34,0.07) !important;
   overflow: hidden;
 }
 
-body.tt-home-premium .tt-product-card:hover { box-shadow: 0 18px 38px rgba(78, 40, 52, .11) !important; }
+body.tt-home-premium .tt-product-card:hover { box-shadow: 0 18px 38px rgba(34,34,34,0.11) !important; }
 
 /* Dos campañas editoriales, no dos tarjetas de catálogo. */
 body.tt-home-premium :is(.tt-editorial, .tt-watch-feature) {
@@ -112,7 +112,7 @@ body.tt-home-premium :is(.tt-editorial, .tt-watch-feature) {
   margin-block: clamp(16px, 3vw, 32px);
   border: 0 !important;
   border-radius: clamp(20px, 2.4vw, 32px);
-  box-shadow: 0 20px 56px rgba(77, 37, 50, .075) !important;
+  box-shadow: 0 20px 56px rgba(34,34,34,0.075) !important;
 }
 
 body.tt-home-premium :is(.tt-editorial-content, .tt-watch-feature-content) {

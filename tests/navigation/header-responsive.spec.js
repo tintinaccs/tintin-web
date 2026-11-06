@@ -289,7 +289,7 @@ test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async 
 
   await page.locator('#btn-notifications-tablet').evaluate(node => { node.hidden = false; });
   await expect(page.locator('.tt-tablet-actions > button:not([hidden])')).toHaveCount(4);
-  await expect(page.locator('#btn-notifications-tablet')).toHaveCSS('background-color', 'rgb(238, 241, 244)');
+  await expect(page.locator('#btn-notifications-tablet')).toHaveCSS('background-color', 'rgb(253, 236, 242)');
 
   const tabletGeometry = await page.evaluate(() => {
     const menu = document.getElementById('btn-menu-tablet').getBoundingClientRect();

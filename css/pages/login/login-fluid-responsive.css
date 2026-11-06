@@ -5,7 +5,7 @@ body:has(.login-page) {
   --login-accent: var(--tt-brand, var(--color-brand-primary, #F8AACA));
   --login-accent-deep: var(--tt-brand-deep, var(--color-brand-primary, #F8AACA));
   --login-surface: var(--tt-surface, #FFFFFF);
-  --login-surface-soft: var(--tt-surface-soft, #FFF5FA);
+  --login-surface-soft: var(--tt-surface-soft, #FDECF2);
   --login-page-fluid: var(--tt-page-bg, #FFF8FC);
   --login-border-fluid: color-mix(in srgb, var(--login-accent) 18%, white);
   --login-gutter: clamp(12px, 2.3vw, 42px);
@@ -22,9 +22,9 @@ body:has(.login-page) .login-page {
     max(var(--login-gutter), env(safe-area-inset-bottom))
     max(var(--login-gutter), env(safe-area-inset-left)) !important;
   background:
-    radial-gradient(circle at 8% 16%, rgba(202, 1, 105, .10), transparent 31%),
-    radial-gradient(circle at 92% 78%, rgba(160, 0, 85, .08), transparent 29%),
-    linear-gradient(145deg, #FDECF2 0%, #FFF1F7 54%, #FDE9F2 100%) !important;
+    radial-gradient(circle at 8% 16%, rgba(248,170,202,0.1), transparent 31%),
+    radial-gradient(circle at 92% 78%, rgba(248,170,202,0.08), transparent 29%),
+    linear-gradient(145deg, #FDECF2 0%, #FDECF2 54%, #FDECF2 100%) !important;
 }
 
 body:has(.login-page) .login-shell {
@@ -34,7 +34,7 @@ body:has(.login-page) .login-shell {
   background-color: var(--login-surface) !important;
   border: 1px solid var(--login-border-fluid) !important;
   border-radius: clamp(22px, 2.2vw, 34px) !important;
-  box-shadow: 0 22px 64px rgba(138, 39, 86, .13) !important;
+  box-shadow: 0 22px 64px rgba(34,34,34,0.13) !important;
   overflow: clip;
 }
 
