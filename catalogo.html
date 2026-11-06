@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="d87c66ecc476c4947462129ae88f1d86291b787708350ec2448770a40ec6d913">
+  <meta name="tintin-page-revision" content="32b06d6055ed5987b5bd66364d928f439a0131c583fa1da0ccd3d5be310c41aa">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -233,6 +233,17 @@
       width: 8px; height: 8px; border-radius: 50%; background: #ddd; flex-shrink: 0; transition: background .2s;
     }
     .cat-filter-option.active .cat-filter-dot { background: var(--acc); }
+    .cat-variant-group { border: 0; padding: 0; min-width: 0; }
+    .cat-variant-group legend { width: 100%; }
+    .cat-variant-options { max-height: 260px; overflow-y: auto; }
+    .cat-variant-option { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 8px 2px; border: 0; background: transparent; color: var(--color-text-primary, #222222); font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
+    .cat-variant-label { overflow-wrap: anywhere; min-width: 0; }
+    .cat-variant-check { flex: 0 0 18px; width: 18px; height: 18px; border: 1px solid currentColor; border-radius: 4px; display: grid; place-items: center; }
+    .cat-variant-option[aria-pressed="true"] { font-weight: 800; }
+    .cat-variant-option.is-unavailable { color: var(--color-text-secondary, #595959); }
+    .cat-variant-option.is-unavailable .cat-variant-label { text-decoration: line-through; }
+    .cat-variant-option:disabled { cursor: not-allowed; opacity: 1; }
+    .cat-variant-option:focus-visible { outline: 2px solid var(--color-text-primary, #222222); outline-offset: -2px; }
     .cat-filter-count { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--text-muted); }
 
     .cat-range { display: flex; gap: 8px; align-items: end; }
@@ -500,6 +511,8 @@
         </label>
       </div>
 
+      <div id="cat-variant-filters"></div>
+
       <button type="button" class="tt-filtro-btn" id="btn-limpiar-filtros" style="width:100%;margin-top:8px">
         Limpiar filtros
       </button>
@@ -622,6 +635,7 @@ import { sanitizeImageUrl } from './js/components/images/utilidades-imagenes.js?
 import { hasProductStock, firstAvailableVariant, productDefaultPrice } from './js/core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { productVariantImage } from './js/components/images/foto-variante.mjs?v=tintin-20261031-seo-espacios-2';
 import { productSearchScore, productSearchText, normalizeProductSearch as normalizeSearch } from './js/core/store/busqueda-productos.mjs?v=tintin-20261021-commerce-review-1';
+import { catalogFilterRecord, catalogFilterOptions, matchesCatalogFilters, pruneCatalogFilters } from './js/pages/catalog/filtros-variantes.mjs?v=tintin-20261106-filtros-1';
 import { heartIconMarkup } from './js/components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
 
 // Import dinámico (no estático): si falla la red/CDN al traer
@@ -700,6 +714,8 @@ function renderCollectionButtons(cols) {
 }
 
 let todos = [];
+let filterRecords = [];
+const selectedVariants = new Map();
 let catActual = 'todos';
 let filteredProducts = [];
 let visibleProductLimit = PRODUCT_BATCH_SIZE;
@@ -759,6 +775,26 @@ function isInStockCat(p) {
   return hasProductStock(p);
 }
 
+function renderVariantFilters(records, onlyStock) {
+  const root = document.getElementById('cat-variant-filters');
+  const focused = root.contains(document.activeElement) ? { ...document.activeElement.dataset } : null;
+  root.innerHTML = catalogFilterOptions(records, selectedVariants, filterRecords).map(group => `
+    <fieldset class="cat-filter-group cat-variant-group">
+      <legend class="cat-filter-title">${escapeCatalogHtml(group.label)}</legend>
+      <div class="cat-variant-options">${group.options.map(option => {
+        const selected = Boolean(selectedVariants.get(group.key)?.has(option.value));
+        const unavailable = option.availableCount === 0;
+        const count = onlyStock ? option.availableCount : option.count;
+        return `<button type="button" class="cat-variant-option${unavailable ? ' is-unavailable' : ''}" data-filter-key="${escapeCatalogHtml(group.key)}" data-filter-value="${escapeCatalogHtml(option.value)}" aria-pressed="${selected}" aria-label="${escapeCatalogHtml(group.label + ': ' + option.label + (unavailable ? ' — Sin stock para esta selección' : ''))}" ${onlyStock && unavailable && !selected ? 'disabled' : ''}>
+          <span class="cat-variant-check" aria-hidden="true">${selected ? '✓' : ''}</span>
+          <span class="cat-variant-label">${escapeCatalogHtml(option.label)}</span>
+          <span class="cat-filter-count">${count}</span>
+        </button>`;
+      }).join('')}</div>
+    </fieldset>`).join('');
+  if (focused) [...root.querySelectorAll('button')].find(button => button.dataset.filterKey === focused.filterKey && button.dataset.filterValue === focused.filterValue)?.focus({ preventScroll: true });
+}
+
 function aplicarFiltros({ resetLimit = true } = {}) {
   let lista = todos.filter(p => p.name && String(p.name).trim());
 
@@ -772,9 +808,11 @@ function aplicarFiltros({ resetLimit = true } = {}) {
     return score > 0;
   });
 
-  if (document.getElementById('filtro-stock').checked) {
-    lista = lista.filter(isInStockCat);
-  }
+  const onlyStock = document.getElementById('filtro-stock').checked;
+  const scopedProducts = new Set(lista);
+  const scopedRecords = filterRecords.filter(record => scopedProducts.has(record.product));
+  renderVariantFilters(scopedRecords, onlyStock);
+  lista = scopedRecords.filter(record => matchesCatalogFilters(record, selectedVariants, { onlyStock })).map(record => record.product);
 
   const sort = document.getElementById('cat-sort').value;
   lista = window.TintinCatalogMerchandising?.sortCatalogProducts
@@ -883,7 +921,7 @@ function renderGrid(lista) {
 
 function seleccionarCat(cat) {
   catActual = cat;
-  document.querySelectorAll('.cat-filter-option').forEach(b => {
+  document.querySelectorAll('.cat-filter-option[data-cat]').forEach(b => {
     const selected = b.dataset.cat === cat;
     b.classList.toggle('active', selected);
     b.setAttribute('aria-pressed', String(selected));
@@ -911,6 +949,8 @@ function seleccionarCat(cat) {
 
 function init(products) {
   todos = products;
+  filterRecords = todos.map(catalogFilterRecord);
+  pruneCatalogFilters(selectedVariants, filterRecords);
   actualizarContadores();
   if (catActual !== 'todos') {
     // catActual starts out as catParam (set at parse time above), but may
@@ -922,7 +962,7 @@ function init(products) {
     // every product in the grid under a category title that didn't
     // actually apply to any of them. With 0 matches this now correctly
     // renders the "Sin resultados" state.
-    document.querySelectorAll('.cat-filter-option').forEach(b => b.classList.toggle('active', b.dataset.cat === catActual));
+    document.querySelectorAll('.cat-filter-option[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === catActual));
     document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(b => b.classList.toggle('activo', b.dataset.cat === catActual));
     const titulo = document.getElementById('cat-titulo');
     if (titulo) titulo.textContent = catLabel(catActual);
@@ -945,7 +985,7 @@ function bootCollections() {
 
     renderCollectionButtons(cols);
     // Re-apply the active highlight now that the dynamic buttons exist
-    document.querySelectorAll('.cat-filter-option').forEach(b => b.classList.toggle('active', b.dataset.cat === catActual));
+    document.querySelectorAll('.cat-filter-option[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === catActual));
     document.querySelectorAll('#cat-tabs-mobile .tt-filtro-btn').forEach(b => b.classList.toggle('activo', b.dataset.cat === catActual));
     const titulo = document.getElementById('cat-titulo');
     if (titulo) titulo.textContent = catActual === 'todos' ? TODOS_LABEL : catLabel(catActual);
@@ -966,6 +1006,8 @@ function handleProductsUpdate(products) {
     window.ttPageReady && window.ttPageReady();
   } else {
     todos = products;
+    filterRecords = todos.map(catalogFilterRecord);
+    pruneCatalogFilters(selectedVariants, filterRecords);
     actualizarContadores();
     aplicarFiltros({ resetLimit: false });
   }
@@ -1027,6 +1069,14 @@ document.addEventListener('tintin:catalog-category', event => {
   event.preventDefault();
   seleccionarCat(normalizeCategory(event.detail.slug));
 });
+// Los botones estáticos también filtran mientras carga la presentación de
+// colecciones. Los nodos que ya tienen dueño conservan su intención canónica.
+document.addEventListener('click', event => {
+  if (!(event.target instanceof Element)) return;
+  const button = event.target.closest('#cat-tabs-mobile button[data-cat], #cat-sidebar button[data-cat]');
+  if (!button || button.dataset.phase4CollectionNode === '1') return;
+  seleccionarCat(normalizeCategory(button.dataset.cat));
+});
 let searchTimer = 0;
 document.getElementById('cat-search').addEventListener('input', () => {
   clearTimeout(searchTimer);
@@ -1034,7 +1084,19 @@ document.getElementById('cat-search').addEventListener('input', () => {
 });
 document.getElementById('cat-sort').addEventListener('change', aplicarFiltros);
 document.getElementById('filtro-stock').addEventListener('change', aplicarFiltros);
+document.getElementById('cat-variant-filters').addEventListener('click', event => {
+  const button = event.target.closest('button[data-filter-key]');
+  if (!button || button.disabled) return;
+  const { filterKey, filterValue } = button.dataset;
+  const values = selectedVariants.get(filterKey) || new Set();
+  if (values.has(filterValue)) values.delete(filterValue);
+  else values.add(filterValue);
+  if (values.size) selectedVariants.set(filterKey, values);
+  else selectedVariants.delete(filterKey);
+  aplicarFiltros();
+});
 document.getElementById('btn-limpiar-filtros').onclick = () => {
+  selectedVariants.clear();
   catActual = 'todos';
   document.getElementById('cat-search').value = '';
   document.getElementById('filtro-stock').checked = false;
