@@ -108,7 +108,7 @@
     .perfil-wa-box:hover { background: #c8e6c9; }
     .perfil-wa-icon { font-size: 32px; }
     .perfil-wa-title { font-size: 14px; font-weight: 800; text-transform: uppercase; }
-    .perfil-wa-desc { font-size: 12px; color: #F8AACA; margin-top: 2px; }
+    .perfil-wa-desc { font-size: 12px; color: #222222; margin-top: 2px; }
 
     .perfil-order-row {
       padding: 12px 0; border-bottom: 1px solid var(--border);
@@ -206,7 +206,7 @@
     .tt-profile-panel[hidden]{display:none!important}
     .tt-profile-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
     .tt-profile-summary-card{background:#fff;border:1px solid #F8AACA;border-radius:16px;padding:18px;min-width:0}
-    .tt-profile-summary-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#F8AACA;font-weight:700;margin-bottom:6px}
+    .tt-profile-summary-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#222222;font-weight:700;margin-bottom:6px}
     .tt-profile-summary-card strong{font-size:15px;color:#222222;overflow-wrap:anywhere}
     body[data-tt-profile-v2="1"] .perfil-card{border-radius:18px!important;border:1px solid #F8AACA!important;box-shadow:none!important;margin-bottom:14px!important}
     body[data-tt-profile-v2="1"] .perfil-body{padding:clamp(18px,3vw,26px)!important}
