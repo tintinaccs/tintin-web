@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="1c3dd427f7d6204cddf6a5f37699a6d041726364be94dcbfd6c250da05a47048">
+  <meta name="tintin-page-revision" content="d87c66ecc476c4947462129ae88f1d86291b787708350ec2448770a40ec6d913">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -892,7 +892,10 @@ function seleccionarCat(cat) {
     const selected = b.dataset.cat === cat;
     b.classList.toggle('activo', selected);
     b.setAttribute('aria-pressed', String(selected));
-    if (selected) b.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+    if (selected) {
+      const tabs = b.parentElement;
+      tabs.scrollTo({ left: Math.max(0, b.offsetLeft - (tabs.clientWidth - b.offsetWidth) / 2), behavior: 'instant' });
+    }
   });
   const titulo = document.getElementById('cat-titulo');
   if (titulo) titulo.textContent = cat === 'todos' ? TODOS_LABEL : catLabel(cat);
@@ -901,6 +904,9 @@ function seleccionarCat(cat) {
   else url.searchParams.set('cat', cat);
   history.replaceState(null, '', url.pathname + (url.search || '') + url.hash);
   aplicarFiltros();
+  // Elegir una colección empieza arriba; las actualizaciones de datos y los
+  // otros filtros conservan la posición porque no pasan por esta acción.
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 }
 
 function init(products) {

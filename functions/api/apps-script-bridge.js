@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { isValidFullName, readProfileName } from '../../js/pages/profile/configuracion-inicial-perfil.mjs';
 import {
   corsHeaders,
@@ -142,7 +143,7 @@ export async function onRequest(context) {
   }
 
   try {
-    const rawBody = await request.text();
+    const rawBody = await readLimitedText(request, MAX_BODY_BYTES);
     if (!rawBody || new TextEncoder().encode(rawBody).byteLength > MAX_BODY_BYTES) {
       return jsonResponse({ ok: false, error: 'payload_too_large' }, 413, origin, requestUrl);
     }

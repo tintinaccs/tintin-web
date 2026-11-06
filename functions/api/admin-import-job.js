@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import {
   decodeFirestoreFields,
   encodeFirestoreFields,
@@ -158,7 +159,7 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, requestUrl);
   try {
     const actor = await requireSuperAdmin(request, env);
-    const raw = await request.text();
+    const raw = await readLimitedText(request, MAX_BODY_BYTES);
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw Object.assign(new Error('Solicitud de importación demasiado grande.'), { status: 413 });
     const body = JSON.parse(raw);
     const action = clean(body.action, 30).toLowerCase();

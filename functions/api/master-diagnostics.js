@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
@@ -120,7 +121,7 @@ async function handleGet(env){
 async function handlePost(request,env){
   const token=cleanToken(env);
   if(!token)return{status:503,body:{ok:false,error:'La lectura del Diagnóstico Maestro funciona sin credenciales. Para iniciar una nueva ejecución desde el panel falta configurar la credencial privada de GitHub en el backend.',code:'github_token_missing'}};
-  const raw=await request.text();if(raw.length>3000)return{status:400,body:{ok:false,error:'Solicitud inválida.'}};let body={};if(raw.trim()){try{body=JSON.parse(raw);}catch{return{status:400,body:{ok:false,error:'Solicitud inválida.'}};}}
+  const raw=await readLimitedText(request, 3000);if(raw.length>3000)return{status:400,body:{ok:false,error:'Solicitud inválida.'}};let body={};if(raw.trim()){try{body=JSON.parse(raw);}catch{return{status:400,body:{ok:false,error:'Solicitud inválida.'}};}}
   const runs=await listMasterRuns(token);const active=runs.find(run=>['queued','in_progress','waiting','pending'].includes(run.status));if(active)return{status:202,body:{ok:true,alreadyRunning:true,run:compactRun(active)}};
   const includeProduction=body.includeProduction!==false;
   await githubRequest(`/repos/${REPOSITORY}/actions/workflows/${encodeURIComponent(WORKFLOW_FILE)}/dispatches`,{token,method:'POST',body:{ref:BASE_BRANCH,inputs:{production_origin:PRODUCTION_ORIGIN,include_production:String(includeProduction)}}});

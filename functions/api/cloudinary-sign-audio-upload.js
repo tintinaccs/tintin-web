@@ -1,3 +1,4 @@
+import { readLimitedJson } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   cloudinarySignature,
   getCloudinaryConfig,
@@ -19,7 +20,7 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ error: 'Método no permitido' }, 405, origin, request.url);
   try {
     await requireSuperAdmin(request, env);
-    const body = await request.json().catch(() => ({}));
+    const body = await readLimitedJson(request, 16 * 1024).catch(error => { if (error?.status === 413) throw error; return {}; });
     const slot = String(body?.slot || 'global').trim().toLowerCase();
     if (!['global', 'order', 'review', 'like'].includes(slot)) throw new Error('Tono inválido.');
     const config = getCloudinaryConfig(env);

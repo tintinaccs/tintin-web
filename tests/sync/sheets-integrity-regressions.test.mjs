@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { readLimitedText } from '../../functions/lib/operational-guard.js';
 import { variantInventoryEntries } from '../../js/core/store/inventario-variantes.mjs';
 const read = file => fs.readFileSync(new URL(`../../${file}`, import.meta.url), 'utf8');
 function loadModule(file, deps) {
   const source = read(file).replace(/^import[\s\S]*?from\s+['"][^'"]+['"];\s*/gm, '').replace(/^export /gm, '');
-  const context = vm.createContext({ Request, Response, URL, TextEncoder, crypto, console, ...deps });
+  const context = vm.createContext({ Request, Response, URL, TextEncoder, crypto, console, readLimitedText, ...deps });
   vm.runInContext(source, context);
   return context;
 }

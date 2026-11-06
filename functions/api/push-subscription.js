@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 // =============================================================
 // TINTIN — Registro seguro de dispositivos para Web Push
 // =============================================================
@@ -68,7 +69,7 @@ export async function onRequest(context) {
   }
 
   try {
-    const body = parseBody(await request.text());
+    const body = parseBody(await readLimitedText(request, MAX_BODY_BYTES));
     const action = cleanText(body.action, 20);
     if (!ALLOWED_ACTIONS.includes(action)) throw new Error('Acción no permitida.');
 

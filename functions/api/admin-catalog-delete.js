@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
@@ -97,7 +98,7 @@ export async function onRequest(context) {
 
   try {
     const actor = await requireSuperAdmin(request, env);
-    const raw = await request.text();
+    const raw = await readLimitedText(request, MAX_BODY_BYTES);
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud inválida.');
     const body = JSON.parse(raw);
     const action = String(body.action || '');

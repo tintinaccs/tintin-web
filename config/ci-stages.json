@@ -20,7 +20,7 @@
       "npm run test:cart-quantity-browser",
       "npx playwright test tests/ui-ux/product-shape-selection.spec.js --project=chromium --retries=0",
       "npx playwright test tests/checkout/coupon-recovery.spec.js tests/ui-ux/product-small-controls.spec.js tests/login/profile-availability-recovery.spec.js --project=chromium",
-      "npx playwright test tests/checkout/paypal-fictitious-browser.spec.js tests/checkout/login-required-browser.spec.js tests/checkout/availability-browser.spec.js tests/catalog/search-responsive.spec.js tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium",
+      "npx playwright test tests/checkout/paypal-fictitious-browser.spec.js tests/checkout/login-required-browser.spec.js tests/checkout/availability-browser.spec.js tests/catalog/search-responsive.spec.js tests/catalog/collection-scroll.spec.js tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium",
       "npx playwright test tests/profile/wholesale-session-recovery.spec.js --project=chromium",
       "npx playwright test tests/cart/color-choice-browser.spec.js --project=chromium --retries=0",
       "node --test tests/catalog/public-catalog-batch.test.mjs tests/checkout/request-correlation-event.test.mjs",
@@ -157,6 +157,7 @@
       "audit:cache-versioning"
     ],
     "commands": [
+      "node --test tests/security/request-body-limits.test.mjs tests/security/tooling-glob-compatibility.test.mjs",
       "npm run test:fast",
       "node scripts/auditar-legal-paginas.js"
     ]

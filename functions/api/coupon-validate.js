@@ -1,3 +1,4 @@
+import { readLimitedJson } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
@@ -31,7 +32,7 @@ export async function onRequest(context) {
 
   try {
     const user = await requireFirebaseUser(request, env);
-    const body = await request.json().catch(() => ({}));
+    const body = await readLimitedJson(request, 16 * 1024).catch(error => { if (error?.status === 413) throw error; return {}; });
     const code = normalizeCouponCode(body?.code);
     if (!code) {
       return jsonResponse({ valid: false, code: 'coupon_invalid', message: COUPON_ERROR_MESSAGES.coupon_invalid }, 200, origin, requestUrl);
