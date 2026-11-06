@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="32b06d6055ed5987b5bd66364d928f439a0131c583fa1da0ccd3d5be310c41aa">
+  <meta name="tintin-page-revision" content="9b950f6edece7cee53e4ae9584c4dfc4e8481c8be86e08a10a9c4a32af30bba9">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -240,7 +240,10 @@
     .cat-variant-label { overflow-wrap: anywhere; min-width: 0; }
     .cat-variant-check { flex: 0 0 18px; width: 18px; height: 18px; border: 1px solid currentColor; border-radius: 4px; display: grid; place-items: center; }
     .cat-variant-option[aria-pressed="true"] { font-weight: 800; }
-    .cat-variant-option.is-unavailable { color: var(--color-text-secondary, #595959); }
+    html body.tt-catalog-maintenance .cat-variant-option.is-unavailable,
+    html body.tt-catalog-maintenance .cat-variant-option.is-unavailable :is(.cat-variant-label, .cat-variant-check, .cat-filter-count) { color: #4B5563 !important; }
+    .cat-variant-option.is-unavailable .cat-variant-check { background: #E5E7EB; }
+    .cat-variant-option.is-unavailable .cat-filter-count { color: inherit; }
     .cat-variant-option.is-unavailable .cat-variant-label { text-decoration: line-through; }
     .cat-variant-option:disabled { cursor: not-allowed; opacity: 1; }
     .cat-variant-option:focus-visible { outline: 2px solid var(--color-text-primary, #222222); outline-offset: -2px; }
