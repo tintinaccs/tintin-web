@@ -1,3 +1,9 @@
+## PR1348: corrección del inventario generado — 2026-11-06 — Codex /root
+
+PR1348 abierto por NOVAKPY, rama subida y permisos de escritura comprobados. Primer SHA736f4ff:CodeQL42206010438/1SUCCESS y previewCloudflareSUCCESS. CI42206013287/1falló en Reject generated artifact drift: CURRENT_STATE recibió actualizaciones después del generador; sus hashes/tamaño en diagnostic-manifest.json y site-version.json quedaron atrás. Se regenera desde la fuente canónica después de esta entrada y se verifica repetibilidad, sin tocar aserciones ni gates. No es un fallo de las correcciones de API/catálogo.
+
+PASS_LOCAL adicional: npm run test:rules-critical terminó con éxito usando el emulador demo local, incluidas las pruebas de reglas, transacciones, cuotas y proyección del índice. Nuevo commit requiere CI propia. Mantenimiento automático protegido: la validación confiable restringe PR a automaticMergeAuthorIds; NOVAKPY350569209 no figura en esa lista. No se altera el control ni se falsean Protected flow maintenance/integrity; su resultado remoto y el merge siguen pendientes. Seguimiento externo en /workspace/tintin-security-report/handoff.json y en el PR.
+
 ## Acceso de integración habilitado — 2026-11-06 — Codex /root
 
 La nueva política del entorno permite GitHub REST. La API confirmó push:true para NOVAKPY en tintinaccs/tintin-web. El bloqueo de acceso anterior quedó resuelto. Se conserva el commit probado40cbffa1376ef5b83979f1511c5812bbb685d2ee sobre main5c039e8d45c1a9df88025b2c8224e7d8a53e4e0c, sin cambios de implementación posteriores. PR/CI/merge IN_PROGRESS; sus números, SHA, intentos y conclusiones se registrarán en el PR y en /workspace/tintin-security-report/handoff.json. No se acreditará merge sin verificar los controles protegidos del SHA vigente. Sin deploy manual ni operaciones comerciales en producción.
