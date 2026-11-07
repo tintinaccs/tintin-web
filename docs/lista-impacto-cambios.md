@@ -1,3 +1,129 @@
+## Filtros de variantes reales del catálogo — 2026-11-06
+
+Autoridad: filtros-variantes.mjs consume la interpretación canónica de variantes e inventario. Catálogo deriva nombres/valores y material de productos públicos, cruza opciones de una misma combinación, usa OR dentro de cada atributo y AND entre atributos. Disponible primero; agotados legibles/grises/tachados al final, seleccionables sólo cuando no está habilitado Solo con stock. La opción seleccionada siempre puede quitarse. Reposición desde1 normaliza; eliminar la última referencia limpia opción/selección en el próximo snapshot. No se consulta una paleta prefijada ni se escribe inventario. Categorías, búsqueda, orden, paginación y fuente de actualización existentes se conservan. Verificar matrices V1/V2, sin matriz, bajas, teclado, móvil/tablet/escritorio y derivados CSP/caché/protección.
+
+## Cambio de colección vuelve arriba en Catálogo — 2026-11-06
+
+Autoridad: seleccionarCat en catalogo.html, invocada por la intención compartida de los botones de colecciones y limpiar filtros. Después de filtrar, vuelve al inicio del documento sin animación; centra las pestañas móviles solo en su eje horizontal para no desplazar verticalmente la página. Conserva búsqueda, orden, stock y semántica de replaceState; snapshots de productos y otros filtros no reinician el scroll. Verificar escritorio, tableta, móvil vertical/horizontal y movimiento reducido, con suficientes tarjetas para que el cambio de altura no oculte la regresión. CSP, diagnóstico y versión por generadores canónicos; sin paleta, diseño o datos comerciales nuevos.
+
+## Lectura acotada de solicitudes y herramientas de desarrollo — 2026-11-06
+
+Autoridad: functions/lib/operational-guard.js. Extiende el lector JSON existente con lectura de texto limitada por bytes antes de decodificar, cancela streams excedidos y conserva texto de webhooks firmado. Los 38 endpoints que materializaban texto/JSON usan esa autoridad con sus límites vigentes; campos JSON pequeños antes sin límite reciben un máximo de16KiB. No cambia autenticación, roles, reglas Firestore, firmas, pagos ni operaciones comerciales. Regresiones: lectura sin Content-Length o con valor falso, UTF-8 entre chunks, cancelación fallida, webhooks/OTP/pedidos sin efectos secundarios y dependencias reales de fixtures VM. Override glob14.0.4 elimina avisos de glob/minimatch de herramientas; se verifica Firebase CLI, archivador y búsqueda asíncrona. Sin cambios de interfaz. Diagnóstico/versiones y huellas/plan protegidos se regeneran con sus fuentes canónicas; preservar gates y esperar CI del SHA final antes del merge.
+
+## Fondos públicos con ambos bordes difuminados — 2026-11-05
+
+Autoridades: sistema-superficies-tintin.css, alternancia-secciones.js, hero-bienvenida-inicio.css y novak-credit-site.css; consumidores de primer render en ajuste-inicio.css y edicion-editorial-inicio.css. Secciones del cliente, hero y pie vuelven al mismo lienzo en sus dos extremos; colores y degradados publicados se conservan en una única capa de fondo. Textos, productos, acciones, tamaños y panel administrativo intactos. Verificar primer render/runtime, fondos personalizados, ancho pintable, uniones del pie y primer viewport; PNG original sin cambios. Derivados y URLs por generadores canónicos, sin dependencias ni cambios de protección.
+
+## Hero completo en el primer viewport — 2026-11-05
+
+Autoridad hero-bienvenida-inicio.css y marcado index.html. Logo proporcional menor, alto útil descontando navegación, adaptación vertical/horizontal y escalas por ancho/alto. Preserva fuente rosa/CTA corregidos en1331 y barra móvil retirada en1332. Retira CSS anterior del hero en styles.css, ajuste, mantenimiento y paridad; pie/mode edición actuales intactos. Verificar imagen original contain por píxeles, primer viewport320×568/568×320/844×390/1306×630 y hasta1920×1080, foco44px, editor/lineas heredadas, PNG único por request, tipografía, navegación global y generadores canónicos. Sin datos comerciales, permisos, dependencias ni cambios de comprobaciones protegidas.
+
+## 2026-11-04 — Instagram con fotos, carruseles y videos
+
+Fuentes: functions/api/instagram-feed.js, js/components/social/instagram-tintin.js, css/components/social/instagram-tintin.css, bloque #instagram de index.html y etiquetas de caché en index.html/about.html. El endpoint pide media_url y thumbnail_url, devuelve hasta 12 publicaciones recientes (IMAGE, CAROUSEL_ALBUM, VIDEO) con host de imagen validado y clave de caché nueva; registra sólo estado/tipo de error. Fotos y carruseles abren Instagram en pestaña nueva; el video conserva el reproductor. Grilla 2/3/4 columnas con tarjetas cuadradas y estado vacío con "Ir a Instagram". Corrige además texto oscuro ilegible sobre el degradado, preexistente en main por reglas !important del tema (se resuelve sólo dentro del componente). No cambia CSP, seguridad, autenticación, tokens de diseño ni otras secciones; sin dependencias nuevas. Se regeneran CSS generado, diagnóstico, versión y línea base de caché con las herramientas. Lectura adaptada al inicio de sesión unificado de Meta (graph.facebook.com v27.0, token en encabezado Authorization); la renovación a 60 días de la API anterior no aplica y la caducidad del token queda documentada en docs/configuracion-instagram.md (sin secretos).
+
+## 2026-11-04 — Seguimiento de los controles del hero original
+
+Autoridades index.html y definiciones-contenido.js conservadas. Pruebas de precarga PNG responsive, superficie pintable descontando gutter reservado y fallback editorial se concilian con el hero solicitado; conservan tolerancias, descarga única y concordancia con esquema. Imagen original, marca plana, navegación y comercio conservados. Diagnóstico/caché/protección mediante generadores existentes; CI y publicación exigen recibos del SHA final.
+
+## Paridad CSS con carga estable — 2026-11-04
+
+Solo fixture tests/ui-ux/home-styles-bundle.spec.js: conserva defer/versionado canónico de logotipo-marca.js, entrega fotos después de estilos completos, espera fuentes después de liberar fotos (WebKit) y verifica logo realmente pintado y estable. Sin cambios de diseño o posiciones, sin tolerancia ampliada, conserva ruta real de recuperación. Verificar seis tamaños Chromium156/WebKit y regresión1920px; generadores/preflight sin deriva.
+
+## Marca blanca y halo rosa — 2026-11-04
+
+Aclaración final: misma marca blanca original y un halo rosa CSS estático como tercera capa del fondo; bordes top/bottom conservados. Texto secundario oscuro con contraste sobre el halo. Quitar PNG rosa/exportador rechazados; nuevas URLs CSS y todos los derivados. Verificar16tamaños, lectura, movimiento reducido, original/bundle/fallback y cadena completa.
+
+## Hero: continuidad, cadena y contraste — 2026-11-04
+
+Autoridad CSS única hero-bienvenida-inicio.css, marcado index.html y recorte necklace.webp. Gradientes de borde en pseudo-elemento no interactivo bajo accesorios/marca; colores de superficie compartidos con índice contiguo. Producto real Olyra sustituye Yséla, enlace/alt/procedencia juntos. Marca mantiene fuente y alfa con tinta rosa profunda para contraste. Verificar ambos bordes, contraste, recorte de producto incluso al desplazar, foco y geometría en16tamaños/2motores. Nuevas URLs CSS/imagen y derivados generados, sin cambios de datos.
+
+## Favicon original circular — 2026-11-04
+
+Autoridad: scripts/generar-iconos-admin.mjs y PNG original assets-tintin/images/general/logo.png, intacto. Cambia solo la rama de exportación favicon (círculo blanco, rosa plano vigente, una pasada), cinco archivos favicon y URLs de18documentos. Apple/apps/push permanecen iguales. Verificar alfa exterior, círculo blanco, silueta/cuerpo, PNG16/32 e ICO multientrada y rutas/versiones; regenerar shells/diagnóstico/protección.
+
+## 2026-11-04 — Control de animación del hero
+
+Autoridades: hero-bienvenida-inicio.css, inicio-premium.js e index.html. Control sin recuadro ni bezel nativo, icono18px con objetivo44×44 y foco; pausa/reanudar actualiza icono y nombre. Mismo comportamiento de movimiento reducido y parada fuera de vista. Prueba la apariencia y accesibilidad en16composiciones, incluidos teléfono horizontal y escritorio2560px; clic con barra móvil/WhatsApp activos. Derivados, caché y protección mediante generadores vigentes. Sin cambios de negocio, assets de marca ni dependencias del sitio.
+
+## 2026-11-03 — Marca editorial de Inicio y movimiento compartido
+
+Autoridades: index.html, hero-bienvenida-inicio.css, inicio-premium.js, imágenes/definiciones de contenido y revelado-desplazamiento-global. Se sustituyen composiciones anteriores por una sola, con texto/enlaces HTML y recortes independientes. El fondo mantiene su editor por dispositivo; versión4 no borra configuraciones guardadas. Índice de colecciones comparte publicación con carrusel; no consulta adicional. Revelado por bloques y cancelación de movimiento reducido alcanzan las páginas públicas; rutas transaccionales mantienen lectura estática. Pie NOVAK y navegación existentes conservados. Pruebas de geometría, decodificación, personalización, fallback, pausa, teclado/formularios, producto y responsive público; derivados/caché/CSP/protección por generadores vigentes. Sin negocio, permisos, Rules, datos reales ni dependencias nuevos.
+
+## 2026-11-02 — Cancelación/rechazo con elección explícita de stock
+
+Autoridades: modelo-inventario y order-admin-domain; cliente de integridad
+compartido por transiciones y los dos editores. Selector nativo pide devolver o
+conservar unidades ya descontadas; volver no muta. Auditoría y actor/fecha con
+CAS, sin cobro/reembolso implícito. Reaperturas y ediciones posteriores preservan
+el descuento elegido; rechazo comparte la guarda para no saltar la decisión.
+El borrado de compatibilidad delega en la papelera canónica, conservando allí la
+selección por línea. Se retiran escritor duplicado y guardas estáticas obsoletas.
+Importaciones/revisión de reservas usan la misma lectura de reserved, incluso
+cancelado. URLs, loader y derivados con fuentes/generadores existentes. Clientes
+viejos y edición de estado desde Sheets sin elección fallan sin escribir; no se
+inventa una opción silenciosa. Regresiones cliente/dominio/V1/V2/CAS, browser a
+tres anchos y tokens oscuros, integración Firestore demo en gates existentes.
+
+## 2026-11-02 — Fase09: aceptación integral y pendientes consolidados
+
+## 2026-11-02 — Efectivo en retiro y copy de reparto
+
+Autoridades: politica-checkout-publico, pedido-checkout-seguro, nucleo-metodos-pago,
+checkout-metodos-pago y fallback de checkout.html. Configuración habilitada sigue
+mandando; encomienda no admite efectivo. Fallbacks de contenido, FAQ y Envíos
+reflejan reparto lunes–sábado y retiro con efectivo. No hay cambio visual ni de
+credenciales. Importadores/URLs transitivas y shell mediante fuentes y generadores;
+regresión de servidor y fixtures existentes de checkout a tres anchos. Las demás
+decisiones comerciales permanecen en su bloque de implementación propio.
+
+## 2026-11-02 — Resumen de cuentas sin recorte global ni publicación atrasada
+
+Autoridades: sincronizacion-estadisticas-pedido y transporte REST Firebase existente.
+Consultas de igualdad paginadas por identidad con readTime compartido y deduplicación;
+publicación mediante batch canónico con precondición de la cuenta anterior al cálculo.
+Consumidores: creación/cambios de pedido, controles comerciales y webhook Sheets.
+Preserva campos y significado del resumen, fuentes orders/users, roles y side effects.
+Pruebas en sync/admin existentes, sin colecciones, Rules ni nuevas dependencias.
+Las decisiones comerciales de la titular se registran separadas de su implementación.
+
+Preserva y valida08. Estadísticas usan query por identidad, cursor con guardia de truncamiento y CAS de perfil; cambios concurrentes se recalculan. Fallback manual es informativo, autónomo y no ofrece comercio sin Functions. Se retira branch/helper muerto del bridge, alineando contratos; extractor canónico AST excluye texto de auditorías/strings/comentarios. Firebase CLI actualizado en rango;14moderadas siguen abiertas. Acorn sólo desarrollo para diagnóstico. Sin datos reales, migraciones ni deployment de Rules/WebApp/fallback. Matriz, evidencias, límites y relevo en TINTIN_PHASE09_ACCEPTANCE y CURRENT_STATE. Rutas/CSP/caché/diagnóstico/protección derivados por autoridades existentes.
+
+## 2026-11-02 — Fase07: autoridad de metadata de reserva
+
+staffOrderInventoryTransitionValid rechaza inventory* aislado y exige permiso cambiarEstado para transición coherente existente. Conserva Super Admin, pagos sin metadata y escritores canónicos. Regresiones reales SDK para roles, permisos deshabilitados y revisión falsa; pruebas de backend/colas/webhooks/backup aisladas. Sin cambio de modelo, caché cliente, credenciales ni datos reales. Rules sólo candidato: deployment explícitamente separado. Informe07 y CURRENT_STATE conservan límites.
+
+## 2026-11-02 — Fase06: campana y continuidad de cuenta
+
+Autoridad existente notificaciones-clientes: consultas paginadas de100 compatibles con Rules, cursores reactivos y callbacks invalidados; restauración BFCache sin repetir eventos; navegación vinculada al UID original. Sin cambios de permisos ni presentación móvil. Pruebas de cuentas/admin/notificaciones y derivados canónicos. Informe y límites en TINTIN_PHASE06_ACCOUNTS_ADMIN.
+
+## 2026-11-02 — Fase05: integridad del recorrido comercial
+
+Catálogo de pagos explícito autoritativo en cliente/servidor; callbacks de configuración obsoletos descartados. Tarifas reales sin overrides ni defaults inventados, retiro y configuraciones parciales coherentes. Confirmación exige respuesta completa, cierra intento y consume sólo el snapshot comprado en el escritor existente, preservando compras concurrentes/cuenta. Back/BFCache/recarga completada vuelven a inicio. Texto de logística describe productos y costos reales/pendientes. Dispatcher Apps Script rechaza creador público legacy; su WebApp desplegado requiere actualización externa. Sin colecciones, dependencias, sincronización paralela ni datos productivos nuevos. Regresiones en suites CI existentes; derivados/protección canónicos. Evidencia y reservas en TINTIN_PHASE05_COMMERCE y CURRENT_STATE.
+
+## 2026-11-01 — Fase03: editor conectado y conservación de edición
+
+Autoridades: interfaz-productos-adaptable, controles-editor-producto, galeria-unificada y CSS comercial. La sección de inventario original acompaña fotos/opciones o Precio y stock según el paso, con la misma matriz y serializer. Visor modal accesible, línea final de descripción visible y explicación antes de quitar opciones con fotos. Anchos derivados del contenedor, costo/permisos y referencias V1/V2 preservados. Consumidores transitorios renuevan URLs; CSP/caché/diagnóstico/protección por constructores. Pruebas en suites CI existentes, sin módulos, dependencias, Rules, modelos ni datos reales nuevos. Evidencia y límites en PHASE03_ADMIN_PRODUCT_EDITOR y CURRENT_STATE.
+
+## 2026-11-01 — Carga del Admin por sección
+
+Entrada principal /admin y /admin.html: diferir Correos, Diagnóstico, Páginas y editor visual hasta abrirlos. El cargador conserva navegación, muestra estado y reintento, comparte descargas y vuelve a comprobar acceso antes de inicializar; sesiones, controles de seguridad y contratos comerciales se conservan. CI incluye la regresión de carga y permisos del cargador junto a las pruebas existentes de Correos.
+
+## 2026-11-01 — Presentación móvil visible de la interfaz administrativa
+
+Autoridades: dashboard-control.css y workspace compartido existentes; mismo
+Inicio, navegación, tarjetas, formularios y acciones. Superficies de la paleta
+vigente, cabecera compacta y opaca sólo en teléfono, métricas/accesos más densos
+y búsqueda de módulo compacta. Header usa ID estable para superar la cascada
+compartida con :is de IDs. Auth-ready sólo reevalúa el workspace activo, sin
+lecturas ni cambios de sesión. Misma presentación amplia; contraste con capturas
+y geometría real. Pruebas del header distinguen teléfono de tablet/escritorio;
+derivados y URLs mediante constructores. Sin backend, permisos ni datos nuevos.
+
+## 2026-11-01 — Cascada del menú de Usuarios
+
+Autoridad: espacio-modulos-admin.css. Una regla anterior de mayor especificidad estiraba el menú contextual; la regla nueva cubre la misma jerarquía de tabla/fila/celda y recupera44px. Tests comprueban geometría y carga automática desde cargador-pagina/UI Quality para /admin y /admin.html, con Firebase/negocio aislados. Sin cambios de datos, roles, backend ni diseño de escritorio; URLs/diagnóstico/protección mediante generadores canónicos.
+
 ## 2026-11-01 — Legibilidad de Usuarios y menú móvil
 
 Workspace y helpers de Usuarios existentes: correo completo a todo el ancho, menú con botones originales y datos adicionales desplegables; selección global accesible y campos cortos agrupados. Se conserva #1294, sus rutas/PWA/visor y lectores/escritores. Ficha mantiene foto/cabecera y reconstruye pestañas al reabrir. Misma tabla en tablet/escritorio, tokens existentes, sin backend/Rules/datos/permisos nuevos. URLs transitivas y derivados por generadores canónicos; pruebas en el gate responsive existente y seguimiento por SHA/PR.
@@ -966,3 +1092,15 @@ Validador, API de disponibilidad y reserva reciben dígitos con el normalizador
 existente; no cambian autenticación, unicidad, contratos de otros formularios
 ni Rules. Regresiones nuevas en el spec canónico del registro de Comercio.
 CSP, diagnóstico y protección se regeneran desde constructores existentes.
+
+## 2026-11-02 — Fase 04 catálogo: publicación, imágenes y precio
+
+Autoridades: product-editor-domain, política de checkout público y controlador
+administrativo existentes. Estado de botón/tarjeta/lote V1/V2 converge en API
+comercial con fingerprint/CAS/estado editorial y controles de publicación;
+permisos de acción individual y lote conservados. Patch canónico actualiza
+aliases multimedia existentes para evitar fotos retiradas. Checkout comparte
+validador comercial de precios. Sin nuevas colas, migraciones, Rules ni datos
+reales. Regresiones en suites canónicas admin/checkout, documentación y límites
+en TINTIN_PHASE04_CATALOG y CURRENT_STATE. Caché/CSP/diagnóstico/protección se
+generan con herramientas existentes; CI/merge bloqueados por conexión GitHub.

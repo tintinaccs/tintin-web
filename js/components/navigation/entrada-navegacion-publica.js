@@ -1,5 +1,3 @@
-import { renderMobileBrandHeader, initMobileBrandHeader } from './movil/marca-movil.js?v=tintin-20261019-mobile-brand-2';
-import { logoUrl } from './compartido/configuracion.js?v=tintin-20261010-whatsapp-release-5';
 import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20261029-performance-1';
 import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20261029-performance-1';
 import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20261029-performance-1';
@@ -9,11 +7,11 @@ import { renderAccountDrawer } from './compartido/panel-cuenta.js?v=tintin-20261
 import { renderCollectionsSheet } from './compartido/panel-colecciones.js?v=tintin-20261029-performance-1';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js?v=tintin-20260916-final-production-stability-surface-layer-1';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20261030-maestro-1';
+import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20261030-maestro-1-p1106';
 import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261107-sin-favoritos-1';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js?v=tintin-20260916-final-production-stability-registry-1';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20261016-footer-gradient-layout-1';
-import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20261027-global-fluidez-3';
+import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20261027-global-fluidez-3-p1106';
 
 const LEGACY_SHELL_IDS = Object.freeze([
   'tt-mobile-brand',
@@ -61,7 +59,7 @@ function bootGlobalUiUx() {
     document.head.appendChild(link);
   }
   if (!window.TintinUX?.booted) {
-    import('../../quality/experiencia-interfaz.js?v=tintin-20261031-revision-ux-1')
+    import('../../quality/experiencia-interfaz.js?v=tintin-20261031-revision-ux-1-p1106')
       .catch(error => console.warn('[PublicShell] No se pudo iniciar la capa UI global.', error));
   }
 }
@@ -72,7 +70,6 @@ function removeLegacyShell(root = document) {
 
 function renderTopShell() {
   return [
-    renderMobileBrandHeader(window.location.pathname, logoUrl()),
     renderDesktopHeader(),
     renderTabletHeader(),
     renderSearchPanel(),
@@ -253,7 +250,6 @@ function mountPublicShell() {
     document.body.classList.add('tt-public-shell-mounted');
     document.body.classList.toggle('tt-public-shell-home', currentPage() === 'home');
 
-    initMobileBrandHeader();
     applyActiveState();
     enhanceMobileFooter();
     await registerNavigationSurfaces();

@@ -24,6 +24,8 @@ export function orderContactLinks(order, orderId) {
   const observation = partial ? 'Pago parcial registrado. Confirmar saldo pendiente y acreditación antes de despachar. Confirmar ubicación.' : cash && !paid ? 'Paga al recibir, consultar si tiene para vuelto y ubicación para confirmar.' : paid ? 'Pedido pagado. Confirmar ubicación antes de entregar.' : transfer ? 'Pago por transferencia: confirmar acreditación antes de despachar. Confirmar ubicación.' : 'Pago pendiente: verificar el método y la acreditación antes de despachar. Confirmar ubicación.';
   const money = value => Number.isFinite(Number(value)) && value !== undefined && value !== null && value !== ''
     ? `${Number(value).toLocaleString('es-PY')} Gs` : 'No registrado';
+  const shippingPending = order.shippingPending === true || shipping.pending === true;
+  const shippingLabel = method === 'encomienda' ? 'Se paga a la transportadora al recibir; no incluido' : shippingPending ? 'A confirmar' : money(order.shippingCost ?? shipping.cost);
   const paymentState = clean(order.paymentStatus || order.payment?.status).toLowerCase();
   const paymentLabels = {pendiente:'Pendiente',pending:'Pendiente',pagado:'Pago verificado',paid:'Pago verificado',approved:'Pago verificado',completed:'Pago verificado',parcial:'Pago parcial',señado:'Pago parcial',rechazado:'Rechazado',cancelado:'Cancelado',refunded:'Reembolsado',reembolsado:'Reembolsado'};
 
@@ -44,11 +46,11 @@ export function orderContactLinks(order, orderId) {
     `Dirección: ${clean(shipping.address || order.address)}`,
     `Productos:\n${items.length ? items.join('\n') : 'Sin detalle registrado'}`,
     `Subtotal: ${money(order.subtotal)}`,
-    `Costo de envío: ${money(order.shippingCost ?? shipping.cost)}`,
-    `Total: ${money(order.total)}`,
+    `Costo de envío: ${shippingLabel}`,
+    `Total: ${money(order.total)}${shippingPending ? ' + envío a confirmar' : ''}`,
     `Método de pago: ${cash ? 'Efectivo contra entrega' : clean(order.paymentMethod || order.payment?.method) === 'transferencia' ? 'Transferencia bancaria' : clean(order.paymentMethod || order.payment?.method) || 'No registrado'}`,
     `Estado del pago: ${paymentLabels[paymentState] || paymentState || 'No registrado'}`,
-    ...(cash && !paid ? [`Monto a cobrar: ${partial ? 'A confirmar (pago parcial)' : money(amount)}`] : []),
+    ...(cash && !paid ? [`Monto a cobrar: ${partial ? 'A confirmar (pago parcial)' : shippingPending ? 'A confirmar (envío pendiente)' : money(amount)}`] : []),
     `Observación: ${observation}${shipping.referencia ? ` Referencia: ${clean(shipping.referencia)}.` : ''}${order.notes ? ` ${clean(order.notes)}` : ''}`,
   ].join('\n');
   return {map,customer,dispatch: method === 'delivery' ? `https://wa.me/${FITO_WHATSAPP}?text=${encodeURIComponent(dispatchMessage)}` : '',dispatchMessage};

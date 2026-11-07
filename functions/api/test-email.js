@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
@@ -108,7 +109,7 @@ export async function onRequest(context) {
     if (!apiKey) {
       return jsonResponse({ success: false, error: 'El servicio de correo no está configurado' }, 503, origin, requestUrl);
     }
-    const rawBody = await request.text();
+    const rawBody = await readLimitedText(request, 4000);
     if (rawBody.length > 4000) throw new Error('Solicitud demasiado grande');
     const body = JSON.parse(rawBody || '{}');
     const toEmail = clean(body.toEmail, 254).toLowerCase();

@@ -101,6 +101,47 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
   font-size: 13px;
 }
 
+.ck-payment-runtime-value {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ck-payment-runtime-value > span:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ck-payment-copy {
+  flex: 0 0 auto;
+  min-width: 76px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1.5px solid var(--ck-accent, var(--acc));
+  border-radius: 999px;
+  background: var(--ck-accent-soft, var(--acc-pale));
+  color: var(--ck-accent, var(--acc));
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.ck-payment-copy:hover,
+.ck-payment-copy.is-copied {
+  background: var(--ck-accent, var(--acc));
+  color: #fff;
+}
+
+.ck-payment-copy:focus-visible {
+  outline: 2px solid var(--ck-accent, var(--acc));
+  outline-offset: 2px;
+}
+
 .ck-payment-runtime-detail:first-child {
   border-top: 0;
 }
@@ -196,7 +237,7 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 }
 
 .tt-payment-admin-badge.is-disabled {
-  background: #fce8ee;
+  background: #FDECF2;
   color:var(--color-text-primary,#222222);
 }
 
@@ -288,6 +329,9 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 }
 
 @media (max-width: 320px) {
+  .ck-payment-runtime-details { padding: 12px; }
+  .ck-payment-runtime-value { gap: 8px; }
+  .ck-payment-copy { min-width: 68px; padding: 0 10px; }
   .ck-payment-runtime-item .ck-pay-label { padding: 12px 44px 12px 12px; gap: 9px; min-height: 84px; }
   .ck-payment-runtime-item .ck-pay-label::after { top: 50%; right: 10px; }
   .ck-payment-runtime-copy { padding-right: 28px; }

@@ -1,5 +1,5 @@
-import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20261021-identidad-1';
-import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20261031-seo-espacios-2';
+import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-suitcase-20261104-1';
+import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-suitcase-20261104-1-p1106';
 
 const VISUAL_SETTLE_CEILING_MS = 3500;
 

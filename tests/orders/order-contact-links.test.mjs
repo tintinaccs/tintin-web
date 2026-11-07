@@ -69,3 +69,13 @@ test('transferencia no solicita cobro en efectivo y conserva observaciones sin a
   assert.doesNotMatch(next.dispatchMessage,/Llamar al llegar|Reloj Alessia/);
   assert.equal(new URL(transfer.dispatch).searchParams.get('text'),transfer.dispatchMessage);
 });
+
+test('el envío por confirmar no se describe como gratis ni inventa un monto final a cobrar',()=>{
+ const pending=orderContactLinks({...order,shippingPending:true,shippingCost:0},'fixture-pending-shipping');
+ assert.match(pending.dispatchMessage,/Costo de envío: A confirmar/);
+ assert.match(pending.dispatchMessage,/Monto a cobrar: A confirmar \(envío pendiente\)/);
+ assert.doesNotMatch(pending.dispatchMessage,/Costo de envío: 0|Monto a cobrar: 95/);
+ const free=orderContactLinks({...order,shippingPending:false,shippingCost:0},'fixture-free-shipping');
+ assert.match(free.dispatchMessage,/Costo de envío: 0 Gs/);
+ assert.equal(new URL(pending.dispatch).searchParams.get('text'),pending.dispatchMessage);
+});

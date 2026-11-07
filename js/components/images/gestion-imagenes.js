@@ -6,7 +6,7 @@
    de colecciones en collections/{slug}.image.
    ============================================================= */
 
-import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261030-home-history-5';
+import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-suitcase-20261104-1';
 import { createSafeImage, sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 
 if (!window.TintinImagesPhase5Booted) {
@@ -21,7 +21,7 @@ if (!window.TintinImagesPhase5Booted) {
   // /assets-tintin/images/* se sirve con caché inmutable (un año): cuando cambia
   // el arte del hero tiene que cambiar su URL. Mismo tag que los <source> de
   // index.html.
-  const HERO_ART_QUERY = '?v=tintin-20261019-hero-centered-1';
+  const HERO_ART_QUERY = '?v=suitcase-1';
   const STATIC = Object.freeze({
     logo: '/assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1',
     placeholder: 'assets-tintin/images/general/placeholder-section.webp',
@@ -32,10 +32,10 @@ if (!window.TintinImagesPhase5Booted) {
       alt: 'Colección Bags Tintin',
     },
     edit_relojes: {
-      desktop: 'assets-tintin/images/home/editorial-relojes/relojes-original.jpg',
-      tablet: 'assets-tintin/images/home/editorial-relojes/relojes-original.jpg',
-      mobile: 'assets-tintin/images/home/editorial-relojes/relojes-original.jpg',
-      alt: 'Nueva colección de relojes Tintin',
+      desktop: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261105-1',
+      tablet: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261105-1',
+      mobile: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261105-1',
+      alt: 'Reloj, pulseras y anillos de la nueva colección Tintin',
     },
     about_foto: {
       desktop: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-original.jpeg',
@@ -320,7 +320,7 @@ if (!window.TintinImagesPhase5Booted) {
         // Un WebP disponible sigue siendo la URL principal. PNG es respaldo
         // para navegadores sin WebP o para un error real de carga.
         source.srcset = custom ? absolute(custom) : absolute(originalType === 'image/webp'
-          ? defaults[device].replace('.png' + HERO_ART_QUERY, '-lossless.webp?v=tintin-20261029-lossless-1') : defaults[device]);
+          ? defaults[device].replace('.png' + HERO_ART_QUERY, '.webp?v=editorial-1') : defaults[device]);
         if (custom || originalType === 'fallback') source.removeAttribute('type');
         else source.type = originalType;
       }

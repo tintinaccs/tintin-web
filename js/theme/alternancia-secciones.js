@@ -31,6 +31,7 @@
     const rects = list.map(node => node.getBoundingClientRect());
     const positions = list.map(node => getComputedStyle(node).position);
     const width = document.documentElement.clientWidth;
+    const publicSurface = !document.querySelector('.adm-main');
     // Sólo extender el fondo por espacio vacío: una navegación o texto entre
     // secciones debe permanecer visible aunque no forme parte de la secuencia.
     const gaps = list.slice(1).map((next, index) => {
@@ -54,15 +55,18 @@
       const after = gaps[index]?.after || 0;
       const customFooter = node.matches('.tt-footer') && document.documentElement.hasAttribute('data-tt-footer-bg-custom');
       const customVisual = node.style.getPropertyValue('--tt-visual-bg');
-      const customBackground = customFooter ? 'var(--tt-global-footer-bg)' : customVisual ? 'var(--tt-visual-bg)' : '';
+      const referenceHero = node.matches('#hero[data-tt-banner="suitcase-20261104"]');
+      const customBackground = referenceHero ? 'var(--tt-hero-background)' : customFooter ? 'var(--tt-global-footer-bg)' : customVisual ? 'var(--tt-visual-bg)' : '';
       set(node, '--tt-section-background', customBackground || (index % 2 ? 'var(--tt-flow-pink)' : 'var(--tt-flow-light)'));
-      set(node, '--tt-section-start', index ? 'var(--tt-flow-join)' : 'var(--tt-section-background)');
-      set(node, '--tt-section-end', index < list.length - 1 ? 'var(--tt-flow-join)' : 'var(--tt-section-background)');
+      set(node, '--tt-section-start', publicSurface ? 'var(--tt-flow-light)' : index ? 'var(--tt-flow-join)' : 'var(--tt-section-background)');
+      set(node, '--tt-section-end', publicSurface ? 'var(--tt-flow-light)' : index < list.length - 1 ? 'var(--tt-flow-join)' : 'var(--tt-section-background)');
       set(node, '--tt-flow-before', `${before}px`);
       set(node, '--tt-flow-after', `${after}px`);
       set(node, '--tt-flow-left', `${-rect.left}px`);
       set(node, '--tt-flow-width', `${width}px`);
-      set(node, 'background', customBackground || 'none', 'important');
+      // El fondo público se pinta una sola vez, en su capa con ambos bordes
+      // difuminados. El hero conserva su composición editorial independiente.
+      set(node, 'background', referenceHero || !publicSurface ? customBackground || 'none' : 'none', 'important');
       set(node, 'border-radius', '0px', 'important');
       set(node, 'box-shadow', 'none', 'important');
       set(node, 'border', '0px none', 'important');

@@ -111,7 +111,7 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
         expect(Math.abs(final.width - initial.width), url).toBeLessThanOrEqual(1);
         if (url === '/about.html') {
           const gap = await page.locator('.tt-page-hero .tt-section-sub').evaluate(label => {
-            const header = [...document.querySelectorAll('.tt-header-desktop, #tt-header-tablet, #tt-mobile-brand')]
+            const header = [...document.querySelectorAll('.tt-header-desktop, #tt-header-tablet')]
               .find(node => node.getBoundingClientRect().height > 0);
             return label.getBoundingClientRect().top - (header?.getBoundingClientRect().bottom || 0);
           });
@@ -132,12 +132,21 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
         expect(overflow, url).toBe(false);
         const surfaces = await page.evaluate(() => [...document.querySelectorAll('[data-tt-flow-block]')].map(node => {
           const layer = node.querySelector(':scope > [data-tt-flow-background]');
-          const rect = layer?.getBoundingClientRect();
-          return { tone: node.dataset.ttFlowBlock, left: rect?.left, width: rect?.width, viewport: document.documentElement.clientWidth };
+          // El hero tiene su propio degradado y oculta la capa duplicada.
+          // Medir la superficie pintada dentro del gutter reservado del documento.
+          const referenceHero = node.matches('#hero[data-tt-banner="suitcase-20261104"]');
+          const surface = referenceHero ? node : layer;
+          const rect = surface?.getBoundingClientRect();
+          return { referenceHero, background: surface && getComputedStyle(surface).backgroundImage, layerHidden: layer && getComputedStyle(layer).display === 'none', tone: node.dataset.ttFlowBlock, left: rect?.left, width: rect?.width, viewport: referenceHero ? document.documentElement.getBoundingClientRect().width : document.documentElement.clientWidth };
         }));
         expect(surfaces.length, url).toBeGreaterThan(0);
         surfaces.forEach((surface, index) => {
           expect(surface.tone, url).toBe(index % 2 ? 'pink' : 'light');
+          if (surface.referenceHero) {
+            expect(surface.layerHidden, url).toBe(true);
+            expect(surface.background, url).toContain('linear-gradient');
+            expect(surface.background, url).toContain('255, 181, 215');
+          }
           expect(Math.abs(surface.left), url).toBeLessThanOrEqual(1);
           expect(Math.abs(surface.width - surface.viewport), url).toBeLessThanOrEqual(1);
         });

@@ -27,7 +27,12 @@ function mount(root, id) {
   select.id = `tt-admin-jump-${id}`;
   label.htmlFor = select.id;
   label.append(select);
-  const search = create('button', 'adm-btn adm-btn-outline', 'Buscar registros');
+  const search = create('button', 'adm-btn adm-btn-outline tt-admin-workspace-search');
+  search.setAttribute('aria-label', 'Buscar registros');
+  search.title = 'Buscar registros';
+  const searchIcon = document.querySelector('.adm-search-icon svg')?.cloneNode(true);
+  if (searchIcon) { searchIcon.setAttribute('aria-hidden', 'true'); search.append(searchIcon); }
+  search.append(create('span', '', 'Buscar registros'));
   search.type = 'button';
   search.hidden = true;
   bar.append(title, label, search);
@@ -179,5 +184,14 @@ const sections = new MutationObserver(records => {
   }
 });
 for (const root of document.querySelectorAll('.adm-content')) sections.observe(root, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-selected'], attributeOldValue: true });
+// El guard revela el documento después de montar datos y sección inicial.
+// Volver a mejorar la sección visible aunque esa transición no cambie su DOM.
+let authReady = document.documentElement.classList.contains('adm-auth-ready');
+new MutationObserver(() => {
+  const ready = document.documentElement.classList.contains('adm-auth-ready');
+  if (ready === authReady) return;
+  authReady = ready;
+  if (ready) schedule(document.querySelector('.adm-content > .adm-section.active,[data-admin-workspace]'));
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 window.addEventListener('resize', schedule, { passive: true });
 schedule();

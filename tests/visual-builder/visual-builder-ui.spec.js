@@ -6,7 +6,7 @@ const root = path.resolve(__dirname, '../..');
 const admin = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'css/admin/editor-visual.css'), 'utf8');
 const start = admin.indexOf('<section class="visual-editor"');
-const end = admin.indexOf('<div class="adm-card" style="margin-bottom:20px">', start);
+const end = admin.indexOf('<div class="adm-card adm-u-mb-20">', start);
 const section = admin.slice(start, end);
 const html = `<!doctype html><html lang="es"><meta name="viewport" content="width=device-width"><style>:root{--adm-border:#eadde2;--adm-accent:#ad3f67;--adm-text:#30242a;--adm-muted:#766a70}.adm-btn{min-height:38px}.adm-input,.adm-select{box-sizing:border-box;width:100%;min-height:38px}${css}</style><body>${section}</body></html>`;
 

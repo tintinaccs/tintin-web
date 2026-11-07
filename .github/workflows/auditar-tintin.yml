@@ -32,10 +32,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
+      - name: Verify cloud agent Skills on Linux
+        run: |
+          python3 scripts/agent/check-cloud-skills.py
+          bash scripts/agent/bootstrap-cloud-linux.sh --prefix "$RUNNER_TEMP/tintin-agent-skills"
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: VALIDACIÓN RÁPIDA — PREFLIGHT
         run: npm run ci:preflight
       - name: Build exact public artifact
@@ -79,10 +83,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: Cache Playwright Chromium
         uses: actions/cache@v4
         with:
@@ -138,10 +142,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: Cache Playwright Chromium
         uses: actions/cache@v4
         with:
@@ -194,7 +198,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Setup Java for runtime emulators
         uses: actions/setup-java@v5
@@ -202,7 +206,7 @@ jobs:
           distribution: temurin
           java-version: '21'
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: Cache Playwright Chromium
         uses: actions/cache@v4
         with:
@@ -255,10 +259,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: Cache Playwright Chromium
         uses: actions/cache@v4
         with:
@@ -311,7 +315,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: Setup Java for Firestore emulator
         uses: actions/setup-java@v5
@@ -319,7 +323,7 @@ jobs:
           distribution: temurin
           java-version: '21'
       - name: Install locked dependencies once
-        run: npm ci
+        run: npm ci --engine-strict
       - name: B — Reglas e identidad aisladas
         run: npm run ci:rules
       - name: Save timings and failure evidence
@@ -357,7 +361,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
           cache: npm
       - name: E — Validación final obligatoria
         env:
@@ -376,6 +380,6 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: 'package.json'
       - name: Verify main baseline
         run: node scripts/auditar-proteccion-flujos.mjs

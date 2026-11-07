@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 // =============================================================
 // TINTIN — Módulo maestro de Web Push (sólo Super Admin)
 // =============================================================
@@ -49,7 +50,7 @@ export async function onRequest(context) {
     if (request.method === 'GET') {
       return jsonResponse({ success: true, devices: await listAdminDevices(env), settings: await readPushSettings(env), events: await listRecentEvents(env) }, 200, origin, requestUrl);
     }
-    const body = parseBody(await request.text());
+    const body = parseBody(await readLimitedText(request, MAX_BODY_BYTES));
     const action = cleanText(body.action, 20);
     if (!ALLOWED_ACTIONS.includes(action)) throw new Error('Acción no permitida.');
     if (action === 'list') return jsonResponse({ success: true, devices: await listAdminDevices(env), settings: await readPushSettings(env), events: await listRecentEvents(env) }, 200, origin, requestUrl);

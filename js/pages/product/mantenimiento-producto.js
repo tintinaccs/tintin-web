@@ -61,7 +61,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     if (document.querySelector('link[data-tt-product-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../../../css/pages/product/product-maintenance.css?v=tintin-20261031-galeria-sticky-1', import.meta.url).href;
+    link.href = new URL('../../../css/pages/product/product-maintenance.css?v=tintin-20261102-public-focus-scroll-1-p1106', import.meta.url).href;
     link.dataset.ttProductMaintenance = '1';
     document.head.appendChild(link);
   }
@@ -209,10 +209,6 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     if (twImage && /github\.io/.test(twImage.content || '')) twImage.content = fallback;
   }
 
-  function normalizeFooterYear() {
-    const node = document.querySelector('.tt-footer-bottom');
-    if (node) node.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
-  }
 
   function installObservers() {
     const observer = new MutationObserver(queueInspect);
@@ -266,7 +262,6 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     appendStylesheet();
     body?.classList.add('tt-product-maintenance');
     normalizeGenericMetadata();
-    normalizeFooterYear();
     ensureSyncNode();
     installObservers();
     inspectAll();

@@ -1,3 +1,4 @@
+import { readLimitedJson } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   cleanMediaId,
   cleanVariant,
@@ -26,7 +27,7 @@ export async function onRequest(context) {
 
   try {
     await requireSuperAdmin(request, env);
-    const body = await request.json();
+    const body = await readLimitedJson(request, 16 * 1024);
     const mediaId = cleanMediaId(body?.mediaId);
     const variant = cleanVariant(body?.variant);
     const { cloudName, apiKey, apiSecret } = getCloudinaryConfig(env);

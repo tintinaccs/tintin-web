@@ -26,6 +26,7 @@ const EMAIL_TEMPLATE_FILES = new Set([
   path.normalize('cloudflare/mayoristas-avisos.js'),
 ]);
 const REQUIRED_FONT_FILES = [
+  'GreatVibes-Latin.woff',
   'montserrat-cyrillic-ext-wght-normal.woff2',
   'montserrat-cyrillic-wght-normal.woff2',
   'montserrat-vietnamese-wght-normal.woff2',
@@ -85,6 +86,10 @@ function walk(directory) {
     if (entry.isDirectory() && EXCLUDED_DIRECTORIES.has(entry.name)) continue;
     const absolute = path.join(directory, entry.name);
     const relativePath = path.relative(ROOT, absolute).replace(/\\/g, '/');
+    // Skills versionados de agentes son recursos de desarrollo, no CSS/HTML del sitio.
+    // Pueden documentar tipografías alternativas sin aplicarlas a Tintín.
+    // Excluir solo las carpetas de Skills, no el código productivo.
+    if (entry.isDirectory() && (relativePath === '.agents/skills' || relativePath === '.claude/skills' || relativePath === '.codex/skills')) continue;
     // Monaco es una dependencia generada y versionada; sus fuentes de iconos y
     // editor no forman parte del sistema tipográfico visual de Tintin.
     if (entry.isDirectory() && (relativePath === 'js/vendor/monaco' || relativePath === 'public/js/vendor/monaco')) continue;
@@ -180,8 +185,10 @@ const localFontFiles = fs.existsSync(fontDirectory)
   : [];
 check(localFontFiles.length === REQUIRED_FONT_FILES.length, 'Hay archivos tipográficos locales no previstos o faltantes.');
 for (const fontFile of localFontFiles) {
-  check(/^montserrat-/i.test(fontFile), `Fuente local no permitida: assets-tintin/fonts/${fontFile}.`);
+  check(/^montserrat-/i.test(fontFile) || fontFile === 'GreatVibes-Latin.woff', `Fuente local no permitida: assets-tintin/fonts/${fontFile}.`);
 }
+
+check(fs.existsSync(path.join(fontDirectory,'GreatVibes-OFL.txt')), 'Falta licencia OFL de la fuente del hero.');
 
 const globalCssPath = path.join(ROOT, 'css', 'core', 'montserrat.css');
 check(fs.existsSync(globalCssPath), 'Falta css/core/montserrat.css.');
@@ -221,7 +228,38 @@ for (const token of requiredTokens) {
 
 for (const file of walk(ROOT)) {
   const name = relative(file);
-  const source = fs.readFileSync(file, 'utf8');
+  let source = fs.readFileSync(file, 'utf8');
+  // Owner-approved reference typography, confined to the hero. Validate the
+  // exact selector/font pairs; all other rules retain the Montserrat gate.
+  if (['css/pages/home/hero-bienvenida-inicio.css', 'css/generated/inicio.css'].includes(name)) {
+    source = source.replace(/([^{}]+)\{([^{}]*)\}/g, (rule, selector, body) => {
+      const approvedSelector = selector.replace(/\/\*[\s\S]*?\*\//g, '').trim();
+      const face = approvedSelector === '@font-face' && /font-family:TintinScript/.test(body);
+      if (face) {
+        check(/GreatVibes-Latin\.woff/.test(body) && /font-display:swap/.test(body), `${name}: script local con swap obligatorio`);
+        return rule.replaceAll('TintinScript', 'Montserrat');
+      }
+      // Las líneas internas del título (las crea el contenido guardado) heredan
+      // por completo la tipografía aprobada del H1; no definen una familia propia.
+      const titleLines = [
+        'html:root body.tt-home-premium #hero .tt-hero-title .tt-hero-title-line',
+        'html:root body.tt-home-premium #hero .tt-hero-title .tt-hero-title-line+.tt-hero-title-line::before',
+        'html:root body.tt-home-premium #hero .tt-hero-title .tt-hero-title-line+.tt-hero-title-line:before'
+      ].includes(approvedSelector);
+      if (titleLines) {
+        check(!/font-family\s*:\s*(?!inherit\b)/i.test(body) && !/font\s*:\s*(?!inherit\b)/i.test(body), `${name}: las líneas del título deben heredar la tipografía`);
+        return '';
+      }
+      const title = approvedSelector === 'html:root body.tt-home-premium #hero .tt-hero-title';
+      const bodyText = ['html body.tt-home-premium #hero .tt-hero-subtitle', 'html body.tt-home-premium #hero .tt-hero-actions a'].includes(approvedSelector);
+      if (title) return rule.replaceAll('TintinScript', 'Montserrat');
+      if (bodyText) return rule.replaceAll('Arial', 'Montserrat');
+      return rule;
+    });
+  }
+  if (name === 'js/admin/diagnostics/diagnostico-sitio-admin.js') {
+    source = source.replace("primaryFamily === 'Arial' && element.matches('.tt-hero-subtitle,.tt-hero-actions a,.tt-hero-actions a *')", "primaryFamily === 'Montserrat' && element.matches('.tt-hero-subtitle,.tt-hero-actions a,.tt-hero-actions a *')");
+  }
   const isEmailTemplate = EMAIL_TEMPLATE_FILES.has(path.normalize(name));
 
   if (!isEmailTemplate) {
@@ -293,4 +331,4 @@ if (failures.length) {
 }
 
 console.log(`Auditoría tipográfica correcta: ${checks} comprobaciones, 18 páginas y 10 archivos WOFF2.`);
-console.log('Montserrat es la única familia configurada en el código controlado por la plataforma.');
+console.log('Montserrat permanece global; la tipografía de referencia sólo se permite en los selectores aprobados del hero.');

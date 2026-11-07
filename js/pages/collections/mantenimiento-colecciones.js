@@ -70,10 +70,6 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
     document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', image);
   }
 
-  function normalizeFooterYear() {
-    const node = document.querySelector('.tt-footer-bottom');
-    if (node) node.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
-  }
 
   function releasePage() {
     body?.classList.add('tt-collections-runtime-ready');
@@ -173,7 +169,6 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
   function boot() {
     body?.classList.add('tt-collections-page');
     normalizeMetadata();
-    normalizeFooterYear();
     ensureSyncNode();
     installObservers();
     inspectAll();

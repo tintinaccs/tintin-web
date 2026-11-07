@@ -66,11 +66,9 @@ const publicFiles = [
   ...fs.readdirSync(root).filter(name => name.endsWith('.html') || name === 'tienda.js' || name === 'firebase-messaging-sw.js').map(name => path.join(root, name)),
 ];
 
-// El checkout histórico necesita todavía el proceso privilegiado de Apps Script
-// para la transacción de stock/pedido. Ya no se permite que esa dependencia sea
-// una salida de red directa del navegador: integration-router.js intercepta el
-// único deployment heredado y lo envía a /api/apps-script-bridge. Cualquier URL
-// de Apps Script en otro archivo público vuelve a ser un error.
+// Cloudflare crea el pedido y reserva inventario en su dominio canónico.
+// La única URL heredada pública es un adaptador de integración; nunca autoriza
+// volver a delegar la creación en Apps Script.
 const directAppsScript = publicFiles
   .filter(file => fs.readFileSync(file, 'utf8').includes('script.google.com/macros/s/'))
   .map(file => path.relative(root, file).split(path.sep).join('/'));

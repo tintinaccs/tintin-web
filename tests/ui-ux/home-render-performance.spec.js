@@ -1,18 +1,25 @@
 const { test, expect } = require('@playwright/test');
+const path = require('node:path');
 const fs = require('node:fs');
 const home = fs.readFileSync('index.html', 'utf8');
 const preload = home.match(/<link rel="preload" as="image"[^>]+>/g).join('');
 const hero = home.match(/<section class="tt-hero"[\s\S]*?<\/section>/)[0];
-for (const [width, height, device] of [[390,844,'mobile'],[820,1180,'tablet-vertical'],[1024,768,'tablet-horizontal'],[1366,768,'desktop']]) {
-  test(`precarga sólo el banner elegido por picture en ${width}px`, async ({ page }) => {
+for (const [width, height] of [[390,844],[820,1180],[1024,768],[1366,768]]) {
+  test(`precarga una sola variante PNG del maletín elegida por picture en ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     const requests = [];
-    await page.route('**/hero-nuevo/*', async route => {
-      const url = new URL(route.request().url()); if (/\/hero-nuevo-[^/]+\.(webp|png)$/.test(url.pathname)) requests.push(url.pathname);
-      await route.fulfill({ body: fs.readFileSync('.' + url.pathname), contentType: url.pathname.endsWith('.webp') ? 'image/webp' : 'image/png' });
+    await page.route('**/assets-tintin/**', async route => {
+      const url = new URL(route.request().url());
+      if (/\/suitcase(?:-\d+)?\.png$/.test(url.pathname)) requests.push(url.pathname);
+      const types = { '.png': 'image/png', '.webp': 'image/webp', '.svg': 'image/svg+xml' };
+      await route.fulfill({ body: fs.readFileSync('.' + url.pathname), contentType: types[path.extname(url.pathname)] });
     });
     await page.setContent(`<base href="http://tintin.test/">${preload}${hero}`);
+    const suitcase = page.locator('.tt-hero-suitcase img');
+    await expect.poll(() => suitcase.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
     await expect.poll(() => page.locator('#tt-hero-img').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
-    expect(requests).toEqual([`/assets-tintin/images/home/hero-nuevo/hero-nuevo-${device}-lossless.webp`]);
+    const expected = '/assets-tintin/images/home/hero-reference/suitcase-640.png';
+    expect(new URL(await suitcase.evaluate(img => img.currentSrc)).pathname).toBe(expected);
+    expect(requests).toEqual([expected]);
   });
 }

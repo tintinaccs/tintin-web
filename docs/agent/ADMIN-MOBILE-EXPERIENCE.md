@@ -116,3 +116,23 @@ modo standalone no promete equivalencia completa con una aplicación nativa.
 El listado de Usuarios reserva todo el ancho de la tarjeta al correo, sin truncarlo ni imponer cuatro renglones. Foto/nombre, correo, rol/estado y acciones tienen separaciones propias. El menú conserva los botones canónicos y permite desplegar teléfono, pedidos y total en la misma fila; Escape y clic exterior cierran el menú. Tablet y escritorio mantienen la tabla y acciones visibles. Las tablas comunes agrupan datos breves en dos columnas; correos, destinatarios, detalles extensos y filas combinadas conservan el ancho completo. La selección global sigue accesible en móvil.
 
 La ficha conserva su cabecera/foto al montar pestañas y reconstruye estas al reabrirse. Usa los tokens administrativos y navegación de teclado; no cambia lectores, escritores, permisos ni datos. Regresiones en `admin-user-spaced-cards.spec.js`, dentro del gate responsive existente, con correos largos en320/390/540 y conservación de tabla en768/1440. La implementación se reconcilió con el PR1294 ya fusionado, sin reemplazar su navegación, PWA ni visor de foto. Instalación y teclado en dispositivos físicos siguen sin verificar.
+
+
+## Corrección visual del01/11/2026
+
+La primera entrega adaptó fichas y tablas, pero conservó la composición previa
+de Inicio y la cabecera. La queja del usuario en navegador móvil es válida:
+los recursos estaban publicados, sin una evolución suficiente del shell visual.
+
+Ahora se ajustan esos mismos componentes en teléfono: superficies originales
+con menor tinte decorativo, cabecera compacta (título en segunda fila en320px con notificaciones),
+título/accesos compactos,
+indicadores legibles dentro del primer pliegue a390×844 y búsqueda de módulo
+con icono y nombre accesible. No se crea otro dashboard ni se ocultan acciones.
+El botón de nuevo pedido usa el signo+ que ya tenía en pantallas de320px,
+con nombre accesible y mismo destino. Cargas, estados funcionales y permisos
+conservan sus contratos. La tabla inicial también se mejora al revelarse auth.
+
+La aceptación incluye estilo computado con la cascada completa, capturas con
+los mismos datos de prueba, comparación amplia y acceso real a las acciones;
+no se considera suficiente que exista un cambio en el código o que no desborde.

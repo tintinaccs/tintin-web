@@ -3,6 +3,7 @@ const path = require('path');
 const crypto = require('crypto');
 const childProcess = require('child_process');
 const {isBuiltin} = require('node:module');
+const { extractCollections } = require('./lib/firestore-collection-extractor.cjs');
 const { visualSource } = require('../js/quality/revision-visual.mjs');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -511,15 +512,11 @@ function extractFirestoreCollections(files) {
     entry.references.push({ file, line, operation });
     used.set(name, entry);
   };
-  for (const file of files.filter(name => /\.(?:js|html|gs)$/i.test(name))) {
-    const source = read(file);
-    const patterns = [
-      { operation: 'collection', regex: /\bcollection\s*\(\s*db\s*,\s*["']([^"']+)["']/g },
-      { operation: 'doc', regex: /\bdoc\s*\(\s*db\s*,\s*["']([^"']+)["']/g }
-    ];
-    for (const { operation, regex } of patterns) {
-      let match;
-      while ((match = regex.exec(source))) register(match[1], file, lineAt(source, match.index), operation);
+  for (const file of files.filter(name => /\.(?:m?js|html|gs)$/i.test(name) && !name.startsWith('scripts/') && !name.startsWith('tests/'))) {
+    try {
+      for (const item of extractCollections(read(file), {html:file.endsWith('.html')})) register(item.name,file,item.line,item.operation);
+    } catch (error) {
+      throw new Error(`No se pudo analizar colecciones en ${file}: ${error.message}`);
     }
   }
   return [...used.values()].sort((a, b) => a.name.localeCompare(b.name));

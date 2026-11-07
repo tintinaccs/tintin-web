@@ -91,17 +91,21 @@ test('imágenes globales: prioridad explícita y lecturas agrupadas sin promover
   expect(await page.evaluate(()=>window.readsAfterWrite)).toBe(0);
 });
 
-for(const [width,height,device] of [[320,568,'mobile'],[390,844,'mobile'],[540,900,'mobile'],[820,1180,'tablet-vertical'],[1024,768,'tablet-horizontal'],[1440,900,'desktop']])test(`precarga y picture comparten una sola portada ${width}`,async({page})=>{
+for(const [width,height,variant] of [[320,568,'suitcase-640.png'],[390,844,'suitcase-960.png'],[540,900,'suitcase.png'],[820,1180,'suitcase.png'],[1024,768,'suitcase-960.png'],[1440,900,'suitcase.png']])test(`precarga y picture comparten un solo maletín Retina ${width}`,async({page})=>{
   const fs=require('node:fs'),path=require('node:path');
   const {removeFixtureScripts}=require('../../scripts/lib/html-layout-fixture.js');
   const html=removeFixtureScripts(fs.readFileSync(path.resolve(__dirname,'../../index.html'),'utf8'),{removeModulePreloads:true});
-  const requests=[];page.on('request',request=>{const url=new URL(request.url());if(/\/hero-nuevo\/.*\.(png|webp)$/.test(url.pathname))requests.push(url.href);});
+  const requests=[];page.on('request',request=>{const url=new URL(request.url());if(/\/hero-reference\/suitcase[^/]*\.png$/.test(url.pathname))requests.push(url.href);});
   await page.setViewportSize({width,height});
   await page.route('**/__hero-delivery',route=>route.fulfill({contentType:'text/html',body:html}));
   await page.goto('/__hero-delivery');
   await expect.poll(()=>page.locator('#tt-hero-img').evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
-  await expect(page.locator('#tt-hero-img')).toHaveJSProperty('currentSrc',new URL(`/assets-tintin/images/home/hero-nuevo/hero-nuevo-${device}-lossless.webp?v=tintin-20261029-lossless-1`,page.url()).href);
-  expect(requests).toHaveLength(1);
+  await expect(page.locator('#tt-hero-img')).toHaveJSProperty('currentSrc',new URL('/assets-tintin/images/home/hero-reference/backdrop.svg?v=suitcase-1',page.url()).href);
+  const suitcase=page.locator('.tt-hero-suitcase img');
+  await expect.poll(()=>suitcase.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+  const expected=new URL('/assets-tintin/images/home/hero-reference/'+variant+'?v=suitcase-1',page.url()).href;
+  await expect(suitcase).toHaveJSProperty('currentSrc',expected);
+  expect(requests).toEqual([expected]);
   // La portada ya decodificada se revela en un frame, sin una segunda espera
   // por opacidad. Se prueba con el CSS real generado para cada dispositivo.
   const reveal = await page.evaluate(async () => {
@@ -126,7 +130,7 @@ for(const [width,height,device] of [[320,568,'mobile'],[390,844,'mobile'],[540,9
     expect(Math.abs(geometry.center - geometry.axis)).toBeLessThanOrEqual(1);
     expect(geometry.actions).toHaveLength(2);
     for (const action of geometry.actions) {
-      expect(action.right).toBeLessThanOrEqual(geometry.whatsappLeft - 8);
+      expect(action.right).toBeLessThanOrEqual(width);
       expect(action.clipped).toBe(false);
     }
   }

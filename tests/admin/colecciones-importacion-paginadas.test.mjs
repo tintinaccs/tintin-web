@@ -12,7 +12,7 @@ for (const owner of [true, false]) test(`el selector de importación recibe ${ow
   let stopped=0;
   const deps={ auth:{currentUser:{uid:'fixture'}}, db:{}, CACHE_KEY:'fixture',
     adminSubscribers:new Set([(rows,error)=>{assert.equal(error,null);values.push(rows)}]),
-    loadModule:async path=>path.includes('lecturas-admin')?{subscribeAdminSnapshot:(query,next,fail)=>{watches.push({query,next,fail});return()=>stopped++}}:path.includes('fuente-paginada')?{createAdminPagedSource}:{isSuperAdmin:()=>owner},
+    loadModule:async path=>path.includes('/core/firebase/firebase.js')?{auth:deps.auth,db:deps.db}:path.includes('firebase-firestore.js')?{collection:deps.collection,orderBy:deps.orderBy,startAfter:deps.startAfter,limit:deps.limit,query:deps.query}:path.includes('lecturas-admin')?{subscribeAdminSnapshot:(query,next,fail)=>{watches.push({query,next,fail});return()=>stopped++}}:path.includes('fuente-paginada')?{createAdminPagedSource}:{isSuperAdmin:()=>owner},
     collection:(_db,name)=>name,orderBy:field=>({order:field}),startAfter:cursor=>({cursor}),limit:n=>({limit:n}),query:(...args)=>args,
     normalizeCollectionDoc:(id,data)=>({slug:id,...data}),sortCols:rows=>rows,recordFirestoreRead:()=>{},writeCached:(_key,rows)=>cached.push(rows),
   };

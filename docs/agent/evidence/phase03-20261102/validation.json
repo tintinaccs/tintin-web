@@ -1,0 +1,114 @@
+{
+  "phase": "03 — administración y editor de productos",
+  "date": "2026-11-01 America/Buenos_Aires",
+  "agent": "Codex /root",
+  "baseCommit": "344a2936580a8c3ca6c8f1dc112f940334f0b077",
+  "initialBaseCommit": "5b694fe4adaa9e356f3c2f8e74d2de5ca0f5adde",
+  "status": "PASS_LOCAL",
+  "implementationHashes": {
+    "css/admin/shopify-commerce-admin.css": "6aa67e4d802a3436d40996de0b4005b6b36e82a30b94443046f54a809c48db40",
+    "js/admin/products/controles-editor-producto.js": "c274fe132a2bfbbce3911b8178a3b712c0400139e2ac020bf83b2a9e145fe858",
+    "js/admin/products/galeria-unificada.js": "beb1928b619a7beb22ecb35c50fe2cf8356838cae1f7d9a3b7d72d3f813469c0",
+    "js/admin/products/interfaz-productos-adaptable.js": "4c3115efa6178573e201fadb697676665594046b25c6cb003837c6e49d4a57c3"
+  },
+  "runtime": {
+    "node": "24.19.0",
+    "playwright": "1.64.1",
+    "chromium": "151.0.7922.173",
+    "executable": "/usr/bin/chromium",
+    "data": "Ficticios; controladores y motor reales, transporte/identidad/almacenamiento aislados"
+  },
+  "checks": [
+    {
+      "name": "editor, comercio y compatibilidad",
+      "command": "node --test tests/admin/editor-comercial.test.mjs tests/admin/editor-editorial.test.mjs tests/admin/product-editor-category.test.mjs tests/admin/product-workspaces.test.mjs tests/admin/respuesta-editor-producto.test.mjs tests/orders/variant-commerce-v2.test.mjs tests/orders/variant-inventory.test.mjs tests/cart/variant-image.test.mjs tests/catalog/variant-presentation.test.mjs tests/catalog/bulk-product-delete-contract.test.mjs",
+      "passed": 100,
+      "failed": 0
+    },
+    {
+      "name": "borrado y referencias",
+      "command": "node --test tests/catalog/catalog-delete-reference-resilience.test.mjs tests/sync/admin-catalog-delete-preflight.test.mjs",
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "name": "administración y recorridos CRUD del editor",
+      "command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npx playwright test tests/ui-ux/product-editor-tabs.spec.js tests/ui-ux/product-save-responsive.spec.js tests/ui-ux/products-master.spec.js tests/ui-ux/products-mosaic.spec.js tests/ui-ux/admin-all-devices.spec.js --project=chromium --retries=0 -g 'fase03|320x568|390x844|768x1024|1440x900|1920x1080|admin-all-devices|edición masiva|duplicar|eliminar seleccionados|carga unificada'",
+      "passed": 130,
+      "failed": 0,
+      "includesAdminLayoutCases": 41
+    },
+    {
+      "name": "editor tras incorporar fase02 y guardar/reabrir texto largo",
+      "command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npx playwright test tests/ui-ux/product-editor-tabs.spec.js --project=chromium --retries=0 -g fase03",
+      "passed": 13,
+      "failed": 0
+    },
+    {
+      "name": "primera regresión de galería, fotos, tabs y ciclo editorial",
+      "passed": 99,
+      "failed": 1,
+      "resolution": "La aserción de scrollY absoluto se sustituyó por posición visible del control y ausencia de retorno arriba; caso corregido aprobado en ejecución propia, suite130 e integración13. No se borra el fallo inicial."
+    },
+    {
+      "name": "gates estáticos",
+      "commands": [
+        "npm run audit:styles",
+        "npm run audit:products-media",
+        "npm run audit:admin-foundation",
+        "npm run audit:colors",
+        "npm run audit:architecture-contracts",
+        "npm run audit:cache-versioning"
+      ],
+      "status": "PASS_LOCAL"
+    },
+    {
+      "name": "110 pruebas Node repetidas sobre main344a2936 integrado",
+      "passed": 110,
+      "failed": 0
+    },
+    {
+      "name": "build integrado",
+      "command": "npm run build:pages",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "name": "protección",
+      "command": "node scripts/auditar-proteccion-flujos.mjs",
+      "records": 78,
+      "files": 544,
+      "status": "PASS_LOCAL"
+    },
+    {
+      "name": "La protección de fotos permite restaurar disponibilidad y limpia el error anterior",
+      "command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npx playwright test tests/ui-ux/product-editor-tabs.spec.js --project=chromium --retries=0 -g 'fase03: no quitar'",
+      "passed": 1,
+      "failed": 0
+    }
+  ],
+  "coverage": [
+    "Crear, editar, cancelar, recuperar borrador, duplicar, selección para eliminar, reabrir y persistir",
+    "Stock finito, cero y sin control; precio heredado y override; privacidad del costo; V1/V2",
+    "Errores de conexión/subida, reintento y guardado sin duplicados",
+    "Texto largo con línea final visible, foco/Escape/flechas y modal",
+    "30 combinaciones con búsqueda/paginación;1000 combinaciones y rechazo de1100 sin mutación",
+    "320/390/768/1024/1280/1440/1920; orientaciones y otras dimensiones de las suites existentes"
+  ],
+  "screenshots": {
+    "before-1440.png": "2b4eb5d0941439060c66688e75a2d53a9bc17b3653547dc29ac0c9e65a015adf",
+    "after-1440.png": "8446fd5ce598c9103111c8af7d73e0709f22602f7eb956c5fd945b3a0e83d935",
+    "after-390.png": "e834165088551a0f2e18e743603c3ea770f6870e41be9962e1f442a4af3bc727"
+  },
+  "nonAdditive": true,
+  "initialEnvironmentFailures": [
+    "Primer arranque Playwright: faltaba su binario empaquetado. Se usó Chromium del entorno sin cambiar dependencias.",
+    "audit:admin-responsive no arrancó su navegador empaquetado; el comando completo no tiene PASS_LOCAL. Las regresiones pertinentes se ejecutaron con el binario del entorno; el gate completo permanece en CI."
+  ],
+  "notVerified": [
+    "Sesión externa autenticada y datos reales de Firestore/Sheets",
+    "Carga real al proveedor de imágenes",
+    "Safari/iOS, dispositivo físico y lector de pantalla",
+    "CI y publicación del candidato antes de sus resultados terminales"
+  ],
+  "productionDataWrites": false
+}

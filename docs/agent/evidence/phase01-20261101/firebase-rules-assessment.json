@@ -1,0 +1,12 @@
+{
+  "score": 2,
+  "summary": "Evaluación parcial de las reglas versionadas, no certificación de reglas desplegadas: un agente sin permisos de pedidos puede alterar inventario del pedido mientras status no cambia.",
+  "findings": [
+    {
+      "check": "Business Logic vs. Rules / Field-Level vs. Identity-Level Security / Update Bypass",
+      "severity": "major",
+      "issue": "F01-RULES: allow update admite inventoryState/inventoryRevision para agent/admin sin permiso de módulo; staffOrderInventoryTransitionValid retorna true si status no cambia. Reproducido en emulador demo.",
+      "recommendation": "Centralizar mutaciones sensibles en el endpoint autenticado y cerrar o restringir el acceso SDK legado después de revisar consumidores; agregar regresiones de agente sin permisos y consistencia de stock."
+    }
+  ]
+}

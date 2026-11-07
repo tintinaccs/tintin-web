@@ -23,28 +23,28 @@ if (!/\/(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuent
 
 export function loadPageMaintenance() {
   const path = pathName();
-  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261101-touch-targets-1');
-  if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-20261031-seo-espacios-2');
-  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261031-seo-espacios-2');
+  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-footer-canonical-20261103-1-p1106');
+  if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-footer-canonical-20261103-1');
+  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-footer-canonical-20261103-1-p1106');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     const version = 'tintin-20261009-whatsapp-responsive-1-photos-20261008-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261031-seo-espacios-2'),
-      load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261029-mobile-review-1'),
-      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261017-domain-cutover-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261102-pickup-cash-1'),
+      load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261029-mobile-review-1-p1106'),
+      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261105-copiar-pago-1-p1106'),
       load('pages/checkout/checkout-control-cuota.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-photos-20261008-1'),
       load('pages/checkout/estado-navegacion-checkout.js', 'tintin-20261021-commerce-review-1')
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) {
-    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261031-seo-espacios-2');
+    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261031-seo-espacios-2-p1106');
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261026-profile-save-1');
-  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-20261016-story-2bbd366911');
-  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', 'tintin-20261031-seo-espacios-2');
+  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-footer-canonical-20261103-1');
+  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', 'tintin-footer-canonical-20261103-1');
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
-    return load('pages/institutional/mantenimiento-legal.js', 'tintin-20261031-seo-espacios-2');
+    return load('pages/institutional/mantenimiento-legal.js', 'tintin-footer-canonical-20261103-1');
   }
   return Promise.resolve();
 }

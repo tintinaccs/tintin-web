@@ -183,7 +183,9 @@ check(
 // 6. Inicialización
 check(
   'Los permisos dinámicos se cargan antes de armar la UI',
-  /await loadRolePermissions\(\);[\s\S]{0,220}setupPermissions\(role\)/.test(adminApp),
+  (/await loadRolePermissions\(\);[\s\S]{0,220}setupPermissions\(role\)/.test(adminApp) ||
+    (/const rolePermissionsLoad = loadRolePermissions\(\);/.test(adminApp) &&
+      /await rolePermissionsLoad;[\s\S]{0,220}setupPermissions\(role\)/.test(adminApp))),
   'canDo debe estar inicializado desde el primer render.'
 );
 check(

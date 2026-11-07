@@ -89,7 +89,7 @@
   padding-left: max(16px, env(safe-area-inset-left));
   overflow: auto;
   overscroll-behavior: contain;
-  background: rgba(30, 10, 18, .55);
+  background: rgba(34,34,34,0.55);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   box-sizing: border-box;
@@ -106,12 +106,12 @@
   margin: auto;
   padding: clamp(26px, 5vw, 32px) clamp(20px, 5vw, 26px);
   overflow: auto;
-  border: 1px solid rgba(184, 76, 114, .14);
+  border: 1px solid rgba(248,170,202,0.14);
   border-radius: 16px;
   background: #fff;
   color: #222222;
   text-align: center;
-  box-shadow: 0 12px 48px rgba(0, 0, 0, .25);
+  box-shadow: 0 12px 48px rgba(34,34,34,0.25);
 }
 
 .tt-blocked-icon {
@@ -172,7 +172,7 @@
 }
 
 .tt-blocked-action:focus-visible {
-  outline: 3px solid rgba(184, 76, 114, .28);
+  outline: 3px solid rgba(248,170,202,0.28);
   outline-offset: 3px;
 }
 

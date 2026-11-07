@@ -264,8 +264,15 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   await expect(page.locator('#btn-close-sheet')).toBeFocused();
 });
 
-test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async ({ page }) => {
+test('tablet oculta el logo del header solo en el inicio (el hero ya lo muestra)', async ({ page }) => {
   await openPublicPage(page, { width: 768, height: 1024 });
+  await expect(page.locator('#tt-header-tablet .tt-tablet-logo-link')).toHaveCSS('visibility', 'hidden');
+  await expect(page.locator('#btn-menu-tablet')).toBeVisible();
+  await expect(page.locator('.tt-tablet-actions')).toBeVisible();
+});
+
+test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async ({ page }) => {
+  await openPublicPage(page, { width: 768, height: 1024 }, '/about');
 
   await expect(page.locator('#tt-header-tablet')).toBeVisible();
   await expect(page.locator('#tt-header-desktop-tablet')).toBeHidden();
@@ -282,7 +289,7 @@ test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async 
 
   await page.locator('#btn-notifications-tablet').evaluate(node => { node.hidden = false; });
   await expect(page.locator('.tt-tablet-actions > button:not([hidden])')).toHaveCount(4);
-  await expect(page.locator('#btn-notifications-tablet')).toHaveCSS('background-color', 'rgb(238, 241, 244)');
+  await expect(page.locator('#btn-notifications-tablet')).toHaveCSS('background-color', 'rgb(253, 236, 242)');
 
   const tabletGeometry = await page.evaluate(() => {
     const menu = document.getElementById('btn-menu-tablet').getBoundingClientRect();
@@ -503,7 +510,7 @@ test('cuenta mantiene cabecera rosa con logo y título blancos centrados y CTA l
 
 for(const route of ['/catalogo?cat=pulseras','/collections','/about','/contact','/envios','/preguntas-frecuentes','/privacidad'])for(const [width,height]of [[320,700],[390,844],[768,1024],[1024,768],[1440,900]])test(`encabezado global compacto y cuenta clara: ${route} ${width}`,async({page})=>{
  await mockGuestNavigation(page);await openPublicPage(page,{width,height},route);
- if(width<768){const brand=page.locator('#tt-mobile-brand');await expect(brand).toBeVisible();expect((await brand.boundingBox()).height).toBeLessThanOrEqual(70);}
+ if(width<768)await expect(page.locator('#tt-mobile-brand')).toHaveCount(0);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
  const button=page.locator(width<768?'#tabbar-cuenta':width<=1024?'#btn-cuenta-tablet':'#btn-cuenta');
  await button.evaluate((el,mobile)=>{const image=document.createElement('img');image.className=mobile?'tt-tabbar-avatar':'tt-account-avatar-btn';image.alt='Foto clara';image.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><path fill="white" d="M0 0h48v48H0z"/></svg>');image.width=mobile?24:48;image.height=mobile?24:48;el.querySelector('svg')?.replaceWith(image);},width<768);
@@ -517,12 +524,16 @@ for (const [width, height] of [[320,568],[350,724],[390,844],[600,960],[768,1024
   test(`catálogo compacto conserva categorías y márgenes ${width}x${height}`, async ({ page }) => {
     await mockGuestNavigation(page);
     await openPublicPage(page, { width, height }, '/catalogo?cat=bags');
-    const header = page.locator(width < 768 ? '#tt-mobile-brand' : width <= 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet');
     const hero = page.locator('.cat-hero');
-    const headerBox = await header.boundingBox(), heroBox = await hero.boundingBox();
-    const gap = heroBox.y - (headerBox.y + headerBox.height);
-    expect(gap).toBeGreaterThanOrEqual(0);
-    expect(gap).toBeLessThanOrEqual(32);
+    const heroBox = await hero.boundingBox();
+    if (width < 768) await expect(page.locator('#tt-mobile-brand')).toHaveCount(0);
+    else {
+      const header = page.locator(width <= 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet');
+      const headerBox = await header.boundingBox();
+      const gap = heroBox.y - (headerBox.y + headerBox.height);
+      expect(gap).toBeGreaterThanOrEqual(0);
+      expect(gap).toBeLessThanOrEqual(32);
+    }
     const nav = page.locator('#cat-tabs-mobile');
     if (await nav.isVisible()) {
       const navBox = await nav.boundingBox(), subtitle = await page.locator('#cat-subtitulo').boundingBox();
@@ -654,16 +665,30 @@ test('movimiento reducido abre y cierra sin animación de desplazamiento', async
 test('las categorías se desplazan con el dedo y el fondo conserva su posición', async ({ page }) => {
   await mockGuestNavigation(page);
   await openPublicPage(page,{width:390,height:844},'/envios');
-  // html usa scroll-behavior:smooth: sin esperar, el panel podía bloquear el
-  // fondo antes de llegar a 200 y la restauración volvía a la posición previa.
-  await page.evaluate(() => scrollTo({ left: 0, top: 200, behavior: 'instant' }));
+  // El reset de entrada escribe arriba otra vez en el siguiente frame.
+  // Reproducimos esa tarea real pendiente y la completamos antes de preparar
+  // la posición: esperar load/fonts no vacía requestAnimationFrame.
+  await page.evaluate(async () => {
+    window.TintinPageScroll.reset();
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    scrollTo({ left: 0, top: 200, behavior: 'instant' });
+    await new Promise(resolve => requestAnimationFrame(resolve));
+  });
   await expect.poll(() => page.evaluate(() => Math.round(scrollY))).toBe(200);
   await page.locator('#tabbar-tienda').click();
   await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('open');
   const grid = page.locator('#collections-sheet .tt-sheet-grid');
   const box = await grid.boundingBox();
   const session = await page.context().newCDPSession(page);
-  const x = box.x + box.width / 2, y = box.y + box.height - 30;
+  const x = box.x + box.width / 2;
+  // El aviso de privacidad flota por encima de las hojas (z-index 2200) y puede
+  // cubrir el pie de la lista: se toca el punto más bajo que sí es de la lista.
+  const y = await grid.evaluate((el, [px, top, bottom]) => {
+    for (let py = bottom - 30; py > top; py -= 10) {
+      if (el.contains(document.elementFromPoint(px, py))) return py;
+    }
+    return top + 30;
+  }, [x, box.y, box.y + box.height]);
   await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
   for (let step=1;step<=8;step++) {
     await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y-step*30}]});

@@ -130,7 +130,7 @@ async function collectVitals(page) {
       interactionMs: window.__ttVitals?.interactionMs ?? null,
       eventTimingMaxMs: window.__ttVitals?.eventTimingMaxMs ?? null, ttfb: null, dcl: null, load: null,
       requests: 0, firstPartyRequests: 0, thirdPartyRequests: 0, transferKB: 0, firstPartyTransferKB: 0, duplicateRequests: 0, duplicateUrls: [],
-      thirdPartyDuplicateUrls: [], firestoreReads: 0,
+      thirdPartyDuplicateUrls: [], telemetryRequests: 0, firestoreReads: 0,
       firestoreSources: {}, shifts: window.__ttVitals?.shifts || []
     };
     try {
@@ -165,6 +165,15 @@ async function collectVitals(page) {
       const appCounts = new Map();
       const thirdPartyCounts = new Map();
       for (const item of resources) {
+        // sendBeacon envía eventos POST distintos, no descarga un recurso
+        // cacheable. Mantener sus bytes/peticiones y reportarlos por separado.
+        try {
+          const endpoint = new URL(item.name, location.href);
+          if (endpoint.origin === location.origin && endpoint.pathname === '/api/telemetry' && item.initiatorType === 'beacon') {
+            out.telemetryRequests += 1;
+            continue;
+          }
+        } catch {}
         let sameOrigin = false;
         try { sameOrigin = new URL(item.name, location.href).origin === location.origin; } catch {}
         const target = sameOrigin ? appCounts : thirdPartyCounts;
@@ -230,7 +239,9 @@ const BUDGETS = {
   // ~1.77-1.83 MB (medido en CI: 1815 KB en contact/envios/cambios-devoluciones/
   // preguntas-frecuentes, 1877 KB en about.html). Este presupuesto refleja ese
   // piso legítimo con margen, sin relajar el presupuesto general de 6.5 MB.
-  lightweightTransferKB: 2000,
+  // El cargador editorial (#1342) reutiliza tintin-white.webp del hero (177 KB,
+  // medido) en todas las páginas: Nosotros pasó de ~1877 KB a 2077 KB en CI.
+  lightweightTransferKB: 2150,
   homeFirestoreReads: 30,
   loaderMaxMs: 11000
 };

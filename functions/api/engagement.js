@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser,
 } from '../../cloudflare/seguridad-cloudinary.js';
@@ -159,7 +160,7 @@ export async function onRequest(context) {
     }
 
     if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido' }, 405, origin, request.url);
-    const raw = await request.text();
+    const raw = await readLimitedText(request, MAX_BODY_BYTES);
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud vacía o demasiado grande');
     const input = JSON.parse(raw);
     let result = {};

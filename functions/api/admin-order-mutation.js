@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import {handleProductEditor} from '../../cloudflare/product-editor-handler.mjs';
 import {handleAuditRequest} from '../../cloudflare/registro-auditoria.mjs';
 import { rateLimitErrorResponse,
@@ -50,7 +51,7 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, requestUrl);
 
   try {
-    const raw = await request.text();
+    const raw = await readLimitedText(request, 750000);
     if (!raw || new TextEncoder().encode(raw).byteLength > 750000) throw new Error('Solicitud inválida.');
     const body = JSON.parse(raw);
     if (body.action === 'appendAudit') return handleAuditRequest(context, { input: body.entry });
@@ -119,8 +120,8 @@ export async function onRequest(context) {
     if (limited) return limited;
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);
     const message = safeText(error?.message, 300);
-    const allowed = /^(Solicitud inválida|Pedido inválido|El pedido ya no existe|No hay cambios administrativos permitidos|Estado de pedido no permitido|Estado de pago no permitido|Método de pago no permitido|Método de entrega no permitido|Correo de contacto inválido|Costo de envío inválido|Subtotal inválido|Ingresá el nombre del cliente|El producto .* (ya no existe|no está activo)|Precio inválido|El pedido contiene|El pedido debe|El pedido tiene demasiados|Stock inválido|Stock insuficiente|No se puede reconciliar el stock|El pedido cambió después de la última sincronización|Conflicto de versión|Tu rol no tiene permiso|No se pudieron verificar los permisos|Un pedido de retiro|Listo para retirar corresponde|El cambio de estado no corresponde)/i.test(message);
+    const allowed = /^(Elegí si querés devolver el stock|La decisión de stock corresponde|Solicitud inválida|Pedido inválido|El pedido ya no existe|No hay cambios administrativos permitidos|Estado de pedido no permitido|Estado de pago no permitido|Método de pago no permitido|Método de entrega no permitido|Correo de contacto inválido|Costo de envío inválido|Subtotal inválido|Ingresá el nombre del cliente|El producto .* (ya no existe|no está activo)|Precio inválido|El pedido contiene|El pedido debe|El pedido tiene demasiados|Stock inválido|Stock insuficiente|No se puede reconciliar el stock|El pedido cambió después de la última sincronización|Conflicto de versión|Tu rol no tiene permiso|No se pudieron verificar los permisos|Un pedido de retiro|Listo para retirar corresponde|El cambio de estado no corresponde)/i.test(message);
     const status = statusFromError(error, 400);
-    return jsonResponse({ ok: false, error: allowed ? message : 'No se pudo actualizar el pedido.' }, status, origin, requestUrl);
+    return jsonResponse({ ok: false, error: allowed ? message : 'No se pudo actualizar el pedido.', ...(error?.code === 'cancellation_stock_required' ? { code: error.code } : {}) }, status, origin, requestUrl);
   }
 }

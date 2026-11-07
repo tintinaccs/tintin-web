@@ -1,3 +1,4 @@
+import { readLimitedText } from '../lib/operational-guard.js';
 import { jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin, rateLimitErrorResponse, statusFromError } from '../../cloudflare/seguridad-cloudinary.js';
 import { firestoreAdminGet, decodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
 import { moveOrderTrash } from '../../cloudflare/order-trash-controls.js';
@@ -16,7 +17,7 @@ export async function onRequest(context) {
       const document = await firestoreAdminGet(env, 'settings/statisticsResets');
       return jsonResponse({ ok: true, result: document ? decodeFirestoreFields(document.fields || {}) : { resets: {}, lastChangeId: '' } }, 200, origin, request.url);
     }
-    const raw = await request.text();
+    const raw = await readLimitedText(request, 16 * 1024);
     if (new TextEncoder().encode(raw).byteLength > 16 * 1024) throw new Error('Solicitud demasiado grande.');
     const input = JSON.parse(raw);
     const result = input.action === 'resetStatistics'

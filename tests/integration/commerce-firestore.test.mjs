@@ -83,8 +83,8 @@ test('Editor → checkout público → pedido: precio, fotos, clave estable y ca
  assert.equal(order.order.items[0].imageUrl,'https://example.invalid/gold.png');
  assert.equal((await product(id)).variantInventory.find(row=>row.variant===selectedKey).stock,1);
  const duplicate=await createOrderAdmin({},prepared.input,actor,{...deps,inspect:prepared.inspect});assert.equal(duplicate.duplicate,true);
- await applyOrderAdminMutation({},{orderId:order.orderId,status:'cancelado',changeId:'editor_checkout_cancel'},admin,deps);
- await applyOrderAdminMutation({},{orderId:order.orderId,status:'cancelado',changeId:'editor_checkout_cancel'},admin,deps);
+ await applyOrderAdminMutation({},{orderId:order.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'editor_checkout_cancel'},admin,deps);
+ await applyOrderAdminMutation({},{orderId:order.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'editor_checkout_cancel'},admin,deps);
  const after=await product(id);assert.equal(after.stock,4);assert.equal(after.variantInventory.find(row=>row.variant===selectedKey).stock,2);
  assert.deepEqual(after.variantMedia,before.variantMedia);
 });
@@ -111,7 +111,7 @@ test('Firestore aislado: pedido, precio canónico, reserva, concurrencia e idemp
     assert.equal((await createOrderAdmin({}, input(winner.orderId, 'ring', 'Dorado / 6'), actor, deps)).duplicate, true);
     await applyOrderAdminMutation({}, { orderId: winner.orderId, paymentStatus: 'pagado', status: 'confirmado', changeId: 'commerce_confirm' }, admin, deps);
     assert.equal((await product('ring')).stock, 1, 'confirmar no duplica la reserva');
-    await applyOrderAdminMutation({}, { orderId: winner.orderId, status: 'cancelado', changeId: 'commerce_cancel' }, admin, deps);
+    await applyOrderAdminMutation({}, { orderId: winner.orderId, status: 'cancelado', inventoryCancellationDecision: 'release', changeId: 'commerce_cancel' }, admin, deps);
     assert.equal((await product('ring')).stock, 2);
   });
   await t.test('otro color/talle conserva su clave; combinación eliminada no escribe', async () => {
@@ -132,7 +132,7 @@ test('Firestore real aislado: v2 prices, mixed stock, concurrent reserve, cancel
  const winner=results.find(r=>r.status==='fulfilled').value;
  assert.equal(winner.order.items[0].price,250);assert.match(winner.order.items[0].imageUrl,/silver/);
  let p=await product('v2');assert.equal(p.variantInventory[0].stock,0);assert.equal(p.stock,null);
- const cancel={orderId:winner.orderId,status:'cancelado',changeId:'v2_real_cancel'};
+ const cancel={orderId:winner.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'v2_real_cancel'};
  await applyOrderAdminMutation({},cancel,admin,deps);await applyOrderAdminMutation({},cancel,admin,deps);
  p=await product('v2');assert.equal(p.variantInventory[0].stock,1);assert.equal(p.variantInventory[0].price,250);assert.equal(p.variantInventory[1].stock,null);
 });
@@ -147,7 +147,7 @@ test('Firestore real aislado: dos combinaciones de 60 unidades se reservan y dev
  const created=await createOrderAdmin({},draft,actor,deps);
  assert.equal(created.order.total,18000);
  assert.equal((await product('v2_bulk')).stock,0);
- const cancel={orderId:created.orderId,status:'cancelado',changeId:'v2_bulk_cancel'};
+ const cancel={orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'release',changeId:'v2_bulk_cancel'};
  await applyOrderAdminMutation({},cancel,admin,deps);
  await applyOrderAdminMutation({},cancel,admin,deps);
  const restored=await product('v2_bulk');
@@ -279,8 +279,8 @@ test('compra enteramente ficticia: producto → pedido → captura simulada → 
   await markReversed({}, await mapping(), { kind: 'refunded', refundId: 'QA_REFUND_20261024', eventId: 'QA_EVENT_REFUND_20261024', captureId, currency: 'USD', cents: amount.cents }, { ...deps, notify: async () => {} });
   order = decodeFirestoreFields((await deps.get({}, `orders/${result.orderId}`)).fields);
   assert.equal(order.paymentStatus, 'reembolsado');
-  await applyOrderAdminMutation({}, { orderId: result.orderId, status: 'cancelado', changeId: 'qa_fake_payment_cancel' }, admin, deps);
-  await applyOrderAdminMutation({}, { orderId: result.orderId, status: 'cancelado', changeId: 'qa_fake_payment_cancel' }, admin, deps);
+  await applyOrderAdminMutation({}, { orderId: result.orderId, status: 'cancelado', inventoryCancellationDecision: 'release', changeId: 'qa_fake_payment_cancel' }, admin, deps);
+  await applyOrderAdminMutation({}, { orderId: result.orderId, status: 'cancelado', inventoryCancellationDecision: 'release', changeId: 'qa_fake_payment_cancel' }, admin, deps);
   assert.equal((await product(id)).stock, 2, 'cancelar dos veces restituye una sola vez');
   });
 });
@@ -297,7 +297,7 @@ test('pago ficticio: un pedido cancelado después de abrir PayPal no se puede ca
   const providerId = 'QA_PROVIDER_CANCEL_20261024';
   await withPaypalSimulator(project, host, { providerId, captureId: 'QA_CAPTURE_CANCEL_20261024', value: '6.00' }, async ({ env, calls }) => {
     await createPaypalOrder(env, { orderId: result.orderId, uid: actor.uid });
-    await applyOrderAdminMutation({}, { orderId: result.orderId, status: 'cancelado', changeId: 'qa_cancel_before_capture' }, admin, deps);
+    await applyOrderAdminMutation({}, { orderId: result.orderId, status: 'cancelado', inventoryCancellationDecision: 'release', changeId: 'qa_cancel_before_capture' }, admin, deps);
     assert.equal((await product(id)).stock, 1);
     await assert.rejects(capturePaypalOrder(env, { providerOrderId: providerId, uid: actor.uid }), /cerrado/);
     assert.equal(calls.filter(call => call.path.endsWith('/capture')).length, 0, 'rechaza antes de pedir un cobro al proveedor');
@@ -312,7 +312,7 @@ test('fotos privadas: query real paginada entre cuentas bloquea referencias come
  const source=fs.readFileSync('cloudflare/firebase-admin-ligero.js','utf8');
  const queryCode=source.slice(source.indexOf('export async function firestoreAdminCollectionGroupPage'),source.indexOf('/** Una página del listado canónico')).replace('export ','');
  let calls=0;
- const context=vm.createContext({parseServiceAccount:()=>({}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch:async(url,options)=>{calls++;assert.equal(url,root+':runQuery');return Response.json(await request(':runQuery',JSON.parse(options.body)));}});
+ const context=vm.createContext({parseServiceAccount:()=>({project_id:project}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch:async(url,options)=>{calls++;assert.equal(url,root+':runQuery');return Response.json(await request(':runQuery',JSON.parse(options.body)));}});
  vm.runInContext(queryCode,context);
  const id='tintin_media_privateemulator_full',url=`https://res.cloudinary.com/qa-cloud/image/upload/v1/${id}.webp`;
  await deps.commit({},Array.from({length:105},(_,i)=>({path:`productEditorWorkspaces/aaa-media/items/${String(i).padStart(3,'0')}`,fields:encodeFirestoreFields({closed:true,snapshot:{imageUrl:url}})})));
@@ -322,3 +322,61 @@ test('fotos privadas: query real paginada entre cuentas bloquea referencias come
 });
 
 test('retiro, reserva previa, cancelación idempotente y restauración conservan identidad, precio y foto',async()=>{await verifyRetiredOptionCheckout({deps,seed,product,actor,admin});});
+
+test('editor limpia aliases con espacios y galería legacy mediante field paths Firestore reales',async()=>{
+ const id='phase04_media_aliases';
+ await seed('collections/phase04_media',{name:'Fixture'});
+ const before={name:'Fixture multimedia',category:'phase04_media',price:100,stock:2,active:true,oferta:false,destacado:false,description:'Fixture',imageUrl:'https://example.invalid/old.png','Image Src':'https://example.invalid/old.png','Variant Image':'https://example.invalid/old.png',images:['https://example.invalid/old.png'],untouched:'preservado'};
+ await seed('products/'+id,before);
+ await saveProductEditor({},{productId:id,expected:productFingerprint(before),changeId:'phase04_media_aliases_save',product:{imageUrl:'',imagesExtra:[]}},admin,deps);
+ const after=await product(id);
+ assert.equal(after.imageUrl,'');assert.equal(after['Image Src'],'');assert.equal(after['Variant Image'],'');assert.deepEqual(after.images,[]);assert.equal(after.untouched,'preservado');assert.equal(after.stock,2);
+});
+
+
+test('catálogo de pagos canónico: transferencia pendiente, rechazo sin reserva e idempotencia',async()=>{
+ const id='phase05_transfer',requestId='phase05_transfer_20261102';
+ await seed('settings/orderSequence',{lastNumber:0,highWaterMark:0,historyReconciledAt:new Date()});
+ await seed('settings/general',{storeOpen:true,paymentMethods:{transferencia:false,efectivo:true},paymentMethodsCatalog:[{id:'bank',kind:'transferencia',enabled:true}]});
+ await seed('products/'+id,{name:'Fixture transferencia',active:true,stock:2,price:45000});
+ await seed(`checkoutGuards/${actor.uid}`,{lastCheckoutOrderId:`${actor.uid}_${requestId}`,lastCheckoutAt:new Date()});
+ const draft=composeCheckoutDraft({requestId,items:[{id,qty:1}],name:'Ana Gómez',phone:'595981123456',contactEmail:'qa@example.invalid',selectedCity:'__retiro__',shipping:{method:'retiro',cost:0,pending:false},paymentMethod:'transferencia',subtotal:45000});
+ const prepared=await preparePublicCheckoutOrder({},draft,actor,deps);
+ const result=await createOrderAdmin({},prepared.input,actor,{...deps,inspect:prepared.inspect});
+ assert.equal(result.order.paymentStatus,'pendiente');assert.equal((await product(id)).stock,1);
+ const replay=await createOrderAdmin({},prepared.input,actor,{...deps,inspect:prepared.inspect});
+ assert.equal(replay.duplicate,true);assert.equal((await product(id)).stock,1);
+ await seed('settings/general',{storeOpen:true,paymentMethods:{transferencia:true},paymentMethodsCatalog:[]});
+ const resumed=await preparePublicCheckoutOrder({},draft,actor,deps);
+ assert.equal((await createOrderAdmin({},resumed.input,actor,{...deps,inspect:resumed.inspect})).duplicate,true);
+ await seed(`checkoutGuards/${actor.uid}`,{lastCheckoutOrderId:`${actor.uid}_phase05_disabled_20261102`,lastCheckoutAt:new Date()});
+ await assert.rejects(preparePublicCheckoutOrder({}, {...draft,requestId:'phase05_disabled_20261102'},actor,deps),error=>error.code==='payment_unavailable');
+ assert.equal((await product(id)).stock,1);assert.equal(await deps.get({},`orders/public_${actor.uid}_phase05_disabled_20261102`),null);
+});
+
+test('estadísticas reales aisladas: 5001 pedidos ajenos,305 propios,aliases deduplicados y CAS',async()=>{
+ const {syncOrderOwnerStats}=await import('../../cloudflare/sincronizacion-estadisticas-pedido.js');const fs=await import('node:fs');
+ const id='phase09_stats';await seed('users/'+id,{email:'stats@example.invalid',name:'Fixture',untouched:'conservar'});
+ const records=[...Array.from({length:5001},(_,i)=>({path:'orders/phase09_other_'+String(i).padStart(5,'0'),fields:encodeFirestoreFields({userId:'other_stats',total:999})})),...Array.from({length:305},(_,i)=>({path:'orders/phase09_zz_owned_'+i,fields:encodeFirestoreFields({userId:id,userEmail:'stats@example.invalid',total:1,status:'pendiente',createdAt:new Date(1700000000000+i*1000)})}))];
+ for(let i=0;i<records.length;i+=400)await deps.commit({},records.slice(i,i+400));
+ const source=fs.readFileSync('cloudflare/firebase-admin-ligero.js','utf8');const a=source.indexOf('export async function firestoreAdminQueryByFieldPage('),b=source.indexOf('\n/**',a);
+ const query=new Function('deps',`const {parseServiceAccount,getGoogleAccessToken,FIRESTORE_SCOPE,firestoreDatabaseUrl,fetch}=deps;${source.slice(a,b).replace('export ','')};return firestoreAdminQueryByFieldPage;`)({parseServiceAccount:()=>({project_id:project}),getGoogleAccessToken:async()=> 'owner',FIRESTORE_SCOPE:'test',firestoreDatabaseUrl:()=>root.replace(/\/documents$/,''),fetch});
+ const result=await syncOrderOwnerStats({}, {userId:id,userEmail:'stats@example.invalid'},{queryPage:query,get:deps.get,commit:deps.commit});
+ assert.equal(result.updated,true);const saved=decodeFirestoreFields((await deps.get({},'users/'+id)).fields);assert.equal(saved.totalOrders,305);assert.equal(saved.totalSpent,305);assert.equal(saved.untouched,'conservar');
+});
+
+test('cancelación exige elección; conservar y reabrir no vuelven a descontar en Firestore real',async()=>{
+ const id='cancel_stock_choice';await seed('products/'+id,{name:'Fixture cancelación',active:true,stock:2,price:100});
+ const created=await createOrderAdmin({},input('cancel_stock_order',id),actor,deps);
+ const before=await product(id);assert.equal(before.stock,1);
+ await assert.rejects(applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado'},admin,deps),error=>error.code==='cancellation_stock_required');
+ assert.equal((await product(id)).stock,1);
+ const choice={orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'keep',baseChangeId:created.order.lastChangeId,changeId:'cancel_choice_keep'};
+ const cancelled=await applyOrderAdminMutation({},choice,admin,deps);
+ assert.equal(cancelled.order.inventoryState,'reserved');assert.equal((await product(id)).stock,1);
+ assert.equal((await applyOrderAdminMutation({},choice,admin,deps)).duplicate,true);
+ const reopened=await applyOrderAdminMutation({}, {orderId:created.orderId,status:'pendiente',baseChangeId:cancelled.order.lastChangeId,changeId:'cancel_choice_reopen'},admin,deps);
+ assert.equal((await product(id)).stock,1);
+ await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'release',baseChangeId:reopened.order.lastChangeId,changeId:'cancel_choice_release'},admin,deps);
+ assert.equal((await product(id)).stock,2);
+});

@@ -141,12 +141,13 @@ test('reseñas no encoge el CTA y permite wrap cerca de 924px', async () => {
   assert.match(css, /@media \(max-width:\s*940px\)[\s\S]*?flex-wrap:\s*wrap/);
 });
 
-test('admin móvil mantiene cuatro accesos directos y Más con etiquetas cortas', async () => {
+test('admin móvil mantiene cuatro accesos directos (Inicio, Pedidos, Productos, Usuarios) y Más', async () => {
   const html = await read('admin.html');
   const primaries = html.match(/data-mobile-primary/g) || [];
   assert.equal(primaries.length, 4);
   assert.match(html, /data-mobile-primary data-section="dashboard"[\s\S]{0,500}>Inicio<\/button>/);
-  assert.match(html, /data-mobile-primary data-section="estadisticas"[\s\S]{0,500}>Stats<\/button>/);
+  assert.match(html, /data-mobile-primary data-section="usuarios"[\s\S]{0,500}>Usuarios<\/button>/);
+  assert.doesNotMatch(html, /data-mobile-primary data-section="estadisticas"/);
   assert.match(html, /id="adm-mobile-more-toggle"/);
 });
 
@@ -184,9 +185,10 @@ test('home alinea fallback con el título publicado y sanea el typo de pago segu
     read('index.html'),
     read('js/core/store/definiciones-contenido.js'),
   ]);
-  assert.match(home, /UN DETALLE[\s\S]*?MUY VOS/);
+  assert.match(home, /id="tt-hero-heading">El encanto está en los detalles<\/h1>/);
+  assert.match(home, /class="tt-hero-brand"/);
   assert.doesNotMatch(home, /Un detalle[\s\S]*?cambia todo/);
-  assert.match(definitions, /UN DETALLE MUY VOS/);
+  assert.match(definitions, /field\('title', 'Título', '\.tt-hero-title', 'El encanto está en los detalles'/);
   assert.match(definitions, /PAGO SEGUROOXSD/);
   assert.match(definitions, /'Pago seguro'/);
 });

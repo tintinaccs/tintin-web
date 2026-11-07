@@ -20,10 +20,11 @@
       "npm run test:cart-quantity-browser",
       "npx playwright test tests/ui-ux/product-shape-selection.spec.js --project=chromium --retries=0",
       "npx playwright test tests/checkout/coupon-recovery.spec.js tests/ui-ux/product-small-controls.spec.js tests/login/profile-availability-recovery.spec.js --project=chromium",
-      "npx playwright test tests/checkout/paypal-fictitious-browser.spec.js tests/checkout/login-required-browser.spec.js tests/checkout/availability-browser.spec.js tests/catalog/search-responsive.spec.js tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium",
+      "npx playwright test tests/checkout/paypal-fictitious-browser.spec.js tests/checkout/login-required-browser.spec.js tests/checkout/availability-browser.spec.js tests/catalog/search-responsive.spec.js tests/catalog/collection-scroll.spec.js tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium",
       "npx playwright test tests/profile/wholesale-session-recovery.spec.js --project=chromium",
       "npx playwright test tests/cart/color-choice-browser.spec.js --project=chromium --retries=0",
-      "node --test tests/catalog/public-catalog-batch.test.mjs tests/checkout/request-correlation-event.test.mjs"
+      "node --test tests/catalog/public-catalog-batch.test.mjs tests/checkout/request-correlation-event.test.mjs",
+      "npx playwright test tests/orders/cancellation-stock.spec.js --project=chromium --retries=0"
     ]
   },
   "admin": {
@@ -90,7 +91,7 @@
       "node --test tests/ui-ux/brand-palette.test.mjs tests/ui-ux/onboarding-form-browser.test.mjs tests/ui-ux/home-layout-browser.test.mjs",
       "npm run test:admin-operations-browser",
       "npm run test:navigation-header",
-      "npx playwright test tests/navigation/mobile-navigation-front.spec.js --project=chromium --retries=0",
+      "npx playwright test tests/navigation/mobile-navigation-front.spec.js tests/navigation/novak-credit.spec.js --project=chromium --retries=0",
       "npm run test:phase8-ui",
       "npx playwright test tests/ui-ux/admin-white-icons.spec.js --project=chromium",
       "npx playwright test tests/ui-ux/admin-sidebar-interaction.spec.js --project=chromium",
@@ -103,7 +104,7 @@
       "npm run audit:canonical-viewports",
       "npm run audit:global-responsive-geometry",
       "npm run test:pages",
-      "npx playwright test tests/runtime/correos-module.spec.js tests/runtime/email-history-safety.spec.js tests/runtime/audit-history-safety.spec.js --project=chromium"
+      "npx playwright test tests/runtime/admin-section-loading.spec.js tests/runtime/correos-module.spec.js tests/runtime/email-history-safety.spec.js tests/runtime/audit-history-safety.spec.js --project=chromium"
     ]
   },
   "rules": {
@@ -156,6 +157,7 @@
       "audit:cache-versioning"
     ],
     "commands": [
+      "node --test tests/security/request-body-limits.test.mjs tests/security/tooling-glob-compatibility.test.mjs",
       "npm run test:fast",
       "node scripts/auditar-legal-paginas.js"
     ]

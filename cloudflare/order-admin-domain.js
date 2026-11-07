@@ -14,6 +14,7 @@ import {
   inventoryStateForStatus,
   statusReservesInventory,
   orderReservesInventory,
+  orderNeedsCancellationStockChoice,
 } from '../js/core/store/modelo-inventario.mjs';
 import { variantInventoryEntries, normalizeVariantInventoryItems, applyVariantInventoryDeltas, variantInventoryDeltas, productVariantPrice, productStockTotal, variantInventoryTotal, resolveProductVariant, stableVariantSelection, inventorySelection, variantSelectionLabel } from '../js/core/store/inventario-variantes.mjs';
 import { couponDocPath, evaluateCoupon, normalizeCouponCode, redemptionDocPath } from './cupones.js';
@@ -191,6 +192,7 @@ function auditSummary(order) {
     paymentStatus: order?.paymentStatus || order?.payment?.status || 'pendiente',
     total: Number(order?.total || 0),
     inventoryState: order?.inventoryState || '',
+    inventoryCancellationDecision: order?.inventoryCancellationDecision || '',
     orderNumber: clean(order?.orderNumber || order?.shortId, 80),
     shortId: clean(order?.shortId || order?.orderNumber, 80),
     orderSequenceNumber: Math.max(0, Math.floor(Number(order?.orderSequenceNumber || 0))),
@@ -724,6 +726,19 @@ export async function applyOrderAdminMutation(
     assertOrderTransition({ ...beforeOrder, ...(patch.shipping ? { shipping: patch.shipping, shippingMethod: patch.shippingMethod } : {}) }, patch.status);
     if (patch.status === 'incidencia') patch.previousFulfillmentStatus = lifecycleStatus(beforeOrder);
   }
+  const cancellation = orderNeedsCancellationStockChoice(beforeOrder, patch.status);
+  if (cancellation) {
+    if (!['keep', 'release'].includes(input.inventoryCancellationDecision)) {
+      throw Object.assign(new Error('Elegí si querés devolver el stock o conservar el descuento al cancelar o rechazar el pedido.'), { status: 422, code: 'cancellation_stock_required' });
+    }
+    patch.inventoryCancellationDecision = input.inventoryCancellationDecision;
+    patch.inventoryCancellation = { decision: input.inventoryCancellationDecision, by: context.email, at: new Date() };
+  } else if (Object.prototype.hasOwnProperty.call(input, 'inventoryCancellationDecision')) {
+    throw Object.assign(new Error('La decisión de stock corresponde únicamente a una nueva cancelación o rechazo.'), { status: 422, code: 'invalid_cancellation_stock' });
+  } else if (patch.status && statusReservesInventory(patch.status)) {
+    patch.inventoryCancellationDecision = '';
+    patch.inventoryCancellation = null;
+  }
   const inventory = computeInventoryDeltas(beforeOrder, patch, MAX_ADMIN_DISTINCT_PRODUCTS);
   const beforeVariantItems = normalizeVariantInventoryItems(beforeOrder.variantInventoryItems || []);
   if (patch.items) for (const item of patch.items) {
@@ -733,8 +748,9 @@ export async function applyOrderAdminMutation(
   }
   const afterItems = normalizeVariantInventoryItems(patch.items || beforeOrder.items);
   const beforeItems = normalizeVariantInventoryItems(beforeOrder.items);
-  const afterVariantItems = [];
-  const productIds = new Set([...inventory.deltas.keys(), ...beforeVariantItems.map(item => item.id),
+  const retainingWithoutItemChanges = !patch.items && !statusReservesInventory(inventory.afterStatus) && inventory.afterReserved && inventory.deltas.size === 0;
+  const afterVariantItems = retainingWithoutItemChanges ? beforeVariantItems.map(item => ({ ...item })) : [];
+  const productIds = retainingWithoutItemChanges ? new Set() : new Set([...inventory.deltas.keys(), ...beforeVariantItems.map(item => item.id),
     ...(patch.items || (inventory.afterReserved && !orderReservesInventory(beforeOrder)) ? afterItems.map(item => item.id) : [])]);
   const productDocuments = await readProductDocuments(env, productIds, batchGet);
   for (const productId of productIds) {
@@ -834,7 +850,7 @@ export async function applyOrderAdminMutation(
     ...beforeOrder,
     ...patch,
     status: inventory.afterStatus,
-    inventoryState: inventoryStateForStatus(inventory.afterStatus, inventory.afterReserved),
+    inventoryState: inventoryStateForStatus(inventory.afterStatus, inventory.afterReserved, patch.inventoryCancellationDecision ?? beforeOrder.inventoryCancellationDecision),
     variantInventoryItems: afterVariantItems,
     inventoryRevision: Math.max(0, Number(beforeOrder.inventoryRevision || 0)) + 1,
     inventoryUpdatedAt: now,

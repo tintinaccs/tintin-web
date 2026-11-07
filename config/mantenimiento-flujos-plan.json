@@ -1,12 +1,17 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "bdffea94ff64115842fdab26b8324c3e043ee86e",
-  "reason": "public-catalog: ids reservados de Firestore devuelven item null en vez de 502",
+  "baseCommit": "804a74d91531c84382cfe491340e46239ef3afa5",
+  "reason": "Actualizar glob moderno vulnerable en herramientas Firebase, conservar matchers heredados y documentar recuperación comprobada sin modificar PayPal.",
   "files": [
     {
-      "path": "functions/api/public-catalog.js",
-      "oldHash": "f476fdb2fd96b6da617d674db07d26e3c73f2ae34a68ee2cc5ccebaee5445c37",
-      "newHash": "a884aa303c6fa052bf445121f34742fca57a29358ae65c041f5b440cd43d5bbd"
+      "path": "package-lock.json",
+      "oldHash": "97dda5d06ba8ed5e26493dd041c99b4f64cee5593acb7ccee4be0c64f378f77d",
+      "newHash": "d93f6d6c2ecfc1e320d025ea3d4c0f00c1d2e4cf3b565f5fa8c1844fb0df964f"
+    },
+    {
+      "path": "package.json",
+      "oldHash": "9f7e04288ba6ca0ce89e0e92b909db956debc63c82c571a99da0ad8f0da9fabd",
+      "newHash": "1765d7f6e9c7fdd6d669cfd1878aaec898fa82f69b5c835246f45e1963d793e0"
     }
   ],
   "affectedRecords": []

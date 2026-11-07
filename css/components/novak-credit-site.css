@@ -1,0 +1,114 @@
+/* Integración del kit original: superficie clara incluso con un pie oscuro. */
+.novak-credit-row { box-sizing: border-box; width: 100%; padding: 18px 12px 24px; }
+.novak-credit-row .novak-credit { color: #222222; background-color: #fff; max-width: 100%; box-sizing: border-box; }
+.novak-credit-row .novak-credit:hover,
+.novak-credit-row .novak-credit:focus-visible { color: #222222; background-color: #FDECF2; }
+.novak-credit-row .novak-credit img { filter: none; opacity: 1; }
+.novak-credit-row .novak-credit img[data-novak-src] { visibility: hidden; }
+.novak-credit:has(noscript img) > img[data-novak-src] { display: none; }
+[data-novak-footer] { width: 100%; flex: 0 0 auto; }
+
+/* Franja final según la referencia; las columnas del pie conservan su diseño. */
+#tt-footer-ending {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 36px 16px 20px;
+  /* La franja conserva su centro claro y se une al fondo del pie en ambos
+     extremos, sin un corte blanco al llegar al borde de la página. */
+  background: var(--tt-footer-ending-fill, linear-gradient(180deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, .72) 28px,
+    rgba(255, 255, 255, .92) 100%));
+  text-align: center;
+}
+html:root body:not(:has(.adm-main)) #tt-footer-ending {
+  --tt-footer-ending-fill: linear-gradient(180deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, .72) min(28px, 25%),
+    rgba(255, 255, 255, .92) 50%,
+    rgba(255, 255, 255, 0) 100%);
+}
+#tt-footer-ending .tt-footer-bottom {
+  margin: 0;
+  padding: 0 !important;
+  color: #222222 !important;
+  font-size: 12px !important;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0 !important;
+}
+#tt-footer-ending .novak-credit-row { padding: 0; }
+#tt-footer-ending .novak-credit {
+  color: #222222 !important;
+  background-color: transparent;
+  font-size: 11px;
+  gap: 8px;
+  --novak-mark-width: 26.25px;
+  --novak-mark-height: 25px;
+  font-weight: 400;
+}
+#tt-footer-ending .novak-credit:hover,
+#tt-footer-ending .novak-credit:focus-visible { background-color: rgba(255, 255, 255, .55); }
+
+#tt-footer-ending .novak-credit img {
+  width: var(--novak-mark-width);
+  height: var(--novak-mark-height);
+}
+
+/* Móvil: el pie cubre hasta el borde inferior de la página (ya no queda una
+   franja de otro color bajo él) y reserva dentro de sí el espacio de la barra
+   flotante, de modo que la firma queda por encima del menú sin que éste la tape. */
+@media (max-width: 767px) {
+  html:root body:not(:has(.adm-main)):has(.tt-footer[data-tt-footer="unified"]) {
+    padding-bottom: 0 !important;
+  }
+  html:root body .tt-footer #tt-footer-ending {
+    padding-bottom: calc(var(--tt-mobile-nav-clearance, 104px) + env(safe-area-inset-bottom, 0px) + 16px);
+  }
+}
+
+/* El hover del kit se reserva al puntero; el foco de teclado sigue animado. */
+@media (hover: none), (pointer: coarse) {
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) {
+    transform: none;
+    background-color: transparent;
+  }
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) span::after,
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) img { transform: none; }
+  #tt-footer-ending .novak-credit:hover:not(:focus-visible) span::after { transform: scaleX(0); }
+}
+
+/* Presentación uniforme, también para colecciones cargadas o editadas en vivo. */
+:is(.tt-footer[data-tt-footer="unified"], [data-novak-footer]),
+:is(.tt-footer[data-tt-footer="unified"], [data-novak-footer]) :is(a, p, li, span, button, .tt-footer-col-title) {
+  text-transform: uppercase !important;
+}
+
+/* Evita que WebKit amplíe una textura SVG filtrada de tamaño CSS. Un lienzo
+   acorde a la densidad evita ampliar esa textura; el espacio visible sigue
+   siendo el definido por la firma y el SVG original permanece intacto. */
+.novak-credit { --novak-mark-density: 1; }
+@media (min-resolution: 1.01dppx) { .novak-credit { --novak-mark-density: 2; } }
+@media (min-resolution: 2.01dppx) { .novak-credit { --novak-mark-density: 3; } }
+@media (min-resolution: 3.01dppx) { .novak-credit { --novak-mark-density: 4; } }
+@supports (zoom: calc(1 / 2)) {
+  .novak-credit-row .novak-credit img,
+  #tt-footer-ending .novak-credit img {
+    max-width: none;
+    width: calc(var(--novak-mark-width, 42px) * var(--novak-mark-density));
+    height: calc(var(--novak-mark-height, 40px) * var(--novak-mark-density));
+    zoom: calc(1 / var(--novak-mark-density));
+  }
+  /* Compensa la escala interna: conserva los 2px y el 1.06 del kit.
+     Con movimiento reducido conserva la regla original sin transformaciones. */
+  @media (prefers-reduced-motion: no-preference) {
+    .novak-credit:hover img,
+    .novak-credit:focus-visible img {
+      transform: translateX(calc(2px * var(--novak-mark-density))) scale(1.06);
+    }
+  }
+}

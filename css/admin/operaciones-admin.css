@@ -465,7 +465,7 @@
   .tt-ops-loader { top: 80px; }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 768px) {
   .tt-ops-toasts {
     right: 12px;
     bottom: calc(76px + env(safe-area-inset-bottom, 0px));

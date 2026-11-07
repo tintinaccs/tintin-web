@@ -97,6 +97,7 @@ export function createAutomaticMonitor({
   let current = null;
   let disposed = false;
   const clearTimer = () => { timers.clearTimeout(timer); timer = null; };
+  const nextDelay = () => (typeof intervalMs === 'function' ? intervalMs() : intervalMs);
 
   function cancel() {
     clearTimer();
@@ -131,7 +132,7 @@ export function createAutomaticMonitor({
         current = null;
         if (!disposed && isActive()) {
           onStatus('waiting');
-          timer = timers.setTimeout(run, intervalMs);
+          timer = timers.setTimeout(run, nextDelay());
         } else if (!disposed) onStatus('paused');
       }
     }

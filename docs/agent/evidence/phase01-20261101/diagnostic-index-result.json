@@ -1,0 +1,27 @@
+{
+  "finding": "F07-INDEX",
+  "phantoms": [
+    {
+      "name": ") &&\n    admin.includes(",
+      "references": [
+        {
+          "file": "scripts/auditar-admin-analitica-auditar.js",
+          "line": 266,
+          "operation": "collection"
+        }
+      ]
+    },
+    {
+      "name": ") &&\n    orderStats.includes(",
+      "references": [
+        {
+          "file": "scripts/auditar-admin-analitica-auditar.js",
+          "line": 272,
+          "operation": "collection"
+        }
+      ]
+    }
+  ],
+  "runtimeCollectionNameFilter": "^[A-Za-z0-9_-]{1,80}$",
+  "missingSecurityRulesClaimed": false
+}

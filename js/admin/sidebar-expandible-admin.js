@@ -7,7 +7,7 @@ const hamburger = document.getElementById('adm-hamburger');
 const overlay = document.getElementById('adm-overlay');
 const main = document.querySelector('.adm-main');
 const mobileTabs = document.getElementById('adm-mobile-tabs');
-const mobileLayout = window.matchMedia('(max-width: 540px)');
+const mobileLayout = window.matchMedia('(max-width: 768px)');
 const hoverLayout = window.matchMedia('(hover: hover) and (pointer: fine)');
 let pinned = false, peek = false, keyboard = false, closeTimer;
 try { pinned = localStorage.getItem(STORAGE_KEY) === '0'; } catch {}

@@ -17,7 +17,7 @@
   --tt-ui-muted: var(--color-text-secondary, #222222);
   --tt-ui-pink: var(--color-brand-primary, #F8AACA);
   --tt-ui-pink-deep: var(--color-brand-primary, #F8AACA);
-  --tt-ui-pink-soft: var(--color-brand-accent, #FDECF2);
+  --tt-ui-pink-soft: var(--color-brand-accent, #FFFFFF);
   --tt-ui-line: var(--color-border-primary, #FDECF2);
   --tt-ui-shadow: 0 8px 24px color-mix(in srgb, var(--tt-ui-ink) 8%, transparent);
   --tt-ui-shadow-rest: 0 3px 14px color-mix(in srgb, var(--tt-ui-ink) 4%, transparent);
@@ -549,7 +549,7 @@ html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dia
     var(--tt-section-start) 0%,
     var(--tt-section-background) 50%,
     var(--tt-section-end) 100%);
-  background: var(--tt-section-gradient) var(--tt-section-background) !important;
+  background: var(--tt-section-gradient) !important;
   color: var(--color-text-primary, #222222) !important;
   border-block-color: transparent !important;
   border-block-width: 0 !important;
@@ -599,6 +599,31 @@ html:root body [data-tt-flow-block] > [data-tt-flow-background] {
     var(--tt-section-background) 50%,
     var(--tt-section-end) 100%) !important;
 }
+
+/* Resolver el lienzo en body permite heredar la paleta local del hero. */
+html:root body:not(:has(.adm-main)) {
+  --tt-flow-canvas: linear-gradient(180deg, var(--tt-flow-light), var(--tt-flow-light));
+}
+
+/* La misma superficie en el primer render y en la capa de ancho completo.
+   Los dos extremos vuelven al lienzo común, incluso si hay texto o navegación
+   entre secciones. La base admite tanto colores como degradados publicados. */
+html:root body:not(:has(.adm-main)) > :is(section:not([role="dialog"]), .tt-footer),
+html:root body:not(:has(.adm-main)) :is(main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer),
+html:root body:not(:has(.adm-main)) [data-tt-flow-block] {
+  --tt-section-start: var(--tt-flow-light) !important;
+  --tt-section-end: var(--tt-flow-light) !important;
+  --tt-section-gradient:
+    linear-gradient(180deg, var(--tt-flow-light), transparent) top / 100% min(50%, var(--tt-flow-fade)) no-repeat,
+    linear-gradient(0deg, var(--tt-flow-light), transparent) bottom / 100% min(50%, var(--tt-flow-fade)) no-repeat,
+    var(--tt-section-background, var(--tt-flow-light)) !important;
+}
+html[data-tt-footer-bg-custom] body:not(:has(.adm-main)) .tt-footer {
+  --tt-section-background: var(--tt-global-footer-bg) !important;
+}
+html:root body:not(:has(.adm-main)) [data-tt-flow-block] > [data-tt-flow-background] {
+  background: var(--tt-section-gradient) !important;
+}
 html:root body #hero .tt-hero-media { background: transparent !important; }
 html:root body { overflow-x: clip; }
 /* Una foto muy clara conserva un contorno visible, sin sustituir su identidad. */
@@ -640,18 +665,18 @@ html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-c
 html:root body:not(:has(.adm-main)) .tt-visual-product-card > strong { display:block; border-top:1px solid var(--tt-ui-line); margin-top:12px; padding-top:12px; }
 /* El estado se distingue también en una captura, sin depender del botón. */
 html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card).tt-stock-unavailable,
-html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label) { background:#F3F4F6 !important; }
+html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label) { background:#FDECF2 !important; }
 html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card).tt-stock-unavailable :is(.tt-product-img-real,.tt-card-img-wrap img),
 html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label) > img { opacity:.55 !important; }
 
-html:root body .tt-stock-label { color:#4B5563 !important; background:#E5E7EB !important; border-color:#9CA3AF !important; }
+html:root body .tt-stock-label { color:#222222 !important; background:#FDECF2 !important; border-color:#F8AACA !important; }
 
 /* El fondo y su desenfoque se desvanecen juntos sobre el contenido actual.
    La máscara pertenece sólo a esta capa: nunca recorta marca ni desplegables. */
 :where(.ck-header, .login-brand, .adm-header) { position: relative; }
 html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header.scrolled,
 html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header,
-html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand,
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet,
   .ck-header, .login-brand, .adm-topbar, .adm-header) {
   isolation: isolate;
   background: transparent !important;
@@ -661,7 +686,7 @@ html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-bran
   backdrop-filter: none !important;
 }
 
-html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand,
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet,
   .ck-header, .login-brand, .adm-topbar, .adm-header)::before {
   content: "";
   position: absolute;
@@ -679,11 +704,11 @@ html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-bran
 }
 
 /* El tinte global rosa no debe fundir la marca con el encabezado rosa. */
-html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand) {
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet) {
   --tt-header-fade-depth: clamp(32px, 4vw, 56px);
   overflow: visible !important;
 }
-html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand)::before {
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet)::before {
   bottom: calc(-1 * var(--tt-header-fade-depth));
 }
 

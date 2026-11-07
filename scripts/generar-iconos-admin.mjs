@@ -17,17 +17,19 @@ try {
   const pixels=ctx.getImageData(0,0,image.width,image.height).data;
   let left=image.width,top=image.height,right=0,bottom=0;
   for(let y=0;y<image.height;y++)for(let x=0;x<image.width;x++)if(pixels[(y*image.width+x)*4+3]>0){left=Math.min(left,x);right=Math.max(right,x+1);top=Math.min(top,y);bottom=Math.max(bottom,y+1);}
+  // Keep the original silhouette and the existing flat brand variant. The
+  // source PNG contains highlights; its alpha is reused without redrawing.
   ctx.globalCompositeOperation='source-in';ctx.fillStyle=kind==='badge'?'#fff':'#CF367B';ctx.fillRect(0,0,image.width,image.height);
   const canvas=document.createElement('canvas');canvas.width=canvas.height=size;
   const out=canvas.getContext('2d');out.imageSmoothingQuality='high';
   if(kind==='circle'){out.fillStyle='#FFF1F7';out.beginPath();out.arc(size/2,size/2,size/2,0,Math.PI*2);out.fill();}
+  if(kind==='favicon'){out.fillStyle='#fff';out.beginPath();out.arc(size/2,size/2,size/2,0,Math.PI*2);out.fill();}
   // Apple aplica su propia máscara; un lienzo opaco evita esquinas negras.
   // El icono maskable mantiene toda la marca dentro del círculo seguro del 80%.
   if(kind==='apple'||kind==='maskable'){out.fillStyle='#FFF1F7';out.fillRect(0,0,size,size);}
-  const fraction=kind==='favicon'?.94:kind==='maskable'?.66:kind==='badge'?.66:.78;
+  const fraction=kind==='favicon'?.84:kind==='maskable'?.66:kind==='badge'?.66:.78;
   const scale=size*fraction/Math.max(right-left,bottom-top),width=(right-left)*scale,height=(bottom-top)*scale;
-  const passes=kind==='favicon'?(size===16?3:size<=32?2:1):1;
-  for(let pass=0;pass<passes;pass++)out.drawImage(original,left,top,right-left,bottom-top,(size-width)/2,(size-height)/2,width,height);
+  out.drawImage(original,left,top,right-left,bottom-top,(size-width)/2,(size-height)/2,width,height);
   return {png:canvas.toDataURL('image/png').split(',')[1],pixels:Array.from(out.getImageData(0,0,size,size).data)};
  },{source:'data:image/png;base64,'+source.toString('base64'),size,kind});
  for(const [size,name,kind] of [[192,'push-icon-192.png','circle'],[512,'app-icon-512.png','circle'],[512,'app-icon-maskable-512.png','maskable'],[180,'apple-touch-icon.png','apple'],[96,'push-badge-96.png','badge']]) {
@@ -35,7 +37,11 @@ try {
   await fs.writeFile(path.join(target,name),Buffer.from(data.png,'base64'));
   console.log('Icono original exportado:',name);
  }
- for(const [sourceName,filename] of [['push-icon-192.png','favicon-192x192.png'],['app-icon-512.png','favicon-512x512.png'],['apple-touch-icon.png','apple-touch-icon.png']]) await fs.copyFile(path.join(target,sourceName),path.join(root,filename));
+ await fs.copyFile(path.join(target,'apple-touch-icon.png'),path.join(root,'apple-touch-icon.png'));
+ for(const size of [192,512]){
+  const data=await render(size,'favicon');
+  await fs.writeFile(path.join(root,`favicon-${size}x${size}.png`),Buffer.from(data.png,'base64'));
+ }
  const icons=[];
  for(const size of [16,24,32,48,64]) {
   const data=await render(size,'favicon');

@@ -126,7 +126,7 @@ test('retoma el destino tras navegar al login y volver sin from desde el proveed
 });
 
 const {load: loadPanel}=require('./helpers/admin-panel-fixture.cjs');
-test('favicons transparentes, apps circulares y máscara segura usan la marca rosada',async({page})=>{
+test('favicons originales sobre círculo blanco y apps conservan sus variantes de marca',async({page})=>{
  await loadPanel(page,390);
  for(const file of ['manifest.json','admin-manifest.json']) {
   const manifest=JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
@@ -145,13 +145,16 @@ test('favicons transparentes, apps circulares y máscara segura usan la marca ro
    for(let y=0;y<image.height;y++)for(let x=0;x<image.width;x++){
     const i=(y*image.width+x)*4;
     if(data[i+3]>200&&data[i]>250&&data[i+1]>250&&data[i+2]>250)white++;
-    if(data[i+3]>128&&data[i]>180&&data[i+1]<100&&data[i+2]>90){
+    // At16px the original thin silhouette blends with white by antialiasing.
+    // Detect its pink ink, rather than requiring an opaque dark stroke.
+    if(data[i+3]>128&&data[i]>data[i+1]+24&&data[i]>data[i+2]+12){
      pink++;left=Math.min(left,x);right=Math.max(right,x+1);
      if(y>image.height*.6&&Math.abs(x+.5-image.width/2)<image.width*.1)tail++;
      if(Math.hypot(x+.5-image.width/2,y+.5-image.height/2)>image.width*.4)unsafePink++;
     }
    }
-   result.push({name,corner:[...data.slice(0,4)],white,pink,coverage:(right-left)/image.width,unsafePink,tail});
+   const top=(Math.floor(image.width/2))*4;
+   result.push({name,corner:[...data.slice(0,4)],top:[...data.slice(top,top+4)],white,pink,coverage:(right-left)/image.width,unsafePink,tail,size:image.width});
   }
   return result;
  });
@@ -159,7 +162,11 @@ test('favicons transparentes, apps circulares y máscara segura usan la marca ro
   const badge=image.name.includes('badge'),opaque=/apple-touch|maskable/.test(image.name);
   expect(image.corner,image.name).toEqual(opaque?[255,241,247,255]:[0,0,0,0]);
   if(badge){expect(image.white).toBeGreaterThan(100);continue;} // Android requires a monochrome badge.
-  expect(image.white,image.name).toBe(0);
+  if(image.name.includes('favicon')){
+   expect(image.white,image.name+' círculo blanco').toBeGreaterThan(image.size*image.size*.4);
+   expect(image.top.slice(0,3),image.name+' superficie blanca, sin borde').toEqual([255,255,255]);
+   expect(image.top[3],image.name+' antialias del círculo').toBeGreaterThanOrEqual(200);
+  }else expect(image.white,image.name).toBe(0);
   expect(image.pink,image.name).toBeGreaterThan(5);
   expect(image.tail,image.name+' conserva el cuerpo completo').toBeGreaterThan(0);
   if(/favicon-(16|32)|favicon\.ico/.test(image.name))expect(image.coverage,image.name).toBeGreaterThan(.8);
@@ -180,11 +187,18 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[820,1180]
    const style=getComputedStyle(node),paint=getComputedStyle(node,'::before');
    return {blur:paint.backdropFilter,background:paint.backgroundImage,mask:paint.maskImage,canvas:style.backgroundColor,border:style.borderBottomWidth,items,overflow:document.documentElement.scrollWidth>innerWidth+1};
   });
-  expect(geometry.blur).toContain('blur(18px)');
-  expect(geometry.background).toContain('linear-gradient');
-  expect(geometry.mask).toContain('linear-gradient');
-  expect(geometry.canvas).toBe('rgba(0, 0, 0, 0)');
-  expect(geometry.border).toBe('0px');
+  if(width<=540||(width<=1024&&height<=500)) {
+   expect(geometry.background).toBe('none');
+   expect(geometry.mask).toBe('none');
+   expect(geometry.blur).toBe('none');
+   expect(geometry.border).toBe('1px');
+  } else {
+   expect(geometry.blur).toContain('blur(18px)');
+   expect(geometry.background).toContain('linear-gradient');
+   expect(geometry.mask).toContain('linear-gradient');
+   expect(geometry.canvas).toBe('rgba(0, 0, 0, 0)');
+   expect(geometry.border).toBe('0px');
+  }
   expect(geometry.overflow).toBe(false);
   for(let i=0;i<geometry.items.length;i++)for(let j=i+1;j<geometry.items.length;j++){
    const a=geometry.items[i],b=geometry.items[j];

@@ -12,14 +12,15 @@ const withAdminSiteChange = async action => (await import('../../core/store/publ
    reimplementar esta cascada — todas deben importar de acá.
    ============================================================= */
 
-import { db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import {
-  doc,
-  getDoc,
-  onSnapshot,
-  serverTimestamp,
-  setDoc,
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+// Resolver una imagen ya cargada es puro; sólo los defaults requieren SDK.
+async function imageDefaultsIO() {
+  const [{ db }, sdk] = await Promise.all([
+    import('../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1'),
+    import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
+  ]);
+  return { db, ...sdk };
+}
+
 import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 
 const DEFAULTS_DOC_PATH = ['settings', 'imageDefaults'];
@@ -54,11 +55,15 @@ export function onImageDefaultsUpdate(cb) {
   }
   if (!defaultsListenerStarted) {
     defaultsListenerStarted = true;
-    onSnapshot(
-      doc(db, ...DEFAULTS_DOC_PATH),
-      snap => publishDefaults(snap.exists() ? snap.data() : {}),
-      error => console.warn('[image-resolver] defaults listener failed:', error)
-    );
+    imageDefaultsIO().then(({ db, onSnapshot, doc }) => {
+      if (!defaultsSubscribers.size) { defaultsListenerStarted = false; return; }
+      onSnapshot(doc(db, ...DEFAULTS_DOC_PATH),
+        snap => publishDefaults(snap.exists() ? snap.data() : {}),
+        error => console.warn('[image-resolver] defaults listener failed:', error));
+    }).catch(error => {
+      defaultsListenerStarted = false;
+      console.warn('[image-resolver] defaults dependencies failed:', error);
+    });
   }
   return () => defaultsSubscribers.delete(cb);
 }
@@ -67,6 +72,7 @@ export function onImageDefaultsUpdate(cb) {
 export async function loadImageDefaults() {
   if (defaultsCache) return { ...defaultsCache };
   try {
+    const { db, getDoc, doc } = await imageDefaultsIO();
     const snap = await getDoc(doc(db, ...DEFAULTS_DOC_PATH));
     return publishDefaults(snap.exists() ? snap.data() : {});
   } catch (error) {
@@ -77,6 +83,7 @@ export async function loadImageDefaults() {
 
 /** Guarda los respaldos globales (Super Admin únicamente, reglas del lado servidor lo exigen). */
 export async function saveImageDefaults(patch) {
+  const { db, setDoc, doc, serverTimestamp } = await imageDefaultsIO();
   const next = normalizeDefaults({ ...(defaultsCache || {}), ...patch });
   await withAdminSiteChange(async () => setDoc(doc(db, ...DEFAULTS_DOC_PATH), { ...next, updatedAt: serverTimestamp() }, { merge: true }));
   return publishDefaults(next);

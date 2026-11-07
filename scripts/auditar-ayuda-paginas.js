@@ -118,7 +118,7 @@ async function run() {
         /tt-contact-phone/.test(html) &&
         /tt-contact-email/.test(html) &&
         /tt-contact-addr/.test(html) &&
-        html.includes('© 2024-2026 TINTIN ACCESORIOS'),
+        html.includes('© 2024-2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS'),
       'El footer debe traer las clases de contacto sincronizables y copyright vigente.'
     );
 

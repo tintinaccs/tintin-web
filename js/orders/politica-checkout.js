@@ -15,7 +15,7 @@ export function aggregateCheckoutCart(items) {
   for (const item of items || []) {
     const id = clean(item?.id);
     const variant = clean(item?.variant);
-    const qty = Number(item?.qty || 1);
+    const qty = Number(item?.qty);
     if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99) {
       throw Object.assign(new Error('Encontramos una cantidad no válida en el carrito.'), { code: 'invalid_cart' });
     }

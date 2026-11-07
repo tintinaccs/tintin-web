@@ -1,4 +1,4 @@
-import { orderReservesInventory, normalizeInventoryItems } from './modelo-inventario.mjs?v=tintin-20261031-seo-espacios-2';
+import { orderReservesInventory, normalizeInventoryItems } from './modelo-inventario.mjs?v=tintin-20261102-cancel-stock-1';
 import { normalizeVariantInventoryItems } from './inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 
 // Read-only projection. Never spreads order documents: customer, payment and

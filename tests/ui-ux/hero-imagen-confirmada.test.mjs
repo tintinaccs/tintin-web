@@ -8,7 +8,7 @@ const { chromium } = await import(browserPackage);
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const home = await fs.readFile(path.join(root, 'index.html'), 'utf8');
 const hero = home.match(/<section class="tt-hero"[\s\S]*?<\/section>/)[0];
-const fallbackRoot = 'assets-tintin/images/home/hero-nuevo/hero-nuevo-';
+const fallbackRoot = 'assets-tintin/images/home/hero-reference/';
 
 test('Firestore conserva el arte sin pérdida por dispositivo y no vuelve a descargar el banner tras confirmar', async () => {
   const browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } : {}) });
@@ -23,8 +23,8 @@ test('Firestore conserva el arte sin pérdida por dispositivo y no vuelve a desc
         const url = new URL(route.request().url());
         if (url.host !== 'tintin.test') return route.abort();
         if (url.pathname === '/index.html') return route.fulfill({contentType:'text/html',body:'<!doctype html><body></body>'});
-        if (url.pathname.endsWith('/imagenes.js')) return route.fulfill({contentType:'text/javascript',body:`export const HERO_IMAGE_CONFIG_VERSION='test'; export const HERO_IMAGE_FALLBACKS={desktop:'${fallbackRoot}desktop.png',tablet:'${fallbackRoot}tablet-vertical.png',tabletLandscape:'${fallbackRoot}tablet-horizontal.png',mobile:'${fallbackRoot}mobile.png'};export const resolveSlotImage=(images,slot,device)=>images[slot+'_'+device]||'';export const onImagesUpdate=callback=>{window.confirmImages=callback;callback({});};`});
-        if (url.pathname.includes('/hero-nuevo/')) requests.push(url.pathname);
+        if (url.pathname.endsWith('/imagenes.js')) return route.fulfill({contentType:'text/javascript',body:`export const HERO_IMAGE_CONFIG_VERSION='test'; export const HERO_IMAGE_FALLBACKS={desktop:'${fallbackRoot}backdrop.svg',tablet:'${fallbackRoot}backdrop.svg',tabletLandscape:'${fallbackRoot}backdrop.svg',mobile:'${fallbackRoot}backdrop.svg'};export const resolveSlotImage=(images,slot,device)=>images[slot+'_'+device]||'';export const onImagesUpdate=callback=>{window.confirmImages=callback;callback({});};`});
+        if (url.pathname.endsWith('/hero-reference/backdrop.svg') || url.pathname.endsWith('/hero-reference/backdrop.svg')) requests.push(url.pathname);
         if (url.pathname.endsWith('/general/logo.png')) logoRequests.push(url.href);
         const file = path.resolve(root, '.' + url.pathname);
         if (!file.startsWith(root + path.sep)) return route.abort();
@@ -39,23 +39,23 @@ test('Firestore conserva el arte sin pérdida por dispositivo y no vuelve a desc
       await page.evaluate(()=>window.confirmImages({}));
       await page.waitForFunction(()=>document.getElementById('tt-hero-img').dataset.ttHeroPhase5Signature);
       await page.waitForLoadState('networkidle');
-      assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),new RegExp(`hero-nuevo-${art}-lossless\\.webp`));
+      assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),/backdrop\.svg/);
       assert.equal(requests.length,0,'sin segunda descarga del arte confirmado ni precarga de otra variante');
-      assert.ok(logoRequests.every(url=>url.endsWith('?v=fixture-logo')), 'el snapshot no quita la versión del logo publicado');
+      assert.ok(logoRequests.every(url=>url.endsWith('?v=fixture-logo')||url.endsWith('?v=tintin-20261009-whatsapp-responsive-1')), 'el snapshot no quita la versión del logo publicado');
       assert.match(await page.locator('.tt-logo-img').evaluate(img=>img.src), /logo\.png\?v=fixture-logo$/);
       requests.length=0;
-      await page.evaluate(root=>window.confirmImages({hero_bg_configVersion:'test',hero_bg_desktop:root+'desktop.png?custom=1',hero_bg_tablet:root+'tablet-vertical.png?custom=1',hero_bg_mobile:root+'mobile.png?custom=1'}),fallbackRoot);
+      await page.evaluate(root=>window.confirmImages({hero_bg_configVersion:'test',hero_bg_desktop:root+'backdrop.svg?custom=1',hero_bg_tablet:root+'backdrop.svg?custom=1',hero_bg_mobile:root+'backdrop.svg?custom=1'}),fallbackRoot);
       await page.waitForFunction(()=>document.getElementById('tt-hero-img').currentSrc.includes('?custom=1'));
       await page.waitForLoadState('networkidle');
       const customArt=art==='tablet-horizontal'?'tablet-vertical':art;
-      assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),new RegExp(`hero-nuevo-${customArt}\\.png\\?custom=1`));
-      assert.ok(requests.filter(url=>url.endsWith('.png')).every(url=>url.endsWith(`hero-nuevo-${customArt}.png`)), `se predecodifica solamente la personalización activa: ${requests.join(',')}`);
+      assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),/backdrop\.svg\?custom=1/);
+      assert.ok(requests.filter(url=>url.endsWith('.svg')).every(url=>url.endsWith(`backdrop.svg`)), `se predecodifica solamente la personalización activa: ${requests.join(',')}`);
       assert.ok(await page.locator('#tt-hero-img').evaluate(img=>[...img.closest('picture').querySelectorAll('source')].every(source=>source.srcset.includes('?custom=1')&&!source.type)), 'todos los sources usan el formato real de la personalización');
       await page.evaluate(()=>window.confirmImages({}));
-      await page.waitForFunction(()=>document.getElementById('tt-hero-img').currentSrc.includes('-lossless.webp?'));
+      await page.waitForFunction(()=>document.getElementById('tt-hero-img').currentSrc.includes('backdrop.svg?'));
       await page.evaluate(()=>document.getElementById('tt-hero-img').dispatchEvent(new Event('error')));
-      await page.waitForFunction(()=>{const img=document.getElementById('tt-hero-img');return /\.png\?v=/.test(img.currentSrc)&&img.complete&&img.naturalWidth>0;});
-      assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),new RegExp(`hero-nuevo-${art}\\.png`));
+      await page.waitForFunction(()=>{const img=document.getElementById('tt-hero-img');return /\.svg\?v=/.test(img.currentSrc)&&img.complete&&img.naturalWidth>0;});
+      assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),/backdrop\.svg/);
       await page.close();
     }
   } finally { await browser.close(); }

@@ -65,7 +65,8 @@ test('recorrer Configuración conserva el borrador y los encabezados ocultos que
   const options = await select.locator('option').allTextContents();
   expect(options.length).toBeGreaterThan(3);
   await select.selectOption('1');
-  await expect(section.locator('.adm-card-title').nth(1)).toBeFocused();
+  // La tarjeta de modo oscuro (solo teléfono en app) puede estar oculta: el selector lista solo títulos visibles.
+  await expect(section.locator('.adm-card-title:visible').nth(1)).toBeFocused();
   await expect(input).toHaveValue('Borrador sin guardar');
   const columns = await section.locator('.tt-admin-field-grid:visible').evaluateAll(grids => grids.map(grid => getComputedStyle(grid).gridTemplateColumns.split(' ').length));
   expect(columns.length).toBeGreaterThan(0);

@@ -22,6 +22,15 @@ html body #tt-loader:not(.tt-out) {
   visibility: visible !important;
 }
 
+/* La barra de scroll de la página (escritorio con barra clásica) queda sobre
+   el loader como una franja clara en el borde derecho. Se pinta del mismo
+   rosa mientras el loader está activo: conserva el ancho y no mueve el layout. */
+html:has(body #tt-loader:not(.tt-out)) {
+  --color-scrollbar-thumb: #F8AACA;
+  --color-scrollbar-track: #F8AACA;
+  scrollbar-color: #F8AACA #F8AACA;
+}
+
 html body #tt-loader::before {
   content: "";
   position: absolute;
@@ -48,11 +57,13 @@ html body #tt-loader-spin-wrap::before {
   flex: 0 0 auto;
   width: var(--tt-loader-brand-width);
   max-width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 400 / 260;
   background-image: url("../../assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 120% auto;
+  /* Mismo encuadre del símbolo que en el hero (viewBox 40 170 400 260). */
+  background-position: 50% 50%;
   filter: brightness(0) invert(1);
   opacity: 0;
   transform: scale(1.09);
@@ -203,3 +214,33 @@ html body #tt-loader::before {
 /* Cubrir el viewport sin alterar el gutter de la página: cambiarlo mientras
    carga desplazaba el contenido al retirar el loader. */
 html body #tt-loader { width: 100vw !important; width: 100dvw !important; }
+
+/* Recorte del mismo archivo y viewBox del hero: letras y corazones originales. */
+html body #tt-loader-wordmark {
+  display: block;
+  /* Proporción original de la marca: el texto mide ~71% de la libélula. */
+  width: calc(var(--tt-loader-brand-width) * .76);
+  max-width: 100%;
+  height: auto;
+  margin-top: calc(var(--tt-loader-brand-width) * .09);
+  overflow: hidden;
+  /* El recorte del hero incluye la punta de la cola de la libélula (columna
+     x 748-757, filas 715-733 del archivo) y se veía como un puntito sobre
+     "tintin". Se quita solo esa columna: los corazones empiezan en la fila 723
+     en otras columnas y no deben recortarse. Porcentajes de 870x260. */
+  clip-path: polygon(0 0, 47.5% 0, 47.5% 9.6%, 49.7% 9.6%, 49.7% 0, 100% 0, 100% 100%, 0 100%) !important;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html body #tt-loader-spin-wrap.tt-ready::before {
+    animation: tt-logo-fade-scale-in .6s ease both, tt-loader-float 4s .6s ease-in-out infinite;
+  }
+  @keyframes tt-loader-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+}
+@media (max-height: 480px) {
+  html body #tt-loader-spin-wrap { --tt-loader-brand-width: 112px; }
+  html body #tt-loader-wordmark { margin-top: 8px; }
+  html body #tt-loader .tt-loader-spinner { margin-top: 12px; }
+}

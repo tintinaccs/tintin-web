@@ -66,11 +66,11 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         root: '.tt-hero',
         allowVisibility: true,
         fields: [
-          field('title', 'Título', '.tt-hero-title', 'UN DETALLE MUY VOS', { type: 'multiline', rows: 3, maxLength: 220 }),
-          field('subtitle', 'Subtítulo', '.tt-hero-subtitle', 'Joyitas únicas, como vos.', { type: 'multiline', rows: 3, maxLength: 500 }),
-          field('primaryText', 'Botón principal', '.tt-hero-actions a', 'Comprar ahora', { index: 0, maxLength: 80 }),
+          field('title', 'Título', '.tt-hero-title', 'El encanto está en los detalles', { type: 'multiline', rows: 3, maxLength: 220 }),
+          field('subtitle', 'Subtítulo', '.tt-hero-subtitle', 'Piezas elegidas para acompañarte en cada momento.', { type: 'multiline', rows: 3, maxLength: 500 }),
+          field('primaryText', 'Botón principal', '.tt-hero-actions a', 'COMPRAR AHORA', { index: 0, maxLength: 80 }),
           field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', '/catalogo', { index: 0, type: 'href', maxLength: 500 }),
-          field('btnText', 'Botón secundario', '.tt-hero-actions a', '¿Quiénes somos? →', { index: 1, maxLength: 80 }),
+          field('btnText', 'Botón secundario', '.tt-hero-actions a', '¿Quienes somos?', { index: 1, maxLength: 80 }),
           field('btnHref', 'Enlace del botón secundario', '.tt-hero-actions a', '/about', { index: 1, type: 'href', maxLength: 500 }),
         ],
       },
@@ -84,7 +84,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
           field('items.1.label', 'Beneficio 2 — título', '.tt-trust-title', 'Materiales de calidad', { index: 1, maxLength: 100 }),
           field('items.1.desc', 'Beneficio 2 — detalle', '.tt-trust-desc', 'Distintos materiales para cada estilo', { index: 1, maxLength: 220 }),
           field('items.2.label', 'Beneficio 3 — título', '.tt-trust-title', 'Pago seguro', { index: 2, maxLength: 100 }),
-          field('items.2.desc', 'Beneficio 3 — detalle', '.tt-trust-desc', 'Transferencia; efectivo contra entrega sólo en delivery', { index: 2, maxLength: 220 }),
+          field('items.2.desc', 'Beneficio 3 — detalle', '.tt-trust-desc', 'Transferencia; efectivo al recibir por delivery o al retirar', { index: 2, maxLength: 220 }),
           field('items.3.label', 'Beneficio 4 — título', '.tt-trust-title', 'Atención personalizada', { index: 3, maxLength: 100 }),
           field('items.3.desc', 'Beneficio 4 — detalle', '.tt-trust-desc', 'Te ayudamos por WhatsApp', { index: 3, maxLength: 220 }),
         ],
@@ -242,7 +242,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         root: '.tt-page-hero + .section .container',
         fields: [
           field('blocks.0.title', 'Delivery — título', '.tt-info-title', 'Delivery — Zona Central', { index: 0, maxLength: 180 }),
-          field('blocks.0.body', 'Delivery — descripción', '.tt-info-block > p', 'Realizamos delivery a domicilio en Asunción, Gran Asunción y zonas aledañas.', { index: 0, type: 'multiline', rows: 4, maxLength: 900 }),
+          field('blocks.0.body', 'Delivery — descripción', '.tt-info-block > p', 'Realizamos delivery a domicilio de lunes a sábado en Asunción, Gran Asunción y zonas aledañas.', { index: 0, type: 'multiline', rows: 4, maxLength: 900 }),
           field('blocks.1.title', 'Encomienda — título', '.tt-info-title', 'Encomienda — Interior del País', { index: 1, maxLength: 180 }),
           field('blocks.1.body', 'Encomienda — descripción', '.tt-info-block > p', 'Coordinamos la transportadora al confirmar el pedido. Por encomienda, el producto se paga previamente por transferencia bancaria. Sólo el costo del envío se paga a la transportadora al recibir. No hay pago contra entrega del producto.', { index: 1, type: 'multiline', rows: 4, maxLength: 900 }),
           field('blocks.2.title', 'Retiro — título', '.tt-info-title', 'Retiro en San Lorenzo — Gratis', { index: 2, maxLength: 180 }),
@@ -284,7 +284,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
           faqField('questions.4.a', 'Respuesta 5', '.tt-faq-a', 4, 'Consultanos por WhatsApp para conocer las opciones disponibles.'),
           faqField('categories.2', 'Categoría 3', '.tt-info-title', 2, 'Envíos', 'text'),
           faqField('questions.5.q', 'Pregunta 6', '.tt-faq-q', 5, '¿Hacen delivery a domicilio?', 'text'),
-          faqField('questions.5.a', 'Respuesta 6', '.tt-faq-a', 5, 'Sí. Coordinamos la transportadora al confirmar el pedido. Por encomienda, el producto se paga previamente por transferencia bancaria. Sólo el costo del envío se paga a la transportadora al recibir. No hay pago contra entrega del producto.'),
+          faqField('questions.5.a', 'Respuesta 6', '.tt-faq-a', 5, 'Sí. Hacemos delivery en Zona Central de lunes a sábado y podés pagar en efectivo al recibir. Los pedidos hasta las 11:00 hs pueden entregarse el mismo día; después, se coordinan para el siguiente día de reparto. También podés retirar en San Lorenzo, con transferencia previa o efectivo al retirar. Por encomienda, el producto se paga previamente por transferencia bancaria. Sólo el costo del envío se paga a la transportadora al recibir. No hay pago contra entrega del producto por encomienda.'),
           faqField('questions.6.q', 'Pregunta 7', '.tt-faq-q', 6, '¿Cuánto cuesta el envío?', 'text'),
           faqField('questions.6.a', 'Respuesta 7', '.tt-faq-a', 6, 'El costo se calcula según la ciudad y el método elegidos en el checkout.'),
           faqField('questions.7.q', 'Pregunta 8', '.tt-faq-q', 7, '¿Cuánto tarda en llegar?', 'text'),
@@ -434,7 +434,11 @@ export function normalizeContentValue(pageId, sectionId, key, value) {
   const text = String(value == null ? '' : value);
   if (pageId === 'index' && sectionId === 'hero' && key === 'title') {
     const corrected = text.replace(/\bTÚ ESTILO\b/g, 'TU ESTILO');
-    return /^\s*DETALLES QUE ELEVAN\s+TU ESTILO\s*$/i.test(corrected) ? 'UN DETALLE\nMUY VOS' : corrected;
+    return /^\s*(?:DETALLES QUE ELEVAN\s+TU ESTILO|UN DETALLE\s+MUY VOS|Tintin Accesorios & Relojes)\s*$/i.test(corrected) ? 'El encanto está en los detalles' : corrected;
+  }
+  if (pageId === 'index' && sectionId === 'hero') {
+    const legacy = {subtitle: ['Joyitas únicas, como vos.', 'Piezas elegidas para acompañarte en cada momento.'], primaryText: ['Encontrá tu favorito', 'COMPRAR AHORA'], btnText: ['Sobre Tintín', '¿Quienes somos?']};
+    if (legacy[key] && text.trim() === legacy[key][0]) return legacy[key][1];
   }
   if (pageId === 'index' && sectionId === 'editorial_relojes' && key === 'title' && /^\s*EL RELOJ DEL QUE\s+TODAS SE ENAMORAN\s*$/i.test(text)) return 'RELOJES TINTIN';
   if (pageId === 'index' && sectionId === 'reviews' && key === 'eyebrow' && /^\s*Ellas ya eligieron brillar\s*$/i.test(text)) return 'Lo que cuentan nuestras tintinas';

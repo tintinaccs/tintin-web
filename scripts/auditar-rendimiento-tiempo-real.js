@@ -125,7 +125,7 @@ check(
   collectionsStore.includes('loadCollections') &&
     collectionsStore.includes('readCached') &&
     collectionsStore.includes('startAdminListener') &&
-    collectionsStore.includes('onSnapshot') &&
+    collectionsStore.includes('subscribeAdminSnapshot') && collectionsStore.includes('createAdminPagedSource') && collectionsStore.includes('limit(200)') &&
     collectionsStore.includes('adminSubscribers'),
   'El menú público no debe abrir un listener permanente; el Admin sí puede mantenerlo.'
 );

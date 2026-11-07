@@ -97,15 +97,108 @@ for(const width of [320,390,768,854,1024,1440])test(`referencia Studio: galería
  await expect(page.locator('.tt-studio-photo > img')).toHaveAttribute('src',image);
  await page.waitForFunction(()=>{const image=document.querySelector('.tt-studio-photo > img');return image.complete && image.naturalWidth>0;});
  await expect(page.locator('.tt-studio-photo figcaption')).toHaveText('Imagen del producto');
- await expect(page.locator('#prod-variant-stock')).toBeHidden();
+ await expect(page.locator('#prod-variant-stock')).toBeVisible();
  await expect(page.locator('#prod-variant-stock')).toHaveCount(1);
  const geometry=await page.locator('.tt-studio-photo-layout').evaluate(el=>{const visual=el.querySelector('.tt-studio-photo-visual').getBoundingClientRect(),side=el.querySelector('.tt-studio-photo-side').getBoundingClientRect();return {width:el.clientWidth,scroll:el.scrollWidth,visual:{x:visual.x,right:visual.right},side:{x:side.x,right:side.right}};});
  expect(geometry.scroll).toBeLessThanOrEqual(geometry.width+1);
- if(geometry.width>620 && width>=768)expect(geometry.side.x).toBeGreaterThanOrEqual(geometry.visual.right);
+ await expect(page.locator('.tt-studio-photo-side')).toBeHidden();
  await expect(page.locator('.tt-studio-pagination')).toContainText('Fotos y opciones · 2 de 6');
  await page.locator('.tt-studio-pagination').getByRole('button',{name:'Continuar a Variantes →',exact:true}).click();await expect(tab(page,'Variantes')).toHaveAttribute('aria-selected','true');
  await tab(page,'Fotos y opciones').click();await expect(page.locator('.tt-studio-photo > img')).toHaveAttribute('src',image);
  await tab(page,'Precio y stock').click();await expect(page.getByLabel('Stock: Dorado',{exact:true})).toBeVisible();await tab(page,'Fotos y opciones').click();
  await page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop=0);
  await page.screenshot({path:info.outputPath(`studio-reference-${width}.png`),animations:'disabled'});
+});
+
+const phase03Product={name:'Anillo fase 03',description:'Descripción completa de prueba.',category:'qa-tablet',price:50000,stock:10,active:true,publicationStatus:'active',imageUrl:'https://img.test/phase03.webp',imagesExtra:[],variantCommerceVersion:2,variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'gold',attributes:{Color:'Dorado'},stock:4,price:55000},{variant:'silver',attributes:{Color:'Plateado'},stock:6,price:60000}],variantMedia:[{Color:'Dorado',imageUrls:['https://img.test/phase03.webp']}]};
+async function phase03Open(page,width,height=1000){
+ await openProductSaveFixture(page,width,height,{fullShell:true,photos:true,workflow:true,initialRecords:[['products/phase03',phase03Product]]});
+ await page.evaluate(()=>window.qaProductController.workspace.ready);await page.locator('.tt-work-back').click();
+ await page.evaluate(()=>{window.qaProductController.refresh();window.prodEditar('phase03');});await page.evaluate(()=>window.qaProductController.workspace.ready);
+}
+for(const width of [320,390,768,1024,1280,1440,1920])test(`fase03: fotografía, opciones e inventario conectados ${width}`,async({page},info)=>{
+ await phase03Open(page,width);await tab(page,'Fotos y opciones').click();
+ await expect(page.locator('#prod-variant-stock')).toBeVisible();await expect(page.locator('.tt-editor-variant-builder')).toBeVisible();
+ const geometry=await page.locator('#prod-panel-photos').evaluate(panel=>{
+  const areas=['photos','options','availability'].map(section=>panel.querySelector(`[data-product-section="${section}"]`).getBoundingClientRect());
+  return {overflow:panel.scrollWidth>panel.clientWidth+1,areas:areas.map(r=>({top:r.top,left:r.left,right:r.right,bottom:r.bottom}))};
+ });
+ expect(geometry.overflow).toBe(false);
+ if(width>=1440){expect(Math.max(...geometry.areas.map(r=>r.top))-Math.min(...geometry.areas.map(r=>r.top))).toBeLessThan(2);expect(geometry.areas[1].left).toBeGreaterThanOrEqual(geometry.areas[0].right);expect(geometry.areas[2].left).toBeGreaterThanOrEqual(geometry.areas[1].right);}
+ if(width<=390){expect(geometry.areas[1].top).toBeGreaterThanOrEqual(geometry.areas[0].bottom);expect(geometry.areas[2].top).toBeGreaterThanOrEqual(geometry.areas[1].bottom);}
+ const stock=page.getByLabel('Stock: Dorado',{exact:true});await stock.fill('9');
+ await expect(page.locator('#prod-stock')).toHaveValue('15');await expect(page.getByLabel('Stock: Plateado',{exact:true})).toHaveValue('6');
+ await tab(page,'Precio y stock').click();await expect(stock).toHaveValue('9');await expect(page.locator('#prod-variant-stock')).toHaveCount(1);
+ await tab(page,'Fotos y opciones').click();await stock.scrollIntoViewIfNeeded();
+ await page.screenshot({path:info.outputPath(`phase03-connected-${width}.png`),animations:'disabled'});
+});
+
+test('fase03: ampliar portada, teclado y retorno al control sin perder edición',async({page})=>{
+ await phase03Open(page,390,844);await tab(page,'Fotos y opciones').click();
+ const open=page.getByRole('button',{name:'Ampliar imagen seleccionada',exact:true});await open.click();
+ const viewer=page.getByRole('dialog',{name:'Vista de fotografías',exact:true});await expect(viewer).toBeVisible();await expect(viewer.getByRole('button',{name:'Cerrar vista',exact:true})).toBeFocused();
+ await page.keyboard.press('Tab');expect(await viewer.evaluate(el=>el.contains(document.activeElement))).toBe(true);
+ await page.keyboard.press('Escape');await expect(viewer).toHaveCount(0);await expect(open).toBeFocused();await expect(page.locator('#prod-name')).toHaveValue(phase03Product.name);
+});
+
+test('fase03: no quitar una opción nueva con fotografías asociadas',async({page})=>{
+ await openProductSaveFixture(page,390,844,{photos:true});await valid(page);await tab(page,'Fotos y opciones').click();
+ await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Dorado');await page.getByRole('button',{name:'Agregar opción',exact:true}).click();
+ await tab(page,'Variantes').click();await page.getByRole('button',{name:'Fotos de Color: Dorado',exact:true}).click();await page.getByLabel('Usar foto 1 en Dorado',{exact:true}).check();
+ await tab(page,'Fotos y opciones').click();await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();
+ await expect(page.locator('#prod-variants-text')).toHaveValue('Color: Dorado');await expect(page.locator('.tt-editor-control-error')).toContainText('fotografías');
+ await page.getByLabel('Stock: Dorado',{exact:true}).fill('2');
+ const availability=page.getByRole('checkbox',{name:'Habilitada para la venta: Dorado',exact:true});await availability.uncheck();
+ await page.getByRole('button',{name:'Restaurar Color: Dorado',exact:true}).click();
+ await expect(availability).toBeChecked();await expect(page.locator('.tt-editor-control-error')).toBeEmpty();
+ expect(await page.evaluate(()=>window.qaProductController.serializeProductForm().variantMedia.some(row=>row.Color==='Dorado' && row.imageUrls?.length))).toBe(true);
+});
+
+test('fase03: descripción larga completa, edición y crecimiento con scroll interno explícito',async({page})=>{
+ await phase03Open(page,390,844);
+ const text=Array.from({length:90},(_,i)=>`Línea ${i+1}: información del producto con detalles completos.`).join('\n');
+ const field=page.locator('#prod-description');await field.fill(text);await field.press('Control+End');await field.press('End');await field.press('Enter');await field.press('Z');
+ await expect(field).toHaveValue(text+'\nZ');
+ const geometry=await field.evaluate(el=>({overflow:getComputedStyle(el).overflowY,lastVisible:el.scrollTop+el.clientHeight>=el.scrollHeight-3,height:el.clientHeight}));
+ expect(geometry.overflow).toBe('auto');expect(geometry.lastVisible).toBe(true);expect(geometry.height).toBeGreaterThanOrEqual(96);
+ await page.evaluate(()=>window.qaProductController.workspace.save());await expect(field).toHaveValue(text+'\nZ');
+ await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ await page.evaluate(()=>{window.qaProductController.refresh();window.prodEditar('phase03');});await page.evaluate(()=>window.qaProductController.workspace.ready);
+ await expect(field).toHaveValue(text+'\nZ');
+});
+
+test('fase03: edición y guardado parcial conservan scroll, identidad y otra variante',async({page})=>{
+ await phase03Open(page,390,844);await tab(page,'Fotos y opciones').click();
+ const stock=page.getByLabel('Stock: Dorado',{exact:true});await stock.scrollIntoViewIfNeeded();
+ const before=await stock.evaluate(el=>({scroll:scrollY,top:el.getBoundingClientRect().top}));expect(before.scroll).toBeGreaterThan(100);
+ await stock.fill('7');await page.evaluate(()=>window.qaProductController.workspace.save());
+ const after=await stock.evaluate(el=>({scroll:scrollY,top:el.getBoundingClientRect().top}));
+ expect(after.scroll).toBeGreaterThan(100);expect(Math.abs(after.top-before.top)).toBeLessThan(4);
+ await expect(page.getByLabel('Stock: Plateado',{exact:true})).toHaveValue('6');
+ const snapshot=await page.evaluate(()=>window.qaProductController.serializeProductForm());
+ expect(snapshot.commercialDraft.variantInventory.map(row=>[row.variant,row.stock,row.price])).toEqual([['gold',7,55000],['silver',6,60000]]);
+ expect(await page.evaluate(()=>window.qaProductStore.get('products/phase03').stock)).toBe(10);
+});
+
+test('fase03: buscar y paginar treinta combinaciones conserva las ediciones',async({page})=>{
+ const colors=Array.from({length:30},(_,i)=>'Color '+String(i+1).padStart(2,'0'));
+ const product={...phase03Product,variants:{Color:colors},variantInventory:colors.map((color,i)=>({variant:'color-'+i,attributes:{Color:color},stock:1})),stock:30,variantMedia:[]};
+ await openProductSaveFixture(page,1024,768,{photos:true,initialRecords:[['products/many',product]]});await page.evaluate(()=>{window.prodCancelForm();window.qaProductController.refresh();window.prodEditar('many');});
+ await tab(page,'Fotos y opciones').click();await expect(page.locator('.tt-commercial-row')).toHaveCount(25);
+ const search=page.getByRole('searchbox',{name:'Buscar combinación',exact:true});await search.fill('Color 26');await search.press('Tab');await expect(page.locator('.tt-commercial-row')).toHaveCount(1);
+ await page.getByLabel('Stock: Color 26',{exact:true}).fill('11');await search.fill('');await search.press('Tab');await expect(page.locator('.tt-commercial-row')).toHaveCount(25);
+ await page.locator('#prod-variant-stock').getByRole('button',{name:'Siguientes',exact:true}).click();await expect(page.locator('.tt-commercial-row')).toHaveCount(5);
+ await expect(page.getByLabel('Stock: Color 26',{exact:true})).toHaveValue('11');await expect(page.locator('#prod-stock')).toHaveValue('40');
+ await page.locator('#prod-variant-stock').getByRole('button',{name:'Anteriores',exact:true}).click();await expect(page.getByLabel('Stock: Color 01',{exact:true})).toHaveValue('1');
+ await page.locator('#prod-save-btn').click();await expect(page.locator('#prod-form-card')).toBeHidden();
+ const saved=await page.evaluate(()=>window.qaProductStore.get('products/many'));expect(saved.variantInventory.find(row=>row.variant==='color-25').stock).toBe(11);expect(saved.stock).toBe(40);
+});
+
+test('fase03: reemplazar portada tiene ancho completo en su columna y permite cancelar',async({page})=>{
+ await phase03Open(page,1440,900);await tab(page,'Fotos y opciones').click();
+ await page.getByRole('button',{name:'Reemplazar imagen seleccionada',exact:true}).click();
+ const side=page.locator('.tt-studio-photo-side');await expect(side).toBeVisible();
+ expect(await side.evaluate(el=>{const side=el.getBoundingClientRect(),visual=el.previousElementSibling.getBoundingClientRect();return Math.abs(side.width-visual.width)<2 && side.top>=visual.bottom;})).toBe(true);
+ await page.getByRole('button',{name:'Cancelar reemplazo',exact:true}).click();await expect(side).toBeHidden();
+ await expect(page.locator('#prod-imageUrl')).toHaveValue(phase03Product.imageUrl);await expect(page.getByLabel('Stock: Dorado',{exact:true})).toHaveValue('4');
 });

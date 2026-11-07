@@ -1,0 +1,148 @@
+{
+  "auditedBase": "085953dc0b700e91f95fc8c84dd8e17f4627a70c",
+  "gates": [
+    {
+      "command": "npm run audit:architecture-contracts",
+      "exit": 0,
+      "seconds": 0.18,
+      "log": "artifacts/phase01/gate-01.log"
+    },
+    {
+      "command": "npm run test:architecture-gates",
+      "exit": 0,
+      "seconds": 1.87,
+      "log": "artifacts/phase01/gate-02.log"
+    },
+    {
+      "command": "npm run audit:site-structure",
+      "exit": 0,
+      "seconds": 0.5,
+      "log": "artifacts/phase01/gate-03.log"
+    },
+    {
+      "command": "node scripts/auditar-integraciones-canonicas.mjs",
+      "exit": 0,
+      "seconds": 0.15,
+      "log": "artifacts/phase01/gate-04.log"
+    },
+    {
+      "command": "npm run audit:modular-architecture",
+      "exit": 0,
+      "seconds": 0.14,
+      "log": "artifacts/phase01/gate-05.log"
+    },
+    {
+      "command": "npm run audit:account-contract",
+      "exit": 0,
+      "seconds": 0.17,
+      "log": "artifacts/phase01/gate-06.log"
+    },
+    {
+      "command": "npm run audit:sync-contracts",
+      "exit": 0,
+      "seconds": 0.16,
+      "log": "artifacts/phase01/gate-07.log"
+    },
+    {
+      "command": "npm run audit:cache-versioning",
+      "exit": 0,
+      "seconds": 0.76,
+      "log": "artifacts/phase01/gate-08.log"
+    }
+  ],
+  "domainTests": {
+    "passed": 642,
+    "failed": 0,
+    "skipped": 0
+  },
+  "architectureTests": {
+    "passed": 38,
+    "failed": 0
+  },
+  "operationalTests": {
+    "passed": 3,
+    "failed": 0
+  },
+  "browserSmoke": {
+    "routes": 18,
+    "passed": true,
+    "productMode": "static document only"
+  },
+  "geometry": {
+    "cases": 144,
+    "failures": [],
+    "viewports": [
+      [
+        320,
+        568
+      ],
+      [
+        360,
+        640
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        1280,
+        720
+      ],
+      [
+        1440,
+        900
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "adminMode": "isolated-admin-layout"
+  },
+  "a11y": {
+    "passed": 5,
+    "scope": "global helper with synthetic DOM; not WCAG certification"
+  },
+  "build": {
+    "canonical": "PASS",
+    "cleanTreeDrift": false,
+    "fallback": "build exit 0 but incomplete artifact, F03"
+  },
+  "nativeSkills": {
+    "executorCatalog": [],
+    "fileMetadataOnly": 45
+  },
+  "runtime": {
+    "node": "24.19.0",
+    "java": "21.0.12.1",
+    "chromium": "151.0.7922.173 system /usr/bin/chromium",
+    "playwright": "existing lock dependency; launch-path adapter only"
+  },
+  "firstSmokeAttempt": "NOT_EXECUTED: bundled Chromium missing; subsequent system-browser run exit0",
+  "coverageNote": "Counts overlap; do not add them into a total unique coverage claim.",
+  "probeInfrastructure": {
+    "initialRulesExecution": "PASS using temporary absolute Rules path",
+    "nestedRelativeConfigAttempt": "NOT_EXECUTED: Firebase disallows Rules outside nested project directory",
+    "portableRunner": "PASS: run-rules-probe.mjs completed using absolute temporary config",
+    "reportToolingPlacement": "Initial candidate build rejected npm imports under docs; Node audit tools moved to scripts/agent/phase01-audit, existing canonical tooling scope; generator/gate unchanged"
+  },
+  "githubProtection": {
+    "rulesetId": 18212422,
+    "enforcement": "active",
+    "ruleTypes": [
+      "deletion",
+      "non_fast_forward",
+      "pull_request",
+      "required_linear_history"
+    ],
+    "classicRead": "403 Resource not accessible by integration"
+  }
+}

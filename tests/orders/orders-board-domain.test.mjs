@@ -6,6 +6,7 @@ import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/orde
 import { encodeFirestoreFields, decodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
 import { allowedOrderStatuses, assertOrderTransition, orderStage, orderTimeline, customerOrderMessage } from '../../js/orders/ciclo-pedido.mjs';
 import { orderContactLinks } from '../../cloudflare/contactos-pedido.mjs';
+import { readLimitedText } from '../../functions/lib/operational-guard.js';
 
 function store(order) {
   let revision=0;
@@ -20,7 +21,7 @@ function store(order) {
 }
 const order=(extra={})=>({status:'pendiente',paymentStatus:'pendiente',shippingMethod:'delivery',lastChangeId:'',inventoryState:'unreserved',items:[{id:'product_1',name:'Pulsera',qty:1,price:35000}],subtotal:35000,total:35000,...extra});
 const actor={uid:'super_fixture',email:'admin@example.test',role:'superadmin',origin:'superadmin'};
-async function mutate(s,status,id,extra={}) { return applyOrderAdminMutation({}, {orderId:'order_fixture_1',status,baseChangeId:s.order().lastChangeId || '',changeId:id,...extra},actor,s); }
+async function mutate(s,status,id,extra={}) { return applyOrderAdminMutation({}, {orderId:'order_fixture_1',status,...(['cancelado','rechazado'].includes(status)?{inventoryCancellationDecision:'release'}:{}),baseChangeId:s.order().lastChangeId || '',changeId:id,...extra},actor,s); }
 
 for(const method of ['delivery','encomienda','retiro'])test(`ciclo completo ${method}: pago separado, reserva única e historial atómico`,async()=>{
   const s=store(order({shippingMethod:method}));
@@ -61,7 +62,7 @@ test('incidencia conserva la etapa para recuperar el flujo sin entrega falsa',as
 test('consultar contactos exige Super Admin antes de leer y no ejecuta mutaciones',async()=>{
   const source=readFileSync(new URL('../../functions/api/admin-order-mutation.js',import.meta.url),'utf8').replace(/import\s+[\s\S]*?\s+from\s+['"][^'"]+['"];\s*/g,'').replaceAll('export async function','async function');
   let reads=0,auth=true;
-  const deps={rateLimitErrorResponse:()=>null,requireSuperAdmin:async()=>{if(!auth)throw Object.assign(new Error('denied'),{status:403});},originIsAllowed:()=>true,jsonResponse:(data,status)=>new Response(JSON.stringify(data),{status}),statusFromError:(e,f)=>e.status || f,firestoreAdminGet:async()=>{reads++;return {fields:encodeFirestoreFields(order({userName:'QA',userPhone:'0981123456',shipping:{mapLocation:{lat:-25.3,lng:-57.5}}}))};},decodeFirestoreFields,orderContactLinks};
+  const deps={readLimitedText,rateLimitErrorResponse:()=>null,requireSuperAdmin:async()=>{if(!auth)throw Object.assign(new Error('denied'),{status:403});},originIsAllowed:()=>true,jsonResponse:(data,status)=>new Response(JSON.stringify(data),{status}),statusFromError:(e,f)=>e.status || f,firestoreAdminGet:async()=>{reads++;return {fields:encodeFirestoreFields(order({userName:'QA',userPhone:'0981123456',shipping:{mapLocation:{lat:-25.3,lng:-57.5}}}))};},decodeFirestoreFields,orderContactLinks};
   const handler=new Function('deps',`const {${Object.keys(deps).join(',')}}=deps;${source};return onRequest;`)(deps);
   const request=new Request('https://tintinaccesorios.pages.dev/api/admin-order-mutation?orderId=order_fixture_1');
   auth=false;assert.equal((await handler({request,env:{}})).status,403);assert.equal(reads,0);

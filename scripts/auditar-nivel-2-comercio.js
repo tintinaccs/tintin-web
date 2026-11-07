@@ -126,19 +126,21 @@ check(
     rules.includes('sparkInventoryReserveValid(orderId)')
 );
 check(
-  'La eliminación libera inventario antes de borrar',
-  inventory.includes('const releaseResult = await withAdminSiteChange(async () => runTransaction(db, async transaction => {') &&
-    inventory.includes("inventoryState: 'released'") &&
-    inventory.indexOf("inventoryState: 'released'") < inventory.indexOf('transaction.delete(orderRef)')
+  'La eliminación de compatibilidad usa la papelera canónica con decisión de stock',
+  inventory.includes('return window.TintinOrderAdmin.trashOrder(orderId)') &&
+    orderCrud.includes('chooseOrderTrash([before])') &&
+    trashControl.includes('selectedReturns(order, input.returnItems)') &&
+    trashControl.includes('await commit(env, writes)')
 );
 check(
-  'Un reintento no puede liberar inventario dos veces',
-  inventory.includes('const shouldRestore = orderReservesInventory(order)') &&
-    inventory.includes('if (orderReservesInventory(orderSnapshot.data() || {}))')
+  'Un reintento de papelera no puede liberar inventario dos veces',
+  trashControl.includes('duplicate: true') && trashControl.includes('version !== baseChangeId') &&
+    trashControl.includes('currentDocument: condition(source)')
 );
 check(
-  'Los productos históricos faltantes no bloquean todo el borrado',
-  inventory.includes('missingProducts.push(id)') && inventory.includes('continue;')
+  'Un producto faltante exige elegir no devolverlo y nunca publica un lote parcial',
+  trashControl.includes('Elegí no devolverlo o recuperá primero el producto.') &&
+    trashControl.indexOf('await inventoryWrites') < trashControl.indexOf('await commit(env, writes)')
 );
 check(
   'La papelera masiva conserva fallos y mueve solo pedidos confirmados',

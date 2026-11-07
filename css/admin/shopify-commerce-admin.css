@@ -2245,3 +2245,27 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-studio .tt-product-qu
 #prod-form-card .tt-seo-preview .tt-seo-description {margin:0;font-size:13px;line-height:1.5;color:var(--tt-commerce-muted);overflow-wrap:anywhere;}
 #prod-form-card .tt-seo-preview .tt-seo-description:empty {display:none;}
 #prod-form-card :is(.tt-category-fields,.tt-editor-option-assistance) > summary {min-height:44px;display:list-item;line-height:44px;cursor:pointer;font-size:13px;font-weight:600;}
+
+/* Fase 03: los tres ámbitos conservan sus campos y escritores canónicos. */
+html.tt-product-editor-open body #prod-form-card.tt-editor-studio:has(#prod-panel-photos:not([hidden])) {width:100%;max-width:1560px;}
+html.tt-product-editor-open body #prod-form-card.tt-editor-studio:has(#prod-panel-photos:not([hidden])) :is(.tt-product-section-nav,.tt-editor-layout,.tt-studio-pagination) {max-width:1440px;}
+#prod-form-card.tt-editor-studio #prod-panel-photos {display:grid;grid-template-columns:minmax(0,1fr);gap:28px;align-items:start;}
+#prod-form-card.tt-editor-studio #prod-panel-photos > section {min-width:0;grid-column:auto;}
+#prod-form-card.tt-editor-studio #prod-panel-photos .tt-editor-section-fields {grid-template-columns:minmax(0,1fr);}
+#prod-form-card.tt-editor-studio #prod-panel-photos .tt-editor-section > h2 {margin-bottom:16px;}
+#prod-form-card.tt-editor-studio .tt-studio-photo-layout:has(> .tt-studio-photo-side[hidden]) {grid-template-columns:minmax(0,1fr);}
+#prod-form-card.tt-editor-studio .tt-studio-photo-side[hidden] {display:none;}
+#prod-form-card .tt-photo-viewer {position:fixed;inset:0;margin:auto;box-sizing:border-box;width:min(960px,calc(100% - 24px));max-width:calc(100% - 24px);max-height:calc(100dvh - 24px);overflow:auto;background:var(--tt-commerce-surface);color:var(--tt-commerce-text);}
+#prod-form-card .tt-photo-viewer::backdrop {background:var(--color-background-overlay);}
+#prod-form-card .tt-photo-viewer img {max-height:calc(100dvh - 180px);min-height:80px;}
+#prod-form-card .tt-photo-viewer-actions button {min-height:44px;white-space:normal;}
+@container product-editor (min-width:720px) {
+  #prod-form-card.tt-editor-studio #prod-panel-photos {grid-template-columns:repeat(2,minmax(0,1fr));}
+  #prod-form-card.tt-editor-studio #prod-panel-photos > [data-product-section=photos] {grid-column:1/-1;}
+}
+@container product-editor (min-width:1160px) {
+  #prod-form-card.tt-editor-studio #prod-panel-photos {grid-template-columns:minmax(0,1.05fr) minmax(0,1fr) minmax(0,1.1fr);gap:24px;}
+  #prod-form-card.tt-editor-studio #prod-panel-photos > [data-product-section=photos] {grid-column:auto;}
+  #prod-form-card.tt-editor-studio #prod-panel-photos .tt-studio-photo-layout {grid-template-columns:minmax(0,1fr);gap:16px;}
+  #prod-form-card.tt-editor-studio #prod-panel-photos .tt-studio-photo-side {border-left:0;border-top:1px solid var(--editor-line);padding:16px 0 0;}
+}

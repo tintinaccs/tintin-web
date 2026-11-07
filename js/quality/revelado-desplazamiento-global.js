@@ -4,20 +4,15 @@
   if (window.TintinGlobalScrollRevealBooted) return;
   window.TintinGlobalScrollRevealBooted = true;
 
-  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
+  const motionPreference = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+  let reducedMotion = motionPreference?.matches === true;
+  const activeAnimations = new Set();
   const currentPath = (window.location.pathname || '').toLowerCase().replace(/\/+$/, '');
+  const isTransactionalPage = /\/(?:checkout|login|perfil)(?:\.html)?$/.test(currentPath);
   const isAdminPage = /\/(?:admin|admin-images)(?:\.html)?$/.test(currentPath);
   const fixedExclusions = '#tt-loader,#tt-intro,#tt-welcome-tutorial,#tt-privacy-consent,.tt-header,.tt-tabbar,.tt-mobile-tabs,.tt-mobile-menu,.tt-cart-drawer,.tt-search-panel,.tt-collections-sheet,.tt-account-panel,.adm-overlay,.modal,.adm-modal';
-  const revealSelectors = [
-    'main>section', '.section', '.section-sm', '.tt-section', '.tt-page-hero', '.tt-hero', '.tt-trust-bar', '.tt-editorial', '.tt-products-section', '.tt-reviews-section', '.tt-footer',
-    '.tt-card', '.tt-product-card', '.tt-coll-card', '.tt-category-card', '.tt-review-card', '.tt-trust-item', '.tt-info-block', '.tt-dropdown-card', '.tt-sheet-item',
-    '.perfil-card', '.perfil-section', '.ck-panel', '.ck-step', '.ck-summary-card', '.login-box', '.login-brand', '.tt-404-wrap',
-    '.adm-section.active>.adm-card', '.adm-section.active .adm-card', '.adm-section.active .adm-table-wrap', '.adm-section.active .tt-welcome-admin-card', '.adm-section.active .adm-analytics-card',
-    'h1', 'h2', 'h3', '.tt-section-title', '.tt-section-sub', '.tt-section-desc', '.tt-hero-title', '.tt-hero-subtitle', '.tt-page-hero-title',
-    'footer .tt-footer-col', '.tt-faq-item', '.tt-about-img', '.tt-about-content', '.tt-about-text', '.tt-contact-grid', '.tt-page-hero-sub',
-    '.tt-editorial-item', '.tt-editorial-card', '.ck-panel-head', '.tt-checkout-suggested-grid', '.tt-about-section', '.tt-look-card', '.tt-coll-page-card', '.tt-look-item', '.tt-featured-item'
-  ].join(',');
-  const hoverSelectors = '.tt-card,.tt-product-card,.tt-coll-card,.tt-review-card,.perfil-card,.ck-panel,.adm-card,.tt-trust-item,.tt-btn,.ck-btn,.adm-btn,.login-google';
+  const revealSelectors = 'main>section,.tt-about-section,.tt-editorial,.tt-footer';
+  const hoverSelectors = '.tt-btn,.login-google';
   const pendingRoots = new Set();
   let observer = null;
   let scheduled = false;
@@ -28,7 +23,7 @@
     const style = document.createElement('style');
     style.id = 'tt-global-reveal-style';
     style.textContent = `
-      html.tt-reveal-ready .tt-auto-reveal{opacity:1;transform:none!important;transition:box-shadow var(--mo-reveal,520ms) var(--mo-enter,cubic-bezier(.16,1,.3,1));backface-visibility:hidden}
+      html.tt-reveal-ready .tt-auto-reveal{opacity:1;transform:none!important;transition:opacity var(--mo-reveal,520ms) var(--mo-enter,cubic-bezier(.16,1,.3,1));backface-visibility:hidden}
       html.tt-reveal-ready .tt-auto-reveal.tt-visible{opacity:1!important;transform:translate3d(0,0,0) scale(1)!important}
       .tt-auto-reveal.tt-reveal-settled{will-change:auto}
       .tt-reveal-left{transform:translate3d(-18px,10px,0) scale(.992)!important}
@@ -49,7 +44,9 @@
 
   function canReveal(element) {
     if (!element?.isConnected || element.classList.contains('tt-visible') || element.classList.contains('tt-auto-reveal')) return false;
-    if (element.closest(fixedExclusions)) return false;
+    if (element.closest(fixedExclusions + ',.ck-page,.perfil-page,.login-page,[data-tt-banner],.tt-hero-index')) return false;
+    const parent = element.parentElement?.closest(revealSelectors);
+    if (parent) return false;
     if (element.closest('[hidden],.tt-no-reveal,.no-reveal,[data-no-reveal="true"]')) return false;
     return true;
   }
@@ -66,9 +63,11 @@
     if (element.classList.contains('tt-visible')) return;
     element.classList.add('tt-visible');
     if (animate && !reducedMotion && typeof element.animate === 'function') {
-      element.animate([{ opacity: .4, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], {
+      const animation = element.animate([{ opacity: .4, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], {
         duration: 380, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'none'
       });
+      activeAnimations.add(animation);
+      animation.finished.then(() => activeAnimations.delete(animation)).catch(() => activeAnimations.delete(animation));
     }
     const settle = () => element.classList.add('tt-reveal-settled');
     element.addEventListener('transitionend', settle, { once: true });
@@ -143,7 +142,7 @@
   function bindPressFeedback() {
     document.addEventListener('pointerdown', event => {
       const target = event.target.closest('.tt-btn,.ck-btn,.adm-btn,.login-google,button,a');
-      if (target && !target.closest(fixedExclusions)) target.classList.add('tt-premium-pressed');
+      if (target && target.matches('button,.tt-btn,.ck-btn,.login-google') && motionPreference?.matches !== true && !target.closest(fixedExclusions)) target.classList.add('tt-premium-pressed');
     }, { passive: true });
     const clear = () => document.querySelectorAll('.tt-premium-pressed').forEach(element => element.classList.remove('tt-premium-pressed'));
     document.addEventListener('pointerup', clear, { passive: true });
@@ -153,10 +152,22 @@
   function boot() {
     injectStyles();
     bindPressFeedback();
-    if (isAdminPage) {
+    if (isAdminPage || isTransactionalPage) {
       document.documentElement.classList.add('tt-reveal-admin-disabled');
       return;
     }
+    motionPreference?.addEventListener('change', event => {
+      reducedMotion = event.matches;
+      if (reducedMotion) {
+        activeAnimations.forEach(animation => animation.cancel());
+        activeAnimations.clear();
+        observer?.disconnect();
+        document.querySelectorAll('.tt-auto-reveal').forEach(element => element.classList.add('tt-visible', 'tt-reveal-settled'));
+      }
+      document.documentElement.classList.toggle('tt-reveal-reduced-motion', reducedMotion);
+      document.documentElement.classList.toggle('tt-reveal-ready', !reducedMotion);
+      if (!reducedMotion) scheduleScan(document);
+    });
     if (reducedMotion) {
       document.documentElement.classList.add('tt-reveal-reduced-motion');
       return;

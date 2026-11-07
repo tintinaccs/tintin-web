@@ -25,6 +25,7 @@ async function mountLayout(page, markup = html) {
     document.querySelector('.tt-footer-tagline').textContent = 'Accesorios femeninos elegantes con brillo propio. Somos tu tienda online de confianza en Paraguay.';
   });
   await page.evaluate(() => document.fonts.ready);
+  await page.addScriptTag({ content: fs.readFileSync(path.join(root, 'js/components/novak-credit.js'), 'utf8') });
   await page.addScriptTag({ content: fs.readFileSync(path.join(root, 'js/components/color/logotipo-marca.js'), 'utf8') });
   await page.addScriptTag({ content: fs.readFileSync(path.join(root, 'js/components/navigation/compartido/acordeon-pie-pagina.js'), 'utf8').replace('export function', 'function') + '\nenhanceMobileFooter();' });
 }
@@ -49,16 +50,28 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
       const q = selector => box(document.querySelector(selector));
       return { shell:q('.tt-footer-shell'), grid:q('.tt-footer-grid'), brand:q('.tt-footer-brand'), logo:q('.tt-footer-brand .tt-logo-link'), tagline:q('.tt-footer-tagline'), wa:q('.tt-footer-wa'), actionsBox:q('.tt-hero-actions'),
         cards:[...document.querySelectorAll('.tt-trust-item')].map(box),
-        actions:[...document.querySelectorAll('.tt-hero-actions a')].map(a => ({ ...box(a), background:getComputedStyle(a).backgroundColor, border:parseFloat(getComputedStyle(a).borderTopWidth) })),
+        actions:[...document.querySelectorAll('.tt-hero-actions a')].map(a => ({ ...box(a), background:getComputedStyle(a).backgroundColor, border:parseFloat(getComputedStyle(a).borderTopWidth),color:getComputedStyle(a).color })),
         copyrightPadding:parseFloat(getComputedStyle(document.querySelector('.tt-footer-bottom')).paddingBottom),
-        footerTail:document.querySelector('.tt-footer').getBoundingClientRect().bottom-document.querySelector('.tt-footer-bottom').getBoundingClientRect().bottom,
+        credit:q('.tt-footer .novak-credit'), creditRow:q('.tt-footer .novak-credit-row'),
+        creditGap:document.querySelector('.tt-footer .novak-credit-row').getBoundingClientRect().top-document.querySelector('.tt-footer-bottom').getBoundingClientRect().bottom,
+        endingPadding:parseFloat(getComputedStyle(document.querySelector('.tt-footer-ending')).paddingBottom),
+        footerTail:document.querySelector('.tt-footer').getBoundingClientRect().bottom-document.querySelector('.tt-footer-ending').getBoundingClientRect().bottom,
         afterFooter:document.documentElement.scrollHeight-(document.querySelector('.tt-footer').getBoundingClientRect().bottom+scrollY),
         scrollWidth:document.documentElement.scrollWidth };
     });
     expect(geometry.scrollWidth).toBeLessThanOrEqual(width + 1);
     expect(geometry.copyrightPadding).toBeLessThanOrEqual(18);
+    // La firma solicitada sucede al copyright; ningún espacio vacío adicional
+    // se permite después del nuevo contenido final del pie.
+    expect(Math.abs(geometry.creditGap - 2)).toBeLessThanOrEqual(1);
+    expect(geometry.credit.height).toBeGreaterThanOrEqual(48);
+    expect(geometry.creditRow.height - geometry.credit.height).toBeLessThanOrEqual(1);
+    // En móvil el pie reserva dentro de sí el espacio de la barra flotante (ya no
+    // lo reserva el body); en tablet y escritorio no hay barra y el cierre es compacto.
+    expect(geometry.endingPadding).toBeLessThanOrEqual(width <= 767 ? 140 : 32);
+    expect(Math.abs(geometry.credit.center - geometry.creditRow.center)).toBeLessThanOrEqual(1);
     expect(geometry.footerTail).toBeLessThanOrEqual(1);
-    expect(geometry.afterFooter).toBeLessThanOrEqual(width <= 767 ? 97 : 1);
+    expect(geometry.afterFooter).toBeLessThanOrEqual(1);
     const inside = (a, b) => a.left >= b.left - 1 && a.right <= b.right + 1;
     expect(inside(geometry.brand, geometry.shell)).toBe(true);
     if (width <= 1024) {
@@ -88,10 +101,10 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
         expect(a.right).toBeLessThanOrEqual(width - 15);
       }
       expect(geometry.actions[0].background).not.toBe('rgba(0, 0, 0, 0)');
-      expect(geometry.actions[1].border).toBeGreaterThanOrEqual(1);
+      expect(geometry.actions[1].color).not.toBe('rgba(0, 0, 0, 0)');
       if (width <= 479) {
         for (const a of geometry.actions) expect(Math.abs(a.center-geometry.actionsBox.center)).toBeLessThanOrEqual(1);
-        expect(Math.abs(geometry.actions[0].width-geometry.actions[1].width)).toBeLessThanOrEqual(1);
+
       }
     }
     for (const [selector, href] of [['.tt-hero-cta','/catalogo'],['.tt-hero-link','/about']]) {
@@ -107,7 +120,10 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
       await page.evaluate(() => document.activeElement?.blur());
       for (const selector of ['#hero','.tt-trust-bar','.tt-footer']) {
         await page.locator(selector).scrollIntoViewIfNeeded();
-        if (selector === '.tt-footer') await expect.poll(() => page.locator('.tt-footer .tt-logo-img').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+        if (selector === '.tt-footer') {
+          await expect.poll(() => page.locator('.tt-footer .tt-logo-img').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+          await expect.poll(() => page.locator('.novak-credit img').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+        }
         const imagePath = testInfo.outputPath(selector.replace(/[.#]/g, '') + '.png');
         await page.locator(selector).screenshot({ path:imagePath, animations:'disabled' });
         await testInfo.attach(selector, { path:imagePath, contentType:'image/png' });

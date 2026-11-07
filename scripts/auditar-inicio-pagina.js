@@ -25,7 +25,8 @@ const manifest = JSON.parse(read('diagnostic-manifest.json'));
   ['hero', /id=["']hero["']/],
   ['trust bar', /class=["'][^"']*tt-trust-bar/],
   ['collections carousel', /class=["'][^"']*tt-collection-carousel/],
-  ['look', /id=["']look-grid["']/],
+  // La portada vigente usa Más vendidos; look-grid pertenece al diseño retirado.
+  ['Más vendidos', /class=["'][^"']*tt-best-sellers-section/],
   ['reviews', /class=["'][^"']*tt-reviews-section/],
   ['footer', /class=["'][^"']*tt-footer/],
 ].forEach(([label, pattern]) => requireText(html, pattern, `Inicio no contiene ${label}.`));
@@ -60,7 +61,9 @@ forbid(runtime, /ttPageReady/, 'El runtime de Inicio no debe liberar el loader (
 forbid(runtime, /recoverSurface|removeAttribute\(['"]inert['"]\)/, 'El runtime de Inicio no debe revertir inert/visibilidad del store gate.');
 forbid(runtime, /products-grid|look-grid/, 'El runtime de Inicio no debe pintar productos ni el look (dueño: tienda.js).');
 forbid(runtime, /setTimeout|setInterval/, 'El runtime de Inicio no debe usar temporizadores para ocultar carreras.');
-requireText(runtime, /updateFooterYear/, 'El runtime de Inicio no actualiza el año del footer.');
+requireText(read('js/components/novak-credit.js'), /new Date\(\)\.getUTCFullYear/, 'El componente compartido no actualiza el año del footer.');
+requireText(html, /id="novak-credit-loader"[^>]*src="[^"]*js\/components\/novak-credit\.js/, 'La página no carga el componente compartido del pie.');
+if (/updateFooterYear|normalizeFooterYear|\.tt-footer-bottom/.test(runtime)) errors.push('La página no debe competir con el año del pie compartido.');
 
 requireText(css, /@media\s*\(min-width:\s*769px\)\s*and\s*\(max-width:\s*1120px\)/, 'No hay tratamiento específico de tablet.');
 requireText(css, /@media\s*\(max-width:\s*768px\)/, 'No hay tratamiento específico de mobile.');

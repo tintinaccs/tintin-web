@@ -453,7 +453,8 @@ async function saveModal_() {
     } else {
       const orderId = modalState.orderId;
       if (!window.TintinInventoryIntegrity?.updateEditedOrder) throw new Error('El reconciliador de inventario no está disponible.');
-      await window.TintinInventoryIntegrity.updateEditedOrder(orderId, { ...patch, baseChangeId: modalState.baseOrder?.lastChangeId || '' });
+      const result = await window.TintinInventoryIntegrity.updateEditedOrder(orderId, { ...patch, baseChangeId: modalState.baseOrder?.lastChangeId || '' });
+      if (result.cancelled) return false;
       toast(`Pedido ${patch.orderNumber || orderNumberOf(modalState.baseOrder)} actualizado.`);
     }
     closeModal_({force:true});

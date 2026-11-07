@@ -17,7 +17,7 @@ async function load(page,width) {
   // estado cerrado después de que el rail ya sea visible, sin forzar clases.
   await page.mouse.move(width-10,350);
 }
-for(const width of [541,600,768,900,1024,1440]) {
+for(const width of [769,820,900,1024,1440]) {
   test(`rail, hover y fijar sin saltos ni etiquetas rotas a ${width}px`,async({page},testInfo)=>{
     await load(page,width);
     const sidebar=page.locator('#adm-sidebar'), toggle=page.locator('#adm-sidebar-toggle');
@@ -42,34 +42,21 @@ for(const width of [541,600,768,900,1024,1440]) {
     if(width===768||width===1440) await page.screenshot({path:testInfo.outputPath(`panel-lateral-${width}.png`)});
   });
 }
-for(const width of [320,390,540]) {
-  test(`menú táctil, foco y escape a ${width}px`,async({page},testInfo)=>{
+// App móvil (≤768px): sin cajón lateral ni hamburguesa; la navegación es la
+// barra inferior (Inicio, Pedidos, Productos, Usuarios, Más).
+for(const width of [320,390,540,768]) {
+  test(`app móvil sin cajón lateral, con barra inferior a ${width}px`,async({page})=>{
     await load(page,width);
-    const hamburger=page.locator('#adm-hamburger'),sidebar=page.locator('#adm-sidebar');
-    await expect(sidebar).toBeHidden();
-    await expect(hamburger).toBeVisible();await hamburger.click();
-    await expect(hamburger).toHaveAttribute('aria-expanded','true');
-    await expect(sidebar).toBeVisible();
-    await expect.poll(()=>sidebar.evaluate(element=>{
-      const rect=element.getBoundingClientRect();
-      return element.contains(document.elementFromPoint(rect.left+20,rect.top+120));
-    })).toBe(true);
-    expect(await page.locator('.adm-main').evaluate(e=>e.inert)).toBe(true);
-    await expect(page.locator('#adm-sidebar-toggle')).toBeFocused();
-    await page.keyboard.press('Shift+Tab');
-    expect(await page.locator('#adm-sidebar').evaluate(e=>e.contains(document.activeElement))).toBe(true);
-    await page.locator('#adm-sidebar-toggle').click();
-    await expect(hamburger).toHaveAttribute('aria-expanded','false');
-    await expect(sidebar).toBeHidden();
-    await hamburger.click();
-    if(width===390)await page.screenshot({path:testInfo.outputPath('panel-lateral-390.png')});
-    await page.keyboard.press('Escape');await expect(hamburger).toHaveAttribute('aria-expanded','false');await expect(hamburger).toBeFocused();
-    expect(await page.locator('.adm-main').evaluate(e=>e.inert)).toBe(false);
+    await expect(page.locator('#adm-sidebar')).toBeHidden();
+    await expect(page.locator('#adm-hamburger')).toBeHidden();
+    await expect(page.locator('#adm-overlay')).toBeHidden();
+    await expect(page.locator('#adm-mobile-tabs')).toBeVisible();
+    expect(await page.locator('.adm-main').evaluate(e=>Math.round(e.getBoundingClientRect().left))).toBe(0);
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   });
 }
 
-for (const width of [768,1440]) {
+for (const width of [820,1440]) {
   test(`cabecera sin superposición y centros iguales con menú largo a ${width}px`, async ({page},testInfo) => {
     await load(page,width); await page.setViewportSize({width,height:500});
     await page.evaluate(()=>{

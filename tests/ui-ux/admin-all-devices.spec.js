@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { load } = require('./helpers/admin-panel-fixture.cjs');
-for (const width of [320,390,540]) test(`barra móvil permanece al pie tras scroll y cambio de altura ${width}`,async({page})=>{
+for (const width of [320,390,540,768]) test(`barra móvil permanece al pie tras scroll y cambio de altura ${width}`,async({page})=>{
  await load(page,width,'admin.html',{mobile:true,sidebar:true});
  for (const height of [844,620,900]) {
   await page.setViewportSize({width,height});
@@ -13,7 +13,7 @@ for (const width of [320,390,540]) test(`barra móvil permanece al pie tras scro
   }
  }
 });
-for (const width of [390,768,1366]) test(`menú de módulos accesible con editor abierto ${width}`,async({page})=>{
+for (const width of [390,768,1366]) test(`salida o menú de módulos accesible con editor abierto ${width}`,async({page})=>{
  await load(page,width,'admin.html',{mobile:true,sidebar:true,guard:true});
  await page.addStyleTag({path:require('node:path').resolve('css/admin/shopify-commerce-admin.css')});
  await page.evaluate(()=>{
@@ -24,10 +24,13 @@ for (const width of [390,768,1366]) test(`menú de módulos accesible con editor
   const card=document.getElementById('prod-form-card');card.style.display='flex';
   document.getElementById('prod-name').value='Borrador conservado';
  });
- if(width<=540) await page.locator('#adm-hamburger').click();
- else await page.locator('#adm-sidebar').hover();
- await expect(page.locator('#adm-sidebar')).toBeVisible();
- const button=page.locator('#adm-sidebar .adm-nav-item').first();
+ // App móvil (≤768): el editor es una pantalla completa (la barra inferior se
+ // oculta a propósito); la salida es su propio "← Volver", que pasa por la
+ // guardia de cambios. En tablet/escritorio, el lateral sigue accesible.
+ const phone=width<=768;
+ if(!phone) await page.locator('#adm-sidebar').hover();
+ await expect(page.locator(phone?'#prod-form-card':'#adm-sidebar')).toBeVisible();
+ const button=phone?page.locator('#prod-form-card button[onclick="prodCancelForm()"]').first():page.locator('#adm-sidebar .adm-nav-item').first();
  await button.scrollIntoViewIfNeeded();
  expect(await button.evaluate(n=>{const b=n.getBoundingClientRect();return n.contains(document.elementFromPoint(b.x+b.width/2,b.y+b.height/2));})).toBe(true);
  await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');
@@ -84,11 +87,12 @@ for(const width of [360,540,541,760,761,1000,1001,1100,1101,1279,1280,1679,1680]
 test.describe('interacción táctil y rotación',()=>{
   test.use({hasTouch:true,isMobile:true});
   test('tablet conserva formulario y navegación al girar y fijar el lateral',async({page})=>{
-    await load(page,768,'admin.html',{mobile:true,sidebar:true,guard:true});await page.setViewportSize({width:768,height:1024});
+    // 820 es la tablet más chica con lateral (≤768 es la app móvil, sin lateral).
+    await load(page,820,'admin.html',{mobile:true,sidebar:true,guard:true});await page.setViewportSize({width:820,height:1180});
     await page.evaluate(()=>{document.getElementById('section-dashboard').classList.remove('active');document.getElementById('section-configuracion').classList.add('active');});
     const field=page.locator('#section-configuracion input[type="text"]').first();await field.fill('Borrador tablet');
     await page.locator('#adm-sidebar-toggle').tap();await expect(page.locator('#adm-sidebar-toggle')).toHaveAttribute('aria-pressed','true');
-    for(const [width,height] of [[1024,768],[820,1180],[1180,820],[768,1024]]) {
+    for(const [width,height] of [[1024,768],[1180,820],[820,1180]]) {
       await page.setViewportSize({width,height});await settle(page);await expect(field).toHaveValue('Borrador tablet');await expect(field).toBeEditable();
       await contained(page.locator('#section-configuracion .adm-card,#section-configuracion .adm-input'),width);
       expect(await page.locator('.adm-main').evaluate(n=>n.inert)).toBe(false);
@@ -112,7 +116,7 @@ for(const [width,height] of [[390,844],[768,1024],[1024,768],[1920,1080]]) {
 }
 
 
-for(const width of [320,390,540])test('último control accesible sobre navegación móvil '+width,async({page})=>{
+for(const width of [320,390,540,768])test('último control accesible sobre navegación móvil '+width,async({page})=>{
   await load(page,width,'admin.html',{mobile:true,sidebar:true});await page.setViewportSize({width,height:844});
   await page.evaluate(()=>{
     const area=document.getElementById('section-dashboard');

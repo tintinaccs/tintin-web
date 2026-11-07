@@ -14,11 +14,11 @@ const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar
 const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261031-seo-espacios-2';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1';
 const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261030-home-history-5';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261101-touch-targets-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261105-copiar-pago-1-p1106';
 // Mismo ?v= que el import de estado-productos.js: una sola instancia por página.
-const PAGE_MAINTENANCE_URL = '../../../cargador-mantenimiento-pagina.js?v=tintin-20261101-touch-targets-1';
+const PAGE_MAINTENANCE_URL = '../../../cargador-mantenimiento-pagina.js?v=tintin-20261105-copiar-pago-1-p1106';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -95,11 +95,11 @@ function loadHomeMaintenance() {
     const link = document.createElement('link');
     link.id = 'tt-home-maintenance-css';
     link.rel = 'stylesheet';
-    link.href = new URL('/css/pages/home/mantenimiento-inicio.css?v=tintin-20261019-footer-spacing-1', location.href).href;
+    link.href = new URL('/css/pages/home/mantenimiento-inicio.css?v=tintin-hero-fit-20261104-1', location.href).href;
     document.head.appendChild(link);
   }
 
-  return import(new URL('/js/pages/home/mantenimiento-inicio.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href);
+  return import(new URL('/js/pages/home/mantenimiento-inicio.js?v=tintin-footer-canonical-20261103-1', location.href).href);
 }
 
 export function loadProductsRuntime({ forSearch = false } = {}) {
@@ -144,7 +144,7 @@ function loadCartRuntime() {
 
 function loadNotificationsRuntime() {
   if (!notificationsRuntimePromise) {
-    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261030-notificaciones-explicitas-1')
+    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261102-accounts-phase06-1-p1106')
       .then(module => {
         module.initClientNotifications?.();
         return module;
@@ -175,7 +175,7 @@ function loadCollectionsRuntime({ withProducts = false } = {}) {
 // consulta escrita mientras termina de cargar el controlador compartido.
 function loadSearchRuntime() {
   if (!searchControllerPromise) {
-    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261101-touch-targets-1')
+    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261105-copiar-pago-1-p1106')
       .then(module => {
         module.initSearchController();
         window.TintinSearchController?.renderCurrentQuery();
@@ -266,7 +266,7 @@ const navigationSurfaceImportFactories = Object.freeze({
     import(new URL('/js/components/navigation/tableta/control-menu-tableta.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
   ],
   mobile: () => [
-    import(new URL('/js/components/navigation/movil/indicador-navegacion-movil.js?v=tintin-20261010-whatsapp-release-5', location.href).href),
+    import(new URL('/js/components/navigation/movil/indicador-navegacion-movil.js?v=tintin-performance-polish-20261103-1', location.href).href),
     import(new URL('/js/components/navigation/movil/navegacion-compacta-movil.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
   ],
 });

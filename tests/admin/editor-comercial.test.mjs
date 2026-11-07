@@ -6,6 +6,17 @@ import {encodeFirestoreFields,decodeFirestoreFields} from '../../cloudflare/fire
 import {productFingerprint,productDuplicateData} from '../../js/admin/products/maestro-productos-core.mjs';
 const source={name:'Anillo',category:'anillos',price:30000,priceBefore:null,active:true,oferta:false,destacado:false,variants:{Color:['Oro','Plata']},variantInventory:[{variant:'Oro',stock:3},{variant:'Plata',stock:0}],stock:3,privateLegacy:'preservado'};
 const product=()=>commercialDraft(source);
+test('mil combinaciones conservan valores al reordenar y rechazan crecimiento sin mutar el borrador',()=>{
+ const variants=Object.fromEntries(['Color','Talle','Material'].map(key=>[key,Array.from({length:10},(_,i)=>`${key}${i}`)]));
+ const draft=commercialDraft({price:30000,variants});
+ assert.equal(draft.variantInventory.length,1000);
+ const row=draft.variantInventory.at(-1);row.price=55000;row.stock=7;
+ const snapshot=structuredClone(draft);
+ const ordered=commercialDraft(draft,Object.fromEntries(Object.entries(variants).reverse().map(([key,values])=>[key,[...values].reverse()])),{});
+ assert.deepEqual(ordered.variantInventory.find(item=>item.variant===row.variant),row);
+ assert.throws(()=>commercialDraft(draft,{...variants,Color:[...variants.Color,'Otro']},{}),/1.000/);
+ assert.deepEqual(draft,snapshot);
+});
 test('portada canónica actualiza o vacía el alias histórico sin revivir fotografías',()=>{
  const before={...product(),image:'https://img.test/old.webp'};
  const next=validateProductEditorPatch(before,{imageUrl:'https://img.test/fourth.webp'});
@@ -106,4 +117,77 @@ test('crear borradores y cambiar publicación respetan permisos separados de edi
  const create=store();create.docs.set('rolePermissions/main',{fields:encodeFirestoreFields({admin:{productos:{crear:true,activarDesactivar:false}}})});
  await saveProductEditor({},{productId:'new1',expected:null,changeId:'create_draft_123',product:{...editable(p),active:false}},{uid:'admin',role:'admin'},create.io);
  assert.equal(create.writes.length,2);
+});
+
+test('quitar portada y galería no deja aliases públicos que revivan imágenes anteriores',()=>{
+ const aliases=['image','img','photo','imageSrc','image_src','Image Src','Variant Image','Image','Imagen','Foto'];
+ const before={...product(),images:['https://img.test/old-gallery.webp'],...Object.fromEntries(aliases.map(key=>[key,'https://img.test/old.webp']))};
+ for(const imageUrl of ['',null,'https://img.test/new.webp']){
+  const patch=validateProductEditorPatch(before,{imageUrl,imagesExtra:[]});
+  for(const key of aliases)assert.equal(patch[key],imageUrl,key);
+  assert.deepEqual(patch.images,[]);
+ }
+ assert.equal(Object.hasOwn(validateProductEditorPatch(product(),{imagesExtra:[]}), 'images'),false);
+});
+
+test('activación masiva valida publicación completa y colección sin escribir parcialmente',async()=>{
+ const {saveProductBulk}=await import('../../cloudflare/product-editor-domain.mjs');
+ const valid={...product(),active:false,publicationStatus:'draft',description:'Descripción completa',imageUrl:'https://img.test/main.webp'};
+ for(const invalid of [{description:''},{imageUrl:''},{price:0},{priceBefore:1},{variantInventory:[]},{category:'missing'}]){
+  const s=store(),bad={...valid,...invalid};
+  s.docs.set('products/p1',{fields:encodeFirestoreFields(valid),updateTime:'v1'});
+  s.docs.set('products/p2',{fields:encodeFirestoreFields(bad),updateTime:'v2'});
+  await assert.rejects(saveProductBulk({},{ids:['p1','p2'],expected:{p1:productFingerprint(valid),p2:productFingerprint(bad)},field:'active',value:true},actor,s.io));
+  assert.equal(s.writes.length,0,JSON.stringify(invalid));
+ }
+ const s=store();s.docs.set('products/p1',{fields:encodeFirestoreFields(valid),updateTime:'v1'});
+ await saveProductBulk({},{ids:['p1'],expected:{p1:productFingerprint(valid)},field:'active',value:true},actor,s.io);
+ assert.equal(s.writes.length,2);assert.equal(decodeFirestoreFields(s.writes[0].fields).publicationStatus,'active');
+});
+
+test('publicación individual conserva permiso propio; un lote exige acciones masivas y lectura',async()=>{
+ const {saveProductBulk}=await import('../../cloudflare/product-editor-domain.mjs');
+ for(const [ids,permissions,allowed] of [[['p1'],{accionesMasivas:false,activarDesactivar:true},true],[['p1','p2'],{accionesMasivas:false,activarDesactivar:true},false],[['p1'],{ver:false,activarDesactivar:true},false],[['p1'],{activarDesactivar:false},false]]){
+  const s=store(),p=product();s.docs.set('rolePermissions/main',{fields:encodeFirestoreFields({admin:{productos:permissions}})});
+  const run=saveProductBulk({},{ids,expected:{p1:productFingerprint(p),p2:productFingerprint(p)},field:'active',value:false},{uid:'admin',role:'admin'},s.io);
+  if(allowed)await run;else {await assert.rejects(run,error=>error.status===403);assert.equal(s.writes.length,0);}
+ }
+});
+
+test('dos editores concurrentes: sólo uno confirma y el reintento del ganador es idempotente',async()=>{
+ const s=store();let commits=0;
+ s.io.commit=async(_env,writes)=>{
+  for(const write of writes){const current=s.docs.get(write.path);if(write.currentDocument?.updateTime && write.currentDocument.updateTime!==current?.updateTime)throw Object.assign(Error('CAS conflict'),{status:409});}
+  commits++;
+  for(const write of writes)s.docs.set(write.path,{fields:encodeFirestoreFields({...decodeFirestoreFields(s.docs.get(write.path)?.fields || {}),...decodeFirestoreFields(write.fields)}),updateTime:'v'+(commits+1)});
+ };
+ const request=name=>({...body(),changeId:'concurrent_'+name,product:{name},inventory:undefined});
+ const requests=[request('primero'),request('segundo')];
+ const results=await Promise.allSettled(requests.map(value=>saveProductEditor({},value,actor,s.io)));
+ assert.equal(results.filter(row=>row.status==='fulfilled').length,1);
+ assert.equal(results.find(row=>row.status==='rejected').reason.status,409);
+ const winner=requests[results.findIndex(row=>row.status==='fulfilled')];
+ assert.equal((await saveProductEditor({},winner,actor,s.io)).duplicate,true);assert.equal(commits,1);
+});
+
+test('una venta entre lectura y commit impide que el editor reponga stock obsoleto',async()=>{
+ const s=store();
+ s.io.commit=async(_env,writes)=>{
+  const current=s.docs.get('products/p1'),sold=decodeFirestoreFields(current.fields);
+  sold.variantInventory[0].stock--;sold.stock--;
+  s.docs.set('products/p1',{fields:encodeFirestoreFields(sold),updateTime:'sale-v2'});
+  assert.equal(writes[0].currentDocument.updateTime,'v1');
+  throw Object.assign(Error('CAS conflict'),{status:409});
+ };
+ await assert.rejects(saveProductEditor({},{...body(),product:{price:35000}},actor,s.io),error=>error.status===409);
+ const after=decodeFirestoreFields(s.docs.get('products/p1').fields);
+ assert.equal(after.stock,2);assert.equal(after.variantInventory[0].stock,2);assert.equal(after.price,30000);assert.equal(s.writes.length,0);
+});
+
+test('commit de fotos legacy cita field paths con espacios sin tocar campos ajenos',async()=>{
+ const s=store(),p={...product(),'Image Src':'https://img.test/old.webp','Variant Image':'https://img.test/old.webp'};
+ s.docs.set('products/p1',{fields:encodeFirestoreFields(p),updateTime:'v1'});
+ await saveProductEditor({},{...body(),expected:productFingerprint(p),inventory:undefined,product:{imageUrl:''}},actor,s.io);
+ const write=s.writes[0];assert.ok(write.mergeFields.includes('`Image Src`'));assert.ok(write.mergeFields.includes('`Variant Image`'));
+ assert.equal(write.mergeFields.includes('Image Src'),false);assert.equal(decodeFirestoreFields(write.fields)['Image Src'],'');
 });

@@ -130,7 +130,7 @@ test('clientas tienen bandeja inicial de 100 ampliable, saneado, lectura explíc
   assert.match(clientUi, /notificationSeen/);
   assert.match(clientUi, /notificationsSeenAll/);
   assert.match(clientUi, /let historyLimit = 100/);
-  assert.match(clientUi, /limit\(historyLimit\)/);
+  assert.match(clientUi, /limit\(100\)/);
   assert.match(clientUi, /historyLimit \+= 100/);
   assert.match(clientUi, /data-notifications-older/);
   assert.match(clientUi, /safeImageUrl/);

@@ -1,7 +1,7 @@
 import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue,
   sanitizeContentHref, sanitizeContentText,
-} from './esquema-contenido.js?v=tintin-20261021-identidad-1';
+} from './esquema-contenido.js?v=tintin-suitcase-20261104-1';
 import {
   VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS,
 } from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';
@@ -56,7 +56,7 @@ function ensureCss() {
   const link = document.createElement('link');
   link.id = 'tt-visual-builder-runtime-css';
   link.rel = 'stylesheet';
-  link.href = 'css/components/editor-visual-runtime.css?v=tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
+  link.href = 'css/components/editor-visual-runtime.css?v=tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-p1106';
   document.head.appendChild(link);
 }
 

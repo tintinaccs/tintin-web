@@ -186,10 +186,12 @@ test('panel real sin botones: verde, fallo, recuperación y pausa automática en
       await page.clock.runFor(30_001);
       await page.waitForFunction(selector => document.querySelector(selector)?.classList.contains('tfc-state-funcionando-en-produccion'), node);
       await page.evaluate(() => document.getElementById('section-flujo-conexiones').classList.remove('active'));
-      await page.waitForFunction(() => document.getElementById('tfc-monitor-status').textContent.includes('pausado'));
+      // Precarga: con la sección oculta (pestaña visible) el monitor sigue,
+      // más espaciado, para que al volver a entrar el resultado ya esté cargado.
       const readsWhileHidden = healthReads;
       await page.clock.runFor(120_001);
-      assert.equal(healthReads, readsWhileHidden);
+      assert.ok(healthReads > readsWhileHidden, 'la sección oculta debe seguir precargando evidencia');
+      assert.ok(healthReads - readsWhileHidden <= 3, 'oculta debe revisar más espaciado que visible');
       await page.evaluate(() => document.getElementById('section-flujo-conexiones').classList.add('active'));
       await page.waitForFunction(selector => document.querySelector(selector)?.classList.contains('tfc-state-funcionando-en-produccion'), node);
       await page.context().setOffline(true);

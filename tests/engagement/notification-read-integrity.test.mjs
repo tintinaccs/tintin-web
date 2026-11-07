@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { readLimitedText } from '../../functions/lib/operational-guard.js';
 import { notificationIconKey, notificationIconSvg } from '../../js/components/notifications/presentacion-notificacion.mjs';
 const core=fs.readFileSync(new URL('../../cloudflare/notificaciones-sociales.js',import.meta.url),'utf8');
 const api=fs.readFileSync(new URL('../../functions/api/notifications.js',import.meta.url),'utf8');
@@ -33,7 +34,7 @@ test('lectura individual protege la revisión y mantiene la ruta privada del UID
 test('el endpoint ignora UID ajeno y exige Super Admin para la bandeja global',async()=>{
  const writes=[];
  const run=loadFunction(api,'export async function onRequest',null,{
-  originIsAllowed:()=>true,MAX_BODY_BYTES:16384,clean:value=>String(value||''),safeId:x=>x,
+  originIsAllowed:()=>true,readLimitedText,MAX_BODY_BYTES:16384,clean:value=>String(value||''),safeId:x=>x,
   jsonResponse:(body,status)=>Response.json(body,{status}),rateLimitErrorResponse:()=>null,statusFromError:(error,fallback)=>error.status||fallback,
   requireFirebaseUser:async()=>({uid:'cuenta-autenticada'}),requireSuperAdmin:async()=>{throw Object.assign(new Error('Sin permiso'),{status:403});},
   markNotificationRead:async(_env,input)=>writes.push(input),

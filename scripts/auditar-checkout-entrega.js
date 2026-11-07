@@ -7,7 +7,8 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\
 
 const checkout = read('checkout.html');
 const client = read('js/orders/pedido-checkout-seguro.js');
-const server = read('apps-script/CrearPedido.gs');
+const server = read('cloudflare/politica-checkout-publico.js');
+const draft = read('js/orders/politica-checkout.js');
 
 const checks = [
   ['Retiro protege la dirección y solicita la ubicación después del pedido',
@@ -23,12 +24,12 @@ const checks = [
   ['Sólo el envío de encomienda se paga a la transportadora al recibir; el producto se paga previamente',
     checkout.includes('Sólo el envío se abona a la transportadora al recibir; el producto se paga previamente por transferencia') &&
     client.includes("method: 'encomienda'") && client.includes('cost: 0') &&
-    server.includes("method: 'encomienda', city: encomienda.name, departamento: encomienda.departamento, cost: 0")],
+    server.includes("method: 'encomienda'") && server.includes("cost: 0")],
   ['Agencia no exige dirección; puerta exige dirección y mapa',
     client.includes("shipping.encomiendaMode === 'puerta'") && server.includes("encomiendaMode === 'puerta'") &&
     server.includes("encomiendaMode !== 'agencia' && encomiendaMode !== 'puerta'")],
   ['El endpoint acepta y conserva el modo validado de encomienda',
-    server.includes("'shippingMethod', 'encomiendaMode'") &&
+    draft.includes("'shippingMethod', 'encomiendaMode'") &&
     server.includes("encomiendaMode: shipping.method === 'encomienda' ? encomiendaMode : ''")],
 ];
 

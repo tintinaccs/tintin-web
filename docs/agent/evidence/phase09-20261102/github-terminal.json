@@ -1,0 +1,102 @@
+{
+  "observedAtUtc": "2026-11-03T02:49:16Z",
+  "agent": "Codex /root",
+  "repository": "tintinaccs/tintin-web",
+  "phase09": {
+    "pr": 1319,
+    "state": "MERGED",
+    "headSha": "df692c4b48ccf0fa120d2f4ebe1bf82d834180e8",
+    "mergeSha": "9b1b88f8abee27d395d6690f4b68843cb1374d3f",
+    "prCi": {
+      "id": 41562231283,
+      "attempt": 1,
+      "conclusion": "success"
+    },
+    "prCodeql": {
+      "id": 41562227482,
+      "attempt": 1,
+      "conclusion": "success"
+    },
+    "protectedMaintenance": "success",
+    "protectedIntegrity": "success",
+    "mainCi": {
+      "id": 41565290324,
+      "attempt": 1,
+      "conclusion": "success"
+    },
+    "mainCodeql": {
+      "id": 41565289803,
+      "attempt": 1,
+      "conclusion": "success"
+    },
+    "production": {
+      "id": 41565292553,
+      "attempt": 1,
+      "conclusion": "success",
+      "scope": "artifact/public HTTP/headers only",
+      "artifactRevision": "fad562f982086737a7a89738c3093c069d22a26cb7fc7e6b85a22d061829671d",
+      "cleanResponses": 17,
+      "paypalFx": "skipped: verification only",
+      "realPurchasesOrMessages": false
+    }
+  },
+  "ciCoverage": {
+    "performancePass": 107,
+    "canonicalViewportsPass": 144,
+    "globalGeometryPass": 220,
+    "geometryFirstAttempt": true,
+    "isolatedRuntimePass": 528,
+    "runtimeProjects": [
+      "chromium-desktop",
+      "chromium-mobile",
+      "webkit-mobile"
+    ],
+    "rulesControls": 258,
+    "firestoreIntegrationsPass": 18,
+    "statsFixture": {
+      "ownOrders": 305,
+      "otherOrders": 5001,
+      "uidEmailDeduplication": "pass"
+    },
+    "node": "24.22.1",
+    "engineStrict": true,
+    "EBADENGINEWarnings": 0,
+    "countsAreOverlapping": true
+  },
+  "reportedFailure": {
+    "run": 41442885247,
+    "attempt": 1,
+    "sha": "ba96c3a18d1cf4e13c2149db1fd86520ec15bff0",
+    "pr": 1316,
+    "historicalConclusion": "failure",
+    "cause": "generated diagnostic/site-version drift after package/lock update",
+    "resolutionPr": 1319,
+    "pr1316State": "closed_without_merge: update already included"
+  },
+  "automation": {
+    "title": "Atender fallos de CI de Tintín",
+    "enabled": true,
+    "cadence": "hourly condition_watch polling",
+    "firstTriggerUtc": "2026-11-03T02:24:49Z",
+    "promptReceivedInThisThread": true,
+    "webhookReceiver": "not exposed",
+    "nativeSkillDiscoveryOtherHosts": "not verified"
+  },
+  "remaining": {
+    "globalProductionAcceptance": "BLOCKED",
+    "operationsRequiringSeparateAuthorization": [
+      "verify/publish Firestore Rules",
+      "verify/update deployed Apps Script WebApp"
+    ],
+    "notVerified": [
+      "authenticated production roles/providers",
+      "real hardware/screen reader",
+      "real backup restoration",
+      "native skill discovery in both hosts"
+    ],
+    "pendingBusinessRules": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
+    "moderateToolingAdvisories": 14,
+    "lowMaintenanceWarning": "actions/cache@v4 Node20 declaration forced to24 by GitHub",
+    "pr1306": "routing recovery in progress; current HEAD/checks in PR body"
+  }
+}

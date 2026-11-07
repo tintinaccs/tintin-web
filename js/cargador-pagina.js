@@ -38,9 +38,14 @@
   try { history.scrollRestoration = 'manual'; } catch {}
   var entryScrollBehavior;
   var entryScrollRevision = 0;
-  var navigationSurfaceUsed = false;
+  var entryPositionUsed = false;
+  // Una selección local o empezar a leer también consume la posición inicial.
+  // Imágenes/SDK tardíos no deben devolver arriba a quien ya está usando la página.
+  ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (name) {
+    window.addEventListener(name, function () { entryPositionUsed = true; }, { once: true, passive: true, capture: true });
+  });
   window.addEventListener('tintin:surface-change', function (event) {
-    if (event.detail?.surface && event.detail.surface !== 'none') navigationSurfaceUsed = true;
+    if (event.detail?.surface && event.detail.surface !== 'none') entryPositionUsed = true;
   }, { passive: true });
   function resetEntryScroll(surface) {
     window.TintinScrollLock?.resetPosition?.();
@@ -75,14 +80,16 @@
   }
   window.TintinPageScroll = { reset: resetEntryScroll };
   resetEntryScroll();
-  document.addEventListener('DOMContentLoaded', resetEntryScroll, { once: true });
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!entryPositionUsed) resetEntryScroll();
+  }, { once: true });
   window.addEventListener('load', function () {
     // Recursos tardíos no deben reiniciar una posición que el usuario ya
-    // conservó al abrir/cerrar búsqueda, carrito o cuenta.
-    if (!navigationSurfaceUsed) resetEntryScroll();
+    // conservó al interactuar con el contenido o al abrir/cerrar un panel.
+    if (!entryPositionUsed) resetEntryScroll();
   }, { once: true, passive: true });
   window.addEventListener('pageshow', function (event) {
-    if (event?.persisted || !navigationSurfaceUsed) resetEntryScroll();
+    if (event?.persisted || !entryPositionUsed) resetEntryScroll();
   }, { passive: true });
 
   // El sitio oficial vive en Cloudflare Pages. Conserva ruta, parámetros y hash
@@ -449,9 +456,9 @@
     '#tt-store-closed-overlay{visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
     '#tt-loader{position:fixed;inset:0;width:100vw;width:100dvw;height:100%;margin:0;border:0;max-width:none;max-height:none;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#F8AACA;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
-    '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:9px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
+    '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:2px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
     '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:brightness(0) invert(1);user-select:none;pointer-events:none}',
-    '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(-2px,-.2vw,0px);font-family:Montserrat;font-weight:400;font-size:clamp(28px,3.5vw,46px);line-height:.9;letter-spacing:.045em;color:#FFFFFF!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',
+    '#tt-loader-wordmark{display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;overflow:hidden;position:relative;z-index:1;margin-top:clamp(-2px,-.2vw,0px);font-family:Montserrat;font-weight:400;font-size:clamp(28px,3.5vw,46px);line-height:.9;letter-spacing:.045em;color:#FFFFFF!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-wordmark{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both}',
     '#tt-loader-wordmark .tt-loader-wordmark-i{position:relative;display:inline-block;color:#FFFFFF!important}#tt-loader-wordmark .tt-loader-wordmark-i::before,#tt-loader-wordmark .tt-loader-wordmark-i::after{content:none!important;display:none!important}',
     '#tt-loader-brand-subtitle{margin-top:clamp(6px,1vw,9px);max-width:100%;padding:0 6px;box-sizing:border-box;color:#FFFFFF!important;font-family:Montserrat;font-size:clamp(12px,1.3vw,14px);font-weight:500;line-height:1.25;letter-spacing:.055em;text-align:center;opacity:0;transform:scale(1.09);white-space:normal}',
@@ -466,9 +473,9 @@
     '#tt-loader-status:empty{display:none}',
     '#tt-loader-title{font-family:Montserrat;font-size:clamp(11px,1.5vw,13px);font-weight:750;line-height:1.35;letter-spacing:.04em;color:#FFFFFF!important;text-align:center;overflow-wrap:anywhere}',
     '#tt-loader-subtitle{margin-top:5px;font-family:Montserrat;font-size:clamp(10px,1.35vw,12px);font-weight:600;line-height:1.45;color:#FFFFFF!important;text-align:center;opacity:1;overflow-wrap:anywhere}',
-    '@media (min-width:601px) and (max-width:1024px){#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(178px,29vw,220px);--tt-loader-spinner-size:38px;--tt-loader-spinner-border:7px;width:min(100%,310px)}#tt-loader-brand-subtitle{font-size:clamp(12px,1.8vw,15px);margin-top:11px}.tt-loader-spinner{margin-top:25px}}',
-    '@media (max-width:600px){#tt-loader{padding:max(16px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(120px,43vw,158px);--tt-loader-spinner-size:30px;--tt-loader-spinner-border:5px;width:min(100%,230px);max-width:calc(100vw - 28px)}#tt-loader-brand-subtitle{font-size:clamp(10px,3.2vw,12px);margin-top:8px;letter-spacing:.045em}.tt-loader-spinner{margin-top:20px}#tt-loader-status{margin-top:14px;padding:0 8px}#tt-loader-title{font-size:clamp(10px,3.1vw,12px)}#tt-loader-subtitle{font-size:clamp(9px,2.8vw,11px)}}',
-    '@media (max-width:360px){#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(112px,42vw,140px);--tt-loader-spinner-size:27px;--tt-loader-spinner-border:4px}#tt-loader-brand-subtitle{font-size:10px}.tt-loader-spinner{margin-top:17px}}',
+    '@media (min-width:601px) and (max-width:1024px){#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(178px,29vw,220px);--tt-loader-spinner-size:38px;--tt-loader-spinner-border:2px;width:min(100%,310px)}#tt-loader-brand-subtitle{font-size:clamp(12px,1.8vw,15px);margin-top:11px}.tt-loader-spinner{margin-top:25px}}',
+    '@media (max-width:600px){#tt-loader{padding:max(16px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(120px,43vw,158px);--tt-loader-spinner-size:30px;--tt-loader-spinner-border:2px;width:min(100%,230px);max-width:calc(100vw - 28px)}#tt-loader-brand-subtitle{font-size:clamp(10px,3.2vw,12px);margin-top:8px;letter-spacing:.045em}.tt-loader-spinner{margin-top:20px}#tt-loader-status{margin-top:14px;padding:0 8px}#tt-loader-title{font-size:clamp(10px,3.1vw,12px)}#tt-loader-subtitle{font-size:clamp(9px,2.8vw,11px)}}',
+    '@media (max-width:360px){#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(112px,42vw,140px);--tt-loader-spinner-size:27px;--tt-loader-spinner-border:2px}#tt-loader-brand-subtitle{font-size:10px}.tt-loader-spinner{margin-top:17px}}',
     // css/quality/calidad-interfaz.css aplica *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}
     // bajo reduced-motion — sin !important acá, ese reset gana y el anillo se ve congelado
     // (una vuelta imperceptible y listo) en vez de seguir señalando "todavía estoy cargando".
@@ -592,7 +599,7 @@
     '<img id="tt-loader-logo" src="' +
     LOGO_SRC +
     '" alt="" draggable="false" fetchpriority="high" width="882" height="431">' +
-    '<div id="tt-loader-wordmark" aria-hidden="true">t<span class="tt-loader-wordmark-i">i</span>nt<span class="tt-loader-wordmark-i">i</span>n</div>' +
+    '<svg id="tt-loader-wordmark" viewBox="330 715 870 260" width="870" height="260" aria-hidden="true"><image href="' + resolveAsset('assets-tintin/images/home/hero-editorial/tintin-white.webp?v=editorial-1', false) + '" width="1505" height="1045"/></svg>' +
     '<div id="tt-loader-brand-subtitle">' +
     escText(BRAND_LABEL) +
     '</div>' +
@@ -881,7 +888,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261101-admin-spaced-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261105-copiar-pago-1-p1106');
     }
   }
 
@@ -902,7 +909,7 @@
   // segundo sistema de menús.
   function bootHeaderAccountFix() {
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20261029-cart-reveal-1');
+      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20261029-cart-reveal-1-p1106');
     }
   }
 
@@ -912,13 +919,13 @@
     window.TintinSiteActivityScheduled = true;
     // El aviso ya necesita este módulo. Reutilizarlo evita cargar actividad,
     // latidos y endpoint antes de que la persona acepte estadísticas.
-    importSibling('analytics/consentimiento-privacidad.js', 'Privacy Consent', undefined, 'tintin-20261029-mobile-review-1').then(privacy => {
+    importSibling('analytics/consentimiento-privacidad.js', 'Privacy Consent', undefined, 'tintin-20261029-mobile-review-1-p1106').then(privacy => {
       if (!privacy) { window.TintinSiteActivityScheduled = false; return; }
       const start = () => {
         if (!privacy.hasStatisticsConsent()) return;
         if (!window.TintinSiteActivityBooted) {
           window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261029-mobile-review-1');
+          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261029-mobile-review-1-p1106');
         }
       };
       privacy.onPrivacyConsentChange(start);
@@ -959,7 +966,7 @@
 
   function bootScrollReveal() {
     if (!window.TintinGlobalScrollRevealBooted) {
-      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2', 'Scroll Reveal', undefined, 'tintin-20261029-performance-1');
+      importSibling('quality/revelado-desplazamiento-global.js', 'Scroll Reveal', undefined, 'tintin-brand-polish-20261104-1');
     }
   }
 
@@ -971,13 +978,13 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261030-home-history-5');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-editorial-loader-20261105-1');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261031-catalog-cls-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261105-copiar-pago-1-p1106');
     }
   }
 
@@ -1008,11 +1015,11 @@
       const link = document.createElement('link');
       link.id = 'tt-phase8-ui-ux-css';
       link.rel = 'stylesheet';
-      link.href = new URL('/css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1', location.href).href;
+      link.href = new URL('/css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1-p1106', location.href).href;
       document.head.appendChild(link);
     }
     if (!window.TintinUX?.booted) {
-      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX', undefined, 'tintin-20261031-revision-ux-1');
+      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX', undefined, 'tintin-20261031-revision-ux-1-p1106');
     }
   }
 

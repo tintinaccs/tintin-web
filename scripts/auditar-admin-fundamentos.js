@@ -308,12 +308,13 @@ check(
 );
 check(
   'admin.css define el rango mobile',
-  /@media \(max-width: 540px\)/.test(adminCss),
+  // La app móvil del panel cubre hasta 768 px (Fase 0 del rediseño móvil).
+  /@media \(max-width: 768px\)/.test(adminCss),
   'Falta el breakpoint mobile de la base del panel.'
 );
 check(
   'En mobile la navegación usa la barra inferior y libera el ancho del contenido',
-  /@media \(max-width: 540px\)[\s\S]*?\.adm-sidebar\s*\{\s*display:\s*none;[\s\S]*?\.adm-main\s*\{[\s\S]*?margin-left:\s*0;[\s\S]*?\.adm-mobile-tabs\s*\{[\s\S]*?display:\s*flex\s*!important;/.test(adminCss),
+  /@media \(max-width: 768px\)[\s\S]*?\.adm-sidebar\s*\{\s*display:\s*none;[\s\S]*?\.adm-main\s*\{[\s\S]*?margin-left:\s*0;[\s\S]*?\.adm-mobile-tabs\s*\{[\s\S]*?display:\s*flex\s*!important;/.test(adminCss),
   'La sidebar compacta no debe quitarle espacio al contenido en pantallas móviles.'
 );
 check(

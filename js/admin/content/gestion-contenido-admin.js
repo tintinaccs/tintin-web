@@ -31,7 +31,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/esquema-contenido.js?v=tintin-20261021-identidad-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-suitcase-20261104-1';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

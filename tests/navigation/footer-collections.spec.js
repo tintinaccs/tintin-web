@@ -49,6 +49,7 @@ for (const width of [390, 768, 1440]) {
     await footer.scrollIntoViewIfNeeded();
     await expect(footer).toHaveAttribute('data-phase4-collections-state', 'ready');
     await expect(footer.locator('a')).toHaveText(['Catálogo', 'Nueva colección & detalles', 'Relojes']);
+    for (const link of await footer.locator('a').all()) await expect(link).toHaveCSS('text-transform', 'uppercase');
     await expect(footer.locator('a[href="/catalogo?cat=nueva"]')).toBeVisible();
     expect(productRequests).toBe(0);
     items = [];

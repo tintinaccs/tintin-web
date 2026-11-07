@@ -17,7 +17,7 @@ import {
   normalizePaymentMethod,
   paymentCatalogMap,
   paymentMethodId,
-} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261004-final-integration-1-encomienda-20261008-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261105-banco-familiar-1';
 
 const ADMIN_PATH = /(^|\/)admin(?:\.html)?$/i;
 const SETTINGS_REF = doc(db, 'settings', 'general');
@@ -36,7 +36,7 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-palette-20261014-1';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-copiar-20261105-1-p1106';
   document.head.appendChild(link);
 }
 
@@ -68,16 +68,16 @@ function rootHtml() {
         <div class="tt-payment-admin-grid">
           <div class="adm-field">
             <label class="adm-label" for="tt-payment-title">Nombre visible</label>
-            <input type="text" class="adm-input" id="tt-payment-title" maxlength="100" placeholder="Ej: Transferencia Ueno" />
+            <input type="text" class="adm-input" id="tt-payment-title" maxlength="100" placeholder="Ej: Transferencia Banco Familiar" />
           </div>
           <div class="adm-field">
             <label class="adm-label" for="tt-payment-id">Identificador</label>
-            <input type="text" class="adm-input" id="tt-payment-id" maxlength="40" placeholder="transferencia-ueno" />
+            <input type="text" class="adm-input" id="tt-payment-id" maxlength="40" placeholder="transferencia-banco-familiar" />
           </div>
           <div class="adm-field">
             <label class="adm-label" for="tt-payment-kind">Tipo seguro del pedido</label>
             <select class="adm-select" id="tt-payment-kind">
-              <option value="efectivo">Efectivo / contra entrega sólo delivery</option>
+              <option value="efectivo">Efectivo / delivery o retiro</option>
               <option value="transferencia">Transferencia / pago coordinado</option>
             </select>
           </div>
