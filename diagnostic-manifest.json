@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ab829e39a89ce05737f2d1bcda6e2e2dc769f9e08319358f6dabad0a6f97b394",
+  "sourceFingerprint": "5c19d9c7313c92ab7c4b39c5cf27096eab2e045ea414dff8853a04981c53dce9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1824,
     "textFiles": 1674,
-    "totalBytes": 61061034,
+    "totalBytes": 61060813,
     "pages": 19,
     "modules": 1182
   },
@@ -48182,8 +48182,8 @@
     },
     {
       "path": "tests/catalog/product-small-controls.test.mjs",
-      "bytes": 2715,
-      "sha256": "e3dd10e2a76340c4220afdf01e9c211fe305789c4a1c20aabe96b9e4417ea10a",
+      "bytes": 2494,
+      "sha256": "33f1f2fff1b41999c857fe913de3f6be7d4d153e587a90caa5b410efd9831f29",
       "syntax": {
         "ok": true,
         "error": ""
@@ -71247,8 +71247,8 @@
     {
       "path": "tests/catalog/product-small-controls.test.mjs",
       "extension": ".mjs",
-      "bytes": 2715,
-      "sha256": "e3dd10e2a76340c4220afdf01e9c211fe305789c4a1c20aabe96b9e4417ea10a"
+      "bytes": 2494,
+      "sha256": "33f1f2fff1b41999c857fe913de3f6be7d4d153e587a90caa5b410efd9831f29"
     },
     {
       "path": "tests/catalog/product-stock-metadata.test.mjs",
