@@ -21,7 +21,7 @@ function pageStyles(page) {
 const VERSION = 'tintin-hero-fit-20261104-1-p1106';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1-p1106';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1-p1106';
-const TIENDA_VERSION = 'tintin-20261107-ver-agregar-2';
+const TIENDA_VERSION = 'tintin-20261107-tarjeta-opciones-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261101-cls-home-1';
 const LOADER_VERSION = 'tintin-20261107-sin-favoritos-1';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5';

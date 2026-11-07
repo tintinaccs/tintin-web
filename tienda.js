@@ -772,6 +772,224 @@ function renderProductCardColors(p, imageUrl = '') {
   return productCardColorsMarkup(p, colorGroup, '', activeColor);
 }
 
+/* ──────────────────────────────────────
+   HOJA «AGREGAR AL CARRITO» (tarjetas con opciones)
+   Muestra las opciones elegibles (color, tamaño, forma…), preselecciona la
+   que ya tiene la tarjeta y pide confirmación antes de agregar al carrito.
+   No navega a otra página.
+────────────────────────────────────── */
+let _addSheet = null;
+
+function _sheetStyles() {
+  if (document.getElementById('tt-add-sheet-style')) return;
+  const style = document.createElement('style');
+  style.id = 'tt-add-sheet-style';
+  style.textContent = `
+.tt-as-backdrop{position:fixed;inset:0;z-index:10050;display:flex;align-items:flex-end;justify-content:center;background:rgba(34,34,34,.45);opacity:0;transition:opacity .18s ease;font-family:Montserrat,sans-serif}
+.tt-as-backdrop.is-open{opacity:1}
+.tt-as{box-sizing:border-box;width:100%;max-width:480px;max-height:92vh;max-height:92dvh;overflow:auto;background:#fff;color:#222;border-radius:20px 20px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -8px 32px rgba(34,34,34,.18);transform:translateY(24px);transition:transform .22s cubic-bezier(.2,.8,.2,1)}
+.tt-as-backdrop.is-open .tt-as{transform:none}
+.tt-as-head{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.tt-as-img{flex:0 0 72px;width:72px;height:72px;border-radius:14px;object-fit:cover;background:#FDECF2}
+.tt-as-title{margin:0 0 2px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ad3f67}
+.tt-as-name{margin:0;font-size:1rem;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
+.tt-as-price{margin:4px 0 0;font-size:.95rem;font-weight:700}
+.tt-as-group{border:0;margin:0 0 14px;padding:0;min-width:0}
+.tt-as-legend{padding:0;margin:0 0 8px;font-size:.78rem;font-weight:700;color:#555}
+.tt-as-opts{display:flex;flex-wrap:wrap;gap:8px}
+.tt-as-opt{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1.5px solid #e6d3db;border-radius:999px;background:#fff;color:#222;font:600 .85rem Montserrat,sans-serif;cursor:pointer}
+.tt-as-opt[aria-pressed="true"]{border-color:#F8AACA;background:#FDECF2;box-shadow:0 0 0 2px #F8AACA}
+.tt-as-opt:disabled{opacity:.45;cursor:not-allowed;text-decoration:line-through}
+.tt-as-opt:focus-visible,.tt-as-btn:focus-visible{outline:3px solid #ad3f67;outline-offset:2px}
+.tt-as-dot{width:16px;height:16px;border-radius:50%;border:1px solid rgba(34,34,34,.25);flex:0 0 16px}
+.tt-as-summary{margin:4px 0 14px;padding:12px 14px;border-radius:12px;background:#FDECF2;font-size:.85rem;line-height:1.5}
+.tt-as-msg{min-height:1.2em;margin:0 0 10px;font-size:.82rem;font-weight:600;color:#9f2d52}
+.tt-as-actions{display:flex;gap:10px}
+.tt-as-btn{flex:1;min-height:48px;border-radius:999px;border:1.5px solid #F8AACA;font:700 .9rem Montserrat,sans-serif;cursor:pointer;padding:0 16px}
+.tt-as-btn--ok{background:#F8AACA;color:#222}
+.tt-as-btn--no{background:#fff;color:#222}
+.tt-as-btn:disabled{opacity:.6;cursor:not-allowed}
+@media (min-width:640px){.tt-as-backdrop{align-items:center}.tt-as{border-radius:20px;padding-bottom:20px}}
+@media (prefers-reduced-motion:reduce){.tt-as-backdrop,.tt-as{transition:none}}`;
+  document.head.appendChild(style);
+}
+
+// Combinaciones que realmente se pueden comprar (con stock y activas).
+function _sheetCombos(p) {
+  const groups = productVariantGroups(p);
+  if (!groups.length) return [];
+  if (p.variantCommerceVersion === 2) {
+    return (Array.isArray(p.variantInventory) ? p.variantInventory : [])
+      .filter(row => row && row.active !== false && (row.stock === null || row.stock > 0)
+        && groups.every(([key, values]) => values.includes(row.attributes?.[key])))
+      .map(row => ({ ...row.attributes }));
+  }
+  if (Array.isArray(p.variantInventory)) {
+    return p.variantInventory.filter(row => Number.isInteger(row.stock) && row.stock > 0).map(row => {
+      const parts = String(row.variant || '').split('/').map(v => v.trim());
+      return Object.fromEntries(groups.map(([key], i) => [key, parts[i]]));
+    }).filter(sel => groups.every(([key, values]) => values.includes(sel[key])));
+  }
+  if (!isInStock(p)) return [];
+  return groups.reduce((acc, [key, values]) => acc.flatMap(sel => values.map(v => ({ ...sel, [key]: v }))), [{}]);
+}
+
+function _sheetVariantString(p, sel) {
+  return productVariantGroups(p).map(([key]) => sel[key]).join(' / ');
+}
+
+function closeCardAddSheet() {
+  if (!_addSheet) return;
+  const { root, trigger, onKey } = _addSheet;
+  _addSheet = null;
+  document.removeEventListener('keydown', onKey, true);
+  root.classList.remove('is-open');
+  setTimeout(() => root.remove(), 200);
+  document.documentElement.style.overflow = _addSheetPrevOverflow;
+  if (trigger && trigger.isConnected) trigger.focus();
+}
+let _addSheetPrevOverflow = '';
+
+function openCardAddSheet(productId, trigger = document.activeElement) {
+  const p = getProductById(productId);
+  if (!p || !isInStock(p) || _addSheet) return false;
+  const groups = productVariantGroups(p);
+  const combos = _sheetCombos(p);
+  if (!groups.length || !combos.length) return false;
+  _sheetStyles();
+
+  const savedColor = cardColorSelections.get(String(p.id));
+  const colorGroup = productCardColorOptions(p);
+  const start = productPreferredSelection(p, colorGroup && savedColor ? { [colorGroup[0]]: savedColor } : {});
+  let sel = combos.find(c => groups.every(([key]) => c[key] === start[key])) || combos[0];
+
+  const uid = `tt-as-${Date.now().toString(36)}`;
+  const root = document.createElement('div');
+  root.className = 'tt-as-backdrop';
+  root.innerHTML = `
+    <div class="tt-as" role="dialog" aria-modal="true" aria-labelledby="${uid}-name" aria-describedby="${uid}-summary">
+      <div class="tt-as-head">
+        <img class="tt-as-img" alt="" width="72" height="72">
+        <div>
+          <p class="tt-as-title">Agregar al carrito</p>
+          <h2 class="tt-as-name" id="${uid}-name"></h2>
+          <p class="tt-as-price"></p>
+        </div>
+      </div>
+      <div class="tt-as-groups"></div>
+      <p class="tt-as-summary" id="${uid}-summary"></p>
+      <p class="tt-as-msg" role="status" aria-live="polite"></p>
+      <div class="tt-as-actions">
+        <button type="button" class="tt-as-btn tt-as-btn--no" data-as-cancel>Cancelar</button>
+        <button type="button" class="tt-as-btn tt-as-btn--ok" data-as-confirm>Sí, agregar</button>
+      </div>
+    </div>`;
+  const q = selector => root.querySelector(selector);
+  q('.tt-as-name').textContent = p.name;
+
+  const render = () => {
+    const variant = _sheetVariantString(p, sel);
+    const money = selectedProductMoney(p, variant);
+    q('.tt-as-price').textContent = formatPrice(Number(money?.price ?? p.price) || 0);
+    const photo = sanitizeClassicImageUrl(window.TintinProductMedia.galleryImages(p, sel)[0] || p.imageUrl || p.image || getProductImage(p.id), 240);
+    const img = q('.tt-as-img');
+    if (photo) { img.src = photo; img.hidden = false; } else img.hidden = true;
+    const holder = q('.tt-as-groups');
+    holder.textContent = '';
+    for (const [key, values] of groups) {
+      const field = document.createElement('fieldset');
+      field.className = 'tt-as-group';
+      const legend = document.createElement('legend');
+      legend.className = 'tt-as-legend';
+      legend.textContent = key;
+      const row = document.createElement('div');
+      row.className = 'tt-as-opts';
+      for (const value of values) {
+        const available = combos.some(c => c[key] === value);
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'tt-as-opt';
+        button.dataset.asKey = key;
+        button.dataset.asValue = value;
+        button.setAttribute('aria-pressed', String(sel[key] === value));
+        if (!available) { button.disabled = true; button.title = `${value} — Agotado`; }
+        if (window.TintinProductMedia.isColorKey(key)) {
+          const dot = document.createElement('span');
+          dot.className = 'tt-as-dot';
+          dot.setAttribute('aria-hidden', 'true');
+          dot.style.background = productColorSwatch(value, p) || '#eee';
+          button.appendChild(dot);
+        }
+        button.appendChild(document.createTextNode(available ? value : `${value} (agotado)`));
+        row.appendChild(button);
+      }
+      field.append(legend, row);
+      holder.appendChild(field);
+    }
+    q('.tt-as-summary').textContent = `¿Agregar a tu carrito «${p.name}» — ${groups.map(([key]) => `${key}: ${sel[key]}`).join(', ')}?`;
+  };
+
+  root.addEventListener('click', async event => {
+    if (event.target === root || event.target.closest('[data-as-cancel]')) return closeCardAddSheet();
+    const opt = event.target.closest('.tt-as-opt');
+    if (opt && !opt.disabled) {
+      const { asKey, asValue } = opt.dataset;
+      const score = c => groups.reduce((n, [key]) => n + (c[key] === sel[key] ? 1 : 0), 0);
+      const candidates = combos.filter(c => c[asKey] === asValue);
+      sel = candidates.reduce((best, c) => (score(c) > score(best) ? c : best), candidates[0]);
+      q('.tt-as-msg').textContent = '';
+      render();
+      root.querySelector(`.tt-as-opt[data-as-key="${CSS.escape(asKey)}"][aria-pressed="true"]`)?.focus();
+      return;
+    }
+    const ok = event.target.closest('[data-as-confirm]');
+    if (!ok || ok.disabled) return;
+    ok.disabled = true;
+    ok.setAttribute('aria-busy', 'true');
+    q('.tt-as-msg').textContent = '';
+    try {
+      const result = await addToCart(p.id, _sheetVariantString(p, sel));
+      if (result?.changed) return closeCardAddSheet();
+      q('.tt-as-msg').textContent = result?.reason === 'already_in_cart'
+        ? 'Esta opción ya está en tu carrito.'
+        : 'No hay más stock disponible de esta opción.';
+    } catch (error) {
+      console.error('[tienda] No se pudo agregar al carrito:', error);
+      q('.tt-as-msg').textContent = 'No pudimos agregarlo. Intentá de nuevo.';
+    } finally {
+      ok.disabled = false;
+      ok.removeAttribute('aria-busy');
+    }
+  });
+
+  const onKey = event => {
+    if (event.key === 'Escape') { event.preventDefault(); closeCardAddSheet(); return; }
+    if (event.key !== 'Tab') return;
+    const focusable = [...root.querySelectorAll('button:not([disabled])')];
+    if (!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  };
+  document.addEventListener('keydown', onKey, true);
+  _addSheet = { root, trigger, onKey };
+  _addSheetPrevOverflow = document.documentElement.style.overflow;
+  document.documentElement.style.overflow = 'hidden';
+  render();
+  document.body.appendChild(root);
+  requestAnimationFrame(() => root.classList.add('is-open'));
+  (root.querySelector('.tt-as-opt[aria-pressed="true"]') || q('[data-as-confirm]')).focus();
+  return true;
+}
+window.openCardAddSheet = openCardAddSheet;
+
+document.addEventListener('click', event => {
+  const button = event.target.closest?.('[data-card-options]');
+  if (!button || button.disabled) return;
+  event.preventDefault();
+  openCardAddSheet(button.dataset.cardOptions, button);
+});
+
 function renderProductCardMarkup(p, options = {}) {
   const inStock = isInStock(p);
   const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));
@@ -799,7 +1017,7 @@ function renderProductCardMarkup(p, options = {}) {
   const secondaryAction = !inStock
     ? `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline" disabled aria-disabled="true">Agotado</button>`
     : hasVariants && !singleVariant
-      ? `<a href="${productHref}" class="tt-btn tt-btn-sm tt-btn-outline" aria-label="Elegir opciones de ${escapeAttribute(p.name)}">Elegir opciones</a>`
+      ? `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline" data-card-options="${safeId}" aria-haspopup="dialog" aria-label="Agregar ${escapeAttribute(p.name)} al carrito: elegir y confirmar opciones">Agregar al carrito</button>`
       : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}"${singleVariant ? ` data-variant="${escapeAttribute(singleVariant)}"` : ''} aria-label="Agregar ${escapeAttribute(p.name)} al carrito">Agregar al carrito</button>`;
 
   return `

@@ -6551,3 +6551,9 @@ Causa del rojo en CI 42017447387/1 (SHA 7cfbcc9, job D — Interfaz, SEO y rendi
 - Checkout: botón "Copiar" junto a cada dato del método de pago (`js/pages/checkout/checkout-metodos-pago.js`, `copiar-dato-pago.js`, `payment-methods.css`). Copia solo el alias si el dato trae "Alias ...: valor" (aplica "Sin Guión" quitando guiones); si no, copia el texto completo. Fallback `execCommand`. Estado "¡Copiado!" + región `role=status`.
 - Verificado local con el módulo real y catálogo simulado (sin tocar Firestore): portapapeles = `0971300923`, botón dentro de la tarjeta y sin scroll horizontal de 320 a 1920 y 844x390. Pruebas unitarias `tests/payments/copiar-dato-pago.test.mjs` (5) OK.
 - No verificado: Firestore real (el alias cargado hoy tiene guiones y dice "Sin Guión"), producción, portapapeles en iOS/Safari real.
+
+## 2026-11-07 · Tarjetas: «Agregar al carrito» con hoja de confirmación
+- Implementado: botón «Agregar al carrito» en tarjetas con variantes abre hoja (modal/bottom sheet) para elegir/confirmar opciones y agrega sin salir de la página (`tienda.js`, `catalogo.html`).
+- Local: `npm run ci:preflight` exit 0; mecanismo de flujos 58/58; tests cart+catalog 139/140; auditor fase 7 OK; verificación Playwright con datos simulados (390px y 1280px).
+- Fallo preexistente (también en main, no relacionado): `tests/catalog/product-small-controls.test.mjs` «favoritos conserva nombre accesible…».
+- NO probado en producción ni con catálogo/Firestore reales.
