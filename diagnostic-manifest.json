@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e81ed1cf23a35079832e4a55db6fe1f5096a63651350e5099fc2e49c7090a356",
+  "sourceFingerprint": "9d9b44b660c05d62cbd5bc3d741270b1b68a21db921c02307f6e3e57176ce307",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1824,
     "textFiles": 1674,
-    "totalBytes": 61038233,
+    "totalBytes": 61038395,
     "pages": 19,
     "modules": 1182
   },
@@ -47461,8 +47461,8 @@
     },
     {
       "path": "tests/catalog/available-color-card.test.mjs",
-      "bytes": 3122,
-      "sha256": "1373e749c44e7f02f5e87616ef96f1628a6ad50efaaf44805d0a4ce303952a15",
+      "bytes": 3284,
+      "sha256": "e22768b27580bc97b2bebeea0527ddc696da0bf0507edf19c8ef521b4efb68ad",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47506,11 +47506,11 @@
         },
         {
           "url": "https://example.test/gold.jpg",
-          "line": 13
+          "line": 15
         },
         {
           "url": "https://example.test/silver.jpg",
-          "line": 15
+          "line": 17
         }
       ]
     },
@@ -71145,8 +71145,8 @@
     {
       "path": "tests/catalog/available-color-card.test.mjs",
       "extension": ".mjs",
-      "bytes": 3122,
-      "sha256": "1373e749c44e7f02f5e87616ef96f1628a6ad50efaaf44805d0a4ce303952a15"
+      "bytes": 3284,
+      "sha256": "e22768b27580bc97b2bebeea0527ddc696da0bf0507edf19c8ef521b4efb68ad"
     },
     {
       "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
