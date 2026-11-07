@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0c56038e00d4f46941bb771dc43ae71145b9a3a721080cae76b5ee2fb52c5baa",
+  "sourceFingerprint": "27956007b64069b84a6a47d6d397d1c8b3a0d5d46657142ddd757495a5e4cd87",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1821,
     "textFiles": 1671,
-    "totalBytes": 61017824,
+    "totalBytes": 61017850,
     "pages": 19,
     "modules": 1180
   },
@@ -43627,8 +43627,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 30128,
-      "sha256": "b632171df80a3062aa97e1e6bc427140a4963adc0ca3df6a9dc928237a20b0ba",
+      "bytes": 30112,
+      "sha256": "ccb4f7deb9cfb3c8bc8a4edbaf9f2fe8fcec92229118101291e914f769f346f9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55230,8 +55230,8 @@
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
-      "bytes": 63410,
-      "sha256": "ad210e56fead35f254915a5e42f9e28514f69bc755b35fe4d0742b1e5de8f794",
+      "bytes": 63452,
+      "sha256": "9283b7634226f5a115e7070480d7260e61942e28d75c96571e7d68ce4e440920",
       "syntax": {
         "ok": true,
         "error": ""
@@ -70449,8 +70449,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 30128,
-      "sha256": "b632171df80a3062aa97e1e6bc427140a4963adc0ca3df6a9dc928237a20b0ba"
+      "bytes": 30112,
+      "sha256": "ccb4f7deb9cfb3c8bc8a4edbaf9f2fe8fcec92229118101291e914f769f346f9"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -72219,8 +72219,8 @@
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
       "extension": ".mjs",
-      "bytes": 63410,
-      "sha256": "ad210e56fead35f254915a5e42f9e28514f69bc755b35fe4d0742b1e5de8f794"
+      "bytes": 63452,
+      "sha256": "9283b7634226f5a115e7070480d7260e61942e28d75c96571e7d68ce4e440920"
     },
     {
       "path": "tests/orders/order-contact-links.test.mjs",
