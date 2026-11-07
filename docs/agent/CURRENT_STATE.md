@@ -5484,3 +5484,30 @@ original antes de cada aviso. La regresión falla antes y pasa después del camb
 Las cinco pruebas de integridad de lectura pasan. CI, merge y publicación del
 candidato final requieren evidencia por su SHA; no se heredan los PASS locales
 de la sesión anterior. No se escribieron datos comerciales reales.
+
+## 2026-11-07 — Auditoría de rendimiento del Super Panel (agente Claude Sonnet 5.5)
+
+Causa raíz (análisis estático + medición simulada; NO medida en producción):
+`createAdminOrderSource` usaba `complete:true`, que encadena páginas de 250
+pedidos en serie y no publica nada hasta descargar la colección entera
+(introducido en 8e92250, #1244). Contradice la política del propio código de no
+descargar miles de documentos al abrir el panel.
+
+Cambio: `js/admin/datos/fuente-paginada-progresiva.mjs` (nuevo, solo admin) entrega
+el prefijo confirmado vía `onPartial`; `admin-app.js` lo proyecta sin marcar
+`adminRealtimeReady.orders`; `shopify-commerce-admin.js` muestra filas mientras
+sincroniza (escrituras siguen bloqueadas hasta estar listo).
+PASS_LOCAL: `tests/admin/pedidos-carga-progresiva.test.mjs` 3/3; simulación
+2983 pedidos, 12 páginas × 40 ms: primer contenido 486 ms → 42 ms (completo 490 ms).
+`audit:cache-versioning` correcto. No probado en producción.
+
+Revisado sin hallazgo defectuoso: pollers admin (gated por sección y visibilidad),
+`orderTrash` (solo pestaña Borrados), `site_content` (se libera al salir),
+`public-catalog` (caché edge s-maxage=10), sitemaps (s-maxage=900), fallback
+`products/[handle]` (TTL 5 min en memoria). Crons de GitHub Actions listados; no
+hay triggers cron de wrangler.
+
+Pendiente: Usuarios y estadísticas aún esperan el conjunto completo; medir en
+producción (requiere métricas de Firestore Usage/Cloud Monitoring y analítica de
+Cloudflare); `admin-app.js`/`shopify-commerce-admin.js` figuran como protegidos
+modificados y requieren la vía de mantenimiento autorizada. Sin push.
