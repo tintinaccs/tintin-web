@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="86732582b3644e5d2219fef2a2487f26de210df7a8d0256586732294ddb39622">
+  <meta name="tintin-page-revision" content="59deb818bfa18db4307d5446a407936b5d2df8dac3fc5e188e20824053dcc1d3">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -617,7 +617,7 @@
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261107-ver-agregar-1" defer></script>
+<script src="tienda.js?v=tintin-20261107-ver-agregar-2" defer></script>
 <script type="module">
 import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-suitcase-20261104-1-p1106';
 initSiteContent('catalogo');
@@ -625,7 +625,7 @@ initSiteContent('catalogo');
 <script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20261105-modo-edicion-1-p1106"></script>
 <script type="module">
 import { sanitizeImageUrl } from './js/components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
-import { hasProductStock, firstAvailableVariant, productDefaultPrice } from './js/core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
+import { hasProductStock, firstAvailableVariant, productDefaultPrice, resolveProductVariant } from './js/core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { productVariantImage } from './js/components/images/foto-variante.mjs?v=tintin-20261031-seo-espacios-2';
 import { productSearchScore, productSearchText, normalizeProductSearch as normalizeSearch } from './js/core/store/busqueda-productos.mjs?v=tintin-20261021-commerce-review-1';
 import { catalogFilterRecord, catalogFilterOptions, matchesCatalogFilters, pruneCatalogFilters } from './js/pages/catalog/filtros-variantes.mjs?v=tintin-20261106-filtros-1';
@@ -854,6 +854,8 @@ function renderGrid(lista) {
     const hasVariants = window.TintinCatalogPolicy?.hasVariants
       ? window.TintinCatalogPolicy.hasVariants(p)
       : Boolean(p.variants && Object.values(p.variants).some(values => Array.isArray(values) && values.length));
+    const singleVariant = hasVariants ? resolveProductVariant(p, '') || '' : '';
+    const needsChoice = hasVariants && !singleVariant;
     const inStock = isInStockCat(p);
     const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));
     const badgeHtml = !inStock
@@ -880,9 +882,9 @@ function renderGrid(lista) {
             <a class="tt-card-btn tt-card-btn-view" href="${productHref}" aria-label="Ver ${safeAlt}">Ver</a>
             ${!inStock
               ? `<button type="button" class="tt-card-btn tt-card-btn-cart" disabled aria-disabled="true">Agotado</button>`
-              : hasVariants
+              : needsChoice
                 ? `<a class="tt-card-btn tt-card-btn-cart" href="${productHref}" aria-label="Elegir opciones de ${safeAlt}">Elegir opciones</a>`
-                : `<button type="button" class="tt-card-btn tt-card-btn-cart" data-pid="${safeId}" aria-label="Agregar ${safeAlt} al carrito">Agregar al carrito</button>`}
+                : `<button type="button" class="tt-card-btn tt-card-btn-cart" data-pid="${safeId}"${singleVariant ? ` data-variant="${escapeCatalogHtml(singleVariant)}"` : ''} aria-label="Agregar ${safeAlt} al carrito">Agregar al carrito</button>`}
           </div>
         </div>
       </article>`;
@@ -1145,14 +1147,16 @@ document.getElementById('cat-grid').addEventListener('click', async e => {
   btn.textContent = 'Agregando...';
   try {
     const cartSync = await cartSyncPromise;
+    const variant = btn.dataset.variant || '';
     const result = await cartSync.addToCart({
       id: p.id,
       name: p.name,
       cat: p.category || p.cat || '',
-      price: p.price,
+      price: variant && p.variantCommerceVersion === 2 ? window.TintinCatalogPolicy.priceFor(p, variant).price : p.price,
       qty: 1,
       stock: p.stock,
-      imageUrl: p.imageUrl || ''
+      imageUrl: variant ? productVariantImage(p, variant, p.imageUrl || '') : p.imageUrl || '',
+      ...(variant ? { variant } : {})
     });
     btn.textContent = result.changed ? '✓ Agregado' : (result.reason === 'already_in_cart' ? 'Ya está en tu carrito' : 'Stock máximo');
   } catch (error) {

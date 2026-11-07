@@ -111,7 +111,7 @@ check(
   'Las variantes se eligen en la ficha antes de agregar',
   />Ver</.test(catalog) &&
     />Agregar al carrito</.test(catalog) &&
-    /hasVariants\s*\n?\s*\?\s*`<a class="tt-card-btn tt-card-btn-cart" href="\$\{productHref\}"/.test(catalog) &&
+    /needsChoice\s*\n?\s*\?\s*`<a class="tt-card-btn tt-card-btn-cart" href="\$\{productHref\}"/.test(catalog) &&
     /_pdValidateVariants/.test(storefront),
   'Una tarjeta con variantes no debe agregar una combinación incompleta.'
 );
