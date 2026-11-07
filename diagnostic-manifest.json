@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0067ffb401e40bb77e73cf94b0e9f055280d4b9d00bb1b87ef5ff5d894a5c7d9",
+  "sourceFingerprint": "8f7b1de814d44c4952d1c278c22fd8fc63af1d2264183b9e6e54ac66c6698f1d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1824,
     "textFiles": 1674,
-    "totalBytes": 61038655,
+    "totalBytes": 61039036,
     "pages": 19,
     "modules": 1182
   },
@@ -10352,8 +10352,8 @@
         "guest",
         "client"
       ],
-      "bytes": 74685,
-      "sha256": "4f531f1416f548c052e4d747a5f24697d4e2f301ac4f6c29de9ff8abc833620b",
+      "bytes": 75066,
+      "sha256": "d6a6f1ff362fe4e2cd26e959ee941e2ee8f6bb665e08761a4dc007c92f612887",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10362,7 +10362,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          456
+          461
         ]
       },
       "duplicateIds": [],
@@ -10374,13 +10374,13 @@
           "error": ""
         },
         {
-          "line": 621,
+          "line": 626,
           "module": true,
           "ok": true,
           "error": ""
         },
         {
-          "line": 626,
+          "line": 631,
           "module": true,
           "ok": true,
           "error": ""
@@ -10416,57 +10416,57 @@
         {
           "raw": "js/theme/alternancia-secciones.js?v=tintin-client-fades-20261105-1",
           "target": "js/theme/alternancia-secciones.js",
-          "line": 425
+          "line": 430
         },
         {
           "raw": "js/components/novak-credit.js?v=tintin-novak-20261103-2",
           "target": "js/components/novak-credit.js",
-          "line": 448
+          "line": 453
         },
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 619
+          "line": 624
         },
         {
           "raw": "tienda.js?v=tintin-20261107-ver-agregar-2",
           "target": "tienda.js",
-          "line": 620
+          "line": 625
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261105-modo-edicion-1-p1106",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 625
+          "line": 630
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 1176
+          "line": 1181
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 1177
+          "line": 1182
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1-p1106",
           "target": "js/analytics/analitica.js",
-          "line": 1178
+          "line": 1183
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1179
+          "line": 1184
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1180
+          "line": 1185
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1-p1106",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 1181
+          "line": 1186
         }
       ],
       "styles": [
@@ -10553,107 +10553,107 @@
         {
           "raw": "css/generated/catalogo-2.css?v=tintin-catalogo-88934b424575e947",
           "target": "css/generated/catalogo-2.css",
-          "line": 427
+          "line": 432
         },
         {
           "raw": "css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1-p1106",
           "target": "css/theme/superficies-marca-responsive-tintin.css",
-          "line": 428
+          "line": 433
         },
         {
           "raw": "css/theme/pulido-marca-responsive-tintin.css?v=tintin-20260903-loader-white-brand-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
           "target": "css/theme/pulido-marca-responsive-tintin.css",
-          "line": 429
+          "line": 434
         },
         {
           "raw": "css/theme/seguridad-marca-responsive-tintin.css?v=tintin-20260803-brand-safety-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1-palette-20261014-1-p1106",
           "target": "css/theme/seguridad-marca-responsive-tintin.css",
-          "line": 430
+          "line": 435
         },
         {
           "raw": "css/components/navigation/compartido/apariencia-global.css?v=tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1-footer-gradient-20261016-1",
           "target": "css/components/navigation/compartido/apariencia-global.css",
-          "line": 431
+          "line": 436
         },
         {
           "raw": "css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1-p1106",
           "target": "css/quality/experiencia-interfaz.css",
-          "line": 432
+          "line": 437
         },
         {
           "raw": "css/quality/accesibilidad-global.css?v=tintin-20261031-skip-link-1-p1106",
           "target": "css/quality/accesibilidad-global.css",
-          "line": 433
+          "line": 438
         },
         {
           "raw": "css/components/visual-studio-global-runtime.css?v=tintin-20260810-global-studio-4-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-p1106",
           "target": "css/components/visual-studio-global-runtime.css",
-          "line": 434
+          "line": 439
         },
         {
           "raw": "css/components/editor-visual-runtime.css?v=tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-p1106",
           "target": "css/components/editor-visual-runtime.css",
-          "line": 435
+          "line": 440
         },
         {
           "raw": "css/components/notifications/notificaciones-sociales.css?v=tintin-20261030-notificaciones-explicitas-1-p1106",
           "target": "css/components/notifications/notificaciones-sociales.css",
-          "line": 436
+          "line": 441
         },
         {
           "raw": "css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1-p1106",
           "target": "css/components/navigation/escritorio/encabezado-escritorio.css",
-          "line": 437
+          "line": 442
         },
         {
           "raw": "css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1-p1106",
           "target": "css/components/navigation/tableta/encabezado-tableta.css",
-          "line": 438
+          "line": 443
         },
         {
           "raw": "css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2-palette-20261014-1-nav-20261028-2-p1106",
           "target": "css/components/navigation/movil/encabezado-movil.css",
-          "line": 439
+          "line": 444
         },
         {
           "raw": "css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "css/components/navigation/compartido/transiciones-navegacion.css",
-          "line": 440
+          "line": 445
         },
         {
           "raw": "css/components/navigation/compartido/paneles.css?v=tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1-domain-prepared-20261012-6-palette-20261014-1-nav-20261028-2-p1106",
           "target": "css/components/navigation/compartido/paneles.css",
-          "line": 441
+          "line": 446
         },
         {
           "raw": "css/components/navigation/compartido/superficie-notificaciones.css?v=tintin-20260918-header-system-solid-surfaces-1",
           "target": "css/components/navigation/compartido/superficie-notificaciones.css",
-          "line": 442
+          "line": 447
         },
         {
           "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261030-busqueda-compacta-1-p1106",
           "target": "css/components/navigation/compartido/busqueda.css",
-          "line": 443
+          "line": 448
         },
         {
           "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4-perf-20261029-1-p1106",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
-          "line": 444
+          "line": 449
         },
         {
           "raw": "css/pages/catalog/catalog-maintenance.css?v=tintin-20261101-touch-targets-1-p1106",
           "target": "css/pages/catalog/catalog-maintenance.css",
-          "line": 445
+          "line": 450
         },
         {
           "raw": "assets-tintin/novak-signature/novak-credit.css?v=tintin-novak-20261102-2",
           "target": "assets-tintin/novak-signature/novak-credit.css",
-          "line": 446
+          "line": 451
         },
         {
           "raw": "css/components/novak-credit-site.css?v=tintin-client-fades-20261105-1-p1106",
           "target": "css/components/novak-credit-site.css",
-          "line": 447
+          "line": 452
         }
       ],
       "images": [
@@ -10663,7 +10663,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 553
+          "line": 558
         },
         {
           "tag": "img",
@@ -10671,7 +10671,7 @@
           "target": "assets-tintin/novak-signature/novak-mark.svg",
           "alt": "NOVAK",
           "hasAlt": true,
-          "line": 610
+          "line": 615
         }
       ],
       "links": [
@@ -10683,7 +10683,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 552
+          "line": 557
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -10693,7 +10693,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 557
+          "line": 562
         },
         {
           "raw": "/catalogo",
@@ -10703,7 +10703,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 565
+          "line": 570
         },
         {
           "raw": "/catalogo?cat=collares",
@@ -10713,7 +10713,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 566
+          "line": 571
         },
         {
           "raw": "/catalogo?cat=earcuff",
@@ -10723,7 +10723,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 567
+          "line": 572
         },
         {
           "raw": "/catalogo?cat=gafas",
@@ -10733,7 +10733,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 568
+          "line": 573
         },
         {
           "raw": "/catalogo?cat=aros",
@@ -10743,7 +10743,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 569
+          "line": 574
         },
         {
           "raw": "/catalogo?cat=armcuff",
@@ -10753,7 +10753,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 570
+          "line": 575
         },
         {
           "raw": "/catalogo?cat=anillos",
@@ -10763,7 +10763,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 571
+          "line": 576
         },
         {
           "raw": "/catalogo?cat=joyeros",
@@ -10773,7 +10773,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 572
+          "line": 577
         },
         {
           "raw": "/catalogo?cat=pulseras",
@@ -10783,7 +10783,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 573
+          "line": 578
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -10793,7 +10793,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 574
+          "line": 579
         },
         {
           "raw": "/catalogo?cat=tobilleras",
@@ -10803,7 +10803,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 575
+          "line": 580
         },
         {
           "raw": "/catalogo?cat=bolsos",
@@ -10813,7 +10813,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 576
+          "line": 581
         },
         {
           "raw": "/about",
@@ -10823,7 +10823,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 583
+          "line": 588
         },
         {
           "raw": "/envios",
@@ -10833,7 +10833,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 584
+          "line": 589
         },
         {
           "raw": "/cambios-devoluciones",
@@ -10843,7 +10843,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 585
+          "line": 590
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -10853,7 +10853,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 586
+          "line": 591
         },
         {
           "raw": "/terminos",
@@ -10863,7 +10863,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 587
+          "line": 592
         },
         {
           "raw": "/privacidad",
@@ -10873,7 +10873,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 588
+          "line": 593
         },
         {
           "raw": "/contact",
@@ -10883,7 +10883,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 595
+          "line": 600
         },
         {
           "raw": "tel:+595981299331",
@@ -10893,7 +10893,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 596
+          "line": 601
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -10903,7 +10903,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 597
+          "line": 602
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -10913,7 +10913,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 598
+          "line": 603
         },
         {
           "raw": "https://novak-web.inf-novakpy.workers.dev/#inicio",
@@ -10923,7 +10923,7 @@
           "ariaLabel": "Desarrollado por NOVAK, visitar su sitio",
           "title": "",
           "imageAlt": "NOVAK",
-          "line": 607
+          "line": 612
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -10933,7 +10933,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 616
+          "line": 621
         }
       ],
       "references": [
@@ -10970,67 +10970,67 @@
         {
           "raw": "js/theme/alternancia-secciones.js?v=tintin-client-fades-20261105-1",
           "target": "js/theme/alternancia-secciones.js",
-          "line": 425,
+          "line": 430,
           "exists": true
         },
         {
           "raw": "js/components/novak-credit.js?v=tintin-novak-20261103-2",
           "target": "js/components/novak-credit.js",
-          "line": 448,
+          "line": 453,
           "exists": true
         },
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 619,
+          "line": 624,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261107-ver-agregar-2",
           "target": "tienda.js",
-          "line": 620,
+          "line": 625,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261105-modo-edicion-1-p1106",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 625,
+          "line": 630,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 1176,
+          "line": 1181,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 1177,
+          "line": 1182,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1-p1106",
           "target": "js/analytics/analitica.js",
-          "line": 1178,
+          "line": 1183,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1179,
+          "line": 1184,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1180,
+          "line": 1185,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1-p1106",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 1181,
+          "line": 1186,
           "exists": true
         },
         {
@@ -11132,253 +11132,253 @@
         {
           "raw": "css/generated/catalogo-2.css?v=tintin-catalogo-88934b424575e947",
           "target": "css/generated/catalogo-2.css",
-          "line": 427,
+          "line": 432,
           "exists": true
         },
         {
           "raw": "css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1-p1106",
           "target": "css/theme/superficies-marca-responsive-tintin.css",
-          "line": 428,
+          "line": 433,
           "exists": true
         },
         {
           "raw": "css/theme/pulido-marca-responsive-tintin.css?v=tintin-20260903-loader-white-brand-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
           "target": "css/theme/pulido-marca-responsive-tintin.css",
-          "line": 429,
+          "line": 434,
           "exists": true
         },
         {
           "raw": "css/theme/seguridad-marca-responsive-tintin.css?v=tintin-20260803-brand-safety-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1-palette-20261014-1-p1106",
           "target": "css/theme/seguridad-marca-responsive-tintin.css",
-          "line": 430,
+          "line": 435,
           "exists": true
         },
         {
           "raw": "css/components/navigation/compartido/apariencia-global.css?v=tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1-footer-gradient-20261016-1",
           "target": "css/components/navigation/compartido/apariencia-global.css",
-          "line": 431,
+          "line": 436,
           "exists": true
         },
         {
           "raw": "css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1-p1106",
           "target": "css/quality/experiencia-interfaz.css",
-          "line": 432,
+          "line": 437,
           "exists": true
         },
         {
           "raw": "css/quality/accesibilidad-global.css?v=tintin-20261031-skip-link-1-p1106",
           "target": "css/quality/accesibilidad-global.css",
-          "line": 433,
+          "line": 438,
           "exists": true
         },
         {
           "raw": "css/components/visual-studio-global-runtime.css?v=tintin-20260810-global-studio-4-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-p1106",
           "target": "css/components/visual-studio-global-runtime.css",
-          "line": 434,
+          "line": 439,
           "exists": true
         },
         {
           "raw": "css/components/editor-visual-runtime.css?v=tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-p1106",
           "target": "css/components/editor-visual-runtime.css",
-          "line": 435,
+          "line": 440,
           "exists": true
         },
         {
           "raw": "css/components/notifications/notificaciones-sociales.css?v=tintin-20261030-notificaciones-explicitas-1-p1106",
           "target": "css/components/notifications/notificaciones-sociales.css",
-          "line": 436,
+          "line": 441,
           "exists": true
         },
         {
           "raw": "css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1-p1106",
           "target": "css/components/navigation/escritorio/encabezado-escritorio.css",
-          "line": 437,
+          "line": 442,
           "exists": true
         },
         {
           "raw": "css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1-p1106",
           "target": "css/components/navigation/tableta/encabezado-tableta.css",
-          "line": 438,
+          "line": 443,
           "exists": true
         },
         {
           "raw": "css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2-palette-20261014-1-nav-20261028-2-p1106",
           "target": "css/components/navigation/movil/encabezado-movil.css",
-          "line": 439,
+          "line": 444,
           "exists": true
         },
         {
           "raw": "css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "css/components/navigation/compartido/transiciones-navegacion.css",
-          "line": 440,
+          "line": 445,
           "exists": true
         },
         {
           "raw": "css/components/navigation/compartido/paneles.css?v=tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1-domain-prepared-20261012-6-palette-20261014-1-nav-20261028-2-p1106",
           "target": "css/components/navigation/compartido/paneles.css",
-          "line": 441,
+          "line": 446,
           "exists": true
         },
         {
           "raw": "css/components/navigation/compartido/superficie-notificaciones.css?v=tintin-20260918-header-system-solid-surfaces-1",
           "target": "css/components/navigation/compartido/superficie-notificaciones.css",
-          "line": 442,
+          "line": 447,
           "exists": true
         },
         {
           "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261030-busqueda-compacta-1-p1106",
           "target": "css/components/navigation/compartido/busqueda.css",
-          "line": 443,
+          "line": 448,
           "exists": true
         },
         {
           "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4-perf-20261029-1-p1106",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
-          "line": 444,
+          "line": 449,
           "exists": true
         },
         {
           "raw": "css/pages/catalog/catalog-maintenance.css?v=tintin-20261101-touch-targets-1-p1106",
           "target": "css/pages/catalog/catalog-maintenance.css",
-          "line": 445,
+          "line": 450,
           "exists": true
         },
         {
           "raw": "assets-tintin/novak-signature/novak-credit.css?v=tintin-novak-20261102-2",
           "target": "assets-tintin/novak-signature/novak-credit.css",
-          "line": 446,
+          "line": 451,
           "exists": true
         },
         {
           "raw": "css/components/novak-credit-site.css?v=tintin-client-fades-20261105-1-p1106",
           "target": "css/components/novak-credit-site.css",
-          "line": 447,
+          "line": 452,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 553,
+          "line": 558,
           "exists": true
         },
         {
           "raw": "/assets-tintin/novak-signature/novak-mark.svg",
           "target": "assets-tintin/novak-signature/novak-mark.svg",
-          "line": 610,
+          "line": 615,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 565,
+          "line": 570,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
           "target": "catalogo.html",
-          "line": 566,
+          "line": 571,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=earcuff",
           "target": "catalogo.html",
-          "line": 567,
+          "line": 572,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=gafas",
           "target": "catalogo.html",
-          "line": 568,
+          "line": 573,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
           "target": "catalogo.html",
-          "line": 569,
+          "line": 574,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=armcuff",
           "target": "catalogo.html",
-          "line": 570,
+          "line": 575,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
           "target": "catalogo.html",
-          "line": 571,
+          "line": 576,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=joyeros",
           "target": "catalogo.html",
-          "line": 572,
+          "line": 577,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
           "target": "catalogo.html",
-          "line": 573,
+          "line": 578,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 574,
+          "line": 579,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=tobilleras",
           "target": "catalogo.html",
-          "line": 575,
+          "line": 580,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 576,
+          "line": 581,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 583,
+          "line": 588,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 584,
+          "line": 589,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 585,
+          "line": 590,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 586,
+          "line": 591,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 587,
+          "line": 592,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 588,
+          "line": 593,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 595,
+          "line": 600,
           "exists": true
         }
       ],
@@ -11403,7 +11403,7 @@
             "data-cat": "todos"
           },
           "hasSourceReference": true,
-          "line": 463
+          "line": 468
         },
         {
           "id": "",
@@ -11419,7 +11419,7 @@
             "data-cat": "collares"
           },
           "hasSourceReference": true,
-          "line": 466
+          "line": 471
         },
         {
           "id": "",
@@ -11435,7 +11435,7 @@
             "data-cat": "earcuff"
           },
           "hasSourceReference": true,
-          "line": 467
+          "line": 472
         },
         {
           "id": "",
@@ -11451,7 +11451,7 @@
             "data-cat": "gafas"
           },
           "hasSourceReference": true,
-          "line": 468
+          "line": 473
         },
         {
           "id": "",
@@ -11467,7 +11467,7 @@
             "data-cat": "aros"
           },
           "hasSourceReference": true,
-          "line": 469
+          "line": 474
         },
         {
           "id": "",
@@ -11483,7 +11483,7 @@
             "data-cat": "armcuff"
           },
           "hasSourceReference": true,
-          "line": 470
+          "line": 475
         },
         {
           "id": "",
@@ -11499,7 +11499,7 @@
             "data-cat": "anillos"
           },
           "hasSourceReference": true,
-          "line": 471
+          "line": 476
         },
         {
           "id": "",
@@ -11515,7 +11515,7 @@
             "data-cat": "joyeros"
           },
           "hasSourceReference": true,
-          "line": 472
+          "line": 477
         },
         {
           "id": "",
@@ -11531,7 +11531,7 @@
             "data-cat": "pulseras"
           },
           "hasSourceReference": true,
-          "line": 473
+          "line": 478
         },
         {
           "id": "",
@@ -11547,7 +11547,7 @@
             "data-cat": "relojes"
           },
           "hasSourceReference": true,
-          "line": 474
+          "line": 479
         },
         {
           "id": "",
@@ -11563,7 +11563,7 @@
             "data-cat": "tobilleras"
           },
           "hasSourceReference": true,
-          "line": 475
+          "line": 480
         },
         {
           "id": "",
@@ -11579,7 +11579,7 @@
             "data-cat": "bolsos"
           },
           "hasSourceReference": true,
-          "line": 476
+          "line": 481
         },
         {
           "id": "cat-tabs-more",
@@ -11593,7 +11593,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 479
+          "line": 484
         },
         {
           "id": "filter-toggle",
@@ -11607,7 +11607,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 488
+          "line": 493
         },
         {
           "id": "",
@@ -11624,7 +11624,7 @@
             "data-cat": "todos"
           },
           "hasSourceReference": true,
-          "line": 492
+          "line": 497
         },
         {
           "id": "btn-limpiar-filtros",
@@ -11638,7 +11638,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 509
+          "line": 514
         }
       ],
       "controls": [
@@ -11648,7 +11648,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 502,
+          "line": 507,
           "labeled": true
         },
         {
@@ -11657,7 +11657,7 @@
           "name": "",
           "type": "search",
           "ariaLabel": "",
-          "line": 520,
+          "line": 525,
           "labeled": true
         },
         {
@@ -11666,7 +11666,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 522,
+          "line": 527,
           "labeled": true
         }
       ]
@@ -63807,8 +63807,8 @@
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 74685,
-      "sha256": "4f531f1416f548c052e4d747a5f24697d4e2f301ac4f6c29de9ff8abc833620b"
+      "bytes": 75066,
+      "sha256": "d6a6f1ff362fe4e2cd26e959ee941e2ee8f6bb665e08761a4dc007c92f612887"
     },
     {
       "path": "checkout.html",
@@ -73782,7 +73782,7 @@
   "routeReferences": [
     {
       "file": "catalogo.html",
-      "line": 849,
+      "line": 854,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
@@ -75447,7 +75447,7 @@
       "references": [
         {
           "file": "catalogo.html",
-          "line": 849
+          "line": 854
         }
       ]
     }
