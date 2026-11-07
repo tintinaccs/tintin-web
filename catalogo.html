@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="59deb818bfa18db4307d5446a407936b5d2df8dac3fc5e188e20824053dcc1d3">
+  <meta name="tintin-page-revision" content="c0a24bea554d2033143611019971e039d02de7438d86c1727937132dd4fed826">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -107,6 +107,11 @@
     .tt-card-price { font-size: 15px; font-weight: 800; color: #963653; margin-bottom: 8px; }
     /* Colores alineados con el texto de la tarjeta (el botón tiene 7px de aire alrededor del círculo). */
     .tt-card .tt-card-colors { justify-content: flex-start; margin: -4px 0 4px -7px; }
+    /* El rótulo «Agotado» de un color ocupa 10 px bajo el círculo. Se reserva
+       siempre en el bloque (no por color) para que las tarjetas de una fila
+       tengan el mismo ritmo vertical y la fila no crezca por una sola. */
+    html body .tt-card .tt-card-colors { padding-bottom: 10px; }
+    html body .tt-card .tt-card-color.tt-stock-unavailable { margin-bottom: 0; }
     .tt-card-stock {
       display: inline-flex; align-items: center; gap: 6px; width: fit-content;
       margin-bottom: 12px; font-size: 10px; font-weight: 800;
