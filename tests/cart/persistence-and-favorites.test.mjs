@@ -36,16 +36,21 @@ test('favoritos y Me gusta ya no existen en la interfaz pública', async () => {
   }
 });
 
-test('las tarjetas tienen «Ver» y «Agregar al carrito» separados; con varias opciones envían a la ficha', async () => {
+test('las tarjetas tienen «Ver» y «Agregar al carrito»; con varias opciones abren la hoja de confirmación sin salir de la página', async () => {
   const [catalog, classic] = await Promise.all([read('catalogo.html'), read('tienda.js')]);
   for (const text of [catalog, classic]) {
     assert.match(text, />Ver</);
     assert.match(text, />Agregar al carrito</);
-    assert.match(text, />Elegir opciones</);
+    assert.match(text, /data-card-options="\$\{safeId\}"/);
+    assert.doesNotMatch(text, />Elegir opciones</);
     assert.doesNotMatch(text, /Ver y agregar al carrito/);
   }
   assert.match(catalog, /data-pid="\$\{safeId\}"/);
+  assert.match(catalog, /window\.openCardAddSheet\?\.\(btn\.dataset\.cardOptions, btn\)/);
   assert.match(classic, /tt-add-to-cart" data-id=/);
+  assert.match(classic, /function openCardAddSheet/);
+  assert.match(classic, /role="dialog" aria-modal="true"/);
+  assert.match(classic, /await addToCart\(p\.id, _sheetVariantString\(p, sel\)\)/);
 });
 
 test('una variante única (una sola opción por grupo) se agrega directo desde la tarjeta', async () => {
