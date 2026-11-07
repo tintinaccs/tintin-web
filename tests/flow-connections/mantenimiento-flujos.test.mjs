@@ -105,3 +105,27 @@ test('la configuración real reconoce Pages del proyecto Tintin y rechaza otro p
     assert.throws(()=>validateChecks([spoof],onlyPages,headSha),/CI obligatorio/);
   }
 });
+
+// Retiro explícito de un archivo protegido eliminado a propósito.
+const removalFixture = () => {
+  const data = fixture();
+  data.baseline.files['js/gone.js'] = flowFileHash('gone');
+  data.candidate = structuredClone(data.baseline);
+  data.candidate.files['js/a.js'] = flowFileHash('new');
+  delete data.candidate.files['js/gone.js'];
+  data.plan.removedFiles = [{ path: 'js/gone.js', oldHash: data.baseline.files['js/gone.js'] }];
+  data.readFile = path => { if (path === 'js/gone.js') throw new Error('ENOENT'); return ({ 'js/a.js': 'new', 'js/b.js': 'stable' })[path]; };
+  return data;
+};
+test('Retiro explícito de un archivo ausente sin alcance de registro se acepta', () => {
+  const result = inspectMaintenance(removalFixture());
+  assert.equal(result.maintenance, true);
+  assert.deepEqual(result.removedFiles.map(file => file.path), ['js/gone.js']);
+});
+for (const [name, mutate] of [
+  ['retiro sin declarar en el plan', data => { delete data.plan.removedFiles; }],
+  ['retiro con huella distinta en el plan', data => { data.plan.removedFiles[0].oldHash = 'f'.repeat(64); }],
+  ['entrada retirada que sigue en la política', data => { data.candidate.files['js/gone.js'] = data.baseline.files['js/gone.js']; }],
+  ['retiro de archivo con alcance de registro', data => { data.baseline.records.a.push('js/gone.js'); data.candidate.records.a.push('js/gone.js'); }],
+  ['retiro adicional por omisión', data => { delete data.candidate.files['js/b.js']; }],
+]) test(`Retiro rechaza ${name}`, () => { const data = removalFixture(); mutate(data); assert.throws(() => inspectMaintenance(data)); });

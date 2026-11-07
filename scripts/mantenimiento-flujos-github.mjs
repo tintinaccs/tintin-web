@@ -64,7 +64,9 @@ const readCandidate = async () => {
   const candidate = JSON.parse(bytes.get(policyPath).toString('utf8'));
   const paths = [...new Set([...Object.keys(baseline.files), ...Object.keys(candidate.files || {})])];
   assert(paths.length <= 1000, 'Demasiados archivos protegidos.');
-  for (let i = 0; i < paths.length; i += 8) await Promise.all(paths.slice(i, i + 8).map(read));
+  // Una entrada protegida ausente del árbol del PR es un retiro: no se lee y el núcleo la valida contra el plan.
+  const present = paths.filter(path => blobs.has(path));
+  for (let i = 0; i < present.length; i += 8) await Promise.all(present.slice(i, i + 8).map(read));
   let plan;
   if (blobs.has(planPath)) {
     await read(planPath);
