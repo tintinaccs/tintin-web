@@ -787,11 +787,13 @@ function renderProductCardMarkup(p, options = {}) {
   const imgContent = imgUrl
     ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="${options.related ? 'eager' : 'lazy'}" decoding="async" onerror="_onProductImgError(this)">`
     : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
-  // Una sola acción: la ficha permite elegir variantes y agregar al carrito.
-  const primaryLabel = 'Ver y agregar al carrito';
+  // «Ver» abre la ficha; el segundo botón agrega directo si no hay opciones que elegir.
+  const hasVariants = productVariantGroups(p).length > 0;
   const secondaryAction = !inStock
     ? `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline" disabled aria-disabled="true">Agotado</button>`
-    : '';
+    : hasVariants
+      ? `<a href="${productHref}" class="tt-btn tt-btn-sm tt-btn-outline" aria-label="Elegir opciones de ${escapeAttribute(p.name)}">Elegir opciones</a>`
+      : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">Agregar al carrito</button>`;
 
   return `
     <article class="tt-product-card${inStock ? '' : ' tt-stock-unavailable'}" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
@@ -806,7 +808,7 @@ function renderProductCardMarkup(p, options = {}) {
         ${colorsHTML}
         <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
         <div class="tt-product-actions">
-          <a href="${productHref}" class="tt-btn tt-btn-sm">${primaryLabel}</a>
+          <a href="${productHref}" class="tt-btn tt-btn-sm" aria-label="Ver ${escapeAttribute(p.name)}">Ver</a>
           ${secondaryAction}
         </div>
       </div>

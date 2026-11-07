@@ -370,6 +370,16 @@ test('las tarjetas no ofrecen favoritos y conservan la acción accesible despué
  await page.locator('#cat-sort').selectOption('precio-desc');
  await expect(page.locator('#cat-grid [data-product-id]')).toHaveCount(1);
  await expect(page.locator('#cat-grid [data-favorite-id], #cat-grid .tt-card-favorite')).toHaveCount(0);
+ await page.locator('#cat-search').fill('');
+ await expect(page.locator('#cat-grid [data-product-id]')).toHaveCount(3);
+ const card=page.locator('#cat-grid [data-product-id]:not(.tt-stock-unavailable)').filter({has:page.getByRole('button',{name:/Agregar .* al carrito/})}).first();
+ await expect(card.locator('a.tt-card-btn-view')).toHaveText('Ver');
+ await expect(card.locator('a.tt-card-btn-view')).toHaveAttribute('href',/product\.html\?id=/);
+ const add=card.locator('button.tt-card-btn-cart');
+ await expect(add).toHaveText('Agregar al carrito');
+ await add.click();
+ await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('tt_cart')||'[]').length)).toBeGreaterThan(0);
+ expect(page.url()).toContain('/catalogo');
 });
 
 for (const [width,height] of [[320,568],[768,1024],[1440,900]]) test(`filtros reales de variantes, agotados y reposición ${width}×${height}`,async({page})=>{
