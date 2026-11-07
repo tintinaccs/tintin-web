@@ -24,18 +24,18 @@ for (const mode of ['modern', 'fallback', 'denied', 'unsupported', 'throw']) tes
   assert.equal(removed, appended); // nunca quedan textareas invisibles después de fallar
 });
 
-test('favoritos conserva nombre accesible y escaping después de cada repintado', () => {
-  const elements = new Map(), listeners = new Map(); let selected = false;
+test('la línea del carrito no ofrece favoritos y conserva el nombre escapado después de cada repintado', () => {
+  const elements = new Map(), listeners = new Map();
   for (const id of ['tinsel-root', 'tinsel-items', 'tinsel-footer', 'tinsel-count', 'tinsel-total-head', 'tinsel-total-footer']) elements.set(id, { style: {}, textContent: '', innerHTML: '', addEventListener() {} });
   vm.runInNewContext(fs.readFileSync(new URL('../../js/pages/product/seleccion-producto.js', import.meta.url), 'utf8'), {
     document: { getElementById: id => elements.get(id), addEventListener() {} },
     window: {
       syncCartWithCatalog: () => [{ id: 'fixture', name: 'Aro "rosa" & más', qty: 1, price: 1000 }],
-      TintinFavorites: { has: () => selected }, addEventListener(type, fn) { listeners.set(type, fn); },
+      addEventListener(type, fn) { listeners.set(type, fn); },
     },
   });
-  assert.match(elements.get('tinsel-items').innerHTML, /aria-label="Guardar Aro &quot;rosa&quot; &amp; más en favoritos"/);
-  selected = true; listeners.get('tintin:favorites-updated')();
-  assert.match(elements.get('tinsel-items').innerHTML, /aria-label="Quitar Aro &quot;rosa&quot; &amp; más de favoritos"/);
-  assert.match(elements.get('tinsel-items').innerHTML, /aria-pressed="true"/);
+  const html = () => elements.get('tinsel-items').innerHTML;
+  assert.match(html(), /Aro &quot;rosa&quot; &amp; más/);
+  assert.doesNotMatch(html(), /favorit/i);
+  assert.doesNotMatch(html(), /aria-pressed/);
 });
