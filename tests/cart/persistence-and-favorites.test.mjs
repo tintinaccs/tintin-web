@@ -45,6 +45,9 @@ test('las tarjetas tienen «Ver» y «Agregar al carrito»; con varias opciones 
     assert.doesNotMatch(text, />Elegir opciones</);
     assert.doesNotMatch(text, /Ver y agregar al carrito/);
   }
+  const checkout = await read('checkout.html');
+  assert.match(checkout, /data-card-options="\$\{safeId\}"/);
+  assert.match(checkout, /button\.ck-sug-add:not\(\[data-card-options\]\)/);
   assert.match(catalog, /data-pid="\$\{safeId\}"/);
   assert.match(catalog, /window\.openCardAddSheet\?\.\(btn\.dataset\.cardOptions, btn\)/);
   assert.match(classic, /tt-add-to-cart" data-id=/);

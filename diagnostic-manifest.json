@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5c19d9c7313c92ab7c4b39c5cf27096eab2e045ea414dff8853a04981c53dce9",
+  "sourceFingerprint": "219ed9de9713d74a6607a8d6f1c886027046e7252730e6d99754e6665cadd28a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1824,
     "textFiles": 1674,
-    "totalBytes": 61060813,
+    "totalBytes": 61056828,
     "pages": 19,
     "modules": 1182
   },
@@ -11687,8 +11687,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 138173,
-      "sha256": "7a3d002f6248bc836b031ca670cc7274d4cbdb2bc5e99d7619a0a39aeb01ec33",
+      "bytes": 138486,
+      "sha256": "5de7e0ad095ced1acbe64fd1be0733fec1e4c3c33369630e4c5e8643a1426714",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -27130,7 +27130,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 260701,
-      "sha256": "450d3da600065c148e88e9bb4bf0ccc43f33b2599a42b37e68f3d9c747333c60",
+      "sha256": "541d350899dd652d397e46cf2e506cb6e9b9d34d0faefe166ccdde0ef2307823",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47251,8 +47251,8 @@
     },
     {
       "path": "tests/cart/persistence-and-favorites.test.mjs",
-      "bytes": 3715,
-      "sha256": "76cf0e4f7ad4718a34005b39737120441581ceeee7cdaf98a9108c538be807a1",
+      "bytes": 3902,
+      "sha256": "b2a911b5a41d6fd27f5ad3fd2a1f042f26cff27c828b007875aa2826c7154ff6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47286,7 +47286,7 @@
           "raw": "../../js/core/store/inventario-variantes.mjs",
           "target": "js/core/store/inventario-variantes.mjs",
           "dynamic": true,
-          "line": 63
+          "line": 66
         }
       ],
       "endpoints": []
@@ -62956,7 +62956,7 @@
       "path": "_headers",
       "extension": "",
       "bytes": 4589,
-      "sha256": "e1a99fad10c7a8b760a9a8c746feae177257b9354c150772dc585614ae519fd5"
+      "sha256": "4a350405e74070abc2394f8af1a835e696a99dcd194e47858e6ec212205deda0"
     },
     {
       "path": "_redirects",
@@ -63813,8 +63813,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 138173,
-      "sha256": "7a3d002f6248bc836b031ca670cc7274d4cbdb2bc5e99d7619a0a39aeb01ec33"
+      "bytes": 138486,
+      "sha256": "5de7e0ad095ced1acbe64fd1be0733fec1e4c3c33369630e4c5e8643a1426714"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -64144,19 +64144,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 260701,
-      "sha256": "450d3da600065c148e88e9bb4bf0ccc43f33b2599a42b37e68f3d9c747333c60"
+      "sha256": "541d350899dd652d397e46cf2e506cb6e9b9d34d0faefe166ccdde0ef2307823"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 260616,
-      "sha256": "2adecf464cdaaf78cb0c44323a857a33aa045335627074a1e7081c76ed2b195b"
+      "sha256": "b8983b23c259bdf823291517c49351340d59e4bdb5d55ba88326bd1ef347ef46"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 5762,
-      "sha256": "3bc99ac9d481c654d0aaf6d7f556dacc8d2741b1a0999ea2a6616c53139b5906"
+      "bytes": 1277,
+      "sha256": "70e849f541fa63335f39e4e348cbe8faf6b045a92a4dd3452f6fbf6bac4cba97"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64168,7 +64168,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "d9457dc3fe85a04c9c9be6b567cc59a9b76c9244e138ba909249436c14421cc5"
+      "sha256": "a9aeedd4bbe320bfd1ef11fc0c0ace8ca36cf8dbe1441250baac493eaa79b71b"
     },
     {
       "path": "config/public-site.json",
@@ -71109,8 +71109,8 @@
     {
       "path": "tests/cart/persistence-and-favorites.test.mjs",
       "extension": ".mjs",
-      "bytes": 3715,
-      "sha256": "76cf0e4f7ad4718a34005b39737120441581ceeee7cdaf98a9108c538be807a1"
+      "bytes": 3902,
+      "sha256": "b2a911b5a41d6fd27f5ad3fd2a1f042f26cff27c828b007875aa2826c7154ff6"
     },
     {
       "path": "tests/cart/quantity-browser.spec.js",
