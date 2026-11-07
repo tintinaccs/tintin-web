@@ -34,6 +34,11 @@ function productInitialSelectionString(product) {
   const available = product.variantInventory?.find(entry => entry.active !== false && (entry.stock === null || entry.stock > 0)) || product.variantInventory?.[0];
   return available?.attributes ? groups.map(([key]) => available.attributes[key]).join(' / ') : groups.map(([,values]) => values[0]).join(' / ');
 }
+// Una sola opción por grupo = una única combinación: la tarjeta la agrega directo.
+function singleVariantLabel(product) {
+  const groups = productVariantGroups(product);
+  return groups.length && groups.every(([, values]) => values.length === 1) ? groups.map(([, values]) => values[0]).join(' / ') : '';
+}
 function priceMarkup(p) {
   const info = discountInfo(p);
   const current = formatPrice(p.price);
@@ -279,18 +284,19 @@ function getStockLimit(productId, variant) {
   return Math.min(total, option ?? Infinity);
 }
 
-async function addToCart(productId) {
+async function addToCart(productId, variant = '') {
   const product = getProductById(productId);
   if (!product) return null;
   const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
-    price: product.price,
+    price: variant && product.variantCommerceVersion === 2 ? window.TintinCatalogPolicy.priceFor(product, variant).price : product.price,
     qty: 1,
     stock: product.stock,
     cat: product.cat || product.category || '',
-    imageUrl: product.imageUrl || product.image || getProductImage(product.id) || ''
+    imageUrl: variant ? cartSync.productVariantImage(product, variant, getProductImage(product.id)) : product.imageUrl || product.image || getProductImage(product.id) || '',
+    ...(variant ? { variant } : {})
   });
   if (result?.changed) {
     openCart();
@@ -640,7 +646,7 @@ function initCartEvents() {
     const btn = e.target.closest('.tt-add-to-cart');
     if (btn) {
       const id = btn.dataset.id;
-      if (id) addToCart(id);
+      if (id) addToCart(id, btn.dataset.variant || '');
     }
   });
 }
@@ -789,11 +795,12 @@ function renderProductCardMarkup(p, options = {}) {
     : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
   // «Ver» abre la ficha; el segundo botón agrega directo si no hay opciones que elegir.
   const hasVariants = productVariantGroups(p).length > 0;
+  const singleVariant = hasVariants ? singleVariantLabel(p) : '';
   const secondaryAction = !inStock
     ? `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline" disabled aria-disabled="true">Agotado</button>`
-    : hasVariants
+    : hasVariants && !singleVariant
       ? `<a href="${productHref}" class="tt-btn tt-btn-sm tt-btn-outline" aria-label="Elegir opciones de ${escapeAttribute(p.name)}">Elegir opciones</a>`
-      : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">Agregar al carrito</button>`;
+      : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}"${singleVariant ? ` data-variant="${escapeAttribute(singleVariant)}"` : ''} aria-label="Agregar ${escapeAttribute(p.name)} al carrito">Agregar al carrito</button>`;
 
   return `
     <article class="tt-product-card${inStock ? '' : ' tt-stock-unavailable'}" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">

@@ -36,7 +36,7 @@ test('favoritos y Me gusta ya no existen en la interfaz pública', async () => {
   }
 });
 
-test('las tarjetas tienen «Ver» y «Agregar al carrito» separados; con variantes envían a la ficha', async () => {
+test('las tarjetas tienen «Ver» y «Agregar al carrito» separados; con varias opciones envían a la ficha', async () => {
   const [catalog, classic] = await Promise.all([read('catalogo.html'), read('tienda.js')]);
   for (const text of [catalog, classic]) {
     assert.match(text, />Ver</);
@@ -46,4 +46,16 @@ test('las tarjetas tienen «Ver» y «Agregar al carrito» separados; con varian
   }
   assert.match(catalog, /data-pid="\$\{safeId\}"/);
   assert.match(classic, /tt-add-to-cart" data-id=/);
+});
+
+test('una variante única (una sola opción por grupo) se agrega directo desde la tarjeta', async () => {
+  const [catalog, classic] = await Promise.all([read('catalogo.html'), read('tienda.js'), read('tienda.js')]);
+  assert.match(classic, /function singleVariantLabel/);
+  assert.match(catalog, /resolveProductVariant\(p, ''\)/);
+  assert.match(catalog, /data-variant="\$\{escapeCatalogHtml\(singleVariant\)\}"/);
+  assert.match(catalog, /\.\.\.\(variant \? \{ variant \} : \{\}\)/);
+  assert.match(classic, /addToCart\(id, btn\.dataset\.variant \|\| ''\)/);
+  const { resolveProductVariant } = await import('../../js/core/store/inventario-variantes.mjs');
+  assert.equal(resolveProductVariant({ variants: { Color: ['Dorado'] } }, ''), 'Dorado');
+  assert.equal(resolveProductVariant({ variants: { Color: ['Dorado', 'Plata'] } }, ''), null);
 });
