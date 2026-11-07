@@ -10,7 +10,7 @@ import {
   fsTimestamp,
 } from './firebase-admin-ligero.js';
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
-import { sendOrderEmails } from '../functions/api/order-email.js';
+import { emailIsValid, sendOrderEmails } from '../functions/api/order-email.js';
 import { describeOrderChange, sendOrderStatusEmail } from './correo-estado-pedido.js';
 
 const QUEUE_COLLECTION = 'orderEmailQueue';
@@ -184,6 +184,22 @@ export async function drainOrderEmailQueueScheduled(env, { limit = 25, deps = RE
     return true;
   }).slice(0, Math.max(1, Math.min(MAX_PENDING, Number(limit) || 25)));
 
+  // Sin credencial de correo el problema es de configuración, no del pedido:
+  // no se gasta ningún intento (8 corridas sin clave mandaban TODOS los pedidos
+  // a dead-letter y dejaban de reintentarse aun después de corregir la clave).
+  // Las tareas quedan intactas y el endpoint responde 503 para que se note.
+  if (!apiKey && eligible.length) {
+    const message = 'RESEND_API_KEY no está configurada';
+    try {
+      await deps.firestoreAdminMerge(env, QUEUE_META_PATH, {
+        lastRunAt: fsTimestamp(new Date()), lastError: fsString(message),
+      });
+    } catch (error) {
+      console.error('[resiliencia-correo-pedido] No se pudo actualizar syncMeta:', error?.message || error);
+    }
+    throw new Error(message);
+  }
+
   let drained = 0;
   let obsolete = 0;
   let deadLettered = 0;
@@ -200,15 +216,28 @@ export async function drainOrderEmailQueueScheduled(env, { limit = 25, deps = RE
         continue;
       }
       const order = await fetchOrderForRetry(env, claimed.orderId, deps);
-      if (!order) throw new Error('El pedido ya no existe.');
+      if (!order) {
+        // Pedido movido a Borrados o eliminado: no hay correo que reintentar.
+        await deps.firestoreAdminCommit(env, [{ path: `${QUEUE_COLLECTION}/${claimed.id}`, delete: true }]);
+        obsolete += 1;
+        continue;
+      }
+      // Un correo de clienta inválido nunca se arregla reintentando.
+      const sendCustomer = Boolean(claimed.retryCustomer) && emailIsValid(clean(order.userEmail, 254).toLowerCase());
+      const sendAdmin = Boolean(claimed.retryAdmin);
+      if (!sendAdmin && !sendCustomer) {
+        await deps.firestoreAdminCommit(env, [{ path: `${QUEUE_COLLECTION}/${claimed.id}`, delete: true }]);
+        obsolete += 1;
+        continue;
+      }
       const result = await deps.sendOrderEmailsImpl({
         env,
         apiKey,
         orderId: claimed.orderId,
         order,
         isResend: false,
-        sendAdmin: claimed.retryAdmin,
-        sendCustomer: claimed.retryCustomer,
+        sendAdmin,
+        sendCustomer,
       });
       if (!result.success) throw new Error(result.error || 'Reintento de correo falló.');
       await deps.firestoreAdminCommit(env, [{ path: `${QUEUE_COLLECTION}/${claimed.id}`, delete: true }]);

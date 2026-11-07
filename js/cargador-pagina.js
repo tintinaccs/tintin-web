@@ -988,10 +988,6 @@
     }
   }
 
-  function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261102-pickup-cash-1');
-  }
-
   function bootThemeColorSanitizerPublic() {
     if (!window.TintinThemeColorSanitizerBooted) {
       importSibling('components/color/normalizador-color-tema.js', 'Theme Color Sanitizer', undefined, 'tintin-20261021-commerce-review-1');
@@ -1074,7 +1070,6 @@
     bootImagePerformance();
     bootImagesPhase5Public();
     bootCollectionsPhase4Public();
-    bootFavoritesPublic();
     bootThemeColorSanitizerPublic();
     bootPageAuditFixPublic();
     bootPhase8UiUx();

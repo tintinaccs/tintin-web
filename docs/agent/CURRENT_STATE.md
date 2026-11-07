@@ -1,3 +1,12 @@
+## 2026-11-07 — Optimización integral: favoritos, cancelación/stock y cola de correos (base HEAD de rama claude/tintin-accesorios-optimization-xyl6zm)
+Claude Code (Sonnet 5.5). Sin push, merge ni despliegue; sin datos de producción tocados.
+- Fase 2 (PASS_LOCAL): tarjetas «Ver y agregar al carrito»; favoritos/corazones/«Me gusta» retirados de la UI; `toggleFavorite` devuelve 410 `feature_removed` al agregar (quitar sigue permitido); datos y reglas históricos intactos. Cascada de versión `tintin-20261107-sin-favoritos-1`.
+- Fase 3 (PASS_LOCAL): la cancelación ya era por variante, idempotente y con concurrencia probada; no se halló bug reproducible. Se agrega al evento de auditoría existente el detalle de producto/variante/cantidad devuelto (`cloudflare/order-admin-domain.js`) y su prueba. Observación de diseño abierta: una reserva agregada heredada en producto con variantes devuelve solo `stock` agregado (no inventa stock por variante). Reembolso PayPal no libera stock automáticamente (solo advierte).
+- Fase 4 (PASS_LOCAL): causas de los «ocho intentos fallidos» en `drainOrderEmailQueueScheduled`: (a) sin `RESEND_API_KEY` se gastaba un intento por tarea y todas llegaban a dead-letter; (b) pedido borrado/en papelera gastaba 8 intentos; (c) correo de clienta inválido se reintentaba 8 veces. Ahora: sin clave no se reclama ni se gastan intentos (se registra `lastError` en `syncMeta/orderEmailQueue` y el endpoint responde 503); pedido inexistente o sin canal válido → tarea descartada como `obsolete`. Un fallo de correo nunca bloquea el pedido (se encola y el endpoint de correo responde aparte).
+- Pruebas: orders 135/135; cola de correo + drain + recibo + app-check 19/19 y 146/146 combinadas con orders.
+- Fallos previos idénticos sin mis cambios (no regresión): `tests/integration/commerce-firestore` (requiere emulador Firestore), `cart-render-probe`, `sellado-interactivo`, `profile-save-panel` (falta `parse5`), 2 pruebas de arquitectura UI (falta `@playwright/test`); `node_modules` ausente.
+- BLOCKED: `config/proteccion-flujos.json` reporta ~30 archivos protegidos modificados y 2 eliminados; requiere `scripts/preparar-mantenimiento-flujos.mjs` con SHA base y aprobación CI/dueño. No se editó la política a mano.
+- NOT_VERIFIED: producción, navegador real/responsive (sin Playwright), CI del SHA final, auditoría `audit:final`.
 ## Corrección del build de Cloudflare en PR 1346 — 2026-11-06 — Claude Code
 
 Causa del Cloudflare Pages build fallido en b098d9f3 (reproducida localmente, no se pudo leer el log de Cloudflare): el package-lock.json estaba sincronizado solo con npm 11; con npm 10 npm ci falla con EUSAGE (Missing: glob@10.5.0 y otros). Se regeneró el lock con npm 10 (npm install --package-lock-only --ignore-scripts) conservando el override condicional de glob; npm ci --dry-run pasa con npm 10 (692 paquetes) y con npm 11 (663 paquetes), y npm ci real instala 683 paquetes. Se fusionó main 804a74d9 y se regeneró el plan de mantenimiento con scripts/preparar-mantenimiento-flujos.mjs (base 804a74d9, 2 archivos, 0 registros afectados).
@@ -6195,6 +6204,32 @@ Las cinco pruebas de integridad de lectura pasan. CI, merge y publicación del
 candidato final requieren evidencia por su SHA; no se heredan los PASS locales
 de la sesión anterior. No se escribieron datos comerciales reales.
 
+## 2026-11-07 — Auditoría de rendimiento del Super Panel (agente Claude Sonnet 5.5)
+
+Causa raíz (análisis estático + medición simulada; NO medida en producción):
+`createAdminOrderSource` usaba `complete:true`, que encadena páginas de 250
+pedidos en serie y no publica nada hasta descargar la colección entera
+(introducido en 8e92250, #1244). Contradice la política del propio código de no
+descargar miles de documentos al abrir el panel.
+
+Cambio: `js/admin/datos/fuente-paginada-progresiva.mjs` (nuevo, solo admin) entrega
+el prefijo confirmado vía `onPartial`; `admin-app.js` lo proyecta sin marcar
+`adminRealtimeReady.orders`; `shopify-commerce-admin.js` muestra filas mientras
+sincroniza (escrituras siguen bloqueadas hasta estar listo).
+PASS_LOCAL: `tests/admin/pedidos-carga-progresiva.test.mjs` 3/3; simulación
+2983 pedidos, 12 páginas × 40 ms: primer contenido 486 ms → 42 ms (completo 490 ms).
+`audit:cache-versioning` correcto. No probado en producción.
+
+Revisado sin hallazgo defectuoso: pollers admin (gated por sección y visibilidad),
+`orderTrash` (solo pestaña Borrados), `site_content` (se libera al salir),
+`public-catalog` (caché edge s-maxage=10), sitemaps (s-maxage=900), fallback
+`products/[handle]` (TTL 5 min en memoria). Crons de GitHub Actions listados; no
+hay triggers cron de wrangler.
+
+Pendiente: Usuarios y estadísticas aún esperan el conjunto completo; medir en
+producción (requiere métricas de Firestore Usage/Cloud Monitoring y analítica de
+Cloudflare); `admin-app.js`/`shopify-commerce-admin.js` figuran como protegidos
+modificados y requieren la vía de mantenimiento autorizada. Sin push.
 
 ## 2026-11-01 — Estabilización reproducible de Skills y CI
 

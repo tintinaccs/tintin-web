@@ -1,7 +1,6 @@
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { AUTH_STATES, getSessionUser, waitForSession, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { heartIconMarkup } from '../../components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
 import { isValidReviewRating, syncReviewPublishState, reportMissingReviewRating } from './validacion-puntuacion-resena.js?v=tintin-20260831-review-rating-required-1';
 
 const productId = String(new URLSearchParams(location.search).get('id') || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 180);
@@ -11,15 +10,10 @@ const productId = String(new URLSearchParams(location.search).get('id') || '').r
 // con una cuenta anónima.
 let currentUser = getSessionUser() || null;
 let reviews = [];
-let likedReviewIds = new Set();
-let likedReplyIds = new Set();
 let stats = { count: 0, average: 0, distribution: {} };
-let productLikeCount = 0;
-let productLiked = false;
 let selectedRating = 0;
 let unsubscribeReviews = null;
 let unsubscribeStats = null;
-let unsubscribeLikes = null;
 let deepLinkHandled = false;
 const PENDING_INTENT_KEY = 'tt_product_community_intent_v2';
 const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1';
@@ -300,8 +294,6 @@ function highlightDeepLink() {
 
 function renderReply(reviewId, reply) {
   const replyId = replyIdOf(reply);
-  const liked = likedReplyIds.has(replyId);
-  const count = Math.max(0, Number(reply.likeCount) || 0);
   const authorType = reply.authorType === 'store' ? 'store' : 'customer';
   const name = displayPublicName(reply.publicName, authorType);
   return `<div class="tt-review-thread-message${authorType === 'store' ? ' is-store' : ''}" id="reply-${escapeHtml(replyId)}">
@@ -310,7 +302,6 @@ function renderReply(reviewId, reply) {
       <div class="tt-review-thread-meta"><strong class="tt-review-thread-author">${escapeHtml(name)}</strong><time title="${escapeHtml(fullDateTitle(reply.createdAt))}">${escapeHtml(relativeDate(reply.createdAt))}</time></div>
       <p class="tt-review-thread-text">${escapeHtml(reply.text)}</p>
       <div class="tt-review-social-actions">
-        ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked' : ''}" data-reply-like="${escapeHtml(replyId)}" data-review-id="${escapeHtml(reviewId)}" aria-pressed="${liked}"><span aria-hidden="true">${heartIconMarkup(liked)}</span><span>${liked ? 'Te gusta' : (count ? `${count} Me gusta` : 'Me gusta')}</span></button>` : `<span class="tt-review-like-count">${count ? `${heartIconMarkup(true)} ${count} Me gusta` : ''}</span>`}
         ${currentUser ? `<details class="tt-comment-menu"><summary aria-label="Acciones del comentario">•••</summary><button type="button" data-report-comment="${escapeHtml(replyId)}" data-thread-root="${escapeHtml(reviewId)}" data-comment-kind="reply">Denunciar</button></details>` : ''}
       </div>
     </div>
@@ -319,8 +310,6 @@ function renderReply(reviewId, reply) {
 
 function renderReview(review) {
   const id = reviewIdOf(review);
-  const liked = likedReviewIds.has(id);
-  const likeCount = Math.max(0, Number(review.likeCount) || 0);
   const conversation = Array.isArray(review.conversation) ? review.conversation : [];
   const expanded = expandedReplyThreads.has(id);
   const visibleConversation = expanded ? conversation : conversation.slice(0, INITIAL_REPLY_LIMIT);
@@ -332,9 +321,8 @@ function renderReview(review) {
       <time class="tt-review-date" datetime="${dateValue(review.createdAt).toISOString()}" title="${escapeHtml(fullDateTitle(review.createdAt))}">${escapeHtml(relativeDate(review.createdAt))}</time>
     </div>
     <p class="tt-review-comment">${escapeHtml(review.comment)}</p>
-    ${review.storeLiked ? `<div class="tt-review-store-like">${heartIconMarkup(true)} A Tintin Accesorios le gustó esta reseña</div>` : ''}
     <div class="tt-review-social-actions">
-      ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked' : ''}" data-review-like="${escapeHtml(id)}" aria-pressed="${liked}"><span aria-hidden="true">${heartIconMarkup(liked)}</span><span>${liked ? 'Te gusta' : (likeCount ? `${likeCount} Me gusta` : 'Me gusta')}</span></button><button type="button" class="tt-review-reply-toggle" data-reply-toggle="${escapeHtml(id)}">Responder</button><details class="tt-comment-menu"><summary aria-label="Acciones del comentario">•••</summary><button type="button" data-report-comment="${escapeHtml(id)}" data-thread-root="${escapeHtml(id)}" data-comment-kind="comment">Denunciar</button></details>` : `<button type="button" class="tt-review-reply-login" data-reply-login="${escapeHtml(id)}">Iniciá sesión para responder</button>`}
+      ${currentUser ? `<button type="button" class="tt-review-reply-toggle" data-reply-toggle="${escapeHtml(id)}">Responder</button><details class="tt-comment-menu"><summary aria-label="Acciones del comentario">•••</summary><button type="button" data-report-comment="${escapeHtml(id)}" data-thread-root="${escapeHtml(id)}" data-comment-kind="comment">Denunciar</button></details>` : `<button type="button" class="tt-review-reply-login" data-reply-login="${escapeHtml(id)}">Iniciá sesión para responder</button>`}
     </div>
     ${conversation.length ? `<div class="tt-review-thread">${visibleConversation.map(reply => renderReply(id, reply)).join('')}</div>${conversation.length > INITIAL_REPLY_LIMIT ? `<button type="button" class="tt-review-thread-toggle" data-thread-toggle="${escapeHtml(id)}" aria-expanded="${expanded}">${expanded ? 'Ocultar respuestas' : `Ver ${conversation.length} respuestas`}</button>` : ''}` : ''}
     <form class="tt-review-reply-form" data-reply-form="${escapeHtml(id)}" hidden><textarea class="tt-review-reply-input" name="reply" maxlength="1200" required placeholder="Escribí una respuesta…"></textarea><div class="tt-review-reply-actions"><button type="button" data-reply-cancel="${escapeHtml(id)}">Cancelar</button><button type="submit" class="tt-btn">Responder</button></div><div role="alert" data-reply-error></div></form>
@@ -401,30 +389,6 @@ async function loadMorePublicReviews(button) {
   }
 }
 
-function renderProductLike() {
-  const button = document.getElementById('btn-product-like');
-  if (!button) return;
-  button.setAttribute('aria-pressed', String(productLiked));
-  button.setAttribute('aria-label', productLiked ? 'Ya te gusta este producto' : 'Me gusta este producto');
-  button.classList.toggle('is-liked', productLiked);
-  button.classList.toggle('is-locked', productLiked);
-  button.disabled = productLiked;
-  button.querySelector('[data-product-like-label]')?.replaceChildren(document.createTextNode(productLiked ? 'Te gusta' : 'Me gusta'));
-  button.querySelector('[data-product-like-count]')?.replaceChildren(document.createTextNode(String(productLikeCount)));
-  document.querySelectorAll('[data-product-popular-badge]').forEach(node => { node.hidden = productLikeCount < 15; });
-}
-
-async function loadPublicLikeStats() {
-  try {
-    const response = await fetch(`/api/engagement?action=productLikes&productId=${encodeURIComponent(productId)}`, { cache: 'no-store' });
-    const result = await response.json().catch(() => ({}));
-    if (response.ok && result.ok === true) {
-      productLikeCount = Number(result.likeCount) || 0;
-      renderProductLike();
-    }
-  } catch {}
-}
-
 async function loadPublicReviewStats() {
   try {
     const response = await fetch(`/api/engagement?action=reviewStats&productId=${encodeURIComponent(productId)}`, { cache: 'no-store' });
@@ -487,33 +451,20 @@ function renderForm() {
 
 async function loadSocialState() {
   if (!currentUser) {
-    likedReviewIds = new Set();
-    likedReplyIds = new Set();
-    productLiked = false;
     selectedRating = 0;
     renderForm();
     renderReviews();
-    renderProductLike();
     showCommunityNotice('');
     return;
   }
-  const [interactions, favorite] = await Promise.all([
-    api(null, 'GET', 'reviewInteractions'),
-    api(null, 'GET', 'ownFavorite'),
-  ]);
-  likedReviewIds = new Set(interactions.interactions?.reviewIds || []);
-  likedReplyIds = new Set(interactions.interactions?.replyIds || []);
-  productLiked = favorite.favorite === true;
   renderForm();
   renderReviews();
-  renderProductLike();
   showCommunityNotice('');
 }
 
 function subscribePublic() {
   unsubscribeReviews?.();
   unsubscribeStats?.();
-  unsubscribeLikes?.();
   publicReviewCursor = null;
   publicReviewsHaveMore = false;
   unsubscribeReviews = onSnapshot(query(
@@ -530,11 +481,6 @@ function subscribePublic() {
     stats = snapshot.exists() ? snapshot.data() : { count: 0, average: 0, distribution: {} };
     renderSummary();
   }, () => loadPublicReviewStats());
-  unsubscribeLikes = onSnapshot(doc(db, 'productEngagementStats', productId), snapshot => {
-    productLikeCount = snapshot.exists() ? Number(snapshot.data()?.likeCount) || 0 : 0;
-    renderProductLike();
-  }, renderProductLike);
-  loadPublicLikeStats();
   loadPublicReviewStats();
 }
 
@@ -563,70 +509,6 @@ document.addEventListener('click', async event => {
   if (reviewLoadMore) {
     event.preventDefault();
     await loadMorePublicReviews(reviewLoadMore);
-    return;
-  }
-
-  const productButton = event.target.closest('#btn-product-like');
-  if (productButton) {
-    event.preventDefault();
-    if (productLiked) return;
-    if (!await stableAuthUser()) return requestCommunityLogin('productLike');
-    productButton.disabled = true;
-    try {
-      const result = await api({ action: 'toggleFavorite', productId });
-      productLiked = result.selected === true;
-      productLikeCount = Number(result.likeCount) || productLikeCount;
-      renderProductLike();
-      showCommunityNotice(result.alreadyLiked ? 'Este Me gusta ya estaba guardado.' : 'Tu Me gusta quedó guardado de forma permanente.');
-    } catch (failure) {
-      if (failure.requiresLogin) return requestCommunityLogin('productLike');
-      showCommunityNotice(failure.message || 'No pudimos guardar tu Me gusta.');
-      productButton.disabled = false;
-    }
-    return;
-  }
-
-  const reviewLike = event.target.closest('[data-review-like]');
-  if (reviewLike) {
-    event.preventDefault();
-    const reviewId = reviewLike.dataset.reviewLike;
-    if (!await stableAuthUser()) return requestCommunityLogin('reviewLike', { reviewId });
-    reviewLike.disabled = true;
-    try {
-      const result = await api({ action: 'toggleReviewLike', productId, reviewId });
-      if (result.selected === false) likedReviewIds.delete(reviewId);
-      else likedReviewIds.add(reviewId);
-      updateLocalReview(reviewId, review => { review.likeCount = result.likeCount; });
-      renderReviews();
-    } catch (failure) {
-      if (failure.requiresLogin) return requestCommunityLogin('reviewLike', { reviewId });
-      showCommunityNotice(failure.message || 'No pudimos guardar este Me gusta.');
-      reviewLike.disabled = false;
-    }
-    return;
-  }
-
-  const replyLike = event.target.closest('[data-reply-like]');
-  if (replyLike) {
-    event.preventDefault();
-    const replyId = replyLike.dataset.replyLike;
-    const reviewId = replyLike.dataset.reviewId;
-    if (!await stableAuthUser()) return requestCommunityLogin('replyLike', { reviewId, replyId });
-    replyLike.disabled = true;
-    try {
-      const result = await api({ action: 'likeReply', productId, reviewId, replyId });
-      if (result.selected === false) likedReplyIds.delete(replyId);
-      else likedReplyIds.add(replyId);
-      updateLocalReview(reviewId, review => {
-        const reply = (review.conversation || []).find(item => replyIdOf(item) === replyId);
-        if (reply) reply.likeCount = result.likeCount;
-      });
-      renderReviews();
-    } catch (failure) {
-      if (failure.requiresLogin) return requestCommunityLogin('replyLike', { reviewId, replyId });
-      showCommunityNotice(failure.message || 'No pudimos guardar este Me gusta.');
-      replyLike.disabled = false;
-    }
     return;
   }
 
@@ -764,25 +646,7 @@ async function resumePendingIntent() {
   const intent = takePendingIntent();
   if (!intent || !currentUser) return;
   try {
-    if (intent.action === 'productLike') {
-      const result = await api({ action: 'toggleFavorite', productId });
-      productLiked = true;
-      productLikeCount = Number(result.likeCount) || productLikeCount;
-      renderProductLike();
-    } else if (intent.action === 'reviewLike' && intent.payload?.reviewId) {
-      const result = await api({ action: 'toggleReviewLike', productId, reviewId: intent.payload.reviewId });
-      likedReviewIds.add(intent.payload.reviewId);
-      updateLocalReview(intent.payload.reviewId, review => { review.likeCount = result.likeCount; });
-      renderReviews();
-    } else if (intent.action === 'replyLike' && intent.payload?.reviewId && intent.payload?.replyId) {
-      const result = await api({ action: 'likeReply', productId, reviewId: intent.payload.reviewId, replyId: intent.payload.replyId });
-      likedReplyIds.add(intent.payload.replyId);
-      updateLocalReview(intent.payload.reviewId, review => {
-        const reply = (review.conversation || []).find(item => replyIdOf(item) === intent.payload.replyId);
-        if (reply) reply.likeCount = result.likeCount;
-      });
-      renderReviews();
-    } else if (intent.action === 'review') {
+    if (intent.action === 'review') {
       const result = await api({ action: 'createReview', productId, rating: normalizeRating(intent.payload?.rating), comment: String(intent.payload?.comment || '') });
       if (result.publicReview) {
         upsertLocalReview(result.publicReview);

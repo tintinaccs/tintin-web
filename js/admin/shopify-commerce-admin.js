@@ -841,7 +841,7 @@ function renderOrderArchive() {
   }).join('');
   const loading = showingTrash && !state.trashReady
     ? '<div class="tt-commerce-loading">Cargando Borrados…</div>'
-    : !showingTrash && !state.ordersReady
+    : !showingTrash && !state.ordersReady && !list.length
       ? '<div class="tt-commerce-loading">Cargando pedidos…</div>'
       : state.ordersError && !list.length
         ? `<div class="tt-commerce-error" role="alert">${esc(state.ordersError)} <button type="button" class="tt-commerce-btn" data-action="orders-retry">Reintentar</button></div>`

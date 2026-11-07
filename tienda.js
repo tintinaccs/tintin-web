@@ -9,15 +9,6 @@
    UTILITIES
 ────────────────────────────────────── */
 
-// Ícono de corazón compartido (mismo path que js/components/favorites/icono-corazon.js;
-// este archivo se carga como script clásico y no puede usar import).
-const TT_HEART_PATH_D = 'M12 21s-6.716-4.35-9.428-8.485C.79 9.702 1.5 6.06 4.5 4.5 7.03 3.18 9.79 4.06 12 6.5c2.21-2.44 4.97-3.32 7.5-2C22.5 6.06 23.21 9.702 21.428 12.515 18.716 16.65 12 21 12 21z';
-function heartIconMarkup(filled) {
-  return filled
-    ? `<svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="${TT_HEART_PATH_D}"/></svg>`
-    : `<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="${TT_HEART_PATH_D}"/></svg>`;
-}
-
 /**
  * Format a number as Guaraní: 210000 → "Gs. 210.000"
  */
@@ -434,7 +425,6 @@ function renderCart() {
     const safeName = escapeHtml(item.name);
     const safeVariant = escapeHtml(item.variant || '');
     const safeVariantAttr = escapeAttribute(item.variant || '');
-    const isFavorite = Boolean(window.TintinFavorites?.has?.(item.id));
     const imgHtml = imgUrl
       ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(item.name)}" style="width:100%;height:100%;object-fit:contain;">`
       : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#fce4ec,#f5d4e0);display:flex;align-items:center;justify-content:center;"><svg width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg></div>`;
@@ -452,7 +442,6 @@ function renderCart() {
         </div>
       </div>
       <div class="tt-cart-item-actions">
-        <button type="button" class="tt-cart-favorite-toggle${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" data-favorite-cat="${escapeAttribute(item.cat || '')}" aria-label="${escapeAttribute(isFavorite ? `Quitar ${item.name || 'producto'} de favoritos` : `Guardar ${item.name || 'producto'} en favoritos`)}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
         <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" aria-label="Eliminar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>
     </div>
@@ -794,23 +783,18 @@ function renderProductCardMarkup(p, options = {}) {
   const colorsHTML = productCardColorsMarkup(p, colorGroup, selectedColor, activeColor);
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
-  const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
   const productHref = `/product?id=${encodeURIComponent(String(p.id))}${selectedColor ? `&color=${encodeURIComponent(selectedColor)}` : ''}`;
   const imgContent = imgUrl
     ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="${options.related ? 'eager' : 'lazy'}" decoding="async" onerror="_onProductImgError(this)">`
     : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
-  const hasVariants = productVariantGroups(p).length > 0;
-  // Las variantes se eligen en la ficha: una sola acción evita dos enlaces iguales.
-  const primaryLabel = inStock && hasVariants ? (options.related ? 'Elegir' : 'Elegir opciones') : (options.related ? 'Ver' : 'Ver producto');
+  // Una sola acción: la ficha permite elegir variantes y agregar al carrito.
+  const primaryLabel = 'Ver y agregar al carrito';
   const secondaryAction = !inStock
     ? `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline" disabled aria-disabled="true">Agotado</button>`
-    : hasVariants
-      ? ''
-      : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">${options.related ? 'Agregar' : '+ Carrito'}</button>`;
+    : '';
 
   return `
     <article class="tt-product-card${inStock ? '' : ' tt-stock-unavailable'}" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
-      <button type="button" class="tt-product-favorite-button${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(p.name)}" data-favorite-price="${escapeAttribute(p.price)}" data-favorite-image="${escapeAttribute(imgUrl)}" data-favorite-cat="${escapeAttribute(p.category || p.cat || '')}" aria-label="${escapeAttribute(isFavorite ? `Quitar ${p.name || 'producto'} de favoritos` : `Guardar ${p.name || 'producto'} en favoritos`)}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
       <a href="${productHref}" class="tt-product-img tt-product-card-img-link" aria-label="Ver ${escapeAttribute(p.name)}">
         ${badgeHTML}${stockLabel}
         ${imgContent}
@@ -844,7 +828,7 @@ function renderProductsGrid(containerId, products) {
 }
 
 // Home discovery carousel: duplicate-free selection reusing the canonical
-// product-card renderer (links, favorites and cart). The selection is stable
+// product-card renderer (links and cart). The selection is stable
 // across data refreshes; it is re-rolled only when the user asks for it.
 let homeSelectionKeys = [];
 
@@ -1534,15 +1518,6 @@ function _pdUpdateSelectionLabels() {
 
 function _renderProductGallery(product, selected = {}, resetIndex = false) {
   const mainImgUrl = sanitizeClassicImageUrl(product.imageUrl || product.image || getProductImage(product.id) || '', 900);
-  const favoriteButton = document.getElementById('btn-product-favorite');
-  if (favoriteButton) {
-    favoriteButton.dataset.favoriteId = String(product.id);
-    favoriteButton.dataset.favoriteName = product.name || '';
-    favoriteButton.dataset.favoritePrice = String(product.price || 0);
-    favoriteButton.dataset.favoriteImage = mainImgUrl;
-    favoriteButton.dataset.favoriteCat = product.category || product.cat || '';
-    window.TintinFavorites?.refresh?.();
-  }
   const media = window.TintinProductMedia;
   const galleryProduct = { ...product, imageUrl: mainImgUrl };
   const { rows, images } = productGalleryMedia(galleryProduct);
@@ -2606,7 +2581,6 @@ window.addEventListener('tt_cart_updated', () => {
   updateCartBadge();
   renderCart();
 });
-window.addEventListener('tintin:favorites-updated', renderCart);
 
 // El reveal-al-scrollear de esta página ahora lo maneja js/quality/revelado-desplazamiento-global.js
 // (cargado global vía js/cargador-pagina.js) — tenerlo acá duplicado hacía que

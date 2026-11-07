@@ -22,7 +22,7 @@ import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativ
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261102-phase03-editor-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
-import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
+import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261107-pedidos-progresivo-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
 import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1";
 import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261022-avatar-inicial-1';
@@ -1747,6 +1747,7 @@ function refreshRealtimeConsumers() {
 // están cargados y si un pedido existe, sin exponer ningún dato del pedido.
 const adminOrderConsumers = new Set();
 let adminOrdersOwnerUid = '';
+let adminOrdersConfirmed = false;
 function publishAdminOrders() {
   const productId=document.getElementById('prod-id')?.value;
   if(productId && document.getElementById('prod-form-card')?.style.display!=='none')renderProductStatistics(productId);
@@ -1889,7 +1890,7 @@ function startAdminRealtimeData() {
   stopAdminRealtimeData();
   adminRealtimeReady = { ...adminRealtimeReady, orders: false, users: currentRole !== 'superadmin' };
   adminRealtimeErrors = { orders: '', users: '' };
-  if(adminOrdersOwnerUid!==currentUser?.uid){allOrders=[];rawAdminOrders=[];}
+  if(adminOrdersOwnerUid!==currentUser?.uid){allOrders=[];rawAdminOrders=[];adminOrdersConfirmed=false;}
   adminOrdersOwnerUid=currentUser?.uid || '';
   publishAdminOrders();
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
@@ -1908,7 +1909,17 @@ function startAdminRealtimeData() {
         }, error);
       },
       onLoading() { adminRealtimeReady.orders = false; refreshRealtimeConsumers(); },
+      // Primera carga: muestra las páginas ya confirmadas mientras el historial
+      // completo sigue sincronizando. "ready" sigue en false (acciones y totales
+      // esperan al conjunto completo); tras la primera carga completa no se usa.
+      onPartial(orders) {
+        if (adminOrdersConfirmed) return;
+        rawAdminOrders = reconcileAdminOrderSnapshot(orders, rawAdminOrders).sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
+        projectAdminOrders();
+        refreshRealtimeConsumers();
+      },
       onData(orders) {
+        adminOrdersConfirmed = true;
         rawAdminOrders = reconcileAdminOrderSnapshot(orders, rawAdminOrders).sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
         projectAdminOrders();
         adminRealtimeReady.orders = true;

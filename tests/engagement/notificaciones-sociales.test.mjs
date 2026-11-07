@@ -114,10 +114,7 @@ test('las acciones de Tintin notifican a la autora de la reseña', () => {
 });
 
 test('la ficha de producto admite Me gusta, respuestas y reseñas públicas con identidad protegida', () => {
-  assert.match(productReviews, /toggleReviewLike/);
-  assert.match(productReviews, /likeReply/);
-  assert.match(productReviews, /data-review-like/);
-  assert.match(productReviews, /data-reply-like/);
+  assert.doesNotMatch(productReviews, /data-review-like|data-reply-like|toggleFavorite|ownFavorite/);
   assert.match(productReviews, /data-reply-toggle/);
   assert.match(productReviews, /id="review-/);
   assert.match(productReviews, /id="reply-/);

@@ -355,7 +355,7 @@ for (const width of [320,390,540,768]) test(`categorías mobile completas sin re
  await page.screenshot({path:test.info().outputPath(`categorias-completas-${width}.png`),fullPage:true});
 });
 
-test('favoritos conservan nombre accesible después de buscar y ordenar',async({page})=>{
+test('las tarjetas no ofrecen favoritos y conservan la acción accesible después de buscar y ordenar',async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await page.route('**/api/public-catalog?**',route=>{
   const resource=new URL(route.request().url()).searchParams.get('resource');
@@ -366,9 +366,10 @@ test('favoritos conservan nombre accesible después de buscar y ordenar',async({
  await expect(page.locator('#cat-grid [data-product-id]')).toHaveCount(3);
  await page.locator('#cat-search').fill('TIN-00042');
  await expect(page.locator('#cat-grid [data-product-id]')).toHaveCount(1);
- await expect(page.locator('#cat-grid [data-favorite-id="ring"]')).toHaveAccessibleName('Guardar Anillo corazón en favoritos');
+ await expect(page.locator('#cat-grid [data-favorite-id], #cat-grid .tt-card-favorite')).toHaveCount(0);
  await page.locator('#cat-sort').selectOption('precio-desc');
- await expect(page.locator('#cat-grid [data-favorite-id="ring"]')).toHaveAccessibleName('Guardar Anillo corazón en favoritos');
+ await expect(page.locator('#cat-grid [data-product-id]')).toHaveCount(1);
+ await expect(page.locator('#cat-grid [data-favorite-id], #cat-grid .tt-card-favorite')).toHaveCount(0);
 });
 
 for (const [width,height] of [[320,568],[768,1024],[1440,900]]) test(`filtros reales de variantes, agotados y reposición ${width}×${height}`,async({page})=>{
