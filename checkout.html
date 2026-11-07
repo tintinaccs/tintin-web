@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="6cb30708dcb834c4e7f261878eefda7dcf35be95b1f5cb9c3f72dcbfb2c8e191">
+  <meta name="tintin-page-revision" content="d25c3477739425920a377d3b5b602791730099ed056551e2a2b1deda685b207d">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -917,7 +917,7 @@ async function renderCart() {
               <div class="ck-sug-name">${safeName}</div>
               <div class="ck-sug-cat">${safeCat}</div>
               <div class="ck-sug-price">${formatPrice(p.price)}</div>
-              ${p.variants && Object.keys(p.variants).length ? `<a class="ck-sug-add" href="/product?id=${encodeURIComponent(p.id)}">Ver y agregar al carrito</a>` : `<button type="button" class="ck-sug-add" data-id="${safeId}" data-name="${safeName}" data-cat="${safeCat}" data-price="${Number(p.price) || 0}" data-stock="${p.stock == null ? '' : Number(p.stock)}" data-img="${escapeSearchHtml(img)}">+ Agregar</button>`}
+              ${p.variants && Object.keys(p.variants).length ? (window.openCardAddSheet && window.PRODUCTS?.some(x => String(x.id) === String(p.id)) ? `<button type="button" class="ck-sug-add" data-card-options="${safeId}" aria-haspopup="dialog" aria-label="Agregar ${safeName} al carrito: elegir y confirmar opciones">Agregar al carrito</button>` : `<a class="ck-sug-add" href="/product?id=${encodeURIComponent(p.id)}">Ver y agregar al carrito</a>`) : `<button type="button" class="ck-sug-add" data-id="${safeId}" data-name="${safeName}" data-cat="${safeCat}" data-price="${Number(p.price) || 0}" data-stock="${p.stock == null ? '' : Number(p.stock)}" data-img="${escapeSearchHtml(img)}">+ Agregar</button>`}
             </div>`;
           }).join('')}
         </div>
@@ -925,7 +925,7 @@ async function renderCart() {
 
     subtotalEl.textContent = 'Gs. 0';
 
-    container.querySelectorAll('button.ck-sug-add').forEach(btn => {
+    container.querySelectorAll('button.ck-sug-add:not([data-card-options])').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
         const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1');
