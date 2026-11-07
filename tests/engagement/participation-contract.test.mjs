@@ -49,19 +49,13 @@ test('community auth refreshes credentials without client sign-out', async () =>
 });
 
 test('a social 401 never sends an authenticated customer back to login', async () => {
-  const [product, favorites] = await Promise.all([
-    read('js/pages/product/resenas-producto.js'),
-    read('js/components/favorites/sincronizacion-favoritos.js'),
-  ]);
+  const product = await read('js/pages/product/resenas-producto.js');
   assert.doesNotMatch(product, /auth\.authStateReady\?\./);
   assert.match(product, /preserved\.requiresLogin = false/);
   assert.match(product, /Tu cuenta sigue iniciada/);
-  assert.equal((product.match(/if \(!await stableAuthUser\(\)\)/g) || []).length, 5);
+  assert.equal((product.match(/if \(!await stableAuthUser\(\)\)/g) || []).length, 2);
   assert.match(product, /const user = await stableAuthUser\(\);[\s\S]*?requestCommunityLogin\('review'/);
   assert.match(product, /waitForSession\(\)/);
-  assert.match(favorites, /subscribeSession\(/);
-  assert.match(favorites, /AUTH_STATES\.UNKNOWN/);
-  assert.match(favorites, /for \(const forceRefresh of \[false, true\]\)/);
 });
 
 test('community code is retained but absent from the public product page', async () => {
@@ -75,7 +69,7 @@ test('community code is retained but absent from the public product page', async
   assert.doesNotMatch(markup, /data-open-community|tt-product-social-bar|id="product-share"|resenas-producto\.js/);
 });
 
-test('product likes are permanent server-side interactions', async () => {
+test('product favorites are retired: no new likes accepted, history preserved', async () => {
   const [client, route, product, rules] = await Promise.all([
     read('cloudflare/participacion-clientes.js'),
     read('functions/api/engagement.js'),
@@ -83,13 +77,9 @@ test('product likes are permanent server-side interactions', async () => {
     read('firestore.rules'),
   ]);
   assert.match(client, /productEngagementStats\//);
-  assert.match(client, /alreadyLiked: true/);
-  assert.match(client, /currentDocument: \{ exists: false \}/);
-  assert.match(route, /action === 'ownFavorite'/);
-  assert.match(route, /action === 'productLikes'/);
-  assert.match(product, /productLiked\) return/);
-  assert.match(product, /is-locked/);
-  assert.doesNotMatch(product, /Quitar Me gusta/);
+  assert.match(route, /feature_removed/);
+  assert.match(route, /input\.selected !== false/);
+  assert.doesNotMatch(product, /toggleFavorite|ownFavorite|btn-product-like/);
   assert.match(rules, /match \/productEngagementStats\/\{productId\}[\s\S]*?allow read: if isStoreOpenOrAllowed\(\);[\s\S]*?allow write: if false/);
 });
 
@@ -234,7 +224,7 @@ test('opening notifications preserves unread alerts until an explicit action', a
   assert.match(notifications, /id="tt-notifications-mark-all"/);
 });
 
-test('admin management and profile favorites remain wired with product community hidden', async () => {
+test('admin management remains wired; profile favorites are removed', async () => {
   const [admin, product, profile, adminLoader, adminStyles] = await Promise.all([
     read('admin.html'), read('product.html'), read('perfil.html'),
     read('js/admin/participacion/gestion-participacion-admin.js'),
@@ -243,7 +233,7 @@ test('admin management and profile favorites remain wired with product community
   assert.match(admin, /id="section-resenas"/);
   assert.match(admin, /id="section-me-gusta"/);
   assert.doesNotMatch(product, /resenas-producto\.js/);
-  assert.match(profile, /favoritos-perfil\.js/);
+  assert.doesNotMatch(profile, /favoritos-perfil\.js|perfil-favorites-list/);
   assert.match(adminLoader, /gestion-participacion-admin-v2\.js/);
   assert.match(adminStyles, /participacion-admin-v2\.css/);
 });

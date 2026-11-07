@@ -1,3 +1,13 @@
+## 2026-11-07 — Optimización integral: favoritos, cancelación/stock y cola de correos (base HEAD de rama claude/tintin-accesorios-optimization-xyl6zm)
+Claude Code (Sonnet 5.5). Sin push, merge ni despliegue; sin datos de producción tocados.
+- Fase 2 (PASS_LOCAL): tarjetas «Ver y agregar al carrito»; favoritos/corazones/«Me gusta» retirados de la UI; `toggleFavorite` devuelve 410 `feature_removed` al agregar (quitar sigue permitido); datos y reglas históricos intactos. Cascada de versión `tintin-20261107-sin-favoritos-1`.
+- Fase 3 (PASS_LOCAL): la cancelación ya era por variante, idempotente y con concurrencia probada; no se halló bug reproducible. Se agrega al evento de auditoría existente el detalle de producto/variante/cantidad devuelto (`cloudflare/order-admin-domain.js`) y su prueba. Observación de diseño abierta: una reserva agregada heredada en producto con variantes devuelve solo `stock` agregado (no inventa stock por variante). Reembolso PayPal no libera stock automáticamente (solo advierte).
+- Fase 4 (PASS_LOCAL): causas de los «ocho intentos fallidos» en `drainOrderEmailQueueScheduled`: (a) sin `RESEND_API_KEY` se gastaba un intento por tarea y todas llegaban a dead-letter; (b) pedido borrado/en papelera gastaba 8 intentos; (c) correo de clienta inválido se reintentaba 8 veces. Ahora: sin clave no se reclama ni se gastan intentos (se registra `lastError` en `syncMeta/orderEmailQueue` y el endpoint responde 503); pedido inexistente o sin canal válido → tarea descartada como `obsolete`. Un fallo de correo nunca bloquea el pedido (se encola y el endpoint de correo responde aparte).
+- Pruebas: orders 135/135; cola de correo + drain + recibo + app-check 19/19 y 146/146 combinadas con orders.
+- Fallos previos idénticos sin mis cambios (no regresión): `tests/integration/commerce-firestore` (requiere emulador Firestore), `cart-render-probe`, `sellado-interactivo`, `profile-save-panel` (falta `parse5`), 2 pruebas de arquitectura UI (falta `@playwright/test`); `node_modules` ausente.
+- BLOCKED: `config/proteccion-flujos.json` reporta ~30 archivos protegidos modificados y 2 eliminados; requiere `scripts/preparar-mantenimiento-flujos.mjs` con SHA base y aprobación CI/dueño. No se editó la política a mano.
+- NOT_VERIFIED: producción, navegador real/responsive (sin Playwright), CI del SHA final, auditoría `audit:final`.
+
 ## 2026-11-01 — public-catalog: ids reservados de Firestore ya no dan 502 (base main 75049e4)
 Claude Code, rama claude/sharp-cannon-oxfa8o.
 - Evidencia en producción (solo lectura): `GET /api/public-catalog?resource=products&id=__x__` → HTTP 502 y la ficha mostraba "No pudimos cargar el producto".

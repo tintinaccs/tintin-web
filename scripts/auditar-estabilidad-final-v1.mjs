@@ -77,7 +77,7 @@ ok(has(adminFicha, "section(`Pedidos"), 'La ficha Super Admin no integra pedidos
 ok(has(adminFicha, "section('Auditoría reciente')"), 'La ficha Super Admin no integra auditoría.');
 
 // Perfil cliente completo y foto segura.
-for (const [id, label] of [['resumen', 'Resumen'], ['datos', 'Mis datos'], ['pedidos', 'Pedidos'], ['favoritos', 'Favoritos'], ['cuenta', 'Cuenta y seguridad'], ['ayuda', 'Ayuda']]) {
+for (const [id, label] of [['resumen', 'Resumen'], ['datos', 'Mis datos'], ['pedidos', 'Pedidos'], ['cuenta', 'Cuenta y seguridad'], ['ayuda', 'Ayuda']]) {
   ok(has(profile, new RegExp(`data-profile-tab="${id}"[^>]*>${label}`)), `Perfil no tiene pestaña ${label} en su HTML inicial.`);
   ok(has(profile, `data-profile-panel="${id}"`), `Perfil no tiene panel inicial para ${label}.`);
 }

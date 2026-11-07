@@ -136,10 +136,8 @@ test('checkout, navegación pública y carrito nunca deciden Auth con timeouts l
 
 test('errores de perfil/App Check no cierran la sesión', () => {
   const product = read('js/pages/product/resenas-producto.js');
-  const favorites = read('js/components/favorites/sincronizacion-favoritos.js');
   const apiClient = read('js/core/auth/cliente-api-autenticado.js');
   assert.match(product, /AUTH_STATES\.UNKNOWN/);
-  assert.match(favorites, /AUTH_STATES\.UNKNOWN/);
   assert.match(apiClient, /auth\/session-unknown/);
   assert.doesNotMatch(apiClient, /authStateReady/);
 });

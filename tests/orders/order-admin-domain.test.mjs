@@ -585,6 +585,14 @@ test('variant inventory reserves atomically, switches options and releases once 
   assert.equal(store.commits.length, count);
 });
 
+test('la cancelación registra en la auditoría qué producto y variante se devolvió', async () => {
+  const store = variantStore();
+  const created = await createOrderAdmin({}, { userName: 'Cliente', shippingMethod: 'retiro', paymentStatus: 'pagado', items: [{ id: 'ring', qty: 2, variant: '6' }] }, ACTOR, store);
+  const result = await applyOrderAdminMutation({}, { orderId: created.orderId, status: 'cancelado', changeId: 'cancel_ledger_123' }, ACTOR, store);
+  const audit = store.commits.flat().filter(w => String(w.path).startsWith('auditLog/')).map(w => decodeFirestoreFields(w.fields)).find(row => row.eventId === result.auditEventId);
+  assert.deepEqual(audit.inventoryMovements, [{ productId: 'ring', action: 'release', stockBefore: 3, stockAfter: 5, variants: [{ variant: '6', stockChange: 2 }] }]);
+});
+
 test('pending order validates option stock without reserving; confirmation rejects sold-out option', async () => {
   const store = variantStore();
   await assert.rejects(createOrderAdmin({}, { userName: 'Cliente', shippingMethod: 'retiro', items: [{ id: 'ring', qty: 3, variant: '6' }] }, ACTOR, store), /Stock insuficiente/);

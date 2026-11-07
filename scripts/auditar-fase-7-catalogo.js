@@ -109,8 +109,8 @@ check(
 
 check(
   'Las variantes se eligen en la ficha antes de agregar',
-  /const hasVariants = window\.TintinCatalogPolicy/.test(catalog) &&
-    /Elegir opciones/.test(catalog) &&
+  /Ver y agregar al carrito/.test(catalog) &&
+    !/Elegir opciones/.test(catalog) &&
     /_pdValidateVariants/.test(storefront),
   'Una tarjeta con variantes no debe agregar una combinación incompleta.'
 );

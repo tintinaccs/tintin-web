@@ -793,6 +793,9 @@ export async function applyOrderAdminMutation(
   const now = new Date();
   const writes = [];
   const changedProductIds = new Set([...inventory.deltas.keys(), ...variantDeltas.map(item => item.id)]);
+  // Historial de movimientos: qué producto/variante cambió y cuánto, para auditar
+  // cada reserva o devolución sin reconstruirla a partir de los pedidos.
+  const inventoryMovements = [];
   for (const productId of changedProductIds) {
     const reserveDelta = inventory.deltas.get(productId) || 0;
     const document = productDocuments.get(productId);
@@ -812,6 +815,13 @@ export async function applyOrderAdminMutation(
       lastInventoryAction: reserveDelta > 0 ? 'reserve' : 'release',
       updatedAt: now,
     };
+    inventoryMovements.push({
+      productId,
+      action: productPatch.lastInventoryAction,
+      stockBefore: currentStock,
+      stockAfter: productPatch.stock ?? currentStock,
+      variants: deltas.map(item => ({ variant: item.variantKey ?? item.variant, stockChange: -item.qty })),
+    });
     writes.push({
       path: `products/${productId}`,
       fields: encodeFirestoreFields(productPatch),
@@ -871,6 +881,7 @@ export async function applyOrderAdminMutation(
       origin: context.origin,
       result: 'success',
       changeId: nextChangeId,
+      inventoryMovements,
       notes: clean(input.statusNote, 1000),
     }),
     currentDocument: { exists: false },

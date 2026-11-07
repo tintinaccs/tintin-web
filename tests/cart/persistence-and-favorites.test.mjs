@@ -27,20 +27,19 @@ test('el carrito agrega líneas sin reemplazar las existentes', async () => {
   assert.match(runtime, /GUEST_CART_TTL_MS/);
 });
 
-test('favoritos persiste con la cuenta y Me gusta se oculta en la ficha', async () => {
-  const [favorites, product, cart, rules] = await Promise.all([
-    read('js/components/favorites/sincronizacion-favoritos.js'),
-    read('product.html'),
-    read('tienda.js'),
-    read('firestore.rules'),
-  ]);
-  assert.match(favorites, /users', currentUser\.uid, 'favorites'/);
-  // Los favoritos siguen en catálogo/perfil; la ficha oculta la comunidad
-  // según el pedido del propietario, sin introducir otra autoridad.
-  assert.doesNotMatch(product, /id="btn-product-like"/);
-  assert.match(cart, /data-favorite-id/);
-  assert.doesNotMatch(product, /btn-product-favorite/);
-  assert.doesNotMatch(cart, /tt-cart-favorites/);
-  assert.match(await read('perfil.html'), /id="perfil-favorites-list"/);
-  assert.match(rules, /match \/favorites\/\{productId\}/);
+test('favoritos y Me gusta ya no existen en la interfaz pública', async () => {
+  const files = ['product.html', 'catalogo.html', 'perfil.html', 'tienda.js',
+    'js/pages/product/resenas-producto.js', 'js/pages/product/seleccion-producto.js', 'js/cargador-pagina.js'];
+  for (const file of files) {
+    const text = await read(file);
+    assert.doesNotMatch(text, /btn-product-like|btn-product-favorite|data-favorite-id|tt-card-favorite|perfil-favorites-list|sincronizacion-favoritos|favoritos-perfil|data-review-like|data-reply-like|icono-corazon/, file);
+  }
+});
+
+test('las tarjetas usan «Ver y agregar al carrito» y no «Elegir opciones»', async () => {
+  const [catalog, classic] = await Promise.all([read('catalogo.html'), read('tienda.js')]);
+  assert.match(catalog, /Ver y agregar al carrito/);
+  assert.match(classic, /Ver y agregar al carrito/);
+  assert.doesNotMatch(catalog, />\s*Elegir opciones\s*</);
+  assert.doesNotMatch(classic, /'Elegir opciones'/);
 });

@@ -124,7 +124,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 function loadAuthRuntime() {
   if (IS_VISUAL_PREVIEW_FRAME) return Promise.resolve(null);
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261030-home-history-5').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261107-sin-favoritos-1').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
