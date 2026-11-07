@@ -1,0 +1,61 @@
+name: Backup — Google Drive
+
+on:
+  schedule:
+    - cron: '45 4 * * *'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: respaldo-drive
+  cancel-in-progress: false
+
+jobs:
+  drive:
+    name: Bundle del repositorio a Drive
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - run: git fetch --all --tags --prune
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: 'package.json'
+      - name: Verificar configuración de Drive
+        id: config
+        env:
+          DRIVE_CLIENT_ID: ${{ secrets.DRIVE_CLIENT_ID }}
+          DRIVE_CLIENT_SECRET: ${{ secrets.DRIVE_CLIENT_SECRET }}
+          DRIVE_REFRESH_TOKEN: ${{ secrets.DRIVE_REFRESH_TOKEN }}
+        run: |
+          if [ -n "$DRIVE_CLIENT_ID" ] && [ -n "$DRIVE_CLIENT_SECRET" ] && [ -n "$DRIVE_REFRESH_TOKEN" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            echo "::warning::Respaldo a Drive sin configurar (faltan secretos DRIVE_*). No se respaldó este push."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Faltan secretos DRIVE_CLIENT_ID, DRIVE_CLIENT_SECRET o DRIVE_REFRESH_TOKEN."
+            exit 1
+          fi
+      - name: Crear y verificar bundle
+        if: steps.config.outputs.ready == 'true'
+        id: respaldo
+        env:
+          BACKUP_OUTPUT_DIR: respaldos
+        run: |
+          node scripts/crear-respaldo-repositorio.mjs
+          node scripts/verificar-respaldo-repositorio.mjs "$(node -e "const f=require('fs').readdirSync('respaldos').filter(n=>n.endsWith('.bundle'));console.log('respaldos/'+f[0])")"
+      - name: Subir a Drive y verificar tamaño y MD5
+        if: steps.config.outputs.ready == 'true'
+        env:
+          DRIVE_CLIENT_ID: ${{ secrets.DRIVE_CLIENT_ID }}
+          DRIVE_CLIENT_SECRET: ${{ secrets.DRIVE_CLIENT_SECRET }}
+          DRIVE_REFRESH_TOKEN: ${{ secrets.DRIVE_REFRESH_TOKEN }}
+        run: node scripts/subir-respaldo-drive.mjs respaldos/*.bundle respaldos/*.sha256 respaldos/*.json

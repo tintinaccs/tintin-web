@@ -25,6 +25,14 @@ Mantener una recuperación comprobable del código y una guía operativa para lo
 
 El artefacto de GitHub Actions mejora la recuperación, pero no cuenta como copia independiente porque permanece dentro del mismo proveedor. La copia mensual cifrada debe guardarse fuera de GitHub.
 
+## Respaldo automático a Google Drive
+
+Workflow `.github/workflows/respaldo-drive.yml`: se ejecuta cada día (04:45 UTC), en cada push a `main` y bajo demanda. Crea el bundle completo, simula la restauración y lo sube a la carpeta «Tintin — Respaldos (automático)» de Drive, verificando tamaño y MD5 contra el archivo local. Los archivos de más de 60 días van a la papelera de Drive (nunca los 9 más recientes). Corre en GitHub Actions: no usa Cloudflare ni consume su facturación.
+
+Secretos necesarios (repositorio → Settings → Secrets): `DRIVE_CLIENT_ID`, `DRIVE_CLIENT_SECRET`, `DRIVE_REFRESH_TOKEN`, de un cliente OAuth con el alcance `https://www.googleapis.com/auth/drive.file` de la cuenta propietaria del Drive. Sin ellos, la ejecución programada o manual falla de forma visible y el push solo emite una advertencia.
+
+Restaurar si GitHub deja de estar disponible: descargar el `.bundle` de Drive, `git clone archivo.bundle tintin-web`, crear un repositorio nuevo y `git push --all` / `git push --tags`. Firestore se respalda aparte (`backup-firestore.yml`).
+
 ## Comandos del repositorio
 
 Crear un bundle completo:
