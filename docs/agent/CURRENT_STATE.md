@@ -1,3 +1,10 @@
+## 2026-11-07 — Protected flows: renovación de huellas y retiro explícito de archivos eliminados (base a18318c7)
+
+- Causa: el job «Protected flows» de main falla porque varios PR cambiaron archivos protegidos sin plan de mantenimiento (el job se omite en PR y «Protected flow maintenance» no es check obligatorio de la rama) y #1355 eliminó dos archivos protegidos (favoritos) que el mecanismo no podía representar.
+- Cambio: `inspectMaintenance`/helper/lector de GitHub aceptan `removedFiles` en el plan solo para archivos ausentes, sin alcance de registro y declarados exactamente; el resto de controles no cambia. Plan generado con `scripts/preparar-mantenimiento-flujos.mjs` (41 renovados, 2 retirados, 61 registros afectados).
+- PASS_LOCAL: auditar-proteccion-flujos exit 0 (78 registros, 542 archivos), 4 suites de mantenimiento 58/58, ci:preflight, audit:cache-versioning. 4 pruebas de navegador de tests/flow-connections fallan también sin estos cambios (carrito/iframe/panel); no relacionadas, sin verificar en CI.
+- Pendiente: confirmar que el job «Protected flows» del push a main pasa; este PR cambia el propio mecanismo, así que «Protected flow maintenance» no puede validarlo con el control anterior. Hacer ese check obligatorio requiere acceso administrativo a la rama.
+
 ## 2026-11-07 — Optimización integral: favoritos, cancelación/stock y cola de correos (base HEAD de rama claude/tintin-accesorios-optimization-xyl6zm)
 Claude Code (Sonnet 5.5). Sin push, merge ni despliegue; sin datos de producción tocados.
 - Fase 2 (PASS_LOCAL): tarjetas «Ver y agregar al carrito»; favoritos/corazones/«Me gusta» retirados de la UI; `toggleFavorite` devuelve 410 `feature_removed` al agregar (quitar sigue permitido); datos y reglas históricos intactos. Cascada de versión `tintin-20261107-sin-favoritos-1`.

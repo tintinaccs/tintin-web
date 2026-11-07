@@ -13,19 +13,23 @@ try {
   const config = JSON.parse(execFileSync('git', ['show', `${baseSha}:config/mantenimiento-flujos.json`], { encoding: 'utf8' }));
   const allowControlUpdates = config.automaticControlMaintenance === true;
   const candidate = structuredClone(baseline);
-  const files = paths.map(path => {
+  const files = [], removedFiles = [];
+  for (const path of paths) {
     if (!Object.hasOwn(baseline.files, path) || (!allowControlUpdates && controlPath(path))) throw new Error(`Ruta no autorizable mediante mantenimiento: ${path}`);
+    if (!fs.existsSync(path)) { removedFiles.push({ path, oldHash: baseline.files[path] }); delete candidate.files[path]; continue; }
     const newHash = flowFileHash(fs.readFileSync(path));
     if (newHash === baseline.files[path]) throw new Error(`Ruta sin cambios: ${path}`);
     candidate.files[path] = newHash;
-    return { path, oldHash: baseline.files[path], newHash };
-  }).sort((a, b) => a.path.localeCompare(b.path, 'en'));
+    files.push({ path, oldHash: baseline.files[path], newHash });
+  }
+  const byPath = (x, y) => x.path.localeCompare(y.path, 'en');
+  files.sort(byPath); removedFiles.sort(byPath);
   const affectedRecords = Object.entries(baseline.records).filter(([, recordPaths]) =>
     recordPaths.some(path => paths.includes(path))).map(([id]) => id).sort();
-  const plan = { schemaVersion: 1, baseCommit: baseSha, reason, files, affectedRecords };
+  const plan = { schemaVersion: 1, baseCommit: baseSha, reason, files, affectedRecords, ...(removedFiles.length ? { removedFiles } : {}) };
   const changedPaths = execFileSync('git', ['diff', '--name-only', baseSha, '--'], { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
   inspectMaintenance({ baseline, candidate, baseSha, plan, changedPaths, allowControlUpdates, readFile: path => fs.readFileSync(path) });
   fs.writeFileSync(policyPath, `${JSON.stringify(candidate, null, 2)}\n`);
   fs.writeFileSync(planPath, `${JSON.stringify(plan, null, 2)}\n`);
-  console.log(`Plan preparado: ${files.length} archivos, ${affectedRecords.length} registros afectados. La validación y publicación automáticas requieren CI del SHA final.`);
+  console.log(`Plan preparado: ${files.length} archivos renovados, ${removedFiles.length} retirados, ${affectedRecords.length} registros afectados. La validación y publicación automáticas requieren CI del SHA final.`);
 } catch (error) { console.error(error.message); process.exitCode = 1; }
