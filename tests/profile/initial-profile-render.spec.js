@@ -83,7 +83,7 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
     await fixture(page, width);
     const initial = await page.locator('.perfil-wrap').boundingBox();
     await expect(page.locator('.tt-profile-hero')).toBeVisible();
-    await expect(page.locator('[data-profile-tab]')).toHaveCount(6);
+    await expect(page.locator('[data-profile-tab]')).toHaveCount(5);
     await expect(page.locator('[data-profile-panel="datos"]')).toBeVisible();
     await page.evaluate(() => {
       window.handoff = { uid: 'client', profile: { name: 'Ana Ruiz', phone: '595912345678', username: 'ana' } };
