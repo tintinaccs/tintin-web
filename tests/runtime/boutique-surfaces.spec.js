@@ -31,7 +31,7 @@ for(const width of [320,390,768,1024,1280,1440,1920])test(`paneles sólidos y ca
 });
 const store=read('tienda.js');
 const cardRenderer=store.slice(store.indexOf('const cardColorSelections'),store.indexOf('function renderProductsGrid'));
-const cardMedia=store.slice(store.indexOf('function productVariantGroups'),store.indexOf('function _pdSyncVariantToImage'));
+const cardMedia=store.slice(store.indexOf('function singleVariantLabel'),store.indexOf('\n}\n',store.indexOf('function singleVariantLabel'))+3)+store.slice(store.indexOf('function productVariantGroups'),store.indexOf('function _pdSyncVariantToImage'));
 for(const width of [320,390,768,1024,1440])test(`tarjetas compactas y recomendaciones sin celda vacía en ${width}px`,async({page})=>{
   await page.setViewportSize({width,height:900});
   await page.route('**/boutique-cards',r=>r.fulfill({contentType:'text/html',body:`<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${links}${styles}</head><body class="tt-product-maintenance"><section class="tt-related-section"><div class="container"><div id="cards" class="tt-related-grid"></div></div></section></body></html>`}));
