@@ -25,13 +25,14 @@ Mantener una recuperación comprobable del código y una guía operativa para lo
 
 El artefacto de GitHub Actions mejora la recuperación, pero no cuenta como copia independiente porque permanece dentro del mismo proveedor. La copia mensual cifrada debe guardarse fuera de GitHub.
 
-## Respaldo automático a Google Drive
+## Espejo automático en Google Drive
 
-Workflow `.github/workflows/respaldo-drive.yml`: se ejecuta cada día (04:45 UTC), en cada push a `main` y bajo demanda. Crea el bundle completo, simula la restauración y lo sube a la carpeta «Tintin — Respaldos (automático)» de Drive, verificando tamaño y MD5 contra el archivo local. Los archivos de más de 60 días van a la papelera de Drive (nunca los 9 más recientes). Corre en GitHub Actions: no usa Cloudflare ni consume su facturación.
+Workflow `.github/workflows/espejo-drive.yml` + `scripts/espejo-drive.mjs`. Drive es un espejo de `main`: en cada push solo se copian a la carpeta «Tintin — Espejo de GitHub» los archivos cuyo contenido cambió (comparación por SHA de Git, guardada en `.espejo-estado.json` dentro de Drive), respetando la estructura de carpetas. Cada archivo se verifica por tamaño y MD5 tras subirlo. Una ejecución diaria (04:45 UTC) y la manual repiten la comparación y reparan cualquier push que no se haya copiado. Corre en GitHub Actions: no usa Cloudflare ni consume su facturación.
 
-Secretos necesarios (repositorio → Settings → Secrets): `DRIVE_CLIENT_ID`, `DRIVE_CLIENT_SECRET`, `DRIVE_REFRESH_TOKEN`, de un cliente OAuth con el alcance `https://www.googleapis.com/auth/drive.file` de la cuenta propietaria del Drive. Sin ellos, la ejecución programada o manual falla de forma visible y el push solo emite una advertencia.
-
-Restaurar si GitHub deja de estar disponible: descargar el `.bundle` de Drive, `git clone archivo.bundle tintin-web`, crear un repositorio nuevo y `git push --all` / `git push --tags`. Firestore se respalda aparte (`backup-firestore.yml`).
+- Un archivo eliminado en GitHub **se conserva** en Drive (es respaldo, no se borra nada).
+- Contiene los archivos actuales, no el historial de commits; el historial sigue en el bundle semanal (`respaldo-repositorio.yml`).
+- Secretos (repositorio → Settings → Secrets): `DRIVE_CLIENT_ID`, `DRIVE_CLIENT_SECRET`, `DRIVE_REFRESH_TOKEN`, de un cliente OAuth con alcance `https://www.googleapis.com/auth/drive.file` de la cuenta dueña del Drive. Sin ellos, la ejecución programada o manual falla visible y el push solo emite una advertencia.
+- Recuperación si GitHub no está disponible: descargar la carpeta de Drive, crear un repositorio nuevo y subir su contenido. Firestore se respalda aparte (`backup-firestore.yml`).
 
 ## Comandos del repositorio
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "91300251942d51437f6c79e69fc983d68fc36802578f0aa7151a7d6dde4bdb9b",
+  "sourceFingerprint": "9f9568f895e00dac0c3df4e4e0391655242cca64ebe3951df435a1298f0e7d27",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1824,
     "textFiles": 1674,
-    "totalBytes": 61030356,
+    "totalBytes": 61036073,
     "pages": 19,
     "modules": 1182
   },
@@ -42333,6 +42333,55 @@
       ]
     },
     {
+      "path": "scripts/espejo-drive.mjs",
+      "bytes": 8768,
+      "sha256": "fd6069ae04f7ec11553fe3d25d8be68660ff467629a86feb5676fbeced357ca7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 8
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.googleapis.com/drive/v3",
+          "line": 13
+        },
+        {
+          "url": "https://www.googleapis.com/upload/drive/v3",
+          "line": 14
+        },
+        {
+          "url": "https://oauth2.googleapis.com/token",
+          "line": 76
+        }
+      ]
+    },
+    {
       "path": "scripts/exigir-cuenta-flujo-parte-2d.mjs",
       "bytes": 1975,
       "sha256": "a40de4b4c8cef0c5e4e5e88bfbdb4ea559e1bdc7b82600f31b69970689f531e4",
@@ -43736,49 +43785,6 @@
         }
       ],
       "endpoints": []
-    },
-    {
-      "path": "scripts/subir-respaldo-drive.mjs",
-      "bytes": 5412,
-      "sha256": "06c156472100e815ba738bc0ad07f45d50a9fd96af802af1e8bee1f77d76bc66",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:crypto",
-          "target": null,
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "node:path",
-          "target": null,
-          "dynamic": false,
-          "line": 6
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://www.googleapis.com/drive/v3",
-          "line": 10
-        },
-        {
-          "url": "https://www.googleapis.com/upload/drive/v3",
-          "line": 11
-        },
-        {
-          "url": "https://oauth2.googleapis.com/token",
-          "line": 24
-        }
-      ]
     },
     {
       "path": "scripts/verificar-integridad-estilos.mjs",
@@ -46942,9 +46948,9 @@
       "endpoints": []
     },
     {
-      "path": "tests/backup/respaldo-drive.test.mjs",
-      "bytes": 2401,
-      "sha256": "3c80c994a5c892cc096b0a134fbbe3470f065c125d130508f9823ebb4e37e957",
+      "path": "tests/backup/espejo-drive.test.mjs",
+      "bytes": 4999,
+      "sha256": "6fc020568ff66502ac690e99e8ed3d1d21faa04194e96f2a12e3d78809fad303",
       "syntax": {
         "ok": true,
         "error": ""
@@ -46963,40 +46969,22 @@
           "line": 2
         },
         {
-          "raw": "node:fs",
+          "raw": "node:test",
           "target": null,
           "dynamic": false,
           "line": 3
         },
         {
-          "raw": "node:os",
-          "target": null,
+          "raw": "../../scripts/espejo-drive.mjs",
+          "target": "scripts/espejo-drive.mjs",
           "dynamic": false,
           "line": 4
-        },
-        {
-          "raw": "node:path",
-          "target": null,
-          "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "node:test",
-          "target": null,
-          "dynamic": false,
-          "line": 6
-        },
-        {
-          "raw": "../../scripts/subir-respaldo-drive.mjs",
-          "target": "scripts/subir-respaldo-drive.mjs",
-          "dynamic": false,
-          "line": 7
         }
       ],
       "endpoints": [
         {
           "url": "https://up/1",
-          "line": 29
+          "line": 78
         }
       ]
     },
@@ -62911,16 +62899,16 @@
       "sha256": "33d14707339a3f310f3b3c0cbccaf6a9d7fe9ebff4c33fe5f8856fbebc33a2bf"
     },
     {
+      "path": ".github/workflows/espejo-drive.yml",
+      "extension": ".yml",
+      "bytes": 1735,
+      "sha256": "3371ecc698fabdd88f02e1a4e4d5dc5c2226bcdae2d39a0e278dc15e910f97da"
+    },
+    {
       "path": ".github/workflows/monitor-produccion.yml",
       "extension": ".yml",
       "bytes": 5724,
       "sha256": "21cee60e078295e35d08ed7cea59e6ec8aec24087a68f556c516eee6c037de29"
-    },
-    {
-      "path": ".github/workflows/respaldo-drive.yml",
-      "extension": ".yml",
-      "bytes": 2237,
-      "sha256": "985e041a8eb16a549fc2ca92833fa1b7ea8392065601fcfc52a018c74d05e24d"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
@@ -66057,8 +66045,8 @@
     {
       "path": "docs/plan-respaldo-recuperacion.md",
       "extension": ".md",
-      "bytes": 7941,
-      "sha256": "3980c4e2627cb368133b063445c6c2c4dc03fbeb4dce1ec46389a87141e1feb3"
+      "bytes": 8206,
+      "sha256": "cf879467693232cbca75f803da66a0e70177c90f391ba74a819763c9fb24c263"
     },
     {
       "path": "docs/politica-colecciones-publicas.md",
@@ -70285,6 +70273,12 @@
       "sha256": "986c57288051c8b0dd94315c0a4f06c4554b607a67c1788949d5b7a814cc514e"
     },
     {
+      "path": "scripts/espejo-drive.mjs",
+      "extension": ".mjs",
+      "bytes": 8768,
+      "sha256": "fd6069ae04f7ec11553fe3d25d8be68660ff467629a86feb5676fbeced357ca7"
+    },
+    {
       "path": "scripts/exigir-cuenta-flujo-parte-2d.mjs",
       "extension": ".mjs",
       "bytes": 1975,
@@ -70583,12 +70577,6 @@
       "extension": ".json",
       "bytes": 235,
       "sha256": "0028eb222295ca705b0a021d534e4e3d7295d60f815b08b76c6145f97ba5ec57"
-    },
-    {
-      "path": "scripts/subir-respaldo-drive.mjs",
-      "extension": ".mjs",
-      "bytes": 5412,
-      "sha256": "06c156472100e815ba738bc0ad07f45d50a9fd96af802af1e8bee1f77d76bc66"
     },
     {
       "path": "scripts/verificar-integridad-estilos.mjs",
@@ -71065,10 +71053,10 @@
       "sha256": "1086aa6ce39dd500693826513180754cb0315c1a0256e88e6c9da48722e297c2"
     },
     {
-      "path": "tests/backup/respaldo-drive.test.mjs",
+      "path": "tests/backup/espejo-drive.test.mjs",
       "extension": ".mjs",
-      "bytes": 2401,
-      "sha256": "3c80c994a5c892cc096b0a134fbbe3470f065c125d130508f9823ebb4e37e957"
+      "bytes": 4999,
+      "sha256": "6fc020568ff66502ac690e99e8ed3d1d21faa04194e96f2a12e3d78809fad303"
     },
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
