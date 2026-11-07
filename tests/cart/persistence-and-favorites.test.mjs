@@ -36,10 +36,14 @@ test('favoritos y Me gusta ya no existen en la interfaz pública', async () => {
   }
 });
 
-test('las tarjetas usan «Ver y agregar al carrito» y no «Elegir opciones»', async () => {
+test('las tarjetas tienen «Ver» y «Agregar al carrito» separados; con variantes envían a la ficha', async () => {
   const [catalog, classic] = await Promise.all([read('catalogo.html'), read('tienda.js')]);
-  assert.match(catalog, /Ver y agregar al carrito/);
-  assert.match(classic, /Ver y agregar al carrito/);
-  assert.doesNotMatch(catalog, />\s*Elegir opciones\s*</);
-  assert.doesNotMatch(classic, /'Elegir opciones'/);
+  for (const text of [catalog, classic]) {
+    assert.match(text, />Ver</);
+    assert.match(text, />Agregar al carrito</);
+    assert.match(text, />Elegir opciones</);
+    assert.doesNotMatch(text, /Ver y agregar al carrito/);
+  }
+  assert.match(catalog, /data-pid="\$\{safeId\}"/);
+  assert.match(classic, /tt-add-to-cart" data-id=/);
 });
