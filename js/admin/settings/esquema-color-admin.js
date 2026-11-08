@@ -2,7 +2,7 @@
  * Conserva el gate administrativo antes de iniciar lecturas; los documentos
  * de esquemas anteriores permanecen en Firestore como historial, sin activarse.
  */
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261108-appcheck-fallo-1';
 
 if (await waitForAdminAppCheck(12000)) {
   await import('../../components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1');

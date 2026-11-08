@@ -1,3 +1,11 @@
+## 2026-11-08 — Panel admin lento con App Check fallido y feed de Instagram que no volvía — Claude Code
+
+- Admin: si App Check ya había informado fallo (`TintinAppCheckStatus = 'error'`), `resolveAdminAppCheck` esperaba 12 s un evento `tintin:app-check-ready` que no se repite antes del reintento explícito; como la compuerta se limpia ante un negativo, cada módulo volvía a pagar esa espera. Ahora reintenta `getToken` de inmediato; sin token sigue devolviendo false (seguridad igual). Test nuevo en `tests/auth/admin-readiness-gate.test.mjs` (falla con el código anterior).
+- Instagram: un pedido abortado al salir de la sección contaba como intento y bloqueaba el siguiente 60 s; ahora el intento abortado no cuenta (`instagram-tintin.js`). Local: listo a ~2,5 s al volver (antes 60 s).
+- Versiones de caché propagadas a importadores (`tintin-20261108-appcheck-fallo-1`), `LOADER_VERSION` en `sincronizar-inicio-navegacion-publica.js`; plan de flujos protegidos (51 archivos).
+- PASS_LOCAL: `audit:cache-versioning`, `ci:preflight`, `build:pages`, `node --test tests/auth/*.test.mjs` 80/80, `test:rules-critical`, Playwright instagram+reseñas+me-gusta 37/37 y 8 specs admin 65/65.
+- NOT_VERIFIED: tiempo real del panel con sesión admin en producción (sin credenciales); cascada inicial de módulos (~6,5 s primera visita) no modificada.
+
 ## 2026-11-08 — Recomendaciones PYA aplicadas: reglas Firestore, CSP, ponytail y accesibilidad — Claude Code
 
 - AUTHZ-1 (LOW): publicar/ocultar un producto (`active`/`publicationStatus`) exige `productos.activarDesactivar`; con solo `editar` se permiten cambios sin variar visibilidad efectiva y la reactivación automática por stock. El editor del panel bloquea esos campos sin el permiso. Guardia barata `adminInventoryStockKeysOnly()` para no superar el límite de 1000 expresiones (comportamiento equivalente).

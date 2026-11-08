@@ -429,7 +429,7 @@ export function onImagesUpdate(callback, onError) {
     appCheckReady.then(async ready => {
       if (!ready) { _listenerStarted = false; return; }
       const listen = /^\/admin(?:[-/.]|$)/.test(location.pathname)
-        ? (await import('../../admin/auth/lecturas-admin.js?v=tintin-20261022-avatar-inicial-1')).subscribeAdminSnapshot
+        ? (await import('../../admin/auth/lecturas-admin.js?v=tintin-20261108-appcheck-fallo-1')).subscribeAdminSnapshot
         : onSnapshot;
       listen(
         doc(db, FIRESTORE_DOC),

@@ -102,3 +102,18 @@ test('las seis superficies auxiliares consumen el gate estricto, no el timeout p
     assert.doesNotMatch(module, /await appCheckReady/);
   }
 });
+
+test('App Check ya fallido reintenta de inmediato sin esperar un evento que no se repite', async () => {
+  const f = fixture();
+  f.auth.currentUser = f.user; f.restored.resolve(); f.credential.resolve('fixture-auth');
+  f.context.window.TintinAppCheckStatus = 'error';
+  f.context.appCheckReady = Promise.resolve(false);
+  vm.runInContext('appCheckReady = globalThis.appCheckReady;', f.context);
+  let tokenCalls = 0;
+  f.context.getAppCheckToken = async (instance, force) => { assert.equal(force, false); tokenCalls++; return { token: 'fixture-app-check' }; };
+  assert.equal(await f.context.wait(), true);
+  assert.equal(tokenCalls, 1);
+  assert.equal(f.context.window.TintinAppCheckStatus, 'enabled');
+  // Sólo el plazo de Auth y el del reintento: ninguno de espera del evento.
+  assert.equal(f.timers.length, 2);
+});
