@@ -24,7 +24,7 @@ import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-2
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261107-pedidos-progresivo-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
-import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1";
+import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261108-appcheck-fallo-1";
 import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
@@ -43,10 +43,10 @@ import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=ti
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1";
+} from "../core/auth/permisos-roles.js?v=tintin-20261108-appcheck-fallo-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261030-home-history-5";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261105-copiar-pago-1-p1106";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261108-appcheck-fallo-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
@@ -55,7 +55,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261030-audit-integrity-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261030-audit-integrity-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261030-home-history-5";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261101-flow-preload-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261108-appcheck-fallo-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES,
@@ -65,7 +65,7 @@ import {
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20261102-cancel-stock-1';
-import './settings/cupones-admin.js?v=tintin-20261022-avatar-inicial-1';
+import './settings/cupones-admin.js?v=tintin-20261108-appcheck-fallo-1';
 import './products/integridad-inventario-admin.js?v=tintin-20261102-cancel-stock-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
@@ -3587,7 +3587,7 @@ const loadDeferredAdminSection = createAdminSectionLoader({
   sections: {
     correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261108-emaillog-esquema-1'), init: initDeferredCorreos },
     diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-suitcase-20261104-1'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
-    paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2') },
+    paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261108-appcheck-fallo-1') },
     apariencia: { load: async () => {
       await import('./appearance/editor-visual-admin.js?v=tintin-suitcase-20261104-1');
       await import('./appearance/visual-studio-layout-admin.js?v=tintin-20261022-avatar-inicial-1');

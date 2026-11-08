@@ -67,9 +67,13 @@ async function resolveAdminAppCheck(timeoutMs) {
 
   // appCheckReady tiene un timeout blando para no congelar superficies
   // públicas. En Admin no debemos confundir ese timeout con "token válido":
-  // primero damos margen a que llegue el evento real del SDK.
-  const eventReady = await waitForReadyEvent(timeoutMs);
-  if (eventReady || window.TintinAppCheckStatus === 'enabled') return true;
+  // primero damos margen a que llegue el evento real del SDK. Si el SDK ya
+  // informó el fallo, ese evento no se repite: esperarlo sólo sumaba el plazo
+  // completo en cada módulo antes del reintento explícito de abajo.
+  if (window.TintinAppCheckStatus !== 'error') {
+    const eventReady = await waitForReadyEvent(timeoutMs);
+    if (eventReady || window.TintinAppCheckStatus === 'enabled') return true;
+  }
 
   // Si la inicialización sí produjo una instancia, hacemos un último intento
   // explícito. Una caída de red/reCAPTCHA devuelve false y el panel conserva

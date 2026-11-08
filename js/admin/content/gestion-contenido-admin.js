@@ -1,5 +1,5 @@
 import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261108-appcheck-fallo-1';
 /* =============================================================
    TINTIN — Fase 6: editor seguro de contenido
 
@@ -17,7 +17,7 @@ import {
   increment,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
-import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1';
+import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20261108-appcheck-fallo-1';
 import {
   CONTENT_PAGE_IDS,
   SITE_CONTENT_SCHEMA,

@@ -8,7 +8,7 @@
    y de explicar por qué, igual que antes.
    ============================================================= */
 
-import { IMAGE_SLOTS } from '../../components/images/imagenes.js?v=tintin-suitcase-20261104-1';
+import { IMAGE_SLOTS } from '../../components/images/imagenes.js?v=tintin-20261108-appcheck-fallo-1';
 
 if (!window.TintinAdminImagesPhase5Booted) {
   window.TintinAdminImagesPhase5Booted = true;

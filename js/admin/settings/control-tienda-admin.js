@@ -1,6 +1,6 @@
 import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
-import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261022-avatar-inicial-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261108-appcheck-fallo-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261108-appcheck-fallo-1';
 /* =============================================================
    TINTIN — Sincronización segura del estado global de la tienda
    =============================================================
@@ -412,6 +412,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./sincronizacion-correo-admin.js?v=tintin-20261022-avatar-inicial-1').catch(error => {
+import('./sincronizacion-correo-admin.js?v=tintin-20261108-appcheck-fallo-1').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });

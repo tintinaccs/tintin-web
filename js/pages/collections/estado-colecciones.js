@@ -9,7 +9,7 @@ import {
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
     import('../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260925-cache-converge-1'),
-    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261105-copiar-pago-1-p1106')
+    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261108-appcheck-fallo-1')
   ]);
 }
 
@@ -73,7 +73,7 @@ async function startAdminListener() {
   const uid = auth.currentUser?.uid;
   const [{ collection, query, orderBy, startAfter, limit }, { subscribeAdminSnapshot }, { createAdminPagedSource }, { isSuperAdmin }] = await Promise.all([
     import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
-    import('../../admin/auth/lecturas-admin.js?v=tintin-20261022-avatar-inicial-1'),
+    import('../../admin/auth/lecturas-admin.js?v=tintin-20261108-appcheck-fallo-1'),
     import('../../admin/datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1'),
     import('../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2'),
   ]);

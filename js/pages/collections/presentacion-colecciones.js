@@ -8,7 +8,7 @@
    ============================================================= */
 
 import { collectionImageUrl } from '../../components/navigation/compartido/iconos.js?v=tintin-20261029-performance-1';
-import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20261105-copiar-pago-1-p1106';
+import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20261108-appcheck-fallo-1';
 
 if (!window.TintinCollectionsPhase4Booted) {
   window.TintinCollectionsPhase4Booted = true;

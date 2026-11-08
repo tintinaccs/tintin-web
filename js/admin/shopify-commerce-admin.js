@@ -26,7 +26,7 @@ import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tint
    ======================================================================== */
 
 import { auth, db } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
+import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20261108-appcheck-fallo-1';
 import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { recordAuthDiagnostic } from '../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import {
@@ -39,8 +39,8 @@ import {
   startAfter, where
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
-import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261105-copiar-pago-1-p1106';
+import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261108-appcheck-fallo-1';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261108-appcheck-fallo-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 
 const VERSION = 'tintin-20261102-phase03-editor-1';
