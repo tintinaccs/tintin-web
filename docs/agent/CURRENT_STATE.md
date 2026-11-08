@@ -1,3 +1,13 @@
+## 2026-11-08 — Recomendaciones PYA aplicadas: reglas Firestore, CSP, ponytail y accesibilidad — Claude Code
+
+- AUTHZ-1 (LOW): publicar/ocultar un producto (`active`/`publicationStatus`) exige `productos.activarDesactivar`; con solo `editar` se permiten cambios sin variar visibilidad efectiva y la reactivación automática por stock. El editor del panel bloquea esos campos sin el permiso. Guardia barata `adminInventoryStockKeysOnly()` para no superar el límite de 1000 expresiones (comportamiento equivalente).
+- AUTHZ-2 (LOW): retirada la rama que dejaba a un admin escribir estadísticas de pedidos en `users/*` desde el cliente; se recalculan solo en servidor (`cloudflare/sincronizacion-estadisticas-pedido.js`).
+- AUTHZ-3 (LOW): `emailLogs` creados por staff (`reenviarCorreo`) validan esquema, `sentBy == email del token` y `sentAt == request.time`; el panel recorta `error` a 500.
+- PASS_LOCAL emulador (`npm run test:rules-critical`, proyecto demo): exit 0, 272 ataques/controles, nuevos casos de visibilidad, stats y emailLogs. NOT_VERIFIED en emulador: reserva/liberación de inventario (solo prueba unitaria).
+- CSP: `unpkg.com` retirado de la política global/fallback (Leaflet está en `js/vendor/leaflet`); `_headers` y `config/csp-runtime.*` regenerados; `verify:csp` OK.
+- Ponytail: no se fija SHA en `.claude/settings.json` porque `extraKnownMarketplaces` solo admite rama/tag (`ref`); documentado tag→commit en `CLOUD_SKILLS_CATALOG.md`.
+- Accesibilidad (better-accessibility): el botón «Volver al inicio» invisible (opacity 0) recibía foco y clics; ahora es `inert` mientras está oculto (`tienda.js`). PASS_LOCAL: recorrido con Tab 390/1366 px en inicio, catálogo, producto, checkout, contacto y login sin paradas invisibles; `test:phase10-a11y` 5/5. NOT_VERIFIED: lector de pantalla real y contraste.
+
 ## 2026-11-08 — Skills de interfaz (Jakub Krehel) y seguridad (PYA) instaladas — Claude Code
 
 - Instaladas en `.claude/skills/` y `.agents/skills/` (espejo): better-interface, better-ui, better-typography, better-colors, better-accessibility, better-layout, better-writing, build-design (jakubkrehel/skills @157da62) y pya (AgriciDaniel/pya @416c17f), con LICENSE.upstream y nota de integración Tintín. Agentes PYA en `.claude/agents/` (10 + licencia).

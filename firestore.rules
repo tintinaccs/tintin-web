@@ -183,26 +183,6 @@ service cloud.firestore {
       );
     }
 
-    function orderStatsOnlyUpdate() {
-      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-        'purchaseCount', 'orderCount', 'totalOrders', 'totalSpent',
-        'completedOrders', 'pendingOrders', 'cancelledOrders',
-        'lastOrderAt', 'lastOrderId', 'lastPurchaseAt', 'lastPurchaseOrderId',
-        'profileStatsUpdatedAt', 'orderStats', 'updatedAt'
-      ]);
-    }
-
-    function orderStatsNonNegative() {
-      return
-        (!('purchaseCount' in request.resource.data) || request.resource.data.purchaseCount >= 0) &&
-        (!('orderCount' in request.resource.data) || request.resource.data.orderCount >= 0) &&
-        (!('totalOrders' in request.resource.data) || request.resource.data.totalOrders >= 0) &&
-        (!('totalSpent' in request.resource.data) || request.resource.data.totalSpent >= 0) &&
-        (!('completedOrders' in request.resource.data) || request.resource.data.completedOrders >= 0) &&
-        (!('pendingOrders' in request.resource.data) || request.resource.data.pendingOrders >= 0) &&
-        (!('cancelledOrders' in request.resource.data) || request.resource.data.cancelledOrders >= 0);
-    }
-
     function loginMetadataOnlyUpdate() {
       return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
         'lastLogin', 'updatedAt', 'lastAuthMethod', 'authMethods'
@@ -945,6 +925,15 @@ service cloud.firestore {
         );
     }
 
+    // Filtro barato previo: las ediciones normales del panel no tocan solo
+    // estos campos y así no pagan las lecturas del pedido (límite de 1000
+    // expresiones por solicitud). La función completa vuelve a exigirlo.
+    function adminInventoryStockKeysOnly() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        'stock', 'lastInventoryOrderId', 'lastInventoryAction', 'updatedAt'
+      ]);
+    }
+
     function adminInventoryStockUpdateValid(productId) {
       let orderId = request.resource.data.get('lastInventoryOrderId', 'missing-order');
       let orderPath = sparkOrderPath(orderId);
@@ -1216,12 +1205,9 @@ service cloud.firestore {
             onboardingActivationUpdate()
           )
         ) ||
-        (
-          isStoreOpenOrAllowed() &&
-          hasRole("admin") &&
-          orderStatsOnlyUpdate() &&
-          orderStatsNonNegative()
-        ) ||
+        // Las estadísticas de pedidos las recalcula solo el servidor
+        // (cloudflare/sincronizacion-estadisticas-pedido.js); el navegador
+        // de un admin ya no puede sobrescribirlas.
         (
           isSuperAdmin() &&
           !request.resource.data.diff(resource.data).affectedKeys().hasAny(['customerId']) &&
@@ -1308,6 +1294,33 @@ service cloud.firestore {
         permitted && isStoreOpenOrAllowed());
     }
 
+    // Publicar/ocultar en tienda exige 'activarDesactivar'. Solo cuenta el
+    // cambio real de visibilidad (active + publicationStatus efectivos); la
+    // reposición que activa al haber stock (o desactiva al quedar en 0)
+    // sigue permitida con 'editar'. Lo barato va primero por el límite de
+    // 1000 expresiones por solicitud.
+    // Visibilidad pública efectiva de un documento de producto (mismo
+    // criterio que la lectura pública de /products).
+    function productDataPublic(d) {
+      return d.get('active', true) != false &&
+        d.get('publicationStatus', 'active') == 'active';
+    }
+
+    function productVisibilityChangeAllowed() {
+      return (
+          request.resource.data.get('active', true) == resource.data.get('active', true) &&
+          request.resource.data.get('publicationStatus', 'active') == resource.data.get('publicationStatus', 'active')
+        ) ||
+        productDataPublic(request.resource.data) == productDataPublic(resource.data) ||
+        (
+          request.resource.data.get('publicationStatus', 'active') == resource.data.get('publicationStatus', 'active') &&
+          request.resource.data.stock is number &&
+          request.resource.data.stock != resource.data.get('stock', null) &&
+          request.resource.data.active == (request.resource.data.stock > 0)
+        ) ||
+        currentRolePermAllows('productos', 'activarDesactivar');
+    }
+
     match /products/{productId} {
       allow get: if (isStoreOpenOrAllowed() &&
         resource.data.get('active', true) != false &&
@@ -1330,12 +1343,13 @@ service cloud.firestore {
       // El checkout actual reserva stock desde Apps Script con OAuth del
       // propietario. El navegador ya no puede descontar inventario usando la
       // ruta heredada sparkStockUpdateValid().
-      allow update: if resource.data.get('variantCommerceVersion', 1) == 1 && request.resource.data.get('variantCommerceVersion', 1) == 1 && adminInventoryStockUpdateValid(productId);
+      allow update: if resource.data.get('variantCommerceVersion', 1) == 1 && request.resource.data.get('variantCommerceVersion', 1) == 1 && adminInventoryStockKeysOnly() && adminInventoryStockUpdateValid(productId);
       allow update: if resource.data.get('variantCommerceVersion', 1) == 1 && request.resource.data.get('variantCommerceVersion', 1) == 1 && (isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
           (isAdmin() || isAgent()) &&
-          currentRolePermAllows('productos', 'editar')
+          currentRolePermAllows('productos', 'editar') &&
+          productVisibilityChangeAllowed()
         ));
 
       allow delete: if resource.data.get('variantCommerceVersion', 1) == 1 && isSuperAdmin();
@@ -1588,6 +1602,29 @@ service cloud.firestore {
       allow read, write: if isSuperAdmin();
     }
 
+    // Mismos campos que escribe el panel (correos-admin.js /
+    // sincronizacion-correo-admin.js); evita que el staff guarde registros
+    // arbitrarios o firmados con el correo de otra persona.
+    function staffEmailLogValid() {
+      let d = request.resource.data;
+      return d.keys().hasOnly([
+          'category', 'type', 'recipient', 'status', 'templateKey', 'isAutomatic',
+          'sentBy', 'error', 'orderId', 'campaignId', 'variables', 'sentAt'
+        ]) &&
+        d.category in ['pedido', 'prueba', 'promo'] &&
+        d.type is string && d.type.size() <= 100 &&
+        d.recipient is string && d.recipient.size() <= 254 &&
+        d.status in ['sent', 'failed', 'partial', 'pending'] &&
+        d.isAutomatic is bool &&
+        d.sentBy == request.auth.token.email &&
+        d.sentAt == request.time &&
+        d.get('error', '') is string && d.get('error', '').size() <= 500 &&
+        d.get('templateKey', '') is string && d.get('templateKey', '').size() <= 100 &&
+        d.get('orderId', '') is string && d.get('orderId', '').size() <= 200 &&
+        d.get('campaignId', '') is string && d.get('campaignId', '').size() <= 200 &&
+        (d.get('variables', null) == null || d.get('variables', null) is map);
+    }
+
     match /emailLogs/{logId} {
       allow read: if isSuperAdmin();
 
@@ -1597,7 +1634,8 @@ service cloud.firestore {
           (
             (
               (hasRole("admin") || hasRole("agent")) &&
-              currentRolePermAllows('pedidos', 'reenviarCorreo')
+              currentRolePermAllows('pedidos', 'reenviarCorreo') &&
+              staffEmailLogValid()
             ) ||
             (
               isSignedIn() &&

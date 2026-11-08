@@ -3585,7 +3585,7 @@ const loadDeferredAdminSection = createAdminSectionLoader({
   document,
   canLoad: () => currentRole === 'superadmin' && String(currentUser?.email || '').toLowerCase() === SUPER_ADMIN.toLowerCase(),
   sections: {
-    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261028-correos-1-editor-search-20261028-2'), init: initDeferredCorreos },
+    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261108-emaillog-esquema-1'), init: initDeferredCorreos },
     diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-suitcase-20261104-1'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
     paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2') },
     apariencia: { load: async () => {
@@ -4293,7 +4293,7 @@ function productVariantStockConfiguration(text, previous = [], previousVariants 
   return {variants: Object.fromEntries(attributes), entries: combinations.map(variant => ({variant, stock: quantities.get(variant) ?? ''}))};
 }
 
-function productEditorialForm(product={}) {
+function productEditorialForm(product={}, lockVisibility=false) {
   ensureEditorialFields(document.getElementById('prod-form-card'));
   const status=document.getElementById('prod-publicationStatus');
   const inactive=product.active===false && (!product.publicationStatus || product.publicationStatus==='active');
@@ -4301,6 +4301,8 @@ function productEditorialForm(product={}) {
   if(!inactive)status.querySelector('option[value=inactive]')?.remove();
   const values={publicationStatus:inactive?'inactive':productEditorialStatus(product),productTemplate:productTemplate(product),seoTitle:product.seoTitle || '',seoDescription:product.seoDescription || ''};
   for(const [key,value] of Object.entries(values)){const field=document.getElementById(`prod-${key}`);if(field)field.value=value;}
+  // Publicar u ocultar exige el permiso propio (igual que firestore.rules); editar no basta.
+  for(const id of ['prod-publicationStatus','prod-active']){const field=document.getElementById(id);if(field){field.disabled=lockVisibility;field.title=lockVisibility?'Requiere permiso para activar o desactivar productos':'';}}
 }
 function productEditorialData() {
   const status=document.getElementById('prod-publicationStatus');
@@ -4618,7 +4620,7 @@ function _prodEditarNow(docId, duplicate=false) {
   productEditBaseline=duplicate ? null : productFingerprint(stored);
   const inventory = duplicate ? {} : _productInventoryById.get(docId) || {};
   pendingProductEditorSave = null;
-  productEditorialForm(p);
+  productEditorialForm(p, !duplicate && !roleCanDo('productos', 'activarDesactivar'));
   renderProductStatistics(duplicate?'':docId);
   productPrivateBaseline = Object.fromEntries(['costUnit','purchased','stockMinimum','internalNotes'].map(key=>[key,inventory[key] ?? (key==='internalNotes'?'':null)]));
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
