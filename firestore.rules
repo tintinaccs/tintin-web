@@ -1299,17 +1299,19 @@ service cloud.firestore {
     // reposición que activa al haber stock (o desactiva al quedar en 0)
     // sigue permitida con 'editar'. Lo barato va primero por el límite de
     // 1000 expresiones por solicitud.
+    // Visibilidad pública efectiva de un documento de producto (mismo
+    // criterio que la lectura pública de /products).
+    function productDataPublic(d) {
+      return d.get('active', true) != false &&
+        d.get('publicationStatus', 'active') == 'active';
+    }
+
     function productVisibilityChangeAllowed() {
       return (
           request.resource.data.get('active', true) == resource.data.get('active', true) &&
           request.resource.data.get('publicationStatus', 'active') == resource.data.get('publicationStatus', 'active')
         ) ||
-        (
-          (request.resource.data.get('active', true) != false &&
-            request.resource.data.get('publicationStatus', 'active') == 'active') ==
-          (resource.data.get('active', true) != false &&
-            resource.data.get('publicationStatus', 'active') == 'active')
-        ) ||
+        productDataPublic(request.resource.data) == productDataPublic(resource.data) ||
         (
           request.resource.data.get('publicationStatus', 'active') == resource.data.get('publicationStatus', 'active') &&
           request.resource.data.stock is number &&
