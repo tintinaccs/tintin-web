@@ -601,10 +601,10 @@
         "scripts/update_kev.py": "5729840df137cfc42e09195d82e0450554cecf9ecacae305ee66084891dd16b5",
         "scripts/validate_feed.py": "ef04581df591c792566119b43ab3ca0e8700eaa3cdb552f953f99ba06cc84848"
       },
-      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root.",
+      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root. allowed-tools narrowed (removed unquoted python3 and git -C * wildcards).",
       "installedSha256": {
         "LICENSE.upstream": "8c73de0238b4682d88b5a0e1267a3b9aa0567a05b7f5bf206157cc6e8b3a122c",
-        "SKILL.md": "4c943312397b9c5cee59c6d6b3c561864d97404c748cf1e53070d50d333a5b25",
+        "SKILL.md": "ecc07eaec871654a868b607806077cab3d52501348ab259e9f038e7417a998eb",
         "feed/2026-10.json": "4f0f179982aa396bb8147458039c1ef7b8015feb0f559fcecf61ca4cf6e20c88",
         "feed/README.md": "45586a0b2da4f7ed0b1f3b27d9d4ff90c13659e88c2037fdd80cac0c11dfecc3",
         "feed/schema.json": "33c98cfd0f263c7546e75a4f872aa86ce2f6b255a2cb7acb0349db1f5932bca5",
