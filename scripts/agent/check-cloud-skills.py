@@ -69,7 +69,7 @@ for prefix in PREFIXES:
     root = ROOT / prefix
     for file in root.rglob("*"):
         imported = file.relative_to(root).parts[0]
-        if file.is_file() and (imported in {"impeccable", "taste-frontend"} or imported.startswith("emil-")):
+        if file.is_file() and (imported in {"impeccable", "taste-frontend", "pya", "build-design"} or imported.startswith(("emil-", "better-"))):
             mirror = ROOT / PREFIXES[1 if prefix == PREFIXES[0] else 0] / file.relative_to(root)
             if not mirror.is_file() or mirror.read_bytes() != file.read_bytes():
                 errors.append(f"Missing or mismatched mirrored resource: {file.relative_to(ROOT)}")
@@ -93,6 +93,17 @@ for item in lock["imports"]:
             errors.append(f"Unexpected upstream resource modification: {item['folder']}/{relative}")
     if "LICENSE.upstream" not in item["installedSha256"]:
         errors.append(f"Missing upstream license: {item['folder']}")
+agents_lock = lock.get("agents")
+if agents_lock:
+    if len(agents_lock["revision"]) != 40:
+        errors.append("Unpinned PYA agents")
+    agents_dir = ROOT / agents_lock["folder"]
+    if not (agents_dir / agents_lock["license"]).is_file():
+        errors.append("Missing PYA agents license")
+    for name, expected_hash in agents_lock["sha256"].items():
+        file = agents_dir / name
+        if not file.is_file() or hashlib.sha256(file.read_bytes()).hexdigest() != expected_hash:
+            errors.append(f"PYA agent integrity mismatch: {name}")
 checks = [
     ".agents/skills/taste-frontend/scripts/draw.mjs",
     ".claude/skills/taste-frontend/references/copy.md",

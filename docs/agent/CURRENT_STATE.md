@@ -1,3 +1,10 @@
+## 2026-11-08 — Skills de interfaz (Jakub Krehel) y seguridad (PYA) instaladas — Claude Code
+
+- Instaladas en `.claude/skills/` y `.agents/skills/` (espejo): better-interface, better-ui, better-typography, better-colors, better-accessibility, better-layout, better-writing, build-design (jakubkrehel/skills @157da62) y pya (AgriciDaniel/pya @416c17f), con LICENSE.upstream y nota de integración Tintín. Agentes PYA en `.claude/agents/` (10 + licencia).
+- Procedencia y hashes en `docs/agent/design-skills-lock.json` (sección `agents` nueva); `scripts/agent/check-cloud-skills.py` valida espejo e integridad de agentes. PASS_LOCAL: 72 Skills por cliente; prueba negativa (archivo alterado) falla como se espera.
+- No importados: install.sh/uninstall.sh/Makefile de PYA; scripts PYA solo offline (sin `--online`/`update_kev.py` salvo pedido explícito). Starwire es lista de recursos, no Skill.
+- PYA en curso (solo lectura): inventory OK (2777 archivos), feed_match 721 paquetes, 0 maliciosos, 0 KEV (10 coincidencias HIGH son ejemplos del propio PYA: falsos positivos). Revisión de especialistas pendiente de resultado.
+
 ## 2026-11-08 — Fase 5 (emulador y sync panel↔tienda) y auditoría de rendimiento — Claude Code
 
 - PASS_LOCAL emulador Firestore (`npm run test:rules-critical`, proyecto demo, sin datos reales): 21/21 tests y 49 verificaciones de auditoría; exit 0.
