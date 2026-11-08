@@ -38,7 +38,7 @@ const baseConnectOrigins = [
   'https://*.analytics.google.com',
   'https://*.paypal.com'
 ];
-const globalScriptOrigins = [...baseScriptOrigins, 'https://unpkg.com', 'https://*.paypal.com'];
+const globalScriptOrigins = [...baseScriptOrigins, 'https://*.paypal.com'];
 const frameOrigins = [
   publicOrigin,
   'https://*.google.com',
@@ -135,7 +135,7 @@ function staticFallbackPolicy() {
     "default-src 'self'",
     `script-src 'self'${fallbackInlineHashes.length ? ` ${fallbackInlineHashes.join(' ')}` : ''} ${globalScriptOrigins.join(' ')}`,
     "script-src-attr 'none'",
-    "style-src 'self' 'unsafe-inline' https://unpkg.com",
+    "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     `connect-src 'self' ${baseConnectOrigins.join(' ')}`,
@@ -155,7 +155,7 @@ function publicPolicy() {
     "default-src 'self'",
     `script-src 'self'${globalInlineHashes.length ? ` ${globalInlineHashes.join(' ')}` : ''} ${globalScriptOrigins.join(' ')}`,
     scriptAttrDirective,
-    "style-src 'self' 'unsafe-inline' https://unpkg.com",
+    "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     `connect-src 'self' ${baseConnectOrigins.join(' ')}`,

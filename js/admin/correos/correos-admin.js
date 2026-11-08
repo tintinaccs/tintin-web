@@ -318,7 +318,7 @@ async function logEmailSend_(entry) {
   const sentAtSnapshot = new Date();
   const local = {
     id: 'local-' + Date.now() + Math.random(), sentAt: { toDate: () => sentAtSnapshot },
-    isAutomatic: !!entry.isAutomatic, sentBy: getCurrentUser()?.email || '', error: entry.error || '',
+    isAutomatic: !!entry.isAutomatic, sentBy: getCurrentUser()?.email || '', error: String(entry.error || '').slice(0, 500),
     orderId: entry.orderId || '', campaignId: entry.campaignId || '', templateKey: entry.templateKey || '',
     // 'pedido' (correo real de un pedido, ej. estado automático) / 'prueba'
     // (Correos de prueba) / 'promo' (Promociones) — separa pedidos reales
