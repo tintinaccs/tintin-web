@@ -1,3 +1,12 @@
+## 2026-11-08 — Fase 5 (emulador y sync panel↔tienda) y auditoría de rendimiento — Claude Code
+
+- PASS_LOCAL emulador Firestore (`npm run test:rules-critical`, proyecto demo, sin datos reales): 21/21 tests y 49 verificaciones de auditoría; exit 0.
+- PASS_LOCAL sync: `audit:admin-sync` 80/80, `test:products-sync` 244/244, `audit:sync-contracts` OK.
+- Rendimiento: `audit:performance` 0 fallos críticos (WARN: CSS inicio 363 KB y JS directo 298 KB sin comprimir); `audit:performance-regressions` 29/29.
+- `audit:premium-performance` fallaba por comprobación obsoleta: buscaba el hero `hero-editorial/backdrop.webp|png`, reemplazado en #1330 por `hero-reference` (maletín PNG). Se actualiza la comprobación al hero vigente (precarga PNG responsive, fondo SVG, marca); 16/16 OK y falla si se quita la precarga.
+- PASS_PRODUCCIÓN (solo lectura, curl): CSS/JS/imágenes versionados `max-age=31536000, immutable`, `cf-cache-status: HIT`; HTML `no-cache`.
+- Hero: `suitcase.png` 1,7 MB / `-960` 1,5 MB / `-640` 666 KB. Recompresión sin pérdida (oxipng+zopfli) solo ahorra ~4 %: no se aplica. WebP q90 = 255 KB pero cambia píxeles visibles (2,7 % > 12/255, máx. 60): requiere aprobación visual de la titular, que aprobó PNG por fidelidad (ver `assets-tintin/images/home/hero-reference/README.md`). No se cambia.
+
 ## 2026-11-08 — Tarjetas «Agregar al carrito» y sugerencias de checkout (#1361, #1362, #1363) — Claude Code
 
 - #1361: las tarjetas muestran «Ver» y «Agregar al carrito»; con variantes abre la hoja de confirmación de opciones.
