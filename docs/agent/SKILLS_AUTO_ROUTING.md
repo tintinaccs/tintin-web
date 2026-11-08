@@ -85,3 +85,17 @@ Se incorporan Impeccable, Taste (ya existente, verificado sin duplicarlo) y los 
 Los demás Skills de Emil quedan disponibles por coincidencia semántica. Los de Swift, Expo y Apple solo corresponden a trabajos de esas plataformas; `ask-sonner` requiere una consulta pertinente. `break-ui` solo se usa sobre entornos locales de prueba. Se conservan las marcas upstream `disable-model-invocation` de revisión, prototipado y selección de librerías: no autorizan instalaciones ni cambios por iniciativa propia. Cuando el usuario pide expresamente una revisión de animaciones puede leerse su guía manualmente.
 
 La selección automática significa que cada agente consulta las reglas y lee el Skill relevante; no significa ejecutar sus scripts. Impeccable admite lectura manual de PRODUCT.md, DESIGN.md y componentes cuando su CLI de contexto no se ejecuta. Informar esa limitación. El lanzamiento nativo del cliente y las pruebas en hardware físico se verifican por separado.
+
+## Interfaz (Jakub Krehel) y seguridad (PYA)
+
+| Necesidad concreta | Selección |
+| --- | --- |
+| Revisión integral de una pantalla o flujo (accesibilidad, layout, texto, tipografía, color, pulido) | `better-interface` (orquesta a los demás; no cargar todos a la vez) |
+| Foco, teclado, ARIA, formularios, zoom, WCAG 2.2 | `better-accessibility` (con `tintin-accessibility`) |
+| Agrupación, alineación, responsive | `better-layout` (con `tintin-responsive-a11y`) |
+| Escala tipográfica, saltos de línea, truncado | `better-typography` |
+| Contraste, tokens de color | `better-colors`; no renombrar tokens canónicos de Tintín |
+| Radios, sombras, íconos, microanimación | `better-ui` |
+| Microcopy, errores, estados vacíos | `better-writing` (con `tintin-brand-copy`; voz Tintín prevalece) |
+| Construir UI desde Figma o una imagen | `build-design` |
+| Auditoría de seguridad, secretos, dependencias, CI, agentes/MCP | `pya` (con `tintin-security-hardening`); modo solo lectura y offline salvo pedido expreso |

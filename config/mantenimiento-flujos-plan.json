@@ -1,35 +1,23 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "1de129ae703f84d48fe0fe08519c2f3bf77d225e",
-  "reason": "Checkout: sugerencias con variantes abren la hoja de opciones en lugar de enviar al producto",
+  "baseCommit": "c53f0dbf75564396883b734c33cc3c118ffcdf0f",
+  "reason": "PYA: acciones de Google fijadas por SHA y permisos OIDC/issues limitados por job",
   "files": [
     {
-      "path": "_headers",
-      "oldHash": "e1a99fad10c7a8b760a9a8c746feae177257b9354c150772dc585614ae519fd5",
-      "newHash": "4a350405e74070abc2394f8af1a835e696a99dcd194e47858e6ec212205deda0"
+      "path": ".github/workflows/backup-firestore.yml",
+      "oldHash": "95be58b2c9fa36e23a527356ba32475e1271780909005de9ed2530540fa6e75c",
+      "newHash": "30825e5894b3f74bb02a70c426676a0ed3fbb3be5b60c6f19f8f80d68a289382"
     },
     {
-      "path": "checkout.html",
-      "oldHash": "7a3d002f6248bc836b031ca670cc7274d4cbdb2bc5e99d7619a0a39aeb01ec33",
-      "newHash": "5de7e0ad095ced1acbe64fd1be0733fec1e4c3c33369630e4c5e8643a1426714"
+      "path": ".github/workflows/desplegar-reglas-firestore.yml",
+      "oldHash": "ad0857c998d49d6942db2485c4d5f9204a8fa499bee0d38cedcabf87dd015d9c",
+      "newHash": "3da1cf183edafa3f84dcb4909136acfa97cbf9bbefa939380c96ba0e74e92303"
     },
     {
-      "path": "config/csp-runtime.js",
-      "oldHash": "450d3da600065c148e88e9bb4bf0ccc43f33b2599a42b37e68f3d9c747333c60",
-      "newHash": "541d350899dd652d397e46cf2e506cb6e9b9d34d0faefe166ccdde0ef2307823"
-    },
-    {
-      "path": "config/csp-runtime.json",
-      "oldHash": "2adecf464cdaaf78cb0c44323a857a33aa045335627074a1e7081c76ed2b195b",
-      "newHash": "b8983b23c259bdf823291517c49351340d59e4bdb5d55ba88326bd1ef347ef46"
+      "path": ".github/workflows/monitor-produccion.yml",
+      "oldHash": "21cee60e078295e35d08ed7cea59e6ec8aec24087a68f556c516eee6c037de29",
+      "newHash": "78b201f9658e7bdfe1d8990844130f189f62d427d191dd9b735eded5225ba6e9"
     }
   ],
-  "affectedRecords": [
-    "cf-functions",
-    "cf-functions__apis-internas__20",
-    "cf-functions__csp__29",
-    "cf-functions__reglas-firestore__28",
-    "cf-pages__cf-functions__19",
-    "csp"
-  ]
+  "affectedRecords": []
 }
