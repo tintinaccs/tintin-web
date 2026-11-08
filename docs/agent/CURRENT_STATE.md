@@ -1,3 +1,12 @@
+## 2026-11-08 — Tarjetas «Agregar al carrito» y sugerencias de checkout (#1361, #1362, #1363) — Claude Code
+
+- #1361: las tarjetas muestran «Ver» y «Agregar al carrito»; con variantes abre la hoja de confirmación de opciones.
+- #1362 (1de129a): la prueba `tests/catalog/product-small-controls.test.mjs` esperaba favoritos ya retirados; ahora verifica el nombre escapado en la línea del carrito. PASS_LOCAL 6/6 y 140/140; CI 13 checks SUCCESS.
+- #1363 (b1ab94f): en `checkout.html` las sugerencias con variantes usan `data-card-options` y abren la misma hoja (`window.openCardAddSheet`); si el producto no está en `window.PRODUCTS` se mantiene el enlace a la ficha. CSP regenerado y plan protegido creado con `scripts/preparar-mantenimiento-flujos.mjs` (4 archivos). PASS_LOCAL 315/315 (cart, catalog, flow-connections) y ci:preflight; CI 15 checks SUCCESS; en main pasaron «CI Tintin — contrato único», «Push on main» y «Operación — salud de producción».
+- PASS_PRODUCCIÓN (solo lectura): `https://tintinaccs.com/checkout` sirve `data-card-options` (2 coincidencias). NOT_VERIFIED: clic real en navegador de producción.
+- Dependencias: `npm audit --omit=dev` 0 vulnerabilidades; 8 moderadas solo de desarrollo, transitivas de firebase-tools (emuladores); no se fuerzan overrides para no romper los emuladores.
+- Pendiente externo: espejo de respaldos en Drive requiere cliente OAuth y secretos `DRIVE_CLIENT_ID`/`DRIVE_CLIENT_SECRET`/`DRIVE_REFRESH_TOKEN` cargados por la titular.
+
 ## 2026-11-07 — Protected flows: renovación de huellas y retiro explícito de archivos eliminados (base a18318c7)
 
 - Causa: el job «Protected flows» de main falla porque varios PR cambiaron archivos protegidos sin plan de mantenimiento (el job se omite en PR y «Protected flow maintenance» no es check obligatorio de la rama) y #1355 eliminó dos archivos protegidos (favoritos) que el mecanismo no podía representar.
