@@ -303,8 +303,9 @@ if (!window.TintinImagesPhase5Booted) {
       tabletLandscapeSource.dataset.ttHeroDevice = 'tablet-landscape';
       picture.insertBefore(tabletLandscapeSource, tabletSource);
     }
-    tabletLandscapeSource.media = '(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)';
-    tabletSource.media = '(max-width: 1120px)';
+    const landscapeMedia = '(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)';
+    if (tabletLandscapeSource.media !== landscapeMedia) tabletLandscapeSource.media = landscapeMedia;
+    if (tabletSource.media !== '(max-width: 1120px)') tabletSource.media = '(max-width: 1120px)';
     const sourceDevice = source => source.media?.includes('767') ? 'mobile'
       : source.media?.includes('landscape') ? 'tabletLandscape'
       : source.media?.includes('1121') ? 'desktop'
@@ -319,12 +320,17 @@ if (!window.TintinImagesPhase5Booted) {
         const originalType = source.dataset.ttHeroOriginalType;
         // Un WebP disponible sigue siendo la URL principal. PNG es respaldo
         // para navegadores sin WebP o para un error real de carga.
-        source.srcset = custom ? absolute(custom) : absolute(originalType === 'image/webp'
+        const nextSrc = custom ? absolute(custom) : absolute(originalType === 'image/webp'
           ? defaults[device].replace('.png' + HERO_ART_QUERY, '.webp?v=editorial-1') : defaults[device]);
-        if (custom || originalType === 'fallback') source.removeAttribute('type');
-        else source.type = originalType;
+        // La confirmación puede coincidir con el HTML ya publicado. Reescribir
+        // atributos de <picture>, aun con la misma URL, reinicia su selección
+        // de recurso en algunos navegadores y vuelve a pedir el arte.
+        if (absolute(source.srcset) !== nextSrc) source.srcset = nextSrc;
+        if (custom || originalType === 'fallback') {
+          if (source.hasAttribute('type')) source.removeAttribute('type');
+        } else if (source.type !== originalType) source.type = originalType;
       }
-      image.src = desktop;
+      if (image.src !== desktop) image.src = desktop;
       delete image.dataset.ttHeroFallbackApplied;
     };
     const activeDevice = window.matchMedia('(max-width: 767px)').matches ? 'mobile'
