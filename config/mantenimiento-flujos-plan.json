@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
   "baseCommit": "8b5852bbf63de19b40688b385ccba138d5952af5",
-  "reason": "Regenerar huellas y manifiestos de la actualización Dependabot PR 1369 tras verificar el build canónico.",
+  "reason": "Reutilizar las cuatro actualizaciones Dependabot con huellas exactas y manifiestos reproducibles, preservando la política de integración protegida.",
   "files": [
     {
       "path": "package-lock.json",
       "oldHash": "d93f6d6c2ecfc1e320d025ea3d4c0f00c1d2e4cf3b565f5fa8c1844fb0df964f",
-      "newHash": "78ab921f995678b1c020d10d74dd344ac853ee52ecee393fb628444482d1e67a"
+      "newHash": "01b332579e32cd857e506ac65130083e728437b3b44db2e7c22fdd54581cec78"
     },
     {
       "path": "package.json",
       "oldHash": "1765d7f6e9c7fdd6d669cfd1878aaec898fa82f69b5c835246f45e1963d793e0",
-      "newHash": "ce465d31629b673e7a622ec5913659bc6a9cdbe1156a3a27cc262ff63ff866eb"
+      "newHash": "16d7500fe12bb11797bfcedf916e74e901834d4cf09f950e2e2ff9732eb8df73"
     }
   ],
   "affectedRecords": []
