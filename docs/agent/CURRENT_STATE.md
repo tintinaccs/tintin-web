@@ -1,3 +1,9 @@
+## Reparación local de CI PR1369 — Codex /root — 2026-11-10
+
+Base main 8b5852bbf63de19b40688b385ccba138d5952af5. El intento 1 falla porque Dependabot cambió package.json/package-lock.json sin regenerar diagnostic-manifest.json/site-version.json ni sus huellas protegidas. Build canónico con dependencias bloqueadas reproduce deriva de ambos manifiestos. Plan/huellas renovados mediante preparar-mantenimiento-flujos.mjs; diagnóstico regenerado después de esta nota. Sin alterar versiones solicitadas, pruebas, reglas, workflows ni autores permitidos. Validación: consultar /tmp/tintin-deps-1369.log y el seguimiento en worktree principal. No heredar PASS de otra rama.
+
+BLOCKED: validateAutomaticPullRequest del main confiable rechaza bots; Protected flow maintenance es obligatorio y faltan los Analyze obligatorios. Corrección preparada en rama local codex/repair-dependabot-1369; no publicada y sin nuevo run. No duplicar PR ni ampliar autores/eludir checks. La integración requiere una vía confiable autorizada para este candidato.
+
 ## 2026-11-08 — Panel admin lento con App Check fallido y feed de Instagram que no volvía — Claude Code
 
 - Admin: si App Check ya había informado fallo (`TintinAppCheckStatus = 'error'`), `resolveAdminAppCheck` esperaba 12 s un evento `tintin:app-check-ready` que no se repite antes del reintento explícito; como la compuerta se limpia ante un negativo, cada módulo volvía a pagar esa espera. Ahora reintenta `getToken` de inmediato; sin token sigue devolviendo false (seguridad igual). Test nuevo en `tests/auth/admin-readiness-gate.test.mjs` (falla con el código anterior).
