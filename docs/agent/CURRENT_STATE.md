@@ -1,3 +1,15 @@
+## 2026-11-11 — Zoom público, resultado OTP y transferencia (Codex / GPT-6)
+
+Alcance: tienda.js/lightbox, estilos públicos de producto/login, handler OTP en login.html y presentación canónica de métodos de pago. Sin cambios en autenticación del servidor, datos bancarios, importes, pedidos, reglas o integraciones reales. Skills leídos y aplicados: tintin-design-quality y tintin-responsive-a11y, además de las instrucciones de runtime ya consultadas.
+
+- Zoom: lienzo ajustado al viewport, 100–400%, arrastre limitado, rueda/doble clic y pinch de dos dedos, restablecer, navegación táctil visible y retorno del foco al cerrar. Se retira el swipe que competía con arrastrar la imagen.
+- OTP: código confirmado muestra check verde antes de continuar; código incorrecto muestra X roja; formato incompleto y otros fallos muestran exclamación ámbar con texto. Respeta movimiento reducido; no simula aceptación en fallos. Pruebas con autenticación simulada, sin crear cuentas ni enviar correos.
+- Transferencia: banco y campos separados visualmente, alias destacado y acción Copiar alias reutilizando la lógica de copiado existente. Sin recrear el logo de Banco Familiar ni importar su interfaz.
+- PASS_LOCAL: test:fast (104 Node + 6 Playwright import), regresiones de copiado/observador OTP (9), comprobaciones Chromium de zoom en seis tamaños y pinch, estados OTP aislados, datos bancarios largos y galería sticky. Evidencia visual local en /tmp/tintin-product-zoom.png y /tmp/tintin-otp-*.png; no son archivos publicados.
+- Derivados CSS, CSP, diagnóstico y URLs inmutables regenerados con las autoridades del repositorio. Los cambios de tags en módulos compartidos son propagación de dependencias.
+- NOT_VERIFIED: acceso OTP real, dispositivos físicos, Safari/WebKit y producción.
+- BLOCKED: GitHub API devuelve Forbidden al consultar repos/tintinaccs/tintin-web; lectura Git HTTPS funciona. No se abrió PR, no se fusionó ni desplegó. Requiere acceso autorizado a api.github.com para completar el seguimiento GitHub.
+
 ## Reparación del nuevo candidato parse58.1.1 — Codex /root — 2026-11-10T22:04:31+00:00
 
 PR1372 avanzó durante el seguimiento de1373: ahora propone8.1.1 sobre main704b69350a242887a9871cfc39ea909e2478e3f4, HEADa3a7d958dd6759ef05d35945cfe44e7ccd70b759. No cerrar ni confundir con el antiguo8.1.0 ya integrado. CI42909273986/1 falla en preflight130155318307 al rechazar diagnostic-manifest.json/site-version.json trasbuild;5grupos omitidos por needs yProtectedflowsSKIPPED previsto enPR. CodeQLneutral no equivale aAnalyzeobligatorio; Cloudflarefalló, logexternonoaccesible. Son cambios nuevos de versión/SHA, no un rerun de la reparación anterior.

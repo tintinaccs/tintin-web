@@ -777,3 +777,21 @@ body.tt-product-maintenance .tt-product-wa-link:focus-visible { outline:2px soli
   body.tt-product-maintenance #product-variants { margin-top:20px; padding-top:18px; }
   body.tt-product-maintenance .tt-product-info-panel { padding:clamp(20px,5vw,28px) !important; }
 }
+
+/* El lienzo cabe entre los controles incluso en horizontal; la foto parte completa. */
+body.tt-product-maintenance .tt-lightbox { padding:72px 54px 80px; }
+body.tt-product-maintenance .tt-lightbox-stage { width:min(100%,1180px); height:100%; min-height:0; }
+body.tt-product-maintenance .tt-lightbox-img { display:block; width:100%; height:100%; max-width:100%; max-height:100%; object-fit:contain; transform-origin:center; transition:none; }
+body.tt-product-maintenance .tt-lightbox-zoom { position:absolute; top:max(12px,env(safe-area-inset-top)); left:50%; transform:translateX(-50%); display:flex; gap:6px; }
+body.tt-product-maintenance .tt-lightbox-zoom button { min-height:44px; min-width:44px; border-radius:999px; padding:8px 12px; font:inherit; }
+body.tt-product-maintenance .tt-lightbox button:disabled { opacity:.4; cursor:default; }
+body.tt-product-maintenance .tt-lightbox-help { position:absolute; bottom:max(30px,env(safe-area-inset-bottom)); left:16px; right:16px; margin:0; color:#fff; text-align:center; font-size:12px; }
+body.tt-product-maintenance .tt-lightbox-counter { bottom:10px; }
+@media(max-width:767px) {
+  body.tt-product-maintenance .tt-lightbox { padding:72px 8px 88px; }
+  body.tt-product-maintenance .tt-lightbox-nav { display:flex; top:auto; bottom:8px; width:44px; height:44px; }
+  body.tt-product-maintenance .tt-lightbox-help { bottom:58px; }
+}
+
+body.tt-product-maintenance .tt-lightbox #lb-reset { min-width:76px; width:auto; white-space:nowrap; }
+body.tt-product-maintenance .tt-lightbox .tt-lightbox-help { color:#fff!important; }
