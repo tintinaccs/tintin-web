@@ -2,7 +2,7 @@
 
 Fallo confirmado: run42935537031 intento1, job130246845126, SHA cc336fa94f5e839ced92610821632ae72f9e4afc. Dos pruebas de single-interactive-flow.test.mjs ejecutaban el handler OTP con una fixture anterior al feedback visual: faltaba showOtpFeedback y el temporizador de confirmación. Se actualiza únicamente la fixture y sus expectativas: éxito visible antes de continuar, ocultación del loader y una sola finalización, preservando descarte de restauración anterior. No se cambia aplicación ni se elimina ninguna aserción de sesión.
 
-PASS_LOCAL:20 pruebas dirigidas;240 pruebas de login/perfil/bootstrap y34 pruebas Chromium del comando audit:login-profile. La sección de emuladores continúa en ejecución. GitHub API funciona tras publicar el entorno; el bloqueo de acceso anterior queda resuelto. Pendiente resultado terminal de CI del nuevo SHA; no fusionar ni desplegar.
+PASS_LOCAL:20 pruebas dirigidas;240 pruebas de login/perfil/bootstrap y34 pruebas Chromium del comando audit:login-profile. La sección runtime amplia se interrumpió después de la validación dirigida; no se declara aprobada la suite completa de528 casos localmente. Los checks completos se siguen en GitHub. GitHub API funciona tras publicar el entorno; el bloqueo de acceso anterior queda resuelto. El intento1 de run42936981984 detectó deriva de diagnostic-manifest.json y site-version.json tras editar la fixture. Se regeneran ambos con build:pages y se comprueba compilación estable. Pendiente resultado terminal de CI del nuevo SHA; no fusionar ni desplegar.
 
 Skill consultado: gh-fix-ci; autorización de reparación ya presente en las instrucciones del repositorio y el seguimiento solicitado por la titular. Sin cambios de permisos ni debilitamiento de comprobaciones.
 
