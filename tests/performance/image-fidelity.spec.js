@@ -91,11 +91,11 @@ test('imágenes globales: prioridad explícita y lecturas agrupadas sin promover
   expect(await page.evaluate(()=>window.readsAfterWrite)).toBe(0);
 });
 
-for(const [width,height,variant] of [[320,568,'suitcase-640.png'],[390,844,'suitcase-960.png'],[540,900,'suitcase.png'],[820,1180,'suitcase.png'],[1024,768,'suitcase-960.png'],[1440,900,'suitcase.png']])test(`precarga y picture comparten un solo maletín Retina ${width}`,async({page})=>{
+for(const [width,height,variant] of [[320,568,'suitcase-640.webp'],[390,844,'suitcase-960.webp'],[540,900,'suitcase.webp'],[820,1180,'suitcase.webp'],[1024,768,'suitcase-960.webp'],[1440,900,'suitcase.webp']])test(`precarga y picture comparten un solo maletín Retina ${width}`,async({page})=>{
   const fs=require('node:fs'),path=require('node:path');
   const {removeFixtureScripts}=require('../../scripts/lib/html-layout-fixture.js');
   const html=removeFixtureScripts(fs.readFileSync(path.resolve(__dirname,'../../index.html'),'utf8'),{removeModulePreloads:true});
-  const requests=[];page.on('request',request=>{const url=new URL(request.url());if(/\/hero-reference\/suitcase[^/]*\.png$/.test(url.pathname))requests.push(url.href);});
+  const requests=[];page.on('request',request=>{const url=new URL(request.url());if(/\/hero-reference\/suitcase[^/]*\.(?:png|webp)$/.test(url.pathname))requests.push(url.href);});
   await page.setViewportSize({width,height});
   await page.route('**/__hero-delivery',route=>route.fulfill({contentType:'text/html',body:html}));
   await page.goto('/__hero-delivery');
@@ -103,7 +103,7 @@ for(const [width,height,variant] of [[320,568,'suitcase-640.png'],[390,844,'suit
   await expect(page.locator('#tt-hero-img')).toHaveJSProperty('currentSrc',new URL('/assets-tintin/images/home/hero-reference/backdrop.svg?v=suitcase-1',page.url()).href);
   const suitcase=page.locator('.tt-hero-suitcase img');
   await expect.poll(()=>suitcase.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
-  const expected=new URL('/assets-tintin/images/home/hero-reference/'+variant+'?v=suitcase-1',page.url()).href;
+  const expected=new URL('/assets-tintin/images/home/hero-reference/'+variant+'?v=suitcase-2',page.url()).href;
   await expect(suitcase).toHaveJSProperty('currentSrc',expected);
   expect(requests).toEqual([expected]);
   // La portada ya decodificada se revela en un frame, sin una segunda espera

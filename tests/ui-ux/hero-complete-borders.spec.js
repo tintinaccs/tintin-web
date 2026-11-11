@@ -40,7 +40,7 @@ for(const [width,height] of [[844,320],[844,390],[1306,630],[320,568],[375,812],
   });
 }
 test('recurso original del maletín disponible y decodificable antes de publicar',async({page})=>{
-  for(const name of ['suitcase.png','suitcase-960.png','suitcase-640.png']) expect(fs.existsSync(path.join(root,'assets-tintin/images/home/hero-reference',name)),`Falta el archivo original: ${name}`).toBe(true);
+  for(const name of ['suitcase.png','suitcase-960.png','suitcase-640.png','suitcase.webp','suitcase-960.webp','suitcase-640.webp']) expect(fs.existsSync(path.join(root,'assets-tintin/images/home/hero-reference',name)),`Falta el archivo original: ${name}`).toBe(true);
   await open(page);await expect.poll(()=>page.locator('.tt-hero-suitcase img').evaluate(e=>e.complete&&e.naturalWidth>0)).toBe(true);
   const equality=await page.evaluate(async()=>{
     const original=new Image();original.src='/assets-tintin/images/home/hero-reference/suitcase-original.png';await original.decode();
@@ -49,6 +49,17 @@ test('recurso original del maletín disponible y decodificable antes de publicar
     return {source:await digest(original,true),webp:await digest(optimized,false)};
   });
   expect(equality.webp).toBe(equality.source);
+  const webpFidelity=await page.evaluate(async()=>{
+    const out=[];const dir='/assets-tintin/images/home/hero-reference/';
+    const pixels=async src=>{const image=new Image();image.src=src;await image.decode();const canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;const ctx=canvas.getContext('2d');ctx.drawImage(image,0,0);return {w:image.naturalWidth,h:image.naturalHeight,data:ctx.getImageData(0,0,image.naturalWidth,image.naturalHeight).data}};
+    for(const name of ['suitcase','suitcase-960','suitcase-640']){
+      const png=await pixels(dir+name+'.png'),webp=await pixels(dir+name+'.webp?v=suitcase-2');let alpha=0,visible=0;
+      for(let k=0;k<png.data.length;k+=4){if(png.data[k+3]!==webp.data[k+3])alpha++;for(let c=0;c<3;c++)visible=Math.max(visible,Math.abs(png.data[k+c]*png.data[k+3]-webp.data[k+c]*webp.data[k+3])/255);}
+      out.push({name,size:[png.w,png.h,webp.w,webp.h],alpha,visible});
+    }
+    return out;
+  });
+  for(const item of webpFidelity){expect(item.size[0],item.name).toBe(item.size[2]);expect(item.size[1],item.name).toBe(item.size[3]);expect(item.alpha,`${item.name}: transparencia idéntica`).toBe(0);expect(item.visible,`${item.name}: sin diferencia visible (solo redondeo ≤2/255)`).toBeLessThanOrEqual(2);}
 
 });
 test('movimiento de entrada una vez, sin parallax y cancelable por preferencia',async({page})=>{

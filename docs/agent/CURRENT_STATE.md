@@ -1,3 +1,11 @@
+## 2026-11-11 — Portada en WebP sin pérdida y lockfile sin alerta de dependencias (base 9d46ee4)
+
+Claude Code. Rama claude/tintin-accesorios-optimization-xyl6zm.
+- Hero de inicio: se agregan `suitcase{,-960,-640}.webp` sin pérdida generados de los PNG aprobados (~31 % menos: 1,79 MB→1,22 MB escritorio; 666 KB→455 KB móvil). `index.html` precarga WebP y conserva `<source>` PNG + `<img>` PNG de respaldo. Transparencia idéntica; color máx. 2/255 (comprobado en `hero-complete-borders.spec.js`). No se usó WebP con pérdida (diferencias hasta 83/255).
+- `package-lock.json`: se retira el `glob` 10.5.0 anidado obsoleto bajo `rimraf` (el override `glob@>=9 <14.0.2` ya exigía 14.0.3). `npm audit`: 0 vulnerabilidades (antes 8 moderadas).
+- PASS_LOCAL: Playwright hero-complete-borders + home-render-performance + image-fidelity 38/38; hero-imagen-confirmada 2/2; auditar-performance-premium 19 OK; auditar-imagenes-fase-5 OK; cache-versioning y protección de flujos OK.
+- NOT_VERIFIED: producción hasta el despliegue del SHA final; primera carga del panel admin (~6,5 s) no modificada.
+
 ## PR1376 actualizada con main concurrente — 2026-11-11T02:15Z
 
 El mantenedor existente integró PR1375 HEADc6e450f821f0ffb0b95d770ee89982defdfef49c en main00456261d94b26a77b0b39eb3ecdf664d9c95466. CI42941471124/1, CodeQL42941465065/1 y ambos controles confiables aprobados. Su texto pedía revisión sin auto-merge; ese texto no es un gate técnico del mantenedor. El monitor no modificó ni integró manualmente esa PR. Sus cambios y notas se preservan completos al incorporar main mediante merge normal en la rama propia1376. No revertir la función ni convertir su revisión en una aprobación implícita del monitor.
