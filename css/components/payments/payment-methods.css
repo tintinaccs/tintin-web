@@ -343,3 +343,16 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
   .tt-payment-admin-actions { grid-column: auto; }
   .tt-payment-admin-editor { padding: 12px; }
 }
+
+/* Datos bancarios: nombre de banco, campos identificables y alias destacado. */
+.ck-payment-runtime-details .ck-payment-runtime-detail { grid-template-columns:minmax(0,1fr); gap:12px; padding:18px 0; }
+.ck-payment-runtime-detail > strong { font-size:15px; letter-spacing:.01em; }
+.ck-bank-fields { display:grid; gap:12px; }
+.ck-bank-field { display:grid; gap:4px; }
+.ck-bank-field small { font-size:12px; font-weight:500; color:var(--ck-text,var(--text)); }
+.ck-bank-field > span { font-size:15px; font-weight:600; }
+.ck-bank-field.is-alias { padding:12px; border-radius:12px; background:var(--ck-accent-soft,var(--acc-pale)); }
+.ck-bank-field.is-alias > span { font-size:18px; letter-spacing:.03em; }
+.ck-payment-runtime-value { align-items:flex-start; flex-wrap:wrap; }
+.ck-payment-runtime-value > .ck-bank-fields { flex:1 1 180px; }
+.ck-payment-copy { min-height:44px; color:var(--ck-text,var(--text)); }

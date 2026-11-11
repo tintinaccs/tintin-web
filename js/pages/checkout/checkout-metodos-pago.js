@@ -34,8 +34,18 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-copiar-20261105-1-p1106';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20261111-product-login-payment-1';
   document.head.appendChild(link);
+}
+
+function bankValueHtml(value) {
+  return String(value).split('\n').filter(line => line.trim()).map(line => {
+    const colon = line.indexOf(':');
+    if (colon < 1) return `<span class="ck-bank-data">${escapeHtml(line)}</span>`;
+    const label = line.slice(0, colon).trim();
+    const data = line.slice(colon + 1).trim();
+    return `<span class="ck-bank-field${/^alias$/i.test(label) ? ' is-alias' : ''}"><small>${escapeHtml(label)}</small><span>${escapeHtml(data)}</span></span>`;
+  }).join('');
 }
 
 function paymentDetailsHtml(method) {
@@ -46,8 +56,8 @@ function paymentDetailsHtml(method) {
     <div class="ck-payment-runtime-detail">
       <strong>${escapeHtml(detail.label || 'Dato')}</strong>
       <div class="ck-payment-runtime-value">
-        <span>${escapeHtml(detail.value)}</span>
-        <button type="button" class="ck-payment-copy" data-copy-detail="${index}" aria-label="Copiar ${escapeHtml(detail.label || 'dato')}">Copiar</button>
+        <span class="ck-bank-fields">${bankValueHtml(detail.value)}</span>
+        <button type="button" class="ck-payment-copy" data-copy-detail="${index}" aria-label="Copiar ${escapeHtml(detail.label || 'dato')}">${/^\s*alias[^:]*:\s*\S/im.test(detail.value) ? 'Copiar alias' : 'Copiar'}</button>
         <span class="tt-sr-only" role="status" data-copy-status></span>
       </div>
     </div>

@@ -40,7 +40,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261108-appcheck-fallo-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261108-appcheck-fallo-1';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261111-product-login-payment-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 
 const VERSION = 'tintin-20261102-phase03-editor-1';

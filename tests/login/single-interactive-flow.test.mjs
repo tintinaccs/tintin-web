@@ -13,7 +13,7 @@ const deferred = () => { let resolve, reject; const promise = new Promise((ok, f
 
 function fixture({ popupBlocked = true } = {}) {
   const redirect = deferred(), popup = deferred();
-  const calls = { popup: 0, redirect: 0, finish: 0, show: 0, hide: 0, reveal: 0, errors: [], texts: [], timers: [], otp: 0 };
+  const calls = { popup: 0, redirect: 0, finish: 0, show: 0, hide: 0, reveal: 0, errors: [], texts: [], timers: [], otp: 0, feedback: [] };
   const elements = new Map();
   const element = id => {
     if (!elements.has(id)) elements.set(id, { disabled: false, textContent: 'Continuar con Google', value: '123456', setAttribute() {}, removeAttribute() {} });
@@ -28,6 +28,7 @@ function fixture({ popupBlocked = true } = {}) {
     document: { getElementById: element, body: { classList: { add() {}, remove() {} } } },
     window: { setTimeout(fn, ms) { calls.timers.push({fn,ms}); }, dispatchEvent() {}, addEventListener(type,fn){calls[type]=fn;} },
     CustomEvent: class { constructor(type) { this.type = type; } },
+    showOtpFeedback(state, message) { calls.feedback.push({state, message}); },
     hideMessages() {}, showOverlay() { calls.show++; },
     hideLoginOverlay() { calls.hide++; }, revealLoginSurface() { calls.reveal++; },
     setOverlayText(value) { calls.texts.push(value); },
@@ -191,18 +192,28 @@ test('verificar correo descarta una restauración anterior todavía pendiente', 
   reload.resolve();await old;
   assert.equal(f.calls.finish,0);assert.equal(f.calls.hide,0);
   assert.equal(f.calls.reveal,0);assert.equal(f.calls.errors.length,0);
-  verification.resolve({uid:'new'});await attempt;
+  verification.resolve({uid:'new'});
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(f.calls.finish,0);
+  f.calls.timers.find(timer=>timer.ms===900).fn();
+  await attempt;
   assert.equal(f.calls.finish,1);
 });
 
-test('OTP válido finaliza una sola vez con loader, sin textos intermedios', async () => {
+test('OTP válido muestra confirmación antes de finalizar una sola vez', async () => {
   const f = fixture();
   const attempt = f.otp();
   await f.otp();
+  assert.equal(f.calls.finish, 0);
+  assert.equal(f.calls.feedback.length, 1);
+  assert.equal(f.calls.feedback[0].state, 'success');
+  assert.match(f.calls.feedback[0].message, /Código confirmado/);
+  assert.equal(f.calls.hide, 1);
+  f.calls.timers.find(timer=>timer.ms===900).fn();
   await attempt;
   assert.equal(f.calls.otp, 1);
   assert.equal(f.calls.finish, 1);
-  assert.equal(f.calls.hide, 0);
+  assert.equal(f.calls.hide, 1);
   assert.deepEqual(f.calls.texts, []);
 });
 
