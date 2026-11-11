@@ -1,3 +1,9 @@
+## Reanudación vigente — 2026-11-11T01:51Z
+
+Main sigue3f769c52. Rama propia codex/repair-codeql-fetch-fixture publicada en1e69760efaa9b14edcc45a0c82acb608a822a0bf sin PR todavía. El build repetido detectó que la nota CURRENT_STATE añadida después del primer build aún no estaba reflejada en diagnostic/site-version: actualizar desde generador y verificar índice/fuente idénticos antes de abrir PR. No ocultar deriva ni reescribir historial.
+
+Nueva PR ajena1375 HEADc6e450f821f0ffb0b95d770ee89982defdfef49c con CI42941471124/1 IN_PROGRESS, CodeQL42941465065/1 SUCCESS. Descripción exige revisión de titular y no fusionar ni desplegar automáticamente. Preservar fuente/worktree y hold; sólo observar sus checks. No mezclar la reparación del extractor con esa propuesta ni atribuir pending a fallo. Continúa seguimiento1354 sin cambios.
+
 ## Estado vigente: reparaciones 1373/1374 cerradas; CodeQL en reparación — 2026-11-10T23:08:36+00:00
 
 Responsable: Codex /root. Main comprobado: 3f769c52b31952c4fee291ad850c0283fdb03dd6. Las secciones inferiores son historial: sus estados PENDING y watchers activos quedaron superados. Los observadores 116, 131 y 148 terminaron; no volver a esperar esas celdas.
