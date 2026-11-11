@@ -126,7 +126,7 @@ test('retoma el destino tras navegar al login y volver sin from desde el proveed
 });
 
 const {load: loadPanel}=require('./helpers/admin-panel-fixture.cjs');
-test('favicons originales sobre círculo blanco y apps conservan sus variantes de marca',async({page})=>{
+test('favicons blancos sobre círculo rosa y apps conservan sus variantes de marca',async({page})=>{
  await loadPanel(page,390);
  for(const file of ['manifest.json','admin-manifest.json']) {
   const manifest=JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
@@ -141,20 +141,24 @@ test('favicons originales sobre círculo blanco y apps conservan sus variantes d
    const canvas=document.createElement('canvas');canvas.width=image.width;canvas.height=image.height;
    const context=canvas.getContext('2d');context.drawImage(image,0,0);
    const data=context.getImageData(0,0,image.width,image.height).data;
-   let white=0,pink=0,left=image.width,right=0,unsafePink=0,tail=0;
+   let white=0,pink=0,lightInk=0,left=image.width,right=0,inkTop=image.height,inkBottom=0,unsafePink=0,tail=0;
    for(let y=0;y<image.height;y++)for(let x=0;x<image.width;x++){
     const i=(y*image.width+x)*4;
     if(data[i+3]>200&&data[i]>250&&data[i+1]>250&&data[i+2]>250)white++;
-    // At16px the original thin silhouette blends with white by antialiasing.
-    // Detect its pink ink, rather than requiring an opaque dark stroke.
+    // El alfa original a16px mezcla el logo blanco con el círculo rosa.
     if(data[i+3]>128&&data[i]>data[i+1]+24&&data[i]>data[i+2]+12){
-     pink++;left=Math.min(left,x);right=Math.max(right,x+1);
-     if(y>image.height*.6&&Math.abs(x+.5-image.width/2)<image.width*.1)tail++;
+     pink++;
+     if(!name.includes('favicon')){left=Math.min(left,x);right=Math.max(right,x+1);}
+     if(!name.includes('favicon')&&y>image.height*.6&&Math.abs(x+.5-image.width/2)<image.width*.1)tail++;
      if(Math.hypot(x+.5-image.width/2,y+.5-image.height/2)>image.width*.4)unsafePink++;
+    }
+    if(name.includes('favicon')&&data[i+3]>128&&data[i]>=248&&data[i+1]>178&&data[i+2]>205){
+     lightInk++;left=Math.min(left,x);right=Math.max(right,x+1);inkTop=Math.min(inkTop,y);inkBottom=Math.max(inkBottom,y+1);
+     if(y>image.height*.6&&Math.abs(x+.5-image.width/2)<image.width*.1)tail++;
     }
    }
    const top=(Math.floor(image.width/2))*4;
-   result.push({name,corner:[...data.slice(0,4)],top:[...data.slice(top,top+4)],white,pink,coverage:(right-left)/image.width,unsafePink,tail,size:image.width});
+   result.push({name,corner:[...data.slice(0,4)],top:[...data.slice(top,top+4)],white,pink,lightInk,centerOffset:[Math.abs((left+right)/2-image.width/2),Math.abs((inkTop+inkBottom)/2-image.height/2)],coverage:(right-left)/image.width,unsafePink,tail,size:image.width});
   }
   return result;
  });
@@ -163,8 +167,11 @@ test('favicons originales sobre círculo blanco y apps conservan sus variantes d
   expect(image.corner,image.name).toEqual(opaque?[255,241,247,255]:[0,0,0,0]);
   if(badge){expect(image.white).toBeGreaterThan(100);continue;} // Android requires a monochrome badge.
   if(image.name.includes('favicon')){
-   expect(image.white,image.name+' círculo blanco').toBeGreaterThan(image.size*image.size*.4);
-   expect(image.top.slice(0,3),image.name+' superficie blanca, sin borde').toEqual([255,255,255]);
+   expect(image.pink,image.name+' círculo rosa').toBeGreaterThan(image.size*image.size*.4);
+   expect(image.lightInk,image.name+' logo blanco completo').toBeGreaterThan(5);
+   image.centerOffset.forEach(offset=>expect(offset,image.name+' logo centrado en ambos ejes').toBeLessThanOrEqual(1));
+   // El borde semitransparente puede redondear un canal al desmultiplicar alfa.
+   [248,170,202].forEach((channel,index)=>expect(Math.abs(image.top[index]-channel),image.name+' rosa del loader, sin borde').toBeLessThanOrEqual(1));
    expect(image.top[3],image.name+' antialias del círculo').toBeGreaterThanOrEqual(200);
   }else expect(image.white,image.name).toBe(0);
   expect(image.pink,image.name).toBeGreaterThan(5);
