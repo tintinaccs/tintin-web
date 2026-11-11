@@ -692,3 +692,16 @@ body.login-exit-open { overflow: hidden; }
   .login-exit-card { padding: 24px 18px 20px; border-radius: 20px; }
   .login-exit-title { font-size: 20px; }
 }
+
+.login-otp-feedback { display:flex; align-items:center; gap:12px; padding:16px; margin-top:16px; border:1px solid currentColor; border-radius:16px; font-size:14px; line-height:1.5; background:var(--color-card-bg,#fff); }
+.login-otp-feedback svg { width:36px; height:36px; flex:none; animation:otp-feedback-in .35s ease-out both; }
+.login-otp-feedback[data-state="success"] { color:#166534; }
+.login-otp-feedback[data-state="error"] { color:#b91c1c; }
+.login-otp-feedback[data-state="warning"] { color:#946200; }
+@keyframes otp-feedback-in { from { opacity:0; transform:scale(.65); } to { opacity:1; transform:scale(1); } }
+@media(prefers-reduced-motion:reduce) { .login-otp-feedback svg { animation:none; } }
+
+.login-otp-feedback svg { border-radius:50%; }
+.login-otp-feedback[data-state="success"] svg { background:#dcfce7; }
+.login-otp-feedback[data-state="error"] svg { background:#fee2e2; }
+.login-otp-feedback[data-state="warning"] svg { background:#fef3c7; }

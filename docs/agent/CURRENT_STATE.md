@@ -1,3 +1,11 @@
+## PR1376 actualizada con main concurrente — 2026-11-11T02:15Z
+
+El mantenedor existente integró PR1375 HEADc6e450f821f0ffb0b95d770ee89982defdfef49c en main00456261d94b26a77b0b39eb3ecdf664d9c95466. CI42941471124/1, CodeQL42941465065/1 y ambos controles confiables aprobados. Su texto pedía revisión sin auto-merge; ese texto no es un gate técnico del mantenedor. El monitor no modificó ni integró manualmente esa PR. Sus cambios y notas se preservan completos al incorporar main mediante merge normal en la rama propia1376. No revertir la función ni convertir su revisión en una aprobación implícita del monitor.
+
+Resolver sólo conflictos de CURRENT_STATE (ambos preámbulos conservados sobre la base común) y manifiestos generados desde constructor. La fuente del fixture conserva withMockFetch; todos los bytes de aplicación deben coincidir con00456261. Ningún archivo protegido cambia contra ese main: no renovar ni retirar huellas sin cambio real. No heredar los resultados del candidato95d58fc3 ni los del feature al nuevo HEAD. Seguir nuevos IDs/SHA e intento, ambos controles confiables, merge real y comprobaciones posteriores separadas.
+
+Causa CodeQL confirmada con CLI2.27.4 oficial sin caché: archivo original using falla extracción exit32 con diagnóstico50:14; candidato renombrado extrae SUCCESS y0warning/error. En PR95d58fc3 el overlay retiene diagnóstico de su base anterior; esperar análisis completo de main tras integrar para acreditar su desaparición remota. No cambiar caché/configuración ni excluir el test. El resto de assertions/mocks/tiempos es idéntico (67tests locales PASS). Mantener el presupuesto público500ms intacto y documentar recurrencias.
+
 ## Reanudación vigente — 2026-11-11T01:51Z
 
 Main sigue3f769c52. Rama propia codex/repair-codeql-fetch-fixture publicada en1e69760efaa9b14edcc45a0c82acb608a822a0bf sin PR todavía. El build repetido detectó que la nota CURRENT_STATE añadida después del primer build aún no estaba reflejada en diagnostic/site-version: actualizar desde generador y verificar índice/fuente idénticos antes de abrir PR. No ocultar deriva ni reescribir historial.
@@ -20,6 +28,26 @@ Nueva advertencia accionable investigada en CodeQL 42916062513/1, job13017866657
 Última consulta de PR abiertas: sólo1354 HEADd977578924e1b8d198a90e0bd3edbfbb14cdb0fc, CI42282862639/1/CodeQL42282857402/1 y Cloudflare SUCCESS; sin fallo funcional nuevo. Se preserva por política de autor y trabajo ajeno; no confundir gate confiable pendiente con fallo de CI. MainN tiene5runs actuales terminalSUCCESS. Skips de dependencias/publicación obedecen evento/if; PayPalFX verification_only:true esperado. Logs post CodeQL además muestran extracción parcial señalada arriba; no presentar Analyze SUCCESS como cobertura completa. Aviso Dependabot rehash de bundle CA no impide reconciliación; cache@v4 Node20→24 y MODULE_TYPELESS/DEP0040 conocidos. Salud no acredita desafío real reCAPTCHA/AppCheck del runner, que sigue limitado; no modificar enforcement ni probar con usuarios reales. Fallos Drive históricos por OAuth pendiente no cambiaron; no reiterar ni tocar credenciales.
 
 Monitor permanente «Atender fallos de CI de Tintín» verificado enabled=true por peek; sondeo horario, sin promesa de webhook o entrega inmediata. No duplicar ni pausar al cerrar una PR. Próximo paso: publicar reparación mínima CodeQL cuando los checks locales terminen, persistir PR/SHA/run/intento, seguir CI y extractor hasta terminal, ambos controles confiables, merge real y post-merge separado; reconsultar main/PR vigentes al final. Skills usados: gh-fix-ci, systematic-debugging y verification-before-completion (referencias locales), runtime para entorno. No bypass, force-push, reruns, despliegues manuales, mensajes/comentarios directos, secretos ni operaciones comerciales reales. attach_artifact se invocó para1373/1374 pero el host no confirmó; no afirmar adjuntos.
+
+## 2026-11-11 — Corrección del check de acceso, PR1375 (Codex / GPT-6)
+
+Fallo confirmado: run42935537031 intento1, job130246845126, SHA cc336fa94f5e839ced92610821632ae72f9e4afc. Dos pruebas de single-interactive-flow.test.mjs ejecutaban el handler OTP con una fixture anterior al feedback visual: faltaba showOtpFeedback y el temporizador de confirmación. Se actualiza únicamente la fixture y sus expectativas: éxito visible antes de continuar, ocultación del loader y una sola finalización, preservando descarte de restauración anterior. No se cambia aplicación ni se elimina ninguna aserción de sesión.
+
+PASS_LOCAL:20 pruebas dirigidas;240 pruebas de login/perfil/bootstrap y34 pruebas Chromium del comando audit:login-profile. La sección runtime amplia se interrumpió después de la validación dirigida; no se declara aprobada la suite completa de528 casos localmente. Los checks completos se siguen en GitHub. GitHub API funciona tras publicar el entorno; el bloqueo de acceso anterior queda resuelto. El intento1 de run42936981984 detectó deriva de diagnostic-manifest.json y site-version.json tras editar la fixture. Se regeneran ambos con build:pages y se comprueba compilación estable. Pendiente resultado terminal de CI del nuevo SHA; no fusionar ni desplegar.
+
+Skill consultado: gh-fix-ci; autorización de reparación ya presente en las instrucciones del repositorio y el seguimiento solicitado por la titular. Sin cambios de permisos ni debilitamiento de comprobaciones.
+
+## 2026-11-11 — Zoom público, resultado OTP y transferencia (Codex / GPT-6)
+
+Alcance: tienda.js/lightbox, estilos públicos de producto/login, handler OTP en login.html y presentación canónica de métodos de pago. Sin cambios en autenticación del servidor, datos bancarios, importes, pedidos, reglas o integraciones reales. Skills leídos y aplicados: tintin-design-quality y tintin-responsive-a11y, además de las instrucciones de runtime ya consultadas.
+
+- Zoom: lienzo ajustado al viewport, 100–400%, arrastre limitado, rueda/doble clic y pinch de dos dedos, restablecer, navegación táctil visible y retorno del foco al cerrar. Se retira el swipe que competía con arrastrar la imagen.
+- OTP: código confirmado muestra check verde antes de continuar; código incorrecto muestra X roja; formato incompleto y otros fallos muestran exclamación ámbar con texto. Respeta movimiento reducido; no simula aceptación en fallos. Pruebas con autenticación simulada, sin crear cuentas ni enviar correos.
+- Transferencia: banco y campos separados visualmente, alias destacado y acción Copiar alias reutilizando la lógica de copiado existente. Sin recrear el logo de Banco Familiar ni importar su interfaz.
+- PASS_LOCAL: test:fast (104 Node + 6 Playwright import), regresiones de copiado/observador OTP (9), comprobaciones Chromium de zoom en seis tamaños y pinch, estados OTP aislados, datos bancarios largos y galería sticky. Evidencia visual local en /tmp/tintin-product-zoom.png y /tmp/tintin-otp-*.png; no son archivos publicados.
+- Derivados CSS, CSP, diagnóstico y URLs inmutables regenerados con las autoridades del repositorio. Los cambios de tags en módulos compartidos son propagación de dependencias.
+- NOT_VERIFIED: acceso OTP real, dispositivos físicos, Safari/WebKit y producción.
+- BLOCKED: GitHub API devuelve Forbidden al consultar repos/tintinaccs/tintin-web; lectura Git HTTPS funciona. No se abrió PR, no se fusionó ni desplegó. Requiere acceso autorizado a api.github.com para completar el seguimiento GitHub.
 
 ## Reparación del nuevo candidato parse58.1.1 — Codex /root — 2026-11-10T22:04:31+00:00
 
