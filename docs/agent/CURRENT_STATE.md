@@ -1,3 +1,11 @@
+## 2026-11-11 — Corrección del check de acceso, PR1375 (Codex / GPT-6)
+
+Fallo confirmado: run42935537031 intento1, job130246845126, SHA cc336fa94f5e839ced92610821632ae72f9e4afc. Dos pruebas de single-interactive-flow.test.mjs ejecutaban el handler OTP con una fixture anterior al feedback visual: faltaba showOtpFeedback y el temporizador de confirmación. Se actualiza únicamente la fixture y sus expectativas: éxito visible antes de continuar, ocultación del loader y una sola finalización, preservando descarte de restauración anterior. No se cambia aplicación ni se elimina ninguna aserción de sesión.
+
+PASS_LOCAL:20 pruebas dirigidas;240 pruebas de login/perfil/bootstrap y34 pruebas Chromium del comando audit:login-profile. La sección de emuladores continúa en ejecución. GitHub API funciona tras publicar el entorno; el bloqueo de acceso anterior queda resuelto. Pendiente resultado terminal de CI del nuevo SHA; no fusionar ni desplegar.
+
+Skill consultado: gh-fix-ci; autorización de reparación ya presente en las instrucciones del repositorio y el seguimiento solicitado por la titular. Sin cambios de permisos ni debilitamiento de comprobaciones.
+
 ## 2026-11-11 — Zoom público, resultado OTP y transferencia (Codex / GPT-6)
 
 Alcance: tienda.js/lightbox, estilos públicos de producto/login, handler OTP en login.html y presentación canónica de métodos de pago. Sin cambios en autenticación del servidor, datos bancarios, importes, pedidos, reglas o integraciones reales. Skills leídos y aplicados: tintin-design-quality y tintin-responsive-a11y, además de las instrucciones de runtime ya consultadas.
