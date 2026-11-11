@@ -24,6 +24,22 @@ de getFullYear ya presente en main9d46ee42; no pertenece al gate vigente y no
 se agrega lógica anual ajena al arreglo. CI/PR/merge pendientes del SHA final. Sin escrituras comerciales ni
 compras/correos reales. No se heredan verificaciones del PR1352.
 
+Actualización con main29dcebe (PR1378, portada WebP): conflictos solo en
+generados, `index.html` (revisión de página) y este archivo; se conservan
+ambos cambios y se regeneran con build:pages y preparar-mantenimiento-flujos
+sobre la nueva base. PASS_LOCAL: build, preflight, protección de flujos,
+test:fast (104 Node + 6 Chromium) y 85 Chromium (visor, iconos/push, portada).
+CI del SHA final pendiente.
+
+## 2026-11-11 — Portada en WebP sin pérdida y lockfile sin alerta de dependencias (base 9d46ee4)
+
+Claude Code. Rama claude/tintin-accesorios-optimization-xyl6zm.
+- Hero de inicio: se agregan `suitcase{,-960,-640}.webp` sin pérdida generados de los PNG aprobados (~31 % menos: 1,79 MB→1,22 MB escritorio; 666 KB→455 KB móvil). `index.html` precarga WebP y conserva `<source>` PNG + `<img>` PNG de respaldo. Transparencia idéntica; color máx. 2/255 (comprobado en `hero-complete-borders.spec.js`). No se usó WebP con pérdida (diferencias hasta 83/255).
+- Dependencias (solo desarrollo: firebase-tools → gaxios → rimraf 5.0.10): el override `glob@>=9 <14.0.2` no alcanzaba la dependencia `glob ^10.3.7` de `rimraf`; se agrega override anidado `rimraf → glob 14.0.3` y el lock retira el `glob` 10.5.0 anidado. Primer intento (solo lock) rompió `npm ci` del build de Cloudflare (lock desincronizado, 8ca01b1); corregido. `npm ci` limpio OK, `npm audit` 0 (antes 8 moderadas), `rimraf` con `glob:true` probado.
+- PASS_LOCAL: Playwright hero-complete-borders + home-render-performance + image-fidelity 38/38; hero-imagen-confirmada 2/2; auditar-performance-premium 19 OK; auditar-imagenes-fase-5 OK; cache-versioning y protección de flujos OK.
+- PASS_CI (c6569f2): durante la caída de GitHub Actions (~20:37–21:24 UTC) el run pull_request 43097752668 quedó en cola fantasma y CodeQL 43097748105 terminó en `startup_failure` (GitHub no permite reintentarlo). CI 43109255143 (workflow_dispatch) en verde: Repository audit, Protected flows, preflight, B/C/D y Cloudflare Pages en success. Faltaban los obligatorios `Analyze (*)` y `Protected flow maintenance`, que dependen del run CodeQL del PR; este commit de evidencia los vuelve a disparar.
+- NOT_VERIFIED: producción hasta el despliegue del SHA final; primera carga del panel admin (~6,5 s) no modificada.
+
 ## PR1376 actualizada con main concurrente — 2026-11-11T02:15Z
 
 El mantenedor existente integró PR1375 HEADc6e450f821f0ffb0b95d770ee89982defdfef49c en main00456261d94b26a77b0b39eb3ecdf664d9c95466. CI42941471124/1, CodeQL42941465065/1 y ambos controles confiables aprobados. Su texto pedía revisión sin auto-merge; ese texto no es un gate técnico del mantenedor. El monitor no modificó ni integró manualmente esa PR. Sus cambios y notas se preservan completos al incorporar main mediante merge normal en la rama propia1376. No revertir la función ni convertir su revisión en una aprobación implícita del monitor.
