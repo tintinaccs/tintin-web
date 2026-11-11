@@ -1,3 +1,29 @@
+## Visor completo y favicon del loader — 2026-11-11 — Codex /root
+
+Base main9d46ee42; rama fix/product-zoom-and-pink-favicon. Pedido: foto de la
+ficha/visor completa al abrir, sin recorte superior; favicon circular rosa con
+logo blanco como loader. Skills leídos: systematic-debugging,
+tintin-design-quality y tintin-responsive-a11y. Reproducción: foto1086×1448
+medida1180×1573a100% dentro de lienzo1180×748 en1440×900; test de imagen
+completa falla antes del cambio. Pistas implícitas del grid imponían el mínimo
+intrínseco; fuente CSS establece tracks minmax(0,1fr) y mínimos de imagen0.
+El control100% ya reiniciaba la escala: no se reemplaza esa lógica ni se
+modifican originales. Generador canónico de favicon invierte únicamente los
+favicons a círculo#F8AACA/logo blanco, conserva transparencia y variantesapps.
+Regresión de píxeles falla con el icono anterior; borde alfa acepta redondeo
+de1canal por desmultiplicación. Logo centrado en ambos ejes verificado con
+error máximo1px enPNG16/32/192/512 eICO. PASS_LOCAL:9Chromium del visor
+(seis tamaños, pinch, cambio de foto, rotación, reapertura y movimiento
+reducido),38Chromium de navegación/iconos/push incluidos píxeles y centrado,
+104Node+6Chromium de test:fast y4Node de bundles. Build:pages aprobado;
+29huellas protegidas/28registros preparados por el generador canónico. La
+reapertura espera la protección global contra doble clic sin cambiarla ni
+relajar la geometría. Dependencias locales alineadas con npm ci al lockfile
+vigente, sin cambiar dependencias. Auditor opcional de Producto señala falta
+de getFullYear ya presente en main9d46ee42; no pertenece al gate vigente y no
+se agrega lógica anual ajena al arreglo. CI/PR/merge pendientes del SHA final. Sin escrituras comerciales ni
+compras/correos reales. No se heredan verificaciones del PR1352.
+
 ## PR1376 actualizada con main concurrente — 2026-11-11T02:15Z
 
 El mantenedor existente integró PR1375 HEADc6e450f821f0ffb0b95d770ee89982defdfef49c en main00456261d94b26a77b0b39eb3ecdf664d9c95466. CI42941471124/1, CodeQL42941465065/1 y ambos controles confiables aprobados. Su texto pedía revisión sin auto-merge; ese texto no es un gate técnico del mantenedor. El monitor no modificó ni integró manualmente esa PR. Sus cambios y notas se preservan completos al incorporar main mediante merge normal en la rama propia1376. No revertir la función ni convertir su revisión en una aprobación implícita del monitor.

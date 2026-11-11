@@ -19,11 +19,11 @@ try {
   for(let y=0;y<image.height;y++)for(let x=0;x<image.width;x++)if(pixels[(y*image.width+x)*4+3]>0){left=Math.min(left,x);right=Math.max(right,x+1);top=Math.min(top,y);bottom=Math.max(bottom,y+1);}
   // Keep the original silhouette and the existing flat brand variant. The
   // source PNG contains highlights; its alpha is reused without redrawing.
-  ctx.globalCompositeOperation='source-in';ctx.fillStyle=kind==='badge'?'#fff':'#CF367B';ctx.fillRect(0,0,image.width,image.height);
+  ctx.globalCompositeOperation='source-in';ctx.fillStyle=(kind==='badge'||kind==='favicon')?'#fff':'#CF367B';ctx.fillRect(0,0,image.width,image.height);
   const canvas=document.createElement('canvas');canvas.width=canvas.height=size;
   const out=canvas.getContext('2d');out.imageSmoothingQuality='high';
   if(kind==='circle'){out.fillStyle='#FFF1F7';out.beginPath();out.arc(size/2,size/2,size/2,0,Math.PI*2);out.fill();}
-  if(kind==='favicon'){out.fillStyle='#fff';out.beginPath();out.arc(size/2,size/2,size/2,0,Math.PI*2);out.fill();}
+  if(kind==='favicon'){out.fillStyle='#F8AACA';out.beginPath();out.arc(size/2,size/2,size/2,0,Math.PI*2);out.fill();}
   // Apple aplica su propia máscara; un lienzo opaco evita esquinas negras.
   // El icono maskable mantiene toda la marca dentro del círculo seguro del 80%.
   if(kind==='apple'||kind==='maskable'){out.fillStyle='#FFF1F7';out.fillRect(0,0,size,size);}

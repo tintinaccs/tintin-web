@@ -1,3 +1,17 @@
+## 2026-11-11 — Foto completa en visor y favicon rosa/blanco
+
+El grid implícito del visor permitía que una foto vertical midiera1573px dentro
+de748px disponibles a100%, reproduciendo el recorte superior informado. Fuente:
+product-maintenance.css: pistas minmax(0,1fr) y mínimos de imagen en0 mantienen
+la foto completa/centrada sin modificar zoom, arrastre, variantes ni producto.
+Consumidores: CSS compilado de Producto, respaldo CSS y su cadena de imports
+versionados. Fuente de favicon: generar-iconos-admin.mjs conserva el alfa
+original, exporta círculo #F8AACA/logo blanco enICO y PNG16/32/192/512; fuentes
+y variantes de apps intactas. Referencias HTML de todos los favicons renovadas.
+Pruebas: geometría de imagen además del lienzo, reset, pinch, navegación,
+rotación, reapertura y movimiento reducido; píxeles/alfa/silueta de favicon y
+variantes de apps. Bundle/CSP/caché/diagnóstico/protección desde generadores.
+
 ## Confirmación del mismo arte del hero — 2026-11-10
 
 Autoridad: applyHero en gestion-imagenes.js. Confirmar URLs ya publicadas conserva src/srcset/media/type del picture; URLs relativas y absolutas equivalentes no reinician selección/descarga en Chromium158. Personalización, dirección de arte por dispositivo, formato real, predecodificación y recuperación por error mantienen sus recorridos. Assets originales, aspecto, precios, inventario, cuentas y pedidos intactos. Regresión conserva cero descargas adicionales y comprueba ausencia de escrituras de atributos de carga; fallback/personalización y cuatro tamaños siguen cubiertos. Propagar sólo los3módulos afectados mediante el shell y la auditoría de caché canónicos, renovar plan/huellas y verificar el SHA final en CI antes de merge.
