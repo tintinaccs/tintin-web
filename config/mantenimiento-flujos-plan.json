@@ -1,17 +1,22 @@
 {
   "schemaVersion": 1,
   "baseCommit": "9d46ee42822aca7ca489622bcdc808e3671775cf",
-  "reason": "Portada: imagen hero en WebP sin pérdida (PNG de respaldo) y lockfile sin glob vulnerable",
+  "reason": "Portada: imagen hero en WebP sin pérdida (PNG de respaldo); dependencias: override anidado rimraf→glob 14.0.3",
   "files": [
     {
       "path": "index.html",
       "oldHash": "7625373ff4b12eed6ad6add8183d6063ce5ed7d2a30214f3b9ae942c3db4617d",
-      "newHash": "303241954ec0d48203e056f7412c06e7ccea2a1f7aa527844efc4784d440443e"
+      "newHash": "07bcd55da548f447c216f70678abae2eb1411b8464c6d9a6cc5b3ce6aaa85579"
     },
     {
       "path": "package-lock.json",
       "oldHash": "afee79b07c4f574811412dcd612594e61ec74acbcb12cf32e19e8e89023326c5",
       "newHash": "ae079fa4a21a6b8a06dac939a712a93ccbb9335f070149c175c9a8ea7192704a"
+    },
+    {
+      "path": "package.json",
+      "oldHash": "24df728caf6b7a4fc763e88c10232db6ec90b9a778ad023c89296dbccbcb62cd",
+      "newHash": "d1833073146d9dc75fe53792831f2feea81205f1069762bf3f286c156f525a2d"
     }
   ],
   "affectedRecords": []

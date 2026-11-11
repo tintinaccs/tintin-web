@@ -2,7 +2,7 @@
 
 Claude Code. Rama claude/tintin-accesorios-optimization-xyl6zm.
 - Hero de inicio: se agregan `suitcase{,-960,-640}.webp` sin pérdida generados de los PNG aprobados (~31 % menos: 1,79 MB→1,22 MB escritorio; 666 KB→455 KB móvil). `index.html` precarga WebP y conserva `<source>` PNG + `<img>` PNG de respaldo. Transparencia idéntica; color máx. 2/255 (comprobado en `hero-complete-borders.spec.js`). No se usó WebP con pérdida (diferencias hasta 83/255).
-- `package-lock.json`: se retira el `glob` 10.5.0 anidado obsoleto bajo `rimraf` (el override `glob@>=9 <14.0.2` ya exigía 14.0.3). `npm audit`: 0 vulnerabilidades (antes 8 moderadas).
+- Dependencias (solo desarrollo: firebase-tools → gaxios → rimraf 5.0.10): el override `glob@>=9 <14.0.2` no alcanzaba la dependencia `glob ^10.3.7` de `rimraf`; se agrega override anidado `rimraf → glob 14.0.3` y el lock retira el `glob` 10.5.0 anidado. Primer intento (solo lock) rompió `npm ci` del build de Cloudflare (lock desincronizado, 8ca01b1); corregido. `npm ci` limpio OK, `npm audit` 0 (antes 8 moderadas), `rimraf` con `glob:true` probado.
 - PASS_LOCAL: Playwright hero-complete-borders + home-render-performance + image-fidelity 38/38; hero-imagen-confirmada 2/2; auditar-performance-premium 19 OK; auditar-imagenes-fase-5 OK; cache-versioning y protección de flujos OK.
 - NOT_VERIFIED: producción hasta el despliegue del SHA final; primera carga del panel admin (~6,5 s) no modificada.
 
