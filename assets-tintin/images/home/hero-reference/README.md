@@ -6,6 +6,9 @@ No se regeneraron ni retocaron productos. Se recorta únicamente el margen
 exterior del lienzo (200,0,1250,1086), conservando los píxeles de la composición.
 El PNG principal1050×1086 se compara RGBA contra ese recorte: igualdad exacta.
 Versiones640/960 reducidas con Lanczos y codificadas PNG sin pérdida adicional. Se sirve PNG porque Chromium introduce diferencias de redondeo de transparencia al mostrar WebP; la prueba de igualdad visual de píxeles del PNG principal pasa.
+Desde 2026-11-11 se sirve además WebP sin pérdida (`suitcase*.webp`, ~31 % más liviano) generado de
+esos mismos PNG; el PNG queda como respaldo. En Chromium la transparencia es idéntica y el color
+visible difiere como máximo 2/255 (redondeo, imperceptible); lo verifica `hero-complete-borders.spec.js`.
 El recorte y las transparencias interiores son los entregados por la titular.
 
 Logo siempre blanco plano, sin 3D, relieve, bisel, perspectiva ni sombras.
