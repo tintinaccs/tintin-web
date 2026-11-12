@@ -44,7 +44,7 @@ export async function openPhotoEditor(source,{state:initialState=null,signal}={}
  let state={...defaults(),width:image.width,height:image.height,...initialState};
  const fitSize=()=>{const ratio=Math.min(1,4096/state.width,4096/state.height);state.width=Math.max(1,Math.round(state.width*ratio));state.height=Math.max(1,Math.round(state.height*ratio));};fitSize();
  let history=[structuredClone(state)],index=0,working=false,settled=false,drag=null;
- const opener=document.activeElement,dialog=document.createElement('dialog');dialog.className='tt-photo-edit';const titleId='tt-photo-edit-'+(++sequence);dialog.setAttribute('aria-labelledby',titleId);
+ const opener=document.activeElement,dialog=document.createElement('dialog');dialog.className='tt-photo-edit';dialog.dataset.editorRelease='tintin-20261112-free-crop-2';const titleId='tt-photo-edit-'+(++sequence);dialog.setAttribute('aria-labelledby',titleId);
  const header=document.createElement('header'),title=document.createElement('h2');title.id=titleId;title.textContent='Editar fotografía';header.append(title);
  const button=(text,action,host)=>{const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',action);host.append(b);return b;};
  const layout=document.createElement('div');layout.className='tt-photo-edit-layout';

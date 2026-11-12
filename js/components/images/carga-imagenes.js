@@ -1,5 +1,5 @@
 async function openPhotoEditor(...args) {
-  const editor = await import('./editor-fotografias.js?v=tintin-20261112-free-crop-1');
+  const editor = await import('./editor-fotografias.js?v=tintin-20261112-free-crop-2');
   return editor.openPhotoEditor(...args);
 }
 /* =============================================================

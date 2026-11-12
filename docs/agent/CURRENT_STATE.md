@@ -1,3 +1,13 @@
+# Estado actual — 2026-11-12 · renovación de referencias del recorte publicado
+
+PR1383 integrada como58be634d2362b42221ef456111ef1bd565a3942d. CI43206342214/1, CodeQL43206336607/1 y mantenedor43210439133/1 SUCCESS; Protected flow maintenance/integrity SUCCESS. Cloudflare producción a95dfd87 SUCCESS; salud43210504975/1 y CodeQL posterior43210501740/1 SUCCESS. CI posterior43210501503/1 sigue en curso y se sigue por separado.
+
+Verificación pública posterior detectó respuestas anteriores bajo las referencias free-crop-1: una lectura previa al despliegue había llenado la caché inmutable de archivos existentes. CSS vieja con CF HIT/age223 y hash6aa67e4d; la misma ruta con consulta fresca devuelve la CSS aprobada8f8a39f4. El módulo nuevo devuelve bytes correctos. No se declara publicación funcional completada con esas referencias antiguas.
+
+Esta corrección cambia únicamente referencias locales y VERSION del cargador a free-crop-2, conservando controles, comportamiento y pruebas de1383; añade una marca de versión al diálogo para diagnosticar la carga efectiva. Caché/CSP/diagnóstico/plan se regeneran desde autoridades contra main58be634d. No se purga caché ni se despliega manualmente. No consultar las nuevas URLs en producción hasta Cloudflare SUCCESS del nuevo merge. No tocar PR1382 de Claude. Pendientes: gates del nuevo candidato, mantenedor, resultados posteriores y comparación pública de las siete fuentes con referencias nuevas. Sin escrituras comerciales reales.
+
+---
+
 ## Recorte por bordes y cabecera opaca del editor — 2026-11-12 — Codex /root
 
 Base aceptada2d038b19749f56ad56af30fee809e4fc4edf3d67; rama propia
