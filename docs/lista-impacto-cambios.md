@@ -1,3 +1,9 @@
+## 2026-11-12 — referencias nuevas del editor publicado
+
+- Problema acreditado: copias anteriores en caché bajo free-crop-1 tras lectura anticipada a la publicación de1383.
+- Solución: referencias free-crop-2 propagadas por los consumidores del editor y VERSION de la CSS dinámica; misma funcionalidad de recorte/cabecera.
+- Validación: auditoría canónica de caché y build→plan→build→preflight; seguir gates y publicación real antes de comprobar nuevas URLs.
+
 ## Recorte libre de fotos y cabecera de producto — 2026-11-12
 
 Autoridades editor-fotografias.js/recorte-fotografias.mjs y superficie de
