@@ -63,7 +63,11 @@ for (const width of [820,1440]) {
       document.querySelector('.adm-user-name').textContent='TINTIN ACCESORIOS Y RELOJES';
       document.querySelector('.adm-live-clock').textContent='Lunes, 05 de octubre de 2026, 10:42:50';
     });
+    // Exercise the transient hover state before measuring the closed rail.
+    // pointerleave closes it after 80ms, then its width transitions for 160ms.
+    await page.locator('#adm-sidebar').hover();
     await page.mouse.move(width-10,350);
+    await expect.poll(()=>page.locator('#adm-sidebar').evaluate(e=>Math.round(e.getBoundingClientRect().width))).toBe(74);
     const boxes=await page.evaluate(()=>{
       const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {top:r.top,bottom:r.bottom,center:r.left+r.width/2};};
       return {logo:rect('.adm-sidebar-logo'),user:rect('.adm-user-info'),avatar:rect('.adm-user-avatar'),icon:rect('.adm-nav-icon')};
