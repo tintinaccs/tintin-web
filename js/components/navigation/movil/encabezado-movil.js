@@ -1,4 +1,4 @@
-import { UI_ICONS, svgIcon } from '../compartido/iconos.js?v=tintin-20261029-performance-1';
+import { UI_ICONS, svgIcon } from '../compartido/iconos.js?v=tintin-20261029-performance-1-p1112';
 
 export function renderMobileTabbar() {
   return `
