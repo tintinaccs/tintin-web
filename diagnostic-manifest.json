@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5c6e70be3c884c6ebd11611ebe8024ecf818d897c4cad70b7ed12d7057dc500a",
+  "sourceFingerprint": "404f87467622a23557de961afc9677bb0ff6593a0193b437b5ce9a4d33d0a16c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1841,
     "textFiles": 1688,
-    "totalBytes": 64032349,
+    "totalBytes": 64033608,
     "pages": 19,
     "modules": 1196
   },
@@ -2984,7 +2984,7 @@
         "viewer"
       ],
       "bytes": 194895,
-      "sha256": "15b852001d4bb1a9e7fe772dfd83871fcdc797bee6c0bf003b6f4c9367955644",
+      "sha256": "9134680b3e4d44febd26bb48bdc873826e0c306abaed3bfc1017498d5b63d610",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3043,7 +3043,7 @@
           "line": 2129
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261112-delivery-separate-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261112-delivery-separate-2",
           "target": "js/admin/admin-app.js",
           "line": 2130
         },
@@ -3537,7 +3537,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261112-delivery-separate-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261112-delivery-separate-2",
           "target": "js/admin/admin-app.js",
           "line": 2130,
           "exists": true
@@ -29679,8 +29679,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 446019,
-      "sha256": "f6aa9cb603fd5a50072e06289c77b6289625405b92a131315b246291a6da46a3",
+      "bytes": 446288,
+      "sha256": "4279f79767847bec75d421103e41073904b840a006a86eacc6e6c0a687432b9b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55633,8 +55633,8 @@
     },
     {
       "path": "tests/orders/delivery-revenue-separation.test.mjs",
-      "bytes": 7954,
-      "sha256": "73a678ca1e3a6d392b1f37b13b422765a1bf279f0ec34fa0541b0c8befaf0ed5",
+      "bytes": 8692,
+      "sha256": "a9e42bf7ecb848eb592474b03675eff2fa00ae122fb507b0ae3de9530815ef5f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55687,6 +55687,12 @@
           "target": "functions/api/order-email.js",
           "dynamic": false,
           "line": 84
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 97
         }
       ],
       "endpoints": []
@@ -63518,7 +63524,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 194895,
-      "sha256": "15b852001d4bb1a9e7fe772dfd83871fcdc797bee6c0bf003b6f4c9367955644"
+      "sha256": "9134680b3e4d44febd26bb48bdc873826e0c306abaed3bfc1017498d5b63d610"
     },
     {
       "path": "apple-touch-icon.png",
@@ -64700,7 +64706,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 14170,
-      "sha256": "970a79f73f0774688e8b8acacbe5419633c7c7d4dedc688c600ec7c0b1db02b9"
+      "sha256": "a0c36b51c5921d6f519d7bbf233f9ca458aaa9a03ae020cf03575401ec30a328"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64712,7 +64718,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "eb319bc868cd1ab28ac1aaa42751450108b68f616289483e8e64e55483ebd4d3"
+      "sha256": "54bd795466b591ae4b85b08dbd5360e356028d7e095a7315bce3988c03a4562f"
     },
     {
       "path": "config/public-site.json",
@@ -65551,8 +65557,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1315925,
-      "sha256": "f38deaa76c36a75ef9a71c4392ed1548a26df1d1e25cee5b2a66657ba78d3d42"
+      "bytes": 1316177,
+      "sha256": "784644734b2d872dda11824d61a86dc13a078520b44b8279c4519f696eabe37c"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -67627,8 +67633,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 446019,
-      "sha256": "f6aa9cb603fd5a50072e06289c77b6289625405b92a131315b246291a6da46a3"
+      "bytes": 446288,
+      "sha256": "4279f79767847bec75d421103e41073904b840a006a86eacc6e6c0a687432b9b"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -70784,7 +70790,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 83823,
-      "sha256": "fd07b803a712bb4732941b36ee79b6c3905eefba4d442dea1627cff4e4530d60"
+      "sha256": "c4c3b241a56165d31cfa20829fbb85ee23a474da0bdc0b08cd89d8bcc8d2b13c"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -72925,8 +72931,8 @@
     {
       "path": "tests/orders/delivery-revenue-separation.test.mjs",
       "extension": ".mjs",
-      "bytes": 7954,
-      "sha256": "73a678ca1e3a6d392b1f37b13b422765a1bf279f0ec34fa0541b0c8befaf0ed5"
+      "bytes": 8692,
+      "sha256": "a9e42bf7ecb848eb592474b03675eff2fa00ae122fb507b0ae3de9530815ef5f"
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",

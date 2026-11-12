@@ -93,3 +93,13 @@ test('campana cerrada presenta un texto seguro sin descargar pedidos históricos
  reader.body(item,{load:false});await new Promise(r=>setTimeout(r,0));assert.equal(reads,0);
  reader.body(item,{load:true});await new Promise(r=>setTimeout(r,0));assert.equal(reads,1);assert.match(reader.body(item,{load:false}),/Productos: Gs\. 100\.000/);
 });
+
+import fs from 'node:fs';
+test('CSV de clientes distingue desglose incompleto y datos aún no disponibles de importes cero',()=>{
+ const source=fs.readFileSync('js/admin/admin-app.js','utf8');
+ const code=source.slice(source.indexOf('function userRowsToCsv_('),source.indexOf('window.bulkExportUsers ='));
+ const build=new Function('ROLE_LABELS',code+';return userRowsToCsv_;')({});
+ const rows=build([{uid:'incomplete',productsSpent:0,deliverySpent:0,unknownProducts:1,unknownDelivery:1},{uid:'loading'}]);
+ assert.equal(rows[0][9],'Pedidos sin desglose de productos');assert.equal(rows[0][10],'Pedidos sin importe de delivery');
+ assert.deepEqual(rows[1].slice(7,11),[0,0,1,1]);assert.deepEqual(rows[2].slice(7,11),['','','','']);
+});

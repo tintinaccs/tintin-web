@@ -2464,7 +2464,7 @@ function renderUsersTable(users) {
         <td>${roleSelect}</td>
         <td>${blockedBadge}${blockedDetail}</td>
         <td style="font-size:12px;color:#713C53">${u.purchaseCount || 0}</td>
-        <td style="font-size:12px;color:#713C53">${formatPrice(u.productsSpent || 0)} productos<br><small>${formatPrice(u.deliverySpent || 0)} delivery</small></td>
+        <td style="font-size:12px;color:#713C53">${u.productsSpent==null?'—':formatPrice(u.productsSpent)} productos<br><small>${u.deliverySpent==null?'—':formatPrice(u.deliverySpent)} delivery</small>${u.unknownProducts||u.unknownDelivery?'<br><small>Hay pedidos sin desglose registrado</small>':''}</td>
         <td>${actions}</td>
       </tr>
     `;
@@ -2768,10 +2768,10 @@ window.bulkRestoreUsers = async function() {
 
 
 function userRowsToCsv_(users) {
-  const header = ['UID', 'Nombre', 'Email', 'Rol', 'Estado', 'Teléfono', 'Compras', 'Productos comprados', 'Delivery (aparte)', 'Notas internas'];
+  const header = ['UID', 'Nombre', 'Email', 'Rol', 'Estado', 'Teléfono', 'Compras', 'Productos comprados', 'Delivery (aparte)', 'Pedidos sin desglose de productos', 'Pedidos sin importe de delivery', 'Notas internas'];
   const rows = users.map(u => [
     u.uid || '', u.name || '', u.email || '', ROLE_LABELS[u.role] || u.role || '',
-    u.blocked ? 'Bloqueado' : 'Activo', u.phone || '', u.purchaseCount || 0, u.productsSpent || 0, u.deliverySpent || 0, u.internalNotes || ''
+    u.blocked ? 'Bloqueado' : 'Activo', u.phone || '', u.purchaseCount || 0, u.productsSpent ?? '', u.deliverySpent ?? '', u.unknownProducts ?? '', u.unknownDelivery ?? '', u.internalNotes || ''
   ]);
   return [header, ...rows];
 }
