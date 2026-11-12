@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "db9eb668bddcbafe2ad8a5e3914279baadff459b",
-  "reason": "Filtros de variantes del catalogo: cada tarjeta muestra la foto, la muestra de color y el destino de la combinacion que cumple los filtros elegidos, para cualquier atributo; sin cambios de precios, stock, carrito, pedidos ni pagos.",
+  "baseCommit": "d482fb243e1ce6ee6bae447ae2498ea259b59d82",
+  "reason": "Actualiza filtros de variantes del catálogo con main #1380 y renueva el plan",
   "files": [
     {
       "path": "_headers",
@@ -15,18 +15,18 @@
     },
     {
       "path": "config/csp-runtime.js",
-      "oldHash": "5ecfd071d63e9458f690c497ef08ea688eb49db6978308fb18e2497736d0b486",
-      "newHash": "390181e43356daf92f10e442ea9988623f25af0cdb6dae22b1200b4e18ed68aa"
+      "oldHash": "7108a68212ca67a517ce8f5fdf569d3d962ef04d5211740538b6cddb81c59d12",
+      "newHash": "649e5b9eb0b15aee829086f940b39cb872fd683caca2c1aa495c466f04e75ebf"
     },
     {
       "path": "config/csp-runtime.json",
-      "oldHash": "907a9bdf56d2b7d9aebe39186c027d35fbf85854d25636557a3288a33c09be07",
-      "newHash": "38a90d90f9bcc871f8b345c3e1caf971e27ace058363fae206e8f932bfbf82bb"
+      "oldHash": "42b624925f663e05f95a892cd27eb7b6623e23917ea822bf252347f41f2aadec",
+      "newHash": "34304565d9fb6c01234431e3bb4d293aa78e942615f0c3b50e4a013aa5a399fa"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "31ab47da3eb2e545519996bc94c26b46a1714b87dd1d1d352fef2c4b30b9e7ee",
-      "newHash": "ebce8d7871a97fae4bb8e8cbe49b247bfc4a9972c3d81d3c2ef39a6eadb2c1a2"
+      "oldHash": "85f271b34977ede531304442232a4683b68d325dc4e17622a14b808074675ade",
+      "newHash": "ba87a1f431ba58e97a6499dbb02a6ffa022f7bbe0196f34ac2eb33feb82c8102"
     }
   ],
   "affectedRecords": [

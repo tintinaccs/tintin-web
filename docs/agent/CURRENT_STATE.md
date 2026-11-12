@@ -1,6 +1,50 @@
 ## Filtros de variantes: PR 1354 actualizado con main db9eb668 — 2026-11-12 — Claude Code
 
 El CI completo de 588d49c6 salió en verde (Repository audit incluido), pero main avanzó con el PR 1379 y el PR 1354 quedó con conflicto en diagnostic-manifest.json y site-version.json (generados). Se fusionó main, se tomaron los derivados de main y se regeneraron con npm run build:pages; el plan de mantenimiento se rehizo con scripts/preparar-mantenimiento-flujos.mjs (base db9eb668, 5 archivos protegidos: catalogo.html, _headers, CSP y baseline de caché). Sin cambios de código respecto de 588d49c6. PASS_LOCAL: build:pages, auditar-proteccion-flujos, audit:cache-versioning, audit:styles. Pendiente: CI sobre el nuevo commit, merge y verificación en producción de que las tarjetas cambian de foto al filtrar.
+## Editor de fotografías con recorrido de carga — 2026-11-12 — Codex /root
+
+Base dfcb4a6 (PR1377 integrada y verificada; su observador horario específico
+quedó desactivado). Nuevo pedido de la titular: edición de fotografías de
+Nuevo/Editar producto inspirada en la carga de Instagram, adaptada a Tintín y
+a móviles, tabletas, horizontal y escritorio. No rediseñar marca ni retirar
+campos/opciones comerciales. Rama feat/product-image-editor en worktree propio;
+no tocar rama/PR1354 de Claude ni sus checks.
+
+Autoridades: carga-imagenes.js y galeria-unificada.js. Nuevo editor local
+editor-fotografias.js, importado a demanda: proporciones y dimensiones, zoom,
+encuadre arrastrable/teclado/pinch, giro, volteos, brillo/contraste/saturación,
+fondo libre transparente/blanco/rosa, deshacer/rehacer/original. Seleccionar
+archivos en galería abre el editor antes de subirlos; cada foto se confirma
+por separado y se revisa en la cola existente. Cancelar la selección descarta
+sólo ese archivo. Edición manual cancela sin cambiar el pendiente previo. El
+original de biblioteca nunca se sobrescribe; la copia reemplaza referencias
+sólo tras carga confirmada conservando portada/asociaciones. Guardar espera
+validación/edición/carga; cerrar aborta editor y libera bitmap/URLs locales.
+Imagen sin ajustes conserva sus bytes; edición exporta PNG, máximo4096px por
+eje y límite15MiB vigente. Ajustes por píxeles para Safari sin canvas.filter.
+Preview permanece visible mientras se recorren controles, con áreas44px y
+campos16px, superficie modal nativa y acciones siempre accesibles.
+
+Skills leídos: tintin-ecommerce-flows, tintin-design-quality y
+ tintin-responsive-a11y. PASS_LOCAL final:22 Chromium del editor (píxeles,
+recorrido automático, cola, flush, cancelación, copia/original, asociaciones,
+pinch, preview completo, áreas seguras simuladas y CSP que limita connect-src).
+El marco de recorte conserva su proporción visible; botones Ver foto completa
+y Llenar encuadre alternan encaje/recorte sin destruir el original.
+Regresión de246 Chromium de fotos contextuales/guardado/workspaces PASS;
+33 de pestañas y8 de CSP/guardado PASS. Test:fast104Node+6Chromium y auditor
+multimedia42 verificaciones PASS. Build/plan se regeneran tras esta evidencia.
+Foto pública real de Cloudinary decodificada de sólo lectura y canvas limpio
+900×1200: usar Image.crossOrigin/decodificación por img-src existente, sin
+ampliar connect-src ni introducir proxy. Fondos compuestos tras ajustes de
+píxeles para conservar su color. Respeta notch/barra de gestos, modal centrado,
+preview encogible en horizontal y controles con scroll independiente.
+WebKit descargado pero no ejecutable por bibliotecas del host ausentes;
+instalar dependencias requería su no disponible: Safari NOT_VERIFIED.
+Sin datos comerciales reales modificados. PR1380 en curso; seguir SHA/run
+actuales, mantenedor confiable, merge y postmerge por separado. PR1379 y
+1354 ajenas: sólo leer para coordinar; conciliar esta rama con main aceptado
+si integran primero. No heredar verde de33cb/bad4 al siguiente candidato.
 
 ## Reparación activa del check lateral — 2026-11-12T01:22Z — Codex /root
 
@@ -6747,3 +6791,4 @@ Causa del rojo en CI 42017447387/1 (SHA 7cfbcc9, job D — Interfaz, SEO y rendi
 - NO probado en producción ni con catálogo/Firestore reales.
 
 - 2026-11-12 · PR #1354 (filtros de variantes con foto/muestra elegida) actualizado con main dfcb4a6: conflictos en generados (CSP, manifiestos, plan) tomados de main y regenerados; en `catalogo.html` se conserva `catalogFilterPreview` y se descarta el import de favoritos retirado en #1355. Plan de mantenimiento renovado sobre dfcb4a6 (5 archivos, 8 registros). PASS_LOCAL: `build:pages`, `ci:preflight`, protección de flujos (78 registros/542 archivos), `tests/catalog/*.test.mjs` 111/111, `test:fast` (104 Node + 6 Chromium) y 74 Chromium (variant-filter-photos, product-card-colors, product-stock-first, boutique-surfaces, search-responsive). CI del SHA final pendiente.
+- 2026-11-12 · PR #1381 (filtros de variantes): actualizado con main d482fb2 (#1380) y plan de flujos renovado. PASS_LOCAL: build:pages, ci:preflight, protección de flujos 78/542, tests/catalog. CI del SHA final pendiente.
