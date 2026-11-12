@@ -51,7 +51,6 @@ export async function openPhotoEditor(source,{state:initialState=null,signal}={}
  const abort=new AbortController();
  function render(target=canvas,full=false){
   const ratio=full?1:Math.min(1,1000/state.width,800/state.height);target.width=Math.max(1,Math.round(state.width*ratio));target.height=Math.max(1,Math.round(state.height*ratio));const ctx=target.getContext('2d');
-  if(state.background!=='transparent'){ctx.fillStyle=state.background;ctx.fillRect(0,0,target.width,target.height);}
   ctx.scale(ratio,ratio);ctx.translate(state.width/2+state.x*state.width,state.height/2+state.y*state.height);ctx.rotate(state.rotation*Math.PI/180);ctx.scale(state.flipX,state.flipY);
   const angle=state.rotation*Math.PI/180,extentW=Math.abs(image.width*Math.cos(angle))+Math.abs(image.height*Math.sin(angle)),extentH=Math.abs(image.width*Math.sin(angle))+Math.abs(image.height*Math.cos(angle));
   const scale=Math.min(state.width/extentW,state.height/extentH)*state.zoom;
@@ -62,6 +61,7 @@ export async function openPhotoEditor(source,{state:initialState=null,signal}={}
    for(let i=0;i<data.length;i+=4){if(!data[i+3])continue;const r=(data[i]*b-127.5)*c+127.5,g=(data[i+1]*b-127.5)*c+127.5,blue=(data[i+2]*b-127.5)*c+127.5,gray=.213*r+.715*g+.072*blue;data[i]=gray+(r-gray)*s;data[i+1]=gray+(g-gray)*s;data[i+2]=gray+(blue-gray)*s;}
    ctx.putImageData(pixels,0,0);
   }
+  if(state.background!=='transparent'){ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.globalCompositeOperation='destination-over';ctx.fillStyle=state.background;ctx.fillRect(0,0,target.width,target.height);ctx.restore();}
  }
  const bindings=[];
  function refresh(){for(const {input,key,output} of bindings){input.value=String(state[key]);if(output)output.textContent=`${state[key]}${key==='rotation'?'°':key==='zoom'?'×':'%'}`;}bg.value=state.background;const ratio=state.width/state.height;const match=[...format.options].find(option=>option.value!=='free' && Math.abs(ratio-(option.value==='original'?image.width/image.height:Number(option.value)))<.002);format.value=match?.value || 'free';undo.disabled=index===0;redo.disabled=index===history.length-1;render();}
