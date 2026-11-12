@@ -1,3 +1,48 @@
+## Editor de fotografías con recorrido de carga — 2026-11-12 — Codex /root
+
+Base dfcb4a6 (PR1377 integrada y verificada; su observador horario específico
+quedó desactivado). Nuevo pedido de la titular: edición de fotografías de
+Nuevo/Editar producto inspirada en la carga de Instagram, adaptada a Tintín y
+a móviles, tabletas, horizontal y escritorio. No rediseñar marca ni retirar
+campos/opciones comerciales. Rama feat/product-image-editor en worktree propio;
+no tocar rama/PR1354 de Claude ni sus checks.
+
+Autoridades: carga-imagenes.js y galeria-unificada.js. Nuevo editor local
+editor-fotografias.js, importado a demanda: proporciones y dimensiones, zoom,
+encuadre arrastrable/teclado/pinch, giro, volteos, brillo/contraste/saturación,
+fondo libre transparente/blanco/rosa, deshacer/rehacer/original. Seleccionar
+archivos en galería abre el editor antes de subirlos; cada foto se confirma
+por separado y se revisa en la cola existente. Cancelar la selección descarta
+sólo ese archivo. Edición manual cancela sin cambiar el pendiente previo. El
+original de biblioteca nunca se sobrescribe; la copia reemplaza referencias
+sólo tras carga confirmada conservando portada/asociaciones. Guardar espera
+validación/edición/carga; cerrar aborta editor y libera bitmap/URLs locales.
+Imagen sin ajustes conserva sus bytes; edición exporta PNG, máximo4096px por
+eje y límite15MiB vigente. Ajustes por píxeles para Safari sin canvas.filter.
+Preview permanece visible mientras se recorren controles, con áreas44px y
+campos16px, superficie modal nativa y acciones siempre accesibles.
+
+Skills leídos: tintin-ecommerce-flows, tintin-design-quality y
+ tintin-responsive-a11y. PASS_LOCAL final:22 Chromium del editor (píxeles,
+recorrido automático, cola, flush, cancelación, copia/original, asociaciones,
+pinch, preview completo, áreas seguras simuladas y CSP que limita connect-src).
+El marco de recorte conserva su proporción visible; botones Ver foto completa
+y Llenar encuadre alternan encaje/recorte sin destruir el original.
+Regresión de246 Chromium de fotos contextuales/guardado/workspaces PASS;
+33 de pestañas y8 de CSP/guardado PASS. Test:fast104Node+6Chromium y auditor
+multimedia42 verificaciones PASS. Build/plan se regeneran tras esta evidencia.
+Foto pública real de Cloudinary decodificada de sólo lectura y canvas limpio
+900×1200: usar Image.crossOrigin/decodificación por img-src existente, sin
+ampliar connect-src ni introducir proxy. Fondos compuestos tras ajustes de
+píxeles para conservar su color. Respeta notch/barra de gestos, modal centrado,
+preview encogible en horizontal y controles con scroll independiente.
+WebKit descargado pero no ejecutable por bibliotecas del host ausentes;
+instalar dependencias requería su no disponible: Safari NOT_VERIFIED.
+Sin datos comerciales reales modificados. PR1380 en curso; seguir SHA/run
+actuales, mantenedor confiable, merge y postmerge por separado. PR1379 y
+1354 ajenas: sólo leer para coordinar; conciliar esta rama con main aceptado
+si integran primero. No heredar verde de33cb/bad4 al siguiente candidato.
+
 ## Reparación activa del check lateral — 2026-11-12T01:22Z — Codex /root
 
 Base main dfcb4a6e87849671dd11fd825049a7e75b57b257. El control post-merge CI43122499465/1 TERMINALSUCCESS, Repositoryaudit130877668120SUCCESS; browser130868455897 tiene1flaky nuevo: tests/ui-ux/admin-sidebar-interaction.spec.js:72, a820px diferencia de centros8px frente al máximo1px, retryconfiguradoPASS. Calidad528runtimePASS y admin77/471/26/255PASS sinflaky. No confundir conclusiónSUCCESS con ausencia de inestabilidad.

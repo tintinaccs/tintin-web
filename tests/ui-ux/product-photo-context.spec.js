@@ -1,3 +1,4 @@
+const {confirmPhotoEdits}=require('./helpers/photo-editor.cjs');
 'use strict';
 const {test,expect}=require('@playwright/test');
 const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
@@ -102,7 +103,7 @@ test('agregar color desde el mismo bloque no distribuye stock de un producto sim
 test('un reemplazo pendiente no se pierde al intentar cambiar asociaciones y quitar su foto lo cancela',async({page})=>{
  await open(page);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();await page.getByRole('button',{name:'Reemplazar foto 1',exact:true}).click();
  await page.evaluate(()=>window.qaUploadFailure=true);
- await page.locator('.tt-photo-context input[type=file]').setInputFiles({name:'reemplazo.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=','base64')});
+ await page.locator('.tt-photo-context input[type=file]').setInputFiles({name:'reemplazo.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=','base64')});await confirmPhotoEdits(page,1);
  await page.getByRole('tab',{name:'Variantes',exact:true}).click();await page.getByRole('button',{name:'Fotos de Color: Plateado',exact:true}).click();await expect(page.locator('.tt-unified-photos > [role=status]')).toContainText('reemplazo pendiente');await expect(page.locator('.tt-photo-context input[type=file]')).toHaveCount(1);
  await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();await page.getByRole('button',{name:'Quitar foto 1',exact:true}).click();await page.evaluate(()=>{window.qaUploadFailure=false;return window.qaProductController.workspace.save();});await expect(page.locator('.tt-unified-photo')).toHaveCount(1);await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/two.webp');
 });
@@ -182,7 +183,7 @@ test('cantidades antiguas se editan sólo en Precio y stock con sus identidades 
 for(const mode of ['draft','active','inactive','archived'])test(`carga múltiple junto a la opción y guardado ${mode} usan una sola configuración`,async({page})=>{
  await open(page,390,mode==='inactive'?{...product,active:false}:product);const option=await editPhotos(page,'Plateado');
  const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=40;canvas.height=40;return canvas.toDataURL('image/png').split(',')[1];});
- await option.locator('input[multiple]').setInputFiles(['first.png','second.png'].map(name=>({name,mimeType:'image/png',buffer:Buffer.from(png,'base64')})));
+ await option.locator('input[multiple]').setInputFiles(['first.png','second.png'].map(name=>({name,mimeType:'image/png',buffer:Buffer.from(png,'base64')})));await confirmPhotoEdits(page,2);
  await expect(option.locator('.tt-editor-upload-item')).toHaveCount(2);
  await option.getByRole('button',{name:'Confirmar y subir fotos',exact:true}).click();
  await expect(option.locator('.tt-editor-upload-item')).toHaveCount(0);
@@ -211,7 +212,7 @@ for(const mode of ['draft','active','inactive','archived'])test(`carga múltiple
 test('guardar desde otra sección sube las fotos pendientes a su opción original',async({page})=>{
  await open(page,390);const photos=await editPhotos(page,'Dorado');
  const png=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=c.height=40;return c.toDataURL('image/png').split(',')[1];});
- await photos.locator('input[multiple]').setInputFiles({name:'original-option.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});
+ await photos.locator('input[multiple]').setInputFiles({name:'original-option.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});await confirmPhotoEdits(page,1);
  await expect(photos.locator('.tt-editor-upload-item')).toHaveCount(1);
  await page.getByRole('tab',{name:'Precio y stock',exact:true}).click();
  await page.getByRole('spinbutton',{name:'Stock: Plateado',exact:true}).fill('4');

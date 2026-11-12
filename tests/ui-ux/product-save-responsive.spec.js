@@ -1,3 +1,4 @@
+const {confirmPhotoEdits}=require('./helpers/photo-editor.cjs');
 const { test, expect } = require('@playwright/test');
 const { openProductSaveFixture,openOptionAvailability } = require('./helpers/product-save-fixture.cjs');
 for (const [width, height] of [[320,568],[390,844],[430,932],[844,390],[768,1024],[820,1180],[1024,768],[1180,820],[1280,720],[1366,768],[1440,900],[1920,1080],[2560,1440]]) {
@@ -205,13 +206,13 @@ test('carga unificada conserva pendientes ante fallo, reintenta y permite cancel
  const gallery=page.locator('.tt-unified-photos');
  const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=40;canvas.height=40;return canvas.toDataURL('image/png').split(',')[1];});
  const file=n=>({name:`device${n}.png`,mimeType:'image/png',buffer:Buffer.from(png,'base64')});
- await gallery.locator('input[multiple]').setInputFiles([1,2,3,4,5].map(file));
+ await gallery.locator('input[multiple]').setInputFiles([1,2,3,4,5].map(file));await confirmPhotoEdits(page,5);
  await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(5);
  await page.evaluate(()=>window.qaUploadFailure=true);await gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true}).click();
  await expect(gallery.locator('.tt-iuw-multiple .tt-iuw-status')).toContainText('Carga fallida');await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(5);
  await page.evaluate(()=>window.qaUploadFailure=false);await gallery.getByRole('button',{name:'Confirmar y subir fotos',exact:true}).click();
  await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(0);
- await gallery.locator('input[multiple]').setInputFiles(file(6));await gallery.getByRole('button',{name:'Quitar pendiente device6.png',exact:true}).click();await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(0);
+ await gallery.locator('input[multiple]').setInputFiles(file(6));await confirmPhotoEdits(page,1);await gallery.getByRole('button',{name:'Quitar pendiente device6.png',exact:true}).click();await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(0);
  await gallery.getByRole('button',{name:'Reemplazar foto 1',exact:true}).click();await gallery.getByRole('button',{name:'Cancelar reemplazo',exact:true}).click();await expect(gallery.locator('.tt-unified-photo')).toHaveCount(5);
 });
 
