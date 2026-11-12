@@ -41,15 +41,23 @@ test('Inicio actualiza los videos desde la API al volver a la página sin congel
  const order=await page.evaluate(()=>{const section=document.querySelector('#instagram'),reviews=document.querySelector('#tt-reviews-title'),footer=document.querySelector('footer');return !!(reviews.compareDocumentPosition(section)&Node.DOCUMENT_POSITION_FOLLOWING)&&!!(section.compareDocumentPosition(footer)&Node.DOCUMENT_POSITION_FOLLOWING);});expect(order).toBe(true);
 });
 
-test('Instagram no consulta fuera de pantalla y conserva tarjetas si nada cambió',async({page})=>{
+test('Instagram precarga una vez fuera de pantalla, no actualiza fuera de pantalla y conserva tarjetas si nada cambió',async({page})=>{
  await page.clock.install();
  await page.route('**/__instagram-efficiency',route=>route.fulfill({contentType:'text/html',body:'<!doctype html><div style="height:3000px"></div><section id="instagram"><div data-instagram-feed style="height:200px"></div></section>'}));
  let requests=0;
  await page.route('**/api/instagram-feed',route=>{requests++;return route.fulfill({json:{available:true,posts:[{type:'video',url:'https://www.instagram.com/reel/stable/',caption:'Video estable'}]}});});
  await page.goto('/__instagram-efficiency');
  await page.addScriptTag({type:'module',url:'/js/components/social/instagram-tintin.js'});
- await page.locator('#instagram').scrollIntoViewIfNeeded();
+ // Precarga única en segundo plano: las tarjetas ya existen antes de llegar a la sección.
+ await page.clock.runFor(2000);
+ await expect.poll(()=>requests).toBe(1);
  await expect(page.locator('[data-instagram-feed] button')).toHaveText('Video estable');
+ await page.clock.runFor(20000);
+ expect(requests).toBe(1);
+ // Al llegar con datos recientes (menos de 60 s) no se repite la consulta.
+ await page.locator('#instagram').scrollIntoViewIfNeeded();
+ await page.clock.runFor(100);
+ expect(requests).toBe(1);
  const card=await page.locator('[data-instagram-feed] button').elementHandle();
  await page.clock.fastForward(61000);
  await expect.poll(()=>requests).toBe(2);
