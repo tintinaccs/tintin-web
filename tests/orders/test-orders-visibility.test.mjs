@@ -1,3 +1,4 @@
+import {sumOrderAmounts,orderAmounts} from '../../js/orders/importes-pedido.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -5,7 +6,7 @@ import vm from 'node:vm';
 import { testOrderNumber, orderDisplayCode, ordersForView } from '../../js/orders/pedidos-prueba.mjs';
 import { purchasedCustomers, localCommerceSnapshot } from '../../cloudflare/comercio-local.js';
 import { encodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
-const samples=Array.from({length:27},(_,i)=>({id:`fixture_${i+1}`,orderNumber:`TINPED${String(i+1).padStart(2,'0')}`,userId:'real_customer',userName:'Cliente',status:'entregado',total:i===25?205000:10000,createdAt:'2026-10-19'}));
+const samples=Array.from({length:27},(_,i)=>({id:`fixture_${i+1}`,orderNumber:`TINPED${String(i+1).padStart(2,'0')}`,userId:'real_customer',userName:'Cliente',status:'entregado',shippingCost:0,total:i===25?205000:10000,createdAt:'2026-10-19'}));
 test('sólo el lote 01–25 se reclasifica; 26 y futuros mantienen código, ID e identidad',()=>{
  const original=structuredClone(samples),shown=ordersForView(samples,true),hidden=ordersForView(samples);
  assert.equal(shown.length,27);assert.equal(hidden.length,2);assert.strictEqual(hidden[0],samples[25]);
@@ -19,7 +20,7 @@ function statsRuntime(){
  const source=fs.readFileSync(new URL('../../js/core/store/estadisticas-pedidos.js',import.meta.url),'utf8');
  const head=source.slice(source.indexOf('const ZERO_STATS'),source.indexOf('async function getOrdersByField'));
  const calc=source.slice(source.indexOf('export function calculateOrderStats'),source.indexOf('export function buildUserStatsPayload')).replace('export ','');
- const c={ordersForView};vm.createContext(c);vm.runInContext(head+calc,c);return c.calculateOrderStats;
+ const c={ordersForView,sumOrderAmounts};vm.createContext(c);vm.runInContext(head+calc,c);return c.calculateOrderStats;
 }
 test('totales, última compra y perfil ignoran pruebas; la revisión administrativa puede incluirlas',()=>{
  const calculate=statsRuntime();assert.equal(calculate(null).totalOrders,0);const clean=calculate(samples);assert.equal(clean.totalOrders,2);assert.equal(clean.totalSpent,215000);
@@ -69,7 +70,7 @@ test('la exportación legacy aplica el corte también cuando el código sólo ex
  const start=source.indexOf("document.getElementById('btn-exportar-pedidos').onclick = async () => {")+"document.getElementById('btn-exportar-pedidos').onclick = async () => {".length;
  const end=source.indexOf("\n  };",start);
  const rows=[{id:'TINPED01',data:()=>({total:999999})},{id:'TINPED26',data:()=>({total:205000})}];let csv;
- const context={getDocsPaginated:async()=>({docs:rows,size:2}),collection:()=>({}),db:{},ordersForView,includesTestOrders:()=>false,orderDisplayCode,formatDate:()=>'',ORDER_STATUS_LABELS:{},PAY_STATUS_LABELS:{},toast(){},downloadCsv:(name,records)=>{csv=records;}};vm.createContext(context);
+ const context={orderAmounts,getDocsPaginated:async()=>({docs:rows,size:2}),collection:()=>({}),db:{},ordersForView,includesTestOrders:()=>false,orderDisplayCode,formatDate:()=>'',ORDER_STATUS_LABELS:{},PAY_STATUS_LABELS:{},toast(){},downloadCsv:(name,records)=>{csv=records;}};vm.createContext(context);
  await vm.runInContext('(async()=>{'+source.slice(start,end)+'})()',context);
- assert.equal(csv.length,2);assert.equal(csv[1][0],'TINPED26');assert.equal(csv[1][8],205000);
+ assert.equal(csv.length,2);assert.equal(csv[1][0],'TINPED26');assert.equal(csv[1][10],205000);
 });

@@ -4,7 +4,7 @@ import {
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1-p1112';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261112-delivery-separate-1';
 import { AUTH_STATES, subscribeSession, waitForSession, getSessionUser } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { readCheckoutProfile } from './perfil-checkout.js?v=tintin-20261022-avatar-inicial-1';
 

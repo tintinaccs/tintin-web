@@ -234,7 +234,7 @@ for (const mode of ['reset', 'today']) for (const width of [320, 768, 1440]) tes
   await page.goto('https://statistics-controls.test/');
   await page.waitForFunction(() => window.amount === 300);
   await page.getByRole('button', { name: 'Reiniciar contadores' }).click();
-  await page.getByRole('checkbox', { name: 'Facturación', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'Venta de productos (sin delivery)', exact: true }).check();
   await page.getByRole('button', { name: mode === 'today' ? 'Contar desde el inicio de hoy (Paraguay)' : 'Reiniciar seleccionados', exact: true }).click();
   await page.waitForFunction(expected => window.amount === expected, mode === 'today' ? 100 : 0);
   expect(await page.evaluate(() => window.orders)).toBe(2);

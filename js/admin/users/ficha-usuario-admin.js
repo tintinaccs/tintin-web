@@ -1,3 +1,4 @@
+import {orderAmountSummary} from '../../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { ordersForView, orderDisplayCode } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 /* =============================================================
@@ -139,7 +140,7 @@ if (!window.TintinAdminUserFichaBooted) {
       const orders = ordersResult.status === 'fulfilled' ? ordersResult.value : [];
       // Las cifras de la ficha siguen la fuente completa del panel, no cachés históricas del perfil.
       if(window.TintinAdminOrders?.ready?.()) {
-        const {calculateOrderStats}=await import('../../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2');
+        const {calculateOrderStats}=await import('../../core/store/estadisticas-pedidos.js?v=tintin-20261112-delivery-separate-1');
         let snapshot;const stop=window.TintinAdminOrders.subscribe(value=>{snapshot=value;});stop();
         const accountOrders=(snapshot?.orders||[]).filter(order=>order.userId===uid || (user.email && String(order.userEmail||'').toLowerCase()===String(user.email).toLowerCase()));
         user={...user,...calculateOrderStats(accountOrders,{includeTestOrders:snapshot?.includeTestOrders===true})};
@@ -181,7 +182,8 @@ if (!window.TintinAdminUserFichaBooted) {
 
       const commercial = section('Comercial');
       commercial.grid.append(
-        field('Total gastado', formatPrice(user.totalSpent)),
+        field('Productos comprados (sin delivery)', user.productsSpent==null?'No disponible':formatPrice(user.productsSpent)),
+        field('Delivery (aparte)', user.deliverySpent==null?'No disponible':formatPrice(user.deliverySpent)),
         field('Compras registradas', String(user.purchaseCount || 0)),
       );
       if (text(user.internalNotes)) {
@@ -218,7 +220,7 @@ if (!window.TintinAdminUserFichaBooted) {
         row.append(
           el('span', '', `#${orderDisplayCode(order)} · ${formatDate(order.createdAt)}`),
           el('span', 'adm-badge', order.status || 'Pendiente'),
-          el('span', '', formatPrice(order.total)),
+          el('span', '', orderAmountSummary(order,formatPrice)),
         );
         ordersList.appendChild(row);
       });

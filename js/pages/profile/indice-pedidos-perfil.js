@@ -2,7 +2,7 @@ import { appCheck } from '../../core/firebase/firebase.js?v=tintin-20261017-doma
 import { getToken } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
 import { runAuthenticatedQueryRest } from '../../core/firebase/respaldo-rest-firestore.js?v=tintin-20261030-home-history-5';
 
-export const ORDER_INDEX_FIELDS = ['createdAt','updatedAt','total','status','payment.status','paymentStatus','orderNumber','shortId','orderCode'];
+export const ORDER_INDEX_FIELDS = ['subtotal','shippingCost','shippingPending','shippingMethod','shipping.method','shipping.cost','localSale.total','localSale.shippingCost','createdAt','updatedAt','total','status','payment.status','paymentStatus','orderNumber','shortId','orderCode'];
 export const ORDER_INDEX_PAGE_SIZE = 100;
 
 export function accountOrdersIndexQuery(user, cursor = '') {

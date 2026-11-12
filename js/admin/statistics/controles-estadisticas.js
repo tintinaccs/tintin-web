@@ -1,6 +1,6 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
-import { RESETTABLE_STATISTICS, statisticsSince } from './modelo-reinicios.mjs?v=tintin-20261019-revenue-start-1';
+import { RESETTABLE_STATISTICS, statisticsSince } from './modelo-reinicios.mjs?v=tintin-20261112-delivery-separate-1';
 
 let state = { resets: {}, lastChangeId: '' }, owner = '', ready = false, loading = false, rerender;
 export function filterStatisticsRows(metric, rows, timeOf) { return statisticsSince(rows, metric, state.resets, timeOf); }

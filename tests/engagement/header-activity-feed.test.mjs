@@ -1,3 +1,4 @@
+import {createNotificationMoneyReader} from '../../js/components/notifications/importes-notificacion.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -31,7 +32,7 @@ test('marcar visto no avisa, un nuevo agregado sí, y otra cuenta comienza sin h
 
 function subscriptionHarness() {
   const subscriptions = [], notices = [];
-  const context = vm.createContext({
+  const context = vm.createContext({notificationMoney:createNotificationMoneyReader({readOrder:async()=>null,onChange(){}}),
     subscriptionGeneration: 0, unsubscribe: null, subscribeRetryTimer: 0,
     historyLimit: 100, hasOlderNotifications: false,
     listenerFailed: false, notifications: [], subscribeRetryAttempt: 0, subscribeAuthRecoveryAttempted: false,
@@ -116,7 +117,7 @@ test('un snapshot administrativo tardío no reaparece después de cambiar de cue
 
 test('un cambio de sesión durante la obtención de token impide enviar la marca de lectura', async () => {
   let resolveToken, writes = 0;
-  const context = vm.createContext({
+  const context = vm.createContext({notificationMoney:createNotificationMoneyReader({readOrder:async()=>null,onChange(){}}),
     currentUser: { uid: 'a', getIdToken: () => new Promise(resolve => { resolveToken = resolve; }) },
     fetch: async () => { writes++; return { ok: true, json: async () => ({ ok: true }) }; },
   });

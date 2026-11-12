@@ -1,3 +1,4 @@
+import { orderAmounts, orderAmountSummary } from '../../js/orders/importes-pedido.mjs';
 import { readLimitedText } from '../lib/operational-guard.js';
 import { rateLimitErrorResponse,
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, requireSuperAdmin, statusFromError,
@@ -119,9 +120,9 @@ async function registerOrderCreated(env, user, orderId) {
   const profile = userDocument ? decodeFirestoreFields(userDocument.fields || {}) : {};
   const orderNumber = clean(order.orderNumber || order.shortId || id, 80);
   const customerName = clean(order.userName || String(user.email || '').split('@')[0] || 'Una clienta', 160);
-  const total = Math.max(0, Math.round(Number(order.total) || 0));
+  const amountBreakdown = orderAmounts(order);
   const createdAt = order.createdAt ? new Date(order.createdAt) : new Date();
-  const totalText = total ? `${total.toLocaleString('es-PY')} Gs.` : 'Monto a confirmar.';
+  const amountText = orderAmountSummary(order);
 
   // El push de "pedido creado" ya lo garantiza dispatchOrderPushEvent (webhook
   // firmado de Apps Script y, como respaldo, order-email.js), ambos con el
@@ -131,7 +132,7 @@ async function registerOrderCreated(env, user, orderId) {
     kind: 'order_created', actorType: 'customer', actorUid: user.uid, actorName: customerName,
     actorPhotoUrl: profile.photoURL,
     title: `${customerName} realizó el pedido ${orderNumber}`,
-    body: `Nuevo pedido por ${totalText}`,
+    body: amountText, amountBreakdown,
     iconKey: 'order', targetUrl: 'admin.html#section-pedidos',
     orderId: id, orderNumber, status: clean(order.status || 'pendiente', 80),
     sourceType: 'order', sourceId: id, createdAt,
@@ -140,7 +141,7 @@ async function registerOrderCreated(env, user, orderId) {
   await notifyUserIfAbsent(env, user.uid, {
     kind: 'order_created', actorType: 'store', actorName: 'Tintin Accesorios',
     title: `Recibimos tu pedido ${orderNumber}`,
-    body: 'Tu pedido ya está registrado. Te vamos a avisar por acá cada cambio importante de estado.',
+    body: `Tu pedido ya está registrado. ${amountText}`, amountBreakdown,
     iconKey: 'order', targetUrl: `perfil.html#pedido-${encodeURIComponent(id)}`,
     orderId: id, orderNumber, status: clean(order.status || 'pendiente', 80),
     sourceType: 'order', sourceId: id, createdAt,

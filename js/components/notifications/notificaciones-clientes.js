@@ -1,3 +1,4 @@
+import {createNotificationMoneyReader} from './importes-notificacion.mjs?v=tintin-20261112-delivery-separate-1';
 import { notificationIconKey, notificationIconSvg as iconSvg, notificationActionLabel } from './presentacion-notificacion.mjs?v=tintin-20261030-notificaciones-explicitas-1';
 import { testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1';
@@ -8,7 +9,7 @@ import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-
 import { createLiveActivityNotices } from './avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1-palette-20261014-1';
 import '../../admin/notifications/notificaciones-push.js?v=tintin-20261022-avatar-inicial-1';
 import {
-  collection, limit, orderBy, query, startAfter} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+  doc, getDoc, collection, limit, orderBy, query, startAfter} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const ASSET_VERSION = 'tintin-20261009-whatsapp-responsive-1';
 const API_RETRY_DELAYS_MS = [450, 1200];
@@ -27,6 +28,7 @@ let subscriptionGeneration = 0;
 let historyLimit = 100;
 let hasOlderNotifications = false;
 const liveNotices = createLiveActivityNotices();
+const notificationMoney = createNotificationMoneyReader({readOrder:async id=>{const owner=currentUser?.uid;if(!owner)return null;const snapshot=await getDoc(doc(db,'orders',id));if(currentUser?.uid!==owner)return null;return snapshot.exists()?snapshot.data():null;},onChange:()=>render()});
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -211,7 +213,7 @@ function render() {
       <span class="tt-notification-copy">
         <span class="tt-notification-sender">${escapeHtml(notification.actorType === 'store' ? 'Tintin Accesorios' : notification.actorType === 'customer' ? notification.actorName || 'Cliente' : 'Sistema Tintin')}</span>
         <strong>${escapeHtml(notification.title || 'Nueva actividad')}</strong>
-        ${notification.body ? `<p>${escapeHtml(notification.body)}</p>` : ''}
+        ${notification.body || notification.orderId ? `<p>${escapeHtml(notificationMoney.body(notification,{load:document.getElementById('notifications-drawer')?.getAttribute('aria-hidden')==='false'}))}</p>` : ''}
         <span class="tt-notification-meta">${notification.read === true ? '' : '<span class="tt-notification-dot" aria-label="Sin leer"></span>'}<time title="${escapeHtml(timeValue(notification.createdAt).toLocaleString('es-PY'))}" datetime="${timeValue(notification.createdAt).toISOString()}">${escapeHtml(relativeTime(notification.createdAt))}</time></span>
         <span class="tt-notification-action">${escapeHtml(notificationActionLabel(notification))}</span>
       </span>${trailing}
@@ -306,6 +308,7 @@ function subscribe(user, { preserve = false } = {}) {
   subscribeRetryTimer = 0;
   if (!preserve) {
     listenerFailed = false;
+    notificationMoney.reset();
     notifications = [];
     subscribeRetryAttempt = 0;
     subscribeAuthRecoveryAttempted = false;
@@ -338,7 +341,7 @@ function subscribe(user, { preserve = false } = {}) {
       notifications = docs.map(document => ({ ...document.data(), id: document.id }))
         .filter(item => testOrderNumber(item) === null)
         .filter(item => adminFeed || isVisibleCustomerNotification(item));
-      if (adminFeed && index === 0) liveNotices.update(`admin:${user.uid}`, notifications);
+      if (adminFeed && index === 0) liveNotices.update(`admin:${user.uid}`, notifications.map(item=>({...item,body:notificationMoney.body(item,{load:false})})));
       else if (!adminFeed) liveNotices.clear();
       listenerFailed = false;
       subscribeRetryAttempt = 0;
@@ -410,6 +413,7 @@ function wireEvents() {
     const surface = String(event.detail?.surface || '');
     const state = String(event.detail?.state || '');
     if (surface === 'notifications' && (state === 'opening' || state === 'open')) {
+      render();
       // Reintento manual: sólo cuando la recuperación automática ya se detuvo.
       if (listenerFailed && currentUser && !subscribeRetryTimer) {
         subscribeRetryAttempt = 0;
@@ -464,6 +468,7 @@ export function initClientNotifications() {
 
 window.addEventListener('pagehide', () => {
   subscriptionGeneration += 1;
+  notificationMoney.reset();
   liveNotices.clear();
   unsubscribe?.();
   authUnsubscribe?.();

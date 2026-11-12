@@ -1,3 +1,4 @@
+import { orderAmountSummary } from '../js/orders/importes-pedido.mjs';
 // =============================================================
 // TINTIN — Núcleo compartido de Web Push (sin estado, sin red)
 // =============================================================
@@ -97,7 +98,7 @@ export function adminOrderLink(orderId) {
  */
 export function buildPushContent({ type, orderId, order, eventId, foregroundSound = 'default', foregroundSoundUrl = '' }) {
   const shortId = shortIdFor(order, orderId);
-  const total = formatGuarani(order?.total);
+  const amounts = orderAmountSummary(order);
   const url = adminOrderLink(orderId);
   const tag = cleanText(eventId, 120) || `${type}:${orderId}`;
 
@@ -105,16 +106,16 @@ export function buildPushContent({ type, orderId, order, eventId, foregroundSoun
   let body = `Pedido #${shortId}`;
   if (type === 'order.created') {
     title = 'Nuevo pedido en Tintin';
-    body = `Pedido #${shortId} · ${total} · ${deliveryLabel(order)}`;
+    body = `Pedido #${shortId} · ${amounts} · ${deliveryLabel(order)}`;
   } else if (type === 'payment.completed') {
     title = 'Pago confirmado';
-    body = `Pedido #${shortId} · ${paymentLabel(order)} · ${total}`;
+    body = `Pedido #${shortId} · ${paymentLabel(order)} · ${amounts}`;
   } else if (type === 'payment.failed') {
     title = 'Pago rechazado';
     body = `Pedido #${shortId} · ${paymentLabel(order)}`;
   } else if (type === 'payment.refunded') {
     title = 'Pago devuelto';
-    body = `Pedido #${shortId} · ${paymentLabel(order)} · ${total}`;
+    body = `Pedido #${shortId} · ${paymentLabel(order)} · ${amounts}`;
   }
 
   return {

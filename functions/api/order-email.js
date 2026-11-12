@@ -1,3 +1,4 @@
+import {orderAmounts,deliveryAmountText} from '../../js/orders/importes-pedido.mjs';
 import { readLimitedText } from '../lib/operational-guard.js';
 import {
   jsonResponse,
@@ -166,7 +167,7 @@ function fmtDate(value) {
 
 function shippingCostLabel(order) {
   if (order?.shipping?.method === 'encomienda' && (order.shippingPending || Number(order.shippingCost) === 0)) return 'Sólo el envío se paga a la transportadora al recibir. El producto se paga previamente por transferencia; no hay contra entrega.';
-  return order.shippingPending ? 'A confirmar' : fmtPrice(order.shippingCost);
+  return deliveryAmountText(order,fmtPrice);
 }
 
 function shippingLabel(order) {
@@ -256,9 +257,9 @@ export function customerEmail(order, orderId, transfer = null) {
         </p>
         <table style="width:100%;border-collapse:collapse;margin:0 0 18px">${rows}</table>
         <table style="width:100%;border-collapse:collapse;background:#fdf6f9;border-radius:14px">
-          <tr><td style="padding:12px 14px;font-size:13px;color:#7b6f72">Subtotal</td><td style="padding:12px 14px;font-size:13px;text-align:right">${escapeHtml(fmtPrice(order.subtotal))}</td></tr>
-          <tr><td style="padding:0 14px 12px;font-size:13px;color:#7b6f72">Envío</td><td style="padding:0 14px 12px;font-size:13px;text-align:right">${escapeHtml(shippingCostLabel(order))}</td></tr>
-          <tr><td style="padding:12px 14px;font-size:14.5px;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">Total</td><td style="padding:12px 14px;font-size:14.5px;text-align:right;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">${escapeHtml(fmtPrice(order.total))}</td></tr>
+          <tr><td style="padding:12px 14px;font-size:13px;color:#7b6f72">Productos (sin delivery)</td><td style="padding:12px 14px;font-size:13px;text-align:right">${escapeHtml(orderAmounts(order).products===null?'No registrado':fmtPrice(orderAmounts(order).products))}</td></tr>
+          <tr><td style="padding:0 14px 12px;font-size:13px;color:#7b6f72">Delivery (aparte)</td><td style="padding:0 14px 12px;font-size:13px;text-align:right">${escapeHtml(shippingCostLabel(order))}</td></tr>
+          <tr><td style="padding:12px 14px;font-size:14.5px;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">Total del pedido</td><td style="padding:12px 14px;font-size:14.5px;text-align:right;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">${escapeHtml(fmtPrice(order.total))}</td></tr>
         </table>
         <div style="margin-top:18px;padding:16px 18px;background:#fdf6f9;border-radius:14px;font-size:13px;line-height:1.7;color:#5e5357">
           <strong style="color:#2b2226">Entrega:</strong> ${escapeHtml(shippingLabel(order))}<br>
@@ -282,9 +283,9 @@ Tu pedido fue registrado correctamente. En breve nos comunicaremos contigo para 
 
 ${textItems}
 
-Subtotal: ${fmtPrice(order.subtotal)}
-Envío: ${shippingCostLabel(order)}
-Total: ${fmtPrice(order.total)}
+Productos (sin delivery): ${orderAmounts(order).products===null?'No registrado':fmtPrice(orderAmounts(order).products)}
+Delivery (aparte): ${shippingCostLabel(order)}
+Total del pedido: ${fmtPrice(order.total)}
 Entrega: ${shippingLabel(order)}
 Pago: ${paymentLabel(order)}${transferText}
 
@@ -338,9 +339,9 @@ export function adminEmail(order, orderId) {
       <h2 style="margin:24px 0 8px;color:#2b2226;font-size:15px">Productos</h2>
       <table style="width:100%;border-collapse:collapse;font-size:13.5px">${itemRows}</table>
       <table style="width:100%;border-collapse:collapse;margin-top:14px;background:#fdf6f9;border-radius:14px;font-size:13.5px">
-        <tr><td style="padding:12px 14px;color:#7b6f72">Subtotal</td><td style="padding:12px 14px;text-align:right">${escapeHtml(fmtPrice(order.subtotal))}</td></tr>
-        <tr><td style="padding:0 14px 12px;color:#7b6f72">Envío</td><td style="padding:0 14px 12px;text-align:right">${escapeHtml(shippingCostLabel(order))}</td></tr>
-        <tr><td style="padding:12px 14px;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">Total</td><td style="padding:12px 14px;text-align:right;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">${escapeHtml(fmtPrice(order.total))}</td></tr>
+        <tr><td style="padding:12px 14px;color:#7b6f72">Productos (sin delivery)</td><td style="padding:12px 14px;text-align:right">${escapeHtml(orderAmounts(order).products===null?'No registrado':fmtPrice(orderAmounts(order).products))}</td></tr>
+        <tr><td style="padding:0 14px 12px;color:#7b6f72">Delivery (aparte)</td><td style="padding:0 14px 12px;text-align:right">${escapeHtml(shippingCostLabel(order))}</td></tr>
+        <tr><td style="padding:12px 14px;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">Total del pedido</td><td style="padding:12px 14px;text-align:right;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">${escapeHtml(fmtPrice(order.total))}</td></tr>
       </table>
       ${order.notes ? `<p style="margin:18px 0 0;padding:14px 16px;background:#fdf6f9;border-radius:12px;font-size:13px"><strong>Notas:</strong> ${escapeHtml(order.notes)}</p>` : ''}
       <p style="margin:24px 0 0;text-align:center"><a href="${ADMIN_PANEL}" style="display:inline-block;background:#ad3f67;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:999px;font-weight:700;font-size:13.5px">Abrir Super Admin</a></p>
@@ -369,9 +370,9 @@ Pago: ${paymentLabel(order)}
 
 ${textItems}
 
-Subtotal: ${fmtPrice(order.subtotal)}
-Envío: ${shippingCostLabel(order)}
-Total: ${fmtPrice(order.total)}
+Productos (sin delivery): ${orderAmounts(order).products===null?'No registrado':fmtPrice(orderAmounts(order).products)}
+Delivery (aparte): ${shippingCostLabel(order)}
+Total del pedido: ${fmtPrice(order.total)}
 ${order.notes ? `Notas: ${clean(order.notes, 1000)}` : ''}
 
 Super Admin: ${ADMIN_PANEL}

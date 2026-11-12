@@ -1,3 +1,4 @@
+import { sumOrderAmounts } from '../../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';
 import { ordersForView } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 /* =============================================================
    TINTIN — Order Stats centralizadas
@@ -18,6 +19,7 @@ const ZERO_STATS = Object.freeze({
   purchaseCount: 0,
   totalOrders: 0,
   totalSpent: 0,
+  productsSpent: 0, deliverySpent: 0, unknownProducts: 0, unknownDelivery: 0,
   completedOrders: 0,
   pendingOrders: 0,
   cancelledOrders: 0,
@@ -100,6 +102,7 @@ export function calculateOrderStats(orders = [], { includeTestOrders = false } =
   const validForSpent = clean.filter(o => !isCancelled(o));
   const lastOrder = clean[0] || null;
   const lastPurchase = validForSpent[0] || null;
+  const breakdown = sumOrderAmounts(validForSpent);
   const totalSpent = Math.max(0, validForSpent.reduce((sum, o) => sum + Number(o.total || 0), 0));
 
   return {
@@ -107,6 +110,7 @@ export function calculateOrderStats(orders = [], { includeTestOrders = false } =
     purchaseCount: Math.max(0, clean.length),
     totalOrders: Math.max(0, clean.length),
     totalSpent,
+    productsSpent: breakdown.products, deliverySpent: breakdown.delivery, unknownProducts: breakdown.unknownProducts, unknownDelivery: breakdown.unknownDelivery,
     completedOrders: Math.max(0, completed.length),
     pendingOrders: Math.max(0, pending.length),
     cancelledOrders: Math.max(0, cancelled.length),
@@ -119,8 +123,9 @@ export function calculateOrderStats(orders = [], { includeTestOrders = false } =
 
 export function buildUserStatsPayload(stats) {
   const safe = { ...ZERO_STATS, ...(stats || {}) };
+  const { productsSpent, deliverySpent, unknownProducts, unknownDelivery, ...stored } = safe;
   const payload = {
-    ...safe,
+    ...stored,
     profileStatsUpdatedAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     orderStats: {
@@ -130,6 +135,7 @@ export function buildUserStatsPayload(stats) {
       pending: safe.pendingOrders,
       cancelled: safe.cancelledOrders,
       totalSpent: safe.totalSpent,
+      productsSpent: safe.productsSpent, deliverySpent: safe.deliverySpent, unknownProducts: safe.unknownProducts, unknownDelivery: safe.unknownDelivery,
       lastOrderId: safe.lastOrderId,
       lastPurchaseOrderId: safe.lastPurchaseOrderId,
       lastRecalculatedAt: serverTimestamp()

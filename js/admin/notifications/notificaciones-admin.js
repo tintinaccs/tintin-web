@@ -1,3 +1,4 @@
+import {createNotificationMoneyReader} from '../../components/notifications/importes-notificacion.mjs?v=tintin-20261112-delivery-separate-1';
 import { notificationIconKey, notificationIconSvg as iconSvg, notificationActionLabel } from '../../components/notifications/presentacion-notificacion.mjs?v=tintin-20261030-notificaciones-explicitas-1';
 import { testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
@@ -8,7 +9,7 @@ import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tint
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import { createLiveActivityNotices } from '../../components/notifications/avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1-palette-20261014-1';
 import {
-  collection, limit, onSnapshot, orderBy, query,
+  doc, getDoc, collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const ASSET_VERSION = 'tintin-20261030-notificaciones-explicitas-1-p1106';
@@ -34,6 +35,7 @@ let listenerAuthRecoveryPromise = null;
 let markingVisibleRead = false;
 const orderNotificationInFlight = new Set();
 const liveNotices = createLiveActivityNotices();
+const notificationMoney = createNotificationMoneyReader({readOrder:async id=>{const owner=user?.uid;if(!owner)return null;const snapshot=await getDoc(doc(db,'orders',id));if(user?.uid!==owner)return null;return snapshot.exists()?snapshot.data():null;},onChange:()=>render()});
 let notificationGeneration = 0;
 let ordersGeneration = 0;
 
@@ -184,7 +186,7 @@ function render() {
     return `<div class="adm-notification-card${notification.read === true ? '' : ' is-unread'}">
       <button type="button" class="adm-notification-main" data-notification-open="${escapeHtml(notification.id)}">
         <span class="adm-notification-icon" data-icon="${escapeHtml(notificationIconKey(notification))}">${iconSvg(notificationIconKey(notification))}</span>
-        <span><span class="adm-notification-sender">${escapeHtml(notification.actorType === 'customer' ? notification.actorName || 'Cliente' : notification.actorType === 'store' ? 'Tintin Accesorios' : 'Sistema Tintin')}</span><strong>${escapeHtml(notification.title || 'Nueva actividad')}</strong>${notification.body ? `<p>${escapeHtml(notification.body)}</p>` : ''}<time class="adm-notification-time" title="${escapeHtml(asDate(notification.createdAt).toLocaleString('es-PY'))}" datetime="${asDate(notification.createdAt).toISOString()}">${escapeHtml(relativeTime(notification.createdAt))}</time><span class="adm-notification-action">${escapeHtml(notificationActionLabel(notification))}</span></span>${trailing}
+        <span><span class="adm-notification-sender">${escapeHtml(notification.actorType === 'customer' ? notification.actorName || 'Cliente' : notification.actorType === 'store' ? 'Tintin Accesorios' : 'Sistema Tintin')}</span><strong>${escapeHtml(notification.title || 'Nueva actividad')}</strong>${notification.body || notification.orderId ? `<p>${escapeHtml(notificationMoney.body(notification,{load:document.getElementById('adm-notifications-panel')?.classList.contains('open')===true}))}</p>` : ''}<time class="adm-notification-time" title="${escapeHtml(asDate(notification.createdAt).toLocaleString('es-PY'))}" datetime="${asDate(notification.createdAt).toISOString()}">${escapeHtml(relativeTime(notification.createdAt))}</time><span class="adm-notification-action">${escapeHtml(notificationActionLabel(notification))}</span></span>${trailing}
       </button>${notification.read === true ? '' : `<button type="button" class="adm-notification-read" data-adm-notification-read="${escapeHtml(notification.id)}">Marcar como leída</button>`}${profileButton}
     </div>`;
   }).join('');
@@ -350,7 +352,7 @@ async function subscribeNotifications() {
   unsubscribeNotifications = onSnapshot(source, snapshot => {
     if (generation !== notificationGeneration || user?.uid !== targetUser.uid) return;
     notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() })).filter(item=>testOrderNumber(item)===null);
-    liveNotices.update(`admin:${targetUser.uid}`, notifications);
+    liveNotices.update(`admin:${targetUser.uid}`, notifications.map(item=>({...item,body:notificationMoney.body(item,{load:false})})));
     notificationsRetryAttempt = 0;
     notificationsAuthRecoveryAttempted = false;
     render();
@@ -480,6 +482,7 @@ function wireEvents() {
       const opening = !panel?.classList.contains('open');
       panel?.classList.toggle('open', opening);
       button.setAttribute('aria-expanded', String(opening));
+      if(opening)render();
       return;
     }
 
@@ -518,9 +521,10 @@ wireEvents();
 subscribeAuthState(current => {
   notificationGeneration += 1;
   ordersGeneration += 1;
-  if (user?.uid !== current?.uid) liveNotices.clear();
+  if (user?.uid !== current?.uid) { liveNotices.clear(); notificationMoney.reset(); }
   if (String(current?.email || '').trim().toLowerCase() !== String(SUPER_ADMIN || '').trim().toLowerCase()) {
     user = null;
+    notificationMoney.reset();
     notifications = [];
     document.getElementById('adm-notifications-wrap')?.remove();
     unsubscribeNotifications?.();

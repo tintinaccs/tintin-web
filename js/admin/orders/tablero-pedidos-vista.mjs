@@ -1,3 +1,4 @@
+import {orderMoneyMarkup} from '../../orders/presentacion-importes.mjs?v=tintin-20261112-delivery-separate-1';
 import { orderDisplayCode, testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { ORDER_STAGES, orderStage, orderStatusLabel, nextOrderStatus, orderNeedsAttention, shippingMethod } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 
@@ -25,7 +26,7 @@ export function orderCardHtml(order, model) {
     <h3>${esc(order.userName || order.customer?.name || 'Cliente sin nombre')}</h3>
     <small>Origen: ${esc(order.localEntryId ? 'Venta local (manual)' : order.source || order.channel || (String(order.id).startsWith('manual_') ? 'Manual' : 'Sin origen registrado'))}</small>
     <p class="tt-order-items">${esc(items.slice(0,2).map(i=>`${i.qty ?? i.quantity ?? 1} × ${i.name || i.title || 'Producto'}`).join(' · ') || 'Detalle no registrado')}${items.length > 2 ? ` · +${items.length-2} productos` : ''}</p>
-    <div class="tt-order-card-total"><strong>${money(order.total)}</strong><span>${esc(model.payLabels[payment] || payment)}</span></div>
+    <div class="tt-order-card-total"><strong>${orderMoneyMarkup(order,money)}</strong><span>${esc(model.payLabels[payment] || payment)}</span></div>
     <div class="tt-order-card-meta"><span>${esc(deliveryLabel(order))}</span><span class="tt-order-stage-badge">${esc(orderStatusLabel(order))}</span></div>
     ${orderNeedsAttention(order) ? '<small>Requiere revisión</small>' : ''}
     <div class="tt-order-card-actions"><button type="button" class="tt-commerce-btn" data-action="drawer-order" data-id="${id}">Ver detalles</button>${next && model.canUpdate && !order.localEntryId && testOrderNumber(order)===null ? `<button type="button" class="tt-commerce-btn primary" data-action="order-advance" data-id="${id}" ${model.busyIds.has(order.id) || model.offline ? 'disabled' : ''}>${esc(orderStatusLabel({...order,status:next}))}</button>` : ''}</div>

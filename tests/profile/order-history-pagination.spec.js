@@ -8,6 +8,8 @@ for(const width of [320,768,1440])test(`historial carga detalles por página, co
  await page.goto('/404.html');
  await page.setContent('<link rel="stylesheet" href="/css/pages/perfil.css"><main id="perfil-orders-card"><span id="perfil-purchase-count"></span><span id="perfil-total-spent"></span><div id="perfil-orders-list"></div></main>');
  await page.addScriptTag({type:'module',content:`
+ import {orderAmounts,sumOrderAmounts,deliveryAmountText} from '../../js/orders/importes-pedido.mjs';
+ import {orderMoneyMarkup} from '../../js/orders/presentacion-importes.mjs';
  import {ordersForView} from '../../js/orders/pedidos-prueba.mjs';
  import {ORDER_LIFECYCLE_LABELS,orderStatusLabel,orderTimeline,customerOrderMessage} from '../../js/orders/ciclo-pedido.mjs';
  ${statsCode}
@@ -16,12 +18,12 @@ for(const width of [320,768,1440])test(`historial carga detalles por página, co
  const actor={uid:'fixture-owner',email:'fixture@example.test',emailVerified:true,getIdToken:async()=> 'fixture'};
  const getSessionUser=()=>actor;
  const subscribeSession=fn=>{fn({status:'authenticated',user:actor});return()=>{};};
- const rows=Array.from({length:205},(_,i)=>({id:'order-'+String(i).padStart(3,'0'),total:100,status:'pendiente',items:[{name:'Anillo '+i,price:100,qty:1}],...(i===204?{updatedAt:'2026-10-29T00:00:00Z'}:{createdAt:new Date(Date.UTC(2026,0,i+1)).toISOString()})}));
+ const rows=Array.from({length:205},(_,i)=>({id:'order-'+String(i).padStart(3,'0'),total:100,shippingCost:0,status:'pendiente',items:[{name:'Anillo '+i,price:100,qty:1}],...(i===204?{updatedAt:'2026-10-29T00:00:00Z'}:{createdAt:new Date(Date.UTC(2026,0,i+1)).toISOString()})}));
  const doc=(_db,col,id)=>({col,id});let revision;window.__activeOrders=new Set();window.__indexRequests=0;
  const onSnapshot=(ref,next)=>{if(ref.col==='users'){revision=next;queueMicrotask(()=>next({data:()=>({orderCount:rows.length})}));return()=>{};}
  window.__activeOrders.add(ref.id);let active=true;queueMicrotask(()=>{if(active)next({id:ref.id,exists:()=>true,data:()=>rows.find(row=>row.id===ref.id)});});return()=>{active=false;window.__activeOrders.delete(ref.id);};};
- const readAccountOrdersIndexPage=async({cursor,readTime})=>{window.__indexRequests++;const offset=Number(cursor)||0;return {items:rows.slice(offset,offset+100).map(({id,total,status,createdAt,updatedAt})=>({id,total,status,createdAt,updatedAt})),cursor:offset+100<rows.length?String(offset+100):'',readTime:readTime||'same'};};
- window.__newOrder=()=>{rows.push({id:'new-order',total:100,status:'pendiente',createdAt:'2026-10-30T00:00:00Z',items:[]});revision({data:()=>({orderCount:rows.length})});};
+ const readAccountOrdersIndexPage=async({cursor,readTime})=>{window.__indexRequests++;const offset=Number(cursor)||0;return {items:rows.slice(offset,offset+100).map(({id,total,shippingCost,status,createdAt,updatedAt})=>({id,total,shippingCost,status,createdAt,updatedAt})),cursor:offset+100<rows.length?String(offset+100):'',readTime:readTime||'same'};};
+ window.__newOrder=()=>{rows.push({id:'new-order',total:100,shippingCost:0,status:'pendiente',createdAt:'2026-10-30T00:00:00Z',items:[]});revision({data:()=>({orderCount:rows.length})});};
  history.replaceState(null,'','/perfil');
  ${profile}
  `});
