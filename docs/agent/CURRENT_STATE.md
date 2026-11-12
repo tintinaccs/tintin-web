@@ -8,6 +8,16 @@ Esta corrección cambia únicamente referencias locales y VERSION del cargador a
 
 ---
 
+## Colores en estilos en línea de JavaScript — 2026-11-12 — Claude Code
+
+Pedido de la titular: arreglar los colores que quedaron en JavaScript, fuera de la paleta Tintín (#F8AACA, #FDECF2, #222222, blanco). Se transformaron 117 literales de color dentro de estilos en línea (color, fondo, borde, sombra) en 17 archivos de js/ y tienda.js: avisos de conexión y tienda cerrada, tutorial de bienvenida, aviso de nueva versión, iconos de colecciones, carrito, perfil mayorista, pago seguro y carga de imágenes; más dos grises del estado agotado de los filtros en catalogo.html (y la expectativa de color en tests/catalog/search-responsive.spec.js). El texto pasa siempre a #222222 (nunca a rosa, por contraste), las cortinas oscuras siguen oscuras y se conserva el rojo de error.
+
+No se tocó, a propósito: js/components/color/* (valores por defecto y migración del panel de apariencia, protegidos por brand-palette.test.mjs), js/admin, pantallas de edición de administradoras (modo-edicion-sitio, insignia-edicion, editor-fotografias, panel de depuración), colores de estado, WhatsApp, botón de Google y muestras de producto.
+
+Versionado de caché: sufijo -p1112 solo en archivos con bytes nuevos; se retrocedieron los arrastres que el auditor marcó como bump innecesario. Plan de mantenimiento con scripts/preparar-mantenimiento-flujos.mjs sobre main 58be634d (rehecho tras fusionar el PR 1383 de administración; el cambio se reconstruyó limpio sobre main en vez de resolver conflictos de versiones a mano).
+
+PASS_LOCAL: build:pages, auditar-proteccion-flujos, audit:cache-versioning, ci:preflight completo (0 errores), fase de navegador local (17 de 18; la restante, home-layout-browser, falló solo por la versión del Chromium local y pasa 12 de 12 con el correcto) y search-responsive 32 de 32. El CI de 0180c29d (versión previa a esta actualización) salió verde en todas las fases. No probado: iPhone real.
+
 ## Recorte por bordes y cabecera opaca del editor — 2026-11-12 — Codex /root
 
 Base aceptada2d038b19749f56ad56af30fee809e4fc4edf3d67; rama propia
