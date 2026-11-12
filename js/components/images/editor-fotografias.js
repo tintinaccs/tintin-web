@@ -5,33 +5,39 @@ let sequence=0;
 function styles(){
  if(document.getElementById('tt-photo-edit-style'))return;
  const style=document.createElement('style');style.id='tt-photo-edit-style';style.textContent=`
- .tt-photo-edit{box-sizing:border-box;width:min(1120px,calc(100% - 24px));max-width:none;height:min(900px,calc(100dvh - 24px));max-height:calc(100dvh - 24px);padding:0;border:1px solid var(--color-border,#e4d9df);border-radius:16px;background:var(--color-background-surface,#fff);color:var(--color-text,#222);font:400 14px Montserrat,sans-serif;overflow:auto}
+ .tt-photo-edit{position:fixed;inset:0;margin:auto;box-sizing:border-box;width:min(1120px,calc(100% - 24px - env(safe-area-inset-left) - env(safe-area-inset-right)));max-width:none;height:min(900px,calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)));max-height:calc(100dvh - 24px);padding:0;border:1px solid var(--color-border,#e4d9df);border-radius:16px;background:var(--color-background-surface,#fff);color:var(--color-text,#222);font:400 14px Montserrat,sans-serif;overflow:auto}
  .tt-photo-edit[open]{display:flex;flex-direction:column}.tt-photo-edit::backdrop{background:rgb(25 15 21 / .65)}
  .tt-photo-edit *{box-sizing:border-box}.tt-photo-edit header,.tt-photo-edit footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px;border-bottom:1px solid var(--color-border,#e4d9df)}
  .tt-photo-edit header,.tt-photo-edit footer{flex-shrink:0}.tt-photo-edit h2{font-size:19px;margin:0}.tt-photo-edit p{margin:6px 0;line-height:1.5}.tt-photo-edit-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,320px);gap:20px;padding:16px;min-height:0;flex:1;overflow:hidden}
- .tt-photo-edit-workspace{min-width:0;align-self:start;position:static}.tt-photo-edit canvas{display:block;width:100%;height:auto;max-height:60dvh;object-fit:contain;background:repeating-conic-gradient(#eee 0% 25%,#fff 0% 50%) 50% / 16px 16px;border:1px solid var(--color-border,#e4d9df);border-radius:8px;touch-action:none;cursor:grab}
- .tt-photo-edit canvas:focus-visible{outline:3px solid var(--color-primary,#F8AACA);outline-offset:3px}.tt-photo-edit-controls{min-width:0;min-height:0;overflow:auto;display:grid;align-content:start;gap:14px;padding:3px}.tt-photo-edit fieldset{min-width:0;border:1px solid var(--color-border,#e4d9df);border-radius:10px;padding:12px;margin:0}.tt-photo-edit legend{font-weight:700;padding:0 5px}
+ .tt-photo-edit-workspace{min-width:0;min-height:0;align-self:stretch;display:flex;flex-direction:column;position:static}.tt-photo-edit canvas{display:block;width:100%;height:auto;min-height:0;flex:0 1 auto;max-height:60dvh;object-fit:contain;background:repeating-conic-gradient(#eee 0% 25%,#fff 0% 50%) 50% / 16px 16px;border:1px solid var(--color-border,#e4d9df);border-radius:8px;touch-action:none;cursor:grab}
+ .tt-photo-edit canvas:focus-visible{outline:3px solid var(--color-primary,#F8AACA);outline-offset:3px}.tt-photo-edit-workspace p{flex-shrink:0}.tt-photo-edit-controls{min-width:0;min-height:0;overflow:auto;display:grid;align-content:start;gap:14px;padding:3px}.tt-photo-edit fieldset{min-width:0;border:1px solid var(--color-border,#e4d9df);border-radius:10px;padding:12px;margin:0}.tt-photo-edit legend{font-weight:700;padding:0 5px}
  .tt-photo-edit label{display:grid;gap:6px;margin:8px 0}.tt-photo-edit input:not([type=range]),.tt-photo-edit select{width:100%;min-height:44px;border:1px solid var(--color-border,#e4d9df);border-radius:8px;padding:8px;color:inherit;background:var(--color-background-surface,#fff);font:inherit;font-size:16px}
  .tt-photo-edit input[type=range]{width:100%;min-height:44px;accent-color:var(--color-primary,#F8AACA);margin:0}.tt-photo-edit button{min-height:44px;min-width:44px;border:1px solid var(--color-border,#e4d9df);border-radius:8px;background:var(--color-background-surface,#fff);color:inherit;font:600 13px Montserrat,sans-serif;padding:10px 12px;cursor:pointer}.tt-photo-edit button:focus-visible{outline:3px solid var(--color-primary,#F8AACA);outline-offset:2px}.tt-photo-edit button:disabled{opacity:.45;cursor:default}
  .tt-photo-edit .primary{background:var(--color-primary,#F8AACA);color:var(--color-text,#222)}.tt-photo-edit-row{display:flex;gap:8px;flex-wrap:wrap}.tt-photo-edit-row>label{flex:1 1 90px;min-width:0}.tt-photo-edit-status{min-height:22px;margin:0 16px!important}.tt-photo-edit footer{border-top:1px solid var(--color-border,#e4d9df);border-bottom:0;position:sticky;bottom:0;background:var(--color-background-surface,#fff);z-index:1;padding-bottom:max(16px,env(safe-area-inset-bottom))}
- @media(max-width:760px){.tt-photo-edit{width:calc(100% - 12px);max-height:calc(100dvh - 12px)}.tt-photo-edit-layout{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);padding:8px 12px;gap:8px}.tt-photo-edit-workspace{position:static}.tt-photo-edit canvas{max-height:24dvh}.tt-photo-edit header,.tt-photo-edit footer{padding:12px}.tt-photo-edit-workspace p{font-size:12px}.tt-photo-edit button{font-size:13px}.tt-photo-edit footer{gap:8px}.tt-photo-edit footer .tt-photo-edit-row{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.tt-photo-edit footer .tt-photo-edit-row button{padding:8px 4px}.tt-photo-edit footer .primary{flex:1}}
- @media(max-height:500px) and (min-width:600px){.tt-photo-edit-layout{grid-template-columns:minmax(0,1fr) minmax(250px,300px);grid-template-rows:minmax(0,1fr)}.tt-photo-edit canvas{max-height:62dvh}}
+ @media(max-width:760px){.tt-photo-edit{width:calc(100% - 12px - env(safe-area-inset-left) - env(safe-area-inset-right));max-height:calc(100dvh - 12px)}.tt-photo-edit-layout{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);padding:8px 12px;gap:8px}.tt-photo-edit-workspace{position:static}.tt-photo-edit canvas{max-height:24dvh}.tt-photo-edit header,.tt-photo-edit footer{padding:12px}.tt-photo-edit-workspace p{font-size:12px}.tt-photo-edit button{font-size:13px}.tt-photo-edit footer{gap:8px;padding-bottom:max(12px,env(safe-area-inset-bottom))}.tt-photo-edit footer .tt-photo-edit-row{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.tt-photo-edit footer .tt-photo-edit-row button{padding:8px 4px}.tt-photo-edit footer .primary{flex:1}}
+ @media(max-height:500px) and (min-width:600px){.tt-photo-edit-layout{grid-template-columns:minmax(0,1fr) minmax(250px,300px);grid-template-rows:minmax(0,1fr)}.tt-photo-edit canvas{max-height:62dvh}.tt-photo-edit footer .tt-photo-edit-row{width:auto;display:flex;flex-wrap:nowrap}.tt-photo-edit footer .primary{flex:0 1 auto}}
  `;document.head.append(style);
 }
 /** source is a File or an approved image URL. Reopening uses original + state, avoiding compounded compression. */
 export async function openPhotoEditor(source,{state:initialState=null,signal}={}){
  if(signal?.aborted)return null;
  styles();
- let file=source;
+ let image;
  if(typeof source==='string'){
   const url=new URL(source,location.href);
   if(!['https:','http:','blob:'].includes(url.protocol))throw Error('La imagen no tiene una dirección válida.');
-  const response=await fetch(url,{signal,credentials:'omit'});
-  if(!response.ok)throw Error('No pudimos abrir la foto. Podés descargarla y cargarla desde tu dispositivo.');
-  const blob=await response.blob();file=new File([blob],'fotografia.png',{type:blob.type});
- }
- if(signal?.aborted)return null;
- const image=await createImageBitmap(file);
+  // Read through img-src, already permitted for product photos, without widening connect-src.
+  const photo=new Image();photo.crossOrigin='anonymous';
+  await new Promise((resolve,reject)=>{
+   let timer;
+   const done=error=>{clearTimeout(timer);photo.onload=photo.onerror=null;signal?.removeEventListener('abort',cancel);if(error){photo.src='';reject(error);}else resolve();};
+   const cancel=()=>done(Error('Edición cancelada.'));
+   photo.onload=()=>done();photo.onerror=()=>done(Error('No pudimos abrir la foto. Podés cargar el archivo desde tu dispositivo.'));
+   signal?.addEventListener('abort',cancel,{once:true});timer=setTimeout(()=>done(Error('La foto tardó demasiado. Intentá de nuevo.')),20000);photo.src=url.href;
+  });
+  if(signal?.aborted)return null;
+  image=await createImageBitmap(photo);photo.src='';
+ }else image=await createImageBitmap(source);
  if(signal?.aborted){image.close();return null;}
  // Preview and export share precisely the same renderer; full resolution is used only on Apply.
  let state={...defaults(),width:image.width,height:image.height,...initialState};
@@ -89,7 +95,7 @@ export async function openPhotoEditor(source,{state:initialState=null,signal}={}
  let resolve;const result=new Promise(done=>resolve=done);
  function finish(value){if(settled)return;settled=true;abort.abort();dialog.close();dialog.remove();image.close();if(opener?.isConnected)opener.focus({preventScroll:true});resolve(value);}
  button('Cancelar',()=>{if(!working)finish(null);},header);button('Cancelar edición',()=>{if(!working)finish(null);},footer);
- const apply=button('Aplicar edición',async()=>{if(working)return;working=true;dialog.setAttribute('aria-busy','true');for(const control of dialog.querySelectorAll('button,input,select'))control.disabled=true;status.textContent='Preparando copia editada…';try{if(!initialState && state.width===image.width && state.height===image.height && JSON.stringify(state)===JSON.stringify(history[0])){finish({file,state:structuredClone(state),source:file});return;}const output=document.createElement('canvas');render(output,true);const blob=await new Promise((resolve,reject)=>output.toBlob(value=>value?resolve(value):reject(Error('No pudimos crear la imagen. Reducí el tamaño e intentá de nuevo.')),'image/png'));if(settled)return;if(blob.size>15*1024*1024)throw Error('La copia supera 15 MB. Reducí el tamaño en píxeles e intentá de nuevo.');const name=(file.name||'fotografia').replace(/\.[^.]+$/,'')+'-editada.png';finish({file:new File([blob],name,{type:'image/png'}),state:structuredClone(state),source:file});}catch(error){status.textContent=error.message;working=false;dialog.removeAttribute('aria-busy');for(const control of dialog.querySelectorAll('button,input,select'))control.disabled=false;refresh();}},footer);apply.className='primary';
+ const apply=button('Aplicar edición',async()=>{if(working)return;working=true;dialog.setAttribute('aria-busy','true');for(const control of dialog.querySelectorAll('button,input,select'))control.disabled=true;status.textContent='Preparando copia editada…';try{if(typeof source!=='string' && !initialState && state.width===image.width && state.height===image.height && JSON.stringify(state)===JSON.stringify(history[0])){finish({file:source,state:structuredClone(state),source});return;}const output=document.createElement('canvas');render(output,true);const blob=await new Promise((resolve,reject)=>output.toBlob(value=>value?resolve(value):reject(Error('No pudimos crear la imagen. Reducí el tamaño e intentá de nuevo.')),'image/png'));if(settled)return;if(blob.size>15*1024*1024)throw Error('La copia supera 15 MB. Reducí el tamaño en píxeles e intentá de nuevo.');const name=(source.name||'fotografia').replace(/\.[^.]+$/,'')+'-editada.png';finish({file:new File([blob],name,{type:'image/png'}),state:structuredClone(state),source});}catch(error){status.textContent=error.message;working=false;dialog.removeAttribute('aria-busy');for(const control of dialog.querySelectorAll('button,input,select'))control.disabled=false;refresh();}},footer);apply.className='primary';
  dialog.addEventListener('cancel',event=>{event.preventDefault();if(!working)finish(null);});dialog.addEventListener('close',()=>finish(null));
  signal?.addEventListener('abort',()=>finish(null),{signal:abort.signal,once:true});
  dialog.showModal();refresh();format.focus();return result;

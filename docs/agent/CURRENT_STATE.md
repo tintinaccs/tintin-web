@@ -23,16 +23,23 @@ Preview permanece visible mientras se recorren controles, con áreas44px y
 campos16px, superficie modal nativa y acciones siempre accesibles.
 
 Skills leídos: tintin-ecommerce-flows, tintin-design-quality y
-tintin-responsive-a11y. PASS_LOCAL inicial:33 pruebas existentes de pestañas
-más12 iniciales de foto (45 Chromium);16 pruebas del editor/integración y
-pinch antes del recorrido automático,16 luego de asegurar preview visible.
-PASS_LOCAL vigente:17 pruebas del editor y recorrido automático (píxeles,
-cancelación, cola, flush, asociaciones y pinch),42 verificaciones de multimedia,
-build:pages y test:fast (104Node+6Chromium). Sigue en curso la regresión de246
-Chromium de fotos contextuales/guardado/workspaces; no se acredita hasta terminal.
-WebKit descargado pero no ejecutable por bibliotecas del host ausentes: instalar
-dependencias requería su no disponible; Safari NOT_VERIFIED, sin cambiar permisos. Sin escrituras
-comerciales reales. CI, merge y publicación de esta función PENDIENTES.
+ tintin-responsive-a11y. PASS_LOCAL final:21 Chromium del editor (píxeles,
+recorrido automático, cola, flush, cancelación, copia/original, asociaciones,
+pinch, preview completo, áreas seguras simuladas y CSP que limita connect-src).
+Regresión de246 Chromium de fotos contextuales/guardado/workspaces PASS;
+33 de pestañas y8 de CSP/guardado PASS. Test:fast104Node+6Chromium y auditor
+multimedia42 verificaciones PASS. Build/plan se regeneran tras esta evidencia.
+Foto pública real de Cloudinary decodificada de sólo lectura y canvas limpio
+900×1200: usar Image.crossOrigin/decodificación por img-src existente, sin
+ampliar connect-src ni introducir proxy. Fondos compuestos tras ajustes de
+píxeles para conservar su color. Respeta notch/barra de gestos, modal centrado,
+preview encogible en horizontal y controles con scroll independiente.
+WebKit descargado pero no ejecutable por bibliotecas del host ausentes;
+instalar dependencias requería su no disponible: Safari NOT_VERIFIED.
+Sin datos comerciales reales modificados. PR1380 en curso; seguir SHA/run
+actuales, mantenedor confiable, merge y postmerge por separado. PR1379 y
+1354 ajenas: sólo leer para coordinar; conciliar esta rama con main aceptado
+si integran primero. No heredar verde de33cb/bad4 al siguiente candidato.
 
 ## Visor completo y favicon del loader — 2026-11-11 — Codex /root
 

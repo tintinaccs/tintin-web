@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0be53b905853df7eb4cd9a0c72d66eaf667c900c0ebe2f13c2e2bcf2dc0c94e9",
+  "sourceFingerprint": "3d3b541e01ac0ab2870e219dd06bb6ffa551536bd9f9212bb52e16ab704c98c8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1831,
     "textFiles": 1678,
-    "totalBytes": 63915682,
+    "totalBytes": 63919416,
     "pages": 19,
     "modules": 1186
   },
@@ -2291,7 +2291,7 @@
         "viewer"
       ],
       "bytes": 48705,
-      "sha256": "b0d4f3fe1f351574351bd556c0f0e476a2d78aed476a39fc944a5955fae59ae9",
+      "sha256": "7bbd07ab8aafc65abcb5bcdc0947b22d2bf8e8fa7b8cf1b7b1ffe49203df3cd2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2984,7 +2984,7 @@
         "viewer"
       ],
       "bytes": 194251,
-      "sha256": "1f804d9bc63c62807ae83e7aed46f0ba9df940212cba1ef03500abb3732da3ca",
+      "sha256": "e0a2993ac392496c603b7d2b7d4f5baf9088ed9564654c4d6846023f90cb0a36",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3043,7 +3043,7 @@
           "line": 2127
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261112-photo-editor-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261112-photo-editor-3",
           "target": "js/admin/admin-app.js",
           "line": 2128
         },
@@ -3537,7 +3537,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261112-photo-editor-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261112-photo-editor-3",
           "target": "js/admin/admin-app.js",
           "line": 2128,
           "exists": true
@@ -27144,7 +27144,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 260665,
-      "sha256": "eb58567acba44e9cb74b67f05504fe8adf8bf92a87bf96b8728780561c7f2262",
+      "sha256": "de10afb4e0bd32ed5d070fc1bf8f9a4e79281b80b751bf8e774ea60e7c22f013",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29643,7 +29643,7 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 442841,
-      "sha256": "7722894e003e2c181ca314b9d4ae785c59856601b2782554de629ea9f6e970f3",
+      "sha256": "29bb9ee235a1c16a98ad4e7508758f9f7b5d71b4348659a939b6706a8bb24d21",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29782,7 +29782,7 @@
           "line": 22
         },
         {
-          "raw": "./products/galeria-unificada.js?v=tintin-20261112-photo-editor-2",
+          "raw": "./products/galeria-unificada.js?v=tintin-20261112-photo-editor-3",
           "target": "js/admin/products/galeria-unificada.js",
           "dynamic": false,
           "line": 23
@@ -29914,7 +29914,7 @@
           "line": 54
         },
         {
-          "raw": "../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-2",
+          "raw": "../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-3",
           "target": "js/components/images/carga-imagenes.js",
           "dynamic": false,
           "line": 55
@@ -31937,7 +31937,7 @@
     {
       "path": "js/admin/products/galeria-unificada.js",
       "bytes": 25385,
-      "sha256": "b6c1c69f927360683d2c1c4327e9b5b7cbf0b26a0f2e78172b2e02f0897c1920",
+      "sha256": "d8648e81e81e54b99d9acca0e1353fab2bc69f3edd7e6cd89a6db00b1f4e1669",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31962,7 +31962,7 @@
           "line": 3
         },
         {
-          "raw": "../../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-2",
+          "raw": "../../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-3",
           "target": "js/components/images/carga-imagenes.js",
           "dynamic": false,
           "line": 4
@@ -33497,7 +33497,7 @@
     {
       "path": "js/components/images/carga-imagenes.js",
       "bytes": 25425,
-      "sha256": "bc3320df48c5be8a080a32609c23cd211b02e207382f1d0c81aa10239b3f8938",
+      "sha256": "79af382689ac1dc98b5e9956c38fc34f2141d5389ee378dd68c41df58f701531",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33516,7 +33516,7 @@
           "line": 19
         },
         {
-          "raw": "./editor-fotografias.js?v=tintin-20261112-photo-editor-2",
+          "raw": "./editor-fotografias.js?v=tintin-20261112-photo-editor-3",
           "target": "js/components/images/editor-fotografias.js",
           "dynamic": true,
           "line": 2
@@ -33526,8 +33526,8 @@
     },
     {
       "path": "js/components/images/editor-fotografias.js",
-      "bytes": 17217,
-      "sha256": "6d7f4464728a02095be7b594934b2d5fac974a31b1a4318bfedd264fc154b801",
+      "bytes": 18268,
+      "sha256": "7d7914856a79f1a553ec2fa75eb424041e82ee6f387ae6b6417352133b584ef9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -61557,8 +61557,8 @@
     },
     {
       "path": "tests/ui-ux/product-photo-editor.spec.js",
-      "bytes": 14031,
-      "sha256": "067941086f8055a7afc301356152f12e7458994225e578ad53a4b29a2274efad",
+      "bytes": 16227,
+      "sha256": "1f593585d6172ae30a6a722c074034e8228837008a5a8ae10c30366952a0d8e2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -61580,6 +61580,10 @@
         {
           "url": "https://img.test/segunda.png",
           "line": 46
+        },
+        {
+          "url": "https://img.test/",
+          "line": 55
         }
       ]
     },
@@ -63062,7 +63066,7 @@
       "path": "admin-images.html",
       "extension": ".html",
       "bytes": 48705,
-      "sha256": "b0d4f3fe1f351574351bd556c0f0e476a2d78aed476a39fc944a5955fae59ae9"
+      "sha256": "7bbd07ab8aafc65abcb5bcdc0947b22d2bf8e8fa7b8cf1b7b1ffe49203df3cd2"
     },
     {
       "path": "admin-manifest.json",
@@ -63074,7 +63078,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 194251,
-      "sha256": "1f804d9bc63c62807ae83e7aed46f0ba9df940212cba1ef03500abb3732da3ca"
+      "sha256": "e0a2993ac392496c603b7d2b7d4f5baf9088ed9564654c4d6846023f90cb0a36"
     },
     {
       "path": "apple-touch-icon.png",
@@ -64244,19 +64248,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 260665,
-      "sha256": "eb58567acba44e9cb74b67f05504fe8adf8bf92a87bf96b8728780561c7f2262"
+      "sha256": "de10afb4e0bd32ed5d070fc1bf8f9a4e79281b80b751bf8e774ea60e7c22f013"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 260580,
-      "sha256": "a31ae8b1ca7f466afbc58c6ddc8d092e067736c8563dc92e20f7d249adb137b8"
+      "sha256": "1d2590805420c49fa04f5f5f9ac82cd5ca850c3c3fec99687dea418292afdcfb"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 2508,
-      "sha256": "b4255d99a65f6aec8715a9d1797cce1afbc5b4a5a8246edb88aef304915cf585"
+      "sha256": "17bffedc41be590c0fa4f09bd0b21810c37e336ba9ce06b88c056843c551bc4e"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64268,7 +64272,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "05d71a64057780737b30e645075a09d6ffb9fee2e4fd87ea47b0f87ad3cddcfd"
+      "sha256": "55ab09cf9a585215529749ea479f8877f070f9e4e0adcbfd6c7c6d70cb63b818"
     },
     {
       "path": "config/public-site.json",
@@ -65107,8 +65111,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1298241,
-      "sha256": "5193fee0189bc435720a04fe3adcd0073f87ccc5b97defeccdc8aaf46263026d"
+      "bytes": 1298728,
+      "sha256": "a6ce140dda374fcddf159ca773a9d9a4a70e32e001bddd89bece74424af93dc7"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -67184,7 +67188,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 442841,
-      "sha256": "7722894e003e2c181ca314b9d4ae785c59856601b2782554de629ea9f6e970f3"
+      "sha256": "29bb9ee235a1c16a98ad4e7508758f9f7b5d71b4348659a939b6706a8bb24d21"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -67568,7 +67572,7 @@
       "path": "js/admin/products/galeria-unificada.js",
       "extension": ".js",
       "bytes": 25385,
-      "sha256": "b6c1c69f927360683d2c1c4327e9b5b7cbf0b26a0f2e78172b2e02f0897c1920"
+      "sha256": "d8648e81e81e54b99d9acca0e1353fab2bc69f3edd7e6cd89a6db00b1f4e1669"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -67904,13 +67908,13 @@
       "path": "js/components/images/carga-imagenes.js",
       "extension": ".js",
       "bytes": 25425,
-      "sha256": "bc3320df48c5be8a080a32609c23cd211b02e207382f1d0c81aa10239b3f8938"
+      "sha256": "79af382689ac1dc98b5e9956c38fc34f2141d5389ee378dd68c41df58f701531"
     },
     {
       "path": "js/components/images/editor-fotografias.js",
       "extension": ".js",
-      "bytes": 17217,
-      "sha256": "6d7f4464728a02095be7b594934b2d5fac974a31b1a4318bfedd264fc154b801"
+      "bytes": 18268,
+      "sha256": "7d7914856a79f1a553ec2fa75eb424041e82ee6f387ae6b6417352133b584ef9"
     },
     {
       "path": "js/components/images/foto-variante.mjs",
@@ -70310,7 +70314,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 82646,
-      "sha256": "abccdfac673e4bef8cadd1181d7c2ddc9b7eccde39f8d29927145ebdf51e1843"
+      "sha256": "125e754294bcd5d870e2a7e044bc27f4596fc8b54b33a3464e6476c33f5fd24b"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -73651,8 +73655,8 @@
     {
       "path": "tests/ui-ux/product-photo-editor.spec.js",
       "extension": ".js",
-      "bytes": 14031,
-      "sha256": "067941086f8055a7afc301356152f12e7458994225e578ad53a4b29a2274efad"
+      "bytes": 16227,
+      "sha256": "1f593585d6172ae30a6a722c074034e8228837008a5a8ae10c30366952a0d8e2"
     },
     {
       "path": "tests/ui-ux/product-review-rating-required.spec.js",
