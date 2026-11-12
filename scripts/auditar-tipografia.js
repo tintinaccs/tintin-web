@@ -27,6 +27,7 @@ const EMAIL_TEMPLATE_FILES = new Set([
 ]);
 const REQUIRED_FONT_FILES = [
   'GreatVibes-Latin.woff',
+  'GreatVibes-Latin.woff2',
   'montserrat-cyrillic-ext-wght-normal.woff2',
   'montserrat-cyrillic-wght-normal.woff2',
   'montserrat-vietnamese-wght-normal.woff2',
@@ -185,7 +186,7 @@ const localFontFiles = fs.existsSync(fontDirectory)
   : [];
 check(localFontFiles.length === REQUIRED_FONT_FILES.length, 'Hay archivos tipográficos locales no previstos o faltantes.');
 for (const fontFile of localFontFiles) {
-  check(/^montserrat-/i.test(fontFile) || fontFile === 'GreatVibes-Latin.woff', `Fuente local no permitida: assets-tintin/fonts/${fontFile}.`);
+  check(/^montserrat-/i.test(fontFile) || /^GreatVibes-Latin\.woff2?$/.test(fontFile), `Fuente local no permitida: assets-tintin/fonts/${fontFile}.`);
 }
 
 check(fs.existsSync(path.join(fontDirectory,'GreatVibes-OFL.txt')), 'Falta licencia OFL de la fuente del hero.');

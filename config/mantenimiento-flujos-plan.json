@@ -1,22 +1,22 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "d7d46ef1ce9373823aca2eb59cd1ac503f57eb41",
-  "reason": "Precarga en segundo plano del feed de Instagram del inicio",
+  "baseCommit": "a77f99e69460acf1cb829823f22308b505736117",
+  "reason": "Velocidad del inicio: un solo logo y fuente GreatVibes en WOFF2 sin perder calidad",
   "files": [
     {
-      "path": "about.html",
-      "oldHash": "1d06cbf7fd1890f705fe78f29d0a2834846a87e9d1d5523a7d5f22262fdc54e7",
-      "newHash": "d1ac7c67ccaf4db8323bddc753addbe4bb9d46d049f2920eb706c4923b13b501"
+      "path": "css/pages/home/hero-bienvenida-inicio.css",
+      "oldHash": "a5ee326ea1266def21771b3a459058ba88b819ddf373eb34dd375d4d2d662a72",
+      "newHash": "d827cbf84bbc717623e449976bdaf30ff6a6736ba0266f7182b7d7005e624c3f"
     },
     {
       "path": "index.html",
-      "oldHash": "11afa4d91db40e86afa2914d4fa5383680fb85dced4cfdc02696b3a10230c7dd",
-      "newHash": "7d13acb0646c09f89c1ec9da3e2fba570d1d7b6ab3c52cefb416ffbcd0e75f54"
+      "oldHash": "7d13acb0646c09f89c1ec9da3e2fba570d1d7b6ab3c52cefb416ffbcd0e75f54",
+      "newHash": "afbdaf373a3ed88bba32ef6460940762107ad99991fc340e54cae10f3e1a9f14"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "189acf3082f5ff423a9999436fd1cc3de46085ce481dbf675163f43ea4ae5213",
-      "newHash": "8e2f287b728428806cfba6b5c249eb3d60261e4a350f19cafce4ea68a950cf4b"
+      "oldHash": "8e2f287b728428806cfba6b5c249eb3d60261e4a350f19cafce4ea68a950cf4b",
+      "newHash": "362a0608886586c939f8624ffac63014af75cd4a7f0a367dac92e9afa4343f86"
     }
   ],
   "affectedRecords": []
