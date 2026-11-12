@@ -262,7 +262,7 @@ function showCartToast(message) {
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'tt-added-toast';
-    toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#F8AACA;color:#fff;padding:12px 24px;border-radius:50px;font-size:0.82rem;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;white-space:nowrap;font-family:Montserrat;box-shadow:0 4px 20px rgba(34,34,34,0.35)';
+    toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#b84c72;color:#fff;padding:12px 24px;border-radius:50px;font-size:0.82rem;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;white-space:nowrap;font-family:Montserrat;box-shadow:0 4px 20px rgba(184,76,114,0.35)';
     document.body.appendChild(toast);
   }
   toast.textContent = message;
@@ -287,7 +287,7 @@ function getStockLimit(productId, variant) {
 async function addToCart(productId, variant = '') {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1-p1112');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -415,7 +415,7 @@ function renderCart() {
     body.innerHTML = `
       <div class="tt-cart-empty">
         <div class="tt-cart-empty-icon">
-          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#F8AACA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         </div>
         <div class="tt-cart-empty-text">Tu carrito está vacío.<br>¡Agregá algo hermoso!</div>
         <a href="/catalogo" class="tt-cart-goto-btn">EXPLORAR CATÁLOGO →</a>
@@ -433,7 +433,7 @@ function renderCart() {
     const safeVariantAttr = escapeAttribute(item.variant || '');
     const imgHtml = imgUrl
       ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(item.name)}" style="width:100%;height:100%;object-fit:contain;">`
-      : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#FDECF2,#F8AACA);display:flex;align-items:center;justify-content:center;"><svg width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg></div>`;
+      : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#fce4ec,#f5d4e0);display:flex;align-items:center;justify-content:center;"><svg width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg></div>`;
     return `
     <div class="tt-cart-item" data-id="${safeId}">
       <div class="tt-cart-item-img">${imgHtml}</div>
@@ -464,7 +464,7 @@ function renderCart() {
       <a href="/checkout" class="tt-cart-checkout-btn" style="margin-top:12px;">
         Finalizar compra →
       </a>
-      <button type="button" data-cart-action="close" style="width:100%;min-height:44px;margin-top:8px;padding:10px;background:none;border:1px solid #F8AACA;border-radius:50px;font-size:0.78rem;color:#222222;cursor:pointer;font-family:Montserrat">
+      <button type="button" data-cart-action="close" style="width:100%;min-height:44px;margin-top:8px;padding:10px;background:none;border:1px solid #ddd;border-radius:50px;font-size:0.78rem;color:#AD3F67;cursor:pointer;font-family:Montserrat">
         Seguir comprando
       </button>
     `;
@@ -615,7 +615,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261111-product-zoom-2-p1112')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261111-product-zoom-2')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -791,19 +791,19 @@ function _sheetStyles() {
 .tt-as-backdrop.is-open .tt-as{transform:none}
 .tt-as-head{display:flex;gap:14px;align-items:center;margin-bottom:16px}
 .tt-as-img{flex:0 0 72px;width:72px;height:72px;border-radius:14px;object-fit:cover;background:#FDECF2}
-.tt-as-title{margin:0 0 2px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#222222}
+.tt-as-title{margin:0 0 2px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ad3f67}
 .tt-as-name{margin:0;font-size:1rem;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
 .tt-as-price{margin:4px 0 0;font-size:.95rem;font-weight:700}
 .tt-as-group{border:0;margin:0 0 14px;padding:0;min-width:0}
-.tt-as-legend{padding:0;margin:0 0 8px;font-size:.78rem;font-weight:700;color:#222222}
+.tt-as-legend{padding:0;margin:0 0 8px;font-size:.78rem;font-weight:700;color:#555}
 .tt-as-opts{display:flex;flex-wrap:wrap;gap:8px}
-.tt-as-opt{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1.5px solid #F8AACA;border-radius:999px;background:#fff;color:#222;font:600 .85rem Montserrat,sans-serif;cursor:pointer}
+.tt-as-opt{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1.5px solid #e6d3db;border-radius:999px;background:#fff;color:#222;font:600 .85rem Montserrat,sans-serif;cursor:pointer}
 .tt-as-opt[aria-pressed="true"]{border-color:#F8AACA;background:#FDECF2;box-shadow:0 0 0 2px #F8AACA}
 .tt-as-opt:disabled{opacity:.45;cursor:not-allowed;text-decoration:line-through}
-.tt-as-opt:focus-visible,.tt-as-btn:focus-visible{outline:3px solid #222222;outline-offset:2px}
+.tt-as-opt:focus-visible,.tt-as-btn:focus-visible{outline:3px solid #ad3f67;outline-offset:2px}
 .tt-as-dot{width:16px;height:16px;border-radius:50%;border:1px solid rgba(34,34,34,.25);flex:0 0 16px}
 .tt-as-summary{margin:4px 0 14px;padding:12px 14px;border-radius:12px;background:#FDECF2;font-size:.85rem;line-height:1.5}
-.tt-as-msg{min-height:1.2em;margin:0 0 10px;font-size:.82rem;font-weight:600;color:#222222}
+.tt-as-msg{min-height:1.2em;margin:0 0 10px;font-size:.82rem;font-weight:600;color:#9f2d52}
 .tt-as-actions{display:flex;gap:10px}
 .tt-as-btn{flex:1;min-height:48px;border-radius:999px;border:1.5px solid #F8AACA;font:700 .9rem Montserrat,sans-serif;cursor:pointer;padding:0 16px}
 .tt-as-btn--ok{background:#F8AACA;color:#222}
@@ -1031,7 +1031,7 @@ function renderProductCardMarkup(p, options = {}) {
         <h3 class="tt-product-name"><a href="${productHref}">${safeName}</a></h3>
         <div class="tt-product-price">${priceMarkup(p.variantCommerceVersion === 2 ? selectedProductMoney(p) : p)}</div>
         ${colorsHTML}
-        <div data-review-rating hidden style="font-size:12px;color:#222222;font-weight:700;margin-top:4px"></div>
+        <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
         <div class="tt-product-actions">
           <a href="${productHref}" class="tt-btn tt-btn-sm" aria-label="Ver ${escapeAttribute(p.name)}">Ver</a>
           ${secondaryAction}
@@ -1201,7 +1201,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1-p1112');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1784,7 +1784,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
         galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" srcset="${escapeAttribute(withCloudinaryWidth(selectedImage, 480))} 480w, ${escapeAttribute(withCloudinaryWidth(selectedImage, 900))} 900w, ${escapeAttribute(withCloudinaryWidth(selectedImage, 1440))} 1440w" sizes="(max-width:767px) calc(100vw - 32px), (max-width:1024px) 45vw, 560px" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
       }
     } else {
-      galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#F8AACA" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
+      galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
       galleryMain.style.display = 'flex';
       galleryMain.style.alignItems = 'center';
       galleryMain.style.justifyContent = 'center';
@@ -2184,7 +2184,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1-p1112');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

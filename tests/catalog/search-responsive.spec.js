@@ -414,8 +414,8 @@ for (const [width,height] of [[320,568],[768,1024],[1440,900]]) test(`filtros re
   window.dispatchEvent(new CustomEvent('tintin:products-loaded',{detail:{products:window.PRODUCTS}}));
  });
  await expect(violet).toHaveClass(/is-unavailable/);
- await expect(violet).toHaveCSS('color','rgb(34, 34, 34)');
- await expect(violet.locator('.cat-variant-check')).toHaveCSS('background-color','rgb(253, 236, 242)');
+ await expect(violet).toHaveCSS('color','rgb(75, 85, 99)');
+ await expect(violet.locator('.cat-variant-check')).toHaveCSS('background-color','rgb(229, 231, 235)');
  await expect(page.locator('[data-filter-key="color"]').last()).toHaveAttribute('data-filter-value','violeta');
  expect(await violet.locator('.cat-variant-label').evaluate(el=>getComputedStyle(el).textDecorationLine)).toBe('line-through');
  await page.screenshot({path:`artifacts/commerce/variant-filters-sold-out-${width}.png`,fullPage:true});

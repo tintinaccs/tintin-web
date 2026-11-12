@@ -1,5 +1,5 @@
 import { logoUrl } from './configuracion.js?v=tintin-20261010-whatsapp-release-5';
-import { UI_ICONS, svgIcon } from './iconos.js?v=tintin-20261029-performance-1-p1112';
+import { UI_ICONS, svgIcon } from './iconos.js?v=tintin-20261029-performance-1';
 
 export function renderAccountDrawer() {
   return `

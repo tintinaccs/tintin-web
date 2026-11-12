@@ -24,7 +24,7 @@ import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261103-a
 const imagePage = (window.location.pathname || '').toLowerCase();
 if (imagePage === '/' || imagePage.endsWith('/index.html') || imagePage === '') {
   Promise.all([
-    import('../welcome/tutorial-bienvenida.js?v=tintin-20261030-home-history-5-p1112'),
+    import('../welcome/tutorial-bienvenida.js?v=tintin-20261030-home-history-5'),
   ]).catch(error => console.warn('[images] No se pudo iniciar la bienvenida:', error));
 }
 
@@ -497,12 +497,12 @@ function installAdminHeroControls() {
         margin:2px 0 4px;
         padding:10px 12px;
         border-radius:8px;
-        background:#FDECF2;
-        color:#222222;
+        background:#fff6fa;
+        color:#6f5b63;
         font-size:.72rem;
         line-height:1.45;
       }
-      .adm-hero-help strong{color:#222222}
+      .adm-hero-help strong{color:#9f2d57}
       .adm-hero-controls-v2 .adm-hero-ctrl-row{align-items:center}
     `;
     document.head.appendChild(style);

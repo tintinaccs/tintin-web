@@ -45,7 +45,7 @@ function injectGateStyle() {
   style.textContent = `
     html.tt-store-gate-pending,
     html.tt-store-gate-blocked {
-      background: #FDECF2 !important;
+      background: #FFF6FA !important;
     }
 
     html.tt-store-gate-pending body > *:not(#tt-loader):not(#${OVERLAY_ID}),
@@ -74,7 +74,7 @@ function injectGateStyle() {
       box-sizing: border-box !important;
       overflow: auto !important;
       overscroll-behavior: contain !important;
-      background: rgba(34,34,34,0.62) !important;
+      background: rgba(30, 10, 18, .62) !important;
       backdrop-filter: blur(7px) !important;
       -webkit-backdrop-filter: blur(7px) !important;
       visibility: visible !important;
@@ -95,12 +95,12 @@ function injectGateStyle() {
       margin: auto !important;
       padding: clamp(28px, 5vw, 40px) clamp(22px, 5vw, 34px) !important;
       overflow: auto !important;
-      border: 1px solid rgba(248,170,202,0.14) !important;
+      border: 1px solid rgba(212, 106, 138, .14) !important;
       border-radius: 20px !important;
       background: #fff !important;
-      color:#222222 !important;
+      color:#713C53 !important;
       text-align: center !important;
-      box-shadow: 0 18px 60px rgba(34,34,34,0.28) !important;
+      box-shadow: 0 18px 60px rgba(35, 12, 22, .28) !important;
       pointer-events: auto !important;
     }
 
@@ -113,7 +113,7 @@ function injectGateStyle() {
 
     #${OVERLAY_ID} .tt-store-gate-title {
       margin: 0 0 12px !important;
-      color:#222222 !important;
+      color:#713C53 !important;
       font: 800 clamp(19px, 3.2vw, 22px)/1.25 Montserrat !important;
       overflow-wrap: anywhere !important;
     }
@@ -121,7 +121,7 @@ function injectGateStyle() {
     #${OVERLAY_ID} .tt-store-gate-message {
       max-width: 360px !important;
       margin: 0 auto 26px !important;
-      color:#222222 !important;
+      color:#713C53 !important;
       font: 400 clamp(13px, 2.4vw, 14px)/1.65 Montserrat !important;
     }
 
@@ -152,23 +152,23 @@ function injectGateStyle() {
     }
 
     #${LOGIN_CONTROL_ID} {
-      border: 1.5px solid #F8AACA !important;
+      border: 1.5px solid #d9a9b8 !important;
       background: #fff !important;
-      color:#222222 !important;
+      color:#713C53 !important;
     }
 
     #${LOGIN_CONTROL_ID}:hover,
     #${LOGIN_CONTROL_ID}:focus-visible {
       border-color: #F8AACA !important;
-      background: #FDECF2 !important;
-      outline: 3px solid rgba(248,170,202,0.22) !important;
+      background: #fff6fa !important;
+      outline: 3px solid rgba(212, 106, 138, .22) !important;
       outline-offset: 2px !important;
     }
 
     #tt-store-gate-retry {
       border: 0 !important;
       background: #F8AACA !important;
-      color:#222222 !important;
+      color:#713C53 !important;
     }
 
     html.tt-store-gate-degraded {
@@ -187,11 +187,11 @@ function injectGateStyle() {
       width: min(calc(100vw - 28px), 470px) !important;
       min-height: 48px !important;
       padding: 10px 12px 10px 16px !important;
-      border: 1px solid rgba(248,170,202,0.18) !important;
+      border: 1px solid rgba(173, 63, 103, .18) !important;
       border-radius: 18px !important;
       background: rgba(255, 255, 255, .96) !important;
-      color:#222222 !important;
-      box-shadow: 0 14px 40px rgba(34,34,34,0.16) !important;
+      color:#713C53 !important;
+      box-shadow: 0 14px 40px rgba(58, 20, 35, .16) !important;
       -webkit-backdrop-filter: blur(18px) saturate(1.15) !important;
       backdrop-filter: blur(18px) saturate(1.15) !important;
       visibility: visible !important;
@@ -216,7 +216,7 @@ function injectGateStyle() {
       border: 0 !important;
       border-radius: 999px !important;
       background: #F8AACA !important;
-      color:#222222 !important;
+      color:#713C53 !important;
       font: 800 12px/1 Montserrat, sans-serif !important;
       cursor: pointer !important;
       touch-action: manipulation !important;

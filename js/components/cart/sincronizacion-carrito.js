@@ -365,7 +365,7 @@ function createRuntime() {
     const node = document.createElement('div');
     node.className = 'tt-cart-sync-status';
     node.dataset.ttOperationalStatus = 'cart';
-    node.style.cssText = 'margin-left:auto;margin-right:8px;font-size:10px;line-height:1.3;color:#222222;text-align:right;max-width:150px';
+    node.style.cssText = 'margin-left:auto;margin-right:8px;font-size:10px;line-height:1.3;color:#9a6074;text-align:right;max-width:150px';
     header.insertBefore(node, header.querySelector('.tt-cart-close'));
     updateSyncIndicator();
   }
@@ -380,7 +380,7 @@ function createRuntime() {
       node.setAttribute('role', 'status');
       node.setAttribute('aria-live', 'polite');
       node.setAttribute('aria-atomic', 'true');
-      node.style.cssText = 'position:fixed;z-index:2147483646;bottom:100px;left:50%;transform:translateX(-50%);box-sizing:border-box;width:max-content;max-width:min(580px,calc(100vw - 24px));padding:14px 20px;border:1px solid #F8AACA;border-radius:18px;background:#fff;color:#222222;box-shadow:0 8px 28px rgba(34,34,34,0.2);font:600 14px/1.5 Montserrat,sans-serif;overflow-wrap:anywhere;pointer-events:none;text-align:center';
+      node.style.cssText = 'position:fixed;z-index:2147483646;bottom:100px;left:50%;transform:translateX(-50%);box-sizing:border-box;width:max-content;max-width:min(580px,calc(100vw - 24px));padding:14px 20px;border:1px solid #e8bfd0;border-radius:18px;background:#fff;color:#713c53;box-shadow:0 8px 28px #713c5333;font:600 14px/1.5 Montserrat,sans-serif;overflow-wrap:anywhere;pointer-events:none;text-align:center';
       document.body.appendChild(node);
     }
     node.textContent = message;
@@ -1213,7 +1213,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261102-pickup-cash-1-p1112').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261102-pickup-cash-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

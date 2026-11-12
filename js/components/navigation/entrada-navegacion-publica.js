@@ -1,14 +1,14 @@
-import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20261029-performance-1-p1112';
-import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20261029-performance-1-p1112';
-import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20261029-performance-1-p1112';
-import { renderSearchPanel } from './compartido/panel-busqueda.js?v=tintin-20261029-performance-1-p1112';
-import { renderCartDrawer } from './compartido/panel-carrito.js?v=tintin-20261029-performance-1-p1112';
-import { renderAccountDrawer } from './compartido/panel-cuenta.js?v=tintin-20261029-performance-1-p1112';
-import { renderCollectionsSheet } from './compartido/panel-colecciones.js?v=tintin-20261029-performance-1-p1112';
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20261029-performance-1';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20261029-performance-1';
+import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20261029-performance-1';
+import { renderSearchPanel } from './compartido/panel-busqueda.js?v=tintin-20261029-performance-1';
+import { renderCartDrawer } from './compartido/panel-carrito.js?v=tintin-20261029-performance-1';
+import { renderAccountDrawer } from './compartido/panel-cuenta.js?v=tintin-20261029-performance-1';
+import { renderCollectionsSheet } from './compartido/panel-colecciones.js?v=tintin-20261029-performance-1';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js?v=tintin-20260916-final-production-stability-surface-layer-1';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20261030-maestro-1-p1106';
-import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261111-product-zoom-2-p1112';
+import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261111-product-zoom-2';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js?v=tintin-20260916-final-production-stability-registry-1';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20261016-footer-gradient-layout-1';
 import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20261027-global-fluidez-3-p1106';
@@ -188,10 +188,10 @@ async function prepareHomeHeroAtomicReveal() {
 
 async function loadFinalStability() {
   if (document.getElementById('product-detail')) {
-    await import('../../quality/estabilidad-producto.js?v=tintin-20260831-product-stability-2-halo-20261008-3-p1112');
+    await import('../../quality/estabilidad-producto.js?v=tintin-20260831-product-stability-2-halo-20261008-3');
     return 'tintin-20260831-product-stability-2-halo-20261008-3';
   }
-  await import('../../quality/estabilidad-final-publica.js?v=tintin-20261022-avatar-inicial-1-p1112');
+  await import('../../quality/estabilidad-final-publica.js?v=tintin-20261022-avatar-inicial-1');
   return 'tintin-20260829-final-stability-1-brand-runtime-20261004-1';
 }
 

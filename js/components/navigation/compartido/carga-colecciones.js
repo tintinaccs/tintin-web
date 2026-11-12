@@ -1,4 +1,4 @@
-import { collectionImageUrl } from './iconos.js?v=tintin-20261029-performance-1-p1112';
+import { collectionImageUrl } from './iconos.js?v=tintin-20261029-performance-1';
 
 // Debe empezar en la raíz del sitio: el header vive también en /contact,
 // /product, /perfil, etc. Una ruta relativa haría que el navegador busque
@@ -160,7 +160,7 @@ function createStateNode(message, kind = 'info') {
   wrap.className = `tt-collections-nav-state tt-collections-nav-state--${kind}`;
   wrap.dataset.phase4CollectionNode = '1';
   wrap.setAttribute('role', kind === 'error' ? 'alert' : 'status');
-  wrap.style.cssText = 'grid-column:1/-1;padding:12px 16px;font-size:12px;color:var(--text-muted,#222222);text-align:center;width:100%;box-sizing:border-box;';
+  wrap.style.cssText = 'grid-column:1/-1;padding:12px 16px;font-size:12px;color:var(--text-muted,#777);text-align:center;width:100%;box-sizing:border-box;';
   const messageNode = document.createElement('div');
   messageNode.textContent = message;
   wrap.appendChild(messageNode);
@@ -169,7 +169,7 @@ function createStateNode(message, kind = 'info') {
     const retry = document.createElement('button');
     retry.type = 'button';
     retry.textContent = 'Reintentar';
-    retry.style.cssText = 'margin-top:8px;border:0;border-radius:999px;padding:7px 14px;background:#F8AACA;color:#222222!important;font:700 11px Montserrat;cursor:pointer;';
+    retry.style.cssText = 'margin-top:8px;border:0;border-radius:999px;padding:7px 14px;background:#F8AACA;color:#713C53!important;font:700 11px Montserrat;cursor:pointer;';
     retry.addEventListener('click', () => {
       started = false;
       initNavCollections(true);

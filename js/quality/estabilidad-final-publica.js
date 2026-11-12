@@ -13,7 +13,7 @@ function injectStyles() {
     /* Header mobile: una sola jerarquía visual, sin capas compitiendo. */
     @media (max-width:767px){
       #tt-tabbar{isolation:isolate!important}
-      #tt-tabbar .tt-mobile-nav-halo{z-index:0!important;box-shadow:0 6px 16px rgba(34,34,34,0.1)!important}
+      #tt-tabbar .tt-mobile-nav-halo{z-index:0!important;box-shadow:0 6px 16px rgba(139,38,66,.10)!important}
       #tt-tabbar .tt-mobile-nav-indicator{z-index:1!important;bottom:4px!important}
       #tt-tabbar .tt-tabbar-btn{position:relative!important;z-index:2!important}
       #tt-tabbar .tt-tabbar-btn.active,#tt-tabbar .tt-tabbar-btn[aria-expanded="true"]{z-index:3!important}

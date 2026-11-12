@@ -15,17 +15,17 @@ export const CATEGORY_ICONS = Object.freeze({
 });
 
 export const CATEGORIES = Object.freeze([
-  Object.freeze({ slug: 'collares', label: 'Collares', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
-  Object.freeze({ slug: 'earcuff', label: 'Earcuff', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
-  Object.freeze({ slug: 'gafas', label: 'Gafas', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
-  Object.freeze({ slug: 'aros', label: 'Aros', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
-  Object.freeze({ slug: 'armcuff', label: 'Armcuff', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
-  Object.freeze({ slug: 'anillos', label: 'Anillos', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
-  Object.freeze({ slug: 'joyeros', label: 'Joyeros', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
-  Object.freeze({ slug: 'pulseras', label: 'Pulseras', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
-  Object.freeze({ slug: 'relojes', label: 'Relojes', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
-  Object.freeze({ slug: 'tobilleras', label: 'Tobilleras', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
-  Object.freeze({ slug: 'bolsos', label: 'Bags', background: 'linear-gradient(135deg,#F8AACA,#F8AACA)' }),
+  Object.freeze({ slug: 'collares', label: 'Collares', background: 'linear-gradient(135deg,#d4b0c0,#a87090)' }),
+  Object.freeze({ slug: 'earcuff', label: 'Earcuff', background: 'linear-gradient(135deg,#f0d0e0,#d090a8)' }),
+  Object.freeze({ slug: 'gafas', label: 'Gafas', background: 'linear-gradient(135deg,#e8c0d0,#c88098)' }),
+  Object.freeze({ slug: 'aros', label: 'Aros', background: 'linear-gradient(135deg,#f0c8d8,#d48098)' }),
+  Object.freeze({ slug: 'armcuff', label: 'Armcuff', background: 'linear-gradient(135deg,#c8b0cc,#9870a0)' }),
+  Object.freeze({ slug: 'anillos', label: 'Anillos', background: 'linear-gradient(135deg,#dca8c0,#b06880)' }),
+  Object.freeze({ slug: 'joyeros', label: 'Joyeros', background: 'linear-gradient(135deg,#c0a0b8,#906080)' }),
+  Object.freeze({ slug: 'pulseras', label: 'Pulseras', background: 'linear-gradient(135deg,#e0b8c8,#c07888)' }),
+  Object.freeze({ slug: 'relojes', label: 'Relojes', background: 'linear-gradient(135deg,#b8849a,#8b5070)' }),
+  Object.freeze({ slug: 'tobilleras', label: 'Tobilleras', background: 'linear-gradient(135deg,#d8a8c0,#b06888)' }),
+  Object.freeze({ slug: 'bolsos', label: 'Bags', background: 'linear-gradient(135deg,#e0b8c8,#c07888)' }),
 ]);
 
 // Fuente canónica del respaldo visual del menú. Las tres superficies del

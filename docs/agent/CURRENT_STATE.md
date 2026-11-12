@@ -1,12 +1,12 @@
-## Colores en estilos en línea de JavaScript — 2026-11-12 — Claude Code
+# Estado actual — 2026-11-12 · renovación de referencias del recorte publicado
 
-Pedido de la titular: arreglar los colores que quedaron en JavaScript, fuera de la paleta Tintín (#F8AACA, #FDECF2, #222222, blanco). Se transformaron 117 literales de color dentro de estilos en línea (color, fondo, borde, sombra) en 17 archivos de js/ y tienda.js: avisos de conexión y tienda cerrada, tutorial de bienvenida, aviso de nueva versión, iconos de colecciones, carrito, perfil mayorista, pago seguro y carga de imágenes; más dos grises del estado agotado de los filtros en catalogo.html (y la expectativa de color en tests/catalog/search-responsive.spec.js). El texto pasa siempre a #222222 (nunca a rosa, por contraste), las cortinas oscuras siguen oscuras y se conserva el rojo de error.
+PR1383 integrada como58be634d2362b42221ef456111ef1bd565a3942d. CI43206342214/1, CodeQL43206336607/1 y mantenedor43210439133/1 SUCCESS; Protected flow maintenance/integrity SUCCESS. Cloudflare producción a95dfd87 SUCCESS; salud43210504975/1 y CodeQL posterior43210501740/1 SUCCESS. CI posterior43210501503/1 sigue en curso y se sigue por separado.
 
-No se tocó, a propósito: js/components/color/* (valores por defecto y migración del panel de apariencia, protegidos por brand-palette.test.mjs), js/admin, pantallas de edición de administradoras (modo-edicion-sitio, insignia-edicion, editor-fotografias, panel de depuración), colores de estado, WhatsApp, botón de Google y muestras de producto.
+Verificación pública posterior detectó respuestas anteriores bajo las referencias free-crop-1: una lectura previa al despliegue había llenado la caché inmutable de archivos existentes. CSS vieja con CF HIT/age223 y hash6aa67e4d; la misma ruta con consulta fresca devuelve la CSS aprobada8f8a39f4. El módulo nuevo devuelve bytes correctos. No se declara publicación funcional completada con esas referencias antiguas.
 
-Versionado de caché: sufijo -p1112 solo en archivos con bytes nuevos; se retrocedieron los arrastres que el auditor marcó como bump innecesario. Plan de mantenimiento con scripts/preparar-mantenimiento-flujos.mjs sobre main 58be634d (rehecho tras fusionar el PR 1383 de administración; el cambio se reconstruyó limpio sobre main en vez de resolver conflictos de versiones a mano).
+Esta corrección cambia únicamente referencias locales y VERSION del cargador a free-crop-2, conservando controles, comportamiento y pruebas de1383; añade una marca de versión al diálogo para diagnosticar la carga efectiva. Caché/CSP/diagnóstico/plan se regeneran desde autoridades contra main58be634d. No se purga caché ni se despliega manualmente. No consultar las nuevas URLs en producción hasta Cloudflare SUCCESS del nuevo merge. No tocar PR1382 de Claude. Pendientes: gates del nuevo candidato, mantenedor, resultados posteriores y comparación pública de las siete fuentes con referencias nuevas. Sin escrituras comerciales reales.
 
-PASS_LOCAL: build:pages, auditar-proteccion-flujos, audit:cache-versioning, ci:preflight completo (0 errores), fase de navegador local (17 de 18; la restante, home-layout-browser, falló solo por la versión del Chromium local y pasa 12 de 12 con el correcto) y search-responsive 32 de 32. El CI de 0180c29d (versión previa a esta actualización) salió verde en todas las fases. No probado: iPhone real.
+---
 
 ## Recorte por bordes y cabecera opaca del editor — 2026-11-12 — Codex /root
 

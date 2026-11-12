@@ -129,7 +129,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const box = document.getElementById('error-4');
     if (!box) return;
     box.innerHTML = reviewCart
-      ? `<div>${escapeHtml(message)}</div><button type="button" id="tt-review-cart" style="margin-top:10px;border:0;border-radius:999px;background:#F8AACA;color:#fff;padding:10px 18px;font-weight:700;cursor:pointer">Revisar carrito</button>`
+      ? `<div>${escapeHtml(message)}</div><button type="button" id="tt-review-cart" style="margin-top:10px;border:0;border-radius:999px;background:#b84c72;color:#fff;padding:10px 18px;font-weight:700;cursor:pointer">Revisar carrito</button>`
       : escapeHtml(message);
     box.classList.add('show');
     box.setAttribute('role', 'alert');
@@ -1037,7 +1037,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
       return lines;
     };
-    const paragraph = (value, size, bold, color = '#222222') => {
+    const paragraph = (value, size, bold, color = '#713C53') => {
       const lines = wrap(value, contentWidth, size, bold);
       commands.push({ lines, x: padding, y, size, bold, color });
       y += lines.length * (size + 9);
@@ -1055,8 +1055,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       const rightX = padding + leftWidth + 20;
       const left = wrap(label, leftWidth, size, bold);
       const right = wrap(value, width - padding - rightX, size, bold);
-      commands.push({ lines: left, x: padding, y, size, bold, color: '#222222' });
-      commands.push({ lines: right, x: rightX, y, size, bold, color: '#222222' });
+      commands.push({ lines: left, x: padding, y, size, bold, color: '#713C53' });
+      commands.push({ lines: right, x: rightX, y, size, bold, color: '#713C53' });
       y += Math.max(left.length, right.length) * 27 + 20;
     }
     y += 8;

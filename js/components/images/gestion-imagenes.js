@@ -6,7 +6,7 @@
    de colecciones en collections/{slug}.image.
    ============================================================= */
 
-import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261108-appcheck-fallo-1-p1112';
+import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261108-appcheck-fallo-1';
 import { createSafeImage, sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 
 if (!window.TintinImagesPhase5Booted) {
