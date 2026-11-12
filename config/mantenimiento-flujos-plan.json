@@ -1,42 +1,78 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "d482fb243e1ce6ee6bae447ae2498ea259b59d82",
-  "reason": "Actualiza filtros de variantes del catálogo con main #1380 y renueva el plan",
+  "baseCommit": "2d038b19749f56ad56af30fee809e4fc4edf3d67",
+  "reason": "Recorte libre por bordes de fotos y superficie opaca de cabecera del editor, con controles y validación responsive",
   "files": [
     {
-      "path": "_headers",
-      "oldHash": "f9d5d8d3d04fc4a1c09077e34ce6c7d7123c7bb2609d9670c3d0d337c02feac5",
-      "newHash": "b48b1952cbf595bc3e4cc81249218daca3b1931305170829a72469539cf1a567"
+      "path": "admin-images.html",
+      "oldHash": "d4dc55a371b86bd28186f9dd5b6a4b03765987bc987d0c96ef10abbe25559453",
+      "newHash": "7df01b7283caa330d6774590bbdeb66bd1472db92204b2198715b70fb22c404d"
     },
     {
-      "path": "catalogo.html",
-      "oldHash": "c9ef907ab9ff47c9c0b53da2a0f636f86ce4efc362e4f6415615196fc25b8731",
-      "newHash": "97af7f48471fe69b8d02003b241de612fbee7cf887dcf75e4f751625c18149c5"
+      "path": "admin.html",
+      "oldHash": "2d9a79e9286a5880fc3b3f43bf44fbeaa396ca6b4892a052be13c35f06ff3e32",
+      "newHash": "6c64095f232efb95dab5043232a16af2fbbcc9651193970305a31664fcd9079f"
     },
     {
       "path": "config/csp-runtime.js",
-      "oldHash": "7108a68212ca67a517ce8f5fdf569d3d962ef04d5211740538b6cddb81c59d12",
-      "newHash": "649e5b9eb0b15aee829086f940b39cb872fd683caca2c1aa495c466f04e75ebf"
+      "oldHash": "649e5b9eb0b15aee829086f940b39cb872fd683caca2c1aa495c466f04e75ebf",
+      "newHash": "be937c694d46b7744b8d24edcfd941e682c98417fbad79e177522faa63004d03"
     },
     {
       "path": "config/csp-runtime.json",
-      "oldHash": "42b624925f663e05f95a892cd27eb7b6623e23917ea822bf252347f41f2aadec",
-      "newHash": "34304565d9fb6c01234431e3bb4d293aa78e942615f0c3b50e4a013aa5a399fa"
+      "oldHash": "34304565d9fb6c01234431e3bb4d293aa78e942615f0c3b50e4a013aa5a399fa",
+      "newHash": "6ddfa2875cbf01e48704bf68078a8fe72e0bce23403896e0ae1bea5d376de64b"
+    },
+    {
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "6aa67e4d802a3436d40996de0b4005b6b36e82a30b94443046f54a809c48db40",
+      "newHash": "8f8a39f4bf030a9fd162b82bd735ddf98b6ff25fcadf4b0fdc1719fa0a638b3d"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "0e6fa27e0b71936ad0459000c4529e9aa55a75f7317a72470f42c246d1664b76",
+      "newHash": "ba7ce6fd90fe08d038ac65fe8d3df07701424150fd33027d3db5f535a93d74fe"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "ffa04e73a75e17a1d56beeb042cf9ccf1caedd8a80d3a7713f0980705ddc0b69",
+      "newHash": "908b3bef8a3e13d2bf4c0cf8d2d5fd2d85b5a0cf3bed74b5488f56241eb020e4"
+    },
+    {
+      "path": "js/components/images/carga-imagenes.js",
+      "oldHash": "e971785ed2290d8cdf380c49459dbacb7423aebf00d1aefd343c0d64a5e03d01",
+      "newHash": "9e10f9373269dc33527a3bb1833cd6ed981dd63688cf9049ce7edcfa038d9218"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "85f271b34977ede531304442232a4683b68d325dc4e17622a14b808074675ade",
-      "newHash": "ba87a1f431ba58e97a6499dbb02a6ffa022f7bbe0196f34ac2eb33feb82c8102"
+      "oldHash": "ba87a1f431ba58e97a6499dbb02a6ffa022f7bbe0196f34ac2eb33feb82c8102",
+      "newHash": "362502c1bc75c8cf6ded49981a4a12f4cabb24d9f4b7df37bb496e1791e3a0fb"
     }
   ],
   "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
     "cf-functions",
     "cf-functions__apis-internas__20",
     "cf-functions__csp__29",
     "cf-functions__reglas-firestore__28",
     "cf-pages__cf-functions__19",
+    "correos",
     "csp",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
     "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
     "super-panel__productos__34"
   ]
 }

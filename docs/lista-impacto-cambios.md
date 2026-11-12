@@ -1,3 +1,16 @@
+## Recorte libre de fotos y cabecera de producto — 2026-11-12
+
+Autoridades editor-fotografias.js/recorte-fotografias.mjs y superficie de
+shopify-commerce-admin.css. Verificar cuatro bordes y cuatro esquinas,
+exportación con offsets sin reencuadrar, límites1px, mover área,
+deshacer/rehacer/reabrir/reset, porcentajes y giro de viewport; mouse/touch y
+teclado. Aplicar a creación/edición y fotos de variantes mediante widgets
+existentes. Cabecera opaca sólo mientras editor de producto está abierto:
+scroll real, sin franja entre barras y sin cambios de píxeles al cambiar lo
+que hay debajo; conservar liberación de espacio en pantallas bajas. Probar
+320–1920px y ambas orientaciones. CSS/caché/CSP/diagnóstico/plan mediante
+generadores; build→plan→build, preflight y diff0 antes de push.
+
 ## Editor local de fotos de productos — 2026-11-12
 
 Autoridades carga-imagenes.js/galeria-unificada.js y editor-fotografias.js.

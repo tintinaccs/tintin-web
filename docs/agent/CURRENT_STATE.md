@@ -1,3 +1,39 @@
+## Recorte por bordes y cabecera opaca del editor — 2026-11-12 — Codex /root
+
+Base aceptada2d038b19749f56ad56af30fee809e4fc4edf3d67; rama propia
+fix/product-free-crop-and-editor-header. PR1380 está integrada/publicada y sus
+comprobaciones posteriores43144373966/1,43144374195/1,43144375956/1 aprobaron;
+las notas inferiores PENDING son historia, no instrucciones para reintentar.
+Pedido nuevo: cortar arrastrando arriba/abajo/izquierda/derecha y esquinas;
+evitar contenido visible en la cabecera al desplazar; todas las pantallas.
+
+Autoridad editor-fotografias.js, extendida con recorte-fotografias.mjs. Recorte
+normalizado sobre el lienzo ya compuesto: exportación reduce dimensiones y
+traslada el origen, sin recalcular zoom ni volver a centrar la fotografía.
+Máscara y ocho tiradores44px; mouse, touch y flechas; mover selección,
+porcentajes independientes, tamaño final, mínimo1px, deshacer/rehacer/reset y
+estado al reabrir. Al redimensionar/girar pantalla mantiene selección. No
+sube archivos hasta confirmar/guardar ni modifica fuente/contratos de stock.
+El resto de herramientas trabaja sobre la misma composición canónica.
+
+Cabecera: la superficie global tenía transparencia/degradado y un selector
+:is con ID que ganaba por especificidad. En edición de producto se aplica
+una base opaca de tokens administrativos, sin alterar tema público ni otros
+módulos. Se conserva que en horizontal bajo la cabecera del formulario pueda
+salir de vista para liberar espacio. Fixture de cabecera monta la hoja real
+del componente y usa scroll real con foto presente. Compara capturas con
+fondos rojos/azules detrás: ningún píxel de la cabecera cambia por lo que
+hay debajo. No se agregan alturas fijas, filtros de fondo ni otra autoridad.
+
+PASS_LOCAL:23 Chromium nuevos (7 tamaños de recorte,8 cabecera con scroll y
+pintura,3 touch, exportación por píxeles, esquinas/undo/reapertura, límites y
+rotación y composición previa con giro/zoom/luz) y22 regresiones existentes
+del editor más33 de pestañas aprobadas. Los nuevos casos
+se agregan al comando vigente de administración, sin workflows nuevos.
+Guías consultadas: tintin-design-quality y tintin-responsive-a11y; protocolo
+de diagnóstico/reproducción antes de la corrección. Generadores/CI/merge del
+SHA final PENDING. Sin datos comerciales reales ni cambios de permisos.
+
 ## Filtros de variantes: PR 1354 actualizado con main db9eb668 — 2026-11-12 — Claude Code
 
 El CI completo de 588d49c6 salió en verde (Repository audit incluido), pero main avanzó con el PR 1379 y el PR 1354 quedó con conflicto en diagnostic-manifest.json y site-version.json (generados). Se fusionó main, se tomaron los derivados de main y se regeneraron con npm run build:pages; el plan de mantenimiento se rehizo con scripts/preparar-mantenimiento-flujos.mjs (base db9eb668, 5 archivos protegidos: catalogo.html, _headers, CSP y baseline de caché). Sin cambios de código respecto de 588d49c6. PASS_LOCAL: build:pages, auditar-proteccion-flujos, audit:cache-versioning, audit:styles. Pendiente: CI sobre el nuevo commit, merge y verificación en producción de que las tarjetas cambian de foto al filtrar.
