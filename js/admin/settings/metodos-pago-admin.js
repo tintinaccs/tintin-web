@@ -1,5 +1,5 @@
 import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261108-appcheck-fallo-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
@@ -36,7 +36,7 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/components/payments/payment-methods.css?v=tintin-20261012-checkout-ready-3-payment-methods-css-copiar-20261105-1-p1106';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20261111-product-login-payment-1';
   document.head.appendChild(link);
 }
 

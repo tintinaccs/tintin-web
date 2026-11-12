@@ -369,6 +369,280 @@
         "LICENSE.upstream": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
         "SKILL.md": "661ef89575f0307ca2ca9cee8bdb2c59e58b569dc6adb4a0632d211559920ecb"
       }
+    },
+    {
+      "repository": "https://github.com/jakubkrehel/skills",
+      "revision": "157da62016338e8693dcff93d47154a9e36f2157",
+      "source": "skills/better-interface",
+      "folder": "better-interface",
+      "upstreamSha256": {
+        "SKILL.md": "915ed5dc1442d9b78782900ff8b62160133362a2fe23998917814bfb6422869e",
+        "agents/openai.yaml": "541c5d823f474543d4f3a314a9292215f8c90c152249e72411ff3e3632cf55bc",
+        "review-format.md": "4bb2715d6cd7c8afbd984cbe71148a214c9d43ffd535ba00789f7709ee743c01"
+      },
+      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root.",
+      "installedSha256": {
+        "LICENSE.upstream": "ed1dfe988fc40511b4845ccd9050a143a2002fee3bedc8064c47fa342b5d8d4f",
+        "SKILL.md": "22fdaf3c15b1a51324506eb71688f72b42b8b3c10c15b7aff7c67810a4087d90",
+        "agents/openai.yaml": "541c5d823f474543d4f3a314a9292215f8c90c152249e72411ff3e3632cf55bc",
+        "review-format.md": "4bb2715d6cd7c8afbd984cbe71148a214c9d43ffd535ba00789f7709ee743c01"
+      }
+    },
+    {
+      "repository": "https://github.com/jakubkrehel/skills",
+      "revision": "157da62016338e8693dcff93d47154a9e36f2157",
+      "source": "skills/better-ui",
+      "folder": "better-ui",
+      "upstreamSha256": {
+        "SKILL.md": "2d5f9fa4f3bbf045da914349b6e5fde559c947e5323968350b65bb2cdc6b3e4f",
+        "agents/openai.yaml": "799e0b58bded32edf5c217f97e08c364660ec24234978b2e3f7dee1868bea871",
+        "animations.md": "0e9ee790191d0761a6adf27fdf1e4279d79ecbe5d0d916fc331a28a8c86f39b3",
+        "enter-exit.md": "de087d3bc69461343409c275dea7d94bca6c1158558b887b7909ce505cdfa70a",
+        "icon-transitions.md": "676b344e7b22c37692a520c7ea2ab8fad3b3c8943a833f8133e51042297e9f06",
+        "icons.md": "eac6195bb5d5ba77efd6d9d7751295a7b0d4dadf6a68146639091b02f1e3dbbd",
+        "performance.md": "db59db84ab371903b7ebdb69f1e92bdc0f2e041331d9dd65d312e4d1b5d449d6",
+        "surfaces.md": "35a76b7c4e6da0fc933559e73ca8712fb7b804c383c6f69c25be3b9616ff2721"
+      },
+      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root.",
+      "installedSha256": {
+        "LICENSE.upstream": "ed1dfe988fc40511b4845ccd9050a143a2002fee3bedc8064c47fa342b5d8d4f",
+        "SKILL.md": "bccf57736651c21acb2b79ad869fbecd253732acf1aeb812b6eb38d78a9094f9",
+        "agents/openai.yaml": "799e0b58bded32edf5c217f97e08c364660ec24234978b2e3f7dee1868bea871",
+        "animations.md": "0e9ee790191d0761a6adf27fdf1e4279d79ecbe5d0d916fc331a28a8c86f39b3",
+        "enter-exit.md": "de087d3bc69461343409c275dea7d94bca6c1158558b887b7909ce505cdfa70a",
+        "icon-transitions.md": "676b344e7b22c37692a520c7ea2ab8fad3b3c8943a833f8133e51042297e9f06",
+        "icons.md": "eac6195bb5d5ba77efd6d9d7751295a7b0d4dadf6a68146639091b02f1e3dbbd",
+        "performance.md": "db59db84ab371903b7ebdb69f1e92bdc0f2e041331d9dd65d312e4d1b5d449d6",
+        "surfaces.md": "35a76b7c4e6da0fc933559e73ca8712fb7b804c383c6f69c25be3b9616ff2721"
+      }
+    },
+    {
+      "repository": "https://github.com/jakubkrehel/skills",
+      "revision": "157da62016338e8693dcff93d47154a9e36f2157",
+      "source": "skills/better-typography",
+      "folder": "better-typography",
+      "upstreamSha256": {
+        "SKILL.md": "8f00a576f6c8d2f8d72dfbffe765ce569982509d01533ea5881de6e1918d3a68",
+        "agents/openai.yaml": "01d8b8f835112e97ba0e4d97a07775e919407ebb5aab0cce9b4fa280e66b19b8",
+        "choosing-fonts.md": "abd2c084ce7f9c3908dbfa09636ab87a2db731204c1e804b081e4fbd7e4d612d",
+        "css-cheat-sheet.md": "9aac06b524a25a780b950ab046735aab6f45c551fcab2ebf90a8faf7f12db3c9",
+        "details-and-accessibility.md": "705176db1784beed8b85086dd92dcfad6658e61fa8f9d017e648005029b7ab23",
+        "spacing-and-sizing.md": "db91919a92c1b7de16761e8d8a5addffabcde3dce97ff579f7cbbb585f42cb0f",
+        "variable-fonts-and-opentype.md": "3b8bfa85c483d1bd08490203f232c2002b838f89059d341e6b69cde040bf6556",
+        "wrapping-and-punctuation.md": "44ef7be30b3342c0a81f7b07c2f7138c9743b8df8c8edab518907e8ec0abd68a"
+      },
+      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root.",
+      "installedSha256": {
+        "LICENSE.upstream": "ed1dfe988fc40511b4845ccd9050a143a2002fee3bedc8064c47fa342b5d8d4f",
+        "SKILL.md": "ed31c182c238b9185020303ae699eb9a72ea3105e00b93f143e31cb78f6d68a4",
+        "agents/openai.yaml": "01d8b8f835112e97ba0e4d97a07775e919407ebb5aab0cce9b4fa280e66b19b8",
+        "choosing-fonts.md": "abd2c084ce7f9c3908dbfa09636ab87a2db731204c1e804b081e4fbd7e4d612d",
+        "css-cheat-sheet.md": "9aac06b524a25a780b950ab046735aab6f45c551fcab2ebf90a8faf7f12db3c9",
+        "details-and-accessibility.md": "705176db1784beed8b85086dd92dcfad6658e61fa8f9d017e648005029b7ab23",
+        "spacing-and-sizing.md": "db91919a92c1b7de16761e8d8a5addffabcde3dce97ff579f7cbbb585f42cb0f",
+        "variable-fonts-and-opentype.md": "3b8bfa85c483d1bd08490203f232c2002b838f89059d341e6b69cde040bf6556",
+        "wrapping-and-punctuation.md": "44ef7be30b3342c0a81f7b07c2f7138c9743b8df8c8edab518907e8ec0abd68a"
+      }
+    },
+    {
+      "repository": "https://github.com/jakubkrehel/skills",
+      "revision": "157da62016338e8693dcff93d47154a9e36f2157",
+      "source": "skills/better-colors",
+      "folder": "better-colors",
+      "upstreamSha256": {
+        "SKILL.md": "2fc5964fe9adae02e8ba4d80d40ad85d23da227f3eab3b55e06c7df0ac7e7652",
+        "agents/openai.yaml": "9568572146c8d7d1dc2e12536c2b8ea63480f83f2f2ebfcf2f9a500a56830d4a",
+        "color-formats.md": "6c5d7f243dde1c2604c35f40a7668bc20ff8b79249fa52633ac4f1be02fa73ba",
+        "color-usage.md": "02ee247c8782d256a0841c154aee5decb456966f0f7db8701bef37ed4694e773",
+        "contrast.md": "a524a229232a522fc752be9503bba8caffd76894d04c941a1e7e982817d6fefc",
+        "palette-generation.md": "0b50caa5e77085d1d762bb3d362c552103ebbf5ca5ad297b364f8172441c72a5",
+        "palette-structure.md": "bba9cd296c1e4ee613420b32023b8ce1a1bb45d1340e99e906cee37413d3dd62",
+        "token-naming.md": "2cc8c435a37cff3d4320076953431572fa77a6f58aaf88ff62381d2cdcfd022a"
+      },
+      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root.",
+      "installedSha256": {
+        "LICENSE.upstream": "ed1dfe988fc40511b4845ccd9050a143a2002fee3bedc8064c47fa342b5d8d4f",
+        "SKILL.md": "93b56b58053cfadcfe729c4d714134acb282f6ab851ec45a8cec0a364da21d64",
+        "agents/openai.yaml": "9568572146c8d7d1dc2e12536c2b8ea63480f83f2f2ebfcf2f9a500a56830d4a",
+        "color-formats.md": "6c5d7f243dde1c2604c35f40a7668bc20ff8b79249fa52633ac4f1be02fa73ba",
+        "color-usage.md": "02ee247c8782d256a0841c154aee5decb456966f0f7db8701bef37ed4694e773",
+        "contrast.md": "a524a229232a522fc752be9503bba8caffd76894d04c941a1e7e982817d6fefc",
+        "palette-generation.md": "0b50caa5e77085d1d762bb3d362c552103ebbf5ca5ad297b364f8172441c72a5",
+        "palette-structure.md": "bba9cd296c1e4ee613420b32023b8ce1a1bb45d1340e99e906cee37413d3dd62",
+        "token-naming.md": "2cc8c435a37cff3d4320076953431572fa77a6f58aaf88ff62381d2cdcfd022a"
+      }
+    },
+    {
+      "repository": "https://github.com/jakubkrehel/skills",
+      "revision": "157da62016338e8693dcff93d47154a9e36f2157",
+      "source": "skills/better-accessibility",
+      "folder": "better-accessibility",
+      "upstreamSha256": {
+        "SKILL.md": "f3f9dc26c947dbdfc64be80d3c0d278d5d8bb070c7826b2dae6bf8c380e81586",
+        "agents/openai.yaml": "98699206d4fb00b72bcaf69bb446f541644cc0cc3d23967e266731e100a55563",
+        "focus-and-keyboard.md": "47857a860f25f3159ace5b3e06e4961e9c47bd0f9c30f35d1aab22e97e3f0b5c",
+        "forms.md": "66557dc714093f45f6cc0ab8e248092cb2e3bc994609c6e629135f0ddf09e0f4",
+        "hit-areas.md": "7ce9ee5c5420d046f1d87b466e5fe5978d90d17632a2ad084a803ad34d607d53",
+        "motion-and-zoom.md": "16c0c3daeab2f01ed04ee0189998b5711d3c4c9a4ff10604a757577af9bb5896",
+        "screen-readers.md": "0d0911a369bbf332a6237d2cf4c5209b13e7f02e5bb01a6d47bbca3f328df71a",
+        "semantics-and-aria.md": "818ad7d45a8b25a3291e52bdc51ec316c4e00e22ed58940f26321e35365b741e"
+      },
+      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root.",
+      "installedSha256": {
+        "LICENSE.upstream": "ed1dfe988fc40511b4845ccd9050a143a2002fee3bedc8064c47fa342b5d8d4f",
+        "SKILL.md": "e13d7ed666cef1b8dcd31e1adf8f53581b34d774ea537be8eacde0c5e884c539",
+        "agents/openai.yaml": "98699206d4fb00b72bcaf69bb446f541644cc0cc3d23967e266731e100a55563",
+        "focus-and-keyboard.md": "47857a860f25f3159ace5b3e06e4961e9c47bd0f9c30f35d1aab22e97e3f0b5c",
+        "forms.md": "66557dc714093f45f6cc0ab8e248092cb2e3bc994609c6e629135f0ddf09e0f4",
+        "hit-areas.md": "7ce9ee5c5420d046f1d87b466e5fe5978d90d17632a2ad084a803ad34d607d53",
+        "motion-and-zoom.md": "16c0c3daeab2f01ed04ee0189998b5711d3c4c9a4ff10604a757577af9bb5896",
+        "screen-readers.md": "0d0911a369bbf332a6237d2cf4c5209b13e7f02e5bb01a6d47bbca3f328df71a",
+        "semantics-and-aria.md": "818ad7d45a8b25a3291e52bdc51ec316c4e00e22ed58940f26321e35365b741e"
+      }
+    },
+    {
+      "repository": "https://github.com/jakubkrehel/skills",
+      "revision": "157da62016338e8693dcff93d47154a9e36f2157",
+      "source": "skills/better-layout",
+      "folder": "better-layout",
+      "upstreamSha256": {
+        "SKILL.md": "4e7fd6880f41a87a21bb3be8e0b2bd7e7b8c561af5fb706ec0bb3e58877d60ec",
+        "agents/openai.yaml": "d51a2ca663c9331f8f23b7a550e5f848f83e81361e21f2280cc384e99cc0ae15",
+        "grouping-and-alignment.md": "30057c8e063a3cb0026140c82de0c16510080c7c306876caacba1206d7e2483a",
+        "spacing-and-adaptivity.md": "1b7e015f520b5e34cf9712fbb6586deb57a7c9f9902b54aa465719e9e5678958"
+      },
+      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root.",
+      "installedSha256": {
+        "LICENSE.upstream": "ed1dfe988fc40511b4845ccd9050a143a2002fee3bedc8064c47fa342b5d8d4f",
+        "SKILL.md": "4e68ff90d203042204c0b7bdf290243de60621adf2fe7986b4af13080caeb2e3",
+        "agents/openai.yaml": "d51a2ca663c9331f8f23b7a550e5f848f83e81361e21f2280cc384e99cc0ae15",
+        "grouping-and-alignment.md": "30057c8e063a3cb0026140c82de0c16510080c7c306876caacba1206d7e2483a",
+        "spacing-and-adaptivity.md": "1b7e015f520b5e34cf9712fbb6586deb57a7c9f9902b54aa465719e9e5678958"
+      }
+    },
+    {
+      "repository": "https://github.com/jakubkrehel/skills",
+      "revision": "157da62016338e8693dcff93d47154a9e36f2157",
+      "source": "skills/better-writing",
+      "folder": "better-writing",
+      "upstreamSha256": {
+        "SKILL.md": "109e4337da3621410c225b137d4683d8c246ca06071990a22882376ad60ec6e3",
+        "agents/openai.yaml": "a5aec7e0cbc87930962f139eff4341dcf87e83fd19b9447e3f614db2bc71de67",
+        "patterns.md": "93ed5285d2009213b600e6f5af53ae3f7e3ff0114014146779aeda1c1ab42077"
+      },
+      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root.",
+      "installedSha256": {
+        "LICENSE.upstream": "ed1dfe988fc40511b4845ccd9050a143a2002fee3bedc8064c47fa342b5d8d4f",
+        "SKILL.md": "4df3cb92784ba7ae5156d12ff784f0a9d024757fc7351c5d60b80e80208a2aae",
+        "agents/openai.yaml": "a5aec7e0cbc87930962f139eff4341dcf87e83fd19b9447e3f614db2bc71de67",
+        "patterns.md": "93ed5285d2009213b600e6f5af53ae3f7e3ff0114014146779aeda1c1ab42077"
+      }
+    },
+    {
+      "repository": "https://github.com/jakubkrehel/skills",
+      "revision": "157da62016338e8693dcff93d47154a9e36f2157",
+      "source": "skills/build-design",
+      "folder": "build-design",
+      "upstreamSha256": {
+        "SKILL.md": "d51cb44f594de7248340e9369c767f70a955483ba77f9976697cdbaf2f073a68",
+        "agents/openai.yaml": "858842fc00a7d7f086201a02c33af730d41fb00fab1ace92b7109fd8ba23f518",
+        "figma.md": "998359b07687762f0d4a7dc320b76fb6e985ff1e468f91ef1a14e4bcaac18942"
+      },
+      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root.",
+      "installedSha256": {
+        "LICENSE.upstream": "ed1dfe988fc40511b4845ccd9050a143a2002fee3bedc8064c47fa342b5d8d4f",
+        "SKILL.md": "0c76c249916a7ba5f84dd8a388eab087141a75f245cffa0dfb015dfc17e1afb4",
+        "agents/openai.yaml": "858842fc00a7d7f086201a02c33af730d41fb00fab1ace92b7109fd8ba23f518",
+        "figma.md": "998359b07687762f0d4a7dc320b76fb6e985ff1e468f91ef1a14e4bcaac18942"
+      }
+    },
+    {
+      "repository": "https://github.com/AgriciDaniel/pya",
+      "revision": "416c17fa09a234a1a34709d31b335d30196b9899",
+      "source": "skills/pya",
+      "folder": "pya",
+      "upstreamSha256": {
+        "SKILL.md": "1add9a36c71014fb7554967c7e9be8f9c043c814e8b37baf1bcc2e30f38af206",
+        "feed/2026-10.json": "4f0f179982aa396bb8147458039c1ef7b8015feb0f559fcecf61ca4cf6e20c88",
+        "feed/README.md": "45586a0b2da4f7ed0b1f3b27d9d4ff90c13659e88c2037fdd80cac0c11dfecc3",
+        "feed/schema.json": "33c98cfd0f263c7546e75a4f872aa86ce2f6b255a2cb7acb0349db1f5932bca5",
+        "references/agentic-security.md": "6041f2e8b04d6de9068c952b3c529f6083cc43971312f6c9df1ed07f425da9e5",
+        "references/compliance-matrix.md": "8af618b3df08db22f38b453c06a41481219d1a4758c2743130f54b87bcc1655c",
+        "references/false-positive-suppression.md": "d312bd0c31839dd74348d28b93feb773986fb2b516d50217446a7697c7005450",
+        "references/iac-patterns/dockerfile.md": "cde3ca4d0b933567c822f4dd5fe49ef686d2cd089ea62e0ebff65ca4bc762848",
+        "references/iac-patterns/github-actions.md": "0af18e5ae3a5e1d149a6656e6db040ca579847db5b5f90e75f9b5a2d7c24cea5",
+        "references/iac-patterns/kubernetes.md": "b1da52f6f2fef52fd9efc04eb338bd1495eca920c8301e7018fbb58b10b1fd48",
+        "references/iac-patterns/terraform.md": "1f9d7c7fa920bdd1a3d77ed50ae8e57d3b09fd896e18a69e96436ea578f08338",
+        "references/language-patterns/c-cpp.md": "f315e1743e4fa0285dffa812adce53401c033b77997290dc62efd64546eba868",
+        "references/language-patterns/csharp.md": "a27d7e69ee099729dbcbb67ce2040a43294afc66c61f3d67a32dc6582f9c95aa",
+        "references/language-patterns/go.md": "58760b6f3e099d03fede8f8e13a6e631d9a0c8dca5641dd185a44844099cc809",
+        "references/language-patterns/java.md": "4bfa7fedb62b43f707f98b15a7725dc2658375312fc4c2110b03571e37edc24b",
+        "references/language-patterns/javascript-typescript.md": "98ba3c7a971f2dee48544ab4512eab726dbc0c99a6ceab9726af0463d08708e9",
+        "references/language-patterns/php.md": "87582efe9bcec7e310af7c866609ef7613f919fa4f17877ff7481134423a6b14",
+        "references/language-patterns/python.md": "99a2c22379986a30edaf4a747020bbabe21d1c5d4c128395d35386e1732ead61",
+        "references/language-patterns/ruby.md": "94f121e37acd8e315c845371dcaa72e61ef4e91b3bf41fda94991f9802b84f80",
+        "references/language-patterns/rust.md": "9193847669d3324d842bdd9f13d171b5edb67b8533f41aaf383721b5a59de743",
+        "references/language-patterns/shell-bash.md": "97996acad7b20fa48e05fbad3cfe374ac7be997558eaf7231d3cd085e911aa16",
+        "references/language-patterns/swift-kotlin.md": "39070a1201f3f4e4c62eca26ba5e07c021f862ba0c8fbf0716617bf77440bcd7",
+        "references/report-template.md": "8362055b11bf43d290778591e397b9503fa589209c946bd3727a53a2db5440c7",
+        "references/response-order.md": "f1cd55cc042e1221717cebe3ac05e74d6082d01650aa50b2d6dbddef15a6c0ab",
+        "references/scoring-rubric.md": "ed92e8f28a253024c43502f55572418aa76487de0f43a264bd140b54f5db209b",
+        "references/seeds.json": "5af3ca984d5299bd4448d6cde80eaee9b79a01d430fdd9f153901fe847718d80",
+        "references/semgrep-patterns.md": "62b51413451278792962f47b5cc23bc5c5d0329e02e125dc07da6df1ba9402ce",
+        "references/standards.md": "afa6e3bc4a97a029c74c9819b7c361aac8dbe5bb7b7527c0fd731b3971f63217",
+        "references/threat-intelligence.md": "81fa903f97ab8be638c00d1bc41b0f73ec06386c9010aa98859c50b750737489",
+        "references/vulnerability-taxonomy.md": "4665a3fa60f9ef2d5a24e18069e16918733ebfcc82d814e5fb0892a0b080a9f0",
+        "scripts/_pya_common.py": "4c07206e35a701b0557ab5fa035f6d67bbde0ae710b119b6557b20fd697cb62a",
+        "scripts/feed_match.py": "721e6a3385afbf289a2576aea9da5e086fb888557bcdb97a93abb49afc1e34ad",
+        "scripts/inventory.py": "9e3a634baef664699fd93d6012ac02fe5a84bb4e2b74595982aa3ee118dce966",
+        "scripts/ioc_scan.py": "27ec35bf32506f13cf29197d9169f1fd4da9dfd816fe8cb82b505956ae38b4c3",
+        "scripts/run_tools.py": "b17affa20bea7d4308f8441ff4bfeaf8f48149583e90c72b9da5a47cbbab03d1",
+        "scripts/score.py": "7f9ec33044f01dc027d31e9f4c753235edb5a4b86d81ee118b70ae7a7686ab1b",
+        "scripts/update_kev.py": "5729840df137cfc42e09195d82e0450554cecf9ecacae305ee66084891dd16b5",
+        "scripts/validate_feed.py": "ef04581df591c792566119b43ab3ca0e8700eaa3cdb552f953f99ba06cc84848"
+      },
+      "adaptation": "SKILL.md: insert Tint\u00edn integration constraints after original frontmatter; other upstream files unchanged. LICENSE.upstream copied from repository root. allowed-tools narrowed (removed unquoted python3 and git -C * wildcards).",
+      "installedSha256": {
+        "LICENSE.upstream": "8c73de0238b4682d88b5a0e1267a3b9aa0567a05b7f5bf206157cc6e8b3a122c",
+        "SKILL.md": "ecc07eaec871654a868b607806077cab3d52501348ab259e9f038e7417a998eb",
+        "feed/2026-10.json": "4f0f179982aa396bb8147458039c1ef7b8015feb0f559fcecf61ca4cf6e20c88",
+        "feed/README.md": "45586a0b2da4f7ed0b1f3b27d9d4ff90c13659e88c2037fdd80cac0c11dfecc3",
+        "feed/schema.json": "33c98cfd0f263c7546e75a4f872aa86ce2f6b255a2cb7acb0349db1f5932bca5",
+        "references/agentic-security.md": "6041f2e8b04d6de9068c952b3c529f6083cc43971312f6c9df1ed07f425da9e5",
+        "references/compliance-matrix.md": "8af618b3df08db22f38b453c06a41481219d1a4758c2743130f54b87bcc1655c",
+        "references/false-positive-suppression.md": "d312bd0c31839dd74348d28b93feb773986fb2b516d50217446a7697c7005450",
+        "references/iac-patterns/dockerfile.md": "cde3ca4d0b933567c822f4dd5fe49ef686d2cd089ea62e0ebff65ca4bc762848",
+        "references/iac-patterns/github-actions.md": "0af18e5ae3a5e1d149a6656e6db040ca579847db5b5f90e75f9b5a2d7c24cea5",
+        "references/iac-patterns/kubernetes.md": "b1da52f6f2fef52fd9efc04eb338bd1495eca920c8301e7018fbb58b10b1fd48",
+        "references/iac-patterns/terraform.md": "1f9d7c7fa920bdd1a3d77ed50ae8e57d3b09fd896e18a69e96436ea578f08338",
+        "references/language-patterns/c-cpp.md": "f315e1743e4fa0285dffa812adce53401c033b77997290dc62efd64546eba868",
+        "references/language-patterns/csharp.md": "a27d7e69ee099729dbcbb67ce2040a43294afc66c61f3d67a32dc6582f9c95aa",
+        "references/language-patterns/go.md": "58760b6f3e099d03fede8f8e13a6e631d9a0c8dca5641dd185a44844099cc809",
+        "references/language-patterns/java.md": "4bfa7fedb62b43f707f98b15a7725dc2658375312fc4c2110b03571e37edc24b",
+        "references/language-patterns/javascript-typescript.md": "98ba3c7a971f2dee48544ab4512eab726dbc0c99a6ceab9726af0463d08708e9",
+        "references/language-patterns/php.md": "87582efe9bcec7e310af7c866609ef7613f919fa4f17877ff7481134423a6b14",
+        "references/language-patterns/python.md": "99a2c22379986a30edaf4a747020bbabe21d1c5d4c128395d35386e1732ead61",
+        "references/language-patterns/ruby.md": "94f121e37acd8e315c845371dcaa72e61ef4e91b3bf41fda94991f9802b84f80",
+        "references/language-patterns/rust.md": "9193847669d3324d842bdd9f13d171b5edb67b8533f41aaf383721b5a59de743",
+        "references/language-patterns/shell-bash.md": "97996acad7b20fa48e05fbad3cfe374ac7be997558eaf7231d3cd085e911aa16",
+        "references/language-patterns/swift-kotlin.md": "39070a1201f3f4e4c62eca26ba5e07c021f862ba0c8fbf0716617bf77440bcd7",
+        "references/report-template.md": "8362055b11bf43d290778591e397b9503fa589209c946bd3727a53a2db5440c7",
+        "references/response-order.md": "f1cd55cc042e1221717cebe3ac05e74d6082d01650aa50b2d6dbddef15a6c0ab",
+        "references/scoring-rubric.md": "ed92e8f28a253024c43502f55572418aa76487de0f43a264bd140b54f5db209b",
+        "references/seeds.json": "5af3ca984d5299bd4448d6cde80eaee9b79a01d430fdd9f153901fe847718d80",
+        "references/semgrep-patterns.md": "62b51413451278792962f47b5cc23bc5c5d0329e02e125dc07da6df1ba9402ce",
+        "references/standards.md": "afa6e3bc4a97a029c74c9819b7c361aac8dbe5bb7b7527c0fd731b3971f63217",
+        "references/threat-intelligence.md": "81fa903f97ab8be638c00d1bc41b0f73ec06386c9010aa98859c50b750737489",
+        "references/vulnerability-taxonomy.md": "4665a3fa60f9ef2d5a24e18069e16918733ebfcc82d814e5fb0892a0b080a9f0",
+        "scripts/_pya_common.py": "4c07206e35a701b0557ab5fa035f6d67bbde0ae710b119b6557b20fd697cb62a",
+        "scripts/feed_match.py": "721e6a3385afbf289a2576aea9da5e086fb888557bcdb97a93abb49afc1e34ad",
+        "scripts/inventory.py": "9e3a634baef664699fd93d6012ac02fe5a84bb4e2b74595982aa3ee118dce966",
+        "scripts/ioc_scan.py": "27ec35bf32506f13cf29197d9169f1fd4da9dfd816fe8cb82b505956ae38b4c3",
+        "scripts/run_tools.py": "b17affa20bea7d4308f8441ff4bfeaf8f48149583e90c72b9da5a47cbbab03d1",
+        "scripts/score.py": "7f9ec33044f01dc027d31e9f4c753235edb5a4b86d81ee118b70ae7a7686ab1b",
+        "scripts/update_kev.py": "5729840df137cfc42e09195d82e0450554cecf9ecacae305ee66084891dd16b5",
+        "scripts/validate_feed.py": "ef04581df591c792566119b43ab3ca0e8700eaa3cdb552f953f99ba06cc84848"
+      }
     }
   ],
   "taste": {
@@ -418,6 +692,25 @@
       "scripts/lib/rules.mjs": "8244aa9f53e77a59a562410310414e6b1a0f0cf002ce8f5aa792740b7f0149bf",
       "scripts/lint.mjs": "05f2fae2f56fc051b539cdbacb43a6f78fbbfb9644bb74aa11be472ff12dcaf5",
       "scripts/scenes.mjs": "234ec582e2b841457c33033feeeba8535f9ac285495a74d08dc533a1566c90d5"
+    }
+  },
+  "agents": {
+    "repository": "https://github.com/AgriciDaniel/pya",
+    "revision": "416c17fa09a234a1a34709d31b335d30196b9899",
+    "source": "agents",
+    "folder": ".claude/agents",
+    "license": "LICENSE.pya.upstream",
+    "sha256": {
+      "agentic-auditor.md": "21675f9c5a71b7317e63a12b0d27ae5fdcf676d54b1329f4bd7d118d8de6713c",
+      "ai-code-auditor.md": "0e6eccfac006aee66bdbc3bef35ce9ce693727939cba61b67bce126402eb8e4a",
+      "authz-reviewer.md": "676c24650e5d3a4b4cff0bd7be47193a67f1aa6883038820ccf6abb818cf9725",
+      "dependency-auditor.md": "5516e5a89dd70a71f26c9d80c994b0cb76fdd9d21acb2ffe2ee4bd76009e3182",
+      "finding-verifier.md": "3562e824a8cf9818217f88edb679b52f80398dc2a497cb5e807999ff1b7d7d38",
+      "iac-scanner.md": "2e828c79d288de7b60ba5c666bfc3b873effde3e8832d09a4ad05e8310e0ce51",
+      "logic-reviewer.md": "de1cfacbdc9cdb351429e60e3fd399487d19f85d949cf2919d82dfdebc34e20c",
+      "secret-scanner.md": "258dd9f60dd2afabb990f9baba74a5d6af0ef085b40046c78f0c77b8d5eb6b05",
+      "threat-intel.md": "294fe74286e290c068605c975b4e7b9b3824d900456f20d06b326cba848810c0",
+      "vuln-scanner.md": "6e5f6cbf41637f071542351d4c4586356c41fd2337c6c2d2afc950bb0687a0ff"
     }
   }
 }

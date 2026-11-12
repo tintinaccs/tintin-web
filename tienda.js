@@ -9,15 +9,6 @@
    UTILITIES
 ────────────────────────────────────── */
 
-// Ícono de corazón compartido (mismo path que js/components/favorites/icono-corazon.js;
-// este archivo se carga como script clásico y no puede usar import).
-const TT_HEART_PATH_D = 'M12 21s-6.716-4.35-9.428-8.485C.79 9.702 1.5 6.06 4.5 4.5 7.03 3.18 9.79 4.06 12 6.5c2.21-2.44 4.97-3.32 7.5-2C22.5 6.06 23.21 9.702 21.428 12.515 18.716 16.65 12 21 12 21z';
-function heartIconMarkup(filled) {
-  return filled
-    ? `<svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="${TT_HEART_PATH_D}"/></svg>`
-    : `<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="${TT_HEART_PATH_D}"/></svg>`;
-}
-
 /**
  * Format a number as Guaraní: 210000 → "Gs. 210.000"
  */
@@ -42,6 +33,11 @@ function productInitialSelectionString(product) {
   const groups = productVariantGroups(product);
   const available = product.variantInventory?.find(entry => entry.active !== false && (entry.stock === null || entry.stock > 0)) || product.variantInventory?.[0];
   return available?.attributes ? groups.map(([key]) => available.attributes[key]).join(' / ') : groups.map(([,values]) => values[0]).join(' / ');
+}
+// Una sola opción por grupo = una única combinación: la tarjeta la agrega directo.
+function singleVariantLabel(product) {
+  const groups = productVariantGroups(product);
+  return groups.length && groups.every(([, values]) => values.length === 1) ? groups.map(([, values]) => values[0]).join(' / ') : '';
 }
 function priceMarkup(p) {
   const info = discountInfo(p);
@@ -288,18 +284,19 @@ function getStockLimit(productId, variant) {
   return Math.min(total, option ?? Infinity);
 }
 
-async function addToCart(productId) {
+async function addToCart(productId, variant = '') {
   const product = getProductById(productId);
   if (!product) return null;
   const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
-    price: product.price,
+    price: variant && product.variantCommerceVersion === 2 ? window.TintinCatalogPolicy.priceFor(product, variant).price : product.price,
     qty: 1,
     stock: product.stock,
     cat: product.cat || product.category || '',
-    imageUrl: product.imageUrl || product.image || getProductImage(product.id) || ''
+    imageUrl: variant ? cartSync.productVariantImage(product, variant, getProductImage(product.id)) : product.imageUrl || product.image || getProductImage(product.id) || '',
+    ...(variant ? { variant } : {})
   });
   if (result?.changed) {
     openCart();
@@ -434,7 +431,6 @@ function renderCart() {
     const safeName = escapeHtml(item.name);
     const safeVariant = escapeHtml(item.variant || '');
     const safeVariantAttr = escapeAttribute(item.variant || '');
-    const isFavorite = Boolean(window.TintinFavorites?.has?.(item.id));
     const imgHtml = imgUrl
       ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(item.name)}" style="width:100%;height:100%;object-fit:contain;">`
       : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#fce4ec,#f5d4e0);display:flex;align-items:center;justify-content:center;"><svg width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23e8a0b8' stroke-width='1.5'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg></div>`;
@@ -452,7 +448,6 @@ function renderCart() {
         </div>
       </div>
       <div class="tt-cart-item-actions">
-        <button type="button" class="tt-cart-favorite-toggle${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" data-favorite-cat="${escapeAttribute(item.cat || '')}" aria-label="${escapeAttribute(isFavorite ? `Quitar ${item.name || 'producto'} de favoritos` : `Guardar ${item.name || 'producto'} en favoritos`)}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
         <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" aria-label="Eliminar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>
     </div>
@@ -620,7 +615,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261105-copiar-pago-1-p1106')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261111-product-zoom-2')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -651,7 +646,7 @@ function initCartEvents() {
     const btn = e.target.closest('.tt-add-to-cart');
     if (btn) {
       const id = btn.dataset.id;
-      if (id) addToCart(id);
+      if (id) addToCart(id, btn.dataset.variant || '');
     }
   });
 }
@@ -777,6 +772,224 @@ function renderProductCardColors(p, imageUrl = '') {
   return productCardColorsMarkup(p, colorGroup, '', activeColor);
 }
 
+/* ──────────────────────────────────────
+   HOJA «AGREGAR AL CARRITO» (tarjetas con opciones)
+   Muestra las opciones elegibles (color, tamaño, forma…), preselecciona la
+   que ya tiene la tarjeta y pide confirmación antes de agregar al carrito.
+   No navega a otra página.
+────────────────────────────────────── */
+let _addSheet = null;
+
+function _sheetStyles() {
+  if (document.getElementById('tt-add-sheet-style')) return;
+  const style = document.createElement('style');
+  style.id = 'tt-add-sheet-style';
+  style.textContent = `
+.tt-as-backdrop{position:fixed;inset:0;z-index:10050;display:flex;align-items:flex-end;justify-content:center;background:rgba(34,34,34,.45);opacity:0;transition:opacity .18s ease;font-family:Montserrat,sans-serif}
+.tt-as-backdrop.is-open{opacity:1}
+.tt-as{box-sizing:border-box;width:100%;max-width:480px;max-height:92vh;max-height:92dvh;overflow:auto;background:#fff;color:#222;border-radius:20px 20px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -8px 32px rgba(34,34,34,.18);transform:translateY(24px);transition:transform .22s cubic-bezier(.2,.8,.2,1)}
+.tt-as-backdrop.is-open .tt-as{transform:none}
+.tt-as-head{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.tt-as-img{flex:0 0 72px;width:72px;height:72px;border-radius:14px;object-fit:cover;background:#FDECF2}
+.tt-as-title{margin:0 0 2px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ad3f67}
+.tt-as-name{margin:0;font-size:1rem;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
+.tt-as-price{margin:4px 0 0;font-size:.95rem;font-weight:700}
+.tt-as-group{border:0;margin:0 0 14px;padding:0;min-width:0}
+.tt-as-legend{padding:0;margin:0 0 8px;font-size:.78rem;font-weight:700;color:#555}
+.tt-as-opts{display:flex;flex-wrap:wrap;gap:8px}
+.tt-as-opt{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1.5px solid #e6d3db;border-radius:999px;background:#fff;color:#222;font:600 .85rem Montserrat,sans-serif;cursor:pointer}
+.tt-as-opt[aria-pressed="true"]{border-color:#F8AACA;background:#FDECF2;box-shadow:0 0 0 2px #F8AACA}
+.tt-as-opt:disabled{opacity:.45;cursor:not-allowed;text-decoration:line-through}
+.tt-as-opt:focus-visible,.tt-as-btn:focus-visible{outline:3px solid #ad3f67;outline-offset:2px}
+.tt-as-dot{width:16px;height:16px;border-radius:50%;border:1px solid rgba(34,34,34,.25);flex:0 0 16px}
+.tt-as-summary{margin:4px 0 14px;padding:12px 14px;border-radius:12px;background:#FDECF2;font-size:.85rem;line-height:1.5}
+.tt-as-msg{min-height:1.2em;margin:0 0 10px;font-size:.82rem;font-weight:600;color:#9f2d52}
+.tt-as-actions{display:flex;gap:10px}
+.tt-as-btn{flex:1;min-height:48px;border-radius:999px;border:1.5px solid #F8AACA;font:700 .9rem Montserrat,sans-serif;cursor:pointer;padding:0 16px}
+.tt-as-btn--ok{background:#F8AACA;color:#222}
+.tt-as-btn--no{background:#fff;color:#222}
+.tt-as-btn:disabled{opacity:.6;cursor:not-allowed}
+@media (min-width:640px){.tt-as-backdrop{align-items:center}.tt-as{border-radius:20px;padding-bottom:20px}}
+@media (prefers-reduced-motion:reduce){.tt-as-backdrop,.tt-as{transition:none}}`;
+  document.head.appendChild(style);
+}
+
+// Combinaciones que realmente se pueden comprar (con stock y activas).
+function _sheetCombos(p) {
+  const groups = productVariantGroups(p);
+  if (!groups.length) return [];
+  if (p.variantCommerceVersion === 2) {
+    return (Array.isArray(p.variantInventory) ? p.variantInventory : [])
+      .filter(row => row && row.active !== false && (row.stock === null || row.stock > 0)
+        && groups.every(([key, values]) => values.includes(row.attributes?.[key])))
+      .map(row => ({ ...row.attributes }));
+  }
+  if (Array.isArray(p.variantInventory)) {
+    return p.variantInventory.filter(row => Number.isInteger(row.stock) && row.stock > 0).map(row => {
+      const parts = String(row.variant || '').split('/').map(v => v.trim());
+      return Object.fromEntries(groups.map(([key], i) => [key, parts[i]]));
+    }).filter(sel => groups.every(([key, values]) => values.includes(sel[key])));
+  }
+  if (!isInStock(p)) return [];
+  return groups.reduce((acc, [key, values]) => acc.flatMap(sel => values.map(v => ({ ...sel, [key]: v }))), [{}]);
+}
+
+function _sheetVariantString(p, sel) {
+  return productVariantGroups(p).map(([key]) => sel[key]).join(' / ');
+}
+
+function closeCardAddSheet() {
+  if (!_addSheet) return;
+  const { root, trigger, onKey } = _addSheet;
+  _addSheet = null;
+  document.removeEventListener('keydown', onKey, true);
+  root.classList.remove('is-open');
+  setTimeout(() => root.remove(), 200);
+  document.documentElement.style.overflow = _addSheetPrevOverflow;
+  if (trigger && trigger.isConnected) trigger.focus();
+}
+let _addSheetPrevOverflow = '';
+
+function openCardAddSheet(productId, trigger = document.activeElement) {
+  const p = getProductById(productId);
+  if (!p || !isInStock(p) || _addSheet) return false;
+  const groups = productVariantGroups(p);
+  const combos = _sheetCombos(p);
+  if (!groups.length || !combos.length) return false;
+  _sheetStyles();
+
+  const savedColor = cardColorSelections.get(String(p.id));
+  const colorGroup = productCardColorOptions(p);
+  const start = productPreferredSelection(p, colorGroup && savedColor ? { [colorGroup[0]]: savedColor } : {});
+  let sel = combos.find(c => groups.every(([key]) => c[key] === start[key])) || combos[0];
+
+  const uid = `tt-as-${Date.now().toString(36)}`;
+  const root = document.createElement('div');
+  root.className = 'tt-as-backdrop';
+  root.innerHTML = `
+    <div class="tt-as" role="dialog" aria-modal="true" aria-labelledby="${uid}-name" aria-describedby="${uid}-summary">
+      <div class="tt-as-head">
+        <img class="tt-as-img" alt="" width="72" height="72">
+        <div>
+          <p class="tt-as-title">Agregar al carrito</p>
+          <h2 class="tt-as-name" id="${uid}-name"></h2>
+          <p class="tt-as-price"></p>
+        </div>
+      </div>
+      <div class="tt-as-groups"></div>
+      <p class="tt-as-summary" id="${uid}-summary"></p>
+      <p class="tt-as-msg" role="status" aria-live="polite"></p>
+      <div class="tt-as-actions">
+        <button type="button" class="tt-as-btn tt-as-btn--no" data-as-cancel>Cancelar</button>
+        <button type="button" class="tt-as-btn tt-as-btn--ok" data-as-confirm>Sí, agregar</button>
+      </div>
+    </div>`;
+  const q = selector => root.querySelector(selector);
+  q('.tt-as-name').textContent = p.name;
+
+  const render = () => {
+    const variant = _sheetVariantString(p, sel);
+    const money = selectedProductMoney(p, variant);
+    q('.tt-as-price').textContent = formatPrice(Number(money?.price ?? p.price) || 0);
+    const photo = sanitizeClassicImageUrl(window.TintinProductMedia.galleryImages(p, sel)[0] || p.imageUrl || p.image || getProductImage(p.id), 240);
+    const img = q('.tt-as-img');
+    if (photo) { img.src = photo; img.hidden = false; } else img.hidden = true;
+    const holder = q('.tt-as-groups');
+    holder.textContent = '';
+    for (const [key, values] of groups) {
+      const field = document.createElement('fieldset');
+      field.className = 'tt-as-group';
+      const legend = document.createElement('legend');
+      legend.className = 'tt-as-legend';
+      legend.textContent = key;
+      const row = document.createElement('div');
+      row.className = 'tt-as-opts';
+      for (const value of values) {
+        const available = combos.some(c => c[key] === value);
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'tt-as-opt';
+        button.dataset.asKey = key;
+        button.dataset.asValue = value;
+        button.setAttribute('aria-pressed', String(sel[key] === value));
+        if (!available) { button.disabled = true; button.title = `${value} — Agotado`; }
+        if (window.TintinProductMedia.isColorKey(key)) {
+          const dot = document.createElement('span');
+          dot.className = 'tt-as-dot';
+          dot.setAttribute('aria-hidden', 'true');
+          dot.style.background = productColorSwatch(value, p) || '#eee';
+          button.appendChild(dot);
+        }
+        button.appendChild(document.createTextNode(available ? value : `${value} (agotado)`));
+        row.appendChild(button);
+      }
+      field.append(legend, row);
+      holder.appendChild(field);
+    }
+    q('.tt-as-summary').textContent = `¿Agregar a tu carrito «${p.name}» — ${groups.map(([key]) => `${key}: ${sel[key]}`).join(', ')}?`;
+  };
+
+  root.addEventListener('click', async event => {
+    if (event.target === root || event.target.closest('[data-as-cancel]')) return closeCardAddSheet();
+    const opt = event.target.closest('.tt-as-opt');
+    if (opt && !opt.disabled) {
+      const { asKey, asValue } = opt.dataset;
+      const score = c => groups.reduce((n, [key]) => n + (c[key] === sel[key] ? 1 : 0), 0);
+      const candidates = combos.filter(c => c[asKey] === asValue);
+      sel = candidates.reduce((best, c) => (score(c) > score(best) ? c : best), candidates[0]);
+      q('.tt-as-msg').textContent = '';
+      render();
+      root.querySelector(`.tt-as-opt[data-as-key="${CSS.escape(asKey)}"][aria-pressed="true"]`)?.focus();
+      return;
+    }
+    const ok = event.target.closest('[data-as-confirm]');
+    if (!ok || ok.disabled) return;
+    ok.disabled = true;
+    ok.setAttribute('aria-busy', 'true');
+    q('.tt-as-msg').textContent = '';
+    try {
+      const result = await addToCart(p.id, _sheetVariantString(p, sel));
+      if (result?.changed) return closeCardAddSheet();
+      q('.tt-as-msg').textContent = result?.reason === 'already_in_cart'
+        ? 'Esta opción ya está en tu carrito.'
+        : 'No hay más stock disponible de esta opción.';
+    } catch (error) {
+      console.error('[tienda] No se pudo agregar al carrito:', error);
+      q('.tt-as-msg').textContent = 'No pudimos agregarlo. Intentá de nuevo.';
+    } finally {
+      ok.disabled = false;
+      ok.removeAttribute('aria-busy');
+    }
+  });
+
+  const onKey = event => {
+    if (event.key === 'Escape') { event.preventDefault(); closeCardAddSheet(); return; }
+    if (event.key !== 'Tab') return;
+    const focusable = [...root.querySelectorAll('button:not([disabled])')];
+    if (!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  };
+  document.addEventListener('keydown', onKey, true);
+  _addSheet = { root, trigger, onKey };
+  _addSheetPrevOverflow = document.documentElement.style.overflow;
+  document.documentElement.style.overflow = 'hidden';
+  render();
+  document.body.appendChild(root);
+  requestAnimationFrame(() => root.classList.add('is-open'));
+  (root.querySelector('.tt-as-opt[aria-pressed="true"]') || q('[data-as-confirm]')).focus();
+  return true;
+}
+window.openCardAddSheet = openCardAddSheet;
+
+document.addEventListener('click', event => {
+  const button = event.target.closest?.('[data-card-options]');
+  if (!button || button.disabled) return;
+  event.preventDefault();
+  openCardAddSheet(button.dataset.cardOptions, button);
+});
+
 function renderProductCardMarkup(p, options = {}) {
   const inStock = isInStock(p);
   const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));
@@ -794,23 +1007,21 @@ function renderProductCardMarkup(p, options = {}) {
   const colorsHTML = productCardColorsMarkup(p, colorGroup, selectedColor, activeColor);
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
-  const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
   const productHref = `/product?id=${encodeURIComponent(String(p.id))}${selectedColor ? `&color=${encodeURIComponent(selectedColor)}` : ''}`;
   const imgContent = imgUrl
     ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="${options.related ? 'eager' : 'lazy'}" decoding="async" onerror="_onProductImgError(this)">`
     : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
+  // «Ver» abre la ficha; el segundo botón agrega directo si no hay opciones que elegir.
   const hasVariants = productVariantGroups(p).length > 0;
-  // Las variantes se eligen en la ficha: una sola acción evita dos enlaces iguales.
-  const primaryLabel = inStock && hasVariants ? (options.related ? 'Elegir' : 'Elegir opciones') : (options.related ? 'Ver' : 'Ver producto');
+  const singleVariant = hasVariants ? singleVariantLabel(p) : '';
   const secondaryAction = !inStock
     ? `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline" disabled aria-disabled="true">Agotado</button>`
-    : hasVariants
-      ? ''
-      : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">${options.related ? 'Agregar' : '+ Carrito'}</button>`;
+    : hasVariants && !singleVariant
+      ? `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline" data-card-options="${safeId}" aria-haspopup="dialog" aria-label="Agregar ${escapeAttribute(p.name)} al carrito: elegir y confirmar opciones">Agregar al carrito</button>`
+      : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}"${singleVariant ? ` data-variant="${escapeAttribute(singleVariant)}"` : ''} aria-label="Agregar ${escapeAttribute(p.name)} al carrito">Agregar al carrito</button>`;
 
   return `
     <article class="tt-product-card${inStock ? '' : ' tt-stock-unavailable'}" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
-      <button type="button" class="tt-product-favorite-button${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(p.name)}" data-favorite-price="${escapeAttribute(p.price)}" data-favorite-image="${escapeAttribute(imgUrl)}" data-favorite-cat="${escapeAttribute(p.category || p.cat || '')}" aria-label="${escapeAttribute(isFavorite ? `Quitar ${p.name || 'producto'} de favoritos` : `Guardar ${p.name || 'producto'} en favoritos`)}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
       <a href="${productHref}" class="tt-product-img tt-product-card-img-link" aria-label="Ver ${escapeAttribute(p.name)}">
         ${badgeHTML}${stockLabel}
         ${imgContent}
@@ -822,7 +1033,7 @@ function renderProductCardMarkup(p, options = {}) {
         ${colorsHTML}
         <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
         <div class="tt-product-actions">
-          <a href="${productHref}" class="tt-btn tt-btn-sm">${primaryLabel}</a>
+          <a href="${productHref}" class="tt-btn tt-btn-sm" aria-label="Ver ${escapeAttribute(p.name)}">Ver</a>
           ${secondaryAction}
         </div>
       </div>
@@ -844,7 +1055,7 @@ function renderProductsGrid(containerId, products) {
 }
 
 // Home discovery carousel: duplicate-free selection reusing the canonical
-// product-card renderer (links, favorites and cart). The selection is stable
+// product-card renderer (links and cart). The selection is stable
 // across data refreshes; it is re-rolled only when the user asks for it.
 let homeSelectionKeys = [];
 
@@ -1534,15 +1745,6 @@ function _pdUpdateSelectionLabels() {
 
 function _renderProductGallery(product, selected = {}, resetIndex = false) {
   const mainImgUrl = sanitizeClassicImageUrl(product.imageUrl || product.image || getProductImage(product.id) || '', 900);
-  const favoriteButton = document.getElementById('btn-product-favorite');
-  if (favoriteButton) {
-    favoriteButton.dataset.favoriteId = String(product.id);
-    favoriteButton.dataset.favoriteName = product.name || '';
-    favoriteButton.dataset.favoritePrice = String(product.price || 0);
-    favoriteButton.dataset.favoriteImage = mainImgUrl;
-    favoriteButton.dataset.favoriteCat = product.category || product.cat || '';
-    window.TintinFavorites?.refresh?.();
-  }
   const media = window.TintinProductMedia;
   const galleryProduct = { ...product, imageUrl: mainImgUrl };
   const { rows, images } = productGalleryMedia(galleryProduct);
@@ -2105,14 +2307,14 @@ function _openLightbox(images, startIdx) {
     lb.setAttribute('aria-modal', 'true');
     lb.setAttribute('aria-label', 'Imagen ampliada');
     lb.innerHTML = `
-      <div class="tt-lightbox-zoom" aria-label="Controles de zoom"><button type="button" id="lb-zoom-out" aria-label="Alejar">−</button><button type="button" id="lb-zoom-in" aria-label="Acercar">+</button></div>
+      <div class="tt-lightbox-zoom" aria-label="Controles de zoom"><button type="button" id="lb-zoom-out" aria-label="Alejar">−</button><button type="button" id="lb-reset" aria-label="Restablecer imagen completa">100%</button><button type="button" id="lb-zoom-in" aria-label="Acercar">+</button></div>
       <button type="button" class="tt-lightbox-close" id="lb-close" aria-label="Cerrar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
       <button type="button" class="tt-lightbox-nav tt-lightbox-prev" id="lb-prev" aria-label="Anterior">‹</button>
       <div class="tt-lightbox-stage"><img class="tt-lightbox-img" id="lb-img" src="" alt="Vista de producto" draggable="false"></div>
       <button type="button" class="tt-lightbox-nav tt-lightbox-next" id="lb-next" aria-label="Siguiente">›</button>
-      <div class="tt-lightbox-counter" id="lb-counter"></div>
+      <div class="tt-lightbox-counter" id="lb-counter"></div><p class="tt-lightbox-help">Arrastrá para explorar · 100% para volver</p>
     `;
     document.body.appendChild(lb);
 
@@ -2122,6 +2324,12 @@ function _openLightbox(images, startIdx) {
     document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); _lbNav(1); });
     document.getElementById('lb-zoom-in').addEventListener('click', () => _lbZoom(.25));
     document.getElementById('lb-zoom-out').addEventListener('click', () => _lbZoom(-.25));
+    document.getElementById('lb-reset').addEventListener('click', () => _lbZoom(1 - _lbScale));
+    const stage = lb.querySelector('.tt-lightbox-stage');
+    stage.addEventListener('dblclick', () => _lbZoom(_lbScale > 1 ? 1 - _lbScale : 1));
+    stage.addEventListener('wheel', event => { event.preventDefault(); _lbZoom(event.deltaY < 0 ? .15 : -.15); }, { passive: false });
+    window.addEventListener('resize', () => { if (lb.classList.contains('open')) _lbApplyTransform(); });
+
 
     document.addEventListener('keydown', (e) => {
       if (!lb.classList.contains('open')) return;
@@ -2134,35 +2342,45 @@ function _openLightbox(images, startIdx) {
       }
     });
 
-    // Swipe support (mobile)
-    let _tsx = 0;
-    lb.addEventListener('touchstart', (e) => { _tsx = e.touches[0].clientX; }, { passive: true });
-    lb.addEventListener('touchend', (e) => {
-      const dx = e.changedTouches[0].clientX - _tsx;
-      if (Math.abs(dx) > 50) _lbNav(dx < 0 ? 1 : -1);
-    }, { passive: true });
-    let panStart = null;
-    lb.addEventListener('pointerdown', event => {
-      if (event.target.id !== 'lb-img' || _lbScale <= 1) return;
-      panStart = { x: event.clientX, y: event.clientY, tx: _lbTranslateX, ty: _lbTranslateY };
-      event.target.classList.add('is-panning');
-      event.target.setPointerCapture?.(event.pointerId);
+    const pointers = new Map();
+    let panStart = null, pinchDistance = 0;
+    const distance = () => { const [a,b] = [...pointers.values()]; return Math.hypot(a.x-b.x,a.y-b.y); };
+    stage.addEventListener('pointerdown', event => {
+      if (event.button !== 0) return;
+      pointers.set(event.pointerId, { x:event.clientX, y:event.clientY });
+      stage.setPointerCapture(event.pointerId);
+      panStart = { x:event.clientX, y:event.clientY, tx:_lbTranslateX, ty:_lbTranslateY };
+      if (pointers.size === 2) pinchDistance = distance();
+      document.getElementById('lb-img').classList.add('is-panning');
     });
-    lb.addEventListener('pointermove', event => {
-      if (!panStart) return;
-      _lbTranslateX = panStart.tx + event.clientX - panStart.x;
-      _lbTranslateY = panStart.ty + event.clientY - panStart.y;
-      _lbApplyTransform();
+    stage.addEventListener('pointermove', event => {
+      if (!pointers.has(event.pointerId)) return;
+      pointers.set(event.pointerId, { x:event.clientX, y:event.clientY });
+      if (pointers.size === 2) {
+        const next = distance();
+        if (pinchDistance > 0) _lbZoom(_lbScale * (next / pinchDistance - 1));
+        pinchDistance = next;
+      } else if (panStart && _lbScale > 1) {
+        _lbTranslateX = panStart.tx + event.clientX - panStart.x;
+        _lbTranslateY = panStart.ty + event.clientY - panStart.y;
+        _lbApplyTransform();
+      }
     });
-    lb.addEventListener('pointerup', event => {
-      if (!panStart) return;
-      panStart = null;
-      event.target.classList.remove('is-panning');
-    });
+    const endPan = event => {
+      pointers.delete(event.pointerId);
+      pinchDistance = 0;
+      const remaining = [...pointers.values()][0];
+      panStart = remaining ? { ...remaining, tx:_lbTranslateX, ty:_lbTranslateY } : null;
+      if (!remaining) document.getElementById('lb-img').classList.remove('is-panning');
+    };
+    stage.addEventListener('pointerup', endPan);
+    stage.addEventListener('pointercancel', endPan);
+    stage.addEventListener('lostpointercapture', endPan);
   }
 
   _lbUpdate();
   requestAnimationFrame(() => {
+    lb.inert = false;
     lb.classList.add('open');
     document.getElementById('lb-close')?.focus();
   });
@@ -2172,15 +2390,31 @@ function _openLightbox(images, startIdx) {
 
 let _lbScale = 1;
 let _lbTranslateX = 0, _lbTranslateY = 0;
-function _lbApplyTransform() { const img = document.getElementById('lb-img'); if (img) img.style.transform = `translate3d(${_lbTranslateX}px,${_lbTranslateY}px,0) scale(${_lbScale})`; }
-function _lbZoom(delta) { _lbScale = Math.max(1, Math.min(3, _lbScale + delta)); if (_lbScale === 1) { _lbTranslateX = 0; _lbTranslateY = 0; } _lbApplyTransform(); }
+function _lbApplyTransform() {
+  const img = document.getElementById('lb-img');
+  if (!img) return;
+  const stage = img.parentElement;
+  const maxX = Math.max(0, (img.offsetWidth * _lbScale - stage.clientWidth) / 2);
+  const maxY = Math.max(0, (img.offsetHeight * _lbScale - stage.clientHeight) / 2);
+  _lbTranslateX = Math.max(-maxX, Math.min(maxX, _lbTranslateX));
+  _lbTranslateY = Math.max(-maxY, Math.min(maxY, _lbTranslateY));
+  img.style.transform = `translate3d(${_lbTranslateX}px,${_lbTranslateY}px,0) scale(${_lbScale})`;
+  document.getElementById('lb-reset').textContent = `${Math.round(_lbScale * 100)}%`;
+  document.getElementById('lb-zoom-out').disabled = _lbScale <= 1;
+  document.getElementById('lb-zoom-in').disabled = _lbScale >= 4;
+}
+function _lbZoom(delta) {
+  _lbScale = Math.max(1, Math.min(4, _lbScale + delta));
+  if (_lbScale === 1) { _lbTranslateX = 0; _lbTranslateY = 0; }
+  _lbApplyTransform();
+}
 
 function _lbUpdate() {
   const img = document.getElementById('lb-img');
   const counter = document.getElementById('lb-counter');
   const prev = document.getElementById('lb-prev');
   const next = document.getElementById('lb-next');
-  if (img) { img.src = _lbImages[_lbCur]; _lbScale = 1; _lbTranslateX = 0; _lbTranslateY = 0; _lbApplyTransform(); }
+  if (img) { img.onload = _lbApplyTransform; img.src = _lbImages[_lbCur]; _lbScale = 1; _lbTranslateX = 0; _lbTranslateY = 0; _lbApplyTransform(); }
   if (counter) counter.textContent = _lbImages.length > 1 ? `${_lbCur + 1} / ${_lbImages.length}` : '';
   if (prev) prev.style.display = _lbImages.length > 1 ? '' : 'none';
   if (next) next.style.display = _lbImages.length > 1 ? '' : 'none';
@@ -2193,10 +2427,11 @@ function _lbNav(dir) {
 
 function _closeLightbox() {
   const lb = document.getElementById('tt-lightbox');
-  if (lb) lb.classList.remove('open');
+  if (lb) { lb.classList.remove('open'); lb.inert = true; }
   document.documentElement.classList.remove('tt-lightbox-open');
   window.TintinSurfaceController?.unlockScroll?.();
-  if (_lbReturnFocus instanceof HTMLElement) _lbReturnFocus.focus();
+  const returnFocus = _lbReturnFocus;
+  requestAnimationFrame(() => { if (returnFocus instanceof HTMLElement && returnFocus.isConnected) returnFocus.focus({ preventScroll:true }); });
   _lbReturnFocus = null;
 }
 
@@ -2205,6 +2440,7 @@ function _closeLightbox() {
 ────────────────────────────────────── */
 function initBackToTop() {
   const btn = document.createElement('button');
+  btn.type = 'button';
   btn.className = 'tt-back-to-top';
   btn.setAttribute('aria-label', 'Volver al inicio');
   btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`;
@@ -2212,7 +2448,10 @@ function initBackToTop() {
   let frame = 0;
   const update = () => {
     frame = 0;
-    btn.classList.toggle('visible', window.scrollY > 320);
+    const visible = window.scrollY > 320;
+    btn.classList.toggle('visible', visible);
+    // Oculto (opacity 0) no debe recibir foco ni clics invisibles (WCAG 2.4.7).
+    btn.inert = !visible;
   };
   const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
   window.addEventListener('scroll', schedule, { passive: true });
@@ -2606,7 +2845,6 @@ window.addEventListener('tt_cart_updated', () => {
   updateCartBadge();
   renderCart();
 });
-window.addEventListener('tintin:favorites-updated', renderCart);
 
 // El reveal-al-scrollear de esta página ahora lo maneja js/quality/revelado-desplazamiento-global.js
 // (cargado global vía js/cargador-pagina.js) — tenerlo acá duplicado hacía que

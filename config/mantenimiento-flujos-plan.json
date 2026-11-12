@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "804a74d91531c84382cfe491340e46239ef3afa5",
-  "reason": "Filtros de variantes del catalogo: cada tarjeta muestra la foto, la muestra de color y el destino de la combinacion que cumple los filtros elegidos, para cualquier atributo; sin cambios de precios, stock, carrito, pedidos ni pagos.",
+  "baseCommit": "dfcb4a6e87849671dd11fd825049a7e75b57b257",
+  "reason": "Filtros de variantes del catálogo muestran la foto y la muestra de la variante elegida; actualizado con main",
   "files": [
     {
       "path": "_headers",
-      "oldHash": "682a0f1d467d0fccc9c61d551bbb56ee22fbb453d8ad91e4a1f51de783b96c24",
-      "newHash": "ea8994ed44d8da526b4fb36415dcb448de339f0e6d9eb2b00490f49312653701"
+      "oldHash": "f9d5d8d3d04fc4a1c09077e34ce6c7d7123c7bb2609d9670c3d0d337c02feac5",
+      "newHash": "b48b1952cbf595bc3e4cc81249218daca3b1931305170829a72469539cf1a567"
     },
     {
       "path": "catalogo.html",
-      "oldHash": "7c2d6f5d2f3153bfe7ffb719eb032a058f08d856473f30f1f8041ee08713ad47",
-      "newHash": "45e35943b56bc8ebdab02468bbf91ff3b2e5fe6de86ea3d0b9bad6c77c794ee2"
+      "oldHash": "c9ef907ab9ff47c9c0b53da2a0f636f86ce4efc362e4f6415615196fc25b8731",
+      "newHash": "97af7f48471fe69b8d02003b241de612fbee7cf887dcf75e4f751625c18149c5"
     },
     {
       "path": "config/csp-runtime.js",
-      "oldHash": "98fe7cee5ea277d85a1511808b8a5b39a09674fd55ad44e38dd62dc500ffced0",
-      "newHash": "385f83f65e4cc89a8a1cf6f13638e3e1c25ccd659d43b6e947dfec676af4791c"
+      "oldHash": "5ecfd071d63e9458f690c497ef08ea688eb49db6978308fb18e2497736d0b486",
+      "newHash": "390181e43356daf92f10e442ea9988623f25af0cdb6dae22b1200b4e18ed68aa"
     },
     {
       "path": "config/csp-runtime.json",
-      "oldHash": "fa4849d8b13a8349dd5e251b9280c70f8b65dd5bd98f03ff9887dcbbd8064135",
-      "newHash": "80414c5fb0a9dffff6fc135a69e040b5b30632880b648a702cb8a007ec09e773"
+      "oldHash": "907a9bdf56d2b7d9aebe39186c027d35fbf85854d25636557a3288a33c09be07",
+      "newHash": "38a90d90f9bcc871f8b345c3e1caf971e27ace058363fae206e8f932bfbf82bb"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "077b4eb78be8df50c782f80c971be76faaf1ed4dc3f556d83bd68b3a3b13b4a1",
-      "newHash": "44da68eb224d02b4953d1fd0ba49ead13a349f62003d69a18ddca90ef170a997"
+      "oldHash": "31ab47da3eb2e545519996bc94c26b46a1714b87dd1d1d352fef2c4b30b9e7ee",
+      "newHash": "ebce8d7871a97fae4bb8e8cbe49b247bfc4a9972c3d81d3c2ef39a6eadb2c1a2"
     }
   ],
   "affectedRecords": [

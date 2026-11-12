@@ -121,7 +121,9 @@ check(
     files.runtime.includes('hero_bg_tablet') &&
     files.runtime.includes('hero_bg_mobile') &&
     files.runtime.includes("const configured = { desktop: configuredDesktop, tablet: configuredTablet, tabletLandscape: configuredTablet, mobile: configuredMobile };") &&
-    files.runtime.includes("for (const source of picture.querySelectorAll('source'))") && files.runtime.includes('source.srcset = custom ? absolute(custom)'),
+    files.runtime.includes("for (const source of picture.querySelectorAll('source'))") &&
+    files.runtime.includes('const nextSrc = custom ? absolute(custom)') &&
+    files.runtime.includes('if (absolute(source.srcset) !== nextSrc) source.srcset = nextSrc'),
   'los tres controles del panel deben tener efecto visual real'
 );
 

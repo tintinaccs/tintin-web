@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="f5dbc35b7f1327b7e61ba217a9332ac9991ebc45e982c38bbfcde88c16a96676">
+  <meta name="tintin-page-revision" content="9d1ab1624c96814226f7f738a116864009c65158069759fe7f50d13b6d5581b6">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1-p1106"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261111-product-login-payment-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261029-cart-motion-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1-p1106" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261111-product-zoom-2" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
-  <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261104-favicon-1">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261104-favicon-1">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=tintin-20261104-favicon-1">
+  <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261111-favicon-2">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261111-favicon-2">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=tintin-20261111-favicon-2">
   <link rel="apple-touch-icon" sizes="180x180" href="assets-tintin/images/admin/apple-touch-icon.png?v=tintin-20261021-iconos-rosa-1">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#F8AACA">
@@ -22,7 +22,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261105-copiar-pago-1-p1106">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261111-product-zoom-2">
   <link rel="stylesheet" id="tt-perfil-css-bundle" href="css/generated/perfil.css?v=tintin-perfil-dd97ac37e2fc497f">
   <link rel="tt-bundled-stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2" disabled data-tt-style-bundle="tt-perfil-css-bundle">
   <meta name="description" content="Mi perfil en Tintin Accesorios. Gestioná tu cuenta, pedidos y datos." />
@@ -100,7 +100,6 @@
   <button type="button" class="tt-profile-tab" id="profile-tab-resumen" data-profile-tab="resumen" role="tab" aria-controls="profile-panel-resumen" aria-selected="false">Resumen</button>
   <button type="button" class="tt-profile-tab" id="profile-tab-datos" data-profile-tab="datos" role="tab" aria-controls="profile-panel-datos" aria-selected="true">Mis datos</button>
   <button type="button" class="tt-profile-tab" id="profile-tab-pedidos" data-profile-tab="pedidos" role="tab" aria-controls="profile-panel-pedidos" aria-selected="false">Pedidos<span class="tt-profile-tab-badge" data-profile-orders-badge="1" hidden></span></button>
-  <button type="button" class="tt-profile-tab" id="profile-tab-favoritos" data-profile-tab="favoritos" role="tab" aria-controls="profile-panel-favoritos" aria-selected="false">Favoritos</button>
   <button type="button" class="tt-profile-tab" id="profile-tab-cuenta" data-profile-tab="cuenta" role="tab" aria-controls="profile-panel-cuenta" aria-selected="false">Cuenta y seguridad</button>
   <button type="button" class="tt-profile-tab" id="profile-tab-ayuda" data-profile-tab="ayuda" role="tab" aria-controls="profile-panel-ayuda" aria-selected="false">Ayuda</button>
 </nav>
@@ -195,14 +194,6 @@
     </div>
   </div>
 </section>
-<section class="tt-profile-panel" id="profile-panel-favoritos" data-profile-panel="favoritos" role="tabpanel" aria-labelledby="profile-tab-favoritos" hidden>
-<div class="perfil-card" id="perfil-favorites-card">
-    <div class="perfil-body">
-      <div class="perfil-section-title">Mis favoritos</div>
-      <div id="perfil-favorites-list"><div style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Cargando favoritos...</div></div>
-    </div>
-  </div>
-</section>
 <section class="tt-profile-panel" id="profile-panel-cuenta" data-profile-panel="cuenta" role="tabpanel" aria-labelledby="profile-tab-cuenta" hidden>
 <div class="perfil-card">
     <div class="perfil-body">
@@ -263,7 +254,7 @@
 
 <!-- Scripts -->
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261105-copiar-pago-1-p1106"></script>
+<script src="tienda.js?v=tintin-20261111-product-zoom-2"></script>
 
 <script type="module">
 import { auth, db, appCheckReady } from "./js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -812,8 +803,6 @@ startProfileAuthGuard();
 
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1"></script>
-<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20261102-pickup-cash-1"></script>
-<script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20261031-seo-espacios-2"></script>
 <script type="module" src="js/pages/profile/pedidos-perfil.js?v=tintin-20261030-home-history-5"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20261029-mobile-review-1-p1106"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5"></script>

@@ -175,17 +175,10 @@ test('producto carga desde HTTP, carrito cambia y checkout avanza tras validar s
   // Stop before ordering/payment. No purchase is submitted.
 });
 
-test('favorito histórico muestra el precio actual del catálogo y lo conserva al recargar',async({page,request})=>{
+test('el perfil ya no muestra favoritos aunque existan datos históricos',async({page,request})=>{
   const email='favorite-price@example.test';await otp(page,request,email);await fillProfile(page);await continueProfile(page);await expect(page).toHaveURL(/index\.html/);
-  const account=await state(request,email);
-  const seeded=await request.post('/__test/seed',{data:{path:'users/'+account.uid+'/favorites/runtime-watch',data:{productId:'runtime-watch',name:'Nombre histórico',price:0,imageUrl:'/assets-tintin/images/general/logo.png'}}});
-  expect(seeded.ok()).toBe(true);
   await page.goto('/perfil#favoritos',{waitUntil:'domcontentloaded'});
-  await expect(page.locator('#perfil-favorites-list')).toContainText('Reloj Runtime');
-  await expect(page.locator('#perfil-favorites-list')).toContainText('150.000');
-  await expect(page.locator('#perfil-favorites-list')).not.toContainText('Gs. 0');
-  await page.reload();
-  await expect(page.locator('#perfil-favorites-list')).toContainText('150.000');
+  await expect(page.locator('#perfil-favorites-list')).toHaveCount(0);
 });
 
 test('cliente no puede elevar su rol ni abrir el panel administrativo',async({page,request})=>{

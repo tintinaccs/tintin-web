@@ -265,7 +265,7 @@ function renderAccountPanel(user,role=ROLES.CLIENT,profile={},profilePending=fal
  if(!panel)return;
  if(!user){
   const loginHref=loginHrefForCurrentLocation();
-  panel.innerHTML=`<div class="tt-account-guest"><p class="tt-account-guest-title">Tu cuenta Tintin</p><p class="tt-account-guest-copy">Ingresá para guardar favoritos, ver pedidos y comprar más rápido.</p></div><a class="tt-account-item tt-account-primary" href="${loginHref}">Iniciar sesión</a><a class="tt-account-item" href="${loginHref}">Crear una cuenta</a>`;
+  panel.innerHTML=`<div class="tt-account-guest"><p class="tt-account-guest-title">Tu cuenta Tintin</p><p class="tt-account-guest-copy">Ingresá para ver pedidos y comprar más rápido.</p></div><a class="tt-account-item tt-account-primary" href="${loginHref}">Iniciar sesión</a><a class="tt-account-item" href="${loginHref}">Crear una cuenta</a>`;
   return;
  }
  const identity=readAccountIdentity(profile,user,{profilePending});

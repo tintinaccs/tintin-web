@@ -82,19 +82,19 @@ jobs:
 
       - name: Authenticate with service account JSON
         if: env.HAS_FIREBASE_SERVICE_ACCOUNT_JSON == 'true'
-        uses: google-github-actions/auth@v3
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
           credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}'
 
       - name: Authenticate with Workload Identity Federation
         if: env.HAS_FIREBASE_SERVICE_ACCOUNT_JSON != 'true' && env.HAS_GCP_WORKLOAD_IDENTITY == 'true'
-        uses: google-github-actions/auth@v3
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
           workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
           service_account: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
 
       - name: Verify Firebase identity
-        uses: google-github-actions/setup-gcloud@v3
+        uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3.0.1
 
       - name: Verify active identity
         run: gcloud --quiet auth list --filter=status:ACTIVE --format='value(account)' | grep -q .

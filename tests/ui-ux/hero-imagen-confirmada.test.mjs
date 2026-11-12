@@ -36,11 +36,25 @@ test('Firestore conserva el arte sin pérdida por dispositivo y no vuelve a desc
       await page.waitForFunction(()=>window.confirmImages && document.getElementById('tt-hero-img').naturalWidth>0, null, {timeout:5000}).catch(async error => { throw new Error(JSON.stringify({errors,state:await page.evaluate(()=>({callback:typeof window.confirmImages,src:document.getElementById('tt-hero-img').currentSrc,ready:document.getElementById('tt-hero-img').complete})),requests})); });
       await page.waitForLoadState('networkidle');
       requests.length=0;
+      await page.evaluate(() => {
+        window.heroResourceChanges = [];
+        window.heroResourceObserver = new MutationObserver(changes => {
+          window.heroResourceChanges.push(...changes.map(change => change.attributeName));
+        });
+        window.heroResourceObserver.observe(document.getElementById('tt-hero-img').closest('picture'), {
+          subtree: true, attributes: true, attributeFilter: ['src', 'srcset', 'media', 'type'],
+        });
+      });
       await page.evaluate(()=>window.confirmImages({}));
       await page.waitForFunction(()=>document.getElementById('tt-hero-img').dataset.ttHeroPhase5Signature);
       await page.waitForLoadState('networkidle');
       assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),/backdrop\.svg/);
-      assert.equal(requests.length,0,'sin segunda descarga del arte confirmado ni precarga de otra variante');
+      assert.equal(requests.length,0,`sin segunda descarga del arte confirmado ni precarga de otra variante (${width}px): ${requests.join(',')}`);
+      const resourceChanges = await page.evaluate(() => {
+        window.heroResourceObserver.disconnect();
+        return window.heroResourceChanges;
+      });
+      assert.deepEqual(resourceChanges, [], 'confirmar las mismas URLs conserva los atributos de carga del arte publicado');
       assert.ok(logoRequests.every(url=>url.endsWith('?v=fixture-logo')||url.endsWith('?v=tintin-20261009-whatsapp-responsive-1')), 'el snapshot no quita la versión del logo publicado');
       assert.match(await page.locator('.tt-logo-img').evaluate(img=>img.src), /logo\.png\?v=fixture-logo$/);
       requests.length=0;

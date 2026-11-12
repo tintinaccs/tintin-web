@@ -16,9 +16,9 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261102-pickup-cash-1';
 const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261030-home-history-5';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261105-copiar-pago-1-p1106';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261111-product-zoom-2';
 // Mismo ?v= que el import de estado-productos.js: una sola instancia por página.
-const PAGE_MAINTENANCE_URL = '../../../cargador-mantenimiento-pagina.js?v=tintin-20261105-copiar-pago-1-p1106';
+const PAGE_MAINTENANCE_URL = '../../../cargador-mantenimiento-pagina.js?v=tintin-20261111-product-zoom-2';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -124,7 +124,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 function loadAuthRuntime() {
   if (IS_VISUAL_PREVIEW_FRAME) return Promise.resolve(null);
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261030-home-history-5').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261107-sin-favoritos-1').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
@@ -175,7 +175,7 @@ function loadCollectionsRuntime({ withProducts = false } = {}) {
 // consulta escrita mientras termina de cargar el controlador compartido.
 function loadSearchRuntime() {
   if (!searchControllerPromise) {
-    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261105-copiar-pago-1-p1106')
+    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261111-product-zoom-2')
       .then(module => {
         module.initSearchController();
         window.TintinSearchController?.renderCurrentQuery();

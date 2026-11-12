@@ -583,6 +583,34 @@ try {
   await fails(setDoc(doc(superDb,'products','v3_new'),{variantCommerceVersion:3,price:1}));
   await succeeds(setDoc(doc(client1,'users','client1','cart','v2_line_fixture'),{schemaVersion:2,lineId:'v2_line_fixture',id:'v2_protected',variant:'Plateado',variantKey:'Plateado',qty:1,name:'Fixture',cat:'aros',price:150,imageUrl:'',updatedAt:serverTimestamp(),updatedByDevice:'fixture_device'}));
   await fails(updateDoc(doc(client1,'users','client1','cart','v2_line_fixture'),{variantKey:123,updatedAt:serverTimestamp()}));
+  // Publicar/ocultar exige 'activarDesactivar'; 'editar' solo cubre contenido y reposición.
+  await testEnv.withSecurityRulesDisabled(async context => {
+    const db = context.firestore();
+    await setDoc(doc(db,'products','vis_legacy'),{name:'Visible legado',price:100,stock:5,active:true});
+    await setDoc(doc(db,'products','vis_agotado'),{name:'Agotado',price:100,stock:0,active:false,publicationStatus:'active'});
+    await setDoc(doc(db,'products','vis_borrador'),{name:'Borrador',price:100,stock:5,active:false,publicationStatus:'draft'});
+  });
+  const visAdmin = testEnv.authenticatedContext('admin1', claims.admin1).firestore();
+  const visAgent = testEnv.authenticatedContext('agent1', claims.agent1).firestore();
+  await succeeds(updateDoc(doc(visAdmin,'products','vis_legacy'),{price:120,publicationStatus:'active'}));
+  await fails(updateDoc(doc(visAdmin,'products','vis_legacy'),{active:false}));
+  await fails(updateDoc(doc(visAgent,'products','vis_legacy'),{publicationStatus:'draft'}));
+  await fails(updateDoc(doc(visAdmin,'products','vis_borrador'),{active:true,publicationStatus:'active'}));
+  await succeeds(updateDoc(doc(visAdmin,'products','vis_borrador'),{publicationStatus:'archived'}));
+  await succeeds(updateDoc(doc(visAgent,'products','vis_agotado'),{stock:3,active:true}));
+  await fails(updateDoc(doc(visAgent,'products','vis_agotado'),{stock:4,active:false}));
+  await testEnv.withSecurityRulesDisabled(context=>updateDoc(doc(context.firestore(),'rolePermissions','main'),{'admin.productos.activarDesactivar':true}));
+  await succeeds(updateDoc(doc(visAdmin,'products','vis_legacy'),{active:false}));
+  await succeeds(updateDoc(doc(visAdmin,'products','vis_borrador'),{active:true,publicationStatus:'active'}));
+  // Las estadísticas de pedidos solo las recalcula el servidor.
+  await fails(updateDoc(doc(visAdmin,'users','client1'),{totalSpent:999999,orderCount:0,updatedAt:serverTimestamp()}));
+  // Registro de correos del staff: solo con el formato del panel y firmado por quien lo envía.
+  const staffLog = { category:'pedido', type:'pedido_enviado', recipient:'clienta1@example.com', status:'sent', templateKey:'pedido_enviado', isAutomatic:false, sentBy:claims.admin1.email, error:'', orderId:'o1', campaignId:'', variables:null, sentAt:serverTimestamp() };
+  await succeeds(addDoc(collection(visAdmin,'emailLogs'), staffLog));
+  await fails(addDoc(collection(visAdmin,'emailLogs'), { ...staffLog, sentBy:'otra@example.com' }));
+  await fails(addDoc(collection(visAdmin,'emailLogs'), { ...staffLog, html:'<b>x</b>' }));
+  await fails(addDoc(collection(visAdmin,'emailLogs'), { ...staffLog, status:'abierto' }));
+
   console.log('Reglas Fase 6: ' + checks + ' ataques/controles verificados.');
 } finally {
   await testEnv.cleanup();

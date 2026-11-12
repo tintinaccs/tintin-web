@@ -8,6 +8,8 @@ const context = vm.createContext({ URL, Map, window: { location: { href: 'https:
  document: { addEventListener() {} }, isInStock: hasProductStock, sanitizeClassicImageUrl: x => x || '', getProductImage: () => '',
  escapeHtml: String, escapeAttribute: String, heartIconMarkup: () => '', priceMarkup: p => String(p.price) });
 vm.runInContext(fs.readFileSync(new URL('../../js/components/images/galeria-producto.js', import.meta.url), 'utf8'), context);
+const singleStart = source.indexOf('function singleVariantLabel');
+vm.runInContext(source.slice(singleStart, source.indexOf('\n}\n', singleStart) + 3), context);
 vm.runInContext(source.slice(source.indexOf('function productVariantGroups'),source.indexOf('function _pdGetSelectedVariant')), context);
 vm.runInContext(source.slice(source.indexOf('const cardColorSelections'),source.indexOf('function renderProductsGrid')), context);
 const product = () => ({id:'p',name:'Aros',stock:2,imageUrl:'https://example.test/gold.jpg',price:100,

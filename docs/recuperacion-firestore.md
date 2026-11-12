@@ -1,5 +1,16 @@
 # Recuperación de Firestore
 
+## Verificación operativa — 5 de noviembre de 2026
+
+Google Cloud Console confirmó para `(default)` en `us-east1`: PITR de 7 días habilitado, respaldo diario con retención de 30 días, semanal de domingos con retención de 84 días y protección contra borrado habilitada. Había 41 respaldos programados visibles.
+
+Se restauró el respaldo `a5fdb9a3-33f3-45d4-997e-4cf1d9512688`, del 4 de noviembre, en la base nueva y aislada `restore-check-20261105-7dcbee`. La consola confirmó después **Disponible/Listo** y retiró el aviso de restauración en curso. `(default)` y la base anterior `restauracion-prueba` permanecieron disponibles. Evidencia: [verificación de la operación](https://agent.tinyfish.ai/runs/2b284c70-1bed-4431-98f7-5360943c2826). No se consultaron valores personales de documentos ni se midieron conteos por colección; no se reutiliza el conteo histórico de 960 documentos como si fuera actual.
+
+La limpieza de la base temporal quedó pendiente: Cloud Shell no abrió en el primer intento y el proveedor de automatización bloqueó el siguiente por saldo insuficiente. La identidad del único recurso de ensayo es `restore-check-20261105-7dcbee`, creado el 5 de noviembre para esta verificación. Su protección contra borrado fue reportada como inhabilitada en la última inspección. No confundir limpieza con TTL ni actuar sobre `(default)`, `restauracion-prueba`, buckets o respaldos.
+
+La copia cifrada independiente continúa pendiente del destino y del certificado público del dispositivo de la titular. La copia local del código se pudo restaurar y verificar con `git fsck`, pero sigue siendo una copia local. Los controles personales de 2FA y las verificaciones de proveedores no se certifican a partir de esta prueba.
+
+
 Registro histórico de respaldos y recuperación de Firestore. Complementa
 `docs/plan-respaldo-recuperacion.md`. La verificación de PITR, retención y restauración
 corresponde al **2026-08-08** y no certifica por sí sola su estado actual.

@@ -1,3 +1,190 @@
+## Visor completo y favicon del loader — 2026-11-11 — Codex /root
+
+Base main9d46ee42; rama fix/product-zoom-and-pink-favicon. Pedido: foto de la
+ficha/visor completa al abrir, sin recorte superior; favicon circular rosa con
+logo blanco como loader. Skills leídos: systematic-debugging,
+tintin-design-quality y tintin-responsive-a11y. Reproducción: foto1086×1448
+medida1180×1573a100% dentro de lienzo1180×748 en1440×900; test de imagen
+completa falla antes del cambio. Pistas implícitas del grid imponían el mínimo
+intrínseco; fuente CSS establece tracks minmax(0,1fr) y mínimos de imagen0.
+El control100% ya reiniciaba la escala: no se reemplaza esa lógica ni se
+modifican originales. Generador canónico de favicon invierte únicamente los
+favicons a círculo#F8AACA/logo blanco, conserva transparencia y variantesapps.
+Regresión de píxeles falla con el icono anterior; borde alfa acepta redondeo
+de1canal por desmultiplicación. Logo centrado en ambos ejes verificado con
+error máximo1px enPNG16/32/192/512 eICO. PASS_LOCAL:9Chromium del visor
+(seis tamaños, pinch, cambio de foto, rotación, reapertura y movimiento
+reducido),38Chromium de navegación/iconos/push incluidos píxeles y centrado,
+104Node+6Chromium de test:fast y4Node de bundles. Build:pages aprobado;
+29huellas protegidas/28registros preparados por el generador canónico. La
+reapertura espera la protección global contra doble clic sin cambiarla ni
+relajar la geometría. Dependencias locales alineadas con npm ci al lockfile
+vigente, sin cambiar dependencias. Auditor opcional de Producto señala falta
+de getFullYear ya presente en main9d46ee42; no pertenece al gate vigente y no
+se agrega lógica anual ajena al arreglo. CI/PR/merge pendientes del SHA final. Sin escrituras comerciales ni
+compras/correos reales. No se heredan verificaciones del PR1352.
+
+Actualización con main29dcebe (PR1378, portada WebP): conflictos solo en
+generados, `index.html` (revisión de página) y este archivo; se conservan
+ambos cambios y se regeneran con build:pages y preparar-mantenimiento-flujos
+sobre la nueva base. PASS_LOCAL: build, preflight, protección de flujos,
+test:fast (104 Node + 6 Chromium) y 85 Chromium (visor, iconos/push, portada).
+CI del SHA final pendiente.
+
+## 2026-11-11 — Portada en WebP sin pérdida y lockfile sin alerta de dependencias (base 9d46ee4)
+
+Claude Code. Rama claude/tintin-accesorios-optimization-xyl6zm.
+- Hero de inicio: se agregan `suitcase{,-960,-640}.webp` sin pérdida generados de los PNG aprobados (~31 % menos: 1,79 MB→1,22 MB escritorio; 666 KB→455 KB móvil). `index.html` precarga WebP y conserva `<source>` PNG + `<img>` PNG de respaldo. Transparencia idéntica; color máx. 2/255 (comprobado en `hero-complete-borders.spec.js`). No se usó WebP con pérdida (diferencias hasta 83/255).
+- Dependencias (solo desarrollo: firebase-tools → gaxios → rimraf 5.0.10): el override `glob@>=9 <14.0.2` no alcanzaba la dependencia `glob ^10.3.7` de `rimraf`; se agrega override anidado `rimraf → glob 14.0.3` y el lock retira el `glob` 10.5.0 anidado. Primer intento (solo lock) rompió `npm ci` del build de Cloudflare (lock desincronizado, 8ca01b1); corregido. `npm ci` limpio OK, `npm audit` 0 (antes 8 moderadas), `rimraf` con `glob:true` probado.
+- PASS_LOCAL: Playwright hero-complete-borders + home-render-performance + image-fidelity 38/38; hero-imagen-confirmada 2/2; auditar-performance-premium 19 OK; auditar-imagenes-fase-5 OK; cache-versioning y protección de flujos OK.
+- PASS_CI (c6569f2): durante la caída de GitHub Actions (~20:37–21:24 UTC) el run pull_request 43097752668 quedó en cola fantasma y CodeQL 43097748105 terminó en `startup_failure` (GitHub no permite reintentarlo). CI 43109255143 (workflow_dispatch) en verde: Repository audit, Protected flows, preflight, B/C/D y Cloudflare Pages en success. Faltaban los obligatorios `Analyze (*)` y `Protected flow maintenance`, que dependen del run CodeQL del PR; este commit de evidencia los vuelve a disparar.
+- NOT_VERIFIED: producción hasta el despliegue del SHA final; primera carga del panel admin (~6,5 s) no modificada.
+
+## PR1376 actualizada con main concurrente — 2026-11-11T02:15Z
+
+El mantenedor existente integró PR1375 HEADc6e450f821f0ffb0b95d770ee89982defdfef49c en main00456261d94b26a77b0b39eb3ecdf664d9c95466. CI42941471124/1, CodeQL42941465065/1 y ambos controles confiables aprobados. Su texto pedía revisión sin auto-merge; ese texto no es un gate técnico del mantenedor. El monitor no modificó ni integró manualmente esa PR. Sus cambios y notas se preservan completos al incorporar main mediante merge normal en la rama propia1376. No revertir la función ni convertir su revisión en una aprobación implícita del monitor.
+
+Resolver sólo conflictos de CURRENT_STATE (ambos preámbulos conservados sobre la base común) y manifiestos generados desde constructor. La fuente del fixture conserva withMockFetch; todos los bytes de aplicación deben coincidir con00456261. Ningún archivo protegido cambia contra ese main: no renovar ni retirar huellas sin cambio real. No heredar los resultados del candidato95d58fc3 ni los del feature al nuevo HEAD. Seguir nuevos IDs/SHA e intento, ambos controles confiables, merge real y comprobaciones posteriores separadas.
+
+Causa CodeQL confirmada con CLI2.27.4 oficial sin caché: archivo original using falla extracción exit32 con diagnóstico50:14; candidato renombrado extrae SUCCESS y0warning/error. En PR95d58fc3 el overlay retiene diagnóstico de su base anterior; esperar análisis completo de main tras integrar para acreditar su desaparición remota. No cambiar caché/configuración ni excluir el test. El resto de assertions/mocks/tiempos es idéntico (67tests locales PASS). Mantener el presupuesto público500ms intacto y documentar recurrencias.
+
+## Reanudación vigente — 2026-11-11T01:51Z
+
+Main sigue3f769c52. Rama propia codex/repair-codeql-fetch-fixture publicada en1e69760efaa9b14edcc45a0c82acb608a822a0bf sin PR todavía. El build repetido detectó que la nota CURRENT_STATE añadida después del primer build aún no estaba reflejada en diagnostic/site-version: actualizar desde generador y verificar índice/fuente idénticos antes de abrir PR. No ocultar deriva ni reescribir historial.
+
+Nueva PR ajena1375 HEADc6e450f821f0ffb0b95d770ee89982defdfef49c con CI42941471124/1 IN_PROGRESS, CodeQL42941465065/1 SUCCESS. Descripción exige revisión de titular y no fusionar ni desplegar automáticamente. Preservar fuente/worktree y hold; sólo observar sus checks. No mezclar la reparación del extractor con esa propuesta ni atribuir pending a fallo. Continúa seguimiento1354 sin cambios.
+
+## Estado vigente: reparaciones 1373/1374 cerradas; CodeQL en reparación — 2026-11-10T23:08:36+00:00
+
+Responsable: Codex /root. Main comprobado: 3f769c52b31952c4fee291ad850c0283fdb03dd6. Las secciones inferiores son historial: sus estados PENDING y watchers activos quedaron superados. Los observadores 116, 131 y 148 terminaron; no volver a esperar esas celdas.
+
+- PR https://github.com/tintinaccs/tintin-web/pull/1373: HEAD 72a91b80df778a224f70b7ea2c39bd58413e9b15, merge real 704b69350a242887a9871cfc39ea909e2478e3f4 a las 21:50:17Z. CI de PR 42904389537/1 SUCCESS; controles confiables aprobados antes del merge. Post-merge independiente https://github.com/tintinaccs/tintin-web/actions/runs/42908883167 intento 1 SUCCESS, incluidos seis grupos, Protected flows y Repository audit 130169021800. CodeQL 42908883152/1, salud 42908887032/1 y Cloudflare 130154403731 SUCCESS. Causa corregida: manifiestos/huellas de las propuestas de dependencias y escrituras redundantes de atributos del hero que provocaban una descarga adicional en Chromium158. Regresión estricta conserva cero descargas y cero mutaciones de carga al confirmar las mismas URLs. No debilita tests ni presupuestos.
+- PR https://github.com/tintinaccs/tintin-web/pull/1374: HEAD 49444ba4931634e987622a373a0a9e1fbb05394a, merge real 3f769c52b31952c4fee291ad850c0283fdb03dd6 a las 22:36:02Z. CI de PR 42911604639/1 y CodeQL 42911598173/1 SUCCESS; maintenance 130178546685 e integrity 130178551467 SUCCESS antes del merge, mantenedor 42915996221/1 SUCCESS. Post-merge independiente https://github.com/tintinaccs/tintin-web/actions/runs/42916062474 intento 1 TERMINAL SUCCESS: preflight 130178664466, Protected flows 130178664948, comercio 130179245530, reglas 130181516170, interfaz 130181516146, administración 130181516319, calidad 130181516341 y Repository audit 130192348819. CodeQL 42916062513/1, salud 42916065835/1 y Cloudflare 130179199005 SUCCESS. Causa corregida: parse5 8.1.1 del nuevo candidato a3a7d958 con manifiestos desactualizados y lock que npm10 rechazaba por glob10.5.0/peers faltantes; regeneración oficial compatible npm10/11, dos huellas oficiales y nombre histórico lk2. Sin cambio de código cliente.
+
+Ambas descripciones tienen recibo terminal. Propuestas originales 1369/1370/1371 cerradas sin merge propio tras integrar sus versiones; 1372 cerrada sin merge propio 22:38:19Z, HEAD a3a7d958dd6759ef05d35945cfe44e7ccd70b759, tras integrar 8.1.1 mediante 1374. No publicar las cuatro preparaciones locales supersedidas. Worktrees de 1373/1374 limpios; raíz conserva sus dos documentos locales sin reset/checkout.
+
+Advertencia de rendimiento investigada: PR1374 browser 130166503422 SUCCESS con 1 flaky, carrito Inicio 511.7 ms/500; retry configurado 393.1 ms. Post-merge N browser 130181516146: 342.7 ms, sin flaky; hero PASS. Administración y calidad post-merge sin flaky, calidad 528 runtime PASS. No se demostró causa de código; helper inicia en click real y espera animación. Cliente HTML/JS/CSS idéntico entre M y N. Sonda local Chromium154 aislada (externos bloqueados/Firestore0) 275.7–327.9 ms no reproduce carga CI158 ni acredita causa externa o CWV de campo. Mantener límite500 y retries originales; si recurre, obtener perfil antes de proponer cambios. Servidor propio4191 cerrado.
+
+Nueva advertencia accionable investigada en CodeQL 42916062513/1, job130178666573, SHA3f769c52: extractor omite tests/push/dispatch-reliability.test.mjs:50 con Unexpected token al encontrar await using(...). Node24 --check y los10 tests originales PASS; no es un fallo de sintaxis del runtime. El helper de fixture se llama using; cambio mínimo propuesto: withMockFetch en declaración y nueve llamadas, sin cambiar assertions, mocks, tiempos ni producción. El archivo no es protegido (78registros/542archivos intactos). Rama propia codex/repair-codeql-fetch-fixture, worktree /workspace/tintin-codeql-fixture desde3f769c52, sin agente concurrente. Local:67/67 test:web-push PASS; instalación real npm ci --ignore-scripts PASS. Build:pages, preflight, protección78/542 y diffcheck PASS_LOCAL. Diagnóstico/site-version regenerados por constructor oficial. CodeQL real todavía pendiente; no declarar corregida la advertencia hasta comprobar logs del nuevo SHA. No excluir el test del análisis ni cambiar CodeQL/workflows para obtener verde.
+
+Última consulta de PR abiertas: sólo1354 HEADd977578924e1b8d198a90e0bd3edbfbb14cdb0fc, CI42282862639/1/CodeQL42282857402/1 y Cloudflare SUCCESS; sin fallo funcional nuevo. Se preserva por política de autor y trabajo ajeno; no confundir gate confiable pendiente con fallo de CI. MainN tiene5runs actuales terminalSUCCESS. Skips de dependencias/publicación obedecen evento/if; PayPalFX verification_only:true esperado. Logs post CodeQL además muestran extracción parcial señalada arriba; no presentar Analyze SUCCESS como cobertura completa. Aviso Dependabot rehash de bundle CA no impide reconciliación; cache@v4 Node20→24 y MODULE_TYPELESS/DEP0040 conocidos. Salud no acredita desafío real reCAPTCHA/AppCheck del runner, que sigue limitado; no modificar enforcement ni probar con usuarios reales. Fallos Drive históricos por OAuth pendiente no cambiaron; no reiterar ni tocar credenciales.
+
+Monitor permanente «Atender fallos de CI de Tintín» verificado enabled=true por peek; sondeo horario, sin promesa de webhook o entrega inmediata. No duplicar ni pausar al cerrar una PR. Próximo paso: publicar reparación mínima CodeQL cuando los checks locales terminen, persistir PR/SHA/run/intento, seguir CI y extractor hasta terminal, ambos controles confiables, merge real y post-merge separado; reconsultar main/PR vigentes al final. Skills usados: gh-fix-ci, systematic-debugging y verification-before-completion (referencias locales), runtime para entorno. No bypass, force-push, reruns, despliegues manuales, mensajes/comentarios directos, secretos ni operaciones comerciales reales. attach_artifact se invocó para1373/1374 pero el host no confirmó; no afirmar adjuntos.
+
+## 2026-11-11 — Corrección del check de acceso, PR1375 (Codex / GPT-6)
+
+Fallo confirmado: run42935537031 intento1, job130246845126, SHA cc336fa94f5e839ced92610821632ae72f9e4afc. Dos pruebas de single-interactive-flow.test.mjs ejecutaban el handler OTP con una fixture anterior al feedback visual: faltaba showOtpFeedback y el temporizador de confirmación. Se actualiza únicamente la fixture y sus expectativas: éxito visible antes de continuar, ocultación del loader y una sola finalización, preservando descarte de restauración anterior. No se cambia aplicación ni se elimina ninguna aserción de sesión.
+
+PASS_LOCAL:20 pruebas dirigidas;240 pruebas de login/perfil/bootstrap y34 pruebas Chromium del comando audit:login-profile. La sección runtime amplia se interrumpió después de la validación dirigida; no se declara aprobada la suite completa de528 casos localmente. Los checks completos se siguen en GitHub. GitHub API funciona tras publicar el entorno; el bloqueo de acceso anterior queda resuelto. El intento1 de run42936981984 detectó deriva de diagnostic-manifest.json y site-version.json tras editar la fixture. Se regeneran ambos con build:pages y se comprueba compilación estable. Pendiente resultado terminal de CI del nuevo SHA; no fusionar ni desplegar.
+
+Skill consultado: gh-fix-ci; autorización de reparación ya presente en las instrucciones del repositorio y el seguimiento solicitado por la titular. Sin cambios de permisos ni debilitamiento de comprobaciones.
+
+## 2026-11-11 — Zoom público, resultado OTP y transferencia (Codex / GPT-6)
+
+Alcance: tienda.js/lightbox, estilos públicos de producto/login, handler OTP en login.html y presentación canónica de métodos de pago. Sin cambios en autenticación del servidor, datos bancarios, importes, pedidos, reglas o integraciones reales. Skills leídos y aplicados: tintin-design-quality y tintin-responsive-a11y, además de las instrucciones de runtime ya consultadas.
+
+- Zoom: lienzo ajustado al viewport, 100–400%, arrastre limitado, rueda/doble clic y pinch de dos dedos, restablecer, navegación táctil visible y retorno del foco al cerrar. Se retira el swipe que competía con arrastrar la imagen.
+- OTP: código confirmado muestra check verde antes de continuar; código incorrecto muestra X roja; formato incompleto y otros fallos muestran exclamación ámbar con texto. Respeta movimiento reducido; no simula aceptación en fallos. Pruebas con autenticación simulada, sin crear cuentas ni enviar correos.
+- Transferencia: banco y campos separados visualmente, alias destacado y acción Copiar alias reutilizando la lógica de copiado existente. Sin recrear el logo de Banco Familiar ni importar su interfaz.
+- PASS_LOCAL: test:fast (104 Node + 6 Playwright import), regresiones de copiado/observador OTP (9), comprobaciones Chromium de zoom en seis tamaños y pinch, estados OTP aislados, datos bancarios largos y galería sticky. Evidencia visual local en /tmp/tintin-product-zoom.png y /tmp/tintin-otp-*.png; no son archivos publicados.
+- Derivados CSS, CSP, diagnóstico y URLs inmutables regenerados con las autoridades del repositorio. Los cambios de tags en módulos compartidos son propagación de dependencias.
+- NOT_VERIFIED: acceso OTP real, dispositivos físicos, Safari/WebKit y producción.
+- BLOCKED: GitHub API devuelve Forbidden al consultar repos/tintinaccs/tintin-web; lectura Git HTTPS funciona. No se abrió PR, no se fusionó ni desplegó. Requiere acceso autorizado a api.github.com para completar el seguimiento GitHub.
+
+## Reparación del nuevo candidato parse58.1.1 — Codex /root — 2026-11-10T22:04:31+00:00
+
+PR1372 avanzó durante el seguimiento de1373: ahora propone8.1.1 sobre main704b69350a242887a9871cfc39ea909e2478e3f4, HEADa3a7d958dd6759ef05d35945cfe44e7ccd70b759. No cerrar ni confundir con el antiguo8.1.0 ya integrado. CI42909273986/1 falla en preflight130155318307 al rechazar diagnostic-manifest.json/site-version.json trasbuild;5grupos omitidos por needs yProtectedflowsSKIPPED previsto enPR. CodeQLneutral no equivale aAnalyzeobligatorio; Cloudflarefalló, logexternonoaccesible. Son cambios nuevos de versión/SHA, no un rerun de la reparación anterior.
+
+La rama codex/repair-parse5-811 reutiliza ese candidato y conserva8.1.1. Npm10.9.4 regenera lockcompatible con npm10/11 sin podar peers que necesita Pages; restaura nombre histórico lk2 mediante el generador en un directorio con ese nombre(el lock anterior derivó incidentalmente el nombre de un worktree). No cambia otra versión ni código de aplicación/hero, caché, assets, reglas, permisos o tests. Helper de mantenimiento oficial contra704b6935 para las2huellas de paquete/lock; diagnóstico se genera al final. Se usa una PR de reparación de la titular para mantener la política que rechazaBot, sin ampliar autores ni fabricar controles.
+
+PASS_LOCAL: npm ci real con parse58.1.1; dry-run npm11.9.0/npm10.9.4;7pruebas existentes de manifiesto/extractorHTML, generador de secciones y tooling-glob; ci:preflight ybuildcanónico. Comprobar protección/buildrepetido/diff final antes depush; registrarSHA/run/intento de la nuevaPR en el seguimiento principal y su descripción. La CI completa delSHAfinal y su postmerge independiente todavíaPENDING. Sin reintentos ni despliegues manuales, compras, pedidos, correos o datos productivos.
+
+Seguimiento anterior sigue activo:1373 MERGED→704b6935, CIpost42908883167/1 en curso; no heredar su futuroPASS al nuevo candidato.1369/1370/1371 cerrados porDependabot alintegrarse versiones.1372 permaneceabierto con8.1.1: cerrarlo sólocuando esa versión estéintegrada/verificada y suHEADvigente no contengatrabajo posterior. No publicar las antiguas4ramas locales de8.1.0. El monitor continúa después de cada cierre.
+
+## Causa de browser1373 corregida localmente — Codex /root — 2026-11-10
+
+CI42901248156/1, HEAD6178729c: browser130130732561 falla en hero-imagen-confirmada.test.mjs:43 por1descarga adicional tras confirmar las mismas URLs.289Playwright PASS/1skip esperado(preview), segunda prueba Node PASS. No reintento ciego. Causa: applyHero reescribía2media,4srcset,4type y1src aunque el HTML ya contenía exactamente las URLs confirmadas; Chromium154 ocultaba el problema, Chromium158 lo manifiesta con routing sin caché. La regresión reforzada con MutationObserver falla determinísticamente en la fuente anterior(11escrituras), conservando además el contador0estricto y las verificaciones de personalización/fallback.
+
+Corrección: sólo asignar media/type/src cuando cambian, comparar srcset mediante sanitizeImageUrl canónico antes de escribir. Misma firma/URLs, assets, estilos, direcciones de arte, recuperación y permisos. Positivo local2/2 y3repeticiones(6pruebas,12escenarios de dispositivo de la primera prueba); auditoría de imágenes actualizada al cálculo nextSrc sin retirar controles. URL nueva sólo para gestion-imagenes/calidad-interfaz/cargador-pagina y shell/versionado generado; no reusar bytes nuevos bajo tags publicados. No se cambian timeouts/retries/tolerancias ni se borra la prueba fallida. Dependencias de1373 siguen las4propuestas originales.
+
+Chromium158 v1254 NO_VERIFICADO_LOCAL: descarga oficial cdn.playwright.dev rechazada403 Domain forbidden. Se usó Chromium154 local para control negativo/positivo; la CI real del nuevoSHA debe validar158. Admin130130732470/quality130130732485 del intento anterior seguían en curso durante la reparación; no heredar sus resultados al nuevoSHA. Preparar plan oficial contra main8b5852bb exacto, preflight/build repetido/diff, publicar en la mismaPR1373 y seguir hasta merge y postmerge. IDs/pasos vivos en CURRENT_STATE del worktree principal; no publicar las4ramas locales individuales.
+
+## Reparación de CI Dependabot — integración protegida — Codex /root — 2026-11-10
+
+Base main8b5852bbf63de19b40688b385ccba138d5952af5. Se reutilizan las versiones propuestas por1369(firebase13.2.0/firebase-tools15.35.0),1370(Playwright1.65.0),1371(acorn8.19.0) y1372(parse58.1.0). Ninguna versión nueva respecto de esos candidatos. Sus intentos1 fallaron en git diff --exit-code después del build por diagnostic-manifest.json/site-version.json desactualizados; también conservaban huellas antiguas de package.json/package-lock.json. Los cinco grupos omitidos dependen del preflight/comercio fallido; Protected flows de PR se omite por if push/dispatch. No se retiran ni debilitan gates.
+
+Los cuatro parches originales se prepararon en worktrees locales tintin-deps-1369..1372: cada uno reproduce la deriva, regenera mediante las fuentes canónicas y aprueba preflight/build reproducible/protección/diffcheck. No se publicaron esas ramas ni se duplicaron reparaciones activas. La integración usa una única rama codex/repair-dependabot-artifacts con las propuestas existentes, porque validateAutomaticPullRequest sólo permite PR de la titular y Protected flow maintenance ahora es obligatorio. Se conserva exactamente esa política, sin habilitar bots ni fabricar checks. El cierre de las cuatro PR originales se hará al integrar el candidato verificado.
+
+PASS_LOCAL del candidato combinado: npm ci real con lock, npm ci --dry-run con npm11.9.0 y npm10.9.4 (compatibilidad de instalación de Pages), ci:preflight,8 pruebas de filtros/tooling-glob y protección(78registros/542archivos). Plan oficial renueva sólo package.json/package-lock.json contra la base exacta; diagnóstico se genera después de la nota. Build/reproducibilidad/diff final deben aprobar antes de publicar. Ningún cambio de aplicación, datos, permisos, workflows ni dependencias fuera de las cuatro propuestas. Runtime WebKit/servicios reales NOT_VERIFIED_LOCAL; exigir CI del SHA final, ambos checks confiables, merge real y post-merge separado. No actualizar manualmente Pages ni secretos.
+
+PENDING: crear PR lista para revisión, persistir HEAD/run/intento en seguimiento principal y descripción, seguir hasta resultado terminal/merge/post-merge o bloqueo externo concreto. Las PR de bots con CodeQL neutral no tienen sus Analyze obligatorios: neutral no equivale a aprobación. Espejo Drive sigue BLOCKED por secretos OAuth faltantes ya documentados en main; sin reintentos ni cambios de credenciales. No confundir este pendiente externo con el build ni con una compra/operación real.
+
+## 2026-11-08 — Panel admin lento con App Check fallido y feed de Instagram que no volvía — Claude Code
+
+- Admin: si App Check ya había informado fallo (`TintinAppCheckStatus = 'error'`), `resolveAdminAppCheck` esperaba 12 s un evento `tintin:app-check-ready` que no se repite antes del reintento explícito; como la compuerta se limpia ante un negativo, cada módulo volvía a pagar esa espera. Ahora reintenta `getToken` de inmediato; sin token sigue devolviendo false (seguridad igual). Test nuevo en `tests/auth/admin-readiness-gate.test.mjs` (falla con el código anterior).
+- Instagram: un pedido abortado al salir de la sección contaba como intento y bloqueaba el siguiente 60 s; ahora el intento abortado no cuenta (`instagram-tintin.js`). Local: listo a ~2,5 s al volver (antes 60 s).
+- Versiones de caché propagadas a importadores (`tintin-20261108-appcheck-fallo-1`), `LOADER_VERSION` en `sincronizar-inicio-navegacion-publica.js`; plan de flujos protegidos (51 archivos).
+- PASS_LOCAL: `audit:cache-versioning`, `ci:preflight`, `build:pages`, `node --test tests/auth/*.test.mjs` 80/80, `test:rules-critical`, Playwright instagram+reseñas+me-gusta 37/37 y 8 specs admin 65/65.
+- NOT_VERIFIED: tiempo real del panel con sesión admin en producción (sin credenciales); cascada inicial de módulos (~6,5 s primera visita) no modificada.
+
+## 2026-11-08 — Recomendaciones PYA aplicadas: reglas Firestore, CSP, ponytail y accesibilidad — Claude Code
+
+- AUTHZ-1 (LOW): publicar/ocultar un producto (`active`/`publicationStatus`) exige `productos.activarDesactivar`; con solo `editar` se permiten cambios sin variar visibilidad efectiva y la reactivación automática por stock. El editor del panel bloquea esos campos sin el permiso. Guardia barata `adminInventoryStockKeysOnly()` para no superar el límite de 1000 expresiones (comportamiento equivalente).
+- AUTHZ-2 (LOW): retirada la rama que dejaba a un admin escribir estadísticas de pedidos en `users/*` desde el cliente; se recalculan solo en servidor (`cloudflare/sincronizacion-estadisticas-pedido.js`).
+- AUTHZ-3 (LOW): `emailLogs` creados por staff (`reenviarCorreo`) validan esquema, `sentBy == email del token` y `sentAt == request.time`; el panel recorta `error` a 500.
+- PASS_LOCAL emulador (`npm run test:rules-critical`, proyecto demo): exit 0, 272 ataques/controles, nuevos casos de visibilidad, stats y emailLogs. NOT_VERIFIED en emulador: reserva/liberación de inventario (solo prueba unitaria).
+- CSP: `unpkg.com` retirado de la política global/fallback (Leaflet está en `js/vendor/leaflet`); `_headers` y `config/csp-runtime.*` regenerados; `verify:csp` OK.
+- Ponytail: no se fija SHA en `.claude/settings.json` porque `extraKnownMarketplaces` solo admite rama/tag (`ref`); documentado tag→commit en `CLOUD_SKILLS_CATALOG.md`.
+- Accesibilidad (better-accessibility): el botón «Volver al inicio» invisible (opacity 0) recibía foco y clics; ahora es `inert` mientras está oculto (`tienda.js`). PASS_LOCAL: recorrido con Tab 390/1366 px en inicio, catálogo, producto, checkout, contacto y login sin paradas invisibles; `test:phase10-a11y` 5/5. NOT_VERIFIED: lector de pantalla real y contraste.
+
+## 2026-11-08 — Skills de interfaz (Jakub Krehel) y seguridad (PYA) instaladas — Claude Code
+
+- Instaladas en `.claude/skills/` y `.agents/skills/` (espejo): better-interface, better-ui, better-typography, better-colors, better-accessibility, better-layout, better-writing, build-design (jakubkrehel/skills @157da62) y pya (AgriciDaniel/pya @416c17f), con LICENSE.upstream y nota de integración Tintín. Agentes PYA en `.claude/agents/` (10 + licencia).
+- Procedencia y hashes en `docs/agent/design-skills-lock.json` (sección `agents` nueva); `scripts/agent/check-cloud-skills.py` valida espejo e integridad de agentes. PASS_LOCAL: 72 Skills por cliente; prueba negativa (archivo alterado) falla como se espera.
+- No importados: install.sh/uninstall.sh/Makefile de PYA; scripts PYA solo offline (sin `--online`/`update_kev.py` salvo pedido explícito). Starwire es lista de recursos, no Skill.
+- PYA (solo lectura): inventory 2777 archivos; feed_match 721 paquetes, 0 maliciosos, 0 KEV (10 HIGH = ejemplos del propio PYA, falsos positivos). `ioc_scan` agotó 300 s: NOT_VERIFIED. osv-scanner/trufflehog/zizmor/semgrep no instalados: no ejecutados. score.py: 95.9 (A sin tope; C por cobertura 4.2 %), 17 hallazgos, 0 HIGH sin verificar.
+- Corregido: IAC-1 (HIGH) `google-github-actions/auth` y `setup-gcloud` fijados por SHA en backup-firestore y desplegar-reglas-firestore; IAC-2 (MEDIUM) `monitor-produccion.yml` deja `contents: read` global y da `id-token`/`issues` solo al job que lo usa; AG-1 `allowed-tools` comodín de pya retirado. Plan de mantenimiento protegido generado (3 archivos); tests OIDC/producción 19/19.
+- No corregido (recomendación, área sensible o política de la titular): marketplace ponytail fijado por tag (`.claude/settings.json`), Firestore rules LOW (publicar sin `activarDesactivar` l.1334, stats l.1219, esquema emailLogs l.1598), CSP fallback con unpkg, `desplegar-pages.yml` permisos heredados (solo manual), sal OTP por defecto, `engines.node`.
+
+## 2026-11-08 — Fase 5 (emulador y sync panel↔tienda) y auditoría de rendimiento — Claude Code
+
+- PASS_LOCAL emulador Firestore (`npm run test:rules-critical`, proyecto demo, sin datos reales): 21/21 tests y 49 verificaciones de auditoría; exit 0.
+- PASS_LOCAL sync: `audit:admin-sync` 80/80, `test:products-sync` 244/244, `audit:sync-contracts` OK.
+- Rendimiento: `audit:performance` 0 fallos críticos (WARN: CSS inicio 363 KB y JS directo 298 KB sin comprimir); `audit:performance-regressions` 29/29.
+- `audit:premium-performance` fallaba por comprobación obsoleta: buscaba el hero `hero-editorial/backdrop.webp|png`, reemplazado en #1330 por `hero-reference` (maletín PNG). Se actualiza la comprobación al hero vigente (precarga PNG responsive, fondo SVG, marca); 16/16 OK y falla si se quita la precarga.
+- PASS_PRODUCCIÓN (solo lectura, curl): CSS/JS/imágenes versionados `max-age=31536000, immutable`, `cf-cache-status: HIT`; HTML `no-cache`.
+- Hero: `suitcase.png` 1,7 MB / `-960` 1,5 MB / `-640` 666 KB. Recompresión sin pérdida (oxipng+zopfli) solo ahorra ~4 %: no se aplica. WebP q90 = 255 KB pero cambia píxeles visibles (2,7 % > 12/255, máx. 60): requiere aprobación visual de la titular, que aprobó PNG por fidelidad (ver `assets-tintin/images/home/hero-reference/README.md`). No se cambia.
+
+## 2026-11-08 — Tarjetas «Agregar al carrito» y sugerencias de checkout (#1361, #1362, #1363) — Claude Code
+
+- #1361: las tarjetas muestran «Ver» y «Agregar al carrito»; con variantes abre la hoja de confirmación de opciones.
+- #1362 (1de129a): la prueba `tests/catalog/product-small-controls.test.mjs` esperaba favoritos ya retirados; ahora verifica el nombre escapado en la línea del carrito. PASS_LOCAL 6/6 y 140/140; CI 13 checks SUCCESS.
+- #1363 (b1ab94f): en `checkout.html` las sugerencias con variantes usan `data-card-options` y abren la misma hoja (`window.openCardAddSheet`); si el producto no está en `window.PRODUCTS` se mantiene el enlace a la ficha. CSP regenerado y plan protegido creado con `scripts/preparar-mantenimiento-flujos.mjs` (4 archivos). PASS_LOCAL 315/315 (cart, catalog, flow-connections) y ci:preflight; CI 15 checks SUCCESS; en main pasaron «CI Tintin — contrato único», «Push on main» y «Operación — salud de producción».
+- PASS_PRODUCCIÓN (solo lectura): `https://tintinaccs.com/checkout` sirve `data-card-options` (2 coincidencias). NOT_VERIFIED: clic real en navegador de producción.
+- Dependencias: `npm audit --omit=dev` 0 vulnerabilidades; 8 moderadas solo de desarrollo, transitivas de firebase-tools (emuladores); no se fuerzan overrides para no romper los emuladores.
+- Pendiente externo: espejo de respaldos en Drive requiere cliente OAuth y secretos `DRIVE_CLIENT_ID`/`DRIVE_CLIENT_SECRET`/`DRIVE_REFRESH_TOKEN` cargados por la titular.
+
+## 2026-11-07 — Protected flows: renovación de huellas y retiro explícito de archivos eliminados (base a18318c7)
+
+- Causa: el job «Protected flows» de main falla porque varios PR cambiaron archivos protegidos sin plan de mantenimiento (el job se omite en PR y «Protected flow maintenance» no es check obligatorio de la rama) y #1355 eliminó dos archivos protegidos (favoritos) que el mecanismo no podía representar.
+- Cambio: `inspectMaintenance`/helper/lector de GitHub aceptan `removedFiles` en el plan solo para archivos ausentes, sin alcance de registro y declarados exactamente; el resto de controles no cambia. Plan generado con `scripts/preparar-mantenimiento-flujos.mjs` (41 renovados, 2 retirados, 61 registros afectados).
+- PASS_LOCAL: auditar-proteccion-flujos exit 0 (78 registros, 542 archivos), 4 suites de mantenimiento 58/58, ci:preflight, audit:cache-versioning. 4 pruebas de navegador de tests/flow-connections fallan también sin estos cambios (carrito/iframe/panel); no relacionadas, sin verificar en CI.
+- Pendiente: confirmar que el job «Protected flows» del push a main pasa; este PR cambia el propio mecanismo, así que «Protected flow maintenance» no puede validarlo con el control anterior. Hacer ese check obligatorio requiere acceso administrativo a la rama.
+
+## 2026-11-07 — Optimización integral: favoritos, cancelación/stock y cola de correos (base HEAD de rama claude/tintin-accesorios-optimization-xyl6zm)
+Claude Code (Sonnet 5.5). Sin push, merge ni despliegue; sin datos de producción tocados.
+- Fase 2 (PASS_LOCAL): tarjetas «Ver y agregar al carrito»; favoritos/corazones/«Me gusta» retirados de la UI; `toggleFavorite` devuelve 410 `feature_removed` al agregar (quitar sigue permitido); datos y reglas históricos intactos. Cascada de versión `tintin-20261107-sin-favoritos-1`.
+- Fase 3 (PASS_LOCAL): la cancelación ya era por variante, idempotente y con concurrencia probada; no se halló bug reproducible. Se agrega al evento de auditoría existente el detalle de producto/variante/cantidad devuelto (`cloudflare/order-admin-domain.js`) y su prueba. Observación de diseño abierta: una reserva agregada heredada en producto con variantes devuelve solo `stock` agregado (no inventa stock por variante). Reembolso PayPal no libera stock automáticamente (solo advierte).
+- Fase 4 (PASS_LOCAL): causas de los «ocho intentos fallidos» en `drainOrderEmailQueueScheduled`: (a) sin `RESEND_API_KEY` se gastaba un intento por tarea y todas llegaban a dead-letter; (b) pedido borrado/en papelera gastaba 8 intentos; (c) correo de clienta inválido se reintentaba 8 veces. Ahora: sin clave no se reclama ni se gastan intentos (se registra `lastError` en `syncMeta/orderEmailQueue` y el endpoint responde 503); pedido inexistente o sin canal válido → tarea descartada como `obsolete`. Un fallo de correo nunca bloquea el pedido (se encola y el endpoint de correo responde aparte).
+- Pruebas: orders 135/135; cola de correo + drain + recibo + app-check 19/19 y 146/146 combinadas con orders.
+- Fallos previos idénticos sin mis cambios (no regresión): `tests/integration/commerce-firestore` (requiere emulador Firestore), `cart-render-probe`, `sellado-interactivo`, `profile-save-panel` (falta `parse5`), 2 pruebas de arquitectura UI (falta `@playwright/test`); `node_modules` ausente.
+- BLOCKED: `config/proteccion-flujos.json` reporta ~30 archivos protegidos modificados y 2 eliminados; requiere `scripts/preparar-mantenimiento-flujos.mjs` con SHA base y aprobación CI/dueño. No se editó la política a mano.
+- NOT_VERIFIED: producción, navegador real/responsive (sin Playwright), CI del SHA final, auditoría `audit:final`.
+## Corrección del build de Cloudflare en PR 1346 — 2026-11-06 — Claude Code
+
+Causa del Cloudflare Pages build fallido en b098d9f3 (reproducida localmente, no se pudo leer el log de Cloudflare): el package-lock.json estaba sincronizado solo con npm 11; con npm 10 npm ci falla con EUSAGE (Missing: glob@10.5.0 y otros). Se regeneró el lock con npm 10 (npm install --package-lock-only --ignore-scripts) conservando el override condicional de glob; npm ci --dry-run pasa con npm 10 (692 paquetes) y con npm 11 (663 paquetes), y npm ci real instala 683 paquetes. Se fusionó main 804a74d9 y se regeneró el plan de mantenimiento con scripts/preparar-mantenimiento-flujos.mjs (base 804a74d9, 2 archivos, 0 registros afectados).
+
+PASS_LOCAL: build:pages, auditar-proteccion-flujos (78 registros, 544 archivos intactos), 52 pruebas de flow-connections, audit:cache-versioning. No verificado hasta que corra el build real de Cloudflare sobre el commit final.
 ## Filtros de variantes cambian foto y muestra de la tarjeta — 2026-11-06 — Claude Code
 
 Pedido de la titular: al elegir cualquier variante en los filtros del catálogo (ejemplo: color Beige) cada tarjeta debe mostrar la foto y la muestra seleccionada de esa variante, para cualquier atributo, producto y dispositivo. Antes la tarjeta mostraba siempre la primera combinación con stock (catalogo.html usaba firstAvailableVariant) aunque hubiera filtros.
@@ -62,6 +249,17 @@ PASS_LOCAL inicial:7/7 casos Chromium por píxeles (hero390×844/844×390/1306×
 
 Actualización antes de integrar1347: dos consumidores de --tt-section-gradient en ajuste/editorial añadían otra vez el color base e invalidaban background en el primer render. Se concilian con el único fondo completo, sin cambiar geometría ni PNG. Reproducción:alternating-section-colors2/4FAIL; tras corregir4/4PASS. Regresión actual13/13 (paquete CSS y bordes) y2/2 píxeles sin JavaScriptPASS; los nuevos casos se incorporan al spec que CI ya ejecuta. Cifras99/71 anteriores a este último ajuste; CI/merge/producción pendientes del nuevo SHA, sin heredar recibos. Integridad SHA256 de los4PNG contra merge4bc1c20e:2/2 NodePASS. Mantenimiento:24renovaciones/28registros preservados. PR1347; nunca habilitar auto-merge nativo antes del mantenedor protegido.
 
+## 2026-11-05 — Dependencias y recuperación, excluyendo PayPal (Codex)
+
+PASS_LOCAL: `npm audit` detectó 12 paquetes afectados por dos avisos moderados: glob/AbortSignal y minimatch/globparts. Se limita el override a `glob@>=9.0.0 <14.0.2` → `14.0.3`, conservando Firebase CLI 15.34.2 y los minimatch antiguos 3/5/6. Aprobaron `npm ci --engine-strict`, auditoría con cero vulnerabilidades, CLI de Firebase, descubrimiento de archivos y ZIP real mediante archiver. Después de incorporar `main` af7c141b aprobaron 69 pruebas dirigidas de CI, mantenimiento y recuperación, el build reproducible y `ci:preflight` completo. CI del nuevo SHA pendiente. PayPal queda fuera de alcance.
+
+PR #1345 resuelta: head `7dcbee3b`, CI `42065735586/1` y mantenimiento `42070726490/1` en éxito, incluidos ambos checks de protección. Merge `af7c141b`. Postmerge `42070826711` en curso al registrar este bloque; no se hereda éxito de producción. La corrección del plan verificó 43 huellas y pasó 48 pruebas de mantenimiento; 238 pruebas de cuentas, Perfil, Push y respaldo aprobaron también en esa rama.
+
+Recuperación real: Google Cloud confirmó PITR de 7 días, respaldo diario de 30 días, semanal de 84 días y protección contra borrado habilitada en `(default)`. El respaldo `a5fdb9a3-33f3-45d4-997e-4cf1d9512688`, del 4 de noviembre, se restauró en la base nueva `restore-check-20261105-7dcbee`, en us-east1. El run `2b284c70-1bed-4431-98f7-5360943c2826` verificó Disponible/Listo y ausencia del aviso de restauración; las dos bases anteriores siguieron disponibles. No se leyeron valores personales ni se midieron conteos por colección.
+
+Limpieza pendiente: el run `3bda8ad0-716a-4be5-9fd7-dbc2304a21e3` no logró abrir Cloud Shell. Verificó la identidad del recurso temporal y reportó su protección contra borrado inhabilitada. El siguiente intento por UI no inició por saldo insuficiente de TinyFish; se informó a la titular y se pidió elegir recarga o limpieza manual. El único objetivo permitido es `restore-check-20261105-7dcbee`; no actuar sobre `(default)`, `restauracion-prueba`, buckets ni respaldos.
+
+Código: bundle completo de 14 referencias, SHA-256 `71466b563909b4c1d86b9ee171836d79663bc5ab0371b737c79dc9035e80dee3`; clon aislado, `git fsck` y checkout de main `187e16f3` correctos en 15,25 s. Se conserva en una carpeta privada de trabajo y no equivale a copia externa cifrada. Siguen pendientes las respuestas sobre sesión real de Perfil/Push, dispositivo, destino de copia independiente y certificado público generado en el dispositivo de la titular. No cerrar #735, #373 ni #312 con pruebas simuladas. Sin envíos a clientas, cobros, pedidos ni compras de créditos. Skills usados: gh-fix-ci, tintin-observability-recovery y tintin-security-hardening.
 
 ## 2026-11-05 — Pendientes de GitHub excepto PayPal (Codex)
 
@@ -6186,6 +6384,32 @@ Las cinco pruebas de integridad de lectura pasan. CI, merge y publicación del
 candidato final requieren evidencia por su SHA; no se heredan los PASS locales
 de la sesión anterior. No se escribieron datos comerciales reales.
 
+## 2026-11-07 — Auditoría de rendimiento del Super Panel (agente Claude Sonnet 5.5)
+
+Causa raíz (análisis estático + medición simulada; NO medida en producción):
+`createAdminOrderSource` usaba `complete:true`, que encadena páginas de 250
+pedidos en serie y no publica nada hasta descargar la colección entera
+(introducido en 8e92250, #1244). Contradice la política del propio código de no
+descargar miles de documentos al abrir el panel.
+
+Cambio: `js/admin/datos/fuente-paginada-progresiva.mjs` (nuevo, solo admin) entrega
+el prefijo confirmado vía `onPartial`; `admin-app.js` lo proyecta sin marcar
+`adminRealtimeReady.orders`; `shopify-commerce-admin.js` muestra filas mientras
+sincroniza (escrituras siguen bloqueadas hasta estar listo).
+PASS_LOCAL: `tests/admin/pedidos-carga-progresiva.test.mjs` 3/3; simulación
+2983 pedidos, 12 páginas × 40 ms: primer contenido 486 ms → 42 ms (completo 490 ms).
+`audit:cache-versioning` correcto. No probado en producción.
+
+Revisado sin hallazgo defectuoso: pollers admin (gated por sección y visibilidad),
+`orderTrash` (solo pestaña Borrados), `site_content` (se libera al salir),
+`public-catalog` (caché edge s-maxage=10), sitemaps (s-maxage=900), fallback
+`products/[handle]` (TTL 5 min en memoria). Crons de GitHub Actions listados; no
+hay triggers cron de wrangler.
+
+Pendiente: Usuarios y estadísticas aún esperan el conjunto completo; medir en
+producción (requiere métricas de Firestore Usage/Cloud Monitoring y analítica de
+Cloudflare); `admin-app.js`/`shopify-commerce-admin.js` figuran como protegidos
+modificados y requieren la vía de mantenimiento autorizada. Sin push.
 
 ## 2026-11-01 — Estabilización reproducible de Skills y CI
 
@@ -6500,3 +6724,11 @@ Causa del rojo en CI 42017447387/1 (SHA 7cfbcc9, job D — Interfaz, SEO y rendi
 - Checkout: botón "Copiar" junto a cada dato del método de pago (`js/pages/checkout/checkout-metodos-pago.js`, `copiar-dato-pago.js`, `payment-methods.css`). Copia solo el alias si el dato trae "Alias ...: valor" (aplica "Sin Guión" quitando guiones); si no, copia el texto completo. Fallback `execCommand`. Estado "¡Copiado!" + región `role=status`.
 - Verificado local con el módulo real y catálogo simulado (sin tocar Firestore): portapapeles = `0971300923`, botón dentro de la tarjeta y sin scroll horizontal de 320 a 1920 y 844x390. Pruebas unitarias `tests/payments/copiar-dato-pago.test.mjs` (5) OK.
 - No verificado: Firestore real (el alias cargado hoy tiene guiones y dice "Sin Guión"), producción, portapapeles en iOS/Safari real.
+
+## 2026-11-07 · Tarjetas: «Agregar al carrito» con hoja de confirmación
+- Implementado: botón «Agregar al carrito» en tarjetas con variantes abre hoja (modal/bottom sheet) para elegir/confirmar opciones y agrega sin salir de la página (`tienda.js`, `catalogo.html`).
+- Local: `npm run ci:preflight` exit 0; mecanismo de flujos 58/58; tests cart+catalog 139/140; auditor fase 7 OK; verificación Playwright con datos simulados (390px y 1280px).
+- Fallo preexistente (también en main, no relacionado): `tests/catalog/product-small-controls.test.mjs` «favoritos conserva nombre accesible…».
+- NO probado en producción ni con catálogo/Firestore reales.
+
+- 2026-11-12 · PR #1354 (filtros de variantes con foto/muestra elegida) actualizado con main dfcb4a6: conflictos en generados (CSP, manifiestos, plan) tomados de main y regenerados; en `catalogo.html` se conserva `catalogFilterPreview` y se descarta el import de favoritos retirado en #1355. Plan de mantenimiento renovado sobre dfcb4a6 (5 archivos, 8 registros). PASS_LOCAL: `build:pages`, `ci:preflight`, protección de flujos (78 registros/542 archivos), `tests/catalog/*.test.mjs` 111/111, `test:fast` (104 Node + 6 Chromium) y 74 Chromium (variant-filter-photos, product-card-colors, product-stock-first, boutique-surfaces, search-responsive). CI del SHA final pendiente.

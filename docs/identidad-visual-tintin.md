@@ -18,3 +18,11 @@ local/OFL), descripción y acciones con la sans de la referencia, acotadas a
 #hero. Montserrat continúa siendo la familia del resto del sitio. El auditor
 y diagnóstico validan esos selectores exactos; no se habilitan fuentes externas
 ni cambios de familia en otros módulos.
+
+## 2026-11-11 — Favicon circular como el loader
+
+La titular solicita invertir la versión anterior: círculo rosa #F8AACA y logo
+blanco plano, centrado horizontal y verticalmente, con exterior transparente. Se conserva el alfa/silueta del logo
+original. Abarca favicon.ico y sus PNG16/32/192/512; no altera las variantes
+Apple, apps, maskable ni badge. Esta indicación reemplaza el círculo blanco
+con símbolo rosa para los favicons.

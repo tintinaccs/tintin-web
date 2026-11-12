@@ -194,6 +194,11 @@ export async function onRequest(context) {
         },
       };
     } else if (input.action === 'toggleFavorite') {
+      // Favoritos y Me gusta de producto retirados de la tienda: solo se permite
+      // quitar un favorito existente (limpieza); no se aceptan altas nuevas.
+      if (input.selected !== false) {
+        throw Object.assign(new Error('Los favoritos ya no están disponibles.'), { status: 410, code: 'feature_removed' });
+      }
       result = await toggleFavorite(env, user, input);
     } else if (input.action === 'toggleReviewLike') {
       result = await toggleReviewLike(env, user, input);

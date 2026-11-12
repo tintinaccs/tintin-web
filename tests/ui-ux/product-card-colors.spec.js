@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const source = fs.readFileSync('tienda.js', 'utf8');
 const renderer = source.slice(source.indexOf('const cardColorSelections'), source.indexOf('function renderProductsGrid'));
-const media = source.slice(source.indexOf('function productVariantGroups'), source.indexOf('function _pdSyncVariantToImage'));
+const media = source.slice(source.indexOf('function singleVariantLabel'),source.indexOf('\n}\n',source.indexOf('function singleVariantLabel'))+3)+source.slice(source.indexOf('function productVariantGroups'), source.indexOf('function _pdSyncVariantToImage'));
 const harness = `
 const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const escapeAttribute=escapeHtml;

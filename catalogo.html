@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="00aa38c7e6ec356e9db666b376e193b7540835e6da149603542a807358c3e2b1">
+  <meta name="tintin-page-revision" content="06b352d676e955e2fe289a880beacb008a1db5ba7a1f29302da7c92582d56cbf">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261105-copiar-pago-1-p1106"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261111-product-login-payment-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261029-cart-motion-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261105-copiar-pago-1-p1106" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261111-product-zoom-2" defer></script>
   <title>Catálogo de Accesorios | TINTIN Accesorios & Relojes</title>
   <meta name="description" content="Explorá el catálogo de Tintin: relojes, aros, collares, pulseras, anillos y accesorios femeninos con envíos a todo Paraguay.">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -30,9 +30,9 @@
   <meta name="twitter:image" content="https://tintinaccs.com/assets/og-cover.jpg?v=logo-20261027">
   <meta name="twitter:image:alt" content="Logo blanco de Tintin con Accesorios &amp; Relojes sobre fondo rosa Tintin">
   <link rel="canonical" href="https://tintinaccs.com/catalogo">
-  <link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261104-favicon-1">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261104-favicon-1">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=tintin-20261104-favicon-1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261111-favicon-2">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261111-favicon-2">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=tintin-20261111-favicon-2">
   <link rel="apple-touch-icon" sizes="180x180" href="assets-tintin/images/admin/apple-touch-icon.png?v=tintin-20261021-iconos-rosa-1">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#F8AACA">
@@ -43,7 +43,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261105-copiar-pago-1-p1106">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261111-product-zoom-2">
   <link rel="stylesheet" id="tt-catalogo-css-bundle" href="css/generated/catalogo.css?v=tintin-catalogo-28da121ee7e40fbd">
   <link rel="tt-bundled-stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2" disabled data-tt-style-bundle="tt-catalogo-css-bundle"><link rel="tt-bundled-stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css-palette-20261014-1-p1106" disabled data-tt-style-bundle="tt-catalogo-css-bundle">
   <link id="tt-navigation-mobile-solid-css" media="(max-width: 767px)" rel="tt-bundled-stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3-checkout-20261008-2-palette-20261014-1" disabled data-tt-style-bundle="tt-catalogo-css-bundle">
@@ -84,16 +84,6 @@
       transition: box-shadow .24s ease, transform .24s ease, border-color .24s ease;
     }
     .tt-card:hover { box-shadow: 0 12px 36px rgba(173,63,103,.14); border-color: #e8bfd0; }
-    .tt-card-favorite {
-      position: absolute; z-index: 3; top: 10px; right: 10px;
-      width: 44px; height: 44px; border: 1px solid rgba(173,63,103,.22);
-      border-radius: 50%; background: rgba(255,255,255,.94); color: var(--acc);
-      box-shadow: 0 5px 16px rgba(86,32,51,.12); font-size: 22px; cursor: pointer;
-      display: grid; place-items: center; padding: 0; line-height: 0;
-    }
-    .tt-card-favorite [data-favorite-icon] { display: grid; place-items: center; line-height: 0; }
-    .tt-card-favorite svg { display: block; }
-    .tt-card-favorite.is-favorite { background: var(--acc-pale); }
 
     .tt-card-img-wrap {
       display: block;
@@ -117,6 +107,11 @@
     .tt-card-price { font-size: 15px; font-weight: 800; color: #963653; margin-bottom: 8px; }
     /* Colores alineados con el texto de la tarjeta (el botón tiene 7px de aire alrededor del círculo). */
     .tt-card .tt-card-colors { justify-content: flex-start; margin: -4px 0 4px -7px; }
+    /* El rótulo «Agotado» de un color ocupa 10 px bajo el círculo. Se reserva
+       siempre en el bloque (no por color) para que las tarjetas de una fila
+       tengan el mismo ritmo vertical y la fila no crezca por una sola. */
+    html body .tt-card .tt-card-colors { padding-bottom: 10px; }
+    html body .tt-card .tt-card-color.tt-stock-unavailable { margin-bottom: 0; }
     .tt-card-stock {
       display: inline-flex; align-items: center; gap: 6px; width: fit-content;
       margin-bottom: 12px; font-size: 10px; font-weight: 800;
@@ -627,26 +622,25 @@
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261105-copiar-pago-1-p1106" defer></script>
+<script src="tienda.js?v=tintin-20261111-product-zoom-2" defer></script>
 <script type="module">
 import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-suitcase-20261104-1-p1106';
 initSiteContent('catalogo');
 </script>
-<script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20261105-modo-edicion-1-p1106"></script>
+<script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20261108-appcheck-fallo-1"></script>
 <script type="module">
 import { sanitizeImageUrl } from './js/components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
-import { hasProductStock, firstAvailableVariant, productDefaultPrice } from './js/core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
+import { hasProductStock, firstAvailableVariant, productDefaultPrice, resolveProductVariant } from './js/core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { productVariantImage } from './js/components/images/foto-variante.mjs?v=tintin-20261031-seo-espacios-2';
 import { productSearchScore, productSearchText, normalizeProductSearch as normalizeSearch } from './js/core/store/busqueda-productos.mjs?v=tintin-20261021-commerce-review-1';
 import { catalogFilterRecord, catalogFilterOptions, matchesCatalogFilters, pruneCatalogFilters, catalogFilterPreview } from './js/pages/catalog/filtros-variantes.mjs?v=tintin-20261106-filtros-2';
-import { heartIconMarkup } from './js/components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
 
 // Import dinámico (no estático): si falla la red/CDN al traer
 // estado-colecciones.js, un import estático tira abajo TODO este módulo —
 // incluido el polling/fallback de productos más abajo, que es justo lo que
 // tiene que seguir funcionando pase lo que pase con las colecciones.
 let onCollectionsUpdate = () => {};
-import('./js/pages/collections/estado-colecciones.js?v=tintin-20261105-copiar-pago-1-p1106')
+import('./js/pages/collections/estado-colecciones.js?v=tintin-20261111-product-login-payment-1')
   .then(m => { onCollectionsUpdate = m.onCollectionsUpdate; bootCollections(); })
   .catch(e => console.warn('[catalogo] No se pudieron actualizar las colecciones:', e));
 
@@ -872,11 +866,13 @@ function renderGrid(lista) {
     const imgHtml = imageUrl
       ? `<img src="${catalogImageSrc(imageUrl)}"${catalogImageSrcset(imageUrl)} alt="${safeAlt}" width="480" height="480" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`
       : `<div class="cat-card-placeholder" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`;
-    const inStock = isInStockCat(p);
-    const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));
     const hasVariants = window.TintinCatalogPolicy?.hasVariants
       ? window.TintinCatalogPolicy.hasVariants(p)
       : Boolean(p.variants && Object.values(p.variants).some(values => Array.isArray(values) && values.length));
+    const singleVariant = hasVariants ? resolveProductVariant(p, '') || '' : '';
+    const needsChoice = hasVariants && !singleVariant;
+    const inStock = isInStockCat(p);
+    const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));
     const badgeHtml = !inStock
       ? `<span class="tt-stock-label" aria-hidden="true">AGOTADO</span>`
       : isNew
@@ -884,10 +880,8 @@ function renderGrid(lista) {
         : p.badge ? `<span class="tt-card-badge">${escapeCatalogHtml(p.badge)}</span>` : '';
     const rawCategory = p.category || p.cat || '';
     const cardCategory = rawCategory ? catLabel(rawCategory) : '';
-    const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
     return `
       <article class="tt-card${inStock ? '' : ' tt-stock-unavailable'}" data-product-id="${safeId}">
-        <button type="button" class="tt-card-favorite${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${safeAlt}" data-favorite-price="${escapeCatalogHtml(money.price)}" data-favorite-image="${escapeCatalogHtml(imageUrl)}" data-favorite-cat="${escapeCatalogHtml(cardCategory)}" aria-pressed="${isFavorite}" aria-label="${isFavorite ? 'Quitar' : 'Guardar'} ${safeAlt} ${isFavorite ? 'de' : 'en'} favoritos"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
         <a href="${productHref}" class="tt-card-img-wrap" aria-label="Ver ${safeAlt}">
           ${imgHtml}
           ${badgeHtml}
@@ -900,12 +894,12 @@ function renderGrid(lista) {
           <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
           <div class="tt-card-stock ${inStock ? 'tt-card-stock--in' : 'tt-card-stock--out'}">${inStock ? 'Disponible' : 'Agotado'}</div>
           <div class="tt-card-btns">
-            <a class="tt-card-btn tt-card-btn-view" href="${productHref}">Ver</a>
+            <a class="tt-card-btn tt-card-btn-view" href="${productHref}" aria-label="Ver ${safeAlt}">Ver</a>
             ${!inStock
               ? `<button type="button" class="tt-card-btn tt-card-btn-cart" disabled aria-disabled="true">Agotado</button>`
-              : hasVariants
-                ? `<a class="tt-card-btn tt-card-btn-cart" href="${productHref}">Elegir opciones</a>`
-                : `<button type="button" class="tt-card-btn tt-card-btn-cart" data-pid="${safeId}">Agregar</button>`}
+              : needsChoice
+                ? `<button type="button" class="tt-card-btn tt-card-btn-cart" data-card-options="${safeId}" aria-haspopup="dialog" aria-label="Agregar ${safeAlt} al carrito: elegir y confirmar opciones">Agregar al carrito</button>`
+                : `<button type="button" class="tt-card-btn tt-card-btn-cart" data-pid="${safeId}"${singleVariant ? ` data-variant="${escapeCatalogHtml(singleVariant)}"` : ''} aria-label="Agregar ${safeAlt} al carrito">Agregar al carrito</button>`}
           </div>
         </div>
       </article>`;
@@ -1169,6 +1163,7 @@ document.getElementById('cat-grid').addEventListener('click', async e => {
   const btn = e.target.closest('.tt-card-btn-cart');
   if (!btn || btn.disabled) return;
   e.stopPropagation();
+  if (btn.dataset.cardOptions) { window.openCardAddSheet?.(btn.dataset.cardOptions, btn); return; }
   const pid = btn.dataset.pid;
   const p = todos.find(x => String(x.id) === String(pid));
   if (!p || !isInStockCat(p)) return;
@@ -1179,14 +1174,16 @@ document.getElementById('cat-grid').addEventListener('click', async e => {
   btn.textContent = 'Agregando...';
   try {
     const cartSync = await cartSyncPromise;
+    const variant = btn.dataset.variant || '';
     const result = await cartSync.addToCart({
       id: p.id,
       name: p.name,
       cat: p.category || p.cat || '',
-      price: p.price,
+      price: variant && p.variantCommerceVersion === 2 ? window.TintinCatalogPolicy.priceFor(p, variant).price : p.price,
       qty: 1,
       stock: p.stock,
-      imageUrl: p.imageUrl || ''
+      imageUrl: variant ? productVariantImage(p, variant, p.imageUrl || '') : p.imageUrl || '',
+      ...(variant ? { variant } : {})
     });
     btn.textContent = result.changed ? '✓ Agregado' : (result.reason === 'already_in_cart' ? 'Ya está en tu carrito' : 'Stock máximo');
   } catch (error) {

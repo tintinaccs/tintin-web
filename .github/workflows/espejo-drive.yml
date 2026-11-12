@@ -1,0 +1,51 @@
+name: Espejo — Google Drive
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '45 4 * * *' # red de seguridad: repara cualquier push que no se haya copiado
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: espejo-drive
+  cancel-in-progress: false
+
+jobs:
+  espejo:
+    name: Copiar cambios a Drive
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: 'package.json'
+      - name: Verificar configuración de Drive
+        id: config
+        env:
+          DRIVE_CLIENT_ID: ${{ secrets.DRIVE_CLIENT_ID }}
+          DRIVE_CLIENT_SECRET: ${{ secrets.DRIVE_CLIENT_SECRET }}
+          DRIVE_REFRESH_TOKEN: ${{ secrets.DRIVE_REFRESH_TOKEN }}
+        run: |
+          if [ -n "$DRIVE_CLIENT_ID" ] && [ -n "$DRIVE_CLIENT_SECRET" ] && [ -n "$DRIVE_REFRESH_TOKEN" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            echo "::warning::Espejo de Drive sin configurar (faltan secretos DRIVE_*). Este push no se copió."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Faltan secretos DRIVE_CLIENT_ID, DRIVE_CLIENT_SECRET o DRIVE_REFRESH_TOKEN."
+            exit 1
+          fi
+      - name: Sincronizar solo lo que cambió
+        if: steps.config.outputs.ready == 'true'
+        env:
+          DRIVE_CLIENT_ID: ${{ secrets.DRIVE_CLIENT_ID }}
+          DRIVE_CLIENT_SECRET: ${{ secrets.DRIVE_CLIENT_SECRET }}
+          DRIVE_REFRESH_TOKEN: ${{ secrets.DRIVE_REFRESH_TOKEN }}
+        run: node scripts/espejo-drive.mjs

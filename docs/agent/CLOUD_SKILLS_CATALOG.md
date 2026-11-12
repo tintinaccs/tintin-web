@@ -21,6 +21,8 @@ Los Skills del proyecto viven en `.agents/skills/<folder>/SKILL.md` para Codex y
 | Anthropic frontend-design | [anthropics/skills](https://github.com/anthropics/skills/tree/ca45fc496a3436251f191354091d557da31c15b5) · `ca45fc496a34` | `frontend-design` | `frontend-design` |
 | Anthropic webapp-testing | [anthropics/skills](https://github.com/anthropics/skills/tree/ca45fc496a3436251f191354091d557da31c15b5) · `ca45fc496a34` | `webapp-testing` | `webapp-testing` |
 
+> Ponytail (plugin): `.claude/settings.json` carga el marketplace con `ref: "v4.10.3"` (tag ligero → commit `ef8ca48fed2321ab6668b2a954f23b1af97d7f6d`, verificado con `git ls-remote` el 2026-11-08). La documentación oficial de `extraKnownMarketplaces` solo admite `ref` como rama o tag (sin campo `sha`), por lo que no se fija un SHA allí para no romper la carga. La copia local `.claude/skills/ponytail` proviene de `96608e078b2d`, 122 commits posterior al tag.
+
 Archivos de apoyo: para Taste Skill se incluyen scripts, bibliotecas y referencias seleccionadas; para UI UX Pro Max se incluyen los datos, scripts de consulta y referencias; para Webapp Testing se incluyen ejemplos y script de servidor; para debugging se incluyen referencias y algunas herramientas. **No todos los ejemplos/evaluadores y recursos opcionales de los repositorios externos están incluidos.** Algunas funciones requieren navegadores, Node, Python, Playwright u otras dependencias disponibles en el agente; sin ellas deben declarar limitaciones. No ejecutar scripts externos automáticamente.
 
 Licencias y atribuciones: `LICENSE.txt` en cada Skill importado (o licencia original de `frontend-design` y `webapp-testing`) y copias de referencia en `docs/agent/vendor-licenses/`. No se deben redistribuir módulos opcionales fuera de su licencia.
@@ -96,4 +98,18 @@ La skill ayuda al agente activo; no instala un daemon, webhook ni workflow. Se c
 
 ## Bibliotecas de diseño añadidas (2026-11-03)
 
-Impeccable: Apache-2.0, con NOTICE de referencias de plataforma. Emil Kowalski: MIT. Taste: MIT, instalación existente conservada. Fuentes, revisiones, rutas y hashes: [design-skills-lock.json](design-skills-lock.json). Licencias junto a cada Skill importado (`LICENSE.upstream`); Impeccable conserva también `NOTICE.upstream.md`. Los 17 directorios nuevos están reflejados en `.agents/skills` y `.claude/skills`. Total: 63 Skills por cliente. Ver selección y límites en [SKILLS_AUTO_ROUTING.md](SKILLS_AUTO_ROUTING.md).
+Impeccable: Apache-2.0, con NOTICE de referencias de plataforma. Emil Kowalski: MIT. Taste: MIT, instalación existente conservada. Fuentes, revisiones, rutas y hashes: [design-skills-lock.json](design-skills-lock.json). Licencias junto a cada Skill importado (`LICENSE.upstream`); Impeccable conserva también `NOTICE.upstream.md`. Los 17 directorios nuevos están reflejados en `.agents/skills` y `.claude/skills`. Total: 63 Skills por cliente (72 desde 2026-11-08, ver abajo). Ver selección y límites en [SKILLS_AUTO_ROUTING.md](SKILLS_AUTO_ROUTING.md).
+
+## Jakub Krehel (interfaz) y PYA (seguridad) añadidos (2026-11-08)
+
+Instalación pedida por la titular. Copias fijadas con hashes en [design-skills-lock.json](design-skills-lock.json); licencia MIT junto a cada Skill (`LICENSE.upstream`). Cada `SKILL.md` lleva una nota de integración Tintín tras el frontmatter; el resto de archivos es idéntico al original. Total: 72 Skills por cliente.
+
+| Colección / Skill | Origen, revisión fijada | Carpetas |
+|---|---|---|
+| Jakub Krehel skills | [jakubkrehel/skills](https://github.com/jakubkrehel/skills/tree/157da62016338e8693dcff93d47154a9e36f2157) · `157da6201633` | `better-interface`, `better-ui`, `better-typography`, `better-colors`, `better-accessibility`, `better-layout`, `better-writing`, `build-design` |
+| PYA (Protect Your Ass) | [AgriciDaniel/pya](https://github.com/AgriciDaniel/pya/tree/416c17fa09a234a1a34709d31b335d30196b9899) · `416c17fa09a2` | `pya` + 10 subagentes en `.claude/agents/` |
+
+- Jakub Krehel: solo Markdown (más `agents/openai.yaml` de metadatos para Codex); sin scripts. No se importaron `interface-review`, `state-machine`, `variant`, `break`, `explain-interface` ni `teardown` (este último trae JS de visor): no fueron pedidos.
+- PYA: scripts Python estándar, leídos antes de ejecutarse. `inventory.py`, `feed_match.py`, `ioc_scan.py` y `score.py` solo leen; `run_tools.py` ejecuta osv-scanner/trufflehog/zizmor/semgrep **solo si ya están instalados** y en modo offline; `--online` y `update_kev.py` envían datos a terceros y requieren pedido expreso. `install.sh`, `uninstall.sh` y `Makefile` no se importaron. Los subagentes (`vuln-scanner`, `authz-reviewer`, `secret-scanner`, `dependency-auditor`, `iac-scanner`, `threat-intel`, `ai-code-auditor`, `logic-reviewer`, `agentic-auditor`, `finding-verifier`) tienen solo Read/Grep/Glob y se llaman sin el prefijo `pya:`. Su `model: sonnet` es preferencia upstream; el host puede ignorarla.
+- [Starwire](https://github.com/boffti/starwire) (lista CC0 de repositorios) es un recurso de consulta, no un Skill: no se copió al repo.
+- `python3 scripts/agent/check-cloud-skills.py` valida paridad Codex/Claude, hashes de cada archivo importado e integridad de los subagentes.

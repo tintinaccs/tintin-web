@@ -1,4 +1,4 @@
-import { createAdminPagedSource } from '../datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
+import { createProgressiveAdminPagedSource } from '../datos/fuente-paginada-progresiva.mjs?v=tintin-20261107-pedidos-progresivo-1';
 // Páginas de una única fuente administrativa. Cada consulta está limitada;
 // cambios de contenido conservan las otras páginas. Si cambia una frontera,
 // se vuelven a enlazar las páginas posteriores antes de publicar el conjunto.
@@ -10,7 +10,7 @@ export function reconcileAdminOrderSnapshot(incoming, confirmed) {
   });
 }
 export function createAdminOrderSource(options) {
-  return createAdminPagedSource({
+  return createProgressiveAdminPagedSource({
     ...options,
     subscribePage(cursor, next, fail) {
       return options.subscribePage(cursor, snapshot => next({ ...snapshot, records: snapshot.orders }), fail);

@@ -117,7 +117,7 @@ function startDomObserver() {
 async function canEditContent(user) {
   if (user.email === SUPER_ADMIN) return true;
   // Los visitantes no descargan la matriz de permisos del editor.
-  const { EDITABLE_ROLES, loadRolePermissions, canDo } = await import('./permisos-roles.js?v=tintin-20261022-avatar-inicial-1');
+  const { EDITABLE_ROLES, loadRolePermissions, canDo } = await import('./permisos-roles.js?v=tintin-20261108-appcheck-fallo-1');
   const role = await getUserRole(user.uid, user.email);
   if (!EDITABLE_ROLES.includes(role)) return false;
   await loadRolePermissions();

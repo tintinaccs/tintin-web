@@ -83,7 +83,8 @@ if(feed) {
   const markEmpty=()=>{if(!feed.children.length)feed.dataset.state='empty';};
   function pause() {
     window.clearTimeout(timer);timer=0;
-    activeRequest?.abort();
+    // Un intento cortado al salir de la sección no cuenta: al volver se pide de inmediato.
+    if(activeRequest){activeRequest.abort();lastAttempt=0;}
   }
   function schedule() {
     window.clearTimeout(timer);timer=0;
@@ -105,7 +106,7 @@ if(feed) {
       const response=await fetch('/api/instagram-feed',{cache:'no-cache',signal:controller.signal});
       if(!response.ok) return markEmpty();
       const data=await response.json();
-      if(controller.signal.aborted || !canRefresh()) return;
+      if(controller.signal.aborted || !canRefresh()) {if(!timedOut)lastAttempt=0;return;}
       if(!data.available || !Array.isArray(data.posts)) return markEmpty();
       const fingerprint=JSON.stringify(data.posts.map(item=>[item?.type,item?.url,item?.caption,item?.thumbnail]));
       if(fingerprint===renderedFeed) return;

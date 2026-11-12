@@ -204,19 +204,34 @@ test('recuperación: agotar los reintentos pasa a dead-letter, alerta una vez y 
   assert.equal(failing.calls.length, 1, 'no se reintenta contra Resend tras el dead-letter');
 });
 
-test('sin RESEND_API_KEY configurada, la tarea reintenta con backoff en lugar de quedar en limbo', async () => {
+test('sin RESEND_API_KEY no se gastan intentos: la tarea queda intacta y el drenaje avisa', async () => {
   const fs = makeFakeFirestore();
   const notify = makeFakeNotify();
   const send = makeSuccessSend();
   seedPendingItem(fs, 'sinclave');
   const deps = buildDeps(fs, send, notify);
 
-  const result = await drainOrderEmailQueueScheduled({}, { deps });
-  assert.equal(result.drained, 0);
+  await assert.rejects(drainOrderEmailQueueScheduled({}, { deps }), /RESEND_API_KEY/);
   assert.equal(send.calls.length, 0, 'nunca llama a Resend sin credenciales');
   const item = fs.readDecoded(`${QUEUE_COLLECTION}/sinclave`);
-  assert.equal(item.attempts, 1);
-  assert.match(item.lastError, /RESEND_API_KEY/);
+  assert.equal(item.attempts, 0);
+  assert.equal(item.status, 'pending');
+});
+
+test('pedido borrado o con correo de clienta inválido no consume los 8 intentos', async () => {
+  const fs = makeFakeFirestore();
+  const notify = makeFakeNotify();
+  const send = makeSuccessSend();
+  seedPendingItem(fs, 'borrado1');
+  fs.store.delete('orders/borrado1');
+  seedPendingItem(fs, 'sinmail1', { retryAdmin: false });
+  const deps = buildDeps(fs, send, notify);
+  const result = await drainOrderEmailQueueScheduled(env, { deps });
+  assert.equal(result.deadLettered, 0);
+  assert.equal(result.obsolete, 2);
+  assert.equal(send.calls.length, 0);
+  assert.equal(fs.readDecoded(`${QUEUE_COLLECTION}/borrado1`), null, 'pedido borrado: tarea descartada');
+  assert.equal(fs.readDecoded(`${QUEUE_COLLECTION}/sinmail1`), null, 'correo de clienta inválido: tarea descartada');
 });
 
 test('diagnóstico: getOrderEmailQueueStatus reporta pendientes, dead-letter, edad y último éxito', async () => {

@@ -22,9 +22,9 @@ import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativ
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 import { attachProductGallery } from './products/galeria-unificada.js?v=tintin-20261102-phase03-editor-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
-import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
+import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261107-pedidos-progresivo-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
-import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1";
+import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261108-appcheck-fallo-1";
 import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
@@ -43,10 +43,10 @@ import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=ti
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1";
+} from "../core/auth/permisos-roles.js?v=tintin-20261108-appcheck-fallo-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261030-home-history-5";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261105-copiar-pago-1-p1106";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261111-product-login-payment-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
@@ -55,7 +55,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261030-audit-integrity-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261030-audit-integrity-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261030-home-history-5";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261101-flow-preload-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261108-appcheck-fallo-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES,
@@ -65,7 +65,7 @@ import {
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20261102-cancel-stock-1';
-import './settings/cupones-admin.js?v=tintin-20261022-avatar-inicial-1';
+import './settings/cupones-admin.js?v=tintin-20261108-appcheck-fallo-1';
 import './products/integridad-inventario-admin.js?v=tintin-20261102-cancel-stock-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
@@ -1747,6 +1747,7 @@ function refreshRealtimeConsumers() {
 // están cargados y si un pedido existe, sin exponer ningún dato del pedido.
 const adminOrderConsumers = new Set();
 let adminOrdersOwnerUid = '';
+let adminOrdersConfirmed = false;
 function publishAdminOrders() {
   const productId=document.getElementById('prod-id')?.value;
   if(productId && document.getElementById('prod-form-card')?.style.display!=='none')renderProductStatistics(productId);
@@ -1889,7 +1890,7 @@ function startAdminRealtimeData() {
   stopAdminRealtimeData();
   adminRealtimeReady = { ...adminRealtimeReady, orders: false, users: currentRole !== 'superadmin' };
   adminRealtimeErrors = { orders: '', users: '' };
-  if(adminOrdersOwnerUid!==currentUser?.uid){allOrders=[];rawAdminOrders=[];}
+  if(adminOrdersOwnerUid!==currentUser?.uid){allOrders=[];rawAdminOrders=[];adminOrdersConfirmed=false;}
   adminOrdersOwnerUid=currentUser?.uid || '';
   publishAdminOrders();
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
@@ -1908,7 +1909,17 @@ function startAdminRealtimeData() {
         }, error);
       },
       onLoading() { adminRealtimeReady.orders = false; refreshRealtimeConsumers(); },
+      // Primera carga: muestra las páginas ya confirmadas mientras el historial
+      // completo sigue sincronizando. "ready" sigue en false (acciones y totales
+      // esperan al conjunto completo); tras la primera carga completa no se usa.
+      onPartial(orders) {
+        if (adminOrdersConfirmed) return;
+        rawAdminOrders = reconcileAdminOrderSnapshot(orders, rawAdminOrders).sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
+        projectAdminOrders();
+        refreshRealtimeConsumers();
+      },
       onData(orders) {
+        adminOrdersConfirmed = true;
         rawAdminOrders = reconcileAdminOrderSnapshot(orders, rawAdminOrders).sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
         projectAdminOrders();
         adminRealtimeReady.orders = true;
@@ -3574,9 +3585,9 @@ const loadDeferredAdminSection = createAdminSectionLoader({
   document,
   canLoad: () => currentRole === 'superadmin' && String(currentUser?.email || '').toLowerCase() === SUPER_ADMIN.toLowerCase(),
   sections: {
-    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261028-correos-1-editor-search-20261028-2'), init: initDeferredCorreos },
+    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261108-emaillog-esquema-1'), init: initDeferredCorreos },
     diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-suitcase-20261104-1'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
-    paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2') },
+    paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261108-appcheck-fallo-1') },
     apariencia: { load: async () => {
       await import('./appearance/editor-visual-admin.js?v=tintin-suitcase-20261104-1');
       await import('./appearance/visual-studio-layout-admin.js?v=tintin-20261022-avatar-inicial-1');
@@ -4282,7 +4293,7 @@ function productVariantStockConfiguration(text, previous = [], previousVariants 
   return {variants: Object.fromEntries(attributes), entries: combinations.map(variant => ({variant, stock: quantities.get(variant) ?? ''}))};
 }
 
-function productEditorialForm(product={}) {
+function productEditorialForm(product={}, lockVisibility=false) {
   ensureEditorialFields(document.getElementById('prod-form-card'));
   const status=document.getElementById('prod-publicationStatus');
   const inactive=product.active===false && (!product.publicationStatus || product.publicationStatus==='active');
@@ -4290,6 +4301,8 @@ function productEditorialForm(product={}) {
   if(!inactive)status.querySelector('option[value=inactive]')?.remove();
   const values={publicationStatus:inactive?'inactive':productEditorialStatus(product),productTemplate:productTemplate(product),seoTitle:product.seoTitle || '',seoDescription:product.seoDescription || ''};
   for(const [key,value] of Object.entries(values)){const field=document.getElementById(`prod-${key}`);if(field)field.value=value;}
+  // Publicar u ocultar exige el permiso propio (igual que firestore.rules); editar no basta.
+  for(const id of ['prod-publicationStatus','prod-active']){const field=document.getElementById(id);if(field){field.disabled=lockVisibility;field.title=lockVisibility?'Requiere permiso para activar o desactivar productos':'';}}
 }
 function productEditorialData() {
   const status=document.getElementById('prod-publicationStatus');
@@ -4607,7 +4620,7 @@ function _prodEditarNow(docId, duplicate=false) {
   productEditBaseline=duplicate ? null : productFingerprint(stored);
   const inventory = duplicate ? {} : _productInventoryById.get(docId) || {};
   pendingProductEditorSave = null;
-  productEditorialForm(p);
+  productEditorialForm(p, !duplicate && !roleCanDo('productos', 'activarDesactivar'));
   renderProductStatistics(duplicate?'':docId);
   productPrivateBaseline = Object.fromEntries(['costUnit','purchased','stockMinimum','internalNotes'].map(key=>[key,inventory[key] ?? (key==='internalNotes'?'':null)]));
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
