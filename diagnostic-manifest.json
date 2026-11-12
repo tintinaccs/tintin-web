@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "b02af2b5524d92a0ec7cef5678cd19633689cdd1b754a62abd36ce0f8bd4b115",
+  "sourceFingerprint": "96e3e859d24acce2345fdd0d47ad86f0c0fb0210033b4996b8e0468999d352fa",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1831,
     "textFiles": 1678,
-    "totalBytes": 63924855,
+    "totalBytes": 63925275,
     "pages": 19,
     "modules": 1186
   },
@@ -2291,7 +2291,7 @@
         "viewer"
       ],
       "bytes": 48705,
-      "sha256": "5a04750f8b43c3c3950e1cf1710e2cfc2d0d28ce9c4781e9dc909bb708696071",
+      "sha256": "d4dc55a371b86bd28186f9dd5b6a4b03765987bc987d0c96ef10abbe25559453",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2984,7 +2984,7 @@
         "viewer"
       ],
       "bytes": 194251,
-      "sha256": "f683df666c396f03666ff71bfb5d9755fbecc0c5ec1718faeb6917a78ed22eaf",
+      "sha256": "2d9a79e9286a5880fc3b3f43bf44fbeaa396ca6b4892a052be13c35f06ff3e32",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3043,7 +3043,7 @@
           "line": 2127
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261112-photo-editor-6",
+          "raw": "js/admin/admin-app.js?v=tintin-20261112-photo-editor-7",
           "target": "js/admin/admin-app.js",
           "line": 2128
         },
@@ -3537,7 +3537,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261112-photo-editor-6",
+          "raw": "js/admin/admin-app.js?v=tintin-20261112-photo-editor-7",
           "target": "js/admin/admin-app.js",
           "line": 2128,
           "exists": true
@@ -27144,7 +27144,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 260665,
-      "sha256": "10f05230cbd6b5100aa16f87c09fbccab98fcbec2da16db35f66aef861495bee",
+      "sha256": "7108a68212ca67a517ce8f5fdf569d3d962ef04d5211740538b6cddb81c59d12",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29643,7 +29643,7 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 442841,
-      "sha256": "bfbd090ea69ce42d427d525e6560229e64416c26b04dd02ffa3e67546df146ef",
+      "sha256": "0e6fa27e0b71936ad0459000c4529e9aa55a75f7317a72470f42c246d1664b76",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29782,7 +29782,7 @@
           "line": 22
         },
         {
-          "raw": "./products/galeria-unificada.js?v=tintin-20261112-photo-editor-6",
+          "raw": "./products/galeria-unificada.js?v=tintin-20261112-photo-editor-7",
           "target": "js/admin/products/galeria-unificada.js",
           "dynamic": false,
           "line": 23
@@ -29914,7 +29914,7 @@
           "line": 54
         },
         {
-          "raw": "../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-6",
+          "raw": "../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-7",
           "target": "js/components/images/carga-imagenes.js",
           "dynamic": false,
           "line": 55
@@ -31937,7 +31937,7 @@
     {
       "path": "js/admin/products/galeria-unificada.js",
       "bytes": 25403,
-      "sha256": "020d5310384edf5f1f8dce8d46897be53cc8bce0c621a28bddfa8a616b59c586",
+      "sha256": "455e79bb2f5953f934a1c8c1bc1fdbb7912ed4f4e40f00117e41498e72d94edb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31962,7 +31962,7 @@
           "line": 3
         },
         {
-          "raw": "../../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-6",
+          "raw": "../../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-7",
           "target": "js/components/images/carga-imagenes.js",
           "dynamic": false,
           "line": 4
@@ -33496,8 +33496,8 @@
     },
     {
       "path": "js/components/images/carga-imagenes.js",
-      "bytes": 25464,
-      "sha256": "32e4752d50a1498233b5db0dee88facb9a2cd050e70032d9ac07fd9865272d33",
+      "bytes": 25706,
+      "sha256": "e971785ed2290d8cdf380c49459dbacb7423aebf00d1aefd343c0d64a5e03d01",
       "syntax": {
         "ok": true,
         "error": ""
@@ -61557,8 +61557,8 @@
     },
     {
       "path": "tests/ui-ux/product-photo-editor.spec.js",
-      "bytes": 17447,
-      "sha256": "394e6d84f7d32f99a4d3f209265576eeb32b97b54ef12adb00f5c62f6d503bb9",
+      "bytes": 17625,
+      "sha256": "91c7484c0a8c8d82516d89869bf284cb121d049d81b230a3985898b755414b3b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -63066,7 +63066,7 @@
       "path": "admin-images.html",
       "extension": ".html",
       "bytes": 48705,
-      "sha256": "5a04750f8b43c3c3950e1cf1710e2cfc2d0d28ce9c4781e9dc909bb708696071"
+      "sha256": "d4dc55a371b86bd28186f9dd5b6a4b03765987bc987d0c96ef10abbe25559453"
     },
     {
       "path": "admin-manifest.json",
@@ -63078,7 +63078,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 194251,
-      "sha256": "f683df666c396f03666ff71bfb5d9755fbecc0c5ec1718faeb6917a78ed22eaf"
+      "sha256": "2d9a79e9286a5880fc3b3f43bf44fbeaa396ca6b4892a052be13c35f06ff3e32"
     },
     {
       "path": "apple-touch-icon.png",
@@ -64248,19 +64248,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 260665,
-      "sha256": "10f05230cbd6b5100aa16f87c09fbccab98fcbec2da16db35f66aef861495bee"
+      "sha256": "7108a68212ca67a517ce8f5fdf569d3d962ef04d5211740538b6cddb81c59d12"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 260580,
-      "sha256": "07360fd2838480b08d56fbb568eb681c18c06dcd0804260ac5973bcf9b2b4542"
+      "sha256": "42b624925f663e05f95a892cd27eb7b6623e23917ea822bf252347f41f2aadec"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 2528,
-      "sha256": "bc771fa3e3e2faa8e3223f312fa2217010b3e9300911900e8ccf408c92b3f712"
+      "sha256": "32dc4b13dbc13c415b872855e15a70808584cff96b08fb7fd02412616ae424f8"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64272,7 +64272,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "0ec808f22d7d361f5ab898d71a1c411f594fbf0c3b48247c6c97c75a76f1e493"
+      "sha256": "b1eb0c69f0cbc4493e68bb76aaf565130122bf2361b2b03fdb57142201486f08"
     },
     {
       "path": "config/public-site.json",
@@ -67188,7 +67188,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 442841,
-      "sha256": "bfbd090ea69ce42d427d525e6560229e64416c26b04dd02ffa3e67546df146ef"
+      "sha256": "0e6fa27e0b71936ad0459000c4529e9aa55a75f7317a72470f42c246d1664b76"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -67572,7 +67572,7 @@
       "path": "js/admin/products/galeria-unificada.js",
       "extension": ".js",
       "bytes": 25403,
-      "sha256": "020d5310384edf5f1f8dce8d46897be53cc8bce0c621a28bddfa8a616b59c586"
+      "sha256": "455e79bb2f5953f934a1c8c1bc1fdbb7912ed4f4e40f00117e41498e72d94edb"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -67907,8 +67907,8 @@
     {
       "path": "js/components/images/carga-imagenes.js",
       "extension": ".js",
-      "bytes": 25464,
-      "sha256": "32e4752d50a1498233b5db0dee88facb9a2cd050e70032d9ac07fd9865272d33"
+      "bytes": 25706,
+      "sha256": "e971785ed2290d8cdf380c49459dbacb7423aebf00d1aefd343c0d64a5e03d01"
     },
     {
       "path": "js/components/images/editor-fotografias.js",
@@ -70314,7 +70314,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 82646,
-      "sha256": "3e89b22ef6cdff0e2028e184fe816bc8f4c4775decba0afc785b06800b5c9671"
+      "sha256": "85f271b34977ede531304442232a4683b68d325dc4e17622a14b808074675ade"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -73655,8 +73655,8 @@
     {
       "path": "tests/ui-ux/product-photo-editor.spec.js",
       "extension": ".js",
-      "bytes": 17447,
-      "sha256": "394e6d84f7d32f99a4d3f209265576eeb32b97b54ef12adb00f5c62f6d503bb9"
+      "bytes": 17625,
+      "sha256": "91c7484c0a8c8d82516d89869bf284cb121d049d81b230a3985898b755414b3b"
     },
     {
       "path": "tests/ui-ux/product-review-rating-required.spec.js",

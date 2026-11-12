@@ -304,6 +304,7 @@ export function attachImageUploadWidget(container, options = {}) {
       renderPreview(); renderActions();
       setStatus('Edición preparada. Confirmá la carga o guardá el formulario para usar la copia.');
     } catch (error) { if (!destroyed) setStatus(error.message || 'No pudimos editar esta foto.', 'error'); }
+    finally { if (!destroyed) actions.querySelector('button:not(:disabled)')?.focus({preventScroll:true}); }
   }
 
   async function handleFile(file) {
@@ -476,7 +477,7 @@ export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary
         URL.revokeObjectURL(item.preview);item.file=edited.file;item.source=edited.source;item.editState=edited.state;item.preview=URL.createObjectURL(item.file);item.stage='Lista · pendiente de subir';
         container.dispatchEvent(new CustomEvent('tintin:image-pending',{bubbles:true,detail:{pending:true}}));
       } catch(error){if(!destroyed)status.textContent=error.message || 'No pudimos editar la imagen.';}
-      finally {editing=null;if(!destroyed)render();}
+      finally {editing=null;if(!destroyed){render();const target=grid.children[queue.indexOf(item)]?.querySelector('button:not(:disabled)') || drop;target.focus({preventScroll:true});}}
     })();render();return editing;
   }
   function addFiles(files) {
