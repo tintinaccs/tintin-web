@@ -1,68 +1,42 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "db9eb668bddcbafe2ad8a5e3914279baadff459b",
-  "reason": "Editor local de fotografías de productos con recorrido previo a carga, responsive y asociaciones preservadas sobre main aceptado",
+  "baseCommit": "d482fb243e1ce6ee6bae447ae2498ea259b59d82",
+  "reason": "Actualiza filtros de variantes del catálogo con main #1380 y renueva el plan",
   "files": [
     {
-      "path": "admin-images.html",
-      "oldHash": "bd9b9479e5efc5243fe2eeff50d1d116d6ecf3a53645c81639b5256f25132988",
-      "newHash": "d4dc55a371b86bd28186f9dd5b6a4b03765987bc987d0c96ef10abbe25559453"
+      "path": "_headers",
+      "oldHash": "f9d5d8d3d04fc4a1c09077e34ce6c7d7123c7bb2609d9670c3d0d337c02feac5",
+      "newHash": "b48b1952cbf595bc3e4cc81249218daca3b1931305170829a72469539cf1a567"
     },
     {
-      "path": "admin.html",
-      "oldHash": "4ac3818987412b244f199810617cfddf51baa51dbd71ff7eeb900e5cc1beb97c",
-      "newHash": "2d9a79e9286a5880fc3b3f43bf44fbeaa396ca6b4892a052be13c35f06ff3e32"
+      "path": "catalogo.html",
+      "oldHash": "c9ef907ab9ff47c9c0b53da2a0f636f86ce4efc362e4f6415615196fc25b8731",
+      "newHash": "97af7f48471fe69b8d02003b241de612fbee7cf887dcf75e4f751625c18149c5"
     },
     {
       "path": "config/csp-runtime.js",
-      "oldHash": "5ecfd071d63e9458f690c497ef08ea688eb49db6978308fb18e2497736d0b486",
-      "newHash": "7108a68212ca67a517ce8f5fdf569d3d962ef04d5211740538b6cddb81c59d12"
+      "oldHash": "7108a68212ca67a517ce8f5fdf569d3d962ef04d5211740538b6cddb81c59d12",
+      "newHash": "649e5b9eb0b15aee829086f940b39cb872fd683caca2c1aa495c466f04e75ebf"
     },
     {
       "path": "config/csp-runtime.json",
-      "oldHash": "907a9bdf56d2b7d9aebe39186c027d35fbf85854d25636557a3288a33c09be07",
-      "newHash": "42b624925f663e05f95a892cd27eb7b6623e23917ea822bf252347f41f2aadec"
-    },
-    {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "c9f0bc5d1aac552ea4e6342eb15338f360448b2f6a6575d9ece4e8f531955efe",
-      "newHash": "0e6fa27e0b71936ad0459000c4529e9aa55a75f7317a72470f42c246d1664b76"
-    },
-    {
-      "path": "js/components/images/carga-imagenes.js",
-      "oldHash": "ef446274558c59936b05db2de2bd581a6f4885aa567dc552de7e4742be3a063b",
-      "newHash": "e971785ed2290d8cdf380c49459dbacb7423aebf00d1aefd343c0d64a5e03d01"
+      "oldHash": "42b624925f663e05f95a892cd27eb7b6623e23917ea822bf252347f41f2aadec",
+      "newHash": "34304565d9fb6c01234431e3bb4d293aa78e942615f0c3b50e4a013aa5a399fa"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "31ab47da3eb2e545519996bc94c26b46a1714b87dd1d1d352fef2c4b30b9e7ee",
-      "newHash": "85f271b34977ede531304442232a4683b68d325dc4e17622a14b808074675ade"
+      "oldHash": "85f271b34977ede531304442232a4683b68d325dc4e17622a14b808074675ade",
+      "newHash": "ba87a1f431ba58e97a6499dbb02a6ffa022f7bbe0196f34ac2eb33feb82c8102"
     }
   ],
   "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
-    "apis-internas__correos__41",
-    "apis-internas__pedidos__32",
     "cf-functions",
     "cf-functions__apis-internas__20",
     "cf-functions__csp__29",
     "cf-functions__reglas-firestore__28",
     "cf-pages__cf-functions__19",
-    "correos",
     "csp",
-    "pagina-perfil",
-    "pedidos",
-    "pedidos__inventario__33",
     "productos",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-perfil__18",
-    "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
     "super-panel__productos__34"
   ]
 }

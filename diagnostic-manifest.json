@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "96e3e859d24acce2345fdd0d47ad86f0c0fb0210033b4996b8e0468999d352fa",
+  "sourceFingerprint": "142ac8e9b21fcff837c777d0e581b5627e81b3ebadc9210330bdd4f8af93b5ce",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1831,
-    "textFiles": 1678,
-    "totalBytes": 63925275,
+    "files": 1832,
+    "textFiles": 1679,
+    "totalBytes": 63940247,
     "pages": 19,
-    "modules": 1186
+    "modules": 1187
   },
   "viewports": [
     {
@@ -10352,8 +10352,8 @@
         "guest",
         "client"
       ],
-      "bytes": 75264,
-      "sha256": "c9ef907ab9ff47c9c0b53da2a0f636f86ce4efc362e4f6415615196fc25b8731",
+      "bytes": 77041,
+      "sha256": "97af7f48471fe69b8d02003b241de612fbee7cf887dcf75e4f751625c18149c5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10441,32 +10441,32 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 1182
+          "line": 1203
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 1183
+          "line": 1204
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1-p1106",
           "target": "js/analytics/analitica.js",
-          "line": 1184
+          "line": 1205
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1185
+          "line": 1206
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1186
+          "line": 1207
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1-p1106",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 1187
+          "line": 1208
         }
       ],
       "styles": [
@@ -11000,37 +11000,37 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 1182,
+          "line": 1203,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 1183,
+          "line": 1204,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261029-mobile-review-1-p1106",
           "target": "js/analytics/analitica.js",
-          "line": 1184,
+          "line": 1205,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1185,
+          "line": 1206,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1186,
+          "line": 1207,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-suitcase-20261104-1-p1106",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 1187,
+          "line": 1208,
           "exists": true
         },
         {
@@ -27144,7 +27144,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 260665,
-      "sha256": "7108a68212ca67a517ce8f5fdf569d3d962ef04d5211740538b6cddb81c59d12",
+      "sha256": "649e5b9eb0b15aee829086f940b39cb872fd683caca2c1aa495c466f04e75ebf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36744,8 +36744,8 @@
     },
     {
       "path": "js/pages/catalog/filtros-variantes.mjs",
-      "bytes": 4632,
-      "sha256": "360bd7f225dd963450631c834f442fa9cd027f51218499fad83a77c0530bd372",
+      "bytes": 7210,
+      "sha256": "89ebe54a9a98993483220f45680be95eaf36119d12aefd1952c3dd56e77c79a2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48506,9 +48506,25 @@
       ]
     },
     {
+      "path": "tests/catalog/variant-filter-photos.spec.js",
+      "bytes": 5279,
+      "sha256": "2b6e151997669ce76efcbf3a1fb549b599aedcb15457651049a0d3ee62717a13",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "http://www.w3.org/2000/svg",
+          "line": 27
+        }
+      ]
+    },
+    {
       "path": "tests/catalog/variant-filters.test.mjs",
-      "bytes": 4372,
-      "sha256": "c8a711878fe44d89b36d679f18a4325b1c84fd429f87be61c2ca9d5e19ad5dbc",
+      "bytes": 7461,
+      "sha256": "7b2dc2fbf5bdccd3294dd6476bb61bb4644d6f73327b40c57f79a48399c01d23",
       "syntax": {
         "ok": true,
         "error": ""
@@ -63042,7 +63058,7 @@
       "path": "_headers",
       "extension": "",
       "bytes": 4553,
-      "sha256": "f9d5d8d3d04fc4a1c09077e34ce6c7d7123c7bb2609d9670c3d0d337c02feac5"
+      "sha256": "b48b1952cbf595bc3e4cc81249218daca3b1931305170829a72469539cf1a567"
     },
     {
       "path": "_redirects",
@@ -63911,8 +63927,8 @@
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 75264,
-      "sha256": "c9ef907ab9ff47c9c0b53da2a0f636f86ce4efc362e4f6415615196fc25b8731"
+      "bytes": 77041,
+      "sha256": "97af7f48471fe69b8d02003b241de612fbee7cf887dcf75e4f751625c18149c5"
     },
     {
       "path": "checkout.html",
@@ -64248,19 +64264,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 260665,
-      "sha256": "7108a68212ca67a517ce8f5fdf569d3d962ef04d5211740538b6cddb81c59d12"
+      "sha256": "649e5b9eb0b15aee829086f940b39cb872fd683caca2c1aa495c466f04e75ebf"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 260580,
-      "sha256": "42b624925f663e05f95a892cd27eb7b6623e23917ea822bf252347f41f2aadec"
+      "sha256": "34304565d9fb6c01234431e3bb4d293aa78e942615f0c3b50e4a013aa5a399fa"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 2528,
-      "sha256": "32dc4b13dbc13c415b872855e15a70808584cff96b08fb7fd02412616ae424f8"
+      "bytes": 1548,
+      "sha256": "b92c6a4ccab56ad99a98ac701704519a9922266239859c330d2ee34abe8ca957"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64272,7 +64288,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "b1eb0c69f0cbc4493e68bb76aaf565130122bf2361b2b03fdb57142201486f08"
+      "sha256": "8c5833c83d8eaeb764e56d046b27250352fb521e2cb256e298da16f7c724a826"
     },
     {
       "path": "config/public-site.json",
@@ -65111,8 +65127,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1301744,
-      "sha256": "bf513f2440d5e90ca773cf3ec78db61599f5fe7cd7db6f642e674a4ba1295eff"
+      "bytes": 1304973,
+      "sha256": "76053cd96694a680441343352e0ea8526fe590f19f7a273231650858335fa5e5"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -68729,8 +68745,8 @@
     {
       "path": "js/pages/catalog/filtros-variantes.mjs",
       "extension": ".mjs",
-      "bytes": 4632,
-      "sha256": "360bd7f225dd963450631c834f442fa9cd027f51218499fad83a77c0530bd372"
+      "bytes": 7210,
+      "sha256": "89ebe54a9a98993483220f45680be95eaf36119d12aefd1952c3dd56e77c79a2"
     },
     {
       "path": "js/pages/catalog/mantenimiento-catalogo.js",
@@ -70314,7 +70330,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 82646,
-      "sha256": "85f271b34977ede531304442232a4683b68d325dc4e17622a14b808074675ade"
+      "sha256": "ba87a1f431ba58e97a6499dbb02a6ffa022f7bbe0196f34ac2eb33feb82c8102"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -71397,10 +71413,16 @@
       "sha256": "7daa9f84f68a16e8a7bd6530bf29b6c0bafd959aa844501bb5d9c3120d2fa9a9"
     },
     {
+      "path": "tests/catalog/variant-filter-photos.spec.js",
+      "extension": ".js",
+      "bytes": 5279,
+      "sha256": "2b6e151997669ce76efcbf3a1fb549b599aedcb15457651049a0d3ee62717a13"
+    },
+    {
       "path": "tests/catalog/variant-filters.test.mjs",
       "extension": ".mjs",
-      "bytes": 4372,
-      "sha256": "c8a711878fe44d89b36d679f18a4325b1c84fd429f87be61c2ca9d5e19ad5dbc"
+      "bytes": 7461,
+      "sha256": "7b2dc2fbf5bdccd3294dd6476bb61bb4644d6f73327b40c57f79a48399c01d23"
     },
     {
       "path": "tests/catalog/variant-presentation.test.mjs",
@@ -73910,7 +73932,7 @@
   "routeReferences": [
     {
       "file": "catalogo.html",
-      "line": 854,
+      "line": 864,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
@@ -75575,7 +75597,7 @@
       "references": [
         {
           "file": "catalogo.html",
-          "line": 854
+          "line": 864
         }
       ]
     }

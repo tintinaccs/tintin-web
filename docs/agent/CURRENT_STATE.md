@@ -1,3 +1,6 @@
+## Filtros de variantes: PR 1354 actualizado con main db9eb668 — 2026-11-12 — Claude Code
+
+El CI completo de 588d49c6 salió en verde (Repository audit incluido), pero main avanzó con el PR 1379 y el PR 1354 quedó con conflicto en diagnostic-manifest.json y site-version.json (generados). Se fusionó main, se tomaron los derivados de main y se regeneraron con npm run build:pages; el plan de mantenimiento se rehizo con scripts/preparar-mantenimiento-flujos.mjs (base db9eb668, 5 archivos protegidos: catalogo.html, _headers, CSP y baseline de caché). Sin cambios de código respecto de 588d49c6. PASS_LOCAL: build:pages, auditar-proteccion-flujos, audit:cache-versioning, audit:styles. Pendiente: CI sobre el nuevo commit, merge y verificación en producción de que las tarjetas cambian de foto al filtrar.
 ## Editor de fotografías con recorrido de carga — 2026-11-12 — Codex /root
 
 Base dfcb4a6 (PR1377 integrada y verificada; su observador horario específico
@@ -241,6 +244,13 @@ Claude Code (Sonnet 5.5). Sin push, merge ni despliegue; sin datos de producció
 Causa del Cloudflare Pages build fallido en b098d9f3 (reproducida localmente, no se pudo leer el log de Cloudflare): el package-lock.json estaba sincronizado solo con npm 11; con npm 10 npm ci falla con EUSAGE (Missing: glob@10.5.0 y otros). Se regeneró el lock con npm 10 (npm install --package-lock-only --ignore-scripts) conservando el override condicional de glob; npm ci --dry-run pasa con npm 10 (692 paquetes) y con npm 11 (663 paquetes), y npm ci real instala 683 paquetes. Se fusionó main 804a74d9 y se regeneró el plan de mantenimiento con scripts/preparar-mantenimiento-flujos.mjs (base 804a74d9, 2 archivos, 0 registros afectados).
 
 PASS_LOCAL: build:pages, auditar-proteccion-flujos (78 registros, 544 archivos intactos), 52 pruebas de flow-connections, audit:cache-versioning. No verificado hasta que corra el build real de Cloudflare sobre el commit final.
+## Filtros de variantes cambian foto y muestra de la tarjeta — 2026-11-06 — Claude Code
+
+Pedido de la titular: al elegir cualquier variante en los filtros del catálogo (ejemplo: color Beige) cada tarjeta debe mostrar la foto y la muestra seleccionada de esa variante, para cualquier atributo, producto y dispositivo. Antes la tarjeta mostraba siempre la primera combinación con stock (catalogo.html usaba firstAvailableVariant) aunque hubiera filtros.
+
+Cambio: catalogFilterPreview en js/pages/catalog/filtros-variantes.mjs elige por producto la combinación que cumple todos los filtros (primero con stock; con Solo con stock exige stock; sin coincidencia o sin filtros no cambia nada). catalogo.html usa esa combinación para la foto (productVariantImage), marca la muestra de color correspondiente (aria-pressed) y agrega &color= al destino de la tarjeta. No se modificó tienda.js. Los precios, stock, carrito y checkout no cambian.
+
+PASS_LOCAL: node --test tests/catalog/variant-filters.test.mjs (13/13, 6 nuevas); Playwright tests/catalog/variant-filter-photos.spec.js en 320, 390, 768, 1280 y 1920 (5/5), con control negativo: sin el cambio la tarjeta se queda en la foto blanca; build:pages, auditar-proteccion-flujos, audit:cache-versioning. Plan de mantenimiento con 5 archivos protegidos (catalogo.html, _headers, CSP y baseline de caché). No probado: WebKit/iPhone real ni datos reales de producción; si una variante no tiene foto propia la tarjeta conserva la foto general del producto.
 
 ## Unificación de colores y mantenimiento de flujos protegidos — 2026-11-06 — Claude Code
 
@@ -6779,3 +6789,6 @@ Causa del rojo en CI 42017447387/1 (SHA 7cfbcc9, job D — Interfaz, SEO y rendi
 - Local: `npm run ci:preflight` exit 0; mecanismo de flujos 58/58; tests cart+catalog 139/140; auditor fase 7 OK; verificación Playwright con datos simulados (390px y 1280px).
 - Fallo preexistente (también en main, no relacionado): `tests/catalog/product-small-controls.test.mjs` «favoritos conserva nombre accesible…».
 - NO probado en producción ni con catálogo/Firestore reales.
+
+- 2026-11-12 · PR #1354 (filtros de variantes con foto/muestra elegida) actualizado con main dfcb4a6: conflictos en generados (CSP, manifiestos, plan) tomados de main y regenerados; en `catalogo.html` se conserva `catalogFilterPreview` y se descarta el import de favoritos retirado en #1355. Plan de mantenimiento renovado sobre dfcb4a6 (5 archivos, 8 registros). PASS_LOCAL: `build:pages`, `ci:preflight`, protección de flujos (78 registros/542 archivos), `tests/catalog/*.test.mjs` 111/111, `test:fast` (104 Node + 6 Chromium) y 74 Chromium (variant-filter-photos, product-card-colors, product-stock-first, boutique-surfaces, search-responsive). CI del SHA final pendiente.
+- 2026-11-12 · PR #1381 (filtros de variantes): actualizado con main d482fb2 (#1380) y plan de flujos renovado. PASS_LOCAL: build:pages, ci:preflight, protección de flujos 78/542, tests/catalog. CI del SHA final pendiente.
