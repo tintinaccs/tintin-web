@@ -1,5 +1,5 @@
 async function openPhotoEditor(...args) {
-  const editor = await import('./editor-fotografias.js?v=tintin-20261112-photo-editor-3');
+  const editor = await import('./editor-fotografias.js?v=tintin-20261112-photo-editor-5');
   return editor.openPhotoEditor(...args);
 }
 /* =============================================================
@@ -98,6 +98,7 @@ export function attachImageUploadWidget(container, options = {}) {
     onChange,
     onOpenLibrary,
     confirmRemove = true,
+    allowRemove = true,
     cleanupPrevious = true,
     editBeforeUpload = false,
   } = options;
@@ -212,10 +213,8 @@ export function attachImageUploadWidget(container, options = {}) {
     }
 
     if (currentUrl) {
-      actions.append(
-        createButton('Reemplazar', 'tt-iuw-btn', () => input.click()),
-        createButton('Quitar', 'tt-iuw-btn tt-iuw-btn-danger', removeImage)
-      );
+      actions.append(createButton('Reemplazar', 'tt-iuw-btn', () => input.click()));
+      if (allowRemove) actions.append(createButton('Quitar', 'tt-iuw-btn tt-iuw-btn-danger', removeImage));
     }
 
     if (typeof onOpenLibrary === 'function') {

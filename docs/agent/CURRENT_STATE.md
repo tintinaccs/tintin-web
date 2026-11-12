@@ -23,9 +23,11 @@ Preview permanece visible mientras se recorren controles, con áreas44px y
 campos16px, superficie modal nativa y acciones siempre accesibles.
 
 Skills leídos: tintin-ecommerce-flows, tintin-design-quality y
- tintin-responsive-a11y. PASS_LOCAL final:21 Chromium del editor (píxeles,
+ tintin-responsive-a11y. PASS_LOCAL final:22 Chromium del editor (píxeles,
 recorrido automático, cola, flush, cancelación, copia/original, asociaciones,
 pinch, preview completo, áreas seguras simuladas y CSP que limita connect-src).
+El marco de recorte conserva su proporción visible; botones Ver foto completa
+y Llenar encuadre alternan encaje/recorte sin destruir el original.
 Regresión de246 Chromium de fotos contextuales/guardado/workspaces PASS;
 33 de pestañas y8 de CSP/guardado PASS. Test:fast104Node+6Chromium y auditor
 multimedia42 verificaciones PASS. Build/plan se regeneran tras esta evidencia.

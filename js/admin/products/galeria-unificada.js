@@ -1,7 +1,7 @@
 import {appendPhotoOrderControls as appendOptionPhotoOrder} from './fotos-por-variante.js?v=tintin-20261028-opciones-inline-2';
 import {attachColorPhotos} from './fotos-por-color.js?v=tintin-20261031-seo-espacios-2';
 import {sanitizeImageUrl} from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
-import {attachMultiImageUploadWidget,attachImageUploadWidget} from '../../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-3';
+import {attachMultiImageUploadWidget,attachImageUploadWidget} from '../../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-6';
 
 // Contrato existente: portada + doce adicionales. No se amplía almacenamiento.
 export const PRODUCT_PHOTO_LIMIT=13;
@@ -113,7 +113,7 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     if(replacement?.hasPending()){status.textContent='Terminá o cancelá el reemplazo pendiente antes de reemplazar otra foto.';context.scrollIntoView({block:'nearest'});return;}
     replacement?.destroy();replacementTarget=media.imageKey(url);context.replaceChildren();
     const host=document.createElement('div');context.append(host);side.hidden=false;
-    replacement=attachImageUploadWidget(host,{section:'productos',editBeforeUpload:true,value:edit?url:'',label:edit?'Editar fotografía':'Reemplazar fotografía',cleanupPrevious:false,onOpenLibrary:openLibrary,onChange:value=>{
+    replacement=attachImageUploadWidget(host,{section:'productos',editBeforeUpload:true,allowRemove:false,value:edit?url:'',label:edit?'Editar fotografía':'Reemplazar fotografía',cleanupPrevious:false,onOpenLibrary:openLibrary,onChange:value=>{
       const safe=sanitizeImageUrl(value);if(!safe)throw Error('Elegí una imagen válida.');if(destroyed)throw Error('El producto cambió.');
       const current=urls();if(current.some(photo=>media.imageKey(photo)===media.imageKey(safe)) && media.imageKey(url)!==media.imageKey(safe))throw Error('Esa fotografía ya está en la galería.');
       const next=current.map(photo=>media.imageKey(photo)===media.imageKey(url)?safe:photo);associations.replacePhoto(url,safe);publish(next,media.imageKey(mainInput.value)===media.imageKey(url)?safe:mainInput.value);status.textContent='Fotografía reemplazada; asociaciones conservadas.';
