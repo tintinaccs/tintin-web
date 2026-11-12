@@ -1,12 +1,48 @@
 ## Colores en estilos en línea de JavaScript — 2026-11-12 — Claude Code
 
-Pedido de la titular: arreglar los colores que quedaron en JavaScript, fuera de la paleta Tintín (#F8AACA, #FDECF2, #222222, blanco). Se transformaron 117 literales de color dentro de estilos en línea (color, fondo, borde, sombra) en 17 archivos de js/ y tienda.js: avisos de conexión y tienda cerrada, tutorial de bienvenida, aviso de nueva versión, iconos de colecciones, carrito, perfil mayorista, pago seguro y carga de imágenes; más dos grises del estado agotado de los filtros en catalogo.html. El texto pasa siempre a #222222 (nunca a rosa, por contraste), las cortinas oscuras siguen oscuras y se conserva el rojo de error.
+Pedido de la titular: arreglar los colores que quedaron en JavaScript, fuera de la paleta Tintín (#F8AACA, #FDECF2, #222222, blanco). Se transformaron 117 literales de color dentro de estilos en línea (color, fondo, borde, sombra) en 17 archivos de js/ y tienda.js: avisos de conexión y tienda cerrada, tutorial de bienvenida, aviso de nueva versión, iconos de colecciones, carrito, perfil mayorista, pago seguro y carga de imágenes; más dos grises del estado agotado de los filtros en catalogo.html (y la expectativa de color en tests/catalog/search-responsive.spec.js). El texto pasa siempre a #222222 (nunca a rosa, por contraste), las cortinas oscuras siguen oscuras y se conserva el rojo de error.
 
 No se tocó, a propósito: js/components/color/* (valores por defecto y migración del panel de apariencia, protegidos por brand-palette.test.mjs), js/admin, pantallas de edición de administradoras (modo-edicion-sitio, insignia-edicion, editor-fotografias, panel de depuración), colores de estado, WhatsApp, botón de Google y muestras de producto.
 
-Versionado de caché: sufijo -p1112 solo en archivos con bytes nuevos; se retrocedieron los arrastres (payment-methods.css, product-maintenance.css, metodos-pago-admin.js, estado-colecciones.js) que el auditor marcó como bump innecesario. Plan de mantenimiento con scripts/preparar-mantenimiento-flujos.mjs sobre main (64 archivos protegidos, 45 registros afectados).
+Versionado de caché: sufijo -p1112 solo en archivos con bytes nuevos; se retrocedieron los arrastres que el auditor marcó como bump innecesario. Plan de mantenimiento con scripts/preparar-mantenimiento-flujos.mjs sobre main 58be634d (rehecho tras fusionar el PR 1383 de administración; el cambio se reconstruyó limpio sobre main en vez de resolver conflictos de versiones a mano).
 
-PASS_LOCAL: build:pages, auditar-proteccion-flujos, audit:cache-versioning, sintaxis de los 17 archivos. Pendiente: pruebas completas locales y CI, merge y verificación en producción. No probado: iPhone real.
+PASS_LOCAL: build:pages, auditar-proteccion-flujos, audit:cache-versioning, ci:preflight completo (0 errores), fase de navegador local (17 de 18; la restante, home-layout-browser, falló solo por la versión del Chromium local y pasa 12 de 12 con el correcto) y search-responsive 32 de 32. El CI de 0180c29d (versión previa a esta actualización) salió verde en todas las fases. No probado: iPhone real.
+
+## Recorte por bordes y cabecera opaca del editor — 2026-11-12 — Codex /root
+
+Base aceptada2d038b19749f56ad56af30fee809e4fc4edf3d67; rama propia
+fix/product-free-crop-and-editor-header. PR1380 está integrada/publicada y sus
+comprobaciones posteriores43144373966/1,43144374195/1,43144375956/1 aprobaron;
+las notas inferiores PENDING son historia, no instrucciones para reintentar.
+Pedido nuevo: cortar arrastrando arriba/abajo/izquierda/derecha y esquinas;
+evitar contenido visible en la cabecera al desplazar; todas las pantallas.
+
+Autoridad editor-fotografias.js, extendida con recorte-fotografias.mjs. Recorte
+normalizado sobre el lienzo ya compuesto: exportación reduce dimensiones y
+traslada el origen, sin recalcular zoom ni volver a centrar la fotografía.
+Máscara y ocho tiradores44px; mouse, touch y flechas; mover selección,
+porcentajes independientes, tamaño final, mínimo1px, deshacer/rehacer/reset y
+estado al reabrir. Al redimensionar/girar pantalla mantiene selección. No
+sube archivos hasta confirmar/guardar ni modifica fuente/contratos de stock.
+El resto de herramientas trabaja sobre la misma composición canónica.
+
+Cabecera: la superficie global tenía transparencia/degradado y un selector
+:is con ID que ganaba por especificidad. En edición de producto se aplica
+una base opaca de tokens administrativos, sin alterar tema público ni otros
+módulos. Se conserva que en horizontal bajo la cabecera del formulario pueda
+salir de vista para liberar espacio. Fixture de cabecera monta la hoja real
+del componente y usa scroll real con foto presente. Compara capturas con
+fondos rojos/azules detrás: ningún píxel de la cabecera cambia por lo que
+hay debajo. No se agregan alturas fijas, filtros de fondo ni otra autoridad.
+
+PASS_LOCAL:23 Chromium nuevos (7 tamaños de recorte,8 cabecera con scroll y
+pintura,3 touch, exportación por píxeles, esquinas/undo/reapertura, límites y
+rotación y composición previa con giro/zoom/luz) y22 regresiones existentes
+del editor más33 de pestañas aprobadas. Los nuevos casos
+se agregan al comando vigente de administración, sin workflows nuevos.
+Guías consultadas: tintin-design-quality y tintin-responsive-a11y; protocolo
+de diagnóstico/reproducción antes de la corrección. Generadores/CI/merge del
+SHA final PENDING. Sin datos comerciales reales ni cambios de permisos.
 
 ## Filtros de variantes: PR 1354 actualizado con main db9eb668 — 2026-11-12 — Claude Code
 

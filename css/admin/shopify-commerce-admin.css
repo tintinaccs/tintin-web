@@ -2269,3 +2269,12 @@ html.tt-product-editor-open body #prod-form-card.tt-editor-studio:has(#prod-pane
   #prod-form-card.tt-editor-studio #prod-panel-photos .tt-studio-photo-layout {grid-template-columns:minmax(0,1fr);gap:16px;}
   #prod-form-card.tt-editor-studio #prod-panel-photos .tt-studio-photo-side {border-left:0;border-top:1px solid var(--editor-line);padding:16px 0 0;}
 }
+
+/* El formulario se desplaza detrás de la barra del panel: durante la edición
+   su superficie debe ser opaca, sin el degradado/transparencia del dashboard. */
+html:root.tt-product-editor-open body.tt-admin-control:has(#prod-form-card) :is(.adm-topbar,.adm-header) {
+  background:var(--admin-color-background-surface,var(--tt-commerce-surface,#fff)) !important;
+  background-image:none !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}

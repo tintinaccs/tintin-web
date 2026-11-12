@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "3e1b04d7ceb28b75d32caeab357de663031f20b53a3988c73bb9d3aa5fd220b7",
+  "sourceFingerprint": "975a29c98a5e66aa36f0099c597d99162d5f3f94a5a955f4e9d25b952e140125",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1832,
-    "textFiles": 1679,
-    "totalBytes": 63958192,
+    "files": 1834,
+    "textFiles": 1681,
+    "totalBytes": 63985340,
     "pages": 19,
-    "modules": 1187
+    "modules": 1189
   },
   "viewports": [
     {
@@ -2290,8 +2290,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 48741,
-      "sha256": "f2e8fbfcc4fadd1365c2999e2846d8622ee28ebbddbbeb2b9a08dec669396645",
+      "bytes": 48738,
+      "sha256": "7316b3ec42b7800fe59410f2581ef4840b72959e0ddbbad37f91165854a57b7a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2983,8 +2983,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 194269,
-      "sha256": "2d55d7d0d7cbac96ca1bd670effa3417781c42cec3ec056d650476dd1a3e3987",
+      "bytes": 194254,
+      "sha256": "0cd1728484ba8e19e22a2a791387deca7e550f465f75d17cc4310760d19955e6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3043,7 +3043,7 @@
           "line": 2127
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261112-photo-editor-7-p1112",
+          "raw": "js/admin/admin-app.js?v=tintin-20261112-free-crop-1-p1112",
           "target": "js/admin/admin-app.js",
           "line": 2128
         },
@@ -3073,7 +3073,7 @@
           "line": 2133
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261111-product-login-payment-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261112-free-crop-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2134
         },
@@ -3537,7 +3537,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261112-photo-editor-7-p1112",
+          "raw": "js/admin/admin-app.js?v=tintin-20261112-free-crop-1-p1112",
           "target": "js/admin/admin-app.js",
           "line": 2128,
           "exists": true
@@ -3573,7 +3573,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261111-product-login-payment-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261112-free-crop-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2134,
           "exists": true
@@ -27144,7 +27144,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 260665,
-      "sha256": "5d58d3e5c3032e5b93cc4a59896a946f4db584f2c9235c66662aeddf0669d4f8",
+      "sha256": "88ef3b709e0d4ad2034154775411332e0733378a03ef61db33529313af12b538",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29642,8 +29642,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 442859,
-      "sha256": "87db1cc3a6033d68e8107f3022775164b5f35f14da2df7872915fdae138d40f6",
+      "bytes": 442853,
+      "sha256": "ad757fb969c6d21ac69cf09477fb1ea621142c77a12213b58ea5646681efd0a9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29782,7 +29782,7 @@
           "line": 22
         },
         {
-          "raw": "./products/galeria-unificada.js?v=tintin-20261112-photo-editor-7-p1112",
+          "raw": "./products/galeria-unificada.js?v=tintin-20261112-free-crop-1-p1112",
           "target": "js/admin/products/galeria-unificada.js",
           "dynamic": false,
           "line": 23
@@ -29914,7 +29914,7 @@
           "line": 54
         },
         {
-          "raw": "../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-7-p1112",
+          "raw": "../components/images/carga-imagenes.js?v=tintin-20261112-free-crop-1-p1112",
           "target": "js/components/images/carga-imagenes.js",
           "dynamic": false,
           "line": 55
@@ -31936,8 +31936,8 @@
     },
     {
       "path": "js/admin/products/galeria-unificada.js",
-      "bytes": 25409,
-      "sha256": "f0e9c09a9d7d6b058dc8f0930289be5cf9e45196a864d78a534615a78c830d39",
+      "bytes": 25406,
+      "sha256": "81644c34832a6cd6059ccc1e116fa7a2dc1d3b13bd2e4c21caf6506b17dd4760",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31962,7 +31962,7 @@
           "line": 3
         },
         {
-          "raw": "../../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-7-p1112",
+          "raw": "../../components/images/carga-imagenes.js?v=tintin-20261112-free-crop-1-p1112",
           "target": "js/components/images/carga-imagenes.js",
           "dynamic": false,
           "line": 4
@@ -32577,8 +32577,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 138595,
-      "sha256": "ffa04e73a75e17a1d56beeb042cf9ccf1caedd8a80d3a7713f0980705ddc0b69",
+      "bytes": 138590,
+      "sha256": "908b3bef8a3e13d2bf4c0cf8d2d5fd2d85b5a0cf3bed74b5488f56241eb020e4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33496,8 +33496,8 @@
     },
     {
       "path": "js/components/images/carga-imagenes.js",
-      "bytes": 25710,
-      "sha256": "0e4f2db9929c4361102549344a8e2bedcdfe765889422da453f6aae4c78800a7",
+      "bytes": 25707,
+      "sha256": "d5cc3da5504ec8d018071b6beb66b55bc3599d1365ab915f1164641fcceb1d43",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33516,7 +33516,7 @@
           "line": 19
         },
         {
-          "raw": "./editor-fotografias.js?v=tintin-20261112-photo-editor-5",
+          "raw": "./editor-fotografias.js?v=tintin-20261112-free-crop-1",
           "target": "js/components/images/editor-fotografias.js",
           "dynamic": true,
           "line": 2
@@ -33526,13 +33526,20 @@
     },
     {
       "path": "js/components/images/editor-fotografias.js",
-      "bytes": 19067,
-      "sha256": "e47770b4d03463ca0a863c8a8271a116f5b3a61a28d035d5d42c8bdb3d9841a2",
+      "bytes": 19749,
+      "sha256": "a3021486e4735664dcf7a8effb6966e87a6ad99ef351bc677ff69df95efffefd",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "./recorte-fotografias.mjs?v=tintin-20261112-free-crop-1",
+          "target": "js/components/images/recorte-fotografias.mjs",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
       "endpoints": []
     },
     {
@@ -33674,6 +33681,17 @@
       "path": "js/components/images/procesamiento-imagenes.js",
       "bytes": 7637,
       "sha256": "dba680dcd33e578938772b853dd6a3a37e5b0bc20cfa4cf62fb9653d323eb8f3",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/images/recorte-fotografias.mjs",
+      "bytes": 10104,
+      "sha256": "b36ef82baef9b42b3819ca13b1921e8eba9572e7776790258c0313bacd37bfc1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -61320,6 +61338,22 @@
       ]
     },
     {
+      "path": "tests/ui-ux/product-crop-and-header.spec.js",
+      "bytes": 12272,
+      "sha256": "e817a5e1c9f838616a4bf6aa1af3f2cb9698781804e39f0ba5f8b57d83b18449",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://img.test/photo.webp",
+          "line": 14
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/product-editor-csp.spec.js",
       "bytes": 9560,
       "sha256": "98d5dcfdf7e568bd2642a3ad6f15d7fcc215469065faa550c0a4169316964436",
@@ -63081,8 +63115,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 48741,
-      "sha256": "f2e8fbfcc4fadd1365c2999e2846d8622ee28ebbddbbeb2b9a08dec669396645"
+      "bytes": 48738,
+      "sha256": "7316b3ec42b7800fe59410f2581ef4840b72959e0ddbbad37f91165854a57b7a"
     },
     {
       "path": "admin-manifest.json",
@@ -63093,8 +63127,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 194269,
-      "sha256": "2d55d7d0d7cbac96ca1bd670effa3417781c42cec3ec056d650476dd1a3e3987"
+      "bytes": 194254,
+      "sha256": "0cd1728484ba8e19e22a2a791387deca7e550f465f75d17cc4310760d19955e6"
     },
     {
       "path": "apple-touch-icon.png",
@@ -64257,26 +64291,26 @@
     {
       "path": "config/ci-stages.json",
       "extension": ".json",
-      "bytes": 8169,
-      "sha256": "f055db8ad1b9764a38fb281e6e5634c8fdc2db8368aefe15f490e19b7d32bf0d"
+      "bytes": 8213,
+      "sha256": "d69a189e3c21a03013976c083647791fb612f45692d11251c37c7eb401fc0133"
     },
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 260665,
-      "sha256": "5d58d3e5c3032e5b93cc4a59896a946f4db584f2c9235c66662aeddf0669d4f8"
+      "sha256": "88ef3b709e0d4ad2034154775411332e0733378a03ef61db33529313af12b538"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 260580,
-      "sha256": "e4d67438b7831b6784b8248402126b6b3421f9ef83abc5b919299fabd6ea7388"
+      "sha256": "bff4a3b39603dcdd5ee814d353fe2fd6df40a9c9e2c7a0543d9c8604ac23c44c"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 16552,
-      "sha256": "c291279eaa6152eaa146aedef1ecf98819ac6f1efcdb64cc7f561b4d534c0860"
+      "sha256": "da1eda1c57eb90763591c6225d1e64a2967839b96bf8d050cb9a1f08c97ee6a0"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64288,7 +64322,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "f08da20315fa0e9a46e647640be51fb97bf7f39cf565a1853592f8227073086c"
+      "sha256": "d69729ecc0899f54db75442845e6addf36013352de28b2a213704b31b78f10a9"
     },
     {
       "path": "config/public-site.json",
@@ -64407,8 +64441,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 165284,
-      "sha256": "6aa67e4d802a3436d40996de0b4005b6b36e82a30b94443046f54a809c48db40"
+      "bytes": 165765,
+      "sha256": "8f8a39f4bf030a9fd162b82bd735ddf98b6ff25fcadf4b0fdc1719fa0a638b3d"
     },
     {
       "path": "css/admin/sidebar-interaccion.css",
@@ -65127,8 +65161,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1306624,
-      "sha256": "cca745e6288316990717f9462ad74874a77223a666c7bdb7d25e093e54807750"
+      "bytes": 1309261,
+      "sha256": "979e396ac37993389e19dce868d2ab2d65fe11565f2b84ac44262ad056b95405"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -66123,8 +66157,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 166951,
-      "sha256": "4a7e482b8abae47dbdea71624cc519b02b23d47b150dfb7be8f1b7216c334676"
+      "bytes": 167759,
+      "sha256": "484aa226df2043ae011cb6ec85250b469045ed9137566b502c61f41e02f28536"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -67203,8 +67237,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 442859,
-      "sha256": "87db1cc3a6033d68e8107f3022775164b5f35f14da2df7872915fdae138d40f6"
+      "bytes": 442853,
+      "sha256": "ad757fb969c6d21ac69cf09477fb1ea621142c77a12213b58ea5646681efd0a9"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -67587,8 +67621,8 @@
     {
       "path": "js/admin/products/galeria-unificada.js",
       "extension": ".js",
-      "bytes": 25409,
-      "sha256": "f0e9c09a9d7d6b058dc8f0930289be5cf9e45196a864d78a534615a78c830d39"
+      "bytes": 25406,
+      "sha256": "81644c34832a6cd6059ccc1e116fa7a2dc1d3b13bd2e4c21caf6506b17dd4760"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -67719,8 +67753,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 138595,
-      "sha256": "ffa04e73a75e17a1d56beeb042cf9ccf1caedd8a80d3a7713f0980705ddc0b69"
+      "bytes": 138590,
+      "sha256": "908b3bef8a3e13d2bf4c0cf8d2d5fd2d85b5a0cf3bed74b5488f56241eb020e4"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -67923,14 +67957,14 @@
     {
       "path": "js/components/images/carga-imagenes.js",
       "extension": ".js",
-      "bytes": 25710,
-      "sha256": "0e4f2db9929c4361102549344a8e2bedcdfe765889422da453f6aae4c78800a7"
+      "bytes": 25707,
+      "sha256": "d5cc3da5504ec8d018071b6beb66b55bc3599d1365ab915f1164641fcceb1d43"
     },
     {
       "path": "js/components/images/editor-fotografias.js",
       "extension": ".js",
-      "bytes": 19067,
-      "sha256": "e47770b4d03463ca0a863c8a8271a116f5b3a61a28d035d5d42c8bdb3d9841a2"
+      "bytes": 19749,
+      "sha256": "a3021486e4735664dcf7a8effb6966e87a6ad99ef351bc677ff69df95efffefd"
     },
     {
       "path": "js/components/images/foto-variante.mjs",
@@ -67967,6 +68001,12 @@
       "extension": ".js",
       "bytes": 7637,
       "sha256": "dba680dcd33e578938772b853dd6a3a37e5b0bc20cfa4cf62fb9653d323eb8f3"
+    },
+    {
+      "path": "js/components/images/recorte-fotografias.mjs",
+      "extension": ".mjs",
+      "bytes": 10104,
+      "sha256": "b36ef82baef9b42b3819ca13b1921e8eba9572e7776790258c0313bacd37bfc1"
     },
     {
       "path": "js/components/images/rendimiento-imagenes.js",
@@ -70329,8 +70369,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 82904,
-      "sha256": "b71cb0374d8eba996f1abefd94603f291af9046529bc15ce617d8c7aec5de466"
+      "bytes": 83059,
+      "sha256": "891415a25dc0708aad78646b5b53a6dd6c45fbf4304a21888ff577673579e495"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -73607,6 +73647,12 @@
       "extension": ".js",
       "bytes": 26097,
       "sha256": "515cf780a662d64f70edf005e8be1eecdb7896f4667d7a4e32373e7273fe04b7"
+    },
+    {
+      "path": "tests/ui-ux/product-crop-and-header.spec.js",
+      "extension": ".js",
+      "bytes": 12272,
+      "sha256": "e817a5e1c9f838616a4bf6aa1af3f2cb9698781804e39f0ba5f8b57d83b18449"
     },
     {
       "path": "tests/ui-ux/product-editor-csp.spec.js",
