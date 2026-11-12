@@ -1,7 +1,7 @@
 import {appendPhotoOrderControls as appendOptionPhotoOrder} from './fotos-por-variante.js?v=tintin-20261028-opciones-inline-2';
 import {attachColorPhotos} from './fotos-por-color.js?v=tintin-20261031-seo-espacios-2';
 import {sanitizeImageUrl} from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
-import {attachMultiImageUploadWidget,attachImageUploadWidget} from '../../components/images/carga-imagenes.js?v=tintin-20261030-audit-integrity-1';
+import {attachMultiImageUploadWidget,attachImageUploadWidget} from '../../components/images/carga-imagenes.js?v=tintin-20261112-photo-editor-1';
 
 // Contrato existente: portada + doce adicionales. No se amplía almacenamiento.
 export const PRODUCT_PHOTO_LIMIT=13;
@@ -26,6 +26,7 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
   const tools=document.createElement('div'),selectedLabel=document.createElement('small'),selectedName=document.createElement('strong');tools.className='tt-studio-photo-tools';selectedLabel.textContent='OPCIÓN SELECCIONADA';tools.append(selectedLabel,selectedName);
   let heroUrl='',activeViewer=null;
   const enlarge=button('Ampliar imagen seleccionada',()=>{if(heroUrl)viewPhoto(heroUrl,urls(),enlarge);},heroActions);
+  button('Editar imagen seleccionada',()=>{if(heroUrl)replace(heroUrl,true);},heroActions);
   button('Reemplazar imagen seleccionada',()=>{if(heroUrl)replace(heroUrl);},heroActions);
   button('Quitar imagen seleccionada',()=>{if(heroUrl)removePhoto(heroUrl);},heroActions);
   const coverControl=button('Portada del producto',()=>{if(heroUrl)publish([heroUrl,...urls().filter(url=>url!==heroUrl)],heroUrl);},tools,'Marcar imagen seleccionada como portada');
@@ -57,7 +58,7 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     if(Object.keys(selected).length)associations.setPhotos(selected,media.uniqueImages([...photosFor(selected),safe]));
     publish(media.uniqueImages([...current,safe]));librarySelections.delete(media.imageKey(safe));
   }
-  const upload=attachMultiImageUploadWidget(uploadHost,{maxImages:PRODUCT_PHOTO_LIMIT,remaining:()=>Math.max(0,PRODUCT_PHOTO_LIMIT-urls().length),onOpenLibrary:async()=>{
+  const upload=attachMultiImageUploadWidget(uploadHost,{editBeforeUpload:true,maxImages:PRODUCT_PHOTO_LIMIT,remaining:()=>Math.max(0,PRODUCT_PHOTO_LIMIT-urls().length),onOpenLibrary:async()=>{
     const selection={...optionSelection},url=await openLibrary();if(url)librarySelections.set(media.imageKey(url),selection);return url;
   },onChange:add});
   uploadHost.addEventListener('tintin:image-pending',()=>{if(upload.pendingSignature().length===1)queuedSelection={...optionSelection};if(optionContext)optionUpload.open=true;},{signal:abort.signal});
@@ -108,15 +109,16 @@ export function attachProductGallery({container,product={},mainInput,imagesInput
     appendOptionPhotoOrder(tile,{url,photos:assigned,label:Object.values(optionSelection).join(' / '),draggable:false,update:next=>{associations.setPhotos({...optionSelection},next);lastGalleryState='';render();container.dispatchEvent(new Event('change',{bubbles:true}));}});
     if(focus){const target=[...tile.querySelectorAll('[aria-label]')].find(node=>node.getAttribute('aria-label')===focus);(target && !target.disabled?target:check)?.focus({preventScroll:true});}
   }
-  function replace(url){
+  function replace(url,edit=false){
     if(replacement?.hasPending()){status.textContent='Terminá o cancelá el reemplazo pendiente antes de reemplazar otra foto.';context.scrollIntoView({block:'nearest'});return;}
     replacement?.destroy();replacementTarget=media.imageKey(url);context.replaceChildren();
     const host=document.createElement('div');context.append(host);side.hidden=false;
-    replacement=attachImageUploadWidget(host,{label:'Reemplazar fotografía',cleanupPrevious:false,onOpenLibrary:openLibrary,onChange:value=>{
+    replacement=attachImageUploadWidget(host,{section:'productos',editBeforeUpload:true,value:edit?url:'',label:edit?'Editar fotografía':'Reemplazar fotografía',cleanupPrevious:false,onOpenLibrary:openLibrary,onChange:value=>{
       const safe=sanitizeImageUrl(value);if(!safe)throw Error('Elegí una imagen válida.');if(destroyed)throw Error('El producto cambió.');
       const current=urls();if(current.some(photo=>media.imageKey(photo)===media.imageKey(safe)) && media.imageKey(url)!==media.imageKey(safe))throw Error('Esa fotografía ya está en la galería.');
       const next=current.map(photo=>media.imageKey(photo)===media.imageKey(url)?safe:photo);associations.replacePhoto(url,safe);publish(next,media.imageKey(mainInput.value)===media.imageKey(url)?safe:mainInput.value);status.textContent='Fotografía reemplazada; asociaciones conservadas.';
     }});
+    if(edit)void replacement.edit();
     button('Cancelar reemplazo',()=>{replacement?.destroy();replacement=null;context.replaceChildren();side.hidden=!optionContext;refocus(url);},context);
   }
   function viewPhoto(url,photos,opener=document.activeElement){

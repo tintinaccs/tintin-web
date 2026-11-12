@@ -1,3 +1,39 @@
+## Editor de fotografías con recorrido de carga — 2026-11-12 — Codex /root
+
+Base dfcb4a6 (PR1377 integrada y verificada; su observador horario específico
+quedó desactivado). Nuevo pedido de la titular: edición de fotografías de
+Nuevo/Editar producto inspirada en la carga de Instagram, adaptada a Tintín y
+a móviles, tabletas, horizontal y escritorio. No rediseñar marca ni retirar
+campos/opciones comerciales. Rama feat/product-image-editor en worktree propio;
+no tocar rama/PR1354 de Claude ni sus checks.
+
+Autoridades: carga-imagenes.js y galeria-unificada.js. Nuevo editor local
+editor-fotografias.js, importado a demanda: proporciones y dimensiones, zoom,
+encuadre arrastrable/teclado/pinch, giro, volteos, brillo/contraste/saturación,
+fondo libre transparente/blanco/rosa, deshacer/rehacer/original. Seleccionar
+archivos en galería abre el editor antes de subirlos; cada foto se confirma
+por separado y se revisa en la cola existente. Cancelar la selección descarta
+sólo ese archivo. Edición manual cancela sin cambiar el pendiente previo. El
+original de biblioteca nunca se sobrescribe; la copia reemplaza referencias
+sólo tras carga confirmada conservando portada/asociaciones. Guardar espera
+validación/edición/carga; cerrar aborta editor y libera bitmap/URLs locales.
+Imagen sin ajustes conserva sus bytes; edición exporta PNG, máximo4096px por
+eje y límite15MiB vigente. Ajustes por píxeles para Safari sin canvas.filter.
+Preview permanece visible mientras se recorren controles, con áreas44px y
+campos16px, superficie modal nativa y acciones siempre accesibles.
+
+Skills leídos: tintin-ecommerce-flows, tintin-design-quality y
+tintin-responsive-a11y. PASS_LOCAL inicial:33 pruebas existentes de pestañas
+más12 iniciales de foto (45 Chromium);16 pruebas del editor/integración y
+pinch antes del recorrido automático,16 luego de asegurar preview visible.
+PASS_LOCAL vigente:17 pruebas del editor y recorrido automático (píxeles,
+cancelación, cola, flush, asociaciones y pinch),42 verificaciones de multimedia,
+build:pages y test:fast (104Node+6Chromium). Sigue en curso la regresión de246
+Chromium de fotos contextuales/guardado/workspaces; no se acredita hasta terminal.
+WebKit descargado pero no ejecutable por bibliotecas del host ausentes: instalar
+dependencias requería su no disponible; Safari NOT_VERIFIED, sin cambiar permisos. Sin escrituras
+comerciales reales. CI, merge y publicación de esta función PENDIENTES.
+
 ## Visor completo y favicon del loader — 2026-11-11 — Codex /root
 
 Base main9d46ee42; rama fix/product-zoom-and-pink-favicon. Pedido: foto de la

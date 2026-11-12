@@ -1,3 +1,4 @@
+const {confirmPhotoEdits}=require('./helpers/photo-editor.cjs');
 'use strict';
 const {test,expect}=require('@playwright/test');
 const {openProductSaveFixture}=require('./helpers/product-save-fixture.cjs');
@@ -131,14 +132,14 @@ test('fotos pendientes: fallo guarda texto, recuperar advierte y reintento/cance
  await open(page);await page.locator('#prod-name').fill('Fotos recuperables');await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
  const gallery=page.locator('.tt-unified-photos');
  const buffer=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=','base64');
- await gallery.locator('input[multiple]').setInputFiles({name:'pending.png',mimeType:'image/png',buffer});await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(1);
+ await gallery.locator('input[multiple]').setInputFiles({name:'pending.png',mimeType:'image/png',buffer});await confirmPhotoEdits(page,1);await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(1);
  await page.evaluate(()=>window.qaUploadFailure=true);await cancelSave(page);await expect(page.locator('.tt-work-exit-dialog [role=alert]')).toContainText('Texto guardado');await page.getByRole('button',{name:'Seguir editando',exact:true}).click();await expect(page.locator('#prod-form-card')).toBeVisible();
  const key=await page.evaluate(()=>window.qaProductController.workspace.key);
  expect(await page.evaluate(key=>window.qaProductStore.get('productEditorWorkspaces/qa-admin/items/'+key).snapshot.pendingUploads,key)).toBe(true);
  await page.getByRole('button',{name:'Descartar cambios pendientes y volver',exact:true}).click();await reopen(page,key);await expect(page.locator('.tt-work-status')).toContainText('faltan archivos');
  await page.getByRole('button',{name:'Continuar sin las fotos pendientes',exact:true}).click();await page.evaluate(()=>window.qaUploadFailure=false);await page.getByRole('tab',{name:'Fotos y opciones',exact:true}).click();
- await gallery.locator('input[multiple]').setInputFiles({name:'retry.png',mimeType:'image/png',buffer});await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(1);await saveProgress(page);await expect(gallery.locator('.tt-unified-photo')).toHaveCount(1);
- await gallery.locator('input[multiple]').setInputFiles({name:'cancel.png',mimeType:'image/png',buffer});await gallery.getByRole('button',{name:'Quitar pendiente cancel.png',exact:true}).click();await saveProgress(page);await expect(gallery.locator('.tt-unified-photo')).toHaveCount(1);
+ await gallery.locator('input[multiple]').setInputFiles({name:'retry.png',mimeType:'image/png',buffer});await confirmPhotoEdits(page,1);await expect(gallery.locator('.tt-editor-upload-item')).toHaveCount(1);await saveProgress(page);await expect(gallery.locator('.tt-unified-photo')).toHaveCount(1);
+ await gallery.locator('input[multiple]').setInputFiles({name:'cancel.png',mimeType:'image/png',buffer});await confirmPhotoEdits(page,1);await gallery.getByRole('button',{name:'Quitar pendiente cancel.png',exact:true}).click();await saveProgress(page);await expect(gallery.locator('.tt-unified-photo')).toHaveCount(1);
 });
 test('archivar y restaurar exige acción explícita y no cambia stock',async({page})=>{
  await open(page);await page.evaluate(()=>{window.qaProductStore.set('products/existing',{name:'Publicado',category:'qa-tablet',price:30000,priceBefore:null,stock:4,active:true,oferta:false,destacado:false,description:'Completa',imageUrl:'https://img.test/cover.webp',publicationStatus:'active'});window.prodCancelForm();});

@@ -1,3 +1,15 @@
+## Editor local de fotos de productos — 2026-11-12
+
+Autoridades carga-imagenes.js/galeria-unificada.js y editor-fotografias.js.
+Consumidores: Nuevo/Editar, portada, galería, fotos asignadas a opciones;
+widgets ajenos conservan selección directa y edición manual. Validar PNG
+exportado por píxeles y tamaño, cancelar sin escribir, archivo original
+intacto, cola y reintentos, flush durante edición, cierre/abort, asociaciones
+y portada después del reemplazo. Probar320–1920px, vertical/horizontal,
+teclado/pinch y preview visible al ajustar controles inferiores. Reusar
+transporte/validación/permisos/biblioteca existentes; no añadir dependencias.
+Regenerar caché/shell/CSP/diagnóstico y plan protegido desde sus autoridades.
+
 ## 2026-11-11 — Foto completa en visor y favicon rosa/blanco
 
 El grid implícito del visor permitía que una foto vertical midiera1573px dentro
