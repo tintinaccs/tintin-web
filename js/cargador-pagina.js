@@ -482,7 +482,7 @@
     // Un spinner de progreso es estado del sistema, no una animación decorativa: se lo excluye
     // a propósito del apagado general de movimiento.
     '@media (prefers-reduced-motion:reduce){#tt-loader{transition:opacity .01s linear}#tt-loader-spin-wrap.tt-ready #tt-loader-wordmark,#tt-loader-spin-wrap.tt-ready #tt-loader-brand-subtitle,#tt-loader-spin-wrap.tt-ready .tt-loader-spinner{animation:none;opacity:1;transform:none;clip-path:none}.tt-loader-spinner::before,.tt-loader-spinner::after{animation-duration:1.6s!important;animation-iteration-count:infinite!important}}',
-    '#tt-store-gate-emergency-dialog{width:min(100%,460px);max-height:calc(100dvh - 32px);overflow:auto;background:#fff;border-radius:20px;padding:clamp(28px,5vw,40px) clamp(20px,5vw,32px);text-align:center;box-shadow:0 18px 60px rgba(35,12,22,.28);box-sizing:border-box}',
+    '#tt-store-gate-emergency-dialog{width:min(100%,460px);max-height:calc(100dvh - 32px);overflow:auto;background:#fff;border-radius:20px;padding:clamp(28px,5vw,40px) clamp(20px,5vw,32px);text-align:center;box-shadow:0 18px 60px rgba(34,34,34,0.28);box-sizing:border-box}',
     '#tt-store-gate-emergency-actions{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}',
     '.tt-store-gate-emergency-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;min-width:146px;padding:11px 24px;border-radius:999px;font:700 13px/1.2 Montserrat;text-decoration:none;cursor:pointer;touch-action:manipulation;box-sizing:border-box}',
     '@media(max-width:600px){#tt-store-closed-overlay{padding:max(16px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))!important}#tt-store-gate-emergency-dialog{width:100%;max-width:390px;padding:28px 20px 24px;border-radius:18px}#tt-store-gate-emergency-actions{flex-direction:column}.tt-store-gate-emergency-action{width:min(100%,260px);min-width:0}}'
@@ -787,10 +787,10 @@
         notice.setAttribute('role', 'status');
         notice.setAttribute('aria-live', 'polite');
         notice.style.cssText =
-          'position:fixed;z-index:2147482988;right:14px;bottom:14px;display:flex;align-items:center;gap:10px;width:min(calc(100vw - 28px),470px);min-height:48px;padding:10px 12px 10px 16px;border:1px solid rgba(173,63,103,.18);border-radius:18px;background:rgba(255,255,255,.96);color:#713C53;box-shadow:0 14px 40px rgba(58,20,35,.16);box-sizing:border-box;visibility:visible;pointer-events:auto';
+          'position:fixed;z-index:2147482988;right:14px;bottom:14px;display:flex;align-items:center;gap:10px;width:min(calc(100vw - 28px),470px);min-height:48px;padding:10px 12px 10px 16px;border:1px solid rgba(248,170,202,0.18);border-radius:18px;background:rgba(255,255,255,.96);color:#222222;box-shadow:0 14px 40px rgba(34,34,34,0.16);box-sizing:border-box;visibility:visible;pointer-events:auto';
         notice.innerHTML =
           '<span style="min-width:0;flex:1;font:600 12px/1.45 Montserrat">Conexión inestable. Podés explorar la tienda; las compras se habilitan al reconectar.</span>' +
-          '<button type="button" aria-label="Reintentar conexión" style="min-width:44px;min-height:44px;padding:8px 12px;border:0;border-radius:999px;background:#F8AACA;color:#713C53;font:800 12px/1 Montserrat;cursor:pointer">Reintentar</button>';
+          '<button type="button" aria-label="Reintentar conexión" style="min-width:44px;min-height:44px;padding:8px 12px;border:0;border-radius:999px;background:#F8AACA;color:#222222;font:800 12px/1 Montserrat;cursor:pointer">Reintentar</button>';
         notice
           .querySelector('button')
           ?.addEventListener('click', () => window.location.reload());
@@ -888,13 +888,13 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261111-product-login-payment-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261111-product-login-payment-1-p1112');
     }
   }
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261030-home-history-5');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261030-home-history-5-p1112');
   }
 
   function bootHeaderMode() {
@@ -941,10 +941,10 @@
     try { framed = window.top !== window; } catch { framed = true; }
     if (isVisualPreviewFrame || framed) return;
     if (!window.TintinSiteChangesBooted) {
-      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261029-performance-1');
+      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261029-performance-1-p1112');
     }
     if (!window.TintinVersionWatchBooted) {
-      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261027-global-fluidez-3');
+      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261027-global-fluidez-3-p1112');
     }
   }
 
@@ -978,13 +978,13 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261110-hero-confirmacion-1');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261110-hero-confirmacion-1-p1112');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261111-product-login-payment-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261111-product-login-payment-1-p1112');
     }
   }
 
@@ -996,7 +996,7 @@
 
   function bootPageAuditFixPublic() {
     if (!window.TintinPageAuditFixBooted) {
-      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261012-checkout-ready-3-control-paneles-js-palette-20261014-1');
+      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261012-checkout-ready-3-control-paneles-js-palette-20261014-1-p1112');
     }
   }
 

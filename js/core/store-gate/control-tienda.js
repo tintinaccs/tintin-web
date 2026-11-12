@@ -21,7 +21,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './nucleo-control-tienda.js?v=tintin-20261030-home-history-5';
+} from './nucleo-control-tienda.js?v=tintin-20261030-home-history-5-p1112';
 
 export {
   isAccessAllowed,

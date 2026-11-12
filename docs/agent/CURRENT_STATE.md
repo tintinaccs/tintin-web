@@ -1,3 +1,13 @@
+## Colores en estilos en línea de JavaScript — 2026-11-12 — Claude Code
+
+Pedido de la titular: arreglar los colores que quedaron en JavaScript, fuera de la paleta Tintín (#F8AACA, #FDECF2, #222222, blanco). Se transformaron 117 literales de color dentro de estilos en línea (color, fondo, borde, sombra) en 17 archivos de js/ y tienda.js: avisos de conexión y tienda cerrada, tutorial de bienvenida, aviso de nueva versión, iconos de colecciones, carrito, perfil mayorista, pago seguro y carga de imágenes; más dos grises del estado agotado de los filtros en catalogo.html. El texto pasa siempre a #222222 (nunca a rosa, por contraste), las cortinas oscuras siguen oscuras y se conserva el rojo de error.
+
+No se tocó, a propósito: js/components/color/* (valores por defecto y migración del panel de apariencia, protegidos por brand-palette.test.mjs), js/admin, pantallas de edición de administradoras (modo-edicion-sitio, insignia-edicion, editor-fotografias, panel de depuración), colores de estado, WhatsApp, botón de Google y muestras de producto.
+
+Versionado de caché: sufijo -p1112 solo en archivos con bytes nuevos; se retrocedieron los arrastres (payment-methods.css, product-maintenance.css, metodos-pago-admin.js, estado-colecciones.js) que el auditor marcó como bump innecesario. Plan de mantenimiento con scripts/preparar-mantenimiento-flujos.mjs sobre main (64 archivos protegidos, 45 registros afectados).
+
+PASS_LOCAL: build:pages, auditar-proteccion-flujos, audit:cache-versioning, sintaxis de los 17 archivos. Pendiente: pruebas completas locales y CI, merge y verificación en producción. No probado: iPhone real.
+
 ## Filtros de variantes: PR 1354 actualizado con main db9eb668 — 2026-11-12 — Claude Code
 
 El CI completo de 588d49c6 salió en verde (Repository audit incluido), pero main avanzó con el PR 1379 y el PR 1354 quedó con conflicto en diagnostic-manifest.json y site-version.json (generados). Se fusionó main, se tomaron los derivados de main y se regeneraron con npm run build:pages; el plan de mantenimiento se rehizo con scripts/preparar-mantenimiento-flujos.mjs (base db9eb668, 5 archivos protegidos: catalogo.html, _headers, CSP y baseline de caché). Sin cambios de código respecto de 588d49c6. PASS_LOCAL: build:pages, auditar-proteccion-flujos, audit:cache-versioning, audit:styles. Pendiente: CI sobre el nuevo commit, merge y verificación en producción de que las tarjetas cambian de foto al filtrar.
