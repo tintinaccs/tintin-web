@@ -48,7 +48,14 @@ async function installRuntimeErrorMonitor(page,context){
     // Keep exact local resource allowlist, caller, native kind and leaving window.
     const publicCatalogProducts=['products','collections'].some(resource=>error.message===`/127.0.0.1:4174/api/public-catalog?resource=${resource} due to access control checks.`) &&
       error.stack?.includes('    at fetchResource (http://127.0.0.1:4174/js/core/firebase/catalogo-publico-api.js?');
-    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup || authTokenRefresh || visualStudioPublic || siteVersionPublic || publicCatalogProducts);
+    // CI43205201027: la precarga única del feed de Instagram (al terminar la
+    // carga del inicio) sigue en vuelo cuando el redirect del rol cliente sale
+    // de la página. Sólo el endpoint local exacto, fetch nativo o el caller
+    // canónico refresh de instagram-tintin.js, y la ventana de salida.
+    const instagramFeedPublic=error.message==='/127.0.0.1:4174/api/instagram-feed due to access control checks.' &&
+      (error.stack?.endsWith('    at fetch ([native code]:0:0)') ||
+        error.stack?.includes('    at refresh (http://127.0.0.1:4174/js/components/social/instagram-tintin.js?'));
+    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup || authTokenRefresh || visualStudioPublic || siteVersionPublic || publicCatalogProducts || instagramFeedPublic);
     if(navigationCancellation)browserDiagnostics.push({kind:'native-emulator-channel-cancelled-on-navigation',message:error.message});
     else errors.push(error.message);
   });
