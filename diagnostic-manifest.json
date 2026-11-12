@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "142ac8e9b21fcff837c777d0e581b5627e81b3ebadc9210330bdd4f8af93b5ce",
+  "sourceFingerprint": "54040d0372e41de9887ce7c7b6de3169d90ba7741ccf9ef489db11160dd0003a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1832,
     "textFiles": 1679,
-    "totalBytes": 63940247,
+    "totalBytes": 63941742,
     "pages": 19,
     "modules": 1187
   },
@@ -1180,8 +1180,8 @@
         "guest",
         "client"
       ],
-      "bytes": 30878,
-      "sha256": "4e6349bbd66c81557b5e6b66e08844f749adb41571641367fd147ae82dad3151",
+      "bytes": 30879,
+      "sha256": "75b8d54a7c6e3ed88f007c83366c95d4513bedf36405ee5d8de7f4ccad8f1d0c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1281,7 +1281,7 @@
           "line": 340
         },
         {
-          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261108-instagram-retorno-1",
+          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261112-instagram-precarga-1",
           "target": "js/components/social/instagram-tintin.js",
           "line": 341
         }
@@ -1883,7 +1883,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261108-instagram-retorno-1",
+          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261112-instagram-precarga-1",
           "target": "js/components/social/instagram-tintin.js",
           "line": 341,
           "exists": true
@@ -16542,8 +16542,8 @@
         "guest",
         "client"
       ],
-      "bytes": 47859,
-      "sha256": "6ade47c4e4bb260e3c672ee5f235b67042a601f71c19cafe3276cc79991d9776",
+      "bytes": 47860,
+      "sha256": "41d803147db94a60d6d9263123b022761fe9b1e7f5437435736f08d27b8ba0d8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16684,7 +16684,7 @@
           "line": 513
         },
         {
-          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261108-instagram-retorno-1",
+          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261112-instagram-precarga-1",
           "target": "js/components/social/instagram-tintin.js",
           "line": 514
         }
@@ -17670,7 +17670,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261108-instagram-retorno-1",
+          "raw": "js/components/social/instagram-tintin.js?v=tintin-20261112-instagram-precarga-1",
           "target": "js/components/social/instagram-tintin.js",
           "line": 514,
           "exists": true
@@ -34704,8 +34704,8 @@
     },
     {
       "path": "js/components/social/instagram-tintin.js",
-      "bytes": 7882,
-      "sha256": "d0e68608ee362486f8697742230fb06abcf794982cfe58c1fbdef39ebcfcc57d",
+      "bytes": 8809,
+      "sha256": "19787cf29a88ce357bd5dc0cb2ea017e32c7e5b068e464423b1bb67512b7beba",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60897,8 +60897,8 @@
     },
     {
       "path": "tests/ui-ux/instagram-tintin.spec.js",
-      "bytes": 22013,
-      "sha256": "81e21c9b3e1adf107815a4cc44805640d6e089682b0e596934332db43f8c4413",
+      "bytes": 22411,
+      "sha256": "75e2cbae6f04a03c98370d277ac41e343a02a43e4dda307e694a311bb2308a2f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -60927,59 +60927,59 @@
         },
         {
           "url": "https://www.instagram.com/reel/lifecycle/",
-          "line": 72
+          "line": 80
         },
         {
           "url": "https://scontent-gru1-1.cdninstagram.com/v/t51.2885-15/",
-          "line": 87
-        },
-        {
-          "url": "http://www.w3.org/2000/svg",
-          "line": 89
-        },
-        {
-          "url": "https://www.instagram.com/p/photo1/",
-          "line": 91
-        },
-        {
-          "url": "https://www.instagram.com/p/carousel1/",
-          "line": 92
-        },
-        {
-          "url": "https://www.instagram.com/reel/video1/",
-          "line": 93
-        },
-        {
-          "url": "https://www.instagram.com/p/photo2/",
-          "line": 94
-        },
-        {
-          "url": "https://www.instagram.com/reel/video2/",
           "line": 95
         },
         {
-          "url": "https://www.instagram.com/p/carousel2/",
-          "line": 96
-        },
-        {
-          "url": "https://www.instagram.com/p/photo3/",
+          "url": "http://www.w3.org/2000/svg",
           "line": 97
         },
         {
+          "url": "https://www.instagram.com/p/photo1/",
+          "line": 99
+        },
+        {
+          "url": "https://www.instagram.com/p/carousel1/",
+          "line": 100
+        },
+        {
+          "url": "https://www.instagram.com/reel/video1/",
+          "line": 101
+        },
+        {
+          "url": "https://www.instagram.com/p/photo2/",
+          "line": 102
+        },
+        {
+          "url": "https://www.instagram.com/reel/video2/",
+          "line": 103
+        },
+        {
+          "url": "https://www.instagram.com/p/carousel2/",
+          "line": 104
+        },
+        {
+          "url": "https://www.instagram.com/p/photo3/",
+          "line": 105
+        },
+        {
           "url": "https://www.instagram.com/reel/video3/",
-          "line": 98
+          "line": 106
         },
         {
           "url": "https://evil.example/p/x/",
-          "line": 173
+          "line": 181
         },
         {
           "url": "https://www.instagram.com/tintinaccs/",
-          "line": 185
+          "line": 193
         },
         {
           "url": "https://www.instagram.com/reel/video1/embed/",
-          "line": 223
+          "line": 231
         }
       ]
     },
@@ -63075,8 +63075,8 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 30878,
-      "sha256": "4e6349bbd66c81557b5e6b66e08844f749adb41571641367fd147ae82dad3151"
+      "bytes": 30879,
+      "sha256": "75b8d54a7c6e3ed88f007c83366c95d4513bedf36405ee5d8de7f4ccad8f1d0c"
     },
     {
       "path": "admin-images.html",
@@ -64275,8 +64275,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1548,
-      "sha256": "b92c6a4ccab56ad99a98ac701704519a9922266239859c330d2ee34abe8ca957"
+      "bytes": 856,
+      "sha256": "ae44f7e8fc7cdd5e21ee4921dfed6d3a70407c7aa281c475344679e073b2d61f"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64288,7 +64288,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "8c5833c83d8eaeb764e56d046b27250352fb521e2cb256e298da16f7c724a826"
+      "sha256": "b210d722edcd47e2ee25c8a7f74dcd00e3fe1a22996d51f073dba510d9926c87"
     },
     {
       "path": "config/public-site.json",
@@ -65127,8 +65127,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1304973,
-      "sha256": "76053cd96694a680441343352e0ea8526fe590f19f7a273231650858335fa5e5"
+      "bytes": 1305832,
+      "sha256": "b09170ebf941f2fbb14b06a43404dd0b046c4f879223d157cf7cf03c1f3805a7"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -67197,8 +67197,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 47859,
-      "sha256": "6ade47c4e4bb260e3c672ee5f235b67042a601f71c19cafe3276cc79991d9776"
+      "bytes": 47860,
+      "sha256": "41d803147db94a60d6d9263123b022761fe9b1e7f5437435736f08d27b8ba0d8"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -68271,8 +68271,8 @@
     {
       "path": "js/components/social/instagram-tintin.js",
       "extension": ".js",
-      "bytes": 7882,
-      "sha256": "d0e68608ee362486f8697742230fb06abcf794982cfe58c1fbdef39ebcfcc57d"
+      "bytes": 8809,
+      "sha256": "19787cf29a88ce357bd5dc0cb2ea017e32c7e5b068e464423b1bb67512b7beba"
     },
     {
       "path": "js/components/welcome/configuracion-bienvenida.js",
@@ -70329,8 +70329,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 82646,
-      "sha256": "ba87a1f431ba58e97a6499dbb02a6ffa022f7bbe0196f34ac2eb33feb82c8102"
+      "bytes": 82647,
+      "sha256": "a6041a72b6b362c9f2c51c5f390371aa61e3c7483e9729c2185c13f0508ae92d"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -73527,8 +73527,8 @@
     {
       "path": "tests/ui-ux/instagram-tintin.spec.js",
       "extension": ".js",
-      "bytes": 22013,
-      "sha256": "81e21c9b3e1adf107815a4cc44805640d6e089682b0e596934332db43f8c4413"
+      "bytes": 22411,
+      "sha256": "75e2cbae6f04a03c98370d277ac41e343a02a43e4dda307e694a311bb2308a2f"
     },
     {
       "path": "tests/ui-ux/inventory-regressions.test.mjs",
@@ -75671,7 +75671,7 @@
     },
     {
       "file": "js/components/social/instagram-tintin.js",
-      "line": 106,
+      "line": 110,
       "target": "/api/instagram-feed",
       "method": "GET"
     },

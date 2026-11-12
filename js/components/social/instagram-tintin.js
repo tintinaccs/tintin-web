@@ -91,22 +91,26 @@ if(feed) {
     if(!canRefresh() || loading) return;
     timer=window.setTimeout(()=>{timer=0;void refresh();},Math.max(0,refreshInterval-(Date.now()-lastAttempt)));
   }
-  async function refresh() {
-    if(loading || !canRefresh()) return;
+  // preload=true: carga única en segundo plano al terminar la página, aunque la
+  // sección esté lejos, para que las tarjetas ya estén listas al llegar. Las
+  // actualizaciones periódicas siguen ocurriendo sólo con la sección a la vista.
+  async function refresh(preload=false) {
+    if(loading || (!preload && !canRefresh())) return;
     // An observer delivery can lag a scroll or a restored page by a frame.
-    if(!surfaceIsNear()) {nearViewport=false;pause();return;}
+    if(!preload && !surfaceIsNear()) {nearViewport=false;pause();return;}
     if(dialog?.open) {lastAttempt=Date.now();schedule();return;}
     loading=true;
     lastAttempt=Date.now();
     const controller=new AbortController();
-    activeRequest=controller;
+    // La precarga no se corta al estar fuera de pantalla: es justamente su caso.
+    if(!preload) activeRequest=controller;
     let timedOut=false;
     const timeout=window.setTimeout(()=>{timedOut=true;controller.abort();},10000);
     try {
       const response=await fetch('/api/instagram-feed',{cache:'no-cache',signal:controller.signal});
       if(!response.ok) return markEmpty();
       const data=await response.json();
-      if(controller.signal.aborted || !canRefresh()) {if(!timedOut)lastAttempt=0;return;}
+      if(controller.signal.aborted || (!preload && !canRefresh())) {if(!timedOut)lastAttempt=0;return;}
       if(!data.available || !Array.isArray(data.posts)) return markEmpty();
       const fingerprint=JSON.stringify(data.posts.map(item=>[item?.type,item?.url,item?.caption,item?.thumbnail]));
       if(fingerprint===renderedFeed) return;
@@ -114,7 +118,12 @@ if(feed) {
       if(!cards.length) return markEmpty();
       // Avoid replacing a focused card during background refresh.
       if(!feed.contains(document.activeElement)) {feed.replaceChildren(...cards);feed.dataset.state='ready';renderedFeed=fingerprint;}
-    } catch {if(timedOut || !controller.signal.aborted)markEmpty();} finally {window.clearTimeout(timeout);loading=false;activeRequest=null;schedule();}
+    } catch {if(timedOut || !controller.signal.aborted)markEmpty();} finally {
+      window.clearTimeout(timeout);loading=false;if(!preload)activeRequest=null;
+      // Si la precarga no dejó tarjetas, al llegar a la sección se reintenta sin esperar.
+      if(preload && !renderedFeed)lastAttempt=0;
+      schedule();
+    }
   }
   function reconcile() {if(canRefresh())schedule();else pause();}
   if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{nearViewport=entries.some(entry=>entry.isIntersecting);reconcile();},{rootMargin:'200px'});observer.observe(feedSurface);}else {
@@ -129,4 +138,7 @@ if(feed) {
   window.addEventListener('pagehide',()=>{pageActive=false;pause();});
   window.addEventListener('pageshow',()=>{pageActive=true;reconcile();});
   reconcile();
+  const preload=()=>{if(!renderedFeed && !loading && !lastAttempt)void refresh(true);};
+  const preloadWhenIdle=()=>{if('requestIdleCallback' in window)requestIdleCallback(preload,{timeout:1500});else window.setTimeout(preload,300);};
+  if(document.readyState==='complete')preloadWhenIdle();else window.addEventListener('load',preloadWhenIdle,{once:true});
 }

@@ -1,42 +1,23 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "d482fb243e1ce6ee6bae447ae2498ea259b59d82",
-  "reason": "Actualiza filtros de variantes del catálogo con main #1380 y renueva el plan",
+  "baseCommit": "2d038b19749f56ad56af30fee809e4fc4edf3d67",
+  "reason": "Precarga en segundo plano del feed de Instagram del inicio",
   "files": [
     {
-      "path": "_headers",
-      "oldHash": "f9d5d8d3d04fc4a1c09077e34ce6c7d7123c7bb2609d9670c3d0d337c02feac5",
-      "newHash": "b48b1952cbf595bc3e4cc81249218daca3b1931305170829a72469539cf1a567"
+      "path": "about.html",
+      "oldHash": "4e6349bbd66c81557b5e6b66e08844f749adb41571641367fd147ae82dad3151",
+      "newHash": "75b8d54a7c6e3ed88f007c83366c95d4513bedf36405ee5d8de7f4ccad8f1d0c"
     },
     {
-      "path": "catalogo.html",
-      "oldHash": "c9ef907ab9ff47c9c0b53da2a0f636f86ce4efc362e4f6415615196fc25b8731",
-      "newHash": "97af7f48471fe69b8d02003b241de612fbee7cf887dcf75e4f751625c18149c5"
-    },
-    {
-      "path": "config/csp-runtime.js",
-      "oldHash": "7108a68212ca67a517ce8f5fdf569d3d962ef04d5211740538b6cddb81c59d12",
-      "newHash": "649e5b9eb0b15aee829086f940b39cb872fd683caca2c1aa495c466f04e75ebf"
-    },
-    {
-      "path": "config/csp-runtime.json",
-      "oldHash": "42b624925f663e05f95a892cd27eb7b6623e23917ea822bf252347f41f2aadec",
-      "newHash": "34304565d9fb6c01234431e3bb4d293aa78e942615f0c3b50e4a013aa5a399fa"
+      "path": "index.html",
+      "oldHash": "6ade47c4e4bb260e3c672ee5f235b67042a601f71c19cafe3276cc79991d9776",
+      "newHash": "41d803147db94a60d6d9263123b022761fe9b1e7f5437435736f08d27b8ba0d8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "85f271b34977ede531304442232a4683b68d325dc4e17622a14b808074675ade",
-      "newHash": "ba87a1f431ba58e97a6499dbb02a6ffa022f7bbe0196f34ac2eb33feb82c8102"
+      "oldHash": "ba87a1f431ba58e97a6499dbb02a6ffa022f7bbe0196f34ac2eb33feb82c8102",
+      "newHash": "a6041a72b6b362c9f2c51c5f390371aa61e3c7483e9729c2185c13f0508ae92d"
     }
   ],
-  "affectedRecords": [
-    "cf-functions",
-    "cf-functions__apis-internas__20",
-    "cf-functions__csp__29",
-    "cf-functions__reglas-firestore__28",
-    "cf-pages__cf-functions__19",
-    "csp",
-    "productos",
-    "super-panel__productos__34"
-  ]
+  "affectedRecords": []
 }
