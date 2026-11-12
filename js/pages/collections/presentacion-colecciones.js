@@ -7,7 +7,7 @@
    renderer legado vuelva a dejar categorías antiguas después del snapshot.
    ============================================================= */
 
-import { collectionImageUrl } from '../../components/navigation/compartido/iconos.js?v=tintin-20261029-performance-1';
+import { collectionImageUrl } from '../../components/navigation/compartido/iconos.js?v=tintin-20261029-performance-1-p1112';
 import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20261111-product-login-payment-1';
 
 if (!window.TintinCollectionsPhase4Booted) {
@@ -139,7 +139,7 @@ if (!window.TintinCollectionsPhase4Booted) {
     wrap.className = `tt-phase4-collections-state tt-phase4-collections-state--${kind}`;
     wrap.setAttribute('role', kind === 'error' ? 'alert' : 'status');
     wrap.style.cssText =
-      'grid-column:1/-1;width:100%;box-sizing:border-box;text-align:center;padding:28px 18px;color:var(--text-muted,#777);font-size:13px;';
+      'grid-column:1/-1;width:100%;box-sizing:border-box;text-align:center;padding:28px 18px;color:var(--text-muted,#222222);font-size:13px;';
 
     const text = document.createElement('div');
     text.textContent = message;

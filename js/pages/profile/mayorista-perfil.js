@@ -134,7 +134,7 @@ function quotesHtml() {
     const items = Array.isArray(quote.items) ? quote.items : [];
     const priced = quote.status === 'aprobada';
     return `
-      <details style="border:1px solid var(--border,#eee);border-radius:12px;padding:10px 12px;margin-bottom:8px">
+      <details style="border:1px solid var(--border,#F8AACA);border-radius:12px;padding:10px 12px;margin-bottom:8px">
         <summary style="cursor:pointer;display:flex;justify-content:space-between;gap:10px;font-size:13px">
           <span><strong>${escapeHtml(quote.quoteNumber)}</strong> · ${escapeHtml(dateText(quote.createdAt))} · ${Number(quote.itemCount) || 0} unidades</span>
           <span style="font-weight:700;color:${tone}">${escapeHtml(label)}</span>
@@ -153,7 +153,7 @@ function renderLines() {
   const container = root()?.querySelector('[data-wholesale-lines]');
   if (!container) return;
   container.innerHTML = state.lines.length ? state.lines.map((line, index) => `
-    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border,#eee)">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border,#F8AACA)">
       <span style="flex:1 1 160px;font-size:13px;font-weight:600">${escapeHtml(line.name)}</span>
       <input class="perfil-input" style="flex:1 1 120px;max-width:180px" data-line-variant="${index}" maxlength="120" placeholder="Color / medida" value="${escapeHtml(line.variant)}">
       <input class="perfil-input" style="width:90px" type="number" min="1" max="9999" step="1" inputmode="numeric" data-line-qty="${index}" value="${line.qty}" aria-label="Cantidad de ${escapeHtml(line.name)}">
