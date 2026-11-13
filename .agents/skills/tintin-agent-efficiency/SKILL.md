@@ -5,9 +5,11 @@ description: Use to reduce coding-agent token use, duplicated investigation, slo
 
 # tintin-agent-efficiency
 
-Before reading files, inspect AGENTS.md and docs/agent/README.md; search likely canonical paths, avoid scanning the entire repo by default. Summarize known facts, reuse existing docs/tests, batch related reads, cache paths and do not re-read unchanged blobs. Select 1-2 pertinent Skills per task, not every installed Skill; their metadata consumes context. Make small coherent diffs, run targeted checks first, and leave concise actionable handoffs with file paths, commit SHA, tests and remaining blockers. NEVER shorten away evidence, approvals, security checks or correctness for token savings.
+Before reading files, inspect AGENTS.md and docs/agent/README.md; search likely canonical paths, avoid scanning the entire repo by default. Summarize known facts, reuse existing docs/tests, batch related reads, cache paths and do not re-read unchanged blobs. Select the minimum pertinent Skills under docs/agent/SKILLS_AUTO_ROUTING.md, not every installed Skill; their metadata consumes context. Make small coherent diffs, run targeted checks first, and leave concise actionable handoffs with file paths, commit SHA, tests and remaining blockers. NEVER shorten away evidence, approvals, security checks or correctness for token savings.
 
 ## Completion evidence
 Report files touched, targeted verification results, repository commit/PR when applicable, and explicit limits. This Skill never overrides AGENTS.md, DESIGN.md, or production safety rules.
 
 Skill availability is not an instruction to load everything: choose only what a concrete request requires and reuse existing project context.
+
+Use that shared resource decision flow for missing capabilities and authorized installations: reuse working tools, verify any necessary addition, and resume the original task. Distinguish reading/applying instructions from native invocation or script execution; report tools reused, Skills actually used, installations (or none), verification, pending work and limits without invented savings.

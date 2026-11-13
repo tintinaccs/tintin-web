@@ -51,7 +51,7 @@ Estos 16 Skills son instrucciones ligeras de trabajo enfocadas en tareas reales;
 
 ## Detección automática por tarea (sin volver a pedir Skills)
 
-En toda nueva tarea del repositorio, Codex y Claude Code reciben instrucciones en `AGENTS.md` y `.claude/CLAUDE.md` para **evaluar por defecto** qué Skills necesita el trabajo. El enrutamiento detallado por intención y archivos está en [`docs/agent/SKILLS_AUTO_ROUTING.md`](SKILLS_AUTO_ROUTING.md). Se usan generalmente 1–3 Skills relevantes, no los 45 simultáneamente. Los modos de conversación persistentes quedan desactivados salvo pedido expreso. Esta es una instrucción de proyecto: el host sigue decidiendo el descubrimiento/invocación nativa, y los chats sin checkout no comparten Skills automáticamente.
+En toda nueva tarea del repositorio, Codex y Claude Code reciben instrucciones en `AGENTS.md` y `.claude/CLAUDE.md` para **evaluar por defecto** qué Skills necesita el trabajo. El enrutamiento detallado por intención y archivos está en [`docs/agent/SKILLS_AUTO_ROUTING.md`](SKILLS_AUTO_ROUTING.md). Se usan generalmente 1–3 Skills relevantes, sin cargar toda la biblioteca simultáneamente. Los modos de conversación persistentes quedan desactivados salvo pedido expreso. Esta es una instrucción de proyecto: el host sigue decidiendo el descubrimiento/invocación nativa, y los chats sin checkout no comparten Skills automáticamente.
 
 ## Usar en Codex Cloud / Claude Code Cloud
 1. Abrir una nueva tarea con `tintinaccs/tintin-web` sobre una versión que incluya los cambios; si la sesión estaba abierta antes, actualizar/reiniciar su workspace para verlos.
