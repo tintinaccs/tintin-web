@@ -62,7 +62,7 @@ check(
 );
 check(
   'La conversión exige pedidos Y tráfico disponibles y un denominador real',
-  admin.includes('adminRealtimeReady.orders && adminRealtimeReady.traffic && conversionVisitors ?') && admin.includes('conversionOrders / conversionVisitors'),
+  admin.includes('adminRealtimeReady.orders && adminRealtimeReady.traffic && !trafficLimited && conversionVisitors ?') && admin.includes('conversionOrders / conversionVisitors'),
   'La conversión no debe calcularse (ni mostrarse "0%") sobre datos que no cargaron.'
 );
 check(

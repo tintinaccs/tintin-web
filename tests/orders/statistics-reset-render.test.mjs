@@ -1,3 +1,5 @@
+import {orderAmounts,sumOrderAmounts} from '../../js/orders/importes-pedido.mjs';
+import {commercePeriodWindow} from '../../js/admin/statistics/periodos-comerciales.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -9,10 +11,10 @@ const validOrder = new Function(source.slice(source.indexOf('function statistics
 function render(resets = {}, extraOrders = []) {
   const values = {}, bars = {}, rankings = {};
   const now = Date.now();
-  const allOrders = [{ createdAt: now - 10000, status: 'entregado', paymentStatus: 'pagado', total: 200, items: [], shipping: { city: 'A' } },
-    { createdAt: now - 1000, status: 'pendiente', paymentStatus: 'pendiente', total: 100, items: [], shipping: { city: 'B' } },
+  const allOrders = [{ createdAt: now - 10000, status: 'entregado', paymentStatus: 'pagado', shippingCost:0, total: 200, items: [], shipping: { city: 'A' } },
+    { createdAt: now - 1000, status: 'pendiente', paymentStatus: 'pendiente', shippingCost:0, total: 100, items: [], shipping: { city: 'B' } },
     ...extraOrders.map(order=>({createdAt:now-500,status:'entregado',paymentStatus:'pagado',...order}))];
-  const dependencies = { currentRole: 'superadmin', ensureStatisticsControls: () => true, refreshStatisticsViews() {}, runAdminCrudOperation() {},
+  const dependencies = {orderAmounts,sumOrderAmounts,commercePeriodWindow,statisticsRangeDays:7,statisticsSelectedYear:null,syncStatisticsYears(){}, currentRole: 'superadmin', ensureStatisticsControls: () => true, refreshStatisticsViews() {}, runAdminCrudOperation() {},
     statisticsStartDate: () => new Date(now - 100000), allOrders, allUsers: [{ createdAt: now - 10000 }],
     activityTimestampMillis: value => Number(value), statisticsOrderIsValid: validOrder,
     statisticsPaymentStatus: order => order.paymentStatus, statisticsTrafficSessions: [{ startedAt: now - 10000, visitorId: 'old' }, { startedAt: now - 1000, visitorId: 'new' }],
@@ -65,4 +67,14 @@ test('product ranking respects the existing invalid-order policy for cancelled a
  const items=[{id:'a',name:'Fixture',qty:1,price:100}];
  const {rankings}=render({},[{status:'cancelado',items},{status:'rechazado',items}]);
  assert.deepEqual(rankings['statistics-top-products'],[]);
+});
+
+test('delivery independiente no aumenta ventas ni ticket y se puede reiniciar sin borrar ventas históricas',()=>{
+ const order={total:115000,subtotal:100000,shippingCost:15000};
+ const result=render({},[order]);
+ assert.equal(result.values['statistics-revenue'],100300);
+ assert.equal(result.values['statistics-delivery'],15000);
+ assert.equal(result.values['statistics-paid'],100200);
+ const reset=render({delivery:new Date(result.now+1000)},[order]);
+ assert.equal(reset.values['statistics-delivery'],0);assert.equal(reset.values['statistics-revenue'],100300);
 });

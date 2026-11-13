@@ -1,3 +1,4 @@
+import { orderAmounts, orderAmountSummary } from '../js/orders/importes-pedido.mjs';
 import { customerOrderMessage, lifecycleStatus, shippingMethod } from '../js/orders/ciclo-pedido.mjs';
 
 // Sólo campos que ve la clienta: notas internas, auditoría y reenvíos de
@@ -49,7 +50,8 @@ export function orderCustomerNotice(orderId, order, actor = {}, { created = fals
     event: {
       kind: created ? 'order_created' : detailChanges.length ? 'order_updated' : 'order_status', actorType: 'store', actorUid: actor.uid || '', actorName: 'Tintin Accesorios',
       title: created ? `Recibimos tu pedido ${number}` : paymentChanged ? paymentTitle : detailChanges.length ? `Actualizamos los detalles de tu pedido ${number}` : titles[stage] || `Tu pedido ${number} fue actualizado`,
-      body: created ? 'Tu pedido ya está registrado. Acá vas a recibir cada avance hasta la entrega.' : detailChanges.length ? `Revisá los cambios de ${detailChanges.join(', ')} en el detalle de tu pedido.` : `${customerOrderMessage(order)}${payment ? ` Pago: ${payment.replace(/_/g, ' ')}.` : ''}`,
+      body: orderAmountSummary(order) + ' · ' + (created ? 'Tu pedido ya está registrado. Acá vas a recibir cada avance hasta la entrega.' : detailChanges.length ? `Revisá los cambios de ${detailChanges.join(', ')} en el detalle de tu pedido.` : `${customerOrderMessage(order)}${payment ? ` Pago: ${payment.replace(/_/g, ' ')}.` : ''}`),
+      amountBreakdown: orderAmounts(order),
       iconKey: paymentChanged ? (paymentConfirmed ? 'payment-confirmed' : 'payment-pending') : 'order', targetUrl: `perfil.html#pedido-${encodeURIComponent(id)}`,
       orderId: id, orderNumber: number, status, sourceType: 'order', sourceId: id,
     },

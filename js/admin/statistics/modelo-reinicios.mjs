@@ -1,5 +1,5 @@
 export const RESETTABLE_STATISTICS = Object.freeze({
-  revenue: 'Facturación', paid: 'Importe pagado', orders: 'Cantidad de pedidos', average: 'Ticket promedio',
+  revenue: 'Venta de productos (sin delivery)', delivery: 'Delivery (no ingreso)', paid: 'Productos pagados', orders: 'Cantidad de pedidos', average: 'Ticket promedio',
   users: 'Usuarios nuevos', visitors: 'Visitantes y sesiones', conversion: 'Conversión', trend: 'Evolución',
   orderStatus: 'Estados de pedido', paymentStatus: 'Estados de pago', products: 'Productos vendidos',
   orderLocations: 'Ubicaciones de pedidos', visitLocations: 'Ubicaciones de visitas', entryPages: 'Páginas de entrada',

@@ -105,3 +105,21 @@ test('presupuesto y conflictos persistentes fallan sin publicar datos parciales'
   }), /conflict/);
   assert.equal(commits, 3);
 });
+
+test('resumen recalcula productos y delivery de años anteriores dentro de orderStats protegido',async()=>{
+ let saved;
+ const result=await syncOrderOwnerStats({},identity,{
+  get:account,
+  queryPage:async(_env,_collection,field)=>page(field==='userId'?[
+   order('legacy',115000,{createdAt:'2023-01-01T12:00:00Z',shippingCost:15000}),
+   order('current',225000,{subtotal:200000,shippingCost:25000}),
+   order('cancelled',900000,{status:'cancelado',shippingCost:100000}),
+   order('unknown',80000)
+  ]:[]),
+  commit:async(_env,writes)=>{saved=decodeFirestoreFields(writes[0].fields);}
+ });
+ assert.equal(result.updated,true);assert.equal(saved.totalSpent,420000);
+ assert.equal(saved.orderStats.productsSpent,300000);assert.equal(saved.orderStats.deliverySpent,40000);
+ assert.equal(saved.orderStats.unknownProducts,1);assert.equal(saved.orderStats.unknownDelivery,1);
+ assert.equal(Object.hasOwn(saved,'productsSpent'),false);assert.equal(Object.hasOwn(saved,'deliverySpent'),false);
+});

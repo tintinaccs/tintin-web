@@ -66,6 +66,7 @@ const ORDER = {
   shortId: 'A1B2C3D4',
   total: 180000,
   subtotal: 150000,
+  shippingCost: 30000,
   userName: 'Clienta Ejemplo',
   userEmail: 'clienta@example.com',
   userPhone: '0981123456',
@@ -103,7 +104,7 @@ test('el mensaje de pedido creado usa el texto acordado', () => {
     eventId: `order.created:${ORDER_ID}`
   });
   assert.equal(content.title, 'Nuevo pedido en Tintin');
-  assert.equal(content.body, 'Pedido #A1B2C3D4 · Gs. 180.000 · Delivery');
+  assert.equal(content.body, 'Pedido #A1B2C3D4 · Productos: Gs. 150.000 · Delivery: Gs. 30.000 · Total del pedido: Gs. 180.000 · Delivery');
   assert.equal(content.data.shortId, 'A1B2C3D4');
   assert.equal(content.data.url, `/admin.html?section=pedidos&order=${ORDER_ID}`);
 });

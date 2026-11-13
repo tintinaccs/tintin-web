@@ -1,3 +1,11 @@
+## 2026-11-12 — venta de productos y delivery separados
+
+- Autoridad de lectura única del snapshot del pedido; no altera total cobrable, reservas, pago ni precios históricos.
+- Consumidores: estadísticas/rangos/reinicios, dashboard y fichas/cuentas/clientes locales; campana/FCM/avisos en vivo, perfil y pedidos, CSV, checkout/comprobantes/correos y evento Analytics futuro.
+- Historia: recalcular vistas desde pedidos; importar montos desconocidos como desconocidos. No hay migración masiva, reenvío de avisos ni reescritura de GA4 histórico.
+- Campo compatible totalSpent conserva gasto bruto; nuevos subtotales persistidos dentro del mapa orderStats ya protegido. Índice de perfil mantiene selección ligera sin PII adicional ni array items.
+- Validación: regresiones Node comerciales y de permisos, importes legado/cupón/envío externo/descuentos,7 viewports/rangos/años y suites existentes de campana/tablero/perfil; generadores canónicos y plan protegido contra base vigente antes de CI.
+
 ## 2026-11-12 — referencias nuevas del editor publicado
 
 - Problema acreditado: copias anteriores en caché bajo free-crop-1 tras lectura anticipada a la publicación de1383.

@@ -1,3 +1,4 @@
+import { sumOrderAmounts } from '../js/orders/importes-pedido.mjs';
 import {
   decodeFirestoreFields,
   encodeFirestoreFields,
@@ -23,10 +24,12 @@ function statsFor(orders) {
   const pending = valid.filter(order => String(order?.status || '').toLowerCase() !== 'entregado');
   const last = ordered[0] || null;
   const lastPurchase = valid[0] || null;
+  const breakdown = sumOrderAmounts(valid);
   return {
     orderCount: ordered.length,
     purchaseCount: ordered.length,
     totalOrders: ordered.length,
+    productsSpent: breakdown.products, deliverySpent: breakdown.delivery, unknownProducts: breakdown.unknownProducts, unknownDelivery: breakdown.unknownDelivery,
     totalSpent: Math.max(0, valid.reduce((sum, order) => sum + Math.max(0, Number(order?.total) || 0), 0)),
     completedOrders: completed.length,
     pendingOrders: pending.length,
@@ -39,8 +42,9 @@ function statsFor(orders) {
 }
 
 function statsPayload(stats) {
+  const { productsSpent, deliverySpent, unknownProducts, unknownDelivery, ...stored } = stats;
   return {
-    ...stats,
+    ...stored,
     profileStatsUpdatedAt: new Date(),
     updatedAt: new Date(),
     orderStats: {
@@ -50,6 +54,7 @@ function statsPayload(stats) {
       pending: stats.pendingOrders,
       cancelled: stats.cancelledOrders,
       totalSpent: stats.totalSpent,
+      productsSpent: stats.productsSpent, deliverySpent: stats.deliverySpent, unknownProducts: stats.unknownProducts, unknownDelivery: stats.unknownDelivery,
       lastOrderId: stats.lastOrderId,
       lastPurchaseOrderId: stats.lastPurchaseOrderId,
       lastRecalculatedAt: new Date(),

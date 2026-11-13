@@ -19,7 +19,8 @@ for(const [width,height] of [[320,568],[390,844],[430,932],[540,960],[844,390]])
  else await expect(page.getByRole('button',{name:'Fijar barra lateral abierta'})).toBeVisible();
  await expect(page.locator('.tt-control-search')).toBeVisible();
  await expect(page.locator('.tt-dashboard-link')).toHaveCount(4);await expect(page.locator('#dash-stats .adm-stat')).toHaveCount(6);
- if(width===390){const last=await page.locator('#dash-stats .adm-stat').last().boundingBox(),nav=await page.locator('#adm-mobile-tabs').boundingBox();expect(last.y+last.height).toBeLessThan(nav.y);}
+ // El desglose agrega información: todas las métricas deben poder leerse al desplazar, sin quedar bajo la barra fija.
+ if(width<=540){await page.locator('#dash-stats .adm-stat').last().scrollIntoViewIfNeeded();const last=await page.locator('#dash-stats .adm-stat').last().boundingBox(),nav=await page.locator('#adm-mobile-tabs').boundingBox();expect(last.y+last.height).toBeLessThan(nav.y);await page.evaluate(()=>scrollTo(0,0));}
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.getByRole('button',{name:'Ver secciones'}).click();await expect(page.getByRole('dialog',{name:'Buscar módulos'})).toBeVisible();await page.keyboard.press('Escape');
  await page.evaluate(()=>{const wrap=document.createElement('div');wrap.className='adm-notifications-wrap';const button=document.createElement('button');button.className='adm-notifications-button';button.setAttribute('aria-label','Notificaciones');wrap.append(button);const actions=document.querySelector('.adm-topbar-actions');actions.insertBefore(wrap,actions.querySelector('.adm-topbar-btn'));document.getElementById('adm-topbar-title').textContent='Pedidos mayoristas';});

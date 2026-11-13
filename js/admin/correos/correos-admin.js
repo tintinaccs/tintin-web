@@ -1,3 +1,4 @@
+import {orderAmountSummary} from '../../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';
 import {normalizeAdminSearch,debounceAdminSearch} from '../datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 // Dependencias explícitas; el estado de sesión y las fuentes vivas se leen al usarse.
 export function iniciarCorreos({
@@ -231,7 +232,7 @@ function buildPreviewHtml_(t, vars) {
 function fakeTestVariables_() {
   return {
     clienteNombre: 'Cliente de prueba', pedidoNumero: 'TEST123', productos: '1x BAG RUBY',
-    total: formatPrice(190000), estadoPedido: 'Pendiente de confirmación', metodoEntrega: 'Delivery',
+    total: 'Productos: '+formatPrice(175000)+' · Delivery: '+formatPrice(15000)+' · Total del pedido: '+formatPrice(190000), estadoPedido: 'Pendiente de confirmación', metodoEntrega: 'Delivery',
     fechaPedido: new Date().toLocaleDateString('es-PY')
   };
 }
@@ -241,7 +242,7 @@ function orderToVariables_(order) {
     clienteNombre: order.userName || '',
     pedidoNumero: order.shortId || (order.id ? String(order.id).slice(0,8).toUpperCase() : ''),
     productos: (order.items||[]).map(i => `${i.qty}x ${i.name}`).join(', '),
-    total: formatPrice(order.total || 0),
+    total: orderAmountSummary(order,formatPrice),
     estadoPedido: ORDER_STATUS_LABELS[order.status] || order.status || '',
     metodoEntrega: ({delivery:'Delivery', encomienda:'Encomienda', retiro:'Retiro en tienda'})[order.shipping?.method] || '',
     fechaPedido: formatDate(order.createdAt)

@@ -1,3 +1,7 @@
+import {commercePeriodStart,commercePeriodWindow,commerceYear} from './statistics/periodos-comerciales.mjs?v=tintin-20261112-delivery-separate-1';
+import {statisticsTodayStart} from './statistics/modelo-reinicios.mjs?v=tintin-20261112-delivery-separate-1';
+import {orderAmounts,sumOrderAmounts,deliveryAmountText} from '../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';
+import {orderMoneyMarkup} from '../orders/presentacion-importes.mjs?v=tintin-20261112-delivery-separate-1';
 import { recordAuditEntry } from './auditoria/registro-auditoria.js?v=tintin-20261030-audit-integrity-1';
 import { normalizeAdminSearch, debounceAdminSearch } from './datos/busqueda-admin.mjs?v=tintin-20261028-search-admin-1';
 import { createAdminSectionLoader } from './carga-secciones-admin.mjs?v=tintin-20261101-admin-entry-1';
@@ -11,11 +15,11 @@ import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-202
 import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261102-phase03-editor-1';
 import { reorderVariantInventory, variantAttributes } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
-import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
+import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261112-delivery-separate-1';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261101-app-movil-1';
 import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261031-seo-espacios-2';
-import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261022-avatar-inicial-1';
+import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261112-delivery-separate-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
@@ -32,7 +36,7 @@ import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, startAfter, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20261029-performance-1";
+import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20261112-delivery-separate-1";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
 // automático del checkout (js/pages/checkout/checkout-puente-correo.js), no el webhook viejo
 // de Apps Script de notificaciones-correo.js — evita reenviar por un canal que ya no
@@ -138,6 +142,7 @@ let adminRealtimeAuthRecoveryPromise = null;
 let statisticsTrafficSessions = [];
 let statisticsTrafficHistorySessions = [];
 let statisticsRangeDays = 7;
+let statisticsSelectedYear = null;
 let statisticsTrafficLoadToken = 0;
 let dashboardSessionUnsubscribe = null;
 let dashboardPresenceUnsubscribe = null;
@@ -1461,11 +1466,11 @@ function activityRelativeTime(timestamp, now = Date.now()) {
   return `hace ${Math.max(1, Math.floor(seconds / 60))} min`;
 }
 
-function statisticsStartDate(days = statisticsRangeDays) {
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  start.setDate(start.getDate() - Math.max(0, Number(days || 1) - 1));
-  return start;
+function statisticsStartDate(days = statisticsRangeDays) { return commercePeriodStart(days); }
+function syncStatisticsYears() {
+ const select=document.getElementById('statistics-range');if(!select)return;
+ const years=[...new Set(allOrders.map(order=>activityTimestampMillis(order.createdAt)).filter(Boolean).map(time=>commerceYear(new Date(time))))].sort().reverse();
+ for(const year of years){const value='year:'+year;if(![...select.options].some(option=>option.value===value)){const option=document.createElement('option');option.value=value;option.textContent='Año '+year;select.append(option);}}
 }
 
 function statisticsDayKey(value) {
@@ -1492,7 +1497,7 @@ function statisticsPaymentStatus(order) {
 }
 
 function statisticsOrderIsValid(order) {
-  return !['cancelado', 'rechazado'].includes(order?.status || 'pendiente');
+  return !['cancelado', 'rechazado'].includes(order?.status || 'pendiente') && !['cancelado','rechazado','reembolsado'].includes((order?.payment?.status || order?.paymentStatus || 'pendiente'));
 }
 
 function statisticsActivePresence(now = Date.now()) {
@@ -1547,14 +1552,12 @@ function renderStatisticsTrend() {
   if (!container) return;
   const days = [];
   for (let offset = 6; offset >= 0; offset -= 1) {
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
-    date.setDate(date.getDate() - offset);
+    const date = statisticsTodayStart(new Date(Date.now()-offset*86400000));
     const key = new Intl.DateTimeFormat('en-CA', {
       timeZone: 'America/Asuncion', year: 'numeric', month: '2-digit', day: '2-digit'
     }).format(date);
     const dayOrders = filterStatisticsRows('trend', allOrders, row => activityTimestampMillis(row.createdAt)).filter(order => statisticsDayKey(order.createdAt) === key && statisticsOrderIsValid(order));
-    const revenue = dayOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+    const revenue = dayOrders.reduce((sum, order) => sum + (orderAmounts(order).products ?? 0), 0);
     const visits = filterStatisticsRows('trend', statisticsTrafficSessions, row => activityTimestampMillis(row.startedAt)).filter(session => statisticsDayKey(session.startedAt) === key).length;
     days.push({ date, key, orders: dayOrders.length, revenue, visits });
   }
@@ -1569,7 +1572,7 @@ function renderStatisticsTrend() {
     return `
       <div class="adm-trend-day">
         <div class="adm-trend-bars" title="${day.orders} pedidos · ${formatPrice(day.revenue)} · ${day.visits} sesiones">
-          <div class="adm-trend-bar" style="--adm-trend-height:${revenueHeight}px" aria-label="Facturación ${formatPrice(day.revenue)}"></div>
+          <div class="adm-trend-bar" style="--adm-trend-height:${revenueHeight}px" aria-label="Productos sin delivery ${formatPrice(day.revenue)}"></div>
           <div class="adm-trend-bar adm-trend-bar-orders" style="--adm-trend-height:${ordersHeight}px" aria-label="${day.orders} pedidos"></div>
           <div class="adm-trend-bar adm-trend-bar-visits" style="--adm-trend-height:${visitsHeight}px" aria-label="${day.visits} sesiones"></div>
         </div>
@@ -1584,11 +1587,13 @@ function renderGeneralStatistics() {
   if (currentRole !== 'superadmin') return;
   if (!ensureStatisticsControls(refreshStatisticsViews, runAdminCrudOperation)) return;
   const now = Date.now();
-  const rangeStart = statisticsStartDate().getTime();
-  const rangeOrders = allOrders.filter(order => activityTimestampMillis(order.createdAt) >= rangeStart);
+  syncStatisticsYears();
+  const period=commercePeriodWindow({days:statisticsRangeDays,year:statisticsSelectedYear,now:new Date(now)});
+  const inPeriod=row=>{const time=activityTimestampMillis(row.createdAt);return time>0&&time>=period.start&&time<period.end;};
+  const rangeOrders = allOrders.filter(inPeriod);
   const ordersFor = metric => filterStatisticsRows(metric, rangeOrders, row => activityTimestampMillis(row.createdAt));
   const sessionsFor = metric => filterStatisticsRows(metric, statisticsTrafficSessions, row => activityTimestampMillis(row.startedAt));
-  const averageOrders = ordersFor('average').filter(statisticsOrderIsValid);
+  const averageOrders = ordersFor('average').filter(statisticsOrderIsValid).filter(order=>orderAmounts(order).products!==null);
   const orderGroups = new Map(), sessionGroups = new Map();
   const orderIncluded = (metric, order) => {
     if (!orderGroups.has(metric)) orderGroups.set(metric, new Set(ordersFor(metric)));
@@ -1598,15 +1603,21 @@ function renderGeneralStatistics() {
     if (!sessionGroups.has(metric)) sessionGroups.set(metric, new Set(sessionsFor(metric)));
     return sessionGroups.get(metric).has(session);
   };
-  const revenue = ordersFor('revenue').filter(statisticsOrderIsValid).reduce((sum, order) => sum + Number(order.total || 0), 0);
+  const revenue = ordersFor('revenue').filter(statisticsOrderIsValid).reduce((sum, order) => sum + (orderAmounts(order).products ?? 0), 0);
   const paid = ordersFor('paid')
-    .filter(order => statisticsPaymentStatus(order) === 'pagado')
-    .reduce((sum, order) => sum + Number(order.total || 0), 0);
-  const rangeUsers = filterStatisticsRows('users', allUsers.filter(user => activityTimestampMillis(user.createdAt) >= rangeStart), row => activityTimestampMillis(row.createdAt));
+    .filter(order => statisticsOrderIsValid(order) && statisticsPaymentStatus(order) === 'pagado')
+    .reduce((sum, order) => sum + (orderAmounts(order).products ?? 0), 0);
+  const deliverySummary = sumOrderAmounts(ordersFor('delivery').filter(statisticsOrderIsValid));
+  const salesSummary = sumOrderAmounts(ordersFor('revenue').filter(statisticsOrderIsValid));
+  statisticsSetText('statistics-delivery', adminRealtimeReady.orders ? formatPrice(deliverySummary.delivery) : '—');
+  statisticsSetText('statistics-delivery-note', `${deliverySummary.unknownDelivery} pedidos con envío a confirmar/no registrado. No es ingreso de Tintín.`);
+  statisticsSetText('statistics-revenue-note', salesSummary.unknownProducts ? `${salesSummary.unknownProducts} pedidos sin desglose de productos; no se atribuyen a ventas.` : 'Productos en pedidos válidos, sin delivery');
+  const rangeUsers = filterStatisticsRows('users', allUsers.filter(inPeriod), row => activityTimestampMillis(row.createdAt));
   const activeUsers = allUsers.filter(user => !user.blocked).length;
   const blockedUsers = allUsers.filter(user => user.blocked).length;
   const uniqueVisitors = new Set(sessionsFor('visitors').map(session => session.visitorId).filter(Boolean)).size;
   const conversionVisitors = new Set(sessionsFor('conversion').map(session => session.visitorId).filter(Boolean)).size;
+  const trafficLimited = statisticsRangeDays === 0 || statisticsRangeDays > 30;
   const conversionOrders = ordersFor('conversion').filter(statisticsOrderIsValid).length;
   const activePresence = statisticsActivePresence(now);
   const activeProducts = _allProducts.filter(product => product.active !== false);
@@ -1615,13 +1626,14 @@ function renderGeneralStatistics() {
   statisticsSetText('statistics-revenue', adminRealtimeReady.orders ? formatPrice(revenue) : '—');
   statisticsSetText('statistics-paid', adminRealtimeReady.orders ? formatPrice(paid) : '—');
   statisticsSetText('statistics-orders', adminRealtimeReady.orders ? String(ordersFor('orders').length) : '—');
-  statisticsSetText('statistics-average-ticket', adminRealtimeReady.orders ? formatPrice(averageOrders.length ? averageOrders.reduce((sum, row) => sum + Number(row.total || 0), 0) / averageOrders.length : 0) : '—');
+  statisticsSetText('statistics-average-ticket', adminRealtimeReady.orders ? formatPrice(averageOrders.length ? averageOrders.reduce((sum, row) => sum + (orderAmounts(row).products ?? 0), 0) / averageOrders.length : 0) : '—');
   statisticsSetText('statistics-new-users', adminRealtimeReady.users ? String(rangeUsers.length) : '—');
   statisticsSetText('statistics-active-users', adminRealtimeReady.users ? String(activeUsers) : '—');
   statisticsSetText('statistics-blocked-users', adminRealtimeReady.users ? `${blockedUsers} bloqueado${blockedUsers === 1 ? '' : 's'}` : '—');
   statisticsSetText('statistics-visitors', adminRealtimeReady.traffic ? String(uniqueVisitors) : '—');
   statisticsSetText('statistics-sessions', adminRealtimeReady.traffic ? `${sessionsFor('visitors').length} ${sessionsFor('visitors').length === 1 ? 'sesión' : 'sesiones'}` : '—');
-  statisticsSetText('statistics-conversion', adminRealtimeReady.orders && adminRealtimeReady.traffic && conversionVisitors ? ((conversionOrders / conversionVisitors) * 100).toFixed(1) + '%' : '—');
+  statisticsSetText('statistics-conversion', adminRealtimeReady.orders && adminRealtimeReady.traffic && !trafficLimited && conversionVisitors ? ((conversionOrders / conversionVisitors) * 100).toFixed(1) + '%' : '—');
+  statisticsSetText('statistics-traffic-period', trafficLimited ? 'Visitas: últimos 30 días; ventas: período seleccionado' : 'Visitas del período seleccionado');
   statisticsSetText('statistics-online', adminRealtimeReady.presence ? String(activePresence.length) : '—');
   statisticsSetText('statistics-active-products', adminRealtimeReady.products ? String(activeProducts.length) : '—');
   statisticsSetText('statistics-low-stock', adminRealtimeReady.products ? `${lowStockProducts} con stock bajo` : '—');
@@ -1692,10 +1704,8 @@ async function listenStatisticsTraffic() {
   const loadToken = ++statisticsTrafficLoadToken;
   adminRealtimeReady.traffic = false;
   const dayKeys = [];
-  for (let offset = statisticsRangeDays - 1; offset >= 0; offset -= 1) {
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
-    date.setDate(date.getDate() - offset);
+  for (let offset = Math.min(statisticsRangeDays || 30,30) - 1; offset >= 0; offset -= 1) {
+    const date = statisticsTodayStart(new Date(Date.now()-offset*86400000));
     dayKeys.push(new Intl.DateTimeFormat('en-CA', {
       timeZone: 'America/Asuncion', year: 'numeric', month: '2-digit', day: '2-digit'
     }).format(date));
@@ -1984,7 +1994,8 @@ function startAdminRealtimeData() {
 const statisticsRangeSelect = document.getElementById('statistics-range');
 if (statisticsRangeSelect) {
   statisticsRangeSelect.addEventListener('change', () => {
-    statisticsRangeDays = Math.max(1, Math.min(30, Number(statisticsRangeSelect.value || 7)));
+    statisticsSelectedYear = /^year:\d{4}$/.test(statisticsRangeSelect.value) ? Number(statisticsRangeSelect.value.slice(5)) : null;
+    statisticsRangeDays = statisticsSelectedYear ? 0 : [0,1,7,30,90,365,730].includes(Number(statisticsRangeSelect.value)) ? Number(statisticsRangeSelect.value) : 7;
     statisticsSetText('statistics-live-status', 'Actualizando…');
     listenStatisticsTraffic();
     renderGeneralStatistics();
@@ -2236,18 +2247,15 @@ function renderDashboardData() {
     }
 
     if (canVentas && ordersReady && statisticsReady) {
-      const today2 = new Date();
-      const monthStart = new Date(today2.getFullYear(), today2.getMonth(), 1);
-      const monthSales = filterStatisticsRows('revenue', orders, row => activityTimestampMillis(row.createdAt))
-        .filter(o => {
-          if (!o.createdAt) return false;
-          const d = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
-          return d >= monthStart;
-        })
-        .reduce((s, o) => s + (o.total || 0), 0);
-      statSalesMonthEl.textContent = formatPrice(monthSales);
+      const monthKey=statisticsDayKey(new Date()).slice(0,7);
+      const monthOrders=orders.filter(order=>statisticsDayKey(order.createdAt).slice(0,7)===monthKey&&statisticsOrderIsValid(order));
+      const sales=sumOrderAmounts(filterStatisticsRows('revenue',monthOrders,row=>activityTimestampMillis(row.createdAt)));
+      const delivery=sumOrderAmounts(filterStatisticsRows('delivery',monthOrders,row=>activityTimestampMillis(row.createdAt)));
+      statSalesMonthEl.textContent = formatPrice(sales.products)+(sales.unknownProducts?' · Desglose incompleto':'');
+      statisticsSetText('stat-delivery-month',`Delivery aparte: ${formatPrice(delivery.delivery)} (no ingreso)${delivery.unknownDelivery?' · Hay envíos sin importe registrado':''}`);
     } else {
       statSalesMonthEl.textContent = '—';
+      statisticsSetText('stat-delivery-month','Delivery aparte: —');
     }
 
     if (!canRecientes) {
@@ -2281,7 +2289,7 @@ function renderDashboardData() {
     tbody.innerHTML = recent.map(o => `
       <tr>
         <td><strong>${escapeHtmlAdmin(o.userName || o.userEmail || '—')}</strong><br><small style="color:#777">${escapeHtmlAdmin(o.userPhone || '')}</small></td>
-        <td style="font-weight:700;color:var(--color-text-primary,#713C53)">${formatPrice(o.total || 0)}</td>
+        <td style="font-weight:700;color:var(--color-text-primary,#713C53)">${orderMoneyMarkup(o,formatPrice)}</td>
         <td>${orderStatusBadgeHtml(o.status)}</td>
         <td>${escapeHtmlAdmin(o.shipping?.city || '—')}</td>
         <td>${formatDate(o.createdAt)}</td>
@@ -2340,7 +2348,7 @@ function applyUserFilters() {
     ? filtered.filter(u => u.blocked && u.deleted !== true && u.profileStatus !== 'deleted')
     : filtered.filter(u => !u.blocked && u.deleted !== true && u.profileStatus !== 'deleted');
   filtered = userSortMode === 'totalSpent'
-    ? [...filtered].sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0))
+    ? [...filtered].sort((a, b) => (b.productsSpent || 0) - (a.productsSpent || 0))
     : userSortMode === 'purchaseCount'
       ? [...filtered].sort((a, b) => (b.purchaseCount || 0) - (a.purchaseCount || 0))
       : userSortMode === 'name'
@@ -2456,7 +2464,7 @@ function renderUsersTable(users) {
         <td>${roleSelect}</td>
         <td>${blockedBadge}${blockedDetail}</td>
         <td style="font-size:12px;color:#713C53">${u.purchaseCount || 0}</td>
-        <td style="font-size:12px;color:#713C53">${formatPrice(u.totalSpent || 0)}</td>
+        <td style="font-size:12px;color:#713C53">${u.productsSpent==null?'—':formatPrice(u.productsSpent)} productos<br><small>${u.deliverySpent==null?'—':formatPrice(u.deliverySpent)} delivery</small>${u.unknownProducts||u.unknownDelivery?'<br><small>Hay pedidos sin desglose registrado</small>':''}</td>
         <td>${actions}</td>
       </tr>
     `;
@@ -2760,10 +2768,10 @@ window.bulkRestoreUsers = async function() {
 
 
 function userRowsToCsv_(users) {
-  const header = ['UID', 'Nombre', 'Email', 'Rol', 'Estado', 'Teléfono', 'Compras', 'Total gastado', 'Notas internas'];
+  const header = ['UID', 'Nombre', 'Email', 'Rol', 'Estado', 'Teléfono', 'Compras', 'Productos comprados', 'Delivery (aparte)', 'Pedidos sin desglose de productos', 'Pedidos sin importe de delivery', 'Notas internas'];
   const rows = users.map(u => [
     u.uid || '', u.name || '', u.email || '', ROLE_LABELS[u.role] || u.role || '',
-    u.blocked ? 'Bloqueado' : 'Activo', u.phone || '', u.purchaseCount || 0, u.totalSpent || 0, u.internalNotes || ''
+    u.blocked ? 'Bloqueado' : 'Activo', u.phone || '', u.purchaseCount || 0, u.productsSpent ?? '', u.deliverySpent ?? '', u.unknownProducts ?? '', u.unknownDelivery ?? '', u.internalNotes || ''
   ]);
   return [header, ...rows];
 }
@@ -2848,7 +2856,7 @@ function renderOrdersTable(orders) {
           <small style="color:#777;font-size:10px">${escapeHtmlAdmin(o.userEmail || '')}</small>
         </td>
         <td data-label="Productos" style="font-size:12px;max-width:160px">${escapeHtmlAdmin(itemsText || '—')}</td>
-        <td data-label="Total" style="font-weight:800;color:var(--color-text-primary,#713C53)">${formatPrice(o.total || 0)}</td>
+        <td data-label="Total" style="font-weight:800;color:var(--color-text-primary,#713C53)">${orderMoneyMarkup(o,formatPrice)}</td>
         <td data-label="Estado" onclick="event.stopPropagation()">
           ${orderStatusBadgeHtml(orderStatus)}
           ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" ${adminEventAttributes('change','updateOrderStatus',[orderArg,{control:'value'}])}>
@@ -2912,9 +2920,9 @@ function renderOrdersTable(orders) {
               </div>
             </div>
             <div style="margin-top:12px;padding-top:10px;border-top:1px solid #f0d8e0;font-size:13px">
-              Subtotal: <strong>${formatPrice(o.subtotal||0)}</strong> &nbsp;|&nbsp;
-              Envío: <strong>${o.shippingCost == null ? 'Consultar precio' : formatPrice(o.shippingCost)}</strong> &nbsp;|&nbsp;
-              <span style="color:var(--color-text-primary,#713C53);font-weight:900;font-size:15px">TOTAL: ${formatPrice(o.total||0)}</span>
+              Productos: <strong>${orderAmounts(o).products===null ? 'No registrado' : formatPrice(orderAmounts(o).products)}</strong> &nbsp;|&nbsp;
+              Envío: <strong>${deliveryAmountText(o,formatPrice)}</strong> &nbsp;|&nbsp;
+              <span style="color:var(--color-text-primary,#713C53);font-weight:900;font-size:15px">TOTAL DEL PEDIDO: ${formatPrice(o.total||0)}</span>
             </div>
             ${o.userPhone ? `
             <div style="margin-top:12px">
@@ -3326,7 +3334,7 @@ window.bulkDeleteOrders = async function() {
 };
 
 function orderRowsToCsv_(orders) {
-  const header = ['ID', 'Cliente', 'Email', 'Teléfono', 'Ciudad', 'Productos', 'Total', 'Estado', 'Estado de pago', 'Fecha'];
+  const header = ['ID', 'Cliente', 'Email', 'Teléfono', 'Ciudad', 'Productos', 'Venta productos', 'Delivery (no ingreso)', 'Total del pedido', 'Estado', 'Estado de pago', 'Fecha'];
   const rows = orders.map(o => [
     o.orderNumber || o.shortId || o.id,
     o.userName || '',
@@ -3334,7 +3342,9 @@ function orderRowsToCsv_(orders) {
     o.userPhone || '',
     o.shipping?.city || o.city || '',
     (o.items || []).map(it => `${it.qty}x ${it.name}`).join('; '),
-    o.total || 0,
+    orderAmounts(o).products ?? '',
+    orderAmounts(o).delivery ?? '',
+    o.total ?? '',
     ORDER_STATUS_LABELS[o.status] || o.status || '',
     PAY_STATUS_LABELS[o.payment?.status || o.paymentStatus] || '',
     o.createdAt?.toDate ? o.createdAt.toDate().toLocaleDateString('es-PY') : ''
@@ -3585,7 +3595,7 @@ const loadDeferredAdminSection = createAdminSectionLoader({
   document,
   canLoad: () => currentRole === 'superadmin' && String(currentUser?.email || '').toLowerCase() === SUPER_ADMIN.toLowerCase(),
   sections: {
-    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261108-emaillog-esquema-1'), init: initDeferredCorreos },
+    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261112-delivery-separate-1'), init: initDeferredCorreos },
     diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-suitcase-20261104-1'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
     paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261108-appcheck-fallo-1') },
     apariencia: { load: async () => {
@@ -6032,7 +6042,7 @@ function loadImportar() {
     const SHIP_LABELS = { delivery: 'Delivery', encomienda: 'Encomienda', retiro: 'Retiro en tienda' };
     const rows = [[
       'Número de pedido', 'Fecha', 'Cliente', 'Email', 'Teléfono', 'Estado',
-      'Estado de pago', 'Productos', 'Total', 'Método de entrega', 'Ciudad/Zona'
+      'Estado de pago', 'Productos', 'Venta productos', 'Delivery (no ingreso)', 'Total del pedido', 'Método de entrega', 'Ciudad/Zona'
     ]];
     snap.docs.forEach(d => {
       const o = d.data();
@@ -6049,7 +6059,9 @@ function loadImportar() {
         ORDER_STATUS_LABELS[o.status] || o.status || 'Pendiente',
         PAY_STATUS_LABELS[o.paymentStatus || o.payment?.status] || o.paymentStatus || o.payment?.status || 'Pago pendiente',
         productos,
-        o.total ?? 0,
+        orderAmounts(o).products ?? '',
+        orderAmounts(o).delivery ?? '',
+        o.total ?? '',
         metodo,
         ciudadZona
       ]);

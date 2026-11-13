@@ -296,7 +296,8 @@ function bindCommerceEvents() {
     const detail = event?.detail || {};
     track('purchase', {
       currency: 'PYG',
-      value: safeNumber(detail.value, { min: 0 }) || 0,
+      ...(detail.value!=null?{value:safeNumber(detail.value,{min:0})||0}:{}),
+      ...(detail.shipping!=null?{shipping:safeNumber(detail.shipping,{min:0})||0}:{}),
       quantity: safeNumber(detail.quantity, { integer: true, min: 0, max: 999 }) || 0,
       item_count: safeNumber(detail.itemCount, { integer: true, min: 0, max: 100 }) || 0
     }, { dedupeKey: cleanText(detail.dedupeKey, 120) });

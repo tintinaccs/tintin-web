@@ -1,3 +1,4 @@
+import {orderAmounts} from '../../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import {
   collection,
@@ -83,7 +84,8 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
     const itemCount = items.filter(item => Number(item?.qty) > 0).length;
     window.dispatchEvent(new CustomEvent('tintin:order-created', {
       detail: {
-        value: Math.max(0, Number(order?.total) || 0),
+        value: orderAmounts(order).products,
+        shipping: orderAmounts(order).delivery,
         quantity,
         itemCount,
         // Solo se usa localmente para evitar eventos repetidos. analitica.js

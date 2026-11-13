@@ -1,3 +1,4 @@
+import { orderAmounts } from '../js/orders/importes-pedido.mjs';
 import { ordersForView } from '../js/orders/pedidos-prueba.mjs';
 import { decodeFirestoreFields, encodeFirestoreFields, firestoreAdminGet, firestoreAdminListAll } from './firebase-admin-ligero.js';
 import { firestoreAdminBatchCommit } from './firestore-admin-batch.js';
@@ -77,15 +78,15 @@ export function historicalOrder(entry, contact = {}) {
   return {orderNumber:`LOCAL-${entry.year}-${String(entry.month).padStart(2,'0')}-${entry.orderCode||entry.id}`,source:'google-sheets-local',channel:'Venta local · Sheets',localEntryId:entry.id,customerId:entry.customerId,userId:'',userName:entry.customerName,userEmail:'',contactEmail:contact.email||'',userPhone:contact.phone||'',items,subtotal:entry.total,shippingCost:entry.shippingCost||0,total:entry.total+(entry.shippingCost||0),createdAt:new Date(entry.occurredOn+'T12:00:00Z'),paymentStatus:entry.paymentStatus||'sin_registrar',paymentMethod:entry.paymentMethod,payment:{status:entry.paymentStatus||'sin_registrar',method:entry.paymentMethod},status:['cancelado','rechazado'].includes(entry.paymentStatus)?entry.paymentStatus:'historico',shipping:{method:entry.deliveryMethod,city:entry.city},notes:entry.notes,inventoryState:'historical_unmanaged',historical:true,localSale:entry};
 }
 export function purchasedCustomers(contacts, orders, { includeTestOrders = false } = {}) {
-  const customers=new Map(contacts.map(c=>[c.id,{...c,origin:'local',hasWebAccount:false,orderCount:0,paidOrderCount:0,totalPurchased:0,totalPaid:0,lastPurchase:'',orderIds:[]}]));
+  const customers=new Map(contacts.map(c=>[c.id,{...c,origin:'local',hasWebAccount:false,orderCount:0,paidOrderCount:0,totalPurchased:0,totalPaid:0,deliveryPurchased:0,deliveryPaid:0,unknownProducts:0,unknownDelivery:0,lastPurchase:'',orderIds:[]}]));
   for(const order of ordersForView(orders, includeTestOrders)) {
     if(order.isTest===true || order.technicalTest===true || order.deleted===true) continue;
     const key=order.userId?`WEB_${order.userId}`:order.customerId||`ORDER_${order.id}`;
-    if(!customers.has(key)) customers.set(key,{id:key,name:order.userName||'Cliente sin nombre',phone:order.userPhone||'',email:order.contactEmail||order.userEmail||'',city:order.shipping?.city||'',address:order.shipping?.address||'',notes:'',origin:order.userId?'web':'local',hasWebAccount:!!order.userId,orderCount:0,paidOrderCount:0,totalPurchased:0,totalPaid:0,lastPurchase:'',orderIds:[]});
+    if(!customers.has(key)) customers.set(key,{id:key,name:order.userName||'Cliente sin nombre',phone:order.userPhone||'',email:order.contactEmail||order.userEmail||'',city:order.shipping?.city||'',address:order.shipping?.address||'',notes:'',origin:order.userId?'web':'local',hasWebAccount:!!order.userId,orderCount:0,paidOrderCount:0,totalPurchased:0,totalPaid:0,deliveryPurchased:0,deliveryPaid:0,unknownProducts:0,unknownDelivery:0,lastPurchase:'',orderIds:[]});
     const customer=customers.get(key); customer.orderCount++; customer.orderIds.push(order.id);
     const cancelled=['cancelado','rechazado'].includes(order.status)||['cancelado','rechazado','reembolsado'].includes(order.payment?.status||order.paymentStatus);
-    if(!cancelled) customer.totalPurchased+=Number(order.total||0);
-    if(!cancelled&&(order.payment?.status||order.paymentStatus)==='pagado'){customer.paidOrderCount++;customer.totalPaid+=Number(order.total||0);}
+    if(!cancelled){const amounts=orderAmounts(order);customer.totalPurchased+=amounts.products??0;customer.deliveryPurchased+=amounts.delivery??0;customer.unknownProducts+=Number(amounts.products===null);customer.unknownDelivery+=Number(amounts.delivery===null);}
+    if(!cancelled&&(order.payment?.status||order.paymentStatus)==='pagado'){customer.paidOrderCount++;customer.totalPaid+=orderAmounts(order).products??0;customer.deliveryPaid+=orderAmounts(order).delivery??0;}
     const occurred=order.createdAt instanceof Date?order.createdAt.toISOString():String(order.createdAt||'');
     if(occurred>customer.lastPurchase) customer.lastPurchase=occurred;
   }

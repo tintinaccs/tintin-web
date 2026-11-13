@@ -888,7 +888,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261111-product-login-payment-1-p1112');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261112-delivery-separate-1');
     }
   }
 
@@ -957,7 +957,7 @@
   function bootAdminAndProfileFixes() {
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
-      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261020-orders-clean-2');
+      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261112-delivery-separate-1');
       importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261108-appcheck-fallo-1');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix', undefined, 'tintin-20261021-commerce-review-1');
       importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261108-appcheck-fallo-1');

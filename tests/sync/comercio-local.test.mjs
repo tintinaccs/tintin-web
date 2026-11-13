@@ -35,7 +35,7 @@ test('un lote inválido no escribe parcialmente; no se puede vaciar una venta co
 });
 test('clientes locales y cuentas web con el mismo nombre permanecen separados',async()=>{
   const id=await localCustomerId('Clienta local');assert.equal(id,await localCustomerId(' CLIENTA   LOCAL '));
-  const customers=purchasedCustomers([{id,name:'Clienta local'}],[{id:'local1',customerId:id,userName:'Clienta local',total:150000,paymentStatus:'pagado',createdAt:'2026-01-03'}, {id:'web1',userId:'uid123',userName:'Clienta local',total:40000,paymentStatus:'pendiente',createdAt:'2026-10-08'}]);
+  const customers=purchasedCustomers([{id,name:'Clienta local'}],[{id:'local1',customerId:id,userName:'Clienta local',total:150000,shippingCost:0,paymentStatus:'pagado',createdAt:'2026-01-03'}, {id:'web1',userId:'uid123',userName:'Clienta local',total:40000,shippingCost:0,paymentStatus:'pendiente',createdAt:'2026-10-08'}]);
   assert.equal(customers.length,2);assert.equal(customers.find(c=>c.id===id).totalPaid,150000);assert.equal(customers.find(c=>c.hasWebAccount).totalPaid,0);
 });
 test('archivo retira la venta de totales sin borrar su evidencia',async()=>{

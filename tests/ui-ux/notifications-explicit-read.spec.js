@@ -29,10 +29,11 @@ async function fixture(page,admin=false) {
  const isSuperAdmin=()=>${admin},testOrderNumber=()=>null,recordAuthDiagnostic=()=>{};
  const createLiveActivityNotices=()=>({clear(){},update(){}});
  const waitForAdminAppCheck=async()=>true,recoverAdminSecurity=async()=>true,adminNotificationLink=()=>'/perfil';
+ const doc=(_db,col,id)=>({col,id}),getDoc=async()=>({exists:()=>true,data:()=>({subtotal:100000,shippingCost:15000,total:115000})});
  const collection=(_db,...parts)=>parts.join('/'),query=(ref)=>ref,orderBy=()=>{},limit=()=>{};
  const onSnapshot=(ref,next)=>{if(ref==='orders'){queueMicrotask(()=>next({docs:[]}));return()=>{};}fixtureListeners.add(next);queueMicrotask(()=>next({docs:fixtureRows.map(row=>({id:row.id,data:()=>structuredClone(row)}))}));return()=>fixtureListeners.delete(next);};
  `;
- const helpers=strip(read('js/components/notifications/presentacion-notificacion.mjs'))+'\nconst iconSvg=notificationIconSvg;';
+ const helpers=strip(read('js/orders/importes-pedido.mjs'))+'\n'+strip(read('js/components/notifications/importes-notificacion.mjs'))+'\n'+strip(read('js/components/notifications/presentacion-notificacion.mjs'))+'\nconst iconSvg=notificationIconSvg;';
  const source=strip(read(admin?'js/admin/notifications/notificaciones-admin.js':'js/components/notifications/notificaciones-clientes.js'));
  await page.addScriptTag({type:'module',content:prelude+helpers+source+(admin?'':'\ninitClientNotifications();')});
  await expect(page.locator(admin?'#adm-notifications-wrap':'#notifications-drawer')).toHaveCount(1);
@@ -45,6 +46,8 @@ for(const admin of [false,true])for(const [width,height] of [[320,568],[390,844]
  await page.setViewportSize({width,height});await fixture(page,admin);
  const readSelector=admin?'[data-adm-notification-read]':'[data-notification-read]';
  const all=page.locator(admin?'#adm-notifications-mark-all':'#tt-notifications-mark-all');
+ await expect(page.locator(admin?'#adm-notifications-list':'#notifications-drawer')).toContainText('Productos: Gs. 100.000');
+ await expect(page.locator(admin?'#adm-notifications-list':'#notifications-drawer')).toContainText('Delivery: Gs. 15.000');
  expect(await page.evaluate(()=>fixtureWrites)).toEqual([]);
  await page.evaluate(()=>fixturePublish());
  expect(await page.evaluate(()=>fixtureWrites)).toEqual([]);

@@ -110,6 +110,7 @@ function normalizeEvent(event = {}) {
     replyId: clean(event.replyId, 180),
     orderId: clean(event.orderId, 220),
     orderNumber: clean(event.orderNumber, 80),
+    ...(event.amountBreakdown ? { amountBreakdown: Object.fromEntries(['products','delivery','total'].map(key => [key, Number.isFinite(event.amountBreakdown[key]) && event.amountBreakdown[key] >= 0 ? Math.round(event.amountBreakdown[key]) : null]).concat([['externalDelivery',event.amountBreakdown.externalDelivery === true]])) } : {}),
     status: clean(event.status, 80),
     sourceType: clean(event.sourceType, 60),
     sourceId: clean(event.sourceId, 220),

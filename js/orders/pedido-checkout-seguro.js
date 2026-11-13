@@ -51,7 +51,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
-    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20261029-performance-1').catch(error => {
+    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20261112-delivery-separate-1').catch(error => {
       console.error('[secure-checkout-order] No se pudo cargar el puente de correo del pedido:', error);
     });
   }
@@ -779,10 +779,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           <span class="ck-summary-item-name">${escapeHtml(item.qty)}x ${escapeHtml(item.name)}${item.variant ? ` — ${escapeHtml(item.variant)}` : ''}</span>
           <span style="font-weight:700">${escapeHtml(formatPrice(item.price * item.qty))}</span>
         </div>`).join('')}</div>
-      <div class="ck-summary-total" style="margin-top:16px"><span>Subtotal</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.subtotal))}</span></div>
-      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${shippingMethod === 'encomienda' ? 'Se paga al recibir' : quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
+      <div class="ck-summary-total" style="margin-top:16px"><span>Productos (sin delivery)</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.subtotal))}</span></div>
+      <div class="ck-summary-total"><span>Delivery (aparte)</span><span class="ck-summary-total-val">${shippingMethod === 'encomienda' ? 'Se paga al recibir' : quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
       ${shippingMethod === 'encomienda' ? '<p class="ck-summary-shipping-note">El envío se paga a la transportadora al recibir y no está incluido en el total.</p>' : ''}
-      <div class="ck-summary-total" style="font-size:18px"><span>${escapeHtml(`TOTAL${quote.shippingPending ? ' (+ envío)' : ''}`)}</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.total))}</span></div>`;
+      <div class="ck-summary-total" style="font-size:18px"><span>${escapeHtml(`TOTAL DEL PEDIDO${quote.shippingPending ? ' (+ envío)' : ''}`)}</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.total))}</span></div>`;
   }
 
   async function reserveCheckoutGuard(draft) {
@@ -891,9 +891,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       '',
       itemLines,
       '',
-      `💰 Subtotal: ${formatPrice(result.subtotal || 0)}`,
+      `💰 Productos (sin delivery): ${formatPrice(result.subtotal || 0)}`,
       `🚚 Envío: ${shippingText}`,
-      `💰 Total: ${formatPrice(result.total || 0)}${result.shippingPending ? ' + envío' : ''}`,
+      `💰 Total del pedido: ${formatPrice(result.total || 0)}${result.shippingPending ? ' + envío' : ''}`,
       '',
       `📦 Entrega: ${shippingSummary(draft)}`,
     ];
@@ -963,7 +963,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       return `<div class="ck-summary-item"><span class="ck-summary-item-name"><span class="ck-receipt-photo" aria-hidden="true">${image ? `<img src="${escapeHtml(image)}" alt="" width="64" height="64" loading="eager">` : ''}${fallback}</span><span>${escapeHtml(item.qty)}x ${escapeHtml(item.name)}${item.variant ? ` — ${escapeHtml(item.variant)}` : ''}</span></span><span>${escapeHtml(formatPrice(item.price * item.qty))}</span></div>`;
     }).join('')}</div></section>`
       + `<section class="ck-receipt-section ck-receipt-totals" aria-label="Totales"><h3 class="ck-receipt-heading">Resumen del importe</h3>`
-      + [['Subtotal', formatPrice(result.subtotal)], ['Costo de envío', method === 'encomienda' ? 'Se paga a la transportadora al recibir' : result.shippingPending ? 'A confirmar' : formatPrice(result.shippingCost || 0)], ['TOTAL', formatPrice(result.total) + (result.shippingPending ? ' + envío a confirmar' : '')]].map(([label, value]) => `<div class="ck-summary-total"><span>${escapeHtml(label)}</span><span class="ck-summary-total-val">${escapeHtml(value)}</span></div>`).join('')
+      + [['Productos (sin delivery)', formatPrice(result.subtotal)], ['Delivery (aparte)', method === 'encomienda' ? 'Se paga a la transportadora al recibir' : result.shippingPending ? 'A confirmar' : formatPrice(result.shippingCost || 0)], ['TOTAL DEL PEDIDO', formatPrice(result.total) + (result.shippingPending ? ' + envío a confirmar' : '')]].map(([label, value]) => `<div class="ck-summary-total"><span>${escapeHtml(label)}</span><span class="ck-summary-total-val">${escapeHtml(value)}</span></div>`).join('')
       + (shippingNote ? `<p class="ck-summary-shipping-note">${escapeHtml(shippingNote)}</p>` : '') + '</section>'
       + `<div class="ck-receipt-details">${section('Entrega', delivery)}${section('Tus datos', customer)}</div>`
       + section('Pago y observaciones', payment);

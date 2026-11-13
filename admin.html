@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="267eb245182d95a2fe6cab282465efdd664629478d35f9ef79a0efa7005d91a3">
+  <meta name="tintin-page-revision" content="ca10e6a7bec9217ff70d0924acb780a93306028a6aa875b4d781ac3f87c38ff0">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
 <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261111-product-login-payment-1-p1112"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261112-delivery-separate-1"></script>
   <script src="js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1-brand-runtime-20261004-1-owner-pink-20261004-1" defer></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><meta name="description" content="Panel privado de administración de Tintin Accesorios.">
@@ -279,7 +279,7 @@
         <div class="adm-stat">
           <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
           <div class="adm-stat-val" id="stat-sales-month">—</div>
-          <div class="adm-stat-label">Ventas del mes</div>
+          <div class="adm-stat-label">Productos del mes (sin delivery)</div><small id="stat-delivery-month">Delivery aparte: —</small>
         </div>
         <div class="adm-stat">
           <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
@@ -364,7 +364,7 @@
         <div>
           <div class="adm-statistics-eyebrow">Super Admin</div>
           <h1>Centro estadístico general</h1>
-          <p>Pedidos, facturación, usuarios, productos, visitas y ubicaciones conectados directamente a los datos en vivo.</p>
+          <p>Pedidos, venta de productos y delivery por separado, usuarios, productos, visitas y ubicaciones conectados directamente a los datos en vivo.</p>
         </div>
         <div class="adm-statistics-toolbar">
           <label for="statistics-range">Período</label>
@@ -372,6 +372,7 @@
             <option value="1">Hoy</option>
             <option value="7" selected>Últimos 7 días</option>
             <option value="30">Últimos 30 días</option>
+            <option value="90">Últimos 90 días</option><option value="365">Último año</option><option value="730">Últimos 2 años</option><option value="0">Todo el historial</option>
           </select>
           <div class="adm-live-status" aria-live="polite">
             <span class="adm-live-dot" aria-hidden="true"></span>
@@ -381,13 +382,14 @@
       </div>
 
       <div class="adm-statistics-kpis" aria-label="Indicadores principales">
-        <article class="adm-stat-kpi"><span>Facturación</span><strong id="statistics-revenue">—</strong><small>Pedidos no cancelados</small></article>
-        <article class="adm-stat-kpi"><span>Importe pagado</span><strong id="statistics-paid">—</strong><small>Pagos confirmados</small></article>
+        <article class="adm-stat-kpi"><span>Venta de productos</span><strong id="statistics-revenue">—</strong><small id="statistics-revenue-note">Sin delivery</small></article>
+        <article class="adm-stat-kpi"><span>Productos pagados</span><strong id="statistics-paid">—</strong><small>Pagos confirmados</small></article>
+        <article class="adm-stat-kpi"><span>Delivery (aparte)</span><strong id="statistics-delivery">—</strong><small id="statistics-delivery-note">No es ingreso de Tintín</small></article>
         <article class="adm-stat-kpi"><span>Pedidos</span><strong id="statistics-orders">—</strong><small>En el período</small></article>
-        <article class="adm-stat-kpi"><span>Ticket promedio</span><strong id="statistics-average-ticket">—</strong><small>Por pedido válido</small></article>
+        <article class="adm-stat-kpi"><span>Ticket promedio</span><strong id="statistics-average-ticket">—</strong><small>Productos por pedido válido, sin delivery</small></article>
         <article class="adm-stat-kpi"><span>Usuarios nuevos</span><strong id="statistics-new-users">—</strong><small>Registros del período</small></article>
         <article class="adm-stat-kpi"><span>Usuarios activos</span><strong id="statistics-active-users">—</strong><small id="statistics-blocked-users">0 bloqueados</small></article>
-        <article class="adm-stat-kpi"><span>Visitantes</span><strong id="statistics-visitors">—</strong><small id="statistics-sessions">0 sesiones</small></article>
+        <article class="adm-stat-kpi"><span>Visitantes</span><strong id="statistics-visitors">—</strong><small id="statistics-sessions">0 sesiones</small><small id="statistics-traffic-period">Visitas del período seleccionado</small></article>
         <article class="adm-stat-kpi"><span>Conversión</span><strong id="statistics-conversion">—</strong><small>Pedidos por visitante</small></article>
         <article class="adm-stat-kpi"><span>En línea ahora</span><strong id="statistics-online">—</strong><small>Actividad en últimos 2 min</small></article>
         <article class="adm-stat-kpi"><span>Catálogo activo</span><strong id="statistics-active-products">—</strong><small id="statistics-low-stock">0 con stock bajo</small></article>
@@ -395,7 +397,7 @@
 
       <div class="adm-analytics-grid">
         <section class="adm-analytics-card adm-analytics-card-wide">
-          <div class="adm-analytics-head"><div><h2>Rendimiento diario</h2><p>Pedidos, facturación y sesiones de los últimos siete días.</p></div></div>
+          <div class="adm-analytics-head"><div><h2>Rendimiento diario</h2><p>Pedidos, venta de productos sin delivery y sesiones de los últimos siete días.</p></div></div>
           <div id="statistics-revenue-trend" class="adm-trend-chart"><div class="adm-analytics-empty">Esperando datos…</div></div>
         </section>
         <section class="adm-analytics-card">
@@ -449,7 +451,7 @@
             <select class="adm-select adm-st-a59f93" id="user-sort" aria-label="Ordenar usuarios">
               <option value="recent">Ordenar: Actividad reciente de clientes</option>
               <option value="name">Ordenar: Nombre (A-Z)</option>
-              <option value="totalSpent">Ordenar: Total gastado</option>
+              <option value="totalSpent">Ordenar: Compra de productos</option>
               <option value="purchaseCount">Ordenar: Pedidos</option>
             </select>
           </div>
@@ -486,7 +488,7 @@
                   <th>Rol</th>
                   <th>Estado</th>
                   <th>Pedidos</th>
-                  <th>Total gastado</th>
+                  <th>Productos y delivery aparte</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -2125,13 +2127,13 @@
 
 <script type="module" src="js/admin/operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2"></script>
 <script type="module" src="js/admin/content/control-bienvenida-admin.js?v=tintin-20261108-appcheck-fallo-1"></script>
-<script type="module" src="js/admin/admin-app.js?v=tintin-20261112-free-crop-2-p1112"></script>
+<script type="module" src="js/admin/admin-app.js?v=tintin-20261112-delivery-separate-2"></script>
 <script type="module" src="js/admin/maestro/app-movil-admin.js?v=tintin-20261101-app-movil-14"></script>
 <script type="module" src="js/admin/sidebar-expandible-admin.js?v=tintin-20261101-app-movil-1"></script>
 <script type="module" src="js/admin/importacion-admin.js?v=tintin-20261102-cancel-stock-1"></script>
 <script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261108-appcheck-fallo-1"></script>
-<script type="module" src="js/admin/comercio-local-admin.js?v=tintin-20261022-avatar-inicial-1-editor-search-20261028-2"></script>
-<script type="module" src="js/admin/shopify-commerce-admin.js?v=tintin-20261112-free-crop-2"></script>
+<script type="module" src="js/admin/comercio-local-admin.js?v=tintin-20261112-delivery-separate-1"></script>
+<script type="module" src="js/admin/shopify-commerce-admin.js?v=tintin-20261112-delivery-separate-1"></script>
 
 
 <!-- ══════════════════════════════════════
@@ -2343,7 +2345,7 @@
 
 <script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20261108-appcheck-fallo-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5-p1112"></script>
-    <script type="module" src="js/admin/notifications/notificaciones-admin.js?v=tintin-20261108-appcheck-fallo-1"></script>
+    <script type="module" src="js/admin/notifications/notificaciones-admin.js?v=tintin-20261112-delivery-separate-1"></script>
 <script type="module" src="js/admin/notifications/notificaciones-push.js?v=tintin-20261022-avatar-inicial-1"></script>
 <script type="module" src="js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20261030-push-recovery-1"></script>
 <script type="module" src="js/admin/notifications/enlace-pedido-push.js?v=tintin-20261020-push-return-1"></script>
