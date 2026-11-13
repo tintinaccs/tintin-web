@@ -2004,6 +2004,18 @@ if (statisticsRangeSelect) {
 
 window.addEventListener('pagehide', stopAdminRealtimeData);
 
+// El uid lo verifica /api/site-activity; los datos salen de la cuenta en `users`.
+function onlineVisitorPerson(item) {
+  const uid = typeof item?.userId === 'string' ? item.userId : '';
+  if (!uid) return { name: 'Visitante sin sesión', details: '' };
+  const user = allUsers.find(candidate => candidate.uid === uid);
+  if (!user) return { name: 'Cliente con cuenta', details: '' };
+  return {
+    name: user.name || user.displayName || user.email || 'Cliente con cuenta',
+    details: [user.email, user.phone].filter(Boolean).join(' · '),
+  };
+}
+
 function renderOnlineLocations(active, now) {
   const container = document.getElementById('dashboard-online-locations');
   const detail = document.getElementById('dashboard-online-detail');
@@ -2013,15 +2025,20 @@ function renderOnlineLocations(active, now) {
     container.innerHTML = '<div class="adm-visitor-empty">No hay visitantes activos en este momento.</div>';
     return;
   }
-  container.innerHTML = active.slice(0, 20).map(item => `
+  container.innerHTML = active.slice(0, 20).map(item => {
+    const person = onlineVisitorPerson(item);
+    return `
     <div class="adm-visitor-row">
       <div>
+        <div class="adm-visitor-name">${escapeHtmlAdmin(person.name)}</div>
+        ${person.details ? `<div class="adm-visitor-meta">${escapeHtmlAdmin(person.details)}</div>` : ''}
         <div class="adm-visitor-location" title="${escapeHtmlAdmin(activityLocationLabel(item))}">${escapeHtmlAdmin(activityLocationLabel(item))}</div>
         <div class="adm-visitor-meta">${escapeHtmlAdmin(activityPageLabel(item.page))}</div>
       </div>
       <div class="adm-visitor-count">${escapeHtmlAdmin(activityRelativeTime(item.lastSeen, now))}</div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function renderTodayLocations(sessions, now) {

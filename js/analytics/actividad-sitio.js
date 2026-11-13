@@ -5,9 +5,10 @@
  * - Cuenta una sesión por pestaña y día de Paraguay.
  * - Guarda ciudad/región/país aproximados, nunca IP, GPS, coordenadas,
  *   código postal, navegador, nombre, correo ni referidor.
- * - El identificador aleatorio rota cada día y no se vincula con la cuenta.
+ * - El identificador aleatorio rota cada día. Si hay sesión iniciada, se envía
+ *   el ID token y el servidor guarda solo el uid verificado (sin nombre ni correo).
  */
-import { appCheckReady } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
+import { appCheckReady, auth } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20261017-domain-cutover-1';
 import {
   hasStatisticsConsent,
@@ -302,9 +303,17 @@ if (
     }
   }
 
+  async function accountAuthHeader(kind) {
+    if (kind !== 'session' && kind !== 'presence') return {};
+    try {
+      const token = await auth.currentUser?.getIdToken();
+      return token ? { authorization: `Bearer ${token}` } : {};
+    } catch { return {}; }
+  }
+
   async function postActivity(kind, fields = {}) {
     const response = await fetch(apiUrl('site-activity'), {
-      method: 'POST', headers: { 'content-type': 'application/json' },
+      method: 'POST', headers: { 'content-type': 'application/json', ...(await accountAuthHeader(kind)) },
       body: JSON.stringify({ kind, ...fields }), signal: AbortSignal.timeout(5000),
     });
     if (!response.ok) throw Object.assign(new Error('Activity unavailable'), { code: response.status === 403 ? 'permission-denied' : 'activity-unavailable' });
