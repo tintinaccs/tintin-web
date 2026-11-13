@@ -1,13 +1,47 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "9d00653b9614bcf3d0d8446a3d15a0bd293cddca",
-  "reason": "Incorporar hono 4.13.18 de Dependabot con lockfile y derivados canónicos, preservando la separación comercial integrada y los controles protegidos.",
+  "baseCommit": "7029b7eed1f009687ef32c472f033a42dbdb44c9",
+  "reason": "Mostrar delivery mensual en una tarjeta propia y responsive con importe grande sin mezclarlo con venta de productos",
   "files": [
     {
-      "path": "package-lock.json",
-      "oldHash": "2b82da2e860a8e6922396574d9545ff8e71062f92ef297b66b27233d7f835b25",
-      "newHash": "470af10ae1cd6d2c18d12462cbd10c170ff4ad8dbd48ac0371e2295892f92d6a"
+      "path": "admin-images.html",
+      "oldHash": "77ae41b07c0acb2f283f3ba394f5ae67194e6f8e8513d0e561278c2066e2489d",
+      "newHash": "7b9574489e7f0098659955ed51a69496fb1d204fa94d3fceb28fc0e9a69fe09f"
+    },
+    {
+      "path": "admin.html",
+      "oldHash": "9134680b3e4d44febd26bb48bdc873826e0c306abaed3bfc1017498d5b63d610",
+      "newHash": "b69dc524166cc36dbdfda5e046ecb2f056cf85b9e0fc52d93e4c278424fa35e9"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "4279f79767847bec75d421103e41073904b840a006a86eacc6e6c0a687432b9b",
+      "newHash": "1bd2e28db68d1f158e582cf8c28f9a2b7fc66122ac54b9acb7de09d8eff8afb9"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "235f1f9e6346fa6f91fc753e0f1272fcc20c22795cacd99b40d44a4dc34f9fc3",
+      "newHash": "09c81160ed5ba6394c3e8174b192bbb1c28e597cabcaddaea235b4b6ac1ee626"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "correos",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

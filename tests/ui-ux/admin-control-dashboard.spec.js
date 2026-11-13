@@ -1,16 +1,27 @@
 const { test, expect } = require('@playwright/test');
 const { load } = require('./helpers/admin-panel-fixture.cjs');
 
-for (const width of [320, 390, 768, 1024, 1440]) {
+for (const width of [320, 390, 540, 768, 844, 1024, 1440, 1920]) {
   test(`dashboard sólido y completo a ${width}px`, async ({ page }, testInfo) => {
     await load(page, width, 'admin.html', { sidebar: true });
+    if(width===844)await page.setViewportSize({width,height:390});
     // Valores sintéticos para verificar tamaños; ningún dato de producción.
     await page.evaluate(() => {
-      const values = { 'stat-users': '1.248', 'stat-orders-today': '24', 'stat-sales-month': '25.850.000 Gs.', 'stat-orders-total': '1.482', 'stat-visits-today': '368', 'stat-online-now': '12' };
+      const values = { 'stat-users': '1.248', 'stat-orders-today': '24', 'stat-sales-month': 'Gs. 1.420.000', 'stat-delivery-month': 'Gs. 170.000', 'stat-delivery-month-note':'No es ingreso de Tintín · Hay envíos sin importe registrado', 'stat-orders-total': '1.482', 'stat-visits-today': '368', 'stat-online-now': '12' };
       for (const [id, value] of Object.entries(values)) document.getElementById(id).textContent = value;
     });
     await expect(page.getByRole('heading', { name: 'Hoy en Tintin' })).toBeVisible();
     await expect(page.locator('h1')).toHaveCount(1);
+    const products=page.locator('#stat-sales-month'), delivery=page.locator('#stat-delivery-month');
+    await expect(page.locator('#dash-stats .adm-stat')).toHaveCount(7);
+    await expect(delivery.locator('..')).toContainText('Delivery del mes');
+    await expect(products.locator('..')).not.toContainText('170.000');
+    expect(await products.evaluate((node)=>node.parentElement===document.getElementById('stat-delivery-month').parentElement)).toBe(false);
+    const type=await products.evaluate(node=>({size:getComputedStyle(node).fontSize,weight:getComputedStyle(node).fontWeight}));
+    await expect(delivery).toHaveCSS('font-size',type.size);await expect(delivery).toHaveCSS('font-weight',type.weight);
+    expect(parseFloat(type.size)).toBeGreaterThanOrEqual(17);expect(Number(type.weight)).toBeGreaterThanOrEqual(700);
+    expect(await delivery.evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);
+
     await expect(page.locator('.tt-dashboard-shortcuts button:visible')).toHaveCount(4);
     const surfaces = await page.locator('.tt-dashboard-hero,#dash-stats .adm-stat,.tt-dashboard-link').evaluateAll(nodes => nodes.map(node => {
       const box = node.getBoundingClientRect(), style = getComputedStyle(node);

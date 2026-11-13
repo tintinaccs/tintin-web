@@ -1,3 +1,10 @@
+## 2026-11-13 — tarjeta independiente de delivery en dashboard
+
+- admin.html: séptimo indicador, Delivery del mes, mismo valor grande/negrita que productos; nota propia de envío no percibido e importes desconocidos.
+- admin-app: mismo cálculo mensual/reinicio/permiso; entrega número y nota en nodos independientes. No cambia pedidos ni monto cobrable.
+- dashboard-control.css: misma tipografía monetaria, ajuste de textos y grilla de cuatro columnas desde1280px para siete tarjetas; CSS compartida en admin/admin-images se versiona en ambas rutas.
+- Verificar320–2560px, horizontal bajo, desconocidos/carga/permisos y navegación inferior; regenerar caché/CSP/diagnóstico/plan desde autoridades contra main real.
+
 ## 2026-11-12 — venta de productos y delivery separados
 
 - Autoridad de lectura única del snapshot del pedido; no altera total cobrable, reservas, pago ni precios históricos.
