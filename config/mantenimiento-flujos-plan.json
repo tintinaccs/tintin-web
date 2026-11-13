@@ -1,22 +1,12 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "a77f99e69460acf1cb829823f22308b505736117",
-  "reason": "Velocidad del inicio: un solo logo y fuente GreatVibes en WOFF2 sin perder calidad",
+  "baseCommit": "17e6d935fcbe3ab15e5006ed4bbbd6fb917dec62",
+  "reason": "Incorporar la actualización de @hono/node-server 2.1.8 de Dependabot con su lockfile y derivados canónicos, conservando los controles protegidos.",
   "files": [
     {
-      "path": "css/pages/home/hero-bienvenida-inicio.css",
-      "oldHash": "a5ee326ea1266def21771b3a459058ba88b819ddf373eb34dd375d4d2d662a72",
-      "newHash": "d827cbf84bbc717623e449976bdaf30ff6a6736ba0266f7182b7d7005e624c3f"
-    },
-    {
-      "path": "index.html",
-      "oldHash": "7d13acb0646c09f89c1ec9da3e2fba570d1d7b6ab3c52cefb416ffbcd0e75f54",
-      "newHash": "afbdaf373a3ed88bba32ef6460940762107ad99991fc340e54cae10f3e1a9f14"
-    },
-    {
-      "path": "scripts/cache-version-baseline.json",
-      "oldHash": "8e2f287b728428806cfba6b5c249eb3d60261e4a350f19cafce4ea68a950cf4b",
-      "newHash": "362a0608886586c939f8624ffac63014af75cd4a7f0a367dac92e9afa4343f86"
+      "path": "package-lock.json",
+      "oldHash": "ae079fa4a21a6b8a06dac939a712a93ccbb9335f070149c175c9a8ea7192704a",
+      "newHash": "2b82da2e860a8e6922396574d9545ff8e71062f92ef297b66b27233d7f835b25"
     }
   ],
   "affectedRecords": []
