@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "97b1f2fdbd985e1f277d2d970487e571e56160ea1c4d9df15ce4e4814eb40fd9",
+  "sourceFingerprint": "1c12edd3c7eab6482b12b2e16f653ff094aafbbeee49886c740c1e584a0500d3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1842,
     "textFiles": 1689,
-    "totalBytes": 62856210,
+    "totalBytes": 62856297,
     "pages": 19,
     "modules": 1197
   },
@@ -57211,8 +57211,8 @@
     },
     {
       "path": "tests/profile/order-history-display.test.mjs",
-      "bytes": 3403,
-      "sha256": "28e3bb31e54d75e49ee7f471d77e262491070639d92a11ded2957f652c0281ce",
+      "bytes": 3490,
+      "sha256": "59fb3a28c8d0bb7e08043b48ca518559b43d9f4e5e92462527f2ce70b6ff7528",
       "syntax": {
         "ok": true,
         "error": ""
@@ -73309,8 +73309,8 @@
     {
       "path": "tests/profile/order-history-display.test.mjs",
       "extension": ".mjs",
-      "bytes": 3403,
-      "sha256": "28e3bb31e54d75e49ee7f471d77e262491070639d92a11ded2957f652c0281ce"
+      "bytes": 3490,
+      "sha256": "59fb3a28c8d0bb7e08043b48ca518559b43d9f4e5e92462527f2ce70b6ff7528"
     },
     {
       "path": "tests/profile/order-history-pagination.spec.js",

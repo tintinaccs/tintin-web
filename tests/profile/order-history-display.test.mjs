@@ -22,5 +22,5 @@ test('perfil muestra seña, saldo y fecha prevista sólo cuando existen y no inv
  context.order={id:'plain',status:'confirmado',total:5000,items:[]};
  const plain=vm.runInContext('orderMarkup(order)',context);assert.doesNotMatch(plain,/Seña recibida|Saldo a pagar|Fecha prevista/);
  context.order={id:'bad-date',total:5000,estimatedDeliveryAt:'<script>',items:[]};
- assert.doesNotMatch(vm.runInContext('orderMarkup(order)',context),/Fecha prevista|<script>/);
+ const badDateHtml=vm.runInContext('orderMarkup(order)',context);assert.doesNotMatch(badDateHtml,/Fecha prevista/);assert.equal(badDateHtml.toLowerCase().includes('<script'),false);
 });
