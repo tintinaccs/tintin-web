@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "faca3b63cbfbf60cc5d301a353897f80dee6459f22c6a74aba076f12f8c76cae",
+  "sourceFingerprint": "6065993cf944b8ed73ff08d667dd836139c959159dc3291916329e59335876b2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1841,
     "textFiles": 1688,
-    "totalBytes": 64037389,
+    "totalBytes": 64038760,
     "pages": 19,
     "modules": 1196
   },
@@ -2291,7 +2291,7 @@
         "viewer"
       ],
       "bytes": 48731,
-      "sha256": "48bd201d2c06f7a8700a9796d6229963a04c19a6751efed3537e229f521a83b9",
+      "sha256": "7b9574489e7f0098659955ed51a69496fb1d204fa94d3fceb28fc0e9a69fe09f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2428,7 +2428,7 @@
           "line": 322
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261113-delivery-card-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261113-delivery-card-2",
           "target": "css/admin/dashboard-control.css",
           "line": 323
         },
@@ -2628,7 +2628,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261113-delivery-card-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261113-delivery-card-2",
           "target": "css/admin/dashboard-control.css",
           "line": 323,
           "exists": true
@@ -2984,7 +2984,7 @@
         "viewer"
       ],
       "bytes": 195428,
-      "sha256": "9216a2128964b507a263dee9045f80ac29a9777219a671f2952634d18c2bb560",
+      "sha256": "b69dc524166cc36dbdfda5e046ecb2f056cf85b9e0fc52d93e4c278424fa35e9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3260,7 +3260,7 @@
           "line": 79
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261113-delivery-card-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261113-delivery-card-2",
           "target": "css/admin/dashboard-control.css",
           "line": 80
         },
@@ -3795,7 +3795,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261113-delivery-card-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261113-delivery-card-2",
           "target": "css/admin/dashboard-control.css",
           "line": 80,
           "exists": true
@@ -60434,8 +60434,8 @@
     },
     {
       "path": "tests/ui-ux/admin-all-devices.spec.js",
-      "bytes": 9887,
-      "sha256": "5556f3a25786a64bef90c8763013bdf6d995933aa250f3fdcddae9116e6ab958",
+      "bytes": 10320,
+      "sha256": "ae2cd398ec2b2a365f5ec0359003428cc7fb45390796880bbe98c0dea2bd42c7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -63524,7 +63524,7 @@
       "path": "admin-images.html",
       "extension": ".html",
       "bytes": 48731,
-      "sha256": "48bd201d2c06f7a8700a9796d6229963a04c19a6751efed3537e229f521a83b9"
+      "sha256": "7b9574489e7f0098659955ed51a69496fb1d204fa94d3fceb28fc0e9a69fe09f"
     },
     {
       "path": "admin-manifest.json",
@@ -63536,7 +63536,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 195428,
-      "sha256": "9216a2128964b507a263dee9045f80ac29a9777219a671f2952634d18c2bb560"
+      "sha256": "b69dc524166cc36dbdfda5e046ecb2f056cf85b9e0fc52d93e4c278424fa35e9"
     },
     {
       "path": "apple-touch-icon.png",
@@ -64718,7 +64718,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 1657,
-      "sha256": "bf498781bbdef97e22c8573913de7c829a2cdb915f016bebdda681fadd170040"
+      "sha256": "b4354e93992049ab066c282bd5f840bd73e5d104c1816dca5417736454f1b002"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64730,7 +64730,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "f2d740be81daa9ff6d8511eae0ae65689fb3a5bc09f27a7e167350bc74dc23a5"
+      "sha256": "a126e1e7002f4f5667e4927746235984d7561b3b9e5bb2d8d32aac14979b935a"
     },
     {
       "path": "config/public-site.json",
@@ -64778,7 +64778,7 @@
       "path": "css/admin/dashboard-control.css",
       "extension": ".css",
       "bytes": 34440,
-      "sha256": "cbcbe581e2abeec238fd200a07ec257246b4f66c3f6e7b5c4b0142a2ca5abba4"
+      "sha256": "c3c2ff0f3505299b60652dcf86d500f6bc45be758ed8847fe70b3ac306a1cf70"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -65569,8 +65569,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1327172,
-      "sha256": "4768c1fc4c7ef33791f35eee155515a1b3294bf0aedd61a5bcc7f6f749020df8"
+      "bytes": 1328085,
+      "sha256": "b7d435675d5e2eddd5476c0cc65eb865279a71b4d09fa67824ac36979c926fe4"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -66565,8 +66565,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 169945,
-      "sha256": "f65a92d9be3810edbc788a08d68a583d6b88b3c40fb1a4a20a6f87f479bcf742"
+      "bytes": 169970,
+      "sha256": "6ead8e085a17d6f460410f058b3ca05fa2fe994262fe6f483a1ba0d0e55755a3"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -70802,7 +70802,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 83814,
-      "sha256": "130ec5bcc288972511d7eec7ded25c6aa5592eba812ee984e520954fd2c15829"
+      "sha256": "09c81160ed5ba6394c3e8174b192bbb1c28e597cabcaddaea235b4b6ac1ee626"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -73693,8 +73693,8 @@
     {
       "path": "tests/ui-ux/admin-all-devices.spec.js",
       "extension": ".js",
-      "bytes": 9887,
-      "sha256": "5556f3a25786a64bef90c8763013bdf6d995933aa250f3fdcddae9116e6ab958"
+      "bytes": 10320,
+      "sha256": "ae2cd398ec2b2a365f5ec0359003428cc7fb45390796880bbe98c0dea2bd42c7"
     },
     {
       "path": "tests/ui-ux/admin-app-apariencia.spec.js",

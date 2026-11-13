@@ -51,7 +51,7 @@ for (const [name,width,height] of devices) {
   test(`panel completo: ${name} ${width}x${height}`, async ({page}, info) => {
     await load(page,width,'admin.html',{mobile:true,sidebar:true,guard:true}); await page.setViewportSize({width,height});
     await page.evaluate(() => {
-      for (const [id,value] of Object.entries({'stat-users':'1.248','stat-orders-today':'24','stat-sales-month':'25.850.000 Gs.','stat-orders-total':'1.482','stat-visits-today':'368','stat-online-now':'12'})) document.getElementById(id).textContent=value;
+      for (const [id,value] of Object.entries({'stat-users':'1.248','stat-orders-today':'24','stat-sales-month':'25.850.000 Gs.','stat-delivery-month':'170.000 Gs.','stat-orders-total':'1.482','stat-visits-today':'368','stat-online-now':'12'})) document.getElementById(id).textContent=value;
     });
     await settle(page);
     // Una palabra de módulo no debe dividirse para hacerla entrar en una celda.
@@ -59,8 +59,13 @@ for (const [name,width,height] of devices) {
     expect(await config.evaluate(n => {const r=document.createRange();r.selectNodeContents(n);return r.getClientRects().length;})).toBe(1);
     const cards = page.locator('.tt-dashboard-link');
     await contained(cards,width);
-    const stats = await page.locator('#dash-stats .adm-stat').evaluateAll(nodes => nodes.map(n => {const b=n.getBoundingClientRect();return {x:b.x,y:b.y};}));
-    if(width>=1680) expect(stats.every(s=>Math.abs(s.y-stats[0].y)<1)).toBe(true);
+    const metricCards=page.locator('#dash-stats .adm-stat');
+    await expect(metricCards).toHaveCount(7);await contained(metricCards,width);
+    const stats=await metricCards.evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return{x:b.x,y:b.y,right:b.right,bottom:b.bottom};}));
+    // Siete indicadores pueden repartirse en filas: todos deben caber y seguir siendo legibles, sin superponerse.
+    for(let i=0;i<stats.length;i++)for(let j=i+1;j<stats.length;j++){
+      const a=stats[i],b=stats[j];expect(Math.min(a.right,b.right)-Math.max(a.x,b.x)>1&&Math.min(a.bottom,b.bottom)-Math.max(a.y,b.y)>1).toBe(false);
+    }
     if(width===1366) expect((await page.locator('.tt-dashboard-orders').boundingBox()).y).toBeLessThan(height);
     // Usar el espacio del monitor, con un contenedor centrado y acotado.
     if(width>=1920) {const b=await page.locator('.adm-content').boundingBox();expect(b.width).toBeGreaterThan(1500);expect(b.width).toBeLessThanOrEqual(1680);}

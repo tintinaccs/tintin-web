@@ -2,8 +2,8 @@
 
 - admin.html: séptimo indicador, Delivery del mes, mismo valor grande/negrita que productos; nota propia de envío no percibido e importes desconocidos.
 - admin-app: mismo cálculo mensual/reinicio/permiso; entrega número y nota en nodos independientes. No cambia pedidos ni monto cobrable.
-- dashboard-control.css: misma tipografía monetaria, ajuste de textos y grilla ancha para siete tarjetas; CSS compartida en admin/admin-images se versiona en ambas rutas.
-- Verificar320–1920px, horizontal bajo, desconocidos/carga/permisos y navegación inferior; regenerar caché/CSP/diagnóstico/plan desde autoridades contra main real.
+- dashboard-control.css: misma tipografía monetaria, ajuste de textos y grilla de cuatro columnas desde1280px para siete tarjetas; CSS compartida en admin/admin-images se versiona en ambas rutas.
+- Verificar320–2560px, horizontal bajo, desconocidos/carga/permisos y navegación inferior; regenerar caché/CSP/diagnóstico/plan desde autoridades contra main real.
 
 ## 2026-11-12 — venta de productos y delivery separados
 
