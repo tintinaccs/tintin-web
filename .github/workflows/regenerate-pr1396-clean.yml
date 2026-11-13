@@ -1,0 +1,45 @@
+name: Regenerar PR limpio 1396
+
+on:
+  push:
+    branches:
+      - automation/regenerate-pr1396-clean
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/visual-audit-instagram-feed-smoke-clean
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: package.json
+          cache: npm
+      - run: npm ci --engine-strict
+      - name: Generate canonical artifacts on clean PR branch
+        run: npm run build:pages
+      - name: Commit generated artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "build: refresh Instagram smoke artifacts"
+            npm run build:pages
+            git diff --exit-code -- .
+            git push origin HEAD:fix/visual-audit-instagram-feed-smoke-clean
+          fi
+      - name: Validate final clean branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run auditar-tintin.yml --ref fix/visual-audit-instagram-feed-smoke-clean
+          gh workflow run auditoria-visual.yml --ref fix/visual-audit-instagram-feed-smoke-clean
