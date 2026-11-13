@@ -23,6 +23,6 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
     expect(geometry.contentOverflow).toBeLessThanOrEqual(1);
     expect(geometry.ratio).toBeCloseTo(1086/1448,2);
     expect(geometry.fit).toBe('contain');
-    expect(geometry.src).toContain('/coleccion-tintin.webp?v=coleccion-20261105-1');
+    expect(geometry.src).toContain('/coleccion-tintin.webp?v=coleccion-20261113-1');
   });
 }

@@ -1,3 +1,15 @@
+## Sin nota en la casilla «Delivery del mes» del panel — 2026-11-13 — Claude Code
+
+Pedido de la titular: no mostrar «No es ingreso de Tintín · Hay envíos sin importe registrado» bajo el monto de Delivery del mes. Se quita el <small id="stat-delivery-month-note">, su aria-describedby, los dos statisticsSetText de admin-app.js y la regla CSS .adm-stat-note que quedó sin uso. No cambia el cálculo: el monto sigue siendo sólo delivery del mes y aparte de Productos. La nota del módulo Estadísticas (#statistics-delivery-note) no se toca. Tags: dashboard-control.css delivery-card-3 y admin-app.js delivery-card-2, registrados en la baseline. La rama integra main 04615a5f (PR 1392) y el plan de flujos protegidos se regeneró una sola vez contra ese SHA (24 archivos, foto Colección incluida).
+
+PASS_LOCAL: build:pages dos veces sin diferencias; protección de flujos 78/542 intactos; 54 pruebas de protección/mantenimiento; audit:cache-versioning correcta; dashboard-data 8/8; Playwright 76/76 (admin-control-dashboard, sales-delivery-separation, editorial-relojes). Pendiente: CI del SHA final y verificación en producción.
+
+## Peso de la foto «Colección Tintín» del inicio — 2026-11-13 — Claude Code
+
+Pedido aprobado por la titular (comparación «videos vs. Tintín», punto 1). Medición previa en navegador real: el héroe ya usa WebP responsive (LCP 1,8 s celular / 0,9 s escritorio) y no se toca; el PNG de 1,7 MB del héroe es sólo respaldo. Lo que sobraba: coleccion-tintin.webp (1.548.704 B, sin pérdida) se descarga al abrir el inicio. Cambio: WebP calidad 96, método 6, sin redimensionar (329.734 B, −79 %, PSNR 40,9 dB). coleccion-tintin-original.png sin tocar; README actualizado. Versión de caché coleccion-20261113-1 en index.html, gestion-imagenes.js y su test. Tags -p1113 sólo en gestion-imagenes.js, calidad-interfaz.js y cargador-pagina.js (contenido cambiado); tienda.js conserva su tag. Puntos 4, 6 y 7 excluidos por la titular.
+
+PASS_LOCAL sobre main 7029b7ee: build:pages dos veces sin diferencias; plan de flujos protegidos (23 archivos) y auditoría de protección intactos; 51 pruebas de protección/mantenimiento; audit:images, audit:public-shell, audit:performance, audit:performance-regressions y audit:cache-versioning en 0; 32 pruebas de navegador (editorial-relojes, rendimiento del inicio, bordes del héroe). Navegador local Pixel 7 y 1440×900: coleccion-tintin.webp 329.734 B image/webp, sin desborde horizontal, sin pageerror (sólo avisos de reCAPTCHA esperables en localhost). Producción: pendiente de CI, integración automática y verificación de solo lectura.
+
 ## Delivery en casilla propia del dashboard — 2026-11-13 — Codex /root
 
 Base main7029b7eed1f009687ef32c472f033a42dbdb44c9; rama fix/dashboard-delivery-card, worktree propio. No hay PR concurrentes abiertas en la lectura inicial. Conservar Hono/portada y demás cambios aceptados. La separación comercial de1386 ya terminó integrada/publicada con CI posterior43354414837/1, CodeQL43354416843/1, salud43354417017/1 y comprobación pública aprobados; las notas PENDING anteriores son históricas.

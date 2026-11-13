@@ -32,9 +32,9 @@ if (!window.TintinImagesPhase5Booted) {
       alt: 'Colección Bags Tintin',
     },
     edit_relojes: {
-      desktop: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261105-1',
-      tablet: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261105-1',
-      mobile: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261105-1',
+      desktop: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261113-1',
+      tablet: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261113-1',
+      mobile: 'assets-tintin/images/home/editorial-relojes/coleccion-tintin.webp?v=coleccion-20261113-1',
       alt: 'Reloj, pulseras y anillos de la nueva colección Tintin',
     },
     about_foto: {
