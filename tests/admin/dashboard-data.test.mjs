@@ -1,3 +1,5 @@
+import {orderAmounts,sumOrderAmounts} from '../../js/orders/importes-pedido.mjs';
+import {orderMoneyMarkup} from '../../js/orders/presentacion-importes.mjs';
 import {adminEventAttributes} from '../../js/admin/eventos-dinamicos-admin.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -13,6 +15,7 @@ function dashboard(orders, ready = true, permissions = true, resets = {}, statis
   const fields = new Map();
   const field = id => { if (!fields.has(id)) fields.set(id, { textContent: '', innerHTML: '', closest: () => card }); return fields.get(id); };
   const context = {
+    orderAmounts,sumOrderAmounts,orderMoneyMarkup,
     document: { getElementById: field }, currentRole: 'superadmin', can: () => permissions,
     adminRealtimeReady: { users: ready, orders: ready }, adminRealtimeErrors: {},
     allUsers: [{ uid: 'one' }], allOrders: orders, roleCanDo: () => permissions,
@@ -21,7 +24,7 @@ function dashboard(orders, ready = true, permissions = true, resets = {}, statis
     filterStatisticsRows: (metric, rows, timeOf) => statisticsSince(rows, metric, resets, timeOf),
   };
   vm.createContext(context);
-  vm.runInContext(functionSource('activityTimestampMillis', '\nfunction activityLocationLabel') + '\n' + functionSource('renderDashboardData', '\nfunction loadDashboard') + '\nrenderDashboardData();', context);
+  vm.runInContext(functionSource('activityTimestampMillis', '\nfunction activityLocationLabel') + '\n' + functionSource('statisticsDayKey','\nfunction statisticsSetText') + '\n' + functionSource('statisticsSetText','\nfunction statisticsCompactNumber') + '\n' + functionSource('statisticsOrderIsValid','\nfunction statisticsActivePresence') + '\n' + functionSource('renderDashboardData', '\nfunction loadDashboard') + '\nrenderDashboardData();', context);
   return { field, card, context, render: () => vm.runInContext("renderDashboardData();", context) };
 }
 
@@ -40,7 +43,7 @@ test('Últimos pedidos mezcla fechas ISO y Timestamp, ordena del más nuevo y li
 
 test('Ventas del mes respeta el inicio elegido sin reiniciar usuarios ni pedidos', () => {
   const now = new Date(), today = new Date(now); today.setHours(0, 0, 0, 0);
-  const orders = [{ createdAt: new Date(today.getTime() - 1), total: 999 }, { createdAt: now, total: 120 }];
+  const orders = [{ createdAt: new Date(today.getTime() - 1), total: 999 }, { createdAt: now, total: 120, shippingCost: 0 }];
   const { field } = dashboard(orders, true, true, { revenue: new Date(today.getTime() - 1) });
   assert.equal(field('stat-sales-month').textContent, '120');
   assert.equal(field('stat-orders-today').textContent, 1);
@@ -85,7 +88,7 @@ test('el paginador real de Usuarios ofrece los registros de la segunda página',
 
 
 test('un error de lectura no convierte pedidos confirmados en ceros comerciales y se recupera al confirmar', () => {
-  const { field, context, render } = dashboard([{ createdAt: new Date(), total: 120 }]);
+  const { field, context, render } = dashboard([{ createdAt: new Date(), total: 120, shippingCost: 0 }]);
   assert.equal(field('stat-orders-total').textContent, 1);
   context.adminRealtimeReady.orders = false;
   context.adminRealtimeErrors.orders = 'permission-denied';
@@ -98,4 +101,21 @@ test('un error de lectura no convierte pedidos confirmados en ceros comerciales 
   render();
   assert.equal(field('stat-orders-total').textContent, 1);
   assert.equal(field('stat-sales-month').textContent, '120');
+});
+
+test('dashboard mensual conserva el total pagadero pero muestra venta sin delivery y envío aparte',()=>{
+ const now=new Date();const {field}=dashboard([
+  {createdAt:now,total:115000,shippingCost:15000},
+  {createdAt:now,total:225000,shippingCost:25000},
+  {createdAt:now,total:999999,shippingCost:100000,status:'cancelado'},
+  {createdAt:now,total:999999,shippingCost:100000,paymentStatus:'reembolsado'}
+ ]);
+ assert.equal(field('stat-sales-month').textContent,'300000');
+ assert.equal(field('stat-delivery-month').textContent,'Delivery aparte: 40000 (no ingreso)');
+ assert.match(field('dash-recent-orders').innerHTML,/Productos: 100000/);assert.match(field('dash-recent-orders').innerHTML,/Delivery: 15000/);assert.match(field('dash-recent-orders').innerHTML,/Total del pedido: 115000/);
+});
+test('dashboard no atribuye un total histórico sin desglose a ventas',()=>{
+ const {field}=dashboard([{createdAt:new Date(),total:115000}]);
+ assert.equal(field('stat-sales-month').textContent,'0 · Desglose incompleto');
+ assert.match(field('stat-delivery-month').textContent,/Hay envíos sin importe registrado/);
 });

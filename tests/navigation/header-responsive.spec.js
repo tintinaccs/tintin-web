@@ -64,9 +64,12 @@ async function mockGuestNavigation(page) {
 
 async function mockNotificationData(page) {
   const code = fs.readFileSync(path.resolve(__dirname, '../../js/components/notifications/notificaciones-clientes.js'), 'utf8');
+  const strip=code=>code.replace(/^import\s[\s\S]*?;\s*$/gm,'').replace(/^export /gm,'');
+  const money=strip(fs.readFileSync(path.resolve(__dirname,'../../js/orders/importes-pedido.mjs'),'utf8'));
+  const reader=strip(fs.readFileSync(path.resolve(__dirname,'../../js/components/notifications/importes-notificacion.mjs'),'utf8'));
   await page.route('**/notificaciones-clientes.js*', route => route.fulfill({
     contentType: 'text/javascript',
-    body: `
+    body: money+'\n'+reader+'\n'+`
       const auth = { currentUser: null }, db = {}, appCheckReady = Promise.resolve();
       const subscribeAuthState = callback => { callback(null); return () => {}; };
       const recordAuthDiagnostic = () => {}, isSuperAdmin = () => false;
