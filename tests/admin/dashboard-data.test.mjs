@@ -60,7 +60,7 @@ test('Ventas del mes espera el inicio confirmado en lugar de mostrar ventas hist
 test('Dashboard conserva estado desconocido ante datos no confirmados y respeta permisos', () => {
   for (const [ready, permissions] of [[false, true], [true, false]]) {
     const { field, card } = dashboard([{ total: 1000 }], ready, permissions);
-    for (const id of ['stat-users', 'stat-orders-total', 'stat-orders-today', 'stat-sales-month']) assert.equal(field(id).textContent, '—');
+    for (const id of ['stat-users', 'stat-orders-total', 'stat-orders-today', 'stat-sales-month', 'stat-delivery-month']) assert.equal(field(id).textContent, '—');
     if (!permissions) assert.equal(card.style.display, 'none');
     else assert.match(field('dash-recent-orders').innerHTML, /Sincronizando/);
   }
@@ -93,7 +93,7 @@ test('un error de lectura no convierte pedidos confirmados en ceros comerciales 
   context.adminRealtimeReady.orders = false;
   context.adminRealtimeErrors.orders = 'permission-denied';
   render();
-  for (const id of ['stat-orders-total','stat-orders-today','stat-sales-month']) assert.equal(field(id).textContent, '—');
+  for (const id of ['stat-orders-total','stat-orders-today','stat-sales-month','stat-delivery-month']) assert.equal(field(id).textContent, '—');
   assert.equal(field('stat-users').textContent, 1);
   assert.match(field('dash-recent-orders').innerHTML, /Pedidos no disponibles/);
   context.adminRealtimeReady.orders = true;
@@ -111,11 +111,13 @@ test('dashboard mensual conserva el total pagadero pero muestra venta sin delive
   {createdAt:now,total:999999,shippingCost:100000,paymentStatus:'reembolsado'}
  ]);
  assert.equal(field('stat-sales-month').textContent,'300000');
- assert.equal(field('stat-delivery-month').textContent,'Delivery aparte: 40000 (no ingreso)');
+ assert.equal(field('stat-delivery-month').textContent,'40000');
+ assert.equal(field('stat-delivery-month-note').textContent,'No es ingreso de Tintín');
  assert.match(field('dash-recent-orders').innerHTML,/Productos: 100000/);assert.match(field('dash-recent-orders').innerHTML,/Delivery: 15000/);assert.match(field('dash-recent-orders').innerHTML,/Total del pedido: 115000/);
 });
 test('dashboard no atribuye un total histórico sin desglose a ventas',()=>{
  const {field}=dashboard([{createdAt:new Date(),total:115000}]);
  assert.equal(field('stat-sales-month').textContent,'0 · Desglose incompleto');
- assert.match(field('stat-delivery-month').textContent,/Hay envíos sin importe registrado/);
+ assert.equal(field('stat-delivery-month').textContent,'0');
+ assert.match(field('stat-delivery-month-note').textContent,/Hay envíos sin importe registrado/);
 });
