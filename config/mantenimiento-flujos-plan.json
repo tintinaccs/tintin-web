@@ -1,13 +1,82 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "3e5aa6690fc1f9f391eb15aa1d8c09d5a5a5d1db",
-  "reason": "Consolidar directiva operativa de recursos existentes, instalaciones autorizadas, eficiencia y evidencia sin ampliar permisos ni cambiar la aplicacion",
+  "baseCommit": "112972aa3a7dfe374962c623a0e8bc650fe8e233",
+  "reason": "Seña, saldo y fecha prevista de entrega en pedidos: validación servidor, modal admin y perfil",
   "files": [
     {
-      "path": "AGENTS.md",
-      "oldHash": "b59aabeb744871d802c1cb86ebf003c74b84a0df58bbf419f4b5bb8bc58264ea",
-      "newHash": "d597c172d78fe2b65475ed539a8c2a9b80805a0d4cdb2bcb5774b3077f3d911b"
+      "path": "admin.html",
+      "oldHash": "6bbb9d0fa770fa8f4db583224c79542f20f9751b2eb72f81be157e48ae50e2c7",
+      "newHash": "d478101fac579f02c08e47fc1e2e86f669fa7062e26573160be6457e47c3314f"
+    },
+    {
+      "path": "cloudflare/order-admin-domain.js",
+      "oldHash": "a822cceaae58eaa0e3754da26feae5199e82b4b3185cbed89ab325dbd6343ed3",
+      "newHash": "6d2bfa341ff4c643f843b49035f25539acebd181c46e42d1ea229844dfcb5a56"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "e49fcc39d333328a99f0ea6c2af763fa174e459090b8ec0bce4687f46e594f1b",
+      "newHash": "8f94fade77a8ededb10ab24f7ad09c5c391bfc779ab16b9058ed732e66d46955"
+    },
+    {
+      "path": "js/admin/orders/pedidos-superadmin-crud.js",
+      "oldHash": "c9719bd0384bd0e382d7ac2a18e3290ab699cf34daffa25d2e92c0840553b110",
+      "newHash": "6d4ddfd62c08acdb400d1a85e78e0992e1d2e37908745dc93d735707ad110fca"
+    },
+    {
+      "path": "js/pages/profile/pedidos-perfil.js",
+      "oldHash": "ba9eb076f551616376e1cff9a9d322fbf3c3d459a10cffbc2aa51d3af613abed",
+      "newHash": "6452f5fcc669427823599b22944a00dc240c9732d92783ae838924ff47bd592f"
+    },
+    {
+      "path": "perfil.html",
+      "oldHash": "e9e71a2f3e8aeeb51edf291d1af96210478f23ab1170ebdb499195add342b029",
+      "newHash": "d4c107332867ecf790c1d0dbb15ab95f3caa2355296f638adff612b1eaf3cfe1"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "d10c07682d4eba891df12ee6b55647886d84c75acebeb2fc5e32d90efed63aae",
+      "newHash": "619e343418d04f6801651425e83aeccae01b9e3c6f3c11bab8e4c196c9db2b6e"
+    },
+    {
+      "path": "tests/orders/order-admin-domain.test.mjs",
+      "oldHash": "9283b7634226f5a115e7070480d7260e61942e28d75c96571e7d68ce4e440920",
+      "newHash": "0ef976fd889756b17429f0f288f19e3b2012abfa101ab5c2df5d88c5656ea39f"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas",
+    "apis-internas__apps-script__22",
+    "apis-internas__comentarios__39",
+    "apis-internas__correos__41",
+    "apis-internas__favoritos__37",
+    "apis-internas__firestore__21",
+    "apis-internas__likes__38",
+    "apis-internas__notificaciones__40",
+    "apis-internas__pedidos__32",
+    "apps-script",
+    "apps-script__google-sheets__24",
+    "apps-script__sheets-products-webhook__26",
+    "cf-functions__apis-internas__20",
+    "correos",
+    "firestore__apps-script__23",
+    "google-sheets__apps-script__25",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "sheets-products-webhook",
+    "sheets-products-webhook__firestore__27",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

@@ -10,6 +10,7 @@ for(const width of [320,768,1440])test(`historial carga detalles por página, co
  await page.addScriptTag({type:'module',content:`
  import {orderAmounts,sumOrderAmounts,deliveryAmountText} from '../../js/orders/importes-pedido.mjs';
  import {orderMoneyMarkup} from '../../js/orders/presentacion-importes.mjs';
+ import {orderCashSummary} from '../../js/orders/caja-pedido.mjs';
  import {ordersForView} from '../../js/orders/pedidos-prueba.mjs';
  import {ORDER_LIFECYCLE_LABELS,orderStatusLabel,orderTimeline,customerOrderMessage} from '../../js/orders/ciclo-pedido.mjs';
  ${statsCode}

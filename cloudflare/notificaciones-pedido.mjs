@@ -9,11 +9,13 @@ export function customerOrderChanges(before = {}, after = {}) {
   const groups = {
     productos: ['items'],
     importes: ['subtotal', 'shippingCost', 'total', 'coupon'],
-    entrega: ['shipping', 'shippingMethod', 'shippingCity', 'departamento', 'address', 'reference', 'shippingPending'],
+    entrega: ['shipping', 'shippingMethod', 'shippingCity', 'departamento', 'address', 'reference', 'shippingPending', 'estimatedDeliveryAt'],
     contacto: ['userName', 'userPhone', 'contactEmail'],
     pago: ['paymentMethod'],
   };
-  return Object.entries(groups).filter(([, fields]) => fields.some(field => stable(before[field]) !== stable(after[field]))).map(([label]) => label);
+  const changed = Object.entries(groups).filter(([, fields]) => fields.some(field => stable(before[field]) !== stable(after[field]))).map(([label]) => label);
+  if (!changed.includes('pago') && stable(before.payment?.depositAmount ?? 0) !== stable(after.payment?.depositAmount ?? 0)) changed.push('pago');
+  return changed;
 }
 
 // La campana conserva cada transición confirmada, con la misma clave en el

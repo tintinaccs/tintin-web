@@ -1,3 +1,23 @@
+## Auditoría SEO e indexación (solo lectura) — 2026-11-13 — Claude Code
+
+Pedido: instalar claude-seo y auditar la indexación de tintinaccs.com. claude-seo v2.6.0 revisado (install.sh y hooks sin acciones sospechosas) e instalado solo en `~/.claude` del contenedor (26 skills, 19 agentes; sin runtime Python/Chromium); no se tocó el repositorio.
+
+PASS_PRODUCCION (curl solo lectura): robots.txt y sitemaps (índice, páginas, 321 productos, colecciones) responden 200; canonical/og/robots correctos en las páginas públicas; ficha de producto renderizada en servidor con Product JSON-LD, canonical y precio; /product sin id y ids inexistentes llevan `x-robots-tag: noindex`; http y www redirigen 301 al dominio canónico; 404 real; Store/WebSite/Organization JSON-LD en inicio. `npm run audit:phase11` PASS (1235 comprobaciones).
+
+Hallazgos sin cambiar (decisión pendiente): LOW sitemap-collections lista `/catalogo?cat=...` pero esas URLs declaran canonical `/catalogo` (Google las ignorará); LOW la meta description de producto se corta a 220 caracteres a mitad de palabra (functions/product.js, archivo protegido); LOW páginas estáticas sin JSON-LD; LOW sin llms.txt.
+
+NOT_VERIFIED: Search Console (cobertura, URL Inspection, Core Web Vitals reales) — requiere acceso del titular; la verificación `googlef396be0b943aa3d1.html` responde 308 a la ruta limpia (200 allí), no se pudo confirmar que Google la acepte; el buscador usado no admite `site:` así que la indexación actual no se pudo comprobar.
+
+## Señas, saldos y fecha prevista de entrega en pedidos — 2026-11-13 — Claude Code
+
+Pedido de la titular: registrar seña (solo productos; el envío nunca entra en la seña), saldo a cobrar y fecha prevista de entrega, y revisar todo el repositorio. Implementado: `js/orders/caja-pedido.mjs` (validaciones y resumen de caja), `cloudflare/order-admin-domain.js` (`depositAmount`, `estimatedDeliveryAt`, seña <= productos, y `paymentMethod` que antes se perdía en la edición), `cloudflare/notificaciones-pedido.mjs` (correo al cambiar fecha o seña), modal del panel (`pedidos-superadmin-crud.js`) y perfil del cliente (`pedidos-perfil.js`). Sin cambios en `firestore.rules`. No se calcula la fecha automáticamente ni hay estado «bajo pedido» (no existen datos de plazo por modelo); la fecha es editable a mano. `createOrderAdmin` y `auditSummary` no se extienden (sin necesidad demostrada).
+
+Regresiones propias corregidas: fixtures de `tests/profile/order-history-display.test.mjs` y `tests/profile/order-history-pagination.spec.js` no importaban `orderCashSummary`.
+
+PASS_LOCAL: pruebas de dominio de pedidos 70/70; 958 pruebas Node de pedidos/perfil/checkout/sync/flujos (2 fallos eran de invocación, no de código; commerce-firestore pasa 19/19 con emulador); reglas Firestore (critical, phone, username, otp) con emulador; Chromium escritorio y móvil 353 correctas, 0 fallas; orders-board/avatar/products-master 94/94; `ci:preflight` exit 0; `audit:release`; build:pages dos veces sin diferencias; protección de flujos 78/542 intactos con plan de mantenimiento de 8 archivos contra 112972a; audit:cache-versioning correcta.
+
+Entorno (no es del código): este contenedor trae Chromium 1243 y Playwright pide 1254, por eso hay que fijar PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/opt/pw-browsers/chromium; los tests `click-replay-runtime` fallaban solo por eso y pasan 2/2. Los proyectos `webkit-mobile` (175 pruebas) no se pudieron ejecutar: WebKit no está instalado. NOT_VERIFIED: WebKit/Safari, producción, cuentas reales, envío real de correos.
+
 ## Directiva operativa compartida de recursos — 2026-11-13 — Codex /root
 
 Pedido: confirmar PR1392 y aplicar la directiva 3.0 de autonomía, reutilización, capacidades faltantes, instalaciones autorizadas, eficiencia y evidencia. PR1392 confirmada MERGED/publicada como04615a5f, con resultados posteriores y verificación pública aprobados; seguimiento propio desactivado. No reabrirla.

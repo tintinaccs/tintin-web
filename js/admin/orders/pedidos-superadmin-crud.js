@@ -6,6 +6,7 @@ import { withAdminSiteChange } from '../../core/store/publicar-cambio-administra
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
+import { orderCashSummary, parseDepositAmount, parseEstimatedDelivery } from '../../orders/caja-pedido.mjs?v=tintin-20261113-senas-saldos-1';
 import { allowedOrderStatuses, ORDER_LIFECYCLE_STATUSES, orderStatusLabel } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import {
   collection,
@@ -223,6 +224,9 @@ function ensureModal_() {
         <label class="adm-field">Referencia<input id="tinped-reference" class="adm-input"></label>
         <label class="adm-field">Método de pago<select id="tinped-pay-method" class="adm-input"><option value="efectivo">Efectivo</option><option value="transferencia">Transferencia</option><option value="paypal">PayPal</option></select></label>
         <label class="adm-field">Estado de pago<select id="tinped-pay-status" class="adm-input"><option value="pendiente">Pago pendiente</option><option value="pagado">Pagado</option><option value="rechazado">Rechazado</option><option value="cancelado">Cancelado</option><option value="reembolsado">Reembolsado</option></select></label>
+        <label class="adm-field">Seña recibida (solo productos, sin envío)<input id="tinped-deposit" type="number" min="0" step="1" inputmode="numeric" class="adm-input" placeholder="0"></label>
+        <label class="adm-field">Fecha prevista de entrega<input id="tinped-estimated-delivery" type="date" class="adm-input"></label>
+        <div id="tinped-balance" class="adm-field" style="grid-column:1/-1;font-size:13px;color:#766a70" aria-live="polite"></div>
         <label class="adm-field" style="grid-column:1/-1">Nota interna<input id="tinped-notes" class="adm-input"></label>
         <div style="grid-column:1/-1;border-top:1px solid #eadde2;padding-top:14px">
           <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-bottom:12px"><label class="adm-field tinped-picker-field" style="flex:1;min-width:220px">Agregar producto<select id="tinped-product-picker" class="adm-input"></select></label><button type="button" id="tinped-add-product" class="adm-btn">+ Agregar</button></div>
@@ -241,6 +245,8 @@ function ensureModal_() {
   overlay.querySelector('#tinped-items').addEventListener('input', handleItemInput_);
   overlay.querySelector('#tinped-items').addEventListener('click', handleItemClick_);
   overlay.querySelector('#tinped-shipping-cost').addEventListener('input', updateTotal_);
+  overlay.querySelector('#tinped-deposit').addEventListener('input', updateBalance_);
+  overlay.querySelector('#tinped-pay-status').addEventListener('change', updateBalance_);
   overlay.querySelector('#tinped-shipping-method').addEventListener('change', () => refreshModalStatuses_(modalState?.baseOrder, formEl_('tinped-status').value));
   overlay.addEventListener('keydown', event => {
     if (event.key === 'Escape') { event.stopPropagation();event.preventDefault();closeModal_(); }
@@ -284,6 +290,20 @@ function updateTotal_(){
   const subtotal = modalState.items.reduce((sum, item) => sum + money(item.price) * Math.max(1, Number(item.qty) || 1), 0);
   const total = subtotal + money(formEl_('tinped-shipping-cost')?.value);
   formEl_('tinped-total').textContent = `Total: ${total.toLocaleString('es-PY')} Gs`;
+  updateBalance_();
+}
+function updateBalance_(){
+  const box=formEl_('tinped-balance');
+  if(!box||!modalState)return;
+  const items=modalState.items||[];
+  const subtotal=items.reduce((sum,item)=>sum+money(item.price)*Math.max(1,Number(item.qty)||1),0);
+  const shippingCost=money(formEl_('tinped-shipping-cost')?.value);
+  const raw=formEl_('tinped-deposit')?.value;
+  let deposit;
+  try{deposit=parseDepositAmount(raw);}catch(error){box.textContent=error.message;return;}
+  if(deposit>subtotal){box.textContent='La seña no puede superar el total de productos; el envío no forma parte de la seña.';return;}
+  const summary=orderCashSummary({items,subtotal,shippingCost,total:subtotal+shippingCost,shippingMethod:formEl_('tinped-shipping-method')?.value,payment:{depositAmount:deposit},paymentStatus:formEl_('tinped-pay-status')?.value});
+  box.textContent=deposit?`Seña: ${deposit.toLocaleString('es-PY')} Gs · Saldo a cobrar: ${summary.balance===null?'No registrado':summary.balance.toLocaleString('es-PY')+' Gs'}`:'Sin seña registrada.';
 }
 
 function addSelectedProduct_() {
@@ -344,6 +364,9 @@ function fillModal_(order) {
   if (![...paymentSelect.options].some(option => option.value === paymentValue)) { const legacy = document.createElement('option'); legacy.value = paymentValue; legacy.dataset.legacyPayment = 'true'; legacy.textContent = 'Estado de pago no reconocido'; paymentSelect.appendChild(legacy); }
   setValue_('tinped-pay-status', order?.paymentStatus || order?.payment?.status || 'pendiente');
   setValue_('tinped-notes', order?.notes || '');
+  setValue_('tinped-deposit', order?.payment?.depositAmount ? String(order.payment.depositAmount) : '');
+  setValue_('tinped-estimated-delivery', /^\d{4}-\d{2}-\d{2}$/.test(String(order?.estimatedDeliveryAt || '')) ? order.estimatedDeliveryAt : '');
+  updateBalance_();
 }
 
 function collectPatch_() {
@@ -383,6 +406,9 @@ function collectPatch_() {
     status,
     payment: { method: payMethod, status: payStatus },
     paymentStatus: payStatus,
+    paymentMethod: payMethod,
+    depositAmount: parseDepositAmount(formEl_('tinped-deposit')?.value),
+    estimatedDeliveryAt: parseEstimatedDelivery(formEl_('tinped-estimated-delivery')?.value),
     shipping: {
       ...(modalState?.baseOrder?.shipping || {}),
       method: shippingMethod,

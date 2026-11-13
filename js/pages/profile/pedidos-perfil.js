@@ -1,4 +1,5 @@
 import {orderAmounts,deliveryAmountText} from '../../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';
+import {orderCashSummary} from '../../orders/caja-pedido.mjs?v=tintin-20261113-senas-saldos-1';
 import {orderMoneyMarkup} from '../../orders/presentacion-importes.mjs?v=tintin-20261112-delivery-separate-1';
 import { readAccountOrdersIndexPage } from './indice-pedidos-perfil.js?v=tintin-20261112-delivery-separate-1';
 import { ordersForView } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
@@ -41,6 +42,17 @@ function paymentText(order) {
   const label = {pendiente:'Pago pendiente',parcial:'Parcialmente pagado',pagado:'Pagado',rechazado:'Pago rechazado',cancelado:'Pago cancelado',reembolsado:'Reembolsado'}[state];
   return label ? `${method} · ${label}` : method;
 }
+function cashMarkup(order) {
+  const cash = orderCashSummary(order);
+  const cells = [];
+  if (cash.deposit > 0) {
+    cells.push(`<div><strong>Seña recibida</strong>${escapeHtml(money(cash.deposit))}</div>`);
+    cells.push(`<div><strong>Saldo a pagar</strong>${cash.balance === null ? 'No registrado' : escapeHtml(money(cash.balance))}</div>`);
+  }
+  const date = /^(\d{4})-(\d{2})-(\d{2})$/.exec(cash.estimatedDeliveryAt);
+  if (date) cells.push(`<div><strong>Fecha prevista</strong>${escapeHtml(`${date[3]}/${date[2]}/${date[1]}`)}</div>`);
+  return cells.join('');
+}
 function deliveryText(order) {
   return clean(order.shippingMethod || order.deliveryMethod || order.delivery?.method || 'A coordinar');
 }
@@ -73,7 +85,7 @@ function orderMarkup(order) {
   const amount = value => value == null ? 'No registrado' : money(value);
   const breakdown = `<div class="tt-profile-order-line"><span>Subtotal de productos</span><strong>${amount(orderAmounts(order).products)}</strong></div><div class="tt-profile-order-line"><span>Envío</span><strong>${(order.shippingMethod || order.shipping?.method) === 'encomienda' && (order.shippingPending || Number(order.shippingCost) === 0) ? 'Sólo el envío se paga a la transportadora al recibir; producto por transferencia previa' : order.shippingPending ? 'A coordinar' : amount(order.shippingCost == null ? null : Number(order.shippingCost) + shippingDiscount)}</strong></div>${shippingDiscount ? `<div class="tt-profile-order-line"><span>Descuento de envío</span><strong>−${money(shippingDiscount)}</strong></div>` : ''}`;
   const invoice = order.invoice?.wanted ? `<div><strong>Factura solicitada</strong>${escapeHtml(order.invoice.taxpayerType === 'fisica' ? 'Persona física' : order.invoice.taxpayerType === 'juridica' ? 'Persona jurídica' : 'Tipo no registrado')}<br>${escapeHtml(order.invoice.razonSocial)}<br>RUC: ${escapeHtml(order.invoice.ruc)}</div>` : '';
-  return `<article class="perfil-order-row" id="pedido-${anchor}" data-order-id="${escapeHtml(id)}" aria-label="Pedido ${escapeHtml(displayNumber)}"><div class="tt-profile-order-head"><h3 class="tt-profile-order-meta">Pedido #${escapeHtml(displayNumber)}<span class="tt-profile-order-date">${dateText}</span></h3>${statusBadge(order)}</div><div class="tt-profile-order-items">${summary || 'Sin detalle de productos'}${extra}</div><div class="tt-profile-order-total">${orderMoneyMarkup(order,money)}</div><details class="tt-profile-order-details"><summary>Ver seguimiento y detalle</summary>${timeline(order)}<div class="tt-profile-order-grid"><div><strong>Pago</strong>${escapeHtml(paymentText(order))}</div><div><strong>Entrega</strong>${escapeHtml(deliveryText(order))}</div><div><strong>Dirección</strong>${escapeHtml(addressText(order))}</div><div><strong>Número de pedido</strong>${escapeHtml(displayNumber)}</div><div class="tt-profile-order-lines"><strong>Productos</strong>${lines || 'Sin detalle de productos'}${breakdown}<div class="tt-profile-order-line"><span>Total del pedido</span><strong>${money(order.total)}</strong></div></div>${invoice}</div></details></article>`;
+  return `<article class="perfil-order-row" id="pedido-${anchor}" data-order-id="${escapeHtml(id)}" aria-label="Pedido ${escapeHtml(displayNumber)}"><div class="tt-profile-order-head"><h3 class="tt-profile-order-meta">Pedido #${escapeHtml(displayNumber)}<span class="tt-profile-order-date">${dateText}</span></h3>${statusBadge(order)}</div><div class="tt-profile-order-items">${summary || 'Sin detalle de productos'}${extra}</div><div class="tt-profile-order-total">${orderMoneyMarkup(order,money)}</div><details class="tt-profile-order-details"><summary>Ver seguimiento y detalle</summary>${timeline(order)}<div class="tt-profile-order-grid"><div><strong>Pago</strong>${escapeHtml(paymentText(order))}</div><div><strong>Entrega</strong>${escapeHtml(deliveryText(order))}</div>${cashMarkup(order)}<div><strong>Dirección</strong>${escapeHtml(addressText(order))}</div><div><strong>Número de pedido</strong>${escapeHtml(displayNumber)}</div><div class="tt-profile-order-lines"><strong>Productos</strong>${lines || 'Sin detalle de productos'}${breakdown}<div class="tt-profile-order-line"><span>Total del pedido</span><strong>${money(order.total)}</strong></div></div>${invoice}</div></details></article>`;
 }
 
 export function createProfileOrdersController({ readIndexPage, subscribe, subscribeRevision = () => () => {}, render, onStatus, onStats, requestedId = () => '' }) {

@@ -20,6 +20,8 @@ import { variantInventoryEntries, normalizeVariantInventoryItems, applyVariantIn
 import { couponDocPath, evaluateCoupon, normalizeCouponCode, redemptionDocPath } from './cupones.js';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 import { ORDER_LIFECYCLE_STATUSES, assertOrderTransition, lifecycleStatus } from '../js/orders/ciclo-pedido.mjs';
+import { parseDepositAmount, parseEstimatedDelivery, assertDepositWithinProducts } from '../js/orders/caja-pedido.mjs';
+import { orderAmounts } from '../js/orders/importes-pedido.mjs';
 import { orderCustomerNotice, customerOrderChanges } from './notificaciones-pedido.mjs';
 import { buildUserNotificationWrite } from './notificaciones-sociales.js';
 
@@ -132,6 +134,15 @@ function buildPatch(input, beforeOrder, { allowEmpty = false } = {}) {
     patch.paymentMethod = paymentMethod;
   }
 
+  if (has('depositAmount')) {
+    const base = patch.payment || { ...currentPayment };
+    const deposit = parseDepositAmount(input.depositAmount);
+    patch.payment = { ...base, depositAmount: deposit };
+    if (!patch.payment.status) patch.payment.status = normalizedPaymentStatus(beforeOrder?.paymentStatus || 'pendiente');
+    if (!patch.payment.method) patch.payment.method = normalizedPaymentMethod(beforeOrder?.paymentMethod || 'efectivo');
+  }
+  if (has('estimatedDeliveryAt')) patch.estimatedDeliveryAt = parseEstimatedDelivery(input.estimatedDeliveryAt);
+
   if (has('userName')) patch.userName = clean(input.userName, 120);
   if (has('userPhone')) patch.userPhone = clean(input.userPhone, 40);
   if (has('contactEmail')) {
@@ -180,6 +191,12 @@ function buildPatch(input, beforeOrder, { allowEmpty = false } = {}) {
     patch.subtotal = subtotal;
     patch.shippingCost = shippingCost;
     patch.total = subtotal + shippingCost;
+  }
+
+  if (has('depositAmount') || has('items') || has('shippingCost')) {
+    const merged = { ...beforeOrder, ...patch, payment: patch.payment || beforeOrder?.payment };
+    const deposit = Number(merged.payment?.depositAmount) || 0;
+    assertDepositWithinProducts(deposit, orderAmounts(merged).products);
   }
 
   if (!Object.keys(patch).length && !allowEmpty) throw new Error('No hay cambios administrativos permitidos.');
