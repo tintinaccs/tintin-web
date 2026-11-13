@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e5874596e84073685529fa616e9ca5963b2fbd22cc4e397bae68788b34e0ee6a",
+  "sourceFingerprint": "158ab822b938fd997b1c28ab9935800543579750ed470445880e0295dae8dc1c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1841,
-    "textFiles": 1688,
-    "totalBytes": 62836762,
+    "files": 1842,
+    "textFiles": 1689,
+    "totalBytes": 62837954,
     "pages": 19,
-    "modules": 1196
+    "modules": 1197
   },
   "viewports": [
     {
@@ -43983,8 +43983,8 @@
     },
     {
       "path": "scripts/smoke-todas-paginas.mjs",
-      "bytes": 23355,
-      "sha256": "07de435477565947929a54ab4bb47b67722d266421b2360dcefd8be13e9d08ff",
+      "bytes": 23736,
+      "sha256": "e3e47bfc167f331b72d9c15ad05c41435228dc3e71d83658d5d26d55cbcaec6f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44025,6 +44025,12 @@
           "target": "cloudflare/paypal-seguro.js",
           "dynamic": false,
           "line": 6
+        },
+        {
+          "raw": "../functions/api/instagram-feed.js",
+          "target": "functions/api/instagram-feed.js",
+          "dynamic": false,
+          "line": 7
         }
       ],
       "endpoints": []
@@ -46616,6 +46622,36 @@
           "target": null,
           "dynamic": false,
           "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/architecture/smoke-public-api-fixtures.test.mjs",
+      "bytes": 811,
+      "sha256": "b88d5061d2700cd7767976454fee2f89385a14458a028d3d11182e9a1994540f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
         }
       ],
       "endpoints": []
@@ -71179,8 +71215,8 @@
     {
       "path": "scripts/smoke-todas-paginas.mjs",
       "extension": ".mjs",
-      "bytes": 23355,
-      "sha256": "07de435477565947929a54ab4bb47b67722d266421b2360dcefd8be13e9d08ff"
+      "bytes": 23736,
+      "sha256": "e3e47bfc167f331b72d9c15ad05c41435228dc3e71d83658d5d26d55cbcaec6f"
     },
     {
       "path": "scripts/styles-integrity.json",
@@ -71577,6 +71613,12 @@
       "extension": ".mjs",
       "bytes": 3927,
       "sha256": "d4f949c67aceccdc81dda15a34ff7fdba9aed245fbbdbe6b5d3fa5fbe1f6d190"
+    },
+    {
+      "path": "tests/architecture/smoke-public-api-fixtures.test.mjs",
+      "extension": ".mjs",
+      "bytes": 811,
+      "sha256": "b88d5061d2700cd7767976454fee2f89385a14458a028d3d11182e9a1994540f"
     },
     {
       "path": "tests/auth/admin-auth-diagnostic-persistence.test.mjs",
