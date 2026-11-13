@@ -18,7 +18,7 @@ for(const [width,height] of [[320,568],[390,844],[430,932],[540,960],[844,390]])
  if(width<=540)await expect(page.locator('#adm-mobile-more-toggle')).toBeVisible();
  else await expect(page.getByRole('button',{name:'Fijar barra lateral abierta'})).toBeVisible();
  await expect(page.locator('.tt-control-search')).toBeVisible();
- await expect(page.locator('.tt-dashboard-link')).toHaveCount(4);await expect(page.locator('#dash-stats .adm-stat')).toHaveCount(6);
+ await expect(page.locator('.tt-dashboard-link')).toHaveCount(4);await expect(page.locator('#dash-stats .adm-stat')).toHaveCount(7);
  // El desglose agrega información: todas las métricas deben poder leerse al desplazar, sin quedar bajo la barra fija.
  if(width<=540){await page.locator('#dash-stats .adm-stat').last().scrollIntoViewIfNeeded();const last=await page.locator('#dash-stats .adm-stat').last().boundingBox(),nav=await page.locator('#adm-mobile-tabs').boundingBox();expect(last.y+last.height).toBeLessThan(nav.y);await page.evaluate(()=>scrollTo(0,0));}
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);

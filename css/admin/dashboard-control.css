@@ -130,7 +130,7 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
   html:root body.tt-admin-control #dash-stats .adm-stat { display: flex; flex-direction: column; align-items: flex-start; padding: 14px; gap: 10px; }
   html:root body.tt-admin-control #dash-stats .adm-stat-icon { width: 32px; height: 32px; }
   html:root body.tt-admin-control #dash-stats .adm-stat-val { font-size: 21px; }
-  html:root body.tt-admin-control #dash-stats #stat-sales-month { font-size: 14px; letter-spacing: -.02em; }
+  html:root body.tt-admin-control #dash-stats :is(#stat-sales-month,#stat-delivery-month) { font-size: 14px; letter-spacing: -.02em; }
   html:root body.tt-admin-control #dash-stats .adm-stat-label { order: -1; }
   .tt-control-dialog { padding: 16px; }
 }
@@ -226,10 +226,11 @@ html:root body.tt-admin-control .tt-admin-workspace-jump select { min-height: 44
 html:root body.tt-admin-control #dash-stats .adm-stat { padding: 16px; gap: 8px 12px; min-height: 112px; }
 html:root body.tt-admin-control #dash-stats .adm-stat-icon { grid-row: 1; width: 34px; height: 34px; }
 html:root body.tt-admin-control #dash-stats .adm-stat-label { align-self: center; }
+html:root body.tt-admin-control #dash-stats .adm-stat-note { grid-column: 1/-1; margin: 0; font-size: 11px; line-height: 1.5; overflow-wrap: anywhere; }
 html:root body.tt-admin-control #dash-stats .adm-stat-val { grid-column: 1/-1; font-size: clamp(22px,2vw,30px); }
-html:root body.tt-admin-control #dash-stats #stat-sales-month { font-size: clamp(17px,1.6vw,22px); }
+html:root body.tt-admin-control #dash-stats :is(#stat-sales-month,#stat-delivery-month) { font-size: clamp(17px,1.6vw,22px); }
 @media (min-width:1680px) {
-  html:root body.tt-admin-control #dash-stats { grid-template-columns: repeat(6,minmax(0,1fr)); }
+  html:root body.tt-admin-control #dash-stats { grid-template-columns: repeat(4,minmax(0,1fr)); }
 }
 @media (min-width:761px) and (max-width:1100px) {
   html:root body.tt-admin-control .tt-admin-field-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
@@ -245,7 +246,7 @@ html:root body.tt-admin-control #dash-stats #stat-sales-month { font-size: clamp
   html:root body.tt-admin-control #dash-stats .adm-stat { display: grid; padding: 14px; min-height: 108px; }
   html:root body.tt-admin-control #dash-stats .adm-stat-icon { width: 28px; height: 28px; }
   html:root body.tt-admin-control #dash-stats .adm-stat-val { grid-row: 2; }
-  html:root body.tt-admin-control #dash-stats #stat-sales-month { font-size: clamp(13px,4vw,18px); }
+  html:root body.tt-admin-control #dash-stats :is(#stat-sales-month,#stat-delivery-month) { font-size: clamp(17px,4vw,22px); }
   .tt-dashboard-link { min-height: 92px; gap: 8px; }
 }
 @media (max-width: 768px) {

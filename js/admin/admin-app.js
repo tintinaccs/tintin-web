@@ -2252,10 +2252,12 @@ function renderDashboardData() {
       const sales=sumOrderAmounts(filterStatisticsRows('revenue',monthOrders,row=>activityTimestampMillis(row.createdAt)));
       const delivery=sumOrderAmounts(filterStatisticsRows('delivery',monthOrders,row=>activityTimestampMillis(row.createdAt)));
       statSalesMonthEl.textContent = formatPrice(sales.products)+(sales.unknownProducts?' · Desglose incompleto':'');
-      statisticsSetText('stat-delivery-month',`Delivery aparte: ${formatPrice(delivery.delivery)} (no ingreso)${delivery.unknownDelivery?' · Hay envíos sin importe registrado':''}`);
+      statisticsSetText('stat-delivery-month',formatPrice(delivery.delivery));
+      statisticsSetText('stat-delivery-month-note',`No es ingreso de Tintín${delivery.unknownDelivery?' · Hay envíos sin importe registrado':''}`);
     } else {
       statSalesMonthEl.textContent = '—';
-      statisticsSetText('stat-delivery-month','Delivery aparte: —');
+      statisticsSetText('stat-delivery-month','—');
+      statisticsSetText('stat-delivery-month-note','No es ingreso de Tintín');
     }
 
     if (!canRecientes) {
