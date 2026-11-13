@@ -1,3 +1,13 @@
+## Auditoría SEO e indexación (solo lectura) — 2026-11-13 — Claude Code
+
+Pedido: instalar claude-seo y auditar la indexación de tintinaccs.com. claude-seo v2.6.0 revisado (install.sh y hooks sin acciones sospechosas) e instalado solo en `~/.claude` del contenedor (26 skills, 19 agentes; sin runtime Python/Chromium); no se tocó el repositorio.
+
+PASS_PRODUCCION (curl solo lectura): robots.txt y sitemaps (índice, páginas, 321 productos, colecciones) responden 200; canonical/og/robots correctos en las páginas públicas; ficha de producto renderizada en servidor con Product JSON-LD, canonical y precio; /product sin id y ids inexistentes llevan `x-robots-tag: noindex`; http y www redirigen 301 al dominio canónico; 404 real; Store/WebSite/Organization JSON-LD en inicio. `npm run audit:phase11` PASS (1235 comprobaciones).
+
+Hallazgos sin cambiar (decisión pendiente): LOW sitemap-collections lista `/catalogo?cat=...` pero esas URLs declaran canonical `/catalogo` (Google las ignorará); LOW la meta description de producto se corta a 220 caracteres a mitad de palabra (functions/product.js, archivo protegido); LOW páginas estáticas sin JSON-LD; LOW sin llms.txt.
+
+NOT_VERIFIED: Search Console (cobertura, URL Inspection, Core Web Vitals reales) — requiere acceso del titular; la verificación `googlef396be0b943aa3d1.html` responde 308 a la ruta limpia (200 allí), no se pudo confirmar que Google la acepte; el buscador usado no admite `site:` así que la indexación actual no se pudo comprobar.
+
 ## Señas, saldos y fecha prevista de entrega en pedidos — 2026-11-13 — Claude Code
 
 Pedido de la titular: registrar seña (solo productos; el envío nunca entra en la seña), saldo a cobrar y fecha prevista de entrega, y revisar todo el repositorio. Implementado: `js/orders/caja-pedido.mjs` (validaciones y resumen de caja), `cloudflare/order-admin-domain.js` (`depositAmount`, `estimatedDeliveryAt`, seña <= productos, y `paymentMethod` que antes se perdía en la edición), `cloudflare/notificaciones-pedido.mjs` (correo al cambiar fecha o seña), modal del panel (`pedidos-superadmin-crud.js`) y perfil del cliente (`pedidos-perfil.js`). Sin cambios en `firestore.rules`. No se calcula la fecha automáticamente ni hay estado «bajo pedido» (no existen datos de plazo por modelo); la fecha es editable a mano. `createOrderAdmin` y `auditSummary` no se extienden (sin necesidad demostrada).
