@@ -1,3 +1,13 @@
+## Directiva operativa compartida de recursos — 2026-11-13 — Codex /root
+
+Pedido: confirmar PR1392 y aplicar la directiva 3.0 de autonomía, reutilización, capacidades faltantes, instalaciones autorizadas, eficiencia y evidencia. PR1392 confirmada MERGED/publicada como04615a5f, con resultados posteriores y verificación pública aprobados; seguimiento propio desactivado. No reabrirla.
+
+Base f45ae13b4b98369326ed1e564610f0d997bd6dd8; rama docs/autonomous-resource-policy, worktree propio /workspace/tintin-agent-policy. Claude mantiene PR1394 de presencia/identidad; se leyó sólo su estado/diff para evitar conflictos. No se modifica su rama, funcionalidad ni checks. Si integra primero, conservar su main aceptado y regenerar únicamente nuestros derivados/plan sobre esa base.
+
+Se amplía la fuente compartida docs/agent/SKILLS_AUTO_ROUTING.md y se enlaza desde AGENTS/CLAUDE/README; tintin-agent-efficiency conserva paridad en ambas raíces y remite a esa autoridad. No se copia íntegra la directiva ni se duplica el inventario. Casos existente/faltante/innecesario/bloqueado, revisión de procedencia/compatibilidad/licencia/scripts, autorización persistente, instalación mínima verificable, descubrimiento acotado, Instagram/automatización pertinentes y cierre con evidencia. No implica configuración global de cuentas/chats ajenos, permisos nuevos ni ejecución automática de scripts externos.
+
+PASS_LOCAL: verificador oficial check-cloud-skills.py,72Skills con metadatos válidos en cada raíz, paridad/licencias/revisiones correctas; ejecución nativa del host no comprobada. Reutilización de Node modules existentes sólo tras cmp de manifiesto/lockfile idénticos; sin instalación ni cambios de dependencias. Skill consultada/aplicada manualmente: tintin-agent-efficiency. Pendientes: build/plan/preflight, PR protegido, checks del candidato/merge y resultados posteriores. Sin modificaciones del sitio ni datos comerciales.
+
 ## Sin nota en la casilla «Delivery del mes» del panel — 2026-11-13 — Claude Code
 
 Pedido de la titular: no mostrar «No es ingreso de Tintín · Hay envíos sin importe registrado» bajo el monto de Delivery del mes. Se quita el <small id="stat-delivery-month-note">, su aria-describedby, los dos statisticsSetText de admin-app.js y la regla CSS .adm-stat-note que quedó sin uso. No cambia el cálculo: el monto sigue siendo sólo delivery del mes y aparte de Productos. La nota del módulo Estadísticas (#statistics-delivery-note) no se toca. Tags: dashboard-control.css delivery-card-3 y admin-app.js delivery-card-2, registrados en la baseline. La rama integra main 04615a5f (PR 1392) y el plan de flujos protegidos se regeneró una sola vez contra ese SHA (24 archivos, foto Colección incluida).

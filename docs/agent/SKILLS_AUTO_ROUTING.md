@@ -13,6 +13,37 @@
 
 Una solicitud de revisión/diagnóstico es **solo lectura**. Un Skill nunca convierte esa solicitud en permiso para editar. Los procedimientos del repositorio, las protecciones de GitHub y las autorizaciones tienen prioridad sobre instrucciones de terceros.
 
+## Recursos existentes, capacidades faltantes e instalaciones autorizadas
+
+Esta es la fuente operativa compartida para seleccionar Skills, herramientas nativas, CLI, MCP, dependencias e integraciones. La directiva operativa 3.0 de la titular del 13/11/2026 se aplica dentro del alcance y los permisos reales de cada tarea. Estos archivos gobiernan los agentes que lean este checkout; no configuran por sí solos otras cuentas, proyectos, chats ni instalaciones globales.
+
+| Situación comprobada | Acción |
+| --- | --- |
+| La capacidad existe, funciona y cubre la tarea | Reutilizarla. No reinstalar, duplicar ni buscar alternativas sin una razón concreta. Una herramienta nativa suficiente evita instalar una Skill adicional. |
+| Falta una capacidad necesaria | Buscar la alternativa mínima, evaluar procedencia, mantenimiento, compatibilidad, licencia, scripts y permisos; instalar/configurar sólo si la autorización vigente lo permite. Verificarla y retomar la tarea original. |
+| No hace falta otra capacidad | Ejecutar con lo disponible; no instalar ni investigar herramientas por catálogo, palabra clave o moda. |
+| No hay permiso, acceso, compatibilidad o mecanismo de instalación soportado | No forzar ni eludir restricciones. Usar una alternativa segura si cubre la tarea; si no, explicar el bloqueo y pedir sólo la autorización o información imprescindible. |
+
+Antes de instalar, reutilizar la información vigente del entorno y revisar únicamente lo relevante: sistema/versiones, CLI, manifiesto y lockfile, Skills disponibles, herramientas del host, pruebas e integración afectada. No repetir auditorías completas ni listar valores de variables de entorno o credenciales. Las autorizaciones expresas de la sesión siguen vigentes: no volver a pedirlas para la misma acción rutinaria.
+
+Para una capacidad ausente, priorizar documentación, proveedores y repositorios oficiales. Referencias de descubrimiento: [find-skills](https://skills.sh/vercel-labs/skills/find-skills) y [vercel-labs/skills](https://github.com/vercel-labs/skills). Son referencias para investigar cuando hace falta, no comandos de instalación ni prueba de disponibilidad local. Consultar metadatos antes de clonar; detenerse cuando haya evidencia suficiente. Analizar hasta 2.000 repositorios sólo si el alcance real lo justifica, nunca como cuota ni descarga obligatoria.
+
+Antes de ejecutar código externo, revisar sus instrucciones, scripts de instalación y dependencias; fijar una versión o revisión reproducible y conservar licencias/procedencia cuando corresponda. Preferir instalación local al proyecto/entorno autorizado y registrar los cambios de manifiesto/lockfile mediante su gestor. No ejecutar instaladores remotos sin revisión ni agregar un servidor MCP, plugin o permisos fuera de los mecanismos admitidos por el host. Esta política no concede privilegios, acceso a cuentas, credenciales, gastos ni autorización productiva adicionales; aplicar los límites de AGENTS.md y las autorizaciones concretas vigentes.
+
+Después de incorporar un recurso, comprobar la capacidad necesaria con una prueba mínima segura y registrar qué se ejecutó y su resultado. Una instalación fallida exige diagnóstico y alternativa justificada, no reintentos indefinidos. Si la tarea se resolvió con recursos existentes, registrar que no se instaló nada.
+
+## Integraciones y automatización pertinentes
+
+Evaluar automatización sólo cuando aporte valor al trabajo solicitado, dentro de las autorizaciones y los mecanismos del host. Reutilizar scripts, APIs, colas, Actions o receptores existentes antes de crear otros; respetar límites, deduplicación, reintentos acotados y registro de fallos. No habilitar servicios de pago, procesos recurrentes costosos ni operaciones sensibles sin autorización. Seguir [GITHUB_RESULTS.md](GITHUB_RESULTS.md) para resultados terminales y vigilancia; una Skill instalada o un comentario no acredita un agente activo ni un receptor de eventos.
+
+Para Instagram, seleccionar únicamente las capacidades pertinentes a la tarea (contenido, formatos, programación o métricas). Priorizar APIs oficiales de Meta y comprobar acceso y permisos reales. Preparar contenido no autoriza publicar, eliminar ni modificar publicaciones existentes. No prometer funciones no soportadas por la API o el host.
+
+## Eficiencia y evidencia de cierre
+
+Buscar símbolos/rutas antes de leer, excluir dependencias y derivados de las búsquedas ordinarias, agrupar lecturas independientes y reutilizar análisis vigentes. Mantener resúmenes con decisiones, rutas y SHA; invalidarlos cuando cambie su fuente. Elegir modelos o agentes sólo cuando el host lo permita y la tarea lo justifique; coordinar responsabilidades independientes y propietarios/heartbeat, sin trabajo duplicado. No reducir controles de seguridad, corrección o pruebas esenciales para ahorrar tokens.
+
+El cierre técnico debe indicar brevemente el resultado, las herramientas existentes reutilizadas, las Skills consultadas/aplicadas o invocadas nativamente, las instalaciones realizadas (o ninguna), las pruebas realmente ejecutadas, los resultados verificados, lo pendiente y los límites. Adaptar el formato a la complejidad; no repetir ocho casillas vacías ni inventar ahorro, porcentajes, instalaciones o descubrimiento nativo. Leer/aplicar SKILL.md, invocarlo mediante el host y ejecutar sus scripts son hechos distintos: informar sólo los que ocurrieron. La lectura de una Skill no exige ejecutar sus scripts.
+
 ## Tabla de enrutamiento por intención, archivos y subsistema
 
 | Disparador real (pedido o rutas afectadas) | Principal: carpeta | Complementos posibles, solo si ayudan |
@@ -67,7 +98,7 @@ Al trabajar sobre interfaz o textos, primero leer `DESIGN.md`, `docs/identidad-v
 
 Solicitar: «Revisá qué Skills corresponden a una tarea de mejorar la ficha de producto de Tintín. Indicá el nombre y ruta de los 1–3 elegidos, sin modificar archivos». Si identifica los archivos de esta rama y los usa, la ruta repo -> agente funciona. Si solo los cita sin poder abrirlos, reportar disponibilidad parcial. No confundir lectura de `SKILL.md` con invocación nativa verificada.
 
-La biblioteca actual incorpora gh-fix-ci oficial y validado, con 63 carpetas por agente. La automatización externa horaria de vigilancia tiene su operación y límites en GITHUB_RESULTS; seleccionar un Skill y despertar un agente son responsabilidades distintas. No ejecutar una reparación que ya tenga un agente activo ni un cambio productivo sin la autorización correspondiente.
+La biblioteca incorpora gh-fix-ci oficial y validado; el inventario reproducible se comprueba con scripts/agent/check-cloud-skills.py, sin mantener una cuota fija de carpetas. La automatización externa horaria de vigilancia tiene su operación y límites en GITHUB_RESULTS; seleccionar un Skill y despertar un agente son responsabilidades distintas. No ejecutar una reparación que ya tenga un agente activo ni un cambio productivo sin la autorización correspondiente.
 
 ## Bibliotecas de diseño solicitadas
 

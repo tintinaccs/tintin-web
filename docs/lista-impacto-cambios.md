@@ -1,3 +1,10 @@
+## 2026-11-13 — selección de recursos y autonomía compartida
+
+- Autoridad única: SKILLS_AUTO_ROUTING para selección, búsqueda necesaria, instalación autorizada/verificada y reporte de evidencia; enlaces desde ambos agentes y README.
+- Mantener las copias propias de tintin-agent-efficiency idénticas y preservar recursos/licencias importados. No instalar ni actualizar dependencias para una regla documental.
+- AGENTS es archivo protegido: renovar su huella/plan con el preparador oficial contra main real; derivados únicamente por build canónico.
+- Verificar metadatos/paridad de Skills, enlaces locales, diff y preflight; preservar PR1394 de Claude y conciliar sólo nuestra rama si integra antes.
+
 ## 2026-11-13 — tarjeta independiente de delivery en dashboard
 
 - admin.html: séptimo indicador, Delivery del mes, mismo valor grande/negrita que productos; nota propia de envío no percibido e importes desconocidos.

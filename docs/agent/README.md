@@ -6,7 +6,7 @@ Este directorio es el punto de entrada operativo para agentes de código. No ree
 
 ## Selección automática de Skills
 
-Para todas las tareas realizadas en Codex/Claude Code dentro de este repositorio, aplicar el enrutamiento de `docs/agent/SKILLS_AUTO_ROUTING.md` (vinculado desde `AGENTS.md` y `.claude/CLAUDE.md`). Elegir solamente los Skills pertinentes y no atribuir activación nativa sin verificarla.
+Para todas las tareas realizadas en Codex/Claude Code dentro de este repositorio, aplicar el enrutamiento de `docs/agent/SKILLS_AUTO_ROUTING.md` (vinculado desde `AGENTS.md` y `.claude/CLAUDE.md`). Ese documento también es la fuente compartida de selección de herramientas, capacidades faltantes, instalaciones autorizadas y evidencia de cierre. Reutilizar lo que funciona; elegir solamente los Skills pertinentes y no atribuir activación nativa sin verificarla.
 
 ## Orden de autoridad
 

@@ -104,6 +104,10 @@ Do not report Delete, Edit, or another operation as missing when the product des
 A task is complete only when the requested scope is implemented or analyzed, relevant verification has finished, failures introduced by the change are corrected, the final changes are reviewed, and any real unverified limitation is clearly stated.
 
 
+## Resource selection and authorized installations
+- Follow the shared decision flow in `docs/agent/SKILLS_AUTO_ROUTING.md` for existing resources, missing capabilities, safe installation and final evidence. Reuse a sufficient working resource; search/install only a demonstrated missing capability within current authorization, verify it and resume the original task.
+- Preserve prior explicit authorizations; do not ask again for routine actions already covered. Neither a Skill nor this policy grants additional account access, privileges, costs or production permissions. Report actual tools/Skills used, installations (or none), executed checks, verified results, pending work and limits concisely.
+
 ## Auto-selección de Skills en TODAS las tareas del repositorio
 - **Por defecto, sin que el usuario tenga que pedirlo:** antes de cada tarea, clasificar intención y rutas probablemente afectadas, y aplicar el protocolo en `docs/agent/SKILLS_AUTO_ROUTING.md`. Hacer esta evaluación incluso si el prompt no menciona Skills.
 - Elegir el Skill principal pertinente y hasta dos complementarios solo cuando aporten valor diferente. Revisar sus descripciones y leer los `SKILL.md` completos **solo de los elegidos**. No cargar toda la biblioteca de Skills para cada tarea ni activar persistentemente `caveman`/`ponytail` sin solicitud explícita.
