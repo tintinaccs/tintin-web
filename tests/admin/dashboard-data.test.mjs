@@ -112,12 +112,10 @@ test('dashboard mensual conserva el total pagadero pero muestra venta sin delive
  ]);
  assert.equal(field('stat-sales-month').textContent,'300000');
  assert.equal(field('stat-delivery-month').textContent,'40000');
- assert.equal(field('stat-delivery-month-note').textContent,'No es ingreso de Tintín');
  assert.match(field('dash-recent-orders').innerHTML,/Productos: 100000/);assert.match(field('dash-recent-orders').innerHTML,/Delivery: 15000/);assert.match(field('dash-recent-orders').innerHTML,/Total del pedido: 115000/);
 });
 test('dashboard no atribuye un total histórico sin desglose a ventas',()=>{
  const {field}=dashboard([{createdAt:new Date(),total:115000}]);
  assert.equal(field('stat-sales-month').textContent,'0 · Desglose incompleto');
  assert.equal(field('stat-delivery-month').textContent,'0');
- assert.match(field('stat-delivery-month-note').textContent,/Hay envíos sin importe registrado/);
 });

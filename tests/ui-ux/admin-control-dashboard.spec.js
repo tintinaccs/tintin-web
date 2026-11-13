@@ -7,7 +7,7 @@ for (const width of [320, 390, 540, 768, 844, 1024, 1440, 1920]) {
     if(width===844)await page.setViewportSize({width,height:390});
     // Valores sintéticos para verificar tamaños; ningún dato de producción.
     await page.evaluate(() => {
-      const values = { 'stat-users': '1.248', 'stat-orders-today': '24', 'stat-sales-month': 'Gs. 1.420.000', 'stat-delivery-month': 'Gs. 170.000', 'stat-delivery-month-note':'No es ingreso de Tintín · Hay envíos sin importe registrado', 'stat-orders-total': '1.482', 'stat-visits-today': '368', 'stat-online-now': '12' };
+      const values = { 'stat-users': '1.248', 'stat-orders-today': '24', 'stat-sales-month': 'Gs. 1.420.000', 'stat-delivery-month': 'Gs. 170.000', 'stat-orders-total': '1.482', 'stat-visits-today': '368', 'stat-online-now': '12' };
       for (const [id, value] of Object.entries(values)) document.getElementById(id).textContent = value;
     });
     await expect(page.getByRole('heading', { name: 'Hoy en Tintin' })).toBeVisible();
@@ -15,6 +15,8 @@ for (const width of [320, 390, 540, 768, 844, 1024, 1440, 1920]) {
     const products=page.locator('#stat-sales-month'), delivery=page.locator('#stat-delivery-month');
     await expect(page.locator('#dash-stats .adm-stat')).toHaveCount(7);
     await expect(delivery.locator('..')).toContainText('Delivery del mes');
+    await expect(delivery.locator('..')).not.toContainText('No es ingreso de Tintín');
+    await expect(page.locator('#stat-delivery-month-note')).toHaveCount(0);
     await expect(products.locator('..')).not.toContainText('170.000');
     expect(await products.evaluate((node)=>node.parentElement===document.getElementById('stat-delivery-month').parentElement)).toBe(false);
     const type=await products.evaluate(node=>({size:getComputedStyle(node).fontSize,weight:getComputedStyle(node).fontWeight}));
