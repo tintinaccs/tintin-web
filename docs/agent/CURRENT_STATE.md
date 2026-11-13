@@ -1,3 +1,9 @@
+## Peso de la foto «Colección Tintín» del inicio — 2026-11-13 — Claude Code
+
+Pedido aprobado por la titular (comparación «videos vs. Tintín», punto 1). Medición previa en navegador real: el héroe ya usa WebP responsive (LCP 1,8 s celular / 0,9 s escritorio) y no se toca; el PNG de 1,7 MB del héroe es sólo respaldo. Lo que sobraba: coleccion-tintin.webp (1.548.704 B, sin pérdida) se descarga al abrir el inicio. Cambio: WebP calidad 96, método 6, sin redimensionar (329.734 B, −79 %, PSNR 40,9 dB). coleccion-tintin-original.png sin tocar; README actualizado. Versión de caché coleccion-20261113-1 en index.html, gestion-imagenes.js y su test. Tags -p1113 sólo en gestion-imagenes.js, calidad-interfaz.js y cargador-pagina.js (contenido cambiado); tienda.js conserva su tag. Puntos 4, 6 y 7 excluidos por la titular.
+
+PASS_LOCAL sobre main 7029b7ee: build:pages dos veces sin diferencias; plan de flujos protegidos (23 archivos) y auditoría de protección intactos; 51 pruebas de protección/mantenimiento; audit:images, audit:public-shell, audit:performance, audit:performance-regressions y audit:cache-versioning en 0; 32 pruebas de navegador (editorial-relojes, rendimiento del inicio, bordes del héroe). Navegador local Pixel 7 y 1440×900: coleccion-tintin.webp 329.734 B image/webp, sin desborde horizontal, sin pageerror (sólo avisos de reCAPTCHA esperables en localhost). Producción: pendiente de CI, integración automática y verificación de solo lectura.
+
 ## Reparación de CI de hono 4.13.18 — 2026-11-13 — Codex /root
 
 IN_PROGRESS sobre main 9d00653b9614bcf3d0d8446a3d15a0bd293cddca. Incorpora exactamente el cambio de lockfile de Dependabot #1390, HEAD ab6bbe5aa8d1a27be586a0472b1885580cfa80be: hono 4.13.13 → 4.13.18 de desarrollo. Conserva @hono/node-server 2.1.8 y la separación comercial integrada por #1386. La política de integración sólo para PR de la titular permanece vigente.
