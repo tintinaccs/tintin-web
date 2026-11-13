@@ -55,7 +55,7 @@ test('Firestore conserva el arte sin pérdida por dispositivo y no vuelve a desc
         return window.heroResourceChanges;
       });
       assert.deepEqual(resourceChanges, [], 'confirmar las mismas URLs conserva los atributos de carga del arte publicado');
-      assert.ok(logoRequests.every(url=>url.endsWith('?v=fixture-logo')||url.endsWith('?v=tintin-20261009-whatsapp-responsive-1')), 'el snapshot no quita la versión del logo publicado');
+      assert.ok(logoRequests.every(url=>url.endsWith('?v=fixture-logo')||home.includes('logo.png?v='+new URL(url).searchParams.get('v'))), 'el snapshot no quita la versión del logo publicado');
       assert.match(await page.locator('.tt-logo-img').evaluate(img=>img.src), /logo\.png\?v=fixture-logo$/);
       requests.length=0;
       await page.evaluate(root=>window.confirmImages({hero_bg_configVersion:'test',hero_bg_desktop:root+'backdrop.svg?custom=1',hero_bg_tablet:root+'backdrop.svg?custom=1',hero_bg_mobile:root+'backdrop.svg?custom=1'}),fallbackRoot);
