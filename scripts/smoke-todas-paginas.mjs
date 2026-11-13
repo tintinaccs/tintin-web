@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { publicPaypalConfig } from '../cloudflare/paypal-seguro.js';
+import { onRequestGet as instagramFeed } from '../functions/api/instagram-feed.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
@@ -89,7 +90,7 @@ function sendJson(response, status, payload, extraHeaders = {}) {
   response.end(JSON.stringify(payload));
 }
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
   const parsed = new URL(request.url || '/', baseURL);
   const pathname = decodeURIComponent(parsed.pathname);
 
@@ -111,6 +112,13 @@ const server = http.createServer((request, response) => {
   // simula únicamente las lecturas públicas que las superficies comunes puedan
   // ejecutar. Cualquier otra llamada a /api/engagement sigue siendo un error,
   // para no ocultar escrituras inesperadas ni regresiones de autenticación.
+  if (pathname === '/api/instagram-feed' && request.method === 'GET') {
+    const result = await instagramFeed({ env: {}, request: new Request(parsed.href) });
+    response.writeHead(result.status, Object.fromEntries(result.headers));
+    response.end(await result.text());
+    return;
+  }
+
   if (pathname === '/api/engagement') {
     const action = parsed.searchParams.get('action');
     if (request.method === 'GET' && action === 'productLikes') {
