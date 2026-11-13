@@ -1,3 +1,9 @@
+## Estudio de Reels (etapa 1, en progreso) — 2026-11-13 — Claude Code
+
+Pedido de la titular: sistema propio para preparar, revisar y luego programar/publicar reels de Tintín con material propio y voz clonada con consentimiento. Rama `claude/hopeful-turing-2owvv4`, sin PR (la titular no pidió merge). Punto de continuación para un chat nuevo: `docs/reels/CONTINUAR.md` (decisiones, estado, pasos de acceso a Instagram y reglas). Herramientas sólo en `scripts/reels/` y entornos Python fuera del repo; sin cambios en `package.json`, sitio, `firestore.rules` ni datos comerciales. Videos, muestras de voz, consentimiento y claves nunca entran a Git (`reels-trabajo/` ignorado).
+
+PASS_LOCAL: transcripción faster-whisper con palabras; montaje `render.mjs` → MP4 1080×1920 H.264 High yuv420p 30 fps AAC 48 kHz −14 LUFS con subtítulos por palabra, textos, transiciones, encuadre «contener», portada y SRT (`verificarRequisitos` aprobado); voz clonada Chatterbox local con consentimiento y marca Perth, dos variantes transcritas completas. Pendiente: aprobación de la muestra de voz, guion con criterios y catálogo, referencias, panel responsive, calendario/programador, conexión Instagram (permisos y token separado), métricas, pruebas automáticas, reel de muestra real e informe final.
+
 ## Directiva operativa compartida de recursos — 2026-11-13 — Codex /root
 
 Pedido: confirmar PR1392 y aplicar la directiva 3.0 de autonomía, reutilización, capacidades faltantes, instalaciones autorizadas, eficiencia y evidencia. PR1392 confirmada MERGED/publicada como04615a5f, con resultados posteriores y verificación pública aprobados; seguimiento propio desactivado. No reabrirla.
