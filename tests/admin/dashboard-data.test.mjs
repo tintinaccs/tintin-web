@@ -119,3 +119,21 @@ test('dashboard no atribuye un total histórico sin desglose a ventas',()=>{
  assert.equal(field('stat-sales-month').textContent,'0 · Desglose incompleto');
  assert.equal(field('stat-delivery-month').textContent,'0');
 });
+
+test('«En línea ahora» muestra nombre y datos de la cuenta verificada, escapados', () => {
+  const html = value => String(value).replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`);
+  const container = { innerHTML: '' }, detail = { textContent: '' };
+  const context = {
+    allUsers: [{ uid: 'uid_ana', name: 'Ana <b>Pérez</b>', email: 'ana@example.test', phone: '0981 000 000' }],
+    document: { getElementById: id => (id === 'dashboard-online-locations' ? container : detail) },
+    escapeHtmlAdmin: html, activityLocationLabel: () => 'Asunción', activityPageLabel: () => 'Inicio', activityRelativeTime: () => 'ahora',
+  };
+  vm.createContext(context);
+  vm.runInContext(functionSource('onlineVisitorPerson', '\nfunction renderOnlineLocations') + '\n' + functionSource('renderOnlineLocations', '\nfunction ') , context);
+  vm.runInContext(`renderOnlineLocations([{ userId: 'uid_ana' }, { userId: '' }, { userId: 'uid_sin_cargar' }], 0);`, context);
+  assert.match(container.innerHTML, /Ana &#60;b&#62;Pérez&#60;\/b&#62;/);
+  assert.match(container.innerHTML, /ana@example\.test · 0981 000 000/);
+  assert.match(container.innerHTML, /Visitante sin sesión/);
+  assert.match(container.innerHTML, /Cliente con cuenta/);
+  assert.doesNotMatch(container.innerHTML, /<b>Pérez/);
+});

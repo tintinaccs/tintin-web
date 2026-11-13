@@ -167,10 +167,11 @@ check(
   'Las estadísticas deben pasar por cuotas compartidas, sin escritura libre desde el SDK.'
 );
 check(
-  'La API conserva una proyección explícita sin IP, GPS ni identidad de cuenta',
-  activityApi.includes("userId: ''") && activityApi.includes('clean(cf.city, 80)') &&
-    !/input\.(?:ip|lat|lng|email|uid|userAgent)/.test(activityApi),
-  'El cuerpo del visitante no debe decidir los datos personales guardados.'
+  'La API conserva una proyección explícita sin IP ni GPS y sólo con el uid de un token verificado',
+  activityApi.includes('clean(cf.city, 80)') &&
+    /verifyToken\(bearer, \{ requireVerifiedEmail: false \}\)\.then\(user => user\.uid, \(\) => ''\)/.test(activityApi) &&
+    !/input\.(?:ip|lat|lng|email|uid|userId|userAgent)/.test(activityApi),
+  'El cuerpo del visitante no debe decidir los datos personales guardados; la cuenta sólo sale del token verificado.'
 );
 check(
   'La analítica es consentida y con identificadores que rotan por día',

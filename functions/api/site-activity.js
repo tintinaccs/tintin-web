@@ -1,6 +1,7 @@
 import { jsonResponse, originIsAllowed, preflightResponse, rateLimitErrorResponse } from '../../cloudflare/seguridad-cloudinary.js';
 import { decodeFirestoreFields, encodeFirestoreFields, firestoreAdminGet, firestoreAdminCommit } from '../../cloudflare/firebase-admin-ligero.js';
 import { limitByIp, reserveSharedRateLimit } from '../../cloudflare/rate-limit-compartido.js';
+import { verifyFirebaseIdToken } from '../../cloudflare/firebase-id-token.js';
 
 const KINDS = new Set(['session', 'presence', 'aggregate', 'authFailure']);
 const FAILURE_REASONS = new Set(['handoff-recovery-timeout', 'handoff-restore-error', 'auth-restore-fallback']);
@@ -33,6 +34,7 @@ async function readBody(request) {
 export async function handleSiteActivity({ request, env }, {
   get = firestoreAdminGet, commit = firestoreAdminCommit,
   ipLimit = limitByIp, reserve = reserveSharedRateLimit, now = () => new Date(),
+  verifyToken = verifyFirebaseIdToken,
 } = {}) {
   const origin = request.headers.get('origin') || '';
   if (!origin || !originIsAllowed(origin, request.url)) return jsonResponse({ ok: false }, 403, origin, request.url);
@@ -84,8 +86,12 @@ export async function handleSiteActivity({ request, env }, {
         }
         const cf = request.cf || {};
         const countryCode = /^[A-Z]{2}$/.test(cf.country || '') ? cf.country : '';
+        // La cuenta sale solo de un ID token verificado en el servidor; nunca de un
+        // uid enviado por el navegador. Token ausente o inválido: visita anónima.
+        const bearer = /^Bearer\s+(\S{1,4096})$/i.exec(request.headers.get('authorization') || '')?.[1];
+        const userId = bearer ? await verifyToken(bearer, { requireVerifiedEmail: false }).then(user => user.uid, () => '') : '';
         const fields = encodeFirestoreFields({
-          visitorId: input.visitorId, sessionId: input.sessionId, userId: '',
+          visitorId: input.visitorId, sessionId: input.sessionId, userId,
           city: clean(cf.city, 80), region: clean(cf.region, 80), country: countryCode, countryCode,
           geoSource: countryCode || cf.city ? 'cloudflare' : 'unavailable',
           ...(kind === 'session' ? { dayKey, landingPage: route, startedAt: date } : { page: route, lastSeen: date }),

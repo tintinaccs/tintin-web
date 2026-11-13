@@ -73,3 +73,22 @@ test('mantenimiento no acepta estadísticas, y un origen ajeno no alcanza las cu
   state.policies.length = 0;
   assert.equal((await handleSiteActivity({ request, env: {} }, state.deps)).status, 403); assert.equal(state.policies.length, 0);
 });
+
+test('presencia con sesión guarda solo el uid verificado en el servidor; token inválido queda anónimo', async () => {
+  const presence = { kind: 'presence', visitorId: 'visitor_777', sessionId: 'session_777', consent: true, route: '/', uid: 'forged-uid' };
+  const withAuth = token => new Request('https://shop.test/api/site-activity', {
+    method: 'POST', headers: { origin: 'https://shop.test', 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify(presence),
+  });
+  const verified = fixture(); const seen = [];
+  verified.deps.verifyToken = async (token, options) => { seen.push([token, options]); return { uid: 'uid_real_1', email: 'x@example.test' }; };
+  assert.equal((await handleSiteActivity({ request: withAuth('good.token.sig'), env: {} }, verified.deps)).status, 202);
+  const fields = decodeFirestoreFields(verified.documents.get('sitePresence/visitor_777').fields);
+  assert.equal(fields.userId, 'uid_real_1');
+  assert.equal('email' in fields || 'uid' in fields, false);
+  assert.deepEqual(seen, [['good.token.sig', { requireVerifiedEmail: false }]]);
+
+  const rejected = fixture();
+  rejected.deps.verifyToken = async () => { throw Object.assign(Error('bad'), { status: 401 }); };
+  assert.equal((await handleSiteActivity({ request: withAuth('bad.token.sig'), env: {} }, rejected.deps)).status, 202);
+  assert.equal(decodeFirestoreFields(rejected.documents.get('sitePresence/visitor_777').fields).userId, '');
+});

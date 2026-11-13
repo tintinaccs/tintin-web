@@ -925,7 +925,7 @@
         if (!privacy.hasStatisticsConsent()) return;
         if (!window.TintinSiteActivityBooted) {
           window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261029-mobile-review-1-p1106');
+          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261113-online-names-1');
         }
       };
       privacy.onPrivacyConsentChange(start);

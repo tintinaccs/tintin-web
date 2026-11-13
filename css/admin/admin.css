@@ -440,6 +440,17 @@
       border-bottom: 1px solid #f1e5e9;
     }
     .adm-visitor-row:last-child { border-bottom: 0; }
+    .adm-visitor-name {
+      overflow: hidden;
+      color: var(--adm-text);
+      font-size: 13px;
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .adm-visitor-name + .adm-visitor-meta,
+    .adm-visitor-name + .adm-visitor-meta + .adm-visitor-location,
+    .adm-visitor-name + .adm-visitor-location { margin-top: 2px; }
     .adm-visitor-location {
       overflow: hidden;
       color: var(--adm-text);
