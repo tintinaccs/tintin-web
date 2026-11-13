@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "404f87467622a23557de961afc9677bb0ff6593a0193b437b5ce9a4d33d0a16c",
+  "sourceFingerprint": "8d1652b4435aebdd30b7a4242231f7228a180f2c8687ba0c3354ae047a5e55e0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1841,
     "textFiles": 1688,
-    "totalBytes": 64033608,
+    "totalBytes": 64041217,
     "pages": 19,
     "modules": 1196
   },
@@ -16542,8 +16542,8 @@
         "guest",
         "client"
       ],
-      "bytes": 47881,
-      "sha256": "e2527cbff9b62f819031134a0f99fc741da7d5399b6f89bbf49f8dee59fed6f6",
+      "bytes": 47933,
+      "sha256": "a88d116aa8ad31cac8991b94f1fcac9341dcc30a6dbb5d5d5e963b6110ca9b96",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16691,7 +16691,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-97d86248344a4662",
+          "raw": "css/generated/inicio.css?v=tintin-home-9a79962a96a54c30",
           "target": "css/generated/inicio.css",
           "line": 62
         },
@@ -16756,7 +16756,7 @@
           "line": 80
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-woff2-20261112-1",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 90
         },
@@ -17676,7 +17676,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-97d86248344a4662",
+          "raw": "css/generated/inicio.css?v=tintin-home-9a79962a96a54c30",
           "target": "css/generated/inicio.css",
           "line": 62,
           "exists": true
@@ -17754,7 +17754,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-woff2-20261112-1",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 90,
           "exists": true
@@ -42066,8 +42066,8 @@
     },
     {
       "path": "scripts/auditar-tipografia.js",
-      "bytes": 16772,
-      "sha256": "2aba89d8d6264d88452ec3730fe71ec69f4751556206254975b0a9c4cdda265f",
+      "bytes": 16807,
+      "sha256": "a4dc7c1fd539ecf04c4515a382cc49423e39dcf61a1b4ba0f4dc4cb3e9d8e860",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44918,48 +44918,60 @@
     },
     {
       "path": "tests/admin/dashboard-data.test.mjs",
-      "bytes": 6361,
-      "sha256": "0e7938feeeccaa511e960f7d1e5227fc46640fe22c9dbb3eba632c290d9d1fb4",
+      "bytes": 7967,
+      "sha256": "326471bec31bb9e0fe428a5fea46b27a95d1d09fd36c567d0f7fd6ea52aaea25",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../../js/orders/importes-pedido.mjs",
+          "target": "js/orders/importes-pedido.mjs",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../js/orders/presentacion-importes.mjs",
+          "target": "js/orders/presentacion-importes.mjs",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "../../js/admin/eventos-dinamicos-admin.mjs",
           "target": "js/admin/eventos-dinamicos-admin.mjs",
           "dynamic": false,
-          "line": 1
+          "line": 3
         },
         {
           "raw": "node:test",
           "target": null,
           "dynamic": false,
-          "line": 2
+          "line": 4
         },
         {
           "raw": "node:assert/strict",
           "target": null,
           "dynamic": false,
-          "line": 3
+          "line": 5
         },
         {
           "raw": "node:fs",
           "target": null,
           "dynamic": false,
-          "line": 4
+          "line": 6
         },
         {
           "raw": "node:vm",
           "target": null,
           "dynamic": false,
-          "line": 5
+          "line": 7
         },
         {
           "raw": "../../js/admin/statistics/modelo-reinicios.mjs",
           "target": "js/admin/statistics/modelo-reinicios.mjs",
           "dynamic": false,
-          "line": 6
+          "line": 8
         }
       ],
       "endpoints": []
@@ -53767,8 +53779,8 @@
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",
-      "bytes": 41141,
-      "sha256": "4d6d7cf6bb485f1bce37f9487bb328016d7c3e9933efc44cbe26d41344364f59",
+      "bytes": 41495,
+      "sha256": "da084838f58f5e839d12fc80860919289604b110bc4b9f76035caafb44156830",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53777,7 +53789,7 @@
       "endpoints": [
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 516
+          "line": 519
         }
       ]
     },
@@ -60810,8 +60822,8 @@
     },
     {
       "path": "tests/ui-ux/admin-mobile-visual.spec.js",
-      "bytes": 6397,
-      "sha256": "ec8b931b2a03bd66168366a6acd1a74d4be6051f4643b660264d2682c83f2c1c",
+      "bytes": 6632,
+      "sha256": "59217290f9e938d2329ea14bc7b372a7f1efcf37bfd380c47e07f099e5c4f549",
       "syntax": {
         "ok": true,
         "error": ""
@@ -61109,8 +61121,8 @@
     },
     {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
-      "bytes": 8525,
-      "sha256": "be147ef7e23f2ae682f625d858a0a090b149c6f49e17cf29d316e8d940b571e2",
+      "bytes": 8532,
+      "sha256": "3cea130b86f145bf7c35547fc29b13e09f7ad9fbc19e7a5a129c22e03b794914",
       "syntax": {
         "ok": true,
         "error": ""
@@ -64706,7 +64718,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 14170,
-      "sha256": "a0c36b51c5921d6f519d7bbf233f9ca458aaa9a03ae020cf03575401ec30a328"
+      "sha256": "2967c775b1ca139fd2ac4d93f45340868fa317364b9ef4a7061b01fa4204708d"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64718,7 +64730,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "54bd795466b591ae4b85b08dbd5360e356028d7e095a7315bce3988c03a4562f"
+      "sha256": "0aef98ecfcc3b0c1e050553165c4a40596044e6e23703dd7a70fe6bd69a9a50b"
     },
     {
       "path": "config/public-site.json",
@@ -65095,8 +65107,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 371388,
-      "sha256": "97d86248344a46622f9c5e24cd05dc63eab947d81c0b4077f5536e85c9726ad9"
+      "bytes": 371452,
+      "sha256": "9a79962a96a54c30e4aa4ea390417a9a87fc9a6c22ef52dea590051c550168e8"
     },
     {
       "path": "css/generated/login-2.css",
@@ -65215,8 +65227,8 @@
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
       "extension": ".css",
-      "bytes": 10612,
-      "sha256": "a5ee326ea1266def21771b3a459058ba88b819ddf373eb34dd375d4d2d662a72"
+      "bytes": 10687,
+      "sha256": "d827cbf84bbc717623e449976bdaf30ff6a6736ba0266f7182b7d7005e624c3f"
     },
     {
       "path": "css/pages/home/mantenimiento-inicio.css",
@@ -65557,8 +65569,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1316177,
-      "sha256": "784644734b2d872dda11824d61a86dc13a078520b44b8279c4519f696eabe37c"
+      "bytes": 1321366,
+      "sha256": "3b0198ffbaf2442f85818077e7ef1530911791cd114f647b7bb69cad3a4396d2"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -67627,8 +67639,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 47881,
-      "sha256": "e2527cbff9b62f819031134a0f99fc741da7d5399b6f89bbf49f8dee59fed6f6"
+      "bytes": 47933,
+      "sha256": "a88d116aa8ad31cac8991b94f1fcac9341dcc30a6dbb5d5d5e963b6110ca9b96"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -69860,7 +69872,7 @@
       "path": "package-lock.json",
       "extension": ".json",
       "bytes": 341561,
-      "sha256": "ae079fa4a21a6b8a06dac939a712a93ccbb9335f070149c175c9a8ea7192704a"
+      "sha256": "2b82da2e860a8e6922396574d9545ff8e71062f92ef297b66b27233d7f835b25"
     },
     {
       "path": "package.json",
@@ -70735,8 +70747,8 @@
     {
       "path": "scripts/auditar-tipografia.js",
       "extension": ".js",
-      "bytes": 16772,
-      "sha256": "2aba89d8d6264d88452ec3730fe71ec69f4751556206254975b0a9c4cdda265f"
+      "bytes": 16807,
+      "sha256": "a4dc7c1fd539ecf04c4515a382cc49423e39dcf61a1b4ba0f4dc4cb3e9d8e860"
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
@@ -70789,8 +70801,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 83823,
-      "sha256": "c4c3b241a56165d31cfa20829fbb85ee23a474da0bdc0b08cd89d8bcc8d2b13c"
+      "bytes": 83815,
+      "sha256": "235f1f9e6346fa6f91fc753e0f1272fcc20c22795cacd99b40d44a4dc34f9fc3"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -71347,8 +71359,8 @@
     {
       "path": "tests/admin/dashboard-data.test.mjs",
       "extension": ".mjs",
-      "bytes": 6361,
-      "sha256": "0e7938feeeccaa511e960f7d1e5227fc46640fe22c9dbb3eba632c290d9d1fb4"
+      "bytes": 7967,
+      "sha256": "326471bec31bb9e0fe428a5fea46b27a95d1d09fd36c567d0f7fd6ea52aaea25"
     },
     {
       "path": "tests/admin/editor-comercial.test.mjs",
@@ -72637,8 +72649,8 @@
     {
       "path": "tests/navigation/header-responsive.spec.js",
       "extension": ".js",
-      "bytes": 41141,
-      "sha256": "4d6d7cf6bb485f1bce37f9487bb328016d7c3e9933efc44cbe26d41344364f59"
+      "bytes": 41495,
+      "sha256": "da084838f58f5e839d12fc80860919289604b110bc4b9f76035caafb44156830"
     },
     {
       "path": "tests/navigation/home-collection-links.test.mjs",
@@ -73861,8 +73873,8 @@
     {
       "path": "tests/ui-ux/admin-mobile-visual.spec.js",
       "extension": ".js",
-      "bytes": 6397,
-      "sha256": "ec8b931b2a03bd66168366a6acd1a74d4be6051f4643b660264d2682c83f2c1c"
+      "bytes": 6632,
+      "sha256": "59217290f9e938d2329ea14bc7b372a7f1efcf37bfd380c47e07f099e5c4f549"
     },
     {
       "path": "tests/ui-ux/admin-push-navigation.spec.js",
@@ -73963,8 +73975,8 @@
     {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
       "extension": ".mjs",
-      "bytes": 8525,
-      "sha256": "be147ef7e23f2ae682f625d858a0a090b149c6f49e17cf29d316e8d940b571e2"
+      "bytes": 8532,
+      "sha256": "3cea130b86f145bf7c35547fc29b13e09f7ad9fbc19e7a5a129c22e03b794914"
     },
     {
       "path": "tests/ui-ux/home-footer-spacing.spec.js",
