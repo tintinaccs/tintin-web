@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e5874596e84073685529fa616e9ca5963b2fbd22cc4e397bae68788b34e0ee6a",
+  "sourceFingerprint": "6502c0ec4ed035bebd528533a5b51c934b77d2c5902d686b380fb4d8888098b3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1841,
-    "textFiles": 1688,
-    "totalBytes": 62836762,
+    "files": 1842,
+    "textFiles": 1689,
+    "totalBytes": 62852626,
     "pages": 19,
-    "modules": 1196
+    "modules": 1197
   },
   "viewports": [
     {
@@ -2984,7 +2984,7 @@
         "viewer"
       ],
       "bytes": 195273,
-      "sha256": "6bbb9d0fa770fa8f4db583224c79542f20f9751b2eb72f81be157e48ae50e2c7",
+      "sha256": "d478101fac579f02c08e47fc1e2e86f669fa7062e26573160be6457e47c3314f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3043,7 +3043,7 @@
           "line": 2134
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261113-online-names-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261113-senas-saldos-1",
           "target": "js/admin/admin-app.js",
           "line": 2135
         },
@@ -3537,7 +3537,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261113-online-names-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261113-senas-saldos-1",
           "target": "js/admin/admin-app.js",
           "line": 2135,
           "exists": true
@@ -19459,8 +19459,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 60590,
-      "sha256": "e9e71a2f3e8aeeb51edf291d1af96210478f23ab1170ebdb499195add342b029",
+      "bytes": 60585,
+      "sha256": "d4c107332867ecf790c1d0dbb15ab95f3caa2355296f638adff612b1eaf3cfe1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19551,7 +19551,7 @@
           "line": 806
         },
         {
-          "raw": "js/pages/profile/pedidos-perfil.js?v=tintin-20261112-delivery-separate-1",
+          "raw": "js/pages/profile/pedidos-perfil.js?v=tintin-20261113-senas-saldos-1",
           "target": "js/pages/profile/pedidos-perfil.js",
           "line": 807
         },
@@ -20171,7 +20171,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/profile/pedidos-perfil.js?v=tintin-20261112-delivery-separate-1",
+          "raw": "js/pages/profile/pedidos-perfil.js?v=tintin-20261113-senas-saldos-1",
           "target": "js/pages/profile/pedidos-perfil.js",
           "line": 807,
           "exists": true
@@ -26105,8 +26105,8 @@
     },
     {
       "path": "cloudflare/notificaciones-pedido.mjs",
-      "bytes": 4197,
-      "sha256": "1367ade8c500bc0d7aabdc0435761d83c48b3e1b0ef2cab2328348505bd3e772",
+      "bytes": 4394,
+      "sha256": "b85715400574c566fcc0091216ee0b6a5b6ba167a7c506747ed851c29c80ae2b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26186,8 +26186,8 @@
     },
     {
       "path": "cloudflare/order-admin-domain.js",
-      "bytes": 46496,
-      "sha256": "a822cceaae58eaa0e3754da26feae5199e82b4b3185cbed89ab325dbd6343ed3",
+      "bytes": 47555,
+      "sha256": "6d2bfa341ff4c643f843b49035f25539acebd181c46e42d1ea229844dfcb5a56",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26242,16 +26242,28 @@
           "line": 22
         },
         {
+          "raw": "../js/orders/caja-pedido.mjs",
+          "target": "js/orders/caja-pedido.mjs",
+          "dynamic": false,
+          "line": 23
+        },
+        {
+          "raw": "../js/orders/importes-pedido.mjs",
+          "target": "js/orders/importes-pedido.mjs",
+          "dynamic": false,
+          "line": 24
+        },
+        {
           "raw": "./notificaciones-pedido.mjs",
           "target": "cloudflare/notificaciones-pedido.mjs",
           "dynamic": false,
-          "line": 23
+          "line": 25
         },
         {
           "raw": "./notificaciones-sociales.js",
           "target": "cloudflare/notificaciones-sociales.js",
           "dynamic": false,
-          "line": 24
+          "line": 26
         }
       ],
       "endpoints": []
@@ -29686,7 +29698,7 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 446962,
-      "sha256": "e49fcc39d333328a99f0ea6c2af763fa174e459090b8ec0bce4687f46e594f1b",
+      "sha256": "8f94fade77a8ededb10ab24f7ad09c5c391bfc779ab16b9058ed732e66d46955",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30041,7 +30053,7 @@
           "line": 75
         },
         {
-          "raw": "./orders/pedidos-superadmin-crud.js?v=tintin-20261102-cancel-stock-1",
+          "raw": "./orders/pedidos-superadmin-crud.js?v=tintin-20261113-senas-saldos-1",
           "target": "js/admin/orders/pedidos-superadmin-crud.js",
           "dynamic": false,
           "line": 71
@@ -31490,8 +31502,8 @@
     },
     {
       "path": "js/admin/orders/pedidos-superadmin-crud.js",
-      "bytes": 33523,
-      "sha256": "c9719bd0384bd0e382d7ac2a18e3290ab699cf34daffa25d2e92c0840553b110",
+      "bytes": 35819,
+      "sha256": "6d4ddfd62c08acdb400d1a85e78e0992e1d2e37908745dc93d735707ad110fca",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31546,22 +31558,28 @@
           "line": 8
         },
         {
+          "raw": "../../orders/caja-pedido.mjs?v=tintin-20261113-senas-saldos-1",
+          "target": "js/orders/caja-pedido.mjs",
+          "dynamic": false,
+          "line": 9
+        },
+        {
           "raw": "../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1",
           "target": "js/orders/ciclo-pedido.mjs",
           "dynamic": false,
-          "line": 9
+          "line": 10
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 21
+          "line": 22
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 21
+          "line": 22
         }
       ]
     },
@@ -36753,6 +36771,24 @@
       "endpoints": []
     },
     {
+      "path": "js/orders/caja-pedido.mjs",
+      "bytes": 2740,
+      "sha256": "6d68ca7bf85cd00b8fbdb246bbdd13811a83031c1ac4b5a3d4a3dec13d1c1bed",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./importes-pedido.mjs?v=tintin-20261112-delivery-separate-1",
+          "target": "js/orders/importes-pedido.mjs",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "js/orders/ciclo-pedido.mjs",
       "bytes": 6058,
       "sha256": "4a1c8ca8d7c0bcc8c0c2fab95592336dadd8630088ff8b1ed99ce6e6f239e1d6",
@@ -38177,8 +38213,8 @@
     },
     {
       "path": "js/pages/profile/pedidos-perfil.js",
-      "bytes": 21127,
-      "sha256": "ba9eb076f551616376e1cff9a9d322fbf3c3d459a10cffbc2aa51d3af613abed",
+      "bytes": 21816,
+      "sha256": "6452f5fcc669427823599b22944a00dc240c9732d92783ae838924ff47bd592f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38191,58 +38227,64 @@
           "line": 1
         },
         {
+          "raw": "../../orders/caja-pedido.mjs?v=tintin-20261113-senas-saldos-1",
+          "target": "js/orders/caja-pedido.mjs",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "../../orders/presentacion-importes.mjs?v=tintin-20261112-delivery-separate-1",
           "target": "js/orders/presentacion-importes.mjs",
           "dynamic": false,
-          "line": 2
+          "line": 3
         },
         {
           "raw": "./indice-pedidos-perfil.js?v=tintin-20261112-delivery-separate-1",
           "target": "js/pages/profile/indice-pedidos-perfil.js",
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2",
           "target": "js/orders/pedidos-prueba.mjs",
           "dynamic": false,
-          "line": 4
+          "line": 5
         },
         {
           "raw": "../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/core/firebase/firebase.js",
           "dynamic": false,
-          "line": 5
+          "line": 6
         },
         {
           "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../../core/store/estadisticas-pedidos.js?v=tintin-20261112-delivery-separate-1",
           "target": "js/core/store/estadisticas-pedidos.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         },
         {
           "raw": "../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1",
           "target": "js/orders/ciclo-pedido.mjs",
           "dynamic": false,
-          "line": 9
+          "line": 10
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 7
+          "line": 8
         }
       ]
     },
@@ -55717,8 +55759,8 @@
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
-      "bytes": 63452,
-      "sha256": "9283b7634226f5a115e7070480d7260e61942e28d75c96571e7d68ce4e440920",
+      "bytes": 68428,
+      "sha256": "0ef976fd889756b17429f0f288f19e3b2012abfa101ab5c2df5d88c5656ea39f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55753,6 +55795,18 @@
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
           "line": 14
+        },
+        {
+          "raw": "../../js/orders/caja-pedido.mjs",
+          "target": "js/orders/caja-pedido.mjs",
+          "dynamic": false,
+          "line": 1046
+        },
+        {
+          "raw": "../../cloudflare/notificaciones-pedido.mjs",
+          "target": "cloudflare/notificaciones-pedido.mjs",
+          "dynamic": false,
+          "line": 1047
         }
       ],
       "endpoints": [
@@ -57157,8 +57211,8 @@
     },
     {
       "path": "tests/profile/order-history-display.test.mjs",
-      "bytes": 2333,
-      "sha256": "f3a12e806193f0a02e587d9dd88ebc2c76aac913835a57b20b4ce793d90c5f67",
+      "bytes": 3403,
+      "sha256": "28e3bb31e54d75e49ee7f471d77e262491070639d92a11ded2957f652c0281ce",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57177,42 +57231,48 @@
           "line": 2
         },
         {
+          "raw": "../../js/orders/caja-pedido.mjs",
+          "target": "js/orders/caja-pedido.mjs",
+          "dynamic": false,
+          "line": 3
+        },
+        {
           "raw": "node:test",
           "target": null,
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "node:assert/strict",
           "target": null,
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "node:fs",
           "target": null,
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "node:vm",
           "target": null,
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "../../js/orders/ciclo-pedido.mjs",
           "target": "js/orders/ciclo-pedido.mjs",
           "dynamic": false,
-          "line": 4
+          "line": 5
         }
       ],
       "endpoints": []
     },
     {
       "path": "tests/profile/order-history-pagination.spec.js",
-      "bytes": 4763,
-      "sha256": "53ac50bb359a063d040b61818ca3229249df106cd4cb0ff42260e38f2f22528c",
+      "bytes": 4830,
+      "sha256": "4ba57c38a96d954f1c8d40ff262be80577eeb5c91d96c12798bd3b52ff77e065",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57231,16 +57291,22 @@
           "line": 12
         },
         {
+          "raw": "../../js/orders/caja-pedido.mjs",
+          "target": "js/orders/caja-pedido.mjs",
+          "dynamic": false,
+          "line": 13
+        },
+        {
           "raw": "../../js/orders/pedidos-prueba.mjs",
           "target": "js/orders/pedidos-prueba.mjs",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "../../js/orders/ciclo-pedido.mjs",
           "target": "js/orders/ciclo-pedido.mjs",
           "dynamic": false,
-          "line": 14
+          "line": 15
         }
       ],
       "endpoints": []
@@ -63542,7 +63608,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 195273,
-      "sha256": "6bbb9d0fa770fa8f4db583224c79542f20f9751b2eb72f81be157e48ae50e2c7"
+      "sha256": "d478101fac579f02c08e47fc1e2e86f669fa7062e26573160be6457e47c3314f"
     },
     {
       "path": "apple-touch-icon.png",
@@ -64507,8 +64573,8 @@
     {
       "path": "cloudflare/notificaciones-pedido.mjs",
       "extension": ".mjs",
-      "bytes": 4197,
-      "sha256": "1367ade8c500bc0d7aabdc0435761d83c48b3e1b0ef2cab2328348505bd3e772"
+      "bytes": 4394,
+      "sha256": "b85715400574c566fcc0091216ee0b6a5b6ba167a7c506747ed851c29c80ae2b"
     },
     {
       "path": "cloudflare/notificaciones-sociales.js",
@@ -64525,8 +64591,8 @@
     {
       "path": "cloudflare/order-admin-domain.js",
       "extension": ".js",
-      "bytes": 46496,
-      "sha256": "a822cceaae58eaa0e3754da26feae5199e82b4b3185cbed89ab325dbd6343ed3"
+      "bytes": 47555,
+      "sha256": "6d2bfa341ff4c643f843b49035f25539acebd181c46e42d1ea229844dfcb5a56"
     },
     {
       "path": "cloudflare/order-sheets-sync.js",
@@ -64723,8 +64789,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 502,
-      "sha256": "cbd3fdd4508b6c61d0f5321bddccf7858d85f175f46631f739f2dc8d4b3a9482"
+      "bytes": 3114,
+      "sha256": "4133d40e755b6139fa90b9746d020650cbfa8ad94d634e96617bc002419933a4"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64736,7 +64802,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "4cb103bb9b66fa47cac60509c68128ff6f6eb624f04a614616acc8a599ed5935"
+      "sha256": "bf7cffae7d88b9e4b8c480d435b0e2eba169a2926154c6e185fe4a0302472ceb"
     },
     {
       "path": "config/public-site.json",
@@ -67652,7 +67718,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 446962,
-      "sha256": "e49fcc39d333328a99f0ea6c2af763fa174e459090b8ec0bce4687f46e594f1b"
+      "sha256": "8f94fade77a8ededb10ab24f7ad09c5c391bfc779ab16b9058ed732e66d46955"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -67927,8 +67993,8 @@
     {
       "path": "js/admin/orders/pedidos-superadmin-crud.js",
       "extension": ".js",
-      "bytes": 33523,
-      "sha256": "c9719bd0384bd0e382d7ac2a18e3290ab699cf34daffa25d2e92c0840553b110"
+      "bytes": 35819,
+      "sha256": "6d4ddfd62c08acdb400d1a85e78e0992e1d2e37908745dc93d735707ad110fca"
     },
     {
       "path": "js/admin/orders/seleccion-devolucion.mjs",
@@ -69179,6 +69245,12 @@
       "sha256": "4be86ae4cacab639902da8487267c1c02b943aa4ae41e53b28b8c03f11a4c2ac"
     },
     {
+      "path": "js/orders/caja-pedido.mjs",
+      "extension": ".mjs",
+      "bytes": 2740,
+      "sha256": "6d68ca7bf85cd00b8fbdb246bbdd13811a83031c1ac4b5a3d4a3dec13d1c1bed"
+    },
+    {
       "path": "js/orders/ciclo-pedido.mjs",
       "extension": ".mjs",
       "bytes": 6058,
@@ -69529,8 +69601,8 @@
     {
       "path": "js/pages/profile/pedidos-perfil.js",
       "extension": ".js",
-      "bytes": 21127,
-      "sha256": "ba9eb076f551616376e1cff9a9d322fbf3c3d459a10cffbc2aa51d3af613abed"
+      "bytes": 21816,
+      "sha256": "6452f5fcc669427823599b22944a00dc240c9732d92783ae838924ff47bd592f"
     },
     {
       "path": "js/quality/accesibilidad-global.js",
@@ -69889,8 +69961,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 60590,
-      "sha256": "e9e71a2f3e8aeeb51edf291d1af96210478f23ab1170ebdb499195add342b029"
+      "bytes": 60585,
+      "sha256": "d4c107332867ecf790c1d0dbb15ab95f3caa2355296f638adff612b1eaf3cfe1"
     },
     {
       "path": "playwright.config.js",
@@ -70807,8 +70879,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 83804,
-      "sha256": "d10c07682d4eba891df12ee6b55647886d84c75acebeb2fc5e32d90efed63aae"
+      "bytes": 83967,
+      "sha256": "619e343418d04f6801651425e83aeccae01b9e3c6f3c11bab8e4c196c9db2b6e"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -72955,8 +73027,8 @@
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
       "extension": ".mjs",
-      "bytes": 63452,
-      "sha256": "9283b7634226f5a115e7070480d7260e61942e28d75c96571e7d68ce4e440920"
+      "bytes": 68428,
+      "sha256": "0ef976fd889756b17429f0f288f19e3b2012abfa101ab5c2df5d88c5656ea39f"
     },
     {
       "path": "tests/orders/order-contact-links.test.mjs",
@@ -73237,14 +73309,14 @@
     {
       "path": "tests/profile/order-history-display.test.mjs",
       "extension": ".mjs",
-      "bytes": 2333,
-      "sha256": "f3a12e806193f0a02e587d9dd88ebc2c76aac913835a57b20b4ce793d90c5f67"
+      "bytes": 3403,
+      "sha256": "28e3bb31e54d75e49ee7f471d77e262491070639d92a11ded2957f652c0281ce"
     },
     {
       "path": "tests/profile/order-history-pagination.spec.js",
       "extension": ".js",
-      "bytes": 4763,
-      "sha256": "53ac50bb359a063d040b61818ca3229249df106cd4cb0ff42260e38f2f22528c"
+      "bytes": 4830,
+      "sha256": "4ba57c38a96d954f1c8d40ff262be80577eeb5c91d96c12798bd3b52ff77e065"
     },
     {
       "path": "tests/profile/order-history-pagination.test.mjs",
@@ -76735,7 +76807,7 @@
           },
           {
             "file": "js/pages/profile/pedidos-perfil.js",
-            "line": 234,
+            "line": 246,
             "operation": "doc"
           }
         ]
@@ -76915,12 +76987,12 @@
           },
           {
             "file": "js/admin/orders/pedidos-superadmin-crud.js",
-            "line": 189,
+            "line": 190,
             "operation": "collection"
           },
           {
             "file": "js/admin/orders/pedidos-superadmin-crud.js",
-            "line": 536,
+            "line": 562,
             "operation": "doc"
           },
           {
@@ -77075,7 +77147,7 @@
           },
           {
             "file": "js/admin/orders/pedidos-superadmin-crud.js",
-            "line": 23,
+            "line": 24,
             "operation": "doc"
           },
           {
@@ -77485,7 +77557,7 @@
           },
           {
             "file": "js/pages/profile/pedidos-perfil.js",
-            "line": 237,
+            "line": 249,
             "operation": "doc"
           },
           {

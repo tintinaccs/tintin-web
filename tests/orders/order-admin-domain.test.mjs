@@ -1041,3 +1041,65 @@ test('v2 conserva referencia, inventario nullable y precios al cancelar sin devo
  const reopened=await applyOrderAdminMutation({}, {orderId:created.orderId,status:'pendiente',paymentStatus:'pendiente'},ACTOR,store);
  assert.deepEqual(decodeFirestoreFields(store.map.get('products/ring').fields),before);assert.deepEqual(reopened.order.items,created.order.items);
 });
+
+// ---- Señas, saldos y fecha prevista ----
+import { orderCashSummary, parseDepositAmount, parseEstimatedDelivery, assertDepositWithinProducts } from '../../js/orders/caja-pedido.mjs';
+import { customerOrderChanges } from '../../cloudflare/notificaciones-pedido.mjs';
+
+test('seña y fecha prevista: se guardan, se calcula el saldo y el aviso al cliente sale junto al pedido', async () => {
+  const store = fakeStore({ 'products/prod_001': stockedProduct() }, { transactional: true });
+  const actor = { uid: 'superadmin-fixture', email: 'admin@example.test', role: 'superadmin' };
+  const created = await createOrderAdmin({}, { ...RETIRO, userId: 'customer-fixture', userEmail: 'customer@example.test' }, actor, store);
+  const result = await applyOrderAdminMutation({}, { orderId: created.orderId, baseChangeId: created.order.lastChangeId, changeId: 'deposit_1', depositAmount: 20000, estimatedDeliveryAt: '2026-12-05' }, actor, store);
+  assert.equal(result.order.payment.depositAmount, 20000);
+  assert.equal(result.order.estimatedDeliveryAt, '2026-12-05');
+  assert.equal(orderCashSummary(result.order).balance, 30000);
+  assert.ok(writeFor(store.commits.at(-1), 'users/customer-fixture/notifications/'), 'cambiar seña/fecha avisa al cliente en el mismo commit');
+});
+
+test('seña: no puede superar los productos (el envío no forma parte de la seña) ni ser inválida', async () => {
+  const store = fakeStore({ 'products/prod_001': stockedProduct() }, { transactional: true });
+  const actor = { uid: 'superadmin-fixture', email: 'admin@example.test', role: 'superadmin' };
+  const created = await createOrderAdmin({}, { ...RETIRO, userId: 'customer-fixture', userEmail: 'customer@example.test' }, actor, store);
+  const base = { orderId: created.orderId, baseChangeId: created.order.lastChangeId };
+  await assert.rejects(applyOrderAdminMutation({}, { ...base, changeId: 'dep_big', depositAmount: 50001 }, actor, store), /no puede superar el total de productos/);
+  await assert.rejects(applyOrderAdminMutation({}, { ...base, changeId: 'dep_neg', depositAmount: -5 }, actor, store), /entero mayor o igual a cero/);
+  await assert.rejects(applyOrderAdminMutation({}, { ...base, changeId: 'dep_txt', depositAmount: '12abc' }, actor, store), /entero mayor o igual a cero/);
+  await assert.rejects(applyOrderAdminMutation({}, { ...base, changeId: 'date_bad', estimatedDeliveryAt: '2026-02-31' }, actor, store), /fecha válida/);
+});
+
+test('seña vacía la borra y fecha vacía la quita; el pago anterior se conserva', async () => {
+  const store = fakeStore({ 'products/prod_001': stockedProduct() }, { transactional: true });
+  const actor = { uid: 'superadmin-fixture', email: 'admin@example.test', role: 'superadmin' };
+  const created = await createOrderAdmin({}, { ...RETIRO, userId: 'customer-fixture', userEmail: 'customer@example.test' }, actor, store);
+  let r = await applyOrderAdminMutation({}, { orderId: created.orderId, baseChangeId: created.order.lastChangeId, changeId: 'set_1', depositAmount: 10000, estimatedDeliveryAt: '2026-12-01', paymentMethod: 'transferencia' }, actor, store);
+  assert.equal(r.order.payment.method, 'transferencia');
+  r = await applyOrderAdminMutation({}, { orderId: created.orderId, baseChangeId: r.order.lastChangeId || r.changeId, changeId: 'clear_1', depositAmount: '', estimatedDeliveryAt: '' }, actor, store);
+  assert.equal(r.order.payment.depositAmount, 0);
+  assert.equal(r.order.estimatedDeliveryAt, '');
+  assert.equal(r.order.payment.method, 'transferencia');
+});
+
+test('caja-pedido: saldo según estado de pago, sin inventar importes', () => {
+  assert.equal(parseDepositAmount(''), 0);
+  assert.equal(parseDepositAmount('15000'), 15000);
+  assert.throws(() => parseDepositAmount(1.5), /entero/);
+  assert.equal(parseEstimatedDelivery(''), '');
+  assert.throws(() => parseEstimatedDelivery('05/12/2026'), /fecha válida/);
+  assert.doesNotThrow(() => assertDepositWithinProducts(100, null));
+  const order = { total: 80000, shippingCost: 30000, shippingMethod: 'delivery', payment: { depositAmount: 25000 }, paymentStatus: 'parcial' };
+  const cash = orderCashSummary(order);
+  assert.equal(cash.balance, 55000);
+  assert.equal(cash.productsBalance, 25000);
+  assert.equal(cash.deliveryAtReceipt, 30000);
+  assert.equal(orderCashSummary({ ...order, paymentStatus: 'pagado' }).balance, 0);
+  assert.equal(orderCashSummary({ ...order, paymentStatus: 'reembolsado' }).balance, 0);
+  assert.equal(orderCashSummary({ payment: { depositAmount: 5000 } }).balance, null);
+});
+
+test('aviso al cliente: cambios de seña y de fecha prevista se detectan', () => {
+  const before = { status: 'confirmado', payment: { depositAmount: 0 } };
+  assert.ok(customerOrderChanges(before, { ...before, payment: { depositAmount: 20000 } }).includes('pago'));
+  assert.ok(customerOrderChanges(before, { ...before, estimatedDeliveryAt: '2026-12-05' }).length > 0);
+  assert.equal(customerOrderChanges(before, { ...before }).length, 0);
+});
