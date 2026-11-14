@@ -89,7 +89,7 @@ function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   const links = PUBLIC_STRUCTURAL_STYLES.map(([id, href, version]) =>
     `  <link id="${id}" rel="stylesheet" href="${absolute ? '/' : ''}${href}?v=${version}">`
   ).concat((PUBLIC_PAGE_STYLES[page] || []).map(href =>
-    `  <link data-tt-page-structure="initial" rel="stylesheet" href="${href}?v=tintin-20261010-first-render-merge-1-palette-20261014-1-p1106">`
+    `  <link data-tt-page-structure="initial" rel="stylesheet" href="${href}?v=${href === 'css/pages/legal.css' ? 'tintin-20261114-harmonic-palette-1' : 'tintin-20261010-first-render-merge-1-palette-20261014-1-p1106'}">`
   )).join('\n');
   return out.replace('</head>', `  <!-- Estructura pública disponible desde el primer render -->\n${links}\n</head>`);
 }
@@ -224,7 +224,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-adm-social-notifications=\"1\"",
       "css/admin/notificaciones-admin.css",
-      "tintin-20261030-notificaciones-explicitas-1-p1106"
+      "tintin-20261114-harmonic-palette-1"
     ]
   ]
 };

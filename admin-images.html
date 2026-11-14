@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="3d85765821e47fe0c4accec416d34ee6020b9549f0a7b4c2dabf9bf106ca74d9">
+  <meta name="tintin-page-revision" content="aa2e9637556904f6030ed23296564036673d5b699f2df8cff0a34144fa11276a">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -178,12 +178,10 @@
       font-size: 0.65rem; font-weight: 700; letter-spacing: .08em;
       padding: 2px 8px; border-radius: 99px; white-space: nowrap; flex-shrink: 0;
     }
-    .badge-hero      { background: #fff0c0; color: #7a5800; }
-    .badge-productos { background: #e8f4ff; color: #1a5fa0; }
-    .badge-editorial { background: #f0ffe8; color: #2a6a10; }
-    .badge-iconos    { background: #fce4ff; color: #7a1a9a; }
-    .badge-nosotros  { background: #ffe4e8; color: #9a1a2a; }
-    .badge-branding  { background: #fff0e4; color: #9a4a0a; }
+    .badge-hero, .badge-productos, .badge-editorial,
+    .badge-iconos, .badge-nosotros, .badge-branding {
+      background: var(--color-badge-background); color: var(--color-badge-text);
+    }
 
     /* ── IMAGE PREVIEW ── */
     .adm-preview {

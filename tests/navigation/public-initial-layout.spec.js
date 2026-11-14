@@ -145,7 +145,7 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
           if (surface.referenceHero) {
             expect(surface.layerHidden, url).toBe(true);
             expect(surface.background, url).toContain('linear-gradient');
-            expect(surface.background, url).toContain('255, 181, 215');
+            expect(surface.background, url).toContain('248, 170, 202');
           }
           expect(Math.abs(surface.left), url).toBeLessThanOrEqual(1);
           expect(Math.abs(surface.width - surface.viewport), url).toBeLessThanOrEqual(1);

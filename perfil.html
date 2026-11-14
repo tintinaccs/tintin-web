@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="b3b386f2e7688713ced42b9b6e2ecdf5c3b7993efd1f6bc5bf8c0a4817058492">
+  <meta name="tintin-page-revision" content="22eef978535de6297481182a90f2c6aae2d9efd485396eff769ebe62d21a059a">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
@@ -41,11 +41,11 @@
   <link rel="tt-bundled-stylesheet" href="css/quality/movimiento.css?v=tintin-20261114-global-motion-1" disabled data-tt-style-bundle="tt-perfil-css-bundle">
   <link rel="tt-bundled-stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261021-location-profile-layout-2-p1106" disabled data-tt-style-bundle="tt-perfil-css-bundle">
   <link rel="stylesheet" href="/js/vendor/leaflet/leaflet.css?v=leaflet-1.9.4-tintin-2" integrity="sha256-ugti1XvT9fCYo/vrONAf0r5FKu/U8H04PwZikxySCts=" crossorigin="anonymous" />
-  <link rel="stylesheet" id="tt-perfil-css-bundle-2" href="css/generated/perfil-2.css?v=tintin-perfil-55778e7cf6389e61">
+  <link rel="stylesheet" id="tt-perfil-css-bundle-2" href="css/generated/perfil-2.css?v=tintin-perfil-74377a535ef3f68c">
   <link rel="tt-bundled-stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-footer-gradient-20261016-1" disabled data-tt-style-bundle="tt-perfil-css-bundle-2">
   <link rel="tt-bundled-stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1" disabled data-tt-style-bundle="tt-perfil-css-bundle-2">
   <script>document.documentElement.classList.add('profile-auth-pending');</script>
-  <link rel="tt-bundled-stylesheet" href="css/pages/perfil.css?v=tintin-20261114-profile-motion-1" disabled data-tt-style-bundle="tt-perfil-css-bundle-2">
+  <link rel="tt-bundled-stylesheet" href="css/pages/perfil.css?v=tintin-20261114-harmonic-palette-1" disabled data-tt-style-bundle="tt-perfil-css-bundle-2">
   <script type="module" src="js/quality/estabilidad-final-publica.js?v=tintin-20261022-avatar-inicial-1-p1112"></script>
   <script id="tt-section-flow-runtime" src="js/theme/alternancia-secciones.js?v=tintin-client-fades-20261105-1" defer></script>
   <!-- Estructura pública disponible desde el primer render -->
@@ -274,7 +274,7 @@ import { readAccountIdentity } from "./js/pages/profile/estado-canonico-perfil.m
 import { accountAccessSummary } from "./js/core/auth/presentacion-acceso.mjs?v=tintin-20261004-location-consistency-1";
 import { DEFAULT_COUNTRY, phoneKey, normalizePhone, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { reservePhone, releasePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
-import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
+import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261114-harmonic-palette-1";
 import { reserveUsername, releaseUsername } from "./js/components/forms/reserva-username.js?v=tintin-20261010-whatsapp-release-5";
 import { isValidUsernameFormat, isReservedUsername, usernameKey } from "./js/components/forms/utilidades-username.js?v=tintin-20261010-whatsapp-release-5";
 
@@ -347,15 +347,8 @@ function formatProfileDate(value) {
 }
 
 function statusBadge(status) {
-  const map = {
-    pendiente:  '#f59e0b',
-    confirmado: '#3b82f6',
-    enviado:    '#8b5cf6',
-    entregado:  '#10b981',
-    cancelado:  '#ef4444'
-  };
-  const c = map[status] || '#888';
-  return `<span style="display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;background:${c}20;color:${c};text-transform:uppercase">${escapeHtmlPerfil(status)}</span>`;
+  const known = ['pendiente', 'confirmado', 'enviado', 'entregado', 'cancelado'].includes(status);
+  return `<span class="tt-profile-status${known ? ` tt-profile-status--${status}` : ''}">${escapeHtmlPerfil(status)}</span>`;
 }
 
 const dirtyProfileFields = new Set();

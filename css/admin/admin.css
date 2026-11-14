@@ -141,8 +141,8 @@
       font-variant-numeric: tabular-nums;
       letter-spacing: .02em;
     }
-    .role-viewer     { background: #2568b5; color: #fff; }
-    .role-client     { background: #5f6b77; color: #fff; }
+    .role-viewer,
+    .role-client     { background: var(--admin-color-badge-background); color: var(--admin-color-badge-text); }
 
     .adm-nav {
       flex: 1;
@@ -633,6 +633,8 @@
     .adm-rank-meta { margin-top: 2px; overflow: hidden; color: var(--adm-muted); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
     .adm-rank-value { color:var(--color-text-primary,#222222); font-size: 11px; font-weight: 900; text-align: right; white-space: nowrap; }
     .adm-trend-chart {
+      --adm-chart-neutral: var(--color-brand-secondary);
+      --adm-chart-secondary: color-mix(in srgb, var(--admin-color-brand) 55%, var(--adm-chart-neutral));
       display: grid;
       grid-template-columns: repeat(7, minmax(50px, 1fr));
       align-items: end;
@@ -643,9 +645,10 @@
     }
     .adm-trend-day { display: grid; grid-template-rows: 150px auto auto; gap: 6px; min-width: 48px; text-align: center; }
     .adm-trend-bars { display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 150px; border-bottom: 1px solid #eadde2; }
-    .adm-trend-bar { width: 15px; min-height: 3px; height: var(--adm-trend-height, 3px); border-radius: 6px 6px 2px 2px; background: var(--admin-color-brand); transition: height .4s cubic-bezier(.16,1,.3,1); }
-    .adm-trend-bar-orders { background: #d997ad; }
-    .adm-trend-bar-visits { background: #7263a8; }
+    .adm-trend-bar { width: 15px; min-height: 3px; height: var(--adm-trend-height, 3px); border-radius: 6px 6px 2px 2px; background: var(--admin-color-brand); box-shadow: inset 0 0 0 1px var(--adm-chart-neutral); transition: height .4s cubic-bezier(.16,1,.3,1); }
+    .adm-trend-bar-orders { background: var(--adm-chart-secondary); }
+    .adm-trend-bar-visits { background: var(--adm-chart-neutral); }
+    html.adm-app.adm-dark .adm-trend-chart { --adm-chart-neutral: #FFFFFF; }
     .adm-trend-day strong { color: var(--adm-text); font-size: 10px; }
     .adm-trend-day span { color: var(--adm-muted); font-size: 9px; }
     .adm-analytics-empty { display: grid; min-height: 80px; place-items: center; color: var(--adm-muted); font-size: 11px; text-align: center; }
@@ -671,10 +674,10 @@
 
     .adm-bulk-toolbar {
       display: none; align-items: center; gap: 10px; flex-wrap: wrap;
-      padding: 10px 16px; background: #fff3e0; border-bottom: 1px solid var(--adm-border);
+      padding: 10px 16px; background: var(--admin-color-background-sidebar-active); border-bottom: 1px solid var(--adm-border);
     }
     .adm-bulk-toolbar.show { display: flex; }
-    .adm-bulk-count { font-size: 13px; font-weight: 700; color: #e65100; }
+    .adm-bulk-count { font-size: 13px; font-weight: 700; color: var(--admin-color-text-primary); }
     .adm-table th.col-select, .adm-table td.col-select {
       position: sticky; left: 0; z-index: 2; text-align: center; width: 38px;
       background: var(--adm-card, #fff);
@@ -914,8 +917,8 @@
       white-space: nowrap;
     }
     .badge-pendiente  { background: #fef3c7; color: #92400e; }
-    .badge-confirmado { background: #dbeafe; color: #1e40af; }
-    .badge-enviado    { background: #ede9fe; color:var(--color-text-primary,#222222); }
+    .badge-confirmado,
+    .badge-enviado    { background: var(--admin-color-badge-background); color: var(--admin-color-badge-text); }
     .badge-entregado  { background: #d1fae5; color: #065f46; }
     .badge-cancelado  { background: #fee2e2; color: #991b1b; }
     .badge-preparando  { background: #fef9c3; color: #713f12; }
@@ -924,7 +927,7 @@
        puedan distinguir de un vistazo en la misma columna — son estados
        "terminales" distintos, no el mismo. */
     .badge-rechazado   { background: var(--admin-color-error-background); color: var(--admin-color-error-text); }
-    .badge-reembolsado { background: #ede9fe; color:var(--color-text-primary,#222222); }
+    .badge-reembolsado { background: var(--admin-color-badge-background); color: var(--admin-color-badge-text); }
     /* Listo para retirar: único estado de pedido con el rosa de marca en vez
        de la paleta semántica genérica — es un hito positivo específico de
        Tintin (retiro en tienda), no un estado de logística estándar. */
@@ -2495,8 +2498,8 @@ html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo-sub { color: rgba(255,255,
 }
 .adm-diagnostic-badge-confirmed { background: #fee4e2; color: #b42318; }
 .adm-diagnostic-badge-manual { background: #fff1cc; color: #7a4a00; }
-.adm-diagnostic-badge-new { background: #e0f2fe; color: #075985; }
-.adm-diagnostic-badge-recurrent { background: #ede9fe; color:var(--color-text-primary,#222222); }
+.adm-diagnostic-badge-new,
+.adm-diagnostic-badge-recurrent { background: var(--admin-color-badge-background); color: var(--admin-color-badge-text); }
 .adm-diagnostic-item details {
   margin-top: 9px;
   border-top: 1px solid rgba(0,0,0,.08);

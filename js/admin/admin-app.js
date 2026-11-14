@@ -3612,7 +3612,7 @@ const loadDeferredAdminSection = createAdminSectionLoader({
   document,
   canLoad: () => currentRole === 'superadmin' && String(currentUser?.email || '').toLowerCase() === SUPER_ADMIN.toLowerCase(),
   sections: {
-    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261112-delivery-separate-1'), init: initDeferredCorreos },
+    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261114-harmonic-palette-1'), init: initDeferredCorreos },
     diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-suitcase-20261104-1'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
     paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261108-appcheck-fallo-1') },
     apariencia: { load: async () => {
