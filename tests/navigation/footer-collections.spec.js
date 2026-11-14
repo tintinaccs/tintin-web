@@ -6,13 +6,19 @@ const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.
 const pages = ['index', 'about', 'catalogo', 'collections', 'product', 'checkout', 'perfil', 'contact', 'envios', 'cambios-devoluciones', 'preguntas-frecuentes', 'terminos', 'privacidad', '404'];
 const expectedLinks = ['/catalogo', ...CATEGORIES.map(({ slug }) => `/catalogo?cat=${slug}`)];
 
-for (const width of [320, 390, 768, 1024, 1440, 1920]) {
+for (const width of [320, 390, 768, 844, 1024, 1440, 1920, 2560]) {
   test(`todas las páginas ofrecen todas las colecciones en el footer · ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 900 });
+    await page.setViewportSize({ width, height: ({320:568,390:844,768:1024,844:390,1024:768,1440:900,1920:1080,2560:1440})[width] });
     for (const name of pages) {
       const html = removeFixtureScripts(fs.readFileSync(path.join(__dirname, `../../${name}.html`), 'utf8'), { removeModulePreloads: true });
       await page.route('**/__footer-fixture', route => route.fulfill({ contentType: 'text/html', body: html }));
       await page.goto('/__footer-fixture');
+      if (['envios','cambios-devoluciones','preguntas-frecuentes','terminos','privacidad','collections','404'].includes(name)) {
+        await expect(page.locator('a[href*="wa.me/"]:not(.tt-wa-float)'), name).toHaveCount(1);
+        const contact=page.locator('footer .tt-footer-wa');
+        await expect(contact, name).toHaveCount(1);await expect(contact, name).toBeVisible();
+        await expect(contact, name).toHaveAttribute('target','_blank');
+      }
       const links = page.locator('[data-collections-nav="footer"] a');
       expect(await links.evaluateAll(nodes => nodes.map(node => node.getAttribute('href'))), name).toEqual(expectedLinks);
       for (const link of await links.all()) await expect(link, name).toBeVisible();

@@ -3616,7 +3616,7 @@ const loadDeferredAdminSection = createAdminSectionLoader({
     diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-suitcase-20261104-1'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
     paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261108-appcheck-fallo-1') },
     apariencia: { load: async () => {
-      await import('./appearance/editor-visual-admin.js?v=tintin-suitcase-20261104-1');
+      await import('./appearance/editor-visual-admin.js?v=tintin-20261114-wa-contact-1');
       await import('./appearance/visual-studio-layout-admin.js?v=tintin-20261022-avatar-inicial-1');
     } }
   }

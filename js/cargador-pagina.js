@@ -888,7 +888,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261112-delivery-separate-1-p1113');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261114-wa-contact-1');
     }
   }
 

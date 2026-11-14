@@ -1,3 +1,11 @@
+## WhatsApp general único al pie — 2026-11-14 — Codex /root
+
+Pedido de la titular: quitar el botón general de WhatsApp que se repite justo antes del pie y conservar el inferior, en todas las pantallas. Base be6c3e9df4e27e5b7879ec85497159f3122134af; rama fix/whatsapp-support-duplication; worktree propio. No hay PR concurrentes abiertas al inicio. Conservar paleta, catálogo y cambios aceptados de Claude.
+
+Se retiran cierres generales redundantes en Envíos, Cambios, FAQ, Términos, Privacidad, Colecciones y404; el footer canónico y su contacto/configuración permanecen. Se conservan las instrucciones legales y acciones con contexto de formulario, compra/registro/pedido. Se eliminan cuatro campos CMS de los CTA retirados para evitar controles sin destino. Datos publicados antiguos no se migran ni reescriben. Propagación mecánica de tags desde definiciones-contenido por su fachada/consumidores y dos llamadas dinámicas explícitas; constantes del generador de shell alineadas. Footer nunca se parchea manualmente ni se crea un segundo contacto.
+
+PASS_LOCAL:14Node de límites de seguridad del contenido; auditorías de contenido, contrato estructural, legal, ayuda39 y auxiliares15 aprobadas;15Chromium de lectura/márgenes legales y contacto aprobadas. Footer:8 casos finales con14páginas cada uno (112combinaciones),320–2560px incluyendo móvil/tablet horizontal PASS. Captura de privacidad1440px inspeccionada visualmente. Captura con el ejecutable de navegador existente del entorno, sin instalar herramientas. Skills consultadas: tintin-design-quality y tintin-responsive-a11y. Dependencias existentes reutilizadas tras cmp de manifiesto/lockfile idénticos. Sin envíos WhatsApp, compras ni datos comerciales reales. Pendientes build/plan/preflight, PR/checks, integración protegida y verificación pública posterior al despliegue.
+
 ## Auditoría SEO e indexación (solo lectura) — 2026-11-13 — Claude Code
 
 Pedido: instalar claude-seo y auditar la indexación de tintinaccs.com. claude-seo v2.6.0 revisado (install.sh y hooks sin acciones sospechosas) e instalado solo en `~/.claude` del contenedor (26 skills, 19 agentes; sin runtime Python/Chromium); no se tocó el repositorio.
