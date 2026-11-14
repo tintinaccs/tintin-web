@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "cb1383a22feb2a7100ba511950c2e56a34c2fedb",
-  "reason": "Armonizar paleta Tintin con roles existentes y reparar fixture del smoke visual sin modificar permisos ni flujos comerciales",
+  "reason": "Armonizar paleta Tintin y corregir pares de contraste claro y oscuro, conservando permisos, datos y flujos comerciales",
   "files": [
     {
       "path": "_headers",
@@ -21,7 +21,7 @@
     {
       "path": "admin.html",
       "oldHash": "5a5921c03c12f6b2f595eac737d91abd79255aefe7dff45e93992558852fd747",
-      "newHash": "f248d0c29b026ed4fbea3a37836d9ef3ad45378b90af26f9cfb14639ea702428"
+      "newHash": "0ee2fd88d9c76ad874284c52bd03b0238ef324c1b7ecda646a045036fa8d8f1c"
     },
     {
       "path": "checkout.html",
@@ -61,12 +61,12 @@
     {
       "path": "css/admin/participacion-admin-v2.css",
       "oldHash": "9920069b82b71e6db6847a8d112576042bb99f3cac331d659fde5e5bde11747a",
-      "newHash": "10c6de5e1356ab6e99eed6805ef97845070455fdb0d7f8cd477bb9a91472b969"
+      "newHash": "5330b813a863fb345ea7357e0e8b95d17ca4e89b0b8b961a3af0323b14c17953"
     },
     {
       "path": "css/admin/participacion-admin.css",
       "oldHash": "1250e8f1efcc9860a190cc34c829b8b968fbe968b4c24130820921e8d868d9c3",
-      "newHash": "ce29dc60a79b47b26bb98cbbf8b7c3bc193033c245e3c58514581b876e7f3672"
+      "newHash": "e9e69ed0398e02cbf3812b37f39eca3130fce5a091a7e929046cb6caf7ce98da"
     },
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
@@ -116,7 +116,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "666331d7efac17db1c2bc906f37c5efbeddca32d768dc959cc71f32c8fb0afb0",
-      "newHash": "60a184839b56fc19c1f30f549c3bd79761a2adcc44e001795c9beddf9a20452f"
+      "newHash": "e0009fcf24b11dc3cdfe32543c102e370cb5aba8ba9a4b7a9590c794f4517a2f"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

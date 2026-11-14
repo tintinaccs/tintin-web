@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "cbf7f764dfb8cbc1aefe52e82864a8fa56f7635d8e4467b726ace6f8d7a47e12",
+  "sourceFingerprint": "acfa9802f86579116d67143b6b36898396f79aadfc9addbd92356e5a28e7caf2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1847,
     "textFiles": 1694,
-    "totalBytes": 62910764,
+    "totalBytes": 62920010,
     "pages": 19,
     "modules": 1200
   },
@@ -2984,7 +2984,7 @@
         "viewer"
       ],
       "bytes": 195224,
-      "sha256": "f248d0c29b026ed4fbea3a37836d9ef3ad45378b90af26f9cfb14639ea702428",
+      "sha256": "0ee2fd88d9c76ad874284c52bd03b0238ef324c1b7ecda646a045036fa8d8f1c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3195,7 +3195,7 @@
           "line": 41
         },
         {
-          "raw": "css/admin/participacion-admin.css?v=tintin-20261114-harmonic-palette-1",
+          "raw": "css/admin/participacion-admin.css?v=tintin-20261114-harmonic-palette-2",
           "target": "css/admin/participacion-admin.css",
           "line": 42
         },
@@ -3250,7 +3250,7 @@
           "line": 77
         },
         {
-          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261114-harmonic-palette-1",
+          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261114-harmonic-palette-2",
           "target": "css/admin/tablero-pedidos.css",
           "line": 78
         },
@@ -3717,7 +3717,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/participacion-admin.css?v=tintin-20261114-harmonic-palette-1",
+          "raw": "css/admin/participacion-admin.css?v=tintin-20261114-harmonic-palette-2",
           "target": "css/admin/participacion-admin.css",
           "line": 42,
           "exists": true
@@ -3783,7 +3783,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261114-harmonic-palette-1",
+          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261114-harmonic-palette-2",
           "target": "css/admin/tablero-pedidos.css",
           "line": 78,
           "exists": true
@@ -61740,8 +61740,8 @@
     },
     {
       "path": "tests/ui-ux/palette-harmony.cases.js",
-      "bytes": 6674,
-      "sha256": "0d374836b53f29a8c7f28e2dce51da4a81c8bbbf505d222b4324621c8d2d513d",
+      "bytes": 12128,
+      "sha256": "1322f5574b817f537291c590128602b8788e175caab6d0d4812a6c58144a1c95",
       "syntax": {
         "ok": true,
         "error": ""
@@ -63672,7 +63672,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 195224,
-      "sha256": "f248d0c29b026ed4fbea3a37836d9ef3ad45378b90af26f9cfb14639ea702428"
+      "sha256": "0ee2fd88d9c76ad874284c52bd03b0238ef324c1b7ecda646a045036fa8d8f1c"
     },
     {
       "path": "apple-touch-icon.png",
@@ -64853,8 +64853,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 7160,
-      "sha256": "834fbeea821142394aece36fe0516f6873cfbbe69d842bc12e83304d668ce288"
+      "bytes": 7154,
+      "sha256": "8e61e22cfde39554b3cc3e72e59c18772607e03393ac7872837350f0ae05012e"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64866,7 +64866,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "e7efa5b88066252155f8daa2f3f99aacd19a08ec1e8b97bba97a484b5621391a"
+      "sha256": "e9be9b9bb997ee8d00638c4f040b88dfe5ad300635b1107c7e6314d4f3f5cbc2"
     },
     {
       "path": "config/public-site.json",
@@ -64973,14 +64973,14 @@
     {
       "path": "css/admin/participacion-admin-v2.css",
       "extension": ".css",
-      "bytes": 23001,
-      "sha256": "10c6de5e1356ab6e99eed6805ef97845070455fdb0d7f8cd477bb9a91472b969"
+      "bytes": 23222,
+      "sha256": "5330b813a863fb345ea7357e0e8b95d17ca4e89b0b8b961a3af0323b14c17953"
     },
     {
       "path": "css/admin/participacion-admin.css",
       "extension": ".css",
       "bytes": 82,
-      "sha256": "ce29dc60a79b47b26bb98cbbf8b7c3bc193033c245e3c58514581b876e7f3672"
+      "sha256": "e9e69ed0398e02cbf3812b37f39eca3130fce5a091a7e929046cb6caf7ce98da"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -64997,8 +64997,8 @@
     {
       "path": "css/admin/tablero-pedidos.css",
       "extension": ".css",
-      "bytes": 15026,
-      "sha256": "fe48f30d726fd6cf3dcd9cba4ff149f3889a86d1cb3fdf16e8a3ac85847df64a"
+      "bytes": 15621,
+      "sha256": "ca917638e9e710a68a906e731751bf7c1b332aad5dc8666e0c4131d08c83e1fb"
     },
     {
       "path": "css/admin/visual-studio-global-admin.css",
@@ -65681,8 +65681,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1341540,
-      "sha256": "06249b58572da987aa4d2f22ac20dd31764ba9ff853a6fff38f03e5075a5f96f"
+      "bytes": 1342304,
+      "sha256": "95648d88249784ec14b15f427b26bedca7fe260bb2d76eedeb86bbd8d9fc3d85"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -65765,8 +65765,8 @@
     {
       "path": "docs/agent/PALETA_ARMONICA_20261114.md",
       "extension": ".md",
-      "bytes": 5537,
-      "sha256": "b2938ea43593cb94c8862113f62bf8a31b509a13f6e7ea376550db5c52afb096"
+      "bytes": 7755,
+      "sha256": "fb0374ff2827366f6182110fb6f30a2768ce12cad44b83e791d7cc6609bda23c"
     },
     {
       "path": "docs/agent/PEDIDOS_SUPERADMIN_RENOVACION_20261012.md",
@@ -70956,7 +70956,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 83836,
-      "sha256": "60a184839b56fc19c1f30f549c3bd79761a2adcc44e001795c9beddf9a20452f"
+      "sha256": "e0009fcf24b11dc3cdfe32543c102e370cb5aba8ba9a4b7a9590c794f4517a2f"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -74225,8 +74225,8 @@
     {
       "path": "tests/ui-ux/palette-harmony.cases.js",
       "extension": ".js",
-      "bytes": 6674,
-      "sha256": "0d374836b53f29a8c7f28e2dce51da4a81c8bbbf505d222b4324621c8d2d513d"
+      "bytes": 12128,
+      "sha256": "1322f5574b817f537291c590128602b8788e175caab6d0d4812a6c58144a1c95"
     },
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",

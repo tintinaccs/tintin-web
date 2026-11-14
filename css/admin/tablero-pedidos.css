@@ -97,24 +97,28 @@ body:has(.adm-main) .adm-content:has(> #section-pedidos.active.tt-commerce-mount
 #tt-commerce-orders [data-order-stage="new"], #tt-commerce-orders [data-stage="new"], #tt-commerce-orders [data-order-lane="new"] { --order-stage-bg: var(--admin-color-background-surface); --order-stage-ink: var(--admin-color-text-primary); --order-stage-border: var(--admin-color-brand); }
 #tt-commerce-orders [data-order-stage="preparing"], #tt-commerce-orders [data-stage="preparing"], #tt-commerce-orders [data-order-lane="preparing"] { --order-stage-bg: var(--admin-color-badge-background); --order-stage-ink: var(--admin-color-badge-text); --order-stage-border: var(--admin-color-brand); }
 #tt-commerce-orders [data-order-stage="ready"], #tt-commerce-orders [data-stage="ready"], #tt-commerce-orders [data-order-lane="ready"] { --order-stage-bg: color-mix(in srgb, var(--admin-color-brand) 45%, var(--admin-color-background-surface)); --order-stage-ink: var(--admin-color-text-primary); --order-stage-border: var(--admin-color-brand); }
-#tt-commerce-orders [data-order-stage="sent"], #tt-commerce-orders [data-stage="sent"], #tt-commerce-orders [data-order-lane="sent"] { --order-stage-bg: var(--admin-color-brand); --order-stage-ink: var(--admin-color-text-primary); --order-stage-border: var(--admin-color-brand); }
+#tt-commerce-orders [data-order-stage="sent"], #tt-commerce-orders [data-stage="sent"], #tt-commerce-orders [data-order-lane="sent"] { --order-stage-bg: var(--admin-color-brand); --order-stage-ink: var(--admin-color-button-primary-text); --order-stage-border: var(--admin-color-brand); }
 #tt-commerce-orders [data-order-stage="done"], #tt-commerce-orders [data-stage="done"], #tt-commerce-orders [data-order-lane="done"] { --order-stage-bg: var(--admin-color-success-background); --order-stage-ink: var(--admin-color-success-text); --order-stage-border: var(--admin-color-success-text); }
 #tt-commerce-orders [data-order-stage="attention"], #tt-commerce-orders [data-order-lane="attention"] { --order-stage-bg: var(--admin-color-warning-background); --order-stage-ink: var(--admin-color-warning-text); --order-stage-border: var(--admin-color-warning-text); }
 #tt-commerce-orders [data-order-stage="history"], #tt-commerce-orders [data-order-lane="history"] { --order-stage-bg: var(--admin-color-background-surface); --order-stage-ink: var(--admin-color-text-secondary); --order-stage-border: var(--admin-color-border); }
 #tt-commerce-orders .tt-order-stage-tabs button { display: flex; align-items: center; gap: 7px; min-width: 0; min-height: 58px; padding: 10px; border: 1px solid var(--order-stage-border); border-radius: 12px; color: var(--order-stage-ink); background: var(--order-stage-bg); font: inherit; font-size: 12px; text-align: start; cursor: pointer; overflow-wrap: anywhere; }
 #tt-commerce-orders .tt-order-stage-tabs button[aria-selected="true"] { border-color: var(--order-stage-ink); box-shadow: inset 0 -3px 0 var(--order-stage-ink); color: var(--order-stage-ink); background: var(--order-stage-bg); }
-#tt-commerce-orders .tt-order-step-index { display: inline-grid; place-items: center; flex: 0 0 24px; width: 24px; height: 24px; border-radius: 50%; background: var(--order-stage-ink); color: #FFFFFF; font-size: 11px; font-weight: 700; }
+#tt-commerce-orders .tt-order-step-index { display: inline-grid; place-items: center; flex: 0 0 24px; width: 24px; height: 24px; border-radius: 50%; background: var(--order-stage-ink); color: var(--order-stage-bg) !important; font-size: 11px; font-weight: 700; }
 #tt-commerce-orders .tt-order-step-label { flex: 1; min-width: 0; }
 #tt-commerce-orders .tt-order-metrics > div { background: var(--order-stage-bg); border: 1px solid var(--order-stage-border); color: var(--order-stage-ink); }
 #tt-commerce-orders .tt-order-metrics strong { color: inherit; }
-#tt-commerce-orders .tt-order-lane { background: var(--order-stage-bg); border: 1px solid var(--order-stage-border); padding: 10px; }
+#tt-commerce-orders .tt-order-lane { background: var(--order-stage-bg) !important; border: 1px solid var(--order-stage-border); padding: 10px; }
 #tt-commerce-orders .tt-order-lane h2 { color: var(--order-stage-ink); gap: 6px; flex-wrap: wrap; }
 #tt-commerce-orders .tt-order-lane h2 .tt-order-step-label { flex-basis: 60px; }
 #tt-commerce-orders .tt-order-card { border-top: 3px solid var(--order-stage-ink) !important; padding: 12px; }
-#tt-commerce-orders .tt-order-stage-badge { display: inline-block; border: 1px solid var(--order-stage-border); background: var(--order-stage-bg); color: var(--order-stage-ink); border-radius: 8px; padding: 3px 7px; font-weight: 600; }
+#tt-commerce-orders .tt-order-stage-badge { display: inline-block; border: 1px solid var(--order-stage-border); background: var(--order-stage-bg) !important; color: var(--order-stage-ink); border-radius: 8px; padding: 3px 7px; font-weight: 600; }
 #tt-commerce-orders .tt-order-stage-tabs button > [data-lane-tab-count] { font-weight: 700; }
 @media (min-width: 1181px) and (max-width: 1500px) {
   #tt-commerce-orders .tt-order-stage-tabs button { flex-wrap: wrap; }
   #tt-commerce-orders .tt-order-stage-tabs button .tt-order-step-label { flex-basis: calc(100% - 40px); }
   #tt-commerce-orders .tt-order-card-actions .tt-commerce-btn { padding-inline: 7px; }
 }
+
+/* El binding global administrativo fuerza el texto con !important. Estas
+   superficies de estado conservan su par propio, también en modo oscuro. */
+#tt-commerce-orders :where(.tt-order-stage-tabs button, .tt-order-step-label, [data-lane-tab-count], .tt-order-metrics > div, .tt-order-metrics > div strong, .tt-order-metrics > div span, .tt-order-metrics > div small, .tt-order-lane > h2, .tt-order-lane > h2 span, .tt-order-lane > h2 strong, .tt-order-stage-badge, .tt-order-stage-badge *) { color: var(--order-stage-ink) !important; }

@@ -86,3 +86,45 @@ for (const width of [390, 1440]) test(`panel y gráficos heredan la paleta y con
     expect(new Set(await page.locator('#palette-components .adm-trend-bar').evaluateAll(nodes => nodes.map(node => getComputedStyle(node).backgroundColor))).size).toBe(3);
   }
 });
+
+for (const { width, dark } of [{ width: 390, dark: false }, { width: 1440, dark: false }, { width: 390, dark: true }, { width: 768, dark: true }]) test(`contraste de pedidos y participación ${dark ? 'oscuro' : 'claro'} ${width}px`, async ({ page }, testInfo) => {
+  await load(page, width, 'admin.html', { mobile: true });
+  await page.evaluate(() => {
+    document.getElementById('tt-commerce-orders')?.remove();
+    const host = document.createElement('article'); host.id = 'palette-contrast-components';
+    const stages = ['new', 'preparing', 'ready', 'sent', 'done', 'attention', 'history'];
+    host.innerHTML = `<div id="tt-commerce-orders"><div class="tt-order-stage-tabs">${stages.map(stage => `<button data-order-stage="${stage}"><span class="tt-order-step-index">1</span><span class="tt-order-step-label">${stage}</span><span data-lane-tab-count>2</span></button>`).join('')}</div><div class="tt-order-metrics">${stages.map(stage => `<div data-order-stage="${stage}"><strong>2</strong><span>${stage}</span></div>`).join('')}</div>${stages.map(stage => `<section class="tt-order-lane" data-order-lane="${stage}"><h2><span class="tt-order-step-label">${stage}</span></h2><span class="tt-order-stage-badge">${stage}</span></section>`).join('')}</div>
+      <div class="eg-shell">
+        <div class="eg-segments"><button class="is-active">Reseñas <span class="eg-segment-badge">2</span></button></div>
+        <div class="eg-toolbar"><label><span>Filtrar reseñas</span></label></div>
+        <div class="eg-filter-chips"><button>Sin leer</button><button class="is-active">Todas</button></div>
+        <div class="eg-bulkbar"><strong>2 seleccionadas</strong><button class="eg-link-btn">Archivar</button></div>
+        <article class="eg-card"><div class="eg-card-main"><div class="eg-person"><div><strong>Cliente QA</strong><span>cliente@example.test</span></div></div><p class="eg-comment">Reseña de prueba</p><span class="eg-badge eg-badge-accent">Nueva</span><div class="eg-product-strip"><div><strong>Pulsera Tintín</strong><span class="eg-field-label">Producto</span></div></div><details class="eg-more" open><summary>Más acciones</summary><div><button>Responder</button></div></details></div></article>
+        <div class="eg-table-wrap"><table class="eg-table"><thead><tr><th>Cliente</th></tr></thead><tbody><tr><td>Cliente QA</td></tr></tbody></table></div>
+        <div class="eg-settings-nav"><strong>Ajustes</strong><span>Participación</span></div>
+        <div class="eg-detail-section"><h3>Detalle</h3><div class="eg-detail-grid"><div><span>Fecha</span><strong>Hoy</strong></div></div><div class="eg-message is-customer"><p>Consulta</p><span>Hoy</span></div><div class="eg-message is-store"><p>Respuesta</p><span>Hoy</span></div></div>
+        <div class="eg-callout"><strong>Información</strong></div><div class="eg-danger-zone"><h3>Acción delicada</h3><p>Revisar antes de continuar</p></div>
+      </div>`;
+    document.querySelector('.adm-section.active').append(host);
+  });
+  if (dark) {
+    await page.evaluate(() => document.getElementById('adm-theme-switch').click());
+    await expect(page.locator('html')).toHaveClass(/adm-dark/);
+  }
+  const pairs = await page.locator('#palette-contrast-components').evaluate(host => {
+    const context = document.createElement('canvas').getContext('2d', { willReadFrequently: true }); context.canvas.width = context.canvas.height = 1;
+    const rgba = value => { context.clearRect(0, 0, 1, 1); context.fillStyle = value; context.fillRect(0, 0, 1, 1); return [...context.getImageData(0, 0, 1, 1).data]; };
+    const luminance = rgb => rgb.slice(0, 3).map(value => { value /= 255; return value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4; }).reduce((sum, value, i) => sum + value * [.2126, .7152, .0722][i], 0);
+    const selectors = '.tt-order-step-index,.tt-order-step-label,[data-lane-tab-count],.tt-order-metrics strong,.tt-order-metrics span,.tt-order-lane h2,.tt-order-stage-badge,.eg-segments button,.eg-segment-badge,.eg-toolbar label>span,.eg-filter-chips button,.eg-bulkbar strong,.eg-link-btn,.eg-person strong,.eg-person span,.eg-comment,.eg-badge-accent,.eg-product-strip strong,.eg-field-label,.eg-more summary,.eg-more button,.eg-table th,.eg-table td,.eg-settings-nav strong,.eg-settings-nav span,.eg-detail-section h3,.eg-detail-grid span,.eg-detail-grid strong,.eg-message p,.eg-message span,.eg-callout strong,.eg-danger-zone h3,.eg-danger-zone p';
+    return [...host.querySelectorAll(selectors)].map(element => {
+      const layers = [];
+      for (let parent = element; parent; parent = parent.parentElement) layers.unshift(rgba(getComputedStyle(parent).backgroundColor));
+      const background = layers.reduce((base, layer) => { const alpha = layer[3] / 255; return base.map((value, i) => layer[i] * alpha + value * (1 - alpha)); }, [255, 255, 255]);
+      const foreground = luminance(rgba(getComputedStyle(element).color)), back = luminance(background);
+      return { element: element.className || element.tagName, stage: element.closest('[data-order-stage]')?.dataset.orderStage, contrast: (Math.max(foreground, back) + .05) / (Math.min(foreground, back) + .05) };
+    });
+  });
+  await testInfo.attach('contrastes-de-superficies', { body: JSON.stringify(pairs), contentType: 'application/json' });
+  expect(pairs.length).toBeGreaterThan(80);
+  expect(pairs.filter(pair => pair.contrast < 4.5), JSON.stringify(pairs)).toEqual([]);
+});

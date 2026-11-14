@@ -86,3 +86,38 @@ El fallo no modifica bloqueo/autorización ni exige cambiar lógica comercial.
 Auditoría visual43596177163/1 SUCCESS sobre el candidato9e17123e: acredita
 la reparación del404 de Instagram y las geometrías; el cierre del nuevo head
 sigue requiriendo sus propios checks. Los19 casos de layout público PASS.
+
+## Revisión de contraste oscuro antes de integrar
+
+CI43596897104/1 SUCCESS sobre751afaf8. Mantenimiento43599278210/1 FAIL:
+GitHub rechazó el mergeHTTP405 por dos conversaciones de revisión abiertas;
+no por una divergencia de hashes/plan. La revisión automática detectó dos
+problemas reales de contraste en modo oscuro móvil. Se reproducen con el
+CSS de ese head y el controlador real de tema: etapa enviada1.53:1 y nombre/
+metadatos de reseña1.19:1. Después de corregirlos se miden8.78:1 y14.56:1,
+respectivamente. Se conservan las fotos y el mismo sistema de colores.
+
+Pedidos conserva su texto oscuro sobre el relleno rosa de marca. Los índices
+usan el par invertido de cada etapa, y una regla acotada preserva los pares
+de los estados frente al binding administrativo global con !important.
+Participación migra también fondos de tarjetas, filtros, menús, tablas,
+conversaciones, detalle y modales a las superficies adaptativas existentes;
+texto y fondo se actualizan juntos. No se habilita un modo oscuro nuevo en
+escritorio: se prueba el modo real en390/768px y el claro en390/1440px.
+Cuatro regresiones miden el contraste efectivo de más de80 textos de esos
+componentes en cada modo; se anexan los pares a los resultados de Playwright.
+
+Maestro43596892634/1 FAIL global por los dos checks protegidos fallidos que
+siguieron al405. Sus ocho suites de producto sí terminaron correctamente,
+incluidos5/5 checks estructurales (audit:final/deep/names/build/preflight).
+Ese resultado parcial no se presenta como Maestro global PASS. El nuevo
+head corrige los hallazgos, resuelve las conversaciones sólo tras validarlos
+y necesita sus propias ejecuciones completas y cierre protegido.
+
+La medición ampliada detectó además que el tema público forzaba el fondo de
+section y badges con !important: se conserva el par de cada etapa también
+en columnas y etiquetas mediante reglas acotadas a Pedidos. Paleta/contraste
+final8/8 PASS; cada combinación verifica80+ textos, incluidos índices,
+contadores, métricas, encabezados, badges y reseñas/menús. Participación72/72
+pruebas Node PASS. La primera variante ampliada tuvo2 FAIL de contraste;
+se conservan como reproducción, no como resultado final.

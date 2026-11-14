@@ -7016,3 +7016,14 @@ avisos y WhatsApp. Se preservan fotos/variantes/tipografías y se armonizan
 hero, perfil y metadatos/superficies admin con roles existentes. Color y
 estilos PASS; paleta4 y navegador relacionado98 PASS locales. Build/plan,
 CI/Maestro y cierre protegido deben verificarse para este head propio.
+
+Continuación PR1401: head751afaf8, CI43596897104/1 SUCCESS. Mantenimiento
+43599278210/1 FAIL por HTTP405 al fusionar: había dos revisiones abiertas
+con problemas válidos de contraste oscuro en Pedidos/Participación.
+Maestro43596892634/1 tuvo ocho suites de producto correctas pero FAIL global
+por esos checks protegidos. Se corrigen pares completos de superficie/texto,
+se agregan pruebas de contraste de80+ textos en4 combinaciones claro/oscuro
+390/768/1440px y se conservan pruebas de pedidos/participación. Las reseñas
+pasan de1.19:1 a14.56:1; etapa enviada de1.53:1 a8.78:1, medido en Chromium.
+El nuevo head requiere build/plan/CI/Maestro propios y resolución fundada de
+ambos hilos antes de su integración. No se fuerza ni se omite una protección.
