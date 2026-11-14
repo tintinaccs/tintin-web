@@ -11,7 +11,7 @@ definición de roles, rutas, datos o despliegue.
   manifiesto y avisos semánticos de actualización.
 - `contratos-calidad.md`:responsive, accesibilidad, estados y presupuestos.
 - `../DESIGN.md`:documentación del sistema visual actual.
-- `AUDITORIA_PROFESIONAL.md` y `QA_REPORT.md`:inventario, riesgos, evidencia y
+- `auditoria-profesional.md` y `informe-verificacion.md`:inventario, riesgos, evidencia y
   continuidad de la revisión local de `5a2ea0f63`.
 
 Frontend:HTML/CSS/JS nativos; backend:Cloudflare Pages Functions y módulos

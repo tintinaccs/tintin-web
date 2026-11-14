@@ -107,7 +107,7 @@ async function inspect(page) {
         const known = node.matches([
           '.adm-table-wrap','.adm-mobile-tabs','.tt-tabs','.tt-tabbar','.tt-chip-row',
           '.tt-category-tabs','.correos-tabs','.ship-tabs','.user-tabs',
-          '.tt-search-suggestions','.ck-steps','.adm-sidebar','[class*="table-wrap"]'
+          '.tt-search-suggestions','.cat-tabs-mobile','.ck-steps','.adm-sidebar','[class*="table-wrap"]'
         ].join(','));
         if (known && /(auto|scroll)/.test(style.overflowX)) return true;
         node = node.parentElement;

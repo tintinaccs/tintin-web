@@ -51,3 +51,47 @@ usa su publicación Cloudflare existente, no hosting Sites. No hay herramienta
 de trazas DevTools disponible; no se inventa una puntuación Lighthouse.
 Chromium de Playwright se descargó con su instalador oficial existente para
 los scripts que necesitan el navegador del runner; manifiesto/lock intactos.
+
+## Cierre del primer candidato y reparación del Maestro
+
+PR1399, head209dc648b6ef676faf5b2e257a7dce8938903308: CI43589388485/1
+SUCCESS; mantenimiento protegido43591370208/1 SUCCESS; integrado como
+cfe530d90b705c58f3b7bad55014dc858552ddb0. Salud posterior43591407154/1
+SUCCESS. No confundir esos resultados con el candidato siguiente.
+
+Maestro43589398231/1 terminó FAIL:5 áreas aprobadas y3 fallidas. Sus logs
+completos se leyeron al terminar; no se oculta ese resultado. audit:final y
+el barrido profundo aprobaron. Las causas restantes acreditadas fueron:
+
+- MEDIUM, Catálogo:100vw cuenta la reserva de scrollbar y saca la fila de
+  categorías del ancho útil. El gutter fluido real pasa a una sola variable
+  compartida con su contenedor. Se conservan scroll, expansión, filtros y
+  cambio de colección. El auditor reconoce el scroller sólo con overflow
+  realmente desplazable;8 pruebas comprueban límites y acceso por teclado.
+- MEDIUM, Estadísticas: las7 columnas mínimas del gráfico reservan410px
+  también cuando sólo existe «Esperando datos». El estado vacío usa una
+  pista flexible; al recibir datos vuelven las7 pistas.2 pruebas en280/390px
+  verifican ambos estados.
+- LOW, auditor administrativo: exigía abrir un lateral retirado deliberadamente
+  en la app móvil. Ahora ejecuta el controlador real de Más, comprueba apertura,
+  geometría, cierre y retorno de foco en todos los tamaños móviles. No se
+  reactiva navegación antigua ni se modifica la guardia de autenticación.
+- LOW, auditor de búsqueda:404 falso de/api/instagram-feed en su servidor
+  interno. Se usa el handler real con env vacío: sin credenciales ni llamadas
+  a Meta. Corregido en el auditor de búsqueda; se conserva el trabajo separado
+  de PR1397 sobre el servidor de smoke.
+- LOW, nombres: se conservan DESIGN.md/PRODUCT.md como contexto contractual de
+  Skills, documentando la excepción. Los4 informes internos y el servidor de
+  previsualización pasan a nombres coherentes; se actualizan sus consumidores.
+  Un control negativo comprueba que otros nombres inválidos siguen fallando.
+
+Base de la reparación:cfe530d9. Evidencia local adicional:270 combinaciones
+(18 páginas×15 tamaños) de global fit PASS tras corregir Catálogo;46 estados
+administrativos y2 estados de Imágenes en la sonda de280/390px PASS;12 anchos,
+13 rutas y ciclos de navegación PASS; búsqueda desktop/mobile PASS; nombres
+PASS y control negativo correcto. Las sondas acotadas no se presentan como
+la ejecución completa de15 viewports: ésta se conserva en el Maestro canónico.
+
+La reparación se entrega mediante la rama codex/global-maestro-repair-20261114,
+con nuevos build/plan/CI/Maestro propios. Los recibos terminales de sus checks
+son la autoridad de cierre; los resultados del primer head no se heredan.

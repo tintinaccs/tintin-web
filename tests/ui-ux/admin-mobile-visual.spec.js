@@ -3,6 +3,17 @@ const fs=require('node:fs');
 const {load}=require('./helpers/admin-panel-fixture.cjs');
 const settle=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))).then(()=>Promise.all(document.getAnimations().filter(animation=>Number.isFinite(animation.effect?.getComputedTiming().endTime)).map(animation=>animation.finished.catch(()=>{})))));
 const values={'stat-users':'1.248','stat-orders-today':'24','stat-sales-month':'25.850.000 Gs.','stat-orders-total':'1.482','stat-visits-today':'368','stat-online-now':'12'};
+for (const width of [280, 390]) test(`estadísticas vacías caben y el gráfico poblado conserva sus siete días ${width}px`, async ({ page }) => {
+ await load(page,width,'admin.html',{mobile:true});
+ await page.evaluate(()=>document.querySelectorAll('.adm-section').forEach(node=>node.classList.toggle('active',node.id==='section-estadisticas')));
+ await settle(page);
+ const empty=page.locator('#statistics-revenue-trend > .adm-analytics-empty');
+ await expect(empty).toBeVisible();
+ const box=await empty.boundingBox();expect(box.x).toBeGreaterThanOrEqual(0);expect(box.x+box.width).toBeLessThanOrEqual(width);
+ await page.locator('#statistics-revenue-trend').evaluate(chart=>{chart.innerHTML=Array.from({length:7},(_,day)=>`<div class="adm-trend-day">Día ${day+1}</div>`).join('');});
+ const populated=await page.locator('#statistics-revenue-trend').evaluate(chart=>({columns:getComputedStyle(chart).gridTemplateColumns.split(' ').length,scroll:chart.scrollWidth>chart.clientWidth}));
+ expect(populated.columns).toBe(7);expect(populated.scroll).toBe(true);
+});
 for(const [width,height] of [[320,568],[390,844],[430,932],[540,960],[844,390]])test(`presentación móvil visible, compacta y sin perder controles ${width}x${height}`,async({page},info)=>{
  await load(page,width,'admin.html',{mobile:true,sidebar:true,guard:true});await page.setViewportSize({width,height});
  await page.evaluate(values=>{for(const[id,value]of Object.entries(values))document.getElementById(id).textContent=value;},values);await settle(page);

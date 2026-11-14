@@ -1750,7 +1750,7 @@ Node scheduling3/3 PASS; build:pages PASS. Plan protegido canónico3 archivos,
 presentación/scheduler, sin loaders/diseño/negocio/permisos/datos modificados.
 Preflight/CI/merge/producción se verifican por SHA nuevo; recibos terminales en
 artifacts/admin-fluidity/FOLLOWUP.json y el PR. Alcance/límites detallados en
-docs/SUPERADMIN_FLUIDEZ.md. No se acredita sesión autenticada ni hardware físico.
+docs/superadmin-fluidez.md. No se acredita sesión autenticada ni hardware físico.
 
 ## 2026-10-28 — Studio: distinguir clase visual de un editor paralelo
 
@@ -1906,7 +1906,7 @@ arreglo del auditor, huellas protegidas sin desajustes y diff --check limpio.
 Logs:artifacts/professional/build-complete.log y preflight-complete.log.
 
 Estado vigente ampliado:ver entrada «Ampliación profesional local, continuidad
-verificable» y docs/QA_REPORT.md. No heredar PASS del cierre inicial.
+verificable» y docs/informe-verificacion.md. No heredar PASS del cierre inicial.
 
 ## 2026-10-28 — Auditoría profesional local, primera entrega
 
@@ -1942,7 +1942,7 @@ Candidato 2d03f3cf: CI 40704867838 intento 1, CodeQL 40704857949 y Cloudflare PA
 
 ## 2026-10-28 — Integración automática autorizada del rediseño, Codex /root
 
-La titular pide «mergealo automatico y seguimiento» después de revisar la entrega local. Esta autorización posterior reemplaza la prohibición de merge del alcance anterior. Se publica la rama `codex/redesign-product-editor-20261028` y se prepara PR con integración automática sujeta a las protecciones. No se hacen escrituras comerciales de prueba en producción ni despliegues manuales. PR/SHA/runs/intentos se seguirán por el conector de GitHub: el CLI gh del entorno no autentica. CI del candidato 18bb0325, run 40698927099 intento 1, aprobó Comercio, reglas e Interfaz/SEO/rendimiento; Administración (job 122856337681) detectó tres pruebas CSP que exigían un único feedback de fallo de operación. Se marca ese alcance desde el controlador y se conserva el error contextual sólo para validaciones; pruebas cubren error/reintento de operación y validación de precio con versión pública intacta. CI del candidato d5e944c7 (40703215996 intento 1) detectó que los dobles mínimos del DOM no tienen dataset: se comprueba su existencia al marcar el alcance del error, sin alterar guardado ni escrituras. La batería completa audit:admin-sync repite 78 PASS. Estado: IN_PROGRESS; no se confunde auto-merge habilitado con merge confirmado. PR #1265, candidato inicial `6e8776e73204e5ede17a0fadb6cf88f5477c01c7`, CI 40696458055 intento 1. CodeQL detectó tres alertas HIGH de rutas HTTP en scripts/preview-product-editor.cjs (check 122844727673); se reemplaza la construcción de rutas por un índice cerrado de assets públicos, excluyendo enlaces simbólicos. Se agregan regresiones de traversal y se seguirá el nuevo SHA, sin suprimir alertas ni relajar controles. CodeQL del candidato 774d0816 aprobó las tres alertas corregidas. Una comprobación adicional reproduce TypeError al abrir una superficie con formulario todavía incompleto: showSection asumía selector/layout montados. Se conserva la apertura y geometría sin navegar hasta que existan ambos nodos; nueva regresión cubre apertura/cierre y foco sin errores.
+La titular pide «mergealo automatico y seguimiento» después de revisar la entrega local. Esta autorización posterior reemplaza la prohibición de merge del alcance anterior. Se publica la rama `codex/redesign-product-editor-20261028` y se prepara PR con integración automática sujeta a las protecciones. No se hacen escrituras comerciales de prueba en producción ni despliegues manuales. PR/SHA/runs/intentos se seguirán por el conector de GitHub: el CLI gh del entorno no autentica. CI del candidato 18bb0325, run 40698927099 intento 1, aprobó Comercio, reglas e Interfaz/SEO/rendimiento; Administración (job 122856337681) detectó tres pruebas CSP que exigían un único feedback de fallo de operación. Se marca ese alcance desde el controlador y se conserva el error contextual sólo para validaciones; pruebas cubren error/reintento de operación y validación de precio con versión pública intacta. CI del candidato d5e944c7 (40703215996 intento 1) detectó que los dobles mínimos del DOM no tienen dataset: se comprueba su existencia al marcar el alcance del error, sin alterar guardado ni escrituras. La batería completa audit:admin-sync repite 78 PASS. Estado: IN_PROGRESS; no se confunde auto-merge habilitado con merge confirmado. PR #1265, candidato inicial `6e8776e73204e5ede17a0fadb6cf88f5477c01c7`, CI 40696458055 intento 1. CodeQL detectó tres alertas HIGH de rutas HTTP en scripts/previsualizar-editor-producto.cjs (check 122844727673); se reemplaza la construcción de rutas por un índice cerrado de assets públicos, excluyendo enlaces simbólicos. Se agregan regresiones de traversal y se seguirá el nuevo SHA, sin suprimir alertas ni relajar controles. CodeQL del candidato 774d0816 aprobó las tres alertas corregidas. Una comprobación adicional reproduce TypeError al abrir una superficie con formulario todavía incompleto: showSection asumía selector/layout montados. Se conserva la apertura y geometría sin navegar hasta que existan ambos nodos; nueva regresión cubre apertura/cierre y foco sin errores.
 
 ## 2026-10-28 — Rediseño de seis pestañas para revisión local, Codex /root
 
@@ -1961,7 +1961,7 @@ Evidencia de esta implementación (no resultados heredados):
 - El caso de validación de precio explícito se repite PASS al corregir su selección de campo; el mensaje persistente no reinicia scroll ni foco. Galería y retorno de foco repiten PASS con selector de prueba acotado al editor.
 - Auditorías de productos/imágenes (42), tipografía (41622), colores (153 tokens globales/36 administrativos) y estilos: PASS. `build:pages`/rutas/CSP/diagnóstico/caché: PASS_LOCAL desde sus generadores. Versiones transitivas coherentes; sin nueva dependencia.
 
-Vista local: `node scripts/preview-product-editor.cjs`, puerto 4173; formulario y escritores reales con identidad/almacenamiento/proveedores de QA en memoria. Smoke en navegador PASS: seis pestañas, foto real del repositorio cargada localmente, guardado y recuperación del borrador, sin errores JS. Capturas de escritorio/móvil en `artifacts/product-editor-tabs/`; logs en `artifacts/product-editor-tabs/evidence/`. Detalles y reproducción: `docs/product-editor-refactor/REDISENO-SEIS-PESTANAS-20261028.md`.
+Vista local: `node scripts/previsualizar-editor-producto.cjs`, puerto 4173; formulario y escritores reales con identidad/almacenamiento/proveedores de QA en memoria. Smoke en navegador PASS: seis pestañas, foto real del repositorio cargada localmente, guardado y recuperación del borrador, sin errores JS. Capturas de escritorio/móvil en `artifacts/product-editor-tabs/`; logs en `artifacts/product-editor-tabs/evidence/`. Detalles y reproducción: `docs/product-editor-refactor/REDISENO-SEIS-PESTANAS-20261028.md`.
 
 NOT_VERIFIED: no están accesibles el HTML y las siete capturas Windows indicadas; no se afirma haberlas visto ni fidelidad a ellas. Sin sesión administrativa de QA externa: fixtures no acreditan Auth/Firestore/Sheets/biblioteca reales, concurrencia remota ni dispositivos físicos. No se ejecuta el emulador omitido, CI ni aceptación en producción. Ninguna escritura comercial en producción, despliegue o merge.
 ## 2026-10-28 — PR #1267: candidato con carga tardía y scroll corregidos, Codex /root
@@ -6978,3 +6978,26 @@ salud/smoke Maestro2/2 con proxy del entorno. No equivale al deploy candidato.
 Build, suites amplias, Rules, CI y Maestro completo en curso: no se declaran
 PASS. Evidencia local artifacts/global-20261114 y artifacts/master; Skills y
 límites en el informe. Sin operaciones comerciales reales ni cambios de Rules.
+
+### Seguimiento y reparación de los fallos del Maestro — misma solicitud global
+
+PR1399 integrado:cfe530d90b705c58f3b7bad55014dc858552ddb0; head209dc648,
+CI43589388485/1 SUCCESS, protección43591370208/1 SUCCESS y salud posterior
+43591407154/1 SUCCESS. Maestro43589398231/1 FAIL:5/8 áreas correctas; fallos
+revisados por logs completos, reproducidos y descritos en
+GLOBAL_REFINEMENT_20261114.md. audit:final y deep de ese head sí aprobaron.
+
+La reparación continúa en codex/global-maestro-repair-20261114 sobrecfe530d9:
+fit de categorías con gutter real, gráfico vacío flexible, auditor móvil con
+controlador real de Más, fixture real de Instagram en búsqueda y nombres
+contractuales/internos coherentes. Nuevas pruebas8 Catálogo+2 Estadísticas PASS;
+sonda administrativa280/390 (46 estados+2 de Imágenes) PASS; global fit270/270 PASS; navegación13 rutas/
+12 anchos y búsqueda PASS; nombres y control negativo PASS. La ejecución local
+inicial de audit:final y el duplicado de navegación se interrumpieron al tener
+sus equivalentes completos en CI; no se cuentan como PASS locales. La suite
+Maestro local administrativa terminó9/10 antes de actualizar el auditor:
+ese FAIL se conserva, no se borra por la sonda acotada posterior.
+
+La rama de reparación necesita sus propios recibos de build, plan, CI, Maestro,
+merge y producción; no hereda el verde de1399. Los enlaces y límites quedan en
+el informe de esta fecha. No se modificaron permisos ni datos comerciales.

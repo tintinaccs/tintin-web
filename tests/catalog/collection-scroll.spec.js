@@ -1,4 +1,6 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
 
 const products = ['anillos', 'earcuff'].flatMap(category => Array.from({ length: 60 }, (_, index) => ({
   id: `${category}-${index}`, name: `Pieza prueba ${String(index).padStart(2, '0')}`, category,
@@ -22,6 +24,14 @@ for (const [width, height, reducedMotion] of [
   await page.goto('/catalogo?cat=anillos', { waitUntil: 'domcontentloaded' });
   const cards = page.locator('#cat-grid [data-product-id]');
   await expect(cards).toHaveCount(48);
+  if (width <= 768) {
+    const geometry = await page.locator('#cat-tabs-shell').evaluate(shell => {
+      const rect = shell.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, available: document.documentElement.clientWidth };
+    });
+    expect(geometry.left).toBeGreaterThanOrEqual(0);
+    expect(geometry.right).toBeLessThanOrEqual(geometry.available + 1);
+  }
   await page.locator('#cat-search').fill('pieza');
   await page.locator('#cat-sort').selectOption('precio-asc');
   if (width <= 768) await page.locator('#filter-toggle').click();
@@ -54,4 +64,30 @@ for (const [width, height, reducedMotion] of [
   await all.evaluate(button => button.click());
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
   expect(new URL(page.url()).searchParams.has('cat')).toBe(false);
+});
+
+for (const width of [320, 768]) test(`categorías desplazables conservan todos los destinos con teclado ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 844 });
+  await page.route('**/__catalog-category-fit', route => route.fulfill({ contentType: 'text/html',
+    body: removeFixtureScripts(fs.readFileSync('catalogo.html', 'utf8'), { removeModulePreloads: true }) }));
+  await page.goto('/__catalog-category-fit');
+  await page.evaluate(() => {
+    document.getElementById('tt-loader')?.remove();
+    document.documentElement.classList.remove('tt-color-scheme-pending', 'tt-store-gate-pending');
+  });
+  const buttons = page.locator('#cat-tabs-mobile .tt-filtro-btn');
+  expect(await buttons.count()).toBeGreaterThan(5);
+  await buttons.first().focus();
+  for (let index = 1; index < await buttons.count(); index++) await page.keyboard.press('Tab');
+  await expect(buttons.last()).toBeFocused();
+  const geometry = await page.locator('#cat-tabs-mobile').evaluate(track => {
+    const shell = track.parentElement.getBoundingClientRect(), last = track.lastElementChild.getBoundingClientRect();
+    return { left: shell.left, right: shell.right, available: document.documentElement.clientWidth,
+      scrolled: track.scrollLeft > 0, lastLeft: last.left, lastRight: last.right, trackRight: track.getBoundingClientRect().right };
+  });
+  expect(geometry.left).toBeGreaterThanOrEqual(0);
+  expect(geometry.right).toBeLessThanOrEqual(geometry.available + 1);
+  expect(geometry.scrolled).toBe(true);
+  expect(geometry.lastLeft).toBeGreaterThanOrEqual(geometry.left);
+  expect(geometry.lastRight).toBeLessThanOrEqual(geometry.trackRight + 1);
 });
