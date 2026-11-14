@@ -70,3 +70,11 @@ del layout público al rosa claro canónico solicitado. Se conserva ese primer
 FAIL; la repetición se identifica como palette-smoke-final.log. Auditor del
 hero7/7 PASS tras la actualización, sin relajar controles de transparencia,
 bordes, recursos, loaders o errores JavaScript.
+
+CI43596174694/1 falló en tipografía: la clave JavaScript `font` de una prueba
+se interpretaba como shorthand CSS. Se renombra a `family` manteniendo la
+comparación de fuente real. Auditor tipográfico49.584 comprobaciones PASS,
+caso de actualización de líneas del editor PASS y `npm run ci:preflight`
+completo PASS después de corregirlo. El nuevo commit requiere CI/Maestro
+propios; los runs del anterior quedan identificados como reemplazados.
+Smoke final18 rutas PASS, incluido Instagram y degradado canónico del header.

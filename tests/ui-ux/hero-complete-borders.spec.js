@@ -86,14 +86,14 @@ test('transición mantiene el rosa del hero al activar el flujo compartido',asyn
 
 test('el título conserva la misma fuente y color cuando el editor actualiza sus líneas',async({page})=>{
  await open(page);
- const before=await page.locator('.tt-hero-title').evaluate(e=>({font:getComputedStyle(e).fontFamily,color:getComputedStyle(e).color}));
+ const before=await page.locator('.tt-hero-title').evaluate(e=>({family:getComputedStyle(e).fontFamily,color:getComputedStyle(e).color}));
  await page.evaluate(async()=>{
   const {applyVisualContentPreview}=await import(new URL('../../js/core/store/editor-visual-runtime.js',location.href).href);
   applyVisualContentPreview('index',{hero:{title:'El encanto está\nen los detalles',primaryText:'Comprar ahora'}});
  });
  await expect(page.locator('.tt-hero-title')).toHaveCount(1);
  for(const line of await page.locator('.tt-hero-title-line').all()){
-  await expect(line).toHaveCSS('font-family',before.font);
+  await expect(line).toHaveCSS('font-family',before.family);
   await expect(line).toHaveCSS('font-size',await page.locator('.tt-hero-title').evaluate(e=>getComputedStyle(e).fontSize));
   await expect(line).toHaveCSS('color',before.color);
  }
