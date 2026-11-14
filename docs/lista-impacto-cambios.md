@@ -1,3 +1,10 @@
+## 2026-11-14 — quitar CTA general de WhatsApp repetido antes del footer
+
+- Siete documentos públicos: eliminar el cierre general repetido y conservar el contacto único del footer compartido; formularios y consultas contextuales siguen en su flujo.
+- Definiciones CMS: retirar ctaText/ctaPrompt de Envíos/FAQ/Cambios y propagar versiones por la fachada/consumidores; no escribir datos publicados ni recrear el CTA desde valores históricos.
+- Generador de shell: alinear versiones de loader/Visual Builder desde autoridades; footer HTML y contacto global sin cambios funcionales.
+- Verificar footer único con enlace operativo, ausencia de CTA redundante y contención320–2560px, orientación horizontal, lectura/legal y esquema/editor de contenido. Derivados por build y plan protegido contra main real.
+
 ## 2026-11-13 — selección de recursos y autonomía compartida
 
 - Autoridad única: SKILLS_AUTO_ROUTING para selección, búsqueda necesaria, instalación autorizada/verificada y reporte de evidencia; enlaces desde ambos agentes y README.

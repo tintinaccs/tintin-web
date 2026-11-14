@@ -18,9 +18,9 @@ import { subscribeAuthState } from '../auth/coordinador-sesion.js?v=tintin-20261
 import { SUPER_ADMIN } from '../auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue, sanitizeContentText, setNested,
-} from './esquema-contenido.js?v=tintin-suitcase-20261104-1';
+} from './esquema-contenido.js?v=tintin-20261114-wa-contact-1';
 import { moveBlock, moveSection } from './orden-casillas.js?v=tintin-suitcase-20261104-1';
-import { applyVisualBuilderConfig, initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-suitcase-20261104-1-p1106';
+import { applyVisualBuilderConfig, initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261114-wa-contact-1';
 
 const IMAGE_BLOCK_TYPES = new Set(['banner', 'section', 'columns', 'testimonial']);
 const clone = value => JSON.parse(JSON.stringify(value));

@@ -15,8 +15,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-suitcase-20261104-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-suitcase-20261104-1-p1106';
+} from './esquema-contenido.js?v=tintin-20261114-wa-contact-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261114-wa-contact-1';
 
 const subscriptions = new Map();
 const latestData = new Map();
