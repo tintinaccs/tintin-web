@@ -81,21 +81,21 @@ test('transición mantiene el rosa del hero al activar el flujo compartido',asyn
   await expect(page.locator('#hero')).toHaveAttribute('data-tt-flow-block','light');
   await expect(page.locator('.tt-trust-bar')).toHaveAttribute('data-tt-flow-block','pink');
   const flow=await page.evaluate(()=>{const h=document.querySelector('#hero'),s=getComputedStyle(h),after=getComputedStyle(h,'::after');return {background:s.backgroundImage,fade:after.backgroundImage,pointer:after.pointerEvents,hiddenLayer:getComputedStyle(h.querySelector('[data-tt-flow-background]')).display}});
-  expect(flow.background).toContain('linear-gradient');expect(flow.background).toContain('255, 181, 215');expect(flow.fade).toContain('linear-gradient');expect(flow.pointer).toBe('none');expect(flow.hiddenLayer).toBe('none');
+  expect(flow.background).toContain('linear-gradient');expect(flow.background).toContain('248, 170, 202');expect(flow.fade).toContain('linear-gradient');expect(flow.pointer).toBe('none');expect(flow.hiddenLayer).toBe('none');
 });
 
 test('el título conserva la misma fuente y color cuando el editor actualiza sus líneas',async({page})=>{
  await open(page);
- const before=await page.locator('.tt-hero-title').evaluate(e=>getComputedStyle(e).fontFamily);
+ const before=await page.locator('.tt-hero-title').evaluate(e=>({family:getComputedStyle(e).fontFamily,color:getComputedStyle(e).color}));
  await page.evaluate(async()=>{
   const {applyVisualContentPreview}=await import(new URL('../../js/core/store/editor-visual-runtime.js',location.href).href);
   applyVisualContentPreview('index',{hero:{title:'El encanto está\nen los detalles',primaryText:'Comprar ahora'}});
  });
  await expect(page.locator('.tt-hero-title')).toHaveCount(1);
  for(const line of await page.locator('.tt-hero-title-line').all()){
-  await expect(line).toHaveCSS('font-family',before);
+  await expect(line).toHaveCSS('font-family',before.family);
   await expect(line).toHaveCSS('font-size',await page.locator('.tt-hero-title').evaluate(e=>getComputedStyle(e).fontSize));
-  await expect(line).toHaveCSS('color','rgb(255, 100, 176)');
+  await expect(line).toHaveCSS('color',before.color);
  }
  await expect(page.locator('.tt-hero-cta')).toHaveCSS('text-transform','uppercase');
 });

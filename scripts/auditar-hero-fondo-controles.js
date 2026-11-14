@@ -10,7 +10,7 @@ const cleanup = read('css/core/limpieza-tema-tintin.css');
 const heroSurface = home;
 
 const checks = [
-  ['Hero de referencia con fondo separado y marca plana', heroSurface.includes('--tt-flow-light:#FFCEE5') && heroSurface.includes('background:var(--tt-hero-background)!important') && heroSurface.includes('.tt-hero-brand')],
+  ['Hero de referencia con fondo separado y marca plana', heroSurface.includes('--tt-flow-light:var(--color-brand-accent,#FDECF2)') && heroSurface.includes('background:var(--tt-hero-background)!important') && heroSurface.includes('.tt-hero-brand')],
   ['Ajuste independiente en desktop', home.includes('object-fit:var(--tt-hero-fit-desktop,cover)!important') && home.includes('--tt-hero-pos-desktop')],
   ['Ajuste independiente en tablet', home.includes('object-fit:var(--tt-hero-fit-tablet,cover)!important') && home.includes('--tt-hero-scale-tablet')],
   ['Ajuste independiente en mobile', home.includes('object-fit:var(--tt-hero-fit-mobile,cover)!important') && home.includes('--tt-hero-scale-mobile')],

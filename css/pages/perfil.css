@@ -171,11 +171,11 @@
       .tt-profile-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:14px 0}.tt-profile-step{font-size:10px;text-align:center;color:var(--text-muted,#222222);border-top:3px solid var(--border,#F8AACA);padding-top:7px}.tt-profile-step.is-done{border-color:var(--success,#267a41);color:var(--success,#267a41);font-weight:800}
       .tt-profile-order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;line-height:1.55}.tt-profile-order-grid strong{display:block}.tt-profile-order-lines{grid-column:1/-1;border-top:1px solid var(--border,#F8AACA);padding-top:8px}.tt-profile-order-line{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
       .tt-profile-status { display:inline-flex;align-items:center;min-height:26px;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.04em;border:1px solid currentColor; }
-      .tt-profile-status--pendiente { color:var(--warning,#946200);background:var(--warning-soft,#fff4cf); }
-      .tt-profile-status--confirmado { color:var(--info,#245b98);background:var(--info-soft,#eaf3ff); }
-      .tt-profile-status--enviado { color:var(--purple,#7147a8);background:var(--purple-soft,#f2eaff); }
-      .tt-profile-status--entregado { color:var(--success,#267a41);background:var(--success-soft,#eaf7ee); }
-      .tt-profile-status--cancelado { color:var(--danger,#b42345);background:var(--danger-soft,#FDECF2); }
+      .tt-profile-status--pendiente { color:var(--color-warning-text);background:var(--color-warning-background); }
+      .tt-profile-status--confirmado,
+      .tt-profile-status--enviado { color:var(--color-badge-text);background:var(--color-badge-background); }
+      .tt-profile-status--entregado { color:var(--color-success-text);background:var(--color-success-background); }
+      .tt-profile-status--cancelado { color:var(--color-error-text);background:var(--color-error-background); }
       .tt-profile-state { padding:24px 16px;border:1px solid var(--border,#F8AACA);border-radius:14px;text-align:center;color:var(--text-muted,#222222);font-size:13px;line-height:1.6; }
       .tt-profile-state .perfil-btn { margin-top:12px; }
       #tt-profile-network { margin:0 0 16px;min-height:24px;display:flex;align-items:center;justify-content:center;gap:7px;color:var(--text-muted,#222222);font-size:11px;font-weight:750;text-align:center; }

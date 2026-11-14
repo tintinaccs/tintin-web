@@ -1198,3 +1198,12 @@ Auditor de búsqueda sirve Instagram con handler real/env vacío.4 informes y
 preview local renombrados con referencias actualizadas; DESIGN/PRODUCT son
 contexto contractual de Skills, y otros nombres inválidos siguen rechazados.
 Regenerar derivados y plan contra maincfe530d9; CI/Maestro del head nuevo.
+
+## 2026-11-14 — Paleta armónica y corrección del smoke visual
+
+Inicio, perfil, badges y superficies administrativas reutilizan los tokens
+Tintín; avisos semánticos y WhatsApp conservan sus colores discretos. No se
+cambian imágenes ni lógica comercial. CSS/JS afectados propagan sus versiones
+por el generador canónico. El smoke local sirve Instagram con el handler real
+sin credenciales (parche revisado de PR1397), resolviendo el404 de la auditoría
+visual43594710557. Evidencia y límites:docs/agent/PALETA_ARMONICA_20261114.md.

@@ -12,7 +12,7 @@ import {
   doc, getDoc, collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20261030-notificaciones-explicitas-1-p1106';
+const ASSET_VERSION = 'tintin-20261114-harmonic-palette-1';
 const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1';
 const ORDER_RECOVERY_WINDOW_MS = 2 * 60 * 60 * 1000;
 const ORDER_NOTIFY_RETRY_DELAYS_MS = [700, 1800];

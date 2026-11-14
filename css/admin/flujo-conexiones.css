@@ -103,7 +103,7 @@
 .tfc-state-con-error { background: var(--admin-color-error-background); color: var(--admin-color-error-text); border-color: #f5b7ae; }
 .tfc-state-desconectado { background: #f3f3f3; color:#222222; border-color: #dcdcdc; }
 .tfc-state-no-implementado { background: #ececec; color:#222222; border-color: #d5d5d5; }
-.tfc-state-documentado-pero-no-confirmado { background: #ede7f6; color:var(--color-text-primary,#222222); border-color: #d1c4e9; }
+.tfc-state-documentado-pero-no-confirmado { background: var(--admin-color-badge-background); color:var(--admin-color-badge-text); border-color: var(--admin-color-border); }
 .tfc-state-duplicado-o-en-conflicto { background: #fde3e1; color: #b8341f; border-color: #f5b7ae; }
 .tfc-state-desconocido { background: #eeeeee; color:#222222; border-color: #d5d5d5; }
 

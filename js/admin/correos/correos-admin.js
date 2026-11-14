@@ -1337,7 +1337,7 @@ async function runPromoCampaign_(tpl, recipients) {
 
 // ---- Historial ----
 function categoryBadge_(category) {
-  const map = { pedido: ['#dbeafe', '#1e40af', 'Pedido real'], prueba: ['#fff3cd', '#856404', 'Prueba'], promo: ['#ede9fe', '#5b21b6', 'Promoción'] };
+  const map = { pedido: ['var(--admin-color-badge-background)', 'var(--admin-color-badge-text)', 'Pedido real'], prueba: ['var(--admin-color-warning-background)', 'var(--admin-color-warning-text)', 'Prueba'], promo: ['var(--admin-color-badge-background)', 'var(--admin-color-badge-text)', 'Promoción'] };
   const [bg, color, label] = map[category] || map.pedido;
   return `<span class="adm-badge" style="background:${bg};color:${color}">${label}</span>`;
 }

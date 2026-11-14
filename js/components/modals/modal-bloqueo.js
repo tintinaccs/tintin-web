@@ -24,7 +24,7 @@ function escapeAttribute(value) {
 
 /** Mensaje corto con "WhatsApp" como enlace, listo para insertar como HTML. */
 export function accountProblemHtml(email = '') {
-  return `${ACCOUNT_PROBLEM_TEXT} <a href="${escapeAttribute(accountSupportUrl(email))}" target="_blank" rel="noopener noreferrer" style="color:#005fcc;font-weight:800;text-decoration:underline">WhatsApp</a>.`;
+  return `${ACCOUNT_PROBLEM_TEXT} <a href="${escapeAttribute(accountSupportUrl(email))}" target="_blank" rel="noopener noreferrer" style="color:var(--color-text-link,#222222);font-weight:800;text-decoration:underline">WhatsApp</a>.`;
 }
 
 const OVERLAY_ID = 'tt-blocked-overlay';

@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { publicPaypalConfig } from '../cloudflare/paypal-seguro.js';
+import { onRequestGet as instagramFeed } from '../functions/api/instagram-feed.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
@@ -89,7 +90,7 @@ function sendJson(response, status, payload, extraHeaders = {}) {
   response.end(JSON.stringify(payload));
 }
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
   const parsed = new URL(request.url || '/', baseURL);
   const pathname = decodeURIComponent(parsed.pathname);
 
@@ -111,6 +112,13 @@ const server = http.createServer((request, response) => {
   // simula únicamente las lecturas públicas que las superficies comunes puedan
   // ejecutar. Cualquier otra llamada a /api/engagement sigue siendo un error,
   // para no ocultar escrituras inesperadas ni regresiones de autenticación.
+  if (pathname === '/api/instagram-feed' && request.method === 'GET') {
+    const result = await instagramFeed({ env: {}, request: new Request(parsed.href) });
+    response.writeHead(result.status, Object.fromEntries(result.headers));
+    response.end(await result.text());
+    return;
+  }
+
   if (pathname === '/api/engagement') {
     const action = parsed.searchParams.get('action');
     if (request.method === 'GET' && action === 'productLikes') {
@@ -409,8 +417,8 @@ try {
       await page.waitForTimeout(350);
       const surfaces = await page.evaluate(() => {
         const brandProbe = document.createElement('div');
-        // Inicio hereda el rosa claro #FFCEE5 de la referencia aprobada del hero.
-        brandProbe.style.setProperty('background-image', 'linear-gradient(180deg, color-mix(in srgb, #F8AACA 94%, transparent) 0%, color-mix(in srgb, #FFCEE5 90%, transparent) 52%, transparent 100%)', 'important');
+        // Inicio comparte el rosa y rosa claro de la paleta Tintín aprobada.
+        brandProbe.style.setProperty('background-image', 'linear-gradient(180deg, color-mix(in srgb, #F8AACA 94%, transparent) 0%, color-mix(in srgb, #FDECF2 90%, transparent) 52%, transparent 100%)', 'important');
         document.body.appendChild(brandProbe);
         const expectedHeaderGradient = getComputedStyle(brandProbe).backgroundImage;
         brandProbe.remove();

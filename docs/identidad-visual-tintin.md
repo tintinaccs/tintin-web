@@ -26,3 +26,16 @@ blanco plano, centrado horizontal y verticalmente, con exterior transparente. Se
 original. Abarca favicon.ico y sus PNG16/32/192/512; no altera las variantes
 Apple, apps, maskable ni badge. Esta indicación reemplaza el círculo blanco
 con símbolo rosa para los favicons.
+
+## 2026-11-14 — Paleta armónica en toda la tienda
+
+La titular solicita unificar fondos, superficies, texto y detalles alrededor
+del rosa Tintín, rosa claro, blanco y texto oscuro; retirar acentos violetas
+ajenos a la marca. La indicación abarca también Inicio y el panel, conserva
+fotos, logos, tipografías y colores reales de variantes de productos.
+Se reutilizan los tokens canónicos #F8AACA, #FDECF2, #FFFFFF y #222222;
+los pasos intermedios se mezclan desde esos roles, sin añadir otro matiz.
+Esta instrucción actualiza los colores locales anteriores del hero, no su
+composición ni sus imágenes. La respuesta explícita de la titular permite
+colores funcionales discretos en avisos de éxito/error/información y WhatsApp.
+Se conservan etiquetas y estados para que el color no sea su única señal.
