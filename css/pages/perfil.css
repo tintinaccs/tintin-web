@@ -90,7 +90,8 @@
       padding: 11px 24px; border-radius: 50px; font-size: 12px;
       min-width: 24px; min-height: 44px; justify-content: center;
       font-weight: 800; text-transform: uppercase; letter-spacing: .08em;
-      cursor: pointer; font-family:Montserrat; border: none; transition: all .2s;
+      cursor: pointer; font-family:Montserrat; border: none;
+      transition: transform .2s, background-color .2s, border-color .2s, color .2s;
       text-decoration: none; display: inline-flex; align-items: center;
     }
     .perfil-btn-primary { background: var(--acc); color: #fff !important; }

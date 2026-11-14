@@ -103,6 +103,10 @@
 
   function scanRoots() {
     scheduled = false;
+    if (reducedMotion) {
+      pendingRoots.clear();
+      return;
+    }
     const roots = pendingRoots.size ? [...pendingRoots] : [document];
     pendingRoots.clear();
     // Las raíces pueden solaparse. Medir cada elemento una sola vez y terminar
@@ -132,6 +136,7 @@
   }
 
   function scheduleScan(root = document) {
+    if (reducedMotion) return;
     pendingRoots.add(root);
     if (scheduled) return;
     scheduled = true;
@@ -142,11 +147,20 @@
   function bindPressFeedback() {
     document.addEventListener('pointerdown', event => {
       const target = event.target.closest('.tt-btn,.ck-btn,.adm-btn,.login-google,button,a');
-      if (target && target.matches('button,.tt-btn,.ck-btn,.login-google') && motionPreference?.matches !== true && !target.closest(fixedExclusions)) target.classList.add('tt-premium-pressed');
+      if (target && target.matches('button,.tt-btn,.ck-btn,.login-google') &&
+          !target.matches(':disabled,[aria-disabled="true"]') &&
+          motionPreference?.matches !== true && !target.closest(fixedExclusions)) target.classList.add('tt-premium-pressed');
     }, { passive: true });
     const clear = () => document.querySelectorAll('.tt-premium-pressed').forEach(element => element.classList.remove('tt-premium-pressed'));
     document.addEventListener('pointerup', clear, { passive: true });
     document.addEventListener('pointercancel', clear, { passive: true });
+    window.addEventListener('blur', clear);
+    motionPreference?.addEventListener('change', event => {
+      if (event.matches) clear();
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) clear();
+    });
   }
 
   function boot() {
@@ -170,10 +184,10 @@
     });
     if (reducedMotion) {
       document.documentElement.classList.add('tt-reveal-reduced-motion');
-      return;
+    } else {
+      document.documentElement.classList.add('tt-reveal-ready');
+      scheduleScan(document);
     }
-    document.documentElement.classList.add('tt-reveal-ready');
-    scheduleScan(document);
     document.addEventListener('tintin:products-loaded', event => scheduleScan(event.target || document), { passive: true });
     document.addEventListener('tintin:page-ready', () => scheduleScan(document), { passive: true });
     document.addEventListener('click', event => {

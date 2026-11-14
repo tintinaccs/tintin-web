@@ -157,3 +157,4 @@ test('el auditor excluye sólo el logotipo decorativo y conserva la detección d
 
 // Regresiones de contenido largo, foco y scroll compartido; misma suite canónica.
 require('./public-content-reflow.cases.js');
+require('./global-refinement.cases.js');

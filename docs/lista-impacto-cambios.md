@@ -1175,3 +1175,13 @@ validador comercial de precios. Sin nuevas colas, migraciones, Rules ni datos
 reales. Regresiones en suites canónicas admin/checkout, documentación y límites
 en TINTIN_PHASE04_CATALOG y CURRENT_STATE. Caché/CSP/diagnóstico/protección se
 generan con herramientas existentes; CI/merge bloqueados por conexión GitHub.
+
+## 2026-11-14 — Refinamiento global y respuesta al movimiento
+
+Autoridades: sistema-superficies-tintin.css, movimiento.css, perfil.css y
+revelado-desplazamiento-global.js. Consumidores:18 documentos, bundles públicos,
+panel y carga diferida del loader. Mantener tokens publicados y opacidad de
+paneles; verificar touch, hover fino, reduced motion inicial/dinámico,
+contenido incorporado, blur, controles disabled y foco. Cinco regresiones se
+integran en la suite UI/UX canónica. Generar URLs/bundles/caché/CSP/diagnóstico
+y plan protegido contra main; barrido global y Maestro con resultados propios.

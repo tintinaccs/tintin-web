@@ -966,7 +966,7 @@
 
   function bootScrollReveal() {
     if (!window.TintinGlobalScrollRevealBooted) {
-      importSibling('quality/revelado-desplazamiento-global.js', 'Scroll Reveal', undefined, 'tintin-brand-polish-20261104-1');
+      importSibling('quality/revelado-desplazamiento-global.js', 'Scroll Reveal', undefined, 'tintin-20261114-motion-lifecycle-1');
     }
   }
 

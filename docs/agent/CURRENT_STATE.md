@@ -6964,3 +6964,17 @@ Causa del rojo en CI 42017447387/1 (SHA 7cfbcc9, job D — Interfaz, SEO y rendi
 
 - 2026-11-12 · PR #1354 (filtros de variantes con foto/muestra elegida) actualizado con main dfcb4a6: conflictos en generados (CSP, manifiestos, plan) tomados de main y regenerados; en `catalogo.html` se conserva `catalogFilterPreview` y se descarta el import de favoritos retirado en #1355. Plan de mantenimiento renovado sobre dfcb4a6 (5 archivos, 8 registros). PASS_LOCAL: `build:pages`, `ci:preflight`, protección de flujos (78 registros/542 archivos), `tests/catalog/*.test.mjs` 111/111, `test:fast` (104 Node + 6 Chromium) y 74 Chromium (variant-filter-photos, product-card-colors, product-stock-first, boutique-surfaces, search-responsive). CI del SHA final pendiente.
 - 2026-11-12 · PR #1381 (filtros de variantes): actualizado con main d482fb2 (#1380) y plan de flujos renovado. PASS_LOCAL: build:pages, ci:preflight, protección de flujos 78/542, tests/catalog. CI del SHA final pendiente.
+
+## 2026-11-14 — Refinamiento y comprobación global solicitados por la titular
+
+Codex /root; base21ea0838, rama codex/global-refinement-20261114. Informe
+vigente: [GLOBAL_REFINEMENT_20261114.md](GLOBAL_REFINEMENT_20261114.md).
+No se heredan PASS históricos. Se corrigen hover táctil/reduced motion,
+observación al cambiar preferencias, estados pulsados y transiciones amplias;
+se suavizan superficies compartidas y uniones sin desenfocar texto/productos.
+PASS_LOCAL:5 regresiones Chromium y seguridad Maestro8/8; npm audit completo0
+vulnerabilidades. PASS_PRODUCTION por lectura directa de la base publicada:
+salud/smoke Maestro2/2 con proxy del entorno. No equivale al deploy candidato.
+Build, suites amplias, Rules, CI y Maestro completo en curso: no se declaran
+PASS. Evidencia local artifacts/global-20261114 y artifacts/master; Skills y
+límites en el informe. Sin operaciones comerciales reales ni cambios de Rules.
