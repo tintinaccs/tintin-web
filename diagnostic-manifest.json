@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "1c12edd3c7eab6482b12b2e16f653ff094aafbbeee49886c740c1e584a0500d3",
+  "sourceFingerprint": "f195d6b3d5c93f4c30d5ede31cb0a8a360e9987ad9878a72307898fe521656cf",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1842,
-    "textFiles": 1689,
-    "totalBytes": 62856297,
+    "files": 1844,
+    "textFiles": 1691,
+    "totalBytes": 62882606,
     "pages": 19,
-    "modules": 1197
+    "modules": 1198
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18291,
-      "sha256": "3efacf823b3344f0852c9e93252c2c3d0d96d9f6dec66ac6dbf757f661dbd64f",
+      "bytes": 18280,
+      "sha256": "b8d01e7a66face5c703947c1b5930dcd174ff40675122ec3acae7746d8f293e8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -109,7 +109,7 @@
           "line": 8
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -226,7 +226,7 @@
           "line": 40
         },
         {
-          "raw": "/css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "/css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 41
         },
@@ -241,7 +241,7 @@
           "line": 132
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 133
         },
@@ -715,7 +715,7 @@
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -853,7 +853,7 @@
           "exists": true
         },
         {
-          "raw": "/css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "/css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 41,
           "exists": true
@@ -871,7 +871,7 @@
           "exists": true
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 133,
           "exists": true
@@ -1180,8 +1180,8 @@
         "guest",
         "client"
       ],
-      "bytes": 30895,
-      "sha256": "9ae92add3342d2c83bdaedb3193834c36b30ececde8af9adf51d265c7debe34f",
+      "bytes": 30884,
+      "sha256": "1354f35e3440163f544520035537517cd4260d03df423200176adcd26ea44590",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1221,7 +1221,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -1288,7 +1288,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-d7f40a59a50c72b1",
+          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-d41d038b1e11d222",
           "target": "css/generated/nosotros.css",
           "line": 35
         },
@@ -1353,7 +1353,7 @@
           "line": 46
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47
         },
@@ -1368,7 +1368,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -1811,7 +1811,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -1889,7 +1889,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-d7f40a59a50c72b1",
+          "raw": "css/generated/nosotros.css?v=tintin-about-e9f78c18973f8f56-d41d038b1e11d222",
           "target": "css/generated/nosotros.css",
           "line": 35,
           "exists": true
@@ -1967,7 +1967,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47,
           "exists": true
@@ -1985,7 +1985,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -2290,8 +2290,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 48726,
-      "sha256": "77c10f2749d6451013a14f84db33e436020810af46b84c8c542b1f9100b91ae8",
+      "bytes": 48715,
+      "sha256": "cdb0dc664df802867116f2aceff081d1c32971d24778bfdd54317ee8b12aeb5e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2326,7 +2326,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -2403,7 +2403,7 @@
           "line": 38
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 39
         },
@@ -2418,7 +2418,7 @@
           "line": 320
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 321
         },
@@ -2508,7 +2508,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -2598,7 +2598,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 39,
           "exists": true
@@ -2616,7 +2616,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 321,
           "exists": true
@@ -2983,8 +2983,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 195273,
-      "sha256": "d478101fac579f02c08e47fc1e2e86f669fa7062e26573160be6457e47c3314f",
+      "bytes": 195262,
+      "sha256": "3795387db4cd4f5a07b4aac880519d0b70d84cab8fa9764b397a92e272f545a1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3013,7 +3013,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -3230,7 +3230,7 @@
           "line": 48
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 49
         },
@@ -3240,7 +3240,7 @@
           "line": 50
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 51
         },
@@ -3501,7 +3501,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -3759,7 +3759,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 49,
           "exists": true
@@ -3771,7 +3771,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 51,
           "exists": true
@@ -9336,8 +9336,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22662,
-      "sha256": "9fb21af9b54b49dab692baab19a634c1277a2e25f7d8162e2d7fe6fd4bf38de0",
+      "bytes": 22651,
+      "sha256": "833e1b488baf8b7c64323f9ec0651977efec1c321e523ce1f45f39bffecc0e6a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9371,7 +9371,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -9433,7 +9433,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-e540de7d2bdffedc",
+          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-681a5590626a3234",
           "target": "css/generated/cambios-devoluciones.css",
           "line": 35
         },
@@ -9498,7 +9498,7 @@
           "line": 46
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47
         },
@@ -9513,7 +9513,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -9917,7 +9917,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -9989,7 +9989,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-e540de7d2bdffedc",
+          "raw": "css/generated/cambios-devoluciones.css?v=tintin-cambios-devoluciones-681a5590626a3234",
           "target": "css/generated/cambios-devoluciones.css",
           "line": 35,
           "exists": true
@@ -10067,7 +10067,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47,
           "exists": true
@@ -10085,7 +10085,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -10352,8 +10352,8 @@
         "guest",
         "client"
       ],
-      "bytes": 77057,
-      "sha256": "68e097959bd211bcef101df094efd48aafa8c66e9a8da5d8844d7fef8af6aee9",
+      "bytes": 77046,
+      "sha256": "34ab21ddb8d7c3071b8862fba13c887d337b6f41394fde4a86add21ec552dcf3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10399,7 +10399,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -10471,7 +10471,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/catalogo.css?v=tintin-catalogo-28da121ee7e40fbd",
+          "raw": "css/generated/catalogo.css?v=tintin-catalogo-5ed71b8af9ac17a5",
           "target": "css/generated/catalogo.css",
           "line": 47
         },
@@ -10536,7 +10536,7 @@
           "line": 58
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 59
         },
@@ -10546,7 +10546,7 @@
           "line": 60
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 61
         },
@@ -10950,7 +10950,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -11034,7 +11034,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/catalogo.css?v=tintin-catalogo-28da121ee7e40fbd",
+          "raw": "css/generated/catalogo.css?v=tintin-catalogo-5ed71b8af9ac17a5",
           "target": "css/generated/catalogo.css",
           "line": 47,
           "exists": true
@@ -11112,7 +11112,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 59,
           "exists": true
@@ -11124,7 +11124,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 61,
           "exists": true
@@ -11687,8 +11687,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 138483,
-      "sha256": "5fd7834e0573bbc3dbb4f0b70590318d4f6f3a902380a6fa296c988d9d6b1301",
+      "bytes": 138472,
+      "sha256": "e8c5a7d8b1c5df561e42c4ef95b77d680a5cd7ee1a31c3eb4ac984cd4aaa80c9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11728,7 +11728,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -11805,7 +11805,7 @@
           "line": 33
         },
         {
-          "raw": "css/generated/checkout-2.css?v=tintin-checkout-2b2ffc3b0b2055ec",
+          "raw": "css/generated/checkout-2.css?v=tintin-checkout-c79b59cbf41a16f0",
           "target": "css/generated/checkout-2.css",
           "line": 34
         },
@@ -11875,7 +11875,7 @@
           "line": 47
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 48
         },
@@ -11885,7 +11885,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -12324,7 +12324,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -12414,7 +12414,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/checkout-2.css?v=tintin-checkout-2b2ffc3b0b2055ec",
+          "raw": "css/generated/checkout-2.css?v=tintin-checkout-c79b59cbf41a16f0",
           "target": "css/generated/checkout-2.css",
           "line": 34,
           "exists": true
@@ -12498,7 +12498,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 48,
           "exists": true
@@ -12510,7 +12510,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -13275,8 +13275,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24087,
-      "sha256": "ab3bcf39b668a0ee60fe457b7ee8d35adbfab6efcba57ded41bd63ec963bffc5",
+      "bytes": 24076,
+      "sha256": "941881af41008962949a719c991ec838c13f01165df669d5a4187b0f496b0e59",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13316,7 +13316,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -13388,7 +13388,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/collections.css?v=tintin-collections-2d1f16a39c6bc531",
+          "raw": "css/generated/collections.css?v=tintin-collections-e2721d5fa153f1d6",
           "target": "css/generated/collections.css",
           "line": 42
         },
@@ -13458,7 +13458,7 @@
           "line": 54
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 55
         },
@@ -13468,7 +13468,7 @@
           "line": 56
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 57
         },
@@ -13882,7 +13882,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -13966,7 +13966,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/collections.css?v=tintin-collections-2d1f16a39c6bc531",
+          "raw": "css/generated/collections.css?v=tintin-collections-e2721d5fa153f1d6",
           "target": "css/generated/collections.css",
           "line": 42,
           "exists": true
@@ -14050,7 +14050,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 55,
           "exists": true
@@ -14062,7 +14062,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 57,
           "exists": true
@@ -14335,8 +14335,8 @@
         "guest",
         "client"
       ],
-      "bytes": 28928,
-      "sha256": "df4a5d245b951f802c1f2ad51326ec6a84f77fa40f8436a609ce14a5108e1300",
+      "bytes": 28917,
+      "sha256": "c4a353734621e6ea69defc5750c9dd2d2f939a203ebd09a81784ae0c60ea3ac0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14376,7 +14376,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -14438,7 +14438,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/contact.css?v=tintin-contact-c314486d2a6004f9",
+          "raw": "css/generated/contact.css?v=tintin-contact-98fb9405bbf6e3f0",
           "target": "css/generated/contact.css",
           "line": 35
         },
@@ -14503,7 +14503,7 @@
           "line": 46
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47
         },
@@ -14518,7 +14518,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -14967,7 +14967,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -15039,7 +15039,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/contact.css?v=tintin-contact-c314486d2a6004f9",
+          "raw": "css/generated/contact.css?v=tintin-contact-98fb9405bbf6e3f0",
           "target": "css/generated/contact.css",
           "line": 35,
           "exists": true
@@ -15117,7 +15117,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47,
           "exists": true
@@ -15135,7 +15135,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -15469,8 +15469,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26343,
-      "sha256": "c57fe15d9b383a307b7577fe916f7fa485d6d7e17df7fc02eccc0dd9ef3b7481",
+      "bytes": 26332,
+      "sha256": "1e8b69292f175856e131f7770bbd224023a6192a07056b8fbe2837177ab9115f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15510,7 +15510,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -15572,7 +15572,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/envios.css?v=tintin-envios-cebb1e4ab4434dff",
+          "raw": "css/generated/envios.css?v=tintin-envios-8c68918bca36c8e9",
           "target": "css/generated/envios.css",
           "line": 35
         },
@@ -15637,7 +15637,7 @@
           "line": 46
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47
         },
@@ -15647,7 +15647,7 @@
           "line": 48
         },
         {
-          "raw": "css/generated/envios-2.css?v=tintin-envios-26813424060886ca",
+          "raw": "css/generated/envios-2.css?v=tintin-envios-d9650fd826e8e524",
           "target": "css/generated/envios-2.css",
           "line": 55
         },
@@ -15657,7 +15657,7 @@
           "line": 56
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 57
         },
@@ -16061,7 +16061,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -16133,7 +16133,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/envios.css?v=tintin-envios-cebb1e4ab4434dff",
+          "raw": "css/generated/envios.css?v=tintin-envios-8c68918bca36c8e9",
           "target": "css/generated/envios.css",
           "line": 35,
           "exists": true
@@ -16211,7 +16211,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47,
           "exists": true
@@ -16223,7 +16223,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/envios-2.css?v=tintin-envios-26813424060886ca",
+          "raw": "css/generated/envios-2.css?v=tintin-envios-d9650fd826e8e524",
           "target": "css/generated/envios-2.css",
           "line": 55,
           "exists": true
@@ -16235,7 +16235,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 57,
           "exists": true
@@ -16542,8 +16542,8 @@
         "guest",
         "client"
       ],
-      "bytes": 47928,
-      "sha256": "7060363983db7116e954ec9aeaec6e5be5fa62a3f7d8f25bca8adde2a3d21c09",
+      "bytes": 47917,
+      "sha256": "bce136ad159022c3f6737d0d2ef8749f25ff39a6a68158e7f6efac3ef738b99f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16594,7 +16594,7 @@
           "line": 11
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 12
         },
@@ -16691,7 +16691,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-9a79962a96a54c30",
+          "raw": "css/generated/inicio.css?v=tintin-home-b2d093dfbd60fcf7",
           "target": "css/generated/inicio.css",
           "line": 62
         },
@@ -16776,7 +16776,7 @@
           "line": 93
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 94
         },
@@ -16786,7 +16786,7 @@
           "line": 95
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 96
         },
@@ -17562,7 +17562,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 12,
           "exists": true
@@ -17676,7 +17676,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-9a79962a96a54c30",
+          "raw": "css/generated/inicio.css?v=tintin-home-b2d093dfbd60fcf7",
           "target": "css/generated/inicio.css",
           "line": 62,
           "exists": true
@@ -17778,7 +17778,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 94,
           "exists": true
@@ -17790,7 +17790,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 96,
           "exists": true
@@ -18408,8 +18408,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 80516,
-      "sha256": "6eebac70377d02aafff9e230baccfc562c81365237d51ae83782351b643d4544",
+      "bytes": 80505,
+      "sha256": "7d824b16357ce94d36468e30a31d90c7dff38bff75fc1a3a2b0d828b5c44bd59",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18455,7 +18455,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -18582,7 +18582,7 @@
           "line": 47
         },
         {
-          "raw": "css/generated/login-2.css?v=tintin-login-5837debdaeade76c",
+          "raw": "css/generated/login-2.css?v=tintin-login-6dc9ea43af9d2cc7",
           "target": "css/generated/login-2.css",
           "line": 48
         },
@@ -18592,7 +18592,7 @@
           "line": 49
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 50
         },
@@ -18602,7 +18602,7 @@
           "line": 51
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 52
         },
@@ -18791,7 +18791,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -18941,7 +18941,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/login-2.css?v=tintin-login-5837debdaeade76c",
+          "raw": "css/generated/login-2.css?v=tintin-login-6dc9ea43af9d2cc7",
           "target": "css/generated/login-2.css",
           "line": 48,
           "exists": true
@@ -18953,7 +18953,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 50,
           "exists": true
@@ -18965,7 +18965,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 52,
           "exists": true
@@ -19328,8 +19328,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1973,
-      "sha256": "69e1e925effdd59b48cd8472e5b19a4aa4874c63083c2f85a563f0dfb4e7e1b4",
+      "bytes": 1962,
+      "sha256": "db0c27ce0dd51203ba946a879ad9c7a210a3ad9c4a223aaf52b096b88155ed7c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19346,7 +19346,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 2
         }
@@ -19363,7 +19363,7 @@
           "line": 2
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 2
         },
@@ -19373,7 +19373,7 @@
           "line": 2
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 2
         }
@@ -19393,7 +19393,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 2,
           "exists": true
@@ -19411,7 +19411,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 2,
           "exists": true
@@ -19423,7 +19423,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 2,
           "exists": true
@@ -19459,8 +19459,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 60585,
-      "sha256": "d4c107332867ecf790c1d0dbb15ab95f3caa2355296f638adff612b1eaf3cfe1",
+      "bytes": 60560,
+      "sha256": "8c790cc45a3e79b0aa66366121dcfa8f2473e5a2620bf18ad00ee1a73e4a8008",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19506,7 +19506,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -19578,7 +19578,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/perfil.css?v=tintin-perfil-dd97ac37e2fc497f",
+          "raw": "css/generated/perfil.css?v=tintin-perfil-7766d1663dfde585",
           "target": "css/generated/perfil.css",
           "line": 26
         },
@@ -19643,7 +19643,7 @@
           "line": 40
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 41
         },
@@ -19658,7 +19658,7 @@
           "line": 43
         },
         {
-          "raw": "css/generated/perfil-2.css?v=tintin-perfil-0ed1e26ecc1f22e3",
+          "raw": "css/generated/perfil-2.css?v=tintin-perfil-55778e7cf6389e61",
           "target": "css/generated/perfil-2.css",
           "line": 44
         },
@@ -19668,12 +19668,12 @@
           "line": 45
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 46
         },
         {
-          "raw": "css/pages/perfil.css?v=tintin-20261021-profile-address-layout-2-p1106",
+          "raw": "css/pages/perfil.css?v=tintin-20261114-profile-motion-1",
           "target": "css/pages/perfil.css",
           "line": 48
         },
@@ -20117,7 +20117,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -20201,7 +20201,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/perfil.css?v=tintin-perfil-dd97ac37e2fc497f",
+          "raw": "css/generated/perfil.css?v=tintin-perfil-7766d1663dfde585",
           "target": "css/generated/perfil.css",
           "line": 26,
           "exists": true
@@ -20279,7 +20279,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 41,
           "exists": true
@@ -20297,7 +20297,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/perfil-2.css?v=tintin-perfil-0ed1e26ecc1f22e3",
+          "raw": "css/generated/perfil-2.css?v=tintin-perfil-55778e7cf6389e61",
           "target": "css/generated/perfil-2.css",
           "line": 44,
           "exists": true
@@ -20309,13 +20309,13 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 46,
           "exists": true
         },
         {
-          "raw": "css/pages/perfil.css?v=tintin-20261021-profile-address-layout-2-p1106",
+          "raw": "css/pages/perfil.css?v=tintin-20261114-profile-motion-1",
           "target": "css/pages/perfil.css",
           "line": 48,
           "exists": true
@@ -20924,8 +20924,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24279,
-      "sha256": "7569b9578dda3072766ea3c0a03e96addddad6ee09ed06964cb5b0fe9500973f",
+      "bytes": 24268,
+      "sha256": "a4242d8d8fe3bd309e3174636243b792ed6954b292c1644270d8c129e2964467",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -20959,7 +20959,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -21021,7 +21021,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-e540de7d2bdffedc",
+          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-681a5590626a3234",
           "target": "css/generated/preguntas-frecuentes.css",
           "line": 35
         },
@@ -21086,7 +21086,7 @@
           "line": 46
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47
         },
@@ -21101,7 +21101,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -21505,7 +21505,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -21577,7 +21577,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-e540de7d2bdffedc",
+          "raw": "css/generated/preguntas-frecuentes.css?v=tintin-preguntas-frecuentes-681a5590626a3234",
           "target": "css/generated/preguntas-frecuentes.css",
           "line": 35,
           "exists": true
@@ -21655,7 +21655,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47,
           "exists": true
@@ -21673,7 +21673,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -21940,8 +21940,8 @@
         "guest",
         "client"
       ],
-      "bytes": 28152,
-      "sha256": "c747b71e91d596cc2a4d0414497d0ef2d47c532d6bbb5752c6534faeb88be192",
+      "bytes": 28141,
+      "sha256": "190cdfaf9394c71d1758f2e9756a143565446439a07460e29e8a7d2275099d0f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -21975,7 +21975,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -22042,7 +22042,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/privacidad.css?v=tintin-privacidad-1f26700338371990",
+          "raw": "css/generated/privacidad.css?v=tintin-privacidad-d776127a41d12f91",
           "target": "css/generated/privacidad.css",
           "line": 35
         },
@@ -22107,7 +22107,7 @@
           "line": 46
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47
         },
@@ -22122,7 +22122,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -22651,7 +22651,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -22729,7 +22729,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/privacidad.css?v=tintin-privacidad-1f26700338371990",
+          "raw": "css/generated/privacidad.css?v=tintin-privacidad-d776127a41d12f91",
           "target": "css/generated/privacidad.css",
           "line": 35,
           "exists": true
@@ -22807,7 +22807,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47,
           "exists": true
@@ -22825,7 +22825,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -23115,8 +23115,8 @@
         "guest",
         "client"
       ],
-      "bytes": 29745,
-      "sha256": "7c8eccc0e4fbb7256af1a7e8caa86c53c2e5ddae417379eef3760167e72e8639",
+      "bytes": 29734,
+      "sha256": "a30d257a275583bd68443bd0d748721bf417e08826f8dad7dab78ad7bf0141f9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -23150,7 +23150,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -23237,7 +23237,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/product.css?v=tintin-product-f6743a718d77bc71",
+          "raw": "css/generated/product.css?v=tintin-product-b77aa0eaa334ca57",
           "target": "css/generated/product.css",
           "line": 42
         },
@@ -23327,7 +23327,7 @@
           "line": 58
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 59
         },
@@ -23337,7 +23337,7 @@
           "line": 60
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 61
         },
@@ -23771,7 +23771,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -23873,7 +23873,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/product.css?v=tintin-product-f6743a718d77bc71",
+          "raw": "css/generated/product.css?v=tintin-product-b77aa0eaa334ca57",
           "target": "css/generated/product.css",
           "line": 42,
           "exists": true
@@ -23981,7 +23981,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 59,
           "exists": true
@@ -23993,7 +23993,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 61,
           "exists": true
@@ -24445,8 +24445,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26033,
-      "sha256": "6ee7524fd51aa46d9f48f6977fbba5ec73379ceacaa185ddea4c9dfd5f68aaf0",
+      "bytes": 26022,
+      "sha256": "26aaccd14748d415977a8d3d8522155f8b10c53e03b678cebcc803c0dc0cc4e4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -24473,7 +24473,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -24540,7 +24540,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/terminos.css?v=tintin-terminos-1f26700338371990",
+          "raw": "css/generated/terminos.css?v=tintin-terminos-d776127a41d12f91",
           "target": "css/generated/terminos.css",
           "line": 35
         },
@@ -24605,7 +24605,7 @@
           "line": 46
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47
         },
@@ -24620,7 +24620,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -25169,7 +25169,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261113-online-names-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261114-global-refinement-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -25247,7 +25247,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/terminos.css?v=tintin-terminos-1f26700338371990",
+          "raw": "css/generated/terminos.css?v=tintin-terminos-d776127a41d12f91",
           "target": "css/generated/terminos.css",
           "line": 35,
           "exists": true
@@ -25325,7 +25325,7 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2-p1106",
+          "raw": "css/quality/movimiento.css?v=tintin-20261114-global-motion-1",
           "target": "css/quality/movimiento.css",
           "line": 47,
           "exists": true
@@ -25343,7 +25343,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-client-fades-20261105-1-p1106",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -33190,8 +33190,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 51532,
-      "sha256": "e8c7bf26b08baedabaf97a50f47f394e88388bf529e1efe40edbb4296a0d303b",
+      "bytes": 51536,
+      "sha256": "ae67b466f00e8713a30d91d391972be458a360f2945f87a5b820e46aa9890b6f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38493,8 +38493,8 @@
     },
     {
       "path": "js/quality/revelado-desplazamiento-global.js",
-      "bytes": 10567,
-      "sha256": "342c7cf3d607e38182e69cfbe41e508eb01e1cc15f0c666a608f4a929e39a9b5",
+      "bytes": 10997,
+      "sha256": "199ccbc13c495cc6b939a00708f87af3d4d122c44b775f8c66939c7b4558e0cd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43961,8 +43961,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 30104,
-      "sha256": "4070a25fd8ec7369e7e9aba436b019eca3ffebea81bb20eaf647310b76b4fa0d",
+      "bytes": 30109,
+      "sha256": "344712f232bed99bfa68049b9af31c6eef721ff922888c199d9909252d4a90d0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -61168,6 +61168,17 @@
       ]
     },
     {
+      "path": "tests/ui-ux/global-refinement.cases.js",
+      "bytes": 3749,
+      "sha256": "aebd4034df42ba27e02005631acfb466f4cd03f69926950a568c04aa998aa639",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
       "bytes": 10826,
       "sha256": "cb2c58c3e8443d263a11fcc80803e8c4b642736eda40f3dfe5868c9d06a1e646",
@@ -61698,8 +61709,8 @@
     },
     {
       "path": "tests/ui-ux/phase8-ui-ux.spec.js",
-      "bytes": 8221,
-      "sha256": "72827af1fcb13c6d1ad5cb9a38e9c98f8f6bd9270dd2f25d111be85d17d69fad",
+      "bytes": 8262,
+      "sha256": "f5fa80ecf344d4f2891f8cf50b3536144c2dc3e5385344844f2ac7bd5196a30e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -63541,8 +63552,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 18291,
-      "sha256": "3efacf823b3344f0852c9e93252c2c3d0d96d9f6dec66ac6dbf757f661dbd64f"
+      "bytes": 18280,
+      "sha256": "b8d01e7a66face5c703947c1b5930dcd174ff40675122ec3acae7746d8f293e8"
     },
     {
       "path": "AGENTS.md",
@@ -63589,14 +63600,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 30895,
-      "sha256": "9ae92add3342d2c83bdaedb3193834c36b30ececde8af9adf51d265c7debe34f"
+      "bytes": 30884,
+      "sha256": "1354f35e3440163f544520035537517cd4260d03df423200176adcd26ea44590"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 48726,
-      "sha256": "77c10f2749d6451013a14f84db33e436020810af46b84c8c542b1f9100b91ae8"
+      "bytes": 48715,
+      "sha256": "cdb0dc664df802867116f2aceff081d1c32971d24778bfdd54317ee8b12aeb5e"
     },
     {
       "path": "admin-manifest.json",
@@ -63607,8 +63618,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 195273,
-      "sha256": "d478101fac579f02c08e47fc1e2e86f669fa7062e26573160be6457e47c3314f"
+      "bytes": 195262,
+      "sha256": "3795387db4cd4f5a07b4aac880519d0b70d84cab8fa9764b397a92e272f545a1"
     },
     {
       "path": "apple-touch-icon.png",
@@ -64435,20 +64446,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 22662,
-      "sha256": "9fb21af9b54b49dab692baab19a634c1277a2e25f7d8162e2d7fe6fd4bf38de0"
+      "bytes": 22651,
+      "sha256": "833e1b488baf8b7c64323f9ec0651977efec1c321e523ce1f45f39bffecc0e6a"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 77057,
-      "sha256": "68e097959bd211bcef101df094efd48aafa8c66e9a8da5d8844d7fef8af6aee9"
+      "bytes": 77046,
+      "sha256": "34ab21ddb8d7c3071b8862fba13c887d337b6f41394fde4a86add21ec552dcf3"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 138483,
-      "sha256": "5fd7834e0573bbc3dbb4f0b70590318d4f6f3a902380a6fa296c988d9d6b1301"
+      "bytes": 138472,
+      "sha256": "e8c5a7d8b1c5df561e42c4ef95b77d680a5cd7ee1a31c3eb4ac984cd4aaa80c9"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -64759,8 +64770,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 24087,
-      "sha256": "ab3bcf39b668a0ee60fe457b7ee8d35adbfab6efcba57ded41bd63ec963bffc5"
+      "bytes": 24076,
+      "sha256": "941881af41008962949a719c991ec838c13f01165df669d5a4187b0f496b0e59"
     },
     {
       "path": "config/account-contract.json",
@@ -64789,8 +64800,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 3114,
-      "sha256": "4133d40e755b6139fa90b9746d020650cbfa8ad94d634e96617bc002419933a4"
+      "bytes": 6306,
+      "sha256": "563780433e7501a6497f49e2c588aacdf1921a7079e9dc47b9f25adaa66c54ee"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -64802,7 +64813,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "bf7cffae7d88b9e4b8c480d435b0e2eba169a2926154c6e185fe4a0302472ceb"
+      "sha256": "a0d2b8d9f8e237774cd0cdfbabf96f4b474cee098f2d0b469cb7e73b7f39c972"
     },
     {
       "path": "config/public-site.json",
@@ -64819,8 +64830,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 28928,
-      "sha256": "df4a5d245b951f802c1f2ad51326ec6a84f77fa40f8436a609ce14a5108e1300"
+      "bytes": 28917,
+      "sha256": "c4a353734621e6ea69defc5750c9dd2d2f939a203ebd09a81784ae0c60ea3ac0"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -65125,8 +65136,8 @@
     {
       "path": "css/generated/cambios-devoluciones.css",
       "extension": ".css",
-      "bytes": 326376,
-      "sha256": "e540de7d2bdffedcb99aa51895bdbf820c4c4012eb9359e4947da63e1c0fe342"
+      "bytes": 327248,
+      "sha256": "681a5590626a32348bf0a6bd92265999f5bb043c2dff842fdff9d773912f1cdd"
     },
     {
       "path": "css/generated/catalogo-2.css",
@@ -65137,14 +65148,14 @@
     {
       "path": "css/generated/catalogo.css",
       "extension": ".css",
-      "bytes": 198948,
-      "sha256": "28da121ee7e40fbd920b5a568283b26a6b9fd96b47b374533b23c1370c49f738"
+      "bytes": 199820,
+      "sha256": "5ed71b8af9ac17a5103c2756277cef781e3c3c48502d721ae6e6fb3f72d1f034"
     },
     {
       "path": "css/generated/checkout-2.css",
       "extension": ".css",
-      "bytes": 365209,
-      "sha256": "2b2ffc3b0b2055ec3b18cee72d92fb24769cb3a2b12c78370051da569916962e"
+      "bytes": 366081,
+      "sha256": "c79b59cbf41a16f07b4de5516d009b154a407d1e94d6660fc66e7820fd0560c1"
     },
     {
       "path": "css/generated/checkout.css",
@@ -65155,38 +65166,38 @@
     {
       "path": "css/generated/collections.css",
       "extension": ".css",
-      "bytes": 331913,
-      "sha256": "2d1f16a39c6bc5317683cc2b4208a6e047ebac2192e0af1330cf3e2adbf6af5a"
+      "bytes": 332785,
+      "sha256": "e2721d5fa153f1d6715d44b3235f54f929b561e10edef226a3f0264033cc5f26"
     },
     {
       "path": "css/generated/contact.css",
       "extension": ".css",
-      "bytes": 329012,
-      "sha256": "c314486d2a6004f9eb850e0ff5519b2f09c64b7a2539c7ef2acb204f53309e5a"
+      "bytes": 329884,
+      "sha256": "98fb9405bbf6e3f096039daefa9e32f0c6b9b5b44acd2f0bfd149720129061c0"
     },
     {
       "path": "css/generated/envios-2.css",
       "extension": ".css",
-      "bytes": 151797,
-      "sha256": "26813424060886caf288e1be5596e18969298326b1b25de0b9b6f31837467a56"
+      "bytes": 152339,
+      "sha256": "d9650fd826e8e5247e8e9002649aba041d108a5c8f66947499b46d37b9743ddd"
     },
     {
       "path": "css/generated/envios.css",
       "extension": ".css",
-      "bytes": 174659,
-      "sha256": "cebb1e4ab4434dff981227fcfe7a937dd337bd8585fc725845ee55dbb274e498"
+      "bytes": 174989,
+      "sha256": "8c68918bca36c8e9413a58beddc6c52b78dc00a14e0e213899c22c57fccb3b1c"
     },
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 371452,
-      "sha256": "9a79962a96a54c30e4aa4ea390417a9a87fc9a6c22ef52dea590051c550168e8"
+      "bytes": 372324,
+      "sha256": "b2d093dfbd60fcf740b375ccb1e377088eec47f0711fe52e1061273d297e2870"
     },
     {
       "path": "css/generated/login-2.css",
       "extension": ".css",
-      "bytes": 34683,
-      "sha256": "5837debdaeade76c138f6ecb847077b771782c3862a17995b6f56cc1cf6e535b"
+      "bytes": 35555,
+      "sha256": "6dc9ea43af9d2cc714e733c579190244368606eba4fe2b90f19b05c29a71e42c"
     },
     {
       "path": "css/generated/login-3.css",
@@ -65203,44 +65214,44 @@
     {
       "path": "css/generated/nosotros.css",
       "extension": ".css",
-      "bytes": 337948,
-      "sha256": "d7f40a59a50c72b1c730d54276886190a4b022cff71992a0b1f9e1712aca0c43"
+      "bytes": 338820,
+      "sha256": "d41d038b1e11d2223d6f98e73ca36cf6190e2f3b5969a9d1ca1866d314b5dee0"
     },
     {
       "path": "css/generated/perfil-2.css",
       "extension": ".css",
-      "bytes": 166688,
-      "sha256": "0ed1e26ecc1f22e3e0113d21771a7611b6117b9bf5171d59b0d5eb535f710f59"
+      "bytes": 167284,
+      "sha256": "55778e7cf6389e61d64b4dce2af3e560804cf59fcb3754f257ccb8f2839d4090"
     },
     {
       "path": "css/generated/perfil.css",
       "extension": ".css",
-      "bytes": 178680,
-      "sha256": "dd97ac37e2fc497f62517b6fdba97f9f11187119cf1209fc2cef753a7830b157"
+      "bytes": 179010,
+      "sha256": "7766d1663dfde5851de6076437227468410cf46a41091da0cb15e4bba165d911"
     },
     {
       "path": "css/generated/preguntas-frecuentes.css",
       "extension": ".css",
-      "bytes": 326376,
-      "sha256": "e540de7d2bdffedcb99aa51895bdbf820c4c4012eb9359e4947da63e1c0fe342"
+      "bytes": 327248,
+      "sha256": "681a5590626a32348bf0a6bd92265999f5bb043c2dff842fdff9d773912f1cdd"
     },
     {
       "path": "css/generated/privacidad.css",
       "extension": ".css",
-      "bytes": 328602,
-      "sha256": "1f2670033837199024b842973c086ca5f2631bce65dfda14be4527e7a1ebea1d"
+      "bytes": 329474,
+      "sha256": "d776127a41d12f917203d7f73ef637bec163f7d63eb304b6c7543e4dc6455bec"
     },
     {
       "path": "css/generated/product.css",
       "extension": ".css",
-      "bytes": 394134,
-      "sha256": "f6743a718d77bc7168e69487dcf0d046b58c6bd28b5b1f415e82c131a8e3f18f"
+      "bytes": 395006,
+      "sha256": "b77aa0eaa334ca57bc2eec7fe74b4b74e7f68f57daacf5e9f5c9fc252ccc4cbf"
     },
     {
       "path": "css/generated/terminos.css",
       "extension": ".css",
-      "bytes": 328602,
-      "sha256": "1f2670033837199024b842973c086ca5f2631bce65dfda14be4527e7a1ebea1d"
+      "bytes": 329474,
+      "sha256": "d776127a41d12f917203d7f73ef637bec163f7d63eb304b6c7543e4dc6455bec"
     },
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
@@ -65371,8 +65382,8 @@
     {
       "path": "css/pages/perfil.css",
       "extension": ".css",
-      "bytes": 19737,
-      "sha256": "582dd217273a6f0760930903df2762a0a2759bfa1fb555afad0a9711cd6be790"
+      "bytes": 19800,
+      "sha256": "f3fc08c8162badb511e9ed16075a73d01c6448b1d1fcb3f88570ba044092370d"
     },
     {
       "path": "css/pages/product/product-extras.css",
@@ -65449,8 +65460,8 @@
     {
       "path": "css/quality/movimiento.css",
       "extension": ".css",
-      "bytes": 4430,
-      "sha256": "f4edc7c5aa7efb1ac9e8d81837b49dcede282dda7cd452f8a90fcccb28f5c222"
+      "bytes": 4865,
+      "sha256": "bd63d658bb73e622f137901a8cb6faa0729180f801abc12ed3cb9af84eb07ff9"
     },
     {
       "path": "css/theme/fondo-solido-cargador.css",
@@ -65479,8 +65490,8 @@
     {
       "path": "css/theme/sistema-superficies-tintin.css",
       "extension": ".css",
-      "bytes": 31667,
-      "sha256": "c49514371d4e5fead52c32c91c6e4e5846f37d2aeaed359f5aa13740650b2cb4"
+      "bytes": 32407,
+      "sha256": "425e9f66bc0541ec9ff5f5d2b379bcb7f3737b12d5f77ce91b07f8dd5137940f"
     },
     {
       "path": "css/theme/superficies-marca-responsive-tintin.css",
@@ -65641,8 +65652,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1338173,
-      "sha256": "7a200005cbbe0546145a5d0f84f329f6c112a88e0c718a15f291763a1eb16d4e"
+      "bytes": 1339101,
+      "sha256": "20154e4f41064ebbad1d305d5722aeca9e9afe8de1a09b0ba11dbe41383c8940"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -65685,6 +65696,12 @@
       "extension": ".md",
       "bytes": 4440,
       "sha256": "b7cb749e959e63c1ff7ba6c6f4391222928c158bbc24b1ac6f41494ccd23b924"
+    },
+    {
+      "path": "docs/agent/GLOBAL_REFINEMENT_20261114.md",
+      "extension": ".md",
+      "bytes": 4084,
+      "sha256": "08ea051753bbce5976477f3298d2482a671169f93efdcb81c4c1b62ca93ee42f"
     },
     {
       "path": "docs/agent/IDENTIDAD_TINTIN_20261021.md",
@@ -66637,8 +66654,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 170682,
-      "sha256": "80171f786e33e928d47f60169014ec759ac6c5e8aa7fdd0c4bfcc0cc2ca27a1e"
+      "bytes": 171291,
+      "sha256": "2b8e45ad3908a440f59ba1f477bd0073538e1d1ef91c3add2ab1be9512ede4c7"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -67171,8 +67188,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 26343,
-      "sha256": "c57fe15d9b383a307b7577fe916f7fa485d6d7e17df7fc02eccc0dd9ef3b7481"
+      "bytes": 26332,
+      "sha256": "1e8b69292f175856e131f7770bbd224023a6192a07056b8fbe2837177ab9115f"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -67711,8 +67728,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 47928,
-      "sha256": "7060363983db7116e954ec9aeaec6e5be5fa62a3f7d8f25bca8adde2a3d21c09"
+      "bytes": 47917,
+      "sha256": "bce136ad159022c3f6737d0d2ef8749f25ff39a6a68158e7f6efac3ef738b99f"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -68323,8 +68340,8 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 51532,
-      "sha256": "e8c7bf26b08baedabaf97a50f47f394e88388bf529e1efe40edbb4296a0d303b"
+      "bytes": 51536,
+      "sha256": "ae67b466f00e8713a30d91d391972be458a360f2945f87a5b820e46aa9890b6f"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -69673,8 +69690,8 @@
     {
       "path": "js/quality/revelado-desplazamiento-global.js",
       "extension": ".js",
-      "bytes": 10567,
-      "sha256": "342c7cf3d607e38182e69cfbe41e508eb01e1cc15f0c666a608f4a929e39a9b5"
+      "bytes": 10997,
+      "sha256": "199ccbc13c495cc6b939a00708f87af3d4d122c44b775f8c66939c7b4558e0cd"
     },
     {
       "path": "js/quality/revision-visual.mjs",
@@ -69757,8 +69774,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 80516,
-      "sha256": "6eebac70377d02aafff9e230baccfc562c81365237d51ae83782351b643d4544"
+      "bytes": 80505,
+      "sha256": "7d824b16357ce94d36468e30a31d90c7dff38bff75fc1a3a2b0d828b5c44bd59"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -69943,8 +69960,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1973,
-      "sha256": "69e1e925effdd59b48cd8472e5b19a4aa4874c63083c2f85a563f0dfb4e7e1b4"
+      "bytes": 1962,
+      "sha256": "db0c27ce0dd51203ba946a879ad9c7a210a3ad9c4a223aaf52b096b88155ed7c"
     },
     {
       "path": "package-lock.json",
@@ -69961,8 +69978,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 60585,
-      "sha256": "d4c107332867ecf790c1d0dbb15ab95f3caa2355296f638adff612b1eaf3cfe1"
+      "bytes": 60560,
+      "sha256": "8c790cc45a3e79b0aa66366121dcfa8f2473e5a2620bf18ad00ee1a73e4a8008"
     },
     {
       "path": "playwright.config.js",
@@ -69985,14 +70002,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 24279,
-      "sha256": "7569b9578dda3072766ea3c0a03e96addddad6ee09ed06964cb5b0fe9500973f"
+      "bytes": 24268,
+      "sha256": "a4242d8d8fe3bd309e3174636243b792ed6954b292c1644270d8c129e2964467"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 28152,
-      "sha256": "c747b71e91d596cc2a4d0414497d0ef2d47c532d6bbb5752c6534faeb88be192"
+      "bytes": 28141,
+      "sha256": "190cdfaf9394c71d1758f2e9756a143565446439a07460e29e8a7d2275099d0f"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -70003,8 +70020,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 29745,
-      "sha256": "7c8eccc0e4fbb7256af1a7e8caa86c53c2e5ddae417379eef3760167e72e8639"
+      "bytes": 29734,
+      "sha256": "a30d257a275583bd68443bd0d748721bf417e08826f8dad7dab78ad7bf0141f9"
     },
     {
       "path": "robots.txt",
@@ -70879,8 +70896,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 83967,
-      "sha256": "619e343418d04f6801651425e83aeccae01b9e3c6f3c11bab8e4c196c9db2b6e"
+      "bytes": 83946,
+      "sha256": "6e51f60c514afa1e860633783a3b66dd51626b96c375cf0c739359cb17ab4b32"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -71233,8 +71250,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 30104,
-      "sha256": "4070a25fd8ec7369e7e9aba436b019eca3ffebea81bb20eaf647310b76b4fa0d"
+      "bytes": 30109,
+      "sha256": "344712f232bed99bfa68049b9af31c6eef721ff922888c199d9909252d4a90d0"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -71317,8 +71334,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 26033,
-      "sha256": "6ee7524fd51aa46d9f48f6977fbba5ec73379ceacaa185ddea4c9dfd5f68aaf0"
+      "bytes": 26022,
+      "sha256": "26aaccd14748d415977a8d3d8522155f8b10c53e03b678cebcc803c0dc0cc4e4"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -74045,6 +74062,12 @@
       "sha256": "af7104bf966a697e62549aa8d571f6da9942e675010471d710c1bae5e1871692"
     },
     {
+      "path": "tests/ui-ux/global-refinement.cases.js",
+      "extension": ".js",
+      "bytes": 3749,
+      "sha256": "aebd4034df42ba27e02005631acfb466f4cd03f69926950a568c04aa998aa639"
+    },
+    {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
       "extension": ".js",
       "bytes": 10826,
@@ -74143,8 +74166,8 @@
     {
       "path": "tests/ui-ux/phase8-ui-ux.spec.js",
       "extension": ".js",
-      "bytes": 8221,
-      "sha256": "72827af1fcb13c6d1ad5cb9a38e9c98f8f6bd9270dd2f25d111be85d17d69fad"
+      "bytes": 8262,
+      "sha256": "f5fa80ecf344d4f2891f8cf50b3536144c2dc3e5385344844f2ac7bd5196a30e"
     },
     {
       "path": "tests/ui-ux/product-breadcrumb-header-gap.spec.js",

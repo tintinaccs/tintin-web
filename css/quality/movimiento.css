@@ -30,6 +30,8 @@
 .ck-qty-btn,
 .login-google,
 .login-email-btn,
+.perfil-btn,
+.adm-btn,
 .tt-interactive-control {
   transition:
     transform var(--mo-hover) var(--mo-press),
@@ -39,24 +41,15 @@
     color var(--mo-hover) var(--mo-press);
 }
 
-.tt-btn:active,
-.ck-btn:active,
-.tt-tabbar-btn:active,
-.tt-cart-checkout-btn:active,
-.tt-qty-btn:active,
-.ck-qty-btn:active,
-.login-google:active,
-.login-email-btn:active {
+:is(.tt-btn, .ck-btn, .tt-tabbar-btn, .tt-cart-checkout-btn, .tt-qty-btn,
+  .ck-qty-btn, .login-google, .login-email-btn):not(:disabled):not([aria-disabled="true"]):active {
   transform: scale(var(--mo-press-scale));
   transition-duration: var(--mo-tap);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .tt-btn:hover,
-  .ck-btn:hover,
-  .tt-cart-checkout-btn:hover,
-  .login-google:hover,
-  .login-email-btn:hover {
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is(.tt-btn, .ck-btn, .tt-cart-checkout-btn, .login-google,
+    .login-email-btn):not(:disabled):not([aria-disabled="true"]):hover {
     transform: translate3d(0, var(--mo-lift), 0);
   }
 }
@@ -67,9 +60,7 @@
 .tt-category-card,
 .tt-review-card,
 .tt-trust-item {
-  transition:
-    transform var(--mo-hover) var(--mo-enter),
-    box-shadow var(--mo-hover) var(--mo-enter);
+  transition: transform var(--mo-hover) var(--mo-enter);
 }
 
 /* La imagen escala dentro de su marco: el contenedor no cambia de tamano,
@@ -81,12 +72,19 @@
   will-change: auto;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .tt-product-card:hover img,
   .tt-coll-card:hover img,
   .tt-category-card:hover img {
     transform: scale(1.04);
   }
+}
+
+/* Los campos comparten una respuesta discreta sin animar tamaño ni posición. */
+:is(.tt-form-input, .tt-form-textarea, .perfil-input, .ck-input, .ck-select,
+  .ck-textarea, .login-email-input, .adm-input, .adm-select, .adm-textarea) {
+  transition: border-color var(--mo-hover) var(--mo-press),
+    background-color var(--mo-hover) var(--mo-press);
 }
 
 .tt-cart-drawer,

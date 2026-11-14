@@ -19,8 +19,9 @@
   --tt-ui-pink-deep: var(--color-brand-primary, #F8AACA);
   --tt-ui-pink-soft: var(--color-brand-accent, #FFFFFF);
   --tt-ui-line: var(--color-border-primary, #FDECF2);
-  --tt-ui-shadow: 0 8px 24px color-mix(in srgb, var(--tt-ui-ink) 8%, transparent);
-  --tt-ui-shadow-rest: 0 3px 14px color-mix(in srgb, var(--tt-ui-ink) 4%, transparent);
+  --tt-ui-shadow: 0 12px 32px color-mix(in srgb, var(--tt-ui-ink) 6%, transparent);
+  --tt-ui-shadow-rest: 0 6px 24px color-mix(in srgb, var(--tt-ui-ink) 3%, transparent);
+  --tt-ui-edge: color-mix(in srgb, var(--tt-ui-line) 65%, transparent);
   --tt-ui-radius-xl: 28px;
   --tt-ui-radius-lg: 20px;
   --tt-ui-radius-md: 14px;
@@ -95,7 +96,7 @@ html body:not(:has(.adm-main)) :is(
   .perfil-card, .tt-profile-summary-card, .login-box, .ck-panel,
   .tt-info-block, .tt-contact-info-item, .tt-contact-alt, :where(#contact-form)
 ) {
-  border: 1px solid var(--tt-ui-line) !important;
+  border: 1px solid var(--tt-ui-edge) !important;
   border-radius: var(--tt-ui-radius-lg) !important;
   box-shadow: var(--tt-ui-shadow-rest) !important;
 }
@@ -105,15 +106,18 @@ html body:not(:has(.adm-main)) :is(
 ) {
   overflow: hidden;
   background: var(--tt-ui-surface) !important;
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  transition: transform var(--mo-hover, 220ms) var(--mo-enter, ease),
+    border-color var(--mo-hover, 220ms) ease;
 }
 
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
 html body:not(:has(.adm-main)) :is(
   .tt-product-card, .tt-coll-card, .tt-coll-page-card
 ):hover {
   transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--tt-ui-pink) 45%, white) !important;
   box-shadow: var(--tt-ui-shadow) !important;
+}
 }
 
 html body:not(:has(.adm-main)) :is(
@@ -161,6 +165,19 @@ html body:not(:has(.adm-main)) :is(
   .tt-review-form, .tt-review-card, .tt-review-thread-message
 ) {
   background: var(--tt-ui-surface) !important;
+}
+
+/* La tarjeta de contacto ya agrupa estos datos: evitar cinco marcos y
+   sombras dentro de otro marco. Las acciones y sus focos siguen visibles. */
+html body:not(:has(.adm-main)) .tt-contact-alt .tt-contact-info-item {
+  border: 0 !important;
+  border-bottom: 1px solid var(--tt-ui-edge) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+html body:not(:has(.adm-main)) .tt-contact-alt .tt-contact-info-item:last-child {
+  border-bottom: 0 !important;
 }
 
 html body:not(:has(.adm-main)) :is(
@@ -229,7 +246,7 @@ html body:has(.adm-main) .adm-content {
 }
 
 html body:has(.adm-main) :is(.adm-card, .adm-table-wrap, .adm-modal, .adm-img-card) {
-  border: 1px solid var(--tt-ui-line) !important;
+  border: 1px solid var(--tt-ui-edge) !important;
   border-radius: var(--tt-ui-radius-lg) !important;
   box-shadow: var(--tt-ui-shadow-rest) !important;
 }
@@ -528,7 +545,7 @@ html:root body:not(:has(.adm-main)) .tt-404-wrap {
   --tt-flow-light: var(--color-brand-accent, #FDECF2);
   --tt-flow-pink: var(--color-brand-primary, #F8AACA);
   --tt-flow-join: color-mix(in srgb, var(--tt-flow-light) 50%, var(--tt-flow-pink));
-  --tt-flow-fade: 70px;
+  --tt-flow-fade: clamp(88px, 12vw, 176px);
   --tt-flow-canvas: linear-gradient(180deg, var(--tt-flow-light), var(--tt-flow-light));
 }
 
@@ -661,7 +678,7 @@ html:root body .tt-footer[data-tt-flow-block="pink"] { --tt-footer-logo-filter:u
 html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card) :is(.tt-product-img,.tt-card-img-wrap,.tt-product-img-real,.tt-card-img)[class],
 html:root body:not(:has(.adm-main)) .tt-card .tt-card-img-wrap > img,
 html:root body:not(:has(.adm-main)) .tt-visual-product-card > img { background:transparent !important; }
-html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card) > :is(.tt-product-info,.tt-card-info) { border-top:1px solid var(--tt-ui-line) !important; }
+html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card) > :is(.tt-product-info,.tt-card-info) { border-top:1px solid var(--tt-ui-edge) !important; }
 html:root body:not(:has(.adm-main)) .tt-visual-product-card > strong { display:block; border-top:1px solid var(--tt-ui-line); margin-top:12px; padding-top:12px; }
 /* El estado se distingue también en una captura, sin depender del botón. */
 html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card).tt-stock-unavailable,
