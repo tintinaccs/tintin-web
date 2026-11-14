@@ -91,4 +91,4 @@ las de producto no se deforman para llenar una tarjeta.
 Objetivo WCAG2.2AA, no certificación obtenida. Contraste debe comprobarse sobre
 pares efectivos y todos los estados, incluyendo esquemas configurados. La suite
 de componentes aislados no demuestra por sí sola accesibilidad de páginas completas.
-Resultados y límites de esta revisión: `docs/QA_REPORT.md`.
+Resultados y límites de esta revisión: `docs/informe-verificacion.md`.

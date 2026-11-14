@@ -130,21 +130,19 @@ async function activate(page,section) {
 
 async function auditAdmin(page,viewport) {
   const sections=await prepareAdmin(page);
-  if (viewport.width <= 540) {
+  if (viewport.width <= 768) {
     const sidebar = page.locator('#adm-sidebar');
     if (await sidebar.isVisible()) failures.push({page:'admin',viewport:viewport.name,state:'sidebar-closed',message:'La barra móvil cerrada sigue visible tras restaurar Auth.'});
-    await page.evaluate(() => {
-      document.documentElement.classList.add('adm-mobile-sidebar-open');
-      document.getElementById('adm-sidebar').classList.add('open');
-    });
-    await page.waitForTimeout(30);
+    // La app móvil usa la barra inferior y Más desde noviembre. Probar su
+    // controlador real, sin intentar reactivar el lateral retirado en CSS.
+    await page.addScriptTag({ type:'module', content:fs.readFileSync(path.join(root,'js/admin/maestro/navegacion-movil-admin.js'),'utf8') });
+    const more = page.locator('#adm-mobile-more-toggle');
+    const sheet = page.locator('#adm-mobile-more-sheet');
+    await more.click();
     const openGeometry = await geometry(page);
-    if (!(await sidebar.isVisible()) || openGeometry.bad.length || openGeometry.controls.length) failures.push({page:'admin',viewport:viewport.name,state:'sidebar-open',message:'La barra móvil abierta no es accesible dentro del viewport.',result:openGeometry});
-    await page.evaluate(() => {
-      document.documentElement.classList.remove('adm-mobile-sidebar-open');
-      document.getElementById('adm-sidebar').classList.remove('open');
-    });
-    await page.waitForTimeout(30);
+    if (!(await sheet.isVisible()) || await more.getAttribute('aria-expanded') !== 'true' || openGeometry.bad.length || openGeometry.controls.length) failures.push({page:'admin',viewport:viewport.name,state:'mobile-more-open',message:'Más opciones no es accesible dentro del viewport.',result:openGeometry});
+    await page.locator('#adm-mobile-more-close').click();
+    if (await sheet.isVisible() || await more.getAttribute('aria-expanded') !== 'false' || !(await more.evaluate(node => node === document.activeElement))) failures.push({page:'admin',viewport:viewport.name,state:'mobile-more-closed',message:'Más opciones no cierra y devuelve el foco a su botón.'});
   }
   if(sections.length<12) failures.push({page:'admin',viewport:viewport.name,state:'inventory',message:'Faltan secciones en el inventario.',data:sections});
   for(const section of sections) {

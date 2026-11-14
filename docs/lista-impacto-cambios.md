@@ -256,7 +256,7 @@ por cada cambio; montaje/resize conservan descubrimiento global. Visibilidad
 idempotente y descarte de notificaciones propias/sin cambio efectivo. Se conservan
 scroll, foco, navegación, acceso a tablas, campos tardíos y controladores de
 negocio. No cambian diseño, loaders, consultas ni datos. URL inmutable nueva y
-derivados canónicos; mediciones/alcance en `docs/SUPERADMIN_FLUIDEZ.md`.
+derivados canónicos; mediciones/alcance en `docs/superadmin-fluidez.md`.
 
 ## 2026-10-28 — Referencia visual Studio recibida y composición del editor
 
@@ -1185,3 +1185,16 @@ paneles; verificar touch, hover fino, reduced motion inicial/dinámico,
 contenido incorporado, blur, controles disabled y foco. Cinco regresiones se
 integran en la suite UI/UX canónica. Generar URLs/bundles/caché/CSP/diagnóstico
 y plan protegido contra main; barrido global y Maestro con resultados propios.
+
+## 2026-11-14 — Hallazgos adicionales del Diagnóstico Maestro
+
+Catálogo: gutter canónico compartido entre padding real y fila full width,
+incluido clamp móvil y scrollbar;8 regresiones de filtros/teclado/geometría.
+Estadísticas: sólo el gráfico vacío cambia a una pista, conservando las7 pistas
+y scroll del gráfico poblado;2 regresiones. El auditor administrativo prueba
+Más con su controlador real en≤768px; no revive sidebar retirado. Global fit
+reconoce el scroller real de categorías, con comprobaciones de acceso/límites.
+Auditor de búsqueda sirve Instagram con handler real/env vacío.4 informes y
+preview local renombrados con referencias actualizadas; DESIGN/PRODUCT son
+contexto contractual de Skills, y otros nombres inválidos siguen rechazados.
+Regenerar derivados y plan contra maincfe530d9; CI/Maestro del head nuevo.

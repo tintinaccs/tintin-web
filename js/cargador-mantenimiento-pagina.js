@@ -23,7 +23,7 @@ if (!/\/(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuent
 
 export function loadPageMaintenance() {
   const path = pathName();
-  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-footer-canonical-20261103-1-p1106');
+  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261114-catalog-fit-1');
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-footer-canonical-20261103-1');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261111-product-zoom-2-p1112');
   if (/\/checkout(?:\.html)?$/.test(path)) {

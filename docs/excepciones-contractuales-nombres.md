@@ -28,6 +28,7 @@ Los nombres de estos archivos definen endpoints públicos y permanecen estables:
 
 - `README.md`, `AGENTS.md`, `LICENSE`, `package.json`, `firebase.json`, `manifest.webmanifest`, `sw.js`, `_headers` y `_redirects`.
 - `AGENTS.md` conserva exactamente ese nombre porque Codex lo descubre como archivo contractual de instrucciones del repositorio.
+- `DESIGN.md` y `PRODUCT.md` conservan los nombres que consultan las Skills de diseño para obtener contexto; los demás documentos internos siguen la convención en minúsculas.
 - Carpetas arquitectónicas convencionales como `js`, `css`, `pages`, `components`, `core`, `admin`, `scripts`, `functions` y `.github/workflows`.
 - Nombres de proveedores, protocolos y siglas: Firebase, Firestore, Cloudinary, Resend, WhatsApp, API, OTP, PWA, SEO, UI, UX, CI, SDK y Playwright.
 

@@ -33,7 +33,7 @@ Se adaptaron recorridos que dependían del modal y de activadores técnicos reti
 
 ## Vista funcional y capturas
 
-Ejecutar `node scripts/preview-product-editor.cjs` abre una vista QA de los seis pasos en `http://localhost:4173`. Se puede elegir otro puerto con `PRODUCT_EDITOR_PREVIEW_PORT`. La vista usa el mismo formulario, módulos y escritor de dominio con almacenamiento exclusivamente en memoria. Permite crear, editar, cargar fotos locales y recuperar borradores durante la sesión. Se comprobó el clic real en Guardar del ejemplo ALISSEA: nombre modificado en memoria y cantidades dorado 1/plateado 0 conservadas. Reiniciar el servidor borra su almacenamiento de prueba.
+Ejecutar `node scripts/previsualizar-editor-producto.cjs` abre una vista QA de los seis pasos en `http://localhost:4173`. Se puede elegir otro puerto con `PRODUCT_EDITOR_PREVIEW_PORT`. La vista usa el mismo formulario, módulos y escritor de dominio con almacenamiento exclusivamente en memoria. Permite crear, editar, cargar fotos locales y recuperar borradores durante la sesión. Se comprobó el clic real en Guardar del ejemplo ALISSEA: nombre modificado en memoria y cantidades dorado 1/plateado 0 conservadas. Reiniciar el servidor borra su almacenamiento de prueba.
 
 Opcional: `PRODUCT_EDITOR_PREVIEW_SAMPLE=/ruta/producto-publico.json` carga una copia local de un producto para revisar; no consulta ni modifica el producto remoto. La muestra usada fue ANILLO ALISSEA, obtenida del catálogo público en modo lectura. Conserva sus URL reales, dorado 1/plateado 0 y datos editoriales; Cloudinary responde 403 en este entorno, por lo que no se afirma haber verificado visualmente la descarga de esas fotografías ni se las sustituye por imágenes genéricas.
 

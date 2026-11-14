@@ -17,10 +17,10 @@ Los errores canónicos conservan su texto, activan el panel relacionado y se aso
 ## Vista previa local
 
 ```sh
-PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium node scripts/preview-product-editor.cjs
+PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium node scripts/previsualizar-editor-producto.cjs
 ```
 
-Abrir `http://localhost:4173`. Si Chromium está instalado por Playwright en lugar de `/usr/bin/chromium`, basta `node scripts/preview-product-editor.cjs` sin la variable de entorno. Reutiliza el fixture existente, el DOM/controlador reales y los escritores de dominio con proveedores en memoria. Permite Nuevo, Editar ejemplo, recuperar borradores y editar lo guardado. Las fotos elegidas se conservan sólo en memoria del servidor local; la pestaña mantiene los datos de QA mientras no se recargue. Los adaptadores de imagen locales conservan rutas relativas para que funcionen sin un hosting HTTPS. CSP de QA limita las conexiones al propio servidor. No se accede a Auth, Firestore, Sheets ni biblioteca productivos. La biblioteca sólo ofrece las fotos cargadas en este servidor local; las identidades son de prueba; no acredita una sesión administrativa real.
+Abrir `http://localhost:4173`. Si Chromium está instalado por Playwright en lugar de `/usr/bin/chromium`, basta `node scripts/previsualizar-editor-producto.cjs` sin la variable de entorno. Reutiliza el fixture existente, el DOM/controlador reales y los escritores de dominio con proveedores en memoria. Permite Nuevo, Editar ejemplo, recuperar borradores y editar lo guardado. Las fotos elegidas se conservan sólo en memoria del servidor local; la pestaña mantiene los datos de QA mientras no se recargue. Los adaptadores de imagen locales conservan rutas relativas para que funcionen sin un hosting HTTPS. CSP de QA limita las conexiones al propio servidor. No se accede a Auth, Firestore, Sheets ni biblioteca productivos. La biblioteca sólo ofrece las fotos cargadas en este servidor local; las identidades son de prueba; no acredita una sesión administrativa real.
 
 Las capturas por pestaña y tamaño están en `artifacts/product-editor-tabs/`: `390-1.png` a `390-6.png` y `1440-1.png` a `1440-6.png`, además de los tamaños 320/768/1024. Las capturas de la vista local con una foto cargada del repositorio son `preview-390-1.png` a `preview-390-6.png` y `preview-1440-1.png` a `preview-1440-6.png`. Representan datos de prueba. Ninguna imagen del catálogo real se sustituye en la aplicación.
 

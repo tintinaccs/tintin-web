@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { onRequestGet as instagramFeed } from '../functions/api/instagram-feed.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
@@ -14,9 +15,15 @@ const SEEDED_PRODUCTS = [
   { id:'collar-prueba', name:'Collar Corazón', category:'Collares', price:80000, active:true, stock:3, imageUrl:'' },
 ];
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
   const url = new URL(request.url || '/', baseURL);
   const pathname = decodeURIComponent(url.pathname);
+  if (pathname === '/api/instagram-feed' && request.method === 'GET') {
+    const result = await instagramFeed({ env: {}, request: new Request(url) });
+    response.writeHead(result.status, Object.fromEntries(result.headers));
+    response.end(await result.text());
+    return;
+  }
   if (pathname === '/api/public-catalog') {
     const resource = url.searchParams.get('resource');
     if (resource === 'storeGate') {
