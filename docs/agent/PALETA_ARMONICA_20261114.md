@@ -78,3 +78,11 @@ caso de actualización de líneas del editor PASS y `npm run ci:preflight`
 completo PASS después de corregirlo. El nuevo commit requiere CI/Maestro
 propios; los runs del anterior quedan identificados como reemplazados.
 Smoke final18 rutas PASS, incluido Instagram y degradado canónico del header.
+
+CI43596539477/1 aprobó preflight y detectó en cuentas una expectativa del azul
+anterior #005fcc en el enlace de soporte. Se actualiza únicamente a su rol
+canónico de enlace, conservando subrayado, URL, correo escapado y mensaje.
+El fallo no modifica bloqueo/autorización ni exige cambiar lógica comercial.
+Auditoría visual43596177163/1 SUCCESS sobre el candidato9e17123e: acredita
+la reparación del404 de Instagram y las geometrías; el cierre del nuevo head
+sigue requiriendo sus propios checks. Los19 casos de layout público PASS.

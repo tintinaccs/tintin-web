@@ -19,7 +19,7 @@ test('el mensaje visible es corto, sin detalle interno, y "WhatsApp" es el enlac
   assert.ok(html.startsWith(ACCOUNT_PROBLEM_TEXT + ' <a '));
   assert.ok(html.includes('href="https://wa.me/595981299331?text='));
   assert.match(html, /rel="noopener noreferrer"/);
-  assert.match(html, /color:#005fcc/);
+  assert.match(html, /color:var\(--color-text-link,#222222\)/);
   assert.match(html, /text-decoration:underline/);
   assert.match(html, />WhatsApp<\/a>\.$/);
   assert.doesNotMatch(html, /bloquead|eliminad|desactivad|deshabilitad/i);
