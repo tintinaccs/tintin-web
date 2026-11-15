@@ -4,19 +4,32 @@ const path = require('node:path');
 const { restoreStyleSources } = require('../../scripts/lib/estilos-inicio.js');
 const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
 const root = path.resolve(__dirname, '../..');
-const html = restoreStyleSources(removeFixtureScripts(fs.readFileSync(path.join(root, 'index.html'), 'utf8'), { removeModulePreloads: true }));
+const source = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const html = restoreStyleSources(removeFixtureScripts(source, { removeModulePreloads: true }));
+const runtimeHtml = html.replace('<head>', '<head>' +
+  source.match(/<script>window\.TT_PAGE_LOADER_WAIT[\s\S]*?<\/script>/)[0] +
+  source.match(/<script[^>]*src="js\/pages\/home\/inicio-premium\.js[^"]*"[^>]*><\/script>/)[0]);
 const types = { '.js': 'text/javascript', '.mjs':'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2', '.ttf': 'font/ttf' };
-async function open(page) {
+async function open(page, options = {}) {
   await page.route('**/*', async route => {
     const url = new URL(route.request().url());
     if (url.hostname !== 'layout.test') return route.abort();
-    if (url.pathname === '/') return route.fulfill({contentType:'text/html',body:html});
+    if (url.pathname === '/') return route.fulfill({contentType:'text/html',body:options.runtime ? runtimeHtml : html});
+    if (/hero-reference\/suitcase(?:-\d+)?\.(?:webp|png)$/.test(url.pathname)) {
+      if (options.artError) return route.abort('failed');
+      if (options.artGate) await options.artGate;
+    }
+    if (url.pathname.endsWith('/inicio-premium.js')) {
+      if (options.runtimeError) return route.abort('failed');
+      if (options.runtimeGate) await options.runtimeGate;
+    }
     if (url.pathname.endsWith('/espera-cargador.js')) return route.fulfill({contentType:'text/javascript',body:'export const waitForLoaderHidden=()=>Promise.resolve()'});
     const file=path.resolve(root,'.'+url.pathname);
     if (!file.startsWith(root+path.sep)) return route.abort();
     try { return route.fulfill({body:fs.readFileSync(file),contentType:types[path.extname(file)]||'application/octet-stream'}); } catch { return route.abort(); }
   });
-  await page.goto('https://layout.test/');
+  await page.goto('https://layout.test/', { waitUntil: options.runtimeGate ? 'commit' : options.runtime ? 'domcontentloaded' : 'load' });
+  await page.locator('#hero').waitFor({ state: 'attached' });
   await page.waitForFunction(()=>[...document.querySelectorAll('link[rel="stylesheet"]')].every(l=>l.sheet));
   await page.evaluate(()=>document.body.classList.add('tt-public-shell-mounted','tt-home-runtime-ready'));
   await page.evaluate(()=>document.fonts.ready);
@@ -98,4 +111,148 @@ test('el título conserva la misma fuente y color cuando el editor actualiza sus
   await expect(line).toHaveCSS('color',before.color);
  }
  await expect(page.locator('.tt-hero-cta')).toHaveCSS('text-transform','uppercase');
+});
+
+
+for (const [width, height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768],[1440,900],[1920,1080],[2560,1440]]) test(`foto pendiente no aparece a medias y revela completa · ${width}x${height}`, async ({ page }) => {
+  await page.setViewportSize({ width, height });
+  let release;
+  const artGate = new Promise(resolve => { release = resolve; });
+  try {
+    await open(page, { runtime: true, artGate });
+    const picture = page.locator('.tt-hero-suitcase');
+    await expect(picture).toHaveCSS('visibility', 'hidden');
+    const reserved = await picture.boundingBox();
+    // Superar el antiguo corte de1500ms no autoriza pintar una foto incompleta.
+    await page.waitForTimeout(1800);
+    await expect(picture).toHaveCSS('visibility', 'hidden');
+    await expect(page.locator('.tt-hero-cta')).toBeVisible();
+    release();
+    await expect.poll(() => picture.locator('img').evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+    await expect(picture).toHaveCSS('visibility', 'visible');
+    await expect.poll(() => picture.evaluate(element => getComputedStyle(element).opacity)).toBe('1');
+    const final = await picture.boundingBox();
+    expect(final.width).toBeCloseTo(reserved.width, 0);
+    expect(final.height).toBeCloseTo(reserved.height, 0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)).toBe(false);
+  } finally { release(); }
+});
+
+
+test('descarga completa todavía espera decode antes de empezar el reveal', async ({ page }) => {
+  await page.addInitScript(() => {
+    const nativeDecode = HTMLImageElement.prototype.decode;
+    const nativeAnimate = Element.prototype.animate;
+    let release;
+    const decoding = new Promise(resolve => { release = resolve; });
+    window.releaseHeroDecode = release;
+    window.heroDecodeFinished = false;
+    window.heroPhotoFrames = [];
+    HTMLImageElement.prototype.decode = function (...args) {
+      if (!this.closest('.tt-hero-suitcase')) return nativeDecode.apply(this, args);
+      return decoding.then(() => nativeDecode.apply(this, args)).then(() => { window.heroDecodeFinished = true; });
+    };
+    Element.prototype.animate = function (...args) {
+      if (this.matches('.tt-hero-suitcase')) window.heroPhotoFrames.push({ decoded: window.heroDecodeFinished, complete: this.querySelector('img').complete, first: args[0][0] });
+      return nativeAnimate.apply(this, args);
+    };
+  });
+  await open(page, { runtime: true });
+  await expect.poll(() => page.locator('.tt-hero-suitcase img').evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+  await page.waitForTimeout(1800);
+  await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'hidden');
+  expect(await page.evaluate(() => window.heroPhotoFrames)).toEqual([]);
+  await page.evaluate(() => window.releaseHeroDecode());
+  await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'visible');
+  expect(await page.evaluate(() => window.heroPhotoFrames)).toEqual([{ decoded: true, complete: true, first: { opacity: 0, transform: 'translateY(20px) scale(0.96)' } }]);
+});
+
+for (const width of [390,1440]) test(`movimiento reducido espera la foto y aparece sin desplazamiento · ${width}`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  let release;
+  const artGate = new Promise(resolve => { release = resolve; });
+  try {
+    await open(page, { runtime: true, artGate });
+    await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'hidden');
+    release();
+    await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'visible');
+    expect(await page.locator('#hero').evaluate(hero => hero.getAnimations({ subtree: true }).length)).toBe(0);
+    await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('transform', 'none');
+    await expect(page.locator('.tt-hero-cta')).toBeVisible();
+  } finally { release(); }
+});
+
+test('fallo de imagen no deja el texto ni las acciones del hero bloqueados', async ({ page }) => {
+  await open(page, { runtime: true, artError: true });
+  await expect(page.locator('.tt-hero-suitcase')).toHaveAttribute('data-tt-image-error', '');
+  await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'hidden');
+  await expect(page.locator('.tt-hero-title')).toBeVisible();
+  await expect(page.locator('.tt-hero-cta')).toBeVisible();
+  await expect(page.locator('html')).not.toHaveClass(/tt-home-(?:reveal|art)-pending/);
+  await page.locator('.tt-hero-cta').focus();
+  await expect(page.locator('.tt-hero-cta')).toBeFocused();
+});
+
+test('cambiar de orientación mientras descarga revela sólo la imagen seleccionada completa', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  let release;
+  const artGate = new Promise(resolve => { release = resolve; });
+  try {
+    await open(page, { runtime: true, artGate });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'hidden');
+    release();
+    await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'visible');
+    const image = await page.locator('.tt-hero-suitcase img').evaluate(image => ({ complete: image.complete, width: image.naturalWidth, source: image.currentSrc }));
+    expect(image.complete).toBe(true);
+    expect(image.width).toBeGreaterThan(0);
+    expect(image.source).toMatch(/suitcase(?:-\d+)?\.webp/);
+  } finally { release(); }
+});
+
+
+test('controlador lento mantiene la foto oculta y no repite el texto ya disponible', async ({ page }) => {
+  let releaseRuntime, releaseArt;
+  const runtimeGate = new Promise(resolve => { releaseRuntime = resolve; });
+  const artGate = new Promise(resolve => { releaseArt = resolve; });
+  await page.addInitScript(() => {
+    const native = Element.prototype.animate;
+    window.heroLateAnimations = [];
+    Element.prototype.animate = function (...args) {
+      if (this.closest('#hero')) window.heroLateAnimations.push(this.matches('.tt-hero-suitcase') ? 'photo' : 'copy');
+      return native.apply(this, args);
+    };
+  });
+  try {
+    await open(page, { runtime: true, runtimeGate, artGate });
+    await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'hidden');
+    await page.waitForTimeout(4500);
+    await expect(page.locator('.tt-hero-cta')).toBeVisible();
+    await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'hidden');
+    releaseRuntime();
+    await page.waitForFunction(() => window.TintinHomePremiumBooted);
+    await expect(page.locator('.tt-hero-title')).toHaveCSS('opacity', '1');
+    await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'hidden');
+    releaseArt();
+    await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'visible');
+    expect(await page.evaluate(() => window.heroLateAnimations)).toEqual(['photo']);
+  } finally { releaseRuntime(); releaseArt(); }
+});
+
+test('controlador no disponible conserva la portada estática accesible', async ({ page }) => {
+  await open(page, { runtime: true, runtimeError: true });
+  await expect(page.locator('.tt-hero-title')).toBeVisible();
+  await expect(page.locator('.tt-hero-cta')).toBeVisible();
+  await expect(page.locator('html')).not.toHaveClass(/tt-home-(?:reveal|art)-pending/);
+  await expect.poll(() => page.locator('.tt-hero-suitcase img').evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+  await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'visible');
+});
+
+test('sin API de animación la foto lista y las acciones permanecen visibles', async ({ page }) => {
+  await page.addInitScript(() => { Element.prototype.animate = undefined; });
+  await open(page, { runtime: true });
+  await expect(page.locator('.tt-hero-cta')).toBeVisible();
+  await expect(page.locator('.tt-hero-suitcase')).toHaveCSS('visibility', 'visible');
+  await expect(page.locator('html')).not.toHaveClass(/tt-home-(?:reveal|art)-pending/);
 });
