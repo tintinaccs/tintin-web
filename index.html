@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="b091019478b672ffdb22650800bef1e1be8ef8e971b4ff3759177dc1cf85ef68">
+  <meta name="tintin-page-revision" content="f3a23b7d49a3efe832fd0d752a89d4e29dfd8352004e1f37a65996d2802862dd">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preload" as="image" type="image/webp" fetchpriority="high" href="assets-tintin/images/home/hero-reference/suitcase.webp?v=suitcase-2" imagesrcset="assets-tintin/images/home/hero-reference/suitcase-640.webp?v=suitcase-2 640w, assets-tintin/images/home/hero-reference/suitcase-960.webp?v=suitcase-2 960w, assets-tintin/images/home/hero-reference/suitcase.webp?v=suitcase-2 1050w" imagesizes="(max-width: 767px) 90vw, (orientation: portrait) and (max-width: 1120px) 61vw, 45vw">
-  <script defer src="js/pages/home/inicio-premium.js?v=tintin-suitcase-20261104-1"></script>
-  <script>window.TT_PAGE_LOADER_WAIT = true;</script>
+  <script>window.TT_PAGE_LOADER_WAIT = true;
+(function () {
+  var root = document.documentElement;
+  root.setAttribute('data-tt-home-reveal', '');
+  root.classList.add('tt-home-reveal-pending', 'tt-home-art-pending');
+  // A missing controller must never trap the page's text and actions.
+  setTimeout(function () {
+    if (!window.TintinHomePremiumBooted) root.classList.remove('tt-home-reveal-pending');
+  }, 4300);
+  window.addEventListener('error', function (event) {
+    if (!window.TintinHomePremiumBooted && event.target && event.target.tagName === 'SCRIPT' && /\/pages\/home\/inicio-premium\.js(?:\?|$)/.test(event.target.src)) {
+      root.classList.remove('tt-home-reveal-pending', 'tt-home-art-pending');
+    }
+  }, true);
+})();</script>
+  <script defer src="js/pages/home/inicio-premium.js?v=tintin-hero-ready-reveal-20261115-1"></script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20261114-wa-contact-1"></script>
@@ -59,7 +73,7 @@
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
   <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261114-catalog-fit-1">
   <!-- Cada variante del header solo se descarga en el viewport que la utiliza. -->
-  <link rel="stylesheet" id="tt-home-css-bundle" href="css/generated/inicio.css?v=tintin-home-789baf3435c2079b">
+  <link rel="stylesheet" id="tt-home-css-bundle" href="css/generated/inicio.css?v=tintin-home-89bd756112376ba8">
   <link rel="tt-bundled-stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2" disabled data-tt-style-bundle="tt-home-css-bundle">
   <!-- Google Search Console (Fase 2): creá la propiedad en
        https://search.google.com/search-console con esta misma URL, elegí
@@ -87,7 +101,7 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
-  <link id="tt-home-hero-apple-css" rel="tt-bundled-stylesheet" href="css/pages/home/hero-bienvenida-inicio.css?v=tintin-20261114-harmonic-palette-1" disabled data-tt-style-bundle="tt-home-css-bundle">
+  <link id="tt-home-hero-apple-css" rel="tt-bundled-stylesheet" href="css/pages/home/hero-bienvenida-inicio.css?v=tintin-hero-ready-reveal-20261115-1" disabled data-tt-style-bundle="tt-home-css-bundle">
   <link id="tt-home-fit-css" rel="tt-bundled-stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-client-fades-20261105-1-p1106" disabled data-tt-style-bundle="tt-home-css-bundle">
   <link rel="tt-bundled-stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-p1106" disabled data-tt-style-bundle="tt-home-css-bundle">
   <link rel="tt-bundled-stylesheet" href="css/pages/home/edicion-editorial-inicio.css?v=tintin-client-fades-20261105-1-p1106" disabled data-tt-style-bundle="tt-home-css-bundle">
