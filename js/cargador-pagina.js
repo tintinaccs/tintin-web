@@ -970,6 +970,12 @@
     }
   }
 
+  function bootPageEntry() {
+    if (!window.TintinPageEntryBooted) {
+      importSibling('quality/entrada-pagina.js', 'Page Entry', undefined, 'tintin-20261115-page-entry-1');
+    }
+  }
+
   function bootImagePerformance() {
     if (!window.TintinImagePerformanceBooted) {
       importSibling('components/images/rendimiento-imagenes.js', 'Image Performance', undefined, 'tintin-20261021-commerce-review-1-perf-20261029-1');
@@ -1036,12 +1042,13 @@
     // Las páginas institucionales siguen mostrando el mismo loader y el
     // mismo header, pero no necesitan montar el catálogo, favoritos, gestión
     // de imágenes ni efectos propios de una superficie comercial.
+    bootScrollReveal();
+    bootPageEntry();
     if (isLightweightPage) {
       documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
       documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
       return;
     }
-    bootScrollReveal();
     bootImagePerformance();
     bootPhase8UiUx();
 
@@ -1061,12 +1068,13 @@
     // Mantiene el loader y el header idénticos en las páginas informativas,
     // pero evita descargar módulos comerciales que no se usan allí. La
     // navegación compartida conserva sus propios datos y fallback visual.
+    bootScrollReveal();
+    bootPageEntry();
     if (isLightweightPage) {
       documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
       documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
       return;
     }
-    bootScrollReveal();
     bootImagePerformance();
     bootImagesPhase5Public();
     bootCollectionsPhase4Public();
