@@ -1214,3 +1214,12 @@ cambian imágenes ni lógica comercial. CSS/JS afectados propagan sus versiones
 por el generador canónico. El smoke local sirve Instagram con el handler real
 sin credenciales (parche revisado de PR1397), resolviendo el404 de la auditoría
 visual43594710557. Evidencia y límites:docs/agent/PALETA_ARMONICA_20261114.md.
+
+## 2026-11-15 — Imagen del hero lista antes de su reveal
+
+Fuentes: index.html, inicio-premium.js, hero-bienvenida-inicio.css. El bootstrap
+protege el primer frame y el controlador diferido revela sólo una foto completa
+y decodificada. Texto/acciones tienen salida de emergencia; no cambia tamaño,
+marca, foto ni lógica comercial. Incluye red lenta, decode tardío, cambio de
+orientación, fallo de recurso/controlador y movimiento reducido. Derivados,
+caché y protección se generan canónicamente. Evidencia:REVEAL_HERO_20261115.md.

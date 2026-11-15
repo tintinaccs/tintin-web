@@ -4,11 +4,6 @@
   "reason": "Bump versión cargador-pagina.js a tintin-20261115-page-entry-1 en 18 páginas HTML para sistema global de revelado de páginas y scroll reveal. Se añade entrada-pagina.js, se extiende bootScrollReveal a páginas ligeras. Actualización de hashes en cache-version-baseline, CSP, middleware y estilos relacionados.",
   "files": [
     {
-      "path": "_headers",
-      "oldHash": "aae486374678be71953562b013b15bcc9512c6ef409ab38d4d76f3d9c5e6e567",
-      "newHash": "019708fd7505612fd533dba366748dc01d6cc7fa5d74f6fbc0eb988b60b78cfb"
-    },
-    {
       "path": "404.html",
       "oldHash": "55c8908f5961749abda782f5bab313857df5b286e3bb19e947b5e2c1a3ee3dfb",
       "newHash": "39c05205e2aa4729e4fb3d429203c0aff551e3048deb476d5b50764fe2771f62"
@@ -51,22 +46,17 @@
     {
       "path": "config/csp-runtime.js",
       "oldHash": "a5b5398196c649f8e2fde3e4dfc4e5510b604e8142d4a5b52093a1047e5295a1",
-      "newHash": "575aaa40868e88404881fc7dc2aea7e41842acc360ea516a77fb235b965dd699"
+      "newHash": "e8597f504cfa54aa0d8df88efc2320829cd264b3f7a7314dcea46f4ec3e0889c"
     },
     {
       "path": "config/csp-runtime.json",
       "oldHash": "e9b3c2310a33452567ae234d0ecf14c62df53ccd9c39c54e42eec7b1dd914d29",
-      "newHash": "4be72e5f1c9493fe162d10fbfc06aeef5dbaf601b174285e0d6b0d4e2fbe2768"
+      "newHash": "974749788bb1d598aa80746ba31d943b478264694920aa4fc7ae2f0b1e88f940"
     },
     {
       "path": "contact.html",
       "oldHash": "cdc6d14a460508ae0d269795427d4e8ac5aa5700010991a29ed0b21b6419dde7",
       "newHash": "ac31437c64a5e65dececbc421470f88f1356bc0509cba0f3c2ce9464bc2d451b"
-    },
-    {
-      "path": "css/pages/home/hero-bienvenida-inicio.css",
-      "oldHash": "b1946e682ecf24e32b9ee4af2bef866a655cea6dacb42ecbebf2a7da00bf8114",
-      "newHash": "7b28785359d21479549145f56fe6b3e98ad573f5ae793b75793c3ebae217c2cf"
     },
     {
       "path": "envios.html",
@@ -86,17 +76,12 @@
     {
       "path": "index.html",
       "oldHash": "ba525bf87030c9324aa6be3a32636b9cde0a569059c36c314e1d94e2472bea4a",
-      "newHash": "fe21456f56b1fd800e09594a9b58068f840cb58c10aa1fbf8b7b869e4a385ee5"
+      "newHash": "fa0102eda1dc14723a6c1fed2e8abc80e205238ae49ca90e57501351a53f1158"
     },
     {
       "path": "js/cargador-pagina.js",
       "oldHash": "c6d1aa568cee1d9c50f5c39ad7359702437294e752ccaa98935b36f059fd8762",
       "newHash": "28dee426033a0a4ea7ba1a1f96989cc9086f833fb61ea91419675cf3eba9b490"
-    },
-    {
-      "path": "js/pages/home/inicio-premium.js",
-      "oldHash": "dd8b91d279852b642ae0cadc8c0cc24416033bbbecacae1ba88104d7017697ba",
-      "newHash": "9fa77b89ea63b051d8871ffb20f195dfc590496adc07251b235612aca9005747"
     },
     {
       "path": "login.html",
@@ -131,7 +116,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "a29bfcdff72c35fa0fa284a7eb8facefea304a0af1bdb4b5a96d7c6608e4adcb",
-      "newHash": "1e28599ececed36fbb3341e1ae07108435d1c80ced21313799a574a950877c53"
+      "newHash": "666e294734e79ca06326f89718b6ea2580288a26f8323a181ecf7026929403dc"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

@@ -7046,3 +7046,26 @@ se agregan pruebas de contraste de80+ textos en4 combinaciones claro/oscuro
 pasan de1.19:1 a14.56:1; etapa enviada de1.53:1 a8.78:1, medido en Chromium.
 El nuevo head requiere build/plan/CI/Maestro propios y resolución fundada de
 ambos hilos antes de su integración. No se fuerza ni se omite una protección.
+
+## 2026-11-15 — Reveal del hero después de cargar la imagen
+
+Codex /root, base68e8861f, rama codex/hero-ready-reveal-20261115. Solicitud
+puntual de la titular: no mostrar el maletín parcial, revelar completo en todas
+las pantallas. FAIL previo reproducido con petición retenida. El estado previo
+al primer frame se activa desde un bootstrap mínimo; el controlador sigue
+diferido y espera descarga/decode para la foto. El plazo de texto no libera
+la imagen. Se conservan diseño/assets, reserva de espacio y reduced motion.
+8 casos lentos320–2560px y5 de decode/error/preferencia/orientación PASS;
+3 fallbacks de controlador/WAAPI PASS. Regresión inicial hero/precarga38 PASS.
+Rendimiento estático0 fallos críticos/2 avisos previos;29 tripwires PASS.
+Informe REVEAL_HERO_20261115.md. Pendientes: derivados, plan protegido, suite
+final, CI del head, merge y comprobación pública; no heredar PASS anterior.
+
+Validación local final de reveal:41/41 hero/precarga PASS, preflight completo
+PASS, hashes78/542 y build PASS. Rendimiento comparativo local con destino
+explícito PASS en base y candidato:CLS0 y119 solicitudes propias ambos;
+carrito366/397ms dentro de500ms. Dos sondas previas apuntaron por defecto a
+producción y fallaron en carrito; no se atribuyen al candidato ni se cuentan
+como aprobadas. Se conservan logs y límites en REVEAL_HERO_20261115.md.
+Las verificaciones de CI/merge/publicación se acreditan con los recibos
+terminales propios de la PR de esta rama, no con los cierres anteriores.

@@ -60,3 +60,8 @@ html body.tt-home-premium #hero .tt-hero-link{display:inline-flex!important;alig
 @media(prefers-reduced-motion:reduce){#hero *,#hero *::before,#hero *::after{animation:none!important;transition:none!important}#hero .tt-hero-actions a{transform:none!important}}
 
 #hero .tt-hero-actions a::before,#hero .tt-hero-actions a::after{content:none!important}
+
+/* Only a successfully booted controller opts in; no-JS stays readable. */
+html.tt-home-reveal-pending #hero .tt-hero-composition{visibility:hidden}
+html.tt-home-art-pending #hero .tt-hero-suitcase,
+#hero .tt-hero-suitcase[data-tt-image-error]{visibility:hidden}
