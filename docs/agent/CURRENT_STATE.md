@@ -1,3 +1,14 @@
+## Hardening de rate limits en el middleware — 2026-11-15 — Claude Code
+
+Pedido: completar la cobertura de rate limit de borde en todos los endpoints de la API. Auditoría previa (solo lectura) identificó 5 grupos sin límite en _middleware.js: coupon-validate, notifications (GET y POST), claim-commerce-history, y los 4 webhooks de Sheets/local-commerce.
+
+Cambio quirúrgico en functions/_middleware.js:
+- MUTATION_LIMITS: coupon-validate (20/min), notifications (20/min), claim-commerce-history (10/min), webhooks Sheets+local-commerce (30/min).
+- READ_LIMITS: notifications GET (30/min).
+- PayPal: sin cambios (stand-by por decisión de la titular).
+
+PASS_LOCAL: 13 tests api-rate-limits.test.mjs PASS; 15 tests shared-api-rate-limits + pages-dev-indexing PASS. Sin cambios en lógica de negocio, autenticación ni estructura. Pendientes: CI del candidato, integración protegida y verificación post-despliegue.
+
 ## WhatsApp general único al pie — 2026-11-14 — Codex /root
 
 Pedido de la titular: quitar el botón general de WhatsApp que se repite justo antes del pie y conservar el inferior, en todas las pantallas. Base be6c3e9df4e27e5b7879ec85497159f3122134af; rama fix/whatsapp-support-duplication; worktree propio. No hay PR concurrentes abiertas al inicio. Conservar paleta, catálogo y cambios aceptados de Claude.

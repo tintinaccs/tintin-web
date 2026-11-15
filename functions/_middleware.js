@@ -22,6 +22,10 @@ const MUTATION_LIMITS = Object.freeze([
   [/^\/api\/paypal-rate-refresh$/, 4, 60_000, 'paypal-rate-refresh'],
   [/^\/api\/push-(subscription|order-event|test|admin)$/, 20, 60_000, 'push'],
   [/^\/api\/(profile-avatar-upload|cloudinary-sign-upload|cloudinary-sign-audio-upload)$/, 20, 60_000, 'upload'],
+  [/^\/api\/coupon-validate$/, 20, 60_000, 'coupon'],
+  [/^\/api\/notifications$/, 20, 60_000, 'notifications'],
+  [/^\/api\/claim-commerce-history$/, 10, 60_000, 'commerce-history'],
+  [/^\/api\/(sheets-admin-webhook|sheets-products-webhook|sheets-engagement-webhook|local-commerce-webhook)$/, 30, 60_000, 'sheets-webhooks'],
   [/^\/api\/admin-/, 60, 60_000, 'admin']
 ]);
 // Endpoints de lectura que disparan consultas externas o respuestas dinámicas.
@@ -34,7 +38,8 @@ const READ_LIMITS = Object.freeze([
   [/^\/api\/(public-catalog|visual-builder-public|visual-studio-global-public|instagram-feed)$/, 60, 10_000, 'public-content'],
   [/^\/api\/(geo-search|location-search)$/, 30, 60_000, 'geo-search'],
   [/^\/api\/visitor-geo$/, 60, 60_000, 'visitor-geo'],
-  [/^\/api\/paypal-config$/, 60, 60_000, 'paypal-config']
+  [/^\/api\/paypal-config$/, 60, 60_000, 'paypal-config'],
+  [/^\/api\/notifications$/, 30, 60_000, 'notifications-read']
 ]);
 
 function policyForPath(pathname) {

@@ -161,7 +161,8 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
 
   const name = stripHtml(firstValue(data, ['name', 'title', 'Title'])) || 'Producto Tintin';
   const rawDescription = firstValue(data, ['seoDescription','description', 'desc', 'Body (HTML)']);
-  const description = (stripHtml(rawDescription) || `${name} disponible en Tintin Accesorios & Relojes.`).slice(0, 220);
+  const rawDesc = stripHtml(rawDescription) || `${name} disponible en Tintin Accesorios & Relojes.`;
+  const description = rawDesc.length <= 155 ? rawDesc : (rawDesc.slice(0, 156).replace(/\s\S+$/, '') || rawDesc.slice(0, 155));
   const image = absoluteUrl(productVariantImage(data, firstAvailableVariant(data), firstImage(data)));
   const mainImage = productImageUrl(image, 900);
   const imageSrcset = [480, 900, 1440].map(width => `${productImageUrl(image, width)} ${width}w`).join(', ');
