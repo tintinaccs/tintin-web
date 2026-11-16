@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0939ee6cfbb23480f3e5840310dfedeadefe050f37f7bb907c3c0e64d6a0940d",
+  "sourceFingerprint": "f1efed55bf59ed40c0a0473035ea134ef70e4d348c76e8c3ceb2b1fef15ecaad",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1865,
-    "textFiles": 1712,
-    "totalBytes": 63048067,
+    "files": 1866,
+    "textFiles": 1713,
+    "totalBytes": 63059247,
     "pages": 19,
     "modules": 1214
   },
@@ -41800,8 +41800,8 @@
     },
     {
       "path": "scripts/auditar-produccion-salud.mjs",
-      "bytes": 17186,
-      "sha256": "db39f2de3e466922d96412443b8abd2135fc5de3532b0952e56abf6634e5b223",
+      "bytes": 19286,
+      "sha256": "a075190ea0e0610f82aea55bf3ab42dc817491469b4b84f9a526fe9353c3e25e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -41826,16 +41826,28 @@
           "line": 3
         },
         {
+          "raw": "parse5",
+          "target": "scripts/parse5",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../js/core/store/seo-catalogo.mjs",
+          "target": "js/core/store/seo-catalogo.mjs",
+          "dynamic": false,
+          "line": 5
+        },
+        {
           "raw": "./lib/referencias-shopify.mjs",
           "target": "scripts/lib/referencias-shopify.mjs",
           "dynamic": false,
-          "line": 4
+          "line": 6
         },
         {
           "raw": "./lib/origen-produccion.mjs",
           "target": "scripts/lib/origen-produccion.mjs",
           "dynamic": false,
-          "line": 5
+          "line": 7
         }
       ],
       "endpoints": []
@@ -55311,14 +55323,26 @@
     },
     {
       "path": "tests/operations/fixtures/production-monitor-fetch.mjs",
-      "bytes": 3904,
-      "sha256": "d78d7b45b532a0f8bdae3e4202f11ec6abfb6a3134113aad9583b33e3fc6cf67",
+      "bytes": 5914,
+      "sha256": "11bf349cd77646eaaf68941d2c1abde5c1e33ac4348f7011b6cf1fd3d7a438ea",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
-      "endpoints": []
+      "imports": [
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://schema.org/",
+          "line": 67
+        }
+      ]
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
@@ -55774,8 +55798,8 @@
     },
     {
       "path": "tests/operations/production-origin.test.mjs",
-      "bytes": 3681,
-      "sha256": "67c946f31d539863677ed8ff990bada46ff0940b4a3784ca5dc4f80a4f55a700",
+      "bytes": 6057,
+      "sha256": "59838c6da5b1193961cccf13a3006ece771d709c9fd927674863d36eb03a2a75",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55854,6 +55878,10 @@
         {
           "url": "https://user:password@tintinaccs.com/",
           "line": 27
+        },
+        {
+          "url": "https://other.test/catalogo",
+          "line": 77
         }
       ]
     },
@@ -66432,6 +66460,12 @@
       "sha256": "c71e553879503132eeb0b207ff5d47d5af25048c285ccbbdb04c6f75d2099bee"
     },
     {
+      "path": "docs/agent/CI_MONITOR_SEO_20261116.md",
+      "extension": ".md",
+      "bytes": 3380,
+      "sha256": "9e84e55a35c66e370abbb487ec7e9e25fca3a7cc52cc05d3c23228075c5d5292"
+    },
+    {
       "path": "docs/agent/CLOUD_SKILLS_CATALOG.md",
       "extension": ".md",
       "bytes": 15374,
@@ -66476,8 +66510,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1352194,
-      "sha256": "6473d68a407975d97a17760a1c97f6247406bd9ee4721eac4abd1952d4745892"
+      "bytes": 1353099,
+      "sha256": "73a6b938482c078a68001874444e25b33b1d56d581833214aef3bd54f8592c2b"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -67508,8 +67542,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 175617,
-      "sha256": "951836bcded8f0c7237d5fd1d64701c4602386f53fd5aa3ea9673442b9b87f20"
+      "bytes": 176026,
+      "sha256": "6f02c4bbd17956debc5e9cf9ee3e1ef1cef16de1cccd35fe1c1e9f8dadac2404"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -71570,8 +71604,8 @@
     {
       "path": "scripts/auditar-produccion-salud.mjs",
       "extension": ".mjs",
-      "bytes": 17186,
-      "sha256": "db39f2de3e466922d96412443b8abd2135fc5de3532b0952e56abf6634e5b223"
+      "bytes": 19286,
+      "sha256": "a075190ea0e0610f82aea55bf3ab42dc817491469b4b84f9a526fe9353c3e25e"
     },
     {
       "path": "scripts/auditar-producto-cloudflare-preview.mjs",
@@ -73832,8 +73866,8 @@
     {
       "path": "tests/operations/fixtures/production-monitor-fetch.mjs",
       "extension": ".mjs",
-      "bytes": 3904,
-      "sha256": "d78d7b45b532a0f8bdae3e4202f11ec6abfb6a3134113aad9583b33e3fc6cf67"
+      "bytes": 5914,
+      "sha256": "11bf349cd77646eaaf68941d2c1abde5c1e33ac4348f7011b6cf1fd3d7a438ea"
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
@@ -73904,8 +73938,8 @@
     {
       "path": "tests/operations/production-origin.test.mjs",
       "extension": ".mjs",
-      "bytes": 3681,
-      "sha256": "67c946f31d539863677ed8ff990bada46ff0940b4a3784ca5dc4f80a4f55a700"
+      "bytes": 6057,
+      "sha256": "59838c6da5b1193961cccf13a3006ece771d709c9fd927674863d36eb03a2a75"
     },
     {
       "path": "tests/operations/responsive-audit-scroll.test.mjs",

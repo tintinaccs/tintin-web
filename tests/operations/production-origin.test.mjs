@@ -59,3 +59,28 @@ for (const [script, report] of [['auditar-produccion-salud.mjs', 'phase11-produc
     });
   }
 }
+
+
+for (const [name, env, expected, message] of [
+  ['JSON-LD dinámico válido sin autorizar ejecución inline', { TINTIN_MONITOR_FIXTURE_INLINE:'jsonld' }, 0],
+  ['módulo autorizado por hash', { TINTIN_MONITOR_FIXTURE_INLINE:'authorized' }, 0],
+  ['script ejecutable sin hash', { TINTIN_MONITOR_FIXTURE_INLINE:'executable' }, 1, /CSP no autoriza/],
+  ['módulo sin hash', { TINTIN_MONITOR_FIXTURE_INLINE:'module' }, 1, /CSP no autoriza/],
+  ['data-type no suplanta el tipo real de script', { TINTIN_MONITOR_FIXTURE_INLINE:'fake-type' }, 1, /CSP no autoriza/],
+  ['hash de estilo no autoriza módulos', { TINTIN_MONITOR_FIXTURE_INLINE:'style-only' }, 1, /CSP no autoriza/],
+  ['script-src-elem prevalece al bloquear', { TINTIN_MONITOR_FIXTURE_INLINE:'element-blocked' }, 1, /CSP no autoriza/],
+  ['script-src-elem autoriza su propio hash', { TINTIN_MONITOR_FIXTURE_INLINE:'element-authorized' }, 0],
+  ['JSON-LD inválido', { TINTIN_MONITOR_FIXTURE_INLINE:'invalid-jsonld' }, 1, /JSON/],
+  ['producto sin ID no puede responder 200', { TINTIN_MONITOR_FIXTURE_EMPTY_PRODUCT_STATUS:'200' }, 1, /Respuesta inesperada: 200/],
+  ['sitemap rechaza filtros no indexables', { TINTIN_MONITOR_FIXTURE_COLLECTION_URL:'/catalogo?cat=canary&q=bolso' }, 1, /Sitemap dinámico de colecciones/],
+  ['sitemap rechaza página cero', { TINTIN_MONITOR_FIXTURE_COLLECTION_URL:'/catalogo?page=0' }, 1, /Sitemap dinámico de colecciones/],
+  ['sitemap rechaza otro host', { TINTIN_MONITOR_FIXTURE_COLLECTION_URL:'https://other.test/catalogo?cat=canary' }, 1, /Sitemap dinámico de colecciones/],
+  ['sitemap rechaza otra ruta', { TINTIN_MONITOR_FIXTURE_COLLECTION_URL:'/product?cat=canary' }, 1, /Sitemap dinámico de colecciones/],
+  ['producto ausente exige noindex', { TINTIN_MONITOR_FIXTURE_EMPTY_PRODUCT_INDEXED:'1' }, 1, /noindex/],
+]) test(`salud: ${name}`,()=>withConfig(config,cwd=>{
+ const result=spawnSync(process.execPath,['--import',pathToFileURL(resolve(root,'tests/operations/fixtures/production-monitor-fetch.mjs')).href,resolve(root,'scripts/auditar-produccion-salud.mjs')],{
+  cwd,encoding:'utf8',env:{...process.env,TINTIN_PUBLIC_ORIGIN:'',TINTIN_OPERATIONAL_ORIGIN:'',TINTIN_MONITOR_FIXTURE_CANONICAL:canonical,TINTIN_MONITOR_FIXTURE_OPERATIONAL:operational,...env},
+ });
+ assert.equal(result.status,expected,result.stderr);
+ if(message)assert.match(result.stderr,message);
+}));

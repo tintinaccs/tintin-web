@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { parse } from 'parse5';
+import { catalogMetadata } from '../js/core/store/seo-catalogo.mjs';
 import { findShopifyHostedUrls } from './lib/referencias-shopify.mjs';
 import { readProductionOrigins } from './lib/origen-produccion.mjs';
 
@@ -9,7 +11,7 @@ const timeoutMs = Number(process.env.TINTIN_HEALTH_TIMEOUT_MS || 15000);
 const attempts = 3;
 const results = [];
 const failures = [];
-const corePages = ['/', '/catalogo', '/collections', '/product', '/login', '/perfil'];
+const corePages = ['/', '/catalogo', '/collections', '/login', '/perfil'];
 
 async function fetchWithRetry(url, options = {}) {
   let lastError;
@@ -38,17 +40,36 @@ function assertStrongCsp(value, route) {
 }
 
 function assertInlineHashes(body, csp, route) {
-  const allowed = new Set(String(csp || '').match(/'sha256-[^']+'/g) || []);
-  for (const match of String(body || '').replace(/\r\n?/g, '\n').matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script(?:\s[^>]*)?>/gi)) {
-    if (/\bsrc\s*=/i.test(match[1])) continue;
-    const digest = crypto.createHash('sha256').update(match[2], 'utf8').digest('base64');
-    const hash = `'sha256-${digest}'`;
+  const directives = new Map();
+  for (const directive of String(csp || '').split(';')) {
+    const [name, ...values] = directive.trim().split(/\s+/);
+    if (!directives.has(name)) directives.set(name, values);
+  }
+  const policy = directives.get('script-src-elem') ?? directives.get('script-src') ?? directives.get('default-src') ?? [];
+  const allowed = new Set(policy.filter(value => /^'sha256-[^']+'$/.test(value)));
+  const nodes = [parse(String(body || '').replace(/\r\n?/g, '\n'))];
+  while (nodes.length) {
+    const node = nodes.pop();
+    nodes.push(...(node.childNodes || []));
+    if (node.content) nodes.push(node.content);
+    if (node.tagName !== 'script' || node.attrs.some(attr => attr.name === 'src')) continue;
+    const source = (node.childNodes || []).map(child => child.value || '').join('');
+    const type = node.attrs.find(attr => attr.name === 'type')?.value.trim().toLowerCase();
+    // JSON-LD es un bloque de datos, no JavaScript. Validarlo no autoriza
+    // scripts ejecutables ni agrega hashes dinámicos a la CSP de la tienda.
+    if (type === 'application/ld+json') {
+      try { JSON.parse(source); }
+      catch { throw new Error(`${route}: JSON-LD inválido.`); }
+      continue;
+    }
+    const hash = `'sha256-${crypto.createHash('sha256').update(source, 'utf8').digest('base64')}'`;
     if (!allowed.has(hash)) throw new Error(`${route}: CSP no autoriza el script inline ${hash}.`);
   }
 }
 
 function xmlLocations(body) {
-  return [...String(body || '').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+  const entities = { '&amp;':'&', '&lt;':'<', '&gt;':'>', '&quot;':'"', '&apos;':"'" };
+  return [...String(body || '').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1].replace(/&(?:amp|lt|gt|quot|apos);/g, entity => entities[entity]));
 }
 
 async function inspect(relative, expectedType, requestHeaders = {}) {
@@ -107,6 +128,18 @@ for (const route of corePages) {
   });
 }
 
+await check('product-without-id', async () => {
+  const route = '/product';
+  const result = await inspectExpectedStatus(route, [404], 'text/html');
+  if (result.response.url !== origin + route) throw new Error(route + ': la URL final no coincide con la canónica limpia.');
+  const csp = result.response.headers.get('content-security-policy');
+  assertStrongCsp(csp, route);
+  assertInlineHashes(result.body, csp, route);
+  if (!String(result.response.headers.get('x-robots-tag') || '').toLowerCase().split(/[\s,]+/).includes('noindex')) {
+    throw new Error('/product sin ID debe responder noindex.');
+  }
+});
+
 await check('home-security-headers', async () => {
   const home = results.find(item => item.requestedUrl === origin + '/');
   if (!home?.headers?.['strict-transport-security'] || !home?.headers?.['x-content-type-options'] || !home?.headers?.['x-frame-options'] || !home?.headers?.['referrer-policy']) {
@@ -163,7 +196,14 @@ await check('sitemap-products', async () => {
 await check('sitemap-collections', async () => {
   const sitemap = await inspect('/sitemap-collections.xml', 'xml');
   const urls = xmlLocations(sitemap.body);
-  if (urls.some(url => !url.startsWith(canonicalOrigin + '/catalogo?cat='))) {
+  if (urls.some(value => {
+    try {
+      const url = new URL(value);
+      const meta = catalogMetadata(url);
+      return url.origin !== canonicalOrigin || url.pathname !== '/catalogo'
+        || meta.page < 1 || meta.filtered || meta.canonical !== value;
+    } catch { return true; }
+  })) {
     throw new Error('Sitemap dinámico de colecciones contiene URLs inválidas.');
   }
 });
@@ -304,6 +344,7 @@ await check('product-server-metadata', async () => {
   const route = '/product?id=' + encodeURIComponent(sampleProductId);
   const product = await inspect(route, 'text/html');
   assertStrongCsp(product.headers['content-security-policy'], route);
+  assertInlineHashes(product.body, product.headers['content-security-policy'], route);
   if (product.headers['x-tintin-product-meta'] !== 'server') throw new Error('Producto no fue enriquecido por Pages Function.');
   if (!product.body.includes('<meta property="og:type" content="product">')) throw new Error('Producto no entrega Open Graph específico desde servidor.');
   if (!product.body.includes('id="tt-product-jsonld-server"')) throw new Error('Producto no entrega JSON-LD específico desde servidor.');
