@@ -21,13 +21,13 @@ function pageStyles(page) {
 const VERSION = 'tintin-hero-fit-20261104-1-p1106';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1-p1106';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1-p1106';
-const TIENDA_VERSION = 'tintin-20261116-discovery-1';
+const TIENDA_VERSION = 'tintin-20261116-discovery-2';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261101-cls-home-1';
-const LOADER_VERSION = 'tintin-20261116-discovery-1';
+const LOADER_VERSION = 'tintin-20261116-discovery-2';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5-p1112';
-const PANEL_COMPAT_VERSION = 'tintin-20261116-discovery-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261116-discovery-1';
-const NAV_ENTRY_VERSION = 'tintin-20261116-discovery-1';
+const PANEL_COMPAT_VERSION = 'tintin-20261116-discovery-2';
+const PUBLIC_SHELL_VERSION = 'tintin-20261116-discovery-2';
+const NAV_ENTRY_VERSION = 'tintin-20261116-discovery-2';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261114-wa-contact-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261030-home-history-5-p1112';
@@ -161,7 +161,7 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-navigation-coherence-css\"",
     "css/components/navigation/compartido/coherencia-visual.css",
-    "tintin-20261116-discovery-1"
+    "tintin-20261116-discovery-2"
   ]
 ];
 const INITIAL_PAGE_STYLES = {

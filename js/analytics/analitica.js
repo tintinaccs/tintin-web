@@ -1,5 +1,5 @@
 import { db, appCheckReady } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import {safeSearchTerm} from './privacidad-busqueda.mjs?v=tintin-20261116-discovery-1';
+import {safeSearchTerm} from './privacidad-busqueda.mjs?v=tintin-20261116-discovery-2';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   hasStatisticsConsent,

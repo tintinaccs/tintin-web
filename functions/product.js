@@ -141,7 +141,7 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   html = replaceMeta(html, 'twitter:image', image);
   html = replaceMeta(html, 'twitter:card', 'summary_large_image');
 
-  const product = {...data, id:safeId, name, price};
+  const product = {...data, id:safeId, name, price:data.variantCommerceVersion === 2 ? data.price : price};
   const ld = JSON.stringify(productStructuredData(product, {canonical, images:[image]})).replace(/</g, '\\u003c');
   const category = firstValue(data, ['category','cat','collectionSlug']);
   const breadcrumbs = JSON.stringify({'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[

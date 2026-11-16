@@ -131,6 +131,9 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
     expect(purchase.height).toBeLessThan(90);
     await expect(page.locator('#product-reviews, [data-open-community]')).toHaveCount(0);
     await page.locator('#btn-product-add-cart').click();
+    await expect(page.locator('#cart-drawer')).toBeVisible();
+    await page.locator('#btn-cart-close').click();
+    await expect(page.locator('#cart-drawer')).not.toBeVisible();
     await expect(page.locator('#tinsel-items .tinsel-item')).toHaveCount(1);
     await expect(page.locator('#tinsel-count')).toHaveText('2');
     await expect(page.locator('#tinsel-total-footer')).toContainText('140.000');
@@ -159,7 +162,7 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
         window.dispatchEvent(new CustomEvent('tintin:products-loaded', { detail: { products: [product] } }));
       }, product);
       if (route === '/collections.html') await page.addScriptTag({ type: 'module',
-        url: '/js/pages/collections/presentacion-colecciones.js?v=tintin-20261116-discovery-1' });
+        url: '/js/pages/collections/presentacion-colecciones.js?v=tintin-20261116-discovery-2' });
       const first = page.locator(card).first();
       await expect(first).toBeVisible();
       if (route === '/index.html') {
@@ -229,7 +232,10 @@ for(const [width,height] of [[320,700],[390,844],[600,900],[640,900],[768,1024],
    const {addToCart}=await import(moduleUrl);
    const names=['ANILLO AMORE','AROS AMELIE','Cadena de acero con nombre largo para probar los saltos de línea','Aro','AccesorioSuperLargoSinEspaciosParaComprobarQueNoDesborda'];
    for(let i=0;i<5;i++)await addToCart({id:'selection-layout-'+i,name:names[i],variant:i===0?'piedra-del-zodiaco':i===2?'Dorado / talla ajustable':'',price:30000+i*5000,qty:1,stock:8,imageUrl:'/assets-tintin/images/general/logo.png'});
-  },'/js/components/cart/sincronizacion-carrito.js?v=tintin-20261116-discovery-1');
+  },'/js/components/cart/sincronizacion-carrito.js?v=tintin-20261116-discovery-2');
+  await expect(page.locator('#cart-drawer')).toBeVisible();
+  await page.locator('#btn-cart-close').click();
+  await expect(page.locator('#cart-drawer')).not.toBeVisible();
   const items=page.locator('#tinsel-items .tinsel-item');await expect(items).toHaveCount(5);
   const issues=await items.evaluateAll(nodes=>nodes.flatMap((item,index)=>{
    const r=item.getBoundingClientRect();const errors=[];

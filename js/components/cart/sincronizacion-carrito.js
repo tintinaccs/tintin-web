@@ -972,8 +972,9 @@ function createRuntime() {
     }
     const incoming = normalizeItem(item);
     if (!incoming) return { item: null, capped: false, changed: false, reason: 'invalid' };
-    if (pendingAdds.has(incoming.lineId)) return pendingAdds.get(incoming.lineId);
     const generation = authGeneration;
+    const pendingKey = `${generation}:${incoming.lineId}`;
+    if (pendingAdds.has(pendingKey)) return pendingAdds.get(pendingKey);
     const operation = withCartMutation(async () => {
       if (generation !== authGeneration) return { changed: false, reason: 'identity_changed' };
       try { await refreshProductStock(incoming.id); }
@@ -993,7 +994,7 @@ function createRuntime() {
         .filter(entry => String(entry.id) === String(incoming.id))
         .reduce((sum, entry) => sum + entry.qty, 0);
       const requested = Math.max(1, Number(incoming.qty || 1));
-      const available = Math.min(Math.max(0, limit - currentProductQty), availableVariantQuantity(items, incoming));
+      const available = Math.min(Math.max(0, limit - currentProductQty), Math.max(0, MAX_QTY - (existing?.qty || 0)), availableVariantQuantity(items, incoming));
       const accepted = Math.min(requested, available);
       const capped = accepted < requested;
 
@@ -1029,9 +1030,9 @@ function createRuntime() {
       }
       return { item: saved, capped, changed: true, reason: capped ? 'partially_added' : 'added', limit, requested, accepted };
     });
-    pendingAdds.set(incoming.lineId, operation);
+    pendingAdds.set(pendingKey, operation);
     try { return await operation; }
-    finally { if (pendingAdds.get(incoming.lineId) === operation) pendingAdds.delete(incoming.lineId); }
+    finally { if (pendingAdds.get(pendingKey) === operation) pendingAdds.delete(pendingKey); }
   }
 
   async function removeFromCart(identifier, variantValue = undefined) {

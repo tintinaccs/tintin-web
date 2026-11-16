@@ -1,4 +1,4 @@
-import {catalogMetadata, categoryCopy} from '../../core/store/seo-catalogo.mjs?v=tintin-20261116-discovery-1';
+import {catalogMetadata, categoryCopy} from '../../core/store/seo-catalogo.mjs?v=tintin-20261116-discovery-2';
 /* TINTIN — Runtime integral del Catálogo */
 const CATALOG_PATH_RE = /(?:^|\/)catalogo(?:\.html)?\/?$/i;
 

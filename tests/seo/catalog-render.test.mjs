@@ -53,3 +53,12 @@ test('ProductGroup usa identidad estable y no inventa SKUs de las variantes',()=
  assert.equal(schema.hasVariant[0].sku,undefined);
  assert.deepEqual(schema.hasVariant.map(variant=>variant.image[0]),['https://example.test/gold.jpg','https://example.test/silver.jpg']);
 });
+
+
+test('HTML de ficha conserva el precio base para variantes sin sobreprecio',()=>{
+ const product={id:'v2',name:'Anillo',price:100,variantCommerceVersion:2,variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'gold',attributes:{Color:'Dorado'},stock:2,price:150},{variant:'silver',attributes:{Color:'Plateado'},stock:2}]};
+ const html=renderProductMetadataHtml(fs.readFileSync(new URL('../../product.html',import.meta.url),'utf8'),'v2',product).html;
+ const schemas=elements(html).filter(node=>attr(node,'type')==='application/ld+json').map(node=>JSON.parse(node.childNodes.map(child=>child.value||'').join('')));
+ const group=schemas.find(schema=>schema['@type']==='ProductGroup');
+ assert.deepEqual(group.hasVariant.map(variant=>variant.offers.price),['150','100']);
+});

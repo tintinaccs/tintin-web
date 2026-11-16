@@ -7079,3 +7079,13 @@ producción y fallaron en carrito; no se atribuyen al candidato ni se cuentan
 como aprobadas. Se conservan logs y límites en REVEAL_HERO_20261115.md.
 Las verificaciones de CI/merge/publicación se acreditan con los recibos
 terminales propios de la PR de esta rama, no con los cierres anteriores.
+
+## Continuación CI — 16/11/2026
+
+Codex `/root` retomó el PR #1405, SHA inicial `56b62037`, run `43863135965`, intento 1. Administración fallaba por el `href` esperado de una fixture de vigilancia con tag anterior. Interfaz tenía 14 timeouts en `public-spacing-product`: la primera adición abre el drawer modal y vuelve inerte la ficha; los recorridos ahora comprueban esa apertura, cierran con el control real y continúan con cantidades y eliminación. No se retira `inert` ni se fuerzan clicks.
+
+Se reprodujeron y corrigieron también los hallazgos de revisión: precio base V2 intacto al producir ofertas por variante; filtros de búsqueda/variante/stock/orden reinician la página sincrónicamente antes del render; deduplicación de adiciones ligada a la generación de Auth; cantidades aceptadas limitadas al máximo por línea para que analítica y persistencia coincidan. Regresiones nuevas: precio 150/100; cuenta anterior pendiente frente a cuenta actual; límites 99+1 y 80+30; cuatro controles desde página 2.
+
+Evidencia local: 157 pruebas Node (operaciones/carrito/SEO), 14 recorridos de ficha/selección entre 320 y 1920 px y 7 de búsqueda/paginación, todos aprobados. Fallos iniciales y salidas conservados en `artifacts/continuacion-1405-20261116/` (ignorado). Build y preflight se verifican antes del push; CI/merge/publicación pendientes del nuevo SHA. Se regeneran caché, CSP y protección desde fuentes; sin dependencias nuevas ni datos comerciales reales. Skills leídas y aplicadas manualmente: gh-fix-ci, systematic-debugging y verification-before-completion.
+
+Validación de continuación antes del push: `build:pages`, `ci:preflight` y protección de flujos aprobados; 11 casos adicionales de carrito/color/14 líneas/foco aprobados (total de esta continuación: 157 Node + 32 navegador). CI remota todavía pendiente.

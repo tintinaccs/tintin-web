@@ -1,4 +1,4 @@
-import {normalizeCollectionSlug} from './colecciones-publicas.mjs?v=tintin-20261116-discovery-1';
+import {normalizeCollectionSlug} from './colecciones-publicas.mjs?v=tintin-20261116-discovery-2';
 export const PUBLIC_ORIGIN = 'https://tintinaccs.com';
 export const CATALOG_PAGE_SIZE = 48;
 

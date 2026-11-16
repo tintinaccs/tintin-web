@@ -1,12 +1,12 @@
 import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import {productStructuredData} from '../../core/store/datos-producto-seo.mjs?v=tintin-20261116-discovery-1';
+import {productStructuredData} from '../../core/store/datos-producto-seo.mjs?v=tintin-20261116-discovery-2';
 /* =============================================================
    TINTIN — Fase 7: política única de catálogo público
 
    Mantiene una sola definición de producto comprable para portada,
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
-import { loadCollections, normalizeCollectionSlug } from '../collections/datos-publicos-colecciones.js?v=tintin-20261116-discovery-1';
+import { loadCollections, normalizeCollectionSlug } from '../collections/datos-publicos-colecciones.js?v=tintin-20261116-discovery-2';
 import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20261031-seo-espacios-2';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 import { variantStockLimit, hasProductStock, resolveProductVariant, productVariantPrice, productStockTotal, stableVariantSelection, variantSelectionLabel, variantOffers } from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
