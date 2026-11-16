@@ -1,0 +1,77 @@
+# Carrito, búsqueda y catálogo rastreable — 16/11/2026
+
+Implementación sobre `codex/carrito-busqueda-visibilidad`, base actualizada `48278362` (la base montada inicialmente era `818ceeac`).
+Evidencia generada por Codex `/root`; las pruebas de esta rama no acreditan un despliegue.
+
+## Fuentes conservadas
+
+La tienda usa HTML/CSS y JavaScript nativo, sin framework. `tienda.js` presenta las fichas y el carrito; el controlador compartido de navegación administra paneles, teclado, foco, fondo y scroll. `sincronizacion-carrito.js` es el escritor del carrito. `estado-productos.js` y la política pública proporcionan el catálogo completo para búsqueda, con subconjuntos para inicio y ficha.
+
+Firestore conserva productos, colecciones, configuración y carritos por cuenta. Cloudflare Pages entrega documentos y Functions: `/api/public-catalog` filtra los campos públicos y comparte su caché de diez segundos con los renderers de categorías y sitemaps. La ficha consulta el documento actual y comprueba la visibilidad de la colección. No se agregaron escritores de catálogo, servicios, dependencias, cambios de Rules ni credenciales.
+
+Cloudinary entrega las fotos existentes. `/products/:handle` y `/collections/:handle` son compatibilidad con URLs antiguas de Shopify, no un segundo catálogo. Las integraciones vigentes de pedidos, PayPal, correo y Sheets conservan sus autoridades y contratos.
+
+## Cambios
+
+- El escritor confirma una adición antes de abrir o avisar. `sessionStorage.tt_cart_auto_opened_v1` permite una sola apertura automática por sesión de pestaña, independiente del contenido. Después, un aviso reutilizable ofrece Ver carrito. La entrada y salida parten del borde izquierdo; se conserva movimiento reducido. Las actualizaciones de filas conservan controles, foco y scroll; el total y finalizar compra quedan fuera del área desplazable.
+- Se agrupan adiciones simultáneas de la misma línea y se serializan mutaciones. Los cambios pendientes de otra identidad se descartan. El stock por opción y el agregado siguen en la autoridad existente. Una lectura fallida no confirma la adición. Si el navegador bloquea almacenamiento, existe respaldo en memoria y se informa que dura solamente en la pestaña.
+- La cuenta conserva su carrito local y remoto. Salir vuelve al carrito de invitada: **no se copia el carrito de una cuenta a otra ni a una sesión anónima de un dispositivo compartido**. Volver a la misma cuenta recupera su contenido. La caducidad de invitada sigue siendo de treinta minutos sin actividad; no reinicia la apertura automática.
+- Nombre, SKU público textual, materiales, acabado, variantes y atributos participan en la búsqueda compartida. Referencia exacta precede nombre exacto, palabras y prefijos, sinónimos y errores leves; los dígitos no se aproximan. En consultas generales se prioriza disponibilidad. Enter sin seleccionar una sugerencia abre todos los resultados; las cargas anteriores no sustituyen la más reciente.
+- `/catalogo?cat=relojes`, `?cat=bolsos`, `?cat=accesorios` y las colecciones activas entregan H1, texto útil, precios, estado y enlaces a productos sin ejecutar JavaScript. Accesorios reúne las líneas existentes excluyendo relojes, bolsos y mochilas. No se crean categorías comerciales en Firestore. La paginación tiene enlaces y canónica propia. La home y el pie enlazan estas familias y la información de envíos/contacto.
+- Las fichas comparten Product/Offer o ProductGroup entre servidor y cliente. Se conserva PYG, stock y el texto explícito de bajo pedido, que produce PreOrder. La tienda se identifica como vendedor, sin atribuirle el fabricante de todas las piezas. No se inventan SKU, GTIN, marcas, opiniones o fechas. BreadcrumbList describe la jerarquía. Se conservan las descripciones de autenticidad publicadas.
+- Los sitemaps usan el mismo catálogo y colecciones visibles, incluyen agotados publicados y paginación; una lectura incompleta falla en vez de truncarse silenciosamente. `lastmod` requiere fecha comercial conocida, sin fecha ficticia de 1970. Ausencias definitivas responden 404/noindex y fallos temporales 503/Retry-After. Se retiran los validadores del archivo estático al transformar HTML para no devolver 304 con precio/stock viejo.
+- Búsqueda, stock, orden y parámetros adicionales tienen noindex; los parámetros de medición se eliminan de la canónica. No se publican combinaciones de filtros en sitemap. No se modifican autenticación ni noindex de administración, cuenta, checkout y pedidos.
+- GA4 conserva consentimiento. Las adiciones se miden en la confirmación del escritor, sin inferirlas de restauraciones de Auth o snapshots. Una apertura produce una vista de carrito. Se filtran consultas que parezcan correo, teléfono, documento o dirección; la ubicación de página enviada a GA4 excluye parámetros y fragmentos. No se enviaron eventos de prueba a una propiedad real.
+
+## Ejemplos comprobados
+
+Lectura del endpoint público obtenida mediante TinyFish el 16/11/2026. La última lectura contenía 321 productos y doce colecciones; el catálogo continúa cambiando. Las fixtures conservan solamente unos ejemplos públicos, no pretenden ser un inventario actual.
+
+| Consulta | Producto real de la muestra | Antes → ahora |
+| --- | --- | --- |
+| cartera beige | BOLSO ALONDRA | Sin coincidencia → coincide por categoría equivalente y color real |
+| reloj dorado | RELOJ GIANNA | Coincidía → mayor peso de nombre/atributos |
+| reloj plateado | RELOJ LUCIENNE | Coincidía → mayor peso de nombre/atributos |
+| AMIRA | BOLSO AMIRA | Coincidía por subcadena → prioriza la palabra completa |
+| cadenitas doradas | COLLAR AMULET | Solo aproximación → equivalencias de palabras |
+
+La muestra completa no tenía SKU públicos no vacíos. **No se inventaron referencias para llenar ese vacío.** `TIN-00042`, ceros iniciales y `aros plata 925` se prueban con fixtures identificadas como sintéticas; no se afirma que exista surtido de plata 925 verificado. Para referencias reales: completar el SKU público en el editor existente y repetir la búsqueda de ese código exacto.
+
+## Verificación
+
+Pruebas añadidas a los comandos y stages existentes: sesión del carrito, aislamiento entre cuentas, descubrimiento desde inicio/ficha/catálogo, datos reales de búsqueda, privacidad de consultas, deduplicación analítica, HTML inicial sin JS, handlers HTTP y sitemaps. Se ejecutan además las regresiones existentes de comercio/búsqueda/SEO, build y gates canónicos. Los resultados finales y enlaces de CI pertenecen al SHA del PR.
+
+La validación de cuentas usa identidades simuladas y servicios aislados; no se crearon cuentas ni pedidos reales. No acredita un dispositivo físico ni una sesión autenticada de producción. El HTML inicial fue probado sin JS en 390 y 1440 px; el carrito con catorce líneas en 390×844, 844×390, 768×1024 y 1440×900, además de teclado y movimiento reducido.
+
+## Acciones externas concretas
+
+1. **Publicación y rastreo.** Después de desplegar el SHA aprobado, verificar `/catalogo?cat=relojes`, `/catalogo?cat=bolsos`, `/catalogo?cat=accesorios`, `/sitemap.xml` y una ficha disponible, agotada y bajo pedido. Confirmar HTTP, HTML inicial, canónica y precio actual. Validar una muestra con [Rich Results Test](https://search.google.com/test/rich-results). Solo entonces solicitar indexación desde Search Console si existe autorización.
+2. **Search Console/GA4.** El conector GSC Wizard devolvió `payment_required / subscription_required` tanto para propiedades GSC como GA4: no hay baseline de impresiones/clics, cobertura ni diagnósticos de cuenta acreditados. Restablecer su acceso o abrir directamente la propiedad de `tintinaccs.com`. En Search Console → Sitemaps, comprobar `https://tintinaccs.com/sitemap.xml`; en Inspección de URLs, revisar una muestra y la canónica seleccionada. Exportar últimos 28 días completos frente a los 28 previos, separando marca, categorías y fichas. No se registró ni se modificó una propiedad.
+3. **GA4 de producción.** En Administrar → Flujo web → Medición mejorada, revisar Búsqueda en el sitio y desactivar el evento automático si duplica la instrumentación propia. En DebugView, con consentimiento, comprobar una sola búsqueda, vista de producto, adición, apertura y comienzo de checkout por acción. La configuración y eventos reales de cuenta no pudieron comprobarse desde el conector.
+4. **Merchant Center.** La documentación actual incluye [Paraguay y PYG](https://support.google.com/merchants/answer/160637?hl=en); no marca a Paraguay como país con pestaña Shopping. Esa lista no certifica la cuenta, sus destinos ni una aprobación. Abrir Merchant Center → Información de empresa/Países y → Productos/Necesita atención para verificar destinos, fichas gratuitas, idioma español, moneda PYG y condiciones de envío reales. No se activó un feed: el catálogo muestra productos descritos como imitaciones con logotipos, y la [política de falsificaciones](https://support.google.com/merchants/answer/6149993?hl=en) también revisa el sitio de destino. Excluir esos artículos del feed por sí solo no certifica elegibilidad. Conservar la información de autenticidad en la tienda; una revisión comercial del destino es necesaria antes de una publicación en Merchant Center.
+5. **Feed preparado a nivel de contrato, pendiente de elegibilidad.** Fuente única: endpoint público más colecciones visibles; `id` estable del documento, nombre, descripción, enlace canónico, fotos reales, precio/priceCurrency PYG y disponibilidad del mismo modelo de inventario. SKU/GTIN/marca solo cuando sean reales. Para variantes, identidad estable de opción, grupo común, foto/precio/stock por combinación y URL que abra esa selección; no exportar combinaciones con una landing que muestre otro precio. Bajo pedido requiere condiciones y fecha verificadas cuando el destino la exija. No exportar imitaciones, ocultos, borradores, URLs no indexables ni identificadores inventados. No se ofrece un archivo listo para subir mientras falte la revisión de elegibilidad.
+6. **Perfil de Empresa.** La búsqueda pública no confirmó inequívocamente un perfil de este comercio; esto no prueba que no exista. Revisar la cuenta del negocio en Google Maps antes de crear otro. Según las [reglas oficiales](https://support.google.com/business/answer/3038177), una tienda solo online no acredita elegibilidad; confirmar atención presencial o servicio presencial admisible. No publicar un domicilio particular ni inventar una dirección. Si corresponde un negocio de área de servicio, ocultar el domicilio y usar solamente cobertura real.
+7. **Redes.** Mantener `Tintin Accesorios & Relojes`, `https://tintinaccs.com/` y “Accesorios femeninos y relojes en Paraguay. Retiro coordinado en San Lorenzo, delivery en zonas habilitadas y encomiendas al interior” en Instagram, TikTok, Facebook y WhatsApp Business. Instagram `@tintinaccs` y WhatsApp `+595981299331` son los canales ya publicados en el sitio; confirmar titularidad/URL de TikTok y Facebook antes de añadirlos a sameAs. Para publicaciones de productos usar enlaces directos a su ficha o a categorías como `?cat=relojes` y `?cat=bolsos`. No se escribieron perfiles externos.
+8. **Envíos y Bing.** Se conserva la cobertura y horarios publicados en Envíos y la configuración real que lee checkout; no se inventaron tarifas o ciudades ni páginas geográficas. No se encontró configuración activa de Bing/IndexNow en el repositorio y no hay acceso de cuenta acreditado para verificarla. Si se habilita, verificar `tintinaccs.com` y su sitemap en Bing Webmaster antes de configurar una clave o enviar URLs.
+
+Las mejoras de código no garantizan una posición ni el contenido de las respuestas de IA; su efecto externo requiere despliegue, nuevo rastreo y medición con acceso.
+
+Skills consultadas: tintin-ecommerce-flows, tintin-search-seo, tintin-responsive-a11y, emil-animate (incluida receta de drawer), cloud-environment-runtime, tintin-qa-release y gh-fix-ci. Lectura de instrucciones verificada; no se atribuye una activación nativa invisible del cliente.
+
+## Continuación CI — 16/11/2026
+
+Codex `/root` retomó el PR #1405, SHA inicial `56b62037`, run `43863135965`, intento 1. Administración fallaba por el `href` esperado de una fixture de vigilancia con tag anterior. Interfaz tenía 14 timeouts en `public-spacing-product`: la primera adición abre el drawer modal y vuelve inerte la ficha; los recorridos ahora comprueban esa apertura, cierran con el control real y continúan con cantidades y eliminación. No se retira `inert` ni se fuerzan clicks.
+
+Se reprodujeron y corrigieron también los hallazgos de revisión: precio base V2 intacto al producir ofertas por variante; filtros de búsqueda/variante/stock/orden reinician la página sincrónicamente antes del render; deduplicación de adiciones ligada a la generación de Auth; cantidades aceptadas limitadas al máximo por línea para que analítica y persistencia coincidan. Regresiones nuevas: precio 150/100; cuenta anterior pendiente frente a cuenta actual; límites 99+1 y 80+30; cuatro controles desde página 2.
+
+Evidencia local: 157 pruebas Node (operaciones/carrito/SEO), 14 recorridos de ficha/selección entre 320 y 1920 px y 7 de búsqueda/paginación, todos aprobados. Fallos iniciales y salidas conservados en `artifacts/continuacion-1405-20261116/` (ignorado). Build y preflight se verifican antes del push; CI/merge/publicación pendientes del nuevo SHA. Se regeneran caché, CSP y protección desde fuentes; sin dependencias nuevas ni datos comerciales reales. Skills leídas y aplicadas manualmente: gh-fix-ci, systematic-debugging y verification-before-completion.
+
+Validación de continuación antes del push: `build:pages`, `ci:preflight` y protección de flujos aprobados; 11 casos adicionales de carrito/color/14 líneas/foco aprobados (total de esta continuación: 157 Node + 32 navegador). CI remota todavía pendiente.
+
+## Consolidación de las dos X actuales
+
+El PR #1406 (commit `4c8888dc`, Firebase 13.3.0 / CLI 15.36.0) se incorpora conservando su historia al PR #1405. Su run `43864256236` fallaba únicamente por drift de diagnóstico/publicación tras cambiar package/lock. En checkout aislado se reprodujo la regeneración, se instalaron 701 paquetes desde el lock y aprobaron preflight y compatibilidad CLI/glob. Las revisiones semánticas por página y recurso cliente permanecían idénticas.
+
+La CI intermedia `43881932691` / intento 1 / `e23477d8` detectó que dos informes se habían guardado después del build; se regeneraron ambos manifiestos. `43882403380` / intento 1 / `d43081f9` aprobó preflight, CodeQL, Cloudflare y Comercio crítico antes de consolidar dependencias. Será reemplazada por CI del commit combinado: sus resultados parciales no se transfieren como PASS del nuevo SHA. Los cinco hallazgos de revisión están corregidos y sus threads resueltos.
+
+El cierre de #1406 como duplicado queda condicionado a la integración de sus cambios en #1405. No se fuerza ningún merge ni se relajan checks, presupuestos, seguridad, CSP o pruebas. Se vuelve a generar después de la última edición documental y se comprueba estabilidad de los artefactos antes del push.

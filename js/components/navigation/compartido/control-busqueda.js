@@ -1,7 +1,7 @@
-import { normalizeProductSearch as normalize, productSearchText, productSearchScore } from '../../../core/store/busqueda-productos.mjs?v=tintin-20261021-commerce-review-1';
+import { normalizeProductSearch as normalize, productSearchText, productSearchScore } from '../../../core/store/busqueda-productos.mjs?v=tintin-20261116-discovery-2';
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261114-catalog-fit-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261116-discovery-2';
 
 // El área desplazable conserva todas las coincidencias del catálogo público.
 import { hasProductStock, firstAvailableVariant, productDefaultPrice } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
@@ -14,6 +14,7 @@ let activeIndex = -1;
 let loadPromise = null;
 let catalogLoaded = false;
 let catalogSignature = '';
+let loadGeneration = 0;
 
 function safeImageUrl(value) {
   if (!String(value || '').trim()) return '';
@@ -51,7 +52,7 @@ function searchProducts(query) {
   return index
     .map(entry => ({ ...entry, score: resultScore(entry, normalizedQuery) }))
     .filter(entry => entry.score > 0)
-    .sort((a, b) => (b.score === 100) - (a.score === 100) || Number(hasProductStock(b.product)) - Number(hasProductStock(a.product)) || b.score - a.score || String(a.product.name).localeCompare(String(b.product.name), 'es'))
+    .sort((a, b) => (b.score >= 100) - (a.score >= 100) || (a.score >= 100 ? b.score - a.score : 0) || Number(hasProductStock(b.product)) - Number(hasProductStock(a.product)) || b.score - a.score || String(a.product.name).localeCompare(String(b.product.name), 'es'))
     .map(entry => entry.product);
 }
 
@@ -181,6 +182,10 @@ function renderResults(query) {
   const matches = searchProducts(cleaned);
   if (!matches.length) {
     results.appendChild(stateNode(`No encontramos resultados para “${cleaned}”.`));
+    const categories = document.createElement('a');
+    categories.href = '/collections';
+    categories.textContent = 'Ver categorías';
+    results.appendChild(categories);
     return;
   }
   const fragment = document.createDocumentFragment();
@@ -252,6 +257,7 @@ function setActiveResult(nextIndex) {
 
 async function ensureProducts(force = false) {
   if (loadPromise && !force) return loadPromise;
+  const generation = ++loadGeneration;
 
   const results = document.getElementById('search-results');
   if (results && document.getElementById('search-input')?.value) {
@@ -265,10 +271,12 @@ async function ensureProducts(force = false) {
       return typeof load === 'function' ? load({ force }) : window.PRODUCTS || [];
     })
     .then(products => {
+      if (generation !== loadGeneration) return products;
       syncSearchCatalog(Array.isArray(products) ? products : window.PRODUCTS || []);
       return products;
     })
     .catch(error => {
+      if (generation !== loadGeneration) throw error;
       loadPromise = null;
       console.warn('[SearchController] No se pudo cargar el catálogo.', error);
       if (results && document.getElementById('search-input')?.value && document.getElementById('search-panel')?.classList.contains('open')) {
@@ -326,6 +334,9 @@ export function initSearchController() {
     } else if (event.key === 'Enter' && activeIndex >= 0 && items[activeIndex]) {
       event.preventDefault();
       items[activeIndex].click();
+    } else if (event.key === 'Enter' && input.value.trim()) {
+      event.preventDefault();
+      location.assign('/catalogo?q=' + encodeURIComponent(input.value.trim()));
     }
   });
 

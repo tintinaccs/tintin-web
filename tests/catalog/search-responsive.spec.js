@@ -374,7 +374,7 @@ test('las tarjetas no ofrecen favoritos y conservan la acción accesible despué
  await expect(page.locator('#cat-grid [data-product-id]')).toHaveCount(3);
  const card=page.locator('#cat-grid [data-product-id]:not(.tt-stock-unavailable)').filter({has:page.getByRole('button',{name:/Agregar .* al carrito/})}).first();
  await expect(card.locator('a.tt-card-btn-view')).toHaveText('Ver');
- await expect(card.locator('a.tt-card-btn-view')).toHaveAttribute('href',/product\.html\?id=/);
+ await expect(card.locator('a.tt-card-btn-view')).toHaveAttribute('href',/^\/product\?id=/);
  const add=card.locator('button.tt-card-btn-cart');
  await expect(add).toHaveText('Agregar al carrito');
  await add.click();

@@ -8,7 +8,7 @@ const slice=(a,b)=>source.slice(source.indexOf(a),source.indexOf(b,source.indexO
 function fixture(readProduct) {
   const items=[{id:'ring',lineId:'ring-solitario',variant:'solitario',qty:1}];
   let writes=0;
-  const c=vm.createContext({window:{TintinProductsStore:{readProduct}},MAX_QTY:99,variantStockLimit,normalizeVariant:v=>v,
+  const c=vm.createContext({authGeneration:1,window:{TintinProductsStore:{readProduct}},MAX_QTY:99,variantStockLimit,normalizeVariant:v=>v,
     currentLocalCart:()=>items,withCartMutation:fn=>fn(),writeLocal:value=>(writes++,value),scheduleRemoteSync(){},showFeedback(){}});
   vm.runInContext(slice('  const cartStockReads','  async function addToCart')+slice('  async function updateQty','  async function clearCart'),c);
   return {c,items,writes:()=>writes};
@@ -27,6 +27,15 @@ test('una variante disponible aumenta sin exceder la suma del inventario',async(
   const f=fixture(async()=>({id:'ring',stock:2,variantInventory:[{variant:'solitario',stock:2}]}));
   assert.equal((await f.c.updateQty('ring-solitario',1)).changed,true);
   assert.equal((await f.c.updateQty('ring-solitario',1)).changed,false);assert.equal(f.items[0].qty,2);
+});
+for (const action of ['updateQty','removeFromCart']) test(`${action} pendiente no modifica la siguiente cuenta`,async()=>{
+ const f=fixture(async()=>({id:'ring',stock:5}));f.items[0].qty=2;
+ if(action==='removeFromCart')vm.runInContext(slice('  async function removeFromCart','  async function updateQty'),f.c);
+ let run;
+ f.c.withCartMutation=fn=>new Promise(resolve=>{run=()=>resolve(fn());});
+ const pending=action==='updateQty'?f.c.updateQty('ring-solitario',-1):f.c.removeFromCart('ring-solitario');
+ f.c.authGeneration=2;run();const result=await pending;
+ assert.equal(action==='updateQty'?result.changed:result,false);assert.equal(f.writes(),0);assert.equal(f.items[0].qty,2);
 });
 
 test('recorte de stock en tiempo real informa una sola vez y descarta otra identidad',async()=>{

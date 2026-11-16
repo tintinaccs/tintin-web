@@ -1,9 +1,6 @@
-import {
-  decodeFirestoreFields,
-  firestoreAdminListAll
-} from '../cloudflare/firebase-admin-ligero.js';
-
-const PUBLIC_ORIGIN = 'https://tintinaccs.com';
+import {loadPublicCatalog, CATALOG_PAGE_SIZE} from '../cloudflare/catalogo-publico-seo.mjs';
+import {catalogUrl} from '../js/core/store/seo-catalogo.mjs';
+import {categoryMatches} from '../js/core/store/colecciones-publicas.mjs';
 
 function xml(value) {
   return String(value ?? '')
@@ -14,30 +11,27 @@ function xml(value) {
     .replace(/'/g, '&apos;');
 }
 
-function documentId(document) {
-  return String(document?.name || '').split('/').pop() || '';
-}
 
-export async function onRequest({ request, env }) {
+
+export async function onRequest(context) {
+  const {request} = context;
   if (!['GET', 'HEAD'].includes(request.method)) {
     return new Response(null, { status: 405, headers: { allow: 'GET, HEAD' } });
   }
 
   try {
-    const documents = await firestoreAdminListAll(env, 'collections', 300);
-    const rows = documents.flatMap(document => {
-      const data = decodeFirestoreFields(document?.fields || {});
-      if (data.visible === false) return [];
-      const slug = String(data.slug || data.handle || documentId(document) || '').trim();
-      if (!slug) return [];
-      const loc = `${PUBLIC_ORIGIN}/catalogo?cat=${encodeURIComponent(slug)}`;
-      return [`  <url>\n    <loc>${xml(loc)}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`];
-    });
+    const {products, collections} = await loadPublicCatalog(context);
+    const slugs = ['', 'accesorios', ...collections.map(row => row.slug)];
+    const locations = [...new Set(slugs.flatMap(slug => {
+      const count = products.filter(product => categoryMatches(product, slug)).length;
+      return count ? Array.from({length:Math.ceil(count / CATALOG_PAGE_SIZE)}, (_,i) => catalogUrl(slug, i+1)) : [];
+    }))];
+    const rows = locations.map(loc => `  <url>\n    <loc>${xml(loc)}</loc>\n  </url>`);
 
     const body = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${rows.join('\n')}\n</urlset>\n`;
     const headers = {
       'content-type': 'application/xml; charset=utf-8',
-      'cache-control': 'public, max-age=300, s-maxage=900, stale-while-revalidate=3600',
+      'cache-control': 'public, max-age=0, s-maxage=10',
       'x-content-type-options': 'nosniff'
     };
     return request.method === 'HEAD'

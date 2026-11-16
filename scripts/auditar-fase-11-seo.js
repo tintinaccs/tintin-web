@@ -42,11 +42,11 @@ const oldRefs = activeFiles.filter(file => read(file).includes('tintinaccs.githu
 check('No quedan URLs activas de GitHub Pages', oldRefs.length === 0, 'Referencias antiguas: ' + oldRefs.join(', '));
 
 const script = read('tienda.js');
-check('Producto genera canonical absoluto y estable', script.includes("new URL('/product', '" + origin + "')") && script.includes("canonicalProductUrl.searchParams.set('id', String(product.id))"), 'El producto no debe canonicalizar una URL .html que Cloudflare redirige.');
-check('Producto publica JSON-LD vigente', /'@type': 'Product'/.test(script) && /priceCurrency: 'PYG'/.test(script) && /schema.org\/InStock/.test(script) && /schema.org\/OutOfStock/.test(script) && /canonicalProductUrl.href/.test(script), 'Los datos estructurados deben reflejar precio, moneda, URL y stock.');
+check('Producto genera canonical absoluto y estable', read('js/core/store/datos-producto-seo.mjs').includes("https://tintinaccs.com/product?id=") && read('js/core/store/datos-producto-seo.mjs').includes("encodeURIComponent(product.id)"), 'El producto no debe canonicalizar una URL .html que Cloudflare redirige.');
+check('Producto publica JSON-LD vigente', script.includes('TintinCatalogPolicy?.productStructuredData') && read('js/core/store/datos-producto-seo.mjs').includes("priceCurrency:'PYG'") && read('functions/product.js').includes('productStructuredData(product'), 'Los datos estructurados deben reflejar precio, moneda, URL y stock.');
 
 const productFunction = read('functions/product.js');
-check('Producto publica metadata social desde Cloudflare', productFunction.includes('env.ASSETS.fetch(request)') && productFunction.includes('firestoreAdminGet') && productFunction.includes('x-tintin-product-meta') && productFunction.includes("'@type': 'Product'"), 'La ficha debe entregar título, OG/Twitter y JSON-LD específicos antes de ejecutar JavaScript del navegador.');
+check('Producto publica metadata social desde Cloudflare', productFunction.includes('env.ASSETS.fetch(new Request(request.url') && productFunction.includes('firestoreAdminGet') && productFunction.includes('x-tintin-product-meta') && productFunction.includes('productStructuredData(product'), 'La ficha debe entregar título, OG/Twitter y JSON-LD específicos antes de ejecutar JavaScript del navegador.');
 
 const sitemapIndexLocations = xmlLocations(read('sitemap.xml'));
 const expectedSitemapIndex = [
@@ -84,7 +84,7 @@ for (const file of fs.readdirSync(root).filter(file => file.endsWith('.html'))) 
 }
 
 const pkg = JSON.parse(read('package.json'));
-check('Fase 11 forma parte del cierre', pkg.scripts['audit:phase11'] === 'node scripts/auditar-fase-11-seo.js' && pkg.scripts['test:phase11-seo'] === 'playwright test tests/seo/phase11-seo.spec.js --project=chromium' && pkg.scripts['audit:final'].includes('audit:phase11') && pkg.scripts['audit:final'].includes('test:shopify-product-redirect'), 'SEO y redirecciones de handles de Shopify deben quedar permanentes.');
+check('Fase 11 forma parte del cierre', pkg.scripts['audit:phase11'] === 'node scripts/auditar-fase-11-seo.js' && pkg.scripts['test:phase11-seo'].includes('playwright test tests/seo/phase11-seo.spec.js') && pkg.scripts['test:phase11-seo'].includes('tests/seo/catalog-*.test.mjs') && pkg.scripts['audit:final'].includes('audit:phase11') && pkg.scripts['audit:final'].includes('test:shopify-product-redirect'), 'SEO y redirecciones de handles de Shopify deben quedar permanentes.');
 
 // La Fase 11 ya no posee un workflow de PR separado. El monitoreo de producción
 // quedó consolidado en monitor-produccion.yml; aquí se verifica la cobertura real

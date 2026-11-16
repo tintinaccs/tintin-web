@@ -461,7 +461,7 @@ html body .tt-notifications-kicker { display:none !important; }
 .tt-collections-sheet .tt-sheet-grid { gap:12px !important; padding:16px !important; }
 .tt-sheet-grid .tt-sheet-item { border:1px solid var(--tt-drawer-border); border-radius:18px !important; padding:14px 8px !important; gap:10px; }
 .tt-sheet-grid .tt-sheet-item-img { width:clamp(68px,18vw,100px); height:clamp(68px,18vw,100px); }
-.tt-cart-drawer { border-radius:24px 0 0 24px; overflow:hidden; }
+.tt-cart-drawer { border-radius:0 24px 24px 0; overflow:hidden; }
 @media (max-width:767px) {
   .tt-collections-sheet .tt-sheet-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
   .tt-sheet-grid .tt-sheet-item { font-size:11px; line-height:1.4; }
@@ -594,6 +594,18 @@ html body :is(#tt-header-desktop-tablet,#tt-header-tablet,#tt-tabbar,[data-tt-su
 /* The late Store Gate stylesheet must not place its retry notice over the
    header controls or a modal's footer, including a landscape phone. */
 html.tt-surface-locked body #tt-store-gate-network-notice { display:none !important; }
+/* Mi carrito entra desde el borde izquierdo en todos los dispositivos.
+   WAAPI del controlador compartido administra entrada/salida y reduced motion. */
+html body #cart-drawer {
+  left:0 !important;
+  right:auto !important;
+  transform:none !important;
+  border-radius:0 24px 24px 0;
+  transition:none !important;
+}
+html body #cart-drawer .tt-cart-body { flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; }
+html body #cart-drawer .tt-cart-footer { flex:0 0 auto; }
+html body #cart-drawer :is(.tt-cart-fulfilment,#tt-cart-order-note) { margin:6px 0; font-size:.75rem; line-height:1.45; }
 @media (max-width:767px) {
   html body #tt-store-gate-network-notice { bottom:calc(108px + env(safe-area-inset-bottom)) !important; }
 }

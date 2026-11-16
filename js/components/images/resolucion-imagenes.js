@@ -1,4 +1,4 @@
-import { firstEligibleCollectionProduct } from '../../core/store/colecciones-publicas.mjs?v=tintin-20261030-home-history-4';
+import { firstEligibleCollectionProduct } from '../../core/store/colecciones-publicas.mjs?v=tintin-20261116-discovery-2';
 // La lectura pública no descarga las herramientas de guardado administrativo.
 const withAdminSiteChange = async action => (await import('../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1')).withAdminSiteChange(action);
 /* =============================================================

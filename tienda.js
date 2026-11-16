@@ -287,7 +287,7 @@ function getStockLimit(productId, variant) {
 async function addToCart(productId, variant = '') {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261112-delivery-separate-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261116-discovery-2');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -298,10 +298,6 @@ async function addToCart(productId, variant = '') {
     imageUrl: variant ? cartSync.productVariantImage(product, variant, getProductImage(product.id)) : product.imageUrl || product.image || getProductImage(product.id) || '',
     ...(variant ? { variant } : {})
   });
-  if (result?.changed) {
-    openCart();
-    showAddedToCart(product.name);
-  }
   return result;
 }
 
@@ -392,6 +388,41 @@ function syncCartWithCatalog() {
 
 let cartPriceNotice = [];
 
+// Conserva los nodos de las líneas existentes (incluido el control enfocado).
+// Una actualización de stock/cantidad no reinicia el panel ni su scroll.
+function patchCartNode(current, next) {
+  if (current.nodeType !== next.nodeType || current.nodeName !== next.nodeName) {
+    current.replaceWith(next.cloneNode(true));
+    return;
+  }
+  if (current.nodeType === Node.TEXT_NODE) {
+    if (current.textContent !== next.textContent) current.textContent = next.textContent;
+    return;
+  }
+  if (current.nodeType !== Node.ELEMENT_NODE) return;
+  for (const attr of [...current.attributes]) if (!next.hasAttribute(attr.name)) current.removeAttribute(attr.name);
+  for (const attr of next.attributes) if (current.getAttribute(attr.name) !== attr.value) current.setAttribute(attr.name, attr.value);
+  const nodes = [...next.childNodes];
+  nodes.forEach((node, i) => current.childNodes[i] ? patchCartNode(current.childNodes[i], node) : current.appendChild(node.cloneNode(true)));
+  while (current.childNodes.length > nodes.length) current.lastChild.remove();
+}
+
+function patchCartBody(body, markup) {
+  const template = document.createElement('template');
+  template.innerHTML = markup;
+  const key = row => JSON.stringify([row.dataset.id, row.querySelector('[data-cart-variant]')?.dataset.cartVariant || '']);
+  const rows = new Map([...body.querySelectorAll('.tt-cart-item')].map(row => [key(row), row]));
+  let position = body.firstChild;
+  for (const node of [...template.content.children]) {
+    const existing = node.matches('.tt-cart-item') ? rows.get(key(node)) : null;
+    const target = existing || node;
+    if (existing) patchCartNode(existing, node);
+    if (target !== position) body.insertBefore(target, position);
+    position = target.nextSibling;
+  }
+  while (position) { const next = position.nextSibling; position.remove(); position = next; }
+}
+
 function renderCart() {
   const body = document.getElementById('cart-body');
   const footer = document.getElementById('cart-footer');
@@ -425,7 +456,7 @@ function renderCart() {
     return;
   }
 
-  body.innerHTML = priceNoticeHtml + cart.map(item => {
+  patchCartBody(body, priceNoticeHtml + cart.map(item => {
     const imgUrl = sanitizeClassicImageUrl(item.imageUrl || getProductImage(item.id), 160);
     const safeId = escapeAttribute(item.id);
     const safeName = escapeHtml(item.name);
@@ -440,6 +471,7 @@ function renderCart() {
       <div class="tt-cart-item-info">
         <div class="tt-cart-item-name">${safeName}</div>
         ${item.variant ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">${safeVariant}</div>` : ''}
+        ${item.purchaseMode === 'preorder' || /bajo pedido/i.test(getProductById(item.id)?.description || getProductById(item.id)?.desc || '') ? '<p class="tt-cart-fulfilment">Bajo pedido · sujeto a confirmación</p>' : ''}
         <div class="tt-cart-item-price">${priceMarkup({ price: item.price, priceBefore: (() => { const p = (window.PRODUCTS || []).find(p => String(p.id) === String(item.id)); return p?.variantCommerceVersion === 2 ? selectedProductMoney(p,item.variant).priceBefore : p?.priceBefore; })() })}</div>
         <div class="tt-cart-qty">
           <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="-1" aria-label="Restar">−</button>
@@ -452,15 +484,16 @@ function renderCart() {
       </div>
     </div>
   `;
-  }).join('');
+  }).join(''));
 
   if (footer) {
     footer.style.display = 'block';
-    footer.innerHTML = `
+    if (!footer.querySelector('.tt-cart-checkout-btn')) footer.innerHTML = `
       <div class="tt-cart-subtotal">
         <span>Subtotal</span>
         <span>${formatPrice(getCartTotal())}</span>
       </div>
+      <p id="tt-cart-order-note" hidden>Los productos bajo pedido requieren confirmación de disponibilidad.</p>
       <a href="/checkout" class="tt-cart-checkout-btn" style="margin-top:12px;">
         Finalizar compra →
       </a>
@@ -468,6 +501,8 @@ function renderCart() {
         Seguir comprando
       </button>
     `;
+    footer.querySelector('.tt-cart-subtotal span:last-child').textContent = formatPrice(getCartTotal());
+    footer.querySelector('#tt-cart-order-note').hidden = !cart.some(item => item.purchaseMode === 'preorder' || /bajo pedido/i.test(getProductById(item.id)?.description || getProductById(item.id)?.desc || ''));
   }
   if (totalEl) totalEl.textContent = formatPrice(getCartTotal());
 }
@@ -522,6 +557,7 @@ function initSurfaceController() {
     },
   });
   register('cart', 'cart-drawer', '[data-nav-action="cart"],#tabbar-cart', '#btn-cart-close', { beforeOpen: renderCart });
+  window.dispatchEvent(new CustomEvent('tintin:cart-surface-ready'));
   register('account', 'account-drawer', '[data-nav-action="account"]', '#btn-account-close');
 
   addEventListener('tintin:surface-change', event => {
@@ -615,7 +651,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261114-catalog-fit-1')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261116-discovery-2')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -1201,7 +1237,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261112-delivery-separate-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261116-discovery-2');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1216,7 +1252,6 @@ function initLookCombinator() {
         }
         const anySkipped = results.some(result => !result?.changed);
         if (anySkipped) showCartToast('Algunos productos de la combinación ya llegaron a su stock máximo');
-        openCart();
       } catch (error) {
         console.error('[look-combo] No se pudo agregar la combinación al carrito.', error);
         showCartToast('No pudimos agregar la combinación. Inténtalo nuevamente.');
@@ -1341,7 +1376,7 @@ function _pdUpdateQtyUI() {
   }
   const status = document.getElementById('product-status');
   if (status) {
-    status.textContent = unavailable ? 'Agotado' : 'Disponible';
+    status.textContent = unavailable ? 'Agotado' : /bajo pedido/i.test(_pdProduct?.description || _pdProduct?.desc || '') ? 'Bajo pedido · sujeto a confirmación de stock' : 'Disponible';
     status.dataset.stockState = unavailable ? 'out' : 'available';
   }
   for (const id of ['btn-product-add-cart', 'btn-product-buy-now']) {
@@ -1610,47 +1645,9 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
   const description = (product.desc || product.description)
     ? String(product.desc || product.description).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
     : undefined;
-  const available = product.active !== false && isInStock(product);
-  const canonicalProductUrl = new URL('/product', 'https://tintinaccs.com');
-  canonicalProductUrl.searchParams.set('id', String(product.id));
-  const data = {
-    '@context': 'https://schema.org/',
-    '@type': 'Product',
-    // Mismo @id que el JSON-LD del servidor: ambos describen una sola entidad.
-    '@id': `${canonicalProductUrl.href}#product`,
-    name: product.name,
-    image: images.length ? images : undefined,
-    description: description || undefined,
-    sku: String(product.id),
-    category: product.category || product.cat || undefined,
-    brand: { '@type': 'Brand', name: 'Tintin Accesorios & Relojes' },
-    offers: {
-      '@type': 'Offer',
-      url: canonicalProductUrl.href,
-      priceCurrency: 'PYG',
-      price: product.variantCommerceVersion === 2 ? selectedProductMoney(product,_pdGetSelectedVariant()).price : product.price != null ? Number(product.price) : undefined,
-      availability: available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      itemCondition: 'https://schema.org/NewCondition',
-    },
-  };
-  const variants = window.TintinCatalogPolicy?.variantOffers?.(product);
-  if (Array.isArray(variants) && variants.length > 1) {
-    data['@type'] = 'ProductGroup';
-    data.productGroupID = data.sku;
-    data.hasVariant = variants.map((variant, index) => ({
-      '@type': 'Product',
-      name: `${product.name} — ${variant.label}`,
-      sku: variant.sku || `${data.sku}-${index + 1}`,
-      offers: {
-        '@type': 'Offer',
-        url: canonicalProductUrl.href,
-        priceCurrency: 'PYG',
-        price: variant.price,
-        availability: variant.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-        itemCondition: 'https://schema.org/NewCondition',
-      },
-    }));
-  }
+  const data = window.TintinCatalogPolicy?.productStructuredData?.(product, {images});
+  if (!data) return;
+  document.getElementById('tt-product-jsonld-server')?.remove();
   tag.textContent = JSON.stringify(data);
 }
 
@@ -1919,7 +1916,7 @@ function _renderProductDetail(product) {
       statusEl.style.color = '#b84c72';
       statusEl.style.setProperty('--dot-color', '#b84c72');
     } else {
-      statusEl.textContent = 'Disponible';
+      statusEl.textContent = /bajo pedido/i.test(product.description || product.desc || '') ? 'Bajo pedido · sujeto a confirmación de stock' : 'Disponible';
       statusEl.style.background = '';
       statusEl.style.color = '';
       statusEl.style.removeProperty('--dot-color');
@@ -2105,8 +2102,7 @@ function _renderProductDetail(product) {
         btnAdd.disabled = true;
         try {
           const variantStr = _pdGetSelectedVariant();
-          const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
-          if (result?.changed) _showProductToast(_pdProduct.name);
+          await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
         } catch (error) {
           _showProductCartError(error);
         } finally {
@@ -2184,7 +2180,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261112-delivery-separate-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261116-discovery-2');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

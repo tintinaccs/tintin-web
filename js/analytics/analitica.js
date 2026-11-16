@@ -1,4 +1,5 @@
 import { db, appCheckReady } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
+import {safeSearchTerm} from './privacidad-busqueda.mjs?v=tintin-20261116-discovery-2';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   hasStatisticsConsent,
@@ -17,6 +18,7 @@ const ALLOWED_EVENTS = new Set([
   'view_item_list',
   'search',
   'add_to_cart',
+  'view_cart',
   'remove_from_cart',
   'begin_checkout',
   'purchase'
@@ -28,7 +30,6 @@ let configCache = { value: '', expiresAt: 0 };
 let configPromise = null;
 let scriptPromise = null;
 let pendingEvents = [];
-let previousCart = null;
 let consentUnsubscribe = null;
 
 function isTrackablePage() {
@@ -63,6 +64,11 @@ function sanitizeParams(params) {
     // los "_" evita que insertar uno en medio de una palabra prohibida
     // (ej. "em​ail" → "em_ail") esquive el filtro.
     if (!key || FORBIDDEN_PARAM.test(key) || FORBIDDEN_PARAM.test(key.replace(/_/g, ''))) continue;
+    if (key === 'search_term') {
+      const term = safeSearchTerm(rawValue);
+      if (term) output[key] = term;
+      continue;
+    }
 
     if (typeof rawValue === 'number') {
       const numeric = safeNumber(rawValue, { min: 0 });
@@ -238,7 +244,9 @@ async function enableAnalytics({ forceConfig = false } = {}) {
       anonymize_ip: true,
       allow_google_signals: false,
       allow_ad_personalization_signals: false,
-      send_page_view: true
+      send_page_view: true,
+      page_location: window.location.origin + window.location.pathname,
+      page_referrer: '',
     });
     state = 'ready';
     flushQueue();
@@ -278,19 +286,37 @@ function cartSummary(items) {
 }
 
 function bindCommerceEvents() {
-  window.addEventListener('tt_cart_updated', event => {
-    const next = cartSummary(event?.detail?.items);
-    if (previousCart) {
-      const quantityDelta = next.quantity - previousCart.quantity;
-      const valueDelta = Math.max(0, Math.abs(next.value - previousCart.value));
-      if (quantityDelta > 0) {
-        track('add_to_cart', { currency: 'PYG', value: valueDelta, quantity: quantityDelta, line_count: next.lines });
-      } else if (quantityDelta < 0) {
-        track('remove_from_cart', { currency: 'PYG', value: valueDelta, quantity: Math.abs(quantityDelta), line_count: next.lines });
-      }
+  // Los snapshots/restauraciones de cuenta no son adiciones comerciales.
+  // El escritor del carrito emite add/remove únicamente tras confirmar cambios.
+  let cartOpen = false;
+  window.addEventListener('tintin:surface-change', event => {
+    const open = event.detail?.surface === 'cart';
+    if (open && !cartOpen) {
+      const summary = cartSummary(window.TintinCartRuntime?.getCartLocal?.() || []);
+      track('view_cart', {currency:'PYG',value:summary.value,quantity:summary.quantity,item_count:summary.lines});
     }
-    previousCart = next;
+    cartOpen = open;
   }, { passive: true });
+
+  let searchTimer = 0;
+  const reportSearch = input => {
+    const term = safeSearchTerm(input?.value);
+    if (term) track('search', {search_term:term}, {dedupeKey:'search_'+term.toLowerCase()});
+  };
+  document.addEventListener('input', event => {
+    if (!event.target.matches?.('#search-input,#cat-search')) return;
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => reportSearch(event.target), 600);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Enter' && event.target.matches?.('#search-input,#cat-search')) reportSearch(event.target);
+  }, true);
+  window.addEventListener('tintin:products-loaded', () => {
+    if (!/(?:^|\/)product(?:\.html)?$/.test(location.pathname)) return;
+    const id = new URL(location.href).searchParams.get('id');
+    const product = window.PRODUCTS?.find(product => String(product.id) === id);
+    if (product) track('view_item', {currency:'PYG',value:Number(product.price)||0,item_count:1},{dedupeKey:'product_'+id});
+  });
 
   window.addEventListener('tintin:order-created', event => {
     const detail = event?.detail || {};

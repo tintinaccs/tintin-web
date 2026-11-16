@@ -1,4 +1,5 @@
 import { injectMasterDiagnosticsRuntime } from '../cloudflare/inyectar-diagnostico-maestro-admin.js';
+import {onRequest as catalogRequest} from './catalogo.js';
 
 const LIGHTWEIGHT_PAGES = new Set([
   'about',
@@ -72,6 +73,7 @@ export function isLightweightPageName(value) {
 
 export async function onRequest({ request, env }) {
   const page = pageName(request);
+  if (page === 'catalogo.html') return catalogRequest({request, env});
   const asset = await env.ASSETS.fetch(request);
 
   // /admin tiene una Function dedicada; /admin.html cae en este wildcard.

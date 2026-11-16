@@ -1,8 +1,8 @@
-import { normalizeCollectionSlug } from './colecciones-publicas.mjs?v=tintin-20261030-home-history-4';
+import { normalizeCollectionSlug } from './colecciones-publicas.mjs?v=tintin-20261116-discovery-2';
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261030-home-history-5';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261114-catalog-fit-1';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261031-seo-espacios-2';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261116-discovery-2';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261116-discovery-2';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261031-seo-espacios-2';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';

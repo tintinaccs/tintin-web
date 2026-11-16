@@ -1,3 +1,13 @@
+## Carrito, búsqueda y catálogo orgánico — 2026-11-16 — Codex /root
+
+PASS_LOCAL en codex/carrito-busqueda-visibilidad. Checkout inicial818ceeac actualizado contra main48278362 antes del cierre; se conservaron filtros de variantes/fotos, retiro de favoritos, cambios de pedidos y paleta nuevos. No se heredan resultados de la base anterior. Autoridades y acciones externas en docs/carrito-busqueda-seo-20261116.md.
+
+PASS_LOCAL de la base actual:539 pruebas de comercio,254 de sincronización,19 de analítica/renderers HTTP/SEO; suite de68Chromium aprobada y cierre de9casos de carrito aprobado (incluye el caso adicional de retorno de foco ante disparador deshabilitado). build:pages y ci:preflight completos aprobados; auditoría SEO con1235comprobaciones y contratos arquitectónicos aprobados. La suite incluye catorce líneas, sesión/recarga/vaciado, stock/variantes, carrito mixto bajo pedido, foco/teclado/reduced motion, búsqueda desde inicio/catálogo/ficha y HTML inicial sin JS. Se revisó el diff y el plan protegido se regenera con su herramienta canónica. CI/PR e integración remotas todavía pendientes al registrar esta evidencia local. Se reinstalaron las dependencias bloqueadas vigentes con npm ci --ignore-scripts; no se agregaron dependencias. Habilidades consultadas: comercio, búsqueda/SEO, responsive/a11y, emil-animate, entorno cloud y QA-release.
+
+CI del PR1405, run43861537848/intento1, SHA1afa049f: fallo en las dos variantes de color-choice-browser porque la prueba elegía el segundo color sin cerrar la apertura inicial nueva. Se adapta el recorrido conservando todas las aserciones de líneas, precios, fotos y checkout y agregando que la segunda adición mantiene el panel cerrado. PASS_LOCAL:2/2Chromium de colores. El siguiente commit del mismo PR debe repetir CI y mantenimiento protegido; no se acredita PASS_CI todavía.
+
+NOT_VERIFIED: sesión autenticada/dispositivo físico en producción, baseline GSC/GA4 y cuenta Merchant/Bing/Perfil de Empresa. GSC Wizard rechaza lecturas por subscription_required; no se activaron cuentas, feed, indexación ni perfiles. El feed de publicación queda sujeto a elegibilidad real del destino por los productos descritos como imitaciones; no se certifica que excluir filas baste. La mejora pública exige desplegar el SHA revisado y nuevo rastreo. PR, checks e integración se siguen con el procedimiento protegido; no hay deploy manual ni escrituras comerciales.
+
 ## Hardening de rate limits en el middleware — 2026-11-15 — Claude Code
 
 Pedido: completar la cobertura de rate limit de borde en todos los endpoints de la API. Auditoría previa (solo lectura) identificó 5 grupos sin límite en _middleware.js: coupon-validate, notifications (GET y POST), claim-commerce-history, y los 4 webhooks de Sheets/local-commerce.
@@ -7069,3 +7079,21 @@ producción y fallaron en carrito; no se atribuyen al candidato ni se cuentan
 como aprobadas. Se conservan logs y límites en REVEAL_HERO_20261115.md.
 Las verificaciones de CI/merge/publicación se acreditan con los recibos
 terminales propios de la PR de esta rama, no con los cierres anteriores.
+
+## Continuación CI — 16/11/2026
+
+Codex `/root` retomó el PR #1405, SHA inicial `56b62037`, run `43863135965`, intento 1. Administración fallaba por el `href` esperado de una fixture de vigilancia con tag anterior. Interfaz tenía 14 timeouts en `public-spacing-product`: la primera adición abre el drawer modal y vuelve inerte la ficha; los recorridos ahora comprueban esa apertura, cierran con el control real y continúan con cantidades y eliminación. No se retira `inert` ni se fuerzan clicks.
+
+Se reprodujeron y corrigieron también los hallazgos de revisión: precio base V2 intacto al producir ofertas por variante; filtros de búsqueda/variante/stock/orden reinician la página sincrónicamente antes del render; deduplicación de adiciones ligada a la generación de Auth; cantidades aceptadas limitadas al máximo por línea para que analítica y persistencia coincidan. Regresiones nuevas: precio 150/100; cuenta anterior pendiente frente a cuenta actual; límites 99+1 y 80+30; cuatro controles desde página 2.
+
+Evidencia local: 157 pruebas Node (operaciones/carrito/SEO), 14 recorridos de ficha/selección entre 320 y 1920 px y 7 de búsqueda/paginación, todos aprobados. Fallos iniciales y salidas conservados en `artifacts/continuacion-1405-20261116/` (ignorado). Build y preflight se verifican antes del push; CI/merge/publicación pendientes del nuevo SHA. Se regeneran caché, CSP y protección desde fuentes; sin dependencias nuevas ni datos comerciales reales. Skills leídas y aplicadas manualmente: gh-fix-ci, systematic-debugging y verification-before-completion.
+
+Validación de continuación antes del push: `build:pages`, `ci:preflight` y protección de flujos aprobados; 11 casos adicionales de carrito/color/14 líneas/foco aprobados (total de esta continuación: 157 Node + 32 navegador). CI remota todavía pendiente.
+
+## Consolidación de las dos X actuales
+
+El PR #1406 (commit `4c8888dc`, Firebase 13.3.0 / CLI 15.36.0) se incorpora conservando su historia al PR #1405. Su run `43864256236` fallaba únicamente por drift de diagnóstico/publicación tras cambiar package/lock. En checkout aislado se reprodujo la regeneración, se instalaron 701 paquetes desde el lock y aprobaron preflight y compatibilidad CLI/glob. Las revisiones semánticas por página y recurso cliente permanecían idénticas.
+
+La CI intermedia `43881932691` / intento 1 / `e23477d8` detectó que dos informes se habían guardado después del build; se regeneraron ambos manifiestos. `43882403380` / intento 1 / `d43081f9` aprobó preflight, CodeQL, Cloudflare y Comercio crítico antes de consolidar dependencias. Será reemplazada por CI del commit combinado: sus resultados parciales no se transfieren como PASS del nuevo SHA. Los cinco hallazgos de revisión están corregidos y sus threads resueltos.
+
+El cierre de #1406 como duplicado queda condicionado a la integración de sus cambios en #1405. No se fuerza ningún merge ni se relajan checks, presupuestos, seguridad, CSP o pruebas. Se vuelve a generar después de la última edición documental y se comprueba estabilidad de los artefactos antes del push.

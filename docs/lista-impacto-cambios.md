@@ -1,3 +1,7 @@
+## Carrito y descubrimiento público — 2026-11-16
+
+Autoridades: escritor de carrito + controlador compartido de paneles, motor de búsqueda común, catálogo público existente y renderers de Cloudflare. Primera apertura por sesión independiente del contenido; confirmaciones/cuentas/stock y filas enfocadas conservadas. Búsqueda textual de referencias/atributos/sinónimos compartida por encabezado y catálogo. Categorías/paginación con HTML inicial, canónicas y sitemap propios; Product/Offer compartido, sin fabricante ni SKU inventados. Preserva filtros de variantes/fotos nuevos de main, checkout, autenticación y paleta. Derivados por generadores; pruebas de sesión, aislamiento, búsqueda fuera de la primera página, HTML sin JS, HTTP/stock y privacidad de GA4 en los gates existentes. No se configura Merchant/GBP/IndexNow ni se publican datos sin acceso/autorización. Detalle y límites: docs/carrito-busqueda-seo-20261116.md.
+
 ## 2026-11-14 — quitar CTA general de WhatsApp repetido antes del footer
 
 - Siete documentos públicos: eliminar el cierre general repetido y conservar el contacto único del footer compartido; formularios y consultas contextuales siguen en su flujo.
@@ -1223,3 +1227,7 @@ y decodificada. Texto/acciones tienen salida de emergencia; no cambia tamaño,
 marca, foto ni lógica comercial. Incluye red lenta, decode tardío, cambio de
 orientación, fallo de recurso/controlador y movimiento reducido. Derivados,
 caché y protección se generan canónicamente. Evidencia:REVEAL_HERO_20261115.md.
+
+- 2026-11-16 — Continuación PR #1405: corregidos recorridos de modal y fixture de versiones; ofertas V2 conservan precio base, filtros vuelven a primera página y adiciones pendientes se separan por identidad y límite de línea. Evidencia: docs/carrito-busqueda-seo-20261116.md, 157 pruebas Node + 21 navegador aprobadas; CI final pendiente.
+
+- 2026-11-16 — Se consolida la actualización Firebase/CLI del #1406 en #1405 preservando el commit original; regeneración de diagnóstico/publicación y protección de package/lock, sin cambios semánticos adicionales de cliente. Validación remota pendiente del SHA combinado.

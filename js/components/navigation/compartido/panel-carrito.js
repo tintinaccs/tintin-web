@@ -8,6 +8,7 @@ export function renderCartDrawer() {
         <div class="tt-drawer-brand-heading"><img class="tt-drawer-brand-logo" src="${logoUrl()}" alt="Tintin" width="110" height="46"><h2 class="tt-cart-title">MI CARRITO</h2></div>
         <button type="button" class="tt-cart-close" id="btn-cart-close" aria-label="Cerrar carrito">${svgIcon(UI_ICONS.close, { size: 16 })}</button>
       </div>
+      <p class="tt-sr-only" id="tt-cart-announcement" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="tt-cart-body" id="cart-body"></div>
       <div class="tt-cart-footer" id="cart-footer" style="display:none">
         <div class="tt-cart-total-row">

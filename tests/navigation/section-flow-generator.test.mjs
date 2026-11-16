@@ -34,7 +34,7 @@ test('galería informativa se retira hasta estabilizar sin reconstruir una etiqu
   vm.runInContext(helpers+runtime,scope);
   const gallery = '<script src="js/components/images/galeria-producto.js?v=fixture"></script>';
   const nested = '<scr'+gallery+'ipt src="js/components/images/galeria-producto.js?v=fixture"></script>';
-  const html = '<html><body><p>Contenido</p>'+nested+'<script src="tienda.js?v=fixture" defer></script></body></html>';
+  const html = '<html><body><p>Contenido</p>'+nested+'<script src="tienda.js?v=tintin-20261116-discovery-2" defer></script></body></html>';
   const result = scope.centralizeRuntime(html,'contact.html');
   assert.ok(!result.includes('galeria-producto'));
   assert.equal((result.match(/<script\b/g)||[]).length,1);

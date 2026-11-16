@@ -74,12 +74,15 @@ test('ficha sin producto válido no es indexable; los errores transitorios no to
     'products/activo': { status: 200, body: { fields: { active: { booleanValue: true }, name: { stringValue: 'Reloj Test' }, category: { stringValue: 'relojes' }, price: { integerValue: '150000' } } } },
     'products/transitorio': { status: 503, body: {} }
   };
+  const originalCaches = globalThis.caches;
+  globalThis.caches = {default:{match:async()=>null,put:async()=>{}}};
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async input => {
     const url = String(input);
     if (url === 'https://oauth2.googleapis.com/token') {
       return new Response(JSON.stringify({ access_token: 'test-token', expires_in: 3600 }), { status: 200 });
     }
+    if (url.includes('/documents/collections?')) return Response.json({documents:[{name:'projects/seo-test/databases/(default)/documents/collections/relojes',fields:{name:{stringValue:'Relojes'},visible:{booleanValue:true}}}]});
     const docPath = url.split('/documents/')[1];
     const entry = firestore[docPath];
     if (!entry) throw new Error('fetch inesperado en prueba: ' + url);
@@ -89,8 +92,8 @@ test('ficha sin producto válido no es indexable; los errores transitorios no to
   try {
     for (const query of ['', '?id=', '?id=..%2Fetc%2Fpasswd', '?id=inexistente', '?id=inactivo']) {
       const response = await productRequest(query);
-      expect(response.status, query).toBe(200);
-      expect(response.headers.get('x-robots-tag'), query).toBe('noindex, nofollow');
+      expect(response.status, query).toBe(404);
+      expect(response.headers.get('x-robots-tag'), query).toBe('noindex, follow');
       expect(response.headers.get('cache-control'), query).toBe('no-store');
     }
 
@@ -100,10 +103,11 @@ test('ficha sin producto válido no es indexable; los errores transitorios no to
     expect(await active.text()).toContain('Reloj Test | Tintin Accesorios &amp; Relojes');
 
     const transient = await productRequest('?id=transitorio');
-    expect(transient.status).toBe(200);
+    expect(transient.status).toBe(503);
     expect(transient.headers.get('x-robots-tag')).toBeNull();
   } finally {
     globalThis.fetch = originalFetch;
+    globalThis.caches = originalCaches;
   }
 });
 

@@ -1,11 +1,14 @@
-import { productDefaultPrice, productStockTotal } from '../js/core/store/inventario-variantes.mjs';
+import {productStructuredData, productAvailability} from '../js/core/store/datos-producto-seo.mjs';
+import {publicResource} from '../cloudflare/catalogo-publico-seo.mjs';
+import {normalizeCollectionSlug} from '../js/core/store/colecciones-publicas.mjs';
+import { productDefaultPrice } from '../js/core/store/inventario-variantes.mjs';
 import {
   decodeFirestoreFields,
   firestoreAdminGet
 } from '../cloudflare/firebase-admin-ligero.js';
 
 import { hasPublicProductFields } from '../js/core/store/publicacion-producto.mjs';
-import { firstAvailableVariant, hasProductStock, variantOffers } from '../js/core/store/inventario-variantes.mjs';
+import { firstAvailableVariant, hasProductStock } from '../js/core/store/inventario-variantes.mjs';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 
 const PUBLIC_ORIGIN = 'https://tintinaccs.com';
@@ -101,53 +104,6 @@ function replaceTitle(html, value) {
     : html.replace('</head>', `  ${tag}\n</head>`);
 }
 
-function productJsonLd({ id, name, description, image, canonical, price, active, stock, sku, variants }) {
-  const numericPrice = Number(price);
-  const payload = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    '@id': `${canonical}#product`,
-    name,
-    description,
-    image: [image],
-    url: canonical,
-    sku: String(sku || id),
-    brand: { '@type': 'Brand', name: 'Tintin Accesorios & Relojes' }
-  };
-  if (Number.isFinite(numericPrice) && numericPrice >= 0) {
-    payload.offers = {
-      '@type': 'Offer',
-      priceCurrency: 'PYG',
-      price: String(Math.trunc(numericPrice)),
-      url: canonical,
-      availability: active !== false && Number(stock ?? 1) > 0
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock'
-    };
-  }
-  // Con variantes, el producto se publica como ProductGroup (subtipo de
-  // Product): conserva la oferta resumen y detalla cada combinación con su
-  // propio precio y disponibilidad.
-  if (Array.isArray(variants) && variants.length > 1) {
-    payload['@type'] = 'ProductGroup';
-    payload.productGroupID = payload.sku;
-    payload.hasVariant = variants.map((variant, index) => ({
-      '@type': 'Product',
-      name: `${name} — ${variant.label}`,
-      sku: variant.sku || `${payload.sku}-${index + 1}`,
-      image: [image],
-      offers: {
-        '@type': 'Offer',
-        priceCurrency: 'PYG',
-        price: String(Math.trunc(Number(variant.price))),
-        url: canonical,
-        availability: variant.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
-      }
-    }));
-  }
-  return JSON.stringify(payload).replace(/</g, '\\u003c');
-}
-
 /**
  * Render puro compartido por Cloudflare y por el servidor determinista de CI.
  * Mantener la transformación en una sola función impide que la prueba valide
@@ -185,25 +141,21 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   html = replaceMeta(html, 'twitter:image', image);
   html = replaceMeta(html, 'twitter:card', 'summary_large_image');
 
-  const ld = productJsonLd({
-    id: safeId,
-    name,
-    description,
-    image,
-    canonical,
-    price,
-    active: data?.active,
-    stock: hasProductStock(data) ? (data.variantCommerceVersion === 2 ? productStockTotal(data) : data?.stock === null || data?.stock === '' ? null : data?.stock ?? data?.['Variant Inventory Qty'] ?? null) : 0,
-    sku: firstValue(data, ['handle', 'Handle']),
-    variants: variantOffers(data)
-  });
+  const product = {...data, id:safeId, name, price:data.variantCommerceVersion === 2 ? data.price : price};
+  const ld = JSON.stringify(productStructuredData(product, {canonical, images:[image]})).replace(/</g, '\\u003c');
+  const category = firstValue(data, ['category','cat','collectionSlug']);
+  const breadcrumbs = JSON.stringify({'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
+    {'@type':'ListItem',position:1,name:'Inicio',item:PUBLIC_ORIGIN+'/'},
+    {'@type':'ListItem',position:2,name:category || 'Catálogo',item:PUBLIC_ORIGIN+'/catalogo'+(category ? '?cat='+encodeURIComponent(category) : '')},
+    {'@type':'ListItem',position:3,name,item:canonical},
+  ]}).replace(/</g, '\\u003c');
   // El servidor ya validó la publicación: el texto no debe esperar al SDK.
   const previewText = {
     'product-name': name,
     'product-price': 'Gs. ' + Number(price || 0).toLocaleString('es-PY'),
     'product-cat': firstValue(data, ['category', 'cat', 'collectionSlug', 'collection']),
     'product-desc': stripHtml(rawDescription).slice(0, 4000),
-    'product-status': hasProductStock(data) ? 'Disponible' : 'Agotado',
+    'product-status': productAvailability(product) === 'PreOrder' ? 'Bajo pedido · sujeto a confirmación de stock' : hasProductStock(data) ? 'Disponible' : 'Agotado',
   };
   for (const [id, text] of Object.entries(previewText)) {
     const pattern = new RegExp('(<[a-z][^>]*\\bid="' + id + '"[^>]*>)[\\s\\S]*?(</[a-z][^>]*>)', 'i');
@@ -212,6 +164,10 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
       return tag + escapeHtml(text) + close;
     });
   }
+  const attributes = ['material','colorFinish','measurements','sizeFit','care','warranty']
+    .filter(key => String(data[key] || '').trim()).map(key => `${escapeHtml(key === 'colorFinish' ? 'Color' : ({material:'Material',measurements:'Medidas',sizeFit:'Ajuste',care:'Cuidados',warranty:'Garantía'}[key]))}: ${escapeHtml(data[key])}`).join(' · ');
+  html = html.replace(/(<[^>]+id="product-desc"[^>]*>[\s\S]*?<\/[^>]+>)/,
+    `$1<p id="product-server-fulfilment">${attributes ? attributes + '<br>' : ''}Retiro coordinado en San Lorenzo, delivery en zonas habilitadas y encomienda al interior de Paraguay. <a href="/envios">Ver condiciones de envío</a> · <a href="/contact">Consultar disponibilidad</a></p>`);
   html = html.replace(/(<button\b[^>]*\bid="btn-product-(?:add-cart|buy-now)"[^>]*)(>)/gi,
     (_, open, close) => open + ' disabled' + close);
   const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(mainImage)}" imagesrcset="${escapeHtml(imageSrcset)}" imagesizes="${escapeHtml(imageSizes)}" fetchpriority="high" id="tt-product-image-preload">`;
@@ -228,7 +184,7 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
     if (/data-tt-product-server-preview=/i.test(match)) return match;
     return match.replace(/>$/, ' data-tt-product-server-preview="1">');
   });
-  html = html.replace('</head>', `  ${performanceHints}\n  <script type="application/ld+json" id="tt-product-jsonld-server">${ld}</script>\n</head>`);
+  html = html.replace('</head>', `  ${performanceHints}\n  <script type="application/ld+json" id="tt-product-jsonld-server">${ld}</script>\n  <script type="application/ld+json" id="tt-product-breadcrumbs">${breadcrumbs}</script>\n</head>`);
 
   return { html, canonical, image, mainImage };
 }
@@ -265,17 +221,14 @@ export function resolveProductMetadataWithin(promise, ceilingMs = PRODUCT_METADA
 }
 
 /**
- * La ficha base (sin id, con id inválido o inexistente, o de un producto
- * inactivo) responde 200 con robots "index, follow": un soft-404 indexable.
- * Solo ese estado definitivo se marca noindex; los timeouts y errores
- * transitorios de Firestore siguen entregando la ficha base sin tocar la
- * indexación.
+ * Ausencia definitiva: 404 y noindex. Un fallo temporal devuelve 503 y
+ * Retry-After para que el buscador reintente sin indexar una ficha vacía.
  */
 function withNoindex(asset) {
   const headers = new Headers(asset.headers);
-  headers.set('x-robots-tag', 'noindex, nofollow');
+  headers.set('x-robots-tag', 'noindex, follow');
   headers.set('cache-control', 'no-store');
-  return new Response(asset.body, { status: asset.status, statusText: asset.statusText, headers });
+  return new Response(asset.body, { status: 404, headers });
 }
 
 export async function onRequest(context) {
@@ -287,7 +240,10 @@ export async function onRequest(context) {
   // El binding ASSETS resuelve la ruta limpia /product al documento estático.
   // Pedir /product.html explícitamente hace que Pages lo canonice de vuelta a
   // /product con 308 y puede producir un rebote. Conservamos la URL pública.
-  const asset = await env.ASSETS.fetch(request);
+  const assetHeaders = new Headers(request.headers);
+  assetHeaders.delete('if-none-match');
+  assetHeaders.delete('if-modified-since');
+  const asset = await env.ASSETS.fetch(new Request(request.url,{method:'GET',headers:assetHeaders}));
   const responseForMethod = response => request.method === 'HEAD'
     ? new Response(null, { status: response.status, statusText: response.statusText, headers: response.headers })
     : response;
@@ -298,11 +254,12 @@ export async function onRequest(context) {
   if (!id || !/^[A-Za-z0-9_-]{1,180}$/.test(id)) return responseForMethod(withNoindex(asset));
 
   try {
-    const document = await resolveProductMetadataWithin(
-      firestoreAdminGet(env, `products/${id}`)
-    );
+    const [document, collections] = await resolveProductMetadataWithin(Promise.all([
+      firestoreAdminGet(env, `products/${id}`), publicResource(context, 'collections')
+    ]));
     if (!document?.fields) return responseForMethod(withNoindex(asset));
     const data = decodeFirestoreFields(document.fields);
+    if (!collections.some(row => normalizeCollectionSlug(row.id) === normalizeCollectionSlug(data.category || data.cat || data.collectionSlug || data.collection || data.type))) return responseForMethod(withNoindex(asset));
     if (!hasPublicProductFields({ ...data, id,
       name: stripHtml(firstValue(data, ['name', 'title', 'Title'])),
       category: firstValue(data, ['category', 'collectionSlug', 'collection', 'cat', 'type']),
@@ -310,19 +267,19 @@ export async function onRequest(context) {
     })) return responseForMethod(withNoindex(asset));
     if (request.method === 'HEAD') {
       const headers = new Headers(asset.headers);
-      headers.set('cache-control', 'public, max-age=30, s-maxage=120, stale-while-revalidate=300');
+      headers.set('cache-control', 'public, max-age=0, s-maxage=10');
       headers.set('x-tintin-product-meta', 'server');
       headers.set('x-tintin-product-image-preload', 'server');
-      headers.delete('content-length');
+      for (const name of ['content-length','content-encoding','etag','last-modified']) headers.delete(name);
       return new Response(null, { status: asset.status, statusText: asset.statusText, headers });
     }
 
     const rendered = renderProductMetadataHtml(await asset.text(), id, data);
     const headers = new Headers(asset.headers);
-    headers.set('cache-control', 'public, max-age=30, s-maxage=120, stale-while-revalidate=300');
+    headers.set('cache-control', 'public, max-age=0, s-maxage=10');
     headers.set('x-tintin-product-meta', 'server');
     headers.set('x-tintin-product-image-preload', 'server');
-    headers.delete('content-length');
+    for (const name of ['content-length','content-encoding','etag','last-modified']) headers.delete(name);
     return new Response(rendered.html, { status: asset.status, statusText: asset.statusText, headers });
   } catch (error) {
     const reason = error?.message || error;
@@ -331,6 +288,6 @@ export async function onRequest(context) {
     } else {
       console.error('[product-meta] no se pudo renderizar metadata:', reason);
     }
-    return responseForMethod(asset);
+    return responseForMethod(new Response(asset.body,{status:503,headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store','retry-after':'60'}}));
   }
 }
