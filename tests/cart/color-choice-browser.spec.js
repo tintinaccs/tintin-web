@@ -42,10 +42,14 @@ for (const variantV2 of [false,true]) test(`elegir no agrega; colores conservan 
   expect(await page.evaluate(() => window.TintinCartRuntime.getCartLocal())).toEqual([]);
   await page.locator('#btn-product-add-cart').click();
   await expect.poll(() => page.evaluate(() => window.TintinCartRuntime.getCartLocal().length)).toBe(1);
+  await expect(page.locator('#cart-drawer')).toBeVisible();
+  await page.locator('#btn-cart-close').click();
+  await expect(page.locator('#cart-drawer')).not.toBeVisible();
   await page.locator('[data-variant-value="Plateado"]').click();
   expect(await page.evaluate(() => window.TintinCartRuntime.getCartLocal().length)).toBe(1);
   await page.locator('#btn-product-add-cart').click();
   await expect.poll(() => page.evaluate(() => window.TintinCartRuntime.getCartLocal().length)).toBe(2);
+  await expect(page.locator('#cart-drawer')).not.toBeVisible();
   const lines = await page.evaluate(() => window.TintinCartRuntime.getCartLocal());
   expect(lines.map(({ variant, qty, imageUrl }) => ({ variant, qty, imageUrl }))).toEqual([
     { variant: 'Dorado', qty: 1, imageUrl: gold }, { variant: 'Plateado', qty: 1, imageUrl: silver }

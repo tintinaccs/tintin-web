@@ -56,4 +56,4 @@ La validación de cuentas usa identidades simuladas y servicios aislados; no se 
 
 Las mejoras de código no garantizan una posición ni el contenido de las respuestas de IA; su efecto externo requiere despliegue, nuevo rastreo y medición con acceso.
 
-Skills consultadas: tintin-ecommerce-flows, tintin-search-seo, tintin-responsive-a11y, emil-animate (incluida receta de drawer), cloud-environment-runtime y tintin-qa-release. Lectura de instrucciones verificada; no se atribuye una activación nativa invisible del cliente.
+Skills consultadas: tintin-ecommerce-flows, tintin-search-seo, tintin-responsive-a11y, emil-animate (incluida receta de drawer), cloud-environment-runtime, tintin-qa-release y gh-fix-ci. Lectura de instrucciones verificada; no se atribuye una activación nativa invisible del cliente.
