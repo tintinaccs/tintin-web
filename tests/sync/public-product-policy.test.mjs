@@ -6,6 +6,9 @@ import { hasPublicProductFields } from '../../js/core/store/publicacion-producto
 import { renderProductMetadataHtml } from '../../functions/product.js';
 import { hasProductStock, firstAvailableVariant, variantOffers } from '../../js/core/store/inventario-variantes.mjs';
 import { productVariantImage } from '../../js/components/images/foto-variante.mjs';
+import {productStructuredData,productAvailability} from '../../js/core/store/datos-producto-seo.mjs';
+import {normalizeCollectionSlug} from '../../js/core/store/colecciones-publicas.mjs';
+import {visibleCatalog} from '../../cloudflare/catalogo-publico-seo.mjs';
 const read = p => fs.readFileSync(new URL('../../'+p,import.meta.url),'utf8');
 const strip = s => s.replace(/^import[\s\S]*?;\s*$/gm,'').replace(/\bexport\s+/g,'');
 const html = '<html><head></head><body></body></html>';
@@ -18,7 +21,7 @@ test('unlimited and finite stock produce the correct structured availability', (
 });
 test('GET and HEAD share definitive index policy; transient failures remain retryable', async () => {
  let data={name:'',price:0,category:'',active:true};
- const c={URL,Headers,Response,Request,setTimeout,clearTimeout,console,hasPublicProductFields,hasProductStock,firstAvailableVariant,variantOffers,productVariantImage,firestoreAdminGet:async()=>{if(data instanceof Error)throw data;return data===null?null:{fields:data}},decodeFirestoreFields:x=>x};
+ const c={URL,Headers,Response,Request,setTimeout,clearTimeout,console,hasPublicProductFields,hasProductStock,firstAvailableVariant,variantOffers,productVariantImage,productStructuredData,productAvailability,normalizeCollectionSlug,publicResource:async()=>[{id:'aros',data:{name:'Aros'}}],firestoreAdminGet:async()=>{if(data instanceof Error)throw data;return data===null?null:{fields:data}},decodeFirestoreFields:x=>x};
  vm.createContext(c);vm.runInContext(strip(read('functions/product.js')),c);
  for(const scenario of [null,{name:'',category:'',price:0},{name:'Valid',category:'aros',price:70000,stock:null},new Error('transient')]) {
   data=scenario;
@@ -27,7 +30,8 @@ test('GET and HEAD share definitive index policy; transient failures remain retr
    c.context={request:new Request('https://tintin.test/product?id=p',{method}),env:{ASSETS:{fetch:async()=>new Response(method==='HEAD'?null:html,{headers:{'content-type':'text/html'}})}}};
    const response=await vm.runInContext('onRequest(context)',c);
    headers.push(response.headers.get('x-robots-tag'));
-   assert.equal(response.headers.get('x-robots-tag'),scenario===null || scenario?.price===0?'noindex, nofollow':null);
+   assert.equal(response.headers.get('x-robots-tag'),scenario===null || scenario?.price===0?'noindex, follow':null);
+   assert.equal(response.status,scenario instanceof Error?503:scenario===null || scenario?.price===0?404:200);
    if(method==='HEAD')assert.equal(await response.text(),'');
   }
   assert.equal(headers[0],headers[1]);
@@ -51,7 +55,7 @@ test('publication rejects incomplete/invalid products and retains sold out valid
 
 test('product sitemap excludes structurally invalid and inactive documents', async () => {
  const rows=[{id:'valid',name:'Valid',category:'aros',price:70000,stock:0},{id:'invalid',name:'',category:'',price:0},{id:'inactive',name:'Hidden',category:'aros',price:70000,active:false}];
- const c={URL,Headers,Response,Request,console,hasPublicProductFields,firestoreAdminListAll:async()=>rows.map(p=>({name:'products/'+p.id,fields:p})),decodeFirestoreFields:x=>x};
+ const c={URL,Headers,Response,Request,console,loadPublicCatalog:async()=>visibleCatalog(rows.map(({id,...data})=>({id,data})),[{id:'aros',data:{name:'Aros'}}])};
  vm.createContext(c);vm.runInContext(strip(read('functions/sitemap-products.xml.js')),c);
  c.context={request:new Request('https://tintin.test/sitemap-products.xml'),env:{}};
  const response=await vm.runInContext('onRequest(context)',c);const body=await response.text();

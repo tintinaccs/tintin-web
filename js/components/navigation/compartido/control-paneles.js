@@ -105,11 +105,11 @@
     }
 
     async animateSurface(element, opening) {
-      if (reduceMotion.matches || this.breakpoint === 'desktop') return;
+      if (reduceMotion.matches || (this.breakpoint === 'desktop' && element.id !== 'cart-drawer')) return;
       // Independent translate composes with the canonical CSS transform, even
       // where legacy styles use !important. Keep display until exit finishes.
       const mobile = this.breakpoint === 'mobile';
-      const start = mobile ? '0 100%' : '32px 0';
+      const start = element.id === 'cart-drawer' ? '-105% 0' : mobile ? '0 100%' : '32px 0';
       const animation = element.animate(
         opening ? [{ translate: start }, { translate: '0 0' }]
           : [{ translate: '0 0' }, { translate: start }],
@@ -122,6 +122,7 @@
     }
 
     async animateMorph(trigger, target, opening, token) {
+      if (target?.id === 'cart-drawer') return;
       if (this.breakpoint !== 'desktop' || reduceMotion.matches || !trigger?.isConnected || !target?.isConnected || !this.morphLayer) return;
       const from = trigger.getBoundingClientRect();
       const to = target.getBoundingClientRect();
@@ -352,8 +353,13 @@
       // not restore the opener; the next surface will establish its own focus.
       if (config) this.setBackgroundInert(config.element, false);
       document.documentElement.removeAttribute('data-tt-search-active');
-      if (restoreFocus && returnTarget?.isConnected && !config?.element.contains(returnTarget)) {
-        returnTarget.focus({ preventScroll: true });
+      if (restoreFocus) {
+        const usable = target => target instanceof HTMLElement && target.isConnected
+          && target.matches(FOCUSABLE) && target.getClientRects().length
+          && !target.closest('[inert],[hidden]') && !config?.element.contains(target);
+        const target = usable(returnTarget) ? returnTarget
+          : [...document.querySelectorAll(config?.triggerSelector || '[data-nav-action="cart"]')].find(usable);
+        target?.focus({ preventScroll: true });
       }
       if (config?.element.contains(document.activeElement)) document.activeElement.blur();
 

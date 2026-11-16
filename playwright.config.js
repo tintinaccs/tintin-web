@@ -16,7 +16,7 @@ const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefi
 module.exports = defineConfig({
   // Server sources are native JavaScript. Keep Node's ESM loader (including
   // shared browser URL imports) instead of rewriting them to CommonJS require.
-  build: { external: ['**/functions/**', '**/cloudflare/**'] },
+  build: { external: ['**/functions/**', '**/cloudflare/**', '**/js/pages/catalog/politica-exhibicion-catalogo.js'] },
   testDir: './tests',
   timeout: 60000,
   expect: { timeout: 15000 },

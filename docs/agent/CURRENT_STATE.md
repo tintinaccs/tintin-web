@@ -1,3 +1,11 @@
+## Carrito, búsqueda y catálogo orgánico — 2026-11-16 — Codex /root
+
+PASS_LOCAL en codex/carrito-busqueda-visibilidad. Checkout inicial818ceeac actualizado contra main48278362 antes del cierre; se conservaron filtros de variantes/fotos, retiro de favoritos, cambios de pedidos y paleta nuevos. No se heredan resultados de la base anterior. Autoridades y acciones externas en docs/carrito-busqueda-seo-20261116.md.
+
+PASS_LOCAL de la base actual:539 pruebas de comercio,254 de sincronización,19 de analítica/renderers HTTP/SEO; suite de68Chromium aprobada y cierre de9casos de carrito aprobado (incluye el caso adicional de retorno de foco ante disparador deshabilitado). build:pages y ci:preflight completos aprobados; auditoría SEO con1235comprobaciones y contratos arquitectónicos aprobados. La suite incluye catorce líneas, sesión/recarga/vaciado, stock/variantes, carrito mixto bajo pedido, foco/teclado/reduced motion, búsqueda desde inicio/catálogo/ficha y HTML inicial sin JS. Se revisó el diff y el plan protegido se regenera con su herramienta canónica. CI/PR e integración remotas todavía pendientes al registrar esta evidencia local. Se reinstalaron las dependencias bloqueadas vigentes con npm ci --ignore-scripts; no se agregaron dependencias. Habilidades consultadas: comercio, búsqueda/SEO, responsive/a11y, emil-animate, entorno cloud y QA-release.
+
+NOT_VERIFIED: sesión autenticada/dispositivo físico en producción, baseline GSC/GA4 y cuenta Merchant/Bing/Perfil de Empresa. GSC Wizard rechaza lecturas por subscription_required; no se activaron cuentas, feed, indexación ni perfiles. El feed de publicación queda sujeto a elegibilidad real del destino por los productos descritos como imitaciones; no se certifica que excluir filas baste. La mejora pública exige desplegar el SHA revisado y nuevo rastreo. PR, checks e integración se siguen con el procedimiento protegido; no hay deploy manual ni escrituras comerciales.
+
 ## Hardening de rate limits en el middleware — 2026-11-15 — Claude Code
 
 Pedido: completar la cobertura de rate limit de borde en todos los endpoints de la API. Auditoría previa (solo lectura) identificó 5 grupos sin límite en _middleware.js: coupon-validate, notifications (GET y POST), claim-commerce-history, y los 4 webhooks de Sheets/local-commerce.

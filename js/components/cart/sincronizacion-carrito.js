@@ -74,22 +74,26 @@ function createRuntime() {
   let feedbackTimer = 0;
   let guestExpiryTimer = 0;
   let lastGuestActivityTouch = 0;
+  const storageFallback = new Map();
 
   function rawString(key) {
+    if (storageFallback.has(key)) return storageFallback.get(key);
     try { return nativeGetItem.call(window.localStorage, key); } catch { return null; }
   }
 
   function rawStringSet(key, value) {
-    try { nativeSetItem.call(window.localStorage, key, String(value)); } catch {}
+    try { nativeSetItem.call(window.localStorage, key, String(value)); storageFallback.delete(key); }
+    catch { storageFallback.set(key, String(value)); }
   }
 
   function rawRemove(key) {
-    try { nativeRemoveItem.call(window.localStorage, key); } catch {}
+    storageFallback.delete(key);
+    try { nativeRemoveItem.call(window.localStorage, key); } catch { storageFallback.set(key,null); }
   }
 
   function rawGet(key) {
     try {
-      const parsed = JSON.parse(nativeGetItem.call(window.localStorage, key) || '[]');
+      const parsed = JSON.parse(rawString(key) || '[]');
       return Array.isArray(parsed) ? parsed : [];
     } catch {
       return [];
@@ -97,9 +101,7 @@ function createRuntime() {
   }
 
   function rawSet(key, items) {
-    try {
-      nativeSetItem.call(window.localStorage, key, JSON.stringify(Array.isArray(items) ? items : []));
-    } catch {}
+    rawStringSet(key, JSON.stringify(Array.isArray(items) ? items : []));
   }
 
   function deviceId() {
@@ -173,6 +175,7 @@ function createRuntime() {
       id,
       variant,
       qty,
+      ...((product ? /bajo pedido/i.test(product.description || product.desc || '') : input.purchaseMode === 'preorder') ? {purchaseMode:'preorder'} : {}),
       name: cleanText(input.name || input.title || '', 180),
       cat: cleanText(input.cat || input.category || '', 120),
       price,
@@ -344,6 +347,7 @@ function createRuntime() {
   }
 
   function statusLabel() {
+    if (storageFallback.has(activeCartKey)) return 'Solo en esta pestaña · almacenamiento bloqueado';
     if (!currentUser) return 'Guardado en este dispositivo';
     if (status === 'loading') return 'Cargando tu carrito…';
     if (status === 'saving') return 'Guardando cambios…';
@@ -370,7 +374,7 @@ function createRuntime() {
     updateSyncIndicator();
   }
 
-  function showFeedback(message, state = 'info') {
+  function showFeedback(message, state = 'info', { viewCart = false } = {}) {
     if (!message || !document.body) return;
     let node = document.getElementById('tt-cart-feedback');
     if (!node) {
@@ -384,6 +388,15 @@ function createRuntime() {
       document.body.appendChild(node);
     }
     node.textContent = message;
+    node.style.pointerEvents = 'auto';
+    if (viewCart) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = 'Ver carrito';
+      button.style.cssText = 'margin-left:12px;min-height:44px;color:inherit;background:transparent;border:0;text-decoration:underline;font:inherit;cursor:pointer';
+      button.addEventListener('click', () => { node.hidden = true; window.openCart?.(button); });
+      node.appendChild(button);
+    }
     node.dataset.state = state;
     node.classList.add('is-visible');
     node.hidden = false;
@@ -882,6 +895,33 @@ function createRuntime() {
   }
 
   const cartStockReads = new Map();
+  const pendingAdds = new Map();
+  const AUTO_OPEN_KEY = 'tt_cart_auto_opened_v1';
+  let autoOpened = false;
+  let pendingAutoItem = null;
+  window.addEventListener?.('tintin:cart-surface-ready', () => {
+    const pending = pendingAutoItem;
+    pendingAutoItem = null;
+    if (pending && pending.generation === authGeneration && currentLocalCart().some(item => item.lineId === pending.item.lineId)) confirmedAddition(pending.item);
+  });
+  function confirmedAddition(item) {
+    const announcement = document.getElementById('tt-cart-announcement');
+    if (announcement) announcement.textContent = `${item.name || 'Producto'} agregado al carrito. Cantidad: ${item.qty}.`;
+    try { autoOpened ||= sessionStorage.getItem(AUTO_OPEN_KEY) === '1'; } catch {}
+    if (!autoOpened && !window.TintinSurfaceController?.registry?.has('cart')) {
+      pendingAutoItem = {item, generation:authGeneration};
+      showFeedback(`✓ ${item.name || 'Producto'} agregado al carrito`, 'success', {viewCart:true});
+      return;
+    }
+    if (!autoOpened && typeof window.openCart === 'function') {
+      // Reservar antes de abrir: dos confirmaciones simultáneas abren una vez.
+      autoOpened = true;
+      try { sessionStorage.setItem(AUTO_OPEN_KEY, '1'); } catch {}
+      window.openCart();
+    } else if (!document.getElementById('cart-drawer')?.classList.contains('open')) {
+      showFeedback(`✓ ${item.name || 'Producto'} agregado al carrito`, 'success', { viewCart: true });
+    }
+  }
   async function refreshProductStock(id) {
     if (window.PRODUCTS?.some(product => String(product.id) === String(id))) return;
     if (!window.TintinProductsStore?.readProduct) throw new Error('stock_not_ready');
@@ -932,8 +972,21 @@ function createRuntime() {
     }
     const incoming = normalizeItem(item);
     if (!incoming) return { item: null, capped: false, changed: false, reason: 'invalid' };
-    return withCartMutation(() => {
+    if (pendingAdds.has(incoming.lineId)) return pendingAdds.get(incoming.lineId);
+    const generation = authGeneration;
+    const operation = withCartMutation(async () => {
+      if (generation !== authGeneration) return { changed: false, reason: 'identity_changed' };
+      try { await refreshProductStock(incoming.id); }
+      catch {
+        showFeedback('No pudimos comprobar el stock. Reintentá en un momento.', 'warning');
+        return { changed: false, reason: 'stock_unavailable' };
+      }
+      if (generation !== authGeneration) return { changed: false, reason: 'identity_changed' };
       const items = currentLocalCart();
+      if (items.length >= MAX_CART_LINES && !items.some(entry => entry.lineId === incoming.lineId)) {
+        showFeedback('Tu carrito llegó al máximo de productos. Finalizá esta compra para continuar.', 'warning');
+        return { changed: false, reason: 'line_limit' };
+      }
       const existing = items.find(entry => entry.lineId === incoming.lineId);
       const limit = stockLimit(incoming.id, item?.stock);
       const currentProductQty = items
@@ -968,27 +1021,35 @@ function createRuntime() {
       const normalized = writeLocal(items, { notify: true });
       scheduleRemoteSync(normalized);
       const saved = normalized.find(entry => entry.lineId === incoming.lineId) || null;
+      if (!saved) return { changed: false, reason: 'unavailable' };
+      window.TintinAnalytics?.track('add_to_cart', {currency:'PYG',value:saved.price * accepted,quantity:accepted});
+      confirmedAddition(saved);
       if (capped) {
         showFeedback(`Se agregó solamente la cantidad disponible (${accepted} de ${requested}).`, 'warning');
-      } else {
-        showFeedback(`✓ ${incoming.name || 'Producto'} agregado al carrito`, 'success');
       }
       return { item: saved, capped, changed: true, reason: capped ? 'partially_added' : 'added', limit, requested, accepted };
     });
+    pendingAdds.set(incoming.lineId, operation);
+    try { return await operation; }
+    finally { if (pendingAdds.get(incoming.lineId) === operation) pendingAdds.delete(incoming.lineId); }
   }
 
   async function removeFromCart(identifier, variantValue = undefined) {
+    const generation = authGeneration;
     return withCartMutation(() => {
+      if (generation !== authGeneration) return false;
       const items = currentLocalCart();
       const line = findLine(items, identifier, variantValue);
       if (!line) return false;
       const normalized = writeLocal(items.filter(item => item.lineId !== line.lineId), { notify: true });
       scheduleRemoteSync(normalized);
+      window.TintinAnalytics?.track('remove_from_cart', {currency:'PYG',value:line.price * line.qty,quantity:line.qty});
       return true;
     });
   }
 
   async function updateQty(identifier, delta, variantValue = undefined) {
+    const generation = authGeneration;
     const currentLine = findLine(currentLocalCart(), identifier, variantValue);
     if (currentLine && Number(delta) > 0) {
       try { await refreshProductStock(currentLine.id); }
@@ -998,10 +1059,12 @@ function createRuntime() {
       }
     }
     return withCartMutation(() => {
+      if (generation !== authGeneration) return {changed:false,reason:'identity_changed',item:null};
       const items = currentLocalCart();
       const line = findLine(items, identifier, variantValue);
       if (!line) return { capped: false, changed: false, item: null, reason: 'missing' };
       const numericDelta = Math.trunc(Number(delta) || 0);
+      const previousQty = line.qty;
       if (!numericDelta) return { capped: false, changed: false, item: line, reason: 'unchanged' };
 
       let capped = false;
@@ -1023,6 +1086,9 @@ function createRuntime() {
       if (!changed) return { capped, changed: false, item: line, reason: 'stock_limit' };
       const normalized = writeLocal(items, { notify: true });
       scheduleRemoteSync(normalized);
+      const saved = normalized.find(item => item.lineId === line.lineId);
+      const acceptedDelta = (saved?.qty || 0) - previousQty;
+      if (acceptedDelta) window.TintinAnalytics?.track(acceptedDelta > 0 ? 'add_to_cart' : 'remove_from_cart', {currency:'PYG',quantity:Math.abs(acceptedDelta),value:Math.abs(acceptedDelta) * (saved?.price || line.price)});
       return { capped, changed: true, item: normalized.find(item => item.lineId === line.lineId) || null, reason: capped ? 'stock_limit' : 'updated' };
     });
   }

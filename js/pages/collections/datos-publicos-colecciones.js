@@ -1,4 +1,4 @@
-import { normalizeCollectionSlug } from '../../core/store/colecciones-publicas.mjs?v=tintin-20261030-home-history-4';
+import { normalizeCollectionSlug } from '../../core/store/colecciones-publicas.mjs?v=tintin-20261116-discovery-1';
 export { normalizeCollectionSlug };
 /* Metadata pública compartida: sin Firebase, imágenes de configuración ni Auth. */
 import { unifyWristCollections } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';

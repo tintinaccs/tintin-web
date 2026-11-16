@@ -1,3 +1,4 @@
+import {catalogMetadata, categoryCopy} from '../../core/store/seo-catalogo.mjs?v=tintin-20261116-discovery-1';
 /* TINTIN — Runtime integral del Catálogo */
 const CATALOG_PATH_RE = /(?:^|\/)catalogo(?:\.html)?\/?$/i;
 
@@ -113,6 +114,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     const query = search?.value.trim() || '';
     const sortValue = sort?.value || 'default';
     const stockOnly = !!stock?.checked;
+    params.delete('page');
     params.delete('min');
     params.delete('max');
 
@@ -121,6 +123,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     if (stockOnly) params.set('stock', '1'); else params.delete('stock');
 
     history.replaceState({ tintinCatalog: true }, '', `${url.pathname}${params.size ? `?${params}` : ''}${url.hash}`);
+    normalizeMetadata();
   }
 
   function restoreControlsFromUrl() {
@@ -174,7 +177,12 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
 
   function normalizeMetadata() {
     const base = `https://tintinaccs.com/`;
-    const page = `${base}catalogo`;
+    const state = catalogMetadata(new URL(location.href));
+    const page = state.canonical;
+    const [heading, description] = categoryCopy(state.slug, document.getElementById('cat-titulo')?.textContent.replace(/ en Paraguay$/i,''));
+    document.title = heading + ' | Tintin Accesorios & Relojes';
+    document.querySelector('meta[name="description"]')?.setAttribute('content', description);
+    document.querySelector('meta[name="robots"]')?.setAttribute('content', state.filtered ? 'noindex, follow' : 'index, follow');
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', page);
     document.querySelector('meta[property="og:url"]')?.setAttribute('content', page);
     const image = `${base}assets/og-cover.jpg`;
@@ -184,6 +192,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
 
 
   function installObservers() {
+    window.addEventListener('tintin:catalog-filter-change', normalizeMetadata);
     if (grid) {
       gridObserver = new MutationObserver(guardCatalogSurface);
       gridObserver.observe(grid, { childList: true, subtree: true, characterData: true });

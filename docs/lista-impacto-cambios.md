@@ -1,3 +1,7 @@
+## Carrito y descubrimiento público — 2026-11-16
+
+Autoridades: escritor de carrito + controlador compartido de paneles, motor de búsqueda común, catálogo público existente y renderers de Cloudflare. Primera apertura por sesión independiente del contenido; confirmaciones/cuentas/stock y filas enfocadas conservadas. Búsqueda textual de referencias/atributos/sinónimos compartida por encabezado y catálogo. Categorías/paginación con HTML inicial, canónicas y sitemap propios; Product/Offer compartido, sin fabricante ni SKU inventados. Preserva filtros de variantes/fotos nuevos de main, checkout, autenticación y paleta. Derivados por generadores; pruebas de sesión, aislamiento, búsqueda fuera de la primera página, HTML sin JS, HTTP/stock y privacidad de GA4 en los gates existentes. No se configura Merchant/GBP/IndexNow ni se publican datos sin acceso/autorización. Detalle y límites: docs/carrito-busqueda-seo-20261116.md.
+
 ## 2026-11-14 — quitar CTA general de WhatsApp repetido antes del footer
 
 - Siete documentos públicos: eliminar el cierre general repetido y conservar el contacto único del footer compartido; formularios y consultas contextuales siguen en su flujo.

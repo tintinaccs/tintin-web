@@ -7,8 +7,25 @@ export function productSearchText(product) {
   const variants = product?.variants && typeof product.variants === 'object' ? JSON.stringify(product.variants) : '';
   return normalizeProductSearch([
     product?.name, product?.category, product?.cat, product?.description, product?.desc,
-    product?.sku, ...(Array.isArray(product?.tags) ? product.tags : []), variants,
+    product?.sku, product?.material, product?.colorFinish, product?.sizeFit,
+    ...(Array.isArray(product?.tags) ? product.tags : []), variants,
+    ...(product?.variantInventory || []).map(row => [row.sku, ...Object.values(row.attributes || {})].join(' ')),
   ].filter(Boolean).join(' '));
+}
+
+const EQUIVALENTS = [
+  ['bolso', 'bolsos', 'cartera', 'carteras', 'bag', 'bags'],
+  ['aro', 'aros', 'arete', 'aretes', 'pendiente', 'pendientes'],
+  ['collar', 'collares', 'cadenita', 'cadenitas', 'cadena', 'cadenas'],
+  ['reloj', 'relojes'], ['pulsera', 'pulseras'], ['anillo', 'anillos'],
+  ['dorado', 'dorada', 'dorados', 'doradas'], ['plateado', 'plateada', 'plateados', 'plateadas'],
+];
+function wordMatch(word, candidates, fuzzy = false) {
+  if (candidates.includes(word)) return 3;
+  if (!/^\d+$/.test(word) && candidates.some(candidate => candidate.startsWith(word))) return 2;
+  const synonyms = EQUIVALENTS.find(group => group.includes(word));
+  if (synonyms?.some(synonym => candidates.includes(synonym))) return 1;
+  return fuzzy && candidates.some(candidate => nearWord(word, candidate)) ? 0.5 : 0;
 }
 
 // Una sola inserción, omisión, sustitución o transposición. No se aplica a
@@ -35,13 +52,24 @@ function nearWord(word, candidate) {
 export function productSearchScore(product, query, searchText = productSearchText(product)) {
   const normalized = normalizeProductSearch(query).slice(0, 200);
   if (!normalized) return 0;
+  // Comparación de códigos como texto: conserva ceros y no aproxima dígitos.
+  const code = normalized.replace(/ /g, '');
+  const references = [product?.sku, ...(product?.variantInventory || []).map(row => row.sku)]
+    .filter(value => value != null && String(value).trim()).map(value => normalizeProductSearch(value).replace(/ /g, ''));
+  if (references.includes(code)) return 120;
   const name = normalizeProductSearch(product?.name);
   if (name === normalized) return 100;
   if (name.startsWith(normalized)) return 80;
+  if ((' ' + name + ' ').includes(' ' + normalized + ' ')) return 70;
   if (name.includes(normalized)) return 60;
-  if (searchText.includes(normalized)) return 30;
   const words = normalized.split(' ');
-  if (words.every(word => searchText.includes(word))) return 20;
   const candidates = [...new Set(searchText.split(' '))];
-  return words.every(word => searchText.includes(word) || candidates.some(candidate => nearWord(word, candidate))) ? 10 : 0;
+  const matches = words.map(word => wordMatch(word, candidates));
+  if (matches.every(Boolean)) {
+    const primary = normalizeProductSearch([product?.name, product?.category, product?.cat,
+      product?.material, product?.colorFinish, JSON.stringify(product?.variants || {}),
+      ...(product?.variantInventory || []).map(row => Object.values(row.attributes || {}).join(' '))].join(' ')).split(' ');
+    return 30 + words.filter(word => wordMatch(word, primary)).length * 8 + Math.min(...matches);
+  }
+  return words.every(word => wordMatch(word, candidates, true)) ? 10 : 0;
 }

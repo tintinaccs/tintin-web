@@ -1,10 +1,4 @@
-import {
-  decodeFirestoreFields,
-  firestoreAdminListAll
-} from '../cloudflare/firebase-admin-ligero.js';
-
-import { hasPublicProductFields } from '../js/core/store/publicacion-producto.mjs';
-
+import {loadPublicCatalog} from '../cloudflare/catalogo-publico-seo.mjs';
 const PUBLIC_ORIGIN = 'https://tintinaccs.com';
 
 function xml(value) {
@@ -16,32 +10,27 @@ function xml(value) {
     .replace(/'/g, '&apos;');
 }
 
-function documentId(document) {
-  return String(document?.name || '').split('/').pop() || '';
-}
+
 
 function isoDate(value) {
-  const date = new Date(value || 0);
+  if (!value) return '';
+  const date = new Date(value);
   return Number.isNaN(date.getTime()) ? '' : date.toISOString();
 }
 
-export async function onRequest({ request, env }) {
+export async function onRequest(context) {
+  const {request} = context;
   if (!['GET', 'HEAD'].includes(request.method)) {
     return new Response(null, { status: 405, headers: { allow: 'GET, HEAD' } });
   }
 
   try {
-    const documents = await firestoreAdminListAll(env, 'products', 1000);
-    const rows = documents.flatMap(document => {
-      const id = documentId(document);
-      if (!id) return [];
-      const data = decodeFirestoreFields(document?.fields || {});
-      if (!hasPublicProductFields({ ...data, id, name: data.name || data.title || data.Title,
-        category: data.category || data.collectionSlug || data.collection || data.cat || data.type,
-        price: data.price ?? data['Variant Price'] })) return [];
+    const {products} = await loadPublicCatalog(context);
+    const rows = products.flatMap(data => {
+      const id = data.id;
       const loc = `${PUBLIC_ORIGIN}/product?id=${encodeURIComponent(id)}`;
       const lastmod = isoDate(
-        data.updatedAt || data.updated_at || data.modifiedAt || data.catalogActivityAt || document.updateTime
+        data.updatedAt || data.updated_at || data.modifiedAt || data.catalogActivityAt
       );
       return [`  <url>\n    <loc>${xml(loc)}</loc>${lastmod ? `\n    <lastmod>${xml(lastmod)}</lastmod>` : ''}\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`];
     });
@@ -49,7 +38,7 @@ export async function onRequest({ request, env }) {
     const body = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${rows.join('\n')}\n</urlset>\n`;
     const headers = {
       'content-type': 'application/xml; charset=utf-8',
-      'cache-control': 'public, max-age=300, s-maxage=900, stale-while-revalidate=3600',
+      'cache-control': 'public, max-age=0, s-maxage=10',
       'x-content-type-options': 'nosniff'
     };
     return request.method === 'HEAD'

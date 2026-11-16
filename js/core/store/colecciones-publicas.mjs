@@ -7,6 +7,13 @@ export function normalizeCollectionSlug(value) {
     .replace(/^arm-cuffs?$/, 'armcuff').replace(/^jewelry-box$/, 'joyeros');
 }
 
+export function categoryMatches(product, slug) {
+  const category = normalizeCollectionSlug(product.category || product.cat || product.collectionSlug || product.collection || product.type);
+  return !slug || slug === 'todos' || (slug === 'accesorios'
+    ? !['relojes', 'bolsos', 'mochilas'].includes(category)
+    : category === normalizeCollectionSlug(slug));
+}
+
 export function firstEligibleCollectionProduct(slug, products, validImage) {
   if (!slug || !Array.isArray(products)) return null;
   return products.filter(product => product && normalizeCollectionSlug(product.category) === normalizeCollectionSlug(slug)
