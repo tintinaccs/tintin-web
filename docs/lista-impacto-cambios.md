@@ -1229,3 +1229,5 @@ orientación, fallo de recurso/controlador y movimiento reducido. Derivados,
 caché y protección se generan canónicamente. Evidencia:REVEAL_HERO_20261115.md.
 
 - 2026-11-16 — Continuación PR #1405: corregidos recorridos de modal y fixture de versiones; ofertas V2 conservan precio base, filtros vuelven a primera página y adiciones pendientes se separan por identidad y límite de línea. Evidencia: docs/carrito-busqueda-seo-20261116.md, 157 pruebas Node + 21 navegador aprobadas; CI final pendiente.
+
+- 2026-11-16 — Se consolida la actualización Firebase/CLI del #1406 en #1405 preservando el commit original; regeneración de diagnóstico/publicación y protección de package/lock, sin cambios semánticos adicionales de cliente. Validación remota pendiente del SHA combinado.

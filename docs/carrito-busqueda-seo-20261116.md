@@ -67,3 +67,11 @@ Se reprodujeron y corrigieron también los hallazgos de revisión: precio base V
 Evidencia local: 157 pruebas Node (operaciones/carrito/SEO), 14 recorridos de ficha/selección entre 320 y 1920 px y 7 de búsqueda/paginación, todos aprobados. Fallos iniciales y salidas conservados en `artifacts/continuacion-1405-20261116/` (ignorado). Build y preflight se verifican antes del push; CI/merge/publicación pendientes del nuevo SHA. Se regeneran caché, CSP y protección desde fuentes; sin dependencias nuevas ni datos comerciales reales. Skills leídas y aplicadas manualmente: gh-fix-ci, systematic-debugging y verification-before-completion.
 
 Validación de continuación antes del push: `build:pages`, `ci:preflight` y protección de flujos aprobados; 11 casos adicionales de carrito/color/14 líneas/foco aprobados (total de esta continuación: 157 Node + 32 navegador). CI remota todavía pendiente.
+
+## Consolidación de las dos X actuales
+
+El PR #1406 (commit `4c8888dc`, Firebase 13.3.0 / CLI 15.36.0) se incorpora conservando su historia al PR #1405. Su run `43864256236` fallaba únicamente por drift de diagnóstico/publicación tras cambiar package/lock. En checkout aislado se reprodujo la regeneración, se instalaron 701 paquetes desde el lock y aprobaron preflight y compatibilidad CLI/glob. Las revisiones semánticas por página y recurso cliente permanecían idénticas.
+
+La CI intermedia `43881932691` / intento 1 / `e23477d8` detectó que dos informes se habían guardado después del build; se regeneraron ambos manifiestos. `43882403380` / intento 1 / `d43081f9` aprobó preflight, CodeQL, Cloudflare y Comercio crítico antes de consolidar dependencias. Será reemplazada por CI del commit combinado: sus resultados parciales no se transfieren como PASS del nuevo SHA. Los cinco hallazgos de revisión están corregidos y sus threads resueltos.
+
+El cierre de #1406 como duplicado queda condicionado a la integración de sus cambios en #1405. No se fuerza ningún merge ni se relajan checks, presupuestos, seguridad, CSP o pruebas. Se vuelve a generar después de la última edición documental y se comprueba estabilidad de los artefactos antes del push.

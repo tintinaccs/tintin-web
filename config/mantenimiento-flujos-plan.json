@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "48278362154354a0803d4dd87b03faa82fa1fb5c",
-  "reason": "Cerrar fallos CI de carrito y búsqueda; preservar precios base, identidad de adiciones y reinicio de paginación",
+  "reason": "Cerrar regresiones de carrito y búsqueda, incorporar Firebase y CLI con sus artefactos canónicos y preservar todas las protecciones",
   "files": [
     {
       "path": "_headers",
@@ -269,9 +269,14 @@
       "newHash": "e5dafa55d84a8e1b16a64ea6ea5b8b9984c77f33dba0b2c9a95a3ca9e2bc2bf9"
     },
     {
+      "path": "package-lock.json",
+      "oldHash": "470af10ae1cd6d2c18d12462cbd10c170ff4ad8dbd48ac0371e2295892f92d6a",
+      "newHash": "7867ee72eefd8c7ed85150cf1d8d745a220f98c19c0a64e5d8230680421785c2"
+    },
+    {
       "path": "package.json",
       "oldHash": "d1833073146d9dc75fe53792831f2feea81205f1069762bf3f286c156f525a2d",
-      "newHash": "8425c4c52c9b8b30c8a4350d85b2304cec8f86aea90054d8badcb1b82edcc68b"
+      "newHash": "5124296be82b3a465ba63dd2543485170a2afc55b52f8313f7aa138f1dd4e35c"
     },
     {
       "path": "perfil.html",
