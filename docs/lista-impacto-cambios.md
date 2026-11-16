@@ -1231,3 +1231,5 @@ caché y protección se generan canónicamente. Evidencia:REVEAL_HERO_20261115.m
 - 2026-11-16 — Continuación PR #1405: corregidos recorridos de modal y fixture de versiones; ofertas V2 conservan precio base, filtros vuelven a primera página y adiciones pendientes se separan por identidad y límite de línea. Evidencia: docs/carrito-busqueda-seo-20261116.md, 157 pruebas Node + 21 navegador aprobadas; CI final pendiente.
 
 - 2026-11-16 — Se consolida la actualización Firebase/CLI del #1406 en #1405 preservando el commit original; regeneración de diagnóstico/publicación y protección de package/lock, sin cambios semánticos adicionales de cliente. Validación remota pendiente del SHA combinado.
+
+- 2026-11-16 — Monitor de producción alineado con SEO publicado (#1405): JSON-LD validado como datos, hashes exigidos en la directiva efectiva para ejecutables, `/product` sin ID 404/noindex y sitemaps canónicos del catálogo general/paginado. 22 pruebas específicas + 162 regresiones y lectura real del monitor corregido PASS; nueva CI/publicación del monitor pendiente. Sin cambios de tienda ni CSP.
