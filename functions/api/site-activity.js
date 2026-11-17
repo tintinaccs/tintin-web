@@ -1,3 +1,4 @@
+import { normalizeActivityContext, normalizeActivityEvent } from '../../js/analytics/contexto-actividad.mjs';
 import { jsonResponse, originIsAllowed, preflightResponse, rateLimitErrorResponse } from '../../cloudflare/seguridad-cloudinary.js';
 import { decodeFirestoreFields, encodeFirestoreFields, firestoreAdminGet, firestoreAdminCommit } from '../../cloudflare/firebase-admin-ligero.js';
 import { limitByIp, reserveSharedRateLimit } from '../../cloudflare/rate-limit-compartido.js';
@@ -46,7 +47,7 @@ export async function handleSiteActivity({ request, env }, {
     const kind = input.kind;
     const date = now();
     const dayKey = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Asuncion', year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
-    const route = new URL(clean(input.route, 500) || '/', new URL(request.url).origin).pathname.slice(0, 220);
+    let route = new URL(clean(input.route, 500) || '/', new URL(request.url).origin).pathname.slice(0, 220);
     if (kind === 'authFailure' && !FAILURE_REASONS.has(input.reason)) throw invalid();
     if (['session', 'presence'].includes(kind)) {
       if (input.consent !== true) throw invalid();
@@ -90,18 +91,42 @@ export async function handleSiteActivity({ request, env }, {
         // uid enviado por el navegador. Token ausente o inválido: visita anónima.
         const bearer = /^Bearer\s+(\S{1,4096})$/i.exec(request.headers.get('authorization') || '')?.[1];
         const userId = bearer ? await verifyToken(bearer, { requireVerifiedEmail: false }).then(user => user.uid, () => '') : '';
+        const context = normalizeActivityContext(input.context || { page: route.replace(/^\/+|\/+$/g, '').replace(/\.html$/, '') || 'index' });
+        route = context.page === 'other' ? '/' : context.page === 'index' ? '/' : '/'+context.page;
+        const events = (Array.isArray(input.events) ? input.events.slice(0, 12) : []).map(event => normalizeActivityEvent(event, date.getTime())).filter(Boolean);
+        const locationFields={city: clean(cf.city, 80), region: clean(cf.region, 80), country: countryCode, countryCode,
+          geoSource: countryCode || cf.city ? 'cloudflare' : 'unavailable'};
         const fields = encodeFirestoreFields({
-          visitorId: input.visitorId, sessionId: input.sessionId, userId,
-          city: clean(cf.city, 80), region: clean(cf.region, 80), country: countryCode, countryCode,
-          geoSource: countryCode || cf.city ? 'cloudflare' : 'unavailable',
-          ...(kind === 'session' ? { dayKey, landingPage: route, startedAt: date } : { page: route, lastSeen: date }),
+          visitorId: input.visitorId, sessionId: input.sessionId, userId,...locationFields,
+          ...(kind === 'session' ? { dayKey, landingPage: route, landingContext:context, startedAt: date } : { page: route, context, lastSeen: date, contextSince:previous && JSON.stringify(normalizeActivityContext(decodeFirestoreFields(previous.fields).context))===JSON.stringify(context) ? decodeFirestoreFields(previous.fields).contextSince || date : date }),
         });
+        const writes = [{ path, fields, currentDocument: previous ? { updateTime: previous.updateTime } : { exists: false } }];
+        if (kind === 'presence') {
+          const sessionPath = `siteTraffic/${dayKey}/sessions/${input.sessionId}`;
+          const session = await get(env, sessionPath);
+          const saved = session ? decodeFirestoreFields(session.fields) : {};
+          // Una sesión de otra cuenta no puede atribuirse al usuario actual.
+          if (saved.userId && saved.userId !== userId) throw invalid();
+          const old = Array.isArray(saved.timeline) ? saved.timeline : [];
+          const known = new Set(old.map(event => event.id));
+          const additions = events.filter(event => {if(known.has(event.id))return false;known.add(event.id);return true;});
+          const timeline = old.concat(additions);
+          const data = { ...locationFields,...saved, visitorId: input.visitorId, sessionId: input.sessionId, userId,
+            dayKey, landingPage: saved.landingPage || route, startedAt: saved.startedAt || date,
+            context, landingContext:saved.landingContext || context, lastSeen: date, timeline: timeline.slice(-200),
+            historyTruncated: saved.historyTruncated === true || timeline.length > 200 };
+          // Al iniciar sesión no se atribuye la navegación anónima previa.
+          if (saved.userId !== userId) { data.timeline = additions; data.startedAt = date; data.landingPage=route;data.landingContext=context; }
+          writes.push({path:sessionPath,fields:encodeFirestoreFields(data),currentDocument:session ? {updateTime:session.updateTime} : {exists:false}});
+        }
         try {
-          await commit(env, [{ path, fields, currentDocument: previous ? { updateTime: previous.updateTime } : { exists: false } }]);
-        } catch (error) { if (error.status !== 409) throw error; /* otra pestaña ganó la misma identidad */ }
+          await commit(env, writes);
+        } catch (error) { if (error.status !== 409) throw error;
+          return jsonResponse({ ok: true, duplicate: true }, 202, origin, request.url);
+        }
       }
     }
-    return jsonResponse({ ok: true }, 202, origin, request.url);
+    return jsonResponse({ ok: true, recorded: true }, 202, origin, request.url);
   } catch (error) {
     return rateLimitErrorResponse(error, origin, request.url) || jsonResponse({ ok: false, error: error.status === 400 ? 'Evento inválido.' : 'No se pudo registrar el evento.' }, error.status === 400 ? 400 : 503, origin, request.url);
   }

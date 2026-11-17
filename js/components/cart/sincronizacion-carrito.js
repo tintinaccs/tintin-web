@@ -1024,6 +1024,7 @@ function createRuntime() {
       const saved = normalized.find(entry => entry.lineId === incoming.lineId) || null;
       if (!saved) return { changed: false, reason: 'unavailable' };
       window.TintinAnalytics?.track('add_to_cart', {currency:'PYG',value:saved.price * accepted,quantity:accepted});
+      window.TintinSiteActivity?.record?.('cart_add');
       confirmedAddition(saved);
       if (capped) {
         showFeedback(`Se agregó solamente la cantidad disponible (${accepted} de ${requested}).`, 'warning');
@@ -1044,6 +1045,7 @@ function createRuntime() {
       if (!line) return false;
       const normalized = writeLocal(items.filter(item => item.lineId !== line.lineId), { notify: true });
       scheduleRemoteSync(normalized);
+      window.TintinSiteActivity?.record?.('cart_remove');
       window.TintinAnalytics?.track('remove_from_cart', {currency:'PYG',value:line.price * line.qty,quantity:line.qty});
       return true;
     });
@@ -1089,6 +1091,7 @@ function createRuntime() {
       scheduleRemoteSync(normalized);
       const saved = normalized.find(item => item.lineId === line.lineId);
       const acceptedDelta = (saved?.qty || 0) - previousQty;
+      if (acceptedDelta) window.TintinSiteActivity?.record?.(acceptedDelta > 0 ? 'cart_add' : 'cart_remove');
       if (acceptedDelta) window.TintinAnalytics?.track(acceptedDelta > 0 ? 'add_to_cart' : 'remove_from_cart', {currency:'PYG',quantity:Math.abs(acceptedDelta),value:Math.abs(acceptedDelta) * (saved?.price || line.price)});
       return { capped, changed: true, item: normalized.find(item => item.lineId === line.lineId) || null, reason: capped ? 'stock_limit' : 'updated' };
     });
@@ -1280,7 +1283,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261112-delivery-separate-1').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261117-activity-2').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

@@ -16,6 +16,9 @@ html body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header.scrolled{
   box-shadow:0 2px 18px rgba(248,170,202,.10)!important;
 }
 html body:not(:has(.adm-main)) #tt-privacy-consent.tt-privacy-consent{
+  max-height:min(70vh,580px);
+  max-height:min(70dvh,580px);
+  overflow:auto;
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
   opacity:1!important;

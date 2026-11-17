@@ -92,3 +92,51 @@ test('presencia con sesión guarda solo el uid verificado en el servidor; token 
   assert.equal((await handleSiteActivity({ request: withAuth('bad.token.sig'), env: {} }, rejected.deps)).status, 202);
   assert.equal(decodeFirestoreFields(rejected.documents.get('sitePresence/visitor_777').fields).userId, '');
 });
+
+test('contexto preciso e historial diario: deduplica acciones, valida privacidad y conserva CAS',async()=>{
+  const state=fixture();let tick=0;state.deps.now=()=>new Date(+date+tick);state.deps.verifyToken=async()=>({uid:'client_verified'});
+  const event={id:'event_12345678',at:+date,action:'view',context:{page:'catalogo',category:'relojes',email:'private@example.test'}};
+  const body={...input,kind:'presence',context:{page:'checkout',step:3,status:'reviewing'},events:[event]};
+  const send=async()=>handleSiteActivity({request:new Request('https://shop.test/api/site-activity',{method:'POST',headers:{origin:'https://shop.test',authorization:'Bearer verified'},body:JSON.stringify(body)}),env:{}},state.deps);
+  assert.equal((await send()).status,202);tick=21000;
+  body.events.push({id:'event_87654321',at:+date+tick,action:'checkout_error',context:{page:'checkout',step:4,status:'error',reason:'network',password:'secret'}});
+  assert.equal((await send()).status,202);
+  const data=decodeFirestoreFields(state.documents.get('siteTraffic/2026-10-15/sessions/session_123').fields);
+  assert.equal(data.userId,'client_verified');assert.equal(data.timeline.length,2);
+  assert.equal(data.timeline[0].context.category,'relojes');assert.equal(data.timeline[1].context.reason,'network');
+  assert.equal(JSON.stringify(data).includes('private'),false);assert.equal(JSON.stringify(data).includes('secret'),false);
+  assert.equal(decodeFirestoreFields(state.documents.get('sitePresence/visitor_123').fields).context.step,3);
+  tick+=21000;state.deps.verifyToken=async()=>({uid:'other_account'});
+  assert.equal((await send()).status,400);
+  assert.equal(decodeFirestoreFields(state.documents.get('siteTraffic/2026-10-15/sessions/session_123').fields).userId,'client_verified');
+});
+
+test('historial supera200: límite explícito sin crecimiento ilimitado del documento',async()=>{
+  const state=fixture();state.documents.set('siteTraffic/2026-10-15/sessions/session_123',{updateTime:'seed',fields:encodeFirestoreFields({userId:'',timeline:Array.from({length:200},(_,i)=>({id:`event_old_${i}`,at:+date,action:'view',context:{page:'index'}}))})});
+  const event={id:'event_new_123',at:+date,action:'view',context:{page:'checkout',step:2}};
+  const response=await handleSiteActivity({request:makeRequest({...input,kind:'presence',events:[event]}),env:{}},state.deps);
+  assert.equal(response.status,202);
+  const data=decodeFirestoreFields(state.documents.get('siteTraffic/2026-10-15/sessions/session_123').fields);
+  assert.equal(data.timeline.length,200);assert.equal(data.timeline.at(-1).id,event.id);assert.equal(data.historyTruncated,true);
+});
+
+test('la duración del estado no se reinicia si Firestore devuelve campos en otro orden',async()=>{
+ const state=fixture();let tick=0;state.deps.now=()=>new Date(+date+tick);
+ const body={...input,kind:'presence',context:{page:'checkout',step:4,status:'confirming'}};
+ await handleSiteActivity({request:makeRequest(body),env:{}},state.deps);
+ const path='sitePresence/visitor_123';const stored=state.documents.get(path),data=decodeFirestoreFields(stored.fields);
+ data.context={status:'confirming',step:4,page:'checkout'};stored.fields=encodeFirestoreFields(data);
+ tick=61000;
+ await handleSiteActivity({request:makeRequest(body),env:{}},state.deps);
+ const next=decodeFirestoreFields(state.documents.get(path).fields);
+ assert.equal(new Date(next.contextSince).getTime(),+date);
+});
+
+test('presencia antes de sesión conserva la geografía de Cloudflare en estadísticas',async()=>{
+ const state=fixture();const request=makeRequest({...input,kind:'presence'});
+ Object.defineProperty(request,'cf',{value:{city:'San Lorenzo',region:'Central',country:'PY'}});
+ assert.equal((await handleSiteActivity({request,env:{}},state.deps)).status,202);
+ assert.equal((await handleSiteActivity({request:makeRequest(input),env:{}},state.deps)).status,202);
+ const session=decodeFirestoreFields(state.documents.get('siteTraffic/2026-10-15/sessions/session_123').fields);
+ assert.equal(session.city,'San Lorenzo');assert.equal(session.region,'Central');assert.equal(session.country,'PY');assert.equal(session.countryCode,'PY');assert.equal(session.geoSource,'cloudflare');
+});

@@ -1,3 +1,4 @@
+import {activityContextLabel,activityPresenceLabel} from '../../js/analytics/contexto-actividad.mjs';
 import {orderAmounts,sumOrderAmounts} from '../../js/orders/importes-pedido.mjs';
 import {orderMoneyMarkup} from '../../js/orders/presentacion-importes.mjs';
 import {adminEventAttributes} from '../../js/admin/eventos-dinamicos-admin.mjs';
@@ -126,7 +127,7 @@ test('«En línea ahora» muestra nombre y datos de la cuenta verificada, escapa
   const context = {
     allUsers: [{ uid: 'uid_ana', name: 'Ana <b>Pérez</b>', email: 'ana@example.test', phone: '0981 000 000' }],
     document: { getElementById: id => (id === 'dashboard-online-locations' ? container : detail) },
-    escapeHtmlAdmin: html, activityLocationLabel: () => 'Asunción', activityPageLabel: () => 'Inicio', activityRelativeTime: () => 'ahora',
+    escapeHtmlAdmin: html, activityContextLabel,activityPresenceLabel,activityLocationLabel: () => 'Asunción', activityPageLabel: () => 'Inicio', activityRelativeTime: () => 'ahora',
   };
   vm.createContext(context);
   vm.runInContext(functionSource('onlineVisitorPerson', '\nfunction renderOnlineLocations') + '\n' + functionSource('renderOnlineLocations', '\nfunction ') , context);
@@ -136,4 +137,13 @@ test('«En línea ahora» muestra nombre y datos de la cuenta verificada, escapa
   assert.match(container.innerHTML, /Visitante sin sesión/);
   assert.match(container.innerHTML, /Cliente con cuenta/);
   assert.doesNotMatch(container.innerHTML, /<b>Pérez/);
+});
+
+test('la ficha consume la presencia actual compartida sin truncarla a diez documentos históricos',()=>{
+ const records=Array.from({length:15},(_,i)=>({userId:'account',lastSeen:new Date(2026,0,i+1)}));
+ records.push({userId:'account',lastSeen:new Date(),context:{page:'checkout',step:3}},{userId:'other',lastSeen:new Date()});
+ const c=vm.createContext({currentRole:'superadmin',adminRealtimeReady:{presence:true},dashboardActivityState:{presence:records},window:{}});
+ vm.runInContext(functionSource('activityPresenceForUser','\nfunction activityTimestampMillis'),c);
+ const rows=c.activityPresenceForUser('account');assert.equal(rows.length,16);assert.ok(rows.some(row=>row.context?.step===3));
+ c.adminRealtimeReady.presence=false;assert.throws(()=>c.activityPresenceForUser('account'),/presence_not_ready/);
 });

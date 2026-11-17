@@ -11,7 +11,7 @@ async function mountFicha(page,photo=false){
   script.textContent=`const SUPER_ADMIN='owner@example.test', ROLE_LABELS={client:'Cliente'},ASSIGNABLE_ROLES=['client'];
   const auth={currentUser:{uid:'owner',email:SUPER_ADMIN}},db={};
   const subscribeAuthState=callback=>callback(auth.currentUser);
-  const doc=()=>({}),collection=()=>({}),query=()=>({}),where=()=>({}),limit=()=>({});
+  const doc=()=>({}),collection=()=>({}),query=()=>({}),where=()=>({}),limit=()=>({}),startAfter=()=>({}),createActivityHistory=()=>document.createElement('section');
   const getDoc=async()=>({exists:()=>true,id:'qa-user',data:()=>window.qaUser}),getDocs=async()=>({docs:[]});
   const ordersForView=value=>value,orderDisplayCode=value=>value.id;
   const sanitizeImageUrl=value=>value.startsWith('data:image/')?value:'';
