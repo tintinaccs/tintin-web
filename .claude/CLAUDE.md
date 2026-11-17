@@ -124,3 +124,7 @@ A task is complete only when the requested scope is implemented or analyzed, rel
 - See `docs/agent/CLOUD_SKILLS_CATALOG.md` for provenance, availability, limitations and invocation.
 
 Design libraries: Impeccable, Taste and Emil Kowalski are repo-scoped and routed automatically by task under `docs/agent/SKILLS_AUTO_ROUTING.md`. Every agent should consult only the relevant skill and references. Preserve Tintín identity and user-approved assets; never auto-run imported launchers or install libraries merely because a skill suggests them.
+
+## Las cuatro herramientas para evitar el aspecto de IA
+
+Cuando el usuario diga «utiliza las nuevas 4 repos de IA que instalé» o pida las cuatro herramientas anti-IA, carga directamente antislop, unslop, impeccable y humanizer-es desde las Skills de este proyecto. Es una selección explícita de las cuatro. Sigue [el procedimiento compartido](../docs/agent/SKILLS_AUTO_ROUTING.md#las-cuatro-herramientas-para-evitar-el-aspecto-de-ia) para aplicarlas a la tarea activa sin volver a preguntar qué herramienta usar.
