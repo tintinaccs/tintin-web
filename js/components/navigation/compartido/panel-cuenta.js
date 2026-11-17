@@ -7,7 +7,7 @@ export function renderAccountDrawer() {
       <div class="tt-account-drawer-header">
         <div class="tt-account-drawer-heading">
           <img class="tt-account-drawer-logo" src="${logoUrl()}" alt="Tintin" width="160" height="80" loading="lazy" decoding="async">
-          <h2>MI CUENTA</h2>
+          <h2>Mi cuenta</h2>
         </div>
         <button type="button" id="btn-account-close" aria-label="Cerrar cuenta">${svgIcon(UI_ICONS.close, { size: 16 })}</button>
       </div>

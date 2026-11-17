@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="aa2e9637556904f6030ed23296564036673d5b699f2df8cff0a34144fa11276a">
+  <meta name="tintin-page-revision" content="53f088d95dbe1d1bad76eddd8fb3b589eeed97e07fe41090146e1488b5b04122">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
 <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261116-discovery-2"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261117-editorial-1"></script>
   <script src="js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1-brand-runtime-20261004-1-owner-pink-20261004-1" defer></script>
   <link rel="manifest" href="admin-manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
@@ -114,7 +114,7 @@
     }
     .adm-sidebar-title {
       font-size: 0.7rem; font-weight: 700; color: var(--muted);
-      letter-spacing: .1em; text-transform: uppercase; padding: 0 20px 8px;
+      letter-spacing: .1em;  padding: 0 20px 8px;
     }
     .adm-nav-btn {
       display: flex; align-items: center; gap: 10px; width: 100%;
@@ -307,7 +307,7 @@
     .adm-mobile-tab {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 2px; padding: 4px 14px; flex-shrink: 0;
-      font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      font-size: 8px; font-weight: 700;  letter-spacing: .04em;
       color: var(--text-sec); cursor: pointer; background: none; border: none;
       font-family:Montserrat; text-decoration: none; white-space: nowrap;
       border-bottom: 2px solid transparent; transition: color .15s; min-width: 24px; min-height: 44px;
@@ -316,9 +316,9 @@
     .adm-mobile-tab .nav-icon { font-size: 1.2rem; }
   </style>
 <link rel="stylesheet" href="css/pages/secundarias-minimal.css?v=tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1-p1106">
-<link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261114-soft-surfaces-1">
+<link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261117-editorial-1">
   <link rel="stylesheet" href="css/admin/espacio-modulos-admin.css?v=tintin-20261101-app-movil-15">
-  <link rel="stylesheet" href="css/admin/dashboard-control.css?v=tintin-20261113-delivery-card-3">
+  <link rel="stylesheet" href="css/admin/dashboard-control.css?v=tintin-20261117-editorial-1">
   <style id="tt-imagenes-app-movil">
     /* Contenido a la derecha de la barra lateral fija: secundarias-minimal.css
        (body:has(.adm-main) .adm-main { margin-inline:auto }) anulaba el margen
@@ -354,7 +354,7 @@
   <script id="tt-section-flow-runtime" src="js/theme/alternancia-secciones.js?v=tintin-client-fades-20261105-1" defer></script>
   <link id="tt-phase10-accessibility-css" rel="stylesheet" href="css/quality/accesibilidad-global.css?v=tintin-20261031-skip-link-1-p1106">
 <link id="novak-credit-css" rel="stylesheet" href="assets-tintin/novak-signature/novak-credit.css?v=tintin-novak-20261102-2">
-<link id="novak-credit-site-css" rel="stylesheet" href="css/components/novak-credit-site.css?v=tintin-client-fades-20261105-1-p1106">
+<link id="novak-credit-site-css" rel="stylesheet" href="css/components/novak-credit-site.css?v=tintin-20261117-editorial-1">
 <script id="novak-credit-loader" src="js/components/novak-credit.js?v=tintin-novak-20261103-2" defer></script>
 </head>
 <body class="tt-admin-control">
@@ -439,7 +439,7 @@
       <!-- Cards rendered by JS -->
     </div>
 <footer data-novak-footer><div id="tt-footer-ending" class="tt-footer-ending">
-    <div class="tt-footer-bottom">© 2024-2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS</div>
+    <div class="tt-footer-bottom">© 2024-2026 Tintin Accesorios — Todos los derechos reservados</div>
     <div class="novak-credit-row">
     <a class="novak-credit" href="https://novak-web.inf-novakpy.workers.dev/#inicio" target="_blank" rel="noopener" aria-label="Desarrollado por NOVAK, visitar su sitio">
       <span>Desarrollado por</span>
@@ -459,7 +459,7 @@ import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20261017-domai
 import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/core/auth/roles.js?v=tintin-20261017-domain-cutover-1";
 import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, HERO_IMAGE_CONFIG_VERSION, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20261116-discovery-2";
+import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, HERO_IMAGE_CONFIG_VERSION, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20261117-editorial-1";
 import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20261112-free-crop-2-p1112";
 import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20261030-audit-integrity-1";
 
@@ -851,7 +851,7 @@ subscribeAuthState(async (user) => {
 });
 </script>
 <script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20261108-appcheck-fallo-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261030-home-history-5-p1112"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261117-editorial-1"></script>
 <script type="module" src="js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261101-admin-visual-1"></script>
 </body>
 </html>

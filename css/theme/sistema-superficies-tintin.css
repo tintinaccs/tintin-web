@@ -7,9 +7,21 @@
  * la última autoridad visual sin depender de estilos inline de cada módulo.
  */
 :root {
+  --tt-ui-page-title-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  --tt-ui-section-title-size: clamp(1.375rem, 2.3vw, 1.875rem);
+  --tt-ui-card-title-size: 1rem;
+  --tt-ui-body-size: 1rem;
+  --tt-ui-control-size: .875rem;
+  --tt-ui-small-size: .8125rem;
+  --tt-ui-body-weight: 400;
   --tt-ui-heading-weight: 600;
   --tt-ui-label-weight: 600;
   --tt-ui-heading-tracking: -.02em;
+  --tt-ui-control-tracking: normal;
+  --tt-ui-card-action-min: 8.5rem;
+  --tt-ui-heading-leading: 1.25;
+  --tt-ui-body-leading: 1.6;
+  --tt-ui-control-leading: 1.4;
   --tt-ui-canvas: var(--color-brand-accent, #FDECF2);
   --tt-ui-surface: var(--color-background-surface, #FFFFFF);
   --tt-ui-surface-soft: var(--color-brand-accent, #FDECF2);
@@ -44,13 +56,49 @@ html:root body :is(h1, h2, h3, .tt-hero-title, .tt-section-title, .tt-page-hero-
   .tt-commerce-pagehead h1, .tt-dashboard-intro h2, .tt-control-dialog-head h2) {
   font-weight: var(--tt-ui-heading-weight) !important;
   letter-spacing: var(--tt-ui-heading-tracking) !important;
-  line-height: 1.25;
+  line-height: var(--tt-ui-heading-leading);
 }
 html:root body :is(.tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
   .login-email-btn, .ck-btn, .adm-btn, .adm-btn-primary, .adm-btn-save,
   .tt-commerce-btn, .tt-control-text-link, .tt-dashboard-link strong) {
   font-weight: var(--tt-ui-label-weight) !important;
-  letter-spacing: .01em;
+  font-size: var(--tt-ui-control-size);
+  line-height: var(--tt-ui-control-leading);
+  letter-spacing: var(--tt-ui-control-tracking);
+}
+
+/* La escala sigue la función del texto y conserva los títulos editoriales de portada. */
+html:root body :is(.tt-page-hero-title, .cat-hero-title, .login-heading,
+  .tt-admin-workspace-title, .tt-commerce-pagehead h1, .tt-maestro-hero h1) {
+  font-size: var(--tt-ui-page-title-size) !important;
+}
+html:root body :is(.tt-section-title, .tt-info-title, .tt-contact-form-title,
+  .perfil-section-title, .ck-panel-title, .tt-control-dialog-head h2) {
+  font-size: var(--tt-ui-section-title-size) !important;
+}
+html:root body :is(.tt-product-name, .cat-product-name, .adm-card-title) {
+  font-size: var(--tt-ui-card-title-size) !important;
+  font-weight: var(--tt-ui-label-weight) !important;
+  line-height: var(--tt-ui-control-leading);
+}
+html:root body :is(.tt-about-text, .tt-info-block > p, .tt-contact-intro,
+  .cat-hero-sub, .tt-section-sub, .tt-product-detail-desc) {
+  font-size: var(--tt-ui-body-size);
+  font-weight: var(--tt-ui-body-weight);
+  line-height: var(--tt-ui-body-leading);
+  letter-spacing: normal;
+}
+html:root body :is(.tt-footer-col-title, .tt-control-text-link, .ck-label,
+  .adm-label, .login-label, .perfil-label) {
+  font-size: var(--tt-ui-control-size);
+  font-weight: var(--tt-ui-label-weight);
+  line-height: var(--tt-ui-control-leading);
+  letter-spacing: var(--tt-ui-control-tracking);
+}
+html:root body :is(.ck-field-help, .login-hint, .login-methods-note, .tt-best-sellers-kicker) {
+  font-size: var(--tt-ui-small-size);
+  line-height: var(--tt-ui-control-leading);
+  letter-spacing: normal;
 }
 
 /* Acciones discretas y consistentes. Los círculos de iconos y los estados
@@ -287,7 +335,6 @@ html body:has(.adm-main) .adm-table thead th {
   color:var(--color-text-primary,#222222) !important;
   font-size: 11px;
   letter-spacing: .055em;
-  text-transform: uppercase;
 }
 
 html body:has(.adm-main) .adm-nav-item {
@@ -439,9 +486,16 @@ html body:not(:has(.adm-main)) :is(.tt-product-actions, .tt-card-actions, .tt-ca
   gap: 10px;
   flex-wrap: wrap;
 }
+html body:not(:has(.adm-main)) :is(.tt-product-card .tt-product-actions, .tt-card-btns) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--tt-ui-card-action-min)), 1fr));
+}
 html body:not(:has(.adm-main)) :is(.tt-product-actions, .tt-card-actions, .tt-card-btns) > :is(a, button) {
+  min-width: 0;
   min-height: 44px;
   white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
 /* El ancho mínimo del CTA editorial no corresponde a los botones de tarjeta
    que comparten la misma sección de descubrimiento en la portada. */

@@ -262,6 +262,10 @@ for (const file of walk(ROOT)) {
     source = source.replace("primaryFamily === 'Arial' && element.matches('.tt-hero-subtitle,.tt-hero-actions a,.tt-hero-actions a *')", "primaryFamily === 'Montserrat' && element.matches('.tt-hero-subtitle,.tt-hero-actions a,.tt-hero-actions a *')");
   }
   const isEmailTemplate = EMAIL_TEMPLATE_FILES.has(path.normalize(name));
+  if (name === 'styles.css' || name === 'styles.min.css' || name.startsWith('css/')) {
+    check(!/text-transform\s*:\s*(?:uppercase|capitalize)\b/i.test(source),
+      `${name}: aplicá la capitalización en el texto editorial de origen.`);
+  }
 
   if (!isEmailTemplate) {
     for (const match of source.matchAll(/font-family\s*:\s*(?:(['"])([^'"]+)\1|([^;}\r\n>"']+))/gi)) {

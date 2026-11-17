@@ -31,7 +31,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/esquema-contenido.js?v=tintin-20261114-wa-contact-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20261117-editorial-1';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

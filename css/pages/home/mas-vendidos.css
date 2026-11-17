@@ -3,7 +3,7 @@
    variantes, favoritos y carrito se comporten igual en toda la tienda. */
 .tt-best-sellers-section { padding: clamp(52px, 7vw, 96px) 0; background: linear-gradient(180deg, #FDECF2 0%, #f8aaca 100%); }
 .tt-best-sellers-heading { display: grid; gap: 10px; max-width: 680px; margin: 0 auto clamp(28px, 4vw, 48px); text-align: center; }
-.tt-best-sellers-kicker { margin: 0; color: #222222; font-size: .73rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.tt-best-sellers-kicker { margin: 0; color: #222222; font-size: .73rem; font-weight: 800; letter-spacing: .16em;  }
 .tt-best-sellers-heading .tt-section-title { margin: 0; }
 .tt-best-sellers-heading p:last-child { margin: 0; color: #222222; }
 .tt-best-sellers-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 2vw, 26px); }

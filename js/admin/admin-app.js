@@ -67,7 +67,7 @@ import {
   findTokenByKey, buildDefaultTokenMap
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
-import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
+import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20261117-editorial-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20261113-senas-saldos-1';
 import './settings/cupones-admin.js?v=tintin-20261108-appcheck-fallo-1';
 import './products/integridad-inventario-admin.js?v=tintin-20261102-cancel-stock-1';
@@ -3612,11 +3612,11 @@ const loadDeferredAdminSection = createAdminSectionLoader({
   document,
   canLoad: () => currentRole === 'superadmin' && String(currentUser?.email || '').toLowerCase() === SUPER_ADMIN.toLowerCase(),
   sections: {
-    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261114-harmonic-palette-1'), init: initDeferredCorreos },
+    correos: { load: () => import('./correos/correos-admin.js?v=tintin-20261117-editorial-1'), init: initDeferredCorreos },
     diagnostico: { load: () => import('./diagnostics/diagnostico-sitio-admin.js?v=tintin-suitcase-20261104-1'), init: ({ initSiteDiagnostics }) => { const role = currentRole; initSiteDiagnostics({ role }); } },
     paginas: { load: () => import('./pages/paginas-admin.js?v=tintin-20261108-appcheck-fallo-1') },
     apariencia: { load: async () => {
-      await import('./appearance/editor-visual-admin.js?v=tintin-20261114-wa-contact-1');
+      await import('./appearance/editor-visual-admin.js?v=tintin-20261117-editorial-1');
       await import('./appearance/visual-studio-layout-admin.js?v=tintin-20261022-avatar-inicial-1');
     } }
   }
@@ -4141,14 +4141,14 @@ function productRowHtml(p) {
       </td>
       <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name && p.name.trim() ? escapeHtmlAdmin(p.name) : '<span style="color:#c62828;background:#fce4ec;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M12 2L2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>SIN NOMBRE — revisar/eliminar</span>'}${
         p.name && p.name.length > 180
-          ? '<br><span style="color:#bf360c;background:#fff3e0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800" title="Un nombre de más de 180 caracteres no coincide con lo que envía el checkout y bloquea la compra de este producto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M12 2L2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>NOMBRE MUY LARGO</span>'
+          ? '<br><span style="color:#bf360c;background:#fff3e0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800" title="Un nombre de más de 180 caracteres no coincide con lo que envía el checkout y bloquea la compra de este producto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M12 2L2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Nombre muy largo</span>'
           : ''
       }${
         typeof p.price !== 'number' || !Number.isFinite(p.price)
-          ? '<br><span style="color:#bf360c;background:#fff3e0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800" title="El precio no es un número válido: las reglas de Firestore rechazan el checkout de este producto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M12 2L2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>PRECIO INVÁLIDO</span>'
+          ? '<br><span style="color:#bf360c;background:#fff3e0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800" title="El precio no es un número válido: las reglas de Firestore rechazan el checkout de este producto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M12 2L2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Precio inválido</span>'
           : ''
       }</td>
-      <td style="padding:10px 16px;color:var(--adm-muted);text-transform:capitalize">${escapeHtmlAdmin(p.category||'—')}</td>
+      <td style="padding:10px 16px;color:var(--adm-muted);">${escapeHtmlAdmin(p.category||'—')}</td>
       <td style="padding:10px 16px;color:var(--adm-muted);font-size:12px">${escapeHtmlAdmin(p.collection||'—')}</td>
       <td style="padding:10px 16px;text-align:right;font-weight:700;color:var(--adm-primary)">${fmt(p.price||0)}</td>
       <td style="padding:10px 16px;text-align:center">${escapeHtmlAdmin(p.stock != null ? p.stock : '—')}</td>
@@ -4211,7 +4211,7 @@ function renderProductosGrouped(list) {
   });
 
   document.getElementById('prod-tbody').innerHTML = orderedKeys.map(key => `
-    <tr><td colspan="9" style="padding:14px 16px 8px;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-primary);background:var(--adm-bg)">
+    <tr><td colspan="9" style="padding:14px 16px 8px;font-weight:800;font-size:12px;letter-spacing:.06em;color:var(--adm-primary);background:var(--adm-bg)">
       ${escapeHtmlAdmin(labelFor(key))} <span style="color:var(--adm-muted);font-weight:600">(${groups.get(key).length})</span>
     </td></tr>
     ${groups.get(key).map(productRowHtml).join('')}
@@ -5487,7 +5487,7 @@ function renderColeccionesGrid(list) {
         <input type="checkbox" class="coll-row-check" data-slug="${safeSlug}" onclick="toggleCollectionSelect(this)" ${_selectedCollections.has(c.slug) ? 'checked' : ''}>
       </label>
       <div style="height:120px;background:${imageUrl ? `url('${escapeHtmlAdmin(imageUrl)}') center/cover` : 'linear-gradient(135deg,#fce4ec,#e8a0b4)'};position:relative">
-        ${c.visible === false ? `<span style="position:absolute;top:8px;right:8px;background:#fff3e0;color:#bf360c;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px">OCULTA</span>` : ''}
+        ${c.visible === false ? `<span style="position:absolute;top:8px;right:8px;background:#fff3e0;color:#bf360c;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px">Oculta</span>` : ''}
       </div>
       <div style="padding:14px">
         <div style="font-weight:800;font-size:14px">${escapeHtmlAdmin(c.name || c.slug)}</div>
@@ -5505,7 +5505,7 @@ function renderColeccionesGrid(list) {
     const slugArg = String((u.slug) ?? '');
     return `
     <div class="adm-card" style="margin:0;overflow:hidden;border:1.5px dashed #e8a0b4">
-      <div style="height:120px;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#bf360c">SIN GESTIONAR</div>
+      <div style="height:120px;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#bf360c">Sin gestionar</div>
       <div style="padding:14px">
         <div style="font-weight:800;font-size:14px">${safeSlug}</div>
         <div style="color:var(--adm-muted);font-size:11px;margin-bottom:8px">Categoría usada en productos, sin colección creada</div>
@@ -5664,7 +5664,7 @@ function renderCollCurrentList() {
         <div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtmlAdmin(p.name || '(sin nombre)')}</div>
         <div style="font-size:11px;color:var(--adm-muted)">${fmt(p.price)} · ${p.stock != null ? p.stock + ' en stock' : 'stock no definido'}</div>
       </div>
-      ${!inStockRow ? `<span style="font-size:10px;font-weight:800;background:#fce4ec;color:#c62828;padding:2px 8px;border-radius:20px;flex-shrink:0">SIN STOCK</span>` : ''}
+      ${!inStockRow ? `<span style="font-size:10px;font-weight:800;background:#fce4ec;color:#c62828;padding:2px 8px;border-radius:20px;flex-shrink:0">Sin stock</span>` : ''}
       <span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0;background:${p.active !== false ? '#e8f5e9' : '#fce4ec'};color:${p.active !== false ? '#2e7d32' : '#c62828'}">
         ${p.active !== false ? 'Activo' : 'Inactivo'}
       </span>
@@ -7502,7 +7502,7 @@ function aparRenderSchemeBar() {
   el.innerHTML = `
     <label style="font-size:12px;font-weight:700;color:var(--adm-muted)">Esquema:</label>
     <select class="adm-select" id="apar-scheme-select" style="max-width:220px">${opts}</select>
-    ${editingId === activeId ? '<span class="tt-store-state-pill">ACTIVO</span>' : `<button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="apar-btn-activate">Activar este esquema</button>`}
+    ${editingId === activeId ? '<span class="tt-store-state-pill">Activo</span>' : `<button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="apar-btn-activate">Activar este esquema</button>`}
     <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-new">+ Nuevo</button>
     <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-duplicate">Duplicar</button>
     <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="apar-btn-rename">Renombrar</button>
@@ -7720,7 +7720,7 @@ function aparRenderPreview() {
     <div class="row">
       <button class="btn btn-p">Botón principal</button>
       <button class="btn btn-s">Botón secundario</button>
-      <span class="badge">NUEVO</span>
+      <span class="badge">Nuevo</span>
     </div>
     <div class="card">
       <p style="margin:0 0 8px;font-size:13px">Tarjeta de ejemplo con texto principal y <a href="#">un enlace</a>.</p>

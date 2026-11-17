@@ -1,3 +1,9 @@
+## Textos y tipografía transversal — 2026-11-17 — Codex
+
+Se quitó la introducción redundante de Inicio y se retiró el texto SEO visible de la plantilla del catálogo. La descripción de cada colección sigue en los metadatos y JSON-LD. Se simplificó el pie compartido y se aplicaron capitalización editorial y tokens tipográficos en superficies públicas y administrativas.
+
+PASS_LOCAL en la base 7bbad925: se verificaron rutas, CSP, manifiesto, caché, CSS, SEO y 24 pruebas dirigidas a render inicial, contenido y prevención de recargas. El navegador conectado permitió revisar la versión pública anterior al cambio. La suite visual local no pudo iniciar Chromium en este entorno.
+
 ## Carrito, búsqueda y catálogo orgánico — 2026-11-16 — Codex /root
 
 PASS_LOCAL en codex/carrito-busqueda-visibilidad. Checkout inicial818ceeac actualizado contra main48278362 antes del cierre; se conservaron filtros de variantes/fotos, retiro de favoritos, cambios de pedidos y paleta nuevos. No se heredan resultados de la base anterior. Autoridades y acciones externas en docs/carrito-busqueda-seo-20261116.md.

@@ -85,7 +85,6 @@ html:root body:not(:has(.adm-main)) #tt-footer-ending {
 /* Presentación uniforme, también para colecciones cargadas o editadas en vivo. */
 :is(.tt-footer[data-tt-footer="unified"], [data-novak-footer]),
 :is(.tt-footer[data-tt-footer="unified"], [data-novak-footer]) :is(a, p, li, span, button, .tt-footer-col-title) {
-  text-transform: uppercase !important;
 }
 
 /* Evita que WebKit amplíe una textura SVG filtrada de tamaño CSS. Un lienzo

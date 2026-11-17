@@ -217,7 +217,7 @@ function buildPreviewHtml_(t, vars) {
     `</style>`;
   return `<!DOCTYPE html><html><head>${fontCss}</head><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#713C53">` +
     `<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">` +
-    (brandPhrase ? `<p style="color:#713C53;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">${brandPhrase}</p>` : '') +
+    (brandPhrase ? `<p style="color:#713C53;font-size:11px;font-weight:bold;letter-spacing:.06em;margin:0 0 14px">${brandPhrase}</p>` : '') +
     (greeting ? `<h2 style="color:#713C53;margin:0 0 14px;font-size:18px">${greeting}</h2>` : '') +
     (intro ? `<p style="color:#713C53;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">${intro}</p>` : '') +
     (promoText ? `<p style="color:#713C53;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">${promoText}</p>` : '') +

@@ -46,7 +46,7 @@ for(const [width,height] of [[844,320],[844,390],[1306,630],[320,568],[375,812],
     for(const box of [g.brand,g.art,g.title,...g.actions]){expect(box.left).toBeGreaterThanOrEqual(-1);expect(box.right).toBeLessThanOrEqual(width+1);expect(box.top).toBeGreaterThanOrEqual(g.hero.top-1);expect(box.bottom).toBeLessThanOrEqual(g.hero.bottom+1);}
     for(const action of g.actions){expect(action.height).toBeGreaterThanOrEqual(44);expect(action.left<g.wa.right&&action.right>g.wa.left&&action.top<g.wa.bottom&&action.bottom>g.wa.top,'WhatsApp no debe cubrir acciones del hero').toBe(false);}
     if(height>width&&width<=1120){expect(g.brand.bottom).toBeLessThanOrEqual(g.art.top+1);expect(g.art.bottom).toBeLessThanOrEqual(g.title.top+1);}else{expect(g.art.right).toBeLessThanOrEqual(g.brand.left+1);}
-    await expect(page.locator('.tt-hero-cta')).toHaveText('COMPRAR AHORA');await expect(page.locator('.tt-hero-cta')).toHaveAttribute('href','/catalogo');await expect(page.locator('.tt-hero-link')).toHaveAttribute('href','/about');
+    await expect(page.locator('.tt-hero-cta')).toHaveText('Comprar ahora');await expect(page.locator('.tt-hero-cta')).toHaveAttribute('href','/catalogo');await expect(page.locator('.tt-hero-link')).toHaveAttribute('href','/about');
     await page.locator('.tt-hero-cta').focus();expect(await page.locator('.tt-hero-cta').evaluate(e=>getComputedStyle(e).outlineStyle)).not.toBe('none');
     await page.locator('.tt-hero-cta').blur();
     await page.locator('#hero').screenshot({path:testInfo.outputPath('hero.png')});
@@ -110,7 +110,7 @@ test('el título conserva la misma fuente y color cuando el editor actualiza sus
   await expect(line).toHaveCSS('font-size',await page.locator('.tt-hero-title').evaluate(e=>getComputedStyle(e).fontSize));
   await expect(line).toHaveCSS('color',before.color);
  }
- await expect(page.locator('.tt-hero-cta')).toHaveCSS('text-transform','uppercase');
+ await expect(page.locator('.tt-hero-cta')).toHaveCSS('text-transform','none');
 });
 
 

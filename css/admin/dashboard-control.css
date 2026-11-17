@@ -326,7 +326,7 @@ html:root body.tt-admin-control .tt-admin-workspace-bar { padding-bottom: 16px; 
   html:root body.tt-admin-control :is(.adm-btn,.adm-topbar-btn,.tt-commerce-btn,.tt-control-search) { transition: none; }
 }
 
-.tt-admin-nav-group { padding: 18px 12px 6px; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--adm-muted); }
+.tt-admin-nav-group { padding: 18px 12px 6px; font-size: 10px; font-weight: 700; letter-spacing: .12em;  color: var(--adm-muted); }
 .tt-push-lockscreen-note { margin: 0 0 18px; padding: 12px 14px; border: 1px solid var(--tt-control-line); border-radius: 12px; font-size: 12px; line-height: 1.7; }
 html:root body.tt-admin-control .tt-control-heading { display: flex; align-items: center; gap: 8px; }
 html:root body.tt-admin-control .tt-control-heading > span { min-width: 0; overflow-wrap: anywhere; }

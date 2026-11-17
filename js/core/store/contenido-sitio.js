@@ -1,3 +1,4 @@
+import { interfaceLabel, sentenceCase } from './texto-interfaz.mjs?v=tintin-20261117-texto-interfaz-1';
 /* =============================================================
    TINTIN — Fase 6: contenido público seguro y sincronizado
 
@@ -15,8 +16,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20261114-wa-contact-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261114-wa-contact-1';
+} from './esquema-contenido.js?v=tintin-20261117-editorial-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261117-editorial-1';
 
 const subscriptions = new Map();
 const latestData = new Map();
@@ -152,7 +153,10 @@ function applySection(pageId, sectionId, sectionSchema, sectionData) {
       const target = findTarget(root, item);
       if (!target) return;
       if (item.type === 'href') applyHref(target, raw, item);
-      else applyText(target, normalizeContentValue(pageId, sectionId, item.key, raw), item);
+      else {
+        const text = normalizeContentValue(pageId, sectionId, item.key, raw);
+        applyText(target, item.type === 'multiline' ? sentenceCase(text) : interfaceLabel(text), item);
+      }
     });
   });
 }

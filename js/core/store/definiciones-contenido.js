@@ -68,7 +68,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         fields: [
           field('title', 'Título', '.tt-hero-title', 'El encanto está en los detalles', { type: 'multiline', rows: 3, maxLength: 220 }),
           field('subtitle', 'Subtítulo', '.tt-hero-subtitle', 'Piezas elegidas para acompañarte en cada momento.', { type: 'multiline', rows: 3, maxLength: 500 }),
-          field('primaryText', 'Botón principal', '.tt-hero-actions a', 'COMPRAR AHORA', { index: 0, maxLength: 80 }),
+          field('primaryText', 'Botón principal', '.tt-hero-actions a', 'Comprar ahora', { index: 0, maxLength: 80 }),
           field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', '/catalogo', { index: 0, type: 'href', maxLength: 500 }),
           field('btnText', 'Botón secundario', '.tt-hero-actions a', '¿Quienes somos?', { index: 1, maxLength: 80 }),
           field('btnHref', 'Enlace del botón secundario', '.tt-hero-actions a', '/about', { index: 1, type: 'href', maxLength: 500 }),
@@ -101,7 +101,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         allowVisibility: true,
         fields: [
           field('eyebrow', 'Texto pequeño', '.tt-watch-eyebrow', 'Nueva colección', { maxLength: 120 }),
-          field('title', 'Título', '.tt-watch-title', 'RELOJES TINTIN', { type: 'multiline', rows: 3, maxLength: 220 }),
+          field('title', 'Título', '.tt-watch-title', 'Relojes Tintin', { type: 'multiline', rows: 3, maxLength: 220 }),
           field('body', 'Descripción', '.tt-watch-desc', 'Relojes de acero inoxidable, elegantes y femeninos, para acompañarte del día a la noche.', { type: 'multiline', rows: 5, maxLength: 1200 }),
           field('btnText', 'Texto del botón', 'a.tt-btn', 'VER RELOJES →', { maxLength: 80 }),
           field('btnHref', 'Enlace del botón', 'a.tt-btn', '/catalogo?cat=relojes', { type: 'href', maxLength: 500 }),
@@ -113,7 +113,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         allowVisibility: true,
         fields: [
           field('eyebrow', 'Texto pequeño', '.tt-reviews-header .tt-section-sub', 'Lo que cuentan nuestras tintinas', { maxLength: 120 }),
-          field('title', 'Título', '.tt-reviews-header .tt-section-title', 'TINTINAS QUE YA NOS ELIGIERON', { maxLength: 180 }),
+          field('title', 'Título', '.tt-reviews-header .tt-section-title', 'Tintinas que ya nos eligieron', { maxLength: 180 }),
         ],
       },
       footer: {
@@ -123,7 +123,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         fields: [
           field('tagline', 'Descripción de la marca', '.tt-footer-tagline', 'Tu tienda de accesorios y relojes en Paraguay. Comprá online con atención cercana.', { type: 'multiline', rows: 3, maxLength: 500 }),
           field('waText', 'Texto del botón WhatsApp', '.tt-footer-wa-text', 'Escribirnos por WhatsApp', { maxLength: 100 }),
-          field('copy', 'Copyright', '.tt-footer-bottom', '© 2024-2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS', { maxLength: 180 }),
+          field('copy', 'Copyright', '.tt-footer-bottom', '© 2024-2026 Tintin Accesorios — Todos los derechos reservados', { maxLength: 180 }),
         ],
       },
     },
@@ -433,10 +433,10 @@ export function normalizeContentValue(pageId, sectionId, key, value) {
     return /^\s*(?:DETALLES QUE ELEVAN\s+TU ESTILO|UN DETALLE\s+MUY VOS|Tintin Accesorios & Relojes)\s*$/i.test(corrected) ? 'El encanto está en los detalles' : corrected;
   }
   if (pageId === 'index' && sectionId === 'hero') {
-    const legacy = {subtitle: ['Joyitas únicas, como vos.', 'Piezas elegidas para acompañarte en cada momento.'], primaryText: ['Encontrá tu favorito', 'COMPRAR AHORA'], btnText: ['Sobre Tintín', '¿Quienes somos?']};
+    const legacy = {subtitle: ['Joyitas únicas, como vos.', 'Piezas elegidas para acompañarte en cada momento.'], primaryText: ['Encontrá tu favorito', 'Comprar ahora'], btnText: ['Sobre Tintín', '¿Quienes somos?']};
     if (legacy[key] && text.trim() === legacy[key][0]) return legacy[key][1];
   }
-  if (pageId === 'index' && sectionId === 'editorial_relojes' && key === 'title' && /^\s*EL RELOJ DEL QUE\s+TODAS SE ENAMORAN\s*$/i.test(text)) return 'RELOJES TINTIN';
+  if (pageId === 'index' && sectionId === 'editorial_relojes' && key === 'title' && /^\s*EL RELOJ DEL QUE\s+TODAS SE ENAMORAN\s*$/i.test(text)) return 'Relojes Tintin';
   if (pageId === 'index' && sectionId === 'reviews' && key === 'eyebrow' && /^\s*Ellas ya eligieron brillar\s*$/i.test(text)) return 'Lo que cuentan nuestras tintinas';
   if (pageId === 'index' && sectionId === 'trust' && key === 'items.1.label' && /^\s*Acero inoxidable\s*$/i.test(text)) return 'Materiales de calidad';
   if (pageId === 'index' && sectionId === 'trust' && key === 'items.1.desc' && /^\s*No se oxida ni decolora\s*$/i.test(text)) return 'Distintos materiales para cada estilo';
@@ -444,8 +444,8 @@ export function normalizeContentValue(pageId, sectionId, key, value) {
     return /^\s*PAGO SEGUROOXSD\s*$/i.test(text) ? 'Pago seguro' : text;
   }
   if (pageId === 'index' && sectionId === 'editorial_bag' && key === 'title') {
-    if (/tod+o+xd/i.test(text)) return 'EL COMPLEMENTO\nQUE LO CAMBIA TODO';
-    return text.replace(/complementoque/gi, 'COMPLEMENTO\nQUE');
+    if (/tod+o+xd/i.test(text)) return 'El complemento\nque lo cambia todo';
+    return text.replace(/complementoque/gi, 'complemento\nque');
   }
   return value;
 }

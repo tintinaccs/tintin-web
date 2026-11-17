@@ -369,7 +369,7 @@ if (!window.TintinAdminUserFichaBooted) {
       .ficha-photo-dialog > button{display:block;margin:0 0 16px auto;min-height:44px}
       .ficha-avatar-large{width:100%;height:min(60dvh,620px);border-radius:12px;font-size:clamp(64px,20vw,180px)}
       .ficha-avatar-large img{object-fit:contain}
-      .ficha-section-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-primary);margin-bottom:10px}
+      .ficha-section-title{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--adm-primary);margin-bottom:10px}
       .ficha-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
       .ficha-field-label{font-size:11px;color:var(--adm-muted);margin-bottom:2px}
       .ficha-field-value{font-size:13px;color:var(--adm-text);font-weight:600;word-break:break-word}

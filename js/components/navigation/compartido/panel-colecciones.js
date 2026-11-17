@@ -5,7 +5,7 @@ function renderSheetCategories() {
   return CATEGORIES.map(({ slug, label }) => `
     <a href="/catalogo?cat=${slug}" class="tt-sheet-item">
       <span class="tt-sheet-item-img" aria-hidden="true"><img data-tt-collection-image data-src="${collectionImageUrl(slug)}" alt="" loading="lazy"></span>
-      <span>${label.toUpperCase()}</span>
+      <span>${label}</span>
     </a>`).join('');
 }
 
@@ -13,7 +13,7 @@ export function renderCollectionsSheet() {
   return `
     <div class="tt-collections-sheet" id="collections-sheet" role="dialog" aria-modal="true" aria-label="Catálogo" aria-hidden="true">
       <div class="tt-sheet-header">
-        <div class="tt-drawer-brand-heading"><img class="tt-drawer-brand-logo" src="${logoUrl()}" alt="Tintin" width="110" height="46"><h2>CATÁLOGO</h2></div>
+        <div class="tt-drawer-brand-heading"><img class="tt-drawer-brand-logo" src="${logoUrl()}" alt="Tintin" width="110" height="46"><h2>Catálogo</h2></div>
         <button type="button" id="btn-close-sheet" aria-label="Cerrar colecciones">${svgIcon(UI_ICONS.close, { size: 16 })}</button>
       </div>
       <div class="tt-sheet-grid" data-collections-nav="sheet">${renderSheetCategories()}</div>

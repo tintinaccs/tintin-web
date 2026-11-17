@@ -1,3 +1,4 @@
+import { interfaceLabel } from '../../core/store/texto-interfaz.mjs?v=tintin-20261117-texto-interfaz-1';
 /* =============================================================
    TINTIN — Fase 4: colecciones públicas sincronizadas
 
@@ -228,7 +229,7 @@ if (!window.TintinCollectionsPhase4Booted) {
     imageWrap.appendChild(createImage(collection));
     overlay.className = 'tt-coll-card-overlay';
     label.className = 'tt-coll-card-label';
-    label.textContent = (clean(collection.name) || clean(collection.slug)).toUpperCase();
+    label.textContent = interfaceLabel(clean(collection.name) || collection.slug);
     overlay.appendChild(label);
     link.append(imageWrap, overlay);
     return link;
@@ -263,7 +264,7 @@ if (!window.TintinCollectionsPhase4Booted) {
     initial.className = 'tt-coll-page-initial';
     initial.textContent = label.charAt(0).toUpperCase();
     name.className = 'tt-coll-page-name';
-    name.textContent = label.toUpperCase();
+    name.textContent = interfaceLabel(label);
     description.className = 'tt-coll-page-desc';
     description.textContent = clean(collection.description);
     link.href = catalogHref(collection.slug);

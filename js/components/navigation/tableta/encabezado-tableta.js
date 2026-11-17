@@ -45,13 +45,13 @@ export function renderTabletMenu() {
         </button>
       </div>
       <nav class="tt-tablet-nav" aria-label="Navegación tablet">
-        <a href="/" data-shell-route="home">INICIO</a>
+        <a href="/" data-shell-route="home">Inicio</a>
         <button type="button" id="btn-tablet-tienda" class="tt-tablet-tienda-btn" aria-expanded="false" aria-controls="tablet-cats">
-          <span>CATÁLOGO</span>
+          <span>Catálogo</span>
           ${svgIcon(UI_ICONS.chevronDown, { size: 16, className: 'tt-tablet-chevron' })}
         </button>
-        <a href="/about" data-shell-route="about">NOSOTROS</a>
-        <a href="/contact" data-shell-route="contact">CONTACTO</a>
+        <a href="/about" data-shell-route="about">Nosotros</a>
+        <a href="/contact" data-shell-route="contact">Contacto</a>
       </nav>
       <div class="tt-tablet-cats" id="tablet-cats">
         <button type="button" class="tt-tablet-cats-back" id="btn-tablet-cats-back">← Volver</button>

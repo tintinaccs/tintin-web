@@ -18,24 +18,24 @@ function pageStyles(page) {
   const slug = page.replace(/\.html$/, '');
   return { id: `tt-${slug}-css-bundle`, file: `css/generated/${slug}.css`, versionPrefix: `tintin-${slug}` };
 }
-const VERSION = 'tintin-hero-fit-20261104-1-p1106';
+const VERSION = 'tintin-20261117-editorial-1';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1-p1106';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1-p1106';
-const TIENDA_VERSION = 'tintin-20261116-discovery-2';
+const TIENDA_VERSION = 'tintin-20261117-editorial-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261101-cls-home-1';
-const LOADER_VERSION = 'tintin-20261116-discovery-2';
+const LOADER_VERSION = 'tintin-20261117-editorial-1';
 const STORE_GATE_VERSION = 'tintin-20261030-home-history-5-p1112';
 const PANEL_COMPAT_VERSION = 'tintin-20261116-discovery-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20261116-discovery-2';
-const NAV_ENTRY_VERSION = 'tintin-20261116-discovery-2';
+const PUBLIC_SHELL_VERSION = 'tintin-20261117-editorial-1';
+const NAV_ENTRY_VERSION = 'tintin-20261117-editorial-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20261114-wa-contact-1';
-const SESSION_PROTECTION_VERSION = 'tintin-20261030-home-history-5-p1112';
-const PROFILE_GATE_VERSION = 'tintin-20261030-home-history-5-p1112';
+const VISUAL_BUILDER_VERSION = 'tintin-20261117-editorial-1';
+const SESSION_PROTECTION_VERSION = 'tintin-20261117-editorial-1';
+const PROFILE_GATE_VERSION = 'tintin-20261117-editorial-1';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1-p1106';
 const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1-p1106';
 const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1-nav-20261028-2-p1106';
-const UNIFIED_THEME_VERSION = 'tintin-20261102-public-focus-1-p1106';
+const UNIFIED_THEME_VERSION = 'tintin-20261117-editorial-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
@@ -89,7 +89,7 @@ function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   const links = PUBLIC_STRUCTURAL_STYLES.map(([id, href, version]) =>
     `  <link id="${id}" rel="stylesheet" href="${absolute ? '/' : ''}${href}?v=${version}">`
   ).concat((PUBLIC_PAGE_STYLES[page] || []).map(href =>
-    `  <link data-tt-page-structure="initial" rel="stylesheet" href="${href}?v=${href === 'css/pages/legal.css' ? 'tintin-20261114-harmonic-palette-1' : 'tintin-20261010-first-render-merge-1-palette-20261014-1-p1106'}">`
+    `  <link data-tt-page-structure="initial" rel="stylesheet" href="${href}?v=${href === 'css/pages/legal.css' ? 'tintin-20261117-editorial-1' : 'tintin-20261010-first-render-merge-1-palette-20261014-1-p1106'}">`
   )).join('\n');
   return out.replace('</head>', `  <!-- Estructura pública disponible desde el primer render -->\n${links}\n</head>`);
 }
@@ -111,12 +111,12 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-visual-builder-runtime-css\"",
     "css/components/editor-visual-runtime.css",
-    "tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-p1106"
+    "tintin-20261117-editorial-1"
   ],
   [
     "id=\"tt-navigation-notifications-css\" data-tt-social-notifications=\"1\"",
     "css/components/notifications/notificaciones-sociales.css",
-    "tintin-20261030-notificaciones-explicitas-1-p1106"
+    "tintin-20261117-editorial-1"
   ],
   [
     "id=\"tt-navigation-desktop-css\" media=\"(min-width: 1025px)\"",
@@ -161,7 +161,7 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-navigation-coherence-css\"",
     "css/components/navigation/compartido/coherencia-visual.css",
-    "tintin-20261116-discovery-2"
+    "tintin-20261117-editorial-1"
   ]
 ];
 const INITIAL_PAGE_STYLES = {
@@ -224,7 +224,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-adm-social-notifications=\"1\"",
       "css/admin/notificaciones-admin.css",
-      "tintin-20261114-harmonic-palette-1"
+      "tintin-20261117-editorial-1"
     ]
   ]
 };
@@ -370,9 +370,7 @@ function sharedFooter(absoluteAssets = false) {
         <a href="/" class="tt-logo-link" aria-label="Ir al inicio de TINTIN">
           <img loading="lazy" decoding="async" src="${absoluteAssets ? '/' : ''}assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2" alt="TINTIN" width="104" height="56" class="tt-logo-img tt-logo-img--menu">
         </a>
-        <p class="tt-footer-tagline">Tintin Accesorios &amp; Relojes. Tu tienda de accesorios y relojes en Paraguay, con retiro coordinado en San Lorenzo y envíos al interior.</p>
-        <p><a href="/catalogo?cat=accesorios">Ver accesorios</a></p>
-        <p class="tt-footer-hours">Horario de atención: 09:00 a 22:00 hs.</p>
+        <p class="tt-footer-tagline" hidden>Tintin Accesorios &amp; Relojes. Tu tienda de accesorios y relojes en Paraguay, con retiro coordinado en San Lorenzo y envíos al interior.</p>
         <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
           <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.65 15.02L2 22l5.1-1.34A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.08-1.12l-.36-.21-3 .79.8-2.92-.24-.38A8 8 0 1 1 12 20Zm4.38-5.97c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.2-1.44-1.35-1.68-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.8-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.19.86 2.33.98 2.49.12.16 1.7 2.6 4.13 3.65.58.25 1.03.4 1.38.51.58.18 1.11.16 1.52.1.46-.07 1.43-.59 1.63-1.15.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/></svg><span class="tt-footer-wa-text">Escribir por WhatsApp</span>
         </a>

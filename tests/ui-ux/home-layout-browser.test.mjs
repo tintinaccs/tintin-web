@@ -15,11 +15,11 @@ test('la fachada usa las definiciones actuales y conserva copys personalizados',
   assert.ok(facade.includes(dependency), 'Las definiciones deben tener una versión de caché');
   assert.equal(normalizeContentValue('index', 'hero', 'title', 'DETALLES QUE ELEVAN TU ESTILO'), 'El encanto está en los detalles');
   assert.equal(normalizeContentValue('index', 'hero', 'title', 'Mi texto propio'), 'Mi texto propio');
-  for (const [key, previous, expected] of [['subtitle','Joyitas únicas, como vos.','Piezas elegidas para acompañarte en cada momento.'],['primaryText','Encontrá tu favorito','COMPRAR AHORA'],['btnText','Sobre Tintín','¿Quienes somos?']]) {
+  for (const [key, previous, expected] of [['subtitle','Joyitas únicas, como vos.','Piezas elegidas para acompañarte en cada momento.'],['primaryText','Encontrá tu favorito','Comprar ahora'],['btnText','Sobre Tintín','¿Quienes somos?']]) {
     assert.equal(normalizeContentValue('index', 'hero', key, previous), expected);
     assert.equal(normalizeContentValue('index', 'hero', key, 'Mi texto propio'), 'Mi texto propio');
   }
-  assert.equal(normalizeContentValue('index', 'editorial_relojes', 'title', 'EL RELOJ DEL QUE\nTODAS SE ENAMORAN'), 'RELOJES TINTIN');
+  assert.equal(normalizeContentValue('index', 'editorial_relojes', 'title', 'EL RELOJ DEL QUE\nTODAS SE ENAMORAN'), 'Relojes Tintin');
   assert.equal(normalizeContentValue('index', 'editorial_relojes', 'title', 'Mis relojes favoritos'), 'Mis relojes favoritos');
   assert.equal(normalizeContentValue('index', 'trust', 'items.2.label', 'Pago segurooxsd'), 'Pago seguro');
   assert.equal(normalizeContentValue('index', 'trust', 'items.2.label', 'Tu compra está protegida'), 'Tu compra está protegida');

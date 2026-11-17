@@ -32,7 +32,7 @@ function injectStyles() {
     .tcp-preview-row{display:flex;gap:8px;align-items:center;margin:11px 0}
     .tcp-preview{flex:1;height:38px;border-radius:9px;border:1px solid var(--admin-color-border,#F1E4E7);position:relative;overflow:hidden;background-image:linear-gradient(45deg,#ddd 25%,transparent 25%),linear-gradient(-45deg,#ddd 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ddd 75%),linear-gradient(-45deg,transparent 75%,#ddd 75%);background-size:8px 8px;background-position:0 0,0 4px,4px -4px,-4px 0}
     .tcp-preview-color{position:absolute;inset:0}
-    .tcp-preview-label{position:absolute;z-index:1;bottom:3px;left:6px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:rgba(0,0,0,.62);background:rgba(255,255,255,.82);padding:1px 5px;border-radius:4px}
+    .tcp-preview-label{position:absolute;z-index:1;bottom:3px;left:6px;font-size:9.5px;font-weight:800;letter-spacing:.04em;color:rgba(0,0,0,.62);background:rgba(255,255,255,.82);padding:1px 5px;border-radius:4px}
     .tcp-input-row{display:flex;gap:6px;margin-bottom:6px}
     .tcp-input{flex:1;min-width:0;padding:8px 9px;border:1px solid var(--admin-color-field-border,#F1E4E7);border-radius:9px;font-size:12px;font-family:"Montserrat";color:var(--admin-color-text-primary,#713C53);background:var(--admin-color-field-background,#fff)}
     .tcp-input.tcp-invalid{border-color:var(--admin-color-error-text,#b8341f);box-shadow:0 0 0 2px var(--admin-color-error-background,#fde3e1)}

@@ -41,7 +41,7 @@ function ensureStyles() {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.dataset.ttSocialNotifications = '1';
-  link.href = 'css/components/notifications/notificaciones-sociales.css?v=tintin-20261030-notificaciones-explicitas-1-p1106';
+  link.href = 'css/components/notifications/notificaciones-sociales.css?v=tintin-20261117-editorial-1';
   document.head.appendChild(link);
 }
 

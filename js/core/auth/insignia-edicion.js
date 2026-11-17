@@ -151,7 +151,7 @@ subscribeAuthState(async user => {
 
 // Con ?ttEdit=1 el Super Admin entra al modo edición sobre la página real.
 if (typeof location !== 'undefined' && new URLSearchParams(location.search).get('ttEdit') === '1') {
-  import('../store/modo-edicion-sitio.js?v=tintin-20261114-wa-contact-1').catch(error => {
+  import('../store/modo-edicion-sitio.js?v=tintin-20261117-editorial-1').catch(error => {
     console.warn('[edit-mode] no se pudo cargar el modo edición:', error);
   });
 }

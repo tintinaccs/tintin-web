@@ -1,7 +1,7 @@
 import { normalizeProductSearch as normalize, productSearchText, productSearchScore } from '../../../core/store/busqueda-productos.mjs?v=tintin-20261116-discovery-2';
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261116-discovery-2';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261117-editorial-1';
 
 // El área desplazable conserva todas las coincidencias del catálogo público.
 import { hasProductStock, firstAvailableVariant, productDefaultPrice } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';

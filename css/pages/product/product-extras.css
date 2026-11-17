@@ -177,7 +177,7 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
 }
 .tinsel-total-label{
   font-size:11px; color:rgba(34,34,34,0.7);
-  text-transform:uppercase; letter-spacing:.08em;
+   letter-spacing:.08em;
 }
 .tinsel-total{
   font-size:clamp(16px,1.4vw,20px);
@@ -281,7 +281,7 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
   flex-wrap:wrap; gap:12px;
 }
 .tinsel-footer-total{ display:flex; flex-direction:column; gap:2px; }
-.tinsel-footer-label{ font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:rgba(34,34,34,0.7); }
+.tinsel-footer-label{ font-size:10px;  letter-spacing:.1em; color:rgba(34,34,34,0.7); }
 .tinsel-footer-amount{
   font-size:clamp(20px,1.8vw,26px);
   font-weight:700; color:var(--color-text-primary,#222222); letter-spacing:-.02em;
@@ -375,5 +375,5 @@ html body.tt-product-maintenance #tinsel-root .tinsel-box{
 .tt-product-specifications{margin:18px 0 0;border-top:1px solid var(--border,#F8AACA)}
 .tt-product-specifications[hidden]{display:none}
 .tt-product-specifications>div{display:grid;grid-template-columns:minmax(90px,130px) 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--border,#F8AACA)}
-.tt-product-specifications dt{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--text-muted,#222222)}
+.tt-product-specifications dt{font-size:12px;font-weight:800;color:var(--text-muted,#222222)}
 .tt-product-specifications dd{margin:0;font-size:13px;line-height:1.5;color:var(--text,#222222)}

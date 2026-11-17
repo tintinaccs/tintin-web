@@ -89,7 +89,7 @@ function markup() {
       </div>
       <div class="adm-card-body">
         <div class="adm-master-state-row">
-          <span class="adm-master-state" id="system-health-state" data-state="NOT_VERIFIED">NO VERIFICADO</span>
+          <span class="adm-master-state" id="system-health-state" data-state="NOT_VERIFIED">No verificado</span>
           <span class="adm-master-freshness" id="system-health-checked">Abrí Diagnóstico para comprobar el sistema.</span>
         </div>
         <div class="adm-master-notice notice-info" id="system-health-notice">El estado operativo se consulta solo cuando abrís esta sección o pulsás Actualizar estado.</div>
