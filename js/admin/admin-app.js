@@ -1,4 +1,4 @@
-import {activityContextLabel,activityPresenceLabel} from '../analytics/contexto-actividad.mjs?v=tintin-20261117-activity-1';
+import {activityContextLabel,activityPresenceLabel} from '../analytics/contexto-actividad.mjs?v=tintin-20261117-activity-2';
 import {commercePeriodStart,commercePeriodWindow,commerceYear} from './statistics/periodos-comerciales.mjs?v=tintin-20261112-delivery-separate-1';
 import {statisticsTodayStart} from './statistics/modelo-reinicios.mjs?v=tintin-20261112-delivery-separate-1';
 import {orderAmounts,sumOrderAmounts,deliveryAmountText} from '../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';

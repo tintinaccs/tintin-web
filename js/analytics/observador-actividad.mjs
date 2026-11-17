@@ -1,4 +1,4 @@
-import {contextFromLocation,checkoutFailureReason} from './contexto-actividad.mjs?v=tintin-20261117-activity-1';
+import {contextFromLocation,checkoutFailureReason} from './contexto-actividad.mjs?v=tintin-20261117-activity-2';
 export function observeActivity({window:win,document:doc,onChange}) {
   let timer=0,signature='',checkoutStatus='',checkoutReason='',checkoutPhase='',lastStep=-1,currentSurface='';
   const context=()=>{const step=[...doc.querySelectorAll('.ck-panel')].findIndex(node=>node.classList.contains('active'));if(step!==lastStep){checkoutStatus='';checkoutReason='';checkoutPhase='';lastStep=step;}return contextFromLocation({pathname:win.location.pathname,search:win.location.search,

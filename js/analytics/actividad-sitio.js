@@ -1,5 +1,5 @@
 import {waitForSession,getSessionSnapshot,getSessionUser,subscribeSession} from '../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
-import {observeActivity} from './observador-actividad.mjs?v=tintin-20261117-activity-1';
+import {observeActivity} from './observador-actividad.mjs?v=tintin-20261117-activity-2';
 /**
  * Analítica propia y mínima para el panel de Super Admin.
  *
@@ -15,7 +15,7 @@ import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20261017-d
 import {
   hasStatisticsConsent,
   onPrivacyConsentChange
-} from './consentimiento-privacidad.js?v=tintin-20261117-activity-1';
+} from './consentimiento-privacidad.js?v=tintin-20261117-activity-2';
 import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260911-auth-cart-final-1';
 import {
   heartbeatDecision,

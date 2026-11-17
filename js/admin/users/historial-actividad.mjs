@@ -1,4 +1,4 @@
-import {activityContextLabel,activityPresenceLabel,ACTIVITY_ACTIONS,activityPeriodDays} from '../../analytics/contexto-actividad.mjs?v=tintin-20261117-activity-1';
+import {activityContextLabel,activityPresenceLabel,ACTIVITY_ACTIONS,activityPeriodDays} from '../../analytics/contexto-actividad.mjs?v=tintin-20261117-activity-2';
 const format=value=>new Intl.DateTimeFormat('es-PY',{timeZone:'America/Asuncion',dateStyle:'short',timeStyle:'medium'}).format(new Date(value?.toDate?.()||value));
 export function createActivityHistory(doc,{loadPage,loadPresence,isCurrent=()=>true,now=()=>new Date()}) {
   const el=(tag,text='')=>{const node=doc.createElement(tag);node.textContent=text;return node;};

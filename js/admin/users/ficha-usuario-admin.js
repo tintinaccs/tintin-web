@@ -1,4 +1,4 @@
-import {createActivityHistory} from './historial-actividad.mjs?v=tintin-20261117-activity-1';
+import {createActivityHistory} from './historial-actividad.mjs?v=tintin-20261117-activity-2';
 import {orderAmountSummary} from '../../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { ordersForView, orderDisplayCode } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
