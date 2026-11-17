@@ -1,3 +1,7 @@
+## Características de producto sin duplicados — 2026-11-17 — Codex
+
+El HTML inicial conserva la información de envío y deja material, ajuste y cuidados al bloque Características. Se conservan la descripción de producto y los datos estructurados. PASS_LOCAL en SEO y pruebas de renderizado del catálogo, incluida la regresión de la ficha.
+
 ## Textos y tipografía transversal — 2026-11-17 — Codex
 
 Se quitó la introducción redundante de Inicio y se retiró el texto SEO visible de la plantilla del catálogo. La descripción de cada colección sigue en los metadatos y JSON-LD. Se simplificó el pie compartido y se aplicaron capitalización editorial y tokens tipográficos en superficies públicas y administrativas.

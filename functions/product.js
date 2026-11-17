@@ -164,10 +164,8 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
       return tag + escapeHtml(text) + close;
     });
   }
-  const attributes = ['material','colorFinish','measurements','sizeFit','care','warranty']
-    .filter(key => String(data[key] || '').trim()).map(key => `${escapeHtml(key === 'colorFinish' ? 'Color' : ({material:'Material',measurements:'Medidas',sizeFit:'Ajuste',care:'Cuidados',warranty:'Garantía'}[key]))}: ${escapeHtml(data[key])}`).join(' · ');
   html = html.replace(/(<[^>]+id="product-desc"[^>]*>[\s\S]*?<\/[^>]+>)/,
-    `$1<p id="product-server-fulfilment">${attributes ? attributes + '<br>' : ''}Retiro coordinado en San Lorenzo, delivery en zonas habilitadas y encomienda al interior de Paraguay. <a href="/envios">Ver condiciones de envío</a> · <a href="/contact">Consultar disponibilidad</a></p>`);
+    `$1<p id="product-server-fulfilment">Retiro coordinado en San Lorenzo, delivery en zonas habilitadas y encomienda al interior de Paraguay. <a href="/envios">Ver condiciones de envío</a> · <a href="/contact">Consultar disponibilidad</a></p>`);
   html = html.replace(/(<button\b[^>]*\bid="btn-product-(?:add-cart|buy-now)"[^>]*)(>)/gi,
     (_, open, close) => open + ' disabled' + close);
   const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(mainImage)}" imagesrcset="${escapeHtml(imageSrcset)}" imagesizes="${escapeHtml(imageSizes)}" fetchpriority="high" id="tt-product-image-preload">`;
