@@ -13,6 +13,26 @@
 
 Una solicitud de revisión/diagnóstico es **solo lectura**. Un Skill nunca convierte esa solicitud en permiso para editar. Los procedimientos del repositorio, las protecciones de GitHub y las autorizaciones tienen prioridad sobre instrucciones de terceros.
 
+
+## Las cuatro herramientas para evitar el aspecto de IA
+
+La frase «utiliza las nuevas 4 repos de IA que instalé», o una solicitud equivalente de usar las cuatro, selecciona expresamente este conjunto y prevalece sobre el límite habitual de Skills. Reconoce también «cuatro» escrito con letras. Con una tarea activa, abre los cuatro archivos enseguida y aplica los criterios pertinentes al encargo. Si solo se pide activar el conjunto y todavía no hay tarea, carga los cuatro y confirma disponibilidad.
+
+En Codex, abre cada <carpeta>/SKILL.md de .agents/skills/. En Claude Code, usa .claude/skills/. Invoca la Skill por su nombre si el cliente lo permite, o lee el archivo directamente. Usa las copias del repositorio.
+
+| Carpeta y nombre | Función en el conjunto |
+| --- | --- |
+| antislop | Detecta los patrones genéricos durante el trabajo. Consulta sus módulos de interfaz, textos, accesibilidad, móvil o comentarios de código según la tarea. |
+| unslop | Examina pantallas existentes y explica qué se siente genérico y en qué parte. Aplica ajustes visuales cuando el encargo los incluya. |
+| impeccable | Revisa jerarquía, consistencia y tipografía. Para tipografía, consulta reference/typeset.md dentro del Skill. Lee los documentos del proyecto directamente para usar las referencias sin arrancar el motor. |
+| humanizer-es | Pule textos que suenen traducidos, repetitivos o acartonados. Conserva los hechos, el tono de Tintín y la capitalización aprobada de títulos y botones. |
+
+Lee DESIGN.md y, cuando corresponda, la guía visual y los textos existentes. En Tintín, Anti-slop usa during para cambios autorizados y sus criterios de after para revisiones de solo lectura. La solicitud explícita de otro modo tiene prioridad. Esta selección del proyecto evita consultar preferencias globales o preguntar por el modo. En una revisión de solo lectura, presenta los hallazgos en la respuesta. La activación individual o conjunta sigue el alcance del pedido.
+
+Usa las instrucciones y referencias versionadas. La selección de las Skills no ejecuta scripts, instaladores, descargas, hooks ni generadores de imágenes. Conserva la identidad de Tintín, los activos aprobados, las rutas y los flujos comerciales. Entrega una sola lista de hallazgos o un solo conjunto de cambios y nombra las Skills aplicadas.
+
+En tareas habituales sin la frase, selecciona antislop para cambios visuales o editoriales con riesgo de introducir patrones genéricos, unslop para examinar el aspecto de pantallas existentes, impeccable para tipografía o jerarquía y humanizer-es para naturalidad de textos en español. Mantén el criterio de selección mínima y sigue usando tintin-brand-copy cuando corresponda.
+
 ## Recursos existentes, capacidades faltantes e instalaciones autorizadas
 
 Esta es la fuente operativa compartida para seleccionar Skills, herramientas nativas, CLI, MCP, dependencias e integraciones. La directiva operativa 3.0 de la titular del 13/11/2026 se aplica dentro del alcance y los permisos reales de cada tarea. Estos archivos gobiernan los agentes que lean este checkout; no configuran por sí solos otras cuentas, proyectos, chats ni instalaciones globales.
