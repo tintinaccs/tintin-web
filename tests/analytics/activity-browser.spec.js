@@ -2,7 +2,7 @@ const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 // The entire collection pipeline uses the real handler with isolated in-memory
 // Firestore dependencies. All non-fixture requests are blocked, including payments.
-async function mount(page) {
+async function mount(page,{deferAuth=false}={}) {
  const {handleSiteActivity}=await import('../../functions/api/site-activity.js');
  const {encodeFirestoreFields,decodeFirestoreFields}=await import('../../cloudflare/firebase-admin-ligero.js');
  const documents=new Map(),calls=[];let revision=0;
@@ -15,13 +15,16 @@ async function mount(page) {
    const response=await handleSiteActivity({request:new Request(url,{method:'POST',headers:{origin:url.origin,authorization:'Bearer fixture'},body}),env:{}},deps);
    return route.fulfill({status:response.status,contentType:'application/json',body:await response.text()});
   }
-  if(url.pathname==='/js/core/firebase/firebase.js')return route.fulfill({contentType:'text/javascript',body:'export const appCheckReady=Promise.resolve(true);export const auth={currentUser:{uid:"account_one",getIdToken:async()=>"fixture"}};'});
+  if(url.pathname==='/js/core/auth/coordinador-sesion.js')return route.fulfill({contentType:'text/javascript',body:`import {auth} from '../firebase/firebase.js';export const getSessionUser=()=>auth.currentUser;export const getSessionSnapshot=()=>({status:auth.currentUser?'authenticated':'unauthenticated'});export const subscribeSession=()=>()=>{};export const waitForSession=()=>${deferAuth ? 'new Promise(resolve=>window.qaResolveAuth=()=>{auth.currentUser={uid:"account_one",getIdToken:async()=>"fixture"};resolve({status:"authenticated",user:auth.currentUser});})' : 'Promise.resolve(getSessionSnapshot())'};`});
+  if(url.pathname==='/js/core/firebase/firebase.js')return route.fulfill({contentType:'text/javascript',body:`export const appCheckReady=Promise.resolve(true);export const auth={currentUser:${deferAuth ? 'null' : '{uid:"account_one",getIdToken:async()=>"fixture"}'}};`});
   if(url.pathname==='/js/core/firebase/origen-funciones.js')return route.fulfill({contentType:'text/javascript',body:'export const apiUrl=name=>"/api/"+name;'});
   if(url.pathname.startsWith('/js/'))return route.fulfill({contentType:'text/javascript',body:fs.readFileSync('.'+url.pathname,'utf8')});
   return route.fulfill({contentType:'text/html',body:`<html><body><main><div class="ck-panel active"></div><div class="ck-panel"></div><div class="ck-panel"></div><div class="ck-panel"></div><div class="ck-panel"></div></main><script type="module">window.TINTIN_ENABLE_PUBLIC_ACTIVITY=true;await import('/js/analytics/actividad-sitio.js');window.qaReady=true;</script></body></html>`});
  });
  await page.context().addCookies([{name:'tt_privacy_choice',value:'v3.all',domain:'activity.test',path:'/'}]);
- await page.goto('https://activity.test/checkout');await page.waitForFunction(()=>window.qaReady);
+ await page.goto('https://activity.test/checkout',{waitUntil:'domcontentloaded'});
+ if(deferAuth){await page.waitForFunction(()=>window.qaResolveAuth);expect(calls.length).toBe(0);expect(await page.evaluate(()=>JSON.parse(sessionStorage.getItem('tt_activity_pending_v1')).sessionId)).toBe('session_saved_fixture');await page.evaluate(()=>window.qaResolveAuth());}
+ await page.waitForFunction(()=>window.qaReady);
  await expect.poll(()=>calls.filter(c=>c.kind==='presence').length).toBeGreaterThan(0);
  return {calls,documents,decodeFirestoreFields};
 }
@@ -77,4 +80,23 @@ test('retirar permiso detiene eventos pendientes y las escrituras de presencia',
  await page.clock.fastForward(120000);
  expect(state.calls.length).toBe(before);
  expect(await page.evaluate(()=>sessionStorage.getItem('tt_activity_pending_v1'))).toBeNull();
+});
+
+
+test('restauración tardía conserva la sesión y acciones pendientes de la misma cuenta',async({page})=>{
+ await page.addInitScript(()=>{
+  const day=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Asuncion',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  sessionStorage.setItem('tt_activity_session_v2',JSON.stringify({day:day+'_account_one',id:'session_saved_fixture'}));
+  sessionStorage.setItem('tt_activity_pending_v1',JSON.stringify({sessionId:'session_saved_fixture',events:[{id:'event_saved_fixture',at:Date.now(),action:'cart_add',context:{page:'product',productId:'fixture_product'}}]}));
+ });
+ const state=await mount(page,{deferAuth:true});
+ await expect.poll(()=>state.calls.some(c=>c.kind==='presence' && c.sessionId==='session_saved_fixture' && c.events.some(e=>e.id==='event_saved_fixture'))).toBe(true);
+});
+
+test('abrir y cerrar el carrito una vez produce una sola apertura',async({page})=>{
+ const state=await mount(page);await page.clock.install();
+ await page.evaluate(()=>{for(const [state,surface] of [['opening','cart'],['open','cart'],['closing','cart'],['idle','none']])window.dispatchEvent(new CustomEvent('tintin:surface-change',{detail:{state,surface}}));});
+ await page.clock.fastForward(21000);
+ await expect.poll(()=>state.calls.flatMap(c=>c.events||[]).filter(e=>e.action==='cart_open').length).toBe(1);
+ expect(state.calls.flatMap(c=>c.events||[]).filter(e=>e.action==='panel_open')).toHaveLength(0);
 });

@@ -26,3 +26,7 @@ Antes de cambios:542 comercio,19 integración Firestore,79Chromium de checkout a
 El aviso ampliado reprodujo un cierre fuera de pantalla en844x390. La fuente CSS compartida ahora limita la altura y permite desplazamiento sin alterar la compra. La regresión conserva los controles de teclado y de fondo inerte y carga la hoja CSS compartida real en su fixture. La tanda de108Chromium aprobó;186Node de operaciones/analítica/estadísticas también aprobaron. Se alinearon las dependencias locales con el lock vigente mediante npm ci --ignore-scripts; no se cambiaron dependencias del proyecto.
 
 La sonda pública de salud se ejecutó en solo lectura y aprobó. Eso no sustituye una compra autenticada de producción ni una captura real de pago. El código nuevo requiere integración, publicación y señales nuevas para verse en el panel.
+
+## Revisión de precisión
+
+La revisión del PR1412 detectó cuatro casos que se corrigieron con regresión: la ficha consulta la presencia viva compartida sin limitar documentos históricos por UID; la creación de sesión desde un heartbeat conserva la ubicación aproximada suministrada por Cloudflare; el observador cuenta solo la transición de apertura del panel; y la cola no se rota mientras Firebase restaura una sesión. Se reutiliza el coordinador canónico y no se trata RESTORING/UNKNOWN como visitante sin cuenta.45pruebas Node específicas y6Chromium de canalización aprobaron; se repite CI sobre el nuevo SHA.

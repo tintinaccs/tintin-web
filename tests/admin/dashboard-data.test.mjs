@@ -138,3 +138,12 @@ test('«En línea ahora» muestra nombre y datos de la cuenta verificada, escapa
   assert.match(container.innerHTML, /Cliente con cuenta/);
   assert.doesNotMatch(container.innerHTML, /<b>Pérez/);
 });
+
+test('la ficha consume la presencia actual compartida sin truncarla a diez documentos históricos',()=>{
+ const records=Array.from({length:15},(_,i)=>({userId:'account',lastSeen:new Date(2026,0,i+1)}));
+ records.push({userId:'account',lastSeen:new Date(),context:{page:'checkout',step:3}},{userId:'other',lastSeen:new Date()});
+ const c=vm.createContext({currentRole:'superadmin',adminRealtimeReady:{presence:true},dashboardActivityState:{presence:records},window:{}});
+ vm.runInContext(functionSource('activityPresenceForUser','\nfunction activityTimestampMillis'),c);
+ const rows=c.activityPresenceForUser('account');assert.equal(rows.length,16);assert.ok(rows.some(row=>row.context?.step===3));
+ c.adminRealtimeReady.presence=false;assert.throws(()=>c.activityPresenceForUser('account'),/presence_not_ready/);
+});

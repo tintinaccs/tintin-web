@@ -11,7 +11,14 @@ export function observeActivity({window:win,document:doc,onChange}) {
   observer.observe(doc.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class','hidden','aria-selected']});
   const record=(action,code)=>{const value=context();if(value.page==='checkout'){if(action==='checkout_confirm'||action==='order_confirmed'){checkoutReason='';checkoutPhase='';delete value.reason;delete value.phase;}const state={checkout_confirm:'confirming',checkout_error:'error',order_confirmed:'confirmed',payment_pending:'payment_pending'}[action];if(state){checkoutStatus=state;value.status=state;}if(action==='checkout_progress' && ['preparing','profile','guard','server'].includes(code)){checkoutStatus='confirming';checkoutPhase=code;value.status='confirming';value.phase=code;}if(action==='checkout_error'){checkoutReason=checkoutFailureReason(code);value.reason=checkoutReason;}}onChange(action,value);};
   const click=event=>{schedule();};
-  const surface=event=>{currentSurface=event.detail?.surface||'';if(currentSurface==='cart')record('cart_open');else if(currentSurface)record('panel_open');schedule();};
+  const surface=event=>{
+    const {state,surface:next}=event.detail||{};
+    const opening=(state==='opening'||state==='open') && ['cart','account','search','menu','notifications'].includes(next);
+    const changed=opening && currentSurface!==next;
+    currentSurface=opening ? next : '';
+    if(changed)record(next==='cart' ? 'cart_open' : 'panel_open');
+    schedule();
+  };
   const search=event=>{if(event.key==='Enter' && event.target?.matches?.('#search-input,#cat-search'))record('search');};
   const payment=()=>record('order_confirmed');
   doc.addEventListener('click',click,true);doc.addEventListener('keydown',search,true);

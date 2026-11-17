@@ -1437,6 +1437,12 @@ function setupPermissions(role) {
 const DASHBOARD_ONLINE_WINDOW_MS = 2 * 60 * 1000;
 const DASHBOARD_PRESENCE_QUERY_MS = 10 * 60 * 1000;
 
+function activityPresenceForUser(uid) {
+  if(currentRole!=='superadmin' || !adminRealtimeReady.presence)throw new Error('presence_not_ready');
+  return dashboardActivityState.presence.filter(item=>item.userId===uid);
+}
+window.TintinAdminPresence=Object.freeze({forUser:activityPresenceForUser});
+
 function activityTimestampMillis(value) {
   if (!value) return 0;
   if (typeof value.toMillis === 'function') return value.toMillis();

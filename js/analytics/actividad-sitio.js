@@ -1,3 +1,4 @@
+import {waitForSession,getSessionSnapshot,getSessionUser,subscribeSession} from '../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import {observeActivity} from './observador-actividad.mjs?v=tintin-20261117-activity-1';
 /**
  * Analítica propia y mínima para el panel de Super Admin.
@@ -9,7 +10,7 @@ import {observeActivity} from './observador-actividad.mjs?v=tintin-20261117-acti
  * - El identificador aleatorio rota cada día. Si hay sesión iniciada, se envía
  *   el ID token y el servidor guarda solo el uid verificado (sin nombre ni correo).
  */
-import { appCheckReady, auth } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
+import { appCheckReady } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20261017-domain-cutover-1';
 import {
   hasStatisticsConsent,
@@ -22,6 +23,9 @@ import {
 } from './control-heartbeat.mjs?v=tintin-20260918-site-activity-dedupe-1';
 
 const appCheckAvailable = await appCheckReady;
+// RESTORING/UNKNOWN nunca autorizan a reemplazar la identidad o su cola.
+await waitForSession();
+const sessionKnown=()=>['authenticated','unauthenticated'].includes(getSessionSnapshot().status);
 const adminPage = isAdminPage();
 
 if (adminPage || window.TINTIN_ENABLE_PUBLIC_ACTIVITY !== true || !appCheckAvailable) {
@@ -180,7 +184,8 @@ if (
 
   function refreshIdentity() {
     const dayKey = paraguayDayKey();
-    const uid=auth.currentUser?.uid || '';
+    if(!sessionKnown())return dayKey;
+    const uid=getSessionUser()?.uid || '';
     if (identityDay === dayKey && identityUid === uid && visitorId && sessionId) return dayKey;
     const changedAccount=identityUid !== undefined && identityUid !== uid;
     identityUid=uid;
@@ -202,7 +207,7 @@ if (
   }
 
   function hasConsent() {
-    return hasStatisticsConsent();
+    return hasStatisticsConsent() && sessionKnown();
   }
 
   async function recordSessionOnce() {
@@ -295,7 +300,7 @@ if (
   }
 
   function startActivity() {
-    if (!analyticsWritable || permanentWriteErrorCode) return;
+    if (!analyticsWritable || permanentWriteErrorCode || !sessionKnown()) return;
     activityEnabled = true;
     refreshIdentity();
     bindLifecycleOnce();
@@ -330,17 +335,17 @@ if (
   async function accountAuthHeader(kind) {
     if (kind !== 'session' && kind !== 'presence') return {};
     try {
-      const account=auth.currentUser;
+      const account=getSessionUser();
       const token = await account?.getIdToken();
-      if(account?.uid!==auth.currentUser?.uid)throw new Error('session_changed');
+      if(account?.uid!==getSessionUser()?.uid)throw new Error('session_changed');
       return token ? { authorization: `Bearer ${token}` } : {};
     } catch(error) {if(error.message==='session_changed')throw error; return {}; }
   }
 
   async function postActivity(kind, fields = {}) {
-    if(fields.sessionId && identityUid!==(auth.currentUser?.uid||'')){refreshIdentity();throw new Error('session_changed');}
+    if(fields.sessionId && identityUid!==(getSessionUser()?.uid||'')){refreshIdentity();throw new Error('session_changed');}
     const headers=await accountAuthHeader(kind);
-    if(fields.sessionId && identityUid!==(auth.currentUser?.uid||'')){refreshIdentity();throw new Error('session_changed');}
+    if(fields.sessionId && identityUid!==(getSessionUser()?.uid||'')){refreshIdentity();throw new Error('session_changed');}
     const response = await fetch(apiUrl('site-activity'), {
       method: 'POST', headers: { 'content-type': 'application/json', ...headers },
       body: JSON.stringify({ kind, ...fields }), signal: AbortSignal.timeout(5000),
@@ -374,6 +379,7 @@ if (
   if (trackablePage && analyticsWritable) recordAggregateVisitOnce();
 
   if (trackablePage) {
+    subscribeSession(()=>{if(!sessionKnown()){stopActivity();return;}if(hasConsent() && analyticsWritable && !permanentWriteErrorCode)startActivity();});
     if (hasConsent() && analyticsWritable) startActivity();
     onPrivacyConsentChange(preferences => {
       if (preferences.statistics && analyticsWritable && !permanentWriteErrorCode) startActivity();

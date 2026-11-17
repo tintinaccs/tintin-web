@@ -245,7 +245,7 @@ if (!window.TintinAdminUserFichaBooted) {
 
       const history = createActivityHistory(document,{
         isCurrent:()=>auth.currentUser?.uid===ownerUid && version===requestVersion,
-        loadPresence:async()=>{const result=await getDocs(query(collection(db,'sitePresence'),where('userId','==',uid),limit(10)));return result.docs.map(row=>row.data());},
+        loadPresence:async()=>{if(!window.TintinAdminPresence)throw new Error('presence_not_ready');return window.TintinAdminPresence.forUser(uid);},
         loadPage:async(day,cursor,size)=>{
           if(auth.currentUser?.uid!==ownerUid || version!==requestVersion)throw new Error('session_changed');
           const constraints=[where('userId','==',uid),limit(size)];if(cursor)constraints.push(startAfter(cursor));

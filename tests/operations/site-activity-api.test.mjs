@@ -131,3 +131,12 @@ test('la duración del estado no se reinicia si Firestore devuelve campos en otr
  const next=decodeFirestoreFields(state.documents.get(path).fields);
  assert.equal(new Date(next.contextSince).getTime(),+date);
 });
+
+test('presencia antes de sesión conserva la geografía de Cloudflare en estadísticas',async()=>{
+ const state=fixture();const request=makeRequest({...input,kind:'presence'});
+ Object.defineProperty(request,'cf',{value:{city:'San Lorenzo',region:'Central',country:'PY'}});
+ assert.equal((await handleSiteActivity({request,env:{}},state.deps)).status,202);
+ assert.equal((await handleSiteActivity({request:makeRequest(input),env:{}},state.deps)).status,202);
+ const session=decodeFirestoreFields(state.documents.get('siteTraffic/2026-10-15/sessions/session_123').fields);
+ assert.equal(session.city,'San Lorenzo');assert.equal(session.region,'Central');assert.equal(session.country,'PY');assert.equal(session.countryCode,'PY');assert.equal(session.geoSource,'cloudflare');
+});

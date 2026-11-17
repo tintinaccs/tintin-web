@@ -94,10 +94,10 @@ export async function handleSiteActivity({ request, env }, {
         const context = normalizeActivityContext(input.context || { page: route.replace(/^\/+|\/+$/g, '').replace(/\.html$/, '') || 'index' });
         route = context.page === 'other' ? '/' : context.page === 'index' ? '/' : '/'+context.page;
         const events = (Array.isArray(input.events) ? input.events.slice(0, 12) : []).map(event => normalizeActivityEvent(event, date.getTime())).filter(Boolean);
+        const locationFields={city: clean(cf.city, 80), region: clean(cf.region, 80), country: countryCode, countryCode,
+          geoSource: countryCode || cf.city ? 'cloudflare' : 'unavailable'};
         const fields = encodeFirestoreFields({
-          visitorId: input.visitorId, sessionId: input.sessionId, userId,
-          city: clean(cf.city, 80), region: clean(cf.region, 80), country: countryCode, countryCode,
-          geoSource: countryCode || cf.city ? 'cloudflare' : 'unavailable',
+          visitorId: input.visitorId, sessionId: input.sessionId, userId,...locationFields,
           ...(kind === 'session' ? { dayKey, landingPage: route, landingContext:context, startedAt: date } : { page: route, context, lastSeen: date, contextSince:previous && JSON.stringify(normalizeActivityContext(decodeFirestoreFields(previous.fields).context))===JSON.stringify(context) ? decodeFirestoreFields(previous.fields).contextSince || date : date }),
         });
         const writes = [{ path, fields, currentDocument: previous ? { updateTime: previous.updateTime } : { exists: false } }];
@@ -111,7 +111,7 @@ export async function handleSiteActivity({ request, env }, {
           const known = new Set(old.map(event => event.id));
           const additions = events.filter(event => {if(known.has(event.id))return false;known.add(event.id);return true;});
           const timeline = old.concat(additions);
-          const data = { ...saved, visitorId: input.visitorId, sessionId: input.sessionId, userId,
+          const data = { ...locationFields,...saved, visitorId: input.visitorId, sessionId: input.sessionId, userId,
             dayKey, landingPage: saved.landingPage || route, startedAt: saved.startedAt || date,
             context, landingContext:saved.landingContext || context, lastSeen: date, timeline: timeline.slice(-200),
             historyTruncated: saved.historyTruncated === true || timeline.length > 200 };
