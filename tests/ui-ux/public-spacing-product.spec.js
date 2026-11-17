@@ -185,7 +185,7 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
       } else {
         await expect(first.locator('a').first()).toHaveAttribute('href', /product|catalogo/);
         await expect(first.locator('.tt-card-name,.tt-coll-page-name')).toHaveText(
-          route === '/collections.html' ? 'Relojes y accesorios con un nombre de colección largo'.toUpperCase() : product.name);
+          route === '/collections.html' ? 'Relojes y accesorios con un nombre de colección largo' : product.name);
       }
       if(route==='/catalogo.html'){
         const frame=first.locator('.tt-card-img-wrap');let before;

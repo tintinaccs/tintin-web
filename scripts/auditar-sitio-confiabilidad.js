@@ -250,7 +250,7 @@ check('La colección Bolsos conserva su portada real después de sincronizar',
   collectionsPhase4.includes('safeUrl(collectionImageUrl(slug))') &&
   collectionIcons.includes("normalized === 'bolsos' || normalized === 'bags' ? 'bags'") &&
   fs.existsSync(path.join(root, 'assets-tintin/images/collections/col-bags.webp')) &&
-  collectionsPhase4.includes('label.textContent = (clean(collection.name) || clean(collection.slug)).toUpperCase()'));
+  collectionsPhase4.includes('label.textContent = interfaceLabel(clean(collection.name) || collection.slug)'));
 check('Buscador, carrito, menú y colecciones comunican apertura y cierre',
   publicShell.includes('id="search-panel" role="dialog"') &&
   publicShell.includes('id="cart-drawer" role="dialog"') &&
