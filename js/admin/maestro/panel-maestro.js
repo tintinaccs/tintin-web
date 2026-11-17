@@ -16,7 +16,7 @@ import {
   const isAdminRoute = /(^|\/)admin(?:\.html)?$/i.test(location.pathname.replace(/\/$/, ''));
   if (!isAdminRoute) return;
 
-  const VERSION = 'tintin-20261114-harmonic-palette-1';
+  const VERSION = 'tintin-20261117-editorial-2';
   const CAP_COLUMNS = [
     ['create', 'C'], ['read', 'R'], ['update', 'U'], ['archive', 'Arch.'],
     ['delete', 'D'], ['search', 'Buscar'], ['export', 'Exportar'],
