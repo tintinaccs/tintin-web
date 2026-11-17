@@ -43,7 +43,6 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      text-transform: uppercase;
       letter-spacing: .06em;
       min-height: 44px;
       padding-block: 6px;
@@ -114,7 +113,6 @@
     .ck-step-label {
       font-size: 11.5px;
       font-weight: 700;
-      text-transform: uppercase;
       letter-spacing: .06em;
       color: var(--text-muted);
       text-align: center;
@@ -154,7 +152,6 @@
       gap: 8px;
       font-size: 16px;
       font-weight: 800;
-      text-transform: uppercase;
       letter-spacing: .06em;
       color:var(--color-text-primary,#222222);
     }
@@ -209,7 +206,6 @@
     .ck-item-cat {
       font-size: 11px;
       color: var(--text-muted);
-      text-transform: uppercase;
       letter-spacing: .06em;
     }
     .ck-item-price {
@@ -278,13 +274,13 @@
     .ck-empty-icon { font-size: 48px; margin-bottom: 12px; }
     .ck-empty-text { font-size: 14px; font-weight: 600; }
     .ck-suggested { padding: 0 0 16px; }
-    .ck-suggested-title { font-size: 13px; font-weight: 700; color:var(--color-text-primary,#222222); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px; }
+    .ck-suggested-title { font-size: 13px; font-weight: 700; color:var(--color-text-primary,#222222);  letter-spacing: .07em; margin-bottom: 12px; }
     .ck-suggested-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     @media (max-width: 500px) { .ck-suggested-grid { grid-template-columns: repeat(2, 1fr); } }
     .ck-sug-card { border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; gap: 4px; }
     .ck-sug-img { display:flex; justify-content:center; align-items:center; height:56px; margin-bottom:6px; }
     .ck-sug-name { font-size: 12px; font-weight: 700; color:var(--color-text-primary,#222222); line-height: 1.2; }
-    .ck-sug-cat { font-size: 10px; color:var(--color-text-primary,#222222); text-transform: uppercase; letter-spacing: .05em; }
+    .ck-sug-cat { font-size: 10px; color:var(--color-text-primary,#222222);  letter-spacing: .05em; }
     .ck-sug-price { font-size: 12px; font-weight: 700; color:var(--color-text-primary,#222222); margin: 2px 0; }
     .ck-sug-add { min-height:44px; background: var(--acc); color: #fff !important; border: none; border-radius: 20px; padding: 8px 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: background .2s; margin-top: 4px; }
     .ck-sug-add:hover { background: var(--color-brand-primary, #F8AACA); }
@@ -301,7 +297,6 @@
       border-radius: 50px;
       font-size: 13px;
       font-weight: 800;
-      text-transform: uppercase;
       letter-spacing: .1em;
       cursor: pointer;
       font-family:Montserrat;
@@ -322,7 +317,6 @@
       border-radius: 50px;
       font-size: 12px;
       font-weight: 700;
-      text-transform: uppercase;
       letter-spacing: .08em;
       cursor: pointer;
       font-family:Montserrat;
@@ -341,7 +335,6 @@
     .ck-label {
       font-size: 11px;
       font-weight: 700;
-      text-transform: uppercase;
       letter-spacing: .08em;
       color: var(--text-muted);
     }
@@ -593,7 +586,6 @@
       border-radius: 50px;
       font-size: 14px;
       font-weight: 800;
-      text-transform: uppercase;
       letter-spacing: .08em;
       cursor: pointer;
       font-family:Montserrat;
@@ -859,7 +851,6 @@
   border-radius: 50px;
   font: 800 12px/1 "Montserrat", sans-serif;
   letter-spacing: .06em;
-  text-transform: uppercase;
   cursor: pointer;
 }
 

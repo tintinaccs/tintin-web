@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import {createRequire} from 'node:module';
 const {parse}=createRequire(import.meta.url)('parse5');
 import {visibleCatalog,renderCatalogHtml} from '../../cloudflare/catalogo-publico-seo.mjs';
+import {interfaceLabel, sentenceCase} from '../../js/core/store/texto-interfaz.mjs';
 import {productStructuredData} from '../../js/core/store/datos-producto-seo.mjs';
 import {renderProductMetadataHtml} from '../../functions/product.js';
 
@@ -21,6 +22,10 @@ test('HTML inicial de categoría tiene productos, enlaces a páginas siguientes 
  const nodes=elements(result.html);
  assert.equal(nodes.filter(node=>attr(node,'class')==='tt-card').length,48);
  assert.equal(nodes.filter(node=>node.tagName==='h1').length,1);
+ const description=attr(nodes.find(node=>attr(node,'name')==='description'),'content');
+ assert.match(description,/Elegí tu reloj/);
+ assert.equal(nodes.find(node=>attr(node,'id')==='cat-subtitulo').childNodes[0].value,'Descubrí todos nuestros accesorios');
+ assert.ok(result.html.includes('tt-catalog-jsonld'));
  assert.equal(attr(nodes.find(node=>attr(node,'rel')==='canonical'),'href'),'https://tintinaccs.com/catalogo?cat=relojes&page=2');
  assert.ok(nodes.some(node=>attr(node,'href')==='https://tintinaccs.com/catalogo?cat=relojes&page=3'));
  assert.ok(nodes.some(node=>attr(node,'href')?.startsWith('/product?id=')));
@@ -61,4 +66,13 @@ test('HTML de ficha conserva el precio base para variantes sin sobreprecio',()=>
  const schemas=elements(html).filter(node=>attr(node,'type')==='application/ld+json').map(node=>JSON.parse(node.childNodes.map(child=>child.value||'').join('')));
  const group=schemas.find(schema=>schema['@type']==='ProductGroup');
  assert.deepEqual(group.hasVariant.map(variant=>variant.offers.price),['150','100']);
+});
+
+
+test('los textos de interfaz conservan tildes, marcas, siglas y códigos', () => {
+  assert.equal(interfaceLabel('MÁS INFORMACIÓN.'), 'Más información');
+  assert.equal(interfaceLabel('CONTACTANOS POR WHATSAPP.'), 'Contactanos por WhatsApp');
+  assert.equal(interfaceLabel('CÓDIGO QR ABC-123'), 'Código QR ABC-123');
+  assert.equal(interfaceLabel('¿Cómo llego a San Lorenzo?'), '¿Cómo llego a San Lorenzo?');
+  assert.equal(sentenceCase('ACERO INOX.'), 'Acero INOX.');
 });

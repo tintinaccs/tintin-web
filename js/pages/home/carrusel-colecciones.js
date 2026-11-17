@@ -1,3 +1,4 @@
+import { interfaceLabel } from '../../core/store/texto-interfaz.mjs?v=tintin-20261117-texto-interfaz-1';
 import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261116-discovery-2';
 
 const IMAGE_BASE = '/assets-tintin/images/collections/';
@@ -121,7 +122,7 @@ function createImage(collection) {
 }
 
 function createCard(collection, accessible, collectionIndex) {
-  const label = clean(collection.name) || clean(collection.slug);
+  const label = interfaceLabel(clean(collection.name) || collection.slug);
   const link = document.createElement('a');
   const media = document.createElement('div');
   const content = document.createElement('div');

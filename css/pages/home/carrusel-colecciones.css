@@ -39,7 +39,6 @@ body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__descriptio
   letter-spacing: 0.16em;
   line-height: 1.4;
   margin: 9px 0 0;
-  text-transform: uppercase;
 }
 
 .tt-collection-carousel__stage { position: relative; }
@@ -198,7 +197,6 @@ html body:not(:has(.adm-main)) .tt-collection-card * { color:var(--color-text-pr
   margin: 0;
   overflow-wrap: anywhere;
   text-align: center;
-  text-transform: uppercase;
 }
 
 .tt-collection-carousel__state {

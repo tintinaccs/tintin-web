@@ -1,3 +1,4 @@
+import {interfaceLabel} from '../js/core/store/texto-interfaz.mjs';
 import {catalogUrl, categoryCopy, catalogMetadata, CATALOG_PAGE_SIZE} from '../js/core/store/seo-catalogo.mjs';
 export {CATALOG_PAGE_SIZE};
 import {productSearchScore} from '../js/core/store/busqueda-productos.mjs';
@@ -60,11 +61,10 @@ export function renderCatalogHtml(source, url, catalog) {
     .sort((a,b) => Number(hasProductStock(b)) - Number(hasProductStock(a)) || String(a.name).localeCompare(String(b.name), 'es') || a.id.localeCompare(b.id));
   const unknown = meta.slug && meta.slug !== 'accesorios' && !collection;
   const invalid = unknown || meta.page < 1 || meta.page > Math.max(1, Math.ceil(all.length / CATALOG_PAGE_SIZE));
-  const [heading, description] = categoryCopy(meta.slug, collection?.name || collection?.title);
+  const [heading, description] = categoryCopy(meta.slug, interfaceLabel(collection?.name || collection?.title));
   const noindex = invalid || !all.length || meta.filtered;
   let html = replaceCatalogHead(source, {title:`${heading}${meta.page > 1 ? ` · Página ${meta.page}` : ''} | Tintin Accesorios & Relojes`, description, canonical:meta.canonical, noindex});
-  html = html.replace(/(<h1[^>]*id="cat-titulo"[^>]*>)[\s\S]*?<\/h1>/, `$1${htmlText(invalid ? 'Categoría o página no encontrada' : heading)}</h1>`)
-    .replace(/(<div[^>]*id="cat-subtitulo"[^>]*>)[\s\S]*?<\/div>/, `$1${htmlText(description)} <a href="/envios">Ver envíos</a> · <a href="/contact">Contactanos</a></div>`);
+  html = html.replace(/(<h1[^>]*id="cat-titulo"[^>]*>)[\s\S]*?<\/h1>/, `$1${htmlText(invalid ? 'Categoría o página no encontrada' : heading)}</h1>`);
   const products = invalid ? [] : all.slice((meta.page - 1) * CATALOG_PAGE_SIZE, meta.page * CATALOG_PAGE_SIZE);
   const cards = products.map(product => {
     const link = `/product?id=${encodeURIComponent(product.id)}`;
@@ -76,7 +76,7 @@ export function renderCatalogHtml(source, url, catalog) {
   html = html.replace(/(<div class="cat-grid" id="cat-grid"[^>]*>)[\s\S]*?(<!-- cat-grid-end -->)/,
     (_, open, end) => open.replace('aria-busy="true"', 'aria-busy="false"') + cards + '</div>' + end);
   const links = catalog.collections.filter(row => catalog.products.some(product => categoryMatches(product, row.slug)))
-    .map(row => `<a href="${htmlText(catalogUrl(row.slug))}">${htmlText(row.name || row.title || row.slug)}</a>`).join(' · ');
+    .map(row => `<a href="${htmlText(catalogUrl(row.slug))}">${htmlText(interfaceLabel(row.name || row.title || row.slug))}</a>`).join(' · ');
   const nav = `<nav aria-label="Categorías">${links} · <a href="/catalogo?cat=accesorios">Accesorios</a></nav>`;
   const pages = `<nav aria-label="Páginas del catálogo">${Array.from({length:Math.ceil(all.length / CATALOG_PAGE_SIZE)}, (_,i) => `<a href="${htmlText(catalogUrl(meta.slug,i+1))}"${i+1 === meta.page ? ' aria-current="page"' : ''}>${i+1}</a>`).join(' · ')}</nav>`;
   html = html.replace('<!-- cat-grid-end -->', `<!-- cat-grid-end -->${nav}${pages}`);

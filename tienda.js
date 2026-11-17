@@ -651,7 +651,7 @@ function initSearch() {
   if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261116-discovery-2')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261117-editorial-1')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);
@@ -827,7 +827,7 @@ function _sheetStyles() {
 .tt-as-backdrop.is-open .tt-as{transform:none}
 .tt-as-head{display:flex;gap:14px;align-items:center;margin-bottom:16px}
 .tt-as-img{flex:0 0 72px;width:72px;height:72px;border-radius:14px;object-fit:cover;background:#FDECF2}
-.tt-as-title{margin:0 0 2px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#222222}
+.tt-as-title{margin:0 0 2px;font-size:.72rem;font-weight:700;letter-spacing:.08em;color:#222222}
 .tt-as-name{margin:0;font-size:1rem;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
 .tt-as-price{margin:4px 0 0;font-size:.95rem;font-weight:700}
 .tt-as-group{border:0;margin:0 0 14px;padding:0;min-width:0}
@@ -1032,7 +1032,7 @@ function renderProductCardMarkup(p, options = {}) {
   const displayBadge = !inStock ? 'Agotado' : (isNew ? 'Nuevo' : p.badge);
   const badgeClass = displayBadge === 'Nuevo' ? 'nuevo' : '';
   const badgeHTML = displayBadge && inStock ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(displayBadge)}</span>` : '';
-  const stockLabel = `<span class="tt-stock-label" aria-hidden="true" ${inStock ? 'hidden' : ''}>AGOTADO</span>`;
+  const stockLabel = `<span class="tt-stock-label" aria-hidden="true" ${inStock ? 'hidden' : ''}>Agotado</span>`;
   const colorGroup = productCardColorOptions(p);
   const savedColor = cardColorSelections.get(String(p.id));
   const preferred = productPreferredSelection(p, colorGroup && savedColor ? { [colorGroup[0]]: savedColor } : {});
@@ -1795,7 +1795,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
     thumbsEl.innerHTML = allImages.length ? allImages.map((url, i) => `
       <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}" aria-pressed="${i === _pdGalleryIndex}">
         <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" loading="lazy" decoding="async" fetchpriority="low" style="object-fit:contain;background:transparent;width:100%;height:100%;">
-        ${rows.filter(row => media.rowImages(row).some(image => productPhotoIdentity(image) === productPhotoIdentity(url))).every(row => productMediaUnavailable(product, row)) && rows.some(row => media.rowImages(row).some(image => productPhotoIdentity(image) === productPhotoIdentity(url))) ? '<span class="tt-stock-label" aria-hidden="true">AGOTADO</span>' : ''}
+        ${rows.filter(row => media.rowImages(row).some(image => productPhotoIdentity(image) === productPhotoIdentity(url))).every(row => productMediaUnavailable(product, row)) && rows.some(row => media.rowImages(row).some(image => productPhotoIdentity(image) === productPhotoIdentity(url))) ? '<span class="tt-stock-label" aria-hidden="true">Agotado</span>' : ''}
       </button>
     `).join('') : '';
     if (!thumbsEl.dataset.ttBound) {
@@ -1871,7 +1871,7 @@ function _renderProductDetail(product) {
 
   if (nameEl) nameEl.textContent = product.name;
   if (priceEl) priceEl.innerHTML = priceMarkup(product.variantCommerceVersion === 2 ? selectedProductMoney(product) : product);
-  if (catEl) catEl.textContent = (product.category || product.cat || '').toUpperCase();
+  if (catEl) catEl.textContent = (product.category || product.cat || '').replace(/^./, letter => letter.toLocaleUpperCase('es'));
   // Conditional rendering: an empty/missing description has no place in the DOM at all
   if (descEl) {
     const hasDesc = String(product.desc || product.description || '').trim();

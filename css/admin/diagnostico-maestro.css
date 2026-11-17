@@ -25,7 +25,7 @@
 .adm-master-notice.notice-info{background:#eef5ff;border-color:#c8daf7;color:#285b97}
 .adm-master-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
 .adm-master-meta-item{border:1px solid var(--adm-border);border-radius:12px;padding:11px 12px;background:color-mix(in srgb,var(--adm-bg) 70%,#fff)}
-.adm-master-meta-item span{display:block;color:var(--adm-muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:800;margin-bottom:5px}
+.adm-master-meta-item span{display:block;color:var(--adm-muted);font-size:10px;letter-spacing:.06em;font-weight:800;margin-bottom:5px}
 .adm-master-meta-item strong,.adm-master-meta-item a{display:block;color:var(--adm-text);font-size:12px;font-weight:700;overflow-wrap:anywhere;text-decoration:none}
 .adm-master-meta-item a:hover{text-decoration:underline}
 .adm-master-progress-wrap{margin:2px 0 16px}
@@ -35,7 +35,7 @@
 .adm-master-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:16px}
 .adm-master-kpi{padding:12px;border:1px solid var(--adm-border);border-radius:12px;background:#fff;text-align:center}
 .adm-master-kpi strong{display:block;font-size:20px;line-height:1.1;color:var(--adm-text)}
-.adm-master-kpi span{display:block;margin-top:5px;font-size:10px;color:var(--adm-muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.adm-master-kpi span{display:block;margin-top:5px;font-size:10px;color:var(--adm-muted);font-weight:700;letter-spacing:.04em}
 .adm-master-areas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .adm-master-area{border:1px solid var(--adm-border);border-radius:13px;padding:12px;background:#fff;min-width:0}
 .adm-master-area-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}

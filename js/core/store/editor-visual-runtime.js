@@ -1,7 +1,8 @@
+import { interfaceLabel, sentenceCase } from './texto-interfaz.mjs?v=tintin-20261117-texto-interfaz-1';
 import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue,
   sanitizeContentHref, sanitizeContentText,
-} from './esquema-contenido.js?v=tintin-20261114-wa-contact-1';
+} from './esquema-contenido.js?v=tintin-20261117-editorial-1';
 import {
   VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS,
 } from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';
@@ -56,7 +57,7 @@ function ensureCss() {
   const link = document.createElement('link');
   link.id = 'tt-visual-builder-runtime-css';
   link.rel = 'stylesheet';
-  link.href = 'css/components/editor-visual-runtime.css?v=tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-p1106';
+  link.href = 'css/components/editor-visual-runtime.css?v=tintin-20261117-editorial-1';
   document.head.appendChild(link);
 }
 
@@ -272,7 +273,8 @@ export function applyVisualContentPreview(pageId, rawContent = {}) {
           if (href) target.setAttribute('href', href); else target.removeAttribute('href');
         } else if (item.type !== 'href') {
           const normalized = normalizeContentValue(pageId, sectionId, item.key, raw);
-          setPlainText(target, sanitizeContentText(normalized, item.maxLength));
+          const text = item.type === 'multiline' ? sentenceCase(normalized) : interfaceLabel(normalized);
+          setPlainText(target, sanitizeContentText(text, item.maxLength));
         }
       });
     });

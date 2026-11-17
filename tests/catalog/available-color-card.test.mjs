@@ -32,9 +32,9 @@ test('al agotarse el color recordado se cambia a una opción disponible tras rep
  vm.runInContext("cardColorSelections.set('p','Plateado')",context);
  assert.equal(mainImage(p),'https://example.test/gold.jpg');
 });
-test('sin stock en ninguna opción queda al final y con el cartel AGOTADO', () => {
+test('sin stock en ninguna opción queda al final y con el cartel Agotado', () => {
  const p=product();p.stock=0;p.variantInventory.forEach(row=>row.stock=0);
  const available={...product(),id:'available'};
  assert.deepEqual(Array.from(context.window.TintinCatalogMerchandising.sortCatalogProducts([p,available]),p=>p.id),['available','p']);
- assert.match(context.renderProductCardMarkup(p),/tt-stock-label" aria-hidden="true" >AGOTADO/);
+ assert.match(context.renderProductCardMarkup(p),/tt-stock-label" aria-hidden="true" >Agotado/);
 });

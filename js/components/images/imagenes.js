@@ -24,7 +24,7 @@ import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261116-d
 const imagePage = (window.location.pathname || '').toLowerCase();
 if (imagePage === '/' || imagePage.endsWith('/index.html') || imagePage === '') {
   Promise.all([
-    import('../welcome/tutorial-bienvenida.js?v=tintin-20261030-home-history-5-p1112'),
+    import('../welcome/tutorial-bienvenida.js?v=tintin-20261117-editorial-1'),
   ]).catch(error => console.warn('[images] No se pudo iniciar la bienvenida:', error));
 }
 

@@ -5,7 +5,7 @@ function renderDesktopCategories() {
   return CATEGORIES.map(({ slug, label }) => `
     <a href="/catalogo?cat=${encodeURIComponent(slug)}" class="tt-dropdown-card">
       <div class="tt-dropdown-icon"><img data-tt-collection-image data-src="${collectionImageUrl(slug)}" alt="" loading="lazy">${categoryIcon(slug)}</div>
-      <div class="tt-dropdown-label">${label.toUpperCase()}</div>
+      <div class="tt-dropdown-label">${label}</div>
     </a>`).join('');
 }
 
@@ -19,16 +19,16 @@ export function renderDesktopHeader() {
 
         <nav class="tt-nav tt-nav-desktop" id="tt-nav-desktop-tablet" aria-label="Navegación principal">
           <span class="tt-desktop-active-pill" aria-hidden="true"></span>
-          <a href="/" data-shell-route="home" data-desktop-nav-item>INICIO</a>
+          <a href="/" data-shell-route="home" data-desktop-nav-item>Inicio</a>
           <div class="tt-nav-dropdown" id="tienda-dropdown">
-            <button type="button" id="btn-tienda" data-shell-route="shop" data-desktop-nav-item aria-expanded="false" aria-haspopup="true" aria-controls="tt-tienda-dropdown-panel">CATÁLOGO <span aria-hidden="true">▾</span></button>
+            <button type="button" id="btn-tienda" data-shell-route="shop" data-desktop-nav-item aria-expanded="false" aria-haspopup="true" aria-controls="tt-tienda-dropdown-panel">Catálogo <span aria-hidden="true">▾</span></button>
             <div class="tt-dropdown" id="tt-tienda-dropdown-panel" role="dialog" aria-label="Categorías de la tienda" aria-hidden="true">
               <div class="tt-dropdown-grid" data-collections-nav="desktop">${renderDesktopCategories()}</div>
               <a href="/catalogo" class="tt-catalog-all-link">Ver todo el catálogo →</a>
             </div>
           </div>
-          <a href="/about" data-shell-route="about" data-desktop-nav-item>NOSOTROS</a>
-          <a href="/contact" data-shell-route="contact" data-desktop-nav-item>CONTACTO</a>
+          <a href="/about" data-shell-route="about" data-desktop-nav-item>Nosotros</a>
+          <a href="/contact" data-shell-route="contact" data-desktop-nav-item>Contacto</a>
         </nav>
 
         <div class="tt-header-actions">

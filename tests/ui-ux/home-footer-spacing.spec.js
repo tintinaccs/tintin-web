@@ -48,7 +48,7 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
     const geometry = await page.evaluate(() => {
       const box = element => { const r = element.getBoundingClientRect(); return { left:r.left, right:r.right, top:r.top, bottom:r.bottom, width:r.width, height:r.height, center:r.left+r.width/2 }; };
       const q = selector => box(document.querySelector(selector));
-      return { shell:q('.tt-footer-shell'), grid:q('.tt-footer-grid'), brand:q('.tt-footer-brand'), logo:q('.tt-footer-brand .tt-logo-link'), tagline:q('.tt-footer-tagline'), wa:q('.tt-footer-wa'), actionsBox:q('.tt-hero-actions'),
+      return { shell:q('.tt-footer-shell'), grid:q('.tt-footer-grid'), brand:q('.tt-footer-brand'), logo:q('.tt-footer-brand .tt-logo-link'), wa:q('.tt-footer-wa'), actionsBox:q('.tt-hero-actions'),
         cards:[...document.querySelectorAll('.tt-trust-item')].map(box),
         actions:[...document.querySelectorAll('.tt-hero-actions a')].map(a => ({ ...box(a), background:getComputedStyle(a).backgroundColor, border:parseFloat(getComputedStyle(a).borderTopWidth),color:getComputedStyle(a).color })),
         copyrightPadding:parseFloat(getComputedStyle(document.querySelector('.tt-footer-bottom')).paddingBottom),
@@ -59,6 +59,7 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
         afterFooter:document.documentElement.scrollHeight-(document.querySelector('.tt-footer').getBoundingClientRect().bottom+scrollY),
         scrollWidth:document.documentElement.scrollWidth };
     });
+    await expect(page.locator('.tt-footer-tagline')).toBeHidden();
     expect(geometry.scrollWidth).toBeLessThanOrEqual(width + 1);
     expect(geometry.copyrightPadding).toBeLessThanOrEqual(18);
     // La firma solicitada sucede al copyright; ningún espacio vacío adicional
@@ -76,7 +77,7 @@ for (const [width, height] of [[320,568],[375,667],[390,844],[430,932],[568,320]
     expect(inside(geometry.brand, geometry.shell)).toBe(true);
     if (width <= 1024) {
       expect(Math.abs(geometry.brand.width - geometry.grid.width)).toBeLessThanOrEqual(2);
-      for (const element of [geometry.logo, geometry.tagline, geometry.wa]) {
+      for (const element of [geometry.logo, geometry.wa]) {
         expect(Math.abs(element.center - geometry.brand.center)).toBeLessThanOrEqual(1);
       }
     } else {
@@ -137,7 +138,7 @@ for (const file of ['about.html', 'perfil.html']) {
     test(`footer compartido en ${file} · ${width}x${height}`, async ({ page }) => {
       await page.setViewportSize({ width, height });
       await mountLayout(page, removeFixtureScripts(fs.readFileSync(path.join(root, file), 'utf8'), { removeModulePreloads:true }));
-      const boxes = await page.locator('.tt-footer-brand, .tt-footer-brand .tt-logo-link, .tt-footer-tagline, .tt-footer-wa').evaluateAll(nodes => nodes.map(el => {
+      const boxes = await page.locator('.tt-footer-brand, .tt-footer-brand .tt-logo-link, .tt-footer-wa').evaluateAll(nodes => nodes.map(el => {
         const r=el.getBoundingClientRect(); return { left:r.left, center:r.left+r.width/2 };
       }));
       if (width <= 1024) for (const box of boxes) expect(Math.abs(box.center-boxes[0].center)).toBeLessThanOrEqual(1);

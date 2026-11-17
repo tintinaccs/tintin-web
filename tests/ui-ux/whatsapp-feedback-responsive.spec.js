@@ -95,7 +95,7 @@ for(const width of [390,768,1440]) test(`horario, texto y contraste de WhatsApp 
  for(const path of ['/contact','/about','/catalogo','/checkout','/product']){
   await page.goto(path,{waitUntil:'domcontentloaded'});
   const footer=page.locator('.tt-footer');
-  await expect(footer.locator('.tt-footer-hours')).toContainText('09:00 a 22:00');
+  await expect(footer.locator('.tt-footer-hours')).toHaveCount(0);
   await expect(footer.locator('.tt-footer-wa-text')).toHaveText('Escribir por WhatsApp');
   await expect(footer.locator('.tt-footer-wa')).toHaveCSS('color','rgb(255, 255, 255)');
   if(path==='/contact')await expect(page.locator('.tt-contact-wa-link')).toHaveCSS('color','rgb(255, 255, 255)');

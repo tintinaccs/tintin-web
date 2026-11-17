@@ -6,7 +6,7 @@ import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-c
 import {
   CONTENT_PAGE_IDS, getNested, getPageDefaults, getPageSchema,
   mergeContent, sanitizeContentHref, setNested,
-} from '../../core/store/esquema-contenido.js?v=tintin-20261114-wa-contact-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20261117-editorial-1';
 import { chooseRandomPreviewProduct, productPreviewTarget } from './preview-dynamic-targets.js?v=tintin-20260812-preview-dinamico-1';
 import { installWorkspaceSplitters } from './workspace-splitters.js?v=tintin-20261027-global-fluidez-3';
 
@@ -136,7 +136,7 @@ function ensureStudioUi() {
   const editor = $('visual-editor'); if (!editor || editor.dataset.studioReady === '1') return;
   editor.dataset.studioReady='1'; editor.classList.add('visual-studio-v2'); sectionListNode=$('visual-section-list');
   if (!document.getElementById('visual-studio-v2-css')) {
-    const link=document.createElement('link'); link.id='visual-studio-v2-css'; link.rel='stylesheet'; link.href='css/admin/visual-studio-v2.css?v=tintin-20260813-apariencia-horizontal-viewport-real-3-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1'; document.head.appendChild(link);
+    const link=document.createElement('link'); link.id='visual-studio-v2-css'; link.rel='stylesheet'; link.href='css/admin/visual-studio-v2.css?v=tintin-20261117-editorial-1'; document.head.appendChild(link);
   }
   const pageLabel=editor.querySelector('label[for="visual-page"]'); pageLabel?.classList.add('visual-studio-hidden'); $('visual-page')?.classList.add('visual-studio-hidden');
   const sidebar=editor.querySelector('.visual-editor-sidebar');

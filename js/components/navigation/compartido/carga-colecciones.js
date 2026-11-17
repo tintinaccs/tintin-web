@@ -1,3 +1,4 @@
+import { interfaceLabel } from '../../../core/store/texto-interfaz.mjs?v=tintin-20261117-texto-interfaz-1';
 import { collectionImageUrl } from './iconos.js?v=tintin-20261029-performance-1-p1112';
 
 // Debe empezar en la raíz del sitio: el header vive también en /contact,
@@ -102,7 +103,7 @@ function buildDesktopCard(collection) {
   link.dataset.phase4CollectionNode = '1';
   icon.className = 'tt-dropdown-icon';
   label.className = 'tt-dropdown-label';
-  label.textContent = (text(collection.name) || text(collection.slug)).toUpperCase();
+  label.textContent = interfaceLabel(text(collection.name) || collection.slug);
   icon.appendChild(createCollectionImage(collection));
   link.append(icon, label);
   return link;
@@ -136,7 +137,7 @@ function buildMobileNode(container, collection) {
     label.textContent = text(collection.name) || text(collection.slug);
     link.append(imageWrap, label);
   } else {
-    link.textContent = (text(collection.name) || text(collection.slug)).toUpperCase();
+    link.textContent = interfaceLabel(text(collection.name) || collection.slug);
   }
   return link;
 }
@@ -150,7 +151,7 @@ function buildSheetItem(collection) {
   link.dataset.phase4CollectionNode = '1';
   imageWrap.className = 'tt-sheet-item-img';
   imageWrap.appendChild(createCollectionImage(collection));
-  label.textContent = (text(collection.name) || text(collection.slug)).toUpperCase();
+  label.textContent = interfaceLabel(text(collection.name) || collection.slug);
   link.append(imageWrap, label);
   return link;
 }

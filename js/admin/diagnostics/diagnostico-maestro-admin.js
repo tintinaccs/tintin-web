@@ -3,7 +3,7 @@ import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-c
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 
 const API_URL = '/api/master-diagnostics';
-const STYLE_URL = '/css/admin/diagnostico-maestro.css?v=tintin-20260817-master-diagnostics-3-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
+const STYLE_URL = '/css/admin/diagnostico-maestro.css?v=tintin-20261117-editorial-1';
 const POLL_MS = 12000;
 const STATE_LABELS = {
   PASS: 'PASS',
@@ -78,7 +78,7 @@ function masterCardMarkup() {
       </div>
       <div class="adm-card-body">
         <div class="adm-master-state-row">
-          <span class="adm-master-state" id="master-diagnostic-state" data-state="UNKNOWN">SIN DATOS</span>
+          <span class="adm-master-state" id="master-diagnostic-state" data-state="UNKNOWN">Sin datos</span>
           <span class="adm-master-freshness" id="master-diagnostic-freshness">Consultando GitHub/CI…</span>
         </div>
         <div class="adm-master-notice notice-info" id="master-diagnostic-notice">

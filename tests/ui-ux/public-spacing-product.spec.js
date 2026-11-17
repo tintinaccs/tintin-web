@@ -162,7 +162,7 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
         window.dispatchEvent(new CustomEvent('tintin:products-loaded', { detail: { products: [product] } }));
       }, product);
       if (route === '/collections.html') await page.addScriptTag({ type: 'module',
-        url: '/js/pages/collections/presentacion-colecciones.js?v=tintin-20261116-discovery-2' });
+        url: '/js/pages/collections/presentacion-colecciones.js?v=tintin-20261117-editorial-1' });
       const first = page.locator(card).first();
       await expect(first).toBeVisible();
       if (route === '/index.html') {
@@ -185,7 +185,7 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
       } else {
         await expect(first.locator('a').first()).toHaveAttribute('href', /product|catalogo/);
         await expect(first.locator('.tt-card-name,.tt-coll-page-name')).toHaveText(
-          route === '/collections.html' ? 'Relojes y accesorios con un nombre de colección largo'.toUpperCase() : product.name);
+          route === '/collections.html' ? 'Relojes y accesorios con un nombre de colección largo' : product.name);
       }
       if(route==='/catalogo.html'){
         const frame=first.locator('.tt-card-img-wrap');let before;
@@ -274,4 +274,33 @@ for(const width of [320,390,768,1280,1920])for(const route of ['terminos','priva
   expect(bad).toEqual([]);
  }
  if([390,1280].includes(width))await page.screenshot({path:info.outputPath(`${route}-${width}.png`),fullPage:true});
+});
+
+test('las acciones de tarjetas se apilan por ancho disponible y el texto entra en cada botón', async ({page}) => {
+  await page.setViewportSize({width: 980, height: 720});
+  const card = (width, type) => `<article class="${type === 'product' ? 'tt-product-card' : 'tt-card'}" style="inline-size:${width}px">
+    <div class="${type === 'product' ? 'tt-product-actions' : 'tt-card-btns'}">
+      <a class="tt-btn" href="/catalogo">Ver</a>
+      <button class="tt-btn">Agregar al carrito</button>
+    </div>
+  </article>`;
+  const markup = `<!doctype html><link rel="stylesheet" href="/styles.min.css">
+    <link rel="stylesheet" href="/css/core/tema-unificado-tintin.css">
+    <link rel="stylesheet" href="/css/theme/sistema-superficies-tintin.css">
+    ${card(244, 'product')}${card(360, 'product')}${card(244, 'catalog')}`;
+  await page.route('**/__card-width', route => route.fulfill({contentType: 'text/html', body: markup}));
+  await page.goto('/__card-width');
+  const layouts = await page.locator('article').evaluateAll(cards => cards.map(card => {
+    const [first, second] = card.querySelectorAll('a, button');
+    const bounds = second.getBoundingClientRect();
+    const range = document.createRange();
+    range.selectNodeContents(second);
+    return {
+      stacked: bounds.top >= first.getBoundingClientRect().bottom,
+      fits: [...range.getClientRects()].every(line => line.left >= bounds.left && line.right <= bounds.right),
+    };
+  }));
+  expect(layouts).toEqual([
+    {stacked: true, fits: true}, {stacked: false, fits: true}, {stacked: true, fits: true},
+  ]);
 });
