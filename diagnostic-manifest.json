@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "642516c9deb85603fd1c6abd48bd019f97a45c0af5c6bc80c251786efb197921",
+  "sourceFingerprint": "3213ecd50399d19c2268ff7a128a54ef14f1e8fba389dbabc17c8f2ea255a173",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1873,
     "textFiles": 1720,
-    "totalBytes": 63132582,
+    "totalBytes": 63133244,
     "pages": 19,
     "modules": 1220
   },
@@ -29589,8 +29589,8 @@
     },
     {
       "path": "functions/product.js",
-      "bytes": 15088,
-      "sha256": "ca49f39e008d6e28cfa8a31581f86c6da54981a420c1fb3d0b60a84e9cf1d5ab",
+      "bytes": 14697,
+      "sha256": "6fce128d7a2f01740a69c0a1e46bc1aa01cb2f09c69e548c2483793914266845",
       "syntax": {
         "ok": true,
         "error": ""
@@ -59574,8 +59574,8 @@
     },
     {
       "path": "tests/seo/catalog-render.test.mjs",
-      "bytes": 6447,
-      "sha256": "e1d22bd20f65ad8067625f3b993decaadc1b15d0d84d2dd8716dcff1bcd86993",
+      "bytes": 7150,
+      "sha256": "8afa47620ecf81949b248b7e8225a4c245450da82ee50d610bbaf5a647eb1ae5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -59649,11 +59649,11 @@
         },
         {
           "url": "https://example.test/gold.jpg",
-          "line": 55
+          "line": 67
         },
         {
           "url": "https://example.test/silver.jpg",
-          "line": 55
+          "line": 67
         }
       ]
     },
@@ -65584,7 +65584,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 11202,
-      "sha256": "65603389e2584d0dfa29f45af7e636a84be4c521f735492cbfcf2726351c3310"
+      "sha256": "455ec679b0d5a40cce467995b1114e2c115369bc0b9bb3c903066558d32d90f7"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -65596,7 +65596,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "722680741c48b290bd024e23b5ff75dcacbebb9b65b47249d161f066acf08c99"
+      "sha256": "a0353832055a26ee144dfac3e84795801f9ecb72c4bced21a1d5a00e020dc178"
     },
     {
       "path": "config/public-site.json",
@@ -66423,8 +66423,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1357953,
-      "sha256": "95a07301c8f65981d480f41bd09c736d552372fcae8c01a717f26d59a446f797"
+      "bytes": 1358303,
+      "sha256": "4ddc50209368a964f87464b6d6e3e6f382610cc0cdd61b04ea077ba3601b3b41"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -68517,8 +68517,8 @@
     {
       "path": "functions/product.js",
       "extension": ".js",
-      "bytes": 15088,
-      "sha256": "ca49f39e008d6e28cfa8a31581f86c6da54981a420c1fb3d0b60a84e9cf1d5ab"
+      "bytes": 14697,
+      "sha256": "6fce128d7a2f01740a69c0a1e46bc1aa01cb2f09c69e548c2483793914266845"
     },
     {
       "path": "functions/products/[handle].js",
@@ -74535,8 +74535,8 @@
     {
       "path": "tests/seo/catalog-render.test.mjs",
       "extension": ".mjs",
-      "bytes": 6447,
-      "sha256": "e1d22bd20f65ad8067625f3b993decaadc1b15d0d84d2dd8716dcff1bcd86993"
+      "bytes": 7150,
+      "sha256": "8afa47620ecf81949b248b7e8225a4c245450da82ee50d610bbaf5a647eb1ae5"
     },
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",

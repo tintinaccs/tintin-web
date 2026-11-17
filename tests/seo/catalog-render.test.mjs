@@ -51,6 +51,18 @@ test('ofertas muestran PYG, referencia real, vendedor separado y bajo pedido exp
  assert.ok(elements(rendered).some(node=>attr(node,'href')==='/envios'));
 });
 
+test('la ficha no repite las características en el bloque de envío', () => {
+ const product = {name:'Anillo', price:50000, stock:1, description:'Anillo con cristal',
+   material:'Acero inoxidable', sizeFit:'Ajustable', care:'Evitar perfumes'};
+ const source = fs.readFileSync(new URL('../../product.html', import.meta.url), 'utf8');
+ const {html} = renderProductMetadataHtml(source, 'anillo', product);
+ const delivery = html.match(/<p id="product-server-fulfilment">([\s\S]*?)<\/p>/)?.[1];
+ assert.ok(delivery);
+ assert.match(delivery, /href="\/envios"/);
+ assert.doesNotMatch(delivery, /Material:|Ajuste:|Cuidados:/);
+ assert.equal(productStructuredData(product).material, 'Acero inoxidable');
+});
+
 test('ProductGroup usa identidad estable y no inventa SKUs de las variantes',()=>{
  const schema=productStructuredData({id:'v2',name:'Anillo',price:100,variantCommerceVersion:2,variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'gold',attributes:{Color:'Dorado'},stock:2,price:150},{variant:'silver',attributes:{Color:'Plateado'},stock:0,price:200}],variantMedia:[{Color:'Dorado',imageUrl:'https://example.test/gold.jpg'},{Color:'Plateado',imageUrl:'https://example.test/silver.jpg'}]});
  assert.equal(schema['@type'],'ProductGroup');assert.equal(schema.productGroupID,'v2');
