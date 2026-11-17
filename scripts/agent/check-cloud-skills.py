@@ -12,6 +12,8 @@ REQUIRED = {
     "design-taste-frontend", "ui-ux-pro-max", "ponytail", "caveman",
     "code-review", "handoff", "systematic-debugging",
     "verification-before-completion", "frontend-design", "webapp-testing", "gh-fix-ci",
+    "antislop", "antislop-code", "antislop-copywriting", "antislop-human",
+    "antislop-layoutmobile", "antislop-ui", "unslop", "impeccable", "humanizer-es",
 }
 CUSTOM = {
     "tintin-brand-copy", "tintin-design-quality", "tintin-performance-budgets",
@@ -64,16 +66,17 @@ for name in REQUIRED | CUSTOM:
         b = (ROOT / seen[PREFIXES[1]][name]).read_text(encoding="utf-8")
         if a != b:
             errors.append(f"Mismatched Codex and Claude Skill: {name}")
+lock = json.loads((ROOT / "docs/agent/design-skills-lock.json").read_text(encoding="utf-8"))
+mirrored_imports = {item["folder"] for item in lock["imports"]} | {lock["taste"]["folder"]}
 # Validate every auxiliary file, not just selected SKILL.md files.
 for prefix in PREFIXES:
     root = ROOT / prefix
     for file in root.rglob("*"):
         imported = file.relative_to(root).parts[0]
-        if file.is_file() and (imported in {"impeccable", "taste-frontend", "pya", "build-design"} or imported.startswith(("emil-", "better-"))):
+        if file.is_file() and (imported in mirrored_imports or imported.startswith(("emil-", "better-"))):
             mirror = ROOT / PREFIXES[1 if prefix == PREFIXES[0] else 0] / file.relative_to(root)
             if not mirror.is_file() or mirror.read_bytes() != file.read_bytes():
                 errors.append(f"Missing or mismatched mirrored resource: {file.relative_to(ROOT)}")
-lock = json.loads((ROOT / "docs/agent/design-skills-lock.json").read_text())
 taste_file = ROOT / PREFIXES[0] / lock["taste"]["folder"] / "SKILL.md"
 if hashlib.sha256(taste_file.read_bytes()).hexdigest() != lock["taste"]["skillSha256"]:
     errors.append("Taste SKILL.md differs from its recorded upstream version")

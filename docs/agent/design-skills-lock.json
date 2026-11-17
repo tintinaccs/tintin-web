@@ -643,6 +643,176 @@
         "scripts/update_kev.py": "5729840df137cfc42e09195d82e0450554cecf9ecacae305ee66084891dd16b5",
         "scripts/validate_feed.py": "ef04581df591c792566119b43ab3ca0e8700eaa3cdb552f953f99ba06cc84848"
       }
+    },
+    {
+      "repository": "https://github.com/miqdadbadjuber/anti-slop",
+      "revision": "5e1108f74c537cfa05dee6cdfecc1302606c8ca6",
+      "source": "skills/antislop",
+      "folder": "antislop",
+      "upstreamSha256": {
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "7f6f6396ef7f4d5f6b76d585d143c7da6c3d949247b6f8d1666c4c093cfe5697",
+        "VERSION": "ebebdd520c062db8d51e4411f02b45274a44306cbc6acde260ccd452edf97bb8"
+      },
+      "adaptation": "Archivos originales. LICENSE se conserva como LICENSE.upstream.",
+      "installedSha256": {
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "7f6f6396ef7f4d5f6b76d585d143c7da6c3d949247b6f8d1666c4c093cfe5697",
+        "VERSION": "ebebdd520c062db8d51e4411f02b45274a44306cbc6acde260ccd452edf97bb8"
+      }
+    },
+    {
+      "repository": "https://github.com/miqdadbadjuber/anti-slop",
+      "revision": "5e1108f74c537cfa05dee6cdfecc1302606c8ca6",
+      "source": "skills/antislop-code",
+      "folder": "antislop-code",
+      "upstreamSha256": {
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "cac8f34af374f085900fd9b211a92fdfb387f63826571e1221cfb927fb31a5ca"
+      },
+      "adaptation": "Archivos originales. LICENSE se conserva como LICENSE.upstream.",
+      "installedSha256": {
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "cac8f34af374f085900fd9b211a92fdfb387f63826571e1221cfb927fb31a5ca"
+      }
+    },
+    {
+      "repository": "https://github.com/miqdadbadjuber/anti-slop",
+      "revision": "5e1108f74c537cfa05dee6cdfecc1302606c8ca6",
+      "source": "skills/antislop-copywriting",
+      "folder": "antislop-copywriting",
+      "upstreamSha256": {
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "568efd8c763ce95a6ea123288e80f9a1ffdf1883143c1fad6e546a45a17659fc"
+      },
+      "adaptation": "Archivos originales. LICENSE se conserva como LICENSE.upstream.",
+      "installedSha256": {
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "568efd8c763ce95a6ea123288e80f9a1ffdf1883143c1fad6e546a45a17659fc"
+      }
+    },
+    {
+      "repository": "https://github.com/miqdadbadjuber/anti-slop",
+      "revision": "5e1108f74c537cfa05dee6cdfecc1302606c8ca6",
+      "source": "skills/antislop-human",
+      "folder": "antislop-human",
+      "upstreamSha256": {
+        "LICENSE-web-quality-skills": "c122223ac43e86421958e18623979942c21b642951e2e3736dcb63eff13587c3",
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "6cdd6f26d4f77ed629abe269fc423863edd063347c38fa6ce990a77914c1d8e6",
+        "contrast-check.py": "393e6433d120632aa11184792a16cd7b325924dbc9993477825d9aa67fdbfe6e",
+        "contrast-mcp.py": "6879466e7c3704575f25faa79adaf4c954bf37ade7f1289adda4eeb3af83ad1f",
+        "references/A11Y-PATTERNS.md": "4cb6276a237fbe05616b53688075461732454365eb7674d732f7197dddb14fff",
+        "references/WCAG.md": "409ac9e24007f09f3704f890585c880cdd66780e9f14274b1a0e0c4557672330"
+      },
+      "adaptation": "Archivos originales. LICENSE se conserva como LICENSE.upstream.",
+      "installedSha256": {
+        "LICENSE-web-quality-skills": "c122223ac43e86421958e18623979942c21b642951e2e3736dcb63eff13587c3",
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "6cdd6f26d4f77ed629abe269fc423863edd063347c38fa6ce990a77914c1d8e6",
+        "contrast-check.py": "393e6433d120632aa11184792a16cd7b325924dbc9993477825d9aa67fdbfe6e",
+        "contrast-mcp.py": "6879466e7c3704575f25faa79adaf4c954bf37ade7f1289adda4eeb3af83ad1f",
+        "references/A11Y-PATTERNS.md": "4cb6276a237fbe05616b53688075461732454365eb7674d732f7197dddb14fff",
+        "references/WCAG.md": "409ac9e24007f09f3704f890585c880cdd66780e9f14274b1a0e0c4557672330"
+      }
+    },
+    {
+      "repository": "https://github.com/miqdadbadjuber/anti-slop",
+      "revision": "5e1108f74c537cfa05dee6cdfecc1302606c8ca6",
+      "source": "skills/antislop-layoutmobile",
+      "folder": "antislop-layoutmobile",
+      "upstreamSha256": {
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "205c8e0785b4baa5ea53815526ff11e0225c53a4d8c97c3cfa29f2f58a1ed7ce"
+      },
+      "adaptation": "Archivos originales. LICENSE se conserva como LICENSE.upstream.",
+      "installedSha256": {
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "205c8e0785b4baa5ea53815526ff11e0225c53a4d8c97c3cfa29f2f58a1ed7ce"
+      }
+    },
+    {
+      "repository": "https://github.com/miqdadbadjuber/anti-slop",
+      "revision": "5e1108f74c537cfa05dee6cdfecc1302606c8ca6",
+      "source": "skills/antislop-ui",
+      "folder": "antislop-ui",
+      "upstreamSha256": {
+        "LICENSE-web-quality-skills": "c122223ac43e86421958e18623979942c21b642951e2e3736dcb63eff13587c3",
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "31d2cafe672545cb21d67d2d609b0809854ca88705af05c3867db651bd67aa82",
+        "references/CORE-WEB-VITALS.md": "782bc99ba1fc68e25aabb396967468ec8cb7ea33cd681bccf4b7b04a679acf23",
+        "references/WEB-BASELINE.md": "f9a4c8d71a6e2ddf5ad0e46a11553eb188617c36f0bfb331e3d3930aecf772a2"
+      },
+      "adaptation": "Archivos originales. LICENSE se conserva como LICENSE.upstream.",
+      "installedSha256": {
+        "LICENSE-web-quality-skills": "c122223ac43e86421958e18623979942c21b642951e2e3736dcb63eff13587c3",
+        "LICENSE.upstream": "9fd83fb1fda52ca0094b96e2ed5a3d6c42a81b95a6c6326553f5bbe570f443de",
+        "SKILL.md": "31d2cafe672545cb21d67d2d609b0809854ca88705af05c3867db651bd67aa82",
+        "references/CORE-WEB-VITALS.md": "782bc99ba1fc68e25aabb396967468ec8cb7ea33cd681bccf4b7b04a679acf23",
+        "references/WEB-BASELINE.md": "f9a4c8d71a6e2ddf5ad0e46a11553eb188617c36f0bfb331e3d3930aecf772a2"
+      }
+    },
+    {
+      "repository": "https://github.com/heydamir/unslop",
+      "revision": "620163eedb3529d9cd23a3994ed8d287d06f760d",
+      "source": "skills/unslop",
+      "folder": "unslop",
+      "upstreamSha256": {
+        "LICENSE.upstream": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+        "SKILL.md": "54e74d73afedb70dd556495f03a13ab7a5724b948cad20c3c7452684f3cb65e9",
+        "agents/openai.yaml": "170d0b33a418d9d82beb7d15f8a91e314adef2edf53a81c37155b6f40dd52f06",
+        "references/effects.md": "ded4f679e22843a8f68860e6cda0396fa8b8fa27202400e08337143b485c86a4",
+        "references/refs.md": "12a70ce17d574914ea69eb0809e5a9605de044df1b66619159c6d0b38d6b8353",
+        "references/refs/beacon-engraving.webp": "44e7680e9c944f03c8fe45df999bdf74077a106925a8189eebf89e751e306e5b",
+        "references/refs/meadow-3d.webp": "84f526b68021a06fc6d32f162406fab6cc8074da1ef76d2ae4530e1b58219b14",
+        "references/refs/story-dashboard-frames.webp": "cfbf837e40b7626d5a5789dbce54f5c197aab303aa350d13a042048310717137",
+        "references/refs/unslop-dashboard-after.webp": "48067794f86b43dab20515b3810f245d67bff05d10bfa83c0f5885bee93cea52",
+        "references/refs/unslop-hero-after.webp": "92b2d796c5b6116a2039f5ca2b0f3edf700c92b41846b11b9501a4e32f72af6e",
+        "references/rtl.md": "d33ad69324e2b7c27107185f3fc99e50ba0f7f81b7c67c4e4f53e59cd5802be4",
+        "references/signs.md": "ed051b2ed17758145ff5563a3b20fbc9203380f882130b1f25bf6c2e22b69120",
+        "references/tokens.md": "b8beace96055e8097ff5a788b874e290393de56eff946bc1c650cc445e8965c2",
+        "references/visuals.md": "7247da579d2d95ace1e051b867c757bd1e05aa02f3ab8dea0ead4cd4bf14d7d7",
+        "scripts/snapshot.mjs": "4b0c3639bd1c052fa1968c4bbe1b17acb5b108fd22ec70518628d9a4dbd5d6fa",
+        "scripts/story-path.mjs": "319600e594fca2f94cbfef8706b6f1c9f5151ad56d7a27e7f7d28f82f5756c9c",
+        "scripts/story.mjs": "349610ab1d829eb727b5033353e0ecc0e3272a50c6f1d9eea94b74dcc6daa517"
+      },
+      "adaptation": "Archivos originales. LICENSE se conserva como LICENSE.upstream.",
+      "installedSha256": {
+        "LICENSE.upstream": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+        "SKILL.md": "54e74d73afedb70dd556495f03a13ab7a5724b948cad20c3c7452684f3cb65e9",
+        "agents/openai.yaml": "170d0b33a418d9d82beb7d15f8a91e314adef2edf53a81c37155b6f40dd52f06",
+        "references/effects.md": "ded4f679e22843a8f68860e6cda0396fa8b8fa27202400e08337143b485c86a4",
+        "references/refs.md": "12a70ce17d574914ea69eb0809e5a9605de044df1b66619159c6d0b38d6b8353",
+        "references/refs/beacon-engraving.webp": "44e7680e9c944f03c8fe45df999bdf74077a106925a8189eebf89e751e306e5b",
+        "references/refs/meadow-3d.webp": "84f526b68021a06fc6d32f162406fab6cc8074da1ef76d2ae4530e1b58219b14",
+        "references/refs/story-dashboard-frames.webp": "cfbf837e40b7626d5a5789dbce54f5c197aab303aa350d13a042048310717137",
+        "references/refs/unslop-dashboard-after.webp": "48067794f86b43dab20515b3810f245d67bff05d10bfa83c0f5885bee93cea52",
+        "references/refs/unslop-hero-after.webp": "92b2d796c5b6116a2039f5ca2b0f3edf700c92b41846b11b9501a4e32f72af6e",
+        "references/rtl.md": "d33ad69324e2b7c27107185f3fc99e50ba0f7f81b7c67c4e4f53e59cd5802be4",
+        "references/signs.md": "ed051b2ed17758145ff5563a3b20fbc9203380f882130b1f25bf6c2e22b69120",
+        "references/tokens.md": "b8beace96055e8097ff5a788b874e290393de56eff946bc1c650cc445e8965c2",
+        "references/visuals.md": "7247da579d2d95ace1e051b867c757bd1e05aa02f3ab8dea0ead4cd4bf14d7d7",
+        "scripts/snapshot.mjs": "4b0c3639bd1c052fa1968c4bbe1b17acb5b108fd22ec70518628d9a4dbd5d6fa",
+        "scripts/story-path.mjs": "319600e594fca2f94cbfef8706b6f1c9f5151ad56d7a27e7f7d28f82f5756c9c",
+        "scripts/story.mjs": "349610ab1d829eb727b5033353e0ecc0e3272a50c6f1d9eea94b74dcc6daa517"
+      }
+    },
+    {
+      "repository": "https://github.com/jaimeberdejo/humanizer-es",
+      "revision": "b87ab524174b433b1abb37ba346e2b0e08e52758",
+      "source": ".",
+      "folder": "humanizer-es",
+      "upstreamSha256": {
+        "EJEMPLOS.md": "0d44f24c644e9458e811390b2fc77229b5b7643af150d10f768e43ae8530ea99",
+        "LICENSE.upstream": "4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96",
+        "SKILL.md": "cbd8c1c62bf9b4b10909e6aeb8bf85a4df724a8c0150c8b1b63d61facdd0bc9a"
+      },
+      "adaptation": "Archivos originales. LICENSE se conserva como LICENSE.upstream.",
+      "installedSha256": {
+        "EJEMPLOS.md": "0d44f24c644e9458e811390b2fc77229b5b7643af150d10f768e43ae8530ea99",
+        "LICENSE.upstream": "4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96",
+        "SKILL.md": "cbd8c1c62bf9b4b10909e6aeb8bf85a4df724a8c0150c8b1b63d61facdd0bc9a"
+      }
     }
   ],
   "taste": {
