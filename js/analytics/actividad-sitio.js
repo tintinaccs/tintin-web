@@ -1,3 +1,4 @@
+import {observeActivity} from './observador-actividad.mjs?v=tintin-20261117-activity-1';
 /**
  * Analítica propia y mínima para el panel de Super Admin.
  *
@@ -13,7 +14,7 @@ import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20261017-d
 import {
   hasStatisticsConsent,
   onPrivacyConsentChange
-} from './consentimiento-privacidad.js?v=tintin-20261029-mobile-review-1-p1106';
+} from './consentimiento-privacidad.js?v=tintin-20261117-activity-1';
 import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260911-auth-cart-final-1';
 import {
   heartbeatDecision,
@@ -60,6 +61,17 @@ if (
   let permanentWriteErrorCode = '';
   let heartbeatInFlight = false;
   let lastHeartbeatWriteAt = 0;
+  let activityObserver = null, transitionTimer = 0, pendingEvents = [], identityUid;
+  const EVENTS_KEY = 'tt_activity_pending_v1';
+  function savePending() { storageSet(window.sessionStorage, EVENTS_KEY, JSON.stringify({sessionId,events:pendingEvents})); }
+  function recordTransition(action,context) {
+    if(!activityEnabled || !hasConsent())return;
+    refreshIdentity();
+    pendingEvents.push({id:randomId('e_'),at:Date.now(),action,context});
+    pendingEvents=pendingEvents.slice(-200);savePending();
+    window.clearTimeout(transitionTimer);
+    transitionTimer=window.setTimeout(sendHeartbeat,Math.max(150,MIN_HEARTBEAT_INTERVAL_MS-(Date.now()-lastHeartbeatWriteAt)+100));
+  }
 
   function recordActivityDiagnostic(code, detail = {}) {
     const event = Object.freeze({
@@ -168,10 +180,14 @@ if (
 
   function refreshIdentity() {
     const dayKey = paraguayDayKey();
-    if (identityDay === dayKey && visitorId && sessionId) return dayKey;
+    const uid=auth.currentUser?.uid || '';
+    if (identityDay === dayKey && identityUid === uid && visitorId && sessionId) return dayKey;
+    const changedAccount=identityUid !== undefined && identityUid !== uid;
+    identityUid=uid;
     identityDay = dayKey;
     visitorId = dailyId(window.localStorage, VISITOR_KEY, 'v_', dayKey);
-    sessionId = dailyId(window.sessionStorage, SESSION_KEY, 's_', dayKey);
+    sessionId = dailyId(window.sessionStorage, SESSION_KEY, 's_', dayKey+'_'+uid);
+    try {const saved=JSON.parse(storageGet(window.sessionStorage,EVENTS_KEY)||'{}');pendingEvents=!changedAccount && saved.sessionId===sessionId && Array.isArray(saved.events) ? saved.events.slice(-200) : [];}catch {pendingEvents=[];}
     // El documento sitePresence/{visitorId} es compartido por día/navegador (no por
     // pestaña ni por carga de página). Restaurar aquí el último envío evita que una
     // navegación completa "olvide" el throttle de 20s que la regla de Firestore sí
@@ -197,7 +213,7 @@ if (
 
     try {
       if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
-      await postActivity('session', { sessionId, visitorId, route: safePage(), consent: true });
+      await postActivity('session', { sessionId, visitorId, route: safePage(), context:activityObserver?.context(), consent: true });
       storageSet(window.sessionStorage, recordedKey, sessionId);
     } catch (error) {
       if (!stopAfterPermanentWriteError(error, 'registrar la sesión')) {
@@ -231,7 +247,10 @@ if (
       if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
       lastHeartbeatWriteAt = Date.now();
       writeLastHeartbeatWriteAt(identityDay, visitorId, lastHeartbeatWriteAt);
-      await postActivity('presence', { visitorId, sessionId, route: safePage(), consent: true });
+      const batch=pendingEvents.slice(0,12);
+      while(batch.length && new TextEncoder().encode(JSON.stringify(batch)).length>2800)batch.pop();
+      const result=await postActivity('presence', { visitorId, sessionId, route: safePage(), context:activityObserver?.context(), events:batch, consent: true });
+      if(result.recorded===true){const sent=new Set(batch.map(event=>event.id));pendingEvents=pendingEvents.filter(event=>!sent.has(event.id));savePending();}
       recordActivityDiagnostic('HEARTBEAT_WRITE_SUCCESS', {
         ruleMinimumIntervalMs: MIN_HEARTBEAT_INTERVAL_MS,
         visibility: document.visibilityState
@@ -242,6 +261,7 @@ if (
       }
     } finally {
       heartbeatInFlight = false;
+      if(pendingEvents.length && activityEnabled){window.clearTimeout(transitionTimer);transitionTimer=window.setTimeout(sendHeartbeat,MIN_HEARTBEAT_INTERVAL_MS+100);}
     }
   }
 
@@ -260,6 +280,8 @@ if (
     activityEnabled = false;
     window.clearInterval(heartbeatTimer);
     heartbeatTimer = 0;
+    window.clearTimeout(transitionTimer);
+    activityObserver?.stop(); activityObserver=null;
   }
 
   function bindLifecycleOnce() {
@@ -277,6 +299,8 @@ if (
     activityEnabled = true;
     refreshIdentity();
     bindLifecycleOnce();
+    if(!activityObserver)activityObserver=observeActivity({window,document,onChange:recordTransition});
+    window.TintinSiteActivity=Object.freeze({status:'active',record(action,code){try{activityObserver?.record(action,code);}catch{ /* La telemetría nunca bloquea una compra. */ }}});
     recordSessionOnce();
     scheduleHeartbeat();
   }
@@ -306,17 +330,23 @@ if (
   async function accountAuthHeader(kind) {
     if (kind !== 'session' && kind !== 'presence') return {};
     try {
-      const token = await auth.currentUser?.getIdToken();
+      const account=auth.currentUser;
+      const token = await account?.getIdToken();
+      if(account?.uid!==auth.currentUser?.uid)throw new Error('session_changed');
       return token ? { authorization: `Bearer ${token}` } : {};
-    } catch { return {}; }
+    } catch(error) {if(error.message==='session_changed')throw error; return {}; }
   }
 
   async function postActivity(kind, fields = {}) {
+    if(fields.sessionId && identityUid!==(auth.currentUser?.uid||'')){refreshIdentity();throw new Error('session_changed');}
+    const headers=await accountAuthHeader(kind);
+    if(fields.sessionId && identityUid!==(auth.currentUser?.uid||'')){refreshIdentity();throw new Error('session_changed');}
     const response = await fetch(apiUrl('site-activity'), {
-      method: 'POST', headers: { 'content-type': 'application/json', ...(await accountAuthHeader(kind)) },
+      method: 'POST', headers: { 'content-type': 'application/json', ...headers },
       body: JSON.stringify({ kind, ...fields }), signal: AbortSignal.timeout(5000),
     });
     if (!response.ok) throw Object.assign(new Error('Activity unavailable'), { code: response.status === 403 ? 'permission-denied' : 'activity-unavailable' });
+    return response.json();
   }
 
   function clearLocalAnalyticsIds() {
@@ -325,6 +355,7 @@ if (
     storageRemove(window.sessionStorage, SESSION_KEY);
     storageRemove(window.sessionStorage, GEO_KEY);
     storageRemove(window.sessionStorage, SESSION_RECORDED_PREFIX + dayKey);
+    storageRemove(window.sessionStorage, EVENTS_KEY);pendingEvents=[];
     identityDay = '';
     visitorId = '';
     sessionId = '';

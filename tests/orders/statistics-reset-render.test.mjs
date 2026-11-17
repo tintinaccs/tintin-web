@@ -1,3 +1,4 @@
+import {activityContextLabel} from '../../js/analytics/contexto-actividad.mjs';
 import {orderAmounts,sumOrderAmounts} from '../../js/orders/importes-pedido.mjs';
 import {commercePeriodWindow} from '../../js/admin/statistics/periodos-comerciales.mjs';
 import test from 'node:test';
@@ -21,7 +22,7 @@ function render(resets = {}, extraOrders = []) {
     statisticsActivePresence: () => [], _allProducts: [], filterStatisticsRows: (metric, rows, timeOf) => statisticsSince(rows, metric, resets, timeOf),
     statisticsSetText: (key, value) => { values[key] = value; }, formatPrice: value => Number(value),
     adminRealtimeReady: { orders: true, users: true, traffic: true, presence: true, products: true },
-    activityLocationLabel: () => 'QA', activityPageLabel: () => '/', renderStatisticsBars: (key, value) => { bars[key] = value; },
+    activityContextLabel,activityLocationLabel: () => 'QA', activityPageLabel: () => '/', renderStatisticsBars: (key, value) => { bars[key] = value; },
     renderStatisticsRanking: (key, value) => { rankings[key] = value; }, ORDER_STATUS_LABELS: {}, PAY_STATUS_LABELS: {}, renderStatisticsTrend() {} };
   new Function(...Object.keys(dependencies), renderer + '\nrenderGeneralStatistics();')(...Object.values(dependencies));
   return { values, bars, rankings, now };

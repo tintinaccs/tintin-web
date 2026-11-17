@@ -29,7 +29,7 @@ test('el marcador selecciona únicamente la página abierta y conserva fallback 
 
 test('solo cuenta referencias same-origin con ?v= que se ejecutan', () => {
   const refs = versionedRefs(doc([
-    el('SCRIPT', { src: 'js/cargador-pagina.js?v=tintin-20261117-editorial-1' }),
+    el('SCRIPT', { src: 'js/recurso.js?v=tag-1' }),
     el('LINK', { href: '/css/base.css?v=tag-2' }),
     el('SCRIPT', { src: 'js/sin-version.js' }),
     el('SCRIPT', { src: 'https://www.gstatic.com/firebasejs/app.js?v=9' }),
@@ -38,7 +38,7 @@ test('solo cuenta referencias same-origin con ?v= que se ejecutan', () => {
   ]), 'https://tintinaccesorios.pages.dev/catalogo');
 
   assert.deepEqual(refs, [
-    { raw: 'js/cargador-pagina.js?v=tintin-20261117-editorial-1', href: 'https://tintinaccesorios.pages.dev/js/cargador-pagina.js?v=tintin-20261117-editorial-1' },
+    { raw: 'js/recurso.js?v=tag-1', href: 'https://tintinaccesorios.pages.dev/js/recurso.js?v=tag-1' },
     { raw: '/css/base.css?v=tag-2', href: 'https://tintinaccesorios.pages.dev/css/base.css?v=tag-2' },
   ]);
 });
@@ -75,7 +75,7 @@ test('el cargador lo inicia globalmente en ambos runtimes, incluido checkout y f
 });
 
 test('propagar versiones de imports y del loader no altera su identidad visual', () => {
-  const source = `<script src="js/cargador-pagina.js?v=tintin-20261117-editorial-1"></script>\nconst v='tintin-20261020-anterior-1'; import '../../js/quality/vigilancia-version.js?v=antes';`;
+  const source = `<script src="js/cargador-pagina.js?v=tintin-20261117-activity-1"></script>\nconst v='tintin-20261020-anterior-1'; import '../../js/quality/vigilancia-version.js?v=antes';`;
   assert.equal(visualSource(source), visualSource(source.replaceAll('antes', 'despues').replace('tintin-20261020-anterior-1', 'tintin-20261021-otra-1')));
   assert.notEqual(visualSource(source), visualSource(source + '\nbutton.textContent="Guardar";'));
   for (const url of ['https://youtube.com/watch?v=video1', 'https://cdn.test/library.js?v=1', '/assets/foto.png?v=1']) assert.notEqual(visualSource(`src="${url}"`), visualSource(`src="${url.replace(/1$/, '2')}"`));
@@ -84,7 +84,7 @@ test('propagar versiones de imports y del loader no altera su identidad visual',
 
 test('los recursos del servidor y terceros no forman parte de la interfaz cargada', () => {
   for (const ref of ['/functions/api/product.js?v=1', '/cloudflare/product.js?v=1', '/scripts/build.js?v=1', 'https://other.test/a.js?v=1', '/api/products', '/a.js']) assert.equal(clientResourcePath(ref, 'https://version.test/'), '');
-  assert.equal(clientResourcePath('/js/admin/admin-app.js?v=tintin-20261117-editorial-1', 'https://version.test/'), 'js/admin/admin-app.js');
+  assert.equal(clientResourcePath('/js/admin/admin-app.js?v=tintin-20261117-activity-1', 'https://version.test/'), 'js/admin/admin-app.js');
 });
 
 test('un cambio de otra pantalla no avisa aunque cambie la publicación global', async () => {

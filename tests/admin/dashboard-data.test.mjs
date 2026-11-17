@@ -1,3 +1,4 @@
+import {activityContextLabel,activityPresenceLabel} from '../../js/analytics/contexto-actividad.mjs';
 import {orderAmounts,sumOrderAmounts} from '../../js/orders/importes-pedido.mjs';
 import {orderMoneyMarkup} from '../../js/orders/presentacion-importes.mjs';
 import {adminEventAttributes} from '../../js/admin/eventos-dinamicos-admin.mjs';
@@ -126,7 +127,7 @@ test('«En línea ahora» muestra nombre y datos de la cuenta verificada, escapa
   const context = {
     allUsers: [{ uid: 'uid_ana', name: 'Ana <b>Pérez</b>', email: 'ana@example.test', phone: '0981 000 000' }],
     document: { getElementById: id => (id === 'dashboard-online-locations' ? container : detail) },
-    escapeHtmlAdmin: html, activityLocationLabel: () => 'Asunción', activityPageLabel: () => 'Inicio', activityRelativeTime: () => 'ahora',
+    escapeHtmlAdmin: html, activityContextLabel,activityPresenceLabel,activityLocationLabel: () => 'Asunción', activityPageLabel: () => 'Inicio', activityRelativeTime: () => 'ahora',
   };
   vm.createContext(context);
   vm.runInContext(functionSource('onlineVisitorPerson', '\nfunction renderOnlineLocations') + '\n' + functionSource('renderOnlineLocations', '\nfunction ') , context);

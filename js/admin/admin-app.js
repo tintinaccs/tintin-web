@@ -1,3 +1,4 @@
+import {activityContextLabel,activityPresenceLabel} from '../analytics/contexto-actividad.mjs?v=tintin-20261117-activity-1';
 import {commercePeriodStart,commercePeriodWindow,commerceYear} from './statistics/periodos-comerciales.mjs?v=tintin-20261112-delivery-separate-1';
 import {statisticsTodayStart} from './statistics/modelo-reinicios.mjs?v=tintin-20261112-delivery-separate-1';
 import {orderAmounts,sumOrderAmounts,deliveryAmountText} from '../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';
@@ -1451,11 +1452,6 @@ function activityLocationLabel(item) {
   return parts.join(', ') || 'Ubicación no disponible';
 }
 
-function activityPageLabel(path) {
-  const value = String(path || '/').replace(/^\/+/, '').replace(/\.html$/i, '');
-  if (!value || value === 'index') return 'Inicio';
-  return value.replace(/[-_]+/g, ' ').replace(/^./, char => char.toUpperCase()).slice(0, 80);
-}
 
 function activityRelativeTime(timestamp, now = Date.now()) {
   const milliseconds = activityTimestampMillis(timestamp);
@@ -1666,12 +1662,12 @@ function renderGeneralStatistics() {
   statisticsTrafficSessions.forEach(session => {
     const location = activityLocationLabel(session);
     if (sessionIncluded('visitLocations', session)) visitLocations.set(location, (visitLocations.get(location) || 0) + 1);
-    const page = activityPageLabel(session.landingPage);
+    const page = activityContextLabel(session.landingContext,session.landingPage);
     if (sessionIncluded('entryPages', session)) entryPages.set(page, (entryPages.get(page) || 0) + 1);
   });
   const livePages = new Map();
   activePresence.forEach(visitor => {
-    const page = activityPageLabel(visitor.page);
+    const page = activityContextLabel(visitor.context,visitor.page);
     livePages.set(page, (livePages.get(page) || 0) + 1);
   });
 
@@ -2021,6 +2017,10 @@ function renderOnlineLocations(active, now) {
   const detail = document.getElementById('dashboard-online-detail');
   if (detail) detail.textContent = `${active.length} activo${active.length === 1 ? '' : 's'}`;
   if (!container) return;
+  if(!container.dataset?.activityBound && container.addEventListener){
+    container.dataset.activityBound='true';
+    container.addEventListener('click',event=>{const uid=event.target.closest('[data-activity-user]')?.dataset.activityUser;if(uid)window.openClientFichaByUid?.(uid);});
+  }
   if (!active.length) {
     container.innerHTML = '<div class="adm-visitor-empty">No hay visitantes activos en este momento.</div>';
     return;
@@ -2030,10 +2030,10 @@ function renderOnlineLocations(active, now) {
     return `
     <div class="adm-visitor-row">
       <div>
-        <div class="adm-visitor-name">${escapeHtmlAdmin(person.name)}</div>
+        <div class="adm-visitor-name">${item.userId ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" data-activity-user="${escapeHtmlAdmin(item.userId)}">${escapeHtmlAdmin(person.name)}</button>` : escapeHtmlAdmin(person.name)}</div>
         ${person.details ? `<div class="adm-visitor-meta">${escapeHtmlAdmin(person.details)}</div>` : ''}
         <div class="adm-visitor-location" title="${escapeHtmlAdmin(activityLocationLabel(item))}">${escapeHtmlAdmin(activityLocationLabel(item))}</div>
-        <div class="adm-visitor-meta">${escapeHtmlAdmin(activityPageLabel(item.page))}</div>
+        <div class="adm-visitor-meta">${escapeHtmlAdmin(activityPresenceLabel(item,now))}</div>
       </div>
       <div class="adm-visitor-count">${escapeHtmlAdmin(activityRelativeTime(item.lastSeen, now))}</div>
     </div>
