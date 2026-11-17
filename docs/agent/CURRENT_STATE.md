@@ -7107,3 +7107,11 @@ El cierre de #1406 como duplicado queda condicionado a la integración de sus ca
 ## Continuación: monitor SEO de producción — 16/11/2026
 
 Codex `/root`: #1405 integrado en `6a71d353`; #1406 incluido y cerrado como duplicado. Fuente CI `43883840349` e integrador `43888405720` / intento 1 SUCCESS. Monitor `43888598454` / intento 1 FAIL por expectativas antiguas de JSON-LD/404; se verificó también la incompatibilidad del sitemap general paginado. Corrección específica: parser HTML y hashes de la directiva efectiva, datos JSON válidos, 404/noindex y URL canónica compartida para sitemap. 22 pruebas específicas y 162 de regresión PASS_LOCAL; sonda nueva local contra producción PASS por lectura no destructiva (excepción explícita: el script nuevo aún no está integrado, no se hereda PASS_CI). Código público y CSP intactos. Detalle/evidencia: docs/agent/CI_MONITOR_SEO_20261116.md. Nueva CI/merge pendientes; #1405 post-main CI `43888593358` aún en seguimiento.
+
+## Flujo de conexiones: retiro de favoritos, likes y comentarios — 17/11/2026
+
+Se retiraron del catálogo del panel los nodos `favoritos`, `likes` y `comentarios` y sus tres aristas desde `apis-internas`, junto con sus sondas en vivo (`/api/engagement`, estadísticas y registros de participación). `reglas-firestore` y `firestore-fuente-verdad` dejan de depender de `users/{uid}/favorites` y usan la lectura del carrito propio.
+
+Evidencia local (sin CI del SHA final, sin producción): `test:flow-connections` 179/179 (con Chromium 1243 enlazado por `PLAYWRIGHT_BROWSERS_PATH`; sin ello 4 pruebas de navegador no arrancan en este entorno), `audit:flow-connections-responsive`, `audit:cache-versioning`, `audit:diagnostics`, `audit:system-health`, `audit:admin-sync`, `audit:security`, `ci:preflight` y `auditar-proteccion-flujos` aprobados. Huellas renovadas con `preparar-mantenimiento-flujos`; los registros protegidos de esos flujos siguen en `config/proteccion-flujos.json`.
+
+Pendiente: CI del SHA final; ver el panel real en producción; el backend (`cloudflare/admin-runtime-health.js`, `functions/api/engagement.js`, `firestore.rules`, secciones `section-resenas`/`section-me-gusta` de `admin.html`) se dejó intacto a propósito.

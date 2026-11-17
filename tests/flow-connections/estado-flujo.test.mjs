@@ -61,22 +61,18 @@ test('el filtro explícito de atención muestra conexiones aunque sus nodos est�
   }), true, 'al seleccionar un nodo deben mostrarse sus conexiones relacionadas');
 });
 
-test('lecturas de engagement y carrito muestran evidencia parcial sin certificar mutaciones', () => {
+test('la lectura del carrito muestra evidencia parcial sin certificar mutaciones', () => {
   const at = '2026-09-29T00:00:00.000Z';
   const protectedProbes = {
     firestoreRules: { cart: { ok: true, status: 200 } },
-    engagementStats: {
-      likes: { ok: true, status: 200 },
-      reviews: { ok: true, status: 200 },
-    },
   };
   const live = buildLiveChecks({ protectedProbes }, at);
   const edges = buildLiveEdges({ protectedProbes }, at);
-  for (const id of ['likes', 'comentarios', 'carrito']) {
+  for (const id of ['carrito']) {
     assert.equal(live[id].promote, false, `${id}: lectura sola no certifica escritura`);
     assert.equal(resolveState(NODES.find(node => node.id === id), live[id], ESTADOS), ESTADOS.PARCIAL);
   }
-  for (const [from, to] of [['apis-internas', 'likes'], ['apis-internas', 'comentarios'], ['firestore', 'carrito']]) {
+  for (const [from, to] of [['firestore', 'carrito']]) {
     const edge = EDGES.find(item => item.from === from && item.to === to);
     assert.equal(edges[edge.id].promote, false, `${from} → ${to}: lectura sola no certifica mutación`);
     assert.equal(resolveState(edge, edges[edge.id], ESTADOS), ESTADOS.PARCIAL);
@@ -85,10 +81,10 @@ test('lecturas de engagement y carrito muestran evidencia parcial sin certificar
 
 test('un probe sin respuesta conserva el estado no verificado y no se convierte en 200', () => {
   const live = buildLiveChecks({
-    protectedProbes: { engagementStats: { likes: { ok: false, status: 0 } } },
+    protectedProbes: { firestoreRules: { cart: { ok: false, status: 0 } } },
   }, '2026-09-29T00:00:00.000Z');
-  assert.equal(live.likes.status, 0);
-  assert.equal(resolveState(NODES.find(node => node.id === 'likes'), live.likes, ESTADOS), ESTADOS.NO_VERIFICADO);
+  assert.equal(live.carrito.status, 0);
+  assert.equal(resolveState(NODES.find(node => node.id === 'carrito'), live.carrito, ESTADOS), ESTADOS.NO_VERIFICADO);
 });
 
 test('401/403 es falta de evidencia autenticada, no un fallo de producción', () => {
@@ -293,25 +289,24 @@ test('el probe de Apps Script no pinta Google Sheets verde sin probar la escritu
   ]) assert.ok(EDGES.some(item => item.from === from && item.to === to), `${from} → ${to} debe estar dibujada`);
 });
 
-test('lecturas autenticadas verifican favoritos, notificaciones y Rules sin mutarlas', () => {
+test('lecturas autenticadas verifican notificaciones y Rules sin mutarlas', () => {
   const protectedProbes = {
-    favoriteApi: { ok: true, status: 200 },
     notificationApi: { ok: true, status: 200 },
     firestoreRules: {
-      favorites: { ok: true, status: 200 },
+      cart: { ok: true, status: 200 },
       notifications: { ok: true, status: 200 },
     },
   };
   const checkedAt = '2026-09-20T00:00:00.000Z';
   const live = buildLiveChecks({ protectedProbes }, checkedAt);
-  for (const id of ['favoritos', 'notificaciones', 'reglas-firestore']) {
+  for (const id of ['notificaciones', 'reglas-firestore']) {
     const node = NODES.find(item => item.id === id);
     assert.equal(live[id].evidenceLevel, EVIDENCIA.LIVE_PRODUCTION);
     assert.equal(resolveState(node, live[id], ESTADOS), ESTADOS.PROD);
   }
   const edges = buildLiveEdges({ protectedProbes }, checkedAt);
   for (const edge of EDGES.filter(item => (
-    (item.from === 'apis-internas' && ['favoritos', 'notificaciones'].includes(item.to))
+    (item.from === 'apis-internas' && ['notificaciones'].includes(item.to))
     || (item.from === 'cf-functions' && item.to === 'reglas-firestore')
   ))) {
     assert.equal(resolveState(edge, edges[edge.id], ESTADOS), ESTADOS.PROD);
@@ -377,8 +372,8 @@ test('probeClientFirestoreRules espera las lecturas antes de devolver', async ()
   const body = src.slice(src.indexOf('async function probeClientFirestoreRules'), src.indexOf('export function initConnectionsFlow'));
   assert.match(body, /await Promise\.all\(\[/, 'debe esperar ambas lecturas con Promise.all');
   assert.match(body, /collection\(db, 'users', user\.uid, 'cart'\)/, 'debe consultar solo el carrito propio');
-  assert.match(body, /async function probeEngagementStats\(user, signal\)/, 'debe incluir la comprobación cancelable de lectura pública de engagement');
-  assert.doesNotMatch(body, /return \{\s*favorites: probeClientFirestoreRead/, 'no debe devolver promesas sin resolver');
+  assert.doesNotMatch(body, /favorites|engagement/, 'no debe sondear funciones retiradas (favoritos, participación)');
+  assert.doesNotMatch(body, /return \{\s*notifications: probeClientFirestoreRead/, 'no debe devolver promesas sin resolver');
 });
 
 test('cuenta bloqueada sólo se promueve con el Repository audit del commit actual en PASS', () => {
