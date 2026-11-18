@@ -51,15 +51,14 @@ test('ofertas muestran PYG, referencia real, vendedor separado y bajo pedido exp
  assert.ok(elements(rendered).some(node=>attr(node,'href')==='/envios'));
 });
 
-test('la ficha no repite las características en el bloque de envío', () => {
+test('la ficha muestra descripción y características sin el apartado de envío adicional', () => {
  const product = {name:'Anillo', price:50000, stock:1, description:'Anillo con cristal',
    material:'Acero inoxidable', sizeFit:'Ajustable', care:'Evitar perfumes'};
  const source = fs.readFileSync(new URL('../../product.html', import.meta.url), 'utf8');
  const {html} = renderProductMetadataHtml(source, 'anillo', product);
- const delivery = html.match(/<p id="product-server-fulfilment">([\s\S]*?)<\/p>/)?.[1];
- assert.ok(delivery);
- assert.match(delivery, /href="\/envios"/);
- assert.doesNotMatch(delivery, /Material:|Ajuste:|Cuidados:/);
+ assert.doesNotMatch(html, /id="product-server-fulfilment"|Ver condiciones de envío|Consultar disponibilidad/);
+ assert.match(html, /Anillo con cristal/);
+ assert.ok(elements(html).some(node => attr(node, 'id') === 'product-specifications'));
  assert.equal(productStructuredData(product).material, 'Acero inoxidable');
 });
 

@@ -164,8 +164,6 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
       return tag + escapeHtml(text) + close;
     });
   }
-  html = html.replace(/(<[^>]+id="product-desc"[^>]*>[\s\S]*?<\/[^>]+>)/,
-    `$1<p id="product-server-fulfilment">Retiro coordinado en San Lorenzo, delivery en zonas habilitadas y encomienda al interior de Paraguay. <a href="/envios">Ver condiciones de envío</a> · <a href="/contact">Consultar disponibilidad</a></p>`);
   html = html.replace(/(<button\b[^>]*\bid="btn-product-(?:add-cart|buy-now)"[^>]*)(>)/gi,
     (_, open, close) => open + ' disabled' + close);
   const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(mainImage)}" imagesrcset="${escapeHtml(imageSrcset)}" imagesizes="${escapeHtml(imageSizes)}" fetchpriority="high" id="tt-product-image-preload">`;
