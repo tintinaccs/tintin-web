@@ -380,3 +380,19 @@ test('cancelación exige elección; conservar y reabrir no vuelven a descontar e
  await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',inventoryCancellationDecision:'release',baseChangeId:reopened.order.lastChangeId,changeId:'cancel_choice_release'},admin,deps);
  assert.equal((await product(id)).stock,2);
 });
+
+test('actividad de checkout: presencia e historial se confirman juntos en Firestore aislado',async()=>{
+ const {handleSiteActivity}=await import('../../functions/api/site-activity.js');
+ const now=new Date();
+ const event={id:'event_local_20261117',at:+now,action:'checkout_error',context:{page:'checkout',step:4,status:'error',reason:'network'}};
+ const body={kind:'presence',visitorId:'visitor_local_20261117',sessionId:'session_local_20261117',consent:true,route:'/checkout',context:event.context,events:[event]};
+ const request=()=>new Request('https://shop.test/api/site-activity',{method:'POST',headers:{origin:'https://shop.test',authorization:'Bearer fixture'},body:JSON.stringify(body)});
+ const response=await handleSiteActivity({request:request(),env:{}},{...deps,now:()=>now,ipLimit:async()=>{},reserve:async()=>{},verifyToken:async()=>({uid:actor.uid})});
+ assert.equal(response.status,202);
+ const presence=decodeFirestoreFields((await deps.get({},'sitePresence/'+body.visitorId)).fields);
+ const day=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Asuncion',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
+ const session=decodeFirestoreFields((await deps.get({},`siteTraffic/${day}/sessions/${body.sessionId}`)).fields);
+ assert.equal(presence.userId,actor.uid);assert.equal(session.userId,actor.uid);assert.equal(session.timeline[0].context.step,4);assert.equal(session.timeline[0].context.reason,'network');
+ const replay=await handleSiteActivity({request:request(),env:{}},{...deps,now:()=>now,ipLimit:async()=>{},reserve:async()=>{}});
+ assert.equal((await replay.json()).duplicate,true);
+});

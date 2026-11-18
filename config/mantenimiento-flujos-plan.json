@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "13d70efb6891bb7f4d25234cd773ec4cec3a9a40",
-  "reason": "Retirar likes, comentarios y favoritos del flujo de conexiones: funciones ya inexistentes",
+  "baseCommit": "834bab3bdd640a041f8b787b88c4456457f93b5f",
+  "reason": "Retirar favoritos, likes y comentarios del flujo de conexiones del panel admin",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "f18d8fb0a2003f779bccf07fb972eb269d3e3e79ce1bf3897d1185c4166e4d9a",
-      "newHash": "c9ab2b042116193d34634f15c8e929050166d17ed4d7855e5540d02ea1c09e33"
+      "oldHash": "b8237c71c6f9f5dde6d99de43c141f49edd3a9e655091871e9834be9bb8903ff",
+      "newHash": "0d8fae7dcc1c88f9b332a2016219914bdb1083485b27b9082da9dbf2e1f4e58d"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "e9f522c06e39c4bddbf637f6d3e7739cedea1890ec9b0e90769fb52d0f99c34b",
-      "newHash": "c3456294ff37ab704318d32be804aedc8e128cf0bd12fd4a5bea6e0ac3563ad0"
+      "oldHash": "c9561fc3f57bbbf0f9f8ffbd3b06240cf019906d6794a6ba14b8809ffefe2126",
+      "newHash": "b99115a99967663e2786991f1388364ff5c52f9d5371705360c8fbc7a944972a"
     },
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
@@ -30,8 +30,8 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "494efead035ff56607146581a024ab5cfe0f8e49e22ff28ac1310b471fb1a496",
-      "newHash": "edc86f4a57381b0e0945807e4bcc56c16325084bef6a84e15a671976f96b6452"
+      "oldHash": "f17abd6ceb33a28b3b366200c0da7d6c1960835989caec85f4107f50a251ad37",
+      "newHash": "cb8ade344ab043e3ce3efd20ce07c3f2054976f51a1b87a888b28af21753b130"
     }
   ],
   "affectedRecords": [

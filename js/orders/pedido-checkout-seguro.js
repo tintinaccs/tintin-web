@@ -441,9 +441,11 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
       if (saved.paymentPending === true && result.paymentMethod === 'paypal' && (result.paymentStatus || result.payment?.status) !== 'pagado') {
         beginPaypalPayment(result, draft);
+        window.TintinSiteActivity?.record?.('payment_pending');
         return;
       }
       orderCompleted = true;
+      window.TintinSiteActivity?.record?.('order_confirmed');
       success(result, draft);
       if (saved.paymentPending === true) {
         // El proveedor pudo completar el pago antes de recargar, sin que se
@@ -1283,28 +1285,35 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (submitting || orderCompleted || window.TintinCheckoutOrderCompleted || window.history?.state?.tintinOrderCompleted || availabilityBlocked) return;
     submitting = true;
     window.TintinCheckoutOrderInFlight = true;
+    window.TintinSiteActivity?.record?.('checkout_confirm');
     hideError();
     button.disabled = true;
     button.innerHTML = '<span class="ck-spinner"></span> Comprobando precios y stock…';
 
     let draft;
     try {
+      window.TintinSiteActivity?.record?.('checkout_progress','preparing');
       draft = await buildDraft();
       try {
+        window.TintinSiteActivity?.record?.('checkout_progress','profile');
         await persistCheckoutDefaults(draft);
       } catch (profileError) {
         console.warn('[secure-checkout-order] El pedido continúa, pero no se pudieron guardar CI/facturación:', profileError);
         const notice = document.getElementById('ck-saved-checkout-data');
         if (notice) { notice.hidden = false; notice.textContent = 'No pudimos guardar estos datos para tu próxima compra. Este pedido puede continuar.'; }
       }
+      window.TintinSiteActivity?.record?.('checkout_progress','guard');
       await reserveCheckoutGuard(draft);
+      window.TintinSiteActivity?.record?.('checkout_progress','server');
       const result = await createOrderOnServer(draft);
       if (result.userId && result.userId !== getSessionUser()?.uid) throw appError('session_changed', 'Tu sesión cambió. Consultá el pedido desde la cuenta que lo realizó.');
       if (draft.paymentMethod === 'paypal') {
         beginPaypalPayment(result, draft);
+        window.TintinSiteActivity?.record?.('payment_pending');
         return;
       }
       orderCompleted = true;
+      window.TintinSiteActivity?.record?.('order_confirmed');
       success(result, draft);
       try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
       inMemoryRequestId = null;
@@ -1316,6 +1325,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     } catch (error) {
       console.error('[spark-checkout]', error);
       const code = error?.details?.code || error?.code;
+      window.TintinSiteActivity?.record?.('checkout_error',code);
       if (code === 'quote_changed' && error.details?.quote) {
         renderQuote(error.details.quote, draft?.shippingMethod);
         showError('Cambió un precio o el costo de envío. Revisá el resumen actualizado y confirmá nuevamente.');

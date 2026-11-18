@@ -107,6 +107,7 @@ function privacyConsentFixture() {
   });
   return {
     document,
+    preferences:()=>window.TintinActivityPrivacy.preferences,
     emit(type) { listeners.get(type)?.(); },
     openPreferences() { window.TintinActivityPrivacy.open(); },
     chooseNecessary() { nodes.get('tt-privacy-consent').querySelector('[data-privacy-action="necessary"]').click(); },
@@ -133,7 +134,7 @@ test('cerrar bienvenida durante la espera de privacidad no repite el banner tras
   f.advanceTo(1550);
   f.chooseNecessary();
   assert.equal(f.banner(), undefined);
-  assert.match(f.document.cookie, /^tt_privacy_choice=v2\.necessary/);
+  assert.match(f.document.cookie, /^tt_privacy_choice=v3\.necessary/);
   f.advanceTo(3000);
   assert.equal(f.banner(), undefined, 'una tarea pendiente no reabre una elección guardada');
 });
@@ -149,7 +150,15 @@ test('la elección explícita de privacidad cancela el aviso inicial pendiente',
 
 test('el aviso inicial revalida una elección guardada mientras esperaba', () => {
   const f = privacyConsentFixture();
-  f.document.cookie = 'tt_privacy_choice=v2.necessary';
+  f.document.cookie = 'tt_privacy_choice=v3.necessary';
   f.advanceTo(3000);
   assert.equal(f.banner(), undefined);
+});
+
+
+test('historial vinculado requiere renovar la aceptación anterior, conserva rechazo previo',()=>{
+ const f=privacyConsentFixture();f.document.cookie='tt_privacy_choice=v2.all';
+ assert.equal(f.preferences().statistics,false);assert.equal(f.preferences().decided,false);
+ f.document.cookie='tt_privacy_choice=v2.necessary';assert.equal(f.preferences().statistics,false);assert.equal(f.preferences().decided,true);
+ f.document.cookie='tt_privacy_choice=v3.all';assert.equal(f.preferences().statistics,true);
 });

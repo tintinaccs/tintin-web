@@ -9,7 +9,7 @@ import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260911-auth-cart-
  */
 
 const COOKIE_NAME = 'tt_privacy_choice';
-const COOKIE_VERSION = 'v2';
+const COOKIE_VERSION = 'v3';
 const LEGACY_CONSENT_KEY = 'tt_activity_consent_v1';
 const COOKIE_MAX_AGE = 180 * 24 * 60 * 60;
 
@@ -39,7 +39,7 @@ function writeCookie(choice) {
 function readLegacyChoice() {
   try {
     const legacy = localStorage.getItem(LEGACY_CONSENT_KEY) || '';
-    if (legacy === 'granted') return `${COOKIE_VERSION}.all`;
+    // Un permiso anterior no cubre el nuevo historial vinculado a una cuenta.
     if (legacy === 'denied') return `${COOKIE_VERSION}.necessary`;
   } catch {}
   return '';
@@ -51,6 +51,7 @@ function removeLegacyChoice() {
 
 function currentChoice() {
   const stored = readCookie() || memoryChoice;
+  if(stored === 'v2.necessary'){writeCookie(`${COOKIE_VERSION}.necessary`);return `${COOKIE_VERSION}.necessary`;}
   if (stored === `${COOKIE_VERSION}.all` || stored === `${COOKIE_VERSION}.necessary`) return stored;
   const migrated = readLegacyChoice();
   if (migrated) {
@@ -120,7 +121,7 @@ function renderConsent(customize = false, focusDetails = false) {
         <h2>Tu elección, sin interrumpirte</h2>
       </div>
     </div>
-    <p class="tt-privacy-summary">Usamos cookies y almacenamiento esencial para tu sesión y carrito. Si aceptás, también medimos visitas para mejorar la tienda.</p>
+    <p class="tt-privacy-summary">Usamos cookies y almacenamiento esencial para tu sesión y carrito. Si aceptás, registramos las páginas, acciones y pasos de compra para mejorar la tienda; cuando iniciás sesión, ese historial queda asociado a tu cuenta.</p>
     <div class="tt-privacy-actions">
       <button type="button" class="tt-privacy-btn tt-privacy-btn-primary" data-privacy-action="accept">Aceptar opcionales</button>
       <button type="button" class="tt-privacy-btn tt-privacy-btn-secondary" data-privacy-action="necessary">Solo necesarias</button>
@@ -132,7 +133,7 @@ function renderConsent(customize = false, focusDetails = false) {
         <span class="tt-privacy-required">Siempre activas</span>
       </div>
       <label class="tt-privacy-option" for="tt-privacy-statistics">
-        <div><strong>Estadísticas opcionales</strong><span>Sesiones, páginas vistas y ubicación aproximada.</span></div>
+        <div><strong>Estadísticas opcionales</strong><span>Páginas, acciones y pasos de compra, asociados a tu cuenta si iniciás sesión, y ubicación aproximada.</span></div>
         <input type="checkbox" id="tt-privacy-statistics" ${preferences.statistics ? 'checked' : ''}>
       </label>
       <div class="tt-privacy-details-actions">

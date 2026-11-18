@@ -1,3 +1,4 @@
+import {createActivityHistory} from './historial-actividad.mjs?v=tintin-20261117-activity-2';
 import {orderAmountSummary} from '../../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { ordersForView, orderDisplayCode } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
@@ -24,6 +25,7 @@ import {
   query,
   where,
   limit,
+  startAfter,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN, ROLE_LABELS } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import { ASSIGNABLE_ROLES } from '../../core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
@@ -241,7 +243,17 @@ if (!window.TintinAdminUserFichaBooted) {
       if (!logs.length) auditList.appendChild(el('div', '', auditResult.status === 'rejected' ? 'Auditoría no disponible' : 'Sin acciones registradas sobre esta cuenta'));
       auditSection.wrapper.appendChild(auditList);
 
-      body.replaceChildren(header, identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
+      const history = createActivityHistory(document,{
+        isCurrent:()=>auth.currentUser?.uid===ownerUid && version===requestVersion,
+        loadPresence:async()=>{if(!window.TintinAdminPresence)throw new Error('presence_not_ready');return window.TintinAdminPresence.forUser(uid);},
+        loadPage:async(day,cursor,size)=>{
+          if(auth.currentUser?.uid!==ownerUid || version!==requestVersion)throw new Error('session_changed');
+          const constraints=[where('userId','==',uid),limit(size)];if(cursor)constraints.push(startAfter(cursor));
+          const result=await getDocs(query(collection(db,'siteTraffic',day,'sessions'),...constraints));
+          return {items:result.docs.map(row=>row.data()),cursor:result.docs.length===size ? result.docs.at(-1) : null};
+        },
+      });
+      body.replaceChildren(history,header, identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
       return true;
     } catch (error) {
       if (version !== requestVersion) return false;
@@ -369,7 +381,7 @@ if (!window.TintinAdminUserFichaBooted) {
       .ficha-photo-dialog > button{display:block;margin:0 0 16px auto;min-height:44px}
       .ficha-avatar-large{width:100%;height:min(60dvh,620px);border-radius:12px;font-size:clamp(64px,20vw,180px)}
       .ficha-avatar-large img{object-fit:contain}
-      .ficha-section-title{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--adm-primary);margin-bottom:10px}
+      .ficha-activity-controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.ficha-activity-controls :is(select,input){min-height:44px;min-width:0;max-width:100%;border:1px solid var(--adm-border);border-radius:8px;padding:8px;background:var(--adm-bg);color:inherit}.ficha-section details{overflow-wrap:anywhere;margin:12px 0}.ficha-section summary{cursor:pointer}.ficha-section-title{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--adm-primary);margin-bottom:10px}
       .ficha-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
       .ficha-field-label{font-size:11px;color:var(--adm-muted);margin-bottom:2px}
       .ficha-field-value{font-size:13px;color:var(--adm-text);font-weight:600;word-break:break-word}

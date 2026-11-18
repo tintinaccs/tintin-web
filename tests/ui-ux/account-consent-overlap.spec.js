@@ -4,7 +4,7 @@ const path=require('node:path');
 test.use({reducedMotion:'reduce'});
 const root=path.resolve(__dirname,'../..');
 const resources=fs.readFileSync(path.join(root,'js/components/navigation/compartido/recursos-navegacion.js'),'utf8');
-const css=['styles.min.css','css/core/tokens-tintin.css',...Array.from(resources.matchAll(/'([^']+\.css)'/g),m=>m[1])];
+const css=['styles.min.css','css/core/tokens-tintin.css','css/core/limpieza-tema-tintin.css',...Array.from(resources.matchAll(/'([^']+\.css)'/g),m=>m[1])];
 const fixture=`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${css.map(p=>`<link rel="stylesheet" href="/${p}">`).join('')}</head><body><main id="background"><button id="open" data-nav-action="account">Mi cuenta</button><a href="/catalogo">Catálogo</a></main><script type="module">
 import {renderAccountDrawer} from '../../js/components/navigation/compartido/panel-cuenta.js';
 document.body.insertAdjacentHTML('beforeend',renderAccountDrawer()+'<div id="backdrop" class="tt-shared-backdrop" hidden></div>');
@@ -36,7 +36,7 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(page.locator('#btn-account-close')).toBeFocused();
  await banner.getByRole('button',{name:'Solo necesarias',exact:true}).click();
  await expect(banner).toHaveCount(0);await expect(account).toHaveAttribute('aria-hidden','false');
- expect(await page.evaluate(()=>document.cookie.includes('tt_privacy_choice=v2.necessary'))).toBe(true);
+ expect(await page.evaluate(()=>document.cookie.includes('tt_privacy_choice=v3.necessary'))).toBe(true);
  await expect(page.locator('#btn-account-close')).toBeFocused();
  await page.evaluate(()=>window.TintinActivityPrivacy.open());
  await page.getByRole('button',{name:'Cerrar preferencias',exact:true}).click();
