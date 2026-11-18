@@ -1,3 +1,7 @@
+## Retiro del apartado adicional de envío en la ficha — 2026-11-18 — Codex /root
+
+Se elimina la inyección de #product-server-fulfilment en functions/product.js, origen del párrafo señalado por la titular. Descripción, características, enlaces del pie y datos estructurados conservados. PASS_LOCAL: 10/10 pruebas de render SEO y redirecciones de producto; regresión existente actualizada para comprobar la ausencia del apartado y preservar descripción/características. Chromium del sistema: HTML inicial sin JavaScript comprobado a 390, 768 y 1440px; descripción presente y apartado ausente. build:pages y diff --check aprobados. Skill leída/aplicada: tintin-design-quality. Preflight detectó dependencias instaladas de la base antigua; se reinstalan desde el lockfile vigente sin cambios de manifiestos. CI y merge pendientes de comprobación.
+
 ## Checkout y seguimiento por perfil — 2026-11-17 — Codex /root
 
 Base inicial a2b5d32d actualizada a13d70efb antes de entregar, conservando los textos y tipografía de#1409. Los PASS previos no se transfieren; se vuelven a verificar los contratos afectados. Rama codex/checkout-seguimiento-20261117. La titular informa una clienta detenida en checkout, sin paso/error/dispositivo disponible. Pide además contexto preciso en «En línea ahora» e historial por perfil por día/semana/mes con hora y acciones. No se atribuye una causa concreta a esa visita ni se reconstruye actividad pasada inexistente.
