@@ -1,13 +1,57 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "834bab3bdd640a041f8b787b88c4456457f93b5f",
-  "reason": "Retirar el apartado de entrega redundante de la ficha de producto solicitado por la titular",
+  "baseCommit": "118357bb864d0a69c3ec030a53ce483e30a5b90e",
+  "reason": "Renovar huellas tras retirar favoritos, likes y comentarios del flujo de conexiones",
   "files": [
     {
-      "path": "functions/product.js",
-      "oldHash": "6fce128d7a2f01740a69c0a1e46bc1aa01cb2f09c69e548c2483793914266845",
-      "newHash": "f275989bbb9e0cce1c2b66715664d04a1b39c743970bf938d9f66d762d03d8ad"
+      "path": "admin.html",
+      "oldHash": "b8237c71c6f9f5dde6d99de43c141f49edd3a9e655091871e9834be9bb8903ff",
+      "newHash": "0d8fae7dcc1c88f9b332a2016219914bdb1083485b27b9082da9dbf2e1f4e58d"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "c9561fc3f57bbbf0f9f8ffbd3b06240cf019906d6794a6ba14b8809ffefe2126",
+      "newHash": "b99115a99967663e2786991f1388364ff5c52f9d5371705360c8fbc7a944972a"
+    },
+    {
+      "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
+      "oldHash": "082f1d959b133e782e82bee00dc843f89c72fbeb0425e90d1ff3de7011a1ab5d",
+      "newHash": "f8ed3eea6ab09c15cf7ca88d39d9ce9cb2b74288a08f498f12bd38a52100568d"
+    },
+    {
+      "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
+      "oldHash": "33da577a12ba044342eab1c8a53dd86de2caf6d0a72d417a477a30d626081d72",
+      "newHash": "ba030e07713664db0e5e30d63e5a13037d47592c7432d76febf78a8342f16f43"
+    },
+    {
+      "path": "js/admin/flujo-conexiones/live-checks.js",
+      "oldHash": "9b7d40919f88048ff8c3f36b0358aec1462614bd45fd56aaa0527c5aea03b6eb",
+      "newHash": "6f9b64ae5a0cf97cf127cbfeaa4754448d8bc63e436ba08b6f33b2dd18d1e233"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "f17abd6ceb33a28b3b366200c0da7d6c1960835989caec85f4107f50a251ad37",
+      "newHash": "cb8ade344ab043e3ce3efd20ce07c3f2054976f51a1b87a888b28af21753b130"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "correos",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

@@ -6,7 +6,7 @@
 // nodo/conexión que estado-flujo.js puede resolver. No depende del DOM ni
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
-import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20261010-auto-flow-1';
+import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20261117-flow-limpieza-1';
 import { EVIDENCIA } from './estado-flujo.js?v=tintin-20261101-flow-preload-1';
 
 function edgeIdFor(from, to) {
@@ -70,7 +70,6 @@ export const WRITE_CONTRACT_SUITES = Object.freeze({
   stock: 'transición de stock ejecutada: tests/orders/order-admin-domain.test.mjs + tests/orders/variant-inventory.test.mjs',
   panel: 'Rules reales en emulador con escrituras del panel: test:rules-critical',
   cart: 'Rules reales en emulador con alta, edición y baja del carrito propio: test:rules-critical',
-  engagement: 'escritura de "me gusta" y reseñas ejecutada: tests/engagement/escritura-participacion.test.mjs',
 });
 
 // Resultado de la ÚLTIMA sincronización real con Sheets en un sentido, tal
@@ -143,39 +142,6 @@ function externalServicesOutcome(integrations) {
   return {
     ok, status: ok ? 200 : 503, promote: ok && paypalOk, partial: ok && !paypalOk,
     note: `Correo (Resend): ${integrations.resend === true ? 'configurado' : 'no configurado'} · Imágenes (Cloudinary): ${integrations.cloudinary === true ? 'configurado' : 'no configurado'} · PayPal: ${paypalLabel}`,
-  };
-}
-
-// "Me gusta" y reseñas. Verde sólo con las tres evidencias a la vez:
-//  1. las estadísticas públicas responden en producción (lectura real);
-//  2. existe un registro real en likeRecords/reviewRecords, colecciones que
-//     únicamente escribe /api/engagement (las Rules niegan toda escritura de
-//     cliente): es una escritura real de la API en producción;
-//  3. el Repository audit del commit actual, que ejecuta ese código de escritura.
-// Sin registro real o sin CI queda parcial; con el audit en FAIL, rojo.
-function engagementWriteOutcome(statsProbe, recordProbe, currentEvidence, label) {
-  if (!statsProbe) return null;
-  const statsOk = statsProbe.ok === true;
-  const statsNote = `GET /api/engagement · estadísticas públicas de ${label} ${statsOk ? 'disponibles' : 'no confirmadas'}`;
-  const readOnly = EVIDENCIA.LIVE_PRODUCTION_READ_ONLY;
-  if (!statsOk) {
-    return { ok: false, note: `${statsNote}; mutación no probada`, status: Number(statsProbe.status || 0), promote: false, partial: false, evidenceLevel: readOnly };
-  }
-  const partial = reason => ({ ok: true, note: `${statsNote}; ${reason}`, status: Number(statsProbe.status || 200), promote: false, partial: true, evidenceLevel: readOnly });
-  if (!recordProbe || recordProbe.ok !== true) return partial(`mutación no probada: no se pudo leer el registro real de ${label} con esta sesión`);
-  if (recordProbe.exists !== true) return partial(`mutación no probada: todavía no hay ningún registro real de ${label} escrito por la API en producción`);
-  const liveNote = `${statsNote} · registro real escrito por /api/engagement en producción${recordProbe.lastAt ? ` (último: ${recordProbe.lastAt})` : ''}`;
-  if (!currentEvidence?.commit) return partial(`registro real presente${recordProbe.lastAt ? ` (último: ${recordProbe.lastAt})` : ''}, pero falta la evidencia de CI del commit actual (${WRITE_CONTRACT_SUITES.engagement})`);
-  const note = `${liveNote} · ${ciNote(currentEvidence, 'repositoryAudit', 'Repository audit')} · ${WRITE_CONTRACT_SUITES.engagement}`;
-  if (ciCheckFailed(currentEvidence, 'repositoryAudit')) return { ok: false, note, status: 200, promote: false, partial: false, evidenceLevel: EVIDENCIA.CI_VERIFIED };
-  return {
-    ok: true,
-    note,
-    status: Number(statsProbe.status || 200),
-    promote: ciCheckPassed(currentEvidence, 'repositoryAudit'),
-    partial: false,
-    pending: ciCheckPending(currentEvidence, 'repositoryAudit'),
-    evidenceLevel: EVIDENCIA.LIVE_PRODUCTION,
   };
 }
 
@@ -279,8 +245,6 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     productos: 'products',
     inventario: 'productInventory',
     pedidos: 'orders',
-    comentarios: 'reviews',
-    likes: 'likes',
     correos: 'emailLogs',
   }).forEach(([id, key]) => setFrom(id, typeof publicAdmin[key] === 'boolean' ? publicAdmin[key] : undefined,
     `GET /api/health · superficie admin.${key}=${publicAdmin[key] === true} (lectura operativa)`, {
@@ -294,7 +258,7 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     setFrom('users-uid', c.users?.ok, `GET /api/admin-runtime-health · lectura users`, { status: adminHealth.status || 200, promote: c.users?.ok === true, evidenceLevel: LP });
     Object.entries({
       productos: 'products', inventario: 'productInventory', pedidos: 'orders',
-      comentarios: 'reviews', likes: 'likes', correos: 'emailLogs',
+      correos: 'emailLogs',
     }).forEach(([id, key]) => setFrom(id, c[key]?.ok, `GET /api/admin-runtime-health · lectura ${key}`, { status: adminHealth.status || 200 }));
   }
 
@@ -331,31 +295,14 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
 
   // Estas lecturas no mutan datos: consultan APIs públicas/protegidas y Rules
   // desplegadas, sin crear engagement ni marcar notificaciones como leídas.
-  const favoriteApi = protectedProbes.favoriteApi;
   const notificationApi = protectedProbes.notificationApi;
-  const favoriteRules = protectedProbes.firestoreRules?.favorites;
+  const carritoRules = protectedProbes.firestoreRules?.cart;
   const notificationRules = protectedProbes.firestoreRules?.notifications;
-  const favoriteOk = favoriteApi?.ok === true && favoriteRules?.ok === true;
   const notificationsOk = notificationApi?.ok === true && notificationRules?.ok === true;
-  if (favoriteApi || favoriteRules) {
-    setFrom('favoritos', favoriteOk,
-      `GET /api/engagement=200 · SDK Firestore favorites=${favoriteRules?.ok === true ? 'permitido' : 'no confirmado'}`,
-      { status: favoriteApi?.status || favoriteRules?.status, promote: favoriteOk, evidenceLevel: LP, authRequired: favoriteApi?.status === 401 || favoriteRules?.authRequired === true });
-  }
   if (notificationApi || notificationRules) {
     setFrom('notificaciones', notificationsOk,
       `GET /api/notifications?health=200 · SDK Firestore adminNotifications=${notificationRules?.ok === true ? 'permitido' : 'no confirmado'}`,
       { status: notificationApi?.status || notificationRules?.status, promote: notificationsOk, evidenceLevel: LP, authRequired: notificationApi?.status === 401 || notificationRules?.authRequired === true });
-  }
-  const engagementStats = protectedProbes.engagementStats || {};
-  const engagementRecords = protectedProbes.engagementRecords || {};
-  for (const [id, key, label] of [
-    ['likes', 'likes', 'likes'],
-    ['comentarios', 'reviews', 'reseñas'],
-  ]) {
-    const outcome = engagementWriteOutcome(engagementStats[key], engagementRecords[key], currentEvidence, label);
-    if (!outcome) continue;
-    setFrom(id, outcome.ok, outcome.note, outcome);
   }
   const sheetsWebhook = classifySheetsWebhookProbe(protectedProbes.sheetsWebhook);
   if (sheetsWebhook) {
@@ -375,17 +322,17 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       `SDK Firestore autenticado · lectura del carrito propio ${cartRules.ok === true ? 'permitida' : 'no confirmada'}; persistencia/edición no probadas`,
       { status: cartRules.status, promote: false, partial: cartRules.ok === true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
   }
-  const rulesOk = favoriteRules?.ok === true && notificationRules?.ok === true;
-  if (favoriteRules || notificationRules) {
+  const rulesOk = carritoRules?.ok === true && notificationRules?.ok === true;
+  if (carritoRules || notificationRules) {
     setFrom('reglas-firestore', rulesOk,
-      `SDK Firestore autenticado · favorites=${favoriteRules?.ok === true ? 'permitido' : 'no confirmado'} · adminNotifications=${notificationRules?.ok === true ? 'permitido' : 'no confirmado'}`,
-      { status: rulesOk ? 200 : (favoriteRules?.status || notificationRules?.status), promote: rulesOk, evidenceLevel: LP, authRequired: favoriteRules?.authRequired === true || notificationRules?.authRequired === true });
+      `SDK Firestore autenticado · cart=${carritoRules?.ok === true ? 'permitido' : 'no confirmado'} · adminNotifications=${notificationRules?.ok === true ? 'permitido' : 'no confirmado'}`,
+      { status: rulesOk ? 200 : (carritoRules?.status || notificationRules?.status), promote: rulesOk, evidenceLevel: LP, authRequired: carritoRules?.authRequired === true || notificationRules?.authRequired === true });
   }
   const firestoreAuthorityOk = publicChecks.firebase === true && rulesOk;
-  if (publicChecks.firebase !== undefined || favoriteRules || notificationRules) {
+  if (publicChecks.firebase !== undefined || carritoRules || notificationRules) {
     setFrom('firestore-fuente-verdad', firestoreAuthorityOk,
       `Firebase runtime=${publicChecks.firebase === true} · Rules protegidas=${rulesOk}`,
-      { status: publicHealth?.status || (rulesOk ? 200 : 0), promote: firestoreAuthorityOk, evidenceLevel: LP, authRequired: favoriteRules?.authRequired === true || notificationRules?.authRequired === true });
+      { status: publicHealth?.status || (rulesOk ? 200 : 0), promote: firestoreAuthorityOk, evidenceLevel: LP, authRequired: carritoRules?.authRequired === true || notificationRules?.authRequired === true });
   }
 
   // GitHub Actions y el deployment se validan contra el commit actual, no
@@ -540,29 +487,13 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
         { promote: outcome.promote, pending: outcome.pending === true, evidenceLevel: outcome.evidenceLevel });
     }
   }
-  const favoriteApi = protectedProbes.favoriteApi;
   const notificationApi = protectedProbes.notificationApi;
-  const favoriteRules = protectedProbes.firestoreRules?.favorites;
+  const carritoRules = protectedProbes.firestoreRules?.cart;
   const notificationRules = protectedProbes.firestoreRules?.notifications;
-  if (favoriteApi) {
-    set('apis-internas', 'favoritos', favoriteApi.ok === true,
-      `GET /api/engagement?action=ownFavorite → HTTP ${favoriteApi.status || 'sin respuesta'}`,
-      favoriteApi.status || 0, { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
-  }
   if (notificationApi) {
     set('apis-internas', 'notificaciones', notificationApi.ok === true,
       `GET /api/notifications?action=health → HTTP ${notificationApi.status || 'sin respuesta'}`,
       notificationApi.status || 0, { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
-  }
-  const engagementStats = protectedProbes.engagementStats || {};
-  const engagementRecords = protectedProbes.engagementRecords || {};
-  for (const [to, key, label] of [
-    ['likes', 'likes', 'likes'],
-    ['comentarios', 'reviews', 'reseñas'],
-  ]) {
-    const outcome = engagementWriteOutcome(engagementStats[key], engagementRecords[key], currentEvidence, label);
-    if (outcome) set('apis-internas', to, outcome.ok, outcome.note, outcome.status,
-      { promote: outcome.promote, partial: outcome.partial, pending: outcome.pending === true, evidenceLevel: outcome.evidenceLevel });
   }
   const sheetsWebhook = classifySheetsWebhookProbe(protectedProbes.sheetsWebhook);
   if (sheetsWebhook) {
@@ -571,17 +502,17 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
     set('apps-script', 'sheets-products-webhook', outcome.ok, `${sheetsWebhook.note} · ${inbound.note}`,
       outcome.ok ? sheetsWebhook.status : outcome.status, { promote: outcome.promote, partial: outcome.partial, evidenceLevel: outcome.evidenceLevel });
   }
-  const rulesOk = favoriteRules?.ok === true && notificationRules?.ok === true;
-  if (favoriteRules || notificationRules) {
+  const rulesOk = carritoRules?.ok === true && notificationRules?.ok === true;
+  if (carritoRules || notificationRules) {
     set('cf-functions', 'reglas-firestore', rulesOk,
       `SDK Firestore autenticado · paths protegidos=${rulesOk ? 'permitidos' : 'no confirmados'}`,
-      rulesOk ? 200 : (favoriteRules?.status || notificationRules?.status || 0), { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
+      rulesOk ? 200 : (carritoRules?.status || notificationRules?.status || 0), { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
   }
-  if (typeof checks.firebase === 'boolean' && (favoriteRules || notificationRules)) {
+  if (typeof checks.firebase === 'boolean' && (carritoRules || notificationRules)) {
     const firestoreAuthorityOk = checks.firebase === true && rulesOk;
     set('admin-guard', 'firestore-fuente-verdad', firestoreAuthorityOk,
       `Firebase runtime=${checks.firebase === true} · Rules protegidas=${rulesOk}`,
-      firestoreAuthorityOk ? 200 : (favoriteRules?.status || notificationRules?.status || 0), { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
+      firestoreAuthorityOk ? 200 : (carritoRules?.status || notificationRules?.status || 0), { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
   }
   const auditPassed = ciCheckPassed(currentEvidence, 'repositoryAudit');
   const deploymentPassed = ciCheckPassed(currentEvidence, 'cloudflarePages');

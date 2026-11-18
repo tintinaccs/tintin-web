@@ -2,8 +2,7 @@
 // Cada una queda verde únicamente con evidencia real: el Repository audit del
 // commit (que ejecuta su código), una lectura real de producción, o ambas
 // cuando la conexión incluye una escritura. Las que dependen de un sistema
-// externo (Sheets) o de la actividad de las clientas (likes, reseñas) exigen
-// además la constancia de una operación real. Ninguna se pinta a mano.
+// externo (Sheets) exigen además la constancia de una operación real. Ninguna se pinta a mano.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -163,10 +162,10 @@ test('panel → productos y panel → pedidos exigen la lectura con la sesión r
 
 test('el panel pide esas dos lecturas con el SDK y no escribe nada', () => {
   const source = read('js/admin/flujo-conexiones/flujo-conexiones-admin.js');
-  const body = source.slice(source.indexOf('async function probeClientFirestoreRules'), source.indexOf('async function probeEngagementStats'));
+  const body = source.slice(source.indexOf('async function probeClientFirestoreRules'), source.indexOf('async function probeSheetsWebhook'));
   assert.match(body, /probeClientFirestoreRead\('Productos', \(\) => getDocs\(query\(\s*collection\(db, 'products'\), limit\(1\),/);
   assert.match(body, /probeClientFirestoreRead\('Pedidos', \(\) => getDocs\(query\(\s*collection\(db, 'orders'\), limit\(1\),/);
-  assert.match(body, /return \{ favorites, notifications, cart, products, orders \};/);
+  assert.match(body, /return \{ notifications, cart, products, orders \};/);
   assert.doesNotMatch(body, /setDoc|addDoc|updateDoc|deleteDoc|writeBatch/);
 });
 
@@ -200,12 +199,10 @@ test('correos queda verde sólo con entrega confirmada de pedidos pagados reales
 const READ_OK = { ok: true, status: 200 };
 const LIVE_PAYPAL = { configured: true, enabled: true, environment: 'live', productionReady: true };
 const SANDBOX_PAYPAL = { configured: true, enabled: true, environment: 'sandbox', productionReady: false };
-const REAL_RECORD = { ok: true, status: 200, exists: true, lastAt: '2026-10-05T14:30:00.000Z' };
-const NO_RECORD = { ok: true, status: 200, exists: false, lastAt: '' };
 const channel = (overrides = {}) => ({ deploymentRevision: 'test-current', currentDeploymentRevision: 'test-current', lastSuccessAt: '', lastSuccessKind: '', revision: '', lastErrorAt: '', lastErrorKind: '', lastError: '', ...overrides });
 const INBOUND_OK = channel({ lastSuccessAt: '2026-10-06T10:00:00.000Z', lastSuccessKind: 'saveProduct', revision: PRODUCTS_WEBHOOK_EXPECTED_REVISION });
 const MIRROR_OK = channel({ lastSuccessAt: '2026-10-06T11:00:00.000Z', lastSuccessKind: 'order' });
-const fullInput = ({ paypal = LIVE_PAYPAL, engagementRecords, sheetsEvidence, audit = 'PASS', sheets = true, webhook } = {}) => ({
+const fullInput = ({ paypal = LIVE_PAYPAL, sheetsEvidence, audit = 'PASS', sheets = true, webhook } = {}) => ({
   publicHealth: health(),
   systemHealth: { status: 200, body: { report: {
     ...emailReport(),
@@ -224,10 +221,8 @@ const fullInput = ({ paypal = LIVE_PAYPAL, engagementRecords, sheetsEvidence, au
     admin: { path: '/admin', ...READ_OK }, cart: { path: '/', ...READ_OK, hasCartDrawer: true },
   },
   protectedProbes: {
-    favoriteApi: READ_OK, notificationApi: READ_OK,
-    firestoreRules: { favorites: READ_OK, notifications: READ_OK, cart: READ_OK, products: READ_OK, orders: READ_OK },
-    engagementStats: { likes: READ_OK, reviews: READ_OK },
-    ...(engagementRecords ? { engagementRecords } : {}),
+    notificationApi: READ_OK,
+    firestoreRules: { notifications: READ_OK, cart: READ_OK, products: READ_OK, orders: READ_OK },
     sheetsWebhook: webhook || { status: 200, revision: 'products-canonical-v3', authState: 'configured' },
   },
   sessionProbe: { authenticated: true, token: true, role: true, profile: true, status: 200 },
@@ -246,31 +241,24 @@ const SHEETS_RECORDS = [
   'apps-script → google-sheets', 'apps-script → sheets-products-webhook', 'firestore → apps-script',
   'google-sheets', 'google-sheets → apps-script', 'sheets-products-webhook', 'sheets-products-webhook → firestore',
 ];
-const ENGAGEMENT_RECORDS = ['apis-internas → comentarios', 'apis-internas → likes', 'comentarios', 'likes'];
 const PAYPAL_RECORDS = ['apis-internas → servicios-externos', 'servicios-externos'];
 
-test('sin ninguna operación real registrada, sólo quedan pendientes Sheets, likes y reseñas', () => {
+test('sin ninguna operación real registrada, sólo quedan pendientes los registros de Sheets', () => {
   // Ninguna lectura demuestra esas escrituras: siguen fuera del verde a
   // propósito hasta que producción registre una operación real.
-  assert.deepEqual(pendingOf(fullInput()), [...SHEETS_RECORDS, ...ENGAGEMENT_RECORDS].sort());
+  assert.deepEqual(pendingOf(fullInput()), [...SHEETS_RECORDS].sort());
   assert.deepEqual(
-    pendingOf(fullInput({ engagementRecords: { likes: NO_RECORD, reviews: NO_RECORD }, sheetsEvidence: { inbound: channel(), mirror: channel() } })),
-    [...SHEETS_RECORDS, ...ENGAGEMENT_RECORDS].sort(),
+    pendingOf(fullInput({ sheetsEvidence: { inbound: channel(), mirror: channel() } })),
+    [...SHEETS_RECORDS].sort(),
   );
   // PayPal en Sandbox es un estado real de configuración: no se disimula.
-  assert.deepEqual(pendingOf(fullInput({ paypal: SANDBOX_PAYPAL })), [...SHEETS_RECORDS, ...ENGAGEMENT_RECORDS, ...PAYPAL_RECORDS].sort());
+  assert.deepEqual(pendingOf(fullInput({ paypal: SANDBOX_PAYPAL })), [...SHEETS_RECORDS, ...PAYPAL_RECORDS].sort());
 });
 
 test('con operaciones reales registradas y el audit en PASS no queda nada pendiente salvo PayPal en Sandbox', () => {
-  const real = { engagementRecords: { likes: REAL_RECORD, reviews: REAL_RECORD }, sheetsEvidence: { inbound: INBOUND_OK, mirror: MIRROR_OK } };
+  const real = { sheetsEvidence: { inbound: INBOUND_OK, mirror: MIRROR_OK } };
   assert.deepEqual(pendingOf(fullInput(real)), []);
   assert.deepEqual(pendingOf(fullInput({ ...real, paypal: SANDBOX_PAYPAL })), PAYPAL_RECORDS);
-  // Cada evidencia real mueve sólo lo suyo.
-  assert.deepEqual(pendingOf(fullInput({ engagementRecords: real.engagementRecords })), SHEETS_RECORDS);
-  assert.deepEqual(pendingOf(fullInput({ sheetsEvidence: real.sheetsEvidence })), ENGAGEMENT_RECORDS);
-  // Un registro real sin el audit del commit no alcanza, y con el audit en FAIL es un error visible.
-  assert.ok(ENGAGEMENT_RECORDS.every(id => pendingOf(fullInput({ ...real, audit: null })).includes(id)));
-  for (const id of ['likes', 'comentarios']) assert.equal(nodeState(id, fullInput({ ...real, audit: 'FAIL' })), ESTADOS.ERROR);
 });
 
 test('firestore → carrito exige la lectura real del carrito y las Rules del carrito ejecutadas en el audit', () => {
@@ -300,71 +288,6 @@ test('firestore → carrito exige la lectura real del carrito y las Rules del ca
   assert.ok(edgeOf('firestore', 'carrito').evidence.some(item => item.file === 'scripts/probar-firestore-critico.mjs'));
 });
 
-test('likes y reseñas exigen estadísticas reales, un registro real de la API y el audit del commit', () => {
-  const input = ({ stats = READ_OK, record = REAL_RECORD, audit = 'PASS' } = {}) => ({
-    protectedProbes: { engagementStats: { likes: stats, reviews: stats }, engagementRecords: record ? { likes: record, reviews: record } : undefined },
-    currentEvidence: audit ? ci(audit) : undefined,
-  });
-  for (const [id, label] of [['likes', 'likes'], ['comentarios', 'reseñas']]) {
-    const state = probes => [nodeState(id, probes), edgeState('apis-internas', id, probes)];
-    assert.deepEqual(state(input()), [ESTADOS.PROD, ESTADOS.PROD]);
-    const live = buildLiveChecks(input(), AT)[id];
-    assert.equal(live.evidenceLevel, EVIDENCIA.LIVE_PRODUCTION);
-    assert.ok(live.note.includes('último: 2026-10-05T14:30:00.000Z'), 'el detalle muestra la fecha del registro real');
-    assert.ok(live.note.includes(WRITE_CONTRACT_SUITES.engagement));
-    assert.ok(live.note.includes(label));
-
-    assert.deepEqual(state(input({ record: NO_RECORD })), [ESTADOS.PARCIAL, ESTADOS.PARCIAL], 'sin registro real sigue parcial');
-    assert.match(buildLiveChecks(input({ record: NO_RECORD }), AT)[id].note, /todavía no hay ningún registro real/);
-    assert.deepEqual(state(input({ record: null })), [ESTADOS.PARCIAL, ESTADOS.PARCIAL], 'sin la lectura del registro sigue parcial');
-    assert.deepEqual(state(input({ record: { ok: false, status: 403, authRequired: true, exists: false } })), [ESTADOS.PARCIAL, ESTADOS.PARCIAL]);
-    assert.deepEqual(state(input({ audit: null })), [ESTADOS.PARCIAL, ESTADOS.PARCIAL], 'sin CI del commit sigue parcial');
-    assert.deepEqual(state(input({ audit: 'FAIL' })), [ESTADOS.ERROR, ESTADOS.ERROR], 'la prueba de escritura fallida se ve en rojo');
-    for (const running of ['RUNNING', 'QUEUED', 'NOT_VERIFIED']) {
-      for (const value of state(input({ audit: running }))) {
-        assert.notEqual(value, ESTADOS.PROD);
-        assert.notEqual(value, ESTADOS.ERROR);
-      }
-    }
-    // Un registro real no tapa una lectura caída de las estadísticas.
-    for (const value of state(input({ stats: { ok: false, status: 500 } }))) assert.equal(value, ESTADOS.ERROR);
-  }
-});
-
-test('la prueba de escritura de participación ejecuta el código real y corre en el Repository audit', () => {
-  const file = 'tests/engagement/escritura-participacion.test.mjs';
-  const source = read(file);
-  assert.match(source, /import \{[^}]*createReview[^}]*toggleFavorite[^}]*\} from /s);
-  assert.ok(source.includes('cloudflare/participacion-clientes.js'), 'importa el módulo real de participación');
-  assert.match(source, /await toggleFavorite\(ENV, CLIENTA/);
-  assert.match(source, /await createReview\(ENV, CLIENTA/);
-  assert.match(source, /documents:commit/, 'pasa por el commit real de firebase-admin-ligero');
-  const scripts = JSON.parse(read('package.json')).scripts;
-  assert.ok(scripts['test:engagement'].includes('tests/engagement/*.test.mjs'));
-  assert.match(executedCICommands(), /npm run test:engagement/);
-  assert.ok(WRITE_CONTRACT_SUITES.engagement.includes(file));
-  for (const record of [NODES.find(node => node.id === 'likes'), NODES.find(node => node.id === 'comentarios'), edgeOf('apis-internas', 'likes'), edgeOf('apis-internas', 'comentarios')]) {
-    assert.ok(record.evidence.some(item => item.file === file), `${record.id} debe citar ${file}`);
-  }
-  // Sólo la API escribe esos registros: por eso su existencia prueba una escritura real.
-  const rules = read('firestore.rules');
-  for (const collection of ['reviewRecords', 'likeRecords']) {
-    assert.match(rules, new RegExp(`match /${collection}/\\{[a-zA-Z]+\\} \\{\\s+allow read: if isSuperAdmin\\(\\);\\s+allow create, update, delete: if false;`));
-  }
-  assert.match(read('scripts/probar-firestore-critico.mjs'), /for \(const collectionId of \['likeRecords', 'reviewRecords'\]\)/);
-});
-
-test('el panel lee el último registro real de participación sin escribir nada', () => {
-  const source = read('js/admin/flujo-conexiones/flujo-conexiones-admin.js');
-  const body = source.slice(source.indexOf('async function probeEngagementRecords'), source.indexOf('async function probeSheetsWebhook'));
-  assert.match(body, /getDocs\(query\(collection\(db, collectionId\), orderBy\('createdAt', 'desc'\), limit\(1\)\)\)/);
-  assert.match(body, /latest\('likeRecords'\), latest\('reviewRecords'\)/);
-  assert.match(body, /exists: !snapshot\.empty/);
-  assert.doesNotMatch(body, /setDoc|addDoc|updateDoc|deleteDoc|writeBatch|fetch\(/);
-  assert.match(source, /probeEngagementRecords\(user, signal\),/);
-  assert.equal((source.match(/engagementStats, engagementRecords, sheetsWebhook \}/g) || []).length, 2, 'nodos y conexiones reciben la misma evidencia');
-});
-
 test('el acuse de Sheets se clasifica por el resultado de la última operación real', () => {
   assert.equal(classifySheetsChannel(undefined).state, 'none');
   assert.equal(classifySheetsChannel(channel()).state, 'none');
@@ -383,7 +306,7 @@ test('el acuse de Sheets se clasifica por el resultado de la última operación 
 test('cada conexión con Sheets queda verde sólo con el acuse de su sentido', () => {
   const INBOUND = ['google-sheets → apps-script', 'apps-script → sheets-products-webhook', 'sheets-products-webhook → firestore', 'sheets-products-webhook'];
   const MIRROR = ['firestore → apps-script', 'apps-script → google-sheets'];
-  const pendingSheets = options => pendingOf(fullInput({ engagementRecords: { likes: REAL_RECORD, reviews: REAL_RECORD }, ...options }));
+  const pendingSheets = options => pendingOf(fullInput(options));
   // Una edición real de la hoja confirma el camino hoja → Firestore, no el espejo.
   assert.deepEqual(pendingSheets({ sheetsEvidence: { inbound: INBOUND_OK, mirror: channel() } }), [...MIRROR, 'google-sheets'].sort());
   // Un pedido aceptado por Apps Script confirma el espejo, no el camino hoja → Firestore.
