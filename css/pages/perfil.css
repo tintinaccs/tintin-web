@@ -277,7 +277,7 @@ body[data-tt-profile-v2="1"] .tt-profile-tabs{background:#fff!important}
 /* Mis datos: los campos llegan bloqueados y «Editar» los habilita. */
 .tt-profile-data-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px; }
 .tt-profile-data-head .perfil-section-title { margin:0; }
-.tt-profile-edit-toggle { display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:8px 14px; border:1px solid var(--border,#F8AACA); border-radius:999px; background:var(--color-background-surface,#fff); color:var(--color-text-primary,#222222); font:600 12px/1.2 Montserrat,system-ui,sans-serif; cursor:pointer; transition:background-color .15s ease; }
+.tt-profile-edit-toggle { display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:8px 14px; border:1px solid var(--border,#F8AACA); border-radius:999px; background:var(--color-background-surface,#fff); color:var(--color-text-primary,#222222); font:600 12px/1.2 Montserrat,sans-serif; cursor:pointer; transition:background-color .15s ease; }
 .tt-profile-edit-toggle:hover { background:#FDECF2; }
 .tt-profile-edit-toggle:disabled { opacity:.5; cursor:not-allowed; }
 .tt-profile-edit-toggle[hidden] { display:none; }
