@@ -268,6 +268,51 @@ export async function deleteFirebaseUser(env, uid) {
   }
 }
 
+/**
+ * Cambia el correo de acceso de una cuenta (sólo lo llama la Super Admin).
+ * El UID, los pedidos y el historial se conservan. Se quitan Google y
+ * contraseña del correo anterior y se invalidan las sesiones abiertas: desde
+ * ahí la persona entra con el correo nuevo (código por correo, o Google si ese
+ * correo es de Google). Falla si el correo ya es de otra cuenta.
+ */
+export async function updateFirebaseUserEmail(env, uid, newEmail) {
+  const safeUid = String(uid || '').trim();
+  if (!/^[A-Za-z0-9_-]{6,128}$/.test(safeUid)) throw new Error('UID inválido');
+  const email = String(newEmail || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) throw new Error('Correo inválido.');
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+  const lookup = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ localId: [safeUid] })
+  });
+  const lookupData = await lookup.json().catch(() => ({}));
+  const user = lookup.ok && Array.isArray(lookupData.users) ? lookupData.users[0] : null;
+  if (!user?.localId) throw new Error('La cuenta de acceso no existe.');
+  const previousEmail = String(user.email || '').toLowerCase();
+  if (previousEmail === email && user.emailVerified === true) return { changed: false, previousEmail, removedProviders: [] };
+  const owner = await lookupUserByEmail(accessToken, email);
+  if (owner?.localId && owner.localId !== safeUid) {
+    throw Object.assign(new Error('El correo ya pertenece a otra cuenta.'), { status: 409 });
+  }
+  const removedProviders = (user.providerUserInfo || [])
+    .map(provider => provider?.providerId)
+    .filter(provider => provider === 'google.com' || provider === 'password');
+  const body = { localId: safeUid, email, emailVerified: true, validSince: String(Math.floor(Date.now() / 1000)) };
+  if (previousEmail !== email && removedProviders.length) body.deleteProvider = [...new Set(removedProviders)];
+  const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    if (data?.error?.message === 'EMAIL_EXISTS') throw Object.assign(new Error('El correo ya pertenece a otra cuenta.'), { status: 409 });
+    throw new Error('No se pudo cambiar el correo de acceso: ' + (data?.error?.message || response.status));
+  }
+  return { changed: true, previousEmail, removedProviders: body.deleteProvider || [] };
+}
+
 /** Habilita/deshabilita una cuenta sin destruir su UID ni su email histórico. */
 export async function setFirebaseUserDisabled(env, uid, disabled) {
   const safeUid = String(uid || '').trim();

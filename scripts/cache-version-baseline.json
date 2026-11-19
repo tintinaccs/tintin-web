@@ -236,8 +236,8 @@
     "sha256": "581964d809a816060da3daf349a61bc0b8e19e04cf2b6750bfbcce71bd694fa0"
   },
   "css/generated/perfil-2.css": {
-    "version": "tintin-perfil-209885eb074cce42",
-    "sha256": "209885eb074cce42b935ef7e9020b5f4701078e46b025adb684952cc30468aea"
+    "version": "tintin-perfil-bdda86a84e41c549",
+    "sha256": "bdda86a84e41c5491d00456a995f8079557c042f3dc5722d9a0d9bc0cbe60f59"
   },
   "css/generated/perfil.css": {
     "version": "tintin-perfil-95cbf6262748ea70",
@@ -344,8 +344,8 @@
     "sha256": "17d934872cd584b0e7566434c5a44641a02c3079b6bbdda69ea861beb06ae831"
   },
   "css/pages/perfil.css": {
-    "version": "tintin-20261117-editorial-1",
-    "sha256": "afbb7f1a8b9902e19a03f1fc9b0949ab94b52da1375b5def5395e3c5cf2e94e9"
+    "version": "tintin-20261119-perfil-datos-1",
+    "sha256": "a50d05c814a56706349b54ca3133ea76530e288536c89926b203044f453e0c14"
   },
   "css/pages/product/product-extras.css": {
     "version": "tintin-20261117-editorial-1",
@@ -428,8 +428,8 @@
     "sha256": "514d9efdfbab7215dd716f714d46d732c6f935d2e4d321223df22fe89a44fb9c"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20261119-presence-1",
-    "sha256": "707f0c917256ea1f1e65066dc31ec3130cc23a0d01c438a97bab93dbe0c80a5c"
+    "version": "tintin-20261119-compra-vinculada-2",
+    "sha256": "ff7497346d1ae808c2acba3b8ba12d80c4aba96946c322020a52059e80ee34fa"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20261021-commerce-review-1",
@@ -608,8 +608,8 @@
     "sha256": "a68ac7959f3f85ced932125e4dada5411b09edd315debd925a0e5936cafd1bc9"
   },
   "js/admin/orders/pedidos-superadmin-crud.js": {
-    "version": "tintin-20261113-senas-saldos-1",
-    "sha256": "6d4ddfd62c08acdb400d1a85e78e0992e1d2e37908745dc93d735707ad110fca"
+    "version": "tintin-20261119-compra-vinculada-2",
+    "sha256": "256d665e3185e124e09aa2cf38e3e72d80137b5923755f34988e45280aa8166d"
   },
   "js/admin/orders/seleccion-devolucion.mjs": {
     "version": "tintin-20261017-stat-controls-1",
@@ -792,12 +792,12 @@
     "sha256": "68abad5ca69b3fe98bb2499d6599fba2b4dfcc69371e31802e238c22200dea15"
   },
   "js/admin/users/ficha-usuario-admin.js": {
-    "version": "tintin-20261119-presence-1",
-    "sha256": "d549b2cc129b2531b141fb29717931be29d10df09dfcb36296b9d2949a96eb61"
+    "version": "tintin-20261119-ficha-cliente-1",
+    "sha256": "d781285534c6865dcec4cc18b4cc7081fda8b84739afbc81428937863db0b29c"
   },
   "js/admin/users/gestion-usuarios-admin.js": {
-    "version": "tintin-20261119-presence-1",
-    "sha256": "1cfd9eede9b50d360330dff2cacef3f500a449cd41f582ecd7556376da0b6045"
+    "version": "tintin-20261119-ficha-cliente-1",
+    "sha256": "16d39768ef946c948df4f282e74b6047383be4db82859ae42e3566cabcedf274"
   },
   "js/admin/users/historial-actividad.mjs": {
     "version": "tintin-20261119-presence-1",
@@ -844,8 +844,8 @@
     "sha256": "7d3e6fd9a977ff1c149914816ed5da745a88a0c9a88ccb2d09a34d359bf72cb0"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20261119-presence-1",
-    "sha256": "dd657c9dfd32b2bc48440831f6513f8749c77b20a2b641a59fc896a661a62bd2"
+    "version": "tintin-20261119-ficha-cliente-1",
+    "sha256": "c79180327a0252ae24e88528431e95d2ebd8fccfa7b79cf790c725b4ab765135"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -1684,8 +1684,8 @@
     "sha256": "65b03aa3234f62e80acf7a9e8b3de6c527126c2183d122fa8af279d8f1980944"
   },
   "js/quality/calidad-interfaz.js": {
-    "version": "tintin-20261119-presence-1",
-    "sha256": "c102345d06acadd34bc5c1f4432691ad594feb26bf92c87ff137ebe11fa9f857"
+    "version": "tintin-20261119-ficha-cliente-1",
+    "sha256": "4eb86e3c0b49b778b10b1f06dd00eb62d885578afb88836bb060fa2d93fa8d63"
   },
   "js/quality/cambios-tienda.js": {
     "version": "tintin-20261029-performance-1-p1112",

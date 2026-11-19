@@ -1,3 +1,57 @@
+## Compra vinculada, ficha de cliente editable y Mi perfil con edición bloqueada — 2026-11-19 — Claude Code
+
+Base b14787f, rama claude/tender-knuth-1na2of. Pedido de la titular:
+- vincular una compra a un cliente como compra real;
+- poder editar todos los datos del cliente, incluido el correo de acceso;
+- un Mi perfil con los campos bloqueados hasta tocar «Editar».
+
+### Compra vinculada
+- Acción `createLinkedOrder` en /api/admin-order-mutation, solo para la Super Admin.
+- `prepareLinkedPurchaseInput` toma la identidad del comprador (uid, Customer ID, correo, nombre y teléfono) del perfil leído en el servidor.
+- Rechaza clientes bloqueados, eliminados, sin correo válido y la cuenta Super Admin.
+- `createOrderAdmin` con origen `superadmin-linked-purchase` hace lo siguiente:
+  - aplica `reserve-on-checkout`, así que el stock se descuenta al crear el pedido y en 0 el producto queda agotado;
+  - asigna un TINPED nuevo y deja `linkedPurchase: true`, `linkedBy` y la auditoría `vincular_compra_cliente`.
+- Después corre el mismo circuito que el checkout: push `order.created`, ticket por correo con cola de reintento, estadísticas del cliente y Sheets.
+- El `orderId` `linked_*` hace idempotente el reintento.
+
+### Ficha de cliente
+- Acción `updateCustomerProfile`, en `cloudflare/perfil-cliente-admin.mjs`.
+- Exige nombre, apellido, teléfono real y correo válido. Exige dirección solo si ya existía.
+- Valida el teléfono contra la reserva de otra cuenta (409).
+- Protección contra conflictos: CAS por updateTime, `baseChangeId` y `changeId` idempotente.
+- Si cambia el correo:
+  - Identity Toolkit `accounts:update` asigna el correo nuevo y quita Google y contraseña del anterior;
+  - `validSince` cierra las sesiones abiertas;
+  - la auditoría registra `cambiar_correo_cliente`;
+  - si el commit falla, el correo de acceso vuelve al anterior.
+
+### Mi perfil
+- Los campos quedan readonly al entrar.
+- El botón «Editar» habilita nombre, teléfono y dirección; Cancelar y Guardar vuelven a bloquearlos.
+- El correo se muestra solo para lectura; únicamente la Super Admin lo cambia.
+- Las Firestore rules no cambiaron: `email` ya era un campo protegido.
+
+### Mantenimiento
+- Caché: tags `tintin-20261119-ficha-cliente-1`, `compra-vinculada-2` y `perfil-datos-1` en la cadena afectada y en los 18 HTML. Baseline registrado.
+- CSP regenerada con build:csp, porque cambió el script inline de perfil. Manifiesto de diagnóstico reconstruido.
+
+### PASS_LOCAL
+- Pruebas nuevas: `tests/orders/linked-purchase.test.mjs` y `tests/accounts/customer-profile-admin.test.mjs`, 9/9.
+- Suite node completa: 2320 pass y 15 fail. Las 15 fallas son idénticas sobre la base sin estos cambios (comparación por nombre de test).
+- Chromium: `critical-flows`, 22/22, desktop y móvil, con emuladores.
+- Auditorías: superadmin-maestro, admin-usuarios-roles, seguridad-fase-8, estabilidad-final-v1, acceso-perfil-incorporacion, headers-produccion, cache-versioning, verify:csp y manifiesto.
+
+### Fallas previas no relacionadas, no modificadas
+- `auditar-perfil-pedidos-pagina`: 4 checks, también fallan sin cambios.
+- Geometría de `initial-profile-render.spec.js`: 7 tests (top 8 < 112), también fallan sin cambios.
+- `page-loader-route`.
+
+### Límites no verificados
+- No se probó contra producción, para no crear pedidos, correos ni cambios de cuenta reales.
+- El ingreso con Google usando el correo nuevo depende de que ese correo sea de Google, y no se probó en vivo.
+- Si el rollback del correo ocurre, no restaura los proveedores Google y contraseña quitados. La persona entra con código al correo anterior.
+
 ## Push instantáneo y presencia en línea en tiempo real — 2026-11-19 — Claude Code
 
 Base db28312, rama claude/tender-knuth-1na2of. Reporte de la titular: los avisos push llegan tarde y el panel no muestra a tiempo quién está en línea.

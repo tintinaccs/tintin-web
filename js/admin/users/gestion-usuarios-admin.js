@@ -14,5 +14,5 @@
 
 window.TintinAdminUsersPhase8Booted = true;
 
-await import('./ficha-usuario-admin.js?v=tintin-20261119-presence-1');
+await import('./ficha-usuario-admin.js?v=tintin-20261119-ficha-cliente-1');
 await import('./perfil-usuario-superadmin.js?v=tintin-20261101-admin-spaced-1');

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="09b28d70c577f06b2466c2a3e4e0d0b38b58389756c1cf0b4bd665340e40a1ad">
+  <meta name="tintin-page-revision" content="b9c67645220ace1897a9d9c964a75c1702b4344f99858f023606ea9d7ac2d351">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261119-presence-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261119-ficha-cliente-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261116-discovery-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20261117-activity-2" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
@@ -41,11 +41,11 @@
   <link rel="tt-bundled-stylesheet" href="css/quality/movimiento.css?v=tintin-20261114-global-motion-1" disabled data-tt-style-bundle="tt-perfil-css-bundle">
   <link rel="tt-bundled-stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261021-location-profile-layout-2-p1106" disabled data-tt-style-bundle="tt-perfil-css-bundle">
   <link rel="stylesheet" href="/js/vendor/leaflet/leaflet.css?v=leaflet-1.9.4-tintin-2" integrity="sha256-ugti1XvT9fCYo/vrONAf0r5FKu/U8H04PwZikxySCts=" crossorigin="anonymous" />
-  <link rel="stylesheet" id="tt-perfil-css-bundle-2" href="css/generated/perfil-2.css?v=tintin-perfil-209885eb074cce42">
+  <link rel="stylesheet" id="tt-perfil-css-bundle-2" href="css/generated/perfil-2.css?v=tintin-perfil-bdda86a84e41c549">
   <link rel="tt-bundled-stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-footer-gradient-20261016-1" disabled data-tt-style-bundle="tt-perfil-css-bundle-2">
   <link rel="tt-bundled-stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261117-editorial-1" disabled data-tt-style-bundle="tt-perfil-css-bundle-2">
   <script>document.documentElement.classList.add('profile-auth-pending');</script>
-  <link rel="tt-bundled-stylesheet" href="css/pages/perfil.css?v=tintin-20261117-editorial-1" disabled data-tt-style-bundle="tt-perfil-css-bundle-2">
+  <link rel="tt-bundled-stylesheet" href="css/pages/perfil.css?v=tintin-20261119-perfil-datos-1" disabled data-tt-style-bundle="tt-perfil-css-bundle-2">
   <script type="module" src="js/quality/estabilidad-final-publica.js?v=tintin-20261022-avatar-inicial-1-p1112"></script>
   <script id="tt-section-flow-runtime" src="js/theme/alternancia-secciones.js?v=tintin-client-fades-20261105-1" defer></script>
   <!-- Estructura pública disponible desde el primer render -->
@@ -113,26 +113,40 @@
 </section>
 </section>
 <section class="tt-profile-panel" id="profile-panel-datos" data-profile-panel="datos" role="tabpanel" aria-labelledby="profile-tab-datos">
-<div class="perfil-card">
-
+<div class="perfil-card tt-profile-data-card" data-profile-editing="false">
     <div class="perfil-body">
-      <div class="perfil-section-title">Mis datos</div>
+      <div class="tt-profile-data-head">
+        <div class="perfil-section-title">Mis datos</div>
+        <button type="button" class="tt-profile-edit-toggle" id="btn-editar-perfil" aria-controls="perfil-datos-campos" aria-expanded="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Editar</button>
+      </div>
+      <p class="tt-profile-data-hint" id="perfil-datos-hint" aria-live="polite">Tus datos están protegidos. Tocá «Editar» para cambiarlos.</p>
+      <div class="tt-profile-data-fields" id="perfil-datos-campos">
       <div class="perfil-field">
-        <label class="perfil-label">Nombre</label>
-        <input type="text" class="perfil-input" id="perfil-nombre" placeholder="Tu nombre completo" />
+        <label class="perfil-label" for="perfil-nombre">Nombre y apellido</label>
+        <input type="text" class="perfil-input" id="perfil-nombre" readonly autocomplete="name" placeholder="Tu nombre y apellido" />
       </div>
       <div class="perfil-field">
-        <label class="perfil-label">Teléfono *</label>
-        <input type="tel" class="perfil-input" id="perfil-tel" required aria-required="true" autocomplete="tel-national" placeholder="0912 345 678 o 912 345 678" />
+        <label class="perfil-label" for="perfil-tel">Teléfono *</label>
+        <input type="tel" class="perfil-input" id="perfil-tel" readonly required aria-required="true" autocomplete="tel-national" placeholder="0912 345 678 o 912 345 678" />
       </div>
       <div class="perfil-field">
-        <label class="perfil-label">Dirección de entrega (opcional)</label>
-        <input type="text" class="perfil-input" id="perfil-dir" placeholder="Ej: Av. España 1234, Asunción" />
+        <label class="perfil-label" for="perfil-dir">Dirección de entrega (opcional)</label>
+        <input type="text" class="perfil-input" id="perfil-dir" readonly autocomplete="street-address" placeholder="Ej: Av. España 1234, Asunción" />
+      </div>
+      <div class="perfil-field tt-profile-locked-field">
+        <label class="perfil-label" for="perfil-email">Correo de acceso</label>
+        <input type="email" class="perfil-input" id="perfil-email" readonly aria-describedby="perfil-email-note" />
+        <p class="tt-profile-field-note" id="perfil-email-note">Solo Tintín puede cambiar tu correo de acceso. Si necesitás actualizarlo, escribinos.</p>
       </div>
       <div class="perfil-field" id="perfil-username-field" hidden>
         <label class="perfil-label" for="perfil-username">Nombre de usuario</label>
-        <input type="text" class="perfil-input" id="perfil-username" placeholder="minusculas_y_numeros" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <input type="text" class="perfil-input" id="perfil-username" readonly placeholder="minusculas_y_numeros" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" />
         <div id="perfil-username-hint" style="font-size:12px;color:var(--text-muted);margin-top:4px"></div>
+      </div>
+      </div>
+      <div class="tt-profile-data-actions" id="perfil-datos-acciones" hidden>
+        <button type="button" class="perfil-btn perfil-btn-primary" id="btn-guardar-perfil"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Guardar cambios</button>
+        <button type="button" class="perfil-btn perfil-btn-outline" id="btn-cancelar-perfil">Cancelar</button>
       </div>
     </div>
   </div>
@@ -175,11 +189,6 @@
       </div>
     </div>
   </div>
-<div class="perfil-card">
-  <div class="perfil-body">
-      <button type="button" class="perfil-btn perfil-btn-primary" id="btn-guardar-perfil" style="width:100%;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar cambios</button>
-  </div>
-</div>
 </section>
 <section class="tt-profile-panel" id="profile-panel-pedidos" data-profile-panel="pedidos" role="tabpanel" aria-labelledby="profile-tab-pedidos" hidden>
 <div class="perfil-card" id="perfil-orders-card">
@@ -354,6 +363,41 @@ function statusBadge(status) {
 const dirtyProfileFields = new Set();
 const profileFieldIds = ['perfil-nombre', 'perfil-tel', 'perfil-dir', 'perfil-username'];
 profileFieldIds.forEach(id => document.getElementById(id).addEventListener('input', () => dirtyProfileFields.add(id)));
+// Los datos se muestran bloqueados; «Editar» los habilita y «Cancelar»
+// devuelve los últimos valores confirmados. El correo nunca se edita acá.
+const editableProfileFieldIds = ['perfil-nombre', 'perfil-tel', 'perfil-dir', 'perfil-username'];
+const confirmedProfileValues = {};
+let profileEditing = false;
+function setProfileEditing(editing) {
+  profileEditing = Boolean(editing);
+  document.querySelector('.tt-profile-data-card')?.setAttribute('data-profile-editing', String(profileEditing));
+  editableProfileFieldIds.forEach(id => { document.getElementById(id).readOnly = !profileEditing; });
+  document.getElementById('perfil-datos-acciones').hidden = !profileEditing;
+  const toggle = document.getElementById('btn-editar-perfil');
+  toggle.hidden = profileEditing;
+  toggle.setAttribute('aria-expanded', String(profileEditing));
+  document.getElementById('perfil-datos-hint').textContent = profileEditing
+    ? 'Podés cambiar tu nombre, apellido, teléfono y dirección. Tu correo lo cambia solo Tintín.'
+    : 'Tus datos están protegidos. Tocá «Editar» para cambiarlos.';
+}
+function cancelProfileEditing() {
+  for (const [id, value] of Object.entries(confirmedProfileValues)) document.getElementById(id).value = value;
+  dirtyProfileFields.clear();
+  setProfileEditing(false);
+}
+function finishProfileEditing() {
+  editableProfileFieldIds.forEach(id => { confirmedProfileValues[id] = document.getElementById(id).value; });
+  dirtyProfileFields.clear();
+  setProfileEditing(false);
+}
+document.getElementById('btn-editar-perfil').onclick = () => {
+  setProfileEditing(true);
+  document.getElementById('perfil-nombre').focus();
+};
+document.getElementById('btn-cancelar-perfil').onclick = () => {
+  cancelProfileEditing();
+  document.getElementById('btn-editar-perfil').focus();
+};
 let profileGeneration = 0;
 let activeProfileUid = null;
 let profileConfirmed = false;
@@ -394,6 +438,7 @@ function hydrateProfilePresentation(profile, user, profilePending = false) {
   } else avatar.textContent = initial;
   document.getElementById('perfil-nombre-display').textContent = identity.name || identity.email || 'Mi cuenta';
   document.getElementById('perfil-email-display').textContent = identity.email;
+  document.getElementById('perfil-email').value = identity.email || '';
   const national = phoneKey(identity.phone || '', DEFAULT_COUNTRY);
   const fields = {
     'perfil-nombre': identity.name || '',
@@ -402,6 +447,7 @@ function hydrateProfilePresentation(profile, user, profilePending = false) {
     'perfil-username': identity.username || '',
   };
   for (const [id, value] of Object.entries(fields)) {
+    confirmedProfileValues[id] = value;
     if (!dirtyProfileFields.has(id)) document.getElementById(id).value = value;
   }
   return identity;
@@ -414,6 +460,8 @@ function setProfileReadState(state, message) {
   notice.textContent = message;
   document.getElementById('btn-guardar-perfil').disabled = state !== 'ready';
   document.getElementById('btn-reintentar-perfil').hidden = state !== 'error';
+  document.getElementById('btn-editar-perfil').disabled = state === 'blocked';
+  if (state === 'blocked' && profileEditing) cancelProfileEditing();
 }
 
 function startProfileAuthGuard() {
@@ -434,6 +482,8 @@ async function loadProfile(user, attempt = 0) {
     stopProfileEditor = null;
     if (activeProfileUid !== (user?.uid || null)) {
       dirtyProfileFields.clear();
+      Object.keys(confirmedProfileValues).forEach(id => delete confirmedProfileValues[id]);
+      setProfileEditing(false);
       renderSavedLocation([]);
       document.getElementById('perfil-role-card').style.display = 'none';
       document.getElementById('link-admin-panel').style.display = 'none';
@@ -763,6 +813,7 @@ async function loadProfile(user, attempt = 0) {
         usernameInput.disabled = true;
         document.getElementById('perfil-username-hint').textContent = 'Ya usaste tu único cambio de nombre de usuario.';
       }
+      if (typeof finishProfileEditing === 'function') finishProfileEditing();
       toast('✅ Perfil actualizado');
     } catch (e) {
       if (!isCurrent()) return;
