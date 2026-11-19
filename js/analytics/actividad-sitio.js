@@ -66,6 +66,9 @@ if (
   let heartbeatInFlight = false;
   let lastHeartbeatWriteAt = 0;
   let activityObserver = null, transitionTimer = 0, pendingEvents = [], identityUid;
+  // Identifica esta carga de página: el servidor solo acepta su aviso de salida
+  // si fue la última en registrar presencia (otra pestaña sigue en línea).
+  const pageId = randomId('p_');
   const EVENTS_KEY = 'tt_activity_pending_v1';
   function savePending() { storageSet(window.sessionStorage, EVENTS_KEY, JSON.stringify({sessionId,events:pendingEvents})); }
   function recordTransition(action,context) {
@@ -254,7 +257,7 @@ if (
       writeLastHeartbeatWriteAt(identityDay, visitorId, lastHeartbeatWriteAt);
       const batch=pendingEvents.slice(0,12);
       while(batch.length && new TextEncoder().encode(JSON.stringify(batch)).length>2800)batch.pop();
-      const result=await postActivity('presence', { visitorId, sessionId, route: safePage(), context:activityObserver?.context(), events:batch, consent: true });
+      const result=await postActivity('presence', { visitorId, sessionId, pageId, route: safePage(), context:activityObserver?.context(), events:batch, consent: true });
       if(result.recorded===true){const sent=new Set(batch.map(event=>event.id));pendingEvents=pendingEvents.filter(event=>!sent.has(event.id));savePending();}
       recordActivityDiagnostic('HEARTBEAT_WRITE_SUCCESS', {
         ruleMinimumIntervalMs: MIN_HEARTBEAT_INTERVAL_MS,
@@ -281,6 +284,25 @@ if (
     heartbeatTimer = window.setInterval(sendHeartbeat, HEARTBEAT_MS);
   }
 
+  // Aviso de salida al cerrar u ocultar la pestaña: sin él, el panel seguía
+  // mostrando "en línea" hasta ~2 minutos después de que la persona se fue.
+  // keepalive permite que el envío sobreviva al cierre de la página.
+  function sendLeave() {
+    window.clearInterval(heartbeatTimer);
+    if (!analyticsWritable || !activityEnabled || !lastHeartbeatWriteAt || !visitorId || !sessionId || !hasConsent()) return;
+    // Libera el throttle compartido: la página siguiente (o esta al volver)
+    // avisa presencia enseguida; el servidor solo acepta esa escritura tras una
+    // salida o desde otra carga de página.
+    lastHeartbeatWriteAt = 0;
+    writeLastHeartbeatWriteAt(identityDay, visitorId, 0);
+    try {
+      fetch(apiUrl('site-activity'), {
+        method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ kind: 'presence', leaving: true, visitorId, sessionId, pageId, consent: true }),
+      }).catch(() => {});
+    } catch { /* La telemetría nunca bloquea la navegación. */ }
+  }
+
   function stopActivity() {
     activityEnabled = false;
     window.clearInterval(heartbeatTimer);
@@ -294,9 +316,13 @@ if (
     listenersBound = true;
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible' && activityEnabled && analyticsWritable) scheduleHeartbeat();
-      else window.clearInterval(heartbeatTimer);
+      else sendLeave();
     });
-    window.addEventListener('pagehide', () => window.clearInterval(heartbeatTimer));
+    window.addEventListener('pagehide', () => { window.clearInterval(heartbeatTimer); sendLeave(); });
+    // Volver con "atrás" desde la caché del navegador reanuda la presencia.
+    window.addEventListener('pageshow', event => {
+      if (event.persisted && document.visibilityState === 'visible' && activityEnabled && analyticsWritable) scheduleHeartbeat();
+    });
   }
 
   function startActivity() {

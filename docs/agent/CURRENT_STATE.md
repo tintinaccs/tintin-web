@@ -1,3 +1,38 @@
+## Push instantáneo y presencia en línea en tiempo real — 2026-11-19 — Claude Code
+
+Base db28312, rama claude/tender-knuth-1na2of. Reporte de la titular: los avisos push llegan tarde y el panel no muestra a tiempo quién está en línea.
+
+Causa raíz del push: buildFcmMessage enviaba los avisos que no eran de pedidos ni de pagos con urgency normal. FCM y APNs postergan esos avisos mientras el dispositivo está en reposo. Corrección: ahora la prioridad por defecto es high para todos los tipos y se respeta una prioridad explícita. Esto reemplaza la decisión anterior de que «los avisos sociales y la prueba conservan normal». Las notificaciones dentro de la app ya usan onSnapshot en vivo. Los reintentos solo actúan ante errores terminales, así que no hubo evidencia para tocarlos.
+
+Causa raíz de la presencia: no existía una señal de salida. El panel dependía de que lastSeen tuviera menos de 2 min, con un latido cada 60 s. Corrección:
+- Cada carga de página tiene un pageId.
+- Al ocultar o cerrar la pestaña (visibilitychange hidden o pagehide), el cliente envía leaving:true con fetch keepalive.
+- El servidor marca leftAt solo si el sessionId y el pageId coinciden. Usa CAS por updateTime y trata un 409 como duplicado.
+- El siguiente latido reescribe el documento sin leftAt.
+- El admin (dashboard y ficha de usuario) considera fuera de línea un leftAt >= lastSeen, con un margen de 8 s.
+- La salida no usa autorización ni modifica userId. Las rules y la autenticación no cambiaron.
+
+Caché: tag tintin-20261119-presence-1 en la cadena admin-app, ficha, gestión de usuarios, calidad, cargador y los 18 HTML, generado mediante sync:public-shell. Baseline regenerado.
+
+PASS_LOCAL:
+- test:web-push y audit:web-push.
+- site-activity-api, 18/18, con dos pruebas nuevas de salida.
+- test:site-activity.
+- Auditorías: reliability, admin-sync, admin-analitica, critico-recuperacion, rendimiento-tiempo-real, app-check-arranque, cache-versioning, fase-8/10, seguridad-fase-8, admin-usuarios-roles, superadmin-maestro y headers-produccion.
+- Chromium: activity-browser, 7/7. Incluye una prueba nueva de ocultar y volver que falla sobre el código original.
+- Chromium: admin-user-spaced-cards.
+
+Falla previa no relacionada: tests/functions/page-loader-route.test.mjs espera route-fixture-1 y también falla sobre db28312 sin estos cambios. No se modificó.
+
+Límites:
+- Los visitantes sin consentimiento de estadísticas no aparecen, por diseño de privacidad.
+- Si hay dos ventanas visibles y se oculta la que escribió último, la otra puede figurar fuera de línea hasta 60 s.
+
+NOT_VERIFIED:
+- La recepción física del push en el teléfono.
+- El comportamiento en producción.
+- No se hizo push, PR ni deploy.
+
 ## Retiro del apartado adicional de envío en la ficha — 2026-11-18 — Codex /root
 
 Se elimina la inyección de #product-server-fulfilment en functions/product.js, origen del párrafo señalado por la titular. Descripción, características, enlaces del pie y datos estructurados conservados. PASS_LOCAL: 10/10 pruebas de render SEO y redirecciones de producto; regresión existente actualizada para comprobar la ausencia del apartado y preservar descripción/características. Chromium del sistema: HTML inicial sin JavaScript comprobado a 390, 768 y 1440px; descripción presente y apartado ausente. build:pages y diff --check aprobados. Skill leída/aplicada: tintin-design-quality. Preflight detectó dependencias instaladas de la base antigua; se reinstalan desde el lockfile vigente sin cambios de manifiestos. CI y merge pendientes de comprobación.

@@ -52,7 +52,10 @@ export async function handleSiteActivity({ request, env }, {
     if (['session', 'presence'].includes(kind)) {
       if (input.consent !== true) throw invalid();
       safeId(input.visitorId); safeId(input.sessionId);
+      if (input.pageId !== undefined) safeId(input.pageId);
     }
+    const leaving = kind === 'presence' && input.leaving === true;
+    const pageId = typeof input.pageId === 'string' ? input.pageId : '';
     // Cuotas compartidas: cambiar los IDs del navegador o reiniciar un isolate
     // no reinicia el límite por IP ni el presupuesto global de eventos.
     await ipLimit(request, env, { id: 'site-activity', limit: 60, windowMs: 60_000 });
@@ -81,8 +84,24 @@ export async function handleSiteActivity({ request, env }, {
       } else {
         const path = kind === 'session' ? `siteTraffic/${dayKey}/sessions/${input.sessionId}` : `sitePresence/${input.visitorId}`;
         const previous = await get(env, path);
-        // Sesión duplicada y heartbeat adelantado son no-ops, sin escrituras.
-        if (previous && (kind === 'session' || date.getTime() - Date.parse(decodeFirestoreFields(previous.fields).lastSeen) < 20_000)) {
+        const prior = previous ? decodeFirestoreFields(previous.fields) : null;
+        if (leaving) {
+          // Salida explícita (pestaña cerrada u oculta): solo la misma carga de
+          // página que escribió el último latido la marca, así una pestaña o
+          // página nueva que ya avisó presencia no queda como desconectada.
+          if (!prior || prior.leftAt || prior.sessionId !== input.sessionId || (prior.pageId || '') !== pageId) {
+            return jsonResponse({ ok: true, duplicate: true }, 202, origin, request.url);
+          }
+          try {
+            await commit(env, [{ path, fields: { ...previous.fields, ...encodeFirestoreFields({ leftAt: date }) }, currentDocument: { updateTime: previous.updateTime } }]);
+          } catch (error) { if (error.status !== 409) throw error;
+            return jsonResponse({ ok: true, duplicate: true }, 202, origin, request.url);
+          }
+          return jsonResponse({ ok: true, recorded: true }, 202, origin, request.url);
+        }
+        // Sesión duplicada y heartbeat adelantado de la misma página son no-ops,
+        // sin escrituras. Tras una salida o desde otra página se registra enseguida.
+        if (previous && (kind === 'session' || date.getTime() - Date.parse(prior.lastSeen) < 20_000 && !prior.leftAt && (prior.pageId || '') === pageId)) {
           return jsonResponse({ ok: true, duplicate: true }, 202, origin, request.url);
         }
         const cf = request.cf || {};
@@ -98,7 +117,7 @@ export async function handleSiteActivity({ request, env }, {
           geoSource: countryCode || cf.city ? 'cloudflare' : 'unavailable'};
         const fields = encodeFirestoreFields({
           visitorId: input.visitorId, sessionId: input.sessionId, userId,...locationFields,
-          ...(kind === 'session' ? { dayKey, landingPage: route, landingContext:context, startedAt: date } : { page: route, context, lastSeen: date, contextSince:previous && JSON.stringify(normalizeActivityContext(decodeFirestoreFields(previous.fields).context))===JSON.stringify(context) ? decodeFirestoreFields(previous.fields).contextSince || date : date }),
+          ...(kind === 'session' ? { dayKey, landingPage: route, landingContext:context, startedAt: date } : { page: route, context, lastSeen: date, pageId, contextSince:previous && JSON.stringify(normalizeActivityContext(decodeFirestoreFields(previous.fields).context))===JSON.stringify(context) ? decodeFirestoreFields(previous.fields).contextSince || date : date }),
         });
         const writes = [{ path, fields, currentDocument: previous ? { updateTime: previous.updateTime } : { exists: false } }];
         if (kind === 'presence') {

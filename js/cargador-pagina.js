@@ -888,7 +888,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261117-activity-2');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261119-presence-1');
     }
   }
 
@@ -925,7 +925,7 @@
         if (!privacy.hasStatisticsConsent()) return;
         if (!window.TintinSiteActivityBooted) {
           window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261117-activity-2');
+          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261119-presence-1');
         }
       };
       privacy.onPrivacyConsentChange(start);

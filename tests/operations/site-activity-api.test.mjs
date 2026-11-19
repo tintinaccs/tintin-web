@@ -140,3 +140,42 @@ test('presencia antes de sesión conserva la geografía de Cloudflare en estadí
  const session=decodeFirestoreFields(state.documents.get('siteTraffic/2026-10-15/sessions/session_123').fields);
  assert.equal(session.city,'San Lorenzo');assert.equal(session.region,'Central');assert.equal(session.country,'PY');assert.equal(session.countryCode,'PY');assert.equal(session.geoSource,'cloudflare');
 });
+
+test('aviso de salida: marca leftAt solo desde la misma página, y la siguiente página vuelve a registrar al instante',async()=>{
+ const state=fixture();let tick=0;state.deps.now=()=>new Date(+date+tick);
+ const path='sitePresence/visitor_123';
+ const page=pageId=>({...input,kind:'presence',pageId});
+ const leave=pageId=>({...input,kind:'presence',leaving:true,pageId});
+ const send=body=>handleSiteActivity({request:makeRequest(body),env:{}},state.deps);
+ // Sin presencia previa, la salida no crea documentos.
+ assert.equal((await (await send(leave('page_aaaaaaaa'))).json()).duplicate,true);assert.equal(state.documents.has(path),false);
+ await send(page('page_aaaaaaaa'));
+ const firstSeen=decodeFirestoreFields(state.documents.get(path).fields).lastSeen;
+ // Otra pestaña/página no puede desconectar a la que escribió el último latido.
+ tick=2000;assert.equal((await (await send(leave('page_bbbbbbbb'))).json()).duplicate,true);
+ assert.equal('leftAt' in decodeFirestoreFields(state.documents.get(path).fields),false);
+ // Salida válida conserva lastSeen (timestamp) y agrega leftAt.
+ tick=3000;assert.equal((await (await send(leave('page_aaaaaaaa'))).json()).recorded,true);
+ const left=decodeFirestoreFields(state.documents.get(path).fields);
+ assert.equal(new Date(left.leftAt).getTime(),+date+3000);assert.equal(left.lastSeen,firstSeen);
+ assert.ok(state.documents.get(path).fields.lastSeen.timestampValue);
+ // Una salida repetida no reescribe.
+ const stored=state.documents.get(path).updateTime;
+ tick=3500;assert.equal((await (await send(leave('page_aaaaaaaa'))).json()).duplicate,true);assert.equal(state.documents.get(path).updateTime,stored);
+ // La página siguiente registra presencia aunque no pasaron 20 s, y borra leftAt.
+ tick=4000;assert.equal((await (await send(page('page_cccccccc'))).json()).recorded,true);
+ const back=decodeFirestoreFields(state.documents.get(path).fields);
+ assert.equal('leftAt' in back,false);assert.equal(back.pageId,'page_cccccccc');
+ // La misma página dentro de 20 s sigue sin escribir.
+ tick=5000;assert.equal((await (await send(page('page_cccccccc'))).json()).duplicate,true);
+ // Un pageId inválido se rechaza antes de escribir.
+ assert.equal((await send(page('../x'))).status,400);
+});
+
+test('aviso de salida de otra sesión no desconecta al visitante',async()=>{
+ const state=fixture();
+ await handleSiteActivity({request:makeRequest({...input,kind:'presence',pageId:'page_aaaaaaaa'}),env:{}},state.deps);
+ const response=await handleSiteActivity({request:makeRequest({...input,kind:'presence',leaving:true,pageId:'page_aaaaaaaa',sessionId:'session_999'}),env:{}},state.deps);
+ assert.equal((await response.json()).duplicate,true);
+ assert.equal('leftAt' in decodeFirestoreFields(state.documents.get('sitePresence/visitor_123').fields),false);
+});
