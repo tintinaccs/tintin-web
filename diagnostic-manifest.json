@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2184c5d16abff993a33b756e1d09c0f3a56a35084565cb449aa3667d69cba7f5",
+  "sourceFingerprint": "af1bb727e3a16cf21106d26c20aa5b7016239c6240c581c5433c35bea327ad8a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1876,
     "textFiles": 1723,
-    "totalBytes": 63170378,
+    "totalBytes": 63184470,
     "pages": 19,
     "modules": 1223
   },
@@ -26472,8 +26472,8 @@
     },
     {
       "path": "cloudflare/perfil-cliente-admin.mjs",
-      "bytes": 10525,
-      "sha256": "e8428f41b85cee05d938ff34c83377125461156c32662fcd3513e4a7ff93b054",
+      "bytes": 13068,
+      "sha256": "ea1033c691f20e6f145feeb78d8f2406352394c2c79369af739795cf0a2e8dc1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26501,7 +26501,7 @@
           "raw": "./firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 20
+          "line": 21
         }
       ],
       "endpoints": []
@@ -33084,8 +33084,8 @@
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
-      "bytes": 30783,
-      "sha256": "d781285534c6865dcec4cc18b4cc7081fda8b84739afbc81428937863db0b29c",
+      "bytes": 31000,
+      "sha256": "6e13dde6aea50e0bdbbeb1c160bda1dadad3316343d1ad75b7afa30440ef0365",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33155,7 +33155,7 @@
           "raw": "../../core/store/estadisticas-pedidos.js?v=tintin-20261112-delivery-separate-1",
           "target": "js/core/store/estadisticas-pedidos.js",
           "dynamic": true,
-          "line": 297
+          "line": 298
         }
       ],
       "endpoints": [
@@ -44849,8 +44849,8 @@
     },
     {
       "path": "tests/accounts/customer-profile-admin.test.mjs",
-      "bytes": 5452,
-      "sha256": "641fa5082833ba50b9b29c97a3cff80510530cebbd57da70bc4020f1ba2691f8",
+      "bytes": 8594,
+      "sha256": "a6e286439444be6607437800c7c41ffe131fe5d861313ab1c0b7f1ce675ab564",
       "syntax": {
         "ok": true,
         "error": ""
@@ -61788,8 +61788,8 @@
     },
     {
       "path": "tests/ui-ux/admin-app-usuarios.spec.js",
-      "bytes": 6151,
-      "sha256": "9d98743e42527498d7274acff49bcc605ddf90ba22d792ddc60ec047fa1398f2",
+      "bytes": 6497,
+      "sha256": "f6c7fd9a49a4c76f7e034ba60f6283c4c694f9f144c468fc255f33d6309a01bf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -61953,8 +61953,8 @@
     },
     {
       "path": "tests/ui-ux/admin-user-spaced-cards.spec.js",
-      "bytes": 8014,
-      "sha256": "edc85d4585cb8e58dbfd036fffe06e3bd253abd8658917620fa2e773e4c2e8ec",
+      "bytes": 8206,
+      "sha256": "7db9d721914d44acdadc1a148f62c6f694c22a73b220f19b97f1db31c694dbe9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -65609,8 +65609,8 @@
     {
       "path": "cloudflare/perfil-cliente-admin.mjs",
       "extension": ".mjs",
-      "bytes": 10525,
-      "sha256": "e8428f41b85cee05d938ff34c83377125461156c32662fcd3513e4a7ff93b054"
+      "bytes": 13068,
+      "sha256": "ea1033c691f20e6f145feeb78d8f2406352394c2c79369af739795cf0a2e8dc1"
     },
     {
       "path": "cloudflare/politica-checkout-publico.js",
@@ -65777,8 +65777,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 2150,
-      "sha256": "dd8c6e9431eca5dcf1aa95e54da001ef63664ac9b96d8e71146c9f10d0a4cb4d"
+      "bytes": 9802,
+      "sha256": "20f6b2ed70f4038eb31a2e8a5f2767135b87a6762e48514f01ab9cda75a46e52"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -65790,7 +65790,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "8ad7aade8ed7efc5c100fb5857f1f58b184bbf2079110e3853b8a777ede72636"
+      "sha256": "5755a221cc9a165b7ae77ebcbee6f63aff066e1fca5ccda2c5ef569f919a2770"
     },
     {
       "path": "config/public-site.json",
@@ -69299,8 +69299,8 @@
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
       "extension": ".js",
-      "bytes": 30783,
-      "sha256": "d781285534c6865dcec4cc18b4cc7081fda8b84739afbc81428937863db0b29c"
+      "bytes": 31000,
+      "sha256": "6e13dde6aea50e0bdbbeb1c160bda1dadad3316343d1ad75b7afa30440ef0365"
     },
     {
       "path": "js/admin/users/gestion-usuarios-admin.js",
@@ -71964,7 +71964,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 84075,
-      "sha256": "8672437a2ccae4d92079ae2b47bb7420b9229b41582dd0e313a6bfbb0af466e9"
+      "sha256": "458130c20a83be243cb31d623e3ee46e2d37313f130ea4065ba835a77150c513"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -72443,8 +72443,8 @@
     {
       "path": "tests/accounts/customer-profile-admin.test.mjs",
       "extension": ".mjs",
-      "bytes": 5452,
-      "sha256": "641fa5082833ba50b9b29c97a3cff80510530cebbd57da70bc4020f1ba2691f8"
+      "bytes": 8594,
+      "sha256": "a6e286439444be6607437800c7c41ffe131fe5d861313ab1c0b7f1ce675ab564"
     },
     {
       "path": "tests/accounts/diagnostic-email-auth.test.mjs",
@@ -75089,8 +75089,8 @@
     {
       "path": "tests/ui-ux/admin-app-usuarios.spec.js",
       "extension": ".js",
-      "bytes": 6151,
-      "sha256": "9d98743e42527498d7274acff49bcc605ddf90ba22d792ddc60ec047fa1398f2"
+      "bytes": 6497,
+      "sha256": "f6c7fd9a49a4c76f7e034ba60f6283c4c694f9f144c468fc255f33d6309a01bf"
     },
     {
       "path": "tests/ui-ux/admin-app-ventas-locales.spec.js",
@@ -75149,8 +75149,8 @@
     {
       "path": "tests/ui-ux/admin-user-spaced-cards.spec.js",
       "extension": ".js",
-      "bytes": 8014,
-      "sha256": "edc85d4585cb8e58dbfd036fffe06e3bd253abd8658917620fa2e773e4c2e8ec"
+      "bytes": 8206,
+      "sha256": "7db9d721914d44acdadc1a148f62c6f694c22a73b220f19b97f1db31c694dbe9"
     },
     {
       "path": "tests/ui-ux/admin-white-icons.spec.js",
@@ -78502,7 +78502,7 @@
           },
           {
             "file": "js/admin/users/ficha-usuario-admin.js",
-            "line": 404,
+            "line": 405,
             "operation": "collection"
           }
         ]

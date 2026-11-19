@@ -211,6 +211,7 @@ if (!window.TintinAdminUserFichaBooted) {
         const result = await response.json().catch(() => ({}));
         if (!response.ok || result.ok !== true) throw new Error(result.error || apiFailureMessage(response, 'No se pudieron guardar los datos.'));
         status.textContent = result.result?.unchanged ? 'No había cambios para guardar.' : result.result?.emailChanged ? 'Datos guardados. El correo de acceso ya es el nuevo.' : 'Datos guardados.';
+        if (result.result?.ordersEmailSynced === false) window.alert('Los datos se guardaron, pero falta pasar el correo nuevo a los pedidos anteriores del cliente. Tocá Editar y Guardar otra vez para terminarlo.');
         await openClientFicha(user.uid);
       } catch (error) {
         status.textContent = error?.message || 'No se pudieron guardar los datos.';

@@ -16,6 +16,7 @@ import {
   encodeFirestoreFields,
   firestoreAdminCommit,
   firestoreAdminGet,
+  firestoreAdminQueryByField,
   updateFirebaseUserEmail,
 } from './firebase-admin-ligero.js';
 
@@ -27,6 +28,7 @@ const defaultDeps = {
   get: firestoreAdminGet,
   commit: firestoreAdminCommit,
   updateAuthEmail: updateFirebaseUserEmail,
+  ordersOfUser: (env, uid) => firestoreAdminQueryByField(env, 'orders', 'userId', uid, 1000),
   now: () => new Date(),
   randomId: () => crypto.randomUUID().replace(/-/g, ''),
 };
@@ -90,6 +92,37 @@ export async function prepareLinkedPurchaseInput(env, body = {}, deps = {}) {
   };
 }
 
+/**
+ * Los pedidos guardan el correo de la cuenta en `userEmail`, y firestore.rules
+ * deja leer un pedido a quien inicie sesión con ese correo verificado. Cuando
+ * el correo de la cuenta cambia, los pedidos de ese uid pasan al correo
+ * nuevo: si no, quien obtenga el correo anterior podría leerlos.
+ * Devuelve cuántos pedidos actualizó.
+ */
+async function moveOrdersToAccountEmail(env, uid, email, store) {
+  if (!EMAIL_PATTERN.test(email)) return 0;
+  const documents = await store.ordersOfUser(env, uid);
+  const writes = [];
+  for (const document of documents || []) {
+    const orderId = String(document?.name || '').split('/').pop();
+    if (!/^[A-Za-z0-9_-]{1,200}$/.test(orderId)) continue;
+    const data = decodeFirestoreFields(document.fields || {});
+    if (text(data.userId, 128) !== uid || text(data.userEmail, 254).toLowerCase() === email) continue;
+    writes.push({ path: `orders/${orderId}`, fields: encodeFirestoreFields({ userEmail: email }), mergeFields: ['userEmail'], currentDocument: { exists: true } });
+  }
+  for (let index = 0; index < writes.length; index += 20) await store.commit(env, writes.slice(index, index + 20));
+  return writes.length;
+}
+
+async function syncOrdersEmail(env, uid, email, store) {
+  try {
+    return { ordersEmailSynced: true, ordersUpdated: await moveOrdersToAccountEmail(env, uid, email, store) };
+  } catch (error) {
+    console.error('[perfil-cliente-admin] no se pudo pasar el correo nuevo a los pedidos', error?.message || error);
+    return { ordersEmailSynced: false, ordersUpdated: 0 };
+  }
+}
+
 /** Valida y normaliza lo que la Super Admin quiere guardar. Lanza con un mensaje claro. */
 export function validateCustomerProfileInput(input = {}, current = {}) {
   const firstName = text(input.firstName, 60);
@@ -119,7 +152,8 @@ export function validateCustomerProfileInput(input = {}, current = {}) {
  * Guarda los datos del cliente. Orden: (1) validar todo, (2) cambiar el
  * correo de acceso si hace falta, (3) confirmar perfil + reserva de teléfono
  * + auditoría en un único commit. Si el paso 3 falla se devuelve el correo
- * de acceso al anterior para no dejar dos fuentes distintas.
+ * de acceso al que quedó guardado para no dejar dos fuentes distintas.
+ * (4) Con el correo nuevo confirmado, los pedidos de la cuenta pasan a él.
  */
 export async function updateCustomerProfileAdmin(env, input = {}, actor = {}, deps = {}) {
   const store = { ...defaultDeps, ...deps };
@@ -131,9 +165,12 @@ export async function updateCustomerProfileAdmin(env, input = {}, actor = {}, de
   const changeId = text(input.changeId, 120);
   if (!CHANGE_ID_PATTERN.test(changeId)) throw failure('Solicitud inválida: falta el identificador del cambio.');
   const currentChangeId = text(current.lastChangeId, 120);
-  if (currentChangeId && currentChangeId === changeId) return { uid, duplicate: true, changeId };
-  const baseChangeId = text(input.baseChangeId, 120);
-  if (baseChangeId && currentChangeId && baseChangeId !== currentChangeId) {
+  if (currentChangeId && currentChangeId === changeId) {
+    return { uid, duplicate: true, changeId, ...await syncOrdersEmail(env, uid, currentEmail, store) };
+  }
+  // La versión con la que se abrió la ficha debe ser la actual, también
+  // cuando estaba vacía: si otra ficha abierta guardó antes, esta no la pisa.
+  if (typeof input.baseChangeId !== 'string' || text(input.baseChangeId, 120) !== currentChangeId) {
     throw failure('La ficha cambió mientras la editabas. Volvé a abrirla antes de guardar.', 409);
   }
 
@@ -149,7 +186,9 @@ export async function updateCustomerProfileAdmin(env, input = {}, actor = {}, de
   const name = `${next.firstName} ${next.lastName}`;
   const after = { firstName: next.firstName, lastName: next.lastName, name, phone: next.phone, email: next.email, address: next.address };
   const changed = Object.keys(after).filter(key => after[key] !== before[key]);
-  if (!changed.length) return { uid, duplicate: false, unchanged: true, changeId: currentChangeId };
+  if (!changed.length) {
+    return { uid, duplicate: false, unchanged: true, changeId: currentChangeId, ...await syncOrdersEmail(env, uid, currentEmail, store) };
+  }
 
   const writes = [];
   const newKey = phoneKey(next.phone, DEFAULT_COUNTRY);
@@ -208,12 +247,19 @@ export async function updateCustomerProfileAdmin(env, input = {}, actor = {}, de
   try {
     await store.commit(env, writes);
   } catch (error) {
-    if (emailChanged && authResult?.changed && currentEmail) {
-      try { await store.updateAuthEmail(env, uid, currentEmail); }
-      catch (rollbackError) { console.error('[perfil-cliente-admin] no se pudo devolver el correo de acceso', rollbackError?.message || rollbackError); }
+    if (emailChanged && authResult?.changed) {
+      // El acceso vuelve al correo que quedó guardado en el perfil, no al
+      // leído al principio: si otro guardado ganó mientras tanto, su correo
+      // es el vigente y no se deshace.
+      try {
+        const saved = await store.get(env, `users/${uid}`);
+        const savedEmail = text(decodeFirestoreFields(saved?.fields || {}).email, 254).toLowerCase() || currentEmail;
+        if (savedEmail && savedEmail !== next.email) await store.updateAuthEmail(env, uid, savedEmail);
+      } catch (rollbackError) { console.error('[perfil-cliente-admin] no se pudo devolver el correo de acceso', rollbackError?.message || rollbackError); }
     }
     if (Number(error?.status) === 409) throw failure('La ficha cambió mientras la editabas. Volvé a abrirla antes de guardar.', 409);
     throw error;
   }
-  return { uid, duplicate: false, changeId, emailChanged, changedFields: changed, profile: after };
+  const orders = emailChanged ? await syncOrdersEmail(env, uid, next.email, store) : {};
+  return { uid, duplicate: false, changeId, emailChanged, changedFields: changed, profile: after, ...orders };
 }
