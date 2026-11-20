@@ -209,11 +209,18 @@ test('cuenta muestra el perfil persistido, guarda cambios y los conserva al reca
   await consent.getByRole('button',{name:'Solo necesarias',exact:true}).click();
   await expect(consent).toBeHidden();
   expect(await page.evaluate(()=>window.TintinActivityPrivacy.preferences.statistics)).toBe(false);
+  // Los datos llegan bloqueados: hay que tocar «Editar» para cambiarlos.
+  await expect(page.locator('#perfil-nombre')).toHaveJSProperty('readOnly',true);
+  await expect(page.locator('#perfil-email')).toHaveValue(email);
+  await page.locator('#btn-editar-perfil').click();
+  await expect(page.locator('#perfil-email')).toHaveJSProperty('readOnly',true);
   await page.locator('#perfil-nombre').fill('María López');
   await expect(page.locator('#profile-panel-datos #btn-guardar-perfil')).toBeVisible();
   await page.locator('#btn-guardar-perfil').click();
   await expect(page.locator('#perfil-toast')).toContainText('Perfil actualizado');
   await expect(page.locator('#perfil-nombre-display')).toHaveText('María López');
+  await expect(page.locator('#perfil-nombre')).toHaveJSProperty('readOnly',true);
+  await expect(page.locator('#btn-editar-perfil')).toBeVisible();
   expect((await state(request,email)).profile).toMatchObject({name:'María López',phone:'+595981123456'});
   await page.reload({waitUntil:'domcontentloaded'});
   await expect(page.locator('#perfil-nombre')).toHaveValue('María López');

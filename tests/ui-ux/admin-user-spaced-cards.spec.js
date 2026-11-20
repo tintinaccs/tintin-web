@@ -6,6 +6,7 @@ async function users(page,width,options={}) {
   const stubs={
     '/js/core/firebase/firebase.js': 'export const auth=window.__auth;export const db={};',
     '/js/core/auth/coordinador-sesion.js': 'export const subscribeAuthState=fn=>fn(window.__auth.currentUser);',
+    '/js/core/auth/cliente-api-autenticado.js': "export const authenticatedFetch=async()=>{throw new Error('sin red en pruebas');};export const apiFailureMessage=(_r,_b,fallback)=>fallback;",
     '/js/core/auth/roles.js': "export const SUPER_ADMIN='owner@example.test';export const ROLE_LABELS={client:'Cliente'};",
     '/js/core/auth/contrato-cuentas-generado.js': "export const ASSIGNABLE_ROLES=['client'];",
     '/firebase-firestore.js': `export const collection=(...args)=>args;export const doc=(db,collection,uid)=>uid;export const query=(...args)=>args;export const where=(...args)=>args;export const limit=n=>n;export const startAfter=c=>c;export const getDocs=async()=>({docs:[]});export async function getDoc(uid){await new Promise(r=>setTimeout(r,uid==='slow'?120:0));return {id:uid,exists:()=>true,data:()=>window.__users[uid]||{name:'Solicitud anterior'}};}`,

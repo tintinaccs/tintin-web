@@ -92,6 +92,9 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
     await expect(page.locator('#perfil-nombre')).toHaveValue('Ana Ruiz');
     await expect(page.locator('#perfil-tel')).toHaveValue('912345678');
     await expect(page.locator('#btn-guardar-perfil')).toBeDisabled();
+    await expect(page.locator('#perfil-nombre')).toHaveJSProperty('readOnly', true);
+    await page.locator('#btn-editar-perfil').click();
+    await expect(page.locator('#perfil-datos-acciones')).toBeVisible();
     await page.locator('#perfil-nombre').fill('Ana editando');
     await page.evaluate(() => window.resolveProfile('client', { name: 'Ana confirmada', phone: '595912345678', username: 'ana', role: 'client' }));
     await expect(page.locator('#perfil-nombre-display')).toHaveText('Ana confirmada');

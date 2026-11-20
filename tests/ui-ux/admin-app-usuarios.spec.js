@@ -9,15 +9,16 @@ async function users(page,width) {
   const stubs={
     '/js/core/firebase/firebase.js': 'export const auth=window.__auth;export const db={};',
     '/js/core/auth/coordinador-sesion.js': 'export const subscribeAuthState=fn=>fn(window.__auth.currentUser);',
+    '/js/core/auth/cliente-api-autenticado.js': "export const authenticatedFetch=async()=>{throw new Error('sin red en pruebas');};export const apiFailureMessage=(_r,_b,fallback)=>fallback;",
     '/js/core/auth/roles.js': "export const SUPER_ADMIN='owner@example.test';export const ROLE_LABELS={client:'Cliente'};",
     '/js/core/auth/contrato-cuentas-generado.js': "export const ASSIGNABLE_ROLES=['client'];",
-    '/firebase-firestore.js': `export const collection=(...args)=>args;export const doc=(db,collection,uid)=>uid;export const query=(...args)=>args;export const where=(...args)=>args;export const limit=n=>n;export const getDocs=async()=>({docs:[]});export async function getDoc(uid){await new Promise(r=>setTimeout(r,uid==='slow'?120:0));return {id:uid,exists:()=>true,data:()=>window.__users[uid]||{name:'Solicitud anterior'}};}`,
+    '/firebase-firestore.js': `export const collection=(...args)=>args;export const doc=(db,collection,uid)=>uid;export const query=(...args)=>args;export const where=(...args)=>args;export const limit=n=>n;export const startAfter=(...args)=>args;export const getDocs=async()=>({docs:[]});export async function getDoc(uid){await new Promise(r=>setTimeout(r,uid==='slow'?120:0));return {id:uid,exists:()=>true,data:()=>window.__users[uid]||{name:'Solicitud anterior'}};}`,
   };
   await page.addInitScript(()=>{window.__auth={currentUser:{uid:'owner',email:'owner@example.test'}};window.__users={first:{uid:'first',name:'Primera cuenta QA',email:'primera@example.test',photoURL:'/assets-tintin/images/admin/app-icon-512.png'},second:{uid:'second',name:'Segunda cuenta QA',email:'segunda@example.test'}};});
   await load(page,width,'admin.html',{mobile:true,sidebar:true,guard:true,respond:async(route,url)=>{
     const stub=stubs[url.pathname] || (url.hostname==='www.gstatic.com'?stubs['/firebase-firestore.js']:null);
     if(stub) {await route.fulfill({contentType:'text/javascript',body:stub,headers:{'Access-Control-Allow-Origin':'*'}});return true;}
-    if(['/js/admin/users/ficha-usuario-admin.js','/js/admin/users/perfil-usuario-superadmin.js','/js/components/images/utilidades-imagenes.js','/js/orders/pedidos-prueba.mjs'].includes(url.pathname)) {await route.fulfill({path:path.join(root,url.pathname),contentType:'text/javascript'});return true;}
+    if(['/js/admin/users/ficha-usuario-admin.js','/js/admin/users/perfil-usuario-superadmin.js','/js/components/images/utilidades-imagenes.js','/js/orders/pedidos-prueba.mjs','/js/admin/users/historial-actividad.mjs','/js/analytics/contexto-actividad.mjs','/js/orders/importes-pedido.mjs'].includes(url.pathname)) {await route.fulfill({path:path.join(root,url.pathname),contentType:'text/javascript'});return true;}
     return false;
   }});
   await page.evaluate(async paths=>{

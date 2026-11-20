@@ -1,4 +1,4 @@
-import {createActivityHistory} from './historial-actividad.mjs?v=tintin-20261117-activity-2';
+import {createActivityHistory} from './historial-actividad.mjs?v=tintin-20261119-presence-1';
 import {orderAmountSummary} from '../../orders/importes-pedido.mjs?v=tintin-20261112-delivery-separate-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
 import { ordersForView, orderDisplayCode } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
@@ -10,9 +10,11 @@ import { ordersForView, orderDisplayCode } from '../../orders/pedidos-prueba.mjs
    - filtros, roles, bloqueo/restauración, eliminación y acciones masivas
    - estado compartido con Dashboard / Estadísticas / Correos
 
-   Este módulo NO mantiene un segundo listener y NO escribe users. Solo agrega
-   "Ver ficha" a las filas ya renderizadas por admin-app.js y carga el detalle
-   solicitado bajo demanda.
+   Este módulo NO mantiene un segundo listener y NO escribe users desde el
+   navegador. Agrega "Ver ficha" a las filas ya renderizadas por admin-app.js y
+   carga el detalle bajo demanda. Editar los datos del cliente y vincularle una
+   compra pasan siempre por /api/admin-order-mutation (validación y auditoría
+   en el servidor, solo Super Admin).
    ============================================================= */
 
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
@@ -29,6 +31,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN, ROLE_LABELS } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import { ASSIGNABLE_ROLES } from '../../core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
+import { authenticatedFetch, apiFailureMessage } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 
 if (!window.TintinAdminUserFichaBooted) {
   window.TintinAdminUserFichaBooted = true;
@@ -95,6 +98,156 @@ if (!window.TintinAdminUserFichaBooted) {
       .map(item => ({ id: item.id, ...item.data() }))
       .sort((a, b) => (b.createdAt?.toDate?.() || new Date(0)) - (a.createdAt?.toDate?.() || new Date(0)))
       .slice(0, 10);
+  }
+
+  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isRemoved = user => user.deleted === true || user.profileStatus === 'deleted';
+
+  function splitName(user) {
+    const first = text(user.firstName).trim();
+    const last = text(user.lastName).trim();
+    if (first || last) return { first, last };
+    const parts = text(user.name).trim().split(/\s+/).filter(Boolean);
+    return { first: parts[0] || '', last: parts.slice(1).join(' ') };
+  }
+
+  function contactAddress(user) {
+    const saved = user.savedLocation || {};
+    return text(user.address || saved.address || saved.name || user.locationName).trim();
+  }
+
+  // Datos del cliente: bloqueados por defecto; "Editar" habilita el formulario.
+  // Ningún dato puede quedar vacío y el servidor vuelve a validar todo.
+  function customerDataSection(user) {
+    const block = section('Datos del cliente');
+    block.wrapper.classList.add('ficha-customer-data');
+    const names = splitName(user);
+    const initial = {
+      firstName: names.first,
+      lastName: names.last,
+      phone: text(user.phone || user.phoneNumber || user.whatsapp || user.whatsappNumber).trim(),
+      email: text(user.email).trim(),
+      address: contactAddress(user),
+    };
+    const form = el('form', 'ficha-edit-form');
+    form.noValidate = true;
+    const inputs = {};
+    const fields = [
+      ['firstName', 'Nombre', 'text', 'given-name'],
+      ['lastName', 'Apellido', 'text', 'family-name'],
+      ['phone', 'Teléfono', 'tel', 'tel'],
+      ['email', 'Correo de acceso', 'email', 'email'],
+      ['address', 'Dirección', 'text', 'street-address'],
+    ];
+    for (const [key, label, type, autocomplete] of fields) {
+      const wrap = el('label', 'ficha-edit-field');
+      const input = el('input');
+      input.type = type;
+      input.name = key;
+      input.autocomplete = autocomplete;
+      input.value = initial[key];
+      input.readOnly = true;
+      input.required = key !== 'address' || Boolean(initial.address);
+      wrap.append(el('span', 'ficha-field-label', label), input);
+      inputs[key] = input;
+      form.append(wrap);
+    }
+    const note = el('p', 'ficha-edit-note', 'Si cambiás el correo, el cliente ya no podrá entrar con el anterior: va a ingresar con el nuevo correo (Google o código).');
+    const status = el('p', 'ficha-edit-status');
+    status.setAttribute('role', 'status');
+    status.setAttribute('aria-live', 'polite');
+    const actions = el('div', 'ficha-edit-actions');
+    const edit = el('button', 'adm-btn adm-btn-sm adm-btn-outline', 'Editar');
+    edit.type = 'button';
+    const cancel = el('button', 'adm-btn adm-btn-sm adm-btn-outline', 'Cancelar');
+    cancel.type = 'button';
+    const save = el('button', 'adm-btn adm-btn-sm adm-btn-primary', 'Guardar cambios');
+    save.type = 'submit';
+    actions.append(edit);
+    form.append(note, status, actions);
+
+    const protectedAccount = lower(user.email) === SUPER_ADMIN || canonicalRole(user) === 'superadmin';
+    if (protectedAccount || isRemoved(user)) {
+      edit.disabled = true;
+      status.textContent = protectedAccount ? 'La cuenta Super Admin no se edita desde aquí.' : 'La cuenta está eliminada: restaurala antes de editar.';
+    }
+
+    function setEditing(on) {
+      form.dataset.editing = String(on);
+      for (const input of Object.values(inputs)) input.readOnly = !on;
+      actions.replaceChildren(...(on ? [cancel, save] : [edit]));
+      if (on) inputs.firstName.focus();
+    }
+    edit.addEventListener('click', () => { status.textContent = ''; setEditing(true); });
+    cancel.addEventListener('click', () => {
+      for (const [key, input] of Object.entries(inputs)) input.value = initial[key];
+      status.textContent = '';
+      setEditing(false);
+    });
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (form.dataset.editing !== 'true' || save.disabled) return;
+      const values = Object.fromEntries(Object.entries(inputs).map(([key, input]) => [key, input.value.replace(/\s+/g, ' ').trim()]));
+      const empty = fields.find(([key]) => inputs[key].required && !values[key]);
+      if (empty) { status.textContent = `${empty[1]} no puede quedar vacío.`; inputs[empty[0]].focus(); return; }
+      if (!EMAIL_PATTERN.test(values.email)) { status.textContent = 'Correo inválido.'; inputs.email.focus(); return; }
+      const emailChanged = lower(values.email) !== lower(initial.email);
+      if (emailChanged && !window.confirm(`Vas a cambiar el correo de acceso de ${initial.email || 'esta cuenta'} a ${values.email}.\n\nEl cliente ya no podrá ingresar con el correo anterior. ¿Continuar?`)) return;
+      save.disabled = true;
+      cancel.disabled = true;
+      status.textContent = 'Guardando…';
+      try {
+        const response = await authenticatedFetch('/api/admin-order-mutation', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            action: 'updateCustomerProfile',
+            uid: user.uid,
+            ...values,
+            changeId: `perfil_${crypto.randomUUID().replaceAll('-', '')}`,
+            baseChangeId: text(user.lastChangeId),
+          }),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.ok !== true) throw new Error(result.error || apiFailureMessage(response, 'No se pudieron guardar los datos.'));
+        status.textContent = result.result?.unchanged ? 'No había cambios para guardar.' : result.result?.emailChanged ? 'Datos guardados. El correo de acceso ya es el nuevo.' : 'Datos guardados.';
+        if (result.result?.ordersEmailSynced === false) window.alert('Los datos se guardaron, pero falta pasar el correo nuevo a los pedidos anteriores del cliente. Tocá Editar y Guardar otra vez para terminarlo.');
+        await openClientFicha(user.uid);
+      } catch (error) {
+        status.textContent = error?.message || 'No se pudieron guardar los datos.';
+        save.disabled = false;
+        cancel.disabled = false;
+      }
+    });
+    block.wrapper.append(form);
+    block.grid.remove();
+    return block;
+  }
+
+  function linkPurchaseButton(user) {
+    const button = el('button', 'adm-btn adm-btn-sm adm-btn-primary ficha-link-order', 'Vincular producto como nuevo pedido');
+    button.type = 'button';
+    const blocked = user.blocked === true || isRemoved(user);
+    const protectedAccount = lower(user.email) === SUPER_ADMIN;
+    if (blocked || protectedAccount || !EMAIL_PATTERN.test(text(user.email).trim())) {
+      button.disabled = true;
+      button.title = protectedAccount ? 'No aplica a la cuenta Super Admin.' : blocked ? 'La cuenta está bloqueada o eliminada.' : 'Completá un correo válido en los datos del cliente.';
+    }
+    button.addEventListener('click', () => {
+      const open = window.TintinOrderAdmin?.openManualOrder;
+      if (typeof open !== 'function') { window.alert('El editor de pedidos todavía no cargó. Probá de nuevo en unos segundos.'); return; }
+      const names = splitName(user);
+      Promise.resolve(open({
+        uid: user.uid,
+        name: `${names.first} ${names.last}`.trim() || user.name || user.email,
+        phone: user.phone || user.phoneNumber || '',
+        email: user.email,
+        address: contactAddress(user),
+        city: user.city || user.savedLocation?.city || '',
+        onDone: () => openClientFicha(user.uid),
+      })).catch(error => window.alert(error?.message || 'No se pudo abrir el pedido.'));
+    });
+    return button;
   }
 
   let requestVersion = 0;
@@ -227,7 +380,7 @@ if (!window.TintinAdminUserFichaBooted) {
         ordersList.appendChild(row);
       });
       if (!orders.length) ordersList.appendChild(el('div', '', ordersResult.status === 'rejected' ? 'Pedidos no disponibles' : 'Sin pedidos registrados'));
-      ordersSection.wrapper.appendChild(ordersList);
+      ordersSection.wrapper.append(linkPurchaseButton(user), ordersList);
 
       const auditSection = section('Auditoría reciente');
       const auditList = el('div', 'ficha-orders-list');
@@ -253,7 +406,8 @@ if (!window.TintinAdminUserFichaBooted) {
           return {items:result.docs.map(row=>row.data()),cursor:result.docs.length===size ? result.docs.at(-1) : null};
         },
       });
-      body.replaceChildren(history,header, identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
+      const customerData = customerDataSection(user);
+      body.replaceChildren(history,header, customerData.wrapper, identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
       return true;
     } catch (error) {
       if (version !== requestVersion) return false;
@@ -387,7 +541,17 @@ if (!window.TintinAdminUserFichaBooted) {
       .ficha-field-value{font-size:13px;color:var(--adm-text);font-weight:600;word-break:break-word}
       .ficha-orders-list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
       .ficha-order-row{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--adm-text);padding:8px 10px;background:var(--adm-bg);border-radius:8px}
-      @media(max-width:640px){.ficha-grid{grid-template-columns:1fr}.ficha-order-row{flex-direction:column}}
+      .ficha-edit-form{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+      .ficha-edit-field{display:flex;flex-direction:column;gap:4px;min-width:0}
+      .ficha-edit-field input{min-height:44px;border:1px solid var(--adm-border);border-radius:8px;padding:8px 10px;background:var(--adm-bg);color:var(--adm-text);font:inherit;font-size:14px;min-width:0}
+      .ficha-edit-field input:read-only{background:transparent;border-color:transparent;padding-inline:0;font-weight:600;cursor:default}
+      .ficha-edit-field input:focus-visible{outline:2px solid var(--adm-primary);outline-offset:1px}
+      .ficha-edit-note,.ficha-edit-status{grid-column:1/-1;margin:0;font-size:12px;color:var(--adm-muted)}
+      .ficha-edit-form:not([data-editing="true"]) .ficha-edit-note{display:none}
+      .ficha-edit-status:empty{display:none}
+      .ficha-edit-actions{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+      .ficha-link-order{margin-top:12px;min-height:44px}
+      @media(max-width:640px){.ficha-grid,.ficha-edit-form{grid-template-columns:1fr}.ficha-order-row{flex-direction:column}}
     `;
     document.head.appendChild(style);
   }

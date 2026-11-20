@@ -389,7 +389,10 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
   const total = subtotal + shippingCost;
   // Sólo el endpoint autenticado del checkout fija esta política. Un campo
   // enviado desde el navegador no puede alterar el ciclo de inventario.
-  const inventoryPolicy = actor?.origin === 'public-checkout' && actor?.role === 'client'
+  // La compra vinculada por la superadmin (endpoint autenticado, perfil leído
+  // en el servidor) se comporta como una compra real: aparta stock al crearse.
+  const linkedPurchase = actor?.origin === 'superadmin-linked-purchase' && actor?.role === 'superadmin';
+  const inventoryPolicy = (actor?.origin === 'public-checkout' && actor?.role === 'client') || linkedPurchase
     ? 'reserve-on-checkout' : '';
   const reserves = orderConfirmsInventory({ status, paymentStatus, inventoryPolicy });
   const checksAvailability = statusReservesInventory(status);
@@ -435,7 +438,9 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
 
   const order = {
     requestId: orderId,
-    source: context.origin.includes('public-checkout')
+    source: linkedPurchase
+      ? 'superadmin-linked-purchase-v1'
+      : context.origin.includes('public-checkout')
       ? 'public-checkout-v1'
       : context.origin.includes('sheets')
         ? 'google-sheets-manual-v1'
@@ -479,6 +484,7 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
     createdBy: context.email,
     lastChangeId: changeId,
     syncOrigin: context.origin,
+    ...(linkedPurchase ? { linkedPurchase: true, linkedBy: context.email } : {}),
   };
 
   const writes = [];
@@ -586,9 +592,11 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
       actorId: context.id,
       actorEmail: context.email,
       actorRole: context.role,
-      action: 'crear_pedido_manual',
+      action: linkedPurchase ? 'vincular_compra_cliente' : 'crear_pedido_manual',
       entityType: 'pedido',
       entityId: orderId,
+      ...(order.userId ? { targetId: order.userId } : {}),
+      ...(linkedPurchase ? { details: `Compra ${order.orderNumber || orderId} vinculada por Super Admin` } : {}),
       before: {},
       after: auditSummary(order),
       origin: context.origin,

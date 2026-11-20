@@ -69,7 +69,7 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20261117-editorial-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261113-senas-saldos-1';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261119-compra-vinculada-2';
 import './settings/cupones-admin.js?v=tintin-20261108-appcheck-fallo-1';
 import './products/integridad-inventario-admin.js?v=tintin-20261102-cancel-stock-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
@@ -150,6 +150,7 @@ let dashboardPresenceUnsubscribe = null;
 let dashboardAggregateUnsubscribe = null;
 let dashboardActivityClock = 0;
 let dashboardPresenceRestart = 0;
+let dashboardPresenceGraceTimer = 0;
 let dashboardActivityDay = '';
 let dashboardActivityState = { sessions: [], presence: [], totalVisits: null };
 let adminSettingsUnsubscribers = [];
@@ -1435,6 +1436,9 @@ function setupPermissions(role) {
 
 // ======== DASHBOARD ========
 const DASHBOARD_ONLINE_WINDOW_MS = 2 * 60 * 1000;
+// Margen tras un aviso de salida: al cambiar de página la siguiente avisa
+// presencia en 1-3 s, así la persona no parpadea como desconectada.
+const DASHBOARD_PRESENCE_LEAVE_GRACE_MS = 8000;
 const DASHBOARD_PRESENCE_QUERY_MS = 10 * 60 * 1000;
 
 function activityPresenceForUser(uid) {
@@ -1502,11 +1506,16 @@ function statisticsOrderIsValid(order) {
   return !['cancelado', 'rechazado'].includes(order?.status || 'pendiente') && !['cancelado','rechazado','reembolsado'].includes((order?.payment?.status || order?.paymentStatus || 'pendiente'));
 }
 
+function presenceIsOnline(item, now) {
+  const lastSeen = activityTimestampMillis(item.lastSeen);
+  if (lastSeen < now - DASHBOARD_ONLINE_WINDOW_MS || lastSeen > now + 60000) return false;
+  // leftAt: la pestaña se cerró u ocultó; el siguiente latido lo elimina.
+  const leftAt = activityTimestampMillis(item.leftAt);
+  return !(leftAt && leftAt >= lastSeen && leftAt <= now - DASHBOARD_PRESENCE_LEAVE_GRACE_MS);
+}
+
 function statisticsActivePresence(now = Date.now()) {
-  return dashboardActivityState.presence.filter(item => {
-    const lastSeen = activityTimestampMillis(item.lastSeen);
-    return lastSeen >= now - DASHBOARD_ONLINE_WINDOW_MS && lastSeen <= now + 60000;
-  });
+  return dashboardActivityState.presence.filter(item => presenceIsOnline(item, now));
 }
 
 function renderStatisticsBars(containerId, entries, labels = {}) {
@@ -2087,12 +2096,15 @@ function renderDashboardActivityMetrics() {
   const onlineEl = document.getElementById('stat-online-now');
   const statusEl = document.getElementById('dashboard-live-status');
   const now = Date.now();
-  const active = dashboardActivityState.presence
-    .filter(item => {
-      const lastSeen = activityTimestampMillis(item.lastSeen);
-      return lastSeen >= now - DASHBOARD_ONLINE_WINDOW_MS && lastSeen <= now + 60000;
-    })
+  const active = statisticsActivePresence(now)
     .sort((a, b) => activityTimestampMillis(b.lastSeen) - activityTimestampMillis(a.lastSeen));
+  // Quien avisó salida desaparece apenas vence el margen, sin esperar al reloj de 15 s.
+  window.clearTimeout(dashboardPresenceGraceTimer);
+  const leaveDue = active.map(item => activityTimestampMillis(item.leftAt) + DASHBOARD_PRESENCE_LEAVE_GRACE_MS - now)
+    .filter(ms => ms > 0);
+  dashboardPresenceGraceTimer = leaveDue.length
+    ? window.setTimeout(renderDashboardActivityMetrics, Math.min(...leaveDue) + 100)
+    : 0;
 
   // El total real (siteAggregate) cuenta a toda visita, no solo a quienes
   // aceptaron estadísticas — se usa como fuente principal apenas llega el
@@ -2123,6 +2135,8 @@ function stopDashboardActivityMetrics() {
   dashboardAggregateUnsubscribe = null;
   window.clearInterval(dashboardActivityClock);
   window.clearInterval(dashboardPresenceRestart);
+  window.clearTimeout(dashboardPresenceGraceTimer);
+  dashboardPresenceGraceTimer = 0;
   dashboardActivityClock = 0;
   dashboardPresenceRestart = 0;
   dashboardActivityDay = '';

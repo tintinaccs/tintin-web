@@ -100,3 +100,15 @@ test('abrir y cerrar el carrito una vez produce una sola apertura',async({page})
  await expect.poll(()=>state.calls.flatMap(c=>c.events||[]).filter(e=>e.action==='cart_open').length).toBe(1);
  expect(state.calls.flatMap(c=>c.events||[]).filter(e=>e.action==='panel_open')).toHaveLength(0);
 });
+
+test('al ocultar la página la presencia se cierra al instante y vuelve al regresar',async({page})=>{
+ const state=await mount(page);
+ const presence=()=>{const row=[...state.documents.entries()].find(([p])=>p.startsWith('sitePresence/'));return row&&state.decodeFirestoreFields(row[1].fields);};
+ await expect.poll(()=>presence()?.pageId).toMatch(/^p_/);
+ const setVisibility=value=>page.evaluate(v=>{Object.defineProperty(document,'visibilityState',{configurable:true,get:()=>v});Object.defineProperty(document,'hidden',{configurable:true,get:()=>v==='hidden'});document.dispatchEvent(new Event('visibilitychange'));},value);
+ await setVisibility('hidden');
+ await expect.poll(()=>state.calls.some(c=>c.kind==='presence'&&c.leaving===true&&c.pageId===presence()?.pageId)).toBe(true);
+ await expect.poll(()=>Boolean(presence()?.leftAt)).toBe(true);
+ await setVisibility('visible');
+ await expect.poll(()=>presence()&&!('leftAt' in presence())).toBe(true);
+});

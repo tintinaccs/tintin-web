@@ -174,8 +174,10 @@ export function buildTestPushContent(eventId, foregroundSound = 'default', foreg
  */
 export function buildFcmMessage({ token, content, ttlSeconds = 3600, urgency }) {
   // Urgencia de transporte Web Push; no altera Silencio/Concentración del SO.
-  const operational = ['order.created', 'payment.completed', 'payment.failed', 'payment.refunded'].includes(content.data?.type);
-  const priority = urgency ?? (operational ? 'high' : 'normal');
+  // Todo aviso va solo a los dispositivos de la dueña y debe llegar al
+  // instante: con `normal`, FCM/APNs lo agrupan y lo retrasan mientras el
+  // teléfono está en reposo. Un llamador puede pedir otra prioridad explícita.
+  const priority = urgency ?? 'high';
   return {
     message: {
       token,

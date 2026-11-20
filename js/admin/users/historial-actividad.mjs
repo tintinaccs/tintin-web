@@ -50,7 +50,9 @@ export function createActivityHistory(doc,{loadPage,loadPresence,isCurrent=()=>t
       const item=items.sort((a,b)=>new Date(b.lastSeen?.toDate?.()||b.lastSeen)-new Date(a.lastSeen?.toDate?.()||a.lastSeen))[0];
       if(!item){current.textContent='Sin señal actual registrada';return;}
       const seen=new Date(item.lastSeen?.toDate?.()||item.lastSeen);
-      const online=+now()-+seen<120000;
+      // leftAt: avisó salida (pestaña cerrada u oculta) después de su última señal.
+      const left=item.leftAt?new Date(item.leftAt?.toDate?.()||item.leftAt):null;
+      const online=+now()-+seen<120000 && !(left && +left>=+seen);
       current.textContent=`${online?'En línea según la última señal':'Sin actividad reciente'} · ${activityPresenceLabel(item,+now())} · ${format(seen)}`;
     },()=>{if(token===generation)current.textContent='Última actividad no disponible';});
     await next(token);

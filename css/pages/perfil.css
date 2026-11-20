@@ -273,3 +273,31 @@ body[data-tt-profile-v2="1"] .tt-profile-tabs{background:#fff!important}
 @media(orientation:landscape) and (max-height:500px) {
   .tt-profile-location-map .tt-map-canvas { height:200px; min-height:200px; }
 }
+
+/* Mis datos: los campos llegan bloqueados y «Editar» los habilita. */
+.tt-profile-data-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px; }
+.tt-profile-data-head .perfil-section-title { margin:0; }
+.tt-profile-edit-toggle { display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:8px 14px; border:1px solid var(--border,#F8AACA); border-radius:999px; background:var(--color-background-surface,#fff); color:var(--color-text-primary,#222222); font:600 12px/1.2 Montserrat,sans-serif; cursor:pointer; transition:background-color .15s ease; }
+.tt-profile-edit-toggle:hover { background:#FDECF2; }
+.tt-profile-edit-toggle:disabled { opacity:.5; cursor:not-allowed; }
+.tt-profile-edit-toggle[hidden] { display:none; }
+.tt-profile-edit-toggle:focus-visible,
+.tt-profile-data-actions .perfil-btn:focus-visible { outline:2px solid var(--color-text-primary,#222222)!important; outline-offset:3px; }
+.tt-profile-data-hint { margin:0 0 18px; color:var(--color-text-secondary,#222222); font-size:12px; line-height:1.6; }
+.tt-profile-data-fields { display:grid; grid-template-columns:minmax(0,1fr); gap:14px; min-width:0; }
+.tt-profile-data-fields .perfil-field { min-width:0; margin:0; }
+.tt-profile-data-fields .perfil-input { box-sizing:border-box; width:100%; min-height:48px; font-size:16px; }
+body[data-tt-profile-v2="1"] .tt-profile-data-card[data-profile-editing="false"] .perfil-input,
+body[data-tt-profile-v2="1"] .tt-profile-locked-field .perfil-input { background:#FFF7FA!important; border-color:transparent!important; cursor:default; }
+.tt-profile-data-card[data-profile-editing="false"] .perfil-input:focus { box-shadow:none; }
+.tt-profile-field-note { margin:6px 0 0; color:var(--color-text-secondary,#222222); font-size:11px; line-height:1.6; }
+.tt-profile-data-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; padding-top:18px; border-top:1px solid var(--border,#F8AACA); }
+.tt-profile-data-actions[hidden] { display:none; }
+.tt-profile-data-actions .perfil-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; width:auto; min-height:48px; margin:0; padding:12px 20px; border-radius:12px; font-size:12px; font-weight:600; letter-spacing:0; text-transform:none; }
+@media(min-width:700px) {
+  .tt-profile-data-fields { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:600px) {
+  .tt-profile-data-actions .perfil-btn { flex:1 1 100%; width:100%; }
+}
+@media (prefers-reduced-motion:reduce) { .tt-profile-edit-toggle { transition:none; } }

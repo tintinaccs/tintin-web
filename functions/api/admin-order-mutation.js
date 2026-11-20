@@ -17,6 +17,10 @@ import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadistica
 import { notifyOrderStatus } from './notifications.js';
 import { orderContactLinks } from '../../cloudflare/contactos-pedido.mjs';
 import { firestoreAdminGet, decodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
+import { dispatchOrderPushEvent, recordPushFailure } from '../../cloudflare/servicio-push.js';
+import { sendOrderEmails } from './order-email.js';
+import { queuePendingOrderEmail } from '../../cloudflare/resiliencia-correo-pedido.js';
+import { prepareLinkedPurchaseInput, updateCustomerProfileAdmin } from '../../cloudflare/perfil-cliente-admin.mjs';
 
 function deferCustomerNotification(context, env, actor, result) {
   if (result.duplicate || !result.orderId || !result.order) return;
@@ -24,6 +28,27 @@ function deferCustomerNotification(context, env, actor, result) {
   context.waitUntil?.(notifyOrderStatus(env, actor, result.orderId, result.order).catch(error => {
     console.error('[admin-order-mutation] notification failed', error?.message || error);
   }));
+}
+
+// Una compra vinculada sigue el mismo camino que una compra del checkout:
+// push a los admins, ticket por correo, estadísticas del cliente y Sheets.
+function deferNewOrderPipeline(context, env, created) {
+  if (created.duplicate || !created.orderId) return;
+  const eventId = `order.created:${created.orderId}`;
+  context.waitUntil?.(dispatchOrderPushEvent(env, 'order.created', created.orderId, eventId).catch(async error => {
+    console.error('[admin-order-mutation] Falló el push del pedido vinculado.');
+    await recordPushFailure(env, { eventId, type: 'order.created', orderId: created.orderId, error });
+  }));
+  context.waitUntil?.((async () => {
+    try {
+      await queuePendingOrderEmail(env, { orderId: created.orderId, retryAdmin: true, retryCustomer: true, lastError: '' });
+    } catch (error) { console.error('[admin-order-mutation] No se pudo encolar el ticket:', error?.message); }
+    if (!env.RESEND_API_KEY) return;
+    try {
+      const result = await sendOrderEmails({ env, apiKey: env.RESEND_API_KEY, orderId: created.orderId, order: created.order, isResend: false, sendAdmin: true, sendCustomer: true });
+      if (!result.success) console.warn('[admin-order-mutation] Ticket pendiente:', result.error);
+    } catch (error) { console.error('[admin-order-mutation] Falló el envío del ticket:', error?.message); }
+  })());
 }
 
 function safeText(value, max = 500) {
@@ -60,7 +85,7 @@ export async function onRequest(context) {
     const actor = body.action === 'updatePayment' || body.action === 'recordEmailResend'
       ? await requireOrderStaff(request, env)
       : await requireSuperAdmin(request, env);
-    if (!['createOrder', 'resetOrderSequence', 'recordEmailResend'].includes(body.action) && typeof body.baseChangeId !== 'string') {
+    if (!['createOrder', 'createLinkedOrder', 'updateCustomerProfile', 'resetOrderSequence', 'recordEmailResend'].includes(body.action) && typeof body.baseChangeId !== 'string') {
       throw new Error('Solicitud inválida: falta la versión del pedido. Actualizá los datos antes de guardar.');
     }
     if (body.action === 'updatePayment') {
@@ -99,6 +124,20 @@ export async function onRequest(context) {
       const result = await resetOrderSequenceAdmin(env, actorContext);
       return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true, note: 'El próximo pedido se creará con la secuencia canónica y se sincronizará a Sheets.' } }, 200, origin, requestUrl);
     }
+    if (body.action === 'updateCustomerProfile') {
+      const result = await updateCustomerProfileAdmin(env, body, actorContext);
+      return jsonResponse({ ok: true, result }, 200, origin, requestUrl);
+    }
+    if (body.action === 'createLinkedOrder') {
+      const input = await prepareLinkedPurchaseInput(env, body);
+      const result = await createOrderAdmin(env, input, { ...actorContext, origin: 'superadmin-linked-purchase' });
+      deferNewOrderPipeline(context, env, result);
+      context.waitUntil?.(syncOrderOwnerStats(env, result.order).catch(error => {
+        console.error('[admin-order-mutation] order stats sync failed', error?.message || error);
+      }));
+      context.waitUntil?.(syncOrderToSheetsBestEffort(env, result));
+      return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
+    }
     const result = body.action === 'createOrder'
       ? await createOrderAdmin(env, body, actorContext)
       : await applyOrderAdminMutation(env, body, actorContext);
@@ -120,7 +159,7 @@ export async function onRequest(context) {
     if (limited) return limited;
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);
     const message = safeText(error?.message, 300);
-    const allowed = /^(Elegí si querés devolver el stock|La decisión de stock corresponde|Solicitud inválida|Pedido inválido|El pedido ya no existe|No hay cambios administrativos permitidos|Estado de pedido no permitido|Estado de pago no permitido|Método de pago no permitido|Método de entrega no permitido|Correo de contacto inválido|Costo de envío inválido|Subtotal inválido|Ingresá el nombre del cliente|El producto .* (ya no existe|no está activo)|Precio inválido|El pedido contiene|El pedido debe|El pedido tiene demasiados|Stock inválido|Stock insuficiente|No se puede reconciliar el stock|El pedido cambió después de la última sincronización|Conflicto de versión|Tu rol no tiene permiso|No se pudieron verificar los permisos|Un pedido de retiro|Listo para retirar corresponde|El cambio de estado no corresponde)/i.test(message);
+    const allowed = /^(Elegí si querés devolver el stock|La decisión de stock corresponde|Solicitud inválida|Pedido inválido|El pedido ya no existe|No hay cambios administrativos permitidos|Estado de pedido no permitido|Estado de pago no permitido|Método de pago no permitido|Método de entrega no permitido|Correo de contacto inválido|Costo de envío inválido|Subtotal inválido|Ingresá el nombre del cliente|El producto .* (ya no existe|no está activo)|Precio inválido|El pedido contiene|El pedido debe|El pedido tiene demasiados|Stock inválido|Stock insuficiente|No se puede reconciliar el stock|El pedido cambió después de la última sincronización|Conflicto de versión|Tu rol no tiene permiso|No se pudieron verificar los permisos|Un pedido de retiro|Listo para retirar corresponde|El cambio de estado no corresponde|Cliente inválido|El cliente (ya no existe|está eliminado|está bloqueado|no tiene un correo válido)|No se puede vincular una compra|La cuenta Super Admin está protegida|La ficha cambió|El nombre no puede|El apellido no puede|Nombre inválido|Apellido inválido|El teléfono no puede|Teléfono inválido|Ese teléfono ya está registrado|El correo no puede|Correo inválido|Ese correo es de la cuenta|El correo ya pertenece|La dirección no puede|La cuenta de acceso no existe)/i.test(message);
     const status = statusFromError(error, 400);
     return jsonResponse({ ok: false, error: allowed ? message : 'No se pudo actualizar el pedido.', ...(error?.code === 'cancellation_stock_required' ? { code: error.code } : {}) }, status, origin, requestUrl);
   }

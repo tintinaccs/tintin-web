@@ -429,7 +429,9 @@ async function callCanonicalCreate_(patch) {
       'content-type': 'application/json',
     },
     body: JSON.stringify({
-      action: 'createOrder',
+      ...(modalState?.linkUid
+        ? { action: 'createLinkedOrder', linkUid: modalState.linkUid, orderId: modalState.requestId }
+        : { action: 'createOrder' }),
       userName: patch.userName,
       userPhone: patch.userPhone,
       contactEmail: patch.contactEmail,
@@ -474,8 +476,13 @@ async function saveModal_() {
     const patch = collectPatch_();
     if (!patch.userName) throw new Error('Ingresá el nombre del cliente.');
     if (modalState.mode === 'create') {
+      const linked = Boolean(modalState.linkUid);
+      const onDone = modalState.onDone;
       const result = await createManualOrder_(patch);
-      toast(`Pedido ${result.orderNumber} creado manualmente.`);
+      toast(linked
+        ? (result.duplicate ? `La compra ${result.orderNumber} ya estaba vinculada.` : `Compra ${result.orderNumber} vinculada al cliente.`)
+        : `Pedido ${result.orderNumber} creado manualmente.`);
+      if (typeof onDone === 'function') queueMicrotask(() => { try { onDone(result); } catch (error) { console.warn('[TINPED] refresco tras vincular:', error); } });
     } else {
       const orderId = modalState.orderId;
       if (!window.TintinInventoryIntegrity?.updateEditedOrder) throw new Error('El reconciliador de inventario no está disponible.');
@@ -519,16 +526,37 @@ function trackModal_(){
  document.documentElement.classList.add('tt-product-order-open');
 }
 
-async function openManualOrder() {
+// Con `link` el pedido se vincula a un cliente existente: el servidor toma
+// nombre, teléfono y correo de su ficha y lo trata como una compra real
+// (descuenta stock, avisa por push y correo y suma a sus estadísticas).
+async function openManualOrder(link = null) {
   modalReturnFocus = document.activeElement;
   assertSuperAdmin();
+  const linkUid = clean(link?.uid, 128);
+  if (link && !/^[A-Za-z0-9_-]{6,128}$/.test(linkUid)) throw new Error('Cliente inválido.');
   await loadCatalog_();
   assertSuperAdmin();
-  modalState = { mode: 'create', orderId: '', baseOrder: null, items: [] };
+  modalState = {
+    mode: 'create', orderId: '', baseOrder: null, items: [],
+    ...(linkUid ? { linkUid, requestId: `linked_${crypto.randomUUID().replaceAll('-', '')}`, onDone: link.onDone } : {}),
+  };
   const overlay = ensureModal_();
-  formEl_('tinped-modal-title').textContent = 'Nuevo pedido manual';
-  formEl_('tinped-modal-subtitle').textContent = 'TINPED, precios, total y stock se calculan automáticamente desde Firestore al guardar.';
-  fillModal_({ status: 'pendiente', payment: { method: 'efectivo', status: 'pendiente' }, shipping: { method: 'delivery' } });
+  const linkName = clean(link?.name, 120) || 'cliente';
+  formEl_('tinped-modal-title').textContent = linkUid ? `Vincular compra · ${linkName}` : 'Nuevo pedido manual';
+  formEl_('tinped-modal-subtitle').textContent = linkUid
+    ? 'Se crea un TINPED nuevo como compra real del cliente: descuenta stock, avisa por push y correo y suma a sus estadísticas.'
+    : 'TINPED, precios, total y stock se calculan automáticamente desde Firestore al guardar.';
+  fillModal_({
+    status: 'pendiente', payment: { method: 'efectivo', status: 'pendiente' }, shipping: { method: 'delivery', ...(linkUid ? { address: clean(link?.address, 300), city: clean(link?.city, 120) } : {}) },
+    ...(linkUid ? { userName: linkName, userPhone: clean(link?.phone, 40), contactEmail: clean(link?.email, 254) } : {}),
+  });
+  for (const id of ['tinped-name', 'tinped-phone', 'tinped-email']) {
+    const input = formEl_(id);
+    if (!input) continue;
+    input.readOnly = Boolean(linkUid);
+    if (linkUid) input.setAttribute('aria-readonly', 'true'); else input.removeAttribute('aria-readonly');
+    input.title = linkUid ? 'Se toma de la ficha del cliente.' : '';
+  }
   const codeInput = formEl_('tinped-code');
   codeInput.value = '';
   codeInput.placeholder = 'Automático: próximo TINPED';
@@ -572,6 +600,7 @@ async function openAdvancedOrderEditor(orderId,{productIds=[],returnFocus=null}=
   formEl_('tinped-modal-title').textContent=`Editar pedido · ${orderNumberOf(order)}`;
   formEl_('tinped-modal-subtitle').textContent=productIds.length?`${order.userName || 'Cliente sin nombre'} · ${productIds.length} producto${productIds.length===1?'':'s'} agregado${productIds.length===1?'':'s'} al borrador. Revisá cantidades y variantes.`:`ID técnico: ${resolvedId}`;
   const codeInput=formEl_('tinped-code');codeInput.readOnly=false;codeInput.removeAttribute('aria-readonly');
+  for(const id of ['tinped-name','tinped-phone','tinped-email']){const input=formEl_(id);if(input){input.readOnly=false;input.removeAttribute('aria-readonly');input.title='';}}
   fillModal_(order);renderPicker_();renderItems_();overlay.style.display='block';trackModal_();
   if(productIds.length){modalState.items=nextItems;renderItems_();window.AdminUnsaved?.markDirty('order-items-editor');requestAnimationFrame(()=>formEl_('tinped-items')?.scrollIntoView({block:'start'}));}
   formEl_('tinped-modal-close').focus();
