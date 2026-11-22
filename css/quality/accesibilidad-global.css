@@ -1,5 +1,10 @@
 /* TINTIN — Fase 10: accesibilidad y experiencia inclusiva */
 
+:root {
+  --tt-keyboard-public-ink: var(--color-text-primary, #222222);
+  --tt-field-edge: color-mix(in srgb, var(--tt-keyboard-public-ink) 65%, var(--color-background-surface, white));
+}
+
 .tt-skip-link {
   position: fixed;
   z-index: 2147483647;
@@ -22,9 +27,18 @@
 }
 
 :where(a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
-  outline: 3px solid var(--color-brand-primary, #F8AACA) !important;
+  outline: 3px solid var(--tt-keyboard-ink, var(--tt-keyboard-public-ink)) !important;
   outline-offset: 3px !important;
   box-shadow: 0 0 0 5px rgba(248,170,202, .16) !important;
+}
+
+body.tt-admin-control {
+  --tt-keyboard-ink: var(--admin-color-text-primary, var(--tt-keyboard-public-ink));
+}
+
+/* El borde distingue campos sobre superficies claras sin ocultar sus estados. */
+html body :is(.cat-search, .cat-sort, .tt-form-input, .tt-form-textarea, .login-email-input):enabled:not(:focus, [aria-invalid="true"], .is-invalid, .is-valid, .is-warning) {
+  border-color: var(--tt-field-edge) !important;
 }
 
 [data-tt-a11y-touch="1"],

@@ -5,6 +5,7 @@ const product = {
   id: 'qa-spacing', name: 'Reloj de acero inoxidable con nombre largo para comprobar la ficha',
   category: 'relojes', price: 70000, stock: 8,
   desc: 'Un accesorio para acompañarte cada día. Esta descripción conserva toda la información y se adapta sin tocar los bordes de la tarjeta.',
+  material: 'Acero inoxidable',
   imageUrl: '/assets-tintin/images/general/logo.png',
   variants: { Color: ['Dorado', 'Plateado'] },
   variantInventory: [{ variant: 'Dorado', stock: 4 }, { variant: 'Plateado', stock: 4 }]
@@ -99,6 +100,7 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
     }
     await expect(page.locator('.tinben')).toHaveCount(0);
     await expect(page.locator('#product-selection-title')).toHaveText('Tu selección');
+    await expect(page.locator('#product-specifications')).toContainText('Acero inoxidable');
     await expect(page.locator('#tinsel-root')).toBeVisible();
     await expect(page.locator('#tinsel-items')).toContainText('Todavía no agregaste accesorios');
     const geometry = await page.evaluate(() => {
@@ -113,6 +115,8 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
       if (parseFloat(containerStyle.paddingLeft) < 16 || parseFloat(containerStyle.paddingRight) < 16) issues.push('ficha sin margen exterior');
       const desc = document.querySelector('#product-desc'), selection = document.querySelector('.tt-product-selection');
       if (!(desc.compareDocumentPosition(selection) & Node.DOCUMENT_POSITION_FOLLOWING)) issues.push('selección antes de descripción');
+      const specs = document.querySelector('#product-specifications');
+      if (!(selection.compareDocumentPosition(specs) & Node.DOCUMENT_POSITION_FOLLOWING)) issues.push('características antes de selección');
       return issues;
     });
     expect(geometry).toEqual([]);

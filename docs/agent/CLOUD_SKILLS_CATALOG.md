@@ -139,3 +139,7 @@ La copia de `executing-plans` agrupa sus scripts de preparación, verificación 
 | [Last 30 Days](https://github.com/mvanhorn/last30days-skill) | `last30days` reúne evidencia reciente mediante la búsqueda pública del host y puede usar el motor local de la versión 4.6.0 con Python 3.12+. Incluye el runbook y la licencia MIT. |
 
 Las dos raíces de Skills contienen las mismas copias. [El registro de versiones](CLOUD_SKILLS_LOCK.json) fija el commit de cada origen, y el validador comprueba la licencia y la huella de los archivos instalados. Los imports directos normalizan espacios finales. Last 30 Days usa un punto de entrada para Tintín y conserva la guía upstream junto al motor. La copia incluye los recursos de investigación pública. Omite instaladores, hooks, configuración de cuentas, diagnóstico de credenciales y la ruta autenticada de Grok CLI. Los resultados estructurados informan la cobertura sin registrar detalles brutos de proveedores. El [enrutamiento](SKILLS_AUTO_ROUTING.md#tabla-de-enrutamiento-por-intención-archivos-y-subsistema) elige los Skills según la tarea.
+
+## Hallmark
+
+[Nutlope/hallmark](https://github.com/Nutlope/hallmark) v2.0.0 se instala en las dos raíces con licencia MIT, referencias de diseño y herramientas de revisión local. La revisión fijada y la huella de los archivos están en [CLOUD_SKILLS_LOCK.json](CLOUD_SKILLS_LOCK.json). Las utilidades de instalación global, hooks y generación remota están disponibles en el origen. Aplicar Hallmark según el enrutamiento y `DESIGN.md`, usando la identidad y las fotos de Tintín.

@@ -79,7 +79,7 @@ El cierre técnico debe indicar brevemente el resultado, las herramientas existe
 | --- | --- | --- |
 | Errores concretos, excepciones y regresiones | `systematic-debugging` | `fix-bug`, `tintin-tests-evidence` |
 | Checks fallidos de GitHub Actions, warnings accionables o skipped que bloquean una PR | `gh-fix-ci` | `systematic-debugging`, `verification-before-completion` |
-| Diseño o rediseño de páginas, apps y componentes | `tintin-design-quality` | `frontend-design` de Anthropic para dirección visual. Para una revisión puntual, elegir `taste-frontend` o `ui-ux-pro-max` cuando encaje mejor. |
+| Diseño o rediseño de páginas, apps y componentes | `tintin-design-quality` | `hallmark` si se pide por nombre o se diseña una página nueva. `frontend-design` para dirección visual y `taste-frontend` o `ui-ux-pro-max` para una revisión puntual. |
 | Responsive, tablet vertical/horizontal, accesibilidad, interacciones táctiles | `tintin-responsive-a11y` | `tintin-accessibility`, `ui-ux-pro-max` |
 | Textos, etiquetas, microcopy, notificaciones y voz comercial | `tintin-brand-copy` | `tintin-design-quality` |
 | Estrategia comercial, campañas, captación, CRO, contenidos o medición | Skill de Marketing Skills que cubra la tarea | `tintin-brand-copy` para voz propia o `tintin-search-seo` cuando cambie la web. |
