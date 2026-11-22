@@ -307,8 +307,10 @@
       "reason": "licencia o revisión sin verificar"
     },
     "last30days": {
-      "status": "catalog",
-      "reason": "paquete requiere revisión adicional"
+      "status": "existing",
+      "folder": "last30days",
+      "name": "last30days",
+      "reason": "Instalación directa con revisión fijada en CLOUD_SKILLS_LOCK.json."
     },
     "launch": {
       "status": "installed",

@@ -108,6 +108,32 @@ if agents_lock:
         if not file.is_file() or hashlib.sha256(file.read_bytes()).hexdigest() != expected_hash:
             errors.append(f"PYA agent integrity mismatch: {name}")
 alyn = json.loads((ROOT / "docs/agent/alyn-skills-lock.json").read_text(encoding="utf-8"))
+
+
+def skill_fingerprint(folder):
+    fingerprint = hashlib.sha256()
+    for file in sorted(folder.rglob("*")):
+        if file.is_file():
+            fingerprint.update(file.relative_to(folder).as_posix().encode() + b"\0")
+            fingerprint.update(hashlib.sha256(file.read_bytes()).digest())
+    return fingerprint.hexdigest()
+
+
+cloud_lock = json.loads((ROOT / "docs/agent/CLOUD_SKILLS_LOCK.json").read_text(encoding="utf-8"))
+for source in cloud_lock["directImports"]:
+    if len(source["revision"]) != 40:
+        errors.append(f"Unpinned direct import: {source['repository']}")
+    for name, fingerprint in source["skills"].items():
+        for prefix in PREFIXES:
+            folder = ROOT / prefix / name
+            if name not in seen[prefix] or not (folder / "LICENSE.upstream").is_file():
+                errors.append(f"Missing direct Skill or license: {prefix}/{name}")
+            if skill_fingerprint(folder) != fingerprint:
+                errors.append(f"Direct Skill files differ from the recorded import: {prefix}/{name}")
+    for name in source.get("reusedFromAlyn", []):
+        item = alyn["skills"].get(name, {})
+        if any(item.get(key) != source[key] for key in ("repository", "revision")) or item.get("status") != "installed":
+            errors.append(f"Missing matching Alyn import: {name}")
 for slug, item in alyn["skills"].items():
     if item["status"] != "installed":
         continue
