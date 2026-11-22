@@ -3,6 +3,8 @@
 - Base `0a1c03a0b0d9b83d254364f29c103887b1356f40`. Se agregaron 42 Skills de Marketing Skills y se reutilizaron 11 de la revisión ya importada. También se instalaron `token-efficient` y `last30days` en ambos clientes. Se reutilizó Anthropic `frontend-design` y se precisó su selección en el enrutamiento compartido.
 - PASS_LOCAL. Codex enumeró 143 Skills del repositorio sin errores de lectura. Se validaron hashes, licencias, copia Linux en ambas raíces y una investigación con datos de prueba de Last 30 Days, aislada de cuentas y datos de sesión. Skill consultado para la integración: `tintin-cloud-linux`.
 
+- Seguimiento del PR #1417. El resumen de CodeQL señaló escritura y registro de datos sensibles en utilidades upstream. La copia del motor se acotó a investigación pública y conserva los estados estructurados de fuentes.
+
 ## Alyn y revisión de GitHub Actions — 2026-11-22 — Codex
 
 - Base `3eb15d772c9a7e279cfb0a8e1333486782883e10`. Se cotejaron las últimas 100 ejecuciones y la última ejecución de cada uno de los 13 workflows versionados. Las últimas de los 13 terminaron correctamente; no había PR abiertas.

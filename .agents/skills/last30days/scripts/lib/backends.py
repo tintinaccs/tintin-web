@@ -272,94 +272,11 @@ def _probe_bird(config: Dict[str, Any]) -> BackendFinding:
 
 
 def _probe_grok(config: Dict[str, Any]) -> BackendFinding:
-    """grok CLI = keyless X. LOCAL-ONLY probe, like _probe_xurl.
-
-    Deliberately does NOT call ``health.probe_dependency``: that helper runs
-    ``subprocess.run([name, "--version"])``, and the whole-doctor-path test
-    patches ``subprocess.run`` to raise.
-
-    Consequence to be honest about: a grok binary that resolves on PATH but
-    will not execute (the stale-shim class) reports OK here and fails only when
-    a real run shells out. ``grok_x.is_available`` does not close that gap
-    either -- it is also filesystem-only. ``health.probe_dependency("grok")``
-    is the executing probe, and it runs in doctor's CLI-health block rather
-    than on this no-subprocess path.
-    """
-    from . import grok_x
-
-    requires = "grok CLI installed + signed in (no X credential)"
-    if which("grok") is None:
-        off_path = health._off_path_binary("grok")
-        if off_path is not None:
-            return BackendFinding(
-                name="grok",
-                status=health.MISSING,
-                requires=requires,
-                detail=f"grok is installed at {off_path} but that directory is not on this process's PATH",
-                prescription=health.path_edit_prescription(str(off_path.parent), "grok"),
-            )
-        return BackendFinding(
-            name="grok",
-            status=health.MISSING,
-            requires=requires,
-            detail="grok CLI not found on PATH",
-            prescription=(
-                "install the Grok CLI: npm install -g @xai-official/grok (or the installer at https://x.ai/cli/install.sh), "
-                "then run `grok login`"
-            ),
-        )
-    from . import grok_audit
-
-    audit = grok_audit.cached_status(os.path.realpath(which("grok")))
-    if audit and audit["verdict"] == grok_audit.FAIL:
-        return BackendFinding(
-            name="grok",
-            status=health.ERROR,
-            requires=requires,
-            detail=f"{audit['version']} failed the grok tool-boundary audit ({audit['check']})",
-            prescription=(
-                "update the grok CLI or use another X backend; "
-                "running `doctor` again clears this result so the next run re-audits"
-            ),
-        )
-    if audit:
-        audit_note = f"; {audit['version']} passed the tool-boundary audit"
-    else:
-        audit_note = "; this grok build is audited on its first run (local, no credits)"
-    store_status, store_detail, expires_at = grok_x.stored_auth_status()
-    if store_status == grok_x.AUTH_OK:
-        return BackendFinding(
-            name="grok",
-            status=health.OK,
-            requires=requires,
-            detail=f"{store_detail} (not live-verified until a run){audit_note}",
-        )
-    if store_status == grok_x.AUTH_EXPIRED:
-        expiry_str = expires_at.isoformat() if expires_at else "unknown"
-        return BackendFinding(
-            name="grok",
-            status=health.DEGRADED,
-            requires=requires,
-            detail=(
-                f"Grok session expired at {expiry_str}; "
-                "refresh happens at run time (if revoked, run `grok login --device-auth`)"
-            ),
-            prescription="grok login --device-auth",
-        )
-    if store_status == grok_x.AUTH_ERROR:
-        return BackendFinding(
-            name="grok",
-            status=health.ERROR,
-            requires=requires,
-            detail=store_detail,
-            prescription="grok login",
-        )
     return BackendFinding(
         name="grok",
         status=health.MISSING,
-        requires=requires,
-        detail="grok CLI installed but not signed in",
-        prescription="grok login",
+        requires="Grok CLI",
+        detail="The Tintín copy does not use the authenticated Grok CLI.",
     )
 
 

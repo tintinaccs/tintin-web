@@ -4635,19 +4635,9 @@ def _main(
             print(permission_preflight.render_text(preflight), end="")
         return 0
 
-    # Handle doctor subcommand: topic-word dispatch mirroring setup (exact
-    # match only, so multi-word research topics containing "doctor" still
-    # research normally). Aggregates probes/descriptors/prescriptions into
-    # one grouped health surface; always exits 0.
     if command_topic == "doctor":
-        from lib import doctor
-        return doctor.run(
-            config,
-            emit_json=(args.emit == "json" or "--json" in extra_argv),
-            cached="--cached" in extra_argv,
-            postmortem="--postmortem" in extra_argv,
-            probe="--probe" in extra_argv,
-        )
+        sys.stderr.write("[last30days] Use --diagnose for public source availability in Tintín.\n")
+        return 2
 
     if command_topic == "library feed":
         return _run_library_feed(args, config)
@@ -4661,89 +4651,9 @@ def _main(
     if command_topic == "queue cover" or command_topic.startswith("queue cover "):
         return _run_queue_cover(args, config, topic[len("queue cover") :].strip())
 
-    # Handle setup subcommand
     if command_topic == "setup":
-        from lib import setup_wizard
-        if "--openclaw" in extra_argv:
-            results = setup_wizard.run_openclaw_setup(config)
-            print(json.dumps(results))
-            return 0
-        if "--reddit-session" in extra_argv or "--no-reddit-session" in extra_argv:
-            if "--reddit-session" in extra_argv and "--no-reddit-session" in extra_argv:
-                sys.stderr.write("[last30days] pass --reddit-session or --no-reddit-session, not both.\n")
-                return 2
-            consent = "--reddit-session" in extra_argv
-            if consent and args.no_browser_cookies:
-                sys.stderr.write("[last30days] --no-browser-cookies refuses the Reddit login read.\n")
-                return 2
-            results = setup_wizard.run_reddit_session_setup(config, env.CONFIG_FILE, consent=consent)
-            print(json.dumps(results))
-            return 0
-        if any(f in extra_argv for f in ("--github", "--device-auth", "--github-start", "--github-poll")):
-            if "--github-start" in extra_argv:
-                results = setup_wizard.run_github_start()
-            elif "--github-poll" in extra_argv:
-                results = setup_wizard.run_github_poll()
-            elif "--github" in extra_argv:
-                results = setup_wizard.run_github_auth()
-            else:
-                results = setup_wizard.run_full_device_auth()
-            # Persist the returned key so the paid sources activate on the next
-            # run, and mask it in stdout so the secret never lands in the host
-            # model's captured Bash output.
-            api_key = results.get("api_key")
-            status = results.get("status")
-            if api_key:
-                if status == "success":
-                    results["persisted"] = setup_wizard.write_api_key(env.CONFIG_FILE, api_key)
-                elif status == "already_registered":
-                    results["persisted"] = True  # key was already saved
-                else:
-                    results.setdefault("persisted", False)
-                # Mask for EVERY status that carries a key, not just success, so
-                # the raw secret never reaches the host model's captured stdout.
-                results["api_key"] = setup_wizard.mask_api_key(api_key)
-            else:
-                results["persisted"] = False
-            print(json.dumps(results))
-            return 0
-        reuse_browser_consent = USE_RECORDED_BROWSER_CONSENT_FLAG in extra_argv
-        if reuse_browser_consent and config.get("_BROWSER_COOKIE_MODE") != "read":
-            print("not-granted")
-            return 0
-        fresh_browser_consent = _setup_has_fresh_browser_consent(args, extra_argv)
-        sys.stderr.write("Running auto-setup...\n")
-        results = setup_wizard.run_auto_setup(
-            config,
-            allow_browser_cookies=reuse_browser_consent or fresh_browser_consent,
-        )
-        # Keep only successful browsers, including distinct service winners;
-        # "auto" would also probe browsers that did not supply any cookies.
-        found_browsers = dict.fromkeys(
-            "firefox" if browser == "firefox-wsl" else browser
-            for browser in results.get("cookies_found", {}).values()
-        )
-        from_browser = ",".join(found_browsers) or None
-        denied_browsers = (
-            results.get("x_cookie_access_denied", [])
-            if results.get("browser_cookie_scan_attempted") else []
-        )
-        prior_denial = config.get("LAST30DAYS_X_COOKIE_ACCESS_DENIED")
-        denial_marker = (
-            ",".join(denied_browsers) or ("none" if prior_denial else None)
-            if results.get("browser_cookie_scan_attempted") else None
-        )
-        results["env_written"] = setup_wizard.write_setup_config(
-            env.CONFIG_FILE,
-            from_browser=from_browser,
-            x_cookie_access_denied=denial_marker,
-            browser_consent=None if args.diagnose or reuse_browser_consent else fresh_browser_consent,
-        )
-        if not results["env_written"]:
-            sys.stderr.write("Setup configuration could not be fully saved; some settings may already be saved.\n")
-            return 1
-        sys.stderr.write(setup_wizard.get_setup_status_text(results) + "\n")
-        return 0
+        sys.stderr.write("[last30days] Account and browser setup is unavailable in the Tintín copy.\n")
+        return 2
 
     # Bare --discover (no domain) is global trending, so the dispatch keys on
     # "flag present" (is not None), never on the domain string's truthiness.

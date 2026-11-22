@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import sys
 import threading
 import uuid
@@ -319,11 +318,6 @@ def _error_code(body: Optional[str]) -> Optional[str]:
     return code if isinstance(code, str) else None
 
 
-def _billing_hint() -> str:
-    root = re.sub(r"/api/v\d+$", "", _api_base())
-    return f"Add credits at {root}/dashboard/billing" if root else "Add credits to keep using paid sources."
-
-
 def observe_error(
     provider: str, status: int, body: Optional[str], headers: Any, call_key: Optional[str] = None,
 ) -> bool:
@@ -348,7 +342,7 @@ def observe_error(
                 _exhausted = message
                 first = True
         if first:
-            sys.stderr.write(f"[last30days] {message}. {_billing_hint()}\n")
+            sys.stderr.write(f"[last30days] {message}.\n")
             sys.stderr.flush()
         return True
     if code == "provider_unavailable":

@@ -48,7 +48,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from . import grok_audit, log, usage
+from . import log, usage
 from .dates import x_date_filters
 from .relevance import token_overlap_relevance as _compute_relevance
 # One copy of the snowflake, handle-grammar, and generated-sequence helpers
@@ -191,13 +191,8 @@ def clear_availability_cache() -> None:
 
 
 def binary_path() -> Optional[str]:
-    """Resolved `grok` path, or None when it is not on PATH.
-
-    PATH resolution is the gate, not file existence: a binary present on disk
-    but off the agent subprocess PATH is not installed as far as the engine is
-    concerned.
-    """
-    return shutil.which("grok")
+    """The Tintín copy does not launch the authenticated CLI."""
+    return None
 
 
 def token_store_path() -> Path:
@@ -900,91 +895,7 @@ def _check_cli_version(binary: str, workdir: str, timeout: float) -> Tuple[Optio
 
 
 def _invoke(prompt: str, timeout: int) -> Dict[str, Any]:
-    """Run `grok` once. Never raises; every failure returns {'error': str}.
-
-    When the error indicates auth revocation (refresh token rejected, not
-    signed in, etc.), the response also carries 'auth_revoked': True so
-    callers can fall back without retrying grok.
-    """
-    binary = binary_path()
-    if binary is None:
-        return {"error": "grok CLI not found on PATH"}
-    # Keep an updater's symlink swap from changing the build after its check.
-    binary = os.path.realpath(binary)
-    deadline = time.monotonic() + timeout
-    # The npm launcher picks its build at run time; audit and run the native
-    # build it would pick, so the verdict covers what actually executes.
-    try:
-        native = grok_audit.resolve_native(binary, timeout=deadline - time.monotonic())
-    except Exception as exc:  # noqa: BLE001 - search_x must never raise
-        _log(f"could not resolve the native grok binary: {type(exc).__name__}: {exc}")
-        native = None
-    if native is None:
-        return {"error": "could not locate the native grok binary behind the npm launcher",
-                "no_retry": True}
-    binary = native
-    try:
-        with tempfile.TemporaryDirectory(prefix="last30days-grok-") as workdir:
-            remaining = deadline - time.monotonic()
-            if remaining <= 0:
-                return {"error": f"grok CLI timed out after {timeout}s"}
-            version_error, version_line = _check_cli_version(binary, workdir, remaining)
-            if version_error:
-                return {"error": version_error, "no_retry": True}
-            verdict = grok_audit.verdict_for(binary, version_line, deadline)
-            if verdict.status == grok_audit.FAIL:
-                return {
-                    "error": (
-                        f"{version_line} failed the grok tool-boundary audit ({verdict.check}); "
-                        "use another X backend"
-                    ),
-                    "no_retry": True,
-                }
-            if not verdict.passed:
-                return {
-                    "error": (
-                        f"could not complete the grok tool-boundary audit ({verdict.check}); "
-                        "it will retry next run"
-                    ),
-                    "no_retry": True,
-                }
-            child_home = _stage_child_home(workdir)
-            agent_file = _write_agent_profile(workdir)
-            remaining = deadline - time.monotonic()
-            if remaining <= 0:
-                return {"error": f"grok CLI timed out after {timeout}s"}
-            usage.begin("grok")
-            result = subprocess.run(
-                _research_argv(binary, prompt, agent_file),
-                capture_output=True,
-                text=True,
-                # X posts are not cp1252. Without this, text=True decodes the CLI's
-                # stdout with the locale codec and a reader thread dies on the first
-                # emoji or smart quote, which surfaces as "no items parsed" rather
-                # than an error. Matches the auth-store read above.
-                encoding="utf-8",
-                errors="replace",
-                timeout=remaining,
-                cwd=workdir,
-                env=_subprocess_env(child_home),
-            )
-    except FileNotFoundError:
-        return {"error": "grok CLI not found on PATH"}
-    except subprocess.TimeoutExpired:
-        return {"error": f"grok CLI timed out after {timeout}s"}
-    except OSError as exc:
-        return {"error": f"grok CLI failed: {type(exc).__name__}: {exc}"}
-    except Exception as exc:  # noqa: BLE001 - search_x must never raise
-        return {"error": f"grok CLI failed: {type(exc).__name__}: {exc}"}
-
-    if result.returncode != 0:
-        detail = (result.stderr or result.stdout or "").strip()[:300]
-        error_msg = f"grok CLI exited {result.returncode}: {detail}"
-        response: Dict[str, Any] = {"error": error_msg}
-        if is_auth_revoked_error(detail):
-            response["auth_revoked"] = True
-        return response
-    return {"text": result.stdout or ""}
+    return {"error": "Grok CLI is disabled in the Tintín copy", "no_retry": True}
 
 
 def _run_query(
