@@ -3372,33 +3372,6 @@ def _split_hook_flags(
     return install_target, uninstall_target, remaining
 
 
-def _run_hook_setup(
-    install_target: str | None,
-    uninstall_target: str | None,
-) -> int:
-    from lib import hook_installer
-
-    if install_target is not None and uninstall_target is not None:
-        sys.stderr.write(
-            "[last30days] pass --install-hooks or --uninstall-hooks, not both.\n"
-        )
-        return 2
-    try:
-        # Bare --install-hooks / --uninstall-hooks uses "" -> "all", so dispatch
-        # checks `is not None` rather than string truthiness.
-        if install_target is not None:
-            result = hook_installer.install_hooks(install_target or "all")
-        else:
-            result = hook_installer.uninstall_hooks(uninstall_target or "all")
-    except ValueError as exc:
-        sys.stderr.write(f"[last30days] {exc}\n")
-        return 2
-    print(json.dumps(result, indent=2, sort_keys=True))
-    return 0
-
-STORE_KEY_FLAG = "--store-key"
-
-
 def _split_store_key(extra_argv: list[str]) -> tuple[bool, str, list[str]]:
     """Pull ``--store-key <NAME>`` / ``--store-key=<NAME>`` out of ``extra_argv``.
 
@@ -3433,59 +3406,6 @@ def _split_store_key(extra_argv: list[str]) -> tuple[bool, str, list[str]]:
 # One credential line: longer than any real token, short enough that a
 # misdirected stream on stdin cannot grow memory.
 STORE_KEY_MAX_BYTES = 64 * 1024
-
-
-def _run_store_key(name: str) -> int:
-    """``setup --store-key <NAME>``: persist one allowlisted credential from stdin.
-
-    Reads exactly one line from stdin (bounded to ``STORE_KEY_MAX_BYTES``),
-    strips whitespace, and writes it to the global ``.env`` as a 0o600 secret
-    through ``setup_wizard.write_api_key``. An existing line for the same
-    name is replaced, so a rejected credential can be rotated by running the
-    command again. The value never reaches stdout or stderr: stdout carries
-    ``NAME=****`` plus a JSON line ``{"persisted": bool, "key": NAME}``. A
-    name outside ``env.KEYCHAIN_KEYS`` or an empty value exits 2 without
-    echoing anything.
-    """
-    from lib import setup_wizard
-
-    if name not in env.KEYCHAIN_KEYS:
-        # Do not enumerate the allowlist here: on an official-only host a
-        # failure hint must not name the legacy credential keys.
-        sys.stderr.write(
-            "[last30days] setup --store-key: unknown or missing key name "
-            "(must be a credential name the engine loads from its .env; "
-            "see CONFIGURATION.md).\n"
-        )
-        return 2
-    value = sys.stdin.readline(STORE_KEY_MAX_BYTES).strip()
-    if not value:
-        sys.stderr.write(
-            f"[last30days] setup --store-key {name}: empty value on stdin; "
-            "pipe the credential as a single line.\n"
-        )
-        return 2
-    persisted = bool(
-        setup_wizard.write_api_key(env.CONFIG_FILE, value, key_name=name, replace=True)
-    )
-    print(f"{name}=****")
-    print(json.dumps({"persisted": persisted, "key": name}))
-    return 0 if persisted else 1
-
-SKILL_ONLY_FLAGS = {
-    "--agent",
-}
-
-# Doctor passthrough: `doctor --json` / `doctor --cached` mirror the setup
-# passthrough pattern (neither is a global parser flag; they only mean
-# something to doctor). `--cached` serves the stored doctor-cache.json report
-# within its TTL and falls through to a live run otherwise.
-DOCTOR_PASSTHROUGH_FLAGS = {
-    "--json",
-    "--cached",
-    "--postmortem",
-    "--probe",
-}
 
 
 def _looks_inline_json(value: str) -> bool:
@@ -4455,6 +4375,14 @@ def _main(
         if not args.cached_report or args.lookback_days is not None or args.as_of_date is not None else None
     )
     command_topic = "" if args.research_only or args.cached_report else topic.lower()
+    if command_topic == "setup":
+        sys.stderr.write("[last30days] Account and browser setup is unavailable in the Tintín copy.\n")
+        return 2
+
+    if command_topic == "doctor":
+        sys.stderr.write("[last30days] Use --diagnose for public source availability in Tintín.\n")
+        return 2
+
     _validate_extra_argv(parser, command_topic, extra_argv)
     if args.resolve_save_dir:
         print(env.resolve_memory_dir(args.save_dir))
@@ -4495,17 +4423,6 @@ def _main(
             "[last30days] --source, --since, and --dry-run are only supported by the 'library harvest' command.\n"
         )
         return 2
-    if command_topic == "setup":
-        # Persisting a credential or managing local hook configs needs no
-        # config load (no Keychain / pass probes, no cookie policy), so these
-        # dispatch before get_config.
-        store_key_present, store_key_name, _ = _split_store_key(extra_argv)
-        if store_key_present:
-            return _run_store_key(store_key_name)
-        install_target, uninstall_target, _ = _split_hook_flags(extra_argv)
-        if install_target is not None or uninstall_target is not None:
-            return _run_hook_setup(install_target, uninstall_target)
-
     config = env.get_config(policy=_config_policy_for_args(args, topic, extra_argv))
     if args.no_research_persistence:
         config["_no_research_persistence"] = True
@@ -4635,10 +4552,6 @@ def _main(
             print(permission_preflight.render_text(preflight), end="")
         return 0
 
-    if command_topic == "doctor":
-        sys.stderr.write("[last30days] Use --diagnose for public source availability in Tintín.\n")
-        return 2
-
     if command_topic == "library feed":
         return _run_library_feed(args, config)
     if command_topic == "library harvest":
@@ -4650,10 +4563,6 @@ def _main(
         return _run_queue_list(args, config)
     if command_topic == "queue cover" or command_topic.startswith("queue cover "):
         return _run_queue_cover(args, config, topic[len("queue cover") :].strip())
-
-    if command_topic == "setup":
-        sys.stderr.write("[last30days] Account and browser setup is unavailable in the Tintín copy.\n")
-        return 2
 
     # Bare --discover (no domain) is global trending, so the dispatch keys on
     # "flag present" (is not None), never on the domain string's truthiness.
