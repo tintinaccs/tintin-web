@@ -119,3 +119,12 @@ Instalación pedida por la titular. Copias fijadas con hashes en [design-skills-
 El conjunto solicitado por la titular reúne Anti-slop de miqdadbadjuber (MIT, v3.2.30), Unslop de Damir Sokolovsky (CC BY 4.0), Impeccable de pbakaus (Apache-2.0, importación existente) y Humanizer ES de jaimeberdejo (MIT, v1.2.0). Las carpetas y las referencias están en las dos raíces de Skills. El [registro de versiones y sumas](design-skills-lock.json) conserva las revisiones de origen y el contenido de cada importación. Las licencias y la atribución se incluyen junto a sus archivos.
 
 La frase «utiliza las nuevas 4 repos de IA que instalé» activa estas cuatro referencias conforme a [la regla de selección](SKILLS_AUTO_ROUTING.md#las-cuatro-herramientas-para-evitar-el-aspecto-de-ia). Los lanzadores incluidos por sus autores quedan disponibles como parte del material versionado. Esta integración usa las instrucciones y referencias del checkout, con Impeccable en modo de lectura manual.
+
+
+## Catálogo Alyn y paquetes revisados
+
+Alyn añade búsqueda y consulta por tarea en Codex y Claude Code mediante sus configuraciones MCP de proyecto. El [enrutamiento compartido](SKILLS_AUTO_ROUTING.md#alyn-en-codex-y-claude-code) explica cuándo usarlo y qué enviarle. Entre los 56 Skills de los nueve paquetes públicos y los destacados de la portada revisados el 22 de noviembre de 2026, 19 se incorporaron en ambas bibliotecas del repositorio y 13 ya estaban disponibles. Los demás tienen su estado y motivo de importación pendiente o exclusión en [alyn-skills-lock.json](alyn-skills-lock.json). El archivo conserva origen, revisión, licencia y huellas de cada copia local.
+
+El catálogo remoto permite consultar los demás Skills aplicables según la tarea y sus requisitos. La conexión depende de que el cliente admita MCP de proyecto y tenga acceso a Alyn. Las copias locales siguen disponibles sin red. Cada importación se incorpora como un conjunto de archivos del Skill. El repositorio no instala sus runtimes ni habilita hooks.
+
+La copia de `executing-plans` agrupa sus scripts de preparación, verificación y revisión y las guías por cliente de Superpowers de la misma revisión fijada. Las rutas se adaptaron a la instalación de Tintín. `video-shotcraft` se consulta en Alyn y su repositorio de origen ofrece el paquete multimedia completo.

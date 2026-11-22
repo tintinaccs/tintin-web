@@ -75,3 +75,18 @@ export function validateSnapshot(pr, mainSha, baseSha, headSha, config) {
       pr.base?.ref !== config.branch || pr.base?.sha !== baseSha || mainSha !== baseSha ||
       pr.head?.sha !== headSha) fail('El PR o main cambiaron: se requiere actualizar la rama y volver a verificar.');
 }
+
+/** GitHub can briefly return 405 while propagating the results of required checks. */
+export async function mergeValidatedCandidate(merge, verify, wait = ms => new Promise(resolve => setTimeout(resolve, ms))) {
+  const delays = [5_000, 15_000, 30_000, 60_000];
+  for (let attempt = 0; ; attempt++) {
+    await verify();
+    try {
+      return await merge();
+    } catch (error) {
+      if (error.status !== 405 || attempt >= delays.length) throw error;
+      console.warn(`GitHub devolvió HTTP 405 al fusionar. Se revalidará el mismo candidato en ${delays[attempt] / 1000}s.`);
+      await wait(delays[attempt]);
+    }
+  }
+}

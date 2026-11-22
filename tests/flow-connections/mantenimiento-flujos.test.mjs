@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { flowFileHash } from '../../scripts/auditar-proteccion-flujos.mjs';
-import { inspectMaintenance, validateAutomaticPullRequest, validateChecks, validateSnapshot } from '../../scripts/mantenimiento-flujos-core.mjs';
+import { inspectMaintenance, mergeValidatedCandidate, validateAutomaticPullRequest, validateChecks, validateSnapshot } from '../../scripts/mantenimiento-flujos-core.mjs';
 
 const baseSha = 'a'.repeat(40), headSha = 'b'.repeat(40);
 const fixture = () => {
@@ -129,3 +129,39 @@ for (const [name, mutate] of [
   ['retiro de archivo con alcance de registro', data => { data.baseline.records.a.push('js/gone.js'); data.candidate.records.a.push('js/gone.js'); }],
   ['retiro adicional por omisión', data => { delete data.candidate.files['js/b.js']; }],
 ]) test(`Retiro rechaza ${name}`, () => { const data = removalFixture(); mutate(data); assert.throws(() => inspectMaintenance(data)); });
+
+const githubError = status => Object.assign(new Error(`HTTP ${status}`), { status });
+
+test('El primer 405 se recupera con una nueva validación antes de fusionar', async () => {
+  const steps = [];
+  let requests = 0;
+  const result = await mergeValidatedCandidate(async () => {
+    steps.push('merge');
+    if (++requests === 1) throw githubError(405);
+    return { merged: true };
+  }, async () => steps.push('verify'), async ms => steps.push(ms));
+  assert.deepEqual(result, { merged: true });
+  assert.deepEqual(steps, ['verify', 'merge', 5_000, 'verify', 'merge']);
+});
+
+test('No vuelve a intentar un merge si el candidato cambió tras un 405', async () => {
+  let validations = 0;
+  let requests = 0;
+  await assert.rejects(mergeValidatedCandidate(async () => {
+    requests++;
+    throw githubError(405);
+  }, async () => {
+    if (++validations === 2) throw new Error('SHA cambió');
+  }, async () => {}), /SHA cambió/);
+  assert.equal(requests, 1);
+});
+
+test('Tiene un límite de espera para 405 y falla inmediatamente ante otros errores', async () => {
+  for (const [status, expected] of [[405, [5_000, 15_000, 30_000, 60_000]], [409, []]]) {
+    const delays = [];
+    await assert.rejects(mergeValidatedCandidate(async () => {
+      throw githubError(status);
+    }, async () => {}, async ms => delays.push(ms)), { status });
+    assert.deepEqual(delays, expected);
+  }
+});
