@@ -128,3 +128,14 @@ Alyn añade búsqueda y consulta por tarea en Codex y Claude Code mediante sus c
 El catálogo remoto permite consultar los demás Skills aplicables según la tarea y sus requisitos. La conexión depende de que el cliente admita MCP de proyecto y tenga acceso a Alyn. Las copias locales siguen disponibles sin red. Cada importación se incorpora como un conjunto de archivos del Skill. El repositorio no instala sus runtimes ni habilita hooks.
 
 La copia de `executing-plans` agrupa sus scripts de preparación, verificación y revisión y las guías por cliente de Superpowers de la misma revisión fijada. Las rutas se adaptaron a la instalación de Tintín. `video-shotcraft` se consulta en Alyn y su repositorio de origen ofrece el paquete multimedia completo.
+
+## Token Efficient, Marketing Skills, frontend-design y Last 30 Days
+
+| Recurso | Disponibilidad en Tintín |
+|---|---|
+| [Token Efficient](https://github.com/drona23/claude-token-efficient) | Adaptado a `token-efficient` a partir de las reglas de lectura y economía de contexto del proyecto original. Conserva las referencias y su licencia MIT. |
+| [Marketing Skills](https://github.com/coreyhaines31/marketingskills) | 53 Skills. Se agregaron 42 con sus referencias y recursos locales, y se reutilizaron 11 de la misma revisión ya incorporada por Alyn. |
+| [Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) | Se reutiliza la copia versionada de Anthropic. El enrutamiento la selecciona para la dirección visual de páginas y apps. |
+| [Last 30 Days](https://github.com/mvanhorn/last30days-skill) | `last30days` reúne evidencia reciente mediante la búsqueda pública del host y puede usar el motor local de la versión 4.6.0 con Python 3.12+. Incluye el runbook y la licencia MIT. |
+
+Las dos raíces de Skills contienen las mismas copias. [El registro de versiones](CLOUD_SKILLS_LOCK.json) fija el commit de cada origen, y el validador comprueba la licencia y la huella de los archivos instalados. Los imports directos normalizan espacios finales. Last 30 Days usa un punto de entrada para Tintín y conserva la guía upstream junto al motor. La copia incluye los recursos de investigación pública. Omite instaladores, hooks, configuración de cuentas, diagnóstico de credenciales y la ruta autenticada de Grok CLI. Los resultados estructurados informan la cobertura sin registrar detalles brutos de proveedores. El [enrutamiento](SKILLS_AUTO_ROUTING.md#tabla-de-enrutamiento-por-intención-archivos-y-subsistema) elige los Skills según la tarea.

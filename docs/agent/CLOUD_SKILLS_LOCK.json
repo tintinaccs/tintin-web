@@ -110,5 +110,85 @@
     "Graphify requires separate tool integration",
     "Chat Party Skills ambiguous",
     "entire catalogs not vendor-copied"
+  ],
+  "directImports": [
+    {
+      "repository": "drona23/claude-token-efficient",
+      "revision": "0d30a6db75af983b8ababf585f28faefdfc87895",
+      "license": "MIT",
+      "skills": {
+        "token-efficient": "52a084e92202ab50610202f07e1f06432bf4462c438b2c2df2d695421635ca9f"
+      }
+    },
+    {
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "license": "MIT",
+      "skills": {
+        "ab-testing": "c87d001ad88c98b72a8a7c78e08bd9adff2d6c254763ae3716dd123e3e8d013e",
+        "ads": "a486defceef54bb4c2b22101e3d217ddb6da0c72ae6d375b0f19a32f3a3bf8b7",
+        "aso": "97e2aacbded26c31c588c7381bedccad689c55b11cd68c27de1110b650b3b2a5",
+        "attribution": "e3bd75624b423ae9b482656236753414d6a0ec5996fcc2f27df6d7700dc66b46",
+        "churn-prevention": "dd830ed3f6943e995c7f9576ccdfd277a3ab9d2c722ce64f809f35382cc6d8f0",
+        "co-marketing": "32addf8b490b2ea0029347d1dddd0f8563a8fe0679dfb53af8a074f3f2a75bf2",
+        "cold-email": "e58631ed881130dabfd5bd871be224c944caf71e4c53ed757648076ff33e9156",
+        "community-marketing": "6201fa1f64c16e0b42859c66eed4a1210493cfe95781a2550874a5c2b1ca4984",
+        "competitor-profiling": "48f49201ead828a8ff3a2ab53e7fda08d2d4bde58d3176690a63a74262f5f5aa",
+        "competitors": "ce518bde29b936c27c6b0b06d7242df0019dd4e9cf3eff2b8b930561ea71fa4c",
+        "content-strategy": "8b8efd60165a5dfd48a1177984aca3f294f973b4473163bbfcf96be12053f645",
+        "conversion-tracking": "15dd55460ca2a1fc413ad00e22f23c6354055550c98748bb0a1e1b3b99aff8d7",
+        "copy-editing": "05e9d9a218a4e88f64ec07f5942c4dd5a502386f02e62b56cc13b9b531cc97f9",
+        "customer-research": "32002b1515fdba1f0483b638bed7d2a7407c1ef41f9981259caafa60b1f3cb7a",
+        "directory-submissions": "415ccda1f86e91bcf7c026dbdfab075bee35ed4950694735e5b8588cea802707",
+        "events": "bca2aa04c3dcd18d7a015f9007747b38cd903d7112e26672e5c10ade42d53327",
+        "free-tools": "914d968ec9a90223c4f3fa7af4dc4d9b53d71b9c54d798f2717388b9d650dbf1",
+        "image": "df449bc02311dc8344c6fb362f9e23a828a33c27d132425bf22849c01365c945",
+        "influencer-marketing": "f7998a2fb05f6c525719349377759b1acf737d004dfe5386d02dc84a11750ef1",
+        "link-building": "b5426c72b337c813b23ae298c2d72fc59e6855c3851858d7e92c814fdf3e0213",
+        "marketing-council": "7377d8aacdc2f435f7d2a37b25d9d09a62d1d9482eaa4abfd232f65f32499e1a",
+        "marketing-ideas": "ee3ba3f9b631233f6fe2a39af0fba8a04c0f4b87577fbbe958678f8f94d5b3db",
+        "marketing-loops": "ba8ff2f2078b244dbc9dceb9aee3dd1c355a529266e773905410c2e203210e38",
+        "marketing-plan": "f5d39a65eb9708dc507229183fa25eb7be6ff7126e8c1bfc35b358a3346462ce",
+        "offers": "48e12adefba63bed752af5788d53778e90c5c8370dd16f69e3e0d6376cff8a50",
+        "onboarding": "2f2604090d5682f0bec531903a40151699dbf768fc2d69a77c1be86827c5f353",
+        "paywalls": "25c843c640537511cd7a78b1ff1237d2c2235ff9202dd921dece9d1d87b1fe69",
+        "popups": "b0ae62046abef8296313a884d14eb7fba2e6480e6d14d1b8f80e16e724d77ac9",
+        "pricing": "bb5a2b184ebb4d4be8a6d70fb790feadd3dde8b62dadcf09f12bfa3ac259bd4d",
+        "product-marketing": "d0af3d4180fceb61d54dbac3882ce98e2d9a1185295a61bba76f228b36994bdd",
+        "prospecting": "715c4519aa15839f210bfbeba575d92d888cea40a8fc5497523e22985135f597",
+        "public-relations": "dac6f4c669562aaac70969d80cdc9785b522c108c5bd44e4de2eaaa99e2a643c",
+        "referrals": "141ea844207de1e876181cd974fd332f2292bdd69249c25dc98f9c0f0cc7c6df",
+        "reverse-engineer-marketing": "7c41296622b910485883c80fe9692c5e81de4d60a1b9a2d3d40808c69e4f3f16",
+        "revops": "748182aacd9577184de7cc214aea751a8890da407d984c63fc67be8a7eace9ee",
+        "sales-enablement": "a447c77cd9161c6eb35bc5308ba923b453b318056bead265d3891e51be296566",
+        "schema": "1ae9bf8ce8f975763a0b81a6f797a0ca68883a96dfd9ae3e3bd3be7852cfc3ce",
+        "signup": "413a7cff27aab0740994be5cef56a18ec8b0fdfdd39a3e0a24ae91374c402d6b",
+        "site-architecture": "9f7eb442d2ff23c6786ef6cb73c04936083d69664b430a268a9b96e636bd448f",
+        "sms": "563e9c16636c80d2d44177d54750b841bd5fc9f76d68977ca1b26ea031932ad5",
+        "social": "49e9343012c4c618bcacc5c3bacc2461c2324339307377b51450b440842a5112",
+        "video": "9425fd08c6abc139915d222b2fbe4439d7d45a2893d5ca7c88b456ba4c9ef6ae"
+      },
+      "reusedFromAlyn": [
+        "ad-creative",
+        "ai-seo",
+        "analytics",
+        "copywriting",
+        "cro",
+        "emails",
+        "launch",
+        "lead-magnets",
+        "marketing-psychology",
+        "programmatic-seo",
+        "seo-audit"
+      ]
+    },
+    {
+      "repository": "mvanhorn/last30days-skill",
+      "revision": "64b1f006f800640022ce07f51de5ce56aad34b76",
+      "license": "MIT",
+      "skills": {
+        "last30days": "3ae9e9c0f33025ad1e6df35c476b4343a8bee35d8eebf7a7729dc17428f6f90f"
+      }
+    }
   ]
 }

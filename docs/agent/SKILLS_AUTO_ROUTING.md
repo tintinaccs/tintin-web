@@ -79,9 +79,12 @@ El cierre técnico debe indicar brevemente el resultado, las herramientas existe
 | --- | --- | --- |
 | Errores concretos, excepciones y regresiones | `systematic-debugging` | `fix-bug`, `tintin-tests-evidence` |
 | Checks fallidos de GitHub Actions, warnings accionables o skipped que bloquean una PR | `gh-fix-ci` | `systematic-debugging`, `verification-before-completion` |
-| Diseño, ficha de producto, editor visual, estilos, apariencia genérica de IA (`css/`, HTML, componentes UI) | `tintin-design-quality` | `taste-frontend` (`design-taste-frontend`), `ui-ux-pro-max`, `frontend-design` (elegir, **no todos**) |
+| Diseño o rediseño de páginas, apps y componentes | `tintin-design-quality` | `frontend-design` de Anthropic para dirección visual. Para una revisión puntual, elegir `taste-frontend` o `ui-ux-pro-max` cuando encaje mejor. |
 | Responsive, tablet vertical/horizontal, accesibilidad, interacciones táctiles | `tintin-responsive-a11y` | `tintin-accessibility`, `ui-ux-pro-max` |
 | Textos, etiquetas, microcopy, notificaciones y voz comercial | `tintin-brand-copy` | `tintin-design-quality` |
+| Estrategia comercial, campañas, captación, CRO, contenidos o medición | Skill de Marketing Skills que cubra la tarea | `tintin-brand-copy` para voz propia o `tintin-search-seo` cuando cambie la web. |
+| Investigación de los últimos 30 días, tendencias, competidores o señales recientes de comunidades | `last30days` | `customer-research` o `competitors`, según la pregunta. |
+| Eficiencia de contexto en exploraciones extensas, depuración con logs o traspasos largos | `token-efficient` | Skill principal del dominio y `tintin-agent-efficiency` si se necesita un mapa del repo. |
 | Productos, variantes, colecciones, precios, inventario, carrito, checkout, retiro, delivery, encomienda y pedidos | `tintin-ecommerce-flows` | `tintin-commerce-integrity` |
 | Persistencia, reglas, índices, consultas, permisos o listeners de Firestore/Firebase | `tintin-firebase-integrity` | `tintin-data-index-sync`, `tintin-security-privacy` |
 | Datos desactualizados, indexación, sincronización entre panel y tienda, caché de catálogo | `tintin-data-index-sync` | `tintin-firebase-integrity` |
@@ -99,6 +102,10 @@ El cierre técnico debe indicar brevemente el resultado, las herramientas existe
 | Planificación técnica, instrucciones a agentes y handoff | `writing-plans` | `writing-for-agents`, `matt-handoff` |
 
 **No son reglas para forzar toda la biblioteca.** Los Skills del catálogo permanecen disponibles para detección semántica mediante las descripciones de sus `SKILL.md`; la tabla cubre los casos habituales. Si un caso nuevo coincide con la descripción de un Skill no listado, seleccionarlo. La ruta modificada es una pista; el pedido y la implementación real mandan.
+
+Para marketing, elegir por el entregable. Por ejemplo, `marketing-plan` para estrategia, `launch` para lanzamientos, `copywriting` para textos de campaña, `ad-creative` para piezas pagadas, `emails` para secuencias y `conversion-tracking` para medición de eventos. Las consultas de cuentas conectadas usan las herramientas autorizadas de cada plataforma. Envíos, publicaciones, cambios de campañas y nuevos rastreadores requieren la autorización que corresponda a esa acción.
+
+Para investigación reciente, `last30days` puede empezar con búsquedas públicas del host y usar su motor local cuando aporte cobertura. Al invocar el motor, seguir el modo público de la copia de Tintín. Para trabajo extenso, aplicar `token-efficient` al método de lectura y seguimiento desde el inicio, manteniendo la evidencia, las pruebas y el nivel de detalle que necesita la tarea.
 
 ## Selección para tareas transversales
 
