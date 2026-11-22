@@ -1,8 +1,8 @@
 ## Hallmark en Tintín — 2026-11-22 — Codex
 
 - Base `761f961abc33f54b3f20c33056f1d3383710ae25`. Hallmark 2.0.0 se instaló en ambas bibliotecas. Se revisaron los 18 documentos de interfaz desde el origen, incluidas las páginas de compra, cuenta, contenido y administración. Se usó el modo de revisión de Hallmark con `DESIGN.md` como sistema vigente.
-- Cambios: foco compartido con tinta semántica, controles de administración con cambios de estado inmediatos y selección de compra antes de características en la ficha. Se conservan las opciones de producto, los controles y la descripción.
-- El lint upstream cuenta duplicados de CSS generado y aplica reglas de páginas nuevas a shell, formularios y paneles existentes. Sirvió como inventario de observaciones, con verificación específica de cada cambio mediante el navegador y los controles vigentes de Tintín.
+- Cambios: foco compartido con tinta semántica, mejor delimitación de campos de catálogo, contacto, login y perfil, controles de administración con cambios de estado inmediatos y selección de compra antes de características en la ficha. Se conservan las opciones de producto, los controles y la descripción.
+- El lint upstream cuenta duplicados de CSS generado y aplica reglas de páginas nuevas a shell, formularios y paneles existentes. Sirvió como inventario de observaciones, con verificación específica de cada cambio mediante el navegador y los controles vigentes de Tintín. El cargador conserva texto y activos blancos sobre rosa por la decisión registrada de la titular.
 
 ## Skills de marketing, diseño, investigación y eficiencia — 2026-11-22 — Codex
 
