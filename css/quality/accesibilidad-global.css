@@ -22,9 +22,13 @@
 }
 
 :where(a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
-  outline: 3px solid var(--color-brand-primary, #F8AACA) !important;
+  outline: 3px solid var(--tt-keyboard-ink, var(--color-text-primary, #222222)) !important;
   outline-offset: 3px !important;
   box-shadow: 0 0 0 5px rgba(248,170,202, .16) !important;
+}
+
+body.tt-admin-control {
+  --tt-keyboard-ink: var(--admin-color-text-primary, var(--color-text-primary, #222222));
 }
 
 [data-tt-a11y-touch="1"],

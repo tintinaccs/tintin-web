@@ -268,8 +268,10 @@
       "reason": "requiere el entorno del paquete GEO"
     },
     "hallmark": {
-      "status": "catalog",
-      "reason": "paquete requiere revisión adicional"
+      "status": "existing",
+      "name": "hallmark",
+      "folder": "hallmark",
+      "reason": "Instalación directa con revisión fijada en CLOUD_SKILLS_LOCK.json."
     },
     "humanizer": {
       "status": "installed",
