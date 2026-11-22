@@ -18,7 +18,7 @@ plan=$1
 n=$2
 base=$3
 shift 4
-sdd="$(cd "$(dirname "$0")/../../subagent-driven-development/scripts" && pwd)"
+sdd="$(cd "$(dirname "$0")" && pwd)"
 
 # The repository the workspace and ledger belong to (see sdd-repo); BASE and
 # HEAD are read there, not in the bare cwd.

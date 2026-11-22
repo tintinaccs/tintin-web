@@ -47,7 +47,7 @@ those, stop and ask.
 - You have a plan from superpowers:writing-plans and your human partner
   chose inline execution at the handoff.
 - Your harness has no subagent tool (see the per-platform references in
-  `../using-superpowers/references/`). Never fabricate a dispatch; run
+  `references/platforms/`). Never fabricate a dispatch; run
   the plan here.
 - Tasks are mostly independent — the same precondition as
   superpowers:subagent-driven-development.
@@ -123,7 +123,7 @@ The workspace and ledger are shared with superpowers:subagent-driven-development
 and the new one resumes from the same ledger.
 
 - Each plan owns a workspace: at skill start, run
-  `../subagent-driven-development/scripts/sdd-workspace PLAN_FILE` by its
+  `scripts/sdd-workspace PLAN_FILE` by its
   absolute path, from the working tree you're executing in — it
   prints the plan's git-ignored directory
   (`<repo-root>/.superpowers/sdd/<plan-basename>/`), home to every
@@ -235,7 +235,7 @@ mark the todo complete and take the next task.
 
 ## Final Review
 
-Run `../subagent-driven-development/scripts/review-package PLAN_FILE MERGE_BASE HEAD`
+Run `scripts/review-package PLAN_FILE MERGE_BASE HEAD`
 by its absolute path, from the working tree you're executing in (MERGE_BASE = the commit the branch started from, e.g.
 `git merge-base main HEAD`) and review from the file it prints.
 
@@ -252,7 +252,7 @@ explicitly; an omitted model inherits the session's, which may not be the
 most capable. This is the one fresh context the whole run buys. Do not
 skip it, and do not replace it with your own read of the diff.
 
-**Without a subagent tool:** read code-reviewer.md and perform that review
+**Without a subagent tool:** read [code-reviewer.md](../requesting-code-review/code-reviewer.md) and perform that review
 yourself against the package, as a separate pass after the last task's
 ledger line. Write `Final review: self-review (no subagent tool)` to the
 ledger, and say so in your final message: a self-review by the author is

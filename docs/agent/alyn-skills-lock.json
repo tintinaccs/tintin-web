@@ -236,9 +236,20 @@
       "folder": "executing-plans",
       "sha256": {
         "LICENSE.alyn-upstream": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
-        "SKILL.md": "deaf176fa179827e80f2ea3101db3ea90fdf562ebef340eba761e4687940f5f5",
-        "scripts/task-done": "ac0b5ebafc7d471507b7e94d88da77a11f187ba277c8d48fefaf8ff3e4fee50e",
-        "scripts/task-start": "4ae7ce3b6777c3240af786197836a6b4bbf3b0ee831c25f147c149ea8db54a21"
+        "SKILL.md": "589e005ff5f1ae6b63ee1b064e70a7842c397d6318c545a8a9b8d8a6db4eda07",
+        "references/platforms/antigravity-tools.md": "4880f6de3da4e32f9659ebe7a72b9e0ebfff04e028c2ed96173f86d0387a04c0",
+        "references/platforms/claude-code-tools.md": "21479a3fee27448cab8748a3b5687e53bb257883bda9c070426f9a1ab5cebf1b",
+        "references/platforms/codex-tools.md": "1a38ad9b188c393052f58d95657a1c35ea6aafc8b5a27f198f3922912f70bbe7",
+        "references/platforms/gemini-tools.md": "62b9157bcb0ee3c6784e3d0da0798ddfa5872f9e0c34bea48f3079dabea71965",
+        "references/platforms/hermes-tools.md": "e2185c976a3c87503910e05e2aea58cc89bc8e569bb624b93df9958ac47a9190",
+        "references/platforms/muse-tools.md": "5a1da5c575fe18456ca71cd47ebfd8a38c745f8d82a67fe64d5b83080000eeb3",
+        "references/platforms/pi-tools.md": "703dbc83d23ecab9c6f388460c38abc482e9dee2fe6772a8c7a255152ad3a4d5",
+        "scripts/review-package": "aed7c6e09fc660417d28898ed975e84651cb9f18f4675141cd475edfb7037f3d",
+        "scripts/sdd-repo": "6f8256a776968d394bae679572e41ce572fd45c72074b98f9a8eb8b4f160e06f",
+        "scripts/sdd-workspace": "de3af5252fa595fc2000ba05cf69e06187d5c8aae9d283cced4c167ad1813061",
+        "scripts/task-brief": "0f244a12e146393c552ba62069d3eedcc85cb3f76de67b01f4e11219e5ebbcd8",
+        "scripts/task-done": "3ffd95639b0744c82ffe45664ad0c6ad683d5e9629ae112983bd58cf7d8abc5a",
+        "scripts/task-start": "89b0a10e35a8d166a2601e9a0a07745bc6cc9d55bbb305e084ddf5a19bffea15"
       }
     },
     "frontend-design": {
@@ -480,17 +491,13 @@
       "reason": "el enrutamiento existente ya cubre esa función y el upstream exige activación global"
     },
     "video-shotcraft": {
-      "status": "installed",
+      "status": "catalog",
       "name": "video-shotcraft",
       "repository": "Vincentwei1021/video-shotcraft",
       "revision": "59f3e9b9e936ff2bce0e18446226d770a3f2f61f",
       "path": "SKILL.md",
       "license": "Apache-2.0",
-      "folder": "video-shotcraft",
-      "sha256": {
-        "LICENSE.alyn-upstream": "b2ce9877a55547ada9b870150664d1468ff777e67cc9888806a73927d31c5771",
-        "SKILL.md": "9e6b2d68f50cae3d5405178d35d2bd305ee2045691fa726b63bae3ab8bb62e6b"
-      }
+      "reason": "Requiere plantillas, guías, scripts y recursos multimedia del paquete completo de upstream."
     },
     "web-design-guidelines": {
       "status": "catalog",
