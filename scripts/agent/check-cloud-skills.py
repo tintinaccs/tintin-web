@@ -107,6 +107,20 @@ if agents_lock:
         file = agents_dir / name
         if not file.is_file() or hashlib.sha256(file.read_bytes()).hexdigest() != expected_hash:
             errors.append(f"PYA agent integrity mismatch: {name}")
+alyn = json.loads((ROOT / "docs/agent/alyn-skills-lock.json").read_text(encoding="utf-8"))
+for slug, item in alyn["skills"].items():
+    if item["status"] != "installed":
+        continue
+    if len(item["revision"]) != 40 or "LICENSE.alyn-upstream" not in item["sha256"]:
+        errors.append(f"Missing pinned revision or upstream license: {slug}")
+    for prefix in PREFIXES:
+        folder = ROOT / prefix / item["folder"]
+        actual = {
+            file.relative_to(folder).as_posix(): hashlib.sha256(file.read_bytes()).hexdigest()
+            for file in folder.rglob("*") if file.is_file()
+        }
+        if actual != item["sha256"]:
+            errors.append(f"Alyn Skill files differ from the recorded import: {prefix}/{item['folder']}")
 checks = [
     ".agents/skills/taste-frontend/scripts/draw.mjs",
     ".claude/skills/taste-frontend/references/copy.md",

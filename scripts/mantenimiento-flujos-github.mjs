@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { readTrustedOrRemote, githubFailure } from './leer-blobs-mantenimiento.mjs';
 import { execFileSync } from 'node:child_process';
-import { inspectMaintenance, validateAutomaticPullRequest, validateChecks, validateSnapshot, policyPath, planPath } from './mantenimiento-flujos-core.mjs';
+import { inspectMaintenance, mergeValidatedCandidate, validateAutomaticPullRequest, validateChecks, validateSnapshot, policyPath, planPath } from './mantenimiento-flujos-core.mjs';
 
 // Este programa sólo se ejecuta desde el checkout confiable de main.
 // El árbol candidato se lee como JSON y blobs; nunca se ejecuta su código.
@@ -18,7 +18,7 @@ const api = async (path, body, method = body ? 'POST' : 'GET') => {
     headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${process.env.GH_TOKEN || ''}`, 'content-type': 'application/json', 'X-GitHub-Api-Version': '2026-03-10' },
     ...(body ? { body: JSON.stringify(body) } : {}), signal: AbortSignal.timeout(30000),
   });
-  assert(response.ok, githubFailure(path, response));
+  if (!response.ok) throw Object.assign(new Error(githubFailure(path, response)), { status: response.status });
   return response.status === 204 ? null : response.json();
 };
 const list = async (path, key) => {
@@ -158,7 +158,13 @@ try {
   validateChecks(await checkCI(), config, headSha);
   await snapshot();
   await report('success', 'Plan exacto, hashes reales, alcances y CI del commit verificados automáticamente.');
-  const merged = await api(`pulls/${prNumber}/merge`, { sha: headSha, merge_method: config.mergeMethod }, 'PUT');
+  const merged = await mergeValidatedCandidate(
+    () => api(`pulls/${prNumber}/merge`, { sha: headSha, merge_method: config.mergeMethod }, 'PUT'),
+    async () => {
+      validateChecks(await checkCI(), config, headSha);
+      await snapshot();
+    },
+  );
   assert(merged.merged === true && /^[a-f0-9]{40}$/.test(merged.sha || ''), 'GitHub no confirmó la integración.');
   console.log(`PR ${prNumber} integrado: ${merged.sha}`);
   // Los pushes con GITHUB_TOKEN no disparan Actions. Los dispatch explícitos

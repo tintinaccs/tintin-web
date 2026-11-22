@@ -1,0 +1,507 @@
+{
+  "catalog": "https://alyn.dev",
+  "reviewed": "2026-11-22",
+  "bundles": [
+    "design",
+    "engineering",
+    "founder",
+    "writer",
+    "seo-geo",
+    "marketing",
+    "documents",
+    "video",
+    "lean"
+  ],
+  "skills": {
+    "academy-guide": {
+      "status": "catalog",
+      "reason": "licencia o revisión sin verificar"
+    },
+    "ad-creative": {
+      "status": "installed",
+      "name": "ad-creative",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/ad-creative/SKILL.md",
+      "license": "MIT",
+      "folder": "ad-creative",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "3bbdaafe85e7be03eb8501919eafbc804dbf6052c1597d3afff7756c1d72667f",
+        "assets/creative-review-template.html": "0ca7cce4fa809235aee776606205925d8dc01bde8a8325e2af7197d86394d3b7",
+        "evals/evals.json": "a688328a32f7ff3ffd975a2e4a31b5bc2a2c5dae86af0656f8b0ec61e9f8c916",
+        "references/awareness-headlines.md": "0f9b2408e402ad03956ff84bf31e5c594371dd3e2974c5390c42af4e3c60ed4d",
+        "references/creative-review-page.md": "03518911b1648bce12a3d579c5979b97442af50de24ff74809a43ba3395dcb3a",
+        "references/creative-roadmap.md": "a0be737841d8a73f0cf02094c9ed1e3f7c050e1c6f867794b1fa8b64dbf3b50e",
+        "references/generative-tools.md": "4b9de6f12d1dec258711a979431b979902d6d0076173e7a27d70754d8c5c7dca",
+        "references/hook-system.md": "2967ecbf32423bbb70ca9587b0af8d257466c852106fe909f6447bbab9a18002",
+        "references/imessage-video-ads.md": "99627f4a43f9ee8394be49c95bb865496037cf9901dfcdc1d1b0af9d86396aec",
+        "references/meta-creative-formats.md": "46f6261b368f720f960367f7c164bf9ac23520504331d3b325215d100edccbdf",
+        "references/motion-video-ads.md": "05908657e1c587a19382f50901666acc722d8f48425fc59c2b8cd777d83ed139",
+        "references/platform-specs.md": "de69753161071a8d3e4d244280562810a6c4d6ae2696c5a21940f983abd0aa8e",
+        "references/short-form-video-specs.md": "1aa1cc498e350ed00ec4783b60d2eddee5bc98f25750761f6086742d0758f953",
+        "references/static-ad-templates.md": "0f09a356486c906a0d7f1ea87473e1c782b5f6c50ec44dc6756cd719d4de0217"
+      }
+    },
+    "agent-harness-construction": {
+      "status": "installed",
+      "name": "agent-harness-construction",
+      "repository": "affaan-m/ECC",
+      "revision": "4adeee6732a12d1540f49a4d50a38ce8c97f9a53",
+      "path": "skills/agent-harness-construction/SKILL.md",
+      "license": "MIT",
+      "folder": "agent-harness-construction",
+      "sha256": {
+        "LICENSE.alyn-upstream": "326146379f01bb137c0a5d3c54770c1aa31076705c8b88a7f6b26a460f6221b2",
+        "SKILL.md": "6d79c5a080cc6ed4cc11782da08a875e208da3b13eb43d9e7574bf4879ce5541"
+      }
+    },
+    "ai-seo": {
+      "status": "installed",
+      "name": "ai-seo",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/ai-seo/SKILL.md",
+      "license": "MIT",
+      "folder": "ai-seo",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "1eb9e2c4d35adc3b98e10703c03909a92d2e45244095287f88e023ce7c307024",
+        "evals/evals.json": "3824a16a8a8179ac69d40df5148560ad57421b05433b2c78fd191c7ea0a013b6",
+        "references/agent-defaults.md": "4f009f323b381553961914bf7d67755ee3c178dd10f1570f61fe306cd0054b21",
+        "references/agent-readiness.md": "2d2d3b47c4efa6151bd463f8bdbd346101d7e9606946d7479f97aeb694cc7561",
+        "references/ai-attribution.md": "accaf004e50fd92d16e5e1b57ce0aa5f5c0f88d1ba7bb2ce6939de29fe3e1728",
+        "references/answer-accuracy.md": "9c9115a720c6891fc7e0122d465ed38643170b026fa461de5971feb642f0da57",
+        "references/citations-vs-recommendations.md": "90adc950592b24d8ebd46460ef7ada6a2c4df0f4e4752903c93341cbe182b919",
+        "references/content-patterns.md": "07ac95563bf96fdefc2dc0513908c8cf0241dfbf4d90ce61f9b4fbe8ed628d65",
+        "references/content-types.md": "2323104990cb3057f3ce135c2b7bac71e5369992d5aeb24cec009c8f6d841d0b",
+        "references/format-volatility.md": "235858ee4d820dd0b89d3c7ffc65f4f59c7904f63feef7d2fff78cc6818caddf",
+        "references/linkedin-ai-citations.md": "2bd191703b543fc5f3ae36f5e367ed6d5504ad38e7446797cd3c5fe23ababd4b",
+        "references/multilingual-and-commerce.md": "5d65db4b85c9c257f4d052a9b3b65bb2f72af140076e2b2dc4cf7dd34d111057",
+        "references/okf.md": "4abcab5b8ee90b63c5d09c98387a8ec3cdb8f5df33e75d3b4b91eb817283bfd8",
+        "references/platform-ranking-factors.md": "82951391c75008b01d6025e591d8141f222cbb578054727f685cfb8178e5e49a",
+        "references/positioning-and-consensus.md": "b7618247e57a4560c3785155c34de77adc232784b7dd91b2c44a77a73617b9b4",
+        "references/prompt-portfolio.md": "8891f4e747d4eb17a4a2f1d075a081d4261a6084eaa1e9fdb862ed09ebb505c0",
+        "references/youtube-ai-citations.md": "eee24cd9f377db5f59933c775a740f5ff7ece9f238b051157ba72531d9507a99"
+      }
+    },
+    "analytics": {
+      "status": "installed",
+      "name": "analytics",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/analytics/SKILL.md",
+      "license": "MIT",
+      "folder": "analytics",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "45f0d00c1f8ea9ef836882a1ebbc1dadca12f96db8e921c4252e34a4126c903a",
+        "evals/evals.json": "526f4bf20cedca26906dd0c3dfb6ae67de3f5b17977eb426820ca406c5ce0e59",
+        "references/event-library.md": "c60e3e145e6b06258570350b614913ed9150143b4494a71396abaef479502b05",
+        "references/ga4-implementation.md": "a5715de092984fc148b1825f1edc7730813452876f991819c219b477ef03ed6d",
+        "references/gtm-implementation.md": "0b161102de710c978cc2ac52c78c79f32e184bc028aa946eba18e777d7a60d64"
+      }
+    },
+    "anything2explainer": {
+      "status": "catalog",
+      "reason": "licencia upstream NOASSERTION requiere revisión"
+    },
+    "avoid-ai-writing": {
+      "status": "installed",
+      "name": "avoid-ai-writing",
+      "repository": "wshobson/agents",
+      "revision": "12bcec79ec7f24868bc75fe8cd21428ebf5e96d0",
+      "path": "plugins/avoid-ai-writing/skills/avoid-ai-writing/SKILL.md",
+      "license": "MIT",
+      "folder": "avoid-ai-writing",
+      "sha256": {
+        "LICENSE.alyn-upstream": "25ee5b10745b5772693ec03702d85b7eadfd2feed5acbd677a267d1a600f6aaa",
+        "SKILL.md": "3b0940b0014a64aaff405f367e44241095c96856cabcd0a01adf0ec33bbc1a66",
+        "references/pattern-catalog.md": "e085c85213c5e903e370d2c97831e1829dffead8346d202267d1a54298fb9595",
+        "references/profiles.md": "701afb02c9788cdfa60696c0e3f7cb37485c5174cc269f7fb1f234daf5c6b810",
+        "references/word-tiers.md": "8a693aa10f61c55ce3f92945cdf1472079a6b8a07bc0ff906bd38315681362e4"
+      }
+    },
+    "brag": {
+      "status": "catalog",
+      "reason": "paquete requiere revisión adicional"
+    },
+    "brainstorming": {
+      "status": "installed",
+      "name": "brainstorming",
+      "repository": "obra/superpowers",
+      "revision": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "path": "skills/brainstorming/SKILL.md",
+      "license": "MIT",
+      "folder": "brainstorming",
+      "sha256": {
+        "LICENSE.alyn-upstream": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+        "SKILL.md": "2c9ca71f94886f9ca9f4aef055f7cafb3e1a9bdf3aeebf8f4cb547c69405d207",
+        "builder-check-prompt.md": "36d51a4723d6f0a3ce5811a0ea3b3a8424f07533947e1355f5d8cb8cce40c55e",
+        "scripts/frame-template.html": "6a8a4e58bd6a44b904e2e3c57de774481d909204597e1498de53f1b2fecc4c4e",
+        "scripts/helper.js": "43c6d69954a46ec34a2a262bcc62a9a7e83e839c739f199cb72646d397c686e3",
+        "scripts/server.cjs": "763abf96510e0b892a1141397b31aa82ef900cf87ed34dde94bc8782baf4a7ca",
+        "scripts/start-server.sh": "314dd68dc00e8dd94c7491aca8a5f004c7fddffc161e2b07482f29f48d13659a",
+        "scripts/stop-server.sh": "0b5ccbbd57f62d3ed88993f7940b5ee0e5c0fc9b21c550c623da4f6292e47daf",
+        "visual-companion.md": "6ffcb038b53254bd31debaa15e12dcd4ff24bd63d690e0b644ac6396701cf2e2"
+      }
+    },
+    "caveman": {
+      "status": "existing"
+    },
+    "code-review": {
+      "status": "existing"
+    },
+    "copywriting": {
+      "status": "installed",
+      "name": "copywriting",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/copywriting/SKILL.md",
+      "license": "MIT",
+      "folder": "copywriting",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "86dc0466493e8ac59ab17a8f28fd1403e2a322921ed2a8f96b2d0c442ad99d01",
+        "evals/evals.json": "ccec86052a0edd8646d0e50e63c08e0e971f443d8f6e9178843a1629f79efdb0",
+        "references/ai-tells.md": "b98c3a19b3a75c714d69e80a0076e4c07244b0e833c2ce81ff2631224fb7f7b2",
+        "references/copy-frameworks.md": "4db06c481a904be3e4571ad8f671532c97ec186ddf0fb8aee3e3a56ef8e3d441",
+        "references/natural-transitions.md": "9bd61b0de5be2c4de4ce130c68236b4f290b12737823827a458bb2b4c8584683"
+      }
+    },
+    "create-prd": {
+      "status": "installed",
+      "name": "create-prd",
+      "repository": "phuryn/pm-skills",
+      "revision": "9af7bfd0bc47fdad43c2eaa7a43cd13918e7aaef",
+      "path": "pm-execution/skills/create-prd/SKILL.md",
+      "license": "MIT",
+      "folder": "create-prd",
+      "sha256": {
+        "LICENSE.alyn-upstream": "a2c922f9b81b4f40347ddfa79c38eda0f1278b5a6d108bd4099b4da254c774ee",
+        "SKILL.md": "e3aa10a437ed7f748a957bd5d1eb06d8fa3f56dc728dcb93ce484387ecc3fa13"
+      }
+    },
+    "cro": {
+      "status": "installed",
+      "name": "cro",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/cro/SKILL.md",
+      "license": "MIT",
+      "folder": "cro",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "0f8588aba125de102498ca3bbaa0151c8ebffa0a7ad85c14d992ef16db02fb2d",
+        "evals/evals.json": "62f3003602836e2b49d797ca582e7703629a6b07b131eb77b51b2bb39fe65775",
+        "references/experiments.md": "bbcc356c0af36cfaa4556bf9e929deac30c65cafb37f909d7c51d4777fe254ca",
+        "references/form.md": "49b8f29b3da1ae6510572288cad3eb1f3d43a969373443be98b38639746587e6"
+      }
+    },
+    "design-taste-frontend": {
+      "status": "existing"
+    },
+    "doc-coauthoring": {
+      "status": "catalog",
+      "reason": "licencia o revisión sin verificar"
+    },
+    "docx": {
+      "status": "catalog",
+      "reason": "licencia o revisión sin verificar"
+    },
+    "emails": {
+      "status": "installed",
+      "name": "emails",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/emails/SKILL.md",
+      "license": "MIT",
+      "folder": "emails",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "5687682141748000282747e85ef6501c0ad4c78731e138afc9b712ebb91ae750",
+        "evals/evals.json": "b90182c8b6edbb866ef82ad022db3d2fe8598e7329469117fb39edd9ab069f67",
+        "references/copy-guidelines.md": "c0295eead3210e7ffb214f545a960ffcc126b211732f1b468776fbb84cf720e5",
+        "references/email-types.md": "a5dd4f0555a7b21d2ff426948d15657825b9d16265652563f5e272d2e1879bfd",
+        "references/sequence-templates.md": "f8f318f10e29abcd009cbee29e2bd178981d96c973099b508d30af6c10ab8d79"
+      }
+    },
+    "executing-plans": {
+      "status": "installed",
+      "name": "executing-plans",
+      "repository": "obra/superpowers",
+      "revision": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "path": "skills/executing-plans/SKILL.md",
+      "license": "MIT",
+      "folder": "executing-plans",
+      "sha256": {
+        "LICENSE.alyn-upstream": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+        "SKILL.md": "deaf176fa179827e80f2ea3101db3ea90fdf562ebef340eba761e4687940f5f5",
+        "scripts/task-done": "ac0b5ebafc7d471507b7e94d88da77a11f187ba277c8d48fefaf8ff3e4fee50e",
+        "scripts/task-start": "4ae7ce3b6777c3240af786197836a6b4bbf3b0ee831c25f147c149ea8db54a21"
+      }
+    },
+    "frontend-design": {
+      "status": "existing"
+    },
+    "geo": {
+      "status": "catalog",
+      "reason": "requiere el paquete GEO y plantillas fuera de la carpeta"
+    },
+    "geo-citability": {
+      "status": "catalog",
+      "reason": "requiere el entorno del paquete GEO"
+    },
+    "geo-llmstxt": {
+      "status": "catalog",
+      "reason": "requiere el entorno del paquete GEO"
+    },
+    "hallmark": {
+      "status": "catalog",
+      "reason": "paquete requiere revisión adicional"
+    },
+    "humanizer": {
+      "status": "installed",
+      "name": "humanizer",
+      "repository": "blader/humanizer",
+      "revision": "a32f24407364c74c812b43c15926d638bee1e072",
+      "path": "SKILL.md",
+      "license": "MIT",
+      "folder": "humanizer",
+      "sha256": {
+        "LICENSE.alyn-upstream": "4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96",
+        "SKILL.md": "3013910ef5433dab12f0d2b86d9cf9e3421a253ef986518a68ef07aa29629bdc"
+      }
+    },
+    "i-have-adhd": {
+      "status": "installed",
+      "name": "i-have-adhd",
+      "repository": "ayghri/i-have-adhd",
+      "revision": "1ecea1993b7fce257ffbd686c070948b5e07eda6",
+      "path": "skills/i-have-adhd/SKILL.md",
+      "license": "MIT",
+      "folder": "i-have-adhd",
+      "sha256": {
+        "LICENSE.alyn-upstream": "8acbb618089b738404f76ac60fca1aaa995d9a87995eddf95f0b777acd7f7d2c",
+        "SKILL.md": "88955c019bbb1419ff4b49dbb1f80a867467de6233d7865af2e06a7d7b76c7d3",
+        "agents/gemini.toml": "5108a6123beb9df24846e0dd3f902c652d18522dfbc56e5762032ea383041c62",
+        "agents/openai.yaml": "2c51291283dcefdca43ca6b0c08172f225c7c26a9783ec444d6bdfa51ca96f8f"
+      }
+    },
+    "impeccable": {
+      "status": "existing"
+    },
+    "karpathy-guidelines": {
+      "status": "catalog",
+      "reason": "licencia o revisión sin verificar"
+    },
+    "last30days": {
+      "status": "catalog",
+      "reason": "paquete requiere revisión adicional"
+    },
+    "launch": {
+      "status": "installed",
+      "name": "launch",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/launch/SKILL.md",
+      "license": "MIT",
+      "folder": "launch",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "9d93f17367df59103fd932462cb170d1cfa5561d44e00423a52f7dadbce1bc3d",
+        "evals/evals.json": "f2ceb01d664e24ea253789a9a686997f5cc33a0fc99f57bf215acdada787322c",
+        "references/shipped-changes.md": "873c79d17d3f428147348a9cc2a5e3d6bb8282cf13fc8a143d539840e8abaa96",
+        "references/site-launch-qa.md": "aac0447d0d518468e86e971f4e781b61ee05e81dada402e2edcef709cc6418ab"
+      }
+    },
+    "lead-magnets": {
+      "status": "installed",
+      "name": "lead-magnets",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/lead-magnets/SKILL.md",
+      "license": "MIT",
+      "folder": "lead-magnets",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "858b6c0735e7c79b191416344eb3bb57cfdc2743ddc9d50b4bcbef820a9e98e1",
+        "evals/evals.json": "a6930404b17407d918dffac89fab225b7b07d8bdd116e8a45f6f6709348e8915",
+        "references/benchmarks.md": "becdf4bcde17e788ead10794c797294548c712ea1074e042336da93433a61187",
+        "references/content-to-skill-corpus-design.md": "63ecb58aaa18ebcacfbc4cdefdc8075a3f33793a59c79fa73b784ad0dfa93881",
+        "references/content-to-skill-release.md": "87bcc9218232b73b824e8cebac1e64deacffa755779ce2cc0db799c92873c891",
+        "references/content-to-skill.md": "dacbfff6d538ee37167f20034165dbf3a273d8bd1607def6450c649e40ebafa9",
+        "references/format-guide.md": "401f65d709cefbd7ee2df11273e0b616ec50e37e71d914556c800067fdcdef8e"
+      }
+    },
+    "marketing-psychology": {
+      "status": "installed",
+      "name": "marketing-psychology",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/marketing-psychology/SKILL.md",
+      "license": "MIT",
+      "folder": "marketing-psychology",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "755efd52954ecbbddc6fd0fe07cfa4999b63544bf716f2b5587a50c6f26228c0",
+        "evals/evals.json": "c3b7d15b3008eeb493796e21affd6a0c6e7ce312f9cfeffcdef467857903c733"
+      }
+    },
+    "office-hours": {
+      "status": "catalog",
+      "reason": "requiere el runtime, hooks dinámicos y configuración de gstack"
+    },
+    "pdf": {
+      "status": "catalog",
+      "reason": "licencia o revisión sin verificar"
+    },
+    "pitch-deck": {
+      "status": "catalog",
+      "reason": "requiere el paquete fundador y sus integraciones"
+    },
+    "planning-with-files": {
+      "status": "catalog",
+      "reason": "incluye hooks automáticos del agente"
+    },
+    "ponytail": {
+      "status": "existing"
+    },
+    "pptx": {
+      "status": "catalog",
+      "reason": "licencia o revisión sin verificar"
+    },
+    "programmatic-seo": {
+      "status": "installed",
+      "name": "programmatic-seo",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/programmatic-seo/SKILL.md",
+      "license": "MIT",
+      "folder": "programmatic-seo",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "f59dcb0892fc615d6df8f6debedd6b08de910ad220d5ec4a18e62f076a934c00",
+        "evals/evals.json": "d336e380eee0217b0be6e472703434b9e6ac4a424957c6b4a080440646c8e285",
+        "references/implementation-platforms.md": "27d86221387e0880768164d4d03513c85a594d11d12c7a6dd93ac17881c131e2",
+        "references/playbooks.md": "2b2acd3a0c0e5d60b1fb5b71a173aee7ca28de659a7e8ede3effe8525564eb0e"
+      }
+    },
+    "receiving-code-review": {
+      "status": "existing"
+    },
+    "remotion-best-practices": {
+      "status": "catalog",
+      "reason": "licencia o revisión sin verificar"
+    },
+    "remotion-captions": {
+      "status": "catalog",
+      "reason": "licencia o revisión sin verificar"
+    },
+    "requesting-code-review": {
+      "status": "existing"
+    },
+    "reverse-engineer-anything": {
+      "status": "excluded",
+      "reason": "incluye flujos ofensivos"
+    },
+    "security-audit": {
+      "status": "existing"
+    },
+    "seo": {
+      "status": "catalog",
+      "reason": "requiere el plugin y launcher de Claude SEO"
+    },
+    "seo-audit": {
+      "status": "installed",
+      "name": "seo-audit",
+      "repository": "coreyhaines31/marketingskills",
+      "revision": "5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1",
+      "path": "skills/seo-audit/SKILL.md",
+      "license": "MIT",
+      "folder": "seo-audit",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b70d71e24e40fce5da8f4b6f9cd862096a048e433db7f3c8cac5e348e6d34591",
+        "SKILL.md": "edad34843d2c97a2380c4ee421efb6ce98414bf52660dbe8cec49b8b73acc393",
+        "evals/evals.json": "1524e98916ab53abb894fb80827a8d0e1815041adca2ee2023b89916d68f22b2",
+        "references/ai-writing-detection.md": "f1e273f56ce7e2215ff218bf903680ddcec0fd026ab90c3ebfb3439ed0edfaa4",
+        "references/international-seo.md": "0603022cca968acf7889fc224221aa0e70955ba64355bc18b06f7e86b32f45e5",
+        "references/local-seo-pages-and-measurement.md": "20607ef91c4b8b37346f42130a6f51ed4ce64dc2731b6e1328b5b14f16917fe3",
+        "references/local-seo-profile-and-citations.md": "83b1b63eb6083e7aab1f56c4928335ea2a235e837861a9e9e8043b6af162a1f3",
+        "references/local-seo.md": "d2666d9c225bc36f9737ce612894abbe7e263b5974e2db7c1efc50f6010bb376",
+        "references/rankings-push.md": "1b131c2f93a32d2c990aa7d4e7df8f445d292bfedba3822d6abcfcfdfe203ec8",
+        "references/title-tags.md": "c40b3c6af3600ca15670db8eb81000c7ca6fa25265a6550ccc630f53db3fcf51"
+      }
+    },
+    "sepia": {
+      "status": "installed",
+      "name": "sepia",
+      "repository": "Nanako0129/sepia",
+      "revision": "0eb11d6c64c962fcc35f596c167c6e38045d6cb8",
+      "path": "skills/sepia/SKILL.md",
+      "license": "MIT",
+      "folder": "sepia",
+      "sha256": {
+        "LICENSE.alyn-upstream": "7d3d6cf8de8f5ffe1b161b86c35e7286cfacf7f55d17b2a5c52efdad21a79df3",
+        "SKILL.md": "b6e1ff4a0571461b1901be3057c937d23414fe35aab30ca2872707e2b48be4f6",
+        "agents/openai.yaml": "00e5dc7886eb61913387db3120e63ba6da80c314ceadb4957ed945eef07f66dd",
+        "references/discourse-pass.md": "da5c20e84f18be78f15c5a44d60c3e6e622760adc2ba5aad047c717483bee830",
+        "references/domains/dev-replies.md": "e236e757aa0d6dee39616250619dc71a68dfbd0f4036b8a37f1642fa988627fc",
+        "references/domains/journalism.md": "a0d600eeb152b118185a17f54dec51de34f2b91ec7ded61e6d66890757ed2aeb",
+        "references/domains/postmortems.md": "afdb2a1191f71d620d6eee3b9ba917bcd080518116e61535c949500e4711019d",
+        "references/domains/release-notes.md": "9bbe531ff0bb7c83ec47ee1cb3e3a71e73d907ad4fe4ad65aabe431ae1c7f07e",
+        "references/domains/tech-articles.md": "b7fa9e7f65d93c3db4fd35eabc4ab1faafb64878b3e3540aea49164994e8a25a",
+        "references/domains/tickets.md": "2dabd445282c99c7bec9b67ff8d5bf12a16cf2d5fc72161368f5278d644be422",
+        "references/languages/zh.md": "8bc2fe312d1f41fb900d65b762a9a536092103caf3f6c6dba33830e017ecaa42",
+        "references/model-fingerprints.md": "e5583e1069fc1269102c8e163fe633add9e4201276293d881d3abc0334fa5ee9",
+        "references/narrative-pass.md": "322dfb5c50c13388adad318fdcba451909a6b2392a0879d2df058ad6db2420da",
+        "references/professional-pass.md": "0679c7b8024c602d212f87b00cb5834e2c32eaf81c18f82eadb8c498a56c06e4",
+        "references/rubric.md": "40548268b3b6af32b77113989f00207d5183b060762b2714f0d42971a6a04428",
+        "references/style-pass.md": "58e65ee70703915669c4659b017eb3e81fdbc718bd142de969e296a1bd5c4d77",
+        "references/voice-skills.md": "9cafcfa539aa1a051ffbb267dd8e98a7baade4eb3e87fe43a9a7d887a09748fc",
+        "references/voices/PERSONA-TEMPLATE.md": "8383b6e9e9f630ee27065424f7d6b0605f547bbe950efea0a47029f07b821333",
+        "references/voices/hemingway.md": "7582b921f447df68ef9c4d74025bc9a61a164bf6c60c23c86f2c9aa51669a184",
+        "references/voices/personas/nyaneko.md": "044bf3cf190b78309aa72560ba25a98b0cee77ebc0a0d40748c0fe105800d9d6",
+        "references/voices/registry.md": "d91f44a2e9c3665804ae265aa7094918947473ea5e6daffa60fc118c366aff16",
+        "references/voices/tw-journalism.md": "6024cbf374f0a33fc8d9c12971e2334799970f1a0a9988acb38327fbd62c2972"
+      }
+    },
+    "systematic-debugging": {
+      "status": "existing"
+    },
+    "test-driven-development": {
+      "status": "existing"
+    },
+    "unslop": {
+      "status": "existing"
+    },
+    "using-superpowers": {
+      "status": "catalog",
+      "reason": "el enrutamiento existente ya cubre esa función y el upstream exige activación global"
+    },
+    "video-shotcraft": {
+      "status": "installed",
+      "name": "video-shotcraft",
+      "repository": "Vincentwei1021/video-shotcraft",
+      "revision": "59f3e9b9e936ff2bce0e18446226d770a3f2f61f",
+      "path": "SKILL.md",
+      "license": "Apache-2.0",
+      "folder": "video-shotcraft",
+      "sha256": {
+        "LICENSE.alyn-upstream": "b2ce9877a55547ada9b870150664d1468ff777e67cc9888806a73927d31c5771",
+        "SKILL.md": "9e6b2d68f50cae3d5405178d35d2bd305ee2045691fa726b63bae3ab8bb62e6b"
+      }
+    },
+    "web-design-guidelines": {
+      "status": "catalog",
+      "reason": "licencia o revisión sin verificar"
+    },
+    "writing-plans": {
+      "status": "existing"
+    },
+    "xlsx": {
+      "status": "catalog",
+      "reason": "licencia o revisión sin verificar"
+    }
+  }
+}
