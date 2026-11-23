@@ -13,6 +13,11 @@ on:
         required: true
         default: false
         type: boolean
+      verify_push:
+        description: Verificar autenticación del canal push sin enviar avisos
+        required: false
+        default: false
+        type: boolean
       pr:
         description: Número del PR abierto contra main (solo mantenimiento de flujos)
         required: false
@@ -40,7 +45,7 @@ env:
 
 jobs:
   audit:
-    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && !inputs.maintenance
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && !inputs.maintenance && !inputs.verify_push
     name: Dependencias npm
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -121,3 +126,36 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: node scripts/notificar-resultados-github.mjs
+
+  incident:
+    name: Enviar alerta push del incidente
+    needs: [audit, automatic]
+    if: >-
+      always() && github.ref == 'refs/heads/main' &&
+      ((github.event_name == 'workflow_dispatch' && inputs.verify_push && !inputs.maintenance) ||
+       needs.audit.result == 'failure' || needs.automatic.result == 'failure' ||
+        (github.event_name == 'workflow_run' &&
+         github.event.workflow_run.name != 'Mantenimiento — dependencias y flujos protegidos' &&
+         github.event.workflow_run.head_repository.full_name == github.repository &&
+         (github.event.workflow_run.head_branch == 'main' ||
+          (github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion != 'cancelled')) &&
+         contains(fromJSON('["failure","timed_out","startup_failure","action_required","stale","cancelled"]'), github.event.workflow_run.conclusion)))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: 'package.json'
+      - name: Entregar a dispositivos de Super Admin
+        env:
+          VERIFY_PUSH: ${{ github.event_name == 'workflow_dispatch' && inputs.verify_push && !inputs.maintenance }}
+          AUDIT_RESULT: ${{ needs.audit.result }}
+          AUTOMATIC_RESULT: ${{ needs.automatic.result }}
+        run: node scripts/notificar-incidente-github.mjs

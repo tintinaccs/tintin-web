@@ -18,6 +18,9 @@ Las variables privadas se configuran en Cloudflare/Firebase; `.env.example` enum
 
 ## Operación
 
+- [Manual de uso de Tintín](docs/manual-tintin.md) para compras, cambios, productos y pedidos.
+- [Mapa maestro de operación y decisiones](docs/mapa-maestro-tintin.md) para conexiones, responsabilidades y recuperación.
+- [Operación continua](docs/operacion-continua.md) para monitores y alertas.
 - Arquitectura: `docs/arquitectura-tecnica.md`.
 - Cambios seguros: `docs/como-hacer-cambios.md`.
 - Respaldo y recuperación: `docs/recuperacion-firestore.md`.

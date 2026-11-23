@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "bac822ab627b4f1068d8cad945ed1fc8f5d3e638457ae2c4182ad37ad3b84a54",
+  "sourceFingerprint": "2853fa3d099941f712ec9120c2257c33e0671286f387e2626055f5724a1d7b05",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1878,
-    "textFiles": 1725,
-    "totalBytes": 63233586,
+    "files": 1884,
+    "textFiles": 1731,
+    "totalBytes": 63268101,
     "pages": 19,
-    "modules": 1223
+    "modules": 1227
   },
   "viewports": [
     {
@@ -26017,6 +26017,17 @@
       ]
     },
     {
+      "path": "cloudflare/incidentes-github.mjs",
+      "bytes": 2530,
+      "sha256": "d9b46320190194455b1d1912316d508a6e1d8a20acd5a9f49c15a4a3f954fb2f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/indice-inicio.mjs",
       "bytes": 1972,
       "sha256": "e9101901be7a2289dfa5135242cf726e9e967eace5b87d97ceef6585598552a1",
@@ -26951,8 +26962,8 @@
     },
     {
       "path": "cloudflare/servicio-push.js",
-      "bytes": 29165,
-      "sha256": "4c0f266637dab5ac89dac118101efeb971142596a99c60cb1e748e0afe7d637a",
+      "bytes": 29570,
+      "sha256": "0e304c5c09dd6c968e9ee78a695b8da2be435a754445fc03623521e06920168b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26986,7 +26997,7 @@
         },
         {
           "url": "https://fcm.googleapis.com/v1/projects/$%7Bsa.project_id%7D/messages:send",
-          "line": 399
+          "line": 413
         }
       ]
     },
@@ -27315,8 +27326,8 @@
     },
     {
       "path": "firebase-messaging-sw.js",
-      "bytes": 5513,
-      "sha256": "ef142d5a71e2d100f94d62ee5aa63f993341359015bdfed0a5db939e4846bf94",
+      "bytes": 5817,
+      "sha256": "6984a9107c238dd7ed6cd53c9cdc06ee69c19bb7bacd77f36cfa97cb55d58585",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27324,12 +27335,16 @@
       "imports": [],
       "endpoints": [
         {
+          "url": "https://github.com/tintinaccs/tintin-web/actions/runs/$%7Bincident[1]%7D",
+          "line": 35
+        },
+        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js",
-          "line": 54
+          "line": 61
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js",
-          "line": 55
+          "line": 62
         }
       ]
     },
@@ -28878,36 +28893,42 @@
     },
     {
       "path": "functions/api/push-admin.js",
-      "bytes": 5112,
-      "sha256": "b5129191ee6d492d2bc0d491d4590b91eba2bfe8afbe295bccb7d3ea1bbd9651",
+      "bytes": 5406,
+      "sha256": "86505b3e6eb5103da2353c11f1def9d60991805f008d3c1b9821fa31c03591df",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../lib/github-incident-push.js",
+          "target": "functions/lib/github-incident-push.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../lib/operational-guard.js",
           "target": "functions/lib/operational-guard.js",
           "dynamic": false,
-          "line": 1
+          "line": 2
         },
         {
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         },
         {
           "raw": "../../cloudflare/nucleo-push.js",
           "target": "cloudflare/nucleo-push.js",
           "dynamic": false,
-          "line": 15
+          "line": 16
         },
         {
           "raw": "../../cloudflare/servicio-push.js",
           "target": "cloudflare/servicio-push.js",
           "dynamic": false,
-          "line": 25
+          "line": 26
         }
       ],
       "endpoints": []
@@ -29585,8 +29606,8 @@
     },
     {
       "path": "functions/catalogo.js",
-      "bytes": 1621,
-      "sha256": "005e3af2ae309be9589c4b9273a8c5cafe39f6a167689671be4684d7e28e0c93",
+      "bytes": 1956,
+      "sha256": "5f79724ea3cf7f9d11497cd71d2c989c28beefcc7069564af6bdccebd9ea0fe1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29620,8 +29641,8 @@
     },
     {
       "path": "functions/lib/github-actions-oidc.js",
-      "bytes": 5230,
-      "sha256": "b3f9cbb4096147e10a47e8c42acf44dc3893164dd08aeb86fc810d7fb6402108",
+      "bytes": 5263,
+      "sha256": "8441b6a5e4a275d460f3d1ad9fc1568a228b09a2033a635bc64693da7fdccd2c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29633,6 +29654,42 @@
           "line": 1
         }
       ]
+    },
+    {
+      "path": "functions/lib/github-incident-push.js",
+      "bytes": 2797,
+      "sha256": "7761b32623cc88f4b7298bd5be5620933c7477f81bd31a16867c6f2009f5de0a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/servicio-push.js",
+          "target": "cloudflare/servicio-push.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../cloudflare/incidentes-github.mjs",
+          "target": "cloudflare/incidentes-github.mjs",
+          "dynamic": false,
+          "line": 8
+        },
+        {
+          "raw": "./github-actions-oidc.js",
+          "target": "functions/lib/github-actions-oidc.js",
+          "dynamic": false,
+          "line": 9
+        },
+        {
+          "raw": "./operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 10
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "functions/lib/operational-guard.js",
@@ -41708,8 +41765,8 @@
     },
     {
       "path": "scripts/auditar-produccion-salud.mjs",
-      "bytes": 19286,
-      "sha256": "a075190ea0e0610f82aea55bf3ab42dc817491469b4b84f9a526fe9353c3e25e",
+      "bytes": 19921,
+      "sha256": "a13957d31538a6f7779974ddf5125835b8e79f90baaaffc9dcf7145ec9dd1110",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43589,6 +43646,36 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/notificar-incidente-github.mjs",
+      "bytes": 2963,
+      "sha256": "922aa664f02bab27bfb2cb44d83ca21b42b6442df69fcb326eb51ee488d582d2",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:timers/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../cloudflare/incidentes-github.mjs",
+          "target": "cloudflare/incidentes-github.mjs",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
       "endpoints": []
     },
     {
@@ -54695,8 +54782,8 @@
     },
     {
       "path": "tests/navigation/master-home.spec.js",
-      "bytes": 2206,
-      "sha256": "91e9f80c69b8b2ad23b38af80d55260f264d85f1efd26a84232a755e67a9f442",
+      "bytes": 2878,
+      "sha256": "5fe418fba2954e82687c754fd1385abdfaba35798797c48e9c32a324f1a1c3ce",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55387,8 +55474,8 @@
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
-      "bytes": 7105,
-      "sha256": "9b697a01b0177059710386ea2073be55700fa95ebf00ff7c0d3cd26aea298296",
+      "bytes": 9121,
+      "sha256": "1ee9b6a62fcf17716e7a5c97c58be49fa2ec0bcc44291669f1ca6ffe3d5aa48a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55447,12 +55534,32 @@
           "target": null,
           "dynamic": true,
           "line": 169
+        },
+        {
+          "raw": "../../functions/api/push-admin.js",
+          "target": "functions/api/push-admin.js",
+          "dynamic": true,
+          "line": 188
+        },
+        {
+          "raw": "../../cloudflare/incidentes-github.mjs",
+          "target": "cloudflare/incidentes-github.mjs",
+          "dynamic": true,
+          "line": 189
         }
       ],
       "endpoints": [
         {
           "url": "https://token.actions.githubusercontent.com/",
           "line": 47
+        },
+        {
+          "url": "https://token.actions.githubusercontent.com/.well-known/jwks",
+          "line": 201
+        },
+        {
+          "url": "https://tintinaccs.com/api/push-admin",
+          "line": 205
         }
       ]
     },
@@ -58621,6 +58728,65 @@
       "endpoints": []
     },
     {
+      "path": "tests/push/github-incident-push.test.mjs",
+      "bytes": 3414,
+      "sha256": "d7f45121b9f29f6a26491d9a6c33a77076999bf9fd6159c4e2317a5a51f0392d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../cloudflare/incidentes-github.mjs",
+          "target": "cloudflare/incidentes-github.mjs",
+          "dynamic": false,
+          "line": 10
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccs.com/",
+          "line": 68
+        },
+        {
+          "url": "https://untrusted.invalid/action",
+          "line": 81
+        },
+        {
+          "url": "https://github.com/$%7BGITHUB_INCIDENT_REPOSITORY%7D/actions/runs/$%7BrunId%7D",
+          "line": 83
+        },
+        {
+          "url": "https://tintinaccs.com/admin.html",
+          "line": 84
+        }
+      ]
+    },
+    {
       "path": "tests/push/manifest-icon-audit.test.mjs",
       "bytes": 1861,
       "sha256": "3df4fbd46bc89bc882b990a0d96a90e891e04c38773803a68307b50f1262e86c",
@@ -59670,8 +59836,8 @@
     },
     {
       "path": "tests/seo/catalog-http.test.mjs",
-      "bytes": 3694,
-      "sha256": "57e640e6ca52cee85597a7ce9559318b0fa2a60fa14a2b5fef14255f09a2e101",
+      "bytes": 4083,
+      "sha256": "0279d46c51a24beab71d25d5600833b35191ad781e02f3956d5b70b65abfe445",
       "syntax": {
         "ok": true,
         "error": ""
@@ -59696,44 +59862,50 @@
           "line": 3
         },
         {
-          "raw": "node:crypto",
+          "raw": "node:timers/promises",
           "target": null,
           "dynamic": false,
           "line": 4
         },
         {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
           "raw": "../../functions/catalogo.js",
           "target": "functions/catalogo.js",
           "dynamic": false,
-          "line": 5
+          "line": 6
         },
         {
           "raw": "../../functions/sitemap-products.xml.js",
           "target": "functions/sitemap-products.xml.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "../../functions/sitemap-collections.xml.js",
           "target": "functions/sitemap-collections.xml.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         }
       ],
       "endpoints": [
         {
           "url": "https://oauth2.googleapis.com/token",
-          "line": 21
+          "line": 23
         },
         {
           "url": "https://tintinaccs.com/",
-          "line": 27
+          "line": 32
         }
       ]
     },
@@ -64451,8 +64623,8 @@
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
       "extension": ".yml",
-      "bytes": 4775,
-      "sha256": "419cf27c20540e14b27b29015c35ff65ae0c6301cc575ec48b9cca16c739ea58"
+      "bytes": 6538,
+      "sha256": "c0d0bf6d580d75cb443f03208e192d3f2c1f1e9559b72145a674b3973556dc9e"
     },
     {
       "path": ".github/workflows/auditoria-visual.yml",
@@ -64505,8 +64677,8 @@
     {
       "path": ".github/workflows/monitor-produccion.yml",
       "extension": ".yml",
-      "bytes": 5808,
-      "sha256": "78b201f9658e7bdfe1d8990844130f189f62d427d191dd9b735eded5225ba6e9"
+      "bytes": 6967,
+      "sha256": "b94d183bc614e2a1e20ed264cfbfd706e6ee4280d69563fbd838fc7df7f22f33"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
@@ -64547,8 +64719,8 @@
     {
       "path": "README.md",
       "extension": ".md",
-      "bytes": 1104,
-      "sha256": "cab74b29dfffe152abfd26442dbad4d774a7cd9bb5b460a7d270188dd993cb05"
+      "bytes": 1403,
+      "sha256": "a0de92bc07385cd00862c93296042f4aa66e9ee74de067394acffcccbb11b771"
     },
     {
       "path": "_headers",
@@ -65535,6 +65707,12 @@
       "sha256": "9b453be7a24a73aaec46e43ab1bef62f425dcdfc4292445a90f76efa4f4c5bcd"
     },
     {
+      "path": "cloudflare/incidentes-github.mjs",
+      "extension": ".mjs",
+      "bytes": 2530,
+      "sha256": "d9b46320190194455b1d1912316d508a6e1d8a20acd5a9f49c15a4a3f954fb2f"
+    },
+    {
       "path": "cloudflare/indice-inicio.mjs",
       "extension": ".mjs",
       "bytes": 1972,
@@ -65699,8 +65877,8 @@
     {
       "path": "cloudflare/servicio-push.js",
       "extension": ".js",
-      "bytes": 29165,
-      "sha256": "4c0f266637dab5ac89dac118101efeb971142596a99c60cb1e748e0afe7d637a"
+      "bytes": 29570,
+      "sha256": "0e304c5c09dd6c968e9ee78a695b8da2be435a754445fc03623521e06920168b"
     },
     {
       "path": "cloudflare/servir-admin-con-csp.js",
@@ -65783,8 +65961,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 6775,
-      "sha256": "718f516c8fdac590b91430f3e1c8fe1bdf5c75850ecbd0b2c8e5ced5851d8c04"
+      "bytes": 2404,
+      "sha256": "e01edad2c0222eca9accd4eb6d7baf0c62d0c3dbb452943b23014689befe3d88"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -65796,7 +65974,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155297,
-      "sha256": "5ee54da9c9fade61d40d6c7a6cae71b9b68d7cb8200336d8ef6a2148fa63e77d"
+      "sha256": "4ab3115a6d854d62f23438ebcb9554bd4d3dce4df3d42390ac6a5184876c3d24"
     },
     {
       "path": "config/public-site.json",
@@ -66623,8 +66801,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 1371103,
-      "sha256": "d206ff96e47369724f2fd987475686f7169a3bd7a47acf33b2c3873f40c9fed1"
+      "bytes": 1373982,
+      "sha256": "8beec3acb37f01171725ffbaf851c104e355afb06d23319b025681062380e11c"
     },
     {
       "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
@@ -67683,6 +67861,12 @@
       "sha256": "21e57f3b3c512205291f9c949e4649d34dbddb60859ca7e6d1c51f46b46ba678"
     },
     {
+      "path": "docs/manual-tintin.md",
+      "extension": ".md",
+      "bytes": 6783,
+      "sha256": "5dcbf15f4050e65d2a9c9d00695ef115b2c9299b6fbdabd6f0c9d8709abe288b"
+    },
+    {
       "path": "docs/mapa-codigo.md",
       "extension": ".md",
       "bytes": 4537,
@@ -67695,6 +67879,12 @@
       "sha256": "e81579439311d976af97d7703184421a97424b5dbf70341a61ef42070b5606cb"
     },
     {
+      "path": "docs/mapa-maestro-tintin.md",
+      "extension": ".md",
+      "bytes": 8148,
+      "sha256": "7a16944a0b90b73c2a70740d34e978a6b79094270ee4a69f707fabdb07c7b135"
+    },
+    {
       "path": "docs/modulo-mayoristas.md",
       "extension": ".md",
       "bytes": 2693,
@@ -67703,8 +67893,8 @@
     {
       "path": "docs/operacion-continua.md",
       "extension": ".md",
-      "bytes": 9388,
-      "sha256": "51837fa5c224fa3bfb68b7d4ca6530d6ff04feec726791dfa4f9be76259340f6"
+      "bytes": 10456,
+      "sha256": "f09bec255782059bb516650575ba14189eadeba4903f1f29b3baeced2eab2e75"
     },
     {
       "path": "docs/plan-respaldo-recuperacion.md",
@@ -68249,8 +68439,8 @@
     {
       "path": "firebase-messaging-sw.js",
       "extension": ".js",
-      "bytes": 5513,
-      "sha256": "ef142d5a71e2d100f94d62ee5aa63f993341359015bdfed0a5db939e4846bf94"
+      "bytes": 5817,
+      "sha256": "6984a9107c238dd7ed6cd53c9cdc06ee69c19bb7bacd77f36cfa97cb55d58585"
     },
     {
       "path": "firebase.editor-workspaces.test.json",
@@ -68525,8 +68715,8 @@
     {
       "path": "functions/api/push-admin.js",
       "extension": ".js",
-      "bytes": 5112,
-      "sha256": "b5129191ee6d492d2bc0d491d4590b91eba2bfe8afbe295bccb7d3ea1bbd9651"
+      "bytes": 5406,
+      "sha256": "86505b3e6eb5103da2353c11f1def9d60991805f008d3c1b9821fa31c03591df"
     },
     {
       "path": "functions/api/push-config.js",
@@ -68651,8 +68841,8 @@
     {
       "path": "functions/catalogo.js",
       "extension": ".js",
-      "bytes": 1621,
-      "sha256": "005e3af2ae309be9589c4b9273a8c5cafe39f6a167689671be4684d7e28e0c93"
+      "bytes": 1956,
+      "sha256": "5f79724ea3cf7f9d11497cd71d2c989c28beefcc7069564af6bdccebd9ea0fe1"
     },
     {
       "path": "functions/collections/[handle].js",
@@ -68699,8 +68889,14 @@
     {
       "path": "functions/lib/github-actions-oidc.js",
       "extension": ".js",
-      "bytes": 5230,
-      "sha256": "b3f9cbb4096147e10a47e8c42acf44dc3893164dd08aeb86fc810d7fb6402108"
+      "bytes": 5263,
+      "sha256": "8441b6a5e4a275d460f3d1ad9fc1568a228b09a2033a635bc64693da7fdccd2c"
+    },
+    {
+      "path": "functions/lib/github-incident-push.js",
+      "extension": ".js",
+      "bytes": 2797,
+      "sha256": "7761b32623cc88f4b7298bd5be5620933c7477f81bd31a16867c6f2009f5de0a"
     },
     {
       "path": "functions/lib/operational-guard.js",
@@ -71747,8 +71943,8 @@
     {
       "path": "scripts/auditar-produccion-salud.mjs",
       "extension": ".mjs",
-      "bytes": 19286,
-      "sha256": "a075190ea0e0610f82aea55bf3ab42dc817491469b4b84f9a526fe9353c3e25e"
+      "bytes": 19921,
+      "sha256": "a13957d31538a6f7779974ddf5125835b8e79f90baaaffc9dcf7145ec9dd1110"
     },
     {
       "path": "scripts/auditar-producto-cloudflare-preview.mjs",
@@ -72199,6 +72395,12 @@
       "extension": ".js",
       "bytes": 5077,
       "sha256": "68fd109a0b137a679d75e543629e8b803b8efd6fd89c64e2e74930d64dbcdb8c"
+    },
+    {
+      "path": "scripts/notificar-incidente-github.mjs",
+      "extension": ".mjs",
+      "bytes": 2963,
+      "sha256": "922aa664f02bab27bfb2cb44d83ca21b42b6442df69fcb326eb51ee488d582d2"
     },
     {
       "path": "scripts/notificar-resultados-github.mjs",
@@ -73919,8 +74121,8 @@
     {
       "path": "tests/navigation/master-home.spec.js",
       "extension": ".js",
-      "bytes": 2206,
-      "sha256": "91e9f80c69b8b2ad23b38af80d55260f264d85f1efd26a84232a755e67a9f442"
+      "bytes": 2878,
+      "sha256": "5fe418fba2954e82687c754fd1385abdfaba35798797c48e9c32a324f1a1c3ce"
     },
     {
       "path": "tests/navigation/mobile-halo-checkout-labels.spec.js",
@@ -74033,8 +74235,8 @@
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
       "extension": ".mjs",
-      "bytes": 7105,
-      "sha256": "9b697a01b0177059710386ea2073be55700fa95ebf00ff7c0d3cd26aea298296"
+      "bytes": 9121,
+      "sha256": "1ee9b6a62fcf17716e7a5c97c58be49fa2ec0bcc44291669f1ca6ffe3d5aa48a"
     },
     {
       "path": "tests/operations/github-ci-scope.test.mjs",
@@ -74565,6 +74767,12 @@
       "sha256": "1502a30343cba196ba051427cadd715f6b2e76be7eb9e7861885ae3098792c29"
     },
     {
+      "path": "tests/push/github-incident-push.test.mjs",
+      "extension": ".mjs",
+      "bytes": 3414,
+      "sha256": "d7f45121b9f29f6a26491d9a6c33a77076999bf9fd6159c4e2317a5a51f0392d"
+    },
+    {
       "path": "tests/push/manifest-icon-audit.test.mjs",
       "extension": ".mjs",
       "bytes": 1861,
@@ -74741,8 +74949,8 @@
     {
       "path": "tests/seo/catalog-http.test.mjs",
       "extension": ".mjs",
-      "bytes": 3694,
-      "sha256": "57e640e6ca52cee85597a7ce9559318b0fa2a60fa14a2b5fef14255f09a2e101"
+      "bytes": 4083,
+      "sha256": "0279d46c51a24beab71d25d5600833b35191ad781e02f3956d5b70b65abfe445"
     },
     {
       "path": "tests/seo/catalog-initial.spec.js",
@@ -75705,7 +75913,7 @@
     },
     {
       "file": "firebase-messaging-sw.js",
-      "line": 67,
+      "line": 74,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -77285,7 +77493,7 @@
       "references": [
         {
           "file": "firebase-messaging-sw.js",
-          "line": 67
+          "line": 74
         },
         {
           "file": "js/admin/admin-app.js",

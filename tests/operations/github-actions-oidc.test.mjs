@@ -183,3 +183,44 @@ test('el workflow BCP actualiza desde la URL canónica de Pages sin guardar secr
   assert.match(endpoint, /workflowRef:\s*WORKFLOW_REF/);
   assert.match(endpoint, /pygPerUsd:\s*rate/);
 });
+
+test('el receptor push autentica sólo el workflow de mantenimiento y acota solicitudes', async t => {
+  const { onRequest } = await import('../../functions/api/push-admin.js');
+  const { GITHUB_INCIDENT_AUDIENCE, GITHUB_INCIDENT_WORKFLOW_REF } = await import('../../cloudflare/incidentes-github.mjs');
+  const { fetchImpl, token } = await fixture();
+  const now = Math.floor(Date.now() / 1000);
+  const claims = {
+    aud: GITHUB_INCIDENT_AUDIENCE,
+    workflow_ref: GITHUB_INCIDENT_WORKFLOW_REF,
+    event_name: 'workflow_run',
+    iat: now,
+    nbf: now,
+    exp: now + 300,
+  };
+  t.mock.method(globalThis, 'fetch', async url => {
+    assert.equal(url, 'https://token.actions.githubusercontent.com/.well-known/jwks');
+    return fetchImpl();
+  });
+
+  const url = 'https://tintinaccs.com/api/push-admin?source=github-actions';
+  const incident = { runId: '45091100022', attempt: '1', workflow: 'Salud de producción', conclusion: 'failure' };
+  const send = (body, accessToken) => onRequest({
+    request: new Request(url, {
+      method: 'POST',
+      headers: accessToken ? { authorization: `Bearer ${accessToken}` } : {},
+      body: JSON.stringify(body),
+    }),
+    env: {},
+  });
+
+  assert.equal((await onRequest({ request: new Request(url), env: {} })).status, 405);
+  assert.equal((await send(incident)).status, 401);
+  const signed = await token(claims);
+  assert.deepEqual(await (await send(incident, signed)).json(), { ok: true, status: 'disabled', accepted: 0 });
+  assert.equal((await send({ pad: 'x'.repeat(1024) }, signed)).status, 413);
+  assert.equal((await send(incident, await token({ ...claims, workflow_ref: WORKFLOW_REF }))).status, 401);
+  assert.equal((await send(incident, await token({ ...claims, event_name: 'pull_request' }))).status, 401);
+  const manual = await token({ ...claims, event_name: 'workflow_dispatch' });
+  assert.equal((await send(incident, manual)).status, 403);
+  assert.deepEqual(await (await send({}, manual)).json(), { ok: false, error: 'invalid_incident' });
+});

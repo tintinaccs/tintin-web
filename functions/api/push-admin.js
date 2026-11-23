@@ -1,3 +1,4 @@
+import { handleGitHubIncidentPush } from '../lib/github-incident-push.js';
 import { readLimitedText } from '../lib/operational-guard.js';
 // =============================================================
 // TINTIN — Módulo maestro de Web Push (sólo Super Admin)
@@ -39,6 +40,10 @@ function parseBody(raw) {
 
 export async function onRequest(context) {
   const { request, env } = context;
+  // El productor OIDC tiene su propia autenticación y no usa las acciones del navegador.
+  if (new URL(request.url).searchParams.get('source') === 'github-actions') {
+    return handleGitHubIncidentPush(context);
+  }
   const origin = request.headers.get('origin') || '';
   const requestUrl = request.url;
   if (!originIsAllowed(origin, requestUrl)) return jsonResponse({ success: false, error: 'Origen no permitido' }, 403, origin, requestUrl);

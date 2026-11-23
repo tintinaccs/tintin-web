@@ -22,7 +22,14 @@ async function fetchWithRetry(url, options = {}) {
         headers: { 'user-agent': `TintinProductionHealth/4.2 (+${origin}/)`, ...(options.headers || {}) },
         signal: AbortSignal.timeout(timeoutMs)
       });
-      if (response.status >= 500) throw new Error('HTTP ' + response.status);
+      if (response.status >= 500) {
+        await response.body?.cancel().catch(() => {});
+        throw Object.assign(new Error('HTTP ' + response.status), {
+          status: response.status,
+          headers: Object.fromEntries(['content-type', 'retry-after', 'cf-ray', 'x-tintin-csp', 'x-tintin-catalog-html']
+            .map(name => [name, response.headers.get(name) || ''])),
+        });
+      }
       return response;
     } catch (error) {
       lastError = error;
@@ -72,6 +79,20 @@ function xmlLocations(body) {
   return [...String(body || '').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1].replace(/&(?:amp|lt|gt|quot|apos);/g, entity => entities[entity]));
 }
 
+function failedInspection(requestedUrl, started, error) {
+  const transportCode = error?.cause?.code;
+  return {
+    requestedUrl,
+    status: error?.status || 0,
+    ms: Date.now() - started,
+    type: error?.headers?.['content-type'] || '',
+    ok: false,
+    error: String(error?.message || error),
+    ...(error?.headers ? { headers: error.headers } : {}),
+    ...(/^[A-Z_0-9]+$/.test(transportCode || '') ? { transportCode } : {}),
+  };
+}
+
 async function inspect(relative, expectedType, requestHeaders = {}) {
   const requestedUrl = origin + relative;
   const started = Date.now();
@@ -86,7 +107,7 @@ async function inspect(relative, expectedType, requestHeaders = {}) {
     return { body, response, headers };
   } catch (error) {
     if (!results.some(item => item.requestedUrl === requestedUrl && item.ms >= 0)) {
-      results.push({ requestedUrl, status: 0, ms: Date.now() - started, type: '', ok: false, error: String(error?.message || error) });
+      results.push(failedInspection(requestedUrl, started, error));
     }
     throw error;
   }
@@ -105,7 +126,7 @@ async function inspectExpectedStatus(relative, expectedStatuses, expectedType = 
     return { body, response };
   } catch (error) {
     if (!results.some(item => item.requestedUrl === requestedUrl && item.ms >= 0)) {
-      results.push({ requestedUrl, status: 0, ms: Date.now() - started, type: '', ok: false, error: String(error?.message || error) });
+      results.push(failedInspection(requestedUrl, started, error));
     }
     throw error;
   }
