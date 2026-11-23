@@ -30,32 +30,29 @@ confirmarlas o cambiarlas, actualizar esta tabla y marcar el punto 10 de #340.
 
 ## 2. Revisión semanal — monitor de producción
 
-La disponibilidad del sitio **ya está vigilada automáticamente**. El workflow
-`.github/workflows/seo-produccion-fase-11.yml` ejecuta `npm run monitor:production`
-**cada hora** (`cron: '17 * * * *'`) contra el origen público, definido por
-`TINTIN_PUBLIC_ORIGIN` con `https://tintinaccesorios.pages.dev` por defecto.
+El workflow [Operación — salud de producción](../.github/workflows/monitor-produccion.yml)
+corre en cada push a `main`, por horario y cuando se solicita manualmente.
+El origen público se toma de [config/public-site.json](../config/public-site.json).
+La comprobación programada de salud está configurada a los 17 minutos de
+cada hora. La actualización de la tasa PayPal tiene su propio horario en el
+mismo workflow.
 
-`scripts/auditar-produccion-salud.mjs` comprueba en cada corrida:
+| Comprobación | Evidencia |
+| --- | --- |
+| Despliegue | Artefacto publicado del commit esperado |
+| Páginas, catálogo y SEO | Página inicial, catálogo, colecciones, ficha, robots, sitemaps, canonical, JSON-LD, manifiesto y visibilidad en navegador |
+| Conexiones y seguridad | `/api/health`, configuración pública de pago, accesos protegidos, catálogo público, CSP y caché |
+| Experiencia de compra | Exploración de catálogo, login/perfil y smoke sin cobro |
 
-- Inicio, catálogo, colecciones y ficha de producto responden y son HTML.
-- El canonical de inicio apunta al origen correcto.
-- El HTML público **no** expone la URL antigua de GitHub Pages.
-- `robots.txt` apunta al sitemap vigente.
-- `sitemap.xml` no está vacío y todas sus URL usan el mismo origen.
-- `manifest.json` responde como JSON.
+Las lecturas HTTP reintentan los 5xx. Si el fallo persiste, el monitor
+publica el issue **[Producción] Monitor en rojo**, enlaza el run y conserva la
+evidencia en `production-health-<run ID>`. Tras una corrida sana, deja
+constancia y cierra el issue.
 
-Hace **3 intentos con backoff** y trata cualquier 5xx como reintentable, así
-que un 503 pasajero no dispara una falsa alarma. Si tras los tres intentos algo
-sigue fallando, el job sale con código 1 y GitHub notifica. Cada corrida sube
-el artefacto `phase11-production-health` con el detalle y los tiempos.
-
-Por eso la revisión semanal manual se reduce a lo que el monitor no cubre:
-
-- [ ] El último workflow de `main` terminó en verde.
-- [ ] El último despliegue de Cloudflare Pages terminó correctamente.
-- [ ] No hay pedidos atascados sin cambio de estado en Admin.
-- [ ] Las Pages Functions (`/api/*`) responden: el monitor horario cubre las
-      páginas estáticas y los metadatos, no los endpoints de Functions.
+En la revisión semanal, comprobar el último despliegue de `main`, pedidos y
+colas pendientes y la evidencia del espejo. Revisar Search Console para
+confirmar rastreo e indexación desde el buscador. El monitor verifica la
+respuesta de la tienda y sus señales SEO desde fuera.
 
 ## 3. Revisión mensual
 
@@ -133,25 +130,38 @@ exige Blaze. Cambiar de plan es una decisión explícita, no un efecto lateral.
 
 ## 7. Alertas
 
-| Evento | Detección actual | Estado |
-| --- | --- | --- |
-| Fallo de workflow en `main` | Notificación de GitHub Actions al propietario | Activo |
-| Caída del sitio público | `seo-produccion-fase-11.yml`, cada hora, con 3 reintentos | Activo |
-| Metadatos públicos rotos (canonical, robots, sitemap, manifest) | El mismo monitor horario | Activo |
-| Fallo de despliegue de Cloudflare Pages | Notificación del panel de Cloudflare | Requiere confirmar que esté habilitada |
-| Fallo de una Pages Function (`/api/*`) | Sin alerta automática | Hueco real |
-| Cuota cerca del límite | Sin alerta automática | Hueco real |
+| Evento | Detección y seguimiento |
+| --- | --- |
+| Fallo de salud de producción | Issue de GitHub, artefacto y push de Super Admin si hay un dispositivo activo |
+| Fallo terminal de un workflow de `main` o de un PR del mismo repositorio | Registro existente de GitHub y push con enlace a la ejecución |
+| Fallo de auditoría de dependencias o publicación protegida | Aviso del job de mantenimiento con la ejecución que produjo el fallo |
+| Cancelación | Push para cancelación de `main`; cancelar CI obsoleto de un PR conserva el registro de GitHub |
+| Fallo del proveedor o cuota | Se observa si afecta una prueba cubierta. Las alertas específicas de Cloudflare, Firebase, Cloudinary, Resend o el registrador se consultan en sus paneles. |
 
-Quedan **dos huecos reales**. Ninguno se puede cerrar desde el repositorio:
+El receptor de GitHub corre sobre `main` y usa OIDC para autenticar los
+avisos con la misma infraestructura Firebase Cloud Messaging de pedidos.
+El identificador del run y su intento permiten reintentar la entrega sin
+volver a enviar el mismo evento aceptado. Tocar el aviso abre GitHub
+Actions. Las cancelaciones, fallos y tiempos agotados de una ejecución se
+evalúan cuando GitHub emite su evento de finalización.
 
-- **Pages Functions**: el monitor horario consulta páginas estáticas y
-  metadatos, no los endpoints de Functions. Vigilarlos exige o bien un
-  endpoint de salud pensado para eso, o las alertas del panel de Cloudflare.
-- **Cuotas**: cada proveedor las expone en su propio panel. Requiere activar
-  las alertas de Firebase, Cloudflare, Cloudinary y Resend a mano.
+Para verificar el canal, usar **Notificaciones push** en el panel y el
+botón de prueba del dispositivo. Para comprobar sólo GitHub → Cloudflare,
+ejecutar manualmente **Mantenimiento — dependencias y flujos protegidos**
+en `main` con `maintenance=false` y `verify_push=true`. Este modo sólo
+prueba que el servidor acepta la identidad OIDC. La aceptación de FCM en
+un aviso real y la recepción en el dispositivo son verificaciones distintas.
 
-No se agregó un monitor nuevo de disponibilidad: ya existe uno y es más
-completo que un simple ping.
+Si el push aparece como pausado, sin dispositivos o parcial, el registro
+de GitHub sigue disponible. Si FCM o Cloudflare no responden, el job
+reintenta de forma acotada y deja su conclusión visible en GitHub.
+La emisión del push depende de que GitHub pueda iniciar el receptor.
+
+El autocuidado existente incluye reintentos de correos de pedido,
+reconciliación de Sheets, monitores, respaldos y publicación protegida.
+Un problema de datos, un cobro por conciliar o una restauración requieren
+verificar el alcance y seguir el procedimiento del dominio. Consultar el
+[mapa maestro](mapa-maestro-tintin.md) para elegir el recorrido.
 
 ## 8. Alta y baja de accesos
 

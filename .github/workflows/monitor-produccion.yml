@@ -76,6 +76,7 @@ jobs:
           bash scripts/preparar-red-apt-ci.sh
           npx playwright install --with-deps chromium
       - name: Artefacto de producción corresponde al commit auditado
+        id: deployed_artifact
         run: npm run audit:production-artifact
       - name: Monitor operativo
         id: monitor
@@ -105,18 +106,35 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
       - name: Abrir o actualizar alerta
-        if: steps.monitor.outcome == 'failure' || steps.catalog.outcome == 'failure' || steps.auth_browser.outcome == 'failure' || steps.smoke.outcome == 'failure' || steps.headers.outcome == 'failure'
+        if: >-
+          !cancelled() && (steps.deployed_artifact.outcome == 'failure' ||
+            steps.monitor.outcome == 'failure' || steps.catalog.outcome == 'failure' ||
+            steps.auth_browser.outcome == 'failure' || steps.smoke.outcome == 'failure' ||
+            steps.headers.outcome == 'failure')
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          ARTIFACT_OUTCOME: ${{ steps.deployed_artifact.outcome }}
+          MONITOR_OUTCOME: ${{ steps.monitor.outcome }}
+          CATALOG_OUTCOME: ${{ steps.catalog.outcome }}
+          AUTH_OUTCOME: ${{ steps.auth_browser.outcome }}
+          SMOKE_OUTCOME: ${{ steps.smoke.outcome }}
+          HEADERS_OUTCOME: ${{ steps.headers.outcome }}
         shell: bash
         run: |
           title='[Producción] Monitor en rojo'
           issue="$(gh issue list --state open --limit 100 --json number,title --jq '.[] | select(.title == "[Producción] Monitor en rojo") | .number' | head -n 1)"
-          body="El monitor de producción detectó un fallo. Run: $RUN_URL"
+          failed=()
+          if [ "$ARTIFACT_OUTCOME" = failure ]; then failed+=('Artefacto publicado'); fi
+          if [ "$MONITOR_OUTCOME" = failure ]; then failed+=('Monitor operativo'); fi
+          if [ "$CATALOG_OUTCOME" = failure ]; then failed+=('Catálogo en navegador'); fi
+          if [ "$AUTH_OUTCOME" = failure ]; then failed+=('Login y perfil'); fi
+          if [ "$SMOKE_OUTCOME" = failure ]; then failed+=('Smoke de entrega'); fi
+          if [ "$HEADERS_OUTCOME" = failure ]; then failed+=('Encabezados, caché y CSP'); fi
+          body="$(printf 'Fallaron estas comprobaciones de producción.\n\n'; printf -- '- %s\n' "${failed[@]}"; printf '\nEjecución: %s\n' "$RUN_URL")"
           if [ -n "$issue" ]; then gh issue comment "$issue" --body "$body"; else gh issue create --title "$title" --body "$body"; fi
       - name: Cerrar alerta al recuperar
-        if: steps.monitor.outcome == 'success' && steps.catalog.outcome == 'success' && steps.auth_browser.outcome == 'success' && steps.smoke.outcome == 'success' && steps.headers.outcome == 'success'
+        if: steps.deployed_artifact.outcome == 'success' && steps.monitor.outcome == 'success' && steps.catalog.outcome == 'success' && steps.auth_browser.outcome == 'success' && steps.smoke.outcome == 'success' && steps.headers.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash

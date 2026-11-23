@@ -21,14 +21,21 @@
 // Cambiar esta versión fuerza a los navegadores a tratar el archivo como
 // nuevo. Junto con la regla no-cache de _headers y skipWaiting/clients.claim
 // de abajo, ningún dispositivo queda atrapado en una versión vieja.
-const TINTIN_SW_VERSION = '2026-10-21-iconos-rosa-1';
+const TINTIN_SW_VERSION = '2026-11-23-incidentes-github';
 
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   const link = safeInternalLink(event.notification?.data?.url);
+  const incident = /^\/admin\.html\?section=notificaciones-push&githubRun=([1-9]\d{0,19})$/.exec(link);
   const targetUrl = new URL(link, self.location.origin + '/').href;
 
   event.waitUntil((async () => {
+    if (incident) {
+      if (self.clients.openWindow) {
+        await self.clients.openWindow(`https://github.com/tintinaccs/tintin-web/actions/runs/${incident[1]}`);
+      }
+      return;
+    }
     const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
     // Reutiliza una ventana de Tintin ya abierta: le pide navegar al destino
     // y la trae al frente, en vez de dejar dos copias del panel abiertas.

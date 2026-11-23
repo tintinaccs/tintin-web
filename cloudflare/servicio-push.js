@@ -265,22 +265,36 @@ export async function dispatchSocialPushEvent(env, { type, eventId, title, body,
   if (!settings.enabled) return { ok: true, skipped: 'paused_by_superadmin' };
   const id = cleanText(eventId, 260) || `${type}:${crypto.randomUUID()}`;
   const claim = await claimEvent(env, { eventId: id, type, orderId: '' });
-  if (!claim.claimed) return { ok: true, duplicate: Boolean(claim.duplicate), skipped: claim.inProgress ? 'in_progress' : undefined };
-  const sound = soundForType(settings, type);
-  const notificationTag = cleanText(tag, 120) || id;
-  const content = { title: cleanText(title, 100), body: cleanText(body, 220), foregroundSound: sound.mode, data: { type: cleanText(type, 40), orderId: '', shortId: '', url, eventId: id, tag: notificationTag, title: cleanText(title, 100), body: cleanText(body, 220), foregroundSoundUrl: sound.url } };
-  const devices = await listActiveDevices(env);
-  const result = devices.length ? await sendToDevices(env, devices, content) : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
-  const status = await closeEvent(env, claim.path, result);
-  return {
-    ok: status === 'sent' || status === 'partial' || status === 'no_devices',
-    status,
-    attempted: result.attempted,
-    successCount: result.successCount,
-    failureCount: result.failureCount,
-    disabledCount: result.disabledCount,
-    lastError: sanitizeError(result.lastError, 120)
-  };
+  if (!claim.claimed) {
+    if (claim.exhausted) return { ok: false, error: 'attempts_exhausted' };
+    return { ok: true, duplicate: Boolean(claim.duplicate), skipped: claim.inProgress ? 'in_progress' : undefined };
+  }
+
+  let deliveryResult;
+  try {
+    const sound = soundForType(settings, type);
+    const notificationTag = cleanText(tag, 120) || id;
+    const content = { title: cleanText(title, 100), body: cleanText(body, 220), foregroundSound: sound.mode, data: { type: cleanText(type, 40), orderId: '', shortId: '', url, eventId: id, tag: notificationTag, title: cleanText(title, 100), body: cleanText(body, 220), foregroundSoundUrl: sound.url } };
+    const devices = await listActiveDevices(env);
+    const result = devices.length ? await sendToDevices(env, devices, content) : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
+    deliveryResult = result;
+    const status = await closeEvent(env, claim.path, result);
+    return {
+      ok: status === 'sent' || status === 'partial' || status === 'no_devices',
+      status,
+      attempted: result.attempted,
+      successCount: result.successCount,
+      failureCount: result.failureCount,
+      disabledCount: result.disabledCount,
+      lastError: sanitizeError(result.lastError, 120)
+    };
+  } catch (error) {
+    await closeEvent(env, claim.path, {
+      ...(deliveryResult || { attempted: 1, successCount: 0, failureCount: 1 }),
+      lastError: sanitizeError(error, 200)
+    }).catch(() => {});
+    throw error;
+  }
 }
 
 export async function revokeDeviceByDocumentId(env, deviceDocId, reason = 'revocado_por_superadmin') {

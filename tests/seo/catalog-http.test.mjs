@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {setTimeout as sleep} from 'node:timers/promises';
 import {generateKeyPairSync} from 'node:crypto';
 import {onRequest as catalogRequest} from '../../functions/catalogo.js';
 import {onRequest as productSitemap} from '../../functions/sitemap-products.xml.js';
@@ -16,11 +17,15 @@ test('handlers reales: HTML, HEAD, 404/503, noindex y sitemaps sin URLs privadas
  const products=Array.from({length:55},(_,i)=>document('products','p'+i,{name:'Reloj '+i,category:'relojes',price:1000,stock:i===0?0:1,...(i===1?{updatedAt:'2026-11-01T12:00:00Z'}:{})}));
  products.push(document('products','secret',{name:'Secreto',category:'oculta',price:1000,stock:1}));
  let failed=false;
+ let coldRead=false;
  globalThis.fetch=async input=>{
   const url=String(input);
   if(url==='https://oauth2.googleapis.com/token')return Response.json({access_token:'fixture',expires_in:3600});
   if(failed)return Response.json({error:'temporary'},{status:503});
-  if(url.includes('/documents/products?'))return Response.json({documents:products});
+  if(url.includes('/documents/products?')){
+   if(coldRead)await sleep(2000);
+   return Response.json({documents:products});
+  }
   if(url.includes('/documents/collections?'))return Response.json({documents:[document('collections','relojes',{name:'Relojes',visible:true}),document('collections','oculta',{name:'Oculta',visible:false})]});
   throw new Error('Petición inesperada en fixture: '+url);
  };
@@ -37,7 +42,11 @@ test('handlers reales: HTML, HEAD, 404/503, noindex y sitemaps sin URLs privadas
   assert.match(xml,/product\?id=p0/);assert.doesNotMatch(xml,/secret|1970/);assert.equal((xml.match(/<lastmod>/g)||[]).length,1);
   const categories=await categorySitemap(context('/sitemap-collections.xml'));const categoryXml=await categories.text();
   assert.match(categoryXml,/cat=relojes&amp;page=2/);assert.doesNotMatch(categoryXml,/oculta/);
+  coldRead=true;
+  const cold=await catalogRequest(context('/catalogo'));
+  assert.equal(cold.status,200);assert.equal(cold.headers.get('x-tintin-catalog-html'),'server');
+  coldRead=false;
   failed=true;
-  const unavailable=await catalogRequest(context('/catalogo'));assert.equal(unavailable.status,503);assert.equal(unavailable.headers.get('retry-after'),'60');
+  const unavailable=await catalogRequest(context('/catalogo'));assert.equal(unavailable.status,503);assert.equal(unavailable.headers.get('retry-after'),'60');assert.equal(unavailable.headers.get('x-tintin-catalog-html'),'unavailable');
  } finally {globalThis.fetch=originalFetch;globalThis.caches=originalCaches;}
 });

@@ -1,3 +1,11 @@
+## Mapa operativo, avisos GitHub y catálogo — 2026-11-23 — Codex
+
+- Base `96abef9f3b61954a5a14d620a9a5d862d155fa52`. Los últimos 30 runs incluían un fallo. Su artefacto [45091100022](https://github.com/tintinaccs/tintin-web/actions/runs/45091100022) confirmó HTTP 503 en catálogo, sitemap de productos y API de salud. El [monitor siguiente](https://github.com/tintinaccs/tintin-web/actions/runs/45143297466) pasó y cerró el [issue 1419](https://github.com/tintinaccs/tintin-web/issues/1419). Las muestras directas posteriores volvieron a detectar 503 de catálogo con `retry-after: 60` y runtime de Tintín. En la misma revisión, el catálogo API de productos y colecciones, el sitemap y la ficha SEO de muestra respondieron 200.
+- Se amplió de 1.8 a 3.5 segundos la ventana de la lectura fría del catálogo. El catálogo conserva la respuesta temporal 503 si continúa indisponible y distingue timeout de otra falla de upstream. El monitor registra HTTP, referencia de borde y marcador del catálogo, y el issue identifica las comprobaciones fallidas.
+- El workflow existente envía alertas terminales vía OIDC y el Push de Super Admin, con deduplicación por ejecución/intento. Los avisos de GitHub abren la ejecución, los de pedidos conservan su navegación. La comprobación manual OIDC no genera eventos ni avisos.
+- PASS_LOCAL: 118 pruebas Node relacionadas con Push, GitHub, catálogo/SEO y rendimiento. Incluyen lectura fría simulada de 2 segundos, autenticación firmada, rutas de notificación y rechazo de destinos ajenos. También pasaron los contratos de arquitectura, auditoría Web Push y verificación de rutas.
+- Manual de uso, mapa maestro y procedimiento de operación enlazados desde el README. La indexación de Google, recepción física de push y un incidente real con este código requieren sus respectivas evidencias.
+
 ## Hallmark en Tintín — 2026-11-22 — Codex
 
 - Base `761f961abc33f54b3f20c33056f1d3383710ae25`. Hallmark 2.0.0 se instaló en ambas bibliotecas. Se revisaron los 18 documentos de interfaz desde el origen, incluidas las páginas de compra, cuenta, contenido y administración. Se usó el modo de revisión de Hallmark con `DESIGN.md` como sistema vigente.

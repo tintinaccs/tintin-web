@@ -52,6 +52,7 @@ export async function verifyGitHubActionsOidc(token, {
   repository = DEFAULT_REPOSITORY,
   ref = DEFAULT_REF,
   workflowRef = DEFAULT_WORKFLOW_REF,
+  allowedEvents = ['schedule', 'workflow_dispatch'],
   maxTokenAgeSeconds = 10 * 60,
   clockSkewSeconds = 30,
 } = {}) {
@@ -139,7 +140,7 @@ export async function verifyGitHubActionsOidc(token, {
   assertClaim(claims?.repository === repository, 'invalid_repository');
   assertClaim(claims?.ref === ref && claims?.ref_type === 'branch', 'invalid_ref');
   assertClaim(claims?.workflow_ref === workflowRef, 'invalid_workflow_ref');
-  assertClaim(['schedule', 'workflow_dispatch'].includes(claims?.event_name), 'invalid_event');
+  assertClaim(allowedEvents.includes(claims?.event_name), 'invalid_event');
   assertClaim(claims?.sub === `repo:${repository}:ref:${ref}`, 'invalid_subject');
 
   return claims;
