@@ -1,3 +1,8 @@
+## Dependabot Firebase y Contrato Único — 2026-11-23 — Codex
+
+- El preflight del [PR #1421](https://github.com/tintinaccs/tintin-web/pull/1421) rechazó diferencias en `diagnostic-manifest.json` y `site-version.json` al construir los cambios de Firebase y Firebase CLI. El [run 45171862040](https://github.com/tintinaccs/tintin-web/actions/runs/45171862040), intento 1, falló en «Reject generated artifact drift». La auditoría final heredó ese fallo.
+- Se conservan las versiones del candidato de Dependabot y se regeneran los artefactos con el build canónico. El plan protegido se prepara contra la base vigente y los checks se validan en el SHA que se publique.
+
 ## Mapa operativo, avisos GitHub y catálogo — 2026-11-23 — Codex
 
 - Base `96abef9f3b61954a5a14d620a9a5d862d155fa52`. Los últimos 30 runs incluían un fallo. Su artefacto [45091100022](https://github.com/tintinaccs/tintin-web/actions/runs/45091100022) confirmó HTTP 503 en catálogo, sitemap de productos y API de salud. El [monitor siguiente](https://github.com/tintinaccs/tintin-web/actions/runs/45143297466) pasó y cerró el [issue 1419](https://github.com/tintinaccs/tintin-web/issues/1419). Las muestras directas posteriores volvieron a detectar 503 de catálogo con `retry-after: 60` y runtime de Tintín. En la misma revisión, el catálogo API de productos y colecciones, el sitemap y la ficha SEO de muestra respondieron 200.
