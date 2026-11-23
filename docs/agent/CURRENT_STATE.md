@@ -6,6 +6,7 @@
 - PASS_LOCAL: 118 pruebas Node relacionadas con Push, GitHub, catálogo/SEO y rendimiento. Incluyen lectura fría simulada de 2 segundos, autenticación firmada, rutas de notificación y rechazo de destinos ajenos. También pasaron los contratos de arquitectura, auditoría Web Push y verificación de rutas.
 - El último run de `main` de cada uno de los 14 workflows versionados estaba en verde al momento de la revisión. La API de GitHub limita la lectura del listado de alertas de CodeQL y Dependabot; la auditoría npm dio cero avisos y los checks CodeQL del candidato inicial pasaron.
 - Search Console registró que Google leyó `https://tintinaccs.com/sitemap.xml` el 15 de noviembre UTC, con 344 URL enviadas y cero errores o advertencias. Del 24 de octubre al 20 de noviembre se observaron impresiones del catálogo y 90 fichas bajo `/product?id=`. HTTP, www y una ficha de Shopify de muestra redirigieron con 301 a la URL pública vigente. Quedan por verificar URL específicas en Inspección de URLs.
+- PASS_LOCAL: 164 pruebas de navegador de estructura, geometría, márgenes y navegación, entre 320 y 2560 px y con movimiento reducido. La verificación adicional de Inicio medía el margen del contenedor como si fuera un objetivo táctil. Se actualizó para medir ambos enlaces, sus 44 × 44 px y el contorno de foco dentro del hero.
 - Manual de uso, mapa maestro y procedimiento de operación enlazados desde el README. La recepción física de push y un incidente real con este código requieren sus respectivas evidencias.
 
 ## Hallmark en Tintín — 2026-11-22 — Codex

@@ -10,6 +10,8 @@ flowchart TD
   Inventario --> Catalogo["Catálogo, ficha, colección y búsqueda"]
   Catalogo --> Descubrimiento["Acceso directo, comunidad y buscadores"]
   Descubrimiento --> Compra["Carrito y checkout"]
+  Descubrimiento --> Mayorista["Cotización mayorista · perfil, panel y coordinación"]
+  Mayorista --> Gestion
   Compra --> Pedido["Pedido TINPED · stock, total y auditoría"]
   Pedido --> Pago["Validación de pago"]
   Pedido --> Entrega["Preparación, entrega o retiro"]
@@ -38,6 +40,7 @@ La flecha de posventa a inventario representa una verificación de existencias c
 | --- | --- | --- |
 | Proveedores, costos y existencias | Recepción física, **Productos** y **Ventas locales**. Firestore conserva catálogo e inventario por variante. | SKU y unidades recibidas, vendidas, disponibles y reservadas. Gastos y compras registrados por fecha y mes. |
 | Venta web | Checkout, proveedor de pago y **Pedidos**. El dominio del servidor valida productos, stock y totales y confirma la operación atómica. | TINPED, revisión, estado de pago, estado de entrega y movimiento de stock. |
+| Cotización mayorista | **Mi perfil → Compras por mayor** y **Pedidos mayoristas**. La cotización tiene aprobación y coordinación propia. | Número MAY, cantidades, precios aprobados, decisión y coordinación. Ver la [guía mayorista](modulo-mayoristas.md). |
 | Venta local e historial | **Ventas locales** y espejo mensual autorizado. Conserva el identificador y el importe registrados. | Mes, movimiento, revisión y conciliación con el soporte comercial. |
 | Entregas, atención y devoluciones | **Pedidos**, canal de atención y políticas públicas de envío y devoluciones. | Pedido, comprobante, coordinación logística, resolución y existencias verificadas cuando aplique. |
 | Crecimiento y rentabilidad | Catálogo, contenido, canales comerciales y reportes propios. | Conversiones por canal cuando haya atribución, ventas efectivamente pagadas, costos y devoluciones del mismo período. |
