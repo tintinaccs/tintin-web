@@ -4,7 +4,9 @@
 - Se amplió de 1.8 a 3.5 segundos la ventana de la lectura fría del catálogo. El catálogo conserva la respuesta temporal 503 si continúa indisponible y distingue timeout de otra falla de upstream. El monitor registra HTTP, referencia de borde y marcador del catálogo, y el issue identifica las comprobaciones fallidas.
 - El workflow existente envía alertas terminales vía OIDC y el Push de Super Admin, con deduplicación por ejecución/intento. Los avisos de GitHub abren la ejecución, los de pedidos conservan su navegación. La comprobación manual OIDC no genera eventos ni avisos.
 - PASS_LOCAL: 118 pruebas Node relacionadas con Push, GitHub, catálogo/SEO y rendimiento. Incluyen lectura fría simulada de 2 segundos, autenticación firmada, rutas de notificación y rechazo de destinos ajenos. También pasaron los contratos de arquitectura, auditoría Web Push y verificación de rutas.
-- Manual de uso, mapa maestro y procedimiento de operación enlazados desde el README. La indexación de Google, recepción física de push y un incidente real con este código requieren sus respectivas evidencias.
+- El último run de `main` de cada uno de los 14 workflows versionados estaba en verde al momento de la revisión. La API de GitHub limita la lectura del listado de alertas de CodeQL y Dependabot; la auditoría npm dio cero avisos y los checks CodeQL del candidato inicial pasaron.
+- Search Console registró que Google leyó `https://tintinaccs.com/sitemap.xml` el 15 de noviembre UTC, con 344 URL enviadas y cero errores o advertencias. Del 24 de octubre al 20 de noviembre se observaron impresiones del catálogo y 90 fichas bajo `/product?id=`. HTTP, www y una ficha de Shopify de muestra redirigieron con 301 a la URL pública vigente. Quedan por verificar URL específicas en Inspección de URLs.
+- Manual de uso, mapa maestro y procedimiento de operación enlazados desde el README. La recepción física de push y un incidente real con este código requieren sus respectivas evidencias.
 
 ## Hallmark en Tintín — 2026-11-22 — Codex
 

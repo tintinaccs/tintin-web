@@ -52,7 +52,7 @@ Para una colección manual, abrí **Colecciones** en el panel, elegí la colecci
 | Preparar y entregar | Registrá el avance desde el pedido. Usá el estado de entrega que corresponda a lo que ocurrió. |
 | Gestionar cancelación o devolución | Abrí el pedido original. Aplicá el estado y la gestión de pago que correspondan. Luego comprobá el estado final y el movimiento de inventario asociado. |
 | Registrar un movimiento local | En **Ventas locales**, elegí **Nueva venta local**, **Nuevo gasto** o **Nueva compra a proveedor**. Seleccioná el mes y verificá la fila guardada. |
-| Consultar clientes | Usá **Clientes que compraron** para el historial comercial y **Usuarios y permisos** para el acceso administrativo y las cuentas web que puedas gestionar. |
+| Consultar clientes | Usá **Clientes que compraron** para el historial comercial y **Usuarios** para gestionar cuentas web y **Permisos** para ajustar el acceso administrativo. |
 
 El checkout reserva stock cuando se confirma un pedido web, incluso si el pago sigue pendiente. Una venta ingresada para conservar un registro local o histórico mantiene su flujo propio. Al recibir mercadería, actualizá las unidades del catálogo desde el editor de productos según el conteo físico.
 
@@ -62,7 +62,7 @@ En **Páginas** y las herramientas de edición de contenido, elegí qué superfi
 
 Para recibir avisos de pedidos e incidentes de GitHub, entrá al panel como Super Admin y abrí **Notificaciones push**. Activá el dispositivo, permití las notificaciones y usá la prueba del panel. En iPhone o iPad, agregá primero el sitio a la pantalla de inicio desde Safari y abrilo desde el ícono. En Android, usá Chrome. Si el aviso es de GitHub Actions, tocarlo abre la ejecución que requiere atención.
 
-Si hay un problema, abrí **Flujo de conexiones** o el **Diagnóstico Maestro** del panel. Anotá qué estabas haciendo, la hora, el identificador del pedido o ejecución si está disponible y el mensaje de error. Compartí la evidencia con la persona responsable de la tienda o del servicio, por un canal privado cuando contenga datos de clientes.
+Si hay un problema, abrí **Flujo de conexiones** o entrá a **Diagnóstico** para consultar el **Diagnóstico Maestro**. Anotá qué estabas haciendo, la hora, el identificador del pedido o ejecución si está disponible y el mensaje de error. Compartí la evidencia con la persona responsable de la tienda o del servicio, por un canal privado cuando contenga datos de clientes.
 
 ## Referencias vigentes
 

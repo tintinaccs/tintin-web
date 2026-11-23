@@ -181,8 +181,8 @@ verificar el alcance y seguir el procedimiento del dominio. Consultar el
 3. Rotar cualquier credencial compartida que la persona haya conocido.
 4. Registrar la fecha de la baja y de la rotación.
 
-En el Admin del sitio, la baja de un usuario administrativo se hace desde
-Usuarios y permisos; el Super Admin está protegido y no puede degradarse a sí
+En el Admin del sitio, la baja de un usuario administrativo se gestiona desde
+**Usuarios** y **Permisos**; el Super Admin está protegido y no puede degradarse a sí
 mismo por accidente (verificado por `audit:users-roles`).
 
 ## 9. Versiones futuras
