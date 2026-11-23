@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
   "baseCommit": "b9df787795987e0fd0e1ed12abcd47bb5db859ee",
-  "reason": "Regenerar manifiestos para la actualización de Firebase y Firebase CLI, validada por Contrato Único.",
+  "reason": "Aplicar las actualizaciones de Firebase y Playwright juntas, sincronizando los artefactos y el plan protegido de Contrato Único.",
   "files": [
     {
       "path": "package-lock.json",
       "oldHash": "7867ee72eefd8c7ed85150cf1d8d745a220f98c19c0a64e5d8230680421785c2",
-      "newHash": "271e66cdd2fbfe27ae20fb8f0e029f52bdec26d3e02f9637c562d63fc77e1296"
+      "newHash": "670ef5520ff705fd475d976b47088661e40c045961100024b99063154cc4f998"
     },
     {
       "path": "package.json",
       "oldHash": "5124296be82b3a465ba63dd2543485170a2afc55b52f8313f7aa138f1dd4e35c",
-      "newHash": "d51b13582efa52872ce1d6f2ebecd31924a031955b303fb0bdcd89b684addb00"
+      "newHash": "2e429a17e7714211ed23f92d5405681ad312feb1f847f6a21e8a30a7b86709c6"
     }
   ],
   "affectedRecords": []

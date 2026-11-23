@@ -1,7 +1,8 @@
-## Dependabot Firebase y Contrato Único — 2026-11-23 — Codex
+## Dependabot y Contrato Único — 2026-11-23 — Codex
 
-- El preflight del [PR #1421](https://github.com/tintinaccs/tintin-web/pull/1421) rechazó diferencias en `diagnostic-manifest.json` y `site-version.json` al construir los cambios de Firebase y Firebase CLI. El [run 45171862040](https://github.com/tintinaccs/tintin-web/actions/runs/45171862040), intento 1, falló en «Reject generated artifact drift». La auditoría final heredó ese fallo.
-- Se conservan las versiones del candidato de Dependabot y se regeneran los artefactos con el build canónico. El plan protegido se prepara contra la base vigente y los checks se validan en el SHA que se publique.
+- Los PR de [Firebase #1421](https://github.com/tintinaccs/tintin-web/pull/1421) y [Playwright #1422](https://github.com/tintinaccs/tintin-web/pull/1422) modificaron `package.json` y `package-lock.json`. Contrato Único rechazó los manifiestos desactualizados en «Reject generated artifact drift» en [45171862040](https://github.com/tintinaccs/tintin-web/actions/runs/45171862040) y [45171881379](https://github.com/tintinaccs/tintin-web/actions/runs/45171881379), ambos en intento 1.
+- Firebase quedó verde en [45174185957](https://github.com/tintinaccs/tintin-web/actions/runs/45174185957) (intento 1). El mantenedor [45179705796](https://github.com/tintinaccs/tintin-web/actions/runs/45179705796) bloqueó la publicación por el autor de Dependabot. Se consolidan los dos cambios en un PR de titular para aplicar la protección vigente. El lockfile conserva las entradas modernas de Firebase y Playwright de sus candidatos de origen, y los manifiestos se regeneran con el build canónico.
+- PASS_LOCAL en los candidatos originales: reglas críticas de Firestore con Firebase actualizado, 106 pruebas Node y 6 ensayos Chromium con Playwright 1.65.1, y cero avisos en ambas auditorías npm. CI ejecutará el lockfile combinado en el SHA publicado.
 
 ## Mapa operativo, avisos GitHub y catálogo — 2026-11-23 — Codex
 
