@@ -1,5 +1,10 @@
 import { injectMasterDiagnosticsRuntime } from '../cloudflare/inyectar-diagnostico-maestro-admin.js';
-import {onRequest as catalogRequest} from './catalogo.js';
+
+const PUBLIC_ALIASES = new Map([
+  ['catalogo.html', '/catalogo'],
+  ['nosotros', '/about'],
+  ['nosotros.html', '/about']
+]);
 
 const LIGHTWEIGHT_PAGES = new Set([
   'about',
@@ -73,8 +78,32 @@ export function isLightweightPageName(value) {
 
 export async function onRequest({ request, env }) {
   const page = pageName(request);
-  if (page === 'catalogo.html') return catalogRequest({request, env});
-  const asset = await env.ASSETS.fetch(request);
+  const target = PUBLIC_ALIASES.get(page);
+  if (target && ['GET', 'HEAD'].includes(request.method)) {
+    const url = new URL(request.url);
+    url.pathname = target;
+    return new Response(null, {
+      status: 301,
+      headers: { location: url.href, 'cache-control': 'public, max-age=3600' }
+    });
+  }
+  const errorDocument = page === '404' || page === '404.html';
+  let assetRequest = request;
+  if (errorDocument) {
+    const headers = new Headers(request.headers);
+    headers.delete('if-none-match');
+    headers.delete('if-modified-since');
+    assetRequest = new Request(request, { headers });
+  }
+  let asset = await env.ASSETS.fetch(assetRequest);
+
+  const notFound = errorDocument && (asset.ok || asset.status === 404);
+  if (notFound) {
+    const headers = new Headers(asset.headers);
+    headers.set('cache-control', 'no-store');
+    headers.set('x-robots-tag', 'noindex, nofollow');
+    asset = new Response(request.method === 'HEAD' ? null : asset.body, { status: 404, headers });
+  }
 
   // /admin tiene una Function dedicada; /admin.html cae en este wildcard.
   // Ambos caminos deben cargar exactamente el mismo módulo del Diagnóstico Maestro.
@@ -84,13 +113,14 @@ export async function onRequest({ request, env }) {
 
   if (!LIGHTWEIGHT_PAGES.has(page)) return asset;
   if (request.method === 'HEAD') return asset;
-  if (!asset.ok || !(asset.headers.get('content-type') || '').includes('text/html')) return asset;
+  if ((!asset.ok && !notFound) || !(asset.headers.get('content-type') || '').includes('text/html')) return asset;
 
   const html = injectLightweightPageGuards(lightenHtml(await asset.text()), page);
   const headers = new Headers(asset.headers);
   headers.delete('content-length');
+  if (notFound) for (const name of ['content-encoding', 'etag', 'last-modified']) headers.delete(name);
   headers.set('x-tintin-page-runtime', 'lightweight');
-  headers.set('cache-control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=900');
+  if (!notFound) headers.set('cache-control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=900');
   return new Response(html, {
     status: asset.status,
     statusText: asset.statusText,

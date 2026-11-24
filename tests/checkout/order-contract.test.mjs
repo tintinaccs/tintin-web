@@ -13,6 +13,13 @@ import {
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const phase4Source = fs.readFileSync(path.join(root, 'apps-script', 'CrearPedido.gs'), 'utf8');
 
+test('el checkout rechaza temprano un carrito histórico que excede sesenta líneas', () => {
+  const items = Array.from({ length: 61 }, (_, index) => ({ id: `p-${index}`, qty: 1 }));
+  assert.equal(aggregateCheckoutCart(items.slice(0, 60)).length, 60);
+  assert.throws(() => aggregateCheckoutCart(items), { code: 'too_many_products' });
+  assert.equal(items.length, 61, 'revisar el carrito no elimina las líneas guardadas');
+});
+
 function phase4Context() {
   const context = vm.createContext({
     FIRESTORE_PROJECT_ID_: 'demo-tintin',

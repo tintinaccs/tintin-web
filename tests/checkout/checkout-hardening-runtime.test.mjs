@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import vm from 'node:vm';
 import { aggregateCheckoutCart } from '../../js/orders/politica-checkout.js';
 
 const hardening = readFileSync(new URL('../../js/pages/checkout/checkout-hardening.js', import.meta.url), 'utf8');
@@ -130,4 +131,39 @@ test('quote recovery matches current cart metadata by product and variant', () =
   assert.match(secure, /function cartLineKey\(item\)/);
   assert.match(secure, /currentByLine\.get\(cartLineKey\(item\)\)/);
   assert.doesNotMatch(secure, /currentById\.get\(String\(item\.id\)\)/);
+});
+
+test('recotizar nunca sustituye altas, bajas o cantidades nuevas del carrito', () => {
+  const source = readFileSync(new URL('../../js/orders/pedido-checkout-seguro.js', import.meta.url), 'utf8');
+  const quoted = [
+    { id: 'p', variant: 'Dorado', variantKey: 'gold', qty: 2, name: 'Anillo', price: 150 },
+    { id: 'p', variant: 'Plateado', variantKey: 'silver', qty: 1, name: 'Anillo', price: 160 },
+  ];
+  const draft = { shippingMethod: 'retiro', cartLines: quoted };
+  const quote = { items: quoted, subtotal: 460, shippingCost: 0, total: 460 };
+  const original = quoted.map(item => ({ ...item, price: 100, lineId: item.variantKey }));
+  const added = { id: 'q', qty: 1, name: 'Cadena', price: 200 };
+  for (const cart of [[...original, added], [original[0]], [{ ...original[0], qty: 3 }, original[1]], original]) {
+    const matching = cart === original;
+    const summary = { innerHTML: '' };
+    const writes = [];
+    const context = vm.createContext({
+      text: value => String(value ?? '').trim(),
+      getCartLocal: () => cart,
+      setCartLocal: items => writes.push(items),
+      document: { getElementById: () => summary },
+      escapeHtml: String,
+      formatPrice: String,
+    });
+    vm.runInContext(source.slice(source.indexOf('  function cartLineKey('), source.indexOf('  async function reserveCheckoutGuard(')), context);
+    assert.equal(context.renderQuote(quote, draft), matching);
+    assert.equal(writes.length, matching ? 1 : 0);
+    if (matching) {
+      assert.equal(writes[0][0].lineId, 'gold');
+      assert.equal(writes[0][0].price, 150);
+      assert.match(summary.innerHTML, /TOTAL DEL PEDIDO/);
+    } else {
+      assert.equal(summary.innerHTML, '');
+    }
+  }
 });

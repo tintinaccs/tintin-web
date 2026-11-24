@@ -8,6 +8,8 @@ const withoutImports = code => code.replace(/^import\s[\s\S]*?;\s*$/gm, '').repl
 const profile = read('perfil.html');
 const code = withoutImports(profile.match(/<script type="module">([\s\S]*?)<\/script>/)[1]);
 const identity = withoutImports(read('js/pages/profile/estado-canonico-perfil.mjs'));
+const phone = withoutImports(read('js/components/forms/utilidades-telefono.js'));
+const profileValidation = withoutImports(read('js/pages/profile/configuracion-inicial-perfil.mjs'));
 
 test('el resumen muestra la dirección principal sin copiar controles ni direcciones secundarias', async ({ page }) => {
   await fixture(page, 390);
@@ -38,7 +40,8 @@ async function fixture(page, width, securityReady = true) {
     body: removeFixtureScripts(profile),
   }));
   await page.goto('/perfil.html');
-  await page.addScriptTag({ content: identity + `
+  await page.addScriptTag({ content: identity + phone + `
+    const { splitFullName, isValidFullName } = (() => { ${profileValidation}\nreturn { splitFullName, isValidFullName }; })();
     const auth = { currentUser: null }, db = {};
     const appCheckReady = Promise.resolve(${JSON.stringify(securityReady)});
     const subscribeAuthState = callback => { window.changeUser = user => { auth.currentUser = user; callback(user); }; };
@@ -54,9 +57,12 @@ async function fixture(page, width, securityReady = true) {
     const createLocationMap = async () => ({}), renderSavedMapPreviews = () => {};
     const MAX_SAVED_LOCATIONS = 5, readAddressBook = () => [];
     const accountAccessSummary = () => ({ current: 'Google', methods: 'Google' });
-    const DEFAULT_COUNTRY = 'PY', phoneKey = value => String(value);
     const showBlockedModal = () => { window.blocked = true; };
-    const setDoc = async () => { window.writes = (window.writes || 0) + 1; };
+    const usernameKey = value => value;
+    const setDoc = async (_ref, updates) => {
+      window.writes = (window.writes || 0) + 1;
+      if (window.delayProfileSave) await new Promise((resolve, reject) => { window.pendingProfileSave = { updates, resolve, reject }; });
+    };
     const serverTimestamp = () => ({});
     window.profileUser = uid => ({ uid, email: uid + '@example.com', displayName: 'Auth ' + uid, getIdTokenResult: () => new Promise(() => {}) });
     window.resolveProfile = (uid, data) => window.profileReads[uid].resolve({ exists: () => true, data: () => data });
@@ -142,6 +148,65 @@ test('cambiar de cuenta descarta caché, lecturas tardías y permisos anteriores
   await expect.poll(() => page.evaluate(() => window.blocked)).toBe(true);
   await expect(page.locator('#btn-guardar-perfil')).toBeDisabled();
   expect(await page.evaluate(() => window.writes || 0)).toBe(0);
+});
+
+test('un guardado pendiente protege el borrador y devuelve el control al terminar', async ({ page }) => {
+  await fixture(page, 390);
+  await page.evaluate(() => window.changeUser(window.profileUser('client')));
+  await expect.poll(() => page.evaluate(() => Boolean(window.profileReads?.client))).toBe(true);
+  await page.evaluate(() => {
+    window.resolveProfile('client', { name: 'Ana Ruiz', phone: '+595981123456' });
+    window.delayProfileSave = true;
+  });
+  const edit = page.locator('#btn-editar-perfil');
+  const save = page.locator('#btn-guardar-perfil');
+  const cancel = page.locator('#btn-cancelar-perfil');
+  const name = page.locator('#perfil-nombre');
+  await edit.click();
+  await name.fill('María López');
+  await save.click();
+  await expect(save).toHaveAttribute('aria-busy', 'true');
+  await expect(name).toHaveJSProperty('readOnly', true);
+  await expect(cancel).toBeDisabled();
+  await page.evaluate(() => window.pendingProfileSave.reject(new Error('Sin conexión')));
+  await expect(name).toHaveValue('María López');
+  await expect(name).toBeEditable();
+  await expect(cancel).toBeEnabled();
+  await save.click();
+  expect(await page.evaluate(() => window.pendingProfileSave.updates.name)).toBe('María López');
+  await page.evaluate(() => window.pendingProfileSave.resolve());
+  await expect(edit).toBeVisible();
+  await expect(name).toHaveValue('María López');
+  await expect(name).toHaveJSProperty('readOnly', true);
+  await expect(save).not.toHaveAttribute('aria-busy', 'true');
+});
+
+test('la cuenta nueva no hereda un guardado pendiente del perfil anterior', async ({ page }) => {
+  await fixture(page, 390);
+  await page.evaluate(() => window.changeUser(window.profileUser('old')));
+  await expect.poll(() => page.evaluate(() => Boolean(window.profileReads?.old))).toBe(true);
+  await page.evaluate(() => {
+    window.resolveProfile('old', { name: 'Ana Ruiz', phone: '+595981123456' });
+    window.delayProfileSave = true;
+  });
+  const edit = page.locator('#btn-editar-perfil');
+  const save = page.locator('#btn-guardar-perfil');
+  const cancel = page.locator('#btn-cancelar-perfil');
+  const name = page.locator('#perfil-nombre');
+  await edit.click();
+  await name.fill('María López');
+  await save.click();
+  await expect(save).toHaveAttribute('aria-busy', 'true');
+  await page.evaluate(() => window.changeUser(window.profileUser('new')));
+  await expect.poll(() => page.evaluate(() => Boolean(window.profileReads?.new))).toBe(true);
+  await page.evaluate(() => window.resolveProfile('new', { name: 'Laura Vera', phone: '+595982123456' }));
+  await edit.click();
+  await expect(save).not.toHaveAttribute('aria-busy', 'true');
+  await expect(cancel).toBeEnabled();
+  await expect(name).toBeEditable();
+  await page.evaluate(() => window.pendingProfileSave.resolve());
+  await expect(name).toHaveValue('Laura Vera');
+  await expect(name).toBeEditable();
 });
 
 test('error conserva datos, impide guardar y permite reintentar', async ({ page }) => {

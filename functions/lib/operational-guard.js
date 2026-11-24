@@ -14,7 +14,9 @@ export async function readLimitedText(request, maxBytes) {
       if (done) break;
       size += value.byteLength;
       if (size > maxBytes) {
-        await reader.cancel().catch(() => {});
+        // Cancelar una rama duplicada puede quedar pendiente hasta que la
+        // otra rama termine. El rechazo no depende de esa limpieza.
+        void reader.cancel().catch(() => {});
         throw Object.assign(new Error('payload_too_large'), { status: 413, code: 'payload_too_large' });
       }
       chunks.push(value);

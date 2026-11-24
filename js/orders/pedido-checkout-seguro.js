@@ -1,4 +1,5 @@
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5';
+import { checkoutCartLineLimitMessage } from '../components/cart/politica-persistencia-carrito.js?v=tintin-20261124-audit-1';
 import { inspectCheckoutAvailability, showCheckoutAvailabilityDialog } from '../pages/checkout/disponibilidad-checkout.js?v=tintin-20261031-seo-espacios-2';
 import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
@@ -44,7 +45,7 @@ import {
   isValidTaxpayerType
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1';
 import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20261102-commerce-phase05-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20261102-commerce-phase05-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20261124-audit-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -755,8 +756,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return `${String(item?.id ?? '')}\u241f${text(item?.variantKey || item?.variant)}`;
   }
 
-  function authoritativeCartFromQuote(quote) {
-    const currentByLine = new Map(getCartLocal().map(item => [cartLineKey(item), item]));
+  function authoritativeCartFromQuote(quote, currentByLine) {
     return (quote.items || []).map(item => ({
       ...(currentByLine.get(cartLineKey(item)) || {}),
       id: item.id,
@@ -771,10 +771,16 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }));
   }
 
-  function renderQuote(quote, shippingMethod) {
-    setCartLocal(authoritativeCartFromQuote(quote));
+  function renderQuote(quote, draft) {
+    const currentByLine = new Map(getCartLocal().map(item => [cartLineKey(item), item]));
+    if (currentByLine.size !== draft.cartLines.length ||
+        draft.cartLines.some(item => currentByLine.get(cartLineKey(item))?.qty !== item.qty)) {
+      return false;
+    }
+    setCartLocal(authoritativeCartFromQuote(quote, currentByLine));
+    const { shippingMethod } = draft;
     const target = document.getElementById('ck-summary-quote') || document.getElementById('ck-confirm-summary');
-    if (!target) return;
+    if (!target) return true;
     target.innerHTML = `
       <div class="ck-summary-items">${(quote.items || []).map(item => `
         <div class="ck-summary-item">
@@ -785,6 +791,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       <div class="ck-summary-total"><span>Delivery (aparte)</span><span class="ck-summary-total-val">${shippingMethod === 'encomienda' ? 'Se paga al recibir' : quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
       ${shippingMethod === 'encomienda' ? '<p class="ck-summary-shipping-note">El envío se paga a la transportadora al recibir y no está incluido en el total.</p>' : ''}
       <div class="ck-summary-total" style="font-size:18px"><span>${escapeHtml(`TOTAL DEL PEDIDO${quote.shippingPending ? ' (+ envío)' : ''}`)}</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.total))}</span></div>`;
+    return true;
   }
 
   async function reserveCheckoutGuard(draft) {
@@ -1239,7 +1246,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       blocked_account: 'Esta cuenta está bloqueada.',
       store_closed: 'La tienda está temporalmente cerrada.',
       payment_unavailable: 'Ese método de pago ya no está disponible.',
-      too_many_products: error?.message || 'Tu pedido tiene demasiados productos distintos. Escribinos por WhatsApp para coordinarlo.',
+      too_many_products: checkoutCartLineLimitMessage(),
       invalid_cart: error?.message,
       invalid_price: 'No pudimos comprobar el precio de uno de los productos.',
       invalid_variant: 'Las opciones de un producto cambiaron. Volvé a elegirlas desde su ficha para continuar.',
@@ -1327,10 +1334,17 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       const code = error?.details?.code || error?.code;
       window.TintinSiteActivity?.record?.('checkout_error',code);
       if (code === 'quote_changed' && error.details?.quote) {
-        renderQuote(error.details.quote, draft?.shippingMethod);
-        showError('Cambió un precio o el costo de envío. Revisá el resumen actualizado y confirmá nuevamente.');
-        button.disabled = false;
-        button.textContent = '✓ Confirmar pedido actualizado';
+        if (renderQuote(error.details.quote, draft)) {
+          showError('Cambió un precio o el costo de envío. Revisá el resumen actualizado y confirmá nuevamente.');
+          button.disabled = false;
+          button.textContent = '✓ Confirmar pedido actualizado';
+        } else {
+          forceBackToCart('El carrito cambió mientras se verificaba el precio. Revisá las cantidades y volvé a confirmar.');
+          button.textContent = '✓ Confirmar pedido';
+        }
+      } else if (code === 'too_many_products') {
+        forceBackToCart(checkoutCartLineLimitMessage());
+        button.textContent = '✓ Confirmar pedido';
       } else if (code === 'insufficient_stock') {
         availabilityBlocked = true;
         const productId = String(error.details?.productId || '');

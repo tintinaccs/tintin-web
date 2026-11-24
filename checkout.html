@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="983a936391d95ea54bf03095a4a109dbbe7674cc921fe03a2d318458b81d5906">
+  <meta name="tintin-page-revision" content="007659c20c929fe3d45aaa8ff25b9e50d0a8a7bbde8d1ace06570a6c04430583">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261122-hallmark-focus-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261124-audit-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261116-discovery-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261122-hallmark-focus-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261124-audit-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261111-favicon-2">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261111-favicon-2">
@@ -24,7 +24,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261122-hallmark-focus-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261124-audit-1">
   <link rel="stylesheet" id="tt-checkout-css-bundle" href="css/generated/checkout.css?v=tintin-checkout-4b99998f9c23bcd2">
   <link rel="tt-bundled-stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2" disabled data-tt-style-bundle="tt-checkout-css-bundle">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
@@ -453,7 +453,7 @@
 import { onAppCheckSnapshot as onSnapshot } from './js/core/firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1';
 import { isValidCustomerName, readProfileName, isValidFullName } from './js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1';
 import { shippingDepartment } from './js/components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
-import { productVariantImage } from './js/components/images/foto-variante.mjs?v=tintin-20261031-seo-espacios-2';
+import { CHECKOUT_CART_LINE_LIMIT, checkoutCartLineLimitMessage } from './js/components/cart/politica-persistencia-carrito.js?v=tintin-20261124-audit-1';
 import { canonicalDeliveryCities, configuredShippingPrice } from './js/components/location/tarifas-delivery.mjs?v=tintin-20261102-commerce-phase05-1';
 
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -463,9 +463,9 @@ import {
   collection, addDoc, doc, getDoc, getDocs, query, limit, where,
   updateDoc, increment, serverTimestamp, setDoc} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import {
-  getCartLocal, setCartLocal, formatPrice, cartTotal,
-  removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261117-activity-2";
+  getCartLocal, formatPrice, cartTotal,
+  removeFromCart, updateQty, awaitCartIdentityReady
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261124-audit-2";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isNationalMobileInput, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial, isValidTaxpayerType } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261114-harmonic-palette-1";
@@ -839,23 +839,6 @@ async function renderCart() {
   if (window.TintinCheckoutOrderInFlight || window.TintinCheckoutOrderCompleted) return;
   cartItems = getCartLocal();
 
-  // Drop items whose product was deleted/deactivated and refresh price/name from
-  // the live catalog, so checkout never lets someone pay for a stale/removed product.
-  if (window.PRODUCTS?.length && cartItems.length) {
-    const before = cartItems.length;
-    cartItems = cartItems
-      .map(item => {
-        const live = window.PRODUCTS.find(p => String(p.id) === String(item.id));
-        if (!live || live.active === false) return null;
-        const imageUrl = productVariantImage(live, item.variant, item.imageUrl);
-        return { ...item, name: live.name, price: live.price, imageUrl, imgUrl: imageUrl };
-      })
-      .filter(Boolean);
-    if (cartItems.length !== before || cartItems.some(it => it.price !== getCartLocal().find(c => String(c.id) === String(it.id))?.price)) {
-      setCartLocal(cartItems);
-    }
-  }
-
   const container = document.getElementById('ck-items');
   const key = JSON.stringify({ items: cartItems, recommendations: cartItems.length ? null : window.PRODUCTS?.map(p => [p.id, p.name, p.price, p.imageUrl, p.active, p.stock]) });
   if (key === lastCartRenderKey) return;
@@ -928,7 +911,7 @@ async function renderCart() {
     container.querySelectorAll('button.ck-sug-add:not([data-card-options])').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261117-activity-2');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261124-audit-2');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -946,7 +929,8 @@ async function renderCart() {
   container.innerHTML = cartItems.map(item => {
     const safeId = escapeSearchHtml(item.id);
     const safeName = escapeSearchHtml(item.name);
-    const safeCat = escapeSearchHtml(item.cat || '');
+    const variantLabel = typeof item.variant === 'string' ? item.variant.trim() : '';
+    const safeCat = escapeSearchHtml([item.cat, variantLabel].filter(Boolean).join(' · '));
     const safeImage = sanitizeImageUrl(item.imgUrl || item.imageUrl || '');
     return `
     <div class="ck-item" data-id="${safeId}">
@@ -1199,6 +1183,10 @@ document.getElementById('btn-step1-next').onclick = async () => {
   cartItems = getCartLocal();
   if (!cartItems.length) {
     showError(0, 'Tu carrito está vacío. Agregá productos antes de continuar.');
+    return;
+  }
+  if (cartItems.length > CHECKOUT_CART_LINE_LIMIT) {
+    showError(0, checkoutCartLineLimitMessage());
     return;
   }
   // Si el estado de auth todavía está resolviendo (recién se cargó la
@@ -2075,7 +2063,7 @@ subscribeSession(snapshot => {
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261117-editorial-1"></script>
 <script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20261024-qa-productos-checkout-1"></script>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261117-activity-2" defer></script>
+<script src="tienda.js?v=tintin-20261124-audit-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

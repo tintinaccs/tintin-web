@@ -20,7 +20,7 @@ import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-2026
 import { productVariantImage } from '../images/foto-variante.mjs?v=tintin-20261031-seo-espacios-2';
 export { productVariantImage };
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
-import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
+import { CHECKOUT_CART_LINE_LIMIT, GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20261124-audit-1';
 import { variantStockLimit, productVariantPrice, stableVariantSelection, variantSelectionLabel } from '../../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import {
   collection,
@@ -40,6 +40,8 @@ function createRuntime() {
   const MIGRATED_PREFIX = 'tt_cart_v2_migrated_';
   const DIRTY_PREFIX = 'tt_cart_v2_dirty_';
   const MAX_QTY = 99;
+  // Conserva carritos guardados bajo el límite anterior. Se restringen
+  // solamente las nuevas líneas y el tamaño de cada pedido.
   const MAX_CART_LINES = 100;
 
   // Se capturan una sola vez. Si una versión anterior ya había parcheado
@@ -984,8 +986,8 @@ function createRuntime() {
       }
       if (generation !== authGeneration) return { changed: false, reason: 'identity_changed' };
       const items = currentLocalCart();
-      if (items.length >= MAX_CART_LINES && !items.some(entry => entry.lineId === incoming.lineId)) {
-        showFeedback('Tu carrito llegó al máximo de productos. Finalizá esta compra para continuar.', 'warning');
+      if (items.length >= CHECKOUT_CART_LINE_LIMIT && !items.some(entry => entry.lineId === incoming.lineId)) {
+        showFeedback(`El carrito admite hasta ${CHECKOUT_CART_LINE_LIMIT} productos o variantes distintas por pedido.`, 'warning');
         return { changed: false, reason: 'line_limit' };
       }
       const existing = items.find(entry => entry.lineId === incoming.lineId);
@@ -1283,7 +1285,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261117-activity-2').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261124-audit-2').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

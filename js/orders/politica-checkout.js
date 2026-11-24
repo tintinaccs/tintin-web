@@ -25,6 +25,9 @@ export function aggregateCheckoutCart(items) {
     else byLine.set(key, { id, qty, variant, ...(item.variantKey ? {variantKey:item.variantKey} : {}) });
   }
   const result = [...byLine.values()];
+  if (result.length > CHECKOUT_CART_LINE_LIMIT) {
+    throw Object.assign(new Error(checkoutCartLineLimitMessage()), { code: 'too_many_products' });
+  }
   if (result.some(item => item.qty > 99)) {
     throw Object.assign(new Error('La cantidad de una variante es demasiado alta.'), { code: 'invalid_cart' });
   }
@@ -68,3 +71,4 @@ export function composeCheckoutDraft(input) {
     couponCode: couponApplies ? couponCode : ''
   };
 }
+import { CHECKOUT_CART_LINE_LIMIT, checkoutCartLineLimitMessage } from '../components/cart/politica-persistencia-carrito.js?v=tintin-20261124-audit-1';

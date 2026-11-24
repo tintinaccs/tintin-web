@@ -12,6 +12,38 @@ async function catalog(page, items) {
   });
   await page.route('https://media.example.test/**', route => route.fulfill({ contentType: 'image/svg+xml', body: `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><circle cx="100" cy="100" r="65" fill="${route.request().url().includes('gold') ? '#D4AF37' : '#CFD4DA'}"/></svg>` }));
 }
+
+test('limpiar filtros solo aparece cuando hay una selección y no desplaza el catálogo al hidratar variantes', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const products = Array.from({ length: 36 }, (_, index) => ({
+    ...product,
+    id: `qa-filter-${index}`,
+    name: `Aros de color ${index}`,
+    variants: { Color: [`Color ${index}`] },
+    variantInventory: [{ variant: `Color ${index}`, stock: 1 }],
+    variantMedia: [],
+  }));
+  await catalog(page, products);
+  await page.addInitScript(() => {
+    window.__catalogLayoutShift = 0;
+    new PerformanceObserver(list => {
+      for (const entry of list.getEntries()) if (!entry.hadRecentInput) window.__catalogLayoutShift += entry.value;
+    }).observe({ type: 'layout-shift', buffered: true });
+  });
+
+  await page.goto('/catalogo');
+  const clear = page.locator('#btn-limpiar-filtros');
+  await expect(page.locator('#cat-variant-filters .cat-variant-option')).toHaveCount(36);
+  await expect(clear).toBeHidden();
+  await expect.poll(() => page.evaluate(() => window.__catalogLayoutShift)).toBeLessThan(0.01);
+
+  await page.locator('#cat-search').fill('Aros de color 0');
+  await expect(clear).toBeVisible();
+  await clear.click();
+  await expect(clear).toBeHidden();
+  await expect(page.locator('#cat-search')).toHaveValue('');
+});
+
 for (const width of [390, 1440]) {
   test(`abre la variante disponible, sincroniza la foto y conserva el dorado agotado en ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 }); await catalog(page, [product]);

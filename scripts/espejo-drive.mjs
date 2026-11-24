@@ -99,11 +99,18 @@ export function changedPaths(tree, previous) {
 }
 
 async function mapLimit(items, limit, fn) {
-  const results = []; let next = 0;
+  let next = 0;
+  let failure;
   await Promise.all(Array.from({ length: Math.min(limit, items.length) }, async () => {
-    while (next < items.length) { const index = next++; results[index] = await fn(items[index]); }
+    while (!failure && next < items.length) {
+      try {
+        await fn(items[next++]);
+      } catch (error) {
+        failure ??= { error };
+      }
+    }
   }));
-  return results;
+  if (failure) throw failure.error;
 }
 
 export async function syncMirror({ client, tree, readBody, log = console.log }) {
@@ -131,7 +138,13 @@ export async function syncMirror({ client, tree, readBody, log = console.log }) 
   const done = { ...previous };
   let stateId = stateFile?.id;
   let saving = Promise.resolve();
-  const save = () => { saving = saving.then(async () => { stateId = await client.putFile({ name: STATE_NAME, parentId: rootId, existingId: stateId, body: Buffer.from(JSON.stringify(done)) }); }); return saving; };
+  const save = () => {
+    const checkpoint = saving.then(async () => {
+      stateId = await client.putFile({ name: STATE_NAME, parentId: rootId, existingId: stateId, body: Buffer.from(JSON.stringify(done)) });
+    });
+    saving = checkpoint.catch(() => {});
+    return checkpoint;
+  };
   let completed = 0;
   try {
     await mapLimit(todo, 5, async path => {

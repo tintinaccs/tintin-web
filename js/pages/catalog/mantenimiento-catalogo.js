@@ -1,4 +1,4 @@
-import {catalogMetadata, categoryCopy} from '../../core/store/seo-catalogo.mjs?v=tintin-20261116-discovery-2';
+import {catalogMetadata, categoryCopy, catalogTitle, CATALOG_ROBOTS_INDEXABLE} from '../../core/store/seo-catalogo.mjs?v=tintin-20261124-seo-1';
 /* TINTIN — Runtime integral del Catálogo */
 const CATALOG_PATH_RE = /(?:^|\/)catalogo(?:\.html)?\/?$/i;
 
@@ -13,6 +13,9 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
   const stock = document.getElementById('filtro-stock');
   const sidebar = document.getElementById('cat-sidebar');
   const filterToggle = document.getElementById('filter-toggle');
+  const initialCatalogUrl = location.pathname + location.search;
+  const initialCatalogNoindex = Boolean(document.getElementById('tt-catalog-jsonld'))
+    && document.querySelector('meta[name="robots"]')?.content.includes('noindex');
   let loadingTimer = 0;
   let recoveryTimer = 0;
   let lastGridSignature = '';
@@ -176,18 +179,23 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
   }
 
   function normalizeMetadata() {
-    const base = `https://tintinaccs.com/`;
     const state = catalogMetadata(new URL(location.href));
-    const page = state.canonical;
     const [heading, description] = categoryCopy(state.slug, document.getElementById('cat-titulo')?.textContent.replace(/ en Paraguay$/i,''));
-    document.title = heading + ' | Tintin Accesorios & Relojes';
-    document.querySelector('meta[name="description"]')?.setAttribute('content', description);
-    document.querySelector('meta[name="robots"]')?.setAttribute('content', state.filtered ? 'noindex, follow' : 'index, follow');
-    document.querySelector('link[rel="canonical"]')?.setAttribute('href', page);
-    document.querySelector('meta[property="og:url"]')?.setAttribute('content', page);
-    const image = `${base}assets/og-cover.jpg`;
-    document.querySelector('meta[property="og:image"]')?.setAttribute('content', image);
-    document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', image);
+    const title = catalogTitle(heading, state.page);
+    const noindex = state.filtered || (initialCatalogNoindex && location.pathname + location.search === initialCatalogUrl);
+    document.title = title;
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', state.canonical);
+    for (const [selector, content] of [
+      ['meta[name="description"]', description],
+      ['meta[name="robots"]', noindex ? 'noindex, follow' : CATALOG_ROBOTS_INDEXABLE],
+      ['meta[property="og:title"]', title],
+      ['meta[property="og:description"]', description],
+      ['meta[property="og:url"]', state.canonical],
+      ['meta[name="twitter:title"]', title],
+      ['meta[name="twitter:description"]', description]
+    ]) {
+      document.querySelector(selector)?.setAttribute('content', content);
+    }
   }
 
 

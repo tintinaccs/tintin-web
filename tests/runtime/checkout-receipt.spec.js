@@ -19,7 +19,7 @@ const success = secure.slice(secure.indexOf('  function renderConfirmedOrder('),
 const submit = secure.slice(secure.indexOf('  async function submit('), secure.indexOf("  window.addEventListener('tintin:paypal-payment-completed'"));
 const forceCart = hardening.slice(hardening.indexOf('function forceCart('), hardening.indexOf('\nfunction ', hardening.indexOf('function forceCart(') + 1));
 const cartListeners = hardening.slice(hardening.indexOf("  window.addEventListener('tt_cart_updated'"), hardening.indexOf('\n}', hardening.indexOf("  window.addEventListener('tt_cart_updated'")));
-const quote = secure.slice(secure.indexOf('  function renderQuote('), secure.indexOf('  async function reserveCheckoutGuard'));
+const quote = secure.slice(secure.indexOf('  function cartLineKey('), secure.indexOf('  async function reserveCheckoutGuard'));
 const whatsapp = secure.slice(secure.indexOf('  function shippingSummary('), secure.indexOf('  function renderConfirmedOrder('));
 const imageUtilities = read('js/components/images/utilidades-imagenes.js').replace(/^export /gm, '');
 const css = ['css/core/tema-unificado-tintin.css', 'css/pages/checkout/checkout.css', 'css/pages/checkout/checkout-maintenance.css', 'css/components/payments/payment-methods.css'].map(read).join('\n');
@@ -71,7 +71,6 @@ async function fixture(page) {
     const message = () => 'No pudimos confirmar el pedido.';
     const forceBackToCart = forceCart;
     const setCartLocal = items => cart = items;
-    const authoritativeCartFromQuote = quote => quote.items;
     let cartItems = cart;
     const cartTotal = items => items.reduce((sum, item) => sum + item.price * item.qty, 0);
     const orderData = {shippingMethod:'encomienda', shippingCost:0, paymentMethod:'transferencia', name:'Persona de Prueba', phone:'+595981000000', email:'persona.qa@example.invalid', city:'San José de los Arroyos', departamento:'Caaguazú', address:'Dirección extensa de prueba para verificar el resumen en todas las pantallas', notes:'Una referencia de prueba'};
@@ -85,7 +84,7 @@ async function fixture(page) {
     const paymentMethodLabel = method => method.title;
     window.fixtureRequests = 0;
     window.fixtureSubmit = () => submit(document.getElementById('ck-confirm-btn'));
-    window.fixtureQuote = () => { buildConfirmation(); renderQuote({items:cart,subtotal:35000,total:35000,shippingCost:0},'encomienda'); };
+    window.fixtureQuote = () => { buildConfirmation(); renderQuote({items:cart,subtotal:35000,total:35000,shippingCost:0},{cartLines:cart,shippingMethod:'encomienda'}); };
     window.fixturePayment = () => { document.getElementById('panel-3').querySelector('.ck-panel-body').innerHTML = '<div id="ck-payment-methods-runtime">' + methodHtml({id:'local-bank',kind:'transferencia',title:'Transferencia bancaria',icon:'🏦',description:'Envianos el comprobante por WhatsApp',instructions:'Datos de transferencia de prueba',details:[]}) + '</div>'; const item = document.querySelector('.ck-payment-runtime-item'); item.classList.add('is-selected'); item.querySelector('input').checked = true; };
     window.fixtureEmptyCart = () => { cart = []; window.dispatchEvent(new CustomEvent('tt_cart_updated',{detail:{items:[]}})); };
     window.fixtureReview = () => { document.querySelectorAll('.ck-panel').forEach((el,i)=>el.classList.toggle('active',i===4)); };
