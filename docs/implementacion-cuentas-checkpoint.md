@@ -1,6 +1,6 @@
 # Checkpoint — cuentas y sincronización TINTIN
 
-Fecha: 2026-08-22. Rama: `claude/tintin-final-audit-6o9qy2`.
+Fecha: 2026-08-22. Rama: `rama histórica: tintin-final-audit-6o9qy2`.
 
 ## Fase B — cierre (2026-08-22)
 

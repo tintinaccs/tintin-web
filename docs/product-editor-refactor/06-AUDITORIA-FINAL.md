@@ -7,8 +7,8 @@ Recibos por SHA y separación entre publicación y aceptación autenticada:
 [CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md). Los resultados anteriores que siguen abajo son evidencia
 fechada de su ejecución, no nuevas aprobaciones del código actual.
 
-26/10/2026 · Codex /root · base `5dc6f781a81e0ae0dd07d84b0c742ec3d567e133`.
-Rama local `codex/editor-fase6-integracion-20261026`. Sin merge ni deploy.
+26/10/2026 · herramienta de desarrollo anterior /root · base `5dc6f781a81e0ae0dd07d84b0c742ec3d567e133`.
+Rama local `rama histórica: editor-fase6-integracion-20261026`. Sin merge ni deploy.
 
 ## Procedencia y alcance
 

@@ -1,6 +1,6 @@
 # Rediseño de Nuevo y Editar producto — 2026-10-28
 
-Rama `codex/redesign-product-editor-20261028`, base `5a2ea0f63306583df04ed47cc745d52902669a2c` (main comprobada por fetch). Codex /root. Sólo implementación y revisión local: sin merge, deploy ni escrituras en producción. Esta instrucción del pedido prevalece sobre el merge automático indicado en AGENTS.md.
+Rama `rama histórica: redesign-product-editor-20261028`, base `5a2ea0f63306583df04ed47cc745d52902669a2c` (main comprobada por fetch). herramienta de desarrollo anterior /root. Sólo implementación y revisión local: sin merge, deploy ni escrituras en producción. Esta instrucción del pedido prevalece sobre el merge automático indicado en docs/normas-desarrollo.md.
 
 ## Revisión y alcance
 
@@ -26,10 +26,10 @@ Las capturas por pestaña y tamaño están en `artifacts/product-editor-tabs/`: 
 
 ## Referencias no disponibles
 
-No se pudo abrir `C:/Users/USER/.codex/visualizations/2026/10/28/01a18248-ad3f-7661-8736-2c69f21bb7ba/tintin-studio.html` ni la carpeta `C:/Users/USER/Documents/Codex/2026-10-28/referenced-chatgpt-conversation-this-is-an/outputs/`.
+No se pudo abrir `ruta local histórica retirada` ni la carpeta `ruta local histórica retirada`.
 
 Faltan las siete capturas `tintin-studio-{informacion,fotos,variantes,precios,detalles,publicacion,movil}.png`. Se buscó en el filesystem accesible sin encontrarlas. El diseño usa los tokens rosa/blanco y Montserrat reales del repositorio; su fidelidad a esas referencias queda NOT_VERIFIED.
 
 ## Verificación
 
-Resultados locales y límites se registran en `docs/agent/CURRENT_STATE.md`. No se heredan resultados históricos. Los fixtures bloquean red externa y usan registros ficticios. No se afirma aceptación autenticada, CI ni comportamiento en dispositivos físicos a partir de estas pruebas.
+Resultados locales y límites se registran en `docs/operaciones-tecnicas/CURRENT_STATE.md`. No se heredan resultados históricos. Los fixtures bloquean red externa y usan registros ficticios. No se afirma aceptación autenticada, CI ni comportamiento en dispositivos físicos a partir de estas pruebas.

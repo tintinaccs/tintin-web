@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "2cec9054a9a6cb565b64bef150d5341e4d665bdf",
-  "reason": "Auditoría integral: correcciones verificadas de comercio, seguridad, cuentas, accesibilidad y SEO; build y CI local, con WebKit remoto requerido por dependencias del host.",
+  "baseCommit": "d899d3e09b96987339fbd96a838dcd3a5d68c5b2",
+  "reason": "Auditoría integral sobre main actualizado: correcciones de comercio, seguridad, cuenta, accesibilidad y SEO verificadas localmente; WebKit remoto requerido por bibliotecas del host.",
   "files": [
     {
       "path": "_headers",
@@ -25,8 +25,8 @@
     },
     {
       "path": "admin.html",
-      "oldHash": "08e109c34ad39ca8bfb8fd8f332045f4aed325567ff3f212a5cd41940969d801",
-      "newHash": "84fd9627e1045af67a67769e2cb4ca97c06457c640864db88b0dd289b505f4f9"
+      "oldHash": "3d4ec145dc5959335702802227a79624a6a8535a36fc8e130790d872f30407b8",
+      "newHash": "172db6a9cae8fdb9d2fb7f9d15725a0df5fbd7d08914838a62db7182bc8fa895"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -255,8 +255,8 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "7e58fce960d2c06052b44f5cc33116455ea355f71a1feb8a37fcf3f55e7889c7",
-      "newHash": "5a714518c7e7c4c54a7ff9704d20b1c5cdd8f839bb1e51f9bcb7674ea77ff009"
+      "oldHash": "1355428437768b77e41cadd2d64c3620f408fa1cdd5b1fae2ba790bd69b3d22e",
+      "newHash": "30611d19b54b60c3c2908d8992eb6f10f2af115c159d8b1a59af1c3fb2c94c17"
     },
     {
       "path": "scripts/probar-firestore-critico.mjs",

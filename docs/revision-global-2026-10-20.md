@@ -1,6 +1,6 @@
 # Revisión global — 2026-10-20
 
-Autor: Codex /root. Base: main `c99289a9362f96a449934c4063dae3df7b238e01`. Este ciclo retoma el trabajo descrito por el titular y verifica el código actual, sin heredar cifras ni cierres de otra conversación. Inventario: [mapa-global-fase-1.md](mapa-global-fase-1.md).
+Autor: herramienta de desarrollo anterior /root. Base: main `c99289a9362f96a449934c4063dae3df7b238e01`. Este ciclo retoma el trabajo descrito por el titular y verifica el código actual, sin heredar cifras ni cierres de otra conversación. Inventario: [mapa-global-fase-1.md](mapa-global-fase-1.md).
 
 ## Hallazgos y correcciones
 

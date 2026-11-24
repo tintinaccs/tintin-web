@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "65eb285966f4ce6b0fdc0454b2e457d116d71e19237dded3af53ec8426278ddb",
+  "sourceFingerprint": "b1df0977412e19b958323709912710cfeca415ae540882df5455f66b1a682205",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1884,
-    "textFiles": 1731,
-    "totalBytes": 63299150,
+    "files": 1869,
+    "textFiles": 1716,
+    "totalBytes": 63135618,
     "pages": 19,
     "modules": 1227
   },
@@ -2973,8 +2973,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 194939,
-      "sha256": "84fd9627e1045af67a67769e2cb4ca97c06457c640864db88b0dd289b505f4f9",
+      "bytes": 194941,
+      "sha256": "172db6a9cae8fdb9d2fb7f9d15725a0df5fbd7d08914838a62db7182bc8fa895",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3063,7 +3063,7 @@
           "line": 2140
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261117-editorial-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261124-colecciones-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2141
         },
@@ -3563,7 +3563,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261117-editorial-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261124-colecciones-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2141,
           "exists": true
@@ -32895,8 +32895,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 139327,
-      "sha256": "a327324811bf4f25819670bdb72e2dcb301894e02e218e7423a59be1ed36ac4b",
+      "bytes": 139329,
+      "sha256": "a24129a31ce96a5d1675981c1a2ee4e2073a368ab1275d9ab43f83e5315a5659",
       "syntax": {
         "ok": true,
         "error": ""
@@ -39130,225 +39130,6 @@
       ]
     },
     {
-      "path": "scripts/agent/phase01-audit/browser-runtime.mjs",
-      "bytes": 538,
-      "sha256": "7954a2dcacba576b0f11d7188b7dbf183578a1966ada9463b235a6420ce24e03",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:module",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "scripts/agent/phase01-audit/fallback-probe.mjs",
-      "bytes": 1728,
-      "sha256": "b1610ff9db5817775c2a208009d5e4e1ce95bec532ee8a3d46387f59e29a840e",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 2
-        },
-        {
-          "raw": "node:path",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "node:assert/strict",
-          "target": null,
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "parse5",
-          "target": "scripts/agent/phase01-audit/parse5",
-          "dynamic": false,
-          "line": 5
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://fixture.invalid/index.html",
-          "line": 17
-        },
-        {
-          "url": "https://fixture.invalid/",
-          "line": 17
-        }
-      ]
-    },
-    {
-      "path": "scripts/agent/phase01-audit/legacy-order-probe.mjs",
-      "bytes": 4027,
-      "sha256": "8193b5803cf6d524ffdf7c3bfa08a2ce020566e417aafc018174707a7a11733a",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "node:vm",
-          "target": null,
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "node:assert/strict",
-          "target": null,
-          "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "../../../cloudflare/order-admin-domain.js",
-          "target": "cloudflare/order-admin-domain.js",
-          "dynamic": false,
-          "line": 6
-        },
-        {
-          "raw": "../../../cloudflare/firebase-admin-ligero.js",
-          "target": "cloudflare/firebase-admin-ligero.js",
-          "dynamic": false,
-          "line": 7
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "scripts/agent/phase01-audit/rules-probe.mjs",
-      "bytes": 3066,
-      "sha256": "b52f4e6c47bee305569e417cc4382e22ac37364c313c140959020fb00f1b5b1f",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "node:assert/strict",
-          "target": null,
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "@firebase/rules-unit-testing",
-          "target": "scripts/agent/phase01-audit/@firebase/rules-unit-testing",
-          "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "firebase/firestore",
-          "target": "scripts/agent/phase01-audit/firebase/firestore",
-          "dynamic": false,
-          "line": 6
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "scripts/agent/phase01-audit/run-rules-probe.mjs",
-      "bytes": 1170,
-      "sha256": "9c9bc6f69898cc88aa08b15a00cf77ad22d98d9e093cc092b550fde2f16b8f37",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "node:os",
-          "target": null,
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "node:path",
-          "target": null,
-          "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "node:url",
-          "target": null,
-          "dynamic": false,
-          "line": 6
-        },
-        {
-          "raw": "node:child_process",
-          "target": null,
-          "dynamic": false,
-          "line": 7
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "scripts/agent/phase01-audit/stats-probe.mjs",
-      "bytes": 2826,
-      "sha256": "c97aa32483e31e4a91e7134eba944acb9f14b2688295680cda34a3552e44accf",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:vm",
-          "target": null,
-          "dynamic": false,
-          "line": 2
-        },
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "node:assert/strict",
-          "target": null,
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "../../../cloudflare/firebase-admin-ligero.js",
-          "target": "cloudflare/firebase-admin-ligero.js",
-          "dynamic": false,
-          "line": 5
-        }
-      ],
-      "endpoints": []
-    },
-    {
       "path": "scripts/auditar-acceso-aislamiento.js",
       "bytes": 8235,
       "sha256": "ca9fefc1a66ccfc831dc10b7a410723e0a1a472defcd3bcb04f6712876aa17e4",
@@ -40307,8 +40088,8 @@
     },
     {
       "path": "scripts/auditar-convenciones-nombres.mjs",
-      "bytes": 4785,
-      "sha256": "550f7f91035519fd70fef2f25739ae0c6f8ab340a0c722c582e8798e4143bf4c",
+      "bytes": 4772,
+      "sha256": "f33f06d5d53d813e81cbdc1c7823b6c9bb2849893718318c5e31e7395bac6fc4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -41872,8 +41653,8 @@
     },
     {
       "path": "scripts/auditar-profunda.js",
-      "bytes": 16518,
-      "sha256": "343e0d702b833ad2aac5bd93804d8ae0ebca078f9955d5dca117c2d84a3f9f28",
+      "bytes": 16493,
+      "sha256": "85ddd30d53e6d0618c31207cb3dfecfc422a0e00eb87b1e6909831a451119611",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42271,8 +42052,8 @@
     },
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
-      "bytes": 21207,
-      "sha256": "2c00397a7a739a454c093402e9aa638d71c0bb23f2139e1ee1f658895360a0c4",
+      "bytes": 20986,
+      "sha256": "fdc197de46e849c263033fbb7dfbcd4a2d337478cab264611434d11b6e5fdaeb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42592,8 +42373,8 @@
     },
     {
       "path": "scripts/auditar-tipografia.js",
-      "bytes": 17053,
-      "sha256": "22f72ccc404c656ea4d8c4d37e8da293fe7c7ce3c5a7255cc11dcfb44998d268",
+      "bytes": 16667,
+      "sha256": "a14b625185973d1e2a116b97f26d67caabefe13eff67fec9318886b17864b5ce",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43364,8 +43145,8 @@
     },
     {
       "path": "scripts/inventariar-acciones-cliente.mjs",
-      "bytes": 2559,
-      "sha256": "ca422acba8aee7c4cbd40a74a106ea54484f15a528bc79f9d59e9e098d2d85a7",
+      "bytes": 2574,
+      "sha256": "28691a92361783c493c91b11e482e93d5a0d339540d7a0edded741cbba4fe2a9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43701,8 +43482,8 @@
     },
     {
       "path": "scripts/notificar-resultados-github.mjs",
-      "bytes": 3184,
-      "sha256": "bec25cd858cbc05f691f1592a588190a1e5c156e8ac32e7e6d4744408149fb57",
+      "bytes": 3122,
+      "sha256": "ee9e96428a8855b6d47841695622a6ebbb24627090882756641868d3c3f375d5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43721,6 +43502,225 @@
           "line": 6
         }
       ]
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/browser-runtime.mjs",
+      "bytes": 538,
+      "sha256": "7954a2dcacba576b0f11d7188b7dbf183578a1966ada9463b235a6420ce24e03",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/fallback-probe.mjs",
+      "bytes": 1743,
+      "sha256": "920173503f95e734174c9d5cf4d0c0b6eea1eb8ca2f4f98fa4dfa2e62ae25dae",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "parse5",
+          "target": "scripts/operaciones-tecnicas/phase01-audit/parse5",
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://fixture.invalid/index.html",
+          "line": 17
+        },
+        {
+          "url": "https://fixture.invalid/",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/legacy-order-probe.mjs",
+      "bytes": 4042,
+      "sha256": "28b0a9f11c60476d32ba81c12df0f4117c77262a858c0b5b1de70f2bc5074064",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../../cloudflare/order-admin-domain.js",
+          "target": "cloudflare/order-admin-domain.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/rules-probe.mjs",
+      "bytes": 3081,
+      "sha256": "86b290b82fbfafd757d2b7e35440af90a9e06cd456677b4fb327d70917b88eeb",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "@firebase/rules-unit-testing",
+          "target": "scripts/operaciones-tecnicas/phase01-audit/@firebase/rules-unit-testing",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "firebase/firestore",
+          "target": "scripts/operaciones-tecnicas/phase01-audit/firebase/firestore",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/run-rules-probe.mjs",
+      "bytes": 1185,
+      "sha256": "d848b220b21a04638c0479668ad8ec8617f08193eb666d20ff663fa0607f1286",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/stats-probe.mjs",
+      "bytes": 2841,
+      "sha256": "2712d10debcd24c7492c13e6698380996eee996cd209eb6af5292ab165a626aa",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "scripts/preparar-hosting.js",
@@ -44197,8 +44197,8 @@
     },
     {
       "path": "scripts/recopilar-acciones-cliente-runtime.mjs",
-      "bytes": 6989,
-      "sha256": "a2e8fb744a5561dbfe420148480d5b15588fda8affc5ed4017f245b9a8f38513",
+      "bytes": 7004,
+      "sha256": "7686114df926bafeaef8506d2cf4b9c1acb5595e312be6dd7d15df68c7d54489",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55221,8 +55221,8 @@
     },
     {
       "path": "tests/operations/ci-immutable-checkout.test.mjs",
-      "bytes": 752,
-      "sha256": "6c3c86eb15ec8ebc8395ff705a101bb82a1efcb06c0694c74251e10b8fd5eb7d",
+      "bytes": 600,
+      "sha256": "ba4a3633ee4c7bb41ae338767dff503aaa7c6d3f6c3ce37bad45efab2bd25c85",
       "syntax": {
         "ok": true,
         "error": ""
@@ -61708,8 +61708,8 @@
     },
     {
       "path": "tests/ui-ux/admin-app-colecciones.spec.js",
-      "bytes": 6312,
-      "sha256": "72098ebf97b9dee1bbd9f9ac0954165d4812303685ad04b1f32221937a692dcb",
+      "bytes": 7718,
+      "sha256": "a579e827ca8e1e6f444fca380c7be4a090827fa8141726470a5f661d55b1116d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -64042,8 +64042,8 @@
     },
     {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
-      "bytes": 4674,
-      "sha256": "896e832804d89beb35afdcc1b396388de93a7033736900a756eece47d9445c1c",
+      "bytes": 4686,
+      "sha256": "b7afe93c9301fa7067733e44a18a97fb34680b5fce0f7c088e03ed0f3c002d3e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -64644,8 +64644,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 12543,
-      "sha256": "2361bc3261b54404ede4a9977fcac6dac0beef3b15be8ecf1b25e6798ac16177"
+      "bytes": 12327,
+      "sha256": "3d8c91d59ce93211d0f5560bbbfa5c7587ca3287abefda7ee97e5e82a3168f80"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -64714,22 +64714,10 @@
       "sha256": "9e5000425b61bd61e6d8e3251fca71f0309027757e7225deb64310cfbab99ed0"
     },
     {
-      "path": ".mcp.json",
-      "extension": ".json",
-      "bytes": 104,
-      "sha256": "61d3168d45de0cd7ab6fc6562fb982b2751c61c38b55a8e3af3a4c261af37fa2"
-    },
-    {
       "path": "404.html",
       "extension": ".html",
       "bytes": 17816,
       "sha256": "57eac83f663568d9c9e349054e65ad638949f004f5ba8ee6619bc8d1a6261cd9"
-    },
-    {
-      "path": "AGENTS.md",
-      "extension": ".md",
-      "bytes": 12184,
-      "sha256": "273f4b554cece7f4e585b9ecc4958da85c8d957586e45b5122f3a2a61d5faec5"
     },
     {
       "path": "DESIGN.md",
@@ -64740,8 +64728,8 @@
     {
       "path": "PRODUCT.md",
       "extension": ".md",
-      "bytes": 1206,
-      "sha256": "e1811abfe7555af2fb5a813ecf9d6e352c3e16ce202332b7b46dec65313fc5d8"
+      "bytes": 1207,
+      "sha256": "bbb993b8deafb3c93419904a0ef6f3343d9122b48440bd27911cb4b53d7219d7"
     },
     {
       "path": "README.md",
@@ -64788,8 +64776,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 194939,
-      "sha256": "84fd9627e1045af67a67769e2cb4ca97c06457c640864db88b0dd289b505f4f9"
+      "bytes": 194941,
+      "sha256": "172db6a9cae8fdb9d2fb7f9d15725a0df5fbd7d08914838a62db7182bc8fa895"
     },
     {
       "path": "apple-touch-icon.png",
@@ -65988,8 +65976,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 14533,
-      "sha256": "bbb47443811d71976122fd228d72603693c2f952e586ef3231fa2deafe8f80a4"
+      "bytes": 14543,
+      "sha256": "e6dd68309641bcc20f6fdb3d96323706d369d4d1d165ea77dc1d895a171f5ef3"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -66000,8 +65988,8 @@
     {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
-      "bytes": 155297,
-      "sha256": "773736d4c66c2b2f1b301e2006c8d6f9fd29970de0a3cf400b8ae22ea15e3676"
+      "bytes": 155212,
+      "sha256": "f0f296b187a28a458d1b79e0a783c09cc84509096b88782459f5826f3087c523"
     },
     {
       "path": "config/public-site.json",
@@ -66120,8 +66108,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 165624,
-      "sha256": "d878a0335427911804c6d02e0cc8dc9cc89500ed34fca3c633a8a0c4d4624bcf"
+      "bytes": 165641,
+      "sha256": "3323f0f8ab730ca4c4d020ccf789b074ddcee03f1dd9d428e3ef4e1e4be3c65e"
     },
     {
       "path": "css/admin/sidebar-interaccion.css",
@@ -66712,672 +66700,6 @@
       "sha256": "f503cfee692f5564f67853c5632db3f58bac5c9f8226930b8efb80b04f48cce9"
     },
     {
-      "path": "docs/agent/ACCEPTANCE_MATRIX.md",
-      "extension": ".md",
-      "bytes": 4308,
-      "sha256": "9a31effc3e2b03461d9899cd853682497a5f3a75b19e249e24650e42fc6e1eb4"
-    },
-    {
-      "path": "docs/agent/ADMIN-CRUD-FEEDBACK-2026-09-28.md",
-      "extension": ".md",
-      "bytes": 2828,
-      "sha256": "91137aa5c52ee40f9f9f5d789b5a550d123eb214f55fbbf5be31b450cde1f32f"
-    },
-    {
-      "path": "docs/agent/ADMIN-MOBILE-EXPERIENCE.md",
-      "extension": ".md",
-      "bytes": 10333,
-      "sha256": "bfa5521d8de3fa77f8d82a42af6f1993186bc27b72039c5655d44528e1d9df54"
-    },
-    {
-      "path": "docs/agent/AUDIT-INTEGRITY-20261030.md",
-      "extension": ".md",
-      "bytes": 3235,
-      "sha256": "ba86ae7f8f327abb0c45542747c6657f05a7e27347b28f40f14b4550f65ae0a2"
-    },
-    {
-      "path": "docs/agent/AUDITORIA_CLIENTE_20261012.md",
-      "extension": ".md",
-      "bytes": 4656,
-      "sha256": "4f10c71f399d9f9791414bdf4f154555fdc80ad94ff98a7b6738dbd79331ed5a"
-    },
-    {
-      "path": "docs/agent/AUDITORIA_HEADERS_BUSQUEDA_20261028.md",
-      "extension": ".md",
-      "bytes": 18186,
-      "sha256": "b7cf7ad8a8ba75a59c78384d83bdeed7616d909f2e2bfea5368c050ed8cb2b51"
-    },
-    {
-      "path": "docs/agent/AUDITORIA_MULTIDISPOSITIVO_20261010.md",
-      "extension": ".md",
-      "bytes": 12579,
-      "sha256": "5e13af38cf38bba500bd6267310b1e03b59553a50139619161b7268395c1e90b"
-    },
-    {
-      "path": "docs/agent/AUDITORIA_SUPERADMIN_20261016.md",
-      "extension": ".md",
-      "bytes": 10845,
-      "sha256": "36e2a2a44ace8642e1b5d05e97d825458f3a59a3af6859daf16c7555cc2066cc"
-    },
-    {
-      "path": "docs/agent/AUTONOMOUS_REPAIR.md",
-      "extension": ".md",
-      "bytes": 4711,
-      "sha256": "524f4f288c854d55bebe2aebb11d4321ab1d2f00804af763f345970f69d56eff"
-    },
-    {
-      "path": "docs/agent/CHECKOUT_SEGUIMIENTO_20261117.md",
-      "extension": ".md",
-      "bytes": 5014,
-      "sha256": "97bf5b59ebdb818301701058a1e7b31428092ea23b33a9862b67a2ecae716b6d"
-    },
-    {
-      "path": "docs/agent/CI_MIGRATION_20261015.md",
-      "extension": ".md",
-      "bytes": 1252,
-      "sha256": "c71e553879503132eeb0b207ff5d47d5af25048c285ccbbdb04c6f75d2099bee"
-    },
-    {
-      "path": "docs/agent/CI_MONITOR_SEO_20261116.md",
-      "extension": ".md",
-      "bytes": 3380,
-      "sha256": "9e84e55a35c66e370abbb487ec7e9e25fca3a7cc52cc05d3c23228075c5d5292"
-    },
-    {
-      "path": "docs/agent/CLOUD_SKILLS_CATALOG.md",
-      "extension": ".md",
-      "bytes": 19994,
-      "sha256": "a3d6e3eae86a16e2c993e6602f8d5a90a7d1f9a47e07bceb980a616f96cf687c"
-    },
-    {
-      "path": "docs/agent/CLOUD_SKILLS_LOCK.json",
-      "extension": ".json",
-      "bytes": 8535,
-      "sha256": "2e716b7e5f777f56010676df346deb45caaec11dcbe8fc3d80918498a799e80a"
-    },
-    {
-      "path": "docs/agent/CODEQL_TRIAGE_20261013.md",
-      "extension": ".md",
-      "bytes": 4078,
-      "sha256": "f45f314e358ea13fd6ff5a09e71135e76e2e8e75fd167717bb2476efacc5d854"
-    },
-    {
-      "path": "docs/agent/COMPROBACIONES_CIERRE_20261012.md",
-      "extension": ".md",
-      "bytes": 2343,
-      "sha256": "fab5741a8fc13e9c628b3c5ffed2ab2db4a1c30c31b8c0f464108d7e9d69283f"
-    },
-    {
-      "path": "docs/agent/CONSOLIDACION_PR_20261020.md",
-      "extension": ".md",
-      "bytes": 7772,
-      "sha256": "f6479c947b8ff3b4d18d1138bcaf3b5ad4738d92822e3b036a56990a224bfa2d"
-    },
-    {
-      "path": "docs/agent/CONTINUACION_PREPARACION_20261011.md",
-      "extension": ".md",
-      "bytes": 4979,
-      "sha256": "882672b40b2851497b757004431d1caf6f219bed44c9fe512b629fcff09a341b"
-    },
-    {
-      "path": "docs/agent/CORREOS-EXTRACCION-20261028.md",
-      "extension": ".md",
-      "bytes": 2767,
-      "sha256": "3973ed4fa1b1959ee90de3d1054b70e6f9ea89c6b2ff4b7988b46a941a3efb03"
-    },
-    {
-      "path": "docs/agent/CURRENT_STATE.md",
-      "extension": ".md",
-      "bytes": 1378520,
-      "sha256": "23fc9e945e7a7f1dcfd758c899cd5d6412e8fcf16240b3925c5518805d16447d"
-    },
-    {
-      "path": "docs/agent/DECISIONES_COMERCIALES_20261102.md",
-      "extension": ".md",
-      "bytes": 8343,
-      "sha256": "8aa5c5b6a055d7ba020267819cb0b516d5761d859d5932979a5d829f2809100c"
-    },
-    {
-      "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
-      "extension": ".md",
-      "bytes": 4949,
-      "sha256": "a1f79becd882edb479fe690db26901d1fb80027a697ee131689ecdb27ce3a873"
-    },
-    {
-      "path": "docs/agent/DEPENDENCIAS-1231-1242-20261026.md",
-      "extension": ".md",
-      "bytes": 2622,
-      "sha256": "c7ada848abb8267f745484e1acb7cea330e943b079e45bb39f41dc9cf275e643"
-    },
-    {
-      "path": "docs/agent/DESIGN_SKILLS_20261103.md",
-      "extension": ".md",
-      "bytes": 7532,
-      "sha256": "2b9cef25dd536f53f75c078966888d1444a3b9a1e185fa2a468359f82b059dd9"
-    },
-    {
-      "path": "docs/agent/EDITOR-Y-BUSCADORES-20261028.md",
-      "extension": ".md",
-      "bytes": 7016,
-      "sha256": "2d90b574729984c70bb88b7b6cbe488dabc5dbbdd28e01edc3652f999d1a00d7"
-    },
-    {
-      "path": "docs/agent/ESPACIADO_GLOBAL_20261023.md",
-      "extension": ".md",
-      "bytes": 3721,
-      "sha256": "bd23f83e484528b378a990bbc24ac3625bad1055d5c01c4b01c57550fe717b45"
-    },
-    {
-      "path": "docs/agent/GITHUB_RESULTS.md",
-      "extension": ".md",
-      "bytes": 4440,
-      "sha256": "b7cb749e959e63c1ff7ba6c6f4391222928c158bbc24b1ac6f41494ccd23b924"
-    },
-    {
-      "path": "docs/agent/GLOBAL_REFINEMENT_20261114.md",
-      "extension": ".md",
-      "bytes": 6896,
-      "sha256": "bdf9be7ec2f0e407eee6fee9db69a3e2a03ca5bfbca914c5d999b2495579273d"
-    },
-    {
-      "path": "docs/agent/IDENTIDAD_TINTIN_20261021.md",
-      "extension": ".md",
-      "bytes": 4570,
-      "sha256": "664ccd071868eb0d992c29f26db41858c8b7e18ea48fcb7d1b48cb8ca83180a0"
-    },
-    {
-      "path": "docs/agent/MANTENIMIENTO_FLUJOS.md",
-      "extension": ".md",
-      "bytes": 6061,
-      "sha256": "e3bcd2bc698bbea61d05278101109e5e142ec7a4d5dfd0c8722320b04a555392"
-    },
-    {
-      "path": "docs/agent/MERGE-ALL-20261030.md",
-      "extension": ".md",
-      "bytes": 4491,
-      "sha256": "d36183a15c36bd205a0067172f9fa6c61db66a2c2b12ba46fc0232ccad057f99"
-    },
-    {
-      "path": "docs/agent/MIGRACION_CONTROL_20261010.md",
-      "extension": ".md",
-      "bytes": 4490,
-      "sha256": "0fba3342027e3a0be74cd1c0ae9372e8681bb89a3e1266bd0cb277f9c159af96"
-    },
-    {
-      "path": "docs/agent/MONITOR_REPORT_ONLY_20261011.md",
-      "extension": ".md",
-      "bytes": 3309,
-      "sha256": "dfbc40032d16b9e14f3f48b0bf669391ec9e2776ef85f2792e3376b586e33a53"
-    },
-    {
-      "path": "docs/agent/PALETA_ARMONICA_20261114.md",
-      "extension": ".md",
-      "bytes": 7755,
-      "sha256": "fb0374ff2827366f6182110fb6f30a2768ce12cad44b83e791d7cc6609bda23c"
-    },
-    {
-      "path": "docs/agent/PEDIDOS_SUPERADMIN_RENOVACION_20261012.md",
-      "extension": ".md",
-      "bytes": 11647,
-      "sha256": "c3df4700e9dcefd65ea6c8dbafe9ad6a651a7a243d01bc32b994e14831932c7d"
-    },
-    {
-      "path": "docs/agent/PERFORMANCE_GLOBAL_20261029.md",
-      "extension": ".md",
-      "bytes": 11680,
-      "sha256": "d4fc829a4ad70ac61b3c3ee93b83c53853125eed8f49a3ff06dac73433143cb9"
-    },
-    {
-      "path": "docs/agent/PERFORMANCE_POLISH_20261103.md",
-      "extension": ".md",
-      "bytes": 4028,
-      "sha256": "d8ae79759aff18c3fce1642cab625bf145bdc92616c8c31031d324aa0f46e343"
-    },
-    {
-      "path": "docs/agent/PHASE01_GLOBAL_ARCHITECTURE_AUDIT.md",
-      "extension": ".md",
-      "bytes": 33188,
-      "sha256": "37d09e8cfb618f8c8ff6750f422dca843ada845e9fef0822fa09b7ff6fad846c"
-    },
-    {
-      "path": "docs/agent/PHASE02_PUBLIC_VISUAL_REPAIR.md",
-      "extension": ".md",
-      "bytes": 9003,
-      "sha256": "42dd7b2500d2de5db2d57ed7907bd25f0d7021910bb6970772729a9f12833e4c"
-    },
-    {
-      "path": "docs/agent/PHASE03_ADMIN_PRODUCT_EDITOR.md",
-      "extension": ".md",
-      "bytes": 8181,
-      "sha256": "b748d36b234030063a230a6479b9e4d244632e74e258e64a319db4d016f61ede"
-    },
-    {
-      "path": "docs/agent/PRECUTOVER_PEDIDOS_20261013.md",
-      "extension": ".md",
-      "bytes": 7411,
-      "sha256": "397519a462312930456abff3e78e752315e1c76752e9113863e3be3393fe445f"
-    },
-    {
-      "path": "docs/agent/PREPARACION_ACTUAL_20261011.md",
-      "extension": ".md",
-      "bytes": 7017,
-      "sha256": "5caf3f329d893b79ecff861c0423c16167c2f2f7999b5de431027638865a1e19"
-    },
-    {
-      "path": "docs/agent/PREPARACION_DOMINIO_Y_BIENVENIDA_20261011.md",
-      "extension": ".md",
-      "bytes": 7399,
-      "sha256": "fa36c027afaa3676a0ce425950bee92ab8c0b0f003312a61c5dd08e8442037f7"
-    },
-    {
-      "path": "docs/agent/PREPARACION_SIN_CUTOVER_20261011.md",
-      "extension": ".md",
-      "bytes": 6980,
-      "sha256": "9b885e9cf666cb7fa1bb13a4fe41d0f49ffbcb088683edd5175d37015aefb7da"
-    },
-    {
-      "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
-      "extension": ".md",
-      "bytes": 23212,
-      "sha256": "7a4931df1dcd2f9c237c8a93182e3157bd6a22d87aecfd6de5316a02ae92a422"
-    },
-    {
-      "path": "docs/agent/PRODUCTION-PROBE-2026-09-29.md",
-      "extension": ".md",
-      "bytes": 47708,
-      "sha256": "d13f1f06342cb23d435ce3a67f4a6ab9d40283f677443f495a3773600818f1e5"
-    },
-    {
-      "path": "docs/agent/PRODUCT_EDITOR_GUIDED_REVIEW.md",
-      "extension": ".md",
-      "bytes": 9246,
-      "sha256": "2469ed75885a89fda69aacd4304daf4019137f44e0c12ad87558dbb5e658bb2f"
-    },
-    {
-      "path": "docs/agent/PROMPT-MAESTRO-20261030.md",
-      "extension": ".md",
-      "bytes": 6291,
-      "sha256": "de27ae08127f1ba77816b06aeb9b67c80ca395391980c6d78b4f5cd4238b0696"
-    },
-    {
-      "path": "docs/agent/PROPUESTA_MFA_20261010.md",
-      "extension": ".md",
-      "bytes": 3450,
-      "sha256": "3ecb2ae0a853853691df256f81f9950dee50bfdfc8f0f60d730dbfceb075130e"
-    },
-    {
-      "path": "docs/agent/PRUEBA-ESCRITURA-LIKES-RESENAS.md",
-      "extension": ".md",
-      "bytes": 3514,
-      "sha256": "f6032d20e3bef3c3e53c8e25eaaeb1ac37090f06769938902ea449ea46303ea4"
-    },
-    {
-      "path": "docs/agent/QA-PRODUCTOS-CHECKOUT-2026-10-24.md",
-      "extension": ".md",
-      "bytes": 7277,
-      "sha256": "51ef6c5b596faaa2dc5d676b528ec40e8e57f48ba8c4762e31a4ccf22f8144e3"
-    },
-    {
-      "path": "docs/agent/README.md",
-      "extension": ".md",
-      "bytes": 3285,
-      "sha256": "9b5f3d7c6829631d83a6649cbbd9249cbdfc48be7fe251da1cf9f1caf3782171"
-    },
-    {
-      "path": "docs/agent/REAL_INTERACTIONS_20261011.md",
-      "extension": ".md",
-      "bytes": 18443,
-      "sha256": "4e105d37e97fb7525c9e30d02813324775ae45fe06a77bb644acf5219032682b"
-    },
-    {
-      "path": "docs/agent/RECUPERACION_ACTIONS_PR_20261023.md",
-      "extension": ".md",
-      "bytes": 7051,
-      "sha256": "96d9c5c9c321265fb9a867e99d5f33762098d8a8eb5999daa8a453cec021695e"
-    },
-    {
-      "path": "docs/agent/RENDIMIENTO-GLOBAL-20261029.md",
-      "extension": ".md",
-      "bytes": 11498,
-      "sha256": "a0e0f0ca80e8effd3bab1e5d6a51708344671302b4b265e6f9d8f1d96dddee7b"
-    },
-    {
-      "path": "docs/agent/REQUIRED_CHECKS_20261104.md",
-      "extension": ".md",
-      "bytes": 2946,
-      "sha256": "65f1094ad8c9b4217c56b9d5fe429251352076531c10246a1384bef60dd25031"
-    },
-    {
-      "path": "docs/agent/REVEAL_HERO_20261115.md",
-      "extension": ".md",
-      "bytes": 4882,
-      "sha256": "b8ae2fc8f9e24bbfa618da91e67a7927f78b6bceb8f4453171472fef46204bea"
-    },
-    {
-      "path": "docs/agent/REVISION-RESPONSIVE-GLOBAL-2026-10-25.md",
-      "extension": ".md",
-      "bytes": 7271,
-      "sha256": "579a205357835e1a8c4b53951b09a09ae35c825cf9dfb9dbfa3e2f2d44ec2cc8"
-    },
-    {
-      "path": "docs/agent/REVISION_ESPACIOS_20261008.md",
-      "extension": ".md",
-      "bytes": 2115,
-      "sha256": "e413a1d6b9af0bc63143192750b335fcaa2cfff6c94a0c9cc5cac373eb911aeb"
-    },
-    {
-      "path": "docs/agent/REVISION_PRODUCTO_20261008.md",
-      "extension": ".md",
-      "bytes": 5782,
-      "sha256": "774470ab9bc2bec91fb95694e0a7dd3e504b5a1683a0f62a204d50b77c0cbcc1"
-    },
-    {
-      "path": "docs/agent/SECURITY_RELEASE_20261013.md",
-      "extension": ".md",
-      "bytes": 7844,
-      "sha256": "ceb3f1ee27dd8f5713216653b19281f4de6b87f799202d571e125cc418adce85"
-    },
-    {
-      "path": "docs/agent/SECURITY_VALIDATION_20261013.md",
-      "extension": ".md",
-      "bytes": 8104,
-      "sha256": "2ff0ff30bfb1e0fb76d6f0f3a597361704aa58a09d11671dcf2616a11503ec85"
-    },
-    {
-      "path": "docs/agent/SEGUIMIENTO_PENDIENTES_20261026.md",
-      "extension": ".md",
-      "bytes": 4702,
-      "sha256": "a3ba1dd2e5431ec2fd302a71a84a5ff7a7280980775f65a8ceac45fd0045749c"
-    },
-    {
-      "path": "docs/agent/SEGURIDAD_20_PUNTOS_20261012.md",
-      "extension": ".md",
-      "bytes": 8081,
-      "sha256": "d9a299af79d391410abe0b473060eb49e6284939f8effdd54e326c420224eda0"
-    },
-    {
-      "path": "docs/agent/SEGURIDAD_REVISION_20261021.md",
-      "extension": ".md",
-      "bytes": 2044,
-      "sha256": "f6296cc05dc2d160e239e39ca52141551c2b2cbcea6bae7666f9dc9a0061429d"
-    },
-    {
-      "path": "docs/agent/SKILLS_AUTO_ROUTING.md",
-      "extension": ".md",
-      "bytes": 24123,
-      "sha256": "d767474bd060922428ca485bc4b0eb06542d2bce4754c64c2e8d206a357090fc"
-    },
-    {
-      "path": "docs/agent/SUPERADMIN_REVIEW_20261019.md",
-      "extension": ".md",
-      "bytes": 5127,
-      "sha256": "230963b061fb20a5421f405bada655d1fc1db19b8102f5a8d503904886c2d879"
-    },
-    {
-      "path": "docs/agent/TEMA_TINTIN_UNICO_20261023.md",
-      "extension": ".md",
-      "bytes": 11022,
-      "sha256": "bf93ae4d17d4010277e46565001054784a194043a4c96b5246a7aa1a7e9c5170"
-    },
-    {
-      "path": "docs/agent/TINTIN_GLOBAL_PHASES.md",
-      "extension": ".md",
-      "bytes": 13315,
-      "sha256": "8d4e734d2b0d9da1f577e7d1df46e66f851862ad449971a83831f22897616ffb"
-    },
-    {
-      "path": "docs/agent/TINTIN_PHASE04_CATALOG.md",
-      "extension": ".md",
-      "bytes": 11215,
-      "sha256": "0c74ff56027f954f3ce3aff1c8298a5145d10420d5f77dfa622d83b32efe92ee"
-    },
-    {
-      "path": "docs/agent/TINTIN_PHASE05_COMMERCE.md",
-      "extension": ".md",
-      "bytes": 7153,
-      "sha256": "e1c80cc36509225b928d3c0027a59a4ea43cbfcbbb5c05a28a9b52cf2717a8fb"
-    },
-    {
-      "path": "docs/agent/TINTIN_PHASE06_ACCOUNTS_ADMIN.md",
-      "extension": ".md",
-      "bytes": 5240,
-      "sha256": "426a46c81a0bc105722184911c4ee1ecff71b082156b202c24b5c83fd0246680"
-    },
-    {
-      "path": "docs/agent/TINTIN_PHASE07_BACKEND_SECURITY.md",
-      "extension": ".md",
-      "bytes": 8396,
-      "sha256": "91e314f2cea657d2b0560e9a8f57492f17d8aa7d1ecf04bdcdf0758eeef6cef7"
-    },
-    {
-      "path": "docs/agent/TINTIN_PHASE08_TRANSVERSAL.md",
-      "extension": ".md",
-      "bytes": 3869,
-      "sha256": "83d0e8b5271980672cbd6939df7da051083658b943ab6ed6133e0b1390534565"
-    },
-    {
-      "path": "docs/agent/TINTIN_PHASE09_ACCEPTANCE.md",
-      "extension": ".md",
-      "bytes": 14170,
-      "sha256": "94e06a4f74a7f02ade67fa5a2a4406538af6110beaa351639efbd54b6724d7d2"
-    },
-    {
-      "path": "docs/agent/TINTIN_SKILLS_CI_20261101.md",
-      "extension": ".md",
-      "bytes": 8106,
-      "sha256": "78ddde03466cafc09b0c92d6c73914c2c621ed4517ca7f89afd67e250c8f492e"
-    },
-    {
-      "path": "docs/agent/UI_RESPONSIVE_GLOBAL_20261023.md",
-      "extension": ".md",
-      "bytes": 6987,
-      "sha256": "cccd6752c33f12b6aca0fc53b221e75d56f954736e3af6d750bdfbf6682bf86a"
-    },
-    {
-      "path": "docs/agent/VALIDACION-AUDITORIA-VISUAL-20261026.md",
-      "extension": ".md",
-      "bytes": 6655,
-      "sha256": "3232042fa9abed3f32975d3b1e8fbd4b91d777c024715c625c976a195c8e8749"
-    },
-    {
-      "path": "docs/agent/WHATSAPP_REVISION_20261010.md",
-      "extension": ".md",
-      "bytes": 12759,
-      "sha256": "4d20562af54de2d27b299f3e33e366eba4775776375f8b3f9b269faf47725962"
-    },
-    {
-      "path": "docs/agent/WORK_QUEUE_20261019.md",
-      "extension": ".md",
-      "bytes": 5928,
-      "sha256": "4ec07692892402171a6def13beaf5c1bc04407c8f6f5c77f5fb18a106a356fc7"
-    },
-    {
-      "path": "docs/agent/alyn-skills-lock.json",
-      "extension": ".json",
-      "bytes": 25795,
-      "sha256": "fca38cbf9e7f75cc2ff66ae6640be34fb92142416e35971bb0efa45215c5d6d9"
-    },
-    {
-      "path": "docs/agent/design-skills-lock.json",
-      "extension": ".json",
-      "bytes": 64758,
-      "sha256": "59f814b8e47496dab2701b36838d071be5887c64f6874f988df3cceb0cd387b2"
-    },
-    {
-      "path": "docs/agent/evidence/admin-mobile-20261019/webkit-catalog-cancellation.json",
-      "extension": ".json",
-      "bytes": 822,
-      "sha256": "c44dcf860d3a16a4347b3adf9bebf3219a4b5d6a3140263e134e2edf89db933e"
-    },
-    {
-      "path": "docs/agent/evidence/client-actions-20261012/inventory.json",
-      "extension": ".json",
-      "bytes": 149796,
-      "sha256": "3a014d865583cb8b3eacc8bd0c43c20f163e0ef30ea4e4d0e82da1ea8c0a4279"
-    },
-    {
-      "path": "docs/agent/evidence/client-actions-20261012/runtime-observations.json",
-      "extension": ".json",
-      "bytes": 941532,
-      "sha256": "720321e717ba178dbf4dad812a859d3cf6d9adddc1abf3574f1cc34edcf728dc"
-    },
-    {
-      "path": "docs/agent/evidence/client-actions-20261012/runtime-summary.md",
-      "extension": ".md",
-      "bytes": 1474,
-      "sha256": "0a0cc6732d35a44c5986a0bbbb74fc4b19f0bc9050cc3e8bda7526309abf40c5"
-    },
-    {
-      "path": "docs/agent/evidence/phase01-20261101/README.md",
-      "extension": ".md",
-      "bytes": 6112,
-      "sha256": "afef426ac9c2aafa45b2fee649c3f43c11e4fedf5f42f366aab50f09203bcbae"
-    },
-    {
-      "path": "docs/agent/evidence/phase01-20261101/diagnostic-index-result.json",
-      "extension": ".json",
-      "bytes": 610,
-      "sha256": "8f82bcef0a15507cd249cd3bcc2f2d23256a44f61ff87b00a58279ceb1aa9c78"
-    },
-    {
-      "path": "docs/agent/evidence/phase01-20261101/fallback-result.json",
-      "extension": ".json",
-      "bytes": 544,
-      "sha256": "e8cd8f348f1de13922314df46671a16f0e7522a5d2de7da5c5210e1188bed3ea"
-    },
-    {
-      "path": "docs/agent/evidence/phase01-20261101/firebase-rules-assessment.json",
-      "extension": ".json",
-      "bytes": 832,
-      "sha256": "344503149fb1e1366f775a887bfed5b740b9ea02822b8abc71e7b546d87bc3d0"
-    },
-    {
-      "path": "docs/agent/evidence/phase01-20261101/inventory.json",
-      "extension": ".json",
-      "bytes": 214880,
-      "sha256": "0e42a58cf2a8c895d1a1961e6df610862af4ad5452950b304a4ee808ddf76a36"
-    },
-    {
-      "path": "docs/agent/evidence/phase01-20261101/legacy-order-result.json",
-      "extension": ".json",
-      "bytes": 391,
-      "sha256": "cef97f2b65c38a6fbe312c2a4cbf5ca83849cba1f5e77002f5c88067c0a7585f"
-    },
-    {
-      "path": "docs/agent/evidence/phase01-20261101/npm-audit-summary.json",
-      "extension": ".json",
-      "bytes": 1488,
-      "sha256": "9c57e8e75c4fb0007c2fc645d5589b6d25e662728d556ae29ceae8c25e16f8d7"
-    },
-    {
-      "path": "docs/agent/evidence/phase01-20261101/rules-result.json",
-      "extension": ".json",
-      "bytes": 276,
-      "sha256": "55ab14f42eecd626b7f2b0e344eef707d07a768a8ee3fcaf551f4e487e2e624a"
-    },
-    {
-      "path": "docs/agent/evidence/phase01-20261101/stats-result.json",
-      "extension": ".json",
-      "bytes": 351,
-      "sha256": "6f331d86e8f8a9d0711e37839de6ff308eb5f19cf296a3b5e3ca3159f60330dd"
-    },
-    {
-      "path": "docs/agent/evidence/phase01-20261101/validation.json",
-      "extension": ".json",
-      "bytes": 3562,
-      "sha256": "a9d389560d24056acc6f3b0d473fa1fd83ba194b0b389a9c3171bdb0d17ac021"
-    },
-    {
-      "path": "docs/agent/evidence/phase02-20261102/validation.json",
-      "extension": ".json",
-      "bytes": 3302,
-      "sha256": "58908d691c05e57ca519fae2a4c8ed986778348d26b96c8bf62fda1c6b03f5eb"
-    },
-    {
-      "path": "docs/agent/evidence/phase03-20261102/validation.json",
-      "extension": ".json",
-      "bytes": 5775,
-      "sha256": "a91ee70bd3b51b28140e6ca297798da4608376a98521d4e30bcb26460b74ef7d"
-    },
-    {
-      "path": "docs/agent/evidence/phase08-20261102/link-refresh-measurements.json",
-      "extension": ".json",
-      "bytes": 1414,
-      "sha256": "45bed45b513561164fcdd3ea2de516bd3f8d6b7ea1114e70d9e2820e10cebaf3"
-    },
-    {
-      "path": "docs/agent/evidence/phase09-20261102/github-terminal.json",
-      "extension": ".json",
-      "bytes": 3068,
-      "sha256": "882cf1794e16c7a034d8209d7c6e438b5882b750cf8d6e337801c9e71c4eeac9"
-    },
-    {
-      "path": "docs/agent/evidence/phase09-20261102/history-verification.json",
-      "extension": ".json",
-      "bytes": 10434,
-      "sha256": "105d9562f86253763f7581ddb23e5365666d836a51be08d34adf9bdf986617e2"
-    },
-    {
-      "path": "docs/agent/evidence/phase09-20261102/local-validation.json",
-      "extension": ".json",
-      "bytes": 3332,
-      "sha256": "44c42aba420cc017285695df0e9449552576e313ee5edd9bf804cd9e8b46ba24"
-    },
-    {
-      "path": "docs/agent/evidence/real-interactions-20261011/playwright-inventory.json",
-      "extension": ".json",
-      "bytes": 12478,
-      "sha256": "f3dbab894799f306ba57f6ee6bdab8a0728ae7aca999299fb40158b504a9a36c"
-    },
-    {
-      "path": "docs/agent/evidence/real-interactions-20261011/sdk-cache-provenance.json",
-      "extension": ".json",
-      "bytes": 801,
-      "sha256": "7d294f939eea0d15e4f81f6ce4e03ff6b2eb421a0decbfd03cdbebb04e451f0a"
-    },
-    {
-      "path": "docs/agent/vendor-licenses/anthropic-frontend-design-LICENSE.txt",
-      "extension": ".txt",
-      "bytes": 10174,
-      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
-    },
-    {
-      "path": "docs/agent/vendor-licenses/caveman-LICENSE.txt",
-      "extension": ".txt",
-      "bytes": 11358,
-      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
-    },
-    {
-      "path": "docs/agent/vendor-licenses/matt-pocock-LICENSE.txt",
-      "extension": ".txt",
-      "bytes": 1068,
-      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
-    },
-    {
-      "path": "docs/agent/vendor-licenses/ponytail-LICENSE.txt",
-      "extension": ".txt",
-      "bytes": 1071,
-      "sha256": "fb1bc6909ac3ef82d5c22106e32ef682b0cff66788fa915fb9b53b15c9d2f3ab"
-    },
-    {
-      "path": "docs/agent/vendor-licenses/superpowers-LICENSE.txt",
-      "extension": ".txt",
-      "bytes": 1070,
-      "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400"
-    },
-    {
-      "path": "docs/agent/vendor-licenses/taste-skill-LICENSE.txt",
-      "extension": ".txt",
-      "bytes": 1065,
-      "sha256": "4575a543ab88dad12ccea7d97e563d0bce5b448b06072e65d3264497dad326df"
-    },
-    {
-      "path": "docs/agent/vendor-licenses/ui-ux-pro-max-LICENSE.txt",
-      "extension": ".txt",
-      "bytes": 1075,
-      "sha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014"
-    },
-    {
       "path": "docs/arquitectura-operativa-canonica.md",
       "extension": ".md",
       "bytes": 10906,
@@ -67404,14 +66726,14 @@
     {
       "path": "docs/auditoria-cargas-checkout-20261007.md",
       "extension": ".md",
-      "bytes": 19618,
-      "sha256": "cdb61a53a18a98ec4de5caead9184cc08ed34cbb804c9b51355993633a4c8ea1"
+      "bytes": 19629,
+      "sha256": "f81b97ed9f2787883cd5c73021a64d0beca6d50c7bab2f069ad0630ab5f96fd9"
     },
     {
       "path": "docs/auditoria-profesional.md",
       "extension": ".md",
-      "bytes": 23641,
-      "sha256": "0b11ca7454f199aa13e29f05c8719320b13e265222c5bfa1d88bbe3b6bb8b2cc"
+      "bytes": 23689,
+      "sha256": "a7fe6f8d39865540a03ade52897023c4dc1ce8c1e07e7e53f79d4f13c483f363"
     },
     {
       "path": "docs/auditoria-usuarios-fase-8.md",
@@ -67422,14 +66744,14 @@
     {
       "path": "docs/auditoria-versiones-20261020.md",
       "extension": ".md",
-      "bytes": 9113,
-      "sha256": "c824e6e0f8a95e2fc1fbba22f26d664ca654e56cc044b0802562d5cb4d14a3db"
+      "bytes": 9176,
+      "sha256": "debb9a5c3b637f738037025bb67842321d31dce3942b34222af30afb43181b25"
     },
     {
       "path": "docs/autoridades-sincronizacion.md",
       "extension": ".md",
-      "bytes": 7544,
-      "sha256": "3b6d5b6d5df9f902902e6dd263217c53e1fa4111ede4536b98d8a2065d3a5c54"
+      "bytes": 7559,
+      "sha256": "7029182ba586b926b9e04e243f0b193e3da9e7c91edd0b2d8b2fde2c246b2111"
     },
     {
       "path": "docs/capas-css.md",
@@ -67440,14 +66762,14 @@
     {
       "path": "docs/carrito-busqueda-seo-20261116.md",
       "extension": ".md",
-      "bytes": 15327,
-      "sha256": "38f21e899f11ee9bdfcb43b8c19eefadeb9f86dfe4815401b3f766032e9e053c"
+      "bytes": 15428,
+      "sha256": "5bb674c08f54048d1bcd487596e5e4e7ce0fb40f4ae80c9696f97536ab60cc73"
     },
     {
       "path": "docs/ci-preflight.md",
       "extension": ".md",
-      "bytes": 7319,
-      "sha256": "43f3ede891247cbcae97ec110c240cea1bad5d724fa987e69e34862009ae6937"
+      "bytes": 7334,
+      "sha256": "7cb68aa6b6d53e4e86d2f782818d1550a2a82792c7ab4e7b288e50636acbf009"
     },
     {
       "path": "docs/cierre-operativo-2026-08-20.md",
@@ -67542,8 +66864,8 @@
     {
       "path": "docs/editor-productos-v2/01-DECISIONES-Y-ALCANCE.md",
       "extension": ".md",
-      "bytes": 12289,
-      "sha256": "0f3104207f6b74fcb6f78994e8fbc1a9ccc8205675ab7f76ccbf7013381355ca"
+      "bytes": 12300,
+      "sha256": "4c7420ce9d7f5532c0ed54c9c2ff780efbd7bc4ce6a52f527b75f0cd76d56713"
     },
     {
       "path": "docs/editor-productos-v2/02-ARQUITECTURA-ACTUAL.md",
@@ -67566,8 +66888,8 @@
     {
       "path": "docs/editor-productos-v2/05-MATRIZ-DE-PRUEBAS.md",
       "extension": ".md",
-      "bytes": 15317,
-      "sha256": "14148ae0afbd00f696c40649672d4c58e94bc17ed8621acde7794a3cd4335d6f"
+      "bytes": 15328,
+      "sha256": "04e8d7e1c801a7a069ca96b2cb2ff59bdbd28399d92c22f377279f80f7aaa767"
     },
     {
       "path": "docs/editor-productos-v2/06-REGISTRO-DE-DECISIONES.md",
@@ -67576,10 +66898,10 @@
       "sha256": "e66dfa34501ec6be2b5a0f0913161d22e8f556788d677235bc5ebfda2c2f409a"
     },
     {
-      "path": "docs/editor-productos-v2/07-BITACORA-DE-AGENTES.md",
+      "path": "docs/editor-productos-v2/07-BITACORA-TECNICA.md",
       "extension": ".md",
-      "bytes": 12810,
-      "sha256": "ff9356fc22874ebb5f8444c3d00895c0cef6990710dbd13a722dda0d0f890d14"
+      "bytes": 13358,
+      "sha256": "00e17d205b70e214c258ce59d0f07058ef8088229e27578adba47a90c0531058"
     },
     {
       "path": "docs/editor-productos-v2/08-ESTADO-Y-RELEVO.md",
@@ -67596,14 +66918,14 @@
     {
       "path": "docs/editor-productos-v2/10-MOTOR-COMERCIAL-FASE-2.md",
       "extension": ".md",
-      "bytes": 6417,
-      "sha256": "7b4523f8b57a51e04062e7a0df5e04c3c83c5ad02fe0f78bd5e852aefdf8129f"
+      "bytes": 6428,
+      "sha256": "55d63250cd3c166fed9e1289a19af291395c5acdd754c0a7b00381444e98f378"
     },
     {
       "path": "docs/editor-productos-v2/11-AUDITORIA-FASE-5.md",
       "extension": ".md",
-      "bytes": 12100,
-      "sha256": "3f6f51126cebff3e169c82b18b03954700b6d830ab1bcd64f80cc3cf7e4c7959"
+      "bytes": 12111,
+      "sha256": "4ddc61f308132c4792278346bc0d32ce2b46cbcba254f83b6ab20acf8b9314e5"
     },
     {
       "path": "docs/editor-productos-v2/12-MATRIZ-43-FASE-5.md",
@@ -67620,8 +66942,8 @@
     {
       "path": "docs/editor-productos-v2/14-CONTINUIDAD-Y-CANDIDATO.md",
       "extension": ".md",
-      "bytes": 6999,
-      "sha256": "33192c96d1a7f35444ed0e92c9be83f3ec6ed4a97141da5d185e3f6af52645ef"
+      "bytes": 7028,
+      "sha256": "8196604183e0cb4f278ba179d6b892a78e8a5285a3327edaffd4eaf2dade13d5"
     },
     {
       "path": "docs/editor-productos-v2/15-MATRIZ-CANDIDATO.md",
@@ -67632,50 +66954,50 @@
     {
       "path": "docs/editor-productos-v2/18-ESTABILIZACION-FASE-1-20261025.md",
       "extension": ".md",
-      "bytes": 14618,
-      "sha256": "793aaf0bdb6d808af8a96608ded12fbb0f3ebaaa3d408152e8cf9fec0de3bec7"
+      "bytes": 14677,
+      "sha256": "df22586650c70d0b97ffd239ae4c032b1cc87c4de082d558011fd7c495747d99"
     },
     {
       "path": "docs/editor-productos-v2/19-GALERIA-UNIFICADA-FASE-2.md",
       "extension": ".md",
-      "bytes": 11379,
-      "sha256": "ddb567e060332ebdb0ea965c9aafdb45adf6cc9898e624b5e1e663c405b450e0"
+      "bytes": 11419,
+      "sha256": "abb60c178d193e601b3a302d0c42e6b60fe1efae8e2539d9dc1a7af70206edaf"
     },
     {
       "path": "docs/editor-productos-v2/20-OPCIONES-INVENTARIO-FASE-3.md",
       "extension": ".md",
-      "bytes": 12808,
-      "sha256": "e9bbc31cfa50b1f8c7fca37e5e539fd852d19d1b046646d960b5a1183113cd40"
+      "bytes": 12867,
+      "sha256": "853aba2dbebb649c08514e64b816a41ae7e2f72a4f99bf29806328ba2cafb5c2"
     },
     {
       "path": "docs/editor-productos-v2/21-FLUJO-EDITORIAL-FASE-4.md",
       "extension": ".md",
-      "bytes": 12616,
-      "sha256": "a0d364c4f1ae83226567869a6f65e761a66c8759701dd15eb84e919359049db1"
+      "bytes": 12657,
+      "sha256": "c72088ba188e2a5601781a1c0f8411f8cedfc1df0292d8a4838f015f8cebbeb1"
     },
     {
       "path": "docs/editor-productos-v2/22-UI-RESPONSIVE-FASE-5.md",
       "extension": ".md",
-      "bytes": 9040,
-      "sha256": "fe9c4c71c3f1be7a08147feaab08da631d48b587a43c155fa8a00ca08cb91ba7"
+      "bytes": 9080,
+      "sha256": "315f684b9d5996ea0c83e2b48eeb7eac797b4fafabb972a5854325216847ee28"
     },
     {
       "path": "docs/editor-productos-v2/23-AUDITORIA-FINAL-FASE-6.md",
       "extension": ".md",
-      "bytes": 15380,
-      "sha256": "727cf127c2ea16816e7affae0228dabd76e9e370b1b98b0a4fab4170982485ca"
+      "bytes": 15439,
+      "sha256": "b8f19cd5f31ac8ad10b8c24d126c54f5f94166a65fc5507271c0028c131a4199"
     },
     {
       "path": "docs/editor-productos-v2/24-INTEGRACION-Y-CIERRE.md",
       "extension": ".md",
-      "bytes": 7745,
-      "sha256": "7366515e5a69ca776a0ee5085b7379ae8b50839b897a5c3eba957caad8bdd705"
+      "bytes": 7803,
+      "sha256": "7f34d690e37d8b84ca24889e42eec67b0b1243a95595ea5fa09d35931f97522c"
     },
     {
       "path": "docs/editor-productos-v2/25-continuidad-cierre-ci.md",
       "extension": ".md",
-      "bytes": 3799,
-      "sha256": "67821c84f05a3e0a19facedd710f2315d4f61014e1403a19a03262a1d1924cda"
+      "bytes": 3857,
+      "sha256": "ced446cba8e50dc088c3538ee493af29715a6106e1e9c3c048389f1e3de5683f"
     },
     {
       "path": "docs/editor-productos-v2/evidencias-continuidad.json",
@@ -67686,8 +67008,8 @@
     {
       "path": "docs/editor-productos-v2/evidencias-f56.json",
       "extension": ".json",
-      "bytes": 176093,
-      "sha256": "f583b71eba201950cc521198432650913210919f7b7c3f0206be121288f201ae"
+      "bytes": 176375,
+      "sha256": "977ebf41260188caa1fe476536301b272d80d057bbc4bcc0aca9fce73f2c630a"
     },
     {
       "path": "docs/editor-productos-v2/evidencias-f56/resenas-antes-1440.png",
@@ -67752,8 +67074,8 @@
     {
       "path": "docs/editor-productos-v2/evidencias-integracion-cierre.json",
       "extension": ".json",
-      "bytes": 44259,
-      "sha256": "ef2fa4d56434d24904ae4e62bdee8d7c1164760efef890498e982c6f8acc297a"
+      "bytes": 44451,
+      "sha256": "71bf01a50fef04da4201c37db3ccee8051ec6bf964d05148a4c52d501f0fa08a"
     },
     {
       "path": "docs/editor-visual-seguro.md",
@@ -67770,8 +67092,8 @@
     {
       "path": "docs/estado-produccion-2026-09-28.md",
       "extension": ".md",
-      "bytes": 26991,
-      "sha256": "6b7e05598a8e5f4fffe69b2ec75fec38305a5a25ee78affae18af5f80bcc4397"
+      "bytes": 27002,
+      "sha256": "ff3293813c8bcd759a6a8f1214a5f4adcfe0b53a79ede0add04dfd42296722c5"
     },
     {
       "path": "docs/estilo-codigo.md",
@@ -67788,8 +67110,8 @@
     {
       "path": "docs/excepciones-contractuales-nombres.md",
       "extension": ".md",
-      "bytes": 1908,
-      "sha256": "9f4dbd9b9893ce965be8c6a85960e61dd3fe7fe7f553b3084f26e4b93230a411"
+      "bytes": 1749,
+      "sha256": "7dd1f75c7b9bd35eedd1c57c131a6537cad0b319672c4ea88395dafaeb5705c9"
     },
     {
       "path": "docs/favicon-original/README.md",
@@ -67800,8 +67122,8 @@
     {
       "path": "docs/footer-retina/README.md",
       "extension": ".md",
-      "bytes": 2613,
-      "sha256": "abb6bc25cff47b05475a159ba25d9d95bdf877550acd1697e7078c24dd52fb4f"
+      "bytes": 2629,
+      "sha256": "7426c94df65f2342a33b4519321daf76163d348b0452e3bd1d03b0d3c1dec4ee"
     },
     {
       "path": "docs/footer-retina/webkit-after-3x.png",
@@ -67830,8 +67152,8 @@
     {
       "path": "docs/implementacion-cuentas-checkpoint.md",
       "extension": ".md",
-      "bytes": 10526,
-      "sha256": "7054d53820d90ca53df3696d122f202f3896ba4605fc3af31caaa46c6297fa0d"
+      "bytes": 10536,
+      "sha256": "9d1c97b5a40ee4bebf343a038a3107b398ed19bf76cfe9ca5d4ec93c66680c3a"
     },
     {
       "path": "docs/importacion-shopify-media.md",
@@ -67848,8 +67170,8 @@
     {
       "path": "docs/informe-verificacion.md",
       "extension": ".md",
-      "bytes": 28855,
-      "sha256": "929590dca66d7d8d2113f5cf7f49418887ae467617232519a1b99e6d19f84498"
+      "bytes": 28870,
+      "sha256": "e7fe9f2bb645ab6fe330b803db2e1d236d4b2236dbe3c5434d8b2fb57392cd27"
     },
     {
       "path": "docs/inventario-recuperacion-servicios.md",
@@ -67866,8 +67188,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 176996,
-      "sha256": "7cc1f5fa2a5610a6ff69969924e2182b6c99f7c23fc58f4375f01fb4c349c975"
+      "bytes": 177524,
+      "sha256": "70fc18952b325f3ce45c12215d3658bdb9924aa43be42f77c0320216eadaeed2"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -67918,10 +67240,604 @@
       "sha256": "63f0ca29632984602165e1df5cc6fa55f79af5f4e4582c8b0eb57b9289b950e0"
     },
     {
+      "path": "docs/normas-desarrollo.md",
+      "extension": ".md",
+      "bytes": 8005,
+      "sha256": "205483c5201268de56c6df58be011024c634bd59fc94b7644dbaffadb21cba67"
+    },
+    {
       "path": "docs/operacion-continua.md",
       "extension": ".md",
       "bytes": 10456,
       "sha256": "f09bec255782059bb516650575ba14189eadeba4903f1f29b3baeced2eab2e75"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/ACCEPTANCE_MATRIX.md",
+      "extension": ".md",
+      "bytes": 4308,
+      "sha256": "9a31effc3e2b03461d9899cd853682497a5f3a75b19e249e24650e42fc6e1eb4"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/ADMIN-CRUD-FEEDBACK-2026-09-28.md",
+      "extension": ".md",
+      "bytes": 2828,
+      "sha256": "91137aa5c52ee40f9f9f5d789b5a550d123eb214f55fbbf5be31b450cde1f32f"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/ADMIN-MOBILE-EXPERIENCE.md",
+      "extension": ".md",
+      "bytes": 10333,
+      "sha256": "bfa5521d8de3fa77f8d82a42af6f1993186bc27b72039c5655d44528e1d9df54"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/ARCHIVO_HISTORICO.md",
+      "extension": ".md",
+      "bytes": 730,
+      "sha256": "ad715f5e95a2f15574617019dded75089cb5681418dcf070495208cae0ce8797"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/AUDIT-INTEGRITY-20261030.md",
+      "extension": ".md",
+      "bytes": 3235,
+      "sha256": "ba86ae7f8f327abb0c45542747c6657f05a7e27347b28f40f14b4550f65ae0a2"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/AUDITORIA_CLIENTE_20261012.md",
+      "extension": ".md",
+      "bytes": 4685,
+      "sha256": "cd7758ef7cdc49eb02e37bf860782c5d8084431ca05fae4aae9e1015d6262df5"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/AUDITORIA_HEADERS_BUSQUEDA_20261028.md",
+      "extension": ".md",
+      "bytes": 18215,
+      "sha256": "6925c4f525e51eb111ce105ca90942a10f19a13fd65e90a698d62e7c18de8d6d"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/AUDITORIA_MULTIDISPOSITIVO_20261010.md",
+      "extension": ".md",
+      "bytes": 12619,
+      "sha256": "f47c1630da01d68eaa9d511bb483eb965d447eceb93d7510e75fd22d32115690"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/AUDITORIA_SUPERADMIN_20261016.md",
+      "extension": ".md",
+      "bytes": 10845,
+      "sha256": "36e2a2a44ace8642e1b5d05e97d825458f3a59a3af6859daf16c7555cc2066cc"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/AUTONOMOUS_REPAIR.md",
+      "extension": ".md",
+      "bytes": 4711,
+      "sha256": "524f4f288c854d55bebe2aebb11d4321ab1d2f00804af763f345970f69d56eff"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/CHECKOUT_SEGUIMIENTO_20261117.md",
+      "extension": ".md",
+      "bytes": 5014,
+      "sha256": "97bf5b59ebdb818301701058a1e7b31428092ea23b33a9862b67a2ecae716b6d"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/CI_MIGRATION_20261015.md",
+      "extension": ".md",
+      "bytes": 1252,
+      "sha256": "c71e553879503132eeb0b207ff5d47d5af25048c285ccbbdb04c6f75d2099bee"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/CI_MONITOR_SEO_20261116.md",
+      "extension": ".md",
+      "bytes": 3441,
+      "sha256": "bd800a994bf5f3cad985926258aaed9dc286839fc214e068face7c2ba2708da4"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/CODEQL_TRIAGE_20261013.md",
+      "extension": ".md",
+      "bytes": 4107,
+      "sha256": "25c117b695177fe11c7cc59c24fc9deec8c0e2777b7a3b4cd1178554635c889a"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/COMPROBACIONES_CIERRE_20261012.md",
+      "extension": ".md",
+      "bytes": 2372,
+      "sha256": "d49a8fbbcb80f0874ec223fdd84977039d1e8cec9ea9c6336a994f151b28ea2d"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/CONSOLIDACION_PR_20261020.md",
+      "extension": ".md",
+      "bytes": 7849,
+      "sha256": "e345f26cdea0d920fd4f917c7033e9d3e27c489f88553ed1ce353e0b990a6580"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/CONTINUACION_PREPARACION_20261011.md",
+      "extension": ".md",
+      "bytes": 5008,
+      "sha256": "bffdbf1e43a8cbd57b149424da186606ea0668fa7348710a6d5797dd2699b07f"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/CORREOS-EXTRACCION-20261028.md",
+      "extension": ".md",
+      "bytes": 2796,
+      "sha256": "f52f950a81204a147dab50a3d662cbe49ef3dd57e5a06d49ab0b1c18461eca00"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/CURRENT_STATE.md",
+      "extension": ".md",
+      "bytes": 1400485,
+      "sha256": "d4a9d5eefbb9d3857dfd5afcb52b28f19e1eff77827241074109a571ae8b9934"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/DECISIONES_COMERCIALES_20261102.md",
+      "extension": ".md",
+      "bytes": 8388,
+      "sha256": "7aa54ed7180cddff29c888887112983c45dcbcafd7c1e790770aa8595b534037"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/DECISIONES_CUESTIONARIO.md",
+      "extension": ".md",
+      "bytes": 4949,
+      "sha256": "a1f79becd882edb479fe690db26901d1fb80027a697ee131689ecdb27ce3a873"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/DEPENDENCIAS-1231-1242-20261026.md",
+      "extension": ".md",
+      "bytes": 2680,
+      "sha256": "8878fe9097c13fa8070dcfa55225013239f70a50bc47d2b8a232709fd6775523"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/EDITOR-Y-BUSCADORES-20261028.md",
+      "extension": ".md",
+      "bytes": 7045,
+      "sha256": "2ef638b3c35c74021ef8893a21fe5c0d61c8c4c2523e909886d4288b9f430f6a"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/ESPACIADO_GLOBAL_20261023.md",
+      "extension": ".md",
+      "bytes": 3721,
+      "sha256": "bd23f83e484528b378a990bbc24ac3625bad1055d5c01c4b01c57550fe717b45"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/GITHUB_RESULTS.md",
+      "extension": ".md",
+      "bytes": 4559,
+      "sha256": "ca0015bf5cde567ceda759a58772847f72ec613364cdf6431b8d48c0c21ea95e"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/GLOBAL_REFINEMENT_20261114.md",
+      "extension": ".md",
+      "bytes": 6968,
+      "sha256": "186900561f347474c37f605616824bb18fcd921cc5da37a44676fb7fd341241b"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/IDENTIDAD_TINTIN_20261021.md",
+      "extension": ".md",
+      "bytes": 4599,
+      "sha256": "0cba84ada5fbab6006234829dc1c837c1cb19dccd344590b376c71bb97eb0ca4"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/MANTENIMIENTO_FLUJOS.md",
+      "extension": ".md",
+      "bytes": 6061,
+      "sha256": "e3bcd2bc698bbea61d05278101109e5e142ec7a4d5dfd0c8722320b04a555392"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/MERGE-ALL-20261030.md",
+      "extension": ".md",
+      "bytes": 4520,
+      "sha256": "b9f20c2e4b116c3e57ccaeaee7f9005ff65a127a89e0898bae4f32a55b260a96"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/MIGRACION_CONTROL_20261010.md",
+      "extension": ".md",
+      "bytes": 4490,
+      "sha256": "0fba3342027e3a0be74cd1c0ae9372e8681bb89a3e1266bd0cb277f9c159af96"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/MONITOR_REPORT_ONLY_20261011.md",
+      "extension": ".md",
+      "bytes": 3338,
+      "sha256": "675a36281359d300aeed47407e330310789654f9ce88ff6e9e5a6393a92b7f90"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PALETA_ARMONICA_20261114.md",
+      "extension": ".md",
+      "bytes": 7769,
+      "sha256": "4a2f97f5086ee4bf5fdbb15c13c9b08faf37fd9fd6c67c3a36c2ca9c5aff3a14"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PEDIDOS_SUPERADMIN_RENOVACION_20261012.md",
+      "extension": ".md",
+      "bytes": 11658,
+      "sha256": "a716003c176bd24e9d4ee8a97e1a243678711a56902d6c0081273c426b12cbb9"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PERFORMANCE_GLOBAL_20261029.md",
+      "extension": ".md",
+      "bytes": 11720,
+      "sha256": "c72e5b8394cffc92f21e6418e883bae4e8ed10c8b375ea16b99ec32b56282e19"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PERFORMANCE_POLISH_20261103.md",
+      "extension": ".md",
+      "bytes": 4073,
+      "sha256": "b237d29e9c32ba135e06c0eaac32ed4df164eeff27315bf51cf31a5ebb25784a"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PHASE01_GLOBAL_ARCHITECTURE_AUDIT.md",
+      "extension": ".md",
+      "bytes": 33335,
+      "sha256": "47ef7b078a0f1aa7bbb96c3896ff2535734478350b8c12dbf6ac2c1c6a0cbd3c"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PHASE02_PUBLIC_VISUAL_REPAIR.md",
+      "extension": ".md",
+      "bytes": 9061,
+      "sha256": "d55112b188649a492b5ff12903fd1a4cd8598be652130897ffe0e0f21620cc65"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PHASE03_ADMIN_PRODUCT_EDITOR.md",
+      "extension": ".md",
+      "bytes": 8221,
+      "sha256": "926cf8ebc6c222779387782e98d90031e992cb944a97e1fc48fb0f91f6dc0f6a"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PRECUTOVER_PEDIDOS_20261013.md",
+      "extension": ".md",
+      "bytes": 7440,
+      "sha256": "6e4d6d38a65291f5bb099887265975f0e80110d80774d9b2a057dad067f00b67"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PREPARACION_ACTUAL_20261011.md",
+      "extension": ".md",
+      "bytes": 7100,
+      "sha256": "c2b9405ef674cc63f21dd34acf1603f03f2d8b8f83ba4b3cbf5944a6eddb4cf7"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PREPARACION_DOMINIO_Y_BIENVENIDA_20261011.md",
+      "extension": ".md",
+      "bytes": 7428,
+      "sha256": "f5215c13abc8ef4335e728f4e0e01ffdcffd8f855f6e5a44d722a401745cd09b"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PREPARACION_SIN_CUTOVER_20261011.md",
+      "extension": ".md",
+      "bytes": 7009,
+      "sha256": "a4253355181a3797cefaafc39f7ff9565576f11d57c19a5eaf9e40ea76c65f97"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PRODUCTION-PROBE-2026-09-28.md",
+      "extension": ".md",
+      "bytes": 23192,
+      "sha256": "1d79f2d418e3a78cc94f9dda4ac1b0467e036a26839acf343ccc831704182306"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PRODUCTION-PROBE-2026-09-29.md",
+      "extension": ".md",
+      "bytes": 47708,
+      "sha256": "d8d8830b45feaa781a012c4015daf07adc251391862de250fcb64e8a375846db"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PRODUCT_EDITOR_GUIDED_REVIEW.md",
+      "extension": ".md",
+      "bytes": 9218,
+      "sha256": "2f02734a73afa6890f1f96355aca7f2614d9eb2b44d062b6eb50d487a60513c8"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PROMPT-MAESTRO-20261030.md",
+      "extension": ".md",
+      "bytes": 6331,
+      "sha256": "92d04028e435564770573c7ada220e3b773b5de7bbee40b85c04599cfa46a0f1"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PROPUESTA_MFA_20261010.md",
+      "extension": ".md",
+      "bytes": 3450,
+      "sha256": "3ecb2ae0a853853691df256f81f9950dee50bfdfc8f0f60d730dbfceb075130e"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/PRUEBA-ESCRITURA-LIKES-RESENAS.md",
+      "extension": ".md",
+      "bytes": 3529,
+      "sha256": "dc8874aca95028623e3a4deb483523a88ff2807c6e9bf0bc15a029b1edd3e241"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/QA-PRODUCTOS-CHECKOUT-2026-10-24.md",
+      "extension": ".md",
+      "bytes": 7306,
+      "sha256": "3dc29ea0cc704f916e73ceffe999df0b281202524dcdc4b7ec71d985625c6f88"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/README.md",
+      "extension": ".md",
+      "bytes": 657,
+      "sha256": "e119df5712954677ddaf37f0265b1689bcc0771813e9231d34a0eb46345d3b7d"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/REAL_INTERACTIONS_20261011.md",
+      "extension": ".md",
+      "bytes": 18501,
+      "sha256": "78dc7606547139a43bfe5865218af55a3cd94c661f33985abf58040a631195af"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/RECUPERACION_ACTIONS_PR_20261023.md",
+      "extension": ".md",
+      "bytes": 7080,
+      "sha256": "98affe3c954c70dec9b5900a9d155381d3a5f8d548ef6a4f7f2e2187e8b0aba4"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/RENDIMIENTO-GLOBAL-20261029.md",
+      "extension": ".md",
+      "bytes": 11527,
+      "sha256": "94524ed7c83513f6bfa27f709da31ec75988320b84f17fbe9a31696c4119e058"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/REQUIRED_CHECKS_20261104.md",
+      "extension": ".md",
+      "bytes": 2975,
+      "sha256": "e56b7f4fec683c82bb65edcf6b0edd15711629460c008c3756a46bf6faf56712"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/REVEAL_HERO_20261115.md",
+      "extension": ".md",
+      "bytes": 4927,
+      "sha256": "1754533ba0028fbe38ffc9e684e9c862e07c94a8a92cf8ac62bcaabcd50f4c9c"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/REVISION-RESPONSIVE-GLOBAL-2026-10-25.md",
+      "extension": ".md",
+      "bytes": 7340,
+      "sha256": "0b6a694bd950478e95cf851e9840d98c9aeadb3164ef67ba440820f884c9ff78"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/REVISION_ESPACIOS_20261008.md",
+      "extension": ".md",
+      "bytes": 2115,
+      "sha256": "e413a1d6b9af0bc63143192750b335fcaa2cfff6c94a0c9cc5cac373eb911aeb"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/REVISION_PRODUCTO_20261008.md",
+      "extension": ".md",
+      "bytes": 5822,
+      "sha256": "b9153dd70140d0051f98f535b85e1645e71513fcd963d7e9dd71e86b4ba4329d"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/SECURITY_RELEASE_20261013.md",
+      "extension": ".md",
+      "bytes": 7901,
+      "sha256": "93a952aef1471449dca59600f1670113cd52e003c4080daff9ab6626fd463549"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/SECURITY_VALIDATION_20261013.md",
+      "extension": ".md",
+      "bytes": 8200,
+      "sha256": "393d076e0995717357b28caa974c7c2522d3b1cb73193aef77ab04dfb63c7163"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/SEGUIMIENTO_PENDIENTES_20261026.md",
+      "extension": ".md",
+      "bytes": 4731,
+      "sha256": "8902668edcc2932089c4806d9c4b7841907ee9d7d56fdca6d73def6f6f3c4ee1"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/SEGURIDAD_20_PUNTOS_20261012.md",
+      "extension": ".md",
+      "bytes": 8110,
+      "sha256": "b84e4edb31d0c5667328d3aa875c0327574ac6c2c2a2ed5ad006278520cb9323"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/SEGURIDAD_REVISION_20261021.md",
+      "extension": ".md",
+      "bytes": 2073,
+      "sha256": "024ee87dfdaea98e5b8c76dbec25178702c773e8b0de3dc15714218bb876131a"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/SUPERADMIN_REVIEW_20261019.md",
+      "extension": ".md",
+      "bytes": 5156,
+      "sha256": "1154a4fabdfc3ae990c5aca7d7d2ed9766a522d0ec8f72fbd3f94649d09ed801"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/TEMA_TINTIN_UNICO_20261023.md",
+      "extension": ".md",
+      "bytes": 11080,
+      "sha256": "03384f8b972eee171f1bf54f30fccc55847d1e1db5cb4f8a6d1e5bfeff73d9fe"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/TINTIN_GLOBAL_PHASES.md",
+      "extension": ".md",
+      "bytes": 13397,
+      "sha256": "1e48a4b09497d9aadc46e1b558514f5e70efdd5c4b3598c9e947f0ed7ff8557c"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/TINTIN_PHASE04_CATALOG.md",
+      "extension": ".md",
+      "bytes": 11244,
+      "sha256": "55452bcd41309c205286046a999a85ca29b8574047c630cda808bccbb634ca5f"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/TINTIN_PHASE05_COMMERCE.md",
+      "extension": ".md",
+      "bytes": 7193,
+      "sha256": "fc36026fd45416dd69f88015ee1704eaa6707ce6f3e8fdd9768d410fec5111a7"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/TINTIN_PHASE06_ACCOUNTS_ADMIN.md",
+      "extension": ".md",
+      "bytes": 5280,
+      "sha256": "8f3b56fba09c9400fcdafb306278f99ec6678ee3b44a8124cab3f263474934b9"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/TINTIN_PHASE07_BACKEND_SECURITY.md",
+      "extension": ".md",
+      "bytes": 8453,
+      "sha256": "b8baf248e3802a4f1e3d7ea98cd108a82e9946ab5eb6c1b942b2dfc6e18032b3"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/TINTIN_PHASE08_TRANSVERSAL.md",
+      "extension": ".md",
+      "bytes": 3909,
+      "sha256": "687916943247a992e94ab37665aa5772b74f5165a685c93379c5d25d6bef2cea"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/TINTIN_PHASE09_ACCEPTANCE.md",
+      "extension": ".md",
+      "bytes": 14188,
+      "sha256": "9713b663c9a17f03b7bff70d98b939dfcb1cb4836dfe58a8ebdcd840f09fe911"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/UI_RESPONSIVE_GLOBAL_20261023.md",
+      "extension": ".md",
+      "bytes": 7016,
+      "sha256": "c65442690dca0bd87435bec0be047576b94363a16fa6aa38ef75973d87d9bb31"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/VALIDACION-AUDITORIA-VISUAL-20261026.md",
+      "extension": ".md",
+      "bytes": 6713,
+      "sha256": "626c73769b551f69d65eab39a557afe2fa82b85da425c3cc997ba076ff1799ef"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/WHATSAPP_REVISION_20261010.md",
+      "extension": ".md",
+      "bytes": 12785,
+      "sha256": "82df2ffc982b514888a74a601b0fc54ecf126a1d1ae608e0f3e921dc831af7ac"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/WORK_QUEUE_20261019.md",
+      "extension": ".md",
+      "bytes": 5928,
+      "sha256": "4ec07692892402171a6def13beaf5c1bc04407c8f6f5c77f5fb18a106a356fc7"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/admin-mobile-20261019/webkit-catalog-cancellation.json",
+      "extension": ".json",
+      "bytes": 822,
+      "sha256": "c44dcf860d3a16a4347b3adf9bebf3219a4b5d6a3140263e134e2edf89db933e"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/client-actions-20261012/inventory.json",
+      "extension": ".json",
+      "bytes": 149796,
+      "sha256": "3a014d865583cb8b3eacc8bd0c43c20f163e0ef30ea4e4d0e82da1ea8c0a4279"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/client-actions-20261012/runtime-observations.json",
+      "extension": ".json",
+      "bytes": 941532,
+      "sha256": "720321e717ba178dbf4dad812a859d3cf6d9adddc1abf3574f1cc34edcf728dc"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/client-actions-20261012/runtime-summary.md",
+      "extension": ".md",
+      "bytes": 1474,
+      "sha256": "0a0cc6732d35a44c5986a0bbbb74fc4b19f0bc9050cc3e8bda7526309abf40c5"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase01-20261101/README.md",
+      "extension": ".md",
+      "bytes": 6324,
+      "sha256": "97644f48c3658fa511eaa812a68f9b6d4ba122cd4f8e30d021ed0c46d05e86d6"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase01-20261101/diagnostic-index-result.json",
+      "extension": ".json",
+      "bytes": 610,
+      "sha256": "8f82bcef0a15507cd249cd3bcc2f2d23256a44f61ff87b00a58279ceb1aa9c78"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase01-20261101/fallback-result.json",
+      "extension": ".json",
+      "bytes": 544,
+      "sha256": "e8cd8f348f1de13922314df46671a16f0e7522a5d2de7da5c5210e1188bed3ea"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase01-20261101/firebase-rules-assessment.json",
+      "extension": ".json",
+      "bytes": 832,
+      "sha256": "344503149fb1e1366f775a887bfed5b740b9ea02822b8abc71e7b546d87bc3d0"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase01-20261101/inventory.json",
+      "extension": ".json",
+      "bytes": 215080,
+      "sha256": "4b2f10abded6ba1eedb951a1fbf6cbe927e704353ba32281fdaceb91f65a16f4"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase01-20261101/legacy-order-result.json",
+      "extension": ".json",
+      "bytes": 391,
+      "sha256": "cef97f2b65c38a6fbe312c2a4cbf5ca83849cba1f5e77002f5c88067c0a7585f"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase01-20261101/npm-audit-summary.json",
+      "extension": ".json",
+      "bytes": 1488,
+      "sha256": "9c57e8e75c4fb0007c2fc645d5589b6d25e662728d556ae29ceae8c25e16f8d7"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase01-20261101/rules-result.json",
+      "extension": ".json",
+      "bytes": 276,
+      "sha256": "55ab14f42eecd626b7f2b0e344eef707d07a768a8ee3fcaf551f4e487e2e624a"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase01-20261101/stats-result.json",
+      "extension": ".json",
+      "bytes": 351,
+      "sha256": "6f331d86e8f8a9d0711e37839de6ff308eb5f19cf296a3b5e3ca3159f60330dd"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase01-20261101/validation.json",
+      "extension": ".json",
+      "bytes": 3725,
+      "sha256": "7bc88fec5470a648cbcfd798ee573ab87219f4227eff4ed0fc6394f9893b9480"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase02-20261102/validation.json",
+      "extension": ".json",
+      "bytes": 3495,
+      "sha256": "60c8f7e6b2a2ae07d2bb29f11f408e0182393be5e9a82c1ad15a35d7a998957f"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase03-20261102/validation.json",
+      "extension": ".json",
+      "bytes": 5975,
+      "sha256": "34a2d9b7cb409e641dd26c77989816e96982a89e8a276f2520ff89970f928f1b"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase08-20261102/link-refresh-measurements.json",
+      "extension": ".json",
+      "bytes": 1414,
+      "sha256": "45bed45b513561164fcdd3ea2de516bd3f8d6b7ea1114e70d9e2820e10cebaf3"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase09-20261102/github-terminal.json",
+      "extension": ".json",
+      "bytes": 3283,
+      "sha256": "776cc0a22ecb3b251a43322b6f6160cf590f3399f2c65cd64d19be80984cc33b"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase09-20261102/history-verification.json",
+      "extension": ".json",
+      "bytes": 10434,
+      "sha256": "105d9562f86253763f7581ddb23e5365666d836a51be08d34adf9bdf986617e2"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/phase09-20261102/local-validation.json",
+      "extension": ".json",
+      "bytes": 3558,
+      "sha256": "710966be646c5309b18d5456047f8efa42368458b9d24eda1e7101ec907c28e4"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/real-interactions-20261011/playwright-inventory.json",
+      "extension": ".json",
+      "bytes": 12478,
+      "sha256": "f3dbab894799f306ba57f6ee6bdab8a0728ae7aca999299fb40158b504a9a36c"
+    },
+    {
+      "path": "docs/operaciones-tecnicas/evidence/real-interactions-20261011/sdk-cache-provenance.json",
+      "extension": ".json",
+      "bytes": 801,
+      "sha256": "7d294f939eea0d15e4f81f6ce4e03ff6b2eb421a0decbfd03cdbebb04e451f0a"
     },
     {
       "path": "docs/plan-respaldo-recuperacion.md",
@@ -67962,8 +67878,8 @@
     {
       "path": "docs/product-editor-refactor/06-AUDITORIA-FINAL.md",
       "extension": ".md",
-      "bytes": 7474,
-      "sha256": "87e8cab6f7779e174221f0f4628de53a8b364e3105567fd6d4c498be9178b87b"
+      "bytes": 7514,
+      "sha256": "0898b6fc84fa193b86260eaa3c41ff68e744956bfc5c7d5dfc4d677ed38dd025"
     },
     {
       "path": "docs/product-editor-refactor/07-INTEGRACION-AUTORIZADA.md",
@@ -67974,26 +67890,26 @@
     {
       "path": "docs/product-editor-refactor/CAMBIOS-Y-COMPATIBILIDAD.md",
       "extension": ".md",
-      "bytes": 4389,
-      "sha256": "ab4ec24a9fc140f4367b15778cf19f79a5b457aa1f0ab7a5f95486b86cbd662e"
+      "bytes": 4400,
+      "sha256": "c35eaee3d988e956560a6ae4c737bd541ed08bec3291500e29d93f6ba29a617f"
     },
     {
       "path": "docs/product-editor-refactor/CIERRE-VERIFICADO-20261027.md",
       "extension": ".md",
-      "bytes": 6023,
-      "sha256": "e30d517e6ed10d8c9cc73e3ff50fe4dae07bf17115653de812b450effbd5c677"
+      "bytes": 6052,
+      "sha256": "d3c46fb3774e90aea70d83b30e0cf257dfd14d91ce19dd62238fe454c5d00aec"
     },
     {
       "path": "docs/product-editor-refactor/CONTINUIDAD-FASES-0-5.md",
       "extension": ".md",
-      "bytes": 2588,
-      "sha256": "67b0e253b2ede7a44a52e9a111e9f7a6f289cd1bd0be6703e8c3d7866c19aa56"
+      "bytes": 2665,
+      "sha256": "63493369cfdb705a466f43033c54f6931a1f8b0064c7ca7c3f1e6e96131715e1"
     },
     {
       "path": "docs/product-editor-refactor/EDICION-CONTEXTUAL-PRODUCTO.md",
       "extension": ".md",
-      "bytes": 6950,
-      "sha256": "95e1d7d6a67c1437799b35c6e15dca0246388fda3a45b763f22ba1b1672f419a"
+      "bytes": 6990,
+      "sha256": "90198fef8c61fa881289e492e5d6ff29f4434d46518cab1cbb93b0082854d91f"
     },
     {
       "path": "docs/product-editor-refactor/ESPACIO-EDICION-RESPONSIVO.md",
@@ -68034,8 +67950,8 @@
     {
       "path": "docs/product-editor-refactor/REDISENO-SEIS-PESTANAS-20261028.md",
       "extension": ".md",
-      "bytes": 5199,
-      "sha256": "3136dd6e732310b49e9a16280f7353d7d93e8c24017ed2ee1bc46bd3c987ae19"
+      "bytes": 5136,
+      "sha256": "24b9e52418ebbc60bbda58a37b4041af42f3cba80f37a73416ff873610349693"
     },
     {
       "path": "docs/product-editor-refactor/RENDIMIENTO.md",
@@ -68046,20 +67962,20 @@
     {
       "path": "docs/product-editor-refactor/STUDIO-REFERENCIA-20261028.md",
       "extension": ".md",
-      "bytes": 5413,
-      "sha256": "3454884aee20a098594937bd816be4521e0008bd331ad3dfe7ea015055040f12"
+      "bytes": 5442,
+      "sha256": "cbcf1a2c10b8a949d33fb3072dd382a7debde6dcb5d67bb3b58e912512151e3b"
     },
     {
       "path": "docs/product-editor-refactor/TABLET-Y-AVISO-GUARDADO.md",
       "extension": ".md",
-      "bytes": 4421,
-      "sha256": "2fa06def724d39304f4179b4b5dad903644cc2eebea3c79254cd7da209bcd55c"
+      "bytes": 4479,
+      "sha256": "4fdc004845cb11b4c873ea07d2225c5633a5d54e256a207648b8be70a0186126"
     },
     {
       "path": "docs/product-editor-refactor/UNIFICACION-SEIS-FASES.md",
       "extension": ".md",
-      "bytes": 3323,
-      "sha256": "0fa74d2ea3682d27f8d6c5eb41f26fab5eb34daa742e9069abf560993b226bd1"
+      "bytes": 3334,
+      "sha256": "bfb09221e435e422005a6dd7b148750de234469eb1b93e4bec707440db16ba7e"
     },
     {
       "path": "docs/product-editor-refactor/UX-AGIL-AUTOGUARDADO.md",
@@ -68070,8 +67986,8 @@
     {
       "path": "docs/product-editor-refactor/evidencias-cierre-20261027.json",
       "extension": ".json",
-      "bytes": 34279,
-      "sha256": "11357fc549ae3bd5afb5294f0063ade06868d5e81e4f0e2a7c98b9bdd045b1df"
+      "bytes": 34479,
+      "sha256": "0bd31c35f4955e83d47b6a2dda103401c1e4c3f963a748c28ebdcf20d81f2b90"
     },
     {
       "path": "docs/product-editor-refactor/evidencias-contextuales/contexto-1024.png",
@@ -68268,8 +68184,8 @@
     {
       "path": "docs/product-editor-refactor/evidencias/huellas.json",
       "extension": ".json",
-      "bytes": 4398,
-      "sha256": "6d9a6241095cd6e0d986a638583518bf8cb1e37f6bf2c7b6bce4570f20f40134"
+      "bytes": 4570,
+      "sha256": "1b3256fc166d3da61ce3a8b214fa6c1c34e8afabb392d8e88076408337e8c7ca"
     },
     {
       "path": "docs/product-editor-refactor/evidencias/intentos-previos.json",
@@ -68316,8 +68232,8 @@
     {
       "path": "docs/proteccion-anticambios.md",
       "extension": ".md",
-      "bytes": 1588,
-      "sha256": "dd55add5baa33d2ca22c8337a64b5a5f90d17c962b2bea4698ee5c7bb82d2f11"
+      "bytes": 1603,
+      "sha256": "d036581d51d57c97b5c05d7175e72721dcfd20d1d2672a3f9c7d33ded0d7282e"
     },
     {
       "path": "docs/prueba-compra-real.md",
@@ -68370,14 +68286,14 @@
     {
       "path": "docs/revision-comercio-20261021.md",
       "extension": ".md",
-      "bytes": 17790,
-      "sha256": "7021bff6dcf48a83677a53fbd09e90237d09fa2d85f338b0640fee3e45f4f9ad"
+      "bytes": 17819,
+      "sha256": "17fd73ab3b7922530f94a64d41ad2876bacafea1d7a6189f58eb37df318ae6cc"
     },
     {
       "path": "docs/revision-global-2026-10-20.md",
       "extension": ".md",
-      "bytes": 6865,
-      "sha256": "613a7a61cc9a0796d95c9a373beea81e3d123f97d7ab0c13c3bd15e78af38420"
+      "bytes": 6894,
+      "sha256": "ffa5564437a3208cc6c94332573026195eba3cf5593f7bba8be293af9747abab"
     },
     {
       "path": "docs/runbook-conciliacion-checkout.md",
@@ -68412,8 +68328,8 @@
     {
       "path": "docs/superadmin-fluidez.md",
       "extension": ".md",
-      "bytes": 4093,
-      "sha256": "658998d3c14981fed34852c30d9f0bd14f0f94069362e4881ab8e56e81020072"
+      "bytes": 4122,
+      "sha256": "b088d0c8cdfd73e8722a0c42432fc81af01767f143fcf7e425839422089face3"
     },
     {
       "path": "docs/system-health.md",
@@ -69498,8 +69414,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 139327,
-      "sha256": "a327324811bf4f25819670bdb72e2dcb301894e02e218e7423a59be1ed36ac4b"
+      "bytes": 139329,
+      "sha256": "a24129a31ce96a5d1675981c1a2ee4e2073a368ab1275d9ab43f83e5315a5659"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -71068,12 +70984,6 @@
       "sha256": "3bf642b0ab437a1df74fb2c6c328b391bd35afa6c7ebac6610b638c5397affbf"
     },
     {
-      "path": "llms.txt",
-      "extension": ".txt",
-      "bytes": 657,
-      "sha256": "55c6ceb7809df5e68a84553f89f9c61a8dfcce4ceb024cbfe5b3af734de4d31a"
-    },
-    {
       "path": "login.html",
       "extension": ".html",
       "bytes": 80193,
@@ -71332,48 +71242,6 @@
       "sha256": "e210d0052973964e5faf34430366f29ffbf7d210731ad5c70ffc9c09b17e6be5"
     },
     {
-      "path": "scripts/agent/phase01-audit/browser-runtime.mjs",
-      "extension": ".mjs",
-      "bytes": 538,
-      "sha256": "7954a2dcacba576b0f11d7188b7dbf183578a1966ada9463b235a6420ce24e03"
-    },
-    {
-      "path": "scripts/agent/phase01-audit/emulator-config.json",
-      "extension": ".json",
-      "bytes": 239,
-      "sha256": "7e986ae1145d2e043a89c2b27fd27817d8b1e1bc684427e91a9b53adaef1c7a5"
-    },
-    {
-      "path": "scripts/agent/phase01-audit/fallback-probe.mjs",
-      "extension": ".mjs",
-      "bytes": 1728,
-      "sha256": "b1610ff9db5817775c2a208009d5e4e1ce95bec532ee8a3d46387f59e29a840e"
-    },
-    {
-      "path": "scripts/agent/phase01-audit/legacy-order-probe.mjs",
-      "extension": ".mjs",
-      "bytes": 4027,
-      "sha256": "8193b5803cf6d524ffdf7c3bfa08a2ce020566e417aafc018174707a7a11733a"
-    },
-    {
-      "path": "scripts/agent/phase01-audit/rules-probe.mjs",
-      "extension": ".mjs",
-      "bytes": 3066,
-      "sha256": "b52f4e6c47bee305569e417cc4382e22ac37364c313c140959020fb00f1b5b1f"
-    },
-    {
-      "path": "scripts/agent/phase01-audit/run-rules-probe.mjs",
-      "extension": ".mjs",
-      "bytes": 1170,
-      "sha256": "9c9bc6f69898cc88aa08b15a00cf77ad22d98d9e093cc092b550fde2f16b8f37"
-    },
-    {
-      "path": "scripts/agent/phase01-audit/stats-probe.mjs",
-      "extension": ".mjs",
-      "bytes": 2826,
-      "sha256": "c97aa32483e31e4a91e7134eba944acb9f14b2688295680cda34a3552e44accf"
-    },
-    {
       "path": "scripts/auditar-acceso-aislamiento.js",
       "extension": ".js",
       "bytes": 8235,
@@ -71622,8 +71490,8 @@
     {
       "path": "scripts/auditar-convenciones-nombres.mjs",
       "extension": ".mjs",
-      "bytes": 4785,
-      "sha256": "550f7f91035519fd70fef2f25739ae0c6f8ab340a0c722c582e8798e4143bf4c"
+      "bytes": 4772,
+      "sha256": "f33f06d5d53d813e81cbdc1c7823b6c9bb2849893718318c5e31e7395bac6fc4"
     },
     {
       "path": "scripts/auditar-correo-fase-3.js",
@@ -71988,8 +71856,8 @@
     {
       "path": "scripts/auditar-profunda.js",
       "extension": ".js",
-      "bytes": 16518,
-      "sha256": "343e0d702b833ad2aac5bd93804d8ae0ebca078f9955d5dca117c2d84a3f9f28"
+      "bytes": 16493,
+      "sha256": "85ddd30d53e6d0618c31207cb3dfecfc422a0e00eb87b1e6909831a451119611"
     },
     {
       "path": "scripts/auditar-proteccion-flujos.mjs",
@@ -72078,8 +71946,8 @@
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
       "extension": ".js",
-      "bytes": 21207,
-      "sha256": "2c00397a7a739a454c093402e9aa638d71c0bb23f2139e1ee1f658895360a0c4"
+      "bytes": 20986,
+      "sha256": "fdc197de46e849c263033fbb7dfbcd4a2d337478cab264611434d11b6e5fdaeb"
     },
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
@@ -72144,8 +72012,8 @@
     {
       "path": "scripts/auditar-tipografia.js",
       "extension": ".js",
-      "bytes": 17053,
-      "sha256": "22f72ccc404c656ea4d8c4d37e8da293fe7c7ce3c5a7255cc11dcfb44998d268"
+      "bytes": 16667,
+      "sha256": "a14b625185973d1e2a116b97f26d67caabefe13eff67fec9318886b17864b5ce"
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
@@ -72198,8 +72066,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 83916,
-      "sha256": "5a714518c7e7c4c54a7ff9704d20b1c5cdd8f839bb1e51f9bcb7674ea77ff009"
+      "bytes": 83920,
+      "sha256": "30611d19b54b60c3c2908d8992eb6f10f2af115c159d8b1a59af1c3fb2c94c17"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -72318,8 +72186,8 @@
     {
       "path": "scripts/inventariar-acciones-cliente.mjs",
       "extension": ".mjs",
-      "bytes": 2559,
-      "sha256": "ca422acba8aee7c4cbd40a74a106ea54484f15a528bc79f9d59e9e098d2d85a7"
+      "bytes": 2574,
+      "sha256": "28691a92361783c493c91b11e482e93d5a0d339540d7a0edded741cbba4fe2a9"
     },
     {
       "path": "scripts/leer-blobs-mantenimiento.mjs",
@@ -72432,8 +72300,50 @@
     {
       "path": "scripts/notificar-resultados-github.mjs",
       "extension": ".mjs",
-      "bytes": 3184,
-      "sha256": "bec25cd858cbc05f691f1592a588190a1e5c156e8ac32e7e6d4744408149fb57"
+      "bytes": 3122,
+      "sha256": "ee9e96428a8855b6d47841695622a6ebbb24627090882756641868d3c3f375d5"
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/browser-runtime.mjs",
+      "extension": ".mjs",
+      "bytes": 538,
+      "sha256": "7954a2dcacba576b0f11d7188b7dbf183578a1966ada9463b235a6420ce24e03"
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/emulator-config.json",
+      "extension": ".json",
+      "bytes": 239,
+      "sha256": "7e986ae1145d2e043a89c2b27fd27817d8b1e1bc684427e91a9b53adaef1c7a5"
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/fallback-probe.mjs",
+      "extension": ".mjs",
+      "bytes": 1743,
+      "sha256": "920173503f95e734174c9d5cf4d0c0b6eea1eb8ca2f4f98fa4dfa2e62ae25dae"
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/legacy-order-probe.mjs",
+      "extension": ".mjs",
+      "bytes": 4042,
+      "sha256": "28b0a9f11c60476d32ba81c12df0f4117c77262a858c0b5b1de70f2bc5074064"
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/rules-probe.mjs",
+      "extension": ".mjs",
+      "bytes": 3081,
+      "sha256": "86b290b82fbfafd757d2b7e35440af90a9e06cd456677b4fb327d70917b88eeb"
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/run-rules-probe.mjs",
+      "extension": ".mjs",
+      "bytes": 1185,
+      "sha256": "d848b220b21a04638c0479668ad8ec8617f08193eb666d20ff663fa0607f1286"
+    },
+    {
+      "path": "scripts/operaciones-tecnicas/phase01-audit/stats-probe.mjs",
+      "extension": ".mjs",
+      "bytes": 2841,
+      "sha256": "2712d10debcd24c7492c13e6698380996eee996cd209eb6af5292ab165a626aa"
     },
     {
       "path": "scripts/preparar-hosting.js",
@@ -72522,8 +72432,8 @@
     {
       "path": "scripts/recopilar-acciones-cliente-runtime.mjs",
       "extension": ".mjs",
-      "bytes": 6989,
-      "sha256": "a2e8fb744a5561dbfe420148480d5b15588fda8affc5ed4017f245b9a8f38513"
+      "bytes": 7004,
+      "sha256": "7686114df926bafeaef8506d2cf4b9c1acb5595e312be6dd7d15df68c7d54489"
     },
     {
       "path": "scripts/restore-firestore.mjs",
@@ -74226,8 +74136,8 @@
     {
       "path": "tests/operations/ci-immutable-checkout.test.mjs",
       "extension": ".mjs",
-      "bytes": 752,
-      "sha256": "6c3c86eb15ec8ebc8395ff705a101bb82a1efcb06c0694c74251e10b8fd5eb7d"
+      "bytes": 600,
+      "sha256": "ba4a3633ee4c7bb41ae338767dff503aaa7c6d3f6c3ce37bad45efab2bd25c85"
     },
     {
       "path": "tests/operations/content-security-boundaries.test.mjs",
@@ -75204,8 +75114,8 @@
     {
       "path": "tests/ui-ux/admin-app-colecciones.spec.js",
       "extension": ".js",
-      "bytes": 6312,
-      "sha256": "72098ebf97b9dee1bbd9f9ac0954165d4812303685ad04b1f32221937a692dcb"
+      "bytes": 7718,
+      "sha256": "a579e827ca8e1e6f444fca380c7be4a090827fa8141726470a5f661d55b1116d"
     },
     {
       "path": "tests/ui-ux/admin-app-configuracion.spec.js",
@@ -75834,8 +75744,8 @@
     {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 4674,
-      "sha256": "896e832804d89beb35afdcc1b396388de93a7033736900a756eece47d9445c1c"
+      "bytes": 4686,
+      "sha256": "b7afe93c9301fa7067733e44a18a97fb34680b5fce0f7c088e03ed0f3c002d3e"
     },
     {
       "path": "tests/visual-builder/visual-builder-core.test.mjs",

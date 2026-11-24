@@ -1,9 +1,9 @@
 # Fase 4 — Espacio de trabajo, progreso privado y publicación
 
-Fecha: 2026-10-26. Rama `codex/editor-borradores-fase4-20261026`.
+Fecha: 2026-10-26. Rama `rama histórica: editor-borradores-fase4-20261026`.
 Base comprobada: `38fa577b629c7106c7085360ae6d0070fc89c5c5` (Fase 3).
 Sin merge, auto-merge, despliegue, migraciones, pedidos ni escrituras de datos reales.
-La restricción expresa de esta fase prevalece sobre la instrucción permanente de merge de AGENTS.
+La restricción expresa de esta fase prevalece sobre la instrucción permanente de merge de docs/normas-desarrollo.md.
 
 ## Continuidad verificada
 
@@ -188,6 +188,6 @@ despliegue/reversión de Rules requiere autorización separada.
 
 Commit funcional: `6f330b5d99c39d9c727ca495d321ac54e383608c`.
 [PR #1240](https://github.com/tintinaccs/tintin-web/pull/1240), OPEN/listo para
-revisión sobre `codex/opciones-inventario-fase3-20261025`, sin auto-merge.
+revisión sobre `rama histórica: opciones-inventario-fase3-20261025`, sin auto-merge.
 CI sin resultados al crear PR; no se certifica CI ni producción. El recibo
 documental posterior conserva la referencia funcional, sin modificar su código.

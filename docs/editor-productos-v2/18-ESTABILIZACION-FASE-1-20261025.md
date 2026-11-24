@@ -1,6 +1,6 @@
 # Estabilización del editor — nueva Fase 1, 25/10/2026
 
-Autor: Codex /root. Base comprobada: `f9399a90c73398a18c877bcaf1985491d4085913`, igual a main remoto al comenzar. Rama: `codex/editor-estabilizacion-fase1-20261025`. El SHA del candidato se obtiene con `git rev-parse HEAD` y en el PR; este documento describe el delta desde esa base. Alcance: texto adjunto «TINTIN ACCESORIOS — FASE 1». Sus restricciones actuales prevalecen sobre autorizaciones históricas: **sin merge ni despliegue**.
+Autor: herramienta de desarrollo anterior /root. Base comprobada: `f9399a90c73398a18c877bcaf1985491d4085913`, igual a main remoto al comenzar. Rama: `rama histórica: editor-estabilizacion-fase1-20261025`. El SHA del candidato se obtiene con `git rev-parse HEAD` y en el PR; este documento describe el delta desde esa base. Alcance: texto adjunto «TINTIN ACCESORIOS — FASE 1». Sus restricciones actuales prevalecen sobre autorizaciones históricas: **sin merge ni despliegue**.
 
 ## Resultado ejecutivo
 
@@ -10,7 +10,7 @@ La fase completa **no se certifica cerrada**: falta reproducir la lentitud de la
 
 ## Base, concurrencia y autoridad
 
-Historial reciente inspeccionado: #1236 navegación y responsive, #1235 montaje del editor, #1234 opciones/stock, #1232 contraste, #1230 presentación. Abiertos al inicio: #1233 borradores privados (draft), #1228 retirada de colores/stock (draft), #1231 dependencia fast-uri. No se integran sus ramas ni se duplican cambios. El protocolo AGENTS pide merge protegido para implementaciones, pero el pedido expreso actual lo prohíbe. Además existe mantenimiento que puede fusionar PR elegibles automáticamente: presentar este candidato en borrador para impedir esa elegibilidad, sin modificar workflows ni protecciones.
+Historial reciente inspeccionado: #1236 navegación y responsive, #1235 montaje del editor, #1234 opciones/stock, #1232 contraste, #1230 presentación. Abiertos al inicio: #1233 borradores privados (draft), #1228 retirada de colores/stock (draft), #1231 dependencia fast-uri. No se integran sus ramas ni se duplican cambios. El protocolo docs/normas-desarrollo.md pide merge protegido para implementaciones, pero el pedido expreso actual lo prohíbe. Además existe mantenimiento que puede fusionar PR elegibles automáticamente: presentar este candidato en borrador para impedir esa elegibilidad, sin modificar workflows ni protecciones.
 
 Documentación previa: carpeta 00–17, contratos de versiones canónicas, protocolo de reparación y matriz de impacto. Sus resultados de otras bases no se heredan.
 

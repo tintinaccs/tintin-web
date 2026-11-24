@@ -1,6 +1,6 @@
 # Integración y cierre de las seis fases — 26/10/2026
 
-Responsable: Codex /root (GPT-6). La instrucción nueva de la titular autoriza
+Responsable: herramienta de desarrollo anterior /root (herramienta de desarrollo anterior). La instrucción nueva de la titular autoriza
 completar correcciones, comprobaciones e integración/merge. Sustituye la
 restricción anterior de mantener PR separados sin fusionar. No autoriza ejecutar
 manualmente despliegues de Rules, migraciones, cobros o eliminación de datos.

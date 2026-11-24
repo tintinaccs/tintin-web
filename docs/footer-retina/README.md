@@ -1,6 +1,6 @@
 # Nitidez del símbolo original NOVAK en Retina
 
-Continuación de PR1323 sobre main0da99f5f8ae06d8cec028f81cf00713addee1074. Se mantienen el pie único, mayúsculas, columnas, destino, año automático y biblioteca de Skills. Este ajuste corrige un problema de renderizado observado al inspeccionar capturas reales.
+Continuación de PR1323 sobre main0da99f5f8ae06d8cec028f81cf00713addee1074. Se mantienen el pie único, mayúsculas, columnas, destino, año automático y biblioteca de recursos de desarrollo. Este ajuste corrige un problema de renderizado observado al inspeccionar capturas reales.
 
 En WebKit27.2, el SVG del kit —que contiene un PNG original y un filtro de transparencia— se veía rasterizado a su tamaño CSS42×40 y después ampliado en una pantalla3×. Chromium mostraba los mismos píxeles correctamente. La resolución disponible era suficiente: PNG1536×1024, recorte310×290. `naturalWidth` del SVG describe su viewport y no esa resolución real.
 

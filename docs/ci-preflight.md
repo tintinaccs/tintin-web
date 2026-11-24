@@ -126,4 +126,4 @@ mantiene **en borrador**: bloquea ese mecanismo y el merge. No marcarlo listo ni
 activar publicación sin una nueva autorización. Las previsualizaciones de PR de
 Cloudflare existentes no equivalen a un despliegue de producción autorizado.
 
-Resultados y limitaciones de esta ejecución se registran en `docs/agent/CURRENT_STATE.md`.
+Resultados y limitaciones de esta ejecución se registran en `docs/operaciones-tecnicas/CURRENT_STATE.md`.
