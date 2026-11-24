@@ -1,11 +1,11 @@
 # Continuidad comprobada de las fases 0–5
 
-26/10/2026 · Codex /root · base `5dc6f781a81e0ae0dd07d84b0c742ec3d567e133`.
+26/10/2026 · herramienta de desarrollo anterior /root · base `5dc6f781a81e0ae0dd07d84b0c742ec3d567e133`.
 
 La carpeta `docs/product-editor-refactor/` no existía en este checkout al iniciar.
 Se revisaron 701 cabezas remotas, se descargaron sus referencias y se buscó en
 el historial accesible la carpeta y `product-ux-cleanup.spec.js`: sin resultados.
-También se consultaron los chats recientes accesibles y archivos de Codex. No se
+También se consultaron los chats recientes accesibles y archivos de herramienta de desarrollo anterior. No se
 recuperaron los diez archivos de Fase 4 ni los siete de Fase 5 mencionados en el
 texto pegado. No se afirma que se hayan perdido en el equipo de origen; podrían
 seguir sin publicar en otro entorno. La transcripción es evidencia del pedido y
@@ -30,5 +30,5 @@ cambios de PayPal/checkout. Las pruebas nuevas verifican la funcionalidad tomada
 La corrección no autoriza cerrar ni marcar integrado el PR original completo.
 
 La instrucción expresa actual prohíbe merge/deploy y prevalece sobre el merge
-permanente de AGENTS y autorizaciones de otros chats. Se mantiene una rama local
+permanente de docs/normas-desarrollo.md y autorizaciones de otros chats. Se mantiene una rama local
 para revisión; no se publica un PR elegible al mantenimiento automático.

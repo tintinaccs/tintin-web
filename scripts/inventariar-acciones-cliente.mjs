@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 // este inventario inicial nunca se presenta como cobertura completa.
 const root = path.resolve(import.meta.dirname, '..');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'diagnostic-manifest.json'), 'utf8'));
-const output = path.join(root, 'docs/agent/evidence/client-actions-20261012');
+const output = path.join(root, 'docs/operaciones-tecnicas/evidence/client-actions-20261012');
 const pages = manifest.pages.filter(page => page.roles.includes('client'));
 const actions = [];
 for (const page of pages) {

@@ -9,7 +9,7 @@ afirmación de fidelidad ni se afirma disponer del HTML original de Windows.
 ## Alcance
 
 Base main `c031635b9d421ece436b878119247c34bcf93f2a`; rama
-`fix/editor-studio-reference-20261028`, Codex /root. El formulario, los inputs,
+`fix/editor-studio-reference-20261028`, herramienta de desarrollo anterior /root. El formulario, los inputs,
 los escritores, permisos y contratos V1/V2 existentes siguen siendo la autoridad.
 No se cambian Rules, endpoints, catálogo, pagos, límites ni dependencias.
 

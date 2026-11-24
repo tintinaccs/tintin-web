@@ -1,18 +1,24 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b9df787795987e0fd0e1ed12abcd47bb5db859ee",
-  "reason": "Aplicar las actualizaciones de Firebase y Playwright juntas, sincronizando los artefactos y el plan protegido de Contrato Único.",
+  "baseCommit": "e56dbf1949655567976473170df27aa9de561d42",
+  "reason": "Retirar configuraciones de herramientas de desarrollo ajenas al producto, consolidar las normas y conservar auditorías, seguridad y flujos de producción.",
   "files": [
     {
-      "path": "package-lock.json",
-      "oldHash": "7867ee72eefd8c7ed85150cf1d8d745a220f98c19c0a64e5d8230680421785c2",
-      "newHash": "670ef5520ff705fd475d976b47088661e40c045961100024b99063154cc4f998"
-    },
-    {
-      "path": "package.json",
-      "oldHash": "5124296be82b3a465ba63dd2543485170a2afc55b52f8313f7aa138f1dd4e35c",
-      "newHash": "2e429a17e7714211ed23f92d5405681ad312feb1f847f6a21e8a30a7b86709c6"
+      "path": ".github/workflows/auditar-tintin.yml",
+      "oldHash": "2361bc3261b54404ede4a9977fcac6dac0beef3b15be8ecf1b25e6798ac16177",
+      "newHash": "3d8c91d59ce93211d0f5560bbbfa5c7587ca3287abefda7ee97e5e82a3168f80"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "github-actions",
+    "github-actions__deployments__30",
+    "github-actions__pruebas-automatizadas__31",
+    "pruebas-automatizadas"
+  ],
+  "removedFiles": [
+    {
+      "path": "AGENTS.md",
+      "oldHash": "273f4b554cece7f4e585b9ecc4958da85c8d957586e45b5122f3a2a61d5faec5"
+    }
+  ]
 }

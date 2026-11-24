@@ -1,6 +1,6 @@
 # Motor comercial — fase2
 
-Estado: implementación local para revisión; **sin activar productos reales, sin publicar y sin iniciar fase3**. Rama codex/motor-comercial-variantes-v2. Base funcional6ac1fdf2546fa859412399f88eccf207991880de; documentación de fase1 heredada de a0f89051f/#1216.
+Estado: implementación local para revisión; **sin activar productos reales, sin publicar y sin iniciar fase3**. Rama rama histórica: motor-comercial-variantes-v2. Base funcional6ac1fdf2546fa859412399f88eccf207991880de; documentación de fase1 heredada de a0f89051f/#1216.
 
 ## Formato aditivo
 

@@ -60,7 +60,7 @@ Pruebas de navegador posteriores deben usar las suites existentes y MCP Playwrig
 
 ## Ejecución fase2 — motor comercial, 2026-10-23
 
-Base funcional6ac1fdf, rama codex/motor-comercial-variantes-v2; fuentes de esta fase en commits pequeños desde e0ea8e65f hasta1d3106ca8 y propagación de referencias posterior. Consultar el HEAD del PR para el conjunto final, no usar un SHA de fase1 como prueba del motor. Windows, Node24.19.0, Chromium headless local; CI usa Node22 y queda separada del PASS_LOCAL.
+Base funcional6ac1fdf, rama rama histórica: motor-comercial-variantes-v2; fuentes de esta fase en commits pequeños desde e0ea8e65f hasta1d3106ca8 y propagación de referencias posterior. Consultar el HEAD del PR para el conjunto final, no usar un SHA de fase1 como prueba del motor. Windows, Node24.19.0, Chromium headless local; CI usa Node22 y queda separada del PASS_LOCAL.
 
 Todos los comandos de la tabla terminaron exit0. Las cantidades se solapan: **no sumarlas como pruebas únicas**. Logs en artifacts/ del worktree aislado; no contienen una compra ni datos productivos.
 

@@ -2,7 +2,7 @@
 
 Continuación de la versión canónica de seis fases sobre main
 51e5e7376a355902a1eafdba78a3ffbb74ef58c6 (#1256), 27/10/2026.
-Autor de la verificación: Codex /root.
+Autor de la verificación: herramienta de desarrollo anterior /root.
 
 La foto recibida muestra el mismo fallo de guardado en cabecera y cuerpo,
 y toda la galería antes de los campos en tablet. Reproducción con el botón
@@ -53,7 +53,7 @@ escritura en producción. La regresión usa transporte y datos ficticios con el
 escritor canónico; comprueba recuperación, no la salud de aquel POST real.
 
 La titular solicitó iniciar sesión fuera de TinyFish. Se proporcionó el acceso
-directo y se solicitó abrir admin.html en Codex; el control del navegador de la
+directo y se solicitó abrir admin.html en herramienta de desarrollo anterior; el control del navegador de la
 titular no está expuesto en esta sesión. No se usan perfiles de TinyFish para
 inspeccionar la cuenta ni se solicitan credenciales por chat.
 

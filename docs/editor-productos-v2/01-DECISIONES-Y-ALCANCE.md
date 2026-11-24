@@ -1,6 +1,6 @@
 ## Continuación autorizada — candidato integrado (23/10/2026)
 
-La instrucción actual de la titular autoriza recuperar, corregir y continuar las fases pendientes. Se recuperó #1218 sobre #1217 en codex/completar-editor-v2-20261024. Ahora existe editor/escritor compatible, estados/SEO, plantillas acotadas y estadísticas con límites explícitos. El resultado NO APTO de fase5 describe el candidato anterior; no certifica ni rechaza automáticamente el nuevo. Ver [14-CONTINUIDAD-Y-CANDIDATO](14-CONTINUIDAD-Y-CANDIDATO.md). Estado de pruebas/CI/publicación: consultar el relevo actual, sin heredar PASS. No se migran productos reales.
+La instrucción actual de la titular autoriza recuperar, corregir y continuar las fases pendientes. Se recuperó #1218 sobre #1217 en rama histórica: completar-editor-v2-20261024. Ahora existe editor/escritor compatible, estados/SEO, plantillas acotadas y estadísticas con límites explícitos. El resultado NO APTO de fase5 describe el candidato anterior; no certifica ni rechaza automáticamente el nuevo. Ver [14-CONTINUIDAD-Y-CANDIDATO](14-CONTINUIDAD-Y-CANDIDATO.md). Estado de pruebas/CI/publicación: consultar el relevo actual, sin heredar PASS. No se migran productos reales.
 
 # Decisiones funcionales y alcance
 

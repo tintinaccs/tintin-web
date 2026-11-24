@@ -1,6 +1,6 @@
 # Galería unificada — Fase 2
 
-25/10/2026, Codex /root. Rama `codex/galeria-unificada-fase2-20261025`, base `0f57f327ad43671d22d0bd4d373d2f5b7bee8e40`. Incluye correcciones de Fase 1 del PR1237, todavía OPEN/no integrado al comenzar; main remoto `f9399a90c`. No se heredan sus resultados. La instrucción actual autoriza implementación/PR y prohíbe merge y despliegue. La entrega se apila sobre la rama de1237 para revisión independiente; no se integra ninguna rama ajena.
+25/10/2026, herramienta de desarrollo anterior /root. Rama `rama histórica: galeria-unificada-fase2-20261025`, base `0f57f327ad43671d22d0bd4d373d2f5b7bee8e40`. Incluye correcciones de Fase 1 del PR1237, todavía OPEN/no integrado al comenzar; main remoto `f9399a90c`. No se heredan sus resultados. La instrucción actual autoriza implementación/PR y prohíbe merge y despliegue. La entrega se apila sobre la rama de1237 para revisión independiente; no se integra ninguna rama ajena.
 
 ## Arquitectura antes y después
 

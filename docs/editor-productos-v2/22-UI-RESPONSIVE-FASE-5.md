@@ -1,8 +1,8 @@
 # Fase 5 — Presentación responsive y superficies públicas
 
 Fecha de trabajo: 25/10/2026 (America/Buenos_Aires; ejecuciones UTC del 26/10).
-Agente: Codex /root. Base: `a6e197e5382cf694caf6d07272e6450a2dfe5b5b`,
-cabeza recuperada de Fase 4 / #1240. Rama: `codex/editor-responsive-auditoria-fases5-6`.
+Agente: herramienta de desarrollo anterior /root. Base: `a6e197e5382cf694caf6d07272e6450a2dfe5b5b`,
+cabeza recuperada de Fase 4 / #1240. Rama: `rama histórica: editor-responsive-auditoria-fases5-6`.
 Esta fase y la auditoría siguiente se entregan juntas sobre Fase 4, sin fusionar ni desplegar.
 
 ## Sistema visual y editor conservados

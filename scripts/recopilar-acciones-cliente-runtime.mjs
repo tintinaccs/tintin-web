@@ -7,7 +7,7 @@ import { execFileSync } from 'node:child_process';
 // after all assertions. DOM discovery itself never certifies a business action.
 const root=path.resolve(import.meta.dirname,'..');
 const input=path.join(root,'artifacts/real-interactions/runtime-tests');
-const output=path.join(root,'docs/agent/evidence/client-actions-20261012/runtime-observations.json');
+const output=path.join(root,'docs/operaciones-tecnicas/evidence/client-actions-20261012/runtime-observations.json');
 const observations=[];
 const report=JSON.parse(fs.readFileSync(path.join(root,'artifacts/real-interactions/runtime-results.json'),'utf8'));
 function visit(suite){

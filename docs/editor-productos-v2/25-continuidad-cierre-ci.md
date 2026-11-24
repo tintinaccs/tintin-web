@@ -1,6 +1,6 @@
 # Continuidad del PR1241 — 26/10/2026
 
-Responsable: Codex /root (GPT-6). Se retoma el adjunto sobre la cabeza
+Responsable: herramienta de desarrollo anterior /root (herramienta de desarrollo anterior). Se retoma el adjunto sobre la cabeza
 5aa7c935, contra main f9399a90. El merge ya está autorizado; no se ejecuta
 publicación manual, despliegue de Rules ni operaciones comerciales reales.
 

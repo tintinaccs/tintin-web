@@ -1,6 +1,6 @@
 # Opciones, variantes e inventario — Fase 3
 
-25/10/2026, Codex /root. Rama `codex/opciones-inventario-fase3-20261025`. Base `746e944d0d05abf45d9f00d55d3448913352fa6f`, cabeza de Fase2/PR1238 al comenzar. Fase1/PR1237 (`0f57f327a`) y Fase2/PR1238 permanecen OPEN/no integrados; main remoto sigue `f9399a90c`. Esta fase incluye ambos trabajos por ascendencia, sin fusionar sus PR ni heredar sus resultados. Entrega apilada sobre la rama de1238, lista para revisión. Prohibidos merge y deploy por la instrucción expresa actual, que prevalece sobre la autorización permanente de AGENTS.
+25/10/2026, herramienta de desarrollo anterior /root. Rama `rama histórica: opciones-inventario-fase3-20261025`. Base `746e944d0d05abf45d9f00d55d3448913352fa6f`, cabeza de Fase2/PR1238 al comenzar. Fase1/PR1237 (`0f57f327a`) y Fase2/PR1238 permanecen OPEN/no integrados; main remoto sigue `f9399a90c`. Esta fase incluye ambos trabajos por ascendencia, sin fusionar sus PR ni heredar sus resultados. Entrega apilada sobre la rama de1238, lista para revisión. Prohibidos merge y deploy por la instrucción expresa actual, que prevalece sobre la autorización permanente de docs/normas-desarrollo.md.
 
 ## Problemas comprobados y estructura anterior
 

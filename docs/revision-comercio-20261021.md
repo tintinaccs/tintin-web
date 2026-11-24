@@ -1,6 +1,6 @@
 # Revisión de comercio y experiencia — 21/10/2026
 
-Responsable: Codex /root. Base integrada: main `aa1cfaa97` (incluye Perfil/iconos, administración, Sheets, identidad y avisos por documento). Alcance solicitado por la titular: stock/checkout, totales, seguimiento, catálogo/ficha, consistencia visual, formularios, rendimiento, operación administrativa, seguridad, recuperación, accesibilidad y SEO. El carrito persistente ya fue validado por la titular; sus regresiones relacionadas se conservan.
+Responsable: herramienta de desarrollo anterior /root. Base integrada: main `aa1cfaa97` (incluye Perfil/iconos, administración, Sheets, identidad y avisos por documento). Alcance solicitado por la titular: stock/checkout, totales, seguimiento, catálogo/ficha, consistencia visual, formularios, rendimiento, operación administrativa, seguridad, recuperación, accesibilidad y SEO. El carrito persistente ya fue validado por la titular; sus regresiones relacionadas se conservan.
 
 ## Cambios con evidencia
 
