@@ -425,4 +425,4 @@ ignorados por Git no se cuentan como código publicado:
 | Derivados canónicos | `scripts/cache-version-baseline.json`, `config/proteccion-flujos.json`, `config/mantenimiento-flujos-plan.json`, `diagnostic-manifest.json`, `site-version.json` |
 | Pruebas existentes |2OTP de accounts; performance README/_helpers/responsive-performance; runtime critical-flows; ui-ux global-form-fit/whatsapp-consent-overlap |
 | Pruebas nuevas | performance editor-scroll.performance/loader-wait; runtime guest-cart-commerce; security endpoint-auth-status/telemetry-body-limit; operations responsive-audit-scroll |
-| Documentación | `DESIGN.md`, `docs/resumen-arquitectura.md`, `docs/auditoria-profesional.md`, `docs/informe-verificacion.md`, `docs/agent/CURRENT_STATE.md` |
+| Documentación | `DESIGN.md`, `docs/resumen-arquitectura.md`, `docs/auditoria-profesional.md`, `docs/informe-verificacion.md`, `docs/operaciones-tecnicas/CURRENT_STATE.md` |

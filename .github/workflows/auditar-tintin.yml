@@ -34,10 +34,6 @@ jobs:
         with:
           node-version-file: 'package.json'
           cache: npm
-      - name: Verify cloud agent Skills on Linux
-        run: |
-          python3 scripts/agent/check-cloud-skills.py
-          bash scripts/agent/bootstrap-cloud-linux.sh --prefix "$RUNNER_TEMP/tintin-agent-skills"
       - name: Install locked dependencies once
         run: npm ci --engine-strict
       - name: VALIDACIÓN RÁPIDA — PREFLIGHT

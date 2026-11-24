@@ -78,5 +78,5 @@ test('inspector ignora selecciones atrasadas o inexistentes de la vista previa',
 
 test('API pública devuelve configuración nuevamente saneada y sin secretos', () => {
   assert.match(publicApi, /sanitizeVisualConfig/); assert.match(publicApi, /cache-control/);
-  assert.doesNotMatch(publicApi + runtime + admin, /OPENAI_API_KEY|FIREBASE_SERVICE_ACCOUNT_KEY\s*=/);
+  assert.doesNotMatch(publicApi + runtime + admin, /\b[A-Z][A-Z0-9]*_API_KEY\b|FIREBASE_SERVICE_ACCOUNT_KEY\s*=/);
 });

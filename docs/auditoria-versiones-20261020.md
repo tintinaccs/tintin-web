@@ -1,12 +1,12 @@
 # Auditoría de coherencia de versiones — 20 de octubre de 2026
 
-Codex /root. Alcance autorizado: prompt «Auditoría forense, unificación total y control permanente de versiones» y pendientes recientes. Base publicada dc6da947; candidato conjunto 19b3ba0b, reconciliado con9d58fca0 (PR1182, incluye PR1180). No se descarta trabajo ajeno ni se integran indiscriminadamente ramas históricas de cutover.
+herramienta de desarrollo anterior /root. Alcance autorizado: prompt «Auditoría forense, unificación total y control permanente de versiones» y pendientes recientes. Base publicada dc6da947; candidato conjunto 19b3ba0b, reconciliado con9d58fca0 (PR1182, incluye PR1180). No se descarta trabajo ajeno ni se integran indiscriminadamente ramas históricas de cutover.
 
 ## Inventario real antes de corregir
 
 1.416 archivos registrados en Git, 31.544.383 bytes, 541 archivos fuente de runtime, 19 HTML raíz, 58 APIs, 12 workflows, 258 archivos de pruebas Node y 98 specs de navegador. Se examinaron referencias declaradas de scripts/estilos y acciones de las 19 páginas. El inventario JSON completo queda como entregable del trabajo. Estas cifras describen archivos y referencias, no equivalen a probar cada acción dinámica.
 
-Superficies: Inicio, Catálogo, Colecciones, Producto, Checkout, Login, Perfil, Nosotros/About, Contacto, Envíos, Preguntas frecuentes, Cambios/devoluciones, Privacidad, Términos, 404, Admin e Imágenes; Search Console y redirección Nosotros se clasifican como documentos técnicos. Admin contiene Productos, Pedidos, clientes, inventario, mayoristas, estadísticas, importación, configuración y herramientas dinámicas. La matriz completa del producto sigue en `docs/agent/ACCEPTANCE_MATRIX.md`.
+Superficies: Inicio, Catálogo, Colecciones, Producto, Checkout, Login, Perfil, Nosotros/About, Contacto, Envíos, Preguntas frecuentes, Cambios/devoluciones, Privacidad, Términos, 404, Admin e Imágenes; Search Console y redirección Nosotros se clasifican como documentos técnicos. Admin contiene Productos, Pedidos, clientes, inventario, mayoristas, estadísticas, importación, configuración y herramientas dinámicas. La matriz completa del producto sigue en `docs/operaciones-tecnicas/ACCEPTANCE_MATRIX.md`.
 
 Stack observado: HTML/CSS/JS y módulos Node para herramientas; Firebase Auth/Firestore/App Check/FCM; Cloudflare Pages/Functions; Apps Script/Sheets; Resend; Cloudinary; PayPal; Meta/Instagram; GitHub Actions, Playwright y emulador de Firestore. No se crea Firebase Hosting ni un backend paralelo.
 
@@ -29,7 +29,7 @@ Stack observado: HTML/CSS/JS y módulos Node para herramientas; Firebase Auth/Fi
 | Fuente de rutas de build/auditores | Medio: omitir middleware/CSP o superar límite del proveedor | Derivación de archivos reales, reglas estrechas, tests de APIs/documentos, gate exacto y límite 100. El conjunto de rutas conserva el del candidato anterior; sólo orden determinista. Revertir el commit recupera el contrato anterior. |
 | Consolidación de PR1180/1182 | Alto: presentación compartida, variantes y guardado | Conserva los merges normales y editor minimalista. Pruebas de concurrencia, cuenta, borrador, responsive y navegación. No migra documentos comerciales. |
 | Expectativas y fixtures | Bajo: ocultar una regresión | Se corrigen supuestos concretos demostrados; no se reduce ningún presupuesto, aserción de permisos ni umbral de seguridad. |
-| Reglas futuras de ingeniería | Bajo | AGENTS y documento de fuentes canónicas exigen rastrear consumidores antes de retirar código; los generadores/gates existentes aplican la política en CI. |
+| Reglas futuras de ingeniería | Bajo | docs/normas-desarrollo.md y documento de fuentes canónicas exigen rastrear consumidores antes de retirar código; los generadores/gates existentes aplican la política en CI. |
 
 ## Evidencia ejecutada de este ciclo
 

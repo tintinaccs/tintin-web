@@ -1,7 +1,7 @@
 # Fase 6 — Auditoría del candidato de editor
 
 Fecha: 25/10/2026, America/Buenos_Aires. Ejecuciones UTC: 26/10/2026.
-Responsable: Codex /root. Revisión propia automatizada; no se presenta como una
+Responsable: herramienta de desarrollo anterior /root. Revisión propia automatizada; no se presenta como una
 revisión humana independiente ni como una auditoría efectuada por varios agentes.
 
 ## Dictamen
@@ -29,13 +29,13 @@ Fase 4 sin mezclar ramas ni fusionar PR.
 | 2 fotos | `746e944d0d05abf45d9f00d55d3448913352fa6f` | [#1238](https://github.com/tintinaccs/tintin-web/pull/1238), abierto, sobre Fase 1 |
 | 3 opciones/stock | `38fa577b629c7106c7085360ae6d0070fc89c5c5` | [#1239](https://github.com/tintinaccs/tintin-web/pull/1239), abierto, sobre Fase 2 |
 | 4 progreso/publicación | `a6e197e5382cf694caf6d07272e6450a2dfe5b5b` | [#1240](https://github.com/tintinaccs/tintin-web/pull/1240), abierto, sobre Fase 3 |
-| 5–6 presentación/auditoría | HEAD de `codex/editor-responsive-auditoria-fases5-6` | [PR #1241](https://github.com/tintinaccs/tintin-web/pull/1241), listo sobre Fase 4; código en `7fd6b7eab6ee6a467a3388133f56e166a36d7157`, cierre documental posterior en cabeza del PR |
+| 5–6 presentación/auditoría | HEAD de `rama histórica: editor-responsive-auditoria-fases5-6` | [PR #1241](https://github.com/tintinaccs/tintin-web/pull/1241), listo sobre Fase 4; código en `7fd6b7eab6ee6a467a3388133f56e166a36d7157`, cierre documental posterior en cabeza del PR |
 
 Los padres de Fase 4 reúnen las fases anteriores. No se integran #1228, #1231 ni
 #1233 como ramas paralelas; Fase 4 ya incorpora la corrección acotada de privacidad
 que documenta su informe. No se detectó una segunda implementación activa del
 editor en el candidato. La orden expresa sin merge/deploy prevalece sobre la
-instrucción permanente de AGENTS. Mantener el target sobre Fase 4: el mantenimiento
+instrucción permanente de docs/normas-desarrollo.md. Mantener el target sobre Fase 4: el mantenimiento
 automático sólo admite PR contra main y no debe habilitarse mediante retarget.
 
 La numeración de los textos actuales corresponde a informes 18–23. Los informes

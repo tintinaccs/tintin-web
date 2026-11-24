@@ -1,6 +1,6 @@
 # Continuidad del editor v2 — candidato integrado
 
-Fecha local: 23/10/2026, America/Asuncion. Agente: Codex /root.
+Fecha local: 23/10/2026, America/Asuncion. Agente: herramienta de desarrollo anterior /root.
 
 La titular pidió recuperar el chat, corregir y continuar hasta terminar, con autorización general para las fases restantes. Esa instrucción reemplaza las pausas históricas de alcance de los documentos 00–13. No convierte los resultados históricos en evidencia actual ni autoriza inventar verificaciones. Se conserva el alcance 33 SÍ / 10 NO y las funciones 44–58.
 

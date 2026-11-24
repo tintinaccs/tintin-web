@@ -1,7 +1,7 @@
 # Edición contextual sobre la única versión de seis fases
 
-26/10/2026 · Codex /root · base899a6851100b9560e6e3520e71ea3100babaa9fb.
-Rama: codex/editor-bloque-contextual-completo-20261026.
+26/10/2026 · herramienta de desarrollo anterior /root · base899a6851100b9560e6e3520e71ea3100babaa9fb.
+Rama: rama histórica: editor-bloque-contextual-completo-20261026.
 
 La petición es editar el producto completo junto a sus fotografías, con colores
 por selección y opciones pertinentes a su categoría. Se reorganiza el mismo

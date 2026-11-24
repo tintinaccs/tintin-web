@@ -1,10 +1,10 @@
 {
-  "agent": "Codex /root (GPT-6)",
+  "agent": "[identificador histórico omitido; véase el registro original]",
   "localDate": "2026-10-25 America/Buenos_Aires",
   "executionDateUTC": "2026-10-26",
   "baseSha": "a6e197e5382cf694caf6d07272e6450a2dfe5b5b",
   "mainAtRecovery": "f9399a90c73398a18c877bcaf1985491d4085913",
-  "branch": "codex/editor-responsive-auditoria-fases5-6",
+  "branch": "[identificador histórico omitido; véase el registro original]",
   "verdict": "NO_APROBADO_PARA_PRODUCCION",
   "integration": "Fases1–4 OPEN; entrega sobre rama Fase4, sin merge/deploy/auto-merge. SHA final en PR y git rev-parse HEAD.",
   "environment": {
@@ -1976,13 +1976,13 @@
   "delivery": {
     "pr": "https://github.com/tintinaccs/tintin-web/pull/1241",
     "ready": true,
-    "baseBranch": "codex/editor-borradores-fase4-20261026",
+    "baseBranch": "[identificador histórico omitido; véase el registro original]",
     "functionalCommit": "7fd6b7eab6ee6a467a3388133f56e166a36d7157",
     "functionalTree": "083454aec3aeac9989a51318518aafb9291ddc8e",
     "method": "Conector GitHub; blobs/árbol verificados; Git fetch posterior confirma commit local. Cierre documental posterior no cambia código."
   },
   "collectionMembershipFollowup": {
-    "agent": "Codex /root (GPT-6)",
+    "agent": "[identificador histórico omitido; véase el registro original]",
     "dateUTC": "2026-10-26",
     "parentSha": "12bdfe9a8ce82371c30e617ac7f189a38150d7bb",
     "finding": "UI07 MEDIUM: colección recuperada no restaura productos ya filtrados por el publicador canónico.",
@@ -2384,5 +2384,6 @@
       "autoMerge": false
     }
   },
-  "editorIllustrations": "Retiradas al unificar la versión de seis fases. Capturas vigentes en docs/product-editor-refactor/evidencias-version-unica; no se atribuyen a pruebas históricas."
+  "editorIllustrations": "Retiradas al unificar la versión de seis fases. Capturas vigentes en docs/product-editor-refactor/evidencias-version-unica; no se atribuyen a pruebas históricas.",
+  "historicalRedaction": "Se neutralizaron identificadores nominales de herramientas retiradas; original íntegro disponible en el historial Git."
 }

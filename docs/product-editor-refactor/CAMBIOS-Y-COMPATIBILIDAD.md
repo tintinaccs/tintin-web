@@ -7,7 +7,7 @@ Recibos por SHA y separación entre publicación y aceptación autenticada:
 [CIERRE-VERIFICADO-20261027.md](CIERRE-VERIFICADO-20261027.md). Los resultados anteriores que siguen abajo son evidencia
 fechada de su ejecución, no nuevas aprobaciones del código actual.
 
-Base `5dc6f781` · rama `codex/editor-fase6-integracion-20261026`.
+Base `5dc6f781` · rama `rama histórica: editor-fase6-integracion-20261026`.
 
 | Fuente canónica | Cambio y consumidores |
 | --- | --- |

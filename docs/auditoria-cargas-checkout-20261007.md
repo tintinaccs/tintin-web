@@ -2,7 +2,7 @@
 
 ## 1. Resumen ejecutivo
 
-Auditoría independiente de los informes históricos. Base local/remota/producción comprobada antes de editar: `2c3c07fe1efa0387f45823994d1ed66b68bffc06`, fingerprint publicado `7ebe0f6f334d6ef8d5583a1e454435d5f85349feaecb8102b363f0f8fb15ecac`. Rama `codex/auditoria-checkout-20261006`.
+Auditoría independiente de los informes históricos. Base local/remota/producción comprobada antes de editar: `2c3c07fe1efa0387f45823994d1ed66b68bffc06`, fingerprint publicado `7ebe0f6f334d6ef8d5583a1e454435d5f85349feaecb8102b363f0f8fb15ecac`. Rama `rama histórica: auditoria-checkout-20261006`.
 
 Se corrigieron el bloqueo del primer clic durante restauración de sesión, la hidratación duplicada del perfil, dos renderizadores competidores del carrito, la respuesta atrasada de recomendaciones y URLs inconsistentes del logo y de dos dependencias del admin. El primer intento de «Elegir cómo lo recibo» solicita acceso si la identidad resuelta es invitada; conserva el carrito y el paso pendiente.
 

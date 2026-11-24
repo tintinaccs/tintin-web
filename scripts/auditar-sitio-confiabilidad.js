@@ -294,15 +294,13 @@ const technicalProviderFiles = new Set([
 ]);
 function sourceFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
-    // Este control protege el producto publicado, no la documentación ni las
-    // herramientas de ingeniería. AGENTS.md, skills y workflows deben poder
-    // nombrar proveedores explícitamente para configurar y auditar su uso.
+    // Este control protege el producto publicado y conserva las comprobaciones de autoría.
     if (entry.isDirectory() && entry.name === 'vendor') return [];
-    if (dir === root && ['.git', 'node_modules', '.github', '.agents', '.claude', '.codex', '.cloudflare-functions', 'artifacts', 'docs', 'public', 'scripts', 'test-results', 'tests'].includes(entry.name)) return [];
+    if (dir === root && ['.git', 'node_modules', '.github', '.cloudflare-functions', 'artifacts', 'docs', 'public', 'scripts', 'test-results', 'tests'].includes(entry.name)) return [];
     const absolute = path.join(dir, entry.name);
     if (entry.isDirectory()) return sourceFiles(absolute);
     if (!/\.(?:html|css|js|mjs|md|json|rules)$/i.test(entry.name)) return [];
-    if (absolute === __filename || (dir === root && entry.name === 'AGENTS.md')) return [];
+    if (absolute === __filename) return [];
     const repositoryPath = path.relative(root, absolute).replaceAll('\\', '/');
     if (technicalProviderFiles.has(repositoryPath)) return [];
     return [absolute];

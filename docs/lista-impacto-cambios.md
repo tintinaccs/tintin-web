@@ -13,8 +13,8 @@ Autoridades: escritor de carrito + controlador compartido de paneles, motor de b
 
 - Autoridad única: SKILLS_AUTO_ROUTING para selección, búsqueda necesaria, instalación autorizada/verificada y reporte de evidencia; enlaces desde ambos agentes y README.
 - Mantener las copias propias de tintin-agent-efficiency idénticas y preservar recursos/licencias importados. No instalar ni actualizar dependencias para una regla documental.
-- AGENTS es archivo protegido: renovar su huella/plan con el preparador oficial contra main real; derivados únicamente por build canónico.
-- Verificar metadatos/paridad de Skills, enlaces locales, diff y preflight; preservar PR1394 de Claude y conciliar sólo nuestra rama si integra antes.
+- docs/normas-desarrollo.md es archivo protegido: renovar su huella/plan con el preparador oficial contra main real; derivados únicamente por build canónico.
+- Verificar metadatos/paridad de recursos de desarrollo, enlaces locales, diff y preflight; preservar PR1394 de herramienta de desarrollo anterior y conciliar sólo nuestra rama si integra antes.
 
 ## 2026-11-13 — tarjeta independiente de delivery en dashboard
 
@@ -233,7 +233,7 @@ Consumidores de correo/panel y shell público reciben URLs transitivas renovadas
 CSP/caché/diagnóstico/plan se derivan desde sus autoridades. La auditoría y tests
 que exigían autolectura se actualizan al nuevo requisito explícito, manteniendo
 sus gates y cobertura. Nuevas regresiones en etapas CI existentes. Evidencia y
-límites: docs/agent/PROMPT-MAESTRO-20261030.md y CURRENT_STATE.
+límites: docs/operaciones-tecnicas/PROMPT-MAESTRO-20261030.md y CURRENT_STATE.
 
 ## 2026-10-30 — Escritor confiable de Auditoría y representación histórica segura
 
@@ -257,7 +257,7 @@ Autoridades: control-paneles compartido y compatibilidad-cuenta-movil. El carrit
 
 ## 2026-10-29 — Velocidad global de imágenes y portada sin pérdida
 
-Autoridades: index.html, gestión de imágenes y rendimiento de imágenes compartidos. Precarga/picture y confirmación de configuración conservan la misma variante optimizada, originales PNG/respaldo y URLs personalizadas. Cola global deduplicada de hasta64 imágenes por frame; geometrías antes de escrituras, lazy/prioridad explícitas intactas. Sin datos comerciales, SDK/servicios nuevos, reglas ni cambios de sesión/carrito. Generadores de URLs/CSP/caché/diagnóstico y plan canónicos; medidor exige escenarios comparables. Evidencia y límites en docs/agent/RENDIMIENTO-GLOBAL-20261029.md y CURRENT_STATE.
+Autoridades: index.html, gestión de imágenes y rendimiento de imágenes compartidos. Precarga/picture y confirmación de configuración conservan la misma variante optimizada, originales PNG/respaldo y URLs personalizadas. Cola global deduplicada de hasta64 imágenes por frame; geometrías antes de escrituras, lazy/prioridad explícitas intactas. Sin datos comerciales, SDK/servicios nuevos, reglas ni cambios de sesión/carrito. Generadores de URLs/CSP/caché/diagnóstico y plan canónicos; medidor exige escenarios comparables. Evidencia y límites en docs/operaciones-tecnicas/RENDIMIENTO-GLOBAL-20261029.md y CURRENT_STATE.
 
 ## 2026-10-28 — Actualizaciones locales en el workspace de Super Admin
 
@@ -323,11 +323,11 @@ Autoridad vigente: docs/product-editor-refactor/00-VERSION-UNICA.md. Se conserva
 
 ## 2026-10-26 — Lectura de Checkout y reserva de logo
 
-Autoridades: checkout-maintenance.css y sharedFooter del constructor público. Texto de cinco pasos mantiene legibilidad y contenido al ampliar; atributos HTML reservan104×56 del logo antes del CSS en los footers generados. Consumidores de estilos renuevan URLs transitivas y los derivados desde generadores. No lógica de pedidos/pagos, Auth ni datos. Se verifican otros cinco puntos del informe sin introducir sus overrides innecesarios; evidencia en docs/agent/VALIDACION-AUDITORIA-VISUAL-20261026.md y CURRENT_STATE.
+Autoridades: checkout-maintenance.css y sharedFooter del constructor público. Texto de cinco pasos mantiene legibilidad y contenido al ampliar; atributos HTML reservan104×56 del logo antes del CSS en los footers generados. Consumidores de estilos renuevan URLs transitivas y los derivados desde generadores. No lógica de pedidos/pagos, Auth ni datos. Se verifican otros cinco puntos del informe sin introducir sus overrides innecesarios; evidencia en docs/operaciones-tecnicas/VALIDACION-AUDITORIA-VISUAL-20261026.md y CURRENT_STATE.
 
 ## 2026-10-26 — Consolidación de dependencias de desarrollo
 
-Autoridades: package.json y package-lock.json. Reúne propuestas1231/1242 de fast-uri/Firebase CLI/SDK npm y corrige hallazgos transitivos HIGH mediante rangos compatibles. Afecta instalación, emuladores y herramientas; el SDK CDN y las fuentes de aplicación no cambian. Se conservan integridad, plan protegido, gates y autor confiable; derivados desde constructores canónicos. Evidencia en docs/agent/DEPENDENCIAS-1231-1242-20261026.md y CURRENT_STATE.
+Autoridades: package.json y package-lock.json. Reúne propuestas1231/1242 de fast-uri/Firebase CLI/SDK npm y corrige hallazgos transitivos HIGH mediante rangos compatibles. Afecta instalación, emuladores y herramientas; el SDK CDN y las fuentes de aplicación no cambian. Se conservan integridad, plan protegido, gates y autor confiable; derivados desde constructores canónicos. Evidencia en docs/operaciones-tecnicas/DEPENDENCIAS-1231-1242-20261026.md y CURRENT_STATE.
 
 ## 2026-10-24 — Editor Tintin adaptable y sugerencias locales
 
@@ -335,7 +335,7 @@ Autoridades: interfaz-productos-adaptable.js y shopify-commerce-admin.css sobre 
 
 ## 2026-10-24 — Guardado responsive, stock por opción y pago ficticio
 
-El alta permite volver de opciones sin unidades a stock simple y conserva su cantidad previa; mantiene el bloqueo con unidades y referencias persistidas. Convertir a precios individuales conserva cantidades actuales y pide distribución explícita cuando corresponde. PayPal valida de nuevo el pedido antes de capturarlo y rechaza los cancelados antes de solicitar cobro; recupera cargas/render fallidos; los avisos de pago usan el total canónico en guaraníes y no muestran la conversión de liquidación como importe comercial. Regresiones reales de controlador/DOM y escritor comercial en13 tamaños, SDK ficticio e integración REST/CAS con cobro/reembolso simulado. Se conserva galería/ticket de #1226/#1224; sin datos reales ni reglas modificadas. URLs y derivados desde autoridades; evidencia y límites en docs/agent/QA-PRODUCTOS-CHECKOUT-2026-10-24.md y CURRENT_STATE.
+El alta permite volver de opciones sin unidades a stock simple y conserva su cantidad previa; mantiene el bloqueo con unidades y referencias persistidas. Convertir a precios individuales conserva cantidades actuales y pide distribución explícita cuando corresponde. PayPal valida de nuevo el pedido antes de capturarlo y rechaza los cancelados antes de solicitar cobro; recupera cargas/render fallidos; los avisos de pago usan el total canónico en guaraníes y no muestran la conversión de liquidación como importe comercial. Regresiones reales de controlador/DOM y escritor comercial en13 tamaños, SDK ficticio e integración REST/CAS con cobro/reembolso simulado. Se conserva galería/ticket de #1226/#1224; sin datos reales ni reglas modificadas. URLs y derivados desde autoridades; evidencia y límites en docs/operaciones-tecnicas/QA-PRODUCTOS-CHECKOUT-2026-10-24.md y CURRENT_STATE.
 
 ## 2026-10-24 — Arranque seguro del perfil y eventos de mantenimiento
 
@@ -407,7 +407,7 @@ Fuentes: runtime canónico del carrito (evento único de ajuste real, con identi
 
 ## 2026-10-21 — Una identidad visual en tienda y panel
 
-Fuente canónica de superficies: peso semibold/tracking compartidos en encabezados y botones, conservando tamaño contextual, alternancia rosa y máscara alfa del header. Dashboard usa Hoy en Tintin/Inicio, sin numeración o subrayado decorativo. Defaults editoriales y tres migraciones exactas de textos de portada conservan títulos personalizados; Nosotros expresa valores sin superlativos absolutos. Afecta18 páginas, módulos administrativos y cadena de imports de contenido: nuevas URLs inmutables propagadas, bundles/baseline/CSP/diagnóstico/plan desde autoridades. Sin cambios de datos comerciales, eventos, roles o reglas. Mapa y evidencia en docs/agent/IDENTIDAD_TINTIN_20261021.md y CURRENT_STATE.
+Fuente canónica de superficies: peso semibold/tracking compartidos en encabezados y botones, conservando tamaño contextual, alternancia rosa y máscara alfa del header. Dashboard usa Hoy en Tintin/Inicio, sin numeración o subrayado decorativo. Defaults editoriales y tres migraciones exactas de textos de portada conservan títulos personalizados; Nosotros expresa valores sin superlativos absolutos. Afecta18 páginas, módulos administrativos y cadena de imports de contenido: nuevas URLs inmutables propagadas, bundles/baseline/CSP/diagnóstico/plan desde autoridades. Sin cambios de datos comerciales, eventos, roles o reglas. Mapa y evidencia en docs/operaciones-tecnicas/IDENTIDAD_TINTIN_20261021.md y CURRENT_STATE.
 ## 2026-10-21 — Integridad del espejo de Productos y literales de Sheets
 
 Fuentes: sheets-product-sync, sheets-products-webhook y Apps Script ProductosUnificados/AdminParity/Participacion. Admin recupera env y sublotes2; el stock proyectado sigue products.stock conservando fórmulas, y las ediciones agregadas/opciones se rechazan cuando hay inventario por variante, con precondición de versión. Textos externos usan serializador de literales compartido, incluidos historial, espejos administrativos y moderación. No cambia la autoridad Firestore, precios/stock reales ni reglas/permisos; requiere actualizar conjuntamente los tres archivos de Apps Script conservando router y URL.209 regresiones locales y contratos de autoridad aprobados; publicación y paridad real se verifican por separado en CURRENT_STATE.
@@ -568,7 +568,7 @@ El ciclo real de PR1160 confirmó validación y merge sin aprobación. El monito
 
 ## 2026-10-18 — Publicación automática tras CI
 
-Migración administrativa expresamente autorizada por el titular: workflow de mantenimiento usa workflow_run del CI de PR y código confiable de main; valida plan/hashes/alcances, autor y origen, apps/workflows/eventos de CI y SHA exacto antes de integrar y disparar auditoría/monitor de producción. El entorno manual anterior deja de participar; se mantienen los checks obligatorios. El auditor histórico continúa verificando main, y la integridad del candidato se valida mediante el plan técnico completo. Impacto: Actions, configuración y validadores de mantenimiento, pruebas y documentación. Incluye el aviso de spam del PR1157 con su mismo HTML/CSS ya verificado, sin cambiar lógica de acceso, tienda, Auth, Firestore, pagos, correos ni credenciales. Activación administrativa inicial y prueba real del ciclo pendientes; instrucciones únicas en docs/agent/MANTENIMIENTO_FLUJOS.md.
+Migración administrativa expresamente autorizada por el titular: workflow de mantenimiento usa workflow_run del CI de PR y código confiable de main; valida plan/hashes/alcances, autor y origen, apps/workflows/eventos de CI y SHA exacto antes de integrar y disparar auditoría/monitor de producción. El entorno manual anterior deja de participar; se mantienen los checks obligatorios. El auditor histórico continúa verificando main, y la integridad del candidato se valida mediante el plan técnico completo. Impacto: Actions, configuración y validadores de mantenimiento, pruebas y documentación. Incluye el aviso de spam del PR1157 con su mismo HTML/CSS ya verificado, sin cambiar lógica de acceso, tienda, Auth, Firestore, pagos, correos ni credenciales. Activación administrativa inicial y prueba real del ciclo pendientes; instrucciones únicas en docs/operaciones-tecnicas/MANTENIMIENTO_FLUJOS.md.
 
 ## 2026-10-17 — Estadísticas y devolución manual al borrar pedidos
 
@@ -580,7 +580,7 @@ Fuentes: cambios-tienda, vigilancia-version y estado-productos. Las revisiones c
 
 ## 2026-10-16 — Super Admin y sincronización confirmada
 
-Fuente de negocio: controladores autenticados de pedidos/catálogo/comercio y escrituras existentes del titular. Se incorpora settings/siteRevision con nonce+timestamp, watcher público de lectura puntual y mismo aviso Actualizar/Más tarde. No cambia permisos comerciales ni fuerza recarga: publicar la revisión no bloquea ni repite una operación ya confirmada. Impacta administración, galería/biblioteca, perfil, notificaciones y middleware; las Rules restringen la nueva escritura al titular. Paginación compartida completa usuarios/productos/colecciones sin perder límites por consulta; fusión del perfil elige revisión nueva; edición visible del pedido y aviso de clienta se confirman atómicamente. Ventas locales responde a señal sin pisar borradores; sidebar móvil conserva espacio del aviso. Las integraciones Sheets siguen su confirmación/webhook externo. Reporte por módulo, pruebas y límites en docs/agent/AUDITORIA_SUPERADMIN_20261016.md. Requiere CI y revisiones nativas de mantenimiento/production-rules; no se toca la migración de workflows independiente.
+Fuente de negocio: controladores autenticados de pedidos/catálogo/comercio y escrituras existentes del titular. Se incorpora settings/siteRevision con nonce+timestamp, watcher público de lectura puntual y mismo aviso Actualizar/Más tarde. No cambia permisos comerciales ni fuerza recarga: publicar la revisión no bloquea ni repite una operación ya confirmada. Impacta administración, galería/biblioteca, perfil, notificaciones y middleware; las Rules restringen la nueva escritura al titular. Paginación compartida completa usuarios/productos/colecciones sin perder límites por consulta; fusión del perfil elige revisión nueva; edición visible del pedido y aviso de clienta se confirman atómicamente. Ventas locales responde a señal sin pisar borradores; sidebar móvil conserva espacio del aviso. Las integraciones Sheets siguen su confirmación/webhook externo. Reporte por módulo, pruebas y límites en docs/operaciones-tecnicas/AUDITORIA_SUPERADMIN_20261016.md. Requiere CI y revisiones nativas de mantenimiento/production-rules; no se toca la migración de workflows independiente.
 
 ## 2026-10-16 — Portada y fidelidad de imágenes con reseñas reales
 
@@ -604,7 +604,7 @@ La reconciliación de1135 conserva el fondo elegido por Super Admin. Se protege 
 
 ## 2026-10-15 — Candidato integrado: Producto y X de Actions
 
-Codex /root. Base9055392f. Se reconcilian la ficha rápida, las correcciones funcionales del PR1135 y las dependencias de los PR1116/1117/1118 en un único candidato, conservando PR1131/1133. Normalización y transporte públicos mantienen su única autoridad; los SDK de realtime se cargan después de poder pintar la ficha. Se comprueban caché, borrados/categorías tardíos, visibilidad y stock en vivo. Las versiones inmutables de ambos candidatos se alinean antes de regenerar CSP, plan y diagnóstico. Las correcciones de workflows quedan exclusivamente en PR1134, actualizado a229696f2 con build reproducible; el contrato requiere migración revisada del mecanismo, sin modificar sus hashes ni eludir controles.
+herramienta de desarrollo anterior /root. Base9055392f. Se reconcilian la ficha rápida, las correcciones funcionales del PR1135 y las dependencias de los PR1116/1117/1118 en un único candidato, conservando PR1131/1133. Normalización y transporte públicos mantienen su única autoridad; los SDK de realtime se cargan después de poder pintar la ficha. Se comprueban caché, borrados/categorías tardíos, visibilidad y stock en vivo. Las versiones inmutables de ambos candidatos se alinean antes de regenerar CSP, plan y diagnóstico. Las correcciones de workflows quedan exclusivamente en PR1134, actualizado a229696f2 con build reproducible; el contrato requiere migración revisada del mecanismo, sin modificar sus hashes ni eludir controles.
 
 PASS_LOCAL:302 pruebas Node22 de cuentas, seguridad, operaciones, perfil, estadísticas, transporte y catálogo.27 pruebas de parsing/shell también pasan en Node22 con parse5v8.25 Chromium de producto, inventario y menú de colecciones en320–1920 sobre main integrado;8 Chromium adicionales sobre el candidato combinado validan carga con Firebase bloqueado, tres tarjetas reales, render único, actualización de stock y6 casos de bienvenida. Los13 casos anteriores de SEO/tarjetas conservan evidencia separada previa a la combinación; CI final debe revalidar toda la superficie.192 controles de Rules y prueba REST real200peticiones/límite20 en emulador aprobados;18 controles de teléfono/identidad aprobados con Firebase13/rules-testing6/CLI15.33. npm audit:0 vulnerabilidades. Arquitectura, storeGate75/75, rendimiento, App Check y presupuesto de lecturas aprobados.
 
@@ -628,7 +628,7 @@ La validación local de las dependencias encontró una carrera del fixture de cu
 
 ## 2026-10-15 — Arranque rápido de ficha y recomendaciones
 
-Codex /root, base9055392f, conservando PR1131. El grafo estático de producto y su política de visibilidad arrastraba Firebase/Auth; además relacionados se solicitaba después de App Check, el catálogo repintaba la ficha y las fotos recomendadas esperaban lazy. Se extrae la metadata pública de colecciones a una única fuente pura, reutilizada por su store existente, y el SDK del documento se carga dinámicamente. Producto evalúa su store desde el head e inicia su UI sin esperar DOMContentLoaded. Precarga pública inicia documento y catálogo en paralelo, con caché fresca, single-flight, timeout y transporte válido30s; no actúa en otras páginas ni previews. Edge/caché pintan y programan relacionados sin esperar SDK/App Check; el listener sigue tomando control de precio/stock cuando está listo. Se conservan visibilidad canónica y guardas contra eliminación, cambios de categoría y respuestas antiguas. Render idéntico no reinicia galería; cambios de stock sí actualizan. Tres fotos recomendadas eager/async; otras listas siguen lazy. SSR entrega texto escapado y stock; compra espera hidratación. Navegación reutiliza el catálogo sin solicitud duplicada.
+herramienta de desarrollo anterior /root, base9055392f, conservando PR1131. El grafo estático de producto y su política de visibilidad arrastraba Firebase/Auth; además relacionados se solicitaba después de App Check, el catálogo repintaba la ficha y las fotos recomendadas esperaban lazy. Se extrae la metadata pública de colecciones a una única fuente pura, reutilizada por su store existente, y el SDK del documento se carga dinámicamente. Producto evalúa su store desde el head e inicia su UI sin esperar DOMContentLoaded. Precarga pública inicia documento y catálogo en paralelo, con caché fresca, single-flight, timeout y transporte válido30s; no actúa en otras páginas ni previews. Edge/caché pintan y programan relacionados sin esperar SDK/App Check; el listener sigue tomando control de precio/stock cuando está listo. Se conservan visibilidad canónica y guardas contra eliminación, cambios de categoría y respuestas antiguas. Render idéntico no reinicia galería; cambios de stock sí actualizan. Tres fotos recomendadas eager/async; otras listas siguen lazy. SSR entrega texto escapado y stock; compra espera hidratación. Navegación reutiliza el catálogo sin solicitud duplicada.
 
 Auditores siguen las funciones movidas a metadata pura y la programación real de relacionados. El auditor de cuota reconoce la versión literal existente sin cambiar el runtime ni su requisito de una carga sólo en Checkout. Fixtures de catálogo dejan pasar storeGate al servidor canónico, evitando simular una tienda cerrada por una respuesta del recurso incorrecto. No se modifican datos reales, permisos, reglas ni proveedores.
 
@@ -642,11 +642,11 @@ Se integra el PR1131 existente en lugar de duplicar la optimización del carruse
 
 ## 2026-10-15 — Tarjetas y agotados en todas las listas
 
-Codex /root. Pedido ampliado dentro del PR1133: imágenes de tarjetas transparentes, divisoria gris entre imagen y descripción y estado agotado distinguible en capturas (imagen atenuada, tarjeta gris y aviso horizontal gris grande centrado). Fuente única compartida tema-unificado-tintin.css y sistema-superficies-tintin.css; incluye tarjetas de catálogo, compartidas y editor visual, con etiquetas compactas en búsqueda/favoritos. No se editan fotos originales. Otros productos prioriza isPurchasable canónico y no reintroduce agotados con helpers antiguos; catálogo conserva su orden disponibles→agotados. No cambios de datos, precios, permisos ni stock.
+herramienta de desarrollo anterior /root. Pedido ampliado dentro del PR1133: imágenes de tarjetas transparentes, divisoria gris entre imagen y descripción y estado agotado distinguible en capturas (imagen atenuada, tarjeta gris y aviso horizontal gris grande centrado). Fuente única compartida tema-unificado-tintin.css y sistema-superficies-tintin.css; incluye tarjetas de catálogo, compartidas y editor visual, con etiquetas compactas en búsqueda/favoritos. No se editan fotos originales. Otros productos prioriza isPurchasable canónico y no reintroduce agotados con helpers antiguos; catálogo conserva su orden disponibles→agotados. No cambios de datos, precios, permisos ni stock.
 
 ## 2026-10-15 — Diamante y contraste inverso del logo del footer
 
-Codex /root. About: facetas internas del diamante convergen en la punta y dejan de cruzarse como X. Footer compartido: conserva la secuencia y fondos existentes; el tinte alfa del logo usa primary sobre light y accent sobre pink, sin tarjeta. Dos filtros SVG usan los tokens de marca; la regla data-tt-flow-block prevalece sobre el fallback CSS por posición. Referencias y caché actualizadas desde fuentes. Evidencia y límites en docs/agent/CURRENT_STATE.md.
+herramienta de desarrollo anterior /root. About: facetas internas del diamante convergen en la punta y dejan de cruzarse como X. Footer compartido: conserva la secuencia y fondos existentes; el tinte alfa del logo usa primary sobre light y accent sobre pink, sin tarjeta. Dos filtros SVG usan los tokens de marca; la regla data-tt-flow-block prevalece sobre el fallback CSS por posición. Referencias y caché actualizadas desde fuentes. Evidencia y límites en docs/operaciones-tecnicas/CURRENT_STATE.md.
 
 ## 2026-10-15 — Conocenos y encuadre inferior de fotos
 
@@ -680,7 +680,7 @@ Listeners de perfil, navegación, favoritos, notificaciones, configuración y ca
 
 ## 2026-10-12 — Privacidad del diagnóstico Auth y contrato de correo de diagnóstico
 
-Fuente funcional: diagnostico-sesion omite query/console.info, rechaza datos anidados y campos sensibles/override; conserva80 eventos técnicos y errorCode. test-email autentica antes de consultar configuración y conserva HTTP401/403. Sin modificación de credenciales, roles, Rules, AppCheck, stock, pedidos, DNS ni remitentes; no enviar correo. Referencias de caché transitivas del grafo Firebase/Auth reciben versiones únicas; consumidores sólo cambian URLs. Generador shell, CSP, flujo y diagnóstico regenerados desde fuentes. Tests del módulo real con VM y endpoint original sin sesión; suites Auth/cuentas y CSP. Estado externo verificado de Sheets/AppsScript24 y lista20 en docs/agent/SEGURIDAD_20_PUNTOS_20261012.md. Mantenimiento nativo obligatorio del candidato final.
+Fuente funcional: diagnostico-sesion omite query/console.info, rechaza datos anidados y campos sensibles/override; conserva80 eventos técnicos y errorCode. test-email autentica antes de consultar configuración y conserva HTTP401/403. Sin modificación de credenciales, roles, Rules, AppCheck, stock, pedidos, DNS ni remitentes; no enviar correo. Referencias de caché transitivas del grafo Firebase/Auth reciben versiones únicas; consumidores sólo cambian URLs. Generador shell, CSP, flujo y diagnóstico regenerados desde fuentes. Tests del módulo real con VM y endpoint original sin sesión; suites Auth/cuentas y CSP. Estado externo verificado de Sheets/AppsScript24 y lista20 en docs/operaciones-tecnicas/SEGURIDAD_20_PUNTOS_20261012.md. Mantenimiento nativo obligatorio del candidato final.
 
 ## 2026-10-12 — Fórmulas del espejo Productos tras alta y reintento
 
@@ -698,7 +698,7 @@ Se elimina el ocultamiento de inicio por welcome=1. Bienvenida requiere alta can
 
 Checkout mantiene validación condicional y libreta existentes; completa tipo de contribuyente y preferencias de envío, conserva factura al comprar sin ella, rechaza guardado tras lectura fallida/cambio UID y muestra errores. Ubicación también se guarda en encomienda a puerta. Snapshot de Usuarios recupera factura desde checkoutDefaults para el espejo Sheets, sin segunda autoridad de datos. Cache transitiva, generador de shell y CSP/diagnóstico regenerados canónicamente. Pruebas: Auth/Firestore emulados con SDK/Rules reales, casos de UI controlados separados, recuperación/guardado y errores de lectura/identidad.
 
-Migración sólo preparada: DNS web todavía Shopify y origen main pages.dev. Lectura pública de Authentication confirma destinos autorizados; captura DNS y backup verificado. El futuro candidato de dominio queda borrador, sin merge/deploy de cutover. No se modifican DNS, correo, stock, pedidos reales, App Check, MFA, workflows, protecciones ni revisores. Evidencia y límites: docs/agent/PREPARACION_DOMINIO_Y_BIENVENIDA_20261011.md.
+Migración sólo preparada: DNS web todavía Shopify y origen main pages.dev. Lectura pública de Authentication confirma destinos autorizados; captura DNS y backup verificado. El futuro candidato de dominio queda borrador, sin merge/deploy de cutover. No se modifican DNS, correo, stock, pedidos reales, App Check, MFA, workflows, protecciones ni revisores. Evidencia y límites: docs/operaciones-tecnicas/PREPARACION_DOMINIO_Y_BIENVENIDA_20261011.md.
 
 ## Snapshot HTTP Sheets - 2026-10-11
 
@@ -712,7 +712,7 @@ Se altera solo el coordinador create-only de importacion: IDs recuperados del mi
 
 Filtro global acepta continuación programática de guardas y mantiene antirrebote de pulsaciones humanas. Login difiere banner automático de privacidad y confirma documento ya creado ante carrera; errores de permisos sin documento siguen rechazados. Cache coherente propagada a módulos dependientes y HTML mediante generador canónico. Phone API sólo agrega inyección de adaptadores para emuladores con defaults de producción intactos. Sin cambios de Rules, roles, stock, precios, proveedores o workflows.
 
-Fixture público respeta envoltorio, categoría y colección; rendimiento exige hidratación/stock y respeta origen configurado. Capturas sidebar usan outputPath. Nueva suite completa obligatoria vía audit:login-profile cubre correo/OTP/perfil/sesión, errores, carrito/checkout inicial, cuenta y rechazo de roles; Auth/Firestore reales emulados, mail local y App Check no emulado. Detalle/evidencia y límites en docs/agent/REAL_INTERACTIONS_20261011.md. Merge sujeto a checks y revisión protegida exacta; no renueva sellos históricos.
+Fixture público respeta envoltorio, categoría y colección; rendimiento exige hidratación/stock y respeta origen configurado. Capturas sidebar usan outputPath. Nueva suite completa obligatoria vía audit:login-profile cubre correo/OTP/perfil/sesión, errores, carrito/checkout inicial, cuenta y rechazo de roles; Auth/Firestore reales emulados, mail local y App Check no emulado. Detalle/evidencia y límites en docs/operaciones-tecnicas/REAL_INTERACTIONS_20261011.md. Merge sujeto a checks y revisión protegida exacta; no renueva sellos históricos.
 
 ## Auditoria Sheets - 2026-10-10
 
@@ -738,7 +738,7 @@ Esta lista se completa para cada cambio. Marcar una parte como “no aplica” r
 
 ## Registro del 2026-10-10: login, OTP y Envíos
 
-Base publicada `34aa0f3b`; evidencia detallada en `docs/agent/AUDITORIA_MULTIDISPOSITIVO_20261010.md` y CURRENT_STATE.
+Base publicada `34aa0f3b`; evidencia detallada en `docs/operaciones-tecnicas/AUDITORIA_MULTIDISPOSITIVO_20261010.md` y CURRENT_STATE.
 
 - Páginas: login (teclado) y Envíos (lecturas y tarifas); las restantes reciben únicamente referencias transitivas de caché del shell.
 - Componentes: coordinación compartida de sesión en conexiones y logo canónico de cuenta/carrito/catálogo, sin cambiar imagen, CSS ni geometría. Se conservan la tipografía itálica y todas las precargas.
@@ -896,7 +896,7 @@ Superficies: checkout.html, pedido-checkout-seguro, hardening/fiabilidad/estado 
 Fuentes: galeria-producto.js, tienda.js, tema-unificado-tintin.css, product-maintenance.css, panel-colecciones.js, coherencia-visual.css. Impacto: tarjetas de inicio/catálogo/colecciones/recomendaciones; selección de fotos y color en ficha; cabeceras de catálogo/carrito/cuenta/notificaciones en todas las páginas públicas. Consumidores administrativos de la paleta reciben sólo actualización de referencia, sin cambiar datos ni permisos. Validar selección bidireccional y srcset, stock sin rayas, geometría compacta, scroll de recomendaciones, CTA de catálogo, cierre y espacio de navegación móvil. Regenerar caché transitiva, shell, CSP, diagnóstico y plan protegido exacto contra main. Pruebas runtime usan renderizadores reales con fixtures sin operaciones comerciales.
 # Auth y caché de comercio local — 2026-10-12
 
-Referencia web sin versión causaba dos identidades de Auth, una cacheada con diagnóstico antiguo. Comercio local usa el mismo cliente API versionado que el resto del Admin y renueva sólo su consumidor HTML. Gate canónico detecta imports web sin query de archivos ya versionados; módulos servidor conservan imports normales. Sin cambios a permisos, catálogo, pedidos, stock, secretos o dominio. Evidencia: docs/agent/COMPROBACIONES_CIERRE_20261012.md.
+Referencia web sin versión causaba dos identidades de Auth, una cacheada con diagnóstico antiguo. Comercio local usa el mismo cliente API versionado que el resto del Admin y renueva sólo su consumidor HTML. Gate canónico detecta imports web sin query de archivos ya versionados; módulos servidor conservan imports normales. Sin cambios a permisos, catálogo, pedidos, stock, secretos o dominio. Evidencia: docs/operaciones-tecnicas/COMPROBACIONES_CIERRE_20261012.md.
 
 ## Capacidad física de Productos en Sheets — 2026-10-12
 
@@ -966,7 +966,7 @@ Fuente: tablero-pedidos.css. Escritorio usa títulos y contadores de las cinco c
 
 ## 2026-10-20 — Consolidación de los nueve PR pendientes
 
-Se concilian historias929/1122/1134/1146/1154/1156/1170/1180/1182 con main dc6da947 y el avance concurrente9d58fca0. Afecta acceso/OTP, stock de carrito, favoritos, avisos, revisión de inventario, fuente del espejo mensual, superficies y tarjetas/Instagram. Se preservan1175/1179/1183/1184, comparadores canónicos y guardas; las reglas visuales antiguas incompatibles ceden al diseño posterior. Referencias, bundles y derivados se generan; CI conserva todos sus controles. El cambio de workflows sólo añade validación previa al despliegue manual de Rules, instala navegador de diagnóstico y asegura origen local desde antes de los gates. No despliega Rules ni instala Apps Script, cambia DNS o escribe datos comerciales. Inventario y límites en docs/agent/CONSOLIDACION_PR_20261020.md.
+Se concilian historias929/1122/1134/1146/1154/1156/1170/1180/1182 con main dc6da947 y el avance concurrente9d58fca0. Afecta acceso/OTP, stock de carrito, favoritos, avisos, revisión de inventario, fuente del espejo mensual, superficies y tarjetas/Instagram. Se preservan1175/1179/1183/1184, comparadores canónicos y guardas; las reglas visuales antiguas incompatibles ceden al diseño posterior. Referencias, bundles y derivados se generan; CI conserva todos sus controles. El cambio de workflows sólo añade validación previa al despliegue manual de Rules, instala navegador de diagnóstico y asegura origen local desde antes de los gates. No despliega Rules ni instala Apps Script, cambia DNS o escribe datos comerciales. Inventario y límites en docs/operaciones-tecnicas/CONSOLIDACION_PR_20261020.md.
 
 
 ## 2026-10-20 — Rutas de Pages y fixture canónicos en la consolidación
@@ -978,7 +978,7 @@ Consolidación1185: incorpora cb8e28ee de1180, preserva logos blancos bajo tinte
 
 ## Conciliación final del smoke de encabezados
 
-Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187 geometrías, pero su smoke final todavía exigía encabezado desktop blanco sin degradado. Ese supuesto contradice el rosa difuminado aprobado y las regresiones de marca. El smoke comprueba ahora el degradado exacto F8AACA/FDECF2 con94% de opacidad, blur18 sólo de fondo y contenido sin filtro; conserva blanco, bordes, opacidad y acciones de las otras superficies. No se cambia CSS ni producto. El candidato conjunto d456bbeb pasó1755/1755 Node y114/114 Chromium sin reintentos; la CI del nuevo SHA y producción siguen pendientes.
+herramienta de desarrollo anterior /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187 geometrías, pero su smoke final todavía exigía encabezado desktop blanco sin degradado. Ese supuesto contradice el rosa difuminado aprobado y las regresiones de marca. El smoke comprueba ahora el degradado exacto F8AACA/FDECF2 con94% de opacidad, blur18 sólo de fondo y contenido sin filtro; conserva blanco, bordes, opacidad y acciones de las otras superficies. No se cambia CSS ni producto. El candidato conjunto d456bbeb pasó1755/1755 Node y114/114 Chromium sin reintentos; la CI del nuevo SHA y producción siguen pendientes.
 
 Avance final1180: orden visual compartido entre galería y selectores, sin modificar inventario/fotos; diagnóstico Auth demo al salir; regresiones y artefactos canónicos sobre main6033.
 
@@ -1009,7 +1009,7 @@ CI del encabezado: el auditor estático de Fase8 acepta ahora también la lista 
 Resolución final de conexión CI: se ubican las nuevas regresiones de transparencia dentro de section-flow-full-width.spec.js, que ya pertenece a la suite canónica. Package y auditores Fase8/Fase10 quedan exactamente como main; no se amplían sus listas ni se retira ningún gate.10 Chromium+10 WebKit integrados y27 controles estáticos pasan. La nota previa de ampliación del auditor describe un intento reemplazado, no el diff final.
 ## 2026-10-21 — Avisos globales limitados a la página y recursos cargados
 
-Autoridad: vigilancia-version.js y contrato puro revision-visual.mjs compartido con construir/verificar-manifiesto-diagnostico. El marcador de cada HTML excluye tags de caché; site-version conserva la huella exacta de publicación separada de páginas y recursos de cliente. La pestaña compara su marcador embebido y sólo JS/CSS realmente cargados; los bumps transitivos sin cambio semántico y el backend/CRUD no avisan. Navegación normal recibe HTML vigente; Checkout incorpora aviso posponible sin recarga automática, igual que las demás rutas. Se conservan sincronización de datos, formularios, carrito, sesiones, permisos y pago. Cuatro recursos reciben URL nueva desde el generador del shell y registro de caché. La regla queda explícita en AGENTS y arquitectura-versiones-canonicas; pruebas de datos/publicación/navegación, carrera de arranque y geometrías. Estado y límites actuales en CURRENT_STATE.
+Autoridad: vigilancia-version.js y contrato puro revision-visual.mjs compartido con construir/verificar-manifiesto-diagnostico. El marcador de cada HTML excluye tags de caché; site-version conserva la huella exacta de publicación separada de páginas y recursos de cliente. La pestaña compara su marcador embebido y sólo JS/CSS realmente cargados; los bumps transitivos sin cambio semántico y el backend/CRUD no avisan. Navegación normal recibe HTML vigente; Checkout incorpora aviso posponible sin recarga automática, igual que las demás rutas. Se conservan sincronización de datos, formularios, carrito, sesiones, permisos y pago. Cuatro recursos reciben URL nueva desde el generador del shell y registro de caché. La regla queda explícita en docs/normas-desarrollo.md y arquitectura-versiones-canonicas; pruebas de datos/publicación/navegación, carrera de arranque y geometrías. Estado y límites actuales en CURRENT_STATE.
 
 ## 2026-10-21 — PR1199: fotos y regla global de actualización
 
@@ -1045,7 +1045,7 @@ Fuente shopify-commerce-admin.css y versiones del consumidor shopify-commerce-ad
 
 ## 2026-10-22 — Ajuste global de categorías, Cuenta y formularios
 
-Autoridades: alternancia-secciones para impedir que fondos cubran navegación intermedia; sistema-superficies para contorno del avatar, radios compartidos de campos/tarjetas y tamaño táctil; marca-movil/catalog-maintenance para compactar24px el inicio móvil. Consumidores de las18 páginas conservan semántica, controles y datos; imports transitivos y bundles reciben versiones inmutables coherentes mediante generadores. Cobertura, hallazgos y límites en docs/agent/UI_RESPONSIVE_GLOBAL_20261023.md; no acredita sesión privada ni hardware físico ni publicación antes del CI final.
+Autoridades: alternancia-secciones para impedir que fondos cubran navegación intermedia; sistema-superficies para contorno del avatar, radios compartidos de campos/tarjetas y tamaño táctil; marca-movil/catalog-maintenance para compactar24px el inicio móvil. Consumidores de las18 páginas conservan semántica, controles y datos; imports transitivos y bundles reciben versiones inmutables coherentes mediante generadores. Cobertura, hallazgos y límites en docs/operaciones-tecnicas/UI_RESPONSIVE_GLOBAL_20261023.md; no acredita sesión privada ni hardware físico ni publicación antes del CI final.
 
 
 ## 2026-10-23 — Compacidad de Catálogo y contrato de pruebas UI
@@ -1055,7 +1055,7 @@ catalog-maintenance.css reduce rellenos/márgenes y retira la doble reserva de c
 
 ### 2026-10-23 — Un único tema Tintín
 
-Autoridades: GLOBAL_TOKENS/runtime global, alias administrativos y sistema-superficies. Por petición explícita del propietario, el panel adopta el mismo esquema publicado tras Auth/App Check y Apariencia deja de activar un esquema exclusivo de Super Admin. Los documentos históricos permanecen intactos; no se realiza migración ni escritura de datos reales. Se unifican bordes/radios/elevación de tienda, cuenta, compra, formularios y panel preservando semántica de errores/peligro, logo, imágenes, fondos difuminados y geometrías del editor. Verificar esquema en vivo/gate denegado/resize, formularios, superficies, módulos administrativos, ficha y Nosotros; regenerar versiones transitivas, shell, CSP, plan protegido y diagnóstico. Detalle: docs/agent/TEMA_TINTIN_UNICO_20261023.md.
+Autoridades: GLOBAL_TOKENS/runtime global, alias administrativos y sistema-superficies. Por petición explícita del propietario, el panel adopta el mismo esquema publicado tras Auth/App Check y Apariencia deja de activar un esquema exclusivo de Super Admin. Los documentos históricos permanecen intactos; no se realiza migración ni escritura de datos reales. Se unifican bordes/radios/elevación de tienda, cuenta, compra, formularios y panel preservando semántica de errores/peligro, logo, imágenes, fondos difuminados y geometrías del editor. Verificar esquema en vivo/gate denegado/resize, formularios, superficies, módulos administrativos, ficha y Nosotros; regenerar versiones transitivas, shell, CSP, plan protegido y diagnóstico. Detalle: docs/operaciones-tecnicas/TEMA_TINTIN_UNICO_20261023.md.
 
 ## 2026-10-23 — Dropup y headers adaptables
 
@@ -1151,7 +1151,7 @@ mediante herramientas canónicas.
 
 ### 2026-10-29 — Rendimiento global en revisión
 
-Cambios canónicos en revelado/alternancia de secciones (excluir paneles fijos y agrupar mediciones), respaldo compartido de colecciones, filtrado del catálogo sin doble renderer, carga del menú a demanda, favoritos por lotes públicos, asociaciones de variantes paginadas y controles del editor por contexto. Se preservan lectores/escritores comerciales, publicación, permisos e historial. Hero comprimido desde los PNG vigentes con fallback original; CSS de Inicio/Nosotros compilado por el generador existente con Lightning CSS fijado. Checkout emite la correlación antes de la transacción; observabilidad agrega INP y CLS sin datos personales. Las URL transitivas se renuevan mediante la misma autoridad de caché y el plan de mantenimiento protegido. Ledger y límites: `docs/agent/PERFORMANCE_GLOBAL_20261029.md`.
+Cambios canónicos en revelado/alternancia de secciones (excluir paneles fijos y agrupar mediciones), respaldo compartido de colecciones, filtrado del catálogo sin doble renderer, carga del menú a demanda, favoritos por lotes públicos, asociaciones de variantes paginadas y controles del editor por contexto. Se preservan lectores/escritores comerciales, publicación, permisos e historial. Hero comprimido desde los PNG vigentes con fallback original; CSS de Inicio/Nosotros compilado por el generador existente con Lightning CSS fijado. Checkout emite la correlación antes de la transacción; observabilidad agrega INP y CLS sin datos personales. Las URL transitivas se renuevan mediante la misma autoridad de caché y el plan de mantenimiento protegido. Ledger y límites: `docs/operaciones-tecnicas/PERFORMANCE_GLOBAL_20261029.md`.
 
 ## 2026-10-30 — Despacho push de pedidos y categorías móviles
 
@@ -1207,7 +1207,7 @@ Más con su controlador real en≤768px; no revive sidebar retirado. Global fit
 reconoce el scroller real de categorías, con comprobaciones de acceso/límites.
 Auditor de búsqueda sirve Instagram con handler real/env vacío.4 informes y
 preview local renombrados con referencias actualizadas; DESIGN/PRODUCT son
-contexto contractual de Skills, y otros nombres inválidos siguen rechazados.
+contexto contractual de recursos de desarrollo, y otros nombres inválidos siguen rechazados.
 Regenerar derivados y plan contra maincfe530d9; CI/Maestro del head nuevo.
 
 ## 2026-11-14 — Paleta armónica y corrección del smoke visual
@@ -1217,7 +1217,7 @@ Tintín; avisos semánticos y WhatsApp conservan sus colores discretos. No se
 cambian imágenes ni lógica comercial. CSS/JS afectados propagan sus versiones
 por el generador canónico. El smoke local sirve Instagram con el handler real
 sin credenciales (parche revisado de PR1397), resolviendo el404 de la auditoría
-visual43594710557. Evidencia y límites:docs/agent/PALETA_ARMONICA_20261114.md.
+visual43594710557. Evidencia y límites:docs/operaciones-tecnicas/PALETA_ARMONICA_20261114.md.
 
 ## 2026-11-15 — Imagen del hero lista antes de su reveal
 
