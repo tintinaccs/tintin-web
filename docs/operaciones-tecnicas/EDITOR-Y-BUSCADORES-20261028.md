@@ -1,6 +1,6 @@
 # Editor de productos y buscadores — 2026-10-28
 
-Base inspeccionada: `9fcc8c57` (main). Implementación y evidencia: Codex, agente raíz y revisión paralela de búsqueda pública, administrativa y escritor comercial. No se modificaron productos reales ni se iniciaron compras, correos o sesiones de prueba en producción.
+Base inspeccionada: `9fcc8c57` (main). Implementación y evidencia: herramienta de desarrollo anterior, agente raíz y revisión paralela de búsqueda pública, administrativa y escritor comercial. No se modificaron productos reales ni se iniciaron compras, correos o sesiones de prueba en producción.
 
 ## Diagnóstico y correcciones
 

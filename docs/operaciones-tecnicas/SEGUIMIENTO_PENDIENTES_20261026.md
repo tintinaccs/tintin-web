@@ -1,6 +1,6 @@
 # Conciliación de pendientes históricos — 26/10/2026
 
-Codex /root, base main `ed574b1c54874a30bd6aa988ebd820dd2d4a3c4e`.
+herramienta de desarrollo anterior /root, base main `ed574b1c54874a30bd6aa988ebd820dd2d4a3c4e`.
 La titular autoriza depurar pendientes sin que código antiguo reemplace la versión
 actual. La rama nueva parte de esa base; no se integra ninguna rama antigua.
 

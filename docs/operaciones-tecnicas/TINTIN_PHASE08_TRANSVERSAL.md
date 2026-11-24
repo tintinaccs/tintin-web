@@ -1,6 +1,6 @@
 # Fase08 — Optimización transversal consolidada en Fase09
 
-2026-11-02 America/Buenos_Aires. Codex /root. Base39744311; no hubo PR ni integración independiente de08. Sus cambios locales se conservan en codex/phase09-integral-acceptance y deben aceptarse con ese candidato.
+2026-11-02 America/Buenos_Aires. herramienta de desarrollo anterior /root. Base39744311; no hubo PR ni integración independiente de08. Sus cambios locales se conservan en rama histórica: phase09-integral-acceptance y deben aceptarse con ese candidato.
 
 ## Cambios y medición
 

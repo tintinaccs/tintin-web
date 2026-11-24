@@ -1,6 +1,6 @@
 # Preparación para importación y aceptación — 2026-10-11
 
-Codex /root. Base vigente main 3488ebfd4315eceb58a3ca43ae5daefc30390775 (#1100 publicado). La nueva instrucción del propietario excluye migrar dominio, DNS y origen comercial, e integrar #929 o #1101. Shopify permanece disponible. No se permiten compras, pedidos, correos reales ni mutaciones de clientes como pruebas. La ubicación Windows del handoff no está montada en este entorno Linux.
+herramienta de desarrollo anterior /root. Base vigente main 3488ebfd4315eceb58a3ca43ae5daefc30390775 (#1100 publicado). La nueva instrucción del propietario excluye migrar dominio, DNS y origen comercial, e integrar #929 o #1101. Shopify permanece disponible. No se permiten compras, pedidos, correos reales ni mutaciones de clientes como pruebas. La ubicación Windows del handoff no está montada en este entorno Linux.
 
 ## Evidencia actual y estado por requisito
 

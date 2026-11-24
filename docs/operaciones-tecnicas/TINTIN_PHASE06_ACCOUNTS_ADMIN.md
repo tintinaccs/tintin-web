@@ -1,6 +1,6 @@
 # Fase06 — Clientes, administración y notificaciones
 
-2026-11-02. Codex /root. Base001c4218 (#1313), rama codex/phase06-accounts-admin. Alcance solicitado: revisión funcional de cuentas, backoffice y actividad real. No acredita cierre de seguridad03A ni de verificaciones externas anteriores.
+2026-11-02. herramienta de desarrollo anterior /root. Base001c4218 (#1313), rama rama histórica: phase06-accounts-admin. Alcance solicitado: revisión funcional de cuentas, backoffice y actividad real. No acredita cierre de seguridad03A ni de verificaciones externas anteriores.
 
 ## Autoridades y revisión
 

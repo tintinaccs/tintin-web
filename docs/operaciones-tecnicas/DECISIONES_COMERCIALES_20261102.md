@@ -2,7 +2,7 @@
 
 Fuente: respuestas directas de la titular en la conversación de revisión global.
 Base revisada: `39744311216e525919a1f781a03fb854d92e45fd`.
-Autor: Codex /root. Este documento registra requisitos; no acredita su implementación.
+Autor: herramienta de desarrollo anterior /root. Este documento registra requisitos; no acredita su implementación.
 La titular autorizó implementar y fusionar los cambios mediante PR y controles existentes.
 No autoriza operaciones comerciales reales para probar, eliminación de datos ni bypass.
 
@@ -90,5 +90,5 @@ verificación remota pendiente. No presentar informes históricos como PASS actu
    Rules publicadas, versión WebApp, índices y aceptación autenticada/proveedores
    requieren evidencia propia. GSC Wizard bloqueado por suscripción en la revisión.
 
-No activar todos los Skills a la vez ni declarar aplicadas estas reglas por guardar
+No activar todos los recursos de desarrollo a la vez ni declarar aplicadas estas reglas por guardar
 este documento. Cada bloque debe cerrar pruebas, PR, fusión y publicación aplicable.

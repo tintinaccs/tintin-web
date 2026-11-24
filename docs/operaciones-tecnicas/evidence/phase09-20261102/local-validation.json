@@ -1,7 +1,7 @@
 {
-  "agent": "Codex /root",
+  "agent": "[identificador histórico omitido; véase el registro original]",
   "date": "2026-11-03",
-  "branch": "codex/phase09-integral-acceptance",
+  "branch": "[identificador histórico omitido; véase el registro original]",
   "base": "c25421dfe78d83f2dff744b7861c41f28f139641",
   "tests": [
     {
@@ -20,13 +20,13 @@
       "log": "artifacts/phase09/performance-final.log"
     },
     {
-      "command": "python3 scripts/agent/check-cloud-skills.py",
+      "command": "[comando histórico de herramienta retirada]",
       "state": "PASS_LOCAL",
       "countPerAgent": 46,
       "nativeHostDiscovery": "NOT_VERIFIED"
     },
     {
-      "command": "python3 .agents/skills/gh-fix-ci/scripts/inspect_pr_checks.py --help",
+      "command": "[identificador histórico omitido; véase el registro original]",
       "state": "PASS_LOCAL",
       "liveGhExecution": "BLOCKED: invalid GH_TOKEN; connector used without changing credentials"
     },
@@ -89,5 +89,6 @@
     "contractsPass": 180,
     "newShaCi": "PENDING",
     "cloudflareExplicitNodeConfig": "NOT_VERIFIED"
-  }
+  },
+  "historicalRedaction": "Se neutralizaron identificadores nominales de herramientas retiradas; original íntegro disponible en el historial Git."
 }

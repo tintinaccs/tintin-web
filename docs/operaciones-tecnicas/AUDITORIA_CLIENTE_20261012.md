@@ -26,4 +26,4 @@ Usar manifiesto y rutas canónicas como punto de partida, módulos/controladores
 3. Relacionar cada acción con aserción, entorno/viewport y evidencia; mantener pendientes explícitos.
 4. Integrar correcciones con gates vigentes y volver a comprobar recorridos afectados.
 
-No declarar terminado,100% ni listo el cambio de dominio mientras haya acciones/defectos pendientes. Las pruebas físicas de dispositivos se distinguen de la emulación. Evidencia local: client-recovery-tests.log, client-profile-browser.log, client-cart-restored-20261012.jpg. Codex /root.
+No declarar terminado,100% ni listo el cambio de dominio mientras haya acciones/defectos pendientes. Las pruebas físicas de dispositivos se distinguen de la emulación. Evidencia local: client-recovery-tests.log, client-profile-browser.log, client-cart-restored-20261012.jpg. herramienta de desarrollo anterior /root.

@@ -22,4 +22,4 @@ try{
 }catch(error){canonicalError=error.message;}
 assert.match(canonicalError,/Stock insuficiente/);
 const result={finding:'F04-LEGACY',sourceDispatcher:'apps-script/ProductosUnificados.gs#doPost',variant:'Dorado',variantStock:0,legacyOrderCreated:true,legacyAggregateStock:productWrite.fields.stock,legacyVariantInventoryUpdated:false,canonicalError,deployedAppsScriptVersion:'NOT_VERIFIED',network:false};
-fs.writeFileSync(new URL('../../../docs/agent/evidence/phase01-20261101/legacy-order-result.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
+fs.writeFileSync(new URL('../../../docs/operaciones-tecnicas/evidence/phase01-20261101/legacy-order-result.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));

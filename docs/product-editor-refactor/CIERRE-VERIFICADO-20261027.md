@@ -1,6 +1,6 @@
 # Cierre verificado y aceptación administrativa real
 
-27/10/2026 · Codex /root · consulta directa a GitHub PR/Actions/Checks.
+27/10/2026 · herramienta de desarrollo anterior /root · consulta directa a GitHub PR/Actions/Checks.
 Base de aplicación: `65ee34250b20738591ec65cc097ee4e8bd452486` (#1262).
 Esta revisión documental no introduce otra versión del editor ni cambia su código.
 

@@ -1,6 +1,6 @@
 # Hero completo antes del reveal — 15 de noviembre de 2026
 
-Codex /root. Reparación puntual solicitada por la titular mediante captura:
+herramienta de desarrollo anterior /root. Reparación puntual solicitada por la titular mediante captura:
 el maletín se pintaba parcialmente al entrar. Mismo comportamiento requerido
 en móvil, tablet, escritorio y orientación horizontal. Base68e8861f; no se
 modifican fotos, variantes, colores, fuentes ni geometría del hero.
@@ -49,7 +49,7 @@ Se mantienen una sola entrada, cancelación, preferencias y retorno de página.
   una excepción de scripts bloqueantes.29 tripwires de regresión PASS.
 
 Se reutilizan Playwright y generadores existentes; no se instalan dependencias.
-Skills leídos/aplicados manualmente: systematic-debugging,
+recursos de desarrollo leídos/aplicados manualmente: systematic-debugging,
 tintin-performance-loading y emil-animate (incluida receta de reveal). La
 finalidad del movimiento es evitar un cambio brusco de primera entrada;
 se conservan curva, tiempos y escalonado de la composición aprobada.

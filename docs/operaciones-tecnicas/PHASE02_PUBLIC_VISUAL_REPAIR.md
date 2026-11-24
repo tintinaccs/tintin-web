@@ -1,6 +1,6 @@
 # Fase 02 — Responsive, interacción y accesibilidad públicas
 
-Fecha: 2026-11-02 UTC. Autor: Codex /root, GPT-6, Linux Cloud.
+Fecha: 2026-11-02 UTC. Autor: herramienta de desarrollo anterior /root, herramienta de desarrollo anterior, Linux Cloud.
 Base: **5b694fe4adaa9e356f3c2f8e74d2de5ca0f5adde** (#1308, fusionada).
 Rama: `fix/phase02-public-responsive-20261102`.
 

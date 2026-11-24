@@ -1,6 +1,6 @@
 # Revisión y refinamiento global de Tintín — 14/11/2026
 
-Autor: Codex /root. Base: `21ea083825f3280585123b2e4db8411495a83e6a`.
+Autor: herramienta de desarrollo anterior /root. Base: `21ea083825f3280585123b2e4db8411495a83e6a`.
 Solicitud: implementación global, incluidos Maestro, seguridad, comercio,
 responsive, accesibilidad, rendimiento y descubrimiento en Google.
 
@@ -41,7 +41,7 @@ Los estados se actualizan al recibir resultados; una ejecución en curso no es P
   autenticado. No se realizan pedidos, cobros ni modificaciones comerciales
   reales como parte de las pruebas.
 
-## Skills y herramientas
+## recursos de desarrollo y herramientas
 
 Leídos/aplicados manualmente: audit-tintin (diagnóstico),
 tintin-design-quality, tintin-responsive-a11y, emil-animation-performance,
@@ -81,7 +81,7 @@ el barrido profundo aprobaron. Las causas restantes acreditadas fueron:
   a Meta. Corregido en el auditor de búsqueda; se conserva el trabajo separado
   de PR1397 sobre el servidor de smoke.
 - LOW, nombres: se conservan DESIGN.md/PRODUCT.md como contexto contractual de
-  Skills, documentando la excepción. Los4 informes internos y el servidor de
+  recursos de desarrollo, documentando la excepción. Los4 informes internos y el servidor de
   previsualización pasan a nombres coherentes; se actualizan sus consumidores.
   Un control negativo comprueba que otros nombres inválidos siguen fallando.
 
@@ -92,6 +92,6 @@ administrativos y2 estados de Imágenes en la sonda de280/390px PASS;12 anchos,
 PASS y control negativo correcto. Las sondas acotadas no se presentan como
 la ejecución completa de15 viewports: ésta se conserva en el Maestro canónico.
 
-La reparación se entrega mediante la rama codex/global-maestro-repair-20261114,
+La reparación se entrega mediante la rama rama histórica: global-maestro-repair-20261114,
 con nuevos build/plan/CI/Maestro propios. Los recibos terminales de sus checks
 son la autoridad de cierre; los resultados del primer head no se heredan.

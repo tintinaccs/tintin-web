@@ -7,7 +7,7 @@ Fecha2026-10-23. Revisión nueva de fuentes y ejecución de pruebas; no se hered
 - Base funcional de main6ac1fdf2546fa859412399f88eccf207991880de. Candidato fase2:85d5061d69ab503b4ae536425f5cac568ca8eab7, PR1217 OPEN/draft, sin integración ni auto-merge al consultar.
 - PR1216 contiene documentación previa. El historial de fase2 fue leído: motor e0ea8e65f, servidor040564e3a, consumidores14cfc963f, referencias históricas1d3106ca8 y corrección de identidad965cd1f07, entre los commits preservados de su rama. No se reescribe ese historial.
 - En este conjunto no existe el editor compatible de fase3 ni la integración de fase4. Los pedidos posteriores de esas fases no constituyen evidencia de implementación. El relevo anterior lo confirma y la prueba de guardado v2 lo reproduce.
-- Rama de auditoría codex/auditoria-editor-v2-fase5, basada en85d5061d6. Correcciones pequeñas revisables; el PR de auditoría debe apuntar a la rama de fase2 para mostrar sólo su delta, sin duplicar1217 ni integrar a main.
+- Rama de auditoría rama histórica: auditoria-editor-v2-fase5, basada en85d5061d6. Correcciones pequeñas revisables; el PR de auditoría debe apuntar a la rama de fase2 para mostrar sólo su delta, sin duplicar1217 ni integrar a main.
 - Checkout principal sucio y tema de PR1213 intactos. Sin nuevas dependencias, CSS, workflows, datos reales ni funciones rechazadas.
 
 ## Bloqueos y riesgos pendientes

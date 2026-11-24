@@ -1,6 +1,6 @@
 # Rendimiento global — 29 de octubre de 2026
 
-Base: main `a936e6dd` (incluye #1269–#1272). Alcance autorizado: continuar la optimización de velocidad pública del texto aportado por la titular. Implementación: Codex raíz. Sin nuevos servicios, dependencias de aplicación, reglas, cambios comerciales ni operaciones reales de compra/guardado.
+Base: main `a936e6dd` (incluye #1269–#1272). Alcance autorizado: continuar la optimización de velocidad pública del texto aportado por la titular. Implementación: herramienta de desarrollo anterior raíz. Sin nuevos servicios, dependencias de aplicación, reglas, cambios comerciales ni operaciones reales de compra/guardado.
 
 ## Diagnóstico y decisiones
 

@@ -1,8 +1,8 @@
 # Fase 03 — Administración y editor de productos
 
-Fecha de trabajo: 2026-11-01, America/Buenos_Aires. Codex /root.
+Fecha de trabajo: 2026-11-01, America/Buenos_Aires. herramienta de desarrollo anterior /root.
 Base inicial: main `5b694fe4adaa9e356f3c2f8e74d2de5ca0f5adde`.
-Rama: `codex/phase03-product-editor`. Estado: PASS_LOCAL. CI y publicación sólo mediante el recibo terminal del SHA final.
+Rama: `rama histórica: phase03-product-editor`. Estado: PASS_LOCAL. CI y publicación sólo mediante el recibo terminal del SHA final.
 
 La titular pidió continuar la conversación de la fase visual y aplicar el nuevo
 alcance administrativo. El texto adjunto se leyó completo. La PR #1309 contiene

@@ -99,7 +99,7 @@ The business/catalog gates remain the reason the Pages deployment cannot replace
 
 ## Pull request preview recheck — 2026-09-28 07:04 UTC
 
-Read-only GET against the deployed branch preview `https://codex-shopify-independence-a.tintinaccesorios.pages.dev` (commit `1e0ff35e0e5672981223a180b4d56f78682b4f1c`).
+Read-only GET against the deployed branch preview `https://github.com/tintinaccs/tintin-web/commits/main` (commit `1e0ff35e0e5672981223a180b4d56f78682b4f1c`).
 
 | Probe | Result | Interpretation |
 | --- | --- | --- |
@@ -156,7 +156,7 @@ The migration remains **not ready**. Keep Shopify and the commercial DNS intact 
 
 ## CI and updated branch preview — 2026-09-28 10:58 UTC
 
-Commit `a1d85cfcdd8345b201e83f8377f009dc297173fe` has successful `Repository audit`, `Cloudflare Pages`, `CodeQL`, and JavaScript/TypeScript and Actions analyses. Its branch preview is `https://codex-shopify-independence-a.tintinaccesorios.pages.dev`.
+Commit `a1d85cfcdd8345b201e83f8377f009dc297173fe` has successful `Repository audit`, `Cloudflare Pages`, `CodeQL`, and JavaScript/TypeScript and Actions analyses. Its branch preview is `https://github.com/tintinaccs/tintin-web/commits/main`.
 
 The branch preview serves `admin.html` with `tintin-20260928-shopify-media-preflight-1`; its import module calls `/api/admin-import-media`. This confirms the safe static importer is deployed to the preview. However, preview `/api/health` returns HTTP 503 with `configuration: false` at `2026-09-28T10:58:33.596Z`. The health endpoint does not disclose which runtime setting is absent. Preview `/api/paypal-config` returns disabled with `client_id`, `client_secret`, `webhook_id`, `exchange_rate`, `stale_exchange_rate`, and `feature_disabled`; no credentials were exposed.
 

@@ -1,6 +1,6 @@
 # Monitor de producción y contratos SEO — 16/11/2026
 
-Codex `/root`; base `6a71d3536364b684bbea6986fca86ca1b8967387`, entrega #1405 ya integrada. El #1406 se cerró como duplicado después de comprobar que package/lock y el árbol completo coinciden con el candidato combinado `29e83592`. CI fuente `43883840349` e integrador `43888405720`, intento 1, SUCCESS; ambos controles de flujos protegidos SUCCESS.
+herramienta de desarrollo anterior `/root`; base `6a71d3536364b684bbea6986fca86ca1b8967387`, entrega #1405 ya integrada. El #1406 se cerró como duplicado después de comprobar que package/lock y el árbol completo coinciden con el candidato combinado `29e83592`. CI fuente `43883840349` e integrador `43888405720`, intento 1, SUCCESS; ambos controles de flujos protegidos SUCCESS.
 
 ## Fallo observado y causa
 
@@ -25,4 +25,4 @@ No se cambian CSP, `_headers`, aplicación pública, fuentes, imágenes, diseño
 - Artefactos en `artifacts/continuacion-1405-20261116/` (ignorados): logs originales, pruebas antes/después, sonda real, capturas y recibos.
 - Build, preflight, nueva CI y merge se siguen en el PR de esta corrección. La CI posterior de #1405 `43888593358` sigue en seguimiento; CodeQL de main `43888594678` terminó SUCCESS.
 
-Skills leídas y aplicadas manualmente: gh-fix-ci, systematic-debugging y verification-before-completion. Se reutilizan gh, Node, Playwright, parse5 y los generadores del repositorio; no se ejecutan scripts de terceros de Skills.
+recursos de desarrollo leídas y aplicadas manualmente: gh-fix-ci, systematic-debugging y verification-before-completion. Se reutilizan gh, Node, Playwright, parse5 y los generadores del repositorio; no se ejecutan scripts de terceros de recursos de desarrollo.

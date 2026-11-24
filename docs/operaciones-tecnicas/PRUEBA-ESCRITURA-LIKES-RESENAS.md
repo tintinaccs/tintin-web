@@ -27,7 +27,7 @@ Estado: **no ejecutada**. Hoy el panel Flujo/Conexiones solo prueba *lectura* (`
 - Borrar las filas de prueba en Sheets si quedaron.
 
 ## Cómo registrar el resultado (solo con evidencia real)
-Si los pasos 2-4 y la limpieza se cumplieron, anotar fecha, producto, cuenta usada y resultados en `docs/agent/CURRENT_STATE.md`. No hace falta editar `datos-flujo-conexiones.js` ni `live-checks.js`: el like y la reseña de la prueba son registros reales y el panel los toma como evidencia por sí solo. No cambiar colores a mano.
+Si los pasos 2-4 y la limpieza se cumplieron, anotar fecha, producto, cuenta usada y resultados en `docs/operaciones-tecnicas/CURRENT_STATE.md`. No hace falta editar `datos-flujo-conexiones.js` ni `live-checks.js`: el like y la reseña de la prueba son registros reales y el panel los toma como evidencia por sí solo. No cambiar colores a mano.
 
 ## Fuera de alcance de esta prueba
 Servicios externos (rojo): no depende de esto; exige PayPal en Live y Resend/Cloudinary respondiendo en `GET /api/system-health`.

@@ -1,6 +1,6 @@
 # Identidad visual Tintin — 21/10/2026
 
-Base revisada: e96eea9300ec6c2be9aa7a1a73b4aba4618f8823. Codex /root. Pedido: sustituir el título de presentación del panel y revisar cada bloque de la web con una misma identidad.
+Base revisada: e96eea9300ec6c2be9aa7a1a73b4aba4618f8823. herramienta de desarrollo anterior /root. Pedido: sustituir el título de presentación del panel y revisar cada bloque de la web con una misma identidad.
 
 ## Criterio aplicado
 

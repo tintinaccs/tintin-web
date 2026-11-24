@@ -1,6 +1,6 @@
 # Revisión de alertas CodeQL — 2026-10-13
 
-Codex principal inspeccionó 48 alertas abiertas del main df86fc68: 13 apuntan a producción y 35 a auditorías/fixtures. Un check CodeQL correcto no implica cero alertas. No se han descartado alertas en GitHub ni reducido sus reglas.
+herramienta de desarrollo anterior principal inspeccionó 48 alertas abiertas del main df86fc68: 13 apuntan a producción y 35 a auditorías/fixtures. Un check CodeQL correcto no implica cero alertas. No se han descartado alertas en GitHub ni reducido sus reglas.
 
 ## Problemas reproducidos y corregidos
 

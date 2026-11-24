@@ -133,7 +133,7 @@ Este parche aún no está desplegado. La evidencia sandbox solo describe el host
 
 ### Preview de la rama y CI vigente — 2026-09-29 08:43 UTC
 
-GitHub Actions run `36542842963` (CI #3525) para el HEAD `e49dcb3c` terminó **SUCCESS** en 10m48s, incluidas auditorías de navegador, accesibilidad, SEO y rendimiento. El PR #957 sigue abierto y Draft, sin merge. Cloudflare creó el preview de rama `https://codex-shopify-import-identit.tintinaccesorios.pages.dev`; esto no modifica la URL comercial ni constituye despliegue de producción.
+GitHub Actions run `36542842963` (CI #3525) para el HEAD `e49dcb3c` terminó **SUCCESS** en 10m48s, incluidas auditorías de navegador, accesibilidad, SEO y rendimiento. El PR #957 sigue abierto y Draft, sin merge. Cloudflare creó el preview de rama `https://github.com/tintinaccs/tintin-web/commits/main`; esto no modifica la URL comercial ni constituye despliegue de producción.
 
 `npm run monitor:production` ejecutado contra ese host de Preview confirmó respuestas para las páginas principales, login/perfil, robots, sitemaps, las APIs públicas y Visual Builder. El `/api/health` de Preview respondió 503 con `configuration=false`, aunque Firebase, runtime de Admin y Visual Builder aparecieron disponibles; `api/paypal-config` indicó sandbox deshabilitado por faltantes de configuración. El monitor marcó además canonical, sitemaps y catálogo vacíos/sin muestra SEO. Son condiciones del entorno Preview; no se copiaron secretos de producción. El monitor del Pages host de producción a las 08:25 UTC no tuvo 503, pero mantuvo exactamente los tres bloqueos de catálogo/SEO.
 
@@ -209,7 +209,7 @@ La prueba productiva `npm run monitor:production` sigue fallando solo en los tre
 
 Se corrigió en la rama de preparación el mapa de conexiones: el `POST /api/system-health` verifica configuración y que Apps Script reconozca su guard, pero ya no se acepta como prueba verde de sincronización Sheets → Firestore. El flujo se dibuja por separado desde el `onEdit` de Google Sheets hasta el webhook autenticado y el commit de Firestore. Los cambios aún requieren CI/revisión antes de publicar el Admin actualizado.
 
-### Continuación de auditoría — 2026-09-29 17:30 UTC (rama `claude/tintin-web-audit-production-2rtwpe`, base `3fbc26ee`)
+### Continuación de auditoría — 2026-09-29 17:30 UTC (rama `rama histórica: tintin-web-audit-production-2rtwpe`, base `3fbc26ee`)
 
 **Apps Script: diferencia entre v16 y la fuente actual.** El repositorio a fecha 22-sep (`c77dabf1`, previo a v16) y HEAD difieren en tres archivos, por cuatro commits posteriores a v16; los demás (`ContratoCuentas`, `CrearPedido`, `ReorganizacionSheets`, `Seguridad`) son idénticos:
 - `2528c190` (23-sep, #893): `Participacion.gs` añade `tintinHandleEngagementBatch_` y `doPost` enruta `syncEngagementBatch`. Sin él, los lotes de participación son rechazados con "Acción no permitida".

@@ -1,7 +1,7 @@
 # Auditoría profesional — intervención local por fases
 
 Base `5a2ea0f63` (incluye #1262/#1263), rama `audit/profesional-local-20261028`.
-Fecha de ejecución:28/10/2026 UTC. Agente:Codex. Durante la auditoría inicial
+Fecha de ejecución:28/10/2026 UTC. Agente:herramienta de desarrollo anterior. Durante la auditoría inicial
 no se autorizaban push/merge/publicación. Después del cierre local, la titular
 solicitó explícitamente auto-merge y seguimiento. La publicación se acredita
 por PR/SHA/checks, no por los resultados locales de este informe. Continúa
@@ -37,7 +37,7 @@ correos, configuracion, permisos y apariencia. Su presencia no certifica cada CR
 HTML/CSS y JavaScript modular nativo, con entrada clásica `tienda.js`; no es una
 SPA React/Vue/Next. Pages Functions/Cloudflare implementan servidor y rutas
 limpias/dinámicas. `_routes.json`, CSP, shell y manifiestos son generados.
-Fuentes:README, AGENTS, `docs/arquitectura-tecnica.md`, contratos de calidad,
+Fuentes:README, docs/normas-desarrollo.md, `docs/arquitectura-tecnica.md`, contratos de calidad,
 versiones canónicas y autoridades existentes. No crear autoridades paralelas.
 
 58 adaptadores en `functions/api/`:catálogo y contenido público, Visual Builder,

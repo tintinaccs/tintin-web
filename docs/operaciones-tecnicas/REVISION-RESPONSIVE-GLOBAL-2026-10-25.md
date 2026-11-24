@@ -1,6 +1,6 @@
 # Revisión de distribución y navegación — 25/10/2026
 
-Responsable: Codex /root (GPT-6). Base: `9839f4597`, posterior a PR1234 y PR1235. Rama local: `codex/admin-mobile-navigation-20261025`. Solicitud: recorrer pantallas y entregar una lista comprobable de problemas para revisión/aplicación posterior; continuar las correcciones de las tres capturas aportadas. No se publica esta rama ni se modifica la autenticación.
+Responsable: herramienta de desarrollo anterior /root (herramienta de desarrollo anterior). Base: `9839f4597`, posterior a PR1234 y PR1235. Rama local: `rama histórica: admin-mobile-navigation-20261025`. Solicitud: recorrer pantallas y entregar una lista comprobable de problemas para revisión/aplicación posterior; continuar las correcciones de las tres capturas aportadas. No se publica esta rama ni se modifica la autenticación.
 
 ## Hallazgos concretos
 

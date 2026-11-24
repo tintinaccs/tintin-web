@@ -4,7 +4,7 @@ Solicitud: continuar la entrega global, armonizar todo el repositorio sin
 cambiar fotografías y resolver los Actions rojos relacionados. Base cb1383a2,
 PR1400 integrada; Maestro43592676471/1 SUCCESS, ocho suites correctas.
 
-Se aplica el Skill local `.agents/skills/better-colors/SKILL.md`, leído como
+Se aplica el recursos de desarrollo local `configuración histórica retirada`, leído como
 referencia profesional, junto con los tokens e identidad canónicos existentes.
 No se instala una biblioteca de color ni se añade otro matiz a la marca.
 Referencia editorial aportada por la titular:

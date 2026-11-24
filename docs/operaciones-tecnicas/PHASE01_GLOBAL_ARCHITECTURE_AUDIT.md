@@ -1,7 +1,7 @@
 # Fase 01 — Auditoría global y arquitectura de Tintín
 
 Fecha de trabajo: 2026-11-01 America/Asuncion (algunas evidencias tienen fecha UTC 2026-11-02).
-Autor: Codex /root, GPT-6, Linux Cloud. Repositorio: tintinaccs/tintin-web.
+Autor: herramienta de desarrollo anterior /root, herramienta de desarrollo anterior, Linux Cloud. Repositorio: tintinaccs/tintin-web.
 Base auditada: **085953dc0b700e91f95fc8c84dd8e17f4627a70c**, árbol
 b97e4feef9ee05718de9557da9c10f75351fe066. Los resultados siguientes pertenecen
 a ese código, no certifican automáticamente un commit posterior.
@@ -27,12 +27,11 @@ publicaron Rules ni se consultaron/modificaron registros reales de clientes.
   125006122914; logs BlobNotFound/404. Además conserva el job de escritura
   retirado de main y un plan antiguo: no integrar sin conciliar #1307 y validar
   el nuevo SHA. Su rama y propuesta de auto-routing no se modificaron.
-- La instalación en archivos está verificada: 45 Skills en cada ruta principal,
+- La instalación en archivos está verificada: 45 recursos de desarrollo en cada ruta principal,
   cuatro de compatibilidad. El catálogo nativo del ejecutor volvió a devolver
   skills: []; no hay operación expuesta de registro/reindexación. Su activación
   sigue BLOCKED. Esta auditoría usa instrucciones leídas desde el repositorio.
-- El antiguo TINTIN_GLOBAL_PHASES describía exclusivamente Skills/CI. Se conserva
-  como [antecedente](TINTIN_SKILLS_CI_20261101.md); la numeración global actual
+- El antiguo TINTIN_GLOBAL_PHASES describía exclusivamente recursos de desarrollo/CI. Se conserva
   sigue la solicitud de la titular: 01 es esta auditoría. El bloqueo del host no
   se convierte en PASS ni impide el diagnóstico no funcional solicitado.
 - Se usó una rama separada y un worktree limpio del SHA base para build y
@@ -41,7 +40,7 @@ publicaron Rules ni se consultaron/modificaron registros reales de clientes.
 ## 2. Inventario real
 
 Fuente reproducible: [inventory.json](evidence/phase01-20261101/inventory.json),
-construido por [collect-index.py](../../scripts/agent/phase01-audit/collect-index.py)
+construido por [collect-index.py](../../scripts/operaciones-tecnicas/phase01-audit/collect-index.py)
 desde git y el manifiesto canónico del SHA auditado.
 
 | Superficie | Inventario observado |
@@ -174,7 +173,7 @@ el invariante de negocio en PASS.
 - Solución mínima: cerrar la escritura SDK sensible para staff o exigir un camino
   coherente completo y autorizado, conservando el endpoint canónico. Revisar antes
   los consumidores legado y la excepción explícita Superadmin. No basta ocultar UI.
-- Evidencia ejecutable: [rules-probe.mjs](../../scripts/agent/phase01-audit/rules-probe.mjs),
+- Evidencia ejecutable: [rules-probe.mjs](../../scripts/operaciones-tecnicas/phase01-audit/rules-probe.mjs),
   [resultado](evidence/phase01-20261101/rules-result.json). Prioridad: fase 02.
 
 ### F04-LEGACY — HIGH — Segundo creador de pedidos con lógica de variantes incompatible
@@ -196,7 +195,7 @@ el invariante de negocio en PASS.
 - Solución mínima: comprobar deployment/callers y retirar o delegar la acción
   heredada al dominio único; preservar espejo y compatibilidad autorizada. Cubrir
   V1/V2, cero stock de variante, reintento, secuencia y efectos posteriores.
-- Evidencia: [legacy-order-probe.mjs](../../scripts/agent/phase01-audit/legacy-order-probe.mjs)
+- Evidencia: [legacy-order-probe.mjs](../../scripts/operaciones-tecnicas/phase01-audit/legacy-order-probe.mjs)
   y [resultado](evidence/phase01-20261101/legacy-order-result.json), con I/O sintético.
   Prioridad: 02 para autoridad/exposición; 03 para regresión comercial.
 
@@ -217,7 +216,7 @@ el invariante de negocio en PASS.
   por email y deduplicar por ID; no publicar un resultado truncado como completo.
   Proteger la publicación con revisión/snapshot o proyección serializada. Subir el
   límite global no corrige ni la carrera ni el costo.
-- Evidencia: [stats-probe.mjs](../../scripts/agent/phase01-audit/stats-probe.mjs) y
+- Evidencia: [stats-probe.mjs](../../scripts/operaciones-tecnicas/phase01-audit/stats-probe.mjs) y
   [resultado](evidence/phase01-20261101/stats-result.json). Prioridad: fase 04.
 
 ### F03-FALLBACK — MEDIUM — El artefacto del fallback manual tiene recursos faltantes
@@ -233,7 +232,7 @@ el invariante de negocio en PASS.
 - Solución mínima: construir/cerrar las referencias del paquete desde los recursos
   canónicos y probar el contenido publicado; definir explícitamente el modo de
   API/funciones o degradación de respaldo. No copiar indiscriminadamente el repo.
-- Evidencia: [fallback-probe.mjs](../../scripts/agent/phase01-audit/fallback-probe.mjs),
+- Evidencia: [fallback-probe.mjs](../../scripts/operaciones-tecnicas/phase01-audit/fallback-probe.mjs),
   [resultado](evidence/phase01-20261101/fallback-result.json). Prioridad: fase 08.
 
 ### F05-DEPS — MEDIUM — Avisos moderados en herramientas npm
@@ -319,7 +318,7 @@ Los conteos se solapan; no sumarlos como cobertura única.
 | Helper global de accesibilidad | 5/5 PASS con DOM sintético; no certificación WCAG global |
 | Probes adversariales de esta fase | F01, F02, F03, F04 reproducidos. Su salida 0 significa anomalía confirmada |
 | npm audit de lock | FAIL por moderados; 14 paquetes, 2 avisos únicos; sin fix aplicado |
-| Archivos Skills | 45 por ruta válidos; activación nativa BLOCKED |
+| Archivos recursos de desarrollo | 45 por ruta válidos; activación nativa BLOCKED |
 
 Runtime local: Node 24.19.0, Java 21 y Chromium del sistema 151.0.7922.173.
 El primer intento de smoke no inició por falta del Chromium empaquetado en caché.
@@ -363,7 +362,7 @@ Cobertura faltante que debe convertirse en regresión antes de corregir:
 
 | Fase | Alcance y prioridad | Depende de | Criterio de salida |
 | --- | --- | --- | --- |
-| 00 | Base/Skills/CI | — | Código/CI de base confirmados; activación nativa se mantiene BLOCKED hasta prueba del host |
+| 00 | Base/recursos de desarrollo/CI | — | Código/CI de base confirmados; activación nativa se mantiene BLOCKED hasta prueba del host |
 | 01 | Este diagnóstico y mapa | 00, con excepción explícita para análisis no funcional | Informe, inventario, reproducciones, cobertura y pendientes disponibles |
 | 02 | Seguridad, permisos y autoridad de escritura | 01 | F01 cerrado por regresiones negativas/positivas; F04 exposición/delegación resuelta o descartada con evidencia remota |
 | 03 | Integridad comercial: catálogo/variantes, precio, stock, carrito, checkout, pedidos/pagos | 02 | Misma autoridad por todas las entradas; atomicidad/idempotencia y V1/V2 verificadas |
@@ -376,7 +375,7 @@ Cobertura faltante que debe convertirse en regresión antes de corregir:
 
 ## 8. Handoff exacto
 
-1. Leer AGENTS.md, docs/agent/README.md, este informe y TINTIN_GLOBAL_PHASES.
+1. Leer docs/normas-desarrollo.md, docs/operaciones-tecnicas/README.md, este informe y TINTIN_GLOBAL_PHASES.
 2. Consultar main/PR abiertas de nuevo. Este informe analiza 085953dc, no su
    propio commit documental ni el head futuro de #1306. Revisar sólo el diff
    posterior para determinar si cerró un hallazgo antes de reproducirlo.

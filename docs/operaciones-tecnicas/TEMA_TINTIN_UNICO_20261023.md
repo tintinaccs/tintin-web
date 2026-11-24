@@ -35,7 +35,7 @@ No cambia roles, permisos ni datos comerciales.
 
 ## Evidencia del candidato
 
-PASS_LOCAL. Codex /root:
+PASS_LOCAL. herramienta de desarrollo anterior /root:
 
 - Barrido geométrico: 187/187 combinaciones, 11 rutas públicas × 17 dimensiones,
   incluidas transiciones de móvil/tablet/escritorio. Reporte local:
@@ -114,7 +114,7 @@ Verificación de la conciliación:231/231 Chromium y20/20 WebKit, más18/18 cont
 
 Se conserva íntegra la revisión remota 6184a0d3 (conciliación y fixture de hover inicial), incluido RECUPERACION_ACTIONS_PR_20261023.md. El esquema combinado aprobó 4/4 Chromium y 4/4 WebKit sin reintentos. Los ajustes adicionales de foco de paneles, precisión de 48px y presupuesto CI120min permanecen locales hasta resolver quién continúa la PR; no se cancela ni se reejecuta la auditoría iniciada por el otro agente.
 
-## 2026-10-24 — Candidato conciliado y revisión de Actions (Codex /root)
+## 2026-10-24 — Candidato conciliado y revisión de Actions (herramienta de desarrollo anterior /root)
 
 Se preservan remoto872095114 y main6ac1fdf25 sin reescritura. El workflow de main por fases reemplaza íntegro la ampliación local del workflow monolítico: no se mantiene CI120min ni se omiten gates. Tres runtimes combinados reciben tema-conciliado-1; foco/compatibilidad conservan tema-unico-3 y superficies tema-unico-2. PASS_LOCAL actual:119/119 Chromium y18/18 WebKit sin reintentos;41 contratos de mantenimiento/cuenta y11 de CI/aislamiento; colores153/36, Apariencia15, arquitectura, niveles1/2, Parte2H19, CSS, rutas/CSP38, caché364/67 y protección78/544. La prueba negativa de fases de CI se normaliza a LF al leer el YAML para ejecutar las mismas mutaciones en Windows; se reprodujo fallo antes y11/11 después. No se cambia el resolvedor ni el workflow. Fixtures privados y motores emulados, sin certificación de hardware físico ni escrituras comerciales. CI/merge/producción del candidato: PENDING.
 

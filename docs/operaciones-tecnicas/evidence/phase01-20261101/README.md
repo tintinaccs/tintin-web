@@ -8,7 +8,7 @@ la regresión deberá exigir el comportamiento seguro opuesto.
 ## Archivos
 
 Los JSON están en esta carpeta; las herramientas ejecutables y el config están
-en scripts/agent/phase01-audit (categoría Node existente del generador).
+en scripts/operaciones-tecnicas/phase01-audit (categoría Node existente del generador).
 
 - inventory.json: páginas, 58API, módulos/imports, fan-in, ciclos, referencias y
   distribución de archivos de tests. collect-index.py lee el SHA base fijo con git.
@@ -26,7 +26,7 @@ en scripts/agent/phase01-audit (categoría Node existente del generador).
   lockSHA256 y alcance; sin fix automático.
 - diagnostic-index-result.json: nombres de colección fantasma; no son huecos de Rules.
 - firebase-rules-assessment.json: evaluación parcial del camino auditado, formato
-  del Skill de auditoría. No acredita el conjunto de reglas desplegado.
+  del recursos de desarrollo de auditoría. No acredita el conjunto de reglas desplegado.
 - browser-runtime.mjs: adaptador de ejecutable local; conserva tests y plazos.
 
 ## Repetición
@@ -47,12 +47,12 @@ npm run build:pages
 git diff --exit-code
 npm run prepare:hosting
 # Copiar sólo después del build limpio: el inventario diagnóstico incluye docs nuevos.
-mkdir -p docs/agent/evidence scripts/agent
-cp -R "$audit_source/docs/agent/evidence/phase01-20261101" docs/agent/evidence/
-cp -R "$audit_source/scripts/agent/phase01-audit" scripts/agent/
-node --experimental-vm-modules scripts/agent/phase01-audit/stats-probe.mjs
-node scripts/agent/phase01-audit/legacy-order-probe.mjs
-node scripts/agent/phase01-audit/fallback-probe.mjs "$audit_repro"
+mkdir -p docs/operaciones-tecnicas/evidence scripts/operaciones-tecnicas
+cp -R "$audit_source/docs/operaciones-tecnicas/evidence/phase01-20261101" docs/operaciones-tecnicas/evidence/
+cp -R "$audit_source/scripts/operaciones-tecnicas/phase01-audit" scripts/operaciones-tecnicas/
+node --experimental-vm-modules scripts/operaciones-tecnicas/phase01-audit/stats-probe.mjs
+node scripts/operaciones-tecnicas/phase01-audit/legacy-order-probe.mjs
+node scripts/operaciones-tecnicas/phase01-audit/fallback-probe.mjs "$audit_repro"
 ```
 
 Para Rules, run-rules-probe.mjs transforma la plantilla emulator-config.json
@@ -63,7 +63,7 @@ modificar reglas ni comprobaciones. Usa host127.0.0.1/puerto18189 y proyecto dem
 comprobar que el puerto esté libre y no reutilizar un emulador ajeno.
 
 ```sh
-node scripts/agent/phase01-audit/run-rules-probe.mjs
+node scripts/operaciones-tecnicas/phase01-audit/run-rules-probe.mjs
 ```
 
 El probe rechaza FIRESTORE_EMULATOR_HOST no loopback y fija un proyecto demo.
@@ -95,10 +95,10 @@ smoke no llegó a ejecutar casos; se conserva ese límite. En el worktree base:
 
 ```sh
 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium \
-node --import "$audit_source/scripts/agent/phase01-audit/browser-runtime.mjs" \
+node --import "$audit_source/scripts/operaciones-tecnicas/phase01-audit/browser-runtime.mjs" \
   scripts/smoke-todas-paginas.mjs
 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium \
-node --import "$audit_source/scripts/agent/phase01-audit/browser-runtime.mjs" \
+node --import "$audit_source/scripts/operaciones-tecnicas/phase01-audit/browser-runtime.mjs" \
   scripts/auditar-canonicos-viewports.mjs
 ```
 

@@ -1,6 +1,6 @@
 # QA de Productos, checkout y pago ficticio — 24/10/2026
 
-Responsable: Codex /root. Base integrada: main9312c832, incluidos ticket PNG/WhatsApp (#1224) y galería compacta (#1226). La titular pidió corregir los fallos encontrados en estas funciones y sus vínculos, en escritorio, laptop, tablet vertical/horizontal y móvil; importes visibles en guaraníes. Este informe registra evidencia local anterior a CI. El cierre del SHA, merge y publicación se registra en el PR asociado.
+Responsable: herramienta de desarrollo anterior /root. Base integrada: main9312c832, incluidos ticket PNG/WhatsApp (#1224) y galería compacta (#1226). La titular pidió corregir los fallos encontrados en estas funciones y sus vínculos, en escritorio, laptop, tablet vertical/horizontal y móvil; importes visibles en guaraníes. Este informe registra evidencia local anterior a CI. El cierre del SHA, merge y publicación se registra en el PR asociado.
 
 ## Hallazgos reproducidos
 

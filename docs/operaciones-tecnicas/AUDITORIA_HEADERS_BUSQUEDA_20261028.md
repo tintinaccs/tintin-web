@@ -1,6 +1,6 @@
 # Headers, navegación y búsqueda — 28 de octubre de 2026
 
-Implementación y evidencia: Codex `/root`, base `5a2ea0f6`, rama local `work`.
+Implementación y evidencia: herramienta de desarrollo anterior `/root`, base `5a2ea0f6`, rama local `work`.
 Alcance: navegación pública compartida y conexiones con catálogo, carrito y cuenta.
 La instrucción posterior de la titular prevalece: **el header y la barra móvil
 permanecen visibles al abrir la búsqueda**, incluso durante las pruebas de teclado.

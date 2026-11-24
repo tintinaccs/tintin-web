@@ -2,7 +2,7 @@
 """Read a fixed Git snapshot and its canonical diagnostic index; no network."""
 import collections, hashlib, json, pathlib, re, subprocess
 BASE='085953dc0b700e91f95fc8c84dd8e17f4627a70c'
-OUT=pathlib.Path(__file__).resolve().parents[3]/'docs/agent/evidence/phase01-20261101'
+OUT=pathlib.Path(__file__).resolve().parents[3]/'docs/operaciones-tecnicas/evidence/phase01-20261101'
 read=lambda p:subprocess.check_output(['git','show',f'{BASE}:{p}'],text=True)
 tracked=subprocess.check_output(['git','ls-tree','-r','--name-only',BASE],text=True).splitlines()
 m=json.loads(read('diagnostic-manifest.json'))

@@ -30,6 +30,6 @@ try {
   assert.equal(order.inventoryState,'released');assert.equal(order.inventoryRevision,999);assert.equal(product.stock,0);
   const auditWrites=(await getDocs(collection(db,'auditLog'))).size;assert.equal(auditWrites,0);
   const result={finding:'F01-RULES',vulnerabilityConfirmed:true,actor:'agent with all order permissions false',readOrder:'denied',writeInventoryState:'accepted',inventoryRevision:order.inventoryRevision,stock:product.stock,auditWrites,project:'demo-tintin-phase01'};
-  fs.writeFileSync(new URL('../../../docs/agent/evidence/phase01-20261101/rules-result.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
+  fs.writeFileSync(new URL('../../../docs/operaciones-tecnicas/evidence/phase01-20261101/rules-result.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
  });
 } finally {await env.cleanup();}

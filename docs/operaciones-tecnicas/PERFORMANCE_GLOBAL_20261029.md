@@ -10,7 +10,7 @@ La sonda empieza en captura de `window`, durante el clic real, antes del control
 
 PASS_LOCAL dirigido: diez rutas públicas y una regresión de la sonda,11/11 sin reintentos. Inicio262ms y Envíos239ms en esa corrida; no son INP de campo ni evidencia de sesiones comerciales. La suite final y navegación del candidato se registran en CURRENT_STATE y en el recibo de seguimiento. URLs inmutables actualizadas desde el generador y auditor canónicos; no se modifican permisos, datos ni dependencias.
 
-Codex /root. Rama `codex/global-performance-repair-20261029`, base inicial `a936e6dd91be338f00e104c11bc48b8dbc865ad3`; integración posterior de `eac9a327` (#1273).
+herramienta de desarrollo anterior /root. Rama `rama histórica: global-performance-repair-20261029`, base inicial `a936e6dd91be338f00e104c11bc48b8dbc865ad3`; integración posterior de `eac9a327` (#1273).
 
 Auditoría reproducida: `/workspace/audit-global-20261029/AUDITORIA-GLOBAL.md`, `findings.json` y sondas acompañantes. No se heredan sus PASS a los cambios actuales. Sin escrituras comerciales de producción.
 

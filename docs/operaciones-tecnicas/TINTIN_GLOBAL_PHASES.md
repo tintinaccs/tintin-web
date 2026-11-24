@@ -2,9 +2,8 @@
 <!-- Reparación puntual CI2026-11-05: en basee2e699a8 se corrige carrera del fixture táctil header-responsive con el frame real de resetEntryScroll. Control negativo reproduce200→0;20/20 sin retries con barrera de frames. 20/20 sin retries y build/preflight/protección PASS_LOCAL; suite relacionada99PASS/8FAIL por SDK remoto bloqueado/1SKIP Functions preview, sin falsear PASS. Falta CI/merge/postmerge del candidato; sin cierre100% de fases ni cambios productivos. -->
 # Tintín — seguimiento global permanente, fases 00 a 09
 
-Actualizado: 2026-11-03 America/Buenos_Aires. Responsable: Codex /root, GPT-6.
-Este plan global reemplaza la numeración de la tarea particular de Skills/CI;
-aquella evidencia se conserva en [TINTIN_SKILLS_CI_20261101.md](TINTIN_SKILLS_CI_20261101.md).
+Actualizado: 2026-11-03 America/Buenos_Aires. Responsable: herramienta de desarrollo anterior /root, herramienta de desarrollo anterior.
+Este plan global reemplaza la numeración de la tarea particular de recursos de desarrollo/CI;
 La titular solicitó explícitamente que 01 corresponda a auditoría global y arquitectura.
 
 ## Cambio de secuencia solicitado
@@ -34,7 +33,7 @@ sus alcances originales; [el cierre09](TINTIN_PHASE09_ACCEPTANCE.md) los concili
 - #1322 concilia el ajuste de la franja final con main210feb5d. Derivados regenerados, sin heredar PASS del HEAD anterior; nuevos recibos en CURRENT_STATE y PR. Esto no cierra los pendientes productivos de Rules/Apps Script ni acredita operaciones comerciales reales.
 - Los PASS se refieren al criterio y SHA citados. Un informe terminado no prueba
   que sus hallazgos estén corregidos ni certifica todas las operaciones reales.
-- La observación nativa de Skills sigue BLOCKED; catálogo executor vacío
+- La observación nativa de recursos de desarrollo sigue BLOCKED; catálogo executor vacío
   consultado de nuevo en02. Sus instrucciones se leen como referencia. La titular
   autorizó esta reparación visual; no se declara resuelto el bloqueo del host.
 
@@ -42,7 +41,7 @@ sus alcances originales; [el cierre09](TINTIN_PHASE09_ACCEPTANCE.md) los concili
 
 | Fase | Alcance | Estado / evidencia | SHA / PR | Pendiente y siguiente fase |
 | --- | --- | --- | --- | --- |
-| 00 | Baseline y estabilidad Skills/CI | PASS_CI del circuito del repositorio; BLOCKED de activación nativa | 085953dc / #1305 y #1307 | 46 Skills por ruta y4compat válidos; enrutamiento1306 en verificación; catálogo executor vacío. Nueva sesión con catálogo/invocación observables. Diagnóstico01 autorizado sin cambio funcional |
+| 00 | Baseline y estabilidad recursos de desarrollo/CI | PASS_CI del circuito del repositorio; BLOCKED de activación nativa | 085953dc / #1305 y #1307 | 46 recursos de desarrollo por ruta y4compat válidos; enrutamiento1306 en verificación; catálogo executor vacío. Nueva sesión con catálogo/invocación observables. Diagnóstico01 autorizado sin cambio funcional |
 | 01 | Auditoría global y arquitectura real | PASS_CI de publicación diagnóstica; siete hallazgos abiertos | Auditoría085953dc; publicación5b694fe4 / #1308 | Informe y reproducciones completos. Siguiente:02 visual por nueva instrucción |
 | 02 | Reparación visual pública, responsive, scroll y foco | PASS_CI; #1309 MERGED | 344a2936 / [#1309](https://github.com/tintinaccs/tintin-web/pull/1309); CI41375418525/1 SUCCESS del head29e8685c | Comprobación de main y producción separada por sus runs. Continúa03 editor por instrucción actual; seguridad03A abierta |
 | 03 | Administración y editor de productos | Integrado #1310; checks históricos de merge verificados; revalidación09 en curso | e3de73c1 | Fotografías/opciones/stock y móvil incluidos; no heredar PASS del candidato09 |
@@ -113,7 +112,7 @@ No se modifican datos productivos ni se autorizan migraciones destructivas.
 
 Base conciliada con #1317/c25421df, que resuelve F02-STATS en fuente mediante páginas/snapshot/CAS;09 preserva esa autoridad y añade integración real aislada. Tramos de audit:final ejecutados con fallos inspeccionados: auditorías obsoletas alineadas con contratos reales, runtime/emulador local BLOCKED por descarga oficial, continuación final exit0. Se requieren recibos del candidato para PASS_CI.
 
-Se incorporó gh-fix-ci oficial a Codex/Claude (46Skills por ruta) y se habilitó vigilancia horaria externa para fallos/advertencias accionables, sin receiver de eventos ni primer despertar acreditado. Run41442885247/1 de #1316 falla por artefactos generados desactualizados ante bump Firebase15.34.2;09 incluye ese bump con regeneración canónica. [Operación y límites](GITHUB_RESULTS.md). No se declara instalación global del host ni vigilancia instantánea.
+Se incorporó gh-fix-ci oficial a rama histórica: herramienta de desarrollo anterior (46Skills por ruta) y se habilitó vigilancia horaria externa para fallos/advertencias accionables, sin receiver de eventos ni primer despertar acreditado. Run41442885247/1 de #1316 falla por artefactos generados desactualizados ante bump Firebase15.34.2;09 incluye ese bump con regeneración canónica. [Operación y límites](GITHUB_RESULTS.md). No se declara instalación global del host ni vigilancia instantánea.
 
 
 Conciliación posterior de #1318: main1c673584b0b8e69e9610c6d4721210d86bd4f55c incorpora efectivo al retirar y textos reales de delivery. Se preservan política server-side, contratos, pruebas y contenido de ese cambio. Las URLs de13módulos realmente alterados se renuevan a tintin-20261103-acceptance-1;22módulos del grafo concurrente conservan sus URLs publicadas. Nuevas regresiones/generadores/CI se validan sobre la conciliación, sin heredar el PASS del anterior75fa91e9. PR1319 es la entrega vigente.
@@ -123,6 +122,6 @@ Advertencia CI demostrada: Firebase13/@firebase/rules-unit-testing6 exige Node>=
 
 ## Recibo de integración09 y primer despertar
 
-PR1319 MERGED en9b1b88f8, head df692c4b. CI41562231283/1, CodeQL41562227482/1 e integridad/mantenimiento protegidos SUCCESS. Monitor41565292553/1 SUCCESS del artefacto publicado; auditoría posterior41565290324/1 SUCCESS confirmado2026-11-03T02:49:16Z. No equivale a Rules publicadas ni a pruebas monetarias/autenticadas reales. Primer disparo de vigilancia horaria registrado2026-11-03T02:24:49Z, con prompt recibido y seguimiento retomado. PR1306 se recupera preservando esta base y configura selección de Skills, sin modificar comercio ni controles.
+PR1319 MERGED en9b1b88f8, head df692c4b. CI41562231283/1, CodeQL41562227482/1 e integridad/mantenimiento protegidos SUCCESS. Monitor41565292553/1 SUCCESS del artefacto publicado; auditoría posterior41565290324/1 SUCCESS confirmado2026-11-03T02:49:16Z. No equivale a Rules publicadas ni a pruebas monetarias/autenticadas reales. Primer disparo de vigilancia horaria registrado2026-11-03T02:24:49Z, con prompt recibido y seguimiento retomado. PR1306 se recupera preservando esta base y configura selección de recursos de desarrollo, sin modificar comercio ni controles.
 
 [Recibo terminal de Fase09](evidence/phase09-20261102/github-terminal.json): el código1319 está integrado y sus verificaciones de PR/main son SUCCESS. Esto cierra la reparación de fuente y aceptación automatizada de ese SHA; los límites productivos enumerados no se convierten en PASS por ese resultado. La recuperación1306 tiene su propio candidato/CI/merge, sin heredar esos checks.

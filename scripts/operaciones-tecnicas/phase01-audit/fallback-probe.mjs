@@ -18,4 +18,4 @@ const missing=[...new Set(refs.map(x=>new URL(x,'https://fixture.invalid/index.h
 assert.ok(missing.includes('/styles.min.css'));
 assert.equal(fs.existsSync(path.join(publicRoot,'tienda.js')),false);
 const result={finding:'F03-FALLBACK',artifactSource:'scripts/preparar-hosting.js',consumer:'.github/workflows/desplegar-pages.yml',indexMissingLocalAssets:missing,keyFiles:Object.fromEntries(['tienda.js','styles.min.css','styles.css','site-version.json','firebase-messaging-sw.js','vendor/onnxruntime-web-1.22.0/ort.wasm.bundle.min.mjs'].map(f=>[f,fs.existsSync(path.join(publicRoot,f))])),productionCloudflareAffected:false};
-fs.writeFileSync(new URL('../../../docs/agent/evidence/phase01-20261101/fallback-result.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
+fs.writeFileSync(new URL('../../../docs/operaciones-tecnicas/evidence/phase01-20261101/fallback-result.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));

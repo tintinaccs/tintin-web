@@ -1,6 +1,6 @@
 # Revisión activa de producto y superficies compartidas
 
-Base: 89d268ee7a7cda2c48f1ab7263534429449ca2c5. Agente: Codex. Autorización de cambios/publicación vigente; sin pagos. El mantenimiento protegido requiere revisión manual del propietario para el SHA final; no se aprobará en su nombre.
+Base: 89d268ee7a7cda2c48f1ab7263534429449ca2c5. Agente: herramienta de desarrollo anterior. Autorización de cambios/publicación vigente; sin pagos. El mantenimiento protegido requiere revisión manual del propietario para el SHA final; no se aprobará en su nombre.
 
 ## Alcance pendiente de cierre
 
@@ -20,7 +20,7 @@ Base: 89d268ee7a7cda2c48f1ab7263534429449ca2c5. Agente: Codex. Autorización de 
 - Tracker de avisos incluye updatedAt en firma y crea otra tarjeta sin reemplazar la anterior. Push foreground se inicia únicamente cuando existe push-card de admin. Se prepararon correcciones; aún NO VERIFICADAS.
 ## Evidencia del candidato
 
-- Rama aislada codex/producto-colores-recomendaciones-20261008, worktree work/producto-variantes-final. Metadata de variantes reparada en producción con transacción y sincronización HTTP200 de ambos lotes de Sheets. No se modificaron sellos. La fuente está preparada, aún no publicada.
+- Rama aislada rama histórica: producto-colores-recomendaciones-20261008, worktree work/producto-variantes-final. Metadata de variantes reparada en producción con transacción y sincronización HTTP200 de ambos lotes de Sheets. No se modificaron sellos. La fuente está preparada, aún no publicada.
 
 - Comprobación real Chrome: checkout blanco/contraste y textos completos; mapas con tiles256 y overflow:hidden; recarga desde abajo termina scrollY0/restoration manual. Siete anchos 320 a1920. Logo blanco cuenta verificado visualmente. Nuevo requerimiento: carga siempre arriba, sin auto scroll de enlaces iniciales a pedido/reseña; dos pruebas de entrada/load/pageshow pasan.
 - Firma SRI Leaflet corregida tomando bytes verificados de #1066; se mantiene la protección de integridad. Backend/control de acceso sin rebajar permisos.

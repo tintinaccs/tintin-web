@@ -1,6 +1,6 @@
 # Preparación sin activar dominio — 11 octubre 2026
 
-Codex /root. Instrucción vigente: preparar y verificar, sin migrar URL/DNS. Base main `72ea709a` (#1106/#1107). El PR #1101 sigue borrador NO MERGE; #929 excluido.
+herramienta de desarrollo anterior /root. Instrucción vigente: preparar y verificar, sin migrar URL/DNS. Base main `72ea709a` (#1106/#1107). El PR #1101 sigue borrador NO MERGE; #929 excluido.
 
 ## Código preparado
 

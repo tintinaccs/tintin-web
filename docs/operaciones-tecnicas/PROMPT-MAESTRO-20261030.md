@@ -1,6 +1,6 @@
 # Prompt maestro — revisión de capturas del 30 de octubre de 2026
 
-Agente: Codex /root. Base c1baeb4d, rama codex/prompt-maestro-20261030.
+Agente: herramienta de desarrollo anterior /root. Base c1baeb4d, rama rama histórica: prompt-maestro-20261030.
 Los seis adjuntos tienen el mismo SHA256; se ejecuta una sola solicitud.
 Sin PR abiertos al iniciar. Worktree aislado; no se alteran datos comerciales.
 

@@ -1,6 +1,6 @@
 # Fase09 — Reparación integral y aceptación final
 
-Responsable: Codex /root. Inicio2026-11-02 America/Buenos_Aires. Rama codex/phase09-integral-acceptance, base inicial39744311216e525919a1f781a03fb854d92e45fd, conciliada con mainc25421dfe78d83f2dff744b7861c41f28f139641 (#1317). **No es certificación100% ni cierre productivo global.** Este informe registra el candidato; el resultado terminal de su PR/SHA y los pendientes explícitos determinan aceptación. No heredar PASS de informes anteriores.
+Responsable: herramienta de desarrollo anterior /root. Inicio2026-11-02 America/Buenos_Aires. Rama rama histórica: phase09-integral-acceptance, base inicial39744311216e525919a1f781a03fb854d92e45fd, conciliada con mainc25421dfe78d83f2dff744b7861c41f28f139641 (#1317). **No es certificación100% ni cierre productivo global.** Este informe registra el candidato; el resultado terminal de su PR/SHA y los pendientes explícitos determinan aceptación. No heredar PASS de informes anteriores.
 
 ## Estado verificado de00–08
 
@@ -8,7 +8,7 @@ Responsable: Codex /root. Inicio2026-11-02 America/Buenos_Aires. Rama codex/phas
 
 | Fase | Integración comprobada | Estado real y límites |
 | --- | --- | --- |
-|00|#1305/#1307,7dfe8c9f/085953dc|CI de base integrado. Fallo histórico Protected flows de1305 conservado y reparado por1307. Catálogo executor sigue vacío al consultar: activación nativa de Skills BLOCKED del host, fuera de la funcionalidad comercial.|
+|00|#1305/#1307,7dfe8c9f/085953dc|CI de base integrado. Fallo histórico Protected flows de1305 conservado y reparado por1307. Catálogo executor sigue vacío al consultar: activación nativa de recursos de desarrollo BLOCKED del host, fuera de la funcionalidad comercial.|
 |01|#1308,5b694fe4|Mapa y hallazgos integrados; PASS documental no significa hallazgos cerrados. Se revisan los siete abajo.|
 |02|#1309,344a2936|Correcciones visuales incluidas; se revalidan en09. Hardware/lector/WebKit no acreditados.|
 |03|#1310,e3de73c1|Editor y compatibilidad incluidos, con cambios móviles anteriores preservados. No autoriza cambiar permisos.|
@@ -73,7 +73,7 @@ Se instaló gh-fix-ci oficial para ambos agentes y se habilitó una tarea horari
 Revalidación final09 tras conciliar1317: **685pruebas de dominios PASS,0FAIL/0SKIP**; **107/107Chromium de rendimiento PASS sin reintentos** (3min, ambos orígenes locales). El primer barrido08 de106/1FLAKY se conserva como histórico; esta ejecución nueva no hereda su resultado. Skills46por agente validados; --help del script oficial PASS. [Evidencia local](evidence/phase09-20261102/local-validation.json). Build/CI del candidato y limitaciones productivas se registran por separado.
 
 
-Control previo a PR: ci:preflight completo PASS_LOCAL; preflight de imports repetido tras retirar restos muertos del bridge (1194fuentes/72funciones), routing7/7. Build canónico repetido:7derivados idénticos; protección78registros/544archivos intacta. Recibo CI/fusión actual: [PR por rama](https://github.com/tintinaccs/tintin-web/pulls?q=head%3Acodex%2Fphase09-integral-acceptance). Su descripción registra SHA/run/intento terminal sin commits dedicados sólo a anunciar CI. Las limitaciones productivas siguen abiertas.
+Control previo a PR: ci:preflight completo PASS_LOCAL; preflight de imports repetido tras retirar restos muertos del bridge (1194fuentes/72funciones), routing7/7. Build canónico repetido:7derivados idénticos; protección78registros/544archivos intacta. Recibo CI/fusión actual: [PR por rama](https://github.com/tintinaccs/tintin-web/commits/main). Su descripción registra SHA/run/intento terminal sin commits dedicados sólo a anunciar CI. Las limitaciones productivas siguen abiertas.
 
 
 Conciliación posterior de #1318: main1c673584b0b8e69e9610c6d4721210d86bd4f55c incorpora efectivo al retirar y textos reales de delivery. Se preservan política server-side, contratos, pruebas y contenido de ese cambio. Las URLs de13módulos realmente alterados se renuevan a tintin-20261103-acceptance-1;22módulos del grafo concurrente conservan sus URLs publicadas. Nuevas regresiones/generadores/CI se validan sobre la conciliación, sin heredar el PASS del anterior75fa91e9. PR1319 es la entrega vigente.

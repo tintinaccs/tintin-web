@@ -1,6 +1,6 @@
 # Auditoría multidispositivo — 2026-10-10
 
-Responsable: Codex /root. Zona de fecha: America/Buenos_Aires. Base publicada: `34aa0f3b6812bc98aba6ad91075335c81ec7e378` (#1082). Este informe diferencia evidencia local, CI y producción; los resultados históricos no certifican cambios posteriores.
+Responsable: herramienta de desarrollo anterior /root. Zona de fecha: America/Buenos_Aires. Base publicada: `34aa0f3b6812bc98aba6ad91075335c81ec7e378` (#1082). Este informe diferencia evidencia local, CI y producción; los resultados históricos no certifican cambios posteriores.
 
 ## A. Errores encontrados
 
@@ -80,7 +80,7 @@ Los FAIL de reproducción anteriores al arreglo se conservan como evidencia caus
 
 ## I. Git
 
-#1088, #1089, #1062 y #1082 ya integrados. #1082 pasó CI `38077553526` y mantenimiento protegido `38078736757`, con aprobación de la propietaria; merge `34aa0f3b6812bc98aba6ad91075335c81ec7e378`. Su árbol coincide con el candidato aprobado. Esta corrección nueva vive en `codex/auditoria-login-multidispositivo-20261010`; su integración exige CI y revisión propios. #929 cambia dominio y conserva su instrucción expresa de no integrar hasta el corte de catálogo.
+#1088, #1089, #1062 y #1082 ya integrados. #1082 pasó CI `38077553526` y mantenimiento protegido `38078736757`, con aprobación de la propietaria; merge `34aa0f3b6812bc98aba6ad91075335c81ec7e378`. Su árbol coincide con el candidato aprobado. Esta corrección nueva vive en `rama histórica: auditoria-login-multidispositivo-20261010`; su integración exige CI y revisión propios. #929 cambia dominio y conserva su instrucción expresa de no integrar hasta el corte de catálogo.
 
 ## J. Pendientes y recuperación
 

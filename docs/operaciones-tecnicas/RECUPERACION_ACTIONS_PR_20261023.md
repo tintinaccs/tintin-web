@@ -1,6 +1,6 @@
 # Recuperación de Actions y PR — 23/10/2026
 
-Solicitud: corregir fallos vigentes de Actions/PR, excluyendo el job120608130701 de la ejecución40009824667. El job corresponde a Comercio crítico del PR #1214, rama fix/checkout-variantes-catalogo-20261023. Se preserva esa rama y no se cancelan, reejecutan ni modifican sus jobs. Trabajo: Codex /root.
+Solicitud: corregir fallos vigentes de Actions/PR, excluyendo el job120608130701 de la ejecución40009824667. El job corresponde a Comercio crítico del PR #1214, rama fix/checkout-variantes-catalogo-20261023. Se preserva esa rama y no se cancelan, reejecutan ni modifican sus jobs. Trabajo: herramienta de desarrollo anterior /root.
 
 ## Inventario inicial
 

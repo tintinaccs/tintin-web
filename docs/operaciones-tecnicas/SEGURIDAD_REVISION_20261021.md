@@ -1,6 +1,6 @@
 # Revisión de seguridad acotada — 21/10/2026
 
-Codex /root. Base e96eea9300ec6c2be9aa7a1a73b4aba4618f8823. Revisión de sólo lectura, sin cambios de permisos ni datos productivos. No certifica invulnerabilidad.
+herramienta de desarrollo anterior /root. Base e96eea9300ec6c2be9aa7a1a73b4aba4618f8823. Revisión de sólo lectura, sin cambios de permisos ni datos productivos. No certifica invulnerabilidad.
 
 CORRECT: revisión de límites de confianza en Firestore Rules, verificación criptográfica RS256/issuer/audience/exp/email_verified en servidor, guardas de Super Admin y usuarios bloqueados, permisos de pedidos, validación de precios desde Firestore, CSP por ruta y cuotas compartidas con fallo cerrado. Sin hallazgos CRITICAL/HIGH demostrados en este alcance.
 

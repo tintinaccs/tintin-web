@@ -1,7 +1,7 @@
 # Pedidos Super Admin — renovación del 12/10/2026
 
 Estado: implementación local finalizada el 13/10/2026; pendiente de CI, revisión y autorización de producción.
-Base: 7196040 (main). Rama: codex/pedidos-superadmin-renovado-20261012.
+Base: 7196040 (main). Rama: rama histórica: pedidos-superadmin-renovado-20261012.
 URL conservada: https://tintinaccesorios.pages.dev. Sin cambios de DNS, SSL, OAuth, App Check, reglas o configuración de infraestructura.
 
 ## Inspección anterior a la implementación

@@ -4,9 +4,9 @@
   "manifestFingerprint": "73577930753b8451046ce7a386498c553bb1503207b430e2ae80cee21eecec5f",
   "trackedFiles": 2097,
   "countsByTopDirectory": {
-    ".agents": 153,
-    ".claude": 156,
-    ".codex": 4,
+    "herramientas-retiradas-1": 153,
+    "herramientas-retiradas-2": 156,
+    "herramientas-retiradas-3": 4,
     ".github": 13,
     "apps-script": 11,
     "assets": 1,
@@ -6308,5 +6308,6 @@
     "Static imports and literal dynamic imports from canonical manifest; indirect window registries, workers and Apps Script globals require manual tracing.",
     "No unreferenced file is classified dead solely from this graph.",
     "Security reference names are navigation aids; delegated auth and Rules must be read before judging authorization."
-  ]
+  ],
+  "historicalRedaction": "Se neutralizaron identificadores nominales de herramientas retiradas; original íntegro disponible en el historial Git."
 }

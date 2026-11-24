@@ -132,7 +132,7 @@
     "initialRulesExecution": "PASS using temporary absolute Rules path",
     "nestedRelativeConfigAttempt": "NOT_EXECUTED: Firebase disallows Rules outside nested project directory",
     "portableRunner": "PASS: run-rules-probe.mjs completed using absolute temporary config",
-    "reportToolingPlacement": "Initial candidate build rejected npm imports under docs; Node audit tools moved to scripts/agent/phase01-audit, existing canonical tooling scope; generator/gate unchanged"
+    "reportToolingPlacement": "Initial candidate build rejected npm imports under docs; Node audit tools moved to scripts/operaciones-tecnicas/phase01-audit, existing canonical tooling scope; generator/gate unchanged"
   },
   "githubProtection": {
     "rulesetId": 18212422,
@@ -144,5 +144,6 @@
       "required_linear_history"
     ],
     "classicRead": "403 Resource not accessible by integration"
-  }
+  },
+  "historicalRedaction": "Se neutralizaron identificadores nominales de herramientas retiradas; original íntegro disponible en el historial Git."
 }

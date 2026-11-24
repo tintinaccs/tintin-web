@@ -1,6 +1,6 @@
 # Consolidación autorizada de los nueve PR abiertos
 
-Codex /root. El titular pidió «MERGEA TODO» y «continua». Base: dc6da947a4d0d88de4dc7f1b353faa5982c242f7, que conserva las entregas1175,1179,1183 y1184. Se integran las historias mediante merges normales en una rama aislada; el PR de consolidación pasará las comprobaciones obligatorias antes de publicar. Los originales se cerrarán como incorporados sólo después de acreditar el merge y la publicación del conjunto.
+herramienta de desarrollo anterior /root. El titular pidió «MERGEA TODO» y «continua». Base: dc6da947a4d0d88de4dc7f1b353faa5982c242f7, que conserva las entregas1175,1179,1183 y1184. Se integran las historias mediante merges normales en una rama aislada; el PR de consolidación pasará las comprobaciones obligatorias antes de publicar. Los originales se cerrarán como incorporados sólo después de acreditar el merge y la publicación del conjunto.
 
 | PR | Tratamiento en el candidato |
 | --- | --- |
@@ -34,7 +34,7 @@ La CI39519261730 confirmó build reproducible y sin drift, dominio, CSS e integr
 
 ## Conciliación del avance concurrente y del fixture
 
-Incluye fb95aa72 de1182 mediante merge normal. La cobertura de Pages pasa a scripts/lib/rutas-pages.js, consumida por rutas, CSP y auditor final; el conjunto de100 rutas coincide exactamente con el candidato previo. Trece pruebas Node de rutas, monitor e iconos pasan. Se conservan AGENTS y documentos de coherencia añadidos en ese avance.
+Incluye fb95aa72 de1182 mediante merge normal. La cobertura de Pages pasa a scripts/lib/rutas-pages.js, consumida por rutas, CSP y auditor final; el conjunto de100 rutas coincide exactamente con el candidato previo. Trece pruebas Node de rutas, monitor e iconos pasan. Se conservan docs/normas-desarrollo.md y documentos de coherencia añadidos en ese avance.
 
 La CI39520598235 aprobó contratos, operaciones, Rules, Maestro y navegación pública antes de detectar un consumidor de prueba pendiente: quantity-browser importaba el comparador retirado de1156 aunque el renderer actual no lo usa. Se migra el fixture al renderer canónico y la regresión de etiquetas/suma/readonly/reinicio pasa en Chromium sin reintentos. No se restaura una implementación paralela ni se modifica el producto. Se repiten los controles completos del nuevo SHA.1182 queda temporalmente borrador para evitar dos publicaciones paralelas del mismo conjunto.
 
@@ -46,4 +46,4 @@ Se incorpora también cb8e28ee de1180 mediante merge normal: el logo desktop/tab
 
 ## Conciliación final del smoke de encabezados
 
-Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187 geometrías, pero su smoke final todavía exigía encabezado desktop blanco sin degradado. Ese supuesto contradice el rosa difuminado aprobado y las regresiones de marca. El smoke comprueba ahora el degradado exacto F8AACA/FDECF2 con94% de opacidad, blur18 sólo de fondo y contenido sin filtro; conserva blanco, bordes, opacidad y acciones de las otras superficies. No se cambia CSS ni producto. El candidato conjunto d456bbeb pasó1755/1755 Node y114/114 Chromium sin reintentos; la CI del nuevo SHA y producción siguen pendientes.
+herramienta de desarrollo anterior /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187 geometrías, pero su smoke final todavía exigía encabezado desktop blanco sin degradado. Ese supuesto contradice el rosa difuminado aprobado y las regresiones de marca. El smoke comprueba ahora el degradado exacto F8AACA/FDECF2 con94% de opacidad, blur18 sólo de fondo y contenido sin filtro; conserva blanco, bordes, opacidad y acciones de las otras superficies. No se cambia CSS ni producto. El candidato conjunto d456bbeb pasó1755/1755 Node y114/114 Chromium sin reintentos; la CI del nuevo SHA y producción siguen pendientes.

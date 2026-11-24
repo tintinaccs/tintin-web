@@ -1,6 +1,6 @@
 # Fluidez compartida de Super Admin
 
-Revisión del 28/10/2026 (Codex /root). Base `b1d90594ba672d66acfc5c88bf3aad381707bb29`,
+Revisión del 28/10/2026 (herramienta de desarrollo anterior /root). Base `b1d90594ba672d66acfc5c88bf3aad381707bb29`,
 conservando el editor Studio y las correcciones de guardado/búsqueda de #1270.
 
 ## Hallazgo reproducido

@@ -1,6 +1,6 @@
 # Interacciones reales — 2026-10-11
 
-Codex /root, GPT-6. Base `ac7e394874d2668dd8e0ba505f1a9340cf6bc84c`. El usuario confirmó el fallo en correo normal y autorizó completar checks y merge tras validar. Este informe no renueva sellos históricos de producción.
+herramienta de desarrollo anterior /root, herramienta de desarrollo anterior. Base `ac7e394874d2668dd8e0ba505f1a9340cf6bc84c`. El usuario confirmó el fallo en correo normal y autorizó completar checks y merge tras validar. Este informe no renueva sellos históricos de producción.
 
 ## Resultado por función
 

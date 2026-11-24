@@ -1,6 +1,6 @@
 # Preparacion tecnica actual - 2026-10-11
 
-Agente: Codex /root. Commit funcional evaluado: `0f2e058c0ab53a596e5016b9db7cd3edd2b12060`. Este informe describe evidencia observada; no autoriza ni anuncia el cutover.
+Agente: herramienta de desarrollo anterior /root. Commit funcional evaluado: `0f2e058c0ab53a596e5016b9db7cd3edd2b12060`. Este informe describe evidencia observada; no autoriza ni anuncia el cutover.
 
 ## Integracion y publicacion
 
@@ -36,7 +36,7 @@ Agente: Codex /root. Commit funcional evaluado: `0f2e058c0ab53a596e5016b9db7cd3e
 
 CSV local preparado: `PRUEBA_QA_NO_PUBLICAR_IMPORT_SHEETS.csv`, un producto explicitamente ficticio, draft/inactivo, stock cero, SKU QA y coleccion QA oculta. No se subio ni creo un producto.
 
-El selector de archivo funciona, pero `setFiles` fue rechazado por Chrome: falta **Allow access to file URLs** en la extension ChatGPT. Habilitarlo corresponde al usuario en `chrome://extensions` / ChatGPT / Detalles. No se cambia ese permiso de seguridad automaticamente.
+El selector de archivo funciona, pero `setFiles` fue rechazado por Chrome: falta **Allow access to file URLs** en la extension herramienta de desarrollo anterior. Habilitarlo corresponde al usuario en `chrome://extensions` / herramienta de desarrollo anterior / Detalles. No se cambia ese permiso de seguridad automaticamente.
 
 Una vez disponible: cargar el CSV por la interfaz, revisar estado inactivo/stock cero/coleccion oculta, descargar la copia operativa y aplicar; verificar persistencia, ventana central y reflejo Sheets. No crear pedidos, enviar emails ni realizar pagos reales. La copia operativa excluye usuarios/pedidos/auditoria.
 

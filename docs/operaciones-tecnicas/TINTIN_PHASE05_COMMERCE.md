@@ -1,6 +1,6 @@
 # Fase 05 — Integridad del flujo comercial
 
-Responsable: Codex /root. 2026-11-02. Base `b1107b3fc7fd711709832620ea738c814d6462a6` (#1311), rama `codex/phase05-commerce-flow`. Alcance actualizado por instrucción del propietario: recorrido comercial completo. No certifica el cierre global ni la seguridad03A.
+Responsable: herramienta de desarrollo anterior /root. 2026-11-02. Base `b1107b3fc7fd711709832620ea738c814d6462a6` (#1311), rama `rama histórica: phase05-commerce-flow`. Alcance actualizado por instrucción del propietario: recorrido comercial completo. No certifica el cierre global ni la seguridad03A.
 
 ## Recorrido y autoridades
 

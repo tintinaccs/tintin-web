@@ -1,6 +1,6 @@
 # Comprobaciones de cierre — 2026-10-12
 
-Codex /root. Base `72ea709ad9b7eafd18f60e52f8413af49d564117`.
+herramienta de desarrollo anterior /root. Base `72ea709ad9b7eafd18f60e52f8413af49d564117`.
 
 - PASS_PRODUCTION: monitor público, cabeceras y artefacto publicado de la base. Páginas, sitemaps y APIs públicas respondieron; API administrativa sin sesión rechazó con401. PayPal continúa deshabilitado en sandbox, no equivale a pago probado.
 - PASS_PRODUCTION parcial: smoke Chromium /login y /perfil, App Check enabled, sin errores bloqueantes. No demuestra OAuth/OTP/checkout autenticados completos.

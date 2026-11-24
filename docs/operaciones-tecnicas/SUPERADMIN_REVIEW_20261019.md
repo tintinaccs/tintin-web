@@ -1,6 +1,6 @@
 # Super Admin — revisión del 19 de octubre de 2026
 
-Autor: Codex. Alcance: presentación, navegación, conexiones existentes y notificaciones; sin operaciones comerciales reales.
+Autor: herramienta de desarrollo anterior. Alcance: presentación, navegación, conexiones existentes y notificaciones; sin operaciones comerciales reales.
 
 ## Lista de revisión por módulo
 

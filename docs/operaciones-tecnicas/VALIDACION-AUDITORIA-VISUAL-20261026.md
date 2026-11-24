@@ -1,6 +1,6 @@
 # Contraste y corrección de auditoría visual — 26/10/2026
 
-Codex /root (GPT-6), base5dc6f781. La titular solicita continuar directamente el
+herramienta de desarrollo anterior /root (herramienta de desarrollo anterior), base5dc6f781. La titular solicita continuar directamente el
 informe pegado y completar el trabajo. Se contrastan sus siete puntos; no se
 hereda su aprobación432/432 ni su matriz19×6. No se encontró la rama indicada
 publicada ni un PR asociado al comenzar.

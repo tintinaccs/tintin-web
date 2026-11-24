@@ -1,6 +1,6 @@
 # Fase07 — Backend, datos y servicios conectados
 
-2026-11-02, Codex /root. Base1159edeb (#1314), rama codex/phase07-backend-security. Revisión de fuentes y pruebas aisladas; no consultas ni mutaciones manuales de datos productivos. Las Rules corregidas son un candidato sujeto a validación; no se presentan como desplegadas ni como garantía de seguridad exhaustiva.
+2026-11-02, herramienta de desarrollo anterior /root. Base1159edeb (#1314), rama rama histórica: phase07-backend-security. Revisión de fuentes y pruebas aisladas; no consultas ni mutaciones manuales de datos productivos. Las Rules corregidas son un candidato sujeto a validación; no se presentan como desplegadas ni como garantía de seguridad exhaustiva.
 
 ## Hallazgo reparado en fuente
 
@@ -46,7 +46,7 @@ Firestore/dominios son autoridad; Sheets es espejo con cola/acuse y conflictos40
 - También requieren autorización separada: leer/exportar configuración/datos productivos para revisar índices, cualquier backup/restauración real, migración, actualización de WebApp, envío de correo/push/webhook real, lectura de logs con PII o rotación de secretos. No se ejecutan.
 - F02-STATS y otros pendientes globales no se cierran por esta fase. No se declara auditoría exhaustiva de todos los servicios desplegados.
 
-Evaluación del hallazgo de Rules (formato del Skill, antes de validar despliegue):
+Evaluación del hallazgo de Rules (formato del recursos de desarrollo, antes de validar despliegue):
 ```json
 {"score":2,"summary":"Bypass HIGH confirmado en fuente y reparado en candidato; despliegue y validación externa pendientes, sin puntuación global de producción","findings":[{"check":"Update bypass/field authority","severity":"major","issue":"Staff podía editar metadata inventory* sin transición ni permiso","recommendation":"Validar candidato con emulador, publicar Rules sólo con autorización y verificar el SHA desplegado"}]}
 ```

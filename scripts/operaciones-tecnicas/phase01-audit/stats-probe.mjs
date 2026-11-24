@@ -20,4 +20,4 @@ let resolveOld,calls=0;const writes=[];
 const racing=await load(async()=>{if(++calls===1)return new Promise(r=>{resolveOld=r;});return[document('one',order(10)),document('two',order(20))];},async(_env,_path,fields)=>{writes.push(decodeFirestoreFields(fields).totalSpent);});
 const older=racing({},order(10));await racing({},order(20));resolveOld([document('one',order(10))]);await older;assert.deepEqual(writes,[30,10]);
 const result={finding:'F02-STATS',cap:{globalOrders:5001,ownedOrders:1,persistedOrders:saved.totalOrders,persistedTotal:saved.totalSpent,failOnTruncationRequested:false},race:{writes,finalTotal:10,correctLatestTotal:30},productionVolume:'NOT_VERIFIED',network:false};
-fs.writeFileSync(new URL('../../../docs/agent/evidence/phase01-20261101/stats-result.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
+fs.writeFileSync(new URL('../../../docs/operaciones-tecnicas/evidence/phase01-20261101/stats-result.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));

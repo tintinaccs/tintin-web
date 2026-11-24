@@ -1,6 +1,6 @@
 # Fase 04 — Catálogo comercial (2026-11-02)
 
-Responsable: Codex /root. Base conciliada: e3de73c14c8113244f7456db123f10d1730eaaa0 (#1310). Evidencia de esta ejecución,
+Responsable: herramienta de desarrollo anterior /root. Base conciliada: e3de73c14c8113244f7456db123f10d1730eaaa0 (#1310). Evidencia de esta ejecución,
 no aprobación heredada. Estado: PASS_LOCAL de dominio/build y31recorridos Chromium sobre la base
 conciliada; cierre integral IN_PROGRESS hasta CI y dependencias abiertas. No hubo escrituras de
 inventario, pedidos, usuarios, pagos, correos ni migraciones en producción.

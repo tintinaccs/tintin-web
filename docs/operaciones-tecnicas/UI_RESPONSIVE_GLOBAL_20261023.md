@@ -1,6 +1,6 @@
 # UI/UX responsive compartida — 2026-10-22
 
-Agente: Codex /root. Candidato local conciliado con main 0a719fabd (#1208). Alcance autorizado: tema, bordes, espacios y adaptación global de la interfaz. No cambia datos comerciales, permisos, autenticación ni servicios externos.
+Agente: herramienta de desarrollo anterior /root. Candidato local conciliado con main 0a719fabd (#1208). Alcance autorizado: tema, bordes, espacios y adaptación global de la interfaz. No cambia datos comerciales, permisos, autenticación ni servicios externos.
 
 ## Hallazgos y correcciones
 

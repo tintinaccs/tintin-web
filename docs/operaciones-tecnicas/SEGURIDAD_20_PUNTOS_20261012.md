@@ -1,6 +1,6 @@
 # Seguridad: lista del propietario — 2026-10-12
 
-Codex /root. Base integrada `20cd150f5180344930d5c5062f8450b60b3c27f1` (#1106). La lista se aplica al stack real: Pages/Functions, Firebase Auth/Firestore, Apps Script y Cloudinary. No autoriza adelantar el cambio de dominio. Los resultados locales del candidato no sustituyen CI ni configuración remota.
+herramienta de desarrollo anterior /root. Base integrada `20cd150f5180344930d5c5062f8450b60b3c27f1` (#1106). La lista se aplica al stack real: Pages/Functions, Firebase Auth/Firestore, Apps Script y Cloudinary. No autoriza adelantar el cambio de dominio. Los resultados locales del candidato no sustituyen CI ni configuración remota.
 
 ## Verificación y acciones
 

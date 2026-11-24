@@ -1,6 +1,6 @@
 # Monitor Auth: diagnóstico report-only — 2026-10-11
 
-Codex /root. Base main3488ebfd4315eceb58a3ca43ae5daefc30390775. Cambio separado del importador #1099; preservar ambos al integrar y regenerar plan/manifiesto contra main que resulte del primer merge.
+herramienta de desarrollo anterior /root. Base main3488ebfd4315eceb58a3ca43ae5daefc30390775. Cambio separado del importador #1099; preservar ambos al integrar y regenerar plan/manifiesto contra main que resulte del primer merge.
 
 El log del job114480880407 (run38143127671) demuestra FAIL por el aviso exacto Google frame-ancestors report-only. No bloqueó contenido: el texto declara que registra la violación sin aplicar otra acción. El commit af8e7f21176522ff7be977ee0bdbf8a5f0c9c0d4 del handoff sólo existía en Windows; git local no lo contiene y GitHub respondió422. Se reconstruye una corrección acotada sobre main actual, sin reutilizar su supuesto PASS65.
 

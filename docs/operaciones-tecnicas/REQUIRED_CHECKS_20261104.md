@@ -1,6 +1,6 @@
 # Controles de integridad exigibles antes del merge
 
-Estado: **PROPUESTO; configuración administrativa no aplicada**. Observado el2026-11-04 por Codex /root con el conector autorizado de tintinaccs.
+Estado: **PROPUESTO; configuración administrativa no aplicada**. Observado el2026-11-04 por herramienta de desarrollo anterior /root con el conector autorizado de tintinaccs.
 
 ## Evidencia
 

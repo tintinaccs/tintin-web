@@ -36,7 +36,7 @@ La renovación de archivos protegidos usa preparar-mantenimiento-flujos.mjs.
 
 ## Evidencia
 
-Codex /root. Base: 9fcc8c570. Los logs locales se guardan en
+herramienta de desarrollo anterior /root. Base: 9fcc8c570. Los logs locales se guardan en
 artifacts/correos-refactor (no versionados).
 
 Antes: audit:emails, audit:email-messaging y las 14 pruebas de

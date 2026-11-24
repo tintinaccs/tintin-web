@@ -1,8 +1,8 @@
 # Pulido de rendimiento — 2026-11-03
 
-Codex /root. Base publicada `b0f50a1012b5b2affbe301f3ac4bbd2e5c550cea`.
+herramienta de desarrollo anterior /root. Base publicada `b0f50a1012b5b2affbe301f3ac4bbd2e5c550cea`.
 Pedido: revisar y optimizar carga/fluidez preservando la tienda existente.
-Skills leídos y aplicados: tintin-performance-loading y tintin-performance-budgets.
+recursos de desarrollo leídos y aplicados: tintin-performance-loading y tintin-performance-budgets.
 No se afirma una auditoría comercial integral ni INP de campo.
 
 ## Evidencia y correcciones

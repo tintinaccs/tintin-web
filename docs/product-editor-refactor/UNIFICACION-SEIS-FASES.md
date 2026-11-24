@@ -1,6 +1,6 @@
 # Unificación de la versión de seis fases
 
-26/10/2026. Base e78a9de2f; rama codex/editor-version-unica-seis-fases-20261026.
+26/10/2026. Base e78a9de2f; rama rama histórica: editor-version-unica-seis-fases-20261026.
 La titular pide mantener únicamente la entrega de seis fases. La referencia es
 `00-VERSION-UNICA.md`, con formulario/controladores/estilos/galería originales y
 las correcciones de integridad posteriores.

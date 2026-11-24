@@ -1,6 +1,6 @@
 # Preparación final antes de migrar — 13 octubre 2026
 
-Solicitud del titular: dejar la web preparada para que la migración de URL sea el último paso. No ejecutar migración, DNS, cambios productivos ni operaciones comerciales reales. Codex /root.
+Solicitud del titular: dejar la web preparada para que la migración de URL sea el último paso. No ejecutar migración, DNS, cambios productivos ni operaciones comerciales reales. herramienta de desarrollo anterior /root.
 
 ## Candidato y origen
 
