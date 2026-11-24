@@ -40,7 +40,7 @@ if (!targets.length) {
   const title = 'Registro de resultados de GitHub Actions';
   const issues = await list('issues?state=open&creator=github-actions%5Bbot%5D');
   let issue = issues.find(item => !item.pull_request && item.title === title);
-  if (!issue) issue = await request('issues', 'POST', { title, body: 'Recibos automáticos de workflows sin PR asociado. Suscribirse a este issue para recibir los avisos en GitHub. La entrega a Codex requiere un receptor de eventos conectado.' });
+  if (!issue) issue = await request('issues', 'POST', { title, body: 'Recibos automáticos de workflows sin PR asociado. Suscribirse a este issue para recibir los avisos en GitHub.' });
   targets = [issue.number];
 }
 for (const number of new Set(targets)) {

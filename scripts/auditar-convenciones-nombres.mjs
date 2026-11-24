@@ -9,7 +9,7 @@ const ignoredReferenceFiles = new Set([
   'scripts/cerrar-organizacion-nombres.mjs',
   'scripts/completar-cierre-nombres.mjs',
 ]);
-const contractualDocumentNames = new Set(['AGENTS.md', 'DESIGN.md', 'PRODUCT.md']);
+const contractualDocumentNames = new Set(['DESIGN.md', 'PRODUCT.md']);
 
 function repositoryFiles() {
   return execFileSync(
