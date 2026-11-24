@@ -12,6 +12,7 @@ function requireText(text, pattern, message) {
 const html = read('catalogo.html');
 const css = read('css/pages/catalog/catalog-maintenance.css');
 const runtime = read('js/pages/catalog/mantenimiento-catalogo.js');
+const seo = read('js/core/store/seo-catalogo.mjs');
 const loader = read('js/cargador-mantenimiento-pagina.js');
 const maintenance = read('maintenance/02-catalogo.txt');
 
@@ -40,7 +41,8 @@ requireText(runtime, /popstate/, 'Falta restauración Atrás/Adelante.');
 requireText(runtime, /history\.replaceState/, 'Los filtros no sincronizan la URL.');
 requireText(runtime, /MutationObserver/, 'Falta vigilancia de render fuera de orden.');
 requireText(runtime, /tt-catalog-runtime-state/, 'Faltan estados de recuperación.');
-requireText(runtime, /https:\/\/tintinaccs\.com\//, 'Los metadatos no usan el dominio canónico https://tintinaccs.com.');
+requireText(runtime, /catalogMetadata\(new URL\(location\.href\)\)/, 'El runtime no aplica los metadatos canónicos a la URL actual.');
+requireText(seo, /export const PUBLIC_ORIGIN = 'https:\/\/tintinaccs\.com';/, 'Los metadatos no usan el dominio canónico https://tintinaccs.com.');
 requireText(read('js/components/novak-credit.js'), /new Date\(\)\.getUTCFullYear/, 'El componente compartido no actualiza el año del footer.');
 requireText(html, /id="novak-credit-loader"[^>]*src="[^"]*js\/components\/novak-credit\.js/, 'La página no carga el componente compartido del pie.');
 if (/updateFooterYear|normalizeFooterYear|\.tt-footer-bottom/.test(runtime)) errors.push('La página no debe competir con el año del pie compartido.');

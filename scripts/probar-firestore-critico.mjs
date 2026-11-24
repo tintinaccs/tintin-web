@@ -316,6 +316,12 @@ try {
   await fails(updateDoc(doc(client1, 'users', 'client1'), { role: 'admin' }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { blocked: true }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { customerId: 'CUS_otro' }));
+  for (const metadata of [
+    { id: 'client1' }, { uid: 'client1' }, { internalNotes: 'Nota de prueba' },
+    { productsSpent: 0 }, { deliverySpent: 0 }, { unknownProducts: 0 }, { unknownDelivery: 0 },
+  ]) {
+    await fails(updateDoc(doc(client1, 'users', 'client1'), metadata));
+  }
   // Pedidos mayoristas: la clienta ve solo sus cotizaciones y nunca escribe
   // precios, estados ni su condición de mayorista.
   await succeeds(getDoc(doc(client1, 'wholesaleQuotes', 'WQ_client1_req_abcdef123456')));

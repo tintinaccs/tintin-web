@@ -5,18 +5,27 @@ const {
   url, installVitalsObserver, waitLoaderGone, collectVitals, BUDGETS
 } = require('./_helpers');
 
-// Producto publicado observado en el catálogo de producción al tomar el
-// baseline. No es un fixture sintético: la prueba usa la autoridad real del
-// catálogo y falla si el producto deja de estar disponible.
-const PRODUCT_ID = /127\.0\.0\.1|localhost/.test(process.env.PERF_BASE_URL || process.env.PLAYWRIGHT_BASE_URL || '')
-  ? 'seo-prueba'
-  : 'Sy46ycLJOAOA5ZicgNRS';
+const LOCAL_TEST_BASE = ['127.0.0.1', 'localhost'].includes(new URL(url('')).hostname);
 
 test('[producto] ficha real: render principal e interacción de compra', async ({ page }) => {
   await installVitalsObserver(page);
-  const productPath = /127\.0\.0\.1|localhost/.test(process.env.PERF_BASE_URL || process.env.PLAYWRIGHT_BASE_URL || '')
-    ? 'product?id=' + PRODUCT_ID
-    : 'product.html?id=' + PRODUCT_ID;
+  let productId = 'seo-prueba';
+  if (!LOCAL_TEST_BASE) {
+    // El inventario publicado cambia; resolver un producto con stock desde el
+    // índice público evita dejar una referencia permanente a un producto dado
+    // de baja. Es una lectura GET y no altera datos comerciales.
+    const catalogResponse = await page.goto(url('/api/public-catalog?resource=products&view=home-index'), {
+      waitUntil: 'domcontentloaded',
+      timeout: 20000,
+    });
+    expect(catalogResponse?.ok(), 'el índice público del catálogo debe responder').toBeTruthy();
+    const catalog = await catalogResponse.json();
+    productId = catalog.items?.find(item => typeof item?.id === 'string' && item.data?.available === true)?.id || '';
+    expect(productId, 'el catálogo debe incluir al menos un producto publicado con stock').not.toBe('');
+  }
+  const productPath = LOCAL_TEST_BASE
+    ? 'product?id=' + encodeURIComponent(productId)
+    : 'product.html?id=' + encodeURIComponent(productId);
   const response = await page.goto(url(productPath), {
     waitUntil: 'domcontentloaded',
     timeout: 45000,
@@ -25,7 +34,7 @@ test('[producto] ficha real: render principal e interacción de compra', async (
 
   // CI must verify hydration and the final sold-out behavior as well as SEO.
   // This is a seeded local API, not proof of production integrations.
-  if (/127\.0\.0\.1|localhost/.test(process.env.PERF_BASE_URL || process.env.PLAYWRIGHT_BASE_URL || '')) {
+  if (LOCAL_TEST_BASE) {
     expect(response?.headers()['x-tintin-product-meta']).toBe('server-test');
     await expect(page.locator('#product-name')).toHaveText('Reloj SEO Prueba');
     await expect(page.locator('#product-price')).not.toHaveText('');

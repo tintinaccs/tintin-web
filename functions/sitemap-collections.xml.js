@@ -24,7 +24,9 @@ export async function onRequest(context) {
     const slugs = ['', 'accesorios', ...collections.map(row => row.slug)];
     const locations = [...new Set(slugs.flatMap(slug => {
       const count = products.filter(product => categoryMatches(product, slug)).length;
-      return count ? Array.from({length:Math.ceil(count / CATALOG_PAGE_SIZE)}, (_,i) => catalogUrl(slug, i+1)) : [];
+      const firstPage = slug ? 1 : 2; // /catalogo ya se publica en sitemap-pages.xml.
+      const pageCount = Math.ceil(count / CATALOG_PAGE_SIZE);
+      return Array.from({length:Math.max(0, pageCount - firstPage + 1)}, (_, i) => catalogUrl(slug, i + firstPage));
     }))];
     const rows = locations.map(loc => `  <url>\n    <loc>${xml(loc)}</loc>\n  </url>`);
 

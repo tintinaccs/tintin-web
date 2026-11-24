@@ -1,6 +1,10 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const html=fs.readFileSync('checkout.html','utf8');
+const cartPolicy=fs.readFileSync('js/components/cart/politica-persistencia-carrito.js','utf8');
+const checkoutCartLineLimit=Number(cartPolicy.match(/export const CHECKOUT_CART_LINE_LIMIT = (\d+);/)?.[1]);
+if(!Number.isInteger(checkoutCartLineLimit)) throw new Error('No se pudo leer el límite canónico de líneas del checkout.');
+const checkoutCartLineLimitMessage=`Cada pedido admite hasta ${checkoutCartLineLimit} productos o variantes distintas.`;
 const access=html.slice(html.indexOf('function isCheckoutAuthorized()'),html.indexOf('// Espera a que el SDK'));
 const navigation=html.slice(html.indexOf('function goToStep(n)'),html.indexOf('function showError(stepIdx'));
 const next=html.slice(html.indexOf("document.getElementById('btn-step1-next').onclick"),html.indexOf('// ---- STEP 2: SHIPPING'));
@@ -17,7 +21,7 @@ async function fixture(page,{emptyCart=false,profile={blocked:false}}={}) {
     <div class="ck-error" id="error-0" role="alert"></div><button id="btn-step1-next">Elegir cómo lo recibo</button>
     <script>
     let currentUser=null,currentUserProfile=null,currentStep=0,sessionStatus='RESTORING';const AUTH_STATES={RESTORING:'RESTORING',UNKNOWN:'UNKNOWN',AUTHENTICATED:'AUTHENTICATED',UNAUTHENTICATED:'UNAUTHENTICATED'};
-    const CHECKOUT_RESUME_KEY='tt_checkout_resume_step',orderData={},cart=${emptyCart?'[]':JSON.stringify([{id:'fixture',qty:1}])};let cartItems=cart;
+    const CHECKOUT_CART_LINE_LIMIT=${checkoutCartLineLimit},checkoutCartLineLimitMessage=()=>${JSON.stringify(checkoutCartLineLimitMessage)},CHECKOUT_RESUME_KEY='tt_checkout_resume_step',orderData={},cart=${emptyCart?'[]':JSON.stringify([{id:'fixture',qty:1}])};let cartItems=cart;
     const listeners=[];let ready;const sessionReady=new Promise(resolve=>ready=resolve);
     const waitForSession=()=>sessionReady,waitForAuthReady=waitForSession,subscribeSession=fn=>{listeners.push(fn);fn({status:'RESTORING',user:null});};
     const readCheckoutProfile=async()=>(${JSON.stringify(profile)}),getCartLocal=()=>cart,awaitCartReady=async()=>{},updateQty=async()=>{},removeFromCart=async()=>{};

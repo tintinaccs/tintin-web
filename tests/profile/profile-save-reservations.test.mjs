@@ -9,12 +9,14 @@ import { readAccountIdentity } from '../../js/pages/profile/estado-canonico-perf
 
 const html = fs.readFileSync(new URL('../../perfil.html', import.meta.url), 'utf8');
 const save = html.slice(html.indexOf('  // Save'), html.indexOf('  // Logout'));
+const setSaving = html.slice(html.indexOf('function setProfileSaving('), html.indexOf('function cancelProfileEditing('));
 
 function fixture({ name = 'María López', write = async () => {} } = {}) {
   const trace = [], messages = [];
   const button = { disabled: false, dataset: {}, setAttribute() {}, removeAttribute() {} };
   const fields = {
     'btn-guardar-perfil': button,
+    'btn-cancelar-perfil': { disabled: false },
     'perfil-nombre': { value: name },
     'perfil-tel': { value: '982234567', focus() {} },
     'perfil-dir': { value: 'Dirección de prueba' },
@@ -30,7 +32,8 @@ function fixture({ name = 'María López', write = async () => {} } = {}) {
     ...phone, ...username, splitFullName, isValidFullName, readAccountIdentity,
     document: { getElementById: id => fields[id] },
     window: { TintinReleaseProfileButton: () => { button.disabled = false; button.dataset.ttBusy = '0'; } },
-    profileConfirmed: true, generation: 1, profileGeneration: 1,
+    profileConfirmed: true, profileEditing: true, generation: 1, profileGeneration: 1,
+    profileFieldIds: ['perfil-nombre', 'perfil-tel', 'perfil-dir', 'perfil-username'],
     auth: { currentUser: { uid: 'owner' } }, user: { uid: 'owner', email: 'owner@example.test' },
     userData: { name: 'Nombre Anterior', firstName: 'Nombre', lastName: 'Anterior', phone: '+595981234567', username: 'maria_anterior' },
     usernameEditable: true, db: {}, ref: 'users/owner', serverTimestamp: () => 'server-time',
@@ -39,9 +42,10 @@ function fixture({ name = 'María López', write = async () => {} } = {}) {
     changeReservedPhone: async (...args) => { const key = await reservePhone(...args); await releasePhone(); return key; },
     changeReservedUsername: async (...args) => { const key = await reserveUsername(...args); await releaseUsername(); return key; },
     setDoc: async (...args) => { trace.push('write'); await write(...args); trace.push('confirmed'); },
+    finishProfileEditing: () => {},
     toast: message => messages.push(message), console: { error() {} },
   });
-  vm.runInContext(save, context);
+  vm.runInContext(setSaving + save, context);
   return { context, fields, button, trace, messages, submit: () => button.onclick() };
 }
 

@@ -173,7 +173,7 @@ async function findUsersByEmail(email) {
 
 async function getOrdersSafeUserQuery(field, value) {
   const snap = await getDocs(query(collection(db, 'users'), where(field, '==', value)));
-  return snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+  return snap.docs.map(d => ({ ...d.data(), uid: d.id }));
 }
 
 export async function recalculateOrderOwnerStats(order) {
@@ -205,7 +205,7 @@ export async function recalculateAllUserOrderStats() {
   if (usersSnap.truncated || ordersSnap.truncated) {
     throw new Error('La recalculación global superó el límite seguro de 20.000 registros por colección.');
   }
-  const users = usersSnap.docs.map(d => ({ uid: d.id, ...d.data() }));
+  const users = usersSnap.docs.map(d => ({ ...d.data(), uid: d.id }));
   const orders = ordersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
   const ordersByUid = new Map();
   const ordersByEmail = new Map();

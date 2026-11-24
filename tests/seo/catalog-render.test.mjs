@@ -39,6 +39,22 @@ test('búsqueda y filtros son noindex; medición conserva canonical; desconocido
  assert.equal(catalog.products.length,105);
 });
 
+test('las páginas de resultados conservan título, filtros y URLs canónicas durante la hidratación',()=>{
+ const result=renderCatalogHtml(source,new URL('https://tintinaccs.com/catalogo?cat=relojes&q=reloj&sort=precio-asc&page=2'),catalog);
+ assert.equal(result.status,200);assert.equal(result.noindex,true);
+ const nodes=elements(result.html);
+ assert.equal(nodes.find(node=>node.tagName==='title').childNodes[0].value,'Relojes para mujer en Paraguay · Página 2 | Tintin Accesorios & Relojes');
+ assert.equal(attr(nodes.find(node=>attr(node,'rel')==='canonical'),'href'),'https://tintinaccs.com/catalogo?cat=relojes&page=2');
+ assert.equal(attr(nodes.find(node=>attr(node,'name')==='robots'),'content'),'noindex, follow');
+ const pagination=nodes.find(node=>node.tagName==='nav'&&attr(node,'aria-label')==='Páginas del catálogo');
+ const pageLink=pagination.childNodes.find(node=>node.tagName==='a'&&attr(node,'aria-current')!=='page');
+ const pageUrl=new URL(attr(pageLink,'href'));
+ assert.equal(pageUrl.searchParams.get('cat'),'relojes');
+ assert.equal(pageUrl.searchParams.get('q'),'reloj');
+ assert.equal(pageUrl.searchParams.get('sort'),'precio-asc');
+ assert.equal(pageUrl.searchParams.get('page') || '1','1');
+});
+
 test('ofertas muestran PYG, referencia real, vendedor separado y bajo pedido explícito',()=>{
  const product={id:'p',name:'Bolso',category:'bolsos',price:200000,stock:1,sku:'00042',description:'Autenticidad: Imitación no original con logotipo. Producto bajo pedido.'};
  const schema=productStructuredData(product);

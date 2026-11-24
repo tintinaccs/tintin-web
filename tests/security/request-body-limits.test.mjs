@@ -50,6 +50,26 @@ test('un fallo al cancelar el stream no oculta el rechazo 413', async () => {
   await assert.rejects(readLimitedText(new Request('https://tintin.test/', { method: 'POST', body, duplex: 'half' }), 4), error => error.status === 413);
 });
 
+test('el lector responde sin esperar que termine la limpieza del stream', async () => {
+  const cleanup = Promise.withResolvers();
+  const body = new ReadableStream({
+    start(controller) { controller.enqueue(new Uint8Array(5)); },
+    cancel() { return cleanup.promise; },
+  });
+  const result = assert.rejects(readLimitedText({ body }, 4), error => error.status === 413);
+  try {
+    const outcome = await Promise.race([
+      result.then(() => 'rejected'),
+      new Promise(resolve => setImmediate(() => resolve('pending'))),
+    ]);
+    assert.equal(outcome, 'rejected');
+    assert.equal(body.locked, false);
+  } finally {
+    cleanup.resolve();
+    await result;
+  }
+});
+
 test('webhook y pedidos rechazan streams largos antes de consumir el resto o llamar servicios', async () => {
   const previousFetch = globalThis.fetch;
   let externalCalls = 0;

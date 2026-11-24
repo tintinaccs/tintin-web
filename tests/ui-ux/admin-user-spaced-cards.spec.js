@@ -6,12 +6,12 @@ async function users(page,width,options={}) {
   const stubs={
     '/js/core/firebase/firebase.js': 'export const auth=window.__auth;export const db={};',
     '/js/core/auth/coordinador-sesion.js': 'export const subscribeAuthState=fn=>fn(window.__auth.currentUser);',
-    '/js/core/auth/cliente-api-autenticado.js': "export const authenticatedFetch=async()=>{throw new Error('sin red en pruebas');};export const apiFailureMessage=(_r,_b,fallback)=>fallback;",
+    '/js/core/auth/cliente-api-autenticado.js': `export const authenticatedFetch=async(_url,options)=>{const data=JSON.parse(options.body);window.__customerProfileWrites.push(data);return new Promise((resolve,reject)=>{window.__finishCustomerProfileWrite=(success)=>{if(success){Object.assign(window.__users[data.uid],data,{lastChangeId:data.changeId});resolve({ok:true,json:async()=>({ok:true,result:{}})});}else reject(new Error('Sin conexión'));};});};export const apiFailureMessage=(_r,fallback)=>fallback;`,
     '/js/core/auth/roles.js': "export const SUPER_ADMIN='owner@example.test';export const ROLE_LABELS={client:'Cliente'};",
     '/js/core/auth/contrato-cuentas-generado.js': "export const ASSIGNABLE_ROLES=['client'];",
     '/firebase-firestore.js': `export const collection=(...args)=>args;export const doc=(db,collection,uid)=>uid;export const query=(...args)=>args;export const where=(...args)=>args;export const limit=n=>n;export const startAfter=c=>c;export const getDocs=async()=>({docs:[]});export async function getDoc(uid){await new Promise(r=>setTimeout(r,uid==='slow'?120:0));return {id:uid,exists:()=>true,data:()=>window.__users[uid]||{name:'Solicitud anterior'}};}`,
   };
-  await page.addInitScript(()=>{window.__auth={currentUser:{uid:'owner',email:'owner@example.test'}};window.__users={first:{uid:'first',name:'Primera cuenta QA',email:'primera@example.test',photoURL:'/assets-tintin/images/admin/app-icon-512.png'},second:{uid:'second',name:'Segunda cuenta QA',email:'segunda@example.test'}};});
+  await page.addInitScript(()=>{window.__auth={currentUser:{uid:'owner',email:'owner@example.test'}};window.__customerProfileWrites=[];window.__users={first:{uid:'first',name:'Primera cuenta QA',email:'primera@example.test',phone:'+595981123456',photoURL:'/assets-tintin/images/admin/app-icon-512.png'},second:{uid:'second',name:'Segunda cuenta QA',email:'segunda@example.test'}};});
   await load(page,width,'admin.html',{pathname:options.pathname,transform:options.startup ? html=>html.replace('<script src="js/cargador-pagina.js', '<script nonce="dGludGluLWZpeHR1cmU=" src="js/cargador-pagina.js') : undefined,respond:async(route,url)=>{
     const stub=stubs[url.pathname] || (url.hostname==='www.gstatic.com'?stubs['/firebase-firestore.js']:null);
     if(stub) {await route.fulfill({contentType:'text/javascript',body:stub,headers:{'Access-Control-Allow-Origin':'*'}});return true;}
@@ -26,6 +26,45 @@ async function users(page,width,options={}) {
     await window.openClientFichaByUid('first');
   }, ['/js/admin/users/perfil-usuario-superadmin.js','/js/admin/users/ficha-usuario-admin.js']);
 }
+
+test('reintentar un guardado de cliente conserva el identificador del cambio', async ({ page }) => {
+  await users(page, 390);
+  const form = page.locator('.ficha-edit-form');
+  const save = form.getByRole('button', { name: 'Guardar cambios' });
+  const name = form.getByRole('textbox', { name: 'Nombre', exact: true });
+  await form.getByRole('button', { name: 'Editar' }).click();
+  await name.fill('María');
+  await save.click();
+  await expect.poll(() => page.evaluate(() => window.__customerProfileWrites.length)).toBe(1);
+  await page.evaluate(() => window.__finishCustomerProfileWrite(false));
+  await expect(form.getByRole('status')).toHaveText('Sin conexión');
+  await expect(name).toBeEditable();
+  await save.click();
+  await expect.poll(() => page.evaluate(() => window.__customerProfileWrites.length)).toBe(2);
+  const writes = await page.evaluate(() => window.__customerProfileWrites);
+  expect(writes[1]).toEqual(writes[0]);
+  await expect(name).toHaveJSProperty('readOnly', true);
+  await page.evaluate(() => window.__finishCustomerProfileWrite(true));
+  await expect(form.getByRole('button', { name: 'Editar' })).toBeVisible();
+  await expect(name).toHaveValue('María');
+});
+
+test('guardar una ficha cerrada no interrumpe la ficha que se abrió después', async ({ page }) => {
+  await users(page, 390);
+  const ficha = page.locator('#client-ficha-body');
+  await ficha.getByRole('button', { name: 'Editar' }).click();
+  await ficha.getByRole('textbox', { name: 'Nombre', exact: true }).fill('María');
+  await ficha.getByRole('button', { name: 'Guardar cambios' }).click();
+  await expect.poll(() => page.evaluate(() => window.__customerProfileWrites.length)).toBe(1);
+  await page.getByRole('button', { name: 'Cerrar ficha de cliente' }).click();
+  await page.evaluate(() => window.openClientFichaByUid('second'));
+  await expect(ficha.getByRole('heading', { name: 'Segunda cuenta QA' })).toBeVisible();
+  await page.evaluate(async () => {
+    window.__finishCustomerProfileWrite(true);
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
+  await expect(ficha.getByRole('heading', { name: 'Segunda cuenta QA' })).toBeVisible();
+});
 for(const width of [320,390,540,768,1440]) test('tarjeta legible conserva correo y acciones '+width,async({page},info)=>{
   await users(page,width);
   await page.evaluate(()=>{

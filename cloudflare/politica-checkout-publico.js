@@ -1,6 +1,7 @@
 import { normalizePaymentCatalog } from '../js/orders/nucleo-metodos-pago.js';
 import { resolveProductVariant, productVariantPrice } from '../js/core/store/inventario-variantes.mjs';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
+import { CHECKOUT_CART_LINE_LIMIT } from '../js/components/cart/politica-persistencia-carrito.js';
 import { isValidCustomerName } from '../js/pages/profile/configuracion-inicial-perfil.mjs';
 import { shippingDepartment } from '../js/components/location/departamento-ciudad.mjs';
 import { canonicalDeliveryCities, normalizeDeliveryCityName, configuredShippingPrice } from '../js/components/location/tarifas-delivery.mjs';
@@ -23,7 +24,6 @@ import {
 // Es el mismo contrato que aplicaba phase4CreateOrder_ (apps-script/CrearPedido.gs)
 // antes de que la creación se moviera a Cloudflare.
 
-const MAX_CART_LINES = 60;
 const CHECKOUT_GUARD_WINDOW_MS = 5 * 60 * 1000;
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9_-]{12,100}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -73,7 +73,7 @@ function parseMoney(value) {
 
 function normalizeCartLines(cartLines) {
   if (!Array.isArray(cartLines) || !cartLines.length) throw checkoutError('empty_cart');
-  if (cartLines.length > MAX_CART_LINES) throw checkoutError('too_many_products');
+  if (cartLines.length > CHECKOUT_CART_LINE_LIMIT) throw checkoutError('too_many_products');
   const byLine = new Map();
   for (const raw of cartLines) {
     if (!hasOnlyKeys(raw, CART_LINE_KEYS)) throw checkoutError('invalid_cart');

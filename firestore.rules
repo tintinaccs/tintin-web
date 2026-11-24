@@ -247,10 +247,11 @@ service cloud.firestore {
 
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([
-        'customerId', 'identityVersion', 'profileStatus', 'deleted', 'deletedAt', 'deletedBy',
+        'id', 'uid', 'customerId', 'identityVersion', 'profileStatus', 'deleted', 'deletedAt', 'deletedBy',
         'email', 'createdAt', 'provider', 'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason',
         'roleBeforeBlock', 'purchaseCount', 'orderCount', 'totalOrders',
         'totalSpent', 'completedOrders', 'pendingOrders', 'cancelledOrders',
+        'productsSpent', 'deliverySpent', 'unknownProducts', 'unknownDelivery', 'internalNotes',
         'lastOrderAt', 'lastOrderId', 'lastPurchaseAt', 'lastPurchaseOrderId',
         'profileStatsUpdatedAt', 'orderStats', 'lastCheckoutAt', 'lastCheckoutOrderId',
         'commerceHistoryClaimed', 'commerceHistorySourceUid',
@@ -1205,12 +1206,11 @@ service cloud.firestore {
             onboardingActivationUpdate()
           )
         ) ||
-        // Las estadísticas de pedidos las recalcula solo el servidor
-        // (cloudflare/sincronizacion-estadisticas-pedido.js); el navegador
-        // de un admin ya no puede sobrescribirlas.
+        // El recálculo normal vive en Cloudflare. El Super Admin conserva
+        // la reconciliación manual de estadísticas del panel de pedidos.
         (
           isSuperAdmin() &&
-          !request.resource.data.diff(resource.data).affectedKeys().hasAny(['customerId']) &&
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(['id', 'uid', 'customerId']) &&
           (
             !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']) ||
             (

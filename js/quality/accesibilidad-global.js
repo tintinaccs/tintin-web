@@ -38,17 +38,39 @@ function injectStyles() {
 }
 
 function isVisible(element) {
+  if (!isRendered(element)) return false;
+  const rect = element.getBoundingClientRect();
+  return rect.bottom > 0 && rect.right > 0 && rect.top < window.innerHeight && rect.left < window.innerWidth;
+}
+
+function isRendered(element) {
   if (!(element instanceof HTMLElement) || element.hidden || element.inert) return false;
   if (element.closest('[hidden],[inert],[aria-hidden="true"]')) return false;
   const style = getComputedStyle(element);
   if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0' || style.pointerEvents === 'none') return false;
   const rect = element.getBoundingClientRect();
-  if (rect.width <= 0 || rect.height <= 0) return false;
-  return rect.bottom > 0 && rect.right > 0 && rect.top < window.innerHeight && rect.left < window.innerWidth;
+  return rect.width > 0 && rect.height > 0;
+}
+
+function hasScrollableDialogAncestor(element, dialog) {
+  for (let current = element.parentElement; current; current = current.parentElement) {
+    const style = getComputedStyle(current);
+    const scrollsY = /auto|scroll|overlay/.test(style.overflowY) && current.scrollHeight > current.clientHeight;
+    const scrollsX = /auto|scroll|overlay/.test(style.overflowX) && current.scrollWidth > current.clientWidth;
+    if (scrollsY || scrollsX) return true;
+    if (current === dialog) break;
+  }
+  return false;
 }
 
 function focusables(root) {
-  return Array.from(root.querySelectorAll(FOCUSABLE_SELECTOR)).filter(isVisible);
+  return Array.from(root.querySelectorAll(FOCUSABLE_SELECTOR)).filter(element =>
+    isVisible(element) || (
+      root.matches(DIALOG_SELECTOR) &&
+      isRendered(element) &&
+      hasScrollableDialogAncestor(element, root)
+    )
+  );
 }
 
 function ensureMainTarget() {

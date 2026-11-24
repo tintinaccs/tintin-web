@@ -6,7 +6,7 @@ import { ordersForView } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20261112-delivery-separate-1';
+import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20261124-audit-1';
 import { ORDER_LIFECYCLE_LABELS, orderStatusLabel, orderTimeline, customerOrderMessage } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 
 const PAGE = /(?:^|\/)perfil(?:\.html)?\/?$/i;

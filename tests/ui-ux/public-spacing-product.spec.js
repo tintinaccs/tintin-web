@@ -236,7 +236,7 @@ for(const [width,height] of [[320,700],[390,844],[600,900],[640,900],[768,1024],
    const {addToCart}=await import(moduleUrl);
    const names=['ANILLO AMORE','AROS AMELIE','Cadena de acero con nombre largo para probar los saltos de línea','Aro','AccesorioSuperLargoSinEspaciosParaComprobarQueNoDesborda'];
    for(let i=0;i<5;i++)await addToCart({id:'selection-layout-'+i,name:names[i],variant:i===0?'piedra-del-zodiaco':i===2?'Dorado / talla ajustable':'',price:30000+i*5000,qty:1,stock:8,imageUrl:'/assets-tintin/images/general/logo.png'});
-  },'/js/components/cart/sincronizacion-carrito.js?v=tintin-20261117-activity-2');
+  },'/js/components/cart/sincronizacion-carrito.js?v=tintin-20261124-audit-2');
   await expect(page.locator('#cart-drawer')).toBeVisible();
   await page.locator('#btn-cart-close').click();
   await expect(page.locator('#cart-drawer')).not.toBeVisible();

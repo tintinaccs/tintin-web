@@ -1,5 +1,8 @@
 import {interfaceLabel} from '../js/core/store/texto-interfaz.mjs';
-import {catalogUrl, categoryCopy, catalogMetadata, CATALOG_PAGE_SIZE} from '../js/core/store/seo-catalogo.mjs';
+import {
+  catalogUrl, categoryCopy, catalogMetadata, catalogTitle, catalogPaginationUrl,
+  CATALOG_PAGE_SIZE, CATALOG_ROBOTS_INDEXABLE
+} from '../js/core/store/seo-catalogo.mjs';
 export {CATALOG_PAGE_SIZE};
 import {productSearchScore} from '../js/core/store/busqueda-productos.mjs';
 import { onRequest as publicCatalog } from '../functions/api/public-catalog.js';
@@ -39,14 +42,14 @@ export async function loadPublicCatalog(context) {
 }
 
 export function replaceCatalogHead(html, {title, description, canonical, noindex}) {
-  let output = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${htmlText(title)}</title>`)
-    .replace(/<link\s+rel="canonical"[^>]*>/i, `<link rel="canonical" href="${htmlText(canonical)}">`);
-  for (const [attribute, name, value] of [['name','description',description], ['name','robots',noindex ? 'noindex, follow' : 'index, follow'],
+  let output = html.replace(/<title>[\s\S]*?<\/title>/i, () => `<title>${htmlText(title)}</title>`)
+    .replace(/<link\s+rel="canonical"[^>]*>/i, () => `<link rel="canonical" href="${htmlText(canonical)}">`);
+  for (const [attribute, name, value] of [['name','description',description], ['name','robots',noindex ? 'noindex, follow' : CATALOG_ROBOTS_INDEXABLE],
     ['property','og:title',title], ['property','og:description',description], ['property','og:url',canonical],
     ['name','twitter:title',title], ['name','twitter:description',description]]) {
     const regex = new RegExp(`<meta\\s+${attribute}="${name}"[^>]*>`, 'i');
     const tag = `<meta ${attribute}="${name}" content="${htmlText(value)}">`;
-    output = regex.test(output) ? output.replace(regex, tag) : output.replace('</head>', tag + '</head>');
+    output = regex.test(output) ? output.replace(regex, () => tag) : output.replace('</head>', () => tag + '</head>');
   }
   return output;
 }
@@ -63,8 +66,9 @@ export function renderCatalogHtml(source, url, catalog) {
   const invalid = unknown || meta.page < 1 || meta.page > Math.max(1, Math.ceil(all.length / CATALOG_PAGE_SIZE));
   const [heading, description] = categoryCopy(meta.slug, interfaceLabel(collection?.name || collection?.title));
   const noindex = invalid || !all.length || meta.filtered;
-  let html = replaceCatalogHead(source, {title:`${heading}${meta.page > 1 ? ` · Página ${meta.page}` : ''} | Tintin Accesorios & Relojes`, description, canonical:meta.canonical, noindex});
-  html = html.replace(/(<h1[^>]*id="cat-titulo"[^>]*>)[\s\S]*?<\/h1>/, `$1${htmlText(invalid ? 'Categoría o página no encontrada' : heading)}</h1>`);
+  let html = replaceCatalogHead(source, {title:catalogTitle(heading, meta.page), description, canonical:meta.canonical, noindex});
+  html = html.replace(/(<h1[^>]*id="cat-titulo"[^>]*>)[\s\S]*?<\/h1>/,
+    (_, open) => `${open}${htmlText(invalid ? 'Categoría o página no encontrada' : heading)}</h1>`);
   const products = invalid ? [] : all.slice((meta.page - 1) * CATALOG_PAGE_SIZE, meta.page * CATALOG_PAGE_SIZE);
   const cards = products.map(product => {
     const link = `/product?id=${encodeURIComponent(product.id)}`;
@@ -78,13 +82,13 @@ export function renderCatalogHtml(source, url, catalog) {
   const links = catalog.collections.filter(row => catalog.products.some(product => categoryMatches(product, row.slug)))
     .map(row => `<a href="${htmlText(catalogUrl(row.slug))}">${htmlText(interfaceLabel(row.name || row.title || row.slug))}</a>`).join(' · ');
   const nav = `<nav aria-label="Categorías">${links} · <a href="/catalogo?cat=accesorios">Accesorios</a></nav>`;
-  const pages = `<nav aria-label="Páginas del catálogo">${Array.from({length:Math.ceil(all.length / CATALOG_PAGE_SIZE)}, (_,i) => `<a href="${htmlText(catalogUrl(meta.slug,i+1))}"${i+1 === meta.page ? ' aria-current="page"' : ''}>${i+1}</a>`).join(' · ')}</nav>`;
-  html = html.replace('<!-- cat-grid-end -->', `<!-- cat-grid-end -->${nav}${pages}`);
+  const pages = `<nav aria-label="Páginas del catálogo">${Array.from({length:Math.ceil(all.length / CATALOG_PAGE_SIZE)}, (_,i) => `<a href="${htmlText(catalogPaginationUrl(url,meta.slug,i+1))}"${i+1 === meta.page ? ' aria-current="page"' : ''}>${i+1}</a>`).join(' · ')}</nav>`;
+  html = html.replace('<!-- cat-grid-end -->', () => `<!-- cat-grid-end -->${nav}${pages}`);
   const graph = [
     {'@type':'CollectionPage','@id':meta.canonical,name:heading,url:meta.canonical,description},
     {'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Inicio',item:PUBLIC_ORIGIN+'/'},{'@type':'ListItem',position:2,name:heading,item:meta.canonical}]},
     {'@type':'ItemList',itemListElement:products.map((product,i) => ({'@type':'ListItem',position:(meta.page-1)*CATALOG_PAGE_SIZE+i+1,name:product.name,url:PUBLIC_ORIGIN+`/product?id=${encodeURIComponent(product.id)}`}))},
   ];
-  html = html.replace('</head>', `<script type="application/ld+json" id="tt-catalog-jsonld">${JSON.stringify({'@context':'https://schema.org','@graph':graph}).replace(/</g,'\\u003c')}</script></head>`);
+  html = html.replace('</head>', () => `<script type="application/ld+json" id="tt-catalog-jsonld">${JSON.stringify({'@context':'https://schema.org','@graph':graph}).replace(/</g,'\\u003c')}</script></head>`);
   return {html, status:invalid ? 404 : 200, noindex};
 }

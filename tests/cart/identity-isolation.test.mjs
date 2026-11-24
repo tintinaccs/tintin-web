@@ -22,10 +22,10 @@ test('salir conserva el carrito de la cuenta sin entregárselo a otra cuenta o i
 });
 
 
-function additionFixture({qty=0,readStock=async()=>{}}={}) {
- let cart=qty?[{id:'p',lineId:'p',qty,price:100}]:[];
+function additionFixture({qty=0,items,readStock=async()=>{}}={}) {
+ let cart=items || (qty?[{id:'p',lineId:'p',qty,price:100}]:[]);
  const events=[];
- const c=vm.createContext({authGeneration:1,pendingAdds:new Map(),MAX_QTY:99,MAX_CART_LINES:100,
+ const c=vm.createContext({authGeneration:1,pendingAdds:new Map(),MAX_QTY:99,MAX_CART_LINES:100,CHECKOUT_CART_LINE_LIMIT:60,
   window:{PRODUCTS:[],TintinAnalytics:{track:(name,params)=>events.push({name,params})}},
   normalizeItem:item=>({...item,lineId:item.id}),withCartMutation:fn=>fn(),refreshProductStock:readStock,
   currentLocalCart:()=>cart,stockLimit:()=>150,availableVariantQuantity:()=>150,
@@ -43,6 +43,15 @@ test('una adición pendiente de otra identidad no absorbe la adición de la cuen
  releasePrevious();assert.equal((await previous).reason,'identity_changed');
  assert.notEqual(release,releasePrevious,'la cuenta nueva inicia su propia operación');
  release();assert.equal((await current).changed,true);assert.equal(f.cart()[0].qty,1);
+});
+
+test('el carrito deja agregar unidades de una línea existente al alcanzar el límite de checkout', async () => {
+ const items=Array.from({length:60},(_,i)=>({id:`p-${i}`,lineId:`p-${i}`,qty:1,price:100}));
+ const f=additionFixture({items});
+ assert.equal((await f.c.addToCart({id:'producto-nuevo',qty:1,price:100})).reason,'line_limit');
+ assert.equal((await f.c.addToCart({id:'p-0',qty:1,price:100})).changed,true);
+ assert.equal(f.cart().length,60);
+ assert.equal(f.cart()[0].qty,2);
 });
 
 for(const [qty,requested,accepted] of [[99,1,0],[80,30,19]])test(`analítica registra solo unidades persistidas: ${qty} + ${requested}`,async()=>{

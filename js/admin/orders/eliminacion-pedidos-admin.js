@@ -7,7 +7,7 @@
 
 import {
   recalculateOrderOwnerStats
-} from '../../core/store/estadisticas-pedidos.js?v=tintin-20261112-delivery-separate-1';
+} from '../../core/store/estadisticas-pedidos.js?v=tintin-20261124-audit-1';
 
 (function () {
   'use strict';

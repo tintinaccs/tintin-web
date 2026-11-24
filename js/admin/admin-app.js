@@ -16,7 +16,7 @@ import {commercialDraft} from './products/editor-comercial-core.mjs?v=tintin-202
 import {mountCommercialEditor} from './products/editor-comercial-interfaz.js?v=tintin-20261102-phase03-editor-1';
 import { reorderVariantInventory, variantAttributes } from '../core/store/inventario-variantes.mjs?v=tintin-20261031-seo-espacios-2';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
-import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261112-delivery-separate-1';
+import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261124-audit-1';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261101-app-movil-1';
 import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261031-seo-espacios-2';
@@ -1975,7 +1975,7 @@ function startAdminRealtimeData() {
           : query(collection(db, 'users'), orderBy('__name__'), limit(ADMIN_REALTIME_LIMIT));
         return onSnapshot(usersQuery, { includeMetadataChanges: true }, snapshot => {
           const last = snapshot.docs.at(-1);
-          next({ records: snapshot.docs.map(item => ({ id: item.id, uid: item.id, ...item.data() })),
+          next({ records: snapshot.docs.map(item => ({ ...item.data(), id: item.id, uid: item.id })),
             cursor: last, cursorKey: last?.id || '', hasMore: snapshot.docs.length === ADMIN_REALTIME_LIMIT,
             authoritative: snapshot.metadata?.fromCache !== true });
         }, fail);

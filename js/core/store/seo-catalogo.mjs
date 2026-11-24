@@ -1,6 +1,11 @@
 import {normalizeCollectionSlug} from './colecciones-publicas.mjs?v=tintin-20261116-discovery-2';
 export const PUBLIC_ORIGIN = 'https://tintinaccs.com';
 export const CATALOG_PAGE_SIZE = 48;
+export const CATALOG_ROBOTS_INDEXABLE = 'index, follow, max-image-preview:large';
+
+function isCatalogFilter(key) {
+  return !['cat', 'page'].includes(key) && !/^(utm_.+|gclid|fbclid)$/.test(key);
+}
 
 export function catalogUrl(slug = '', page = 1) {
   const url = new URL('/catalogo', PUBLIC_ORIGIN);
@@ -19,11 +24,24 @@ export function categoryCopy(slug, label = '') {
     'Elegí por material, color y medidas reales de cada ficha. Comprá en Tintin Accesorios & Relojes con retiro coordinado en San Lorenzo, delivery en zonas habilitadas y encomienda al interior.'];
 }
 
+export function catalogTitle(heading, page) {
+  return `${heading}${page > 1 ? ` · Página ${page}` : ''} | Tintin Accesorios & Relojes`;
+}
+
+export function catalogPaginationUrl(url, slug, page) {
+  const target = new URL(catalogUrl(slug, page));
+  for (const [key, value] of url.searchParams) {
+    if (isCatalogFilter(key)) target.searchParams.append(key, value);
+  }
+  return target.href;
+}
+
 export function catalogMetadata(url) {
-  const slug = normalizeCollectionSlug(url.searchParams.get('cat') || '');
+  const category = normalizeCollectionSlug(url.searchParams.get('cat') || '');
+  const slug = category === 'todos' ? '' : category;
   const page = /^\d+$/.test(url.searchParams.get('page') || '1') ? Number(url.searchParams.get('page') || 1) : 0;
   const canonical = catalogUrl(slug, page);
-  const filtered = [...url.searchParams.keys()].some(key => !['cat','page'].includes(key) && !/^(utm_.+|gclid|fbclid)$/.test(key));
+  const filtered = [...url.searchParams.keys()].some(isCatalogFilter);
   return {slug, page, canonical, filtered};
 }
 

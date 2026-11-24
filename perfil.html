@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="es" class="tt-parity-safe">
 <head>
-  <meta name="tintin-page-revision" content="b9c67645220ace1897a9d9c964a75c1702b4344f99858f023606ea9d7ac2d351">
+  <meta name="tintin-page-revision" content="df4fcc090ba880c312c528e1cc5269a248c7fdb5e975d01edcbee024144c16fd">
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261101-cls-home-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261122-hallmark-focus-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261124-audit-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261116-discovery-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261122-hallmark-focus-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261124-audit-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261111-favicon-2">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261111-favicon-2">
@@ -22,7 +22,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261122-hallmark-focus-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261124-audit-1">
   <link rel="stylesheet" id="tt-perfil-css-bundle" href="css/generated/perfil.css?v=tintin-perfil-95cbf6262748ea70">
   <link rel="tt-bundled-stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2" disabled data-tt-style-bundle="tt-perfil-css-bundle">
   <meta name="description" content="Mi perfil en Tintin Accesorios. Gestioná tu cuenta, pedidos y datos." />
@@ -264,7 +264,7 @@
 
 <!-- Scripts -->
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261117-activity-2"></script>
+<script src="tienda.js?v=tintin-20261124-audit-1"></script>
 
 <script type="module">
 import { auth, db, appCheckReady } from "./js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -274,7 +274,7 @@ import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20261017-domain-cutover-1";
-import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261117-activity-2";
+import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261124-audit-2";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20261030-home-history-5";
 import { createLocationMap, renderSavedMapPreviews } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261021-location-profile-layout-3-editor-search-20261028-2";
 import { toSavedLocation, splitFullName, isValidFullName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1";
@@ -365,13 +365,12 @@ const profileFieldIds = ['perfil-nombre', 'perfil-tel', 'perfil-dir', 'perfil-us
 profileFieldIds.forEach(id => document.getElementById(id).addEventListener('input', () => dirtyProfileFields.add(id)));
 // Los datos se muestran bloqueados; «Editar» los habilita y «Cancelar»
 // devuelve los últimos valores confirmados. El correo nunca se edita acá.
-const editableProfileFieldIds = ['perfil-nombre', 'perfil-tel', 'perfil-dir', 'perfil-username'];
 const confirmedProfileValues = {};
 let profileEditing = false;
 function setProfileEditing(editing) {
   profileEditing = Boolean(editing);
   document.querySelector('.tt-profile-data-card')?.setAttribute('data-profile-editing', String(profileEditing));
-  editableProfileFieldIds.forEach(id => { document.getElementById(id).readOnly = !profileEditing; });
+  profileFieldIds.forEach(id => { document.getElementById(id).readOnly = !profileEditing; });
   document.getElementById('perfil-datos-acciones').hidden = !profileEditing;
   const toggle = document.getElementById('btn-editar-perfil');
   toggle.hidden = profileEditing;
@@ -380,15 +379,25 @@ function setProfileEditing(editing) {
     ? 'Podés cambiar tu nombre, apellido, teléfono y dirección. Tu correo lo cambia solo Tintín.'
     : 'Tus datos están protegidos. Tocá «Editar» para cambiarlos.';
 }
+function setProfileSaving(saving) {
+  const save = document.getElementById('btn-guardar-perfil');
+  save.disabled = saving || !profileConfirmed;
+  save.dataset.ttBusy = saving ? '1' : '0';
+  if (saving) save.setAttribute('aria-busy', 'true');
+  else save.removeAttribute('aria-busy');
+  document.getElementById('btn-cancelar-perfil').disabled = saving;
+  profileFieldIds.forEach(id => { document.getElementById(id).readOnly = saving || !profileEditing; });
+}
 function cancelProfileEditing() {
   for (const [id, value] of Object.entries(confirmedProfileValues)) document.getElementById(id).value = value;
   dirtyProfileFields.clear();
   setProfileEditing(false);
 }
-function finishProfileEditing() {
-  editableProfileFieldIds.forEach(id => { confirmedProfileValues[id] = document.getElementById(id).value; });
+function finishProfileEditing(profile, user) {
   dirtyProfileFields.clear();
+  hydrateProfilePresentation(profile, user);
   setProfileEditing(false);
+  document.getElementById('btn-editar-perfil').focus();
 }
 document.getElementById('btn-editar-perfil').onclick = () => {
   setProfileEditing(true);
@@ -461,7 +470,10 @@ function setProfileReadState(state, message) {
   document.getElementById('btn-guardar-perfil').disabled = state !== 'ready';
   document.getElementById('btn-reintentar-perfil').hidden = state !== 'error';
   document.getElementById('btn-editar-perfil').disabled = state === 'blocked';
-  if (state === 'blocked' && profileEditing) cancelProfileEditing();
+  if (state === 'blocked' && profileEditing) {
+    cancelProfileEditing();
+    setProfileSaving(false);
+  }
 }
 
 function startProfileAuthGuard() {
@@ -493,6 +505,7 @@ async function loadProfile(user, attempt = 0) {
     document.getElementById('perfil-username-field').hidden = true;
     activeProfileUid = user?.uid || null;
     profileConfirmed = false;
+    setProfileSaving(false);
     document.getElementById('btn-guardar-perfil').onclick = null;
     document.getElementById('perfil-location-content').onclick = null;
     document.getElementById('btn-cambiar-ubicacion').onclick = null;
@@ -718,17 +731,10 @@ async function loadProfile(user, attempt = 0) {
     const isCurrent = () => profileConfirmed && generation === profileGeneration && auth.currentUser?.uid === user.uid;
     if (!isCurrent() || profileSaveInFlight) return;
     profileSaveInFlight = true;
-    const saveButton = document.getElementById('btn-guardar-perfil');
-    saveButton.disabled = true;
-    saveButton.dataset.ttBusy = '1';
-    saveButton.setAttribute('aria-busy', 'true');
+    setProfileSaving(true);
     const release = () => {
       profileSaveInFlight = false;
-      if (!isCurrent()) return;
-      saveButton.disabled = false;
-      saveButton.dataset.ttBusy = '0';
-      saveButton.removeAttribute('aria-busy');
-      window.TintinReleaseProfileButton?.('btn-guardar-perfil');
+      if (isCurrent()) setProfileSaving(false);
     };
     let cambioUsername = false;
     try {
@@ -803,17 +809,12 @@ async function loadProfile(user, attempt = 0) {
       if (cambioUsername && nuevoUsername && usernameAnterior) await releaseUsername(db, usernameAnterior);
       if (!isCurrent()) return;
       userData = { ...(userData || {}), ...updates };
-      const savedIdentity = readAccountIdentity(userData, user);
-      document.getElementById('perfil-nombre-display').textContent = savedIdentity.name || savedIdentity.email || 'Cuenta Tintin';
-      document.getElementById('perfil-nombre').value = savedIdentity.name;
-      if (userData) userData.phone = nuevoTelefono; // para que un segundo guardado no reintente la reserva
       if (cambioUsername && nuevoUsername) {
-        userData.username = nuevoUsername;
         userData.usernameChangedAt = true;
         usernameInput.disabled = true;
         document.getElementById('perfil-username-hint').textContent = 'Ya usaste tu único cambio de nombre de usuario.';
       }
-      if (typeof finishProfileEditing === 'function') finishProfileEditing();
+      finishProfileEditing(userData, user);
       toast('✅ Perfil actualizado');
     } catch (e) {
       if (!isCurrent()) return;
@@ -848,7 +849,7 @@ startProfileAuthGuard();
 
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1"></script>
-<script type="module" src="js/pages/profile/pedidos-perfil.js?v=tintin-20261113-senas-saldos-1"></script>
+<script type="module" src="js/pages/profile/pedidos-perfil.js?v=tintin-20261124-audit-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20261117-activity-2"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261117-editorial-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1"></script>

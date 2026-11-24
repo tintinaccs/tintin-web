@@ -83,7 +83,7 @@ if (!window.TintinAdminUserFichaBooted) {
   async function loadUser(uid) {
     const snap = await getDoc(doc(db, 'users', uid));
     if (!snap.exists()) throw new Error('La ficha de esta cuenta ya no existe.');
-    return { uid: snap.id, ...snap.data() };
+    return { ...snap.data(), uid: snap.id };
   }
 
   async function loadOrders(uid) {
@@ -118,7 +118,7 @@ if (!window.TintinAdminUserFichaBooted) {
 
   // Datos del cliente: bloqueados por defecto; "Editar" habilita el formulario.
   // Ningún dato puede quedar vacío y el servidor vuelve a validar todo.
-  function customerDataSection(user) {
+  function customerDataSection(user, isCurrent) {
     const block = section('Datos del cliente');
     block.wrapper.classList.add('ficha-customer-data');
     const names = splitName(user);
@@ -163,6 +163,7 @@ if (!window.TintinAdminUserFichaBooted) {
     cancel.type = 'button';
     const save = el('button', 'adm-btn adm-btn-sm adm-btn-primary', 'Guardar cambios');
     save.type = 'submit';
+    let lastSubmission;
     actions.append(edit);
     form.append(note, status, actions);
 
@@ -183,18 +184,25 @@ if (!window.TintinAdminUserFichaBooted) {
       for (const [key, input] of Object.entries(inputs)) input.value = initial[key];
       status.textContent = '';
       setEditing(false);
+      edit.focus();
     });
     form.addEventListener('submit', async event => {
       event.preventDefault();
-      if (form.dataset.editing !== 'true' || save.disabled) return;
+      if (!isCurrent() || form.dataset.editing !== 'true' || save.disabled) return;
       const values = Object.fromEntries(Object.entries(inputs).map(([key, input]) => [key, input.value.replace(/\s+/g, ' ').trim()]));
       const empty = fields.find(([key]) => inputs[key].required && !values[key]);
       if (empty) { status.textContent = `${empty[1]} no puede quedar vacío.`; inputs[empty[0]].focus(); return; }
       if (!EMAIL_PATTERN.test(values.email)) { status.textContent = 'Correo inválido.'; inputs.email.focus(); return; }
       const emailChanged = lower(values.email) !== lower(initial.email);
       if (emailChanged && !window.confirm(`Vas a cambiar el correo de acceso de ${initial.email || 'esta cuenta'} a ${values.email}.\n\nEl cliente ya no podrá ingresar con el correo anterior. ¿Continuar?`)) return;
+      const submittedValues = JSON.stringify(values);
+      if (lastSubmission?.values !== submittedValues) {
+        lastSubmission = { values: submittedValues, changeId: `perfil_${crypto.randomUUID().replaceAll('-', '')}` };
+      }
       save.disabled = true;
       cancel.disabled = true;
+      for (const input of Object.values(inputs)) input.readOnly = true;
+      save.setAttribute('aria-busy', 'true');
       status.textContent = 'Guardando…';
       try {
         const response = await authenticatedFetch('/api/admin-order-mutation', {
@@ -204,19 +212,23 @@ if (!window.TintinAdminUserFichaBooted) {
             action: 'updateCustomerProfile',
             uid: user.uid,
             ...values,
-            changeId: `perfil_${crypto.randomUUID().replaceAll('-', '')}`,
+            changeId: lastSubmission.changeId,
             baseChangeId: text(user.lastChangeId),
           }),
         });
         const result = await response.json().catch(() => ({}));
+        if (!isCurrent()) return;
         if (!response.ok || result.ok !== true) throw new Error(result.error || apiFailureMessage(response, 'No se pudieron guardar los datos.'));
         status.textContent = result.result?.unchanged ? 'No había cambios para guardar.' : result.result?.emailChanged ? 'Datos guardados. El correo de acceso ya es el nuevo.' : 'Datos guardados.';
         if (result.result?.ordersEmailSynced === false) window.alert('Los datos se guardaron, pero falta pasar el correo nuevo a los pedidos anteriores del cliente. Tocá Editar y Guardar otra vez para terminarlo.');
         await openClientFicha(user.uid);
       } catch (error) {
+        if (!isCurrent()) return;
         status.textContent = error?.message || 'No se pudieron guardar los datos.';
         save.disabled = false;
         cancel.disabled = false;
+        for (const input of Object.values(inputs)) input.readOnly = false;
+        save.removeAttribute('aria-busy');
       }
     });
     block.wrapper.append(form);
@@ -284,6 +296,7 @@ if (!window.TintinAdminUserFichaBooted) {
     if (!auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return false;
     const ownerUid = auth.currentUser.uid;
     const version = ++requestVersion;
+    const isCurrent = () => auth.currentUser?.uid === ownerUid && version === requestVersion;
     delete body.dataset.ttEnhanced;
 
     body.replaceChildren(el('div', 'adm-loading', 'Cargando ficha…'));
@@ -295,13 +308,13 @@ if (!window.TintinAdminUserFichaBooted) {
       const orders = ordersResult.status === 'fulfilled' ? ordersResult.value : [];
       // Las cifras de la ficha siguen la fuente completa del panel, no cachés históricas del perfil.
       if(window.TintinAdminOrders?.ready?.()) {
-        const {calculateOrderStats}=await import('../../core/store/estadisticas-pedidos.js?v=tintin-20261112-delivery-separate-1');
+        const {calculateOrderStats}=await import('../../core/store/estadisticas-pedidos.js?v=tintin-20261124-audit-1');
         let snapshot;const stop=window.TintinAdminOrders.subscribe(value=>{snapshot=value;});stop();
         const accountOrders=(snapshot?.orders||[]).filter(order=>order.userId===uid || (user.email && String(order.userEmail||'').toLowerCase()===String(user.email).toLowerCase()));
         user={...user,...calculateOrderStats(accountOrders,{includeTestOrders:snapshot?.includeTestOrders===true})};
       }
       const logs = auditResult.status === 'fulfilled' ? auditResult.value : [];
-      if (auth.currentUser?.uid !== ownerUid || version !== requestVersion) return false;
+      if (!isCurrent()) return false;
 
       const header = el('div', 'ficha-profile');
       const photo = el('button', 'ficha-photo-button');
@@ -397,20 +410,20 @@ if (!window.TintinAdminUserFichaBooted) {
       auditSection.wrapper.appendChild(auditList);
 
       const history = createActivityHistory(document,{
-        isCurrent:()=>auth.currentUser?.uid===ownerUid && version===requestVersion,
+        isCurrent,
         loadPresence:async()=>{if(!window.TintinAdminPresence)throw new Error('presence_not_ready');return window.TintinAdminPresence.forUser(uid);},
         loadPage:async(day,cursor,size)=>{
-          if(auth.currentUser?.uid!==ownerUid || version!==requestVersion)throw new Error('session_changed');
+          if(!isCurrent())throw new Error('session_changed');
           const constraints=[where('userId','==',uid),limit(size)];if(cursor)constraints.push(startAfter(cursor));
           const result=await getDocs(query(collection(db,'siteTraffic',day,'sessions'),...constraints));
           return {items:result.docs.map(row=>row.data()),cursor:result.docs.length===size ? result.docs.at(-1) : null};
         },
       });
-      const customerData = customerDataSection(user);
+      const customerData = customerDataSection(user, isCurrent);
       body.replaceChildren(history,header, customerData.wrapper, identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
       return true;
     } catch (error) {
-      if (version !== requestVersion) return false;
+      if (!isCurrent()) return false;
       showError(error?.message || 'No se pudo cargar la ficha de la cuenta.');
       return false;
     }

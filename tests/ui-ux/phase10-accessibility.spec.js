@@ -93,6 +93,34 @@ test('el diálogo atrapa el foco y lo devuelve al cerrar', async ({ page }) => {
   await expect(page.locator('#tt-test-trigger')).toBeFocused();
 });
 
+test('Tab alcanza los controles de un diálogo desplazable debajo del viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 480 });
+  await openAccessiblePage(page);
+  await page.evaluate(() => {
+    const dialog = document.createElement('section');
+    dialog.setAttribute('role', 'dialog');
+    dialog.setAttribute('aria-modal', 'true');
+    dialog.style.cssText = 'position: fixed; inset: 12px; overflow: auto; background: white';
+    dialog.innerHTML = '<h2>Opciones</h2><button id="tt-dialog-first">Primera opción</button><button id="tt-dialog-last" style="margin-top: 600px">Guardar</button>';
+    document.body.appendChild(dialog);
+    window.TintinAccessibility.enhance(dialog);
+    window.TintinAccessibility.scanDialogs();
+  });
+
+  const first = page.locator('#tt-dialog-first');
+  const last = page.locator('#tt-dialog-last');
+  await expect(first).toBeFocused();
+  await expect(last).not.toBeInViewport();
+
+  await page.keyboard.press('Tab');
+  await expect(last).toBeFocused();
+  await expect(last).toBeInViewport();
+  await page.keyboard.press('Tab');
+  await expect(first).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(last).toBeFocused();
+});
+
 test('un campo inválido recibe foco y aria-invalid', async ({ page }) => {
   await openAccessiblePage(page);
   await page.evaluate(() => {

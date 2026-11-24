@@ -62,6 +62,50 @@ test('si una subida falla no se marca como copiada y se reintenta después', asy
   assert.deepEqual(drive.puts.filter(name => name !== STATE_NAME), ['b.txt']);
 });
 
+test('al fallar un archivo se esperan las subidas en curso antes de guardar el avance', async () => {
+  const drive = fakeDrive();
+  const put = drive.putFile;
+  const slowUploadDone = Promise.withResolvers();
+  drive.putFile = async args => {
+    if (args.name === 'b.txt') throw new Error('archivo fallido');
+    if (args.name === 'a.txt') {
+      await new Promise(resolve => setImmediate(resolve));
+      const id = await put(args);
+      slowUploadDone.resolve();
+      return id;
+    }
+    return put(args);
+  };
+  const tree = { 'a.txt': 's1', 'b.txt': 's2' };
+  const files = { 'a.txt': 'A', 'b.txt': 'B' };
+  await assert.rejects(run(drive, tree, files), /archivo fallido/);
+  await slowUploadDone.promise;
+  const state = [...drive.nodes.values()].find(x => x.name === STATE_NAME);
+  assert.deepEqual(await drive.readJson(state.id), { 'a.txt': 's1' });
+
+  drive.putFile = put;
+  drive.puts.length = 0;
+  assert.equal((await run(drive, tree, files)).uploaded, 1);
+  assert.deepEqual(drive.puts, ['b.txt', STATE_NAME]);
+});
+
+test('un fallo transitorio al guardar el avance permite volver a guardarlo antes de salir', async () => {
+  const drive = fakeDrive();
+  const put = drive.putFile;
+  let checkpoints = 0;
+  drive.putFile = async args => {
+    if (args.name === STATE_NAME && ++checkpoints === 1) throw new Error('checkpoint fallido');
+    return put(args);
+  };
+  const files = Object.fromEntries(Array.from({ length: 100 }, (_, index) => [`${index}.txt`, `${index}`]));
+  const tree = Object.fromEntries(Object.keys(files).map(name => [name, `hash-${name}`]));
+  await assert.rejects(run(drive, tree, files), /checkpoint fallido/);
+  assert.equal(checkpoints, 2);
+  const state = [...drive.nodes.values()].find(x => x.name === STATE_NAME);
+  assert.deepEqual(await drive.readJson(state.id), tree);
+  assert.equal((await run(drive, tree, files)).uploaded, 0);
+});
+
 test('changedPaths compara por SHA', () => {
   assert.deepEqual(changedPaths({ a: '1', b: '2' }, { a: '1', b: 'x' }), ['b']);
 });
