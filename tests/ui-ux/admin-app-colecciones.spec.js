@@ -11,9 +11,9 @@ const ROOT = path.resolve(__dirname, '../..');
 const links = [...fs.readFileSync(path.join(ROOT, 'admin.html'), 'utf8').matchAll(/<link rel="stylesheet" href="([^"]+)"/g)]
   .map(m => `<link rel="stylesheet" href="/${m[1]}">`).join('');
 
-async function open(page, width) {
+async function open(page, width, options = {}) {
   await page.setViewportSize({ width, height: 844 });
-  await mockRuntime(page);
+  await mockRuntime(page, options);
   const html = fixtureHtml()
     .replace('</head>', links + '</head>')
     .replace('body{margin:0;padding:24px;', 'body{margin:0;padding:12px;')
@@ -22,7 +22,7 @@ async function open(page, width) {
     .replace('</body>', '<script type="module" src="/js/admin/maestro/app-movil-admin.js"></script></body>');
   await page.route('https://tintin.test/admin-commerce-fixture', route => route.fulfill({ status: 200, contentType: 'text/html', body: html }));
   await page.goto('https://tintin.test/admin-commerce-fixture');
-  await expect(page.locator('#tt-commerce-collections tbody tr')).toHaveCount(3);
+  await expect(page.locator('#tt-commerce-collections tbody tr')).toHaveCount(options.collections?.length ?? 3);
 }
 const rows = page => page.locator('#tt-commerce-collections tbody tr');
 const visibleSelects = page => page.locator('#tt-commerce-collections .tt-commerce-toolbar > select').evaluateAll(list => list.filter(n => n.getClientRects().length).length);
@@ -97,5 +97,25 @@ for (const width of [820, 1440]) {
     await expect(page.locator('.tt-commerce-drawer.open')).toBeVisible();
     await expect.poll(() => page.locator('.tt-commerce-drawer').evaluate(n => Math.round(n.getBoundingClientRect().width))).toBe(440);
     expect(Math.round((await drawerBox(page)).close.height)).toBe(32);
+  });
+}
+
+// Regresión: el contenedor de la grilla heredaba el alto máximo de las tablas
+// (62vh) sin desplazamiento propio y la tarjeta recortaba la segunda fila en adelante.
+for (const width of [1566, 1024, 390]) {
+  test(`Colecciones muestra todas las tarjetas sin recorte a ${width}px`, async ({ page }) => {
+    const collections = Array.from({ length: 12 }, (_, i) => ({ id: `c${i}`, data: { name: `Colección ${i + 1}`, visible: true, order: i } }));
+    await open(page, width, { collections });
+    const clip = await page.locator('#tt-commerce-collections').evaluate(root => {
+      const card = root.querySelector('.tt-commerce-card');
+      const last = [...root.querySelectorAll('tbody tr')].at(-1);
+      const footer = root.querySelector('.tt-commerce-footer');
+      return { overflow: card.scrollHeight - card.clientHeight, lastBottom: last.getBoundingClientRect().bottom, cardBottom: card.getBoundingClientRect().bottom, footerHeight: footer?.getBoundingClientRect().height ?? 0 };
+    });
+    expect(clip.overflow).toBeLessThanOrEqual(1);
+    expect(clip.lastBottom).toBeLessThanOrEqual(clip.cardBottom);
+    await rows(page).last().scrollIntoViewIfNeeded();
+    await expect(rows(page).last()).toBeInViewport();
+    await expect(page.locator('#tt-commerce-collections .tt-commerce-footer')).toContainText('12 de 12 colecciones');
   });
 }

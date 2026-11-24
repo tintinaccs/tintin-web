@@ -1,24 +1,28 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "e56dbf1949655567976473170df27aa9de561d42",
-  "reason": "Retirar configuraciones de herramientas de desarrollo ajenas al producto, consolidar las normas y conservar auditorías, seguridad y flujos de producción.",
+  "baseCommit": "b9d3572064799755278b3287153748b4f8e51068",
+  "reason": "Mostrar todas las colecciones del admin sin recorte y versionar el módulo comercial",
   "files": [
     {
-      "path": ".github/workflows/auditar-tintin.yml",
-      "oldHash": "2361bc3261b54404ede4a9977fcac6dac0beef3b15be8ecf1b25e6798ac16177",
-      "newHash": "3d8c91d59ce93211d0f5560bbbfa5c7587ca3287abefda7ee97e5e82a3168f80"
-    }
-  ],
-  "affectedRecords": [
-    "github-actions",
-    "github-actions__deployments__30",
-    "github-actions__pruebas-automatizadas__31",
-    "pruebas-automatizadas"
-  ],
-  "removedFiles": [
+      "path": "admin.html",
+      "oldHash": "08e109c34ad39ca8bfb8fd8f332045f4aed325567ff3f212a5cd41940969d801",
+      "newHash": "3d4ec145dc5959335702802227a79624a6a8535a36fc8e130790d872f30407b8"
+    },
     {
-      "path": "AGENTS.md",
-      "oldHash": "273f4b554cece7f4e585b9ecc4958da85c8d957586e45b5122f3a2a61d5faec5"
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "d878a0335427911804c6d02e0cc8dc9cc89500ed34fca3c633a8a0c4d4624bcf",
+      "newHash": "3323f0f8ab730ca4c4d020ccf789b074ddcee03f1dd9d428e3ef4e1e4be3c65e"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "a327324811bf4f25819670bdb72e2dcb301894e02e218e7423a59be1ed36ac4b",
+      "newHash": "a24129a31ce96a5d1675981c1a2ee4e2073a368ab1275d9ab43f83e5315a5659"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "7e58fce960d2c06052b44f5cc33116455ea355f71a1feb8a37fcf3f55e7889c7",
+      "newHash": "1355428437768b77e41cadd2d64c3620f408fa1cdd5b1fae2ba790bd69b3d22e"
     }
-  ]
+  ],
+  "affectedRecords": []
 }

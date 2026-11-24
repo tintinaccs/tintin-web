@@ -1,5 +1,14 @@
 > Registro histórico: las menciones nominales a herramientas retiradas se han neutralizado. La versión original permanece en el historial del repositorio; las fechas, resultados y SHA existentes siguen siendo evidencia de sus respectivas ejecuciones.
 
+## Colecciones del admin recortadas después de la primera fila — 2026-11-24
+
+- Base `e56dbf1`. Reproducido con 12 colecciones en el fixture comercial y las hojas reales de `admin.html`: a 1566 y 1024 px solo se veía la primera fila; la segunda quedaba cortada y el resto oculto, sin barra de desplazamiento.
+- Causa: `.tt-commerce-tablewrap` limita el alto a `min(62vh, 720px)` para tablas con desplazamiento propio. Colecciones anulaba solo el `overflow` (a `visible`) y conservaba ese límite; la grilla desbordaba y `.tt-commerce-card` (`overflow:hidden`) recortaba el resto. Productos ya anulaba ambos valores. En móvil (≤760 px) el límite ya se quitaba, por eso no fallaba ahí.
+- Cambio: `max-height:none` en `#tt-commerce-collections .tt-commerce-tablewrap`, igual que en Productos. Nueva prueba en `tests/ui-ux/admin-app-colecciones.spec.js` (1566, 1024 y 390 px); falla sin el cambio (desborde de 1617 y 2546 px) y pasa con él.
+- Versión del módulo comercial subida a `tintin-20261124-colecciones-1` (JS, CSS y `admin.html`) para que el navegador no use la hoja vieja; baseline de caché y plan de flujos protegidos regenerados con sus scripts (4 archivos renovados, 0 registros afectados).
+- PASS_LOCAL: spec de Colecciones 9/9, `auditar-admin-commerce-shopify`, `admin-scroll-scheduling` 3/3, `audit:cache-versioning`, `auditar-proteccion-flujos`, `build:pages` sin cambios en una segunda corrida.
+- Barrido de los demás módulos: detector de contenedores recortados en las 23 secciones de `admin.html` (1566 y 390 px), Productos con 30 productos y Pedidos con 82 pedidos. Sin recortes; solo el encabezado accesible oculto de Productos, que es intencional. Los módulos que cargan datos solo con sesión real se revisaron sin datos.
+
 ## Dependabot y Contrato Único — 2026-11-23 — herramienta de desarrollo anterior
 
 - Los PR de [Firebase #1421](https://github.com/tintinaccs/tintin-web/pull/1421) y [Playwright #1422](https://github.com/tintinaccs/tintin-web/pull/1422) modificaron `package.json` y `package-lock.json`. Contrato Único rechazó los manifiestos desactualizados en «Reject generated artifact drift» en [45171862040](https://github.com/tintinaccs/tintin-web/actions/runs/45171862040) y [45171881379](https://github.com/tintinaccs/tintin-web/actions/runs/45171881379), ambos en intento 1.

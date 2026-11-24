@@ -1353,7 +1353,7 @@ html.tt-product-editor-open #prod-form-card .tt-editor-cover img { max-height:30
 /* Colección y visibilidad se editan desde las mismas superficies canónicas. */
 #tt-commerce-products .tt-card-collection { display:grid; gap:6px; width:100%; min-width:0; color:var(--tt-commerce-muted); font-size:11px; text-align:left; }
 #tt-commerce-products .tt-card-collection select,#tt-commerce-collections .tt-collection-visibility select { box-sizing:border-box; width:100%; min-width:0; min-height:44px; border:1px solid var(--tt-commerce-border); border-radius:10px; padding:9px 28px 9px 12px; background:var(--tt-commerce-surface); color:var(--tt-commerce-text); font:inherit; font-size:12px; }
-#tt-commerce-collections .tt-commerce-tablewrap { overflow:visible; }
+#tt-commerce-collections .tt-commerce-tablewrap { overflow:visible; max-height:none; }
 #tt-commerce-collections .tt-commerce-collection-grid { display:block; width:100%; min-width:0; }
 #tt-commerce-collections .tt-commerce-collection-grid thead { display:none; }
 #tt-commerce-collections .tt-commerce-collection-grid tbody { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; padding:16px; align-items:start; }
