@@ -1,17 +1,27 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b9df787795987e0fd0e1ed12abcd47bb5db859ee",
-  "reason": "Aplicar las actualizaciones de Firebase y Playwright juntas, sincronizando los artefactos y el plan protegido de Contrato Único.",
+  "baseCommit": "e56dbf1949655567976473170df27aa9de561d42",
+  "reason": "Mostrar todas las colecciones del admin sin recorte y versionar el módulo comercial",
   "files": [
     {
-      "path": "package-lock.json",
-      "oldHash": "7867ee72eefd8c7ed85150cf1d8d745a220f98c19c0a64e5d8230680421785c2",
-      "newHash": "670ef5520ff705fd475d976b47088661e40c045961100024b99063154cc4f998"
+      "path": "admin.html",
+      "oldHash": "08e109c34ad39ca8bfb8fd8f332045f4aed325567ff3f212a5cd41940969d801",
+      "newHash": "3d4ec145dc5959335702802227a79624a6a8535a36fc8e130790d872f30407b8"
     },
     {
-      "path": "package.json",
-      "oldHash": "5124296be82b3a465ba63dd2543485170a2afc55b52f8313f7aa138f1dd4e35c",
-      "newHash": "2e429a17e7714211ed23f92d5405681ad312feb1f847f6a21e8a30a7b86709c6"
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "d878a0335427911804c6d02e0cc8dc9cc89500ed34fca3c633a8a0c4d4624bcf",
+      "newHash": "3323f0f8ab730ca4c4d020ccf789b074ddcee03f1dd9d428e3ef4e1e4be3c65e"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "a327324811bf4f25819670bdb72e2dcb301894e02e218e7423a59be1ed36ac4b",
+      "newHash": "a24129a31ce96a5d1675981c1a2ee4e2073a368ab1275d9ab43f83e5315a5659"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "7e58fce960d2c06052b44f5cc33116455ea355f71a1feb8a37fcf3f55e7889c7",
+      "newHash": "1355428437768b77e41cadd2d64c3620f408fa1cdd5b1fae2ba790bd69b3d22e"
     }
   ],
   "affectedRecords": []
